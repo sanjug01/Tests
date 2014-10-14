@@ -1,7 +1,7 @@
 ﻿using FadeTest.Navigation;
 using System.Collections.Generic;
 
-namespace Test.FadeTest.Shared.Mock
+namespace Test.RdClient.Shared.Mock
 {
     class ViewFactory : IPresentableViewFactory
     {

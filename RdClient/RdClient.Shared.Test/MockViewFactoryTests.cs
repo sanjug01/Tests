@@ -1,6 +1,6 @@
 ﻿using FadeTest.Navigation;
 
-namespace Test.FadeTest.Shared
+namespace Test.RdClient.Shared
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 

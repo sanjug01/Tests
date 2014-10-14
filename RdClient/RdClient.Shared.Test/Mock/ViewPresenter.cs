@@ -1,6 +1,6 @@
 ﻿using FadeTest.Navigation;
 
-namespace Test.FadeTest.Shared.Mock
+namespace Test.RdClient.Shared.Mock
 {
     class ViewPresenter : IViewPresenter
     {

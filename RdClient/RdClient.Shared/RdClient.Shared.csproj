@@ -52,6 +52,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ViewModelBase.cs" />
     <Compile Include="Navigation\IModalViewController.cs" />
     <Compile Include="Navigation\INavigationService.cs" />
     <Compile Include="Navigation\IPresentableView.cs" />
