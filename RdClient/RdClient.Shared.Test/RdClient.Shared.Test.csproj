@@ -68,8 +68,19 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="MockViewFactoryTests.cs" />
+    <Compile Include="MockViewPresenterTests.cs" />
+    <Compile Include="Mock\PresentableView.cs" />
+    <Compile Include="Mock\ViewFactory.cs" />
+    <Compile Include="Mock\ViewPresenter.cs" />
+    <Compile Include="Navigation\PresentableViewFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RdClient.Shared\RdClient.Shared.csproj">
+      <Project>{ff57219c-0e7b-4cd5-9e02-287cea2d0d83}</Project>
+      <Name>RdClient.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
