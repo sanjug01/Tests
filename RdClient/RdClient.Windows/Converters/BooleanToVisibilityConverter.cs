@@ -1,4 +1,4 @@
-﻿namespace FadeTest
+﻿namespace RdClient
 {
     using System;
     using Windows.UI.Xaml;

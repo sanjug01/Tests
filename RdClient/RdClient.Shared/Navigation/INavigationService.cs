@@ -1,4 +1,4 @@
-﻿namespace FadeTest.Navigation
+﻿namespace RdClient.Navigation
 {
     /// <summary>
     /// Interface of a navigation service that navigates the UI between named views.
@@ -9,5 +9,6 @@
     {
         void NavigateToView(string viewName, object activationParameter);
         void PushModalView(string viewName, object activationParameter);
+        void DismissModalView(IPresentableView modalView);
     }
 }

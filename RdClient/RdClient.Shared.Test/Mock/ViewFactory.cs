@@ -1,4 +1,4 @@
-﻿using FadeTest.Navigation;
+﻿using RdClient.Navigation;
 using System.Collections.Generic;
 
 namespace Test.RdClient.Shared.Mock
@@ -12,7 +12,7 @@ namespace Test.RdClient.Shared.Mock
             _createdViews = new Dictionary<string, PresentableView>();
         }
 
-        public IPresentableView CreateView(string name)
+        public virtual IPresentableView CreateView(string name, object activationParameter)
         {
             PresentableView view;
             
@@ -20,11 +20,14 @@ namespace Test.RdClient.Shared.Mock
             {
                 view = new PresentableView(name);
                 _createdViews.Add(name, view);
+
+                view.Activating(activationParameter);
             }
             else
             {
                 view.IncrementCreationCount();
             }
+
 
             return view;
         }

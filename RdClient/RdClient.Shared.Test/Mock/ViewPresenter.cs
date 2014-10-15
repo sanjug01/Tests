@@ -1,4 +1,4 @@
-﻿using FadeTest.Navigation;
+﻿using RdClient.Navigation;
 
 namespace Test.RdClient.Shared.Mock
 {
@@ -10,24 +10,15 @@ namespace Test.RdClient.Shared.Mock
         {
         }
 
-        public void PresentView(IPresentableView view, INavigationService navigationService, object activationParameter)
+        public void PresentView(IPresentableView view)
         {
-            if (!object.ReferenceEquals(view, _presentedView))
-            {
-                if (null != _presentedView)
-                    _presentedView.Dismissing();
-            }
-
-            if (null != view)
-            {
-                view.Activating(navigationService, activationParameter);
-                if (!object.ReferenceEquals(view, _presentedView))
-                    view.Presenting(null);
-            }
-            _presentedView = view;
         }
 
-        public void PushModalView(IPresentableView view, INavigationService navigationService, object activationParameter)
+        public void PushModalView(IPresentableView view)
+        {
+        }
+
+        public void DismissModalView(IPresentableView view)
         {
         }
     }

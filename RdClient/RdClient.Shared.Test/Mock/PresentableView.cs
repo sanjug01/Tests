@@ -1,5 +1,5 @@
 ﻿using System;
-using FadeTest.Navigation;
+using RdClient.Navigation;
 
 namespace Test.RdClient.Shared.Mock
 {
@@ -42,15 +42,16 @@ namespace Test.RdClient.Shared.Mock
             ++_creationCount;
         }
 
-        public void Activating(INavigationService navigationService, object activationParameter)
+        public void Activating(object activationParameter)
         {
             ++_activationCount;
             _lastActivationParameter = activationParameter;
         }
 
-        public void Presenting(IModalViewController modalViewController)
+        public void Presenting(INavigationService navigationService, object activationParameter)
         {
             ++_presentationsCount;
+            _lastActivationParameter = activationParameter;
         }
 
         public void Dismissing()

@@ -1,4 +1,4 @@
-﻿using FadeTest.Navigation;
+﻿using RdClient.Navigation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Test.RdClient.Shared.Navigation
@@ -24,22 +24,24 @@ namespace Test.RdClient.Shared.Navigation
         [TestMethod]
         public void EmptyFactory_CreateView_Fails()
         {
+            bool exceptionThrown = false;
             try
             {
-                IPresentableView view = _factory.CreateView("Don Pedro");
-                Assert.Fail();
+                IPresentableView view = _factory.CreateView("Don Pedro", new object());
             }
             catch
             {
-                //  An exception is expected
+                exceptionThrown = true;
             }
+
+            Assert.IsTrue(exceptionThrown);
         }
 
         [TestMethod]
         public void AddClass_CreateView_ViewCreated()
         {
             _factory.AddViewClass("Don Pedro", typeof(Mock.PresentableView), false);
-            IPresentableView view = _factory.CreateView("Don Pedro");
+            IPresentableView view = _factory.CreateView("Don Pedro", new object());
             Assert.IsNotNull(view);
         }
 
@@ -47,7 +49,7 @@ namespace Test.RdClient.Shared.Navigation
         public void AddClass_Create2Views_2ViewsCreated()
         {
             _factory.AddViewClass("Don Pedro", typeof(Mock.PresentableView), false);
-            IPresentableView view1 = _factory.CreateView("Don Pedro"), view2 = _factory.CreateView("Don Pedro");
+            IPresentableView view1 = _factory.CreateView("Don Pedro", new object()), view2 = _factory.CreateView("Don Pedro", new object());
             Assert.IsNotNull(view1);
             Assert.IsNotNull(view2);
             Assert.AreNotSame(view1, view2);
@@ -57,7 +59,7 @@ namespace Test.RdClient.Shared.Navigation
         public void AddSingletonClass_Create2Views_SingletonCreated()
         {
             _factory.AddViewClass("Don Pedro", typeof(Mock.PresentableView), true);
-            IPresentableView view1 = _factory.CreateView("Don Pedro"), view2 = _factory.CreateView("Don Pedro");
+            IPresentableView view1 = _factory.CreateView("Don Pedro", new object()), view2 = _factory.CreateView("Don Pedro", new object());
             Assert.IsNotNull(view1);
             Assert.IsNotNull(view2);
             Assert.AreSame(view1, view2);

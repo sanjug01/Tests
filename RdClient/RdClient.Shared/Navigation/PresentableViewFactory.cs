@@ -1,4 +1,4 @@
-﻿namespace FadeTest.Navigation
+﻿namespace RdClient.Navigation
 {
     using System;
     using System.Collections.Generic;
@@ -18,9 +18,9 @@
             _viewConstructors = new Dictionary<string, PresentableViewConstructor>();
         }
 
-        public IPresentableView CreateView(string name)
+        public IPresentableView CreateView(string name, object activationParameter)
         {
-            return _viewConstructors[name].CreateView();
+            return _viewConstructors[name].CreateView(activationParameter);
         }
 
         public void AddViewClass( string name, Type viewClass, bool isSingleton = false )
@@ -34,7 +34,7 @@
         /// Private helper class that creates instances of the specified type and if needed
         /// retains a singleton instance of the type.
         /// </summary>
-        private class PresentableViewConstructor
+        class PresentableViewConstructor
         {
             private readonly Type _viewClass;
             private readonly bool _isSingleton;
@@ -46,13 +46,14 @@
                 _isSingleton = isSingleton;
             }
 
-            public IPresentableView CreateView()
+            public IPresentableView CreateView(object activationParameter)
             {
                 IPresentableView newView = _singletonView;
 
                 if( null == newView )
                 {
                     newView = Activator.CreateInstance(_viewClass) as IPresentableView;
+                    newView.Activating(activationParameter);
                     if (null != newView && _isSingleton)
                         _singletonView = newView;
                 }
