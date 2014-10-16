@@ -21,7 +21,7 @@
 
         public void AddViewClass( string name, Type viewClass, bool isSingleton = false )
         {
-            Contract.Requires(name != null);
+            Contract.Requires(name != null && !name.Equals(""));
             Contract.Requires(viewClass != null);
             _viewConstructors.Add(name, new PresentableViewConstructor(viewClass, isSingleton));
         }
@@ -38,6 +38,8 @@
 
             public PresentableViewConstructor( Type viewClass, bool isSingleton )
             {
+                Contract.Requires(viewClass != null);
+                
                 _viewClass = viewClass;
                 _isSingleton = isSingleton;
             }

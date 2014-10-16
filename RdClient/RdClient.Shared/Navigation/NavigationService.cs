@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 namespace RdClient.Navigation
 {
     public class NavigationServiceException : Exception
@@ -19,6 +20,9 @@ namespace RdClient.Navigation
 
         public NavigationService(IViewPresenter presenter, IPresentableViewFactory viewFactory)
         {
+            Contract.Requires(presenter != null);
+            Contract.Requires(viewFactory != null);
+
             _presenter = presenter;
             _viewFactory = viewFactory;
         }
@@ -44,6 +48,8 @@ namespace RdClient.Navigation
 
         void INavigationService.PushModalView(string viewName, object activationParameter)
         {
+            Contract.Requires(viewName != null);
+
             IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
             modalStack.Add(view);
             view.Presenting(this, activationParameter);
@@ -52,6 +58,8 @@ namespace RdClient.Navigation
 
         public void DismissModalView(IPresentableView modalView)
         {
+            Contract.Requires(modalView != null);
+
             List<IPresentableView> toDismiss = new List<IPresentableView>();
             bool foundToDismiss = false;
 
