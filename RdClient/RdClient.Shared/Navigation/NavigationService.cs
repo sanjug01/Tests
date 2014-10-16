@@ -56,9 +56,9 @@ namespace RdClient.Navigation
 
             IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
 
-            if (object.ReferenceEquals(view, _currentView))
+            if (object.ReferenceEquals(view, _currentView) || modalStack.Contains(view))
             {
-                throw new NavigationServiceException("trying to modally display a view which is already navigated to.");
+                throw new NavigationServiceException("trying to modally display a view which is already shown.");
             }
 
             modalStack.Add(view);
