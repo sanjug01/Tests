@@ -43,7 +43,11 @@ namespace RdClient.Navigation
             
             _currentView = view;
             _currentView.Presenting(this, activationParameter);
-            _presenter.PresentView(view);
+
+            if (!object.ReferenceEquals(_currentView, view))
+            {
+                _presenter.PresentView(view);
+            }
         }
 
         void INavigationService.PushModalView(string viewName, object activationParameter)
@@ -51,6 +55,12 @@ namespace RdClient.Navigation
             Contract.Requires(viewName != null);
 
             IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
+
+            if (object.ReferenceEquals(view, _currentView))
+            {
+                throw new NavigationServiceException("trying to modally display a view which is already navigated to.");
+            }
+
             modalStack.Add(view);
             view.Presenting(this, activationParameter);
             _presenter.PushModalView(view);
@@ -61,27 +71,18 @@ namespace RdClient.Navigation
             Contract.Requires(modalView != null);
 
             List<IPresentableView> toDismiss = new List<IPresentableView>();
-            bool foundToDismiss = false;
+            int toDismissIndex = modalStack.IndexOf(modalView);
 
-            foreach(IPresentableView view in modalStack)
-            {
-                if(object.ReferenceEquals(view, modalView))
-                {
-                    foundToDismiss = true;
-                }
-
-                if (foundToDismiss)
-                {
-                    toDismiss.Add(view);
-                }
-            }
-
-            if (foundToDismiss == false)
+            if (toDismissIndex < 0)
             {
                 throw new NavigationServiceException("trying to dismiss a modal view which is not presented");
             }
 
-            modalStack.RemoveRange(modalStack.Count - toDismiss.Count, toDismiss.Count); ;
+            toDismiss = modalStack.GetRange(toDismissIndex, modalStack.Count - toDismissIndex);
+
+            modalStack.RemoveRange(toDismissIndex, modalStack.Count - toDismissIndex);
+
+            toDismiss.Reverse();
 
             foreach (IPresentableView view in toDismiss)
             {
