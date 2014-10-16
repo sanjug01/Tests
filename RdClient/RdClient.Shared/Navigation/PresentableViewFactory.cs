@@ -53,9 +53,14 @@
                 if( null == newView )
                 {
                     newView = Activator.CreateInstance(_viewClass) as IPresentableView;
-                    newView.Activating(activationParameter);
-                    if (null != newView && _isSingleton)
-                        _singletonView = newView;
+
+                    if (null != newView)
+                    {
+                        newView.Activating(activationParameter);
+
+                        if(_isSingleton)
+                         _singletonView = newView;
+                    }
                 }
 
                 return newView;

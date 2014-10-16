@@ -2,6 +2,16 @@
 using System.Collections.Generic;
 namespace RdClient.Navigation
 {
+    public class NavigationServiceException : Exception
+    {
+        private string p;
+
+        public NavigationServiceException(string msg) : base(msg)
+        {
+        }
+
+    }
+
     public sealed class NavigationService : INavigationService
     {
         private IViewPresenter _presenter;
@@ -27,7 +37,7 @@ namespace RdClient.Navigation
 
             if (view == null)
             {
-                throw new Exception("Tried to create unknown view: " + viewName);
+                throw new NavigationServiceException("Tried to create unknown view: " + viewName);
             }
 
             if (_currentView != null && !object.ReferenceEquals(_currentView, view))
@@ -68,7 +78,7 @@ namespace RdClient.Navigation
 
             if (foundToDismiss == false)
             {
-                throw new Exception("trying to dismiss a modal view which is not presented");
+                throw new NavigationServiceException("trying to dismiss a modal view which is not presented");
             }
 
             modalStack.RemoveRange(modalStack.Count - toDismiss.Count, toDismiss.Count); ;

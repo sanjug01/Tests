@@ -15,19 +15,21 @@ namespace Test.RdClient.Shared.Mock
         public PresentableView(string name)
         {
             _name = name;
-            _creationCount = 1;
-            _activationCount = 0;
-            _presentationsCount = 0;
-            _dismissalsCount = 0;
+            Initialize();
         }
 
         public PresentableView()
         {
             _name = string.Empty;
+            Initialize();
+        }
+
+        private void Initialize()
+        {
             _creationCount = 1;
             _activationCount = 0;
             _presentationsCount = 0;
-            _dismissalsCount = 0;
+            _dismissalsCount = 0;      
         }
 
         public string Name { get { return _name; } }
