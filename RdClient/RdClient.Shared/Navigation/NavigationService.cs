@@ -17,12 +17,7 @@ namespace RdClient.Navigation
 
         private List<IPresentableView> modalStack = new List<IPresentableView>();
 
-        public static INavigationService Create(IViewPresenter presenter, IPresentableViewFactory viewFactory)
-        {
-            return new NavigationService(presenter, viewFactory);
-        }
-
-        private NavigationService(IViewPresenter presenter, IPresentableViewFactory viewFactory)
+        public NavigationService(IViewPresenter presenter, IPresentableViewFactory viewFactory)
         {
             _presenter = presenter;
             _viewFactory = viewFactory;

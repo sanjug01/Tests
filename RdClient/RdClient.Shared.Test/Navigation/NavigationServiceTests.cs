@@ -16,7 +16,7 @@ namespace Test.RdClient.Shared.Test
         {
             _presenter = new Mock.ViewPresenter();
             _viewFactory = new Mock.ViewFactory();
-            _navigationService = NavigationService.Create(_presenter, _viewFactory);
+            _navigationService = new NavigationService(_presenter, _viewFactory);
         }
 
         [TestCleanup]
@@ -59,7 +59,7 @@ namespace Test.RdClient.Shared.Test
         {
             bool exceptionThrown = false;
 
-            _navigationService = NavigationService.Create(_presenter, new InvalidFactory());
+            _navigationService = new NavigationService(_presenter, new InvalidFactory());
 
             try
             {
