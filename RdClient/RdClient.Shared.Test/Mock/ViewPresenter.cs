@@ -4,8 +4,6 @@ namespace Test.RdClient.Shared.Mock
 {
     class ViewPresenter : IViewPresenter
     {
-        private IPresentableView _presentedView;
-
         public ViewPresenter()
         {
         }

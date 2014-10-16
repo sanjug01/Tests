@@ -12,7 +12,7 @@ namespace Test.RdClient.Shared.Navigation
         [TestInitialize]
         public void TestSetup()
         {
-            _factory = PresentableViewFactory.Create();
+            _factory = new PresentableViewFactory();
         }
 
         [TestCleanup]

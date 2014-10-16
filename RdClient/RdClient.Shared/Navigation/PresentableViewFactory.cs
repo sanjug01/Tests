@@ -8,12 +8,8 @@
     {
         private readonly IDictionary<string, PresentableViewConstructor> _viewConstructors;
 
-        public static PresentableViewFactory Create()
-        {
-            return new PresentableViewFactory();
-        }
 
-        private PresentableViewFactory()
+        public PresentableViewFactory()
         {
             _viewConstructors = new Dictionary<string, PresentableViewConstructor>();
         }

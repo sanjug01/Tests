@@ -65,7 +65,7 @@ namespace Test.RdClient.Shared.Test
             {
                 _navigationService.NavigateToView("foo", null);
             }
-            catch(NavigationServiceException e)
+            catch(NavigationServiceException /* e */)
             {
                 exceptionThrown = true;
             }
@@ -227,7 +227,7 @@ namespace Test.RdClient.Shared.Test
                 _navigationService.DismissModalView(fooView);
                 _navigationService.DismissModalView(fooView);
             }
-            catch (NavigationServiceException e)
+            catch (NavigationServiceException /* e */)
             {
                 exceptionThrown = true;
             }

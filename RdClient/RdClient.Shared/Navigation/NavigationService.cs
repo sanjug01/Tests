@@ -4,12 +4,9 @@ namespace RdClient.Navigation
 {
     public class NavigationServiceException : Exception
     {
-        private string p;
-
         public NavigationServiceException(string msg) : base(msg)
         {
         }
-
     }
 
     public sealed class NavigationService : INavigationService
