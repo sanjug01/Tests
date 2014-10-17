@@ -16,29 +16,12 @@ using Windows.UI.Xaml.Navigation;
 
 namespace RdClient
 {
-    public sealed partial class MainPage : Page, IViewPresenter
+    public sealed partial class MainPage : Page
     {
-        private UIElement _currentElement;
-        private UIElement _newElement;
-
         public MainPage()
         {
             this.InitializeComponent();
         }
 
-        public void PresentView(IPresentableView view)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PushModalView(IPresentableView view)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DismissModalView(IPresentableView view)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -113,8 +113,9 @@
     <SDKReference Include="TestPlatform, Version=11.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LifeTimeManager\LifeTimeManager.cs" />
-    <Compile Include="LifeTimeManager\IWindowContent.cs" />
+    <Compile Include="LifeTimeManager\LifeTimeManagerTests.cs" />
+    <Compile Include="Mock\RootFrameManager.cs" />
+    <Compile Include="Mock\SuspensionArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +144,7 @@
       <Name>RdClient.Windows</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

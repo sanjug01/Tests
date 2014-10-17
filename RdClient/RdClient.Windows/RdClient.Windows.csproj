@@ -114,7 +114,14 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="LifeTimeManager.cs" />
+    <Compile Include="LifeTimeManagement\ActivationArgs.cs" />
+    <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
+    <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
+    <Compile Include="LifeTimeManagement\IRootFrameManager.cs" />
+    <Compile Include="LifeTimeManagement\ISuspensionArgs.cs" />
+    <Compile Include="LifeTimeManagement\LifeTimeManager.cs" />
+    <Compile Include="LifeTimeManagement\RootFrameManager.cs" />
+    <Compile Include="LifeTimeManagement\SuspensionArgs.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -141,6 +148,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

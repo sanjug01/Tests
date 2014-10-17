@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.ApplicationModel;
+﻿using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
+using RdClient.LifeTimeManagement;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -34,17 +21,33 @@ namespace RdClient
             this.Suspending += this.OnSuspending;
 
             _lifeTimeManager = new LifeTimeManager();
-            _lifeTimeManager.Initialize(Window.Current);
+            _lifeTimeManager.Initialize(new RootFrameManager());
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            _lifeTimeManager.OnLaunched(e);
+            ActivationArgs aa = new ActivationArgs();
+
+            aa.Arguments = e.Arguments;
+            aa.TileId = e.TileId;
+            aa.Kind = e.Kind;
+            aa.PreviousExecutionState = e.PreviousExecutionState;
+            aa.SplashScreen = e.SplashScreen;
+            aa.CurrentlyShownApplicationViewId = e.CurrentlyShownApplicationViewId;
+            aa.PrelaunchActivated = e.PrelaunchActivated;
+
+            _lifeTimeManager.OnLaunched(aa);
         }
 
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            _lifeTimeManager.OnSuspending(sender, e);
+            SuspensionArgs sa = new SuspensionArgs();
+            MySuspendingOperation mso = new MySuspendingOperation();
+            mso.Deadline = e.SuspendingOperation.Deadline;
+            mso.Deferral = e.SuspendingOperation.GetDeferral();
+            sa.SuspendingOperation = mso;
+
+            _lifeTimeManager.OnSuspending(sender, sa);
         }
     }
 }
