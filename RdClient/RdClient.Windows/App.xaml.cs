@@ -3,13 +3,8 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using RdClient.LifeTimeManagement;
 
-// The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
-
 namespace RdClient
 {
-    /// <summary>
-    /// Provides application-specific behavior to supplement the default Application class.
-    /// </summary>
     public sealed partial class App : Application
     {
 

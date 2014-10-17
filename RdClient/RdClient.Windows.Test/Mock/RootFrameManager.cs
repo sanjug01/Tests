@@ -11,24 +11,18 @@ namespace RdClient.Windows.Test.Mock
 
         public IActivationArgs LaunchActivatedArgs
         { 
-            get { 
-                return _launchActivatedArgs; 
-            } 
+            get { return _launchActivatedArgs; } 
         }
 
         public int LoadedCount
         {
             get
-            {
-                return _loadedCount;
-            }
+            { return _loadedCount; }
         }
 
         public int ActivatedCount
         {
-            get {
-                return _activatedCount;
-            }
+            get { return _activatedCount; }
         }
 
         public void LoadRoot(IActivationArgs e)
