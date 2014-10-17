@@ -41,13 +41,14 @@ namespace RdClient.Navigation
                 _currentView.Dismissing();
             }
             
-            _currentView = view;
-            _currentView.Presenting(this, activationParameter);
+            view.Presenting(this, activationParameter);
 
             if (!object.ReferenceEquals(_currentView, view))
             {
                 _presenter.PresentView(view);
             }
+
+            _currentView = view;
         }
 
         void INavigationService.PushModalView(string viewName, object activationParameter)

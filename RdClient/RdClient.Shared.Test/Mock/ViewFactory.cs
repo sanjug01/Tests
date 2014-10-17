@@ -38,5 +38,11 @@ namespace Test.RdClient.Shared.Mock
         {
             return _createdViews[name];
         }
+
+
+        public void AddViewClass(string name, System.Type viewClass, bool isSingleton = false)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

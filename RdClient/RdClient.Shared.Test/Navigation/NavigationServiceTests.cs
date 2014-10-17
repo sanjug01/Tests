@@ -100,10 +100,11 @@ namespace Test.RdClient.Shared.Test
         {
             _navigationService.NavigateToView("foo", null);
             Mock.PresentableView fooView = _viewFactory.GetView("foo");
+            Assert.AreEqual(1, _presenter.PresentViewCount);
 
             _navigationService.NavigateToView("bar", null);
             Mock.PresentableView barView = _viewFactory.GetView("bar");
-
+            Assert.AreEqual(2, _presenter.PresentViewCount);
 
             Assert.AreEqual(1, fooView.ActivationsCount);
             Assert.AreEqual(1, fooView.PresentationsCount);

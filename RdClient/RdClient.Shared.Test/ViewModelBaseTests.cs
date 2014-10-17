@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RdClient.ViewModels;
+using RdClient.Shared.ViewModels;
 using System.ComponentModel;
 
 namespace Test.RdClient.Shared.Test
