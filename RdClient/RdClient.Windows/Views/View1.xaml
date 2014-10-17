@@ -8,6 +8,8 @@
     mc:Ignorable="d">
 
     <Grid Background="red">
-
+        <Button
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Right" Click="Button_Click">Make Green</Button>
     </Grid>
 </Page>
