@@ -40,7 +40,7 @@ namespace RdClient.Windows.Test
         {
             object sender = new object();
             SuspensionArgs sa = new SuspensionArgs();
-            sa.SuspendingOperation = new MySuspendingOperation();
+            sa.SuspendingOperation = new SuspendingOperationWrapper();
 
             Mock.MySuspendingDeferral deferral = new Mock.MySuspendingDeferral();
 

@@ -37,7 +37,7 @@ namespace RdClient
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             SuspensionArgs sa = new SuspensionArgs();
-            MySuspendingOperation mso = new MySuspendingOperation();
+            SuspendingOperationWrapper mso = new SuspendingOperationWrapper();
             mso.Deadline = e.SuspendingOperation.Deadline;
             mso.Deferral = e.SuspendingOperation.GetDeferral();
             sa.SuspendingOperation = mso;

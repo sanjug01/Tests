@@ -8,7 +8,7 @@ using Windows.ApplicationModel;
 
 namespace RdClient.LifeTimeManagement
 {
-    public class MySuspendingOperation : ISuspendingOperationWrapper
+    public class SuspendingOperationWrapper : ISuspendingOperationWrapper
     {
         public DateTimeOffset Deadline
         { get; set; }
