@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,10 @@ namespace RdClient.Shared.Test.Mock
 {
     class RdpConnection : IRdpConnection
     {
-        private string _user;
-        private string _domain;
-        private string _password;
+        private Credentials _credentials;
         private bool _usingSavedCreds;
 
-        public string User { get { return _user; } }
-        public string Domain { get { return _domain;  } }
-        public string Password { get { return _password; } }
+        public Credentials Credentials { get { return _credentials; } }
         public bool UsingSavedCreds { get { return _usingSavedCreds; } }
         public int UserCredentialsReturnValue { get; set; }
 
@@ -30,11 +27,9 @@ namespace RdClient.Shared.Test.Mock
         public int SuspendCount { get { return _suspendCount; } }
         public int ResumeCount { get { return _resumeCount; } }
 
-        public int SetUserCredentials(string strUser, string strDomain, string strPassword, bool fUsingSavedCreds)
+        public int SetUserCredentials(Credentials credentials, bool fUsingSavedCreds)
         {
-            _user = strUser;
-            _domain = strDomain;
-            _password = strPassword;
+            _credentials = credentials;
             _usingSavedCreds = fUsingSavedCreds;
 
             return UserCredentialsReturnValue;
