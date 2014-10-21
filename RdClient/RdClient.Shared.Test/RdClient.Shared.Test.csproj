@@ -68,6 +68,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CxWrappers\RdpUtilsTests.cs" />
     <Compile Include="MockViewFactoryTests.cs" />
     <Compile Include="MockViewPresenterTests.cs" />
     <Compile Include="Mock\PresentableView.cs" />
