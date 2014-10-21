@@ -16,12 +16,12 @@ namespace RdClient.LifeTimeManagement
 
     public interface ISuspendingOperationWrapper
     {
-        DateTimeOffset Deadline { get; set; }
+        DateTimeOffset Deadline { get; }
 
-        ISuspendingDeferral Deferral { get; set; }
+        ISuspendingDeferral Deferral { get; }
     }
     public interface ISuspensionArgs
     {
-        ISuspendingOperationWrapper SuspendingOperation { get; set; }
+        ISuspendingOperationWrapper SuspendingOperation { get; }
     }
 }

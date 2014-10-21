@@ -4,6 +4,7 @@ using RdClient.Shared.Models;
 
 namespace RdClient.Shared.CxWrappers
 {
+    
     public class RdpConnection : IRdpConnection, IRdpProperties
     {
         private RdClientCx.RdpConnection _rdpConnection;
@@ -14,13 +15,11 @@ namespace RdClient.Shared.CxWrappers
             _rdpConnection = rdpConnectionCx;
         }
 
-        public int SetUserCredentials(Credentials credentials, bool fUsingSavedCreds)
+        public void Connect(Credentials credentials, bool fUsingSavedCreds)
         {
-            return _rdpConnection.SetUserCredentials(credentials.username, credentials.domain, credentials.password, fUsingSavedCreds);
-        }
+            int xRes = _rdpConnection.SetUserCredentials(credentials.username, credentials.domain, credentials.password, fUsingSavedCreds);
+            RdTrace.IfFailXResultThrow(xRes, "Failed to set user credentials.");
 
-        public void Connect()
-        {
             _rdpConnection.Connect();
         }
 
@@ -36,7 +35,7 @@ namespace RdClient.Shared.CxWrappers
 
         public void Resume()
         {
-            _rdpConnection.Suspend();
+            _rdpConnection.Resume();
         }
 
         public int GetIntProperty(string propertyName)

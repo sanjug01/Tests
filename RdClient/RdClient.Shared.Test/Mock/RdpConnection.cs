@@ -14,7 +14,6 @@ namespace RdClient.Shared.Test.Mock
         private bool _usingSavedCreds;
 
         public Credentials Credentials { get { return _credentials; } }
-        public bool UsingSavedCreds { get { return _usingSavedCreds; } }
         public int UserCredentialsReturnValue { get; set; }
 
         private int _connectCount = 0;
@@ -27,16 +26,10 @@ namespace RdClient.Shared.Test.Mock
         public int SuspendCount { get { return _suspendCount; } }
         public int ResumeCount { get { return _resumeCount; } }
 
-        public int SetUserCredentials(Credentials credentials, bool fUsingSavedCreds)
+        public void Connect(Credentials credentials, bool fUsingSavedCreds)
         {
             _credentials = credentials;
             _usingSavedCreds = fUsingSavedCreds;
-
-            return UserCredentialsReturnValue;
-        }
-
-        public void Connect()
-        {
             _connectCount++;
         }
 

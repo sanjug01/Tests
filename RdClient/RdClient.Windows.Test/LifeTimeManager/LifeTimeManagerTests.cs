@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.LifeTimeManagement;
+using System;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml.Controls;
 
@@ -29,7 +30,7 @@ namespace RdClient.Windows.Test
         [TestMethod]
         public void OnLaunched()
         {
-            IActivationArgs args = new ActivationArgs();
+            IActivationArgs args = new ActivationArgs("", "", ActivationKind.Launch, ApplicationExecutionState.Terminated, null as SplashScreen, 0, false);
             _lifeTimeManager.OnLaunched(args);
 
             Assert.AreEqual(1, _rootFrameManager.LoadedCount);
@@ -39,12 +40,10 @@ namespace RdClient.Windows.Test
         public void OnSuspending()
         {
             object sender = new object();
-            SuspensionArgs sa = new SuspensionArgs();
-            sa.SuspendingOperation = new SuspendingOperationWrapper();
-
+            DateTimeOffset date = new DateTimeOffset();
             Mock.MySuspendingDeferral deferral = new Mock.MySuspendingDeferral();
-
-            sa.SuspendingOperation.Deferral = deferral;
+            SuspensionArgs.SuspendingOperationWrapper sow = new SuspensionArgs.SuspendingOperationWrapper(date, deferral);
+            SuspensionArgs sa = new SuspensionArgs(sow);
 
             _lifeTimeManager.OnSuspending(sender, sa);
 

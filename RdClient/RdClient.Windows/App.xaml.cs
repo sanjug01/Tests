@@ -21,26 +21,22 @@ namespace RdClient
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            ActivationArgs aa = new ActivationArgs();
-
-            aa.Arguments = e.Arguments;
-            aa.TileId = e.TileId;
-            aa.Kind = e.Kind;
-            aa.PreviousExecutionState = e.PreviousExecutionState;
-            aa.SplashScreen = e.SplashScreen;
-            aa.CurrentlyShownApplicationViewId = e.CurrentlyShownApplicationViewId;
-            aa.PrelaunchActivated = e.PrelaunchActivated;
+            ActivationArgs aa = new ActivationArgs(
+                e.Arguments,
+                e.TileId,
+                e.Kind,
+                e.PreviousExecutionState,
+                e.SplashScreen,
+                e.CurrentlyShownApplicationViewId,
+                e.PrelaunchActivated);
 
             _lifeTimeManager.OnLaunched(aa);
         }
 
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            SuspensionArgs sa = new SuspensionArgs();
-            SuspendingOperationWrapper mso = new SuspendingOperationWrapper();
-            mso.Deadline = e.SuspendingOperation.Deadline;
-            mso.Deferral = e.SuspendingOperation.GetDeferral();
-            sa.SuspendingOperation = mso;
+            SuspensionArgs.SuspendingOperationWrapper mso = new SuspensionArgs.SuspendingOperationWrapper(e.SuspendingOperation.Deadline, e.SuspendingOperation.GetDeferral());
+            SuspensionArgs sa = new SuspensionArgs(mso);
 
             _lifeTimeManager.OnSuspending(sender, sa);
         }
