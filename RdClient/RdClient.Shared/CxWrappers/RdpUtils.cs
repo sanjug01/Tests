@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RdClient.Shared.CxWrappers
+namespace RdClient.Shared.CxWrappers.Utils
 {
-    public class RdpUtils
+    public class RdpPropertyApplier
     {
         public static void ApplyRdpProperties(
             IRdpProperties properties, 

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.Models;
 using RdClient.Shared.CxWrappers;
+using RdClient.Shared.CxWrappers.Utils;
 
 namespace RdClient.Shared.Test.CxWrappers
 {
@@ -14,7 +15,7 @@ namespace RdClient.Shared.Test.CxWrappers
             Desktop desktop = new Desktop() { hostName = "narf" };
             Mock.RdpProperties properties = new Mock.RdpProperties();
 
-            RdpUtils.ApplyRdpProperties(properties, desktop);
+            RdpPropertyApplier.ApplyRdpProperties(properties, desktop);
 
             int hostNameIdx = properties._setStringPropertyName.IndexOf("Full Address");
             Assert.IsTrue(hostNameIdx >= 0);

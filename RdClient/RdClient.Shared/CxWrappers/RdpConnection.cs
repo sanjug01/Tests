@@ -1,22 +1,12 @@
 ﻿using System.Diagnostics.Contracts;
-using Windows.UI.Core;
-using Windows.UI.Xaml.Controls;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
 
 namespace RdClient.CxWrappers
 {
-    class RdpConnection : IRdpConnection, IRdpProperties
+    public class RdpConnection : IRdpConnection, IRdpProperties
     {
         private RdClientCx.RdpConnection _rdpConnection;
-
-        public static RdpConnection CreateInstance(CoreWindow spWindow, SwapChainPanel spPanel)
-        {
-            RdClientCx.RdpConnection rdpConnectionCx;
-            RdClientCx.RdpConnection.CreateInstance(spWindow, spPanel, out rdpConnectionCx);
-
-            return new RdpConnection(rdpConnectionCx);
-        }
 
         public RdpConnection(RdClientCx.RdpConnection rdpConnectionCx)
         {
