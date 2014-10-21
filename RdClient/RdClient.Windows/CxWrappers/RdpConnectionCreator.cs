@@ -1,4 +1,5 @@
-﻿using Windows.UI.Core;
+﻿using RdClient.Shared.CxWrappers;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 namespace RdClient.CxWrappers.Utils
 {

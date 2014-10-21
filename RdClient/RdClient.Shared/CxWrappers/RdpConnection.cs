@@ -2,7 +2,7 @@
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
 
-namespace RdClient.CxWrappers
+namespace RdClient.Shared.CxWrappers
 {
     public class RdpConnection : IRdpConnection, IRdpProperties
     {
