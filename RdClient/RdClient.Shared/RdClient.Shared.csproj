@@ -40,7 +40,7 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -55,6 +55,7 @@
     <Compile Include="CxWrappers\IRdpConnection.cs" />
     <Compile Include="CxWrappers\IRdpProperties.cs" />
     <Compile Include="CxWrappers\RdpConnection.cs" />
+    <Compile Include="CxWrappers\RdpPropertiesDictionary.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
     <Compile Include="Models\Credentials.cs" />
