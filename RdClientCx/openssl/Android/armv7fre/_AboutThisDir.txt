@@ -1,0 +1,45 @@
+CURRENTLY COMPILED VERSION: OpenSSL 1.0.1g armv7fre
+
+These are the static libraries for armv7 generated for the Android platform.
+
+The generation process for this file is as follows:
+
+1. Download OpenSSL source code and unpack in a directory <OpenSSLDir>. Ideally you should actually use the copy checked-in at //depot/winmain/secure/mspartners/RemoteDesktop/termsrv/openssl. 
+If you don't use that copy, it will be much harder to debug the code, in the unlikely event that someone needs to step through the execution.
+
+2. Download and install cygwin. Set the following environment variable:
+SETX CYGWIN winsymlinks:nativestrict
+This will turn on windows native symbolic links, as cygwin's workaround doesn't work properly and links are interpreted as actual files by the android compiler.
+
+3. Open a cygwin terminal (note you may need to run as administrator to avoid "permission denied" errors).
+Navigate to <OpenSSLDir> before running the script. Please note the difference between ' and ` in the script below. 
+
+export NDK=<path to android NDK, e.g. export NDK=/cygdrive/c/android-ndk-r9/>
+$NDK/build/tools/make-standalone-toolchain.sh --platform=android-18 --toolchain=arm-linux-androideabi-4.8 --install-dir=`pwd`/android-toolchain-arm --system=windows-x86_64
+
+export TOOLCHAIN_PATH=`pwd`/android-toolchain-arm/bin
+export TOOL=arm-linux-androideabi
+export NDK_TOOLCHAIN_BASENAME=${TOOLCHAIN_PATH}/${TOOL}
+export CC=$NDK_TOOLCHAIN_BASENAME-gcc
+export CXX=$NDK_TOOLCHAIN_BASENAME-g++
+export LINK=${CXX}
+export LD=$NDK_TOOLCHAIN_BASENAME-ld
+export AR=$NDK_TOOLCHAIN_BASENAME-ar
+export RANLIB=$NDK_TOOLCHAIN_BASENAME-ranlib
+export STRIP=$NDK_TOOLCHAIN_BASENAME-strip
+export ARCH_FLAGS="-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16"
+export ARCH_LINK="-march=armv7-a -Wl, --fix-cortex-a8"
+export COMMON_LANG_FLAGS=" ${ARCH_FLAGS} -fpic -ffunction-sections -funwind-tables -fstack-protector -fno-strict-aliasing -finline-limit=64 -Os -g0 -DNDEBUG -DOPENSSL_NO_HEARTBEATS "
+export CPPFLAGS=" ${COMMON_LANG_FLAGS} "
+export CFLAGS=" ${COMMON_LANG_FLAGS} "
+export CXXFLAGS=" ${COMMON_LANG_FLAGS} -frtti "
+export LDFLAGS=" ${ARCH_LINK} "
+./Configure no-ssl2 no-shared no-asm android-armv7
+
+make depend
+
+PATH=$TOOLCHAIN_PATH:$PATH make
+
+(Ignore the errors in the test libraries if you got any.)
+
+4. Copy <OpenSSLDir>\libcrypto.a and <OpenSSLDir>\libssl.a to this directory.

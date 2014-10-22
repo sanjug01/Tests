@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourcePartition Name="termsrv!clouddv!externals!adal" Description="termsrv_clouddv_adal" Owners="vladimis" Branches="fbl_srv3_rds_clouddv" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file://redmond/osg/Release/CORE/BnB/ENG/SourcePartition/Schemas/SourcePartitionV1.xsd" />

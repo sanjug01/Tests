@@ -172,9 +172,17 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
+      <HintPath>..\..\RdClientCx\ADAL\wpa81\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd</HintPath>
+    </Reference>
     <Reference Include="RdClientCx">
       <HintPath>..\..\RdClientCx\WinRTClientBin\Debug\Win32\RdClientCx.winmd</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="Microsoft.VCLibs, Version=12.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

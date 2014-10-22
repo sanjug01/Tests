@@ -69,6 +69,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
+      <HintPath>..\..\RdClientCx\ADAL\wpa81\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd</HintPath>
+    </Reference>
     <Reference Include="RdClientCx">
       <HintPath>..\..\RdClientCx\WinRTClientBin\Debug\Win32\RdClientCx.winmd</HintPath>
     </Reference>
