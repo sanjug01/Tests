@@ -55,7 +55,6 @@
     <Compile Include="CxWrappers\IRdpConnection.cs" />
     <Compile Include="CxWrappers\IRdpProperties.cs" />
     <Compile Include="CxWrappers\RdpConnection.cs" />
-    <Compile Include="CxWrappers\RdpPropertiesDictionary.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
     <Compile Include="Models\Credentials.cs" />
