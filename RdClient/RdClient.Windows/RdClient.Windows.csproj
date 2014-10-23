@@ -149,6 +149,10 @@
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="libeay32.dll" />
+    <Content Include="libeay32.pdb" />
+    <Content Include="ssleay32.dll" />
+    <Content Include="ssleay32.pdb" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
