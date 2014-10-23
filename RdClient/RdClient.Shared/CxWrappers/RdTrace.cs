@@ -5,9 +5,26 @@ namespace RdClient.Shared.CxWrappers
 {
     public static class RdTrace
     {
+        private static bool _initialized = false;
+
         public const string NoFileName = "NoFileName";
         public const uint NoLineNumber = 0;
         public const string NoFunctionName = "NoFunctionName";
+
+        public static void TraceInitialize()
+        {
+            if (!_initialized)
+            {
+                RdClientCx.Tracer.Initialize();
+                _initialized = true;
+            }
+        }
+
+        private static void TraceInternal(string tag, TraceLevel traceLevel, string fileName, uint lineNumber, string functionName, string message)
+        {
+            TraceInitialize();
+            RdClientCx.Tracer.Trace(tag, traceLevel, fileName, lineNumber, functionName, message);
+        }
 
         public static void TraceErr(
             string strMessage,
@@ -16,7 +33,7 @@ namespace RdClient.Shared.CxWrappers
             [CallerMemberName] string functionName = NoFunctionName
             )
         {
-            RdClientCx.Tracer.Trace("UI", TraceLevel.Error, fileName, lineNumber, functionName, strMessage);
+            TraceInternal("UI", TraceLevel.Error, fileName, lineNumber, functionName, strMessage);
         }
 
         public static void TraceWrn(
@@ -26,7 +43,7 @@ namespace RdClient.Shared.CxWrappers
             [CallerMemberName] string functionName = NoFunctionName
             )
         {
-            RdClientCx.Tracer.Trace("UI", TraceLevel.Warning, fileName, lineNumber, functionName, strMessage);
+            TraceInternal("UI", TraceLevel.Warning, fileName, lineNumber, functionName, strMessage);
         }
 
         public static void TraceNrm(
@@ -36,7 +53,7 @@ namespace RdClient.Shared.CxWrappers
             [CallerMemberName] string functionName = NoFunctionName
             )
         {
-            RdClientCx.Tracer.Trace("UI", TraceLevel.Normal, fileName, lineNumber, functionName, strMessage);
+            TraceInternal("UI", TraceLevel.Normal, fileName, lineNumber, functionName, strMessage);
         }
 
         public static void TraceDbg(
@@ -46,7 +63,7 @@ namespace RdClient.Shared.CxWrappers
             [CallerMemberName] string functionName = NoFunctionName
             )
         {
-            RdClientCx.Tracer.Trace("UI", TraceLevel.Debug, fileName, lineNumber, functionName, strMessage);
+            TraceInternal("UI", TraceLevel.Debug, fileName, lineNumber, functionName, strMessage);
         }
 
         public static void TraceAbort(
@@ -56,7 +73,7 @@ namespace RdClient.Shared.CxWrappers
             [CallerMemberName] string functionName = NoFunctionName
             )
         {
-            RdClientCx.Tracer.Trace("UI", TraceLevel.Critical, fileName, lineNumber, functionName, strMessage);
+            TraceInternal("UI", TraceLevel.Critical, fileName, lineNumber, functionName, strMessage);
             if (System.Diagnostics.Debugger.IsAttached)
             {
                 System.Diagnostics.Debugger.Break();
@@ -73,7 +90,7 @@ namespace RdClient.Shared.CxWrappers
         {
             if (iXResult != 0)
             {
-                RdClientCx.Tracer.Trace("UI", TraceLevel.Error, fileName, lineNumber, functionName, strMessage);
+                TraceInternal("UI", TraceLevel.Error, fileName, lineNumber, functionName, strMessage);
                 throw new System.Exception(string.Format("{0} (XResult: {1})", strMessage, iXResult));
             }
         }
@@ -88,7 +105,7 @@ namespace RdClient.Shared.CxWrappers
         {
             if (fCondition)
             {
-                RdClientCx.Tracer.Trace("UI", TraceLevel.Error, fileName, lineNumber, functionName, strMessage);
+                TraceInternal("UI", TraceLevel.Error, fileName, lineNumber, functionName, strMessage);
                 throw new System.Exception(strMessage);
             }
         }

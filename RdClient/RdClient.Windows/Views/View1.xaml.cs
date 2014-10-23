@@ -1,4 +1,6 @@
 ﻿using RdClient.Navigation;
+using RdClient.Shared.Models;
+using System;
 using System.Diagnostics.Contracts;
 using Windows.UI.Xaml.Controls;
 
@@ -32,7 +34,11 @@ namespace RdClient.Views
 
         private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            _navigationService.NavigateToView("view2", null);
+            Tuple<Desktop, Credentials> connectionInformation = new Tuple<Desktop, Credentials>(
+                new Desktop() { hostName = "a3-w81" },
+                new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd" });
+
+            _navigationService.NavigateToView("view2", connectionInformation);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using RdClient.LifeTimeManagement;
+using RdClient.Shared.CxWrappers;
 
 namespace RdClient
 {
@@ -14,6 +15,8 @@ namespace RdClient
         {
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+
+            RdTrace.TraceInitialize();
 
             _lifeTimeManager = new LifeTimeManager();
             _lifeTimeManager.Initialize(new RootFrameManager());
