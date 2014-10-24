@@ -36,13 +36,11 @@ namespace RdClient.Views
         }
 
         void SessionView_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            
+        {            
         }
 
         public void Activating(object activationParameter)
-        {
-            
+        {            
         }
 
         public void Presenting(INavigationService navigationService, object activationParameter)
