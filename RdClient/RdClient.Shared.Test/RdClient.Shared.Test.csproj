@@ -71,6 +71,7 @@
     <Compile Include="CxWrappers\RdpUtilsTests.cs" />
     <Compile Include="MockViewFactoryTests.cs" />
     <Compile Include="MockViewPresenterTests.cs" />
+    <Compile Include="Mock\PhysicalScreenSize.cs" />
     <Compile Include="Mock\PresentableView.cs" />
     <Compile Include="Mock\RdpConnection.cs" />
     <Compile Include="Mock\RdpProperties.cs" />
