@@ -14,7 +14,14 @@ namespace RdClient.Converters
 
             bool visible = (bool)value;
 
-            return visible ? Visibility.Visible : Visibility.Collapsed;
+            if (visible)
+            {
+                return Visibility.Visible;
+            }
+            else
+            {
+                return Visibility.Collapsed;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
