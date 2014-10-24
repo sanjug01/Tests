@@ -53,12 +53,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CxWrappers\IRdpConnection.cs" />
+    <Compile Include="CxWrappers\IRdpEventHandlers.cs" />
     <Compile Include="CxWrappers\IRdpProperties.cs" />
     <Compile Include="CxWrappers\RdpConnection.cs" />
+    <Compile Include="CxWrappers\RdpEventHandlers.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
+    <Compile Include="Helpers\IPhysicalScreenSize.cs" />
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\Desktop.cs" />
+    <Compile Include="ViewModels\SessionViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Navigation\INavigationService.cs" />
     <Compile Include="Navigation\IPresentableView.cs" />

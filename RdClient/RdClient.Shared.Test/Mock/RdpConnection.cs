@@ -47,5 +47,10 @@ namespace RdClient.Shared.Test.Mock
         {
             _resumeCount++;
         }
+
+        public int HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

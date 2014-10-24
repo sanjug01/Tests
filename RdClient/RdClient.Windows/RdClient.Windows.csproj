@@ -115,6 +115,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Helpers\PhysicalScreenSize.cs" />
     <Compile Include="LifeTimeManagement\ActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
@@ -134,8 +135,8 @@
     <Compile Include="Views\View1.xaml.cs">
       <DependentUpon>View1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\View2.xaml.cs">
-      <DependentUpon>View2.xaml</DependentUpon>
+    <Compile Include="Views\SessionView.xaml.cs">
+      <DependentUpon>SessionView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -145,14 +146,22 @@
     <None Include="RdClient.Windows_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\libeay32.dll">
+      <Link>libeay32.dll</Link>
+    </Content>
+    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\libeay32.pdb">
+      <Link>libeay32.pdb</Link>
+    </Content>
+    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\ssleay32.dll">
+      <Link>ssleay32.dll</Link>
+    </Content>
+    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\ssleay32.pdb">
+      <Link>ssleay32.pdb</Link>
+    </Content>
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
-    <Content Include="libeay32.dll" />
-    <Content Include="libeay32.pdb" />
-    <Content Include="ssleay32.dll" />
-    <Content Include="ssleay32.pdb" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -170,7 +179,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\View2.xaml">
+    <Page Include="Views\SessionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

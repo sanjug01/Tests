@@ -38,7 +38,7 @@ namespace RdClient.Views
                 new Desktop() { hostName = "a3-w81" },
                 new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd" });
 
-            _navigationService.NavigateToView("view2", connectionInformation);
+            _navigationService.NavigateToView("SessionView", connectionInformation);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace RdClient
             _navigationService = new NavigationService(this, _viewFactory);
 
             _viewFactory.AddViewClass("view1", typeof(Views.View1));
-            _viewFactory.AddViewClass("view2", typeof(Views.View2));
+            _viewFactory.AddViewClass("SessionView", typeof(Views.SessionView));
 
             _navigationService.NavigateToView("view1", null);
         }

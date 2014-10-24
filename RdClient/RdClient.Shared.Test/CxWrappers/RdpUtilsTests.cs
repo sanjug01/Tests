@@ -15,7 +15,7 @@ namespace RdClient.Shared.Test.CxWrappers
             Desktop desktop = new Desktop() { hostName = "narf" };
             Mock.RdpProperties properties = new Mock.RdpProperties();
 
-            RdpPropertyApplier.ApplyRdpProperties(properties, desktop);
+            RdpPropertyApplier.ApplyDesktop(properties, desktop);
 
             int hostNameIdx = properties._setStringPropertyName.IndexOf("Full Address");
             Assert.IsTrue(hostNameIdx >= 0);
