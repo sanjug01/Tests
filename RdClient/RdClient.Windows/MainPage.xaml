@@ -9,40 +9,9 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Grid   
-            Background="black"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            ManipulationMode="TranslateX, TranslateInertia"
-            >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="12" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="12" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="12" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="12" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="12" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Button Grid.Column="0" BorderBrush="Transparent" BorderThickness="0" Margin="0" Content="T1" FontFamily="Segoe UI Symbol" />
-            <Button Grid.Column="2" BorderBrush="Transparent" BorderThickness="0" Margin="0" Content="T2" FontFamily="Segoe UI Symbol" />
-            <Button Grid.Column="4" BorderBrush="Transparent" BorderThickness="0" Margin="0" Content="T3" FontFamily="Segoe UI Symbol" />
-            <Button Grid.Column="6" BorderBrush="Transparent" BorderThickness="0" Margin="0" Content="T4" FontFamily="Segoe UI Symbol" />
-        </Grid>
-        <Grid>
         <views:TransitionAnimationContainer
             x:Name="TransitionAnimationContainer"
             Grid.Row="0" Grid.Column="0"
             HorizontalAlignment="Stretch"/>
-        </Grid>
     </Grid>
 </Page>

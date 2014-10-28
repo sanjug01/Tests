@@ -39,65 +39,31 @@ namespace RdClient.Shared.CxWrappers
 
         ~RdpConnection()
         {
-            this.CleanUpConnection();
+            _rdpConnection.OnClientConnected -= OnClientConnectedHandler;
+            _rdpConnection.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
+            _rdpConnection.OnClientDisconnected -= OnClientDisconnectedHandler;
+            _rdpConnection.OnUserCredentialsRequest -= OnUserCredentialsRequestHandler;
+            _rdpConnection.OnMouseCursorShapeChanged -= OnMouseCursorShapeChanged;
+            _rdpConnection.OnMouseCursorPositionChanged -= OnMouseCursorPositionChanged;
+            _rdpConnection.OnMultiTouchEnabledChanged -= OnMultiTouchEnabledChanged;
+            _rdpConnection.OnConnectionHealthStateChanged -= OnConnectionHealthStateChangedHandler;
+            _rdpConnection.OnClientAutoReconnecting -= OnClientAutoReconnectingHandler;
+            _rdpConnection.OnClientAutoReconnectComplete -= OnClientAutoReconnectCompleteHandler;
+            _rdpConnection.OnLoginCompleted -= OnLoginCompletedHandler;
+            _rdpConnection.OnStatusInfoReceived -= OnStatusInfoReceivedHandler;
+            _rdpConnection.OnFirstGraphicsUpdateReceived -= OnFirstGraphicsUpdateHandler;
+            _rdpConnection.OnRemoteAppWindowCreated -= OnRemoteAppWindowCreatedHandler;
+            _rdpConnection.OnRemoteAppWindowDeleted -= OnRemoteAppWindowDeletedHandler;
+            _rdpConnection.OnRemoteAppWindowTitleUpdated -= OnRemoteAppWindowTitleUpdatedHandler;
+            _rdpConnection.OnRemoteAppWindowIconUpdated -= OnRemoteAppWindowIconUpdatedHandler;
+
+            //
+            // Terminate the connection object.
+            //
+            _rdpConnection.TerminateInstance();
+            _rdpConnection = null;
         }
-
-
-        private void CleanUpConnection()
-        {
-            if (null != _rdpConnection)
-            {
-                //
-                // FIXME: Remove connection from the store.
-                //
-                //if (_spConnectionStore == null)
-                //{
-                //    xRes = RdpConnectionStore.GetConnectionStore(out _spConnectionStore);
-                //    RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
-                //}
-
-                //xRes = _spConnectionStore.RemoveConnection(_rdpConnection);
-                //RdTrace.IfFailXResultThrow(xRes, "Unable to remove the connection from the store.");
-
-                _rdpConnection.OnClientConnected -= OnClientConnectedHandler;
-                _rdpConnection.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
-                _rdpConnection.OnClientDisconnected -= OnClientDisconnectedHandler;
-                _rdpConnection.OnUserCredentialsRequest -= OnUserCredentialsRequestHandler;
-                _rdpConnection.OnMouseCursorShapeChanged -= OnMouseCursorShapeChanged;
-                _rdpConnection.OnMouseCursorPositionChanged -= OnMouseCursorPositionChanged;
-                _rdpConnection.OnMultiTouchEnabledChanged -= OnMultiTouchEnabledChanged;
-                _rdpConnection.OnConnectionHealthStateChanged -= OnConnectionHealthStateChangedHandler;
-                _rdpConnection.OnClientAutoReconnecting -= OnClientAutoReconnectingHandler;
-                _rdpConnection.OnClientAutoReconnectComplete -= OnClientAutoReconnectCompleteHandler;
-                _rdpConnection.OnLoginCompleted -= OnLoginCompletedHandler;
-                _rdpConnection.OnStatusInfoReceived -= OnStatusInfoReceivedHandler;
-                _rdpConnection.OnFirstGraphicsUpdateReceived -= OnFirstGraphicsUpdateHandler;
-                _rdpConnection.OnRemoteAppWindowCreated -= OnRemoteAppWindowCreatedHandler;
-                _rdpConnection.OnRemoteAppWindowDeleted -= OnRemoteAppWindowDeletedHandler;
-                _rdpConnection.OnRemoteAppWindowTitleUpdated -= OnRemoteAppWindowTitleUpdatedHandler;
-                _rdpConnection.OnRemoteAppWindowIconUpdated -= OnRemoteAppWindowIconUpdatedHandler;
-
-                //
-                // Terminate the connection object.
-                //
-                _rdpConnection.TerminateInstance();
-                _rdpConnection = null;
-
-            }
-
-            /// FIXME: input handler is currently ignored
-            /* ****
-            if (null != m_spInputHandler)
-            {
-                m_spInputHandler.SwapChainPanelPanned -= InputHandler_SwapChainPanelPanned;
-                m_spInputHandler.InertiaEnabled -= InputHandler_InertiaEnabled;
-                m_spInputHandler = null;
-            }
-            m_spKeyboardHandler = null;
-            **** */
-
-            // _spConnectionStore = null;
-        }
+        
 
         public void Connect(Credentials credentials, bool fUsingSavedCreds)
         {
