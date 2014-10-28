@@ -63,6 +63,7 @@
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\Desktop.cs" />
     <Compile Include="ViewModels\SessionViewModel.cs" />
+    <Compile Include="ViewModels\TestsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Navigation\INavigationService.cs" />
     <Compile Include="Navigation\IPresentableView.cs" />

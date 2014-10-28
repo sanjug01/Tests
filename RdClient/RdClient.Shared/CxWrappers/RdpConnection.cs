@@ -37,27 +37,93 @@ namespace RdClient.Shared.CxWrappers
             _rdpConnection.OnRemoteAppWindowIconUpdated += OnRemoteAppWindowIconUpdatedHandler;
         }
 
+        ~RdpConnection()
+        {
+            this.CleanUpConnection();
+        }
+
+
+        private void CleanUpConnection()
+        {
+            if (null != _rdpConnection)
+            {
+                //
+                // FIXME: Remove connection from the store.
+                //
+                //if (_spConnectionStore == null)
+                //{
+                //    xRes = RdpConnectionStore.GetConnectionStore(out _spConnectionStore);
+                //    RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
+                //}
+
+                //xRes = _spConnectionStore.RemoveConnection(_rdpConnection);
+                //RdTrace.IfFailXResultThrow(xRes, "Unable to remove the connection from the store.");
+
+                _rdpConnection.OnClientConnected -= OnClientConnectedHandler;
+                _rdpConnection.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
+                _rdpConnection.OnClientDisconnected -= OnClientDisconnectedHandler;
+                _rdpConnection.OnUserCredentialsRequest -= OnUserCredentialsRequestHandler;
+                _rdpConnection.OnMouseCursorShapeChanged -= OnMouseCursorShapeChanged;
+                _rdpConnection.OnMouseCursorPositionChanged -= OnMouseCursorPositionChanged;
+                _rdpConnection.OnMultiTouchEnabledChanged -= OnMultiTouchEnabledChanged;
+                _rdpConnection.OnConnectionHealthStateChanged -= OnConnectionHealthStateChangedHandler;
+                _rdpConnection.OnClientAutoReconnecting -= OnClientAutoReconnectingHandler;
+                _rdpConnection.OnClientAutoReconnectComplete -= OnClientAutoReconnectCompleteHandler;
+                _rdpConnection.OnLoginCompleted -= OnLoginCompletedHandler;
+                _rdpConnection.OnStatusInfoReceived -= OnStatusInfoReceivedHandler;
+                _rdpConnection.OnFirstGraphicsUpdateReceived -= OnFirstGraphicsUpdateHandler;
+                _rdpConnection.OnRemoteAppWindowCreated -= OnRemoteAppWindowCreatedHandler;
+                _rdpConnection.OnRemoteAppWindowDeleted -= OnRemoteAppWindowDeletedHandler;
+                _rdpConnection.OnRemoteAppWindowTitleUpdated -= OnRemoteAppWindowTitleUpdatedHandler;
+                _rdpConnection.OnRemoteAppWindowIconUpdated -= OnRemoteAppWindowIconUpdatedHandler;
+
+                //
+                // Terminate the connection object.
+                //
+                _rdpConnection.TerminateInstance();
+                _rdpConnection = null;
+
+            }
+
+            /// FIXME: input handler is currently ignored
+            /* ****
+            if (null != m_spInputHandler)
+            {
+                m_spInputHandler.SwapChainPanelPanned -= InputHandler_SwapChainPanelPanned;
+                m_spInputHandler.InertiaEnabled -= InputHandler_InertiaEnabled;
+                m_spInputHandler = null;
+            }
+            m_spKeyboardHandler = null;
+            **** */
+
+            // _spConnectionStore = null;
+        }
+
         public void Connect(Credentials credentials, bool fUsingSavedCreds)
         {
             int xRes = _rdpConnection.SetUserCredentials(credentials.username, credentials.domain, credentials.password, fUsingSavedCreds);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set user credentials.");
 
-            _rdpConnection.Connect();
+            xRes = _rdpConnection.Connect();
+            RdTrace.IfFailXResultThrow(xRes, "Failed to connect.");
         }
 
         public void Disconnect()
         {
-            _rdpConnection.Disconnect();
+            int xRes = _rdpConnection.Disconnect();
+            RdTrace.IfFailXResultThrow(xRes, "Failed to disconnect.");
         }
 
         public void Suspend()
         {
-            _rdpConnection.Suspend();
+            int xRes = _rdpConnection.Suspend();
+            RdTrace.IfFailXResultThrow(xRes, "Failed to suspend.");
         }
 
         public void Resume()
         {
-            _rdpConnection.Resume();
+            int xRes = _rdpConnection.Resume();
+            RdTrace.IfFailXResultThrow(xRes, "Failed to resume.");
         }
 
         public int HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)

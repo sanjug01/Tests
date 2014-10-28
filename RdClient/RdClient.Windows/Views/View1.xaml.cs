@@ -40,5 +40,15 @@ namespace RdClient.Views
 
             _navigationService.NavigateToView("SessionView", connectionInformation);
         }
+
+        private void TestsButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            // test connection settings passed from main view.
+            Tuple<Desktop, Credentials> testConnectionInformation = new Tuple<Desktop, Credentials>(
+                new Desktop() { hostName = "a3-w81" },
+                new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd" });
+
+            _navigationService.NavigateToView("TestsView", testConnectionInformation);
+        }
     }
 }

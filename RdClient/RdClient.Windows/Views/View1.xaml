@@ -11,5 +11,8 @@
         <Button
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right" Click="Button_Click">Connect</Button>
+        <Button
+            VerticalAlignment="Top"
+            HorizontalAlignment="Right" Click="TestsButton_Click">Tests</Button> 
     </Grid>
 </Page>

@@ -129,6 +129,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CxWrappers\RdpConnectionFactory.cs" />
+    <Compile Include="Views\TestsView.xaml.cs">
+      <DependentUpon>TestsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TransitionAnimationContainer.xaml.cs">
       <DependentUpon>TransitionAnimationContainer.xaml</DependentUpon>
     </Compile>
@@ -149,14 +152,8 @@
     <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\libeay32.dll">
       <Link>libeay32.dll</Link>
     </Content>
-    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\libeay32.pdb">
-      <Link>libeay32.pdb</Link>
-    </Content>
     <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\ssleay32.dll">
       <Link>ssleay32.dll</Link>
-    </Content>
-    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\ssleay32.pdb">
-      <Link>ssleay32.pdb</Link>
     </Content>
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
@@ -170,6 +167,10 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\TestsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TransitionAnimationContainer.xaml">
       <SubType>Designer</SubType>
