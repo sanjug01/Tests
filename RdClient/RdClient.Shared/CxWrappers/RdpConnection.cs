@@ -39,6 +39,16 @@ namespace RdClient.Shared.CxWrappers
 
         ~RdpConnection()
         {
+            int xRes;
+
+            // remove from connection store
+            RdClientCx.RdpConnectionStore rdpConnectionStore;
+            xRes = RdClientCx.RdpConnectionStore.GetConnectionStore(out rdpConnectionStore);
+            RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
+            rdpConnectionStore.RemoveConnection(_rdpConnection);
+            rdpConnectionStore = null;
+
+
             _rdpConnection.OnClientConnected -= OnClientConnectedHandler;
             _rdpConnection.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
             _rdpConnection.OnClientDisconnected -= OnClientDisconnectedHandler;
@@ -60,7 +70,8 @@ namespace RdClient.Shared.CxWrappers
             //
             // Terminate the connection object.
             //
-            _rdpConnection.TerminateInstance();
+            xRes = _rdpConnection.TerminateInstance();
+            RdTrace.IfFailXResultThrow(xRes, "Unable to terminate RDP connection.");
             _rdpConnection = null;
         }
         
@@ -230,5 +241,6 @@ namespace RdClient.Shared.CxWrappers
         {
             _eventHandlers.OnRemoteAppWindowIconUpdatedHandler(this, windowId, icon, iconWidth, iconHeight);
         }
+
     }
 }

@@ -84,20 +84,20 @@ namespace RdClient.Views
             Desktop desktop = connectionInformation.Item1;
             Credentials credentials = connectionInformation.Item2;
 
-            _connection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.TestSwapChainPanel, _sessionViewModel);
+            IRdpConnection testConnection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.TestSwapChainPanel, _sessionViewModel);
             RdpPropertyApplier.ApplyDesktop(_connection as IRdpProperties, desktop);
             RdpPropertyApplier.ApplyScreenSize(_connection as IRdpProperties, _screenSize);
 
             for (int i = 0; i < _iterations; i++ )
             {
                 // Connect
-                _connection.Connect(credentials, false);
+                testConnection.Connect(credentials, false);
                
                 // and Disconnect
-                _connection.Disconnect();
+                testConnection.Disconnect();
             }
 
-            _connection = null;
+            testConnection = null;
 
         }
 
@@ -123,16 +123,15 @@ namespace RdClient.Views
 
             for (int i = 0; i < _iterations; i++)
             {
-                _connection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.TestSwapChainPanel, _sessionViewModel);
+                IRdpConnection testConnection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.TestSwapChainPanel, _sessionViewModel);
                 RdpPropertyApplier.ApplyDesktop(_connection as IRdpProperties, desktop);
                 RdpPropertyApplier.ApplyScreenSize(_connection as IRdpProperties, _screenSize);
                 // Connect
-                _connection.Connect(credentials, false);
+                testConnection.Connect(credentials, false);
 
                 // and Disconnect
-                _connection.Disconnect();
-
-                _connection = null;
+                testConnection.Disconnect();
+                testConnection = null;
             }
 
 
