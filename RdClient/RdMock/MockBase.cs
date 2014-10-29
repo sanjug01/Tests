@@ -14,7 +14,7 @@ using System.Reflection;
 //
 // To implement a Mock class for Foo which verifies these things we:
 //
-// class MockFoo : IBar, MockBase
+// class MockFoo : IFoo, MockBase
 // {
 //      public int method(int param1, char param2)
 //      {
