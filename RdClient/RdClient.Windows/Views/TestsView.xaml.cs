@@ -83,6 +83,7 @@ namespace RdClient.Views
             Tuple<Desktop, Credentials> connectionInformation = _activationParameter as Tuple<Desktop, Credentials>;
             Desktop desktop = connectionInformation.Item1;
             Credentials credentials = connectionInformation.Item2;
+            TimeSpan time = TimeSpan.FromSeconds(5); 
 
             IRdpConnection testConnection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.TestSwapChainPanel, _sessionViewModel);
             RdpPropertyApplier.ApplyDesktop(_connection as IRdpProperties, desktop);
@@ -92,6 +93,8 @@ namespace RdClient.Views
             {
                 // Connect
                 testConnection.Connect(credentials, false);
+
+                System.Threading.Tasks.Task.Delay(time); 
                
                 // and Disconnect
                 testConnection.Disconnect();
@@ -120,6 +123,7 @@ namespace RdClient.Views
             Tuple<Desktop, Credentials> connectionInformation = _activationParameter as Tuple<Desktop, Credentials>;
             Desktop desktop = connectionInformation.Item1;
             Credentials credentials = connectionInformation.Item2;
+            TimeSpan time = TimeSpan.FromSeconds(5); 
 
             for (int i = 0; i < _iterations; i++)
             {
@@ -128,6 +132,8 @@ namespace RdClient.Views
                 RdpPropertyApplier.ApplyScreenSize(_connection as IRdpProperties, _screenSize);
                 // Connect
                 testConnection.Connect(credentials, false);
+
+                System.Threading.Tasks.Task.Delay(time); 
 
                 // and Disconnect
                 testConnection.Disconnect();
