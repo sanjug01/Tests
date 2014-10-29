@@ -23,6 +23,7 @@ namespace RdClient.CxWrappers.Utils
 
             RdpEventHandlers eventHandlers = new RdpEventHandlers(sessionViewModel);
 
+            rdpConnectionStore = null;
             return new RdpConnection(rdpConnectionCx, eventHandlers);
         }
     }
