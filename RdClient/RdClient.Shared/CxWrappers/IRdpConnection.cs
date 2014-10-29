@@ -2,6 +2,7 @@
 
 namespace RdClient.Shared.CxWrappers
 {
+    // corresponds to $SDXROOT\termsrv\rdp\winrt\RdClientCx\RdpXPlatDisconnectReasons.h
     public enum RdpDisconnectCode
     {
         AccountDisabled = 0,

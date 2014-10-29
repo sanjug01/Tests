@@ -5,24 +5,17 @@ namespace RdClient.Shared.CxWrappers
 {
     public static class RdTrace
     {
-        private static bool _initialized = false;
-
         public const string NoFileName = "NoFileName";
         public const uint NoLineNumber = 0;
         public const string NoFunctionName = "NoFunctionName";
 
-        public static void TraceInitialize()
+        public static RdTrace()
         {
-            if (!_initialized)
-            {
-                RdClientCx.Tracer.Initialize();
-                _initialized = true;
-            }
+            RdClientCx.Tracer.Initialize();
         }
 
         private static void TraceInternal(string tag, TraceLevel traceLevel, string fileName, uint lineNumber, string functionName, string message)
         {
-            TraceInitialize();
             RdClientCx.Tracer.Trace(tag, traceLevel, fileName, lineNumber, functionName, message);
         }
 
