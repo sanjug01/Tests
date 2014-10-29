@@ -23,7 +23,7 @@ using System.Reflection;
 // }
 // 
 //
-// We are assuming here that IBar only has one method with the signature int method(int param1, char param2).
+// We are assuming here that IFoo only has one method with the signature int method(int param1, char param2).
 // Invoke is called on MockBase which through reflection gives information to the MockBase instance that the method has been called with param1 and param2
 // as parameters.
 //
