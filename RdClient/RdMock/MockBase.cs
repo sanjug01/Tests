@@ -36,7 +36,7 @@ using System.Reflection;
 // mockFoo.Expect("method", new object[] { 3, 4 }, 5);
 //
 // bar.methodUnderTest();
-//
+// bar.MockFinalize();
 //
 // If methodUnderTest does anything with foo that's not rigged with an expect call, an exception is thrown and the test fails.
 //
@@ -74,7 +74,7 @@ namespace RdMock
         private IList<MockCall> _calls = new List<MockCall>();
         private IList<MockReturn> _returns = new List<MockReturn>();
 
-        ~MockBase()
+        public void MockFinalize()
         {
             if(_calls.Count > 0)
             {
@@ -109,7 +109,7 @@ namespace RdMock
 
             string methodName = method.Name;
 
-            if(_calls[0].functionName.Equals(methodName) == false || _calls.Count < 1)
+            if(_calls.Count < 1 ||_calls[0].functionName.Equals(methodName) == false)
             {
                 throw new MockException("Unexpected invocation of " + methodName);
             }
@@ -144,7 +144,7 @@ namespace RdMock
                 }
             }
 
-            if(_returns[0].functionName.Equals(methodName) == false || _returns.Count < 1)
+            if( _returns.Count < 1 || _returns[0].functionName.Equals(methodName) == false)
             {
                 throw new MockException("Initialized expectation but missing return value?!");
             }

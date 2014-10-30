@@ -26,7 +26,7 @@ namespace RdMock.Test
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void MockMethod1()
         {
             bool exceptionThrown = false;
             try
@@ -38,6 +38,8 @@ namespace RdMock.Test
                     tm.Expect("testMethod1", pars, 4);
                     int actual = tm.testMethod1(3);
                     Assert.AreEqual(4, actual);
+
+                    tm.MockFinalize();
                 }
             }
             catch(MockException /* e */)
@@ -49,7 +51,7 @@ namespace RdMock.Test
         }
 
         [TestMethod]
-        public void TestMethodSequence()
+        public void MockMethodSequence()
         {
             bool exceptionThrown = false;
             try
@@ -68,6 +70,8 @@ namespace RdMock.Test
                     Assert.AreEqual(4, actual1);
                     Assert.AreEqual(5, actual2);
                     Assert.AreEqual(42, actual3);
+
+                    tm.MockFinalize();
                 }
             }
             catch (MockException /* e */)
@@ -76,6 +80,117 @@ namespace RdMock.Test
             }
 
             Assert.IsFalse(exceptionThrown);
+        }
+        
+        [TestMethod]
+        public void MockException()
+        {
+            MockException me = new MockException("test");
+
+            Assert.AreEqual("test", me.Message);
+        }
+
+        [TestMethod]
+        public void MockRemainingExpectations()
+        {
+            bool exceptionThrown = false;
+            try
+            {
+                {
+                    TestMock tm = new TestMock();
+                    tm.Expect("testMethod1", new List<object>() { 3 }, 4);
+
+                    tm.MockFinalize();
+                }
+            }
+            catch (MockException /* e */)
+            {
+                exceptionThrown = true;
+            }
+
+            Assert.IsTrue(exceptionThrown);
+        }
+
+        [TestMethod]
+        public void MockUnexpectedInvocation()
+        {
+            bool exceptionThrown = false;
+            try
+            {
+                TestMock tm = new TestMock();
+                tm.testMethod1(1);
+
+                tm.MockFinalize();
+            }
+            catch (MockException /* e */)
+            {
+                exceptionThrown = true;
+            }
+
+            Assert.IsTrue(exceptionThrown);
+        }
+
+        [TestMethod]
+        public void MockParameterCountNotMatching()
+        {
+            bool exceptionThrown = false;
+            try
+            {
+                TestMock tm = new TestMock();
+
+                tm.Expect("testMethod1", new List<object>() { }, 4);
+                tm.testMethod1(1);
+
+                tm.MockFinalize();
+            }
+            catch (MockException /* e */)
+            {
+                exceptionThrown = true;
+            }
+
+            Assert.IsTrue(exceptionThrown);
+        }
+
+        [TestMethod]
+        public void MockParameterTypeNotMatching()
+        {
+            bool exceptionThrown = false;
+            try
+            {
+                TestMock tm = new TestMock();
+
+                tm.Expect("testMethod1", new List<object>() { 'b' }, 4);
+                tm.testMethod1(1);
+
+                tm.MockFinalize();
+            }
+            catch (MockException /* e */)
+            {
+                exceptionThrown = true;
+            }
+
+            Assert.IsTrue(exceptionThrown);
+        }
+
+        [TestMethod]
+        public void MockParameterValueNotMatching()
+        {
+            bool exceptionThrown = false;
+            try
+            {
+                TestMock tm = new TestMock();
+
+                tm.Expect("testMethod1", new List<object>() { 5 }, 4);
+                tm.testMethod1(1);
+
+                tm.MockFinalize();
+            }
+            catch (MockException /* e */)
+            {
+                exceptionThrown = true;
+            }
+
+            Assert.IsTrue(exceptionThrown);
         }
     }
 }

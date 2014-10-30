@@ -16,6 +16,7 @@ namespace RdClient
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
 
+            RdTrace.TraceNrm("Initializing Tracer");
 
             _lifeTimeManager = new LifeTimeManager();
             _lifeTimeManager.Initialize(new RootFrameManager());

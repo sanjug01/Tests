@@ -80,12 +80,17 @@
     <Compile Include="Navigation\NavigationServiceTests.cs" />
     <Compile Include="Navigation\PresentableViewFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModelBaseTests.cs" />
+    <Compile Include="ViewModels\RelayCommandTests.cs" />
+    <Compile Include="ViewModels\ViewModelBaseTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RdClient.Shared\RdClient.Shared.csproj">
       <Project>{ff57219c-0e7b-4cd5-9e02-287cea2d0d83}</Project>
       <Name>RdClient.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RdMock\RdMock.csproj">
+      <Project>{a5cff967-fa97-4083-b627-ec1ad4d5e6be}</Project>
+      <Name>RdMock</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -36,7 +36,7 @@ namespace RdClient.Views
         {
             Tuple<Desktop, Credentials> connectionInformation = new Tuple<Desktop, Credentials>(
                 new Desktop() { hostName = "a3-w81" },
-                new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd" });
+                new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd", haveBeenPersisted = false });
 
             _navigationService.NavigateToView("SessionView", connectionInformation);
         }
@@ -46,7 +46,7 @@ namespace RdClient.Views
             // test connection settings passed from main view.
             Tuple<Desktop, Credentials> testConnectionInformation = new Tuple<Desktop, Credentials>(
                 new Desktop() { hostName = "a3-w81" },
-                new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd" });
+                new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd", haveBeenPersisted = false });
 
             _navigationService.NavigateToView("TestsView", testConnectionInformation);
         }
