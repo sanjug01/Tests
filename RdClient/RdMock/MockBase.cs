@@ -69,14 +69,14 @@ namespace RdMock
         public object value;
     }
 
-    public class MockBase
+    public class MockBase : IDisposable
     {
         private IList<MockCall> _calls = new List<MockCall>();
         private IList<MockReturn> _returns = new List<MockReturn>();
 
-        public void MockFinalize()
+        public void Dispose()
         {
-            if(_calls.Count > 0)
+            if (_calls.Count > 0)
             {
                 throw new MockException("Expected " + _calls.Count + " more calls before exiting scope.");
             }

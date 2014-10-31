@@ -11,28 +11,32 @@ namespace RdClient.Shared.Test.CxWrappers
     public class RdpUtilsTests
     {
         [TestMethod]
-        public void TestApplyDesktop()
+        public void ApplyDesktop()
         {
-            Desktop desktop = new Desktop() { hostName = "narf" };
-            Mock.RdpProperties properties = new Mock.RdpProperties();
+            using(Mock.RdpProperties properties = new Mock.RdpProperties())
+            {
+                Desktop desktop = new Desktop() { hostName = "narf" };
 
-            properties.Expect("SetStringProperty", new List<object>() { "Full Address", "narf" }, 0);
+                properties.Expect("SetStringProperty", new List<object>() { "Full Address", "narf" }, 0);
 
-            RdpPropertyApplier.ApplyDesktop(properties, desktop);
+                RdpPropertyApplier.ApplyDesktop(properties, desktop);
+            }
         }
 
         [TestMethod]
-        public void TestApplyScreenSize()
+        public void ApplyScreenSize()
         {
             Tuple<int, int> size = new Tuple<int, int>(23, 42);
-            Mock.RdpProperties properties = new Mock.RdpProperties();
-            Mock.PhysicalScreenSize physicalSize = new Mock.PhysicalScreenSize(size);
 
-            physicalSize.Expect("GetScreenSize", new List<object>() { }, size);
-            properties.Expect("SetIntProperty", new List<object>() { "PhysicalDesktopWidth", 23 }, 0);
-            properties.Expect("SetIntProperty", new List<object>() { "PhysicalDesktopHeight", 42 }, 0);
+            using(Mock.RdpProperties properties = new Mock.RdpProperties())
+            using (Mock.PhysicalScreenSize physicalSize = new Mock.PhysicalScreenSize(size))
+            {
+                physicalSize.Expect("GetScreenSize", new List<object>() { }, size);
+                properties.Expect("SetIntProperty", new List<object>() { "PhysicalDesktopWidth", 23 }, 0);
+                properties.Expect("SetIntProperty", new List<object>() { "PhysicalDesktopHeight", 42 }, 0);
 
-            RdpPropertyApplier.ApplyScreenSize(properties, physicalSize);
+                RdpPropertyApplier.ApplyScreenSize(properties, physicalSize);
+            }
         }
     }
 }

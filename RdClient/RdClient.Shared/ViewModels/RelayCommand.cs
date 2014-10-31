@@ -4,6 +4,9 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
+    // This is a helper class which gives us a simple, generic implementation
+    // of ICommand. Its purpose is to feed it to XAML bindings so we can
+    // bind to actions.
     public class RelayCommand : ICommand
     {
         readonly Action<object> _execute;

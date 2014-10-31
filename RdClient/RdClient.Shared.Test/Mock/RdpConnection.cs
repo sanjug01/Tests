@@ -1,5 +1,6 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
+using RdMock;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,49 +9,31 @@ using System.Threading.Tasks;
 
 namespace RdClient.Shared.Test.Mock
 {
-    class RdpConnection : IRdpConnection
+    class RdpConnection : MockBase, IRdpConnection
     {
-        private Credentials _credentials;
-        private bool _usingSavedCreds;
-
-        public Credentials Credentials { get { return _credentials; } }
-        public int UserCredentialsReturnValue { get; set; }
-
-        private int _connectCount = 0;
-        private int _disconnectCount = 0;
-        private int _suspendCount = 0;
-        private int _resumeCount = 0;
-
-        public int ConnectCount { get { return _connectCount; } }
-        public int Disconnectcount { get { return _disconnectCount; } }
-        public int SuspendCount { get { return _suspendCount; } }
-        public int ResumeCount { get { return _resumeCount; } }
-
         public void Connect(Credentials credentials, bool fUsingSavedCreds)
         {
-            _credentials = credentials;
-            _usingSavedCreds = fUsingSavedCreds;
-            _connectCount++;
+            Invoke(new object[] { credentials, fUsingSavedCreds });
         }
 
         public void Disconnect()
         {
-            _disconnectCount++;
+            Invoke(new object[] {});
         }
 
         public void Suspend()
         {
-            _suspendCount++;
+            Invoke(new object[] { });
         }
 
         public void Resume()
         {
-            _resumeCount++;
+            Invoke(new object[] { });
         }
 
         public int HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
         {
-            throw new NotImplementedException();
+            return (int) Invoke(new object[] { disconnectReason, reconnectToServer });
         }
     }
 }

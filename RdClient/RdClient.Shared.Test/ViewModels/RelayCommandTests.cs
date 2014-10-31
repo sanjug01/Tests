@@ -9,7 +9,7 @@ namespace RdClient.Shared.Test.ViewModels
     public class RelayCommandTests
     {
         [TestMethod]
-        public void TestBasicExecute()
+        public void BasicExecute()
         {
             bool actionCalled = false;
             Int32 actionParam = 0;
@@ -24,7 +24,7 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void TestCanExecute()
+        public void CanExecute()
         {
             bool canExecute = false;
             bool predicateCalled = false;
@@ -40,7 +40,7 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void TestCanExecuteNil()
+        public void CanExecuteNil()
         {
             bool canExecute = false;
 
