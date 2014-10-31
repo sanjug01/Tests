@@ -9,7 +9,7 @@ namespace RdClient.Shared.CxWrappers
         public const uint NoLineNumber = 0;
         public const string NoFunctionName = "NoFunctionName";
 
-        public static RdTrace()
+        static RdTrace()
         {
             RdClientCx.Tracer.Initialize();
         }
