@@ -59,7 +59,7 @@ namespace RdClient.Views
 
             Tuple<Desktop, Credentials> connectionInformation = _activationParameter as Tuple<Desktop, Credentials>;
 
-            IRdpConnection connection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.SwapChainPanel, svm);
+            IRdpConnection connection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.SwapChainPanel);
             RdpPropertyApplier.ApplyScreenSize(connection as IRdpProperties, _screenSize);
 
             svm.NavigationService = _navigationService;

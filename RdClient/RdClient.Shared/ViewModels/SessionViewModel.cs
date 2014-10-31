@@ -33,12 +33,62 @@ namespace RdClient.Shared.ViewModels
 
             RdpPropertyApplier.ApplyDesktop(RdpConnection as IRdpProperties, desktop);
             RdpConnection.Connect(credentials, credentials.haveBeenPersisted);
+
+            RdpConnection.Events.ClientAsyncDisconnect += ClientAsyncDisconnectHandler;
         }
 
         private void Disconnect(object o)
         {
             RdpConnection.Disconnect();
             NavigationService.NavigateToView("view1", null);
+
+            RdpConnection.Events.ClientAsyncDisconnect -= ClientAsyncDisconnectHandler;
         }
+
+        public void ClientAsyncDisconnectHandler(object sender, ClientAsyncDisconnectArgs args)
+        {
+            int xRes;
+            bool reconnect;
+
+            switch (args.DisconnectReason.code)
+            {
+                case RdpDisconnectCode.PreAuthLogonFailed:
+                    {
+                        reconnect = false;
+                    }
+                    break;
+                case RdpDisconnectCode.FreshCredsRequired:
+                    {
+                        reconnect = false;
+                    }
+                    break;
+
+                case RdpDisconnectCode.CertValidationFailed:
+                    {
+                        reconnect = true;
+                    }
+                    break;
+
+                case RdpDisconnectCode.CredSSPUnsupported:
+                    {
+                        reconnect = false;
+                    }
+                    break;
+
+                default:
+                    {
+                        //
+                        // For all other reasons, we just disconnect.
+                        // We'll handle showing any appropriate dialogs to the user in OnClientDisconnectedHandler.
+                        //
+                        reconnect = false;
+                    }
+                    break;
+            }
+
+            xRes = RdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
+            RdTrace.IfFailXResultThrow(xRes, "HandleAsyncDisconnectResult failed.");
+        }
+
     }
 }

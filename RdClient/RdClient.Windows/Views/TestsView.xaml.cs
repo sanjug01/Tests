@@ -85,7 +85,7 @@ namespace RdClient.Views
             Credentials credentials = connectionInformation.Item2;
             TimeSpan time = TimeSpan.FromSeconds(5); 
 
-            IRdpConnection testConnection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.TestSwapChainPanel, _sessionViewModel);
+            IRdpConnection testConnection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.TestSwapChainPanel);
             RdpPropertyApplier.ApplyDesktop(_connection as IRdpProperties, desktop);
             RdpPropertyApplier.ApplyScreenSize(_connection as IRdpProperties, _screenSize);
 
@@ -127,7 +127,7 @@ namespace RdClient.Views
 
             for (int i = 0; i < _iterations; i++)
             {
-                IRdpConnection testConnection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.TestSwapChainPanel, _sessionViewModel);
+                IRdpConnection testConnection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.TestSwapChainPanel);
                 RdpPropertyApplier.ApplyDesktop(_connection as IRdpProperties, desktop);
                 RdpPropertyApplier.ApplyScreenSize(_connection as IRdpProperties, _screenSize);
                 // Connect
@@ -172,7 +172,7 @@ namespace RdClient.Views
             Desktop desktop = connectionInformation.Item1;
             Credentials credentials = connectionInformation.Item2;
 
-            _connection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.TestSwapChainPanel, _sessionViewModel);
+            _connection = RdpConnectionFactory.CreateInstance(CoreWindow.GetForCurrentThread(), this.TestSwapChainPanel);
             RdpPropertyApplier.ApplyDesktop(_connection as IRdpProperties, desktop);
             RdpPropertyApplier.ApplyScreenSize(_connection as IRdpProperties, _screenSize);
 

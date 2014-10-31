@@ -6,7 +6,7 @@ namespace RdClient.CxWrappers.Utils
 {
     public class RdpConnectionFactory
     {
-        public static IRdpConnection CreateInstance(CoreWindow spWindow, SwapChainPanel swapChainPanel, SessionViewModel sessionViewModel)
+        public static IRdpConnection CreateInstance(CoreWindow spWindow, SwapChainPanel swapChainPanel)
         {
             int xRes;
 
@@ -21,10 +21,8 @@ namespace RdClient.CxWrappers.Utils
             xRes = rdpConnectionStore.CreateConnectionWithSettings("", out rdpConnectionCx);
             RdTrace.IfFailXResultThrow(xRes, "Failed to create a desktop connection with the given settings.");
 
-            RdpEventHandlers eventHandlers = new RdpEventHandlers(sessionViewModel);
-
             rdpConnectionStore = null;
-            return new RdpConnection(rdpConnectionCx, eventHandlers);
+            return new RdpConnection(rdpConnectionCx);
         }
     }
 }

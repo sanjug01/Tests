@@ -9,13 +9,15 @@ namespace RdClient.Shared.CxWrappers
     public class RdpConnection : IRdpConnection, IRdpProperties
     {
         private RdClientCx.RdpConnection _rdpConnection;
-        private IRdpEventHandlers _eventHandlers;
+        private IRdpEventProxy _eventProxy;
 
-        public RdpConnection(RdClientCx.RdpConnection rdpConnectionCx, IRdpEventHandlers eventHandlers)
+        public IRdpEvents Events { get { return _eventProxy; } }
+
+        public RdpConnection(RdClientCx.RdpConnection rdpConnectionCx)
         {
             Contract.Requires(rdpConnectionCx != null);
             _rdpConnection = rdpConnectionCx;
-            _eventHandlers = eventHandlers;
+            _eventProxy = new RdpEventProxy();
 
             _rdpConnection.OnClientConnected += OnClientConnectedHandler;
             _rdpConnection.OnClientAsyncDisconnect += OnClientAsyncDisconnectHandler;
@@ -159,87 +161,92 @@ namespace RdClient.Shared.CxWrappers
 
         void OnClientConnectedHandler(RdClientCx.RdpConnection sender)
         {
-            _eventHandlers.OnClientConnectedHandler(this);
+            _eventProxy.EmitClientConnected(this, new ClientConnectedArgs());
         }
 
         void OnClientAsyncDisconnectHandler(RdClientCx.RdpConnection sender, RdClientCx.RdpDisconnectReason disconnectReason)
         {
-            _eventHandlers.OnClientAsyncDisconnectHandler(this, RdpTypeConverter.ConvertFromCxRdpDisconnectReason(disconnectReason));
+            _eventProxy.EmitClientAsyncDisconnect(this, new ClientAsyncDisconnectArgs(RdpTypeConverter.ConvertFromCxRdpDisconnectReason(disconnectReason)));
         }
 
         void OnClientDisconnectedHandler(RdClientCx.RdpConnection sender, RdClientCx.RdpDisconnectReason disconnectReason)
         {
-            _eventHandlers.OnClientDisconnectedHandler(this, RdpTypeConverter.ConvertFromCxRdpDisconnectReason(disconnectReason));
+            _eventProxy.EmitClientDisconnected(this, new ClientDisconnectedArgs(RdpTypeConverter.ConvertFromCxRdpDisconnectReason(disconnectReason)));
         }
 
         void OnUserCredentialsRequestHandler(RdClientCx.RdpConnection sender, int secLayer)
         {
-            _eventHandlers.OnUserCredentialsRequestHandler(this, secLayer);
+            _eventProxy.EmitUserCredentialsRequest(this, new UserCredentialsRequestArgs(secLayer));
         }
 
         void OnMouseCursorShapeChanged(RdClientCx.RdpConnection sender, byte[] buffer, int width, int height, int xHotspot, int yHotspot)
         {
-            _eventHandlers.OnMouseCursorShapeChanged(this, buffer, width, height, xHotspot, yHotspot);
+            _eventProxy.EmitMouseCursorShapeChanged(this, new MouseCursorShapeChangedArgs(buffer, width, height, xHotspot, yHotspot));            
         }
 
         void OnMouseCursorPositionChanged(RdClientCx.RdpConnection sender, int xPos, int yPos)
         {
-            _eventHandlers.OnMouseCursorPositionChanged(this, xPos, yPos);
+            _eventProxy.EmitMouseCursorPositionChanged(this, new MouseCursorPositionChangedArgs(xPos, yPos));            
         }
 
         void OnMultiTouchEnabledChanged(RdClientCx.RdpConnection sender, bool multiTouchEnabled)
         {
-            _eventHandlers.OnMultiTouchEnabledChanged(this, multiTouchEnabled);
+            _eventProxy.EmitMultiTouchEnabledChanged(this, new MultiTouchEnabledChangedArgs(multiTouchEnabled));            
         }
 
         void OnConnectionHealthStateChangedHandler(RdClientCx.RdpConnection sender, int connectionState)
         {
-            _eventHandlers.OnConnectionHealthStateChangedHandler(this, connectionState);
+            _eventProxy.EmitConnectionHealthStateChanged(this, new ConnectionHealthStateChangedArgs(connectionState));            
         }
 
         void OnClientAutoReconnectingHandler(RdClientCx.RdpConnection sender, int disconnectReason, int attemptCount, out bool continueReconnecting)
         {
-            _eventHandlers.OnClientAutoReconnectingHandler(this, disconnectReason, attemptCount, out continueReconnecting);
+            bool _continueReconnecting = false;
+            ClientAutoReconnectingContinueDelegate shouldContinue = (__continueReconnecting) => { _continueReconnecting = __continueReconnecting; };
+
+            _eventProxy.EmitClientAutoReconnecting(this, new ClientAutoReconnectingArgs(disconnectReason, attemptCount, shouldContinue));
+
+            continueReconnecting = _continueReconnecting;
         }
 
         void OnClientAutoReconnectCompleteHandler(RdClientCx.RdpConnection sender)
         {
-            _eventHandlers.OnClientAutoReconnectCompleteHandler(this);
+            _eventProxy.EmitClientAutoReconnectComplete(this, new ClientAutoReconnectCompleteArgs());
         }
 
         void OnLoginCompletedHandler(RdClientCx.RdpConnection sender)
         {
-            _eventHandlers.OnLoginCompletedHandler(this);
+            _eventProxy.EmitLoginCompleted(this, new LoginCompletedArgs());
         }
 
         void OnStatusInfoReceivedHandler(RdClientCx.RdpConnection sender, int statusCode)
         {
-            _eventHandlers.OnStatusInfoReceivedHandler(this, statusCode);
+            _eventProxy.EmitStatusInfoReceived(this, new StatusInfoReceivedArgs(statusCode));
         }
 
         void OnFirstGraphicsUpdateHandler(RdClientCx.RdpConnection sender)
         {
-            _eventHandlers.OnFirstGraphicsUpdateHandler(this);
+            _eventProxy.EmitFirstGraphicsUpdate(this, new FirstGraphicsUpdateArgs());
         }
 
         void OnRemoteAppWindowCreatedHandler(RdClientCx.RdpConnection sender, uint windowId, string title, byte[] icon, uint iconWidth, uint iconHeight)
         {
-            _eventHandlers.OnRemoteAppWindowCreatedHandler(this, windowId, title, icon, iconWidth, iconHeight);
+            _eventProxy.EmitRemoteAppWindowCreated(this, new RemoteAppWindowCreatedArgs(windowId, title, icon, iconWidth, iconHeight));
         }
 
         void OnRemoteAppWindowDeletedHandler(RdClientCx.RdpConnection sender, uint windowId)
         {
-            _eventHandlers.OnRemoteAppWindowDeletedHandler(this, windowId);
+            _eventProxy.EmitRemoteAppWindowDeleted(this, new RemoteAppWindowDeletedArgs(windowId));
         }
 
         void OnRemoteAppWindowTitleUpdatedHandler(RdClientCx.RdpConnection sender, uint windowId, string title)
         {
-            _eventHandlers.OnRemoteAppWindowTitleUpdatedHandler(this, windowId, title);
+            _eventProxy.EmitRemoteAppWindowTitleUpdated(this, new RemoteAppWindowTitleUpdatedArgs(windowId, title));
         }
 
         void OnRemoteAppWindowIconUpdatedHandler(RdClientCx.RdpConnection sender, uint windowId, byte[] icon, uint iconWidth, uint iconHeight)
         {
-            _eventHandlers.OnRemoteAppWindowIconUpdatedHandler(this, windowId, icon, iconWidth, iconHeight);
+            _eventProxy.EmitRemoteAppWindowIconUpdated(this, new RemoteAppWindowIconUpdatedArgs(windowId, icon, iconWidth, iconHeight));
         }
 
     }

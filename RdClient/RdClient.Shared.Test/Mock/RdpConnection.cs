@@ -11,6 +11,13 @@ namespace RdClient.Shared.Test.Mock
 {
     class RdpConnection : MockBase, IRdpConnection
     {
+        IRdpEvents _events;
+
+        public RdpConnection(IRdpEvents events)
+        {
+            _events = events;
+        }
+
         public void Connect(Credentials credentials, bool fUsingSavedCreds)
         {
             Invoke(new object[] { credentials, fUsingSavedCreds });
@@ -34,6 +41,11 @@ namespace RdClient.Shared.Test.Mock
         public int HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
         {
             return (int) Invoke(new object[] { disconnectReason, reconnectToServer });
+        }
+
+        public IRdpEvents Events
+        {
+            get { return _events; }
         }
     }
 }
