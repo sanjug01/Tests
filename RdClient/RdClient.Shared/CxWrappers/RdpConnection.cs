@@ -8,35 +8,38 @@ namespace RdClient.Shared.CxWrappers
     
     public class RdpConnection : IRdpConnection, IRdpProperties
     {
-        private RdClientCx.RdpConnection _rdpConnection;
+        private RdClientCx.RdpConnection _rdpConnectionCx;
+        private RdClientCx.RdpConnectionStore _rdpConnectionStoreCx;
+
         private IRdpEventProxy _eventProxy;
 
         public IRdpEvents Events { get { return _eventProxy; } }
 
-        public RdpConnection(RdClientCx.RdpConnection rdpConnectionCx)
+        public RdpConnection(RdClientCx.RdpConnection rdpConnectionCx, RdClientCx.RdpConnectionStore rdpConnectionStoreCx)
         {
             Contract.Requires(rdpConnectionCx != null);
-            _rdpConnection = rdpConnectionCx;
+            _rdpConnectionCx = rdpConnectionCx;
+            _rdpConnectionStoreCx = rdpConnectionStoreCx;
             _eventProxy = new RdpEventProxy();
 
-            _rdpConnection.OnClientConnected += OnClientConnectedHandler;
-            _rdpConnection.OnClientAsyncDisconnect += OnClientAsyncDisconnectHandler;
-            _rdpConnection.OnClientDisconnected += OnClientDisconnectedHandler;
-            _rdpConnection.OnUserCredentialsRequest += OnUserCredentialsRequestHandler;
-            _rdpConnection.OnMouseCursorShapeChanged += OnMouseCursorShapeChanged;
-            _rdpConnection.OnMouseCursorPositionChanged += OnMouseCursorPositionChanged;
-            _rdpConnection.OnMultiTouchEnabledChanged += OnMultiTouchEnabledChanged;
+            _rdpConnectionCx.OnClientConnected += OnClientConnectedHandler;
+            _rdpConnectionCx.OnClientAsyncDisconnect += OnClientAsyncDisconnectHandler;
+            _rdpConnectionCx.OnClientDisconnected += OnClientDisconnectedHandler;
+            _rdpConnectionCx.OnUserCredentialsRequest += OnUserCredentialsRequestHandler;
+            _rdpConnectionCx.OnMouseCursorShapeChanged += OnMouseCursorShapeChanged;
+            _rdpConnectionCx.OnMouseCursorPositionChanged += OnMouseCursorPositionChanged;
+            _rdpConnectionCx.OnMultiTouchEnabledChanged += OnMultiTouchEnabledChanged;
 
-            _rdpConnection.OnConnectionHealthStateChanged += OnConnectionHealthStateChangedHandler;
-            _rdpConnection.OnClientAutoReconnecting += OnClientAutoReconnectingHandler;
-            _rdpConnection.OnClientAutoReconnectComplete += OnClientAutoReconnectCompleteHandler;
-            _rdpConnection.OnLoginCompleted += OnLoginCompletedHandler;
-            _rdpConnection.OnStatusInfoReceived += OnStatusInfoReceivedHandler;
-            _rdpConnection.OnFirstGraphicsUpdateReceived += OnFirstGraphicsUpdateHandler;
-            _rdpConnection.OnRemoteAppWindowCreated += OnRemoteAppWindowCreatedHandler;
-            _rdpConnection.OnRemoteAppWindowDeleted += OnRemoteAppWindowDeletedHandler;
-            _rdpConnection.OnRemoteAppWindowTitleUpdated += OnRemoteAppWindowTitleUpdatedHandler;
-            _rdpConnection.OnRemoteAppWindowIconUpdated += OnRemoteAppWindowIconUpdatedHandler;
+            _rdpConnectionCx.OnConnectionHealthStateChanged += OnConnectionHealthStateChangedHandler;
+            _rdpConnectionCx.OnClientAutoReconnecting += OnClientAutoReconnectingHandler;
+            _rdpConnectionCx.OnClientAutoReconnectComplete += OnClientAutoReconnectCompleteHandler;
+            _rdpConnectionCx.OnLoginCompleted += OnLoginCompletedHandler;
+            _rdpConnectionCx.OnStatusInfoReceived += OnStatusInfoReceivedHandler;
+            _rdpConnectionCx.OnFirstGraphicsUpdateReceived += OnFirstGraphicsUpdateHandler;
+            _rdpConnectionCx.OnRemoteAppWindowCreated += OnRemoteAppWindowCreatedHandler;
+            _rdpConnectionCx.OnRemoteAppWindowDeleted += OnRemoteAppWindowDeletedHandler;
+            _rdpConnectionCx.OnRemoteAppWindowTitleUpdated += OnRemoteAppWindowTitleUpdatedHandler;
+            _rdpConnectionCx.OnRemoteAppWindowIconUpdated += OnRemoteAppWindowIconUpdatedHandler;
         }
 
         ~RdpConnection()
@@ -47,73 +50,86 @@ namespace RdClient.Shared.CxWrappers
             RdClientCx.RdpConnectionStore rdpConnectionStore;
             xRes = RdClientCx.RdpConnectionStore.GetConnectionStore(out rdpConnectionStore);
             RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
-            rdpConnectionStore.RemoveConnection(_rdpConnection);
+            rdpConnectionStore.RemoveConnection(_rdpConnectionCx);
             rdpConnectionStore = null;
 
 
-            _rdpConnection.OnClientConnected -= OnClientConnectedHandler;
-            _rdpConnection.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
-            _rdpConnection.OnClientDisconnected -= OnClientDisconnectedHandler;
-            _rdpConnection.OnUserCredentialsRequest -= OnUserCredentialsRequestHandler;
-            _rdpConnection.OnMouseCursorShapeChanged -= OnMouseCursorShapeChanged;
-            _rdpConnection.OnMouseCursorPositionChanged -= OnMouseCursorPositionChanged;
-            _rdpConnection.OnMultiTouchEnabledChanged -= OnMultiTouchEnabledChanged;
-            _rdpConnection.OnConnectionHealthStateChanged -= OnConnectionHealthStateChangedHandler;
-            _rdpConnection.OnClientAutoReconnecting -= OnClientAutoReconnectingHandler;
-            _rdpConnection.OnClientAutoReconnectComplete -= OnClientAutoReconnectCompleteHandler;
-            _rdpConnection.OnLoginCompleted -= OnLoginCompletedHandler;
-            _rdpConnection.OnStatusInfoReceived -= OnStatusInfoReceivedHandler;
-            _rdpConnection.OnFirstGraphicsUpdateReceived -= OnFirstGraphicsUpdateHandler;
-            _rdpConnection.OnRemoteAppWindowCreated -= OnRemoteAppWindowCreatedHandler;
-            _rdpConnection.OnRemoteAppWindowDeleted -= OnRemoteAppWindowDeletedHandler;
-            _rdpConnection.OnRemoteAppWindowTitleUpdated -= OnRemoteAppWindowTitleUpdatedHandler;
-            _rdpConnection.OnRemoteAppWindowIconUpdated -= OnRemoteAppWindowIconUpdatedHandler;
+            _rdpConnectionCx.OnClientConnected -= OnClientConnectedHandler;
+            _rdpConnectionCx.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
+            _rdpConnectionCx.OnClientDisconnected -= OnClientDisconnectedHandler;
+            _rdpConnectionCx.OnUserCredentialsRequest -= OnUserCredentialsRequestHandler;
+            _rdpConnectionCx.OnMouseCursorShapeChanged -= OnMouseCursorShapeChanged;
+            _rdpConnectionCx.OnMouseCursorPositionChanged -= OnMouseCursorPositionChanged;
+            _rdpConnectionCx.OnMultiTouchEnabledChanged -= OnMultiTouchEnabledChanged;
+            _rdpConnectionCx.OnConnectionHealthStateChanged -= OnConnectionHealthStateChangedHandler;
+            _rdpConnectionCx.OnClientAutoReconnecting -= OnClientAutoReconnectingHandler;
+            _rdpConnectionCx.OnClientAutoReconnectComplete -= OnClientAutoReconnectCompleteHandler;
+            _rdpConnectionCx.OnLoginCompleted -= OnLoginCompletedHandler;
+            _rdpConnectionCx.OnStatusInfoReceived -= OnStatusInfoReceivedHandler;
+            _rdpConnectionCx.OnFirstGraphicsUpdateReceived -= OnFirstGraphicsUpdateHandler;
+            _rdpConnectionCx.OnRemoteAppWindowCreated -= OnRemoteAppWindowCreatedHandler;
+            _rdpConnectionCx.OnRemoteAppWindowDeleted -= OnRemoteAppWindowDeletedHandler;
+            _rdpConnectionCx.OnRemoteAppWindowTitleUpdated -= OnRemoteAppWindowTitleUpdatedHandler;
+            _rdpConnectionCx.OnRemoteAppWindowIconUpdated -= OnRemoteAppWindowIconUpdatedHandler;
 
             //
             // Terminate the connection object.
             //
-            xRes = _rdpConnection.TerminateInstance();
+            xRes = _rdpConnectionCx.TerminateInstance();
             RdTrace.IfFailXResultThrow(xRes, "Unable to terminate RDP connection.");
-            _rdpConnection = null;
+            _rdpConnectionCx = null;
         }
         
-
         public void Connect(Credentials credentials, bool fUsingSavedCreds)
         {
-            int xRes = _rdpConnection.SetUserCredentials(credentials.username, credentials.domain, credentials.password, fUsingSavedCreds);
+            int xRes = _rdpConnectionCx.SetUserCredentials(credentials.username, credentials.domain, credentials.password, fUsingSavedCreds);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set user credentials.");
 
-            xRes = _rdpConnection.Connect();
+            xRes = _rdpConnectionCx.Connect();
             RdTrace.IfFailXResultThrow(xRes, "Failed to connect.");
         }
 
         public void Disconnect()
         {
-            int xRes = _rdpConnection.Disconnect();
+            int xRes = _rdpConnectionCx.Disconnect();
             RdTrace.IfFailXResultThrow(xRes, "Failed to disconnect.");
+            
+            xRes = _rdpConnectionCx.TerminateInstance();
+            RdTrace.IfFailXResultThrow(xRes, "Failed to terminate connection instance.");
+
+            xRes = _rdpConnectionStoreCx.RemoveConnection(_rdpConnectionCx);
+            RdTrace.IfFailXResultThrow(xRes, "Failed to disconnect remove connection from store.");
+
+            _rdpConnectionCx = null;
         }
 
         public void Suspend()
         {
-            int xRes = _rdpConnection.Suspend();
+            int xRes = _rdpConnectionCx.Suspend();
             RdTrace.IfFailXResultThrow(xRes, "Failed to suspend.");
         }
 
         public void Resume()
         {
-            int xRes = _rdpConnection.Resume();
+            int xRes = _rdpConnectionCx.Resume();
             RdTrace.IfFailXResultThrow(xRes, "Failed to resume.");
         }
 
-        public int HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
+        public void TerminateInstance()
         {
-            return _rdpConnection.HandleAsyncDisconnectResult(RdpTypeConverter.ConvertToCxRdpDisconnectReason(disconnectReason), reconnectToServer);
+            _rdpConnectionCx.TerminateInstance();
+        }
+
+        public void HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
+        {
+            int xRes = _rdpConnectionCx.HandleAsyncDisconnectResult(RdpTypeConverter.ConvertToCxRdpDisconnectReason(disconnectReason), reconnectToServer);
+            RdTrace.IfFailXResultThrow(xRes, "Failed async disconnect.");
         }
 
         public int GetIntProperty(string propertyName)
         {
             int value;
-            int xRes = _rdpConnection.GetIntProperty(propertyName, out value);
+            int xRes = _rdpConnectionCx.GetIntProperty(propertyName, out value);
 
             RdTrace.IfFailXResultThrow(xRes, "Failed to get int property: " + propertyName);
 
@@ -122,14 +138,14 @@ namespace RdClient.Shared.CxWrappers
 
         public void SetIntProperty(string propertyName, int value)
         {
-            int xRes = _rdpConnection.SetIntProperty(propertyName, value);
+            int xRes = _rdpConnectionCx.SetIntProperty(propertyName, value);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set int property: " + propertyName);
         }
 
         public string GetStringPropery(string propertyName)
         {
             string value;
-            int xRes = _rdpConnection.GetStringProperty(propertyName, out value);
+            int xRes = _rdpConnectionCx.GetStringProperty(propertyName, out value);
 
             RdTrace.IfFailXResultThrow(xRes, "Failed to get string property: " + propertyName);
 
@@ -138,7 +154,7 @@ namespace RdClient.Shared.CxWrappers
 
         public void SetStringProperty(string propertyName, string value)
         {
-            int xRes = _rdpConnection.SetStringProperty(propertyName, value);
+            int xRes = _rdpConnectionCx.SetStringProperty(propertyName, value);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set string property: " + propertyName);
         }
 
@@ -146,7 +162,7 @@ namespace RdClient.Shared.CxWrappers
         public bool GetBoolProperty(string propertyName)
         {
             bool value;
-            int xRes = _rdpConnection.GetBoolProperty(propertyName, out value);
+            int xRes = _rdpConnectionCx.GetBoolProperty(propertyName, out value);
 
             RdTrace.IfFailXResultThrow(xRes, "Failed to get bool property: " + propertyName);
 
@@ -155,7 +171,7 @@ namespace RdClient.Shared.CxWrappers
 
         public void SetBoolProperty(string propertyName, bool value)
         {
-            int xRes = _rdpConnection.SetBoolProperty(propertyName, value);
+            int xRes = _rdpConnectionCx.SetBoolProperty(propertyName, value);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set bool property: " + propertyName);
         }
 

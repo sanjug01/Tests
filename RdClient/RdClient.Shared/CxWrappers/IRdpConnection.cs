@@ -71,6 +71,7 @@ namespace RdClient.Shared.CxWrappers
         void Disconnect();
         void Suspend();
         void Resume();
-        int HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer);
+        void TerminateInstance();
+        void HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer);
     }
 }

@@ -7,8 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Loaded="Page_Loaded"
-    DataContext="{Binding SessionViewModel}">
+    Loaded="Page_Loaded">
     
     <Page.Resources>
         <vm:SessionViewModel x:Key="SessionViewModel"/>

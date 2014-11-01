@@ -12,12 +12,24 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
+    public class ConnectionCreatedArgs : EventArgs
+    {
+        public IRdpConnection RdpConnection { get; private set; }
+        public ConnectionCreatedArgs(IRdpConnection rdpConnection)
+        {
+            RdpConnection = rdpConnection;
+        }
+    }
+
     public class SessionViewModel : ViewModelBase
     {
+        public event EventHandler<ConnectionCreatedArgs> ConnectionCreated;
         public ICommand DisconnectCommand { get; private set; }
         public ICommand ConnectCommand { get; private set; }
-        public IRdpConnection RdpConnection { private get; set; }
+        public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
         public INavigationService NavigationService { private get; set; }
+
+        private IRdpConnection _rdpConnection;
 
         public SessionViewModel()
         {
@@ -27,27 +39,35 @@ namespace RdClient.Shared.ViewModels
 
         private void Connect(object o)
         {
+            _rdpConnection = RdpConnectionFactory.CreateInstance();
+            if(ConnectionCreated != null)
+            {
+                ConnectionCreated(this, new ConnectionCreatedArgs(_rdpConnection));
+            }
+
             Tuple<Desktop, Credentials> connectionInformation = o as Tuple<Desktop, Credentials>;
             Desktop desktop = connectionInformation.Item1;
             Credentials credentials = connectionInformation.Item2;
 
-            RdpPropertyApplier.ApplyDesktop(RdpConnection as IRdpProperties, desktop);
-            RdpConnection.Connect(credentials, credentials.haveBeenPersisted);
+            RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
+            _rdpConnection.Connect(credentials, credentials.haveBeenPersisted);
 
-            RdpConnection.Events.ClientAsyncDisconnect += ClientAsyncDisconnectHandler;
+            _rdpConnection.Events.ClientAsyncDisconnect += ClientAsyncDisconnectHandler;
         }
 
         private void Disconnect(object o)
         {
-            RdpConnection.Disconnect();
-            NavigationService.NavigateToView("view1", null);
+            _rdpConnection.Disconnect();
+            if (NavigationService != null)
+            {
+                NavigationService.NavigateToView("view1", null);
+            }
 
-            RdpConnection.Events.ClientAsyncDisconnect -= ClientAsyncDisconnectHandler;
+            _rdpConnection.Events.ClientAsyncDisconnect -= ClientAsyncDisconnectHandler;
         }
 
         public void ClientAsyncDisconnectHandler(object sender, ClientAsyncDisconnectArgs args)
         {
-            int xRes;
             bool reconnect;
 
             switch (args.DisconnectReason.code)
@@ -86,8 +106,7 @@ namespace RdClient.Shared.ViewModels
                     break;
             }
 
-            xRes = RdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
-            RdTrace.IfFailXResultThrow(xRes, "HandleAsyncDisconnectResult failed.");
+            _rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
         }
 
     }

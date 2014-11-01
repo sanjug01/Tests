@@ -38,9 +38,14 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { });
         }
 
-        public int HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
+        public void TerminateInstance()
         {
-            return (int) Invoke(new object[] { disconnectReason, reconnectToServer });
+            Invoke(new object[] { });
+        }
+
+        public void HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
+        {
+            Invoke(new object[] { disconnectReason, reconnectToServer });
         }
 
         public IRdpEvents Events

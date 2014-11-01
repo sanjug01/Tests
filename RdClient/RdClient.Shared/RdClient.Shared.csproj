@@ -53,6 +53,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CxWrappers\IRdpConnection.cs" />
+    <Compile Include="CxWrappers\IRdpConnectionFactory.cs" />
     <Compile Include="CxWrappers\IRdpEventHandlers.cs" />
     <Compile Include="CxWrappers\IRdpProperties.cs" />
     <Compile Include="CxWrappers\RdpConnection.cs" />

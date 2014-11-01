@@ -4,25 +4,26 @@ using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 namespace RdClient.CxWrappers.Utils
 {
-    public class RdpConnectionFactory
+    public class RdpConnectionFactory : IRdpConnectionFactory
     {
-        public static IRdpConnection CreateInstance(CoreWindow spWindow, SwapChainPanel swapChainPanel)
+        public SwapChainPanel SwapChainPanel { private get; set; }
+
+        public IRdpConnection CreateInstance()
         {
             int xRes;
 
             RdClientCx.RdpConnection rdpConnectionCx;
-            RdClientCx.RdpConnectionStore rdpConnectionStore;
+            RdClientCx.RdpConnectionStore rdpConnectionStoreCx;
 
-            xRes = RdClientCx.RdpConnectionStore.GetConnectionStore(out rdpConnectionStore);
+            xRes = RdClientCx.RdpConnectionStore.GetConnectionStore(out rdpConnectionStoreCx);
             RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
 
-            rdpConnectionStore.SetSwapChainPanel(swapChainPanel);
+            rdpConnectionStoreCx.SetSwapChainPanel(SwapChainPanel);
 
-            xRes = rdpConnectionStore.CreateConnectionWithSettings("", out rdpConnectionCx);
+            xRes = rdpConnectionStoreCx.CreateConnectionWithSettings("", out rdpConnectionCx);
             RdTrace.IfFailXResultThrow(xRes, "Failed to create a desktop connection with the given settings.");
 
-            rdpConnectionStore = null;
-            return new RdpConnection(rdpConnectionCx);
+            return new RdpConnection(rdpConnectionCx, rdpConnectionStoreCx);
         }
     }
 }
