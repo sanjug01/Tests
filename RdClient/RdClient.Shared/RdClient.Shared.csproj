@@ -57,7 +57,7 @@
     <Compile Include="CxWrappers\IRdpEventHandlers.cs" />
     <Compile Include="CxWrappers\IRdpProperties.cs" />
     <Compile Include="CxWrappers\RdpConnection.cs" />
-    <Compile Include="CxWrappers\RdpEventProxy.cs" />
+    <Compile Include="CxWrappers\RdpEventSource.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
     <Compile Include="Helpers\IPhysicalScreenSize.cs" />
