@@ -1,8 +1,15 @@
 ﻿using RdClientCx;
 using System.Runtime.CompilerServices;
 
+
 namespace RdClient.Shared.CxWrappers
 {
+
+    public class RdTraceException : System.Exception
+    {
+        public RdTraceException(string message) : base(message) { }
+    }
+
     public static class RdTrace
     {
         public const string NoFileName = "NoFileName";
@@ -84,7 +91,7 @@ namespace RdClient.Shared.CxWrappers
             if (iXResult != 0)
             {
                 TraceInternal("UI", TraceLevel.Error, fileName, lineNumber, functionName, strMessage);
-                throw new System.Exception(string.Format("{0} (XResult: {1})", strMessage, iXResult));
+                throw new RdTraceException(string.Format("{0} (XResult: {1})", strMessage, iXResult));
             }
         }
 
@@ -99,7 +106,7 @@ namespace RdClient.Shared.CxWrappers
             if (fCondition)
             {
                 TraceInternal("UI", TraceLevel.Error, fileName, lineNumber, functionName, strMessage);
-                throw new System.Exception(strMessage);
+                throw new RdTraceException(strMessage);
             }
         }
     }

@@ -2,6 +2,8 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
+using RdClient.Shared.Helpers;
+
 namespace RdClient.LifeTimeManagement
 {
     class RootFrameManager : IRootFrameManager
@@ -29,7 +31,7 @@ namespace RdClient.LifeTimeManagement
             {
                 if (!RootFrame.Navigate(typeof(MainPage), e.Arguments))
                 {
-                    throw new Exception("Failed to create initial page");
+                    throw new RdClientException("Failed to create initial page");
                 }
             }
 
