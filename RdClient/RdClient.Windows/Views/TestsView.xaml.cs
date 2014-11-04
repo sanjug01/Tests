@@ -50,7 +50,7 @@ namespace RdClient.Views
             Contract.Assert(_activationParameter != null);
             TestsViewModel tvm = (TestsViewModel)this.Resources["TestsViewModel"];
 
-            Tuple<Desktop, Credentials> connectionInformation = _activationParameter as Tuple<Desktop, Credentials>;
+            ConnectionInformation connectionInformation = _activationParameter as ConnectionInformation;
 
             RdpConnectionFactory factory = new RdpConnectionFactory();
             factory.SwapChainPanel = this.TestSwapChainPanel;

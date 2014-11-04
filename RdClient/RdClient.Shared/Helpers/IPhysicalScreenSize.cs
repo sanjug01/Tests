@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace RdClient.Shared
 {
+    public struct ScreenSize
+    {
+        public int Height { get; set; }
+        public int Width { get; set; }
+    }
+
     public interface IPhysicalScreenSize
     {
-        Tuple<int,int> GetScreenSize();
+        ScreenSize GetScreenSize();
     }
 }

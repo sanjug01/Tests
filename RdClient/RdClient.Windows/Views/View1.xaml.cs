@@ -34,21 +34,24 @@ namespace RdClient.Views
 
         private void Button_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            Tuple<Desktop, Credentials> connectionInformation = new Tuple<Desktop, Credentials>(
-                new Desktop() { hostName = "a3-w81" },
-                new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd", haveBeenPersisted = false });
+            ConnectionInformation connectionInformation = new ConnectionInformation()
+            {
+                Desktop = new Desktop() { hostName = "a3-w81" },
+                Credentials = new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd", haveBeenPersisted = false }
+            };
 
             _navigationService.NavigateToView("SessionView", connectionInformation);
         }
 
         private void TestsButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            // test connection settings passed from main view.
-            Tuple<Desktop, Credentials> testConnectionInformation = new Tuple<Desktop, Credentials>(
-                new Desktop() { hostName = "a3-w81" },
-                new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd", haveBeenPersisted = false });
+            ConnectionInformation connectionInformation = new ConnectionInformation()
+            {
+                Desktop = new Desktop() { hostName = "a3-w81" },
+                Credentials = new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd", haveBeenPersisted = false }
+            };
 
-            _navigationService.NavigateToView("TestsView", testConnectionInformation);
+            _navigationService.NavigateToView("TestsView", connectionInformation);
         }
     }
 }

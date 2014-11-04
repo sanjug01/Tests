@@ -49,13 +49,13 @@ namespace RdClient.Helpers
             return physicalSize;
         }
 
-        public Tuple<int, int> GetScreenSize()
+        public ScreenSize GetScreenSize()
         {
             Size size = InternalGetScreenSize();
             int width = (int) InchesToMillimeters(size.Width);
             int height = (int) InchesToMillimeters(size.Height);
 
-            return new Tuple<int, int>(width, height);
+            return new ScreenSize() { Width = width, Height = height };
         }
     }
 }

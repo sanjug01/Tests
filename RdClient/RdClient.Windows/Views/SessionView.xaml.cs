@@ -47,7 +47,7 @@ namespace RdClient.Views
             Contract.Assert(_activationParameter != null);
             SessionViewModel svm = (SessionViewModel)this.Resources["SessionViewModel"];
 
-            Tuple<Desktop, Credentials> connectionInformation = _activationParameter as Tuple<Desktop, Credentials>;
+            ConnectionInformation connectionInformation = _activationParameter as ConnectionInformation;
 
             RdpConnectionFactory factory = new RdpConnectionFactory();
             factory.SwapChainPanel = this.SwapChainPanel;

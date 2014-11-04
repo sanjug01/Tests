@@ -20,7 +20,7 @@ namespace RdClient.Shared.ViewModels
     {
         public ICommand StressTestCommand { get; private set; }
         public ICommand GoHomeCommand { get; private set; }
-        public Tuple<Desktop, Credentials> ConnectionInformation { private get; set; }
+        public ConnectionInformation ConnectionInformation { private get; set; }
 
         public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
         public INavigationService NavigationService { private get; set; }
@@ -50,7 +50,7 @@ namespace RdClient.Shared.ViewModels
             };
             EventHandler<FirstGraphicsUpdateArgs> connectHandler = (s, a) => { are.Set(); };
 
-            svm.RdpConnectionFactory = RdpConnectionFactory;
+            svm.RdpConnectionFactory = RdpConnectionFactory;           
 
             for(i = 0; i < iterations; i++)
             {

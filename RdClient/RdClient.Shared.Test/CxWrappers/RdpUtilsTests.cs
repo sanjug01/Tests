@@ -26,7 +26,7 @@ namespace RdClient.Shared.Test.CxWrappers
         [TestMethod]
         public void ApplyScreenSize()
         {
-            Tuple<int, int> size = new Tuple<int, int>(23, 42);
+            ScreenSize size = new ScreenSize() { Width = 23, Height = 42 };
 
             using(Mock.RdpProperties properties = new Mock.RdpProperties())
             using (Mock.PhysicalScreenSize physicalSize = new Mock.PhysicalScreenSize(size))

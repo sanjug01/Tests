@@ -14,9 +14,9 @@ namespace RdClient.Shared.CxWrappers.Utils
 
         public static void ApplyScreenSize(IRdpProperties properties, IPhysicalScreenSize screenSize)
         {
-            Tuple<int, int> size = screenSize.GetScreenSize();
-            properties.SetIntProperty("PhysicalDesktopWidth", size.Item1);
-            properties.SetIntProperty("PhysicalDesktopHeight", size.Item2);
+            ScreenSize size = screenSize.GetScreenSize();
+            properties.SetIntProperty("PhysicalDesktopWidth", size.Width);
+            properties.SetIntProperty("PhysicalDesktopHeight", size.Height);
         }
     }
 

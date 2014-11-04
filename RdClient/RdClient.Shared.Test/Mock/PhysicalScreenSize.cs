@@ -5,13 +5,13 @@ namespace RdClient.Shared.Test.Mock
 {
     public class PhysicalScreenSize : MockBase, IPhysicalScreenSize
     {
-        public PhysicalScreenSize(Tuple<int, int> size)
+        public PhysicalScreenSize(ScreenSize size)
         {
         }
 
-        public Tuple<int, int> GetScreenSize()
+        public ScreenSize GetScreenSize()
         {
-            return (Tuple<int, int>)Invoke(new object[] { });
+            return (ScreenSize)Invoke(new object[] { });
         }
     }
 }

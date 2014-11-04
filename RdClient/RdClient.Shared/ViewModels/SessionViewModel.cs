@@ -45,9 +45,9 @@ namespace RdClient.Shared.ViewModels
                 ConnectionCreated(this, new ConnectionCreatedArgs(_rdpConnection));
             }
 
-            Tuple<Desktop, Credentials> connectionInformation = o as Tuple<Desktop, Credentials>;
-            Desktop desktop = connectionInformation.Item1;
-            Credentials credentials = connectionInformation.Item2;
+            ConnectionInformation connectionInformation = o as ConnectionInformation;
+            Desktop desktop = connectionInformation.Desktop;
+            Credentials credentials = connectionInformation.Credentials;
 
             RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
             _rdpConnection.Connect(credentials, credentials.haveBeenPersisted);
