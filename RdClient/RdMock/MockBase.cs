@@ -49,6 +49,7 @@ using System.Reflection;
 
 namespace RdMock
 {
+    [Serializable]
     public class MockException : Exception
     {
         public MockException(string message)
@@ -69,11 +70,17 @@ namespace RdMock
         public object value;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly",
+        Justification = "Intended for test")]
     public class MockBase : IDisposable
     {
         private IList<MockCall> _calls = new List<MockCall>();
         private IList<MockReturn> _returns = new List<MockReturn>();
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations",
+            Justification = "Intended for test"), 
+        System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly",
+            Justification = "Intended for test")]
         public void Dispose()
         {
             if (_calls.Count > 0)
