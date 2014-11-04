@@ -197,7 +197,7 @@ namespace RdClient.Shared.CxWrappers
         event EventHandler<RemoteAppWindowIconUpdatedArgs> RemoteAppWindowIconUpdated;
     }
 
-    public interface IRdpEventProxy : IRdpEvents
+    public interface IRdpEventSource
     {
         void EmitClientConnected(IRdpConnection sender, ClientConnectedArgs args);
         void EmitClientAsyncDisconnect(IRdpConnection sender, ClientAsyncDisconnectArgs args);

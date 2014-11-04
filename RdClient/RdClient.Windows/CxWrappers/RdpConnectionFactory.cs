@@ -1,6 +1,4 @@
 ﻿using RdClient.Shared.CxWrappers;
-using RdClient.Shared.ViewModels;
-using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 namespace RdClient.CxWrappers.Utils
 {
@@ -23,7 +21,7 @@ namespace RdClient.CxWrappers.Utils
             xRes = rdpConnectionStoreCx.CreateConnectionWithSettings("", out rdpConnectionCx);
             RdTrace.IfFailXResultThrow(xRes, "Failed to create a desktop connection with the given settings.");
 
-            return new RdpConnection(rdpConnectionCx, rdpConnectionStoreCx);
+            return new RdpConnection(rdpConnectionCx, rdpConnectionStoreCx, new RdpEventSource());
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using RdClient.LifeTimeManagement;
 using System.Diagnostics.Contracts;
-using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 
 namespace RdClient

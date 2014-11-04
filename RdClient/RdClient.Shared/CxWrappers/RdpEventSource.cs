@@ -1,11 +1,8 @@
-﻿using RdClient.Navigation;
-using RdClient.Shared.ViewModels;
-using RdClientCx;
-using System;
+﻿using System;
 
 namespace RdClient.Shared.CxWrappers
 {
-    public class RdpEventProxy : IRdpEventProxy
+    public class RdpEventSource : IRdpEventSource, IRdpEvents
     {
         public event EventHandler<ClientConnectedArgs> ClientConnected;
 

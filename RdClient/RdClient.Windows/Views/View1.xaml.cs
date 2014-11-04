@@ -1,6 +1,5 @@
 ﻿using RdClient.Navigation;
 using RdClient.Shared.Models;
-using System;
 using System.Diagnostics.Contracts;
 using Windows.UI.Xaml.Controls;
 

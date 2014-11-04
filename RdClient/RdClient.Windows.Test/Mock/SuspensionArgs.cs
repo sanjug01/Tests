@@ -1,5 +1,4 @@
-﻿using RdClient.LifeTimeManagement;
-using Windows.ApplicationModel;
+﻿using Windows.ApplicationModel;
 
 namespace RdClient.Windows.Test.Mock
 {

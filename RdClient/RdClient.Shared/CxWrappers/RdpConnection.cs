@@ -1,7 +1,6 @@
-﻿using System.Diagnostics.Contracts;
-using RdClient.Shared.CxWrappers;
+﻿using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
-using RdClient.Shared.CxWrappers.Utils;
+using System.Diagnostics.Contracts;
 
 namespace RdClient.Shared.CxWrappers
 {
@@ -11,16 +10,16 @@ namespace RdClient.Shared.CxWrappers
         private RdClientCx.RdpConnection _rdpConnectionCx;
         private RdClientCx.RdpConnectionStore _rdpConnectionStoreCx;
 
-        private IRdpEventProxy _eventProxy;
+        private IRdpEventSource _eventProxy;
 
-        public IRdpEvents Events { get { return _eventProxy; } }
+        public IRdpEvents Events { get { return _eventProxy as IRdpEvents; } }
 
-        public RdpConnection(RdClientCx.RdpConnection rdpConnectionCx, RdClientCx.RdpConnectionStore rdpConnectionStoreCx)
+        public RdpConnection(RdClientCx.RdpConnection rdpConnectionCx, RdClientCx.RdpConnectionStore rdpConnectionStoreCx, RdpEventSource eventProxy)
         {
             Contract.Requires(rdpConnectionCx != null);
             _rdpConnectionCx = rdpConnectionCx;
             _rdpConnectionStoreCx = rdpConnectionStoreCx;
-            _eventProxy = new RdpEventProxy();
+            _eventProxy = eventProxy;
 
             _rdpConnectionCx.OnClientConnected += OnClientConnectedHandler;
             _rdpConnectionCx.OnClientAsyncDisconnect += OnClientAsyncDisconnectHandler;
@@ -94,9 +93,8 @@ namespace RdClient.Shared.CxWrappers
             int xRes = _rdpConnectionCx.Disconnect();
             RdTrace.IfFailXResultThrow(xRes, "Failed to disconnect.");
             
-            xRes = _rdpConnectionCx.TerminateInstance();
-            RdTrace.IfFailXResultThrow(xRes, "Failed to terminate connection instance.");
-
+            TerminateInstance();
+            
             xRes = _rdpConnectionStoreCx.RemoveConnection(_rdpConnectionCx);
             RdTrace.IfFailXResultThrow(xRes, "Failed to disconnect remove connection from store.");
 

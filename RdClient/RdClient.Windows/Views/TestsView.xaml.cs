@@ -2,11 +2,8 @@
 using RdClient.Helpers;
 using RdClient.Navigation;
 using RdClient.Shared;
-using RdClient.Shared.CxWrappers;
-using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
 using RdClient.Shared.ViewModels;
-using System;
 using System.Diagnostics.Contracts;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -48,7 +45,7 @@ namespace RdClient.Views
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             Contract.Assert(_activationParameter != null);
-            TestsViewModel tvm = (TestsViewModel)this.Resources["TestsViewModel"];
+            ITestsViewModel tvm = Resources["TestsViewModel"] as ITestsViewModel;
 
             ConnectionInformation connectionInformation = _activationParameter as ConnectionInformation;
 

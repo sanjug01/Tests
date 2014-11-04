@@ -1,5 +1,4 @@
-﻿using RdClient.Navigation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Test.RdClient.Shared
 {

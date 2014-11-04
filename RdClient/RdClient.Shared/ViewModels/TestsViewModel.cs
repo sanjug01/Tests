@@ -2,11 +2,7 @@
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
@@ -16,7 +12,7 @@ namespace RdClient.Shared.ViewModels
     /// view model to support integrated tests.
     ///      * these tests should be removed from shiped product.
     /// </summary>
-    public class TestsViewModel : ViewModelBase
+    public class TestsViewModel : ViewModelBase, ITestsViewModel
     {
         public ICommand StressTestCommand { get; private set; }
         public ICommand GoHomeCommand { get; private set; }
@@ -31,7 +27,7 @@ namespace RdClient.Shared.ViewModels
             GoHomeCommand = new RelayCommand(new Action<object>(GoHome));
         }
 
-        public void StressTest(object o)
+        void StressTest(object o)
         {
             int iterations = 3;
             int i;
@@ -39,7 +35,7 @@ namespace RdClient.Shared.ViewModels
             AutoResetEvent are = new AutoResetEvent(false);
 
             EventHandler<ClientDisconnectedArgs> disconnectHandler = (s, a) => {
-                if (a.DisconnectReason.code != RdpDisconnectCode.UserInitiated)
+                if (a.DisconnectReason.Code != RdpDisconnectCode.UserInitiated)
                 {
                     throw new Exception("unexpected disconnect");
                 }
@@ -72,7 +68,7 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        public void GoHome(object o)
+        void GoHome(object o)
         {
             NavigationService.NavigateToView("view1", null);
         }

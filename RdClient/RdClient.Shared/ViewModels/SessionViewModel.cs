@@ -3,11 +3,6 @@ using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
@@ -21,7 +16,7 @@ namespace RdClient.Shared.ViewModels
         }
     }
 
-    public class SessionViewModel : ViewModelBase
+    public class SessionViewModel : ViewModelBase, ISessionViewModel
     {
         public event EventHandler<ConnectionCreatedArgs> ConnectionCreated;
         public ICommand DisconnectCommand { get; private set; }
@@ -70,7 +65,7 @@ namespace RdClient.Shared.ViewModels
         {
             bool reconnect;
 
-            switch (args.DisconnectReason.code)
+            switch (args.DisconnectReason.Code)
             {
                 case RdpDisconnectCode.PreAuthLogonFailed:
                     {

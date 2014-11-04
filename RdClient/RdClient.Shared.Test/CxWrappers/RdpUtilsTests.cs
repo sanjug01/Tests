@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RdClient.Shared.Models;
-using RdClient.Shared.CxWrappers;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers.Utils;
+using RdClient.Shared.Models;
 using System.Collections.Generic;
 
 namespace RdClient.Shared.Test.CxWrappers

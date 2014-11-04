@@ -1,6 +1,4 @@
-﻿using Windows.ApplicationModel;
-using Windows.ApplicationModel.Activation;
-
+﻿
 namespace RdClient.LifeTimeManagement
 {
     public interface ILifeTimeManager

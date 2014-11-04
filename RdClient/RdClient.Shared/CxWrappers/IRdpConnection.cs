@@ -56,11 +56,23 @@ namespace RdClient.Shared.CxWrappers
         VersionMismatch = 48,
     }
 
-    public struct RdpDisconnectReason
+    public class RdpDisconnectReason
     {
-        public RdpDisconnectCode code;
-        public uint uLegacyCode;
-        public uint uLegacyExtendedCode;
+        RdpDisconnectCode _code;
+        public RdpDisconnectCode Code { get { return _code; } }
+
+        uint _uLegacyCode;
+        public uint ULegacyCode { get { return _uLegacyCode; } }
+
+        uint _uLegacyExtendedCode;
+        public uint ULegacyExtendedCode { get { return _uLegacyExtendedCode; } }
+
+        public RdpDisconnectReason(RdpDisconnectCode code, uint uLegacyCode, uint uLegacyExtendedCode)
+        {
+            _code = code;
+            _uLegacyCode = uLegacyCode;
+            _uLegacyExtendedCode = uLegacyExtendedCode;
+        }
     }
 
     public interface IRdpConnection

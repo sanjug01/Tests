@@ -1,5 +1,4 @@
 ﻿using RdClient.Shared.Models;
-using System;
 
 namespace RdClient.Shared.CxWrappers.Utils
 {
@@ -35,21 +34,20 @@ namespace RdClient.Shared.CxWrappers.Utils
         {
             RdClientCx.RdpDisconnectReason cxDisconnectReason = new RdClientCx.RdpDisconnectReason();
 
-            cxDisconnectReason.code = RdpTypeConverter.ConvertToCxRdpDisconnectCode(disconnectReason.code);
-            cxDisconnectReason.uLegacyCode = disconnectReason.uLegacyCode;
-            cxDisconnectReason.uLegacyExtendedCode = disconnectReason.uLegacyExtendedCode;
+            cxDisconnectReason.code = RdpTypeConverter.ConvertToCxRdpDisconnectCode(disconnectReason.Code);
+            cxDisconnectReason.uLegacyCode = disconnectReason.ULegacyCode;
+            cxDisconnectReason.uLegacyExtendedCode = disconnectReason.ULegacyExtendedCode;
 
             return cxDisconnectReason;
         }
 
         public static RdpDisconnectReason ConvertFromCxRdpDisconnectReason(RdClientCx.RdpDisconnectReason cxDisconnectReason)
         {
-            RdpDisconnectReason disconnectReason = new RdpDisconnectReason();
-
-            disconnectReason.code = RdpTypeConverter.ConvertFromCxRdpDisconnectCode(cxDisconnectReason.code);
-            disconnectReason.uLegacyCode = cxDisconnectReason.uLegacyCode;
-            disconnectReason.uLegacyExtendedCode = cxDisconnectReason.uLegacyExtendedCode;
-
+            RdpDisconnectReason disconnectReason = new RdpDisconnectReason(
+                RdpTypeConverter.ConvertFromCxRdpDisconnectCode(cxDisconnectReason.code),
+                cxDisconnectReason.uLegacyCode,
+                cxDisconnectReason.uLegacyExtendedCode);
+            
             return disconnectReason;
         }
     }

@@ -1,5 +1,4 @@
 ﻿using RdClient.Shared;
-using System;
 using Windows.Foundation;
 using Windows.Graphics.Display;
 using Windows.UI.Core;
