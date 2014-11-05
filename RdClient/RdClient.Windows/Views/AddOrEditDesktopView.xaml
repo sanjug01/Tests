@@ -94,6 +94,7 @@
             </Grid>
         </Border>
 
+
     </Grid>
 
     <Grid Background="BlueViolet">
@@ -104,4 +105,5 @@
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right" Command="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=CancelCommand}">Cancel</Button>        
     </Grid>
+
 </Page>
