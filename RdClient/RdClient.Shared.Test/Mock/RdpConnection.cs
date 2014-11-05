@@ -4,13 +4,20 @@ using RdMock;
 
 namespace RdClient.Shared.Test.Mock
 {
-    class RdpConnection : MockBase, IRdpConnection
+    class RdpConnection : MockBase, IRdpConnection, IRdpProperties
     {
         IRdpEvents _events;
 
         public RdpConnection(IRdpEvents events)
         {
-            _events = events;
+            if (events == null)
+            {
+                _events = new Mock.RdpEvents();
+            }
+            else
+            {
+                _events = events;
+            }
         }
 
         public void Connect(Credentials credentials, bool fUsingSavedCreds)
@@ -46,6 +53,36 @@ namespace RdClient.Shared.Test.Mock
         public IRdpEvents Events
         {
             get { return _events; }
+        }
+
+        public int GetIntProperty(string propertyName)
+        {
+            return (int)Invoke(new object[] { propertyName });
+        }
+
+        public void SetIntProperty(string propertyName, int value)
+        {
+            Invoke(new object[] { propertyName, value });
+        }
+
+        public string GetStringPropery(string propertyName)
+        {
+            return (string)Invoke(new object[] { propertyName });
+        }
+
+        public void SetStringProperty(string propertyName, string value)
+        {
+            Invoke(new object[] { propertyName, value });
+        }
+
+        public bool GetBoolProperty(string propertyName)
+        {
+            return (bool)Invoke(new object[] { propertyName });
+        }
+
+        public void SetBoolProperty(string propertyName, bool value)
+        {
+            Invoke(new object[] { propertyName, value });
         }
     }
 }

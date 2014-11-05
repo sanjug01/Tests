@@ -24,7 +24,7 @@ namespace RdClient.Shared.ViewModels
         public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
         public INavigationService NavigationService { private get; set; }
 
-        private IRdpConnection _rdpConnection;
+        protected IRdpConnection _rdpConnection;
 
         public SessionViewModel()
         {

@@ -22,6 +22,11 @@ namespace RdMock.Test
             {
                 return (int)Invoke(new object[] { a });
             }
+
+            public int testMethod4(object a)
+            {
+                return (int)Invoke(new object[] { a });
+            }
         }
 
         [TestMethod]
@@ -160,6 +165,26 @@ namespace RdMock.Test
             }
 
             Assert.IsTrue(exceptionThrown);
+        }
+        
+        [TestMethod]
+        public void MockParameterNull()
+        {
+            bool exceptionThrown = false;
+            try
+            {
+                using (TestMock tm = new TestMock())
+                {
+                    tm.Expect("testMethod4", new List<object>() { null }, 4);
+                    tm.testMethod4(5);
+                }
+            }
+            catch (MockException /* e */)
+            {
+                exceptionThrown = true;
+            }
+
+            Assert.IsFalse(exceptionThrown);
         }
 
         [TestMethod]

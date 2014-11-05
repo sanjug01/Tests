@@ -134,6 +134,11 @@ namespace RdMock
 
             for (i = 0; i < actualParameters.Count(); i++)
             {
+                if(expectedParameters[i] == null)
+                {
+                    continue;
+                }
+
                 Type expectedType = expectedParameters[i].GetType();
                 Type actualType = actualParameters[i].ParameterType;
 
