@@ -18,9 +18,14 @@ namespace RdClient
             _viewFactory = new PresentableViewFactory();
             _navigationService = new NavigationService(this, _viewFactory);
 
+            _navigationService.PushingFirstModalView += OnAddingFirstModalView;
+            _navigationService.DismissingLastModalView += OnRemovedLastModalView;
+
             _viewFactory.AddViewClass("view1", typeof(Views.View1));
             _viewFactory.AddViewClass("SessionView", typeof(Views.SessionView));
             _viewFactory.AddViewClass("TestsView", typeof(Views.TestsView));
+
+            _viewFactory.AddViewClass("Dialog1", typeof(Views.Dialog1));
 
             _navigationService.NavigateToView("view1", null);
         }
@@ -34,12 +39,24 @@ namespace RdClient
 
         public void PushModalView(IPresentableView view)
         {
-            throw new NotImplementedException();
+            this.ModalStackContainer.Push(view as UIElement);
         }
 
         public void DismissModalView(IPresentableView view)
         {
-            throw new NotImplementedException();
+            this.ModalStackContainer.Pop();
+        }
+
+        private void OnAddingFirstModalView(object sender, EventArgs e)
+        {
+            this.TransitionAnimationContainer.IsEnabled = false;
+            this.ModalStackContainer.Visibility = Visibility.Visible;
+        }
+
+        private void OnRemovedLastModalView(object sender, EventArgs e)
+        {
+            this.ModalStackContainer.Visibility = Visibility.Collapsed;
+            this.TransitionAnimationContainer.IsEnabled = true;
         }
     }
 }

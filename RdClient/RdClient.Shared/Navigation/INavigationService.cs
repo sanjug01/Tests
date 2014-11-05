@@ -1,4 +1,5 @@
-﻿namespace RdClient.Navigation
+﻿using System;
+namespace RdClient.Navigation
 {
     /// <summary>
     /// Interface of a navigation service that navigates the UI between named views.
@@ -7,6 +8,9 @@
     /// </summary>
     public interface INavigationService
     {
+        event EventHandler PushingFirstModalView;
+        event EventHandler DismissingLastModalView;
+
         /// <summary>
         /// Navigate to a view. If the view is not currently shown on the UI, the presenter is asked to present it.
         /// Otherwise (for example when the view is already navigated to) the Presenting() callback is called with the new parameter

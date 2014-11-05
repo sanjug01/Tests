@@ -10,8 +10,9 @@
 
     <Grid>
         <views:TransitionAnimationContainer
-            x:Name="TransitionAnimationContainer"
-            Grid.Row="0" Grid.Column="0"
-            HorizontalAlignment="Stretch"/>
+            x:Name="TransitionAnimationContainer"/>
+        <views:ModalStackContainer
+            x:Name="ModalStackContainer"
+            Visibility="Collapsed"/>
     </Grid>
 </Page>
