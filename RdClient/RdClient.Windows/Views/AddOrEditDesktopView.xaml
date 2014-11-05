@@ -1,0 +1,24 @@
+﻿<Page
+    x:Class="RdClient.Views.AddOrEditDesktopView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Views"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Loaded="Page_Loaded">
+
+    <Page.Resources>
+        <vm:AddOrEditDesktopViewModel x:Key="AddOrEditDesktopViewModel"/>
+    </Page.Resources>
+
+    <Grid Background="BlueViolet">
+        <Button
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Left" Command="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=SaveCommand}">Save Desktop</Button>
+        <Button
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Right" Command="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=CancelCommand}">Cancel</Button>        
+    </Grid>
+</Page>
