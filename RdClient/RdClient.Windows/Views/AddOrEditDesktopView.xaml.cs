@@ -47,16 +47,6 @@ namespace RdClient.Views
             vm.NavigationService = _navigationService;            
         }
 
-        private void ButtonMore_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            // TODO
-        }
-
-        private void ButtonLess_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            // TODO
-        }
-
         private void UsersComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // TODO

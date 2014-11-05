@@ -96,4 +96,12 @@
 
     </Grid>
 
+    <Grid Background="BlueViolet">
+        <Button
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Left" Command="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=SaveCommand}">Save Desktop</Button>
+        <Button
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Right" Command="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=CancelCommand}">Cancel</Button>        
+    </Grid>
 </Page>
