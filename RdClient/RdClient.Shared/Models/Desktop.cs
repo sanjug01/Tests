@@ -1,7 +1,7 @@
 ﻿
 namespace RdClient.Shared.Models
 {
-    public struct Desktop
+    public class Desktop
     {
         public string hostName;
     }
