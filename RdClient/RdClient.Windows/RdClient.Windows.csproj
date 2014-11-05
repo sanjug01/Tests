@@ -116,6 +116,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Helpers\PhysicalScreenSize.cs" />
     <Compile Include="LifeTimeManagement\ActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
@@ -171,6 +172,10 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddOrEditDesktopView.xaml">
       <SubType>Designer</SubType>
