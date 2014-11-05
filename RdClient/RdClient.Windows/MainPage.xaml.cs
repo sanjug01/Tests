@@ -21,6 +21,7 @@ namespace RdClient
             _viewFactory.AddViewClass("view1", typeof(Views.View1));
             _viewFactory.AddViewClass("SessionView", typeof(Views.SessionView));
             _viewFactory.AddViewClass("TestsView", typeof(Views.TestsView));
+            _viewFactory.AddViewClass("AddOrEditDesktopView", typeof(Views.AddOrEditDesktopView));
 
             _navigationService.NavigateToView("view1", null);
         }
