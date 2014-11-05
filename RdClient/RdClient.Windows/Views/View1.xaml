@@ -8,9 +8,14 @@
     mc:Ignorable="d">
 
     <Grid Background="red">
-        <Button
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Right" Click="Button_Click">Connect</Button>
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Right">
+            <Button Click="Button_Click">Connect</Button>
+            <Button Click="AddDesktopButton_Click">Add Desktop</Button>
+            <Button Click="EditDesktopButton_Click">Edit Desktop</Button>
+        </StackPanel>
+        
         <Button
             VerticalAlignment="Top"
             HorizontalAlignment="Right" Click="TestsButton_Click">Tests</Button> 
