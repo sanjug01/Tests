@@ -56,14 +56,14 @@ namespace RdClient.Views
         private void AddDesktopButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             // new dektop
-            _navigationService.NavigateToView("AddOrEditDesktopView", null);
+            _navigationService.PushModalView("AddOrEditDesktopView", null);
         }
 
         private void EditDesktopButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             // edit existing desktop
             Desktop d = new Desktop() { hostName = "a3-w81" };
-            _navigationService.NavigateToView("AddOrEditDesktopView", d);
+            _navigationService.PushModalView("AddOrEditDesktopView", d);
         }
     }
 }

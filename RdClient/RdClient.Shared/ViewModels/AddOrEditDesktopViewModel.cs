@@ -30,8 +30,12 @@ namespace RdClient.Shared.ViewModels
             _desktop = null;
 
             this.IsExpandedViewVisible = false;
-            this.ResetCachedDesktopData();            
+            this.ResetCachedDesktopData();
+
+            PresentableView = null;
         }
+
+        public IPresentableView PresentableView { get; set; }
 
         public INavigationService NavigationService { private get; set; }
 
@@ -116,9 +120,9 @@ namespace RdClient.Shared.ViewModels
 
             this.ResetCachedDesktopData();
 
-            if (NavigationService != null)
+            if (null != NavigationService && null != PresentableView)
             {
-                NavigationService.NavigateToView("view1", null);
+                NavigationService.DismissModalView(PresentableView);
             }
         }
 
@@ -126,9 +130,9 @@ namespace RdClient.Shared.ViewModels
         {
             this.ResetCachedDesktopData();
 
-            if (NavigationService != null)
+            if (null != NavigationService && null != PresentableView)
             {
-                NavigationService.NavigateToView("view1", null);
+                NavigationService.DismissModalView(PresentableView);
             }
         }
 

@@ -41,19 +41,22 @@ namespace RdClient.Views
         {
             // Contract.Assert(_activationParameter != null);
             IAddOrEditDesktopViewModel vm = Resources["AddOrEditDesktopViewModel"] as IAddOrEditDesktopViewModel;
+            vm.PresentableView = this;
 
             if (null == _activationParameter )
             {
                 // add
                 vm.IsAddingDesktop = true;
+                vm.Desktop = null;
             }
             else
             {
                 //edit
                 vm.IsAddingDesktop = false;
+                vm.Desktop = _activationParameter as Desktop;
             }
 
-            // Desktop desktop = _activationParameter as Desktop;
+
 
             vm.NavigationService = _navigationService;            
         }
