@@ -40,11 +40,15 @@ namespace RdClient
 
         public void PushModalView(IPresentableView view)
         {
+            Contract.Requires(view != null);
+
             this.ModalStackContainer.Push(view as UIElement);
         }
 
         public void DismissModalView(IPresentableView view)
         {
+            Contract.Requires(view != null);
+
             this.ModalStackContainer.Pop();
         }
 

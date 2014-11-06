@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
@@ -13,13 +9,13 @@ namespace RdClient.Views
     //
     // Interface of a pending animation that may be committed immediately.
     //
-    public interface IPendingAnimation
+    interface IPendingAnimation
     {
         void Commit();
     }
 
 
-    public abstract class FadeBase : IPendingAnimation
+    abstract class FadeBase : IPendingAnimation
     {
         private readonly Grid _container;
         private readonly ContentControl _view;
@@ -82,7 +78,7 @@ namespace RdClient.Views
         }
     }
 
-    public sealed class FadeOut : FadeBase
+    sealed class FadeOut : FadeBase
     {
         public static IPendingAnimation Start(Grid container, ContentControl view, Action<IPendingAnimation> completion)
         {
@@ -123,6 +119,9 @@ namespace RdClient.Views
 
         protected override void CleanUpAnimation(Grid container, ContentControl view)
         {
+            Contract.Requires(null != container);
+            Contract.Requires(null != view);
+
             container.Children.Remove(view);
             view.Content = null;
             //
@@ -183,6 +182,9 @@ namespace RdClient.Views
 
         protected override void CleanUpAnimation(Grid container, ContentControl view)
         {
+            Contract.Requires(null != container);
+            Contract.Requires(null != view);
+
             view.Opacity = 1.0;
             view.IsEnabled = true;
         }
