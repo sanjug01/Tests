@@ -25,11 +25,10 @@
         />
 
         <Border 
-            Background="{StaticResource rdOrangeBrush}" 
+            Background="{StaticResource rdWhiteBrush}" 
             Width="480" 
             HorizontalAlignment="Center" 
             VerticalAlignment="Top" 
-            BorderBrush="{StaticResource rdOrangeBrush}" 
             BorderThickness="4"
             Margin="0,128,8,0"
             >
@@ -41,54 +40,64 @@
                     <RowDefinition Height="12"/>
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Background="{StaticResource rdOrangeBrush}">
+                <Grid Grid.Row="0">
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
-                               Foreground="{StaticResource rdWhiteBrush}" x:Uid="AddOrEditDesktop-Caption" Text="ADD DESKTOP(d)"
-                               Visibility="{Binding IsAddingDesktop, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" Foreground="{StaticResource rdWhiteBrush}" x:Uid="OverlayEditDesktop-Caption" Text="EDIT DESKTOP(d)"
-                               Visibility="{Binding IsAddingDesktop, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-                    <Button Margin="24,0,24,0" Style="{StaticResource ExpanderButtonStyle}" Content="{StaticResource MoreGlyph}" Visibility="{Binding IsExpandedViewVisible, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Tapped="ButtonMore_Tapped"/>
-                    <Button Margin="24,0,24,0" Style="{StaticResource ExpanderButtonStyle}" Content="{StaticResource LessGlyph}" Visibility="{Binding IsExpandedViewVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Tapped="ButtonLess_Tapped" />
+                               Foreground="{StaticResource rdBlackBrush}" 
+                               x:Uid="AddOrEditDesktop-AddCaption" Text="Add PC or Server(d)"
+                               Visibility="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsAddingDesktop, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
+                               Foreground="{StaticResource rdBlackBrush}" 
+                               x:Uid="AddOrEditDesktop-EditCaption" Text="Edit PC or Server(d)"
+                               Visibility="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsAddingDesktop, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
                 </Grid>
 
-                <Border Grid.Row="1" Height="1" Background="{StaticResource rdWhiteBrush}" Margin="0" />
+                <Border Grid.Row="1" Height="1" Margin="0" />
 
                 <StackPanel Grid.Row="2" Margin="26,12,26,0">
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-PcName" Text="PC Name(d)"/>
-                    <TextBox Margin="0,8" Text="{Binding Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Margin="0,8" Text="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddOrEditDesktop-Credentials" Text="Credentials(d)"/>
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
                     <ComboBox Margin="0,8" 
                               x:Uid="AddOrEditDesktop-Credentials-ComboBox"
                               SelectionChanged="UsersComboBox_SelectionChanged"
-                              ItemsSource="{Binding UserOptions}"
-                              SelectedIndex="{Binding SelectedUserOptionsIndex, Mode=TwoWay}" />
+                              ItemsSource="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=UserOptions}"
+                              SelectedIndex="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=SelectedUserOptionsIndex, Mode=TwoWay}" />
 
-                    <StackPanel Visibility="{Binding IsExpandedViewVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" Content="Show additional options(d)" Margin="0,8"
+                            IsChecked="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsExpandedViewVisible, Mode=TwoWay}" />
+
+                    <!-- invisible until fully implemented -->
+                    <!-- StackPanel Visibility="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsExpandedViewVisible, Converter={StaticResource BooleanToVisibilityConverter}}" -->
+                    <StackPanel Visibility="Collapsed">
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
                         <TextBox Margin="0,8" Text="{Binding FriendlyName, Mode=TwoWay}" />
 
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Gateway" Text="Gateway(d)"/>
                         <ComboBox Margin="0,8"
-                                  ItemsSource="{Binding GatewayOptions}"
+                                  ItemsSource="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=GatewayOptions}"
                                   SelectionChanged="Gateways_ComboBox_SelectionChanged"
-                                  SelectedIndex="{Binding SelectedGatewayOptionsIndex, Mode=TwoWay}" />
+                                  SelectedIndex="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=SelectedGatewayOptionsIndex, Mode=TwoWay}" />
 
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Sound" Text="Sound(d)"/>
                         <ComboBox Margin="0,8"                                 
-                                  SelectedIndex="{Binding AudioMode, Mode=TwoWay}">
+                                  SelectedIndex="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=AudioMode, Mode=TwoWay}">
                             <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnThisDevice" Content="Play on this device(d)" />
                             <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnRemotePc" Content="Play on remote PC(d)" />
                             <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-DontPlaySounds" Content="Don't play sounds(d)" />
                         </ComboBox>
 
-                        <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" Content="Swap mouse buttons(d)" Margin="0,8" IsChecked="{Binding IsSwapMouseButtons, Mode=TwoWay}" />
-                        <CheckBox x:Uid="AddOrEditDesktop-ConnectToAdminSession" Content="Connect to admin session(d)" Margin="0,8" IsChecked="{Binding IsConnectToAdminSession, Mode=TwoWay}" />
+                        <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" Content="Swap mouse buttons(d)" Margin="0,8" 
+                                  IsChecked="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsSwapMouseButtons, Mode=TwoWay}" />
+                        <CheckBox x:Uid="AddOrEditDesktop-ConnectToAdminSession" Content="Connect to admin session(d)" Margin="0,8" 
+                                  IsChecked="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsConnectToAdminSession, Mode=TwoWay}" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
-                        <Button x:Uid="AddOrEditDesktop-Save" Content="SAVE(d)" Command="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=SaveCommand}" />
-                        <Button x:Uid="AddOrEditDesktop-Cancel" Content="CANCEL(d)" Command="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=CancelCommand}" />
+                        <Button x:Uid="AddOrEditDesktop-Save" Content="SAVE(d)" 
+                                Command="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=SaveCommand}" />
+                        <Button x:Uid="AddOrEditDesktop-Cancel" Content="CANCEL(d)" 
+                                Command="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=CancelCommand}" />
                     </StackPanel>
                 </StackPanel>
             </Grid>

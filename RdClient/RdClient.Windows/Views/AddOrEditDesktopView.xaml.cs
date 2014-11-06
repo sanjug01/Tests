@@ -42,19 +42,20 @@ namespace RdClient.Views
             // Contract.Assert(_activationParameter != null);
             IAddOrEditDesktopViewModel vm = Resources["AddOrEditDesktopViewModel"] as IAddOrEditDesktopViewModel;
 
+            if (null == _activationParameter )
+            {
+                // add
+                vm.IsAddingDesktop = true;
+            }
+            else
+            {
+                //edit
+                vm.IsAddingDesktop = false;
+            }
+
             // Desktop desktop = _activationParameter as Desktop;
 
             vm.NavigationService = _navigationService;            
-        }
-
-        private void ButtonMore_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            // TODO
-        }
-
-        private void ButtonLess_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            // TODO
         }
 
         private void UsersComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
