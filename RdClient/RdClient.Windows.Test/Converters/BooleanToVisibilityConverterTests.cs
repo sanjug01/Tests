@@ -8,7 +8,7 @@ namespace RdClient.Windows.Test
     public class BooleanToVisibilityConverterTests
     {
         [TestMethod]
-        public void ForwardTrue()
+        public void BooleanToVisibilityConvertForwardTrue()
         {
             BooleanToVisibilityConverter btvc = new BooleanToVisibilityConverter();
             bool value = true;
@@ -19,7 +19,7 @@ namespace RdClient.Windows.Test
         }
 
         [TestMethod]
-        public void ForwardFalse()
+        public void BooleanToVisibilityConvertForwardFalse()
         {
             BooleanToVisibilityConverter btvc = new BooleanToVisibilityConverter();
             bool value = false;
@@ -30,7 +30,7 @@ namespace RdClient.Windows.Test
         }
 
         [TestMethod]
-        public void BackVisible()
+        public void BooleanToVisibilityConvertBackVisible()
         {
             BooleanToVisibilityConverter btvc = new BooleanToVisibilityConverter();
             bool value;
@@ -41,7 +41,7 @@ namespace RdClient.Windows.Test
         }
 
         [TestMethod]
-        public void BackCollapsed()
+        public void BooleanToVisibilityConvertBackCollapsed()
         {
             BooleanToVisibilityConverter btvc = new BooleanToVisibilityConverter();
             bool value;

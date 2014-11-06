@@ -19,8 +19,13 @@ namespace RdClient.Shared.ViewModels
     public class SessionViewModel : ViewModelBase, ISessionViewModel
     {
         public event EventHandler<ConnectionCreatedArgs> ConnectionCreated;
-        public ICommand DisconnectCommand { get; private set; }
-        public ICommand ConnectCommand { get; private set; }
+
+        private readonly ICommand _disconnectCommand;
+        public ICommand DisconnectCommand { get { return _disconnectCommand; } }
+
+        private readonly ICommand _connectCommand;
+        public ICommand ConnectCommand { get { return _connectCommand; } }
+
         public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
         public INavigationService NavigationService { private get; set; }
 
@@ -28,8 +33,8 @@ namespace RdClient.Shared.ViewModels
 
         public SessionViewModel()
         {
-            DisconnectCommand = new RelayCommand(new Action<object>(Disconnect));
-            ConnectCommand = new RelayCommand(new Action<object>(Connect));
+            _disconnectCommand = new RelayCommand(new Action<object>(Disconnect));
+            _connectCommand = new RelayCommand(new Action<object>(Connect));
         }
 
 

@@ -35,7 +35,14 @@ namespace RdClient.Shared.ViewModels
             _execute(parameter);
         }
 
-#pragma warning disable 67 // warning CS0067: the event <...> is never used
         public event EventHandler CanExecuteChanged;
+
+        public void EmitCanExecuteChanged(object sender, EventArgs args)
+        {
+            if(CanExecuteChanged != null)
+            {
+                CanExecuteChanged(sender, args);
+            }
+        }
     }
 }
