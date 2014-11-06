@@ -6,7 +6,7 @@ namespace RdClient.Shared.Test.Mock
 {
     class RdpConnection : MockBase, IRdpConnection, IRdpProperties
     {
-        IRdpEvents _events;
+        private readonly IRdpEvents _events;
 
         public RdpConnection(IRdpEvents events)
         {

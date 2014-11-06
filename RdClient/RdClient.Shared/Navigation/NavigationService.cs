@@ -54,6 +54,14 @@ namespace RdClient.Navigation
             _currentView = view;
         }
 
+        private void EmitPushingFirstModalView(NavigationService sender, EventArgs args)
+        {
+            if(PushingFirstModalView != null)
+            {
+                PushingFirstModalView(sender, args);
+            }
+        }
+
         public void PushModalView(string viewName, object activationParameter)
         {
             Contract.Requires(viewName != null);
@@ -65,14 +73,22 @@ namespace RdClient.Navigation
                 throw new NavigationServiceException("trying to modally display a view which is already shown.");
             }
 
-            if(_modalStack.Count == 0 && PushingFirstModalView != null)
+            if(_modalStack.Count == 0)
             {
-                PushingFirstModalView(this, null);
+                EmitPushingFirstModalView(this, null);
             }
 
             _modalStack.Add(view);
             view.Presenting(this, activationParameter);
             _presenter.PushModalView(view);
+        }
+
+        public void EmitDismissingLastModalView(NavigationService sender, EventArgs args)
+        { 
+            if(DismissingLastModalView != null)
+            {
+                DismissingLastModalView(sender, args);
+            }
         }
 
         public void DismissModalView(IPresentableView modalView)
@@ -99,9 +115,9 @@ namespace RdClient.Navigation
                 _presenter.DismissModalView(view);
             }
 
-            if(DismissingLastModalView != null)
+            if(_modalStack.Count == 0)
             {
-                DismissingLastModalView(this, null);
+                EmitDismissingLastModalView(this, null);
             }
         }
 

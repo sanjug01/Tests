@@ -32,13 +32,19 @@ namespace RdClient.Shared.ViewModels
             ConnectCommand = new RelayCommand(new Action<object>(Connect));
         }
 
+
+        private void EmitConnectionCreated(SessionViewModel sender, ConnectionCreatedArgs args)
+        {
+            if(ConnectionCreated != null)
+            {
+                ConnectionCreated(sender, args);
+            }
+        }
+
         private void Connect(object o)
         {
             _rdpConnection = RdpConnectionFactory.CreateInstance();
-            if(ConnectionCreated != null)
-            {
-                ConnectionCreated(this, new ConnectionCreatedArgs(_rdpConnection));
-            }
+            EmitConnectionCreated(this, new ConnectionCreatedArgs(_rdpConnection));
 
             ConnectionInformation connectionInformation = o as ConnectionInformation;
             Desktop desktop = connectionInformation.Desktop;
