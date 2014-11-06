@@ -10,5 +10,6 @@ namespace RdClient.Shared.ViewModels
         ICommand SaveCommand { get; }
         ICommand CancelCommand { get; }
         INavigationService NavigationService { set; }
+        bool IsAddingDesktop { get; set; }
     }
 }
