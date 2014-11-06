@@ -71,11 +71,10 @@
     <Compile Include="CxWrappers\RdpEventArgsTests.cs" />
     <Compile Include="CxWrappers\RdpEventSourceTests.cs" />
     <Compile Include="CxWrappers\RdpUtilsTests.cs" />
-    <Compile Include="MockViewFactoryTests.cs" />
-    <Compile Include="MockViewPresenterTests.cs" />
     <Compile Include="Mock\NavigationService.cs" />
     <Compile Include="Mock\PhysicalScreenSize.cs" />
     <Compile Include="Mock\PresentableView.cs" />
+    <Compile Include="Mock\PresentableViewConstructor.cs" />
     <Compile Include="Mock\RdpConnection.cs" />
     <Compile Include="Mock\RdpConnectionFactory.cs" />
     <Compile Include="Mock\RdpEvents.cs" />
@@ -83,6 +82,7 @@
     <Compile Include="Mock\ViewFactory.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Navigation\NavigationServiceTests.cs" />
+    <Compile Include="Navigation\PresentableViewConstructorTests.cs" />
     <Compile Include="Navigation\PresentableViewFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\RelayCommandTests.cs" />

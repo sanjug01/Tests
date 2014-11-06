@@ -1,68 +1,38 @@
 ﻿namespace RdClient.Navigation
 {
+    using RdClient.Shared.Navigation;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 
-    public sealed class PresentableViewFactory : IPresentableViewFactory
+    public sealed class PresentableViewFactory<TPresentableViewConstructor> : IPresentableViewFactory where TPresentableViewConstructor : IPresentableViewConstructor, new()
     {
-        private readonly IDictionary<string, PresentableViewConstructor> _viewConstructors;
+        private readonly IDictionary<string, IPresentableViewConstructor> _viewConstructors;
 
 
         public PresentableViewFactory()
         {
-            _viewConstructors = new Dictionary<string, PresentableViewConstructor>();
+            _viewConstructors = new Dictionary<string, IPresentableViewConstructor>();
         }
 
         public IPresentableView CreateView(string name, object activationParameter)
         {
-            return _viewConstructors[name].CreateView(activationParameter);
+            IPresentableView newView = _viewConstructors[name].CreateView();
+            newView.Activating(activationParameter);
+            return newView;
         }
 
-        public void AddViewClass( string name, Type viewClass, bool isSingleton = false )
+        public void AddViewClass(string name, Type viewClass, IPresentableViewConstructor pvc, bool isSingleton)
         {
             Contract.Requires(name != null && !name.Equals(""));
             Contract.Requires(viewClass != null);
-            _viewConstructors.Add(name, new PresentableViewConstructor(viewClass, isSingleton));
+            pvc.Initialize(viewClass, isSingleton);
+            _viewConstructors.Add(name, pvc);
         }
 
-        /// <summary>
-        /// Private helper class that creates instances of the specified type and if needed
-        /// retains a singleton instance of the type.
-        /// </summary>
-        class PresentableViewConstructor
+        public void AddViewClass(string name, Type viewClass, bool isSingleton = false)
         {
-            private readonly Type _viewClass;
-            private readonly bool _isSingleton;
-            private IPresentableView _singletonView;
-
-            public PresentableViewConstructor( Type viewClass, bool isSingleton )
-            {
-                Contract.Requires(viewClass != null);
-                
-                _viewClass = viewClass;
-                _isSingleton = isSingleton;
-            }
-
-            public IPresentableView CreateView(object activationParameter)
-            {
-                IPresentableView newView = _singletonView;
-
-                if( null == newView )
-                {
-                    newView = Activator.CreateInstance(_viewClass) as IPresentableView;
-
-                    if (null != newView)
-                    {
-                        newView.Activating(activationParameter);
-
-                        if(_isSingleton)
-                         _singletonView = newView;
-                    }
-                }
-
-                return newView;
-            }
+            AddViewClass(name, viewClass, new TPresentableViewConstructor(), isSingleton);
         }
     }
 }

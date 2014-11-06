@@ -142,7 +142,7 @@ namespace RdMock
                 Type expectedType = expectedParameters[i].GetType();
                 Type actualType = actualParameters[i].ParameterType;
 
-                if(expectedType.IsAssignableFrom(actualType) == false)
+                if (actualType.IsAssignableFrom(expectedType) == false)
                 {
                     throw new MockException("Parameter " + i + " is of type " + actualType.Name + " but expected type is " + expectedType.Name);
                 }
@@ -150,9 +150,9 @@ namespace RdMock
                 object expectedValue = expectedParameters[i];
                 object actualValue = actualParameterValues[i];
 
-                if (Convert.ChangeType(expectedValue, expectedType).Equals(Convert.ChangeType(actualValue, actualType)) == false)
+                if (actualValue.Equals(expectedValue) == false)
                 {
-                    throw new MockException("Expected value: " + Convert.ChangeType(expectedValue, expectedType) + " Actual value: " + Convert.ChangeType(actualValue, actualType));
+                    throw new MockException("Expected value: " + expectedValue + " Actual value: " + actualValue);
                 }
             }
 

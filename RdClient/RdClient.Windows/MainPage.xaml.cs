@@ -1,4 +1,5 @@
 ﻿using RdClient.Navigation;
+using RdClient.Shared.Navigation;
 using System;
 using System.Diagnostics.Contracts;
 using Windows.UI.Xaml;
@@ -8,14 +9,14 @@ namespace RdClient
 {
     public sealed partial class MainPage : Page, IViewPresenter
     {
-        private PresentableViewFactory _viewFactory;
+        private PresentableViewFactory<PresentableViewConstructor> _viewFactory;
         private INavigationService _navigationService;
 
         public MainPage()
         {
             this.InitializeComponent();
 
-            _viewFactory = new PresentableViewFactory();
+            _viewFactory = new PresentableViewFactory<PresentableViewConstructor>();
             _navigationService = new NavigationService(this, _viewFactory);
 
             _navigationService.PushingFirstModalView += OnAddingFirstModalView;

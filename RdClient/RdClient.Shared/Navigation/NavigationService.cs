@@ -30,7 +30,7 @@ namespace RdClient.Navigation
             _viewFactory = viewFactory;
         }
 
-        void INavigationService.NavigateToView(string viewName, object activationParameter)
+        public void NavigateToView(string viewName, object activationParameter)
         {
             IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
 
@@ -54,7 +54,7 @@ namespace RdClient.Navigation
             _currentView = view;
         }
 
-        void INavigationService.PushModalView(string viewName, object activationParameter)
+        public void PushModalView(string viewName, object activationParameter)
         {
             Contract.Requires(viewName != null);
 
@@ -99,10 +99,11 @@ namespace RdClient.Navigation
                 _presenter.DismissModalView(view);
             }
 
-            if(_modalStack.Count == 0 && DismissingLastModalView != null)
+            if(DismissingLastModalView != null)
             {
                 DismissingLastModalView(this, null);
             }
         }
+
     }
 }

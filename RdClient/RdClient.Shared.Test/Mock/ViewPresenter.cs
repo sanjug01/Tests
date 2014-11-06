@@ -1,45 +1,23 @@
 ﻿using RdClient.Navigation;
+using RdMock;
 
-namespace Test.RdClient.Shared.Mock
+namespace RdClient.Shared.Test.Mock
 {
-    class ViewPresenter : IViewPresenter
+    public class ViewPresenter : MockBase, IViewPresenter
     {
-        private int _presentViewCount = 0;
-
-        public int PresentViewCount
-        {
-            get { return _presentViewCount; }
-        }
-        private int _pushModalViewCount = 0;
-
-        public int PushModalViewCount
-        {
-            get { return _pushModalViewCount; }
-        }
-        private int _dismissModalViewcount = 0;
-
-        public int DismissModalViewcount
-        {
-            get { return _dismissModalViewcount; }
-        }
-
-        public ViewPresenter()
-        {
-        }
-
         public void PresentView(IPresentableView view)
         {
-            _presentViewCount++;
+            Invoke(new object[] { view } );
         }
 
         public void PushModalView(IPresentableView view)
         {
-            _pushModalViewCount++;
+            Invoke(new object[] { view });
         }
 
         public void DismissModalView(IPresentableView view)
         {
-            _dismissModalViewcount++;
+            Invoke(new object[] { view });
         }
     }
 }
