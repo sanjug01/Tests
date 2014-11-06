@@ -65,6 +65,8 @@
     <Compile Include="Models\ConnectionInformation.cs" />
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\Desktop.cs" />
+    <Compile Include="Navigation\IPresentableViewConstructor.cs" />
+    <Compile Include="Navigation\PresentableViewConstructor.cs" />
     <Compile Include="ViewModels\IAddOrEditDesktopViewModel.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModel.cs" />
     <Compile Include="ViewModels\ISessionViewModel.cs" />
