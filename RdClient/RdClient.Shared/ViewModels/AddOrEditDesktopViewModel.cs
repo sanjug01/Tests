@@ -35,7 +35,7 @@ namespace RdClient.Shared.ViewModels
             PresentableView = null;
         }
 
-        public IPresentableView PresentableView { get; set; }
+        public IPresentableView PresentableView { private get; set; }
 
         public INavigationService NavigationService { private get; set; }
 
@@ -183,8 +183,8 @@ namespace RdClient.Shared.ViewModels
         private int _audioMode;
 
         Predicate<object> predicateCanExecute; 
-        private RelayCommand _saveCommand;
-        private RelayCommand _cancelCommand;
+        private readonly RelayCommand _saveCommand;
+        private readonly RelayCommand _cancelCommand;
 
         private Desktop _desktop;
 

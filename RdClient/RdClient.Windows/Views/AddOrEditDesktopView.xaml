@@ -60,38 +60,11 @@
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
                     <ComboBox Margin="0,8" 
                               x:Uid="AddOrEditDesktop-Credentials-ComboBox"
-                              SelectionChanged="UsersComboBox_SelectionChanged"
                               ItemsSource="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=UserOptions}"
                               SelectedIndex="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=SelectedUserOptionsIndex, Mode=TwoWay}" />
 
                     <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" Content="Show additional options(d)" Margin="0,8"
                             IsChecked="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsExpandedViewVisible, Mode=TwoWay}" />
-
-                    <!-- invisible until fully implemented -->
-                    <!-- StackPanel Visibility="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsExpandedViewVisible, Converter={StaticResource BooleanToVisibilityConverter}}" -->
-                    <StackPanel Visibility="Collapsed">
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
-                        <TextBox Margin="0,8" Text="{Binding FriendlyName, Mode=TwoWay}" />
-
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Gateway" Text="Gateway(d)"/>
-                        <ComboBox Margin="0,8"
-                                  ItemsSource="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=GatewayOptions}"
-                                  SelectionChanged="Gateways_ComboBox_SelectionChanged"
-                                  SelectedIndex="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=SelectedGatewayOptionsIndex, Mode=TwoWay}" />
-
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Sound" Text="Sound(d)"/>
-                        <ComboBox Margin="0,8"                                 
-                                  SelectedIndex="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=AudioMode, Mode=TwoWay}">
-                            <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnThisDevice" Content="Play on this device(d)" />
-                            <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnRemotePc" Content="Play on remote PC(d)" />
-                            <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-DontPlaySounds" Content="Don't play sounds(d)" />
-                        </ComboBox>
-
-                        <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" Content="Swap mouse buttons(d)" Margin="0,8" 
-                                  IsChecked="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsSwapMouseButtons, Mode=TwoWay}" />
-                        <CheckBox x:Uid="AddOrEditDesktop-ConnectToAdminSession" Content="Connect to admin session(d)" Margin="0,8" 
-                                  IsChecked="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsConnectToAdminSession, Mode=TwoWay}" />
-                    </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
                         <Button x:Uid="AddOrEditDesktop-Save" Content="SAVE(d)" 

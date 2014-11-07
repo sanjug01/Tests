@@ -31,19 +31,11 @@ namespace RdClient.Views
 
             _navigationService = navigationService;
             _activationParameter = activationParameter;
-        }
 
-        public void Dismissing()
-        {
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Contract.Assert(_activationParameter != null);
             IAddOrEditDesktopViewModel vm = Resources["AddOrEditDesktopViewModel"] as IAddOrEditDesktopViewModel;
             vm.PresentableView = this;
 
-            if (null == _activationParameter )
+            if (null == _activationParameter)
             {
                 // add
                 vm.IsAddingDesktop = true;
@@ -55,20 +47,15 @@ namespace RdClient.Views
                 vm.IsAddingDesktop = false;
                 vm.Desktop = _activationParameter as Desktop;
             }
-
-
-
-            vm.NavigationService = _navigationService;            
+            vm.NavigationService = _navigationService; 
         }
 
-        private void UsersComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void Dismissing()
         {
-            // TODO
         }
 
-        private void Gateways_ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            // TODO
         }
     }
 }
