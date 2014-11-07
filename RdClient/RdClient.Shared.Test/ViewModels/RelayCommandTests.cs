@@ -58,11 +58,12 @@ namespace RdClient.Shared.Test.ViewModels
             Action<object> action = (o) => { };
             RelayCommand rc = new RelayCommand(action, null);
 
-            rc.EmitCanExecuteChanged(this, null);
+            rc.EmitCanExecuteChanged();
+            Assert.IsFalse(canExecuteChanged);
 
-            rc.CanExecuteChanged += (sender, args) => { canExecuteChanged = true; };
+            rc.CanExecuteChanged += (sender, args) => canExecuteChanged = true;
 
-            rc.EmitCanExecuteChanged(this, null);
+            rc.EmitCanExecuteChanged();
 
             Assert.IsTrue(canExecuteChanged);
         }

@@ -60,8 +60,10 @@
     <Compile Include="CxWrappers\RdpEventSource.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
+    <Compile Include="Helpers\DisposableObject.cs" />
     <Compile Include="Helpers\IPhysicalScreenSize.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
+    <Compile Include="Helpers\ReadWriteMonitor.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\Desktop.cs" />
