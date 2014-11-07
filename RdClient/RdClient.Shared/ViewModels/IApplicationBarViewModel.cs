@@ -18,5 +18,9 @@
         /// when user interacts with the UI outside of the bar.
         /// </summary>
         bool IsBarSticky { get; set; }
+        /// <summary>
+        /// Command that shows the application bar.
+        /// </summary>
+        ICommand ShowBar { get; }
     }
 }

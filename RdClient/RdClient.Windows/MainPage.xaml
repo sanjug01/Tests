@@ -5,13 +5,25 @@
     xmlns:local="using:RdClient"
     xmlns:views="using:RdClient.Views"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:conv="using:RdClient.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     
+    <Page.Resources>
+        <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
+    </Page.Resources>
+    
     <Page.DataContext>
         <vm:MainPageViewModel />
     </Page.DataContext>
+    
+    <Page.BottomAppBar>
+        <AppBar
+            IsSticky="{Binding IsBarSticky}"
+            Visibility="{Binding IsBarVisible, Converter={StaticResource boolToVisibility}}">
+        </AppBar>
+    </Page.BottomAppBar>
 
     <Grid>
         <views:TransitionAnimationContainer
@@ -19,5 +31,12 @@
         <views:ModalStackContainer
             x:Name="ModalStackContainer"
             Visibility="Collapsed"/>
+        <Button
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Stretch"
+            Visibility="{Binding IsShowBarButtonVisible, Converter={StaticResource boolToVisibility}}"
+            Command="{Binding ShowBar}">
+            <TextBlock FontSize="12">show application bar</TextBlock>
+        </Button>
     </Grid>
 </Page>
