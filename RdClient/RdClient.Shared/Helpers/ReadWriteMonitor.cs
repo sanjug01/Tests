@@ -53,19 +53,11 @@
         {
             protected readonly ReaderWriterLockSlim _rwLock;
 
-            protected abstract IDisposable Acquire();
-            protected abstract void Release();
-
             protected LockBase(ReaderWriterLockSlim rwLock)
             {
                 Contract.Requires(null != rwLock);
                 Contract.Ensures(null != _rwLock);
                 _rwLock = rwLock;
-            }
-
-            protected override void DisposeManagedState()
-            {
-                Release();
             }
         }
 
@@ -75,19 +67,16 @@
             {
                 Contract.Requires(null != rwLock);
                 Contract.Ensures(null != Contract.Result<IDisposable>());
-                return (new ReadLock(rwLock)).Acquire();
+                return new ReadLock(rwLock);
             }
 
-            private ReadLock(ReaderWriterLockSlim rwLock) : base(rwLock) { }
-
-            protected override IDisposable Acquire()
+            private ReadLock(ReaderWriterLockSlim rwLock) : base(rwLock)
             {
-                Contract.Ensures(null != Contract.Result<IDisposable>());
-                _rwLock.EnterReadLock();
-                return this;
+                Contract.Requires(null != rwLock);
+                rwLock.EnterReadLock();
             }
 
-            protected override void Release()
+            protected override void DisposeManagedState()
             {
                 _rwLock.ExitReadLock();
             }
@@ -99,19 +88,16 @@
             {
                 Contract.Requires(null != rwLock);
                 Contract.Ensures(null != Contract.Result<IDisposable>());
-                return (new UpgradeableReadLock(rwLock)).Acquire();
+                return new UpgradeableReadLock(rwLock);
             }
 
-            private UpgradeableReadLock(ReaderWriterLockSlim rwLock) : base(rwLock) { }
-
-            protected override IDisposable Acquire()
+            private UpgradeableReadLock(ReaderWriterLockSlim rwLock) : base(rwLock)
             {
-                Contract.Ensures(null != Contract.Result<IDisposable>());
-                _rwLock.EnterUpgradeableReadLock();
-                return this;
+                Contract.Requires(null != rwLock);
+                rwLock.EnterUpgradeableReadLock();
             }
 
-            protected override void Release()
+            protected override void DisposeManagedState()
             {
                 _rwLock.ExitUpgradeableReadLock();
             }
@@ -123,19 +109,16 @@
             {
                 Contract.Requires(null != rwLock);
                 Contract.Ensures(null != Contract.Result<IDisposable>());
-                return (new WriteLock(rwLock)).Acquire();
+                return new WriteLock(rwLock);
             }
 
-            private WriteLock(ReaderWriterLockSlim rwLock) : base(rwLock) { }
-
-            protected override IDisposable Acquire()
+            private WriteLock(ReaderWriterLockSlim rwLock) : base(rwLock)
             {
-                Contract.Ensures(null != Contract.Result<IDisposable>());
-                _rwLock.EnterWriteLock();
-                return this;
+                Contract.Requires(null != rwLock);
+                rwLock.EnterWriteLock();
             }
 
-            protected override void Release()
+            protected override void DisposeManagedState()
             {
                 _rwLock.ExitWriteLock();
             }
