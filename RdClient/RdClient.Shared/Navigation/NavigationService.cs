@@ -1,6 +1,8 @@
-﻿using System;
+﻿using RdClient.Shared.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+
 namespace RdClient.Navigation
 {
     public class NavigationServiceException : Exception
@@ -15,19 +17,29 @@ namespace RdClient.Navigation
         public event EventHandler PushingFirstModalView;
         public event EventHandler DismissingLastModalView;
 
-        private IViewPresenter _presenter;
-        private IPresentableViewFactory _viewFactory;
+        private readonly IViewPresenter _presenter;
+        private readonly IPresentableViewFactory _viewFactory;
+        private readonly IApplicationBarViewModel _appBarViewModel;
         private IPresentableView _currentView;
 
         private List<IPresentableView> _modalStack = new List<IPresentableView>();
 
-        public NavigationService(IViewPresenter presenter, IPresentableViewFactory viewFactory)
+        public NavigationService(IViewPresenter presenter, IPresentableViewFactory viewFactory, IApplicationBarViewModel appBarViewModel)
         {
             Contract.Requires(presenter != null);
             Contract.Requires(viewFactory != null);
+            //
+            // appBarViewModel one is asserted because in the application the parameter comes from the view model which may
+            // accidentally get replaced with one that doesn't implement the interface.
+            //
+            Contract.Assert(null != appBarViewModel);
+            Contract.Ensures(null != _presenter);
+            Contract.Ensures(null != _viewFactory);
+            Contract.Ensures(null != _appBarViewModel);
 
             _presenter = presenter;
             _viewFactory = viewFactory;
+            _appBarViewModel = appBarViewModel;
         }
 
         public void NavigateToView(string viewName, object activationParameter)

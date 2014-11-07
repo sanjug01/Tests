@@ -1,5 +1,6 @@
 ﻿using RdClient.Navigation;
 using RdClient.Shared.Navigation;
+using RdClient.Shared.ViewModels;
 using System;
 using System.Diagnostics.Contracts;
 using Windows.UI.Xaml;
@@ -17,7 +18,7 @@ namespace RdClient
             this.InitializeComponent();
 
             _viewFactory = new PresentableViewFactory<PresentableViewConstructor>();
-            _navigationService = new NavigationService(this, _viewFactory);
+            _navigationService = new NavigationService(this, _viewFactory, this.DataContext as IApplicationBarViewModel);
 
             _navigationService.PushingFirstModalView += OnAddingFirstModalView;
             _navigationService.DismissingLastModalView += OnRemovedLastModalView;
