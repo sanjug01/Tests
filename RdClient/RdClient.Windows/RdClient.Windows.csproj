@@ -116,6 +116,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Helpers\PhysicalScreenSize.cs" />
     <Compile Include="LifeTimeManagement\ActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
@@ -136,6 +137,9 @@
     </Compile>
     <Compile Include="Views\ModalStackContainer.xaml.cs">
       <DependentUpon>ModalStackContainer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddOrEditDesktopView.xaml.cs">
+      <DependentUpon>AddOrEditDesktopView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TestsView.xaml.cs">
       <DependentUpon>TestsView.xaml</DependentUpon>
@@ -181,6 +185,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ModalStackContainer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddOrEditDesktopView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -52,5 +52,18 @@ namespace RdClient.Views
 
             _navigationService.NavigateToView("TestsView", connectionInformation);
         }
+
+        private void AddDesktopButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            // new dektop
+            _navigationService.PushModalView("AddOrEditDesktopView", null);
+        }
+
+        private void EditDesktopButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            // edit existing desktop
+            Desktop d = new Desktop() { hostName = "a3-w81" };
+            _navigationService.PushModalView("AddOrEditDesktopView", d);
+        }
     }
 }
