@@ -13,6 +13,8 @@ namespace RdClient.Views
     {
         private INavigationService _navigationService;
 
+        public IViewModel ViewModel { get { return null; } }
+
         public Dialog1()
         {
             this.InitializeComponent();

@@ -80,6 +80,7 @@
     <Compile Include="Mock\RdpEvents.cs" />
     <Compile Include="Mock\RdpProperties.cs" />
     <Compile Include="Mock\ViewFactory.cs" />
+    <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Navigation\NavigationServiceTests.cs" />
     <Compile Include="Navigation\PresentableViewConstructorTests.cs" />

@@ -1,16 +1,15 @@
-﻿using System;
-using RdClient.Navigation;
+﻿using RdClient.Navigation;
 using RdMock;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace RdClient.Shared.Test.Mock
 {
-    public class PresentableView : MockBase, IPresentableView
+    public class ViewModel : MockBase, IViewModel
     {
-        public void Activating(object activationParameter)
-        {
-            Invoke(new object[] { activationParameter });
-        }
-
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
             Invoke(new object[] { navigationService, activationParameter });
@@ -20,7 +19,5 @@ namespace RdClient.Shared.Test.Mock
         {
             Invoke(new object[] { });
         }
-
-        public IViewModel ViewModel { get; set; }
     }
 }

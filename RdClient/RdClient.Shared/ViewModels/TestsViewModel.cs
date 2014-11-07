@@ -2,6 +2,7 @@
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
 using System;
+using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Windows.Input;
 
@@ -16,15 +17,21 @@ namespace RdClient.Shared.ViewModels
     {
         public ICommand StressTestCommand { get; private set; }
         public ICommand GoHomeCommand { get; private set; }
-        public ConnectionInformation ConnectionInformation { private get; set; }
 
         public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
-        public INavigationService NavigationService { private get; set; }
+
+        private ConnectionInformation _connectionInformation;
 
         public TestsViewModel()
         {
             StressTestCommand = new RelayCommand(new Action<object>(StressTest));
             GoHomeCommand = new RelayCommand(new Action<object>(GoHome));
+        }
+
+        protected override void OnPresenting(object activationParameter)
+        {
+            Contract.Requires(null != activationParameter as ConnectionInformation);
+            _connectionInformation = activationParameter as ConnectionInformation;
         }
 
         void StressTest(object o)
@@ -58,7 +65,7 @@ namespace RdClient.Shared.ViewModels
                     rdpConnection.Events.ClientDisconnected += disconnectHandler;
                 };
 
-                svm.ConnectCommand.Execute(ConnectionInformation);
+                svm.ConnectCommand.Execute(_connectionInformation);
                 
                 are.WaitOne();
 

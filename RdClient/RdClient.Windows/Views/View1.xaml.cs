@@ -9,6 +9,8 @@ namespace RdClient.Views
     {
         private INavigationService _navigationService;
 
+        public IViewModel ViewModel { get { return null; } }
+
         public View1()
         {
             this.InitializeComponent();

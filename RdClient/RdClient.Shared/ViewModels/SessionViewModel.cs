@@ -27,7 +27,6 @@ namespace RdClient.Shared.ViewModels
         public ICommand ConnectCommand { get { return _connectCommand; } }
 
         public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
-        public INavigationService NavigationService { private get; set; }
 
         protected IRdpConnection _rdpConnection;
 
@@ -37,6 +36,10 @@ namespace RdClient.Shared.ViewModels
             _connectCommand = new RelayCommand(new Action<object>(Connect));
         }
 
+        protected override void OnPresenting(object activationParameter)
+        {
+
+        }
 
         private void EmitConnectionCreated(SessionViewModel sender, ConnectionCreatedArgs args)
         {

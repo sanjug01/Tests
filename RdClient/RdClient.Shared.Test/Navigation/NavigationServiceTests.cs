@@ -8,7 +8,7 @@ namespace RdClient.Shared.Test
     public class NavigationServiceTests
     {
         [TestMethod]
-        public void NavigateToView_Success()
+        public void NavigateToViewNoViewModel_Success()
         {
             using(Mock.PresentableView view1 = new Mock.PresentableView())
             using(Mock.PresentableView view2 = new Mock.PresentableView())
@@ -32,7 +32,37 @@ namespace RdClient.Shared.Test
                 navigationService.NavigateToView("bar", activationParameter);
 
             }
+        }
 
+        [TestMethod]
+        public void NavigateToView_Success()
+        {
+            using (Mock.PresentableView view1 = new Mock.PresentableView())
+            using (Mock.PresentableView view2 = new Mock.PresentableView())
+            using (Mock.ViewFactory factory = new Mock.ViewFactory())
+            using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
+            using (Mock.ViewModel viewModel = new Mock.ViewModel())
+            {
+                view1.ViewModel = viewModel;
+                NavigationService navigationService = new NavigationService(presenter, factory);
+                object activationParameter = new object();
+
+                factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
+                viewModel.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                presenter.Expect("PresentView", new List<object>() { view1 }, 0);
+
+                navigationService.NavigateToView("foo", activationParameter);
+
+                viewModel.Expect("Dismissing", new List<object>() { }, 0);
+                view1.Expect("Dismissing", new List<object>() { }, 0);
+                factory.Expect("CreateView", new List<object>() { "bar", activationParameter }, view2);
+                view2.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                presenter.Expect("PresentView", new List<object>() { view2 }, 0);
+
+                navigationService.NavigateToView("bar", activationParameter);
+
+            }
         }
 
         [TestMethod]
@@ -146,6 +176,39 @@ namespace RdClient.Shared.Test
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
+            using (Mock.ViewModel viewModel = new Mock.ViewModel())
+            {
+                view1.ViewModel = viewModel;
+
+                NavigationService navigationService = new NavigationService(presenter, factory);
+                bool callbackCalled = false;
+                object activationParameter = new object();
+
+                navigationService.DismissingLastModalView += (sender, args) => { callbackCalled = true; };
+
+                factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
+                viewModel.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+
+                navigationService.PushModalView("foo", activationParameter);
+
+                viewModel.Expect("Dismissing", new List<object>() { }, 0);
+                view1.Expect("Dismissing", new List<object>() {  }, 0);
+                presenter.Expect("DismissModalView", new List<object>() { view1 }, 0);
+
+                navigationService.DismissModalView(view1);
+
+                Assert.IsTrue(callbackCalled);
+            }
+        }
+
+        [TestMethod]
+        public void PushDismissModalViewNoViewModel()
+        {
+            using (Mock.PresentableView view1 = new Mock.PresentableView())
+            using (Mock.ViewFactory factory = new Mock.ViewFactory())
+            using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
                 NavigationService navigationService = new NavigationService(presenter, factory);
                 bool callbackCalled = false;
@@ -159,7 +222,7 @@ namespace RdClient.Shared.Test
 
                 navigationService.PushModalView("foo", activationParameter);
 
-                view1.Expect("Dismissing", new List<object>() {  }, 0);
+                view1.Expect("Dismissing", new List<object>() { }, 0);
                 presenter.Expect("DismissModalView", new List<object>() { view1 }, 0);
 
                 navigationService.DismissModalView(view1);

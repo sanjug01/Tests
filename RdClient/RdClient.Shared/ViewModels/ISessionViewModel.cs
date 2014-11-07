@@ -10,7 +10,6 @@ namespace RdClient.Shared.ViewModels
         event EventHandler<ConnectionCreatedArgs> ConnectionCreated;
         ICommand ConnectCommand { get; }
         ICommand DisconnectCommand { get; }
-        INavigationService NavigationService { set; }
         IRdpConnectionFactory RdpConnectionFactory { set; }
     }
 }

@@ -12,17 +12,11 @@ namespace RdClient.Views
 {
     public sealed partial class TestsView : Page, IPresentableView
     {
-        private INavigationService _navigationService;
-        private IPhysicalScreenSize _screenSize;
-        private object _activationParameter;
-
-        private object _layoutSync = new object();
+        public IViewModel ViewModel { get { return this.TestViewModel; } }
 
         public TestsView()
         {
             this.InitializeComponent();
-
-            _screenSize = new PhysicalScreenSize();
         }
 
         public void Activating(object activationParameter)
@@ -31,11 +25,6 @@ namespace RdClient.Views
 
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
-            Contract.Requires(navigationService != null);
-            Contract.Requires(activationParameter != null);
-
-            _navigationService = navigationService;
-            _activationParameter = activationParameter;
         }
 
         public void Dismissing()
@@ -44,17 +33,10 @@ namespace RdClient.Views
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            Contract.Assert(_activationParameter != null);
-            ITestsViewModel tvm = Resources["TestsViewModel"] as ITestsViewModel;
-
-            ConnectionInformation connectionInformation = _activationParameter as ConnectionInformation;
-
             RdpConnectionFactory factory = new RdpConnectionFactory();
             factory.SwapChainPanel = this.TestSwapChainPanel;
 
-            tvm.NavigationService = _navigationService;
-            tvm.RdpConnectionFactory = factory;
-            tvm.ConnectionInformation = connectionInformation;
+            this.TestViewModel.RdpConnectionFactory = factory;
         }
     }
 }

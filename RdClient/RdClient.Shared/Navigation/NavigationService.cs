@@ -41,9 +41,17 @@ namespace RdClient.Navigation
 
             if (_currentView != null && !object.ReferenceEquals(_currentView, view))
             {
+                if (_currentView.ViewModel != null)
+                {
+                    _currentView.ViewModel.Dismissing();
+                } 
                 _currentView.Dismissing();
             }
-            
+
+            if(view.ViewModel != null)
+            {
+                view.ViewModel.Presenting(this, activationParameter);
+            }
             view.Presenting(this, activationParameter);
 
             if (!object.ReferenceEquals(_currentView, view))
@@ -79,7 +87,13 @@ namespace RdClient.Navigation
             }
 
             _modalStack.Add(view);
+            
+            if(view.ViewModel != null)
+            {
+                view.ViewModel.Presenting(this, activationParameter);
+            }
             view.Presenting(this, activationParameter);
+
             _presenter.PushModalView(view);
         }
 
@@ -111,7 +125,12 @@ namespace RdClient.Navigation
 
             foreach (IPresentableView view in toDismiss)
             {
+                if(view.ViewModel != null)
+                {
+                    view.ViewModel.Dismissing();
+                }
                 view.Dismissing();
+
                 _presenter.DismissModalView(view);
             }
 

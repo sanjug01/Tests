@@ -67,7 +67,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
             using (Mock.NavigationService navigationService = new Mock.NavigationService())
             {
-                _sessionViewModel.NavigationService = navigationService;
+                _sessionViewModel.Presenting(navigationService, null);
                 _sessionViewModel.RdpConnection = connection;
 
                 object disconnectParam = new object();

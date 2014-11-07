@@ -5,6 +5,8 @@
     /// </summary>
     public interface IPresentableView
     {
+        IViewModel ViewModel { get; }
+
         /// <summary>
         /// Invoked when the view is constructed.
         /// </summary>
