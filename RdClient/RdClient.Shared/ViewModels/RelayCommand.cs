@@ -57,7 +57,7 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        public void EmitCanExecuteChanged(object sender, EventArgs args)
+        public void EmitCanExecuteChanged()
         {
             EventHandler handler;
 
@@ -67,7 +67,7 @@ namespace RdClient.Shared.ViewModels
 
             if(null != handler)
             {
-                handler(sender, args);
+                handler(this, EventArgs.Empty);
             }
         }
 
