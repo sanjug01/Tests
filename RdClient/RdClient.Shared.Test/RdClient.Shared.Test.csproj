@@ -82,10 +82,12 @@
     <Compile Include="Mock\RdpProperties.cs" />
     <Compile Include="Mock\ViewFactory.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
+    <Compile Include="Navigation\BarItemModelTests.cs" />
     <Compile Include="Navigation\NavigationServiceTests.cs" />
     <Compile Include="Navigation\PresentableViewConstructorTests.cs" />
     <Compile Include="Navigation\PresentableViewFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\MainPageViewModelTests.cs" />
     <Compile Include="ViewModels\RelayCommandTests.cs" />
     <Compile Include="ViewModels\SessionViewModelTests.cs" />
     <Compile Include="ViewModels\ViewModelBaseTests.cs" />
