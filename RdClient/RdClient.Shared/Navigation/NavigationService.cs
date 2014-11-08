@@ -30,29 +30,32 @@ namespace RdClient.Navigation
             _viewFactory = viewFactory;
         }
 
+        private void EmitPushingFirstModalView()
+        {
+            if (PushingFirstModalView != null)
+            {
+                PushingFirstModalView(this, EventArgs.Empty);
+            }
+        }
+
+        public void EmitDismissingLastModalView()
+        {
+            if (DismissingLastModalView != null)
+            {
+                DismissingLastModalView(this, EventArgs.Empty);
+            }
+        }
+
         public void NavigateToView(string viewName, object activationParameter)
         {
             IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
 
-            if (view == null)
-            {
-                throw new NavigationServiceException("Tried to create unknown view: " + viewName);
-            }
-
             if (_currentView != null && !object.ReferenceEquals(_currentView, view))
             {
-                if (_currentView.ViewModel != null)
-                {
-                    _currentView.ViewModel.Dismissing();
-                } 
-                _currentView.Dismissing();
+                CallDismissing(_currentView);
             }
 
-            if(view.ViewModel != null)
-            {
-                view.ViewModel.Presenting(this, activationParameter);
-            }
-            view.Presenting(this, activationParameter);
+            CallPresenting(view, activationParameter);
 
             if (!object.ReferenceEquals(_currentView, view))
             {
@@ -60,14 +63,6 @@ namespace RdClient.Navigation
             }
 
             _currentView = view;
-        }
-
-        private void EmitPushingFirstModalView(NavigationService sender, EventArgs args)
-        {
-            if(PushingFirstModalView != null)
-            {
-                PushingFirstModalView(sender, args);
-            }
         }
 
         public void PushModalView(string viewName, object activationParameter)
@@ -83,27 +78,15 @@ namespace RdClient.Navigation
 
             if(_modalStack.Count == 0)
             {
-                EmitPushingFirstModalView(this, null);
+                EmitPushingFirstModalView();
             }
 
             _modalStack.Add(view);
-            
-            if(view.ViewModel != null)
-            {
-                view.ViewModel.Presenting(this, activationParameter);
-            }
-            view.Presenting(this, activationParameter);
+            CallPresenting(view, activationParameter);
 
             _presenter.PushModalView(view);
         }
 
-        public void EmitDismissingLastModalView(NavigationService sender, EventArgs args)
-        { 
-            if(DismissingLastModalView != null)
-            {
-                DismissingLastModalView(sender, args);
-            }
-        }
 
         public void DismissModalView(IPresentableView modalView)
         {
@@ -114,7 +97,7 @@ namespace RdClient.Navigation
 
             if (toDismissIndex < 0)
             {
-                throw new NavigationServiceException("trying to dismiss a modal view which is not presented");
+                throw new NavigationServiceException("trying to dismiss a modal view that is not presented");
             }
 
             toDismiss = _modalStack.GetRange(toDismissIndex, _modalStack.Count - toDismissIndex);
@@ -125,19 +108,34 @@ namespace RdClient.Navigation
 
             foreach (IPresentableView view in toDismiss)
             {
-                if(view.ViewModel != null)
-                {
-                    view.ViewModel.Dismissing();
-                }
-                view.Dismissing();
+                CallDismissing(view);
 
                 _presenter.DismissModalView(view);
             }
 
             if(_modalStack.Count == 0)
             {
-                EmitDismissingLastModalView(this, null);
+                EmitDismissingLastModalView();
             }
+        }
+
+        private void CallPresenting(IPresentableView view, object activationParameter)
+        {
+            if (view.ViewModel != null)
+            {
+                view.ViewModel.Presenting(this, activationParameter);
+            }
+            view.Presenting(this, activationParameter);
+        }
+
+
+        private void CallDismissing(IPresentableView view)
+        {
+            if (view.ViewModel != null)
+            {
+                view.ViewModel.Dismissing();
+            }
+            view.Dismissing();
         }
 
     }

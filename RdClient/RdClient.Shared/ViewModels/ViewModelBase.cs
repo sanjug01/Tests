@@ -13,7 +13,8 @@ namespace RdClient.Shared.ViewModels
 
     public abstract class ViewModelBase : INotifyPropertyChanged, IViewModel
     {
-        protected INavigationService NavigationService { get; set; }
+        private INavigationService _navigationService;
+        protected INavigationService NavigationService { get { return _navigationService; } }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -47,12 +48,13 @@ namespace RdClient.Shared.ViewModels
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
             Contract.Requires(navigationService != null);
-            NavigationService = navigationService;
+            _navigationService = navigationService;
             OnPresenting(activationParameter);
         }
 
         public virtual void Dismissing()
         {
+            _navigationService = null;
         }
     }
 

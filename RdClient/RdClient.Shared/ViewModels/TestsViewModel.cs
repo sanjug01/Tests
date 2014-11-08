@@ -13,7 +13,7 @@ namespace RdClient.Shared.ViewModels
     /// view model to support integrated tests.
     ///      * these tests should be removed from shiped product.
     /// </summary>
-    public class TestsViewModel : ViewModelBase, ITestsViewModel
+    public class TestsViewModel : ViewModelBase
     {
         public ICommand StressTestCommand { get; private set; }
         public ICommand GoHomeCommand { get; private set; }
@@ -38,8 +38,9 @@ namespace RdClient.Shared.ViewModels
         {
             int iterations = 3;
             int i;
-            SessionViewModel svm = new SessionViewModel();
             AutoResetEvent are = new AutoResetEvent(false);
+            SessionModel sm = new SessionModel(RdpConnectionFactory);
+            IRdpConnection rdpConnection = null;
 
             EventHandler<ClientDisconnectedArgs> disconnectHandler = (s, a) => {
                 if (a.DisconnectReason.Code != RdpDisconnectCode.UserInitiated)
@@ -53,23 +54,20 @@ namespace RdClient.Shared.ViewModels
             };
             EventHandler<FirstGraphicsUpdateArgs> connectHandler = (s, a) => { are.Set(); };
 
-            svm.RdpConnectionFactory = RdpConnectionFactory;           
+            sm.ConnectionCreated += (sender, args) =>
+            {
+                rdpConnection = args.RdpConnection;
+                rdpConnection.Events.FirstGraphicsUpdate += connectHandler;
+                rdpConnection.Events.ClientDisconnected += disconnectHandler;
+            };
 
             for(i = 0; i < iterations; i++)
             {
-                IRdpConnection rdpConnection = null;
-
-                svm.ConnectionCreated += (sender, args) => {
-                    rdpConnection = args.RdpConnection;
-                    rdpConnection.Events.FirstGraphicsUpdate += connectHandler;
-                    rdpConnection.Events.ClientDisconnected += disconnectHandler;
-                };
-
-                svm.ConnectCommand.Execute(_connectionInformation);
+                sm.Connect(_connectionInformation);
                 
                 are.WaitOne();
 
-                svm.DisconnectCommand.Execute(null);
+                sm.Disconnect();
                 
                 are.WaitOne();
             }

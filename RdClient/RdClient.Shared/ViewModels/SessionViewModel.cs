@@ -1,24 +1,16 @@
 ﻿using RdClient.Navigation;
-using RdClient.Shared.CxWrappers;
-using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
 using System;
+using System.Diagnostics.Contracts;
 using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class ConnectionCreatedArgs : EventArgs
-    {
-        public IRdpConnection RdpConnection { get; private set; }
-        public ConnectionCreatedArgs(IRdpConnection rdpConnection)
-        {
-            RdpConnection = rdpConnection;
-        }
-    }
 
-    public class SessionViewModel : ViewModelBase, ISessionViewModel
+
+    public class SessionViewModel : ViewModelBase
     {
-        public event EventHandler<ConnectionCreatedArgs> ConnectionCreated;
+        private ConnectionInformation _connectionInformation;
 
         private readonly ICommand _disconnectCommand;
         public ICommand DisconnectCommand { get { return _disconnectCommand; } }
@@ -26,9 +18,8 @@ namespace RdClient.Shared.ViewModels
         private readonly ICommand _connectCommand;
         public ICommand ConnectCommand { get { return _connectCommand; } }
 
-        public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
+        public ISessionModel SessionModel { get; set; }
 
-        protected IRdpConnection _rdpConnection;
 
         public SessionViewModel()
         {
@@ -38,85 +29,22 @@ namespace RdClient.Shared.ViewModels
 
         protected override void OnPresenting(object activationParameter)
         {
-
+            Contract.Requires(null != activationParameter as ConnectionInformation);
+            _connectionInformation = activationParameter as ConnectionInformation;
         }
 
-        private void EmitConnectionCreated(SessionViewModel sender, ConnectionCreatedArgs args)
-        {
-            if(ConnectionCreated != null)
-            {
-                ConnectionCreated(sender, args);
-            }
-        }
 
         private void Connect(object o)
-        {
-            _rdpConnection = RdpConnectionFactory.CreateInstance();
-            EmitConnectionCreated(this, new ConnectionCreatedArgs(_rdpConnection));
-
-            ConnectionInformation connectionInformation = o as ConnectionInformation;
-            Desktop desktop = connectionInformation.Desktop;
-            Credentials credentials = connectionInformation.Credentials;
-
-            RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
-            _rdpConnection.Connect(credentials, credentials.haveBeenPersisted);
-
-            _rdpConnection.Events.ClientAsyncDisconnect += ClientAsyncDisconnectHandler;
+        {            
+            Contract.Assert(null != _connectionInformation);
+            SessionModel.Connect(_connectionInformation);
         }
 
         private void Disconnect(object o)
         {
-            _rdpConnection.Disconnect();
-            if (NavigationService != null)
-            {
-                NavigationService.NavigateToView("view1", null);
-            }
+            SessionModel.Disconnect();
 
-            _rdpConnection.Events.ClientAsyncDisconnect -= ClientAsyncDisconnectHandler;
+            NavigationService.NavigateToView("view1", null);            
         }
-
-        public void ClientAsyncDisconnectHandler(object sender, ClientAsyncDisconnectArgs args)
-        {
-            bool reconnect;
-
-            switch (args.DisconnectReason.Code)
-            {
-                case RdpDisconnectCode.PreAuthLogonFailed:
-                    {
-                        reconnect = false;
-                    }
-                    break;
-                case RdpDisconnectCode.FreshCredsRequired:
-                    {
-                        reconnect = false;
-                    }
-                    break;
-
-                case RdpDisconnectCode.CertValidationFailed:
-                    {
-                        reconnect = true;
-                    }
-                    break;
-
-                case RdpDisconnectCode.CredSSPUnsupported:
-                    {
-                        reconnect = false;
-                    }
-                    break;
-
-                default:
-                    {
-                        //
-                        // For all other reasons, we just disconnect.
-                        // We'll handle showing any appropriate dialogs to the user in OnClientDisconnectedHandler.
-                        //
-                        reconnect = false;
-                    }
-                    break;
-            }
-
-            _rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
-        }
-
     }
 }

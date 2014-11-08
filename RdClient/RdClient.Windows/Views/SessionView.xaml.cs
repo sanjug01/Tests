@@ -10,8 +10,6 @@ namespace RdClient.Views
 {
     public sealed partial class SessionView : Page, IPresentableView
     {
-        private ConnectionInformation _connectionInformation;
-
         public IViewModel ViewModel { get { return this.SessionViewModel; } }
 
         public SessionView()
@@ -25,8 +23,6 @@ namespace RdClient.Views
 
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
-            Contract.Requires(null != activationParameter as ConnectionInformation);
-            _connectionInformation = activationParameter as ConnectionInformation;
         }
 
         public void Dismissing()
@@ -38,8 +34,8 @@ namespace RdClient.Views
             RdpConnectionFactory factory = new RdpConnectionFactory();
             factory.SwapChainPanel = this.SwapChainPanel;
 
-            this.SessionViewModel.RdpConnectionFactory = factory;
-            this.SessionViewModel.ConnectCommand.Execute(_connectionInformation);
+            this.SessionViewModel.SessionModel = new SessionModel(factory);
+            this.SessionViewModel.ConnectCommand.Execute(null);
         }
     }
 }

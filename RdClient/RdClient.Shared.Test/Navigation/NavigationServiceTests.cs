@@ -8,7 +8,7 @@ namespace RdClient.Shared.Test
     public class NavigationServiceTests
     {
         [TestMethod]
-        public void NavigateToViewNoViewModel_Success()
+        public void NavigateToViewNoViewModel_ShouldSucceed()
         {
             using(Mock.PresentableView view1 = new Mock.PresentableView())
             using(Mock.PresentableView view2 = new Mock.PresentableView())
@@ -35,7 +35,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void NavigateToView_Success()
+        public void NavigateToView_ShouldSucceed()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.PresentableView view2 = new Mock.PresentableView())
@@ -66,7 +66,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void NavigateToInvalid()
+        public void NavigateToInvalid_ShouldThrowException()
         {
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
@@ -91,7 +91,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void RePresentView_ViewRePresented()
+        public void RePresentView_ShouldRePresentView()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.PresentableView view2 = new Mock.PresentableView())
@@ -125,7 +125,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void PresentViewWithNewParameter_NoPresentTwice()
+        public void PresentViewWithNewParameter_ShouldRePresentView()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
@@ -148,7 +148,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void PushModalView_Presenting()
+        public void PushModalView_ShouldPresentView()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
@@ -171,7 +171,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void PushDismissModalView()
+        public void PushDismissModalView_ShouldPresentDismissView()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
@@ -204,7 +204,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void PushDismissModalViewNoViewModel()
+        public void PushDismissModalViewNoViewModel_ShouldNotThrow()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
@@ -232,7 +232,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void PushDismissModalViewNoCallback()
+        public void PushDismissModalViewNoCallback_ShouldNotThrow()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
@@ -255,7 +255,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void PushDismissModalViewStack()
+        public void PushDismissModalViewStack_ShouldDismissAll3Views()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.PresentableView view2 = new Mock.PresentableView())
@@ -301,7 +301,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void PushModalViewStack_DoubleDismiss()
+        public void PushModalViewStackDoubleDismiss_ShouldThrow()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
@@ -336,7 +336,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void PushModalViewStack_DismissInvalid()
+        public void PushModalViewStackDismissInvalid_ShouldThrow()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
@@ -360,7 +360,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void PushModalViewStack_DoublePush()
+        public void PushModalViewStackDoublePush_ShouldThrow()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
@@ -392,7 +392,7 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
-        public void PushModalViewStack_PushPresented()
+        public void PushModalViewStackPushPresented_ShouldThrow()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
