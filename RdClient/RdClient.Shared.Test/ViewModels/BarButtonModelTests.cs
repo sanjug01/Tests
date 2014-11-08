@@ -17,6 +17,10 @@
         private class TestModel : BarButtonModel
         {
             public TestModel(ICommand command, string label) : base(command, label) { }
+            protected override void OnPresenting(object activationParameter)
+            {
+                //throw new System.NotImplementedException();
+            }
         }
 
         [TestInitialize]

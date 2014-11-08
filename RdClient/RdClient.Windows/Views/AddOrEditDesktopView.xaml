@@ -11,7 +11,7 @@
     Loaded="Page_Loaded">
 
     <Page.Resources>
-        <vm:AddOrEditDesktopViewModel x:Key="AddOrEditDesktopViewModel"/>
+        <vm:AddOrEditDesktopViewModel x:Key="AddOrEditDesktopViewModel" x:Name="AddOrEditDesktopViewModel"/>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />        
     </Page.Resources>

@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class AddOrEditDesktopViewModel : ViewModelBase , IAddOrEditDesktopViewModel
+    public class AddOrEditDesktopViewModel : ViewModelBase
     {
         public AddOrEditDesktopViewModel()
         {
@@ -24,8 +24,6 @@ namespace RdClient.Shared.ViewModels
         }
 
         public IPresentableView PresentableView { private get; set; }
-
-        public INavigationService NavigationService { private get; set; }
 
         public ICommand SaveCommand { get { return _saveCommand; } }
 
@@ -94,6 +92,22 @@ namespace RdClient.Shared.ViewModels
             else
             {
                 this.Host = string.Empty;
+            }
+        }
+
+        protected override void OnPresenting(object activationParameter)
+        {
+            if (null == activationParameter)
+            {
+                // add
+                IsAddingDesktop = true;
+                Desktop = null;
+            }
+            else
+            {
+                //edit
+                IsAddingDesktop = false;
+                Desktop = activationParameter as Desktop;
             }
         }
 

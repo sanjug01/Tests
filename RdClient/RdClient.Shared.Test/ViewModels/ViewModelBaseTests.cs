@@ -10,6 +10,11 @@ namespace Test.RdClient.Shared.Test
         { 
             private bool _someProperty = false;
 
+            protected override void OnPresenting(object activationParameter)
+            {
+
+            }
+
             public bool SomeProperty
             {
                 get { return _someProperty; }

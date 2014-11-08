@@ -60,5 +60,10 @@
                 this.IsBarVisible = true;
             }
         }
+
+        protected override void OnPresenting(object activationParameter)
+        {
+            //throw new NotImplementedException();
+        }
     }
 }

@@ -9,6 +9,10 @@
         private class TestBarItemModel : BarItemModel
         {
             public TestBarItemModel(ItemAlignment alignment, bool isVisible) : base(alignment, isVisible) { }
+            protected override void OnPresenting(object activationParameter)
+            {
+                //throw new System.NotImplementedException();
+            }
         }
 
         [TestMethod]

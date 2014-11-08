@@ -1,0 +1,40 @@
+<Page
+    x:Class="RdClient.Views.DialogMessage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:cv="using:RdClient.Converters"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:DialogMessageViewModel/>
+    </Page.DataContext>
+
+    <Page.Resources>
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+    </Page.Resources>
+    
+    <Grid  Background="brown">
+        <TextBlock x:Name="Message" 
+                   VerticalAlignment="Center" HorizontalAlignment="Center"
+                   FontSize="16"
+                   Margin="1,0" 
+                   Text="{Binding Path=Message}" 
+                   TextWrapping="Wrap" />
+        <StackPanel Margin="8" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+            <Button MinWidth="93"
+                    Visibility="{Binding Path=OkVisible, Converter={StaticResource BooleanToVisibility}}"
+                    Command="{Binding Path=OkCommand}"
+                    Content="{Binding OkString}"
+                    />
+            <Button MinWidth="93"
+                    Visibility="{Binding Path=CancelVisible, Converter={StaticResource BooleanToVisibility}}"
+                    Command="{Binding Path=CancelCommand}"
+                    Content="{Binding CancelString}"
+                    />
+        </StackPanel>
+    </Grid>
+</Page>

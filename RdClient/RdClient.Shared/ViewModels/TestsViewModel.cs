@@ -2,6 +2,7 @@
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
 using System;
+using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Windows.Input;
 
@@ -12,14 +13,14 @@ namespace RdClient.Shared.ViewModels
     /// view model to support integrated tests.
     ///      * these tests should be removed from shiped product.
     /// </summary>
-    public class TestsViewModel : ViewModelBase, ITestsViewModel
+    public class TestsViewModel : ViewModelBase
     {
         public ICommand StressTestCommand { get; private set; }
         public ICommand GoHomeCommand { get; private set; }
-        public ConnectionInformation ConnectionInformation { private get; set; }
 
         public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
-        public INavigationService NavigationService { private get; set; }
+
+        private ConnectionInformation _connectionInformation;
 
         public TestsViewModel()
         {
@@ -27,12 +28,19 @@ namespace RdClient.Shared.ViewModels
             GoHomeCommand = new RelayCommand(new Action<object>(GoHome));
         }
 
+        protected override void OnPresenting(object activationParameter)
+        {
+            Contract.Requires(null != activationParameter as ConnectionInformation);
+            _connectionInformation = activationParameter as ConnectionInformation;
+        }
+
         void StressTest(object o)
         {
             int iterations = 3;
             int i;
-            SessionViewModel svm = new SessionViewModel();
             AutoResetEvent are = new AutoResetEvent(false);
+            SessionModel sm = new SessionModel(RdpConnectionFactory);
+            IRdpConnection rdpConnection = null;
 
             EventHandler<ClientDisconnectedArgs> disconnectHandler = (s, a) => {
                 if (a.DisconnectReason.Code != RdpDisconnectCode.UserInitiated)
@@ -46,23 +54,20 @@ namespace RdClient.Shared.ViewModels
             };
             EventHandler<FirstGraphicsUpdateArgs> connectHandler = (s, a) => { are.Set(); };
 
-            svm.RdpConnectionFactory = RdpConnectionFactory;           
+            sm.ConnectionCreated += (sender, args) =>
+            {
+                rdpConnection = args.RdpConnection;
+                rdpConnection.Events.FirstGraphicsUpdate += connectHandler;
+                rdpConnection.Events.ClientDisconnected += disconnectHandler;
+            };
 
             for(i = 0; i < iterations; i++)
             {
-                IRdpConnection rdpConnection = null;
-
-                svm.ConnectionCreated += (sender, args) => {
-                    rdpConnection = args.RdpConnection;
-                    rdpConnection.Events.FirstGraphicsUpdate += connectHandler;
-                    rdpConnection.Events.ClientDisconnected += disconnectHandler;
-                };
-
-                svm.ConnectCommand.Execute(ConnectionInformation);
+                sm.Connect(_connectionInformation);
                 
                 are.WaitOne();
 
-                svm.DisconnectCommand.Execute(null);
+                sm.Disconnect();
                 
                 are.WaitOne();
             }

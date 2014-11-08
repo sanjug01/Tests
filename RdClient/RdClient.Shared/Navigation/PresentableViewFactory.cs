@@ -18,6 +18,7 @@
         public IPresentableView CreateView(string name, object activationParameter)
         {
             IPresentableView newView = _viewConstructors[name].CreateView();
+
             newView.Activating(activationParameter);
             return newView;
         }
