@@ -74,7 +74,6 @@
     <Compile Include="ViewModels\AddOrEditDesktopViewModel.cs" />
     <Compile Include="ViewModels\DialogMessageViewModel.cs" />
     <Compile Include="Navigation\IViewModel.cs" />
-    <Compile Include="ViewModels\DialogMessageViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\SessionViewModel.cs" />
     <Compile Include="ViewModels\TestsViewModel.cs" />
