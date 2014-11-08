@@ -18,11 +18,19 @@ namespace RdClient.Shared.ViewModels
         private readonly DialogMessageDelegate _cancelDelegate;
         public DialogMessageDelegate CancelDelegate { get { return _cancelDelegate; } }
 
-        public DialogMessageArgs(string message, DialogMessageDelegate okDelegate, DialogMessageDelegate cancelDelegate)
+        private readonly string _okString;
+        public string OkString { get { return _okString; } }
+
+        private readonly string _cancelString;
+        public string CancelString { get { return _cancelString; } }
+
+        public DialogMessageArgs(string message, DialogMessageDelegate okDelegate, DialogMessageDelegate cancelDelegate, string okString = "OK (d)", string cancelString = "Cancel (d)")
         {
             _message = message;
             _okDelegate = okDelegate;
             _cancelDelegate = cancelDelegate;
+            _okString = okString;
+            _cancelString = cancelString;
         }
     }
 
@@ -34,7 +42,6 @@ namespace RdClient.Shared.ViewModels
         private readonly ICommand _cancelCommand;
         public ICommand CancelCommand { get { return _cancelCommand; } }
 
-        public INavigationService NavigationService { private get; set; }
         public IPresentableView DialogView { private get; set; }
 
         private string _message;
@@ -46,6 +53,12 @@ namespace RdClient.Shared.ViewModels
                 SetProperty(ref _message, value, "Message");
             }
         }
+
+        private string _okString;
+        public string OkString { get { return _okString; } }
+
+        private string _cancelString;
+        public string CancelString { get { return _cancelString; } }
 
         private DialogMessageDelegate _okDelegate;
         public bool OkVisible { get { return _okDelegate != null;  } }
@@ -61,38 +74,39 @@ namespace RdClient.Shared.ViewModels
 
         private void Ok(object o)
         {
+            NavigationService.DismissModalView(DialogView);
+
             if(_okDelegate != null)
             {
-                _okDelegate.Invoke();
+                _okDelegate();
             }
-
-            NavigationService.DismissModalView(DialogView);
         }
 
         private void Cancel(object o)
         {
+            NavigationService.DismissModalView(DialogView);
+
             if(_cancelDelegate != null)
             {
-                _cancelDelegate.Invoke();
+                _cancelDelegate();
             }
-
-            NavigationService.DismissModalView(DialogView);
         }
 
-        public void Presenting(INavigationService navigationService, object activationParameter)
+        protected override void OnPresenting(object activationParameter)
         {
-            Contract.Requires(null != navigationService);
             Contract.Requires(null != activationParameter as DialogMessageArgs);
+            DialogMessageArgs args = activationParameter as DialogMessageArgs;
 
-            NavigationService = navigationService;
+            Message = args.Message;
 
-            Message = (activationParameter as DialogMessageArgs).Message;
-
-            _okDelegate = (activationParameter as DialogMessageArgs).OkDelegate;
+            _okDelegate = args.OkDelegate;
             OnPropertyChanged("OkVisible");
 
-            _cancelDelegate = (activationParameter as DialogMessageArgs).CancelDelegate;
+            _cancelDelegate = args.CancelDelegate;
             OnPropertyChanged("CancelVisible");
+
+            _okString = args.OkString;
+            _cancelString = args.CancelString;
         }
     }
 }

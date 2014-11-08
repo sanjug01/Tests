@@ -10,9 +10,7 @@ namespace RdClient.Views
     /// </summary>
     public sealed partial class DialogMessage : Page, IPresentableView
     {
-        private INavigationService _navigationService;
-
-        public IViewModel ViewModel { get { return null; } }
+        public IViewModel ViewModel { get { return (IViewModel)this.DataContext; } }
 
         public DialogMessage()
         {
@@ -26,14 +24,11 @@ namespace RdClient.Views
 
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
-            DialogMessageViewModel dmvm = Resources["DialogMessageViewModel"] as DialogMessageViewModel;
-            dmvm.DialogView = this;
-            dmvm.Presenting(navigationService, activationParameter);
+            (this.DataContext as DialogMessageViewModel).DialogView = this;
         }
 
         public void Dismissing()
-        {
-        
+        {        
         }
     }
 }

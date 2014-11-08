@@ -13,8 +13,7 @@ namespace RdClient.Views
     /// </summary>
     public sealed partial class AddOrEditDesktopView : Page, IPresentableView
     {
-        private INavigationService _navigationService;
-        private object _activationParameter;
+        public IViewModel ViewModel { get { return this.AddOrEditDesktopViewModel; } }
 
         public AddOrEditDesktopView()
         {
@@ -27,27 +26,7 @@ namespace RdClient.Views
 
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
-            Contract.Requires(navigationService != null);
-
-            _navigationService = navigationService;
-            _activationParameter = activationParameter;
-
-            IAddOrEditDesktopViewModel vm = Resources["AddOrEditDesktopViewModel"] as IAddOrEditDesktopViewModel;
-            vm.PresentableView = this;
-
-            if (null == _activationParameter)
-            {
-                // add
-                vm.IsAddingDesktop = true;
-                vm.Desktop = null;
-            }
-            else
-            {
-                //edit
-                vm.IsAddingDesktop = false;
-                vm.Desktop = _activationParameter as Desktop;
-            }
-            vm.NavigationService = _navigationService; 
+            this.AddOrEditDesktopViewModel.PresentableView = this;
         }
 
         public void Dismissing()

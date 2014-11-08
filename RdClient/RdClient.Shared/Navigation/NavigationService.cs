@@ -50,6 +50,11 @@ namespace RdClient.Navigation
         {
             IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
 
+            if (view == null)
+            {
+                throw new NavigationServiceException("Tried to create unknown view: " + viewName);
+            }
+
             if (_currentView != null && !object.ReferenceEquals(_currentView, view))
             {
                 CallDismissing(_currentView);

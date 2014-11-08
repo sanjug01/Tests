@@ -19,11 +19,6 @@
         {
             IPresentableView newView = _viewConstructors[name].CreateView();
 
-            if (newView == null)
-            {
-                throw new NavigationServiceException("Tried to create unknown view: " + name);
-            }
-
             newView.Activating(activationParameter);
             return newView;
         }
