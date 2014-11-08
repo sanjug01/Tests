@@ -8,7 +8,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RdClient.Shared.Test</RootNamespace>
     <AssemblyName>RdClient.Shared.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,6 +16,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -80,8 +81,11 @@
     <Compile Include="Mock\RdpConnectionFactory.cs" />
     <Compile Include="Mock\RdpEvents.cs" />
     <Compile Include="Mock\RdpProperties.cs" />
+    <Compile Include="Mock\SessionModel.cs" />
     <Compile Include="Mock\ViewFactory.cs" />
+    <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
+    <Compile Include="Model\SessionModelTests.cs" />
     <Compile Include="Navigation\NavigationServiceTests.cs" />
     <Compile Include="Navigation\PresentableViewConstructorTests.cs" />
     <Compile Include="Navigation\PresentableViewFactoryTests.cs" />

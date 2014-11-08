@@ -40,6 +40,8 @@ namespace RdClient.Shared.Test
             public void Dismissing()
             {
             }
+
+            public IViewModel ViewModel { get; set; }
         }
 
         [TestMethod]

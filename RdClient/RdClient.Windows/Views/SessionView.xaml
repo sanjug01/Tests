@@ -10,7 +10,7 @@
     Loaded="Page_Loaded">
     
     <Page.Resources>
-        <vm:SessionViewModel x:Key="SessionViewModel"/>
+        <vm:SessionViewModel x:Key="SessionViewModel" x:Name="SessionViewModel"/>
     </Page.Resources>
 
     <Grid Background="green">

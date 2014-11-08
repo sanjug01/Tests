@@ -1,6 +1,8 @@
-﻿using System;
+﻿using RdClient.Navigation;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace RdClient.Shared.ViewModels
@@ -9,8 +11,11 @@ namespace RdClient.Shared.ViewModels
     /// Implementation of <see cref="INotifyPropertyChanged"/> to simplify ViewModels.
     /// </summary>
 
-    public abstract class ViewModelBase : INotifyPropertyChanged
+    public abstract class ViewModelBase : INotifyPropertyChanged, IViewModel
     {
+        private INavigationService _navigationService;
+        protected INavigationService NavigationService { get { return _navigationService; } }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] String propertyName = null)
@@ -36,6 +41,20 @@ namespace RdClient.Shared.ViewModels
             {
                 eventHandler(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        protected abstract void OnPresenting(object activationParameter);
+
+        public void Presenting(INavigationService navigationService, object activationParameter)
+        {
+            Contract.Requires(navigationService != null);
+            _navigationService = navigationService;
+            OnPresenting(activationParameter);
+        }
+
+        public virtual void Dismissing()
+        {
+            _navigationService = null;
         }
     }
 

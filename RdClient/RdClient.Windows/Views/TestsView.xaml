@@ -10,7 +10,7 @@
     Loaded="Page_Loaded">
 
     <Page.Resources>
-        <vm:TestsViewModel x:Key="TestsViewModel"/>
+        <vm:TestsViewModel x:Key="TestsViewModel" x:Name="TestViewModel"/>
     </Page.Resources>
     
     <Grid Background="CornflowerBlue">
