@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Navigation
 {
+    using RdClient.Shared.ViewModels;
     using System.Collections.Generic;
 
     /// <summary>

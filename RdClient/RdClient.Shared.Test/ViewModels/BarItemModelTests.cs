@@ -1,7 +1,7 @@
-﻿namespace RdClient.Shared.Test.Navigation
+﻿namespace RdClient.Shared.Test.ViewModels
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using RdClient.Shared.Navigation;
+    using RdClient.Shared.ViewModels;
 
     [TestClass]
     public class BarItemModelTests

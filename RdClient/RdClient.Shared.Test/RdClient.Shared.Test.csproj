@@ -82,7 +82,8 @@
     <Compile Include="Mock\RdpProperties.cs" />
     <Compile Include="Mock\ViewFactory.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
-    <Compile Include="Navigation\BarItemModelTests.cs" />
+    <Compile Include="ViewModels\BarButtonModelTests.cs" />
+    <Compile Include="ViewModels\BarItemModelTests.cs" />
     <Compile Include="Navigation\NavigationServiceTests.cs" />
     <Compile Include="Navigation\PresentableViewConstructorTests.cs" />
     <Compile Include="Navigation\PresentableViewFactoryTests.cs" />

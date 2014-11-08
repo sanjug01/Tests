@@ -1,4 +1,4 @@
-﻿namespace RdClient.Shared.Navigation
+﻿namespace RdClient.Shared.ViewModels
 {
     /// <summary>
     /// Base class for bar item model classes that represent models of controls shown in the application bar.

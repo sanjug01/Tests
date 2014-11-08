@@ -67,7 +67,8 @@
     <Compile Include="Models\ConnectionInformation.cs" />
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\Desktop.cs" />
-    <Compile Include="Navigation\BarItemModel.cs" />
+    <Compile Include="ViewModels\BarButtonModel.cs" />
+    <Compile Include="ViewModels\BarItemModel.cs" />
     <Compile Include="Navigation\IApplicationBarItemsSource.cs" />
     <Compile Include="Navigation\IApplicationBarSite.cs" />
     <Compile Include="ViewModels\IApplicationBarViewModel.cs" />
