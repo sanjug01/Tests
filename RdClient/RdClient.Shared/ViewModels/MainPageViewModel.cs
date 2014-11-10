@@ -1,10 +1,12 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.Windows.Input;
 
     public sealed class MainPageViewModel : ViewModelBase, IApplicationBarViewModel
     {
+        private IEnumerable<BarItemModel> _barItems;
         private bool _isShowBarButtonVisible;
         private bool _isBarVisible;
         private bool _isBarSticky;
@@ -18,13 +20,18 @@
             _showBar = new RelayCommand(o => this.ShowApplicationBar(), o => _isShowBarButtonVisible);
         }
 
+        public IEnumerable<BarItemModel> BarItems
+        {
+            get { return _barItems; }
+            set { this.SetProperty<IEnumerable<BarItemModel>>(ref _barItems, value); }
+        }
+
         public bool IsShowBarButtonVisible
         {
             get { return _isShowBarButtonVisible; }
             set
             {
-                if (this.SetProperty<bool>(ref _isShowBarButtonVisible, value))
-                    _showBar.EmitCanExecuteChanged();
+                this.SetProperty<bool>(ref _isShowBarButtonVisible, value);
             }
         }
 

@@ -1,10 +1,12 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Windows.Input;
 
     public interface IApplicationBarViewModel : INotifyPropertyChanged
     {
+        IEnumerable<BarItemModel> BarItems { get; set; }
         /// <summary>
         /// Property tracks visibility of the clickable control that executes the ShowBar command.
         /// </summary>

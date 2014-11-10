@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.ViewModels;
+﻿using RdClient.Shared.Navigation;
+using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -80,6 +81,7 @@ namespace RdClient.Navigation
             }
 
             _currentView = view;
+            UpdateApplicationBar();
         }
 
         public void PushModalView(string viewName, object activationParameter)
@@ -96,6 +98,10 @@ namespace RdClient.Navigation
             if(_modalStack.Count == 0)
             {
                 EmitPushingFirstModalView();
+                _appBarViewModel.IsBarSticky = false;
+                _appBarViewModel.IsBarVisible = false;
+                _appBarViewModel.IsShowBarButtonVisible = false;
+                _appBarViewModel.BarItems = null;
             }
 
             _modalStack.Add(view);
@@ -133,6 +139,7 @@ namespace RdClient.Navigation
             if(_modalStack.Count == 0)
             {
                 EmitDismissingLastModalView();
+                UpdateApplicationBar();
             }
         }
 
@@ -155,5 +162,50 @@ namespace RdClient.Navigation
             view.Dismissing();
         }
 
+        private void UpdateApplicationBar()
+        {
+            //
+            // If the new view model is there and implements the IApplicationBarItemsSource interface,
+            // create a bar site object for the view, request the collection of application bar items,
+            // and upate the application bar with the new 
+            //
+            IEnumerable<BarItemModel> barItems = QueryApplicationBarItems();
+
+            _appBarViewModel.IsBarSticky = false;
+            _appBarViewModel.IsBarVisible = false;
+            _appBarViewModel.IsShowBarButtonVisible = null != barItems && 0 == _modalStack.Count;
+            _appBarViewModel.BarItems = barItems;
+        }
+
+        private IEnumerable<BarItemModel> QueryApplicationBarItems()
+        {
+            IEnumerable<BarItemModel> barItems = null;
+
+            if (null != _currentView)
+            {
+                IApplicationBarItemsSource itemSource = _currentView.ViewModel as IApplicationBarItemsSource;
+
+                if (null != itemSource)
+                {
+                    IApplicationBarSite site = ApplicationBarSite.Create(_appBarViewModel,
+                        //
+                        // Predicate that the site object calls before making any changes to the view model -
+                        // check if the currently presented view is the one for that the site was created,
+                        // and that there are no modally presented views on the stack.
+                        //
+                        o => this.IsCurrentView(o) && 0 == _modalStack.Count, _currentView,
+                        _appBarViewModel.ShowBar,
+                        () => _appBarViewModel.IsBarVisible = false);
+                    barItems = itemSource.GetItems(site);
+                }
+            }
+
+            return barItems;
+        }
+
+        private bool IsCurrentView(object obj)
+        {
+            return object.ReferenceEquals(obj, _currentView);
+        }
     }
 }
