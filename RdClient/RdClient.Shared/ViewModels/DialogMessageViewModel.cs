@@ -95,15 +95,22 @@ namespace RdClient.Shared.ViewModels
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Requires(null != activationParameter as DialogMessageArgs);
-            DialogMessageArgs args = activationParameter as DialogMessageArgs;
+            Contract.Assert(activationParameter is DialogMessageArgs);
+            DialogMessageArgs args = (DialogMessageArgs)activationParameter;
 
-            Message = args.Message;
+            this.Message = args.Message;
 
-            _okDelegate = args.OkDelegate;
-            OnPropertyChanged("OkVisible");
+            if (_okDelegate != args.OkDelegate)
+            {
+                _okDelegate = args.OkDelegate;
+                EmitPropertyChanged("OkVisible");
+            }
 
-            _cancelDelegate = args.CancelDelegate;
-            OnPropertyChanged("CancelVisible");
+            if (_cancelDelegate != args.CancelDelegate)
+            {
+                _cancelDelegate = args.CancelDelegate;
+                EmitPropertyChanged("CancelVisible");
+            }
 
             _okString = args.OkString;
             _cancelString = args.CancelString;

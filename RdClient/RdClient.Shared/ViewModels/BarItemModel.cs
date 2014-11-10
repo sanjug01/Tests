@@ -3,7 +3,7 @@
     /// <summary>
     /// Base class for bar item model classes that represent models of controls shown in the application bar.
     /// </summary>
-    public abstract class BarItemModel : ViewModels.ViewModelBase
+    public abstract class BarItemModel : Helpers.MutableObject
     {
         private readonly ItemAlignment _alignment;
         private bool _isVisible;

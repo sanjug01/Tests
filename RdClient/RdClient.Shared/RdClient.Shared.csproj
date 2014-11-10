@@ -62,6 +62,7 @@
     <Compile Include="CxWrappers\RdTrace.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />
     <Compile Include="Helpers\IPhysicalScreenSize.cs" />
+    <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
     <Compile Include="Helpers\ReadWriteMonitor.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />

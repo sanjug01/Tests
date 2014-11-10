@@ -1,0 +1,70 @@
+﻿namespace RdClient.Shared.Helpers
+{
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Runtime.CompilerServices;
+    using System.Threading;
+
+    public abstract class MutableObject : DisposableObject, INotifyPropertyChanged
+    {
+        private readonly ReaderWriterLockSlim _monitor;
+        private PropertyChangedEventHandler _propertyChanged;
+
+        protected MutableObject()
+        {
+            _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        }
+
+        protected void EmitPropertyChanged(PropertyChangedEventArgs e)
+        {
+            PropertyChangedEventHandler handler;
+
+            using (ReadWriteMonitor.Read(_monitor))
+                handler = _propertyChanged;
+
+            if (null != handler)
+                handler(this, e);
+        }
+
+        protected void EmitPropertyChanged(string propertyName)
+        {
+            EmitPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        {
+            Debug.WriteLine("propertyName: {0}, storage: {1}, value: {2}", propertyName, storage, value);
+
+            if (object.Equals(storage, value))
+            {
+                return false;
+            }
+            else
+            {
+                storage = value;
+                this.EmitPropertyChanged(propertyName);
+                return true;
+            }
+        }
+
+        protected override void DisposeManagedState()
+        {
+            _monitor.Dispose();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add
+            {
+                using (ReadWriteMonitor.Write(_monitor))
+                    _propertyChanged += value;
+            }
+
+            remove
+            {
+                using (ReadWriteMonitor.Write(_monitor))
+                    _propertyChanged -= value;
+            }
+        }
+    }
+}

@@ -11,36 +11,13 @@ namespace RdClient.Shared.ViewModels
     /// Implementation of <see cref="INotifyPropertyChanged"/> to simplify ViewModels.
     /// </summary>
 
-    public abstract class ViewModelBase : INotifyPropertyChanged, IViewModel
+    public abstract class ViewModelBase : Helpers.MutableObject, IViewModel
     {
         private INavigationService _navigationService;
-        protected INavigationService NavigationService { get { return _navigationService; } }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] String propertyName = null)
+        protected INavigationService NavigationService
         {
-            Debug.WriteLine("propertyName: {0}, storage: {1}, value: {2}", propertyName, storage, value);
-
-            if (object.Equals(storage, value))
-            {
-                return false;
-            }
-            else
-            {
-                storage = value;
-                this.OnPropertyChanged(propertyName);
-                return true;
-            }
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            var eventHandler = this.PropertyChanged;
-            if (eventHandler != null)
-            {
-                eventHandler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            get { return _navigationService; }
+            private set { SetProperty<INavigationService>(ref _navigationService, value); }
         }
 
         protected abstract void OnPresenting(object activationParameter);
@@ -48,13 +25,15 @@ namespace RdClient.Shared.ViewModels
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
             Contract.Requires(navigationService != null);
-            _navigationService = navigationService;
+            Contract.Ensures(null != _navigationService);
+
+            this.NavigationService = navigationService;
             OnPresenting(activationParameter);
         }
 
         public virtual void Dismissing()
         {
-            _navigationService = null;
+            SetProperty<INavigationService>(ref _navigationService, null);
         }
     }
 
