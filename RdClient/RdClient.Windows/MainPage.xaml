@@ -12,6 +12,7 @@
     
     <Page.Resources>
         <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
+        <conv:SegoeGlyphToSymbolIconConverter x:Key="segoeToSymbolIcon"/>
     </Page.Resources>
     
     <Page.DataContext>
@@ -29,6 +30,14 @@
                             <StackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <AppBarButton
+                                Icon="{Binding Glyph, Converter={StaticResource segoeToSymbolIcon}}"
+                                Label="{Binding Label}"
+                                Command="{Binding Command}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Grid>
         </AppBar>

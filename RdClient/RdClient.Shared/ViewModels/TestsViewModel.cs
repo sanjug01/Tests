@@ -4,6 +4,7 @@ using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Windows.Input;
@@ -33,8 +34,9 @@ namespace RdClient.Shared.ViewModels
 
             _barItems = new List<BarItemModel>()
             {
-                new BarItem(new RelayCommand(o=>{}), "plop"),
-                new BarItem(new RelayCommand(o=>{}), "flop")
+                new SegoeGlyphBarButtonModel(SegoeGlyph.Back, new RelayCommand(o => Debug.WriteLine("Plop")), "Plop"),
+                new SegoeGlyphBarButtonModel(SegoeGlyph.Forward, new RelayCommand(o => Debug.WriteLine("Flop")), "Flop"),
+                new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, new RelayCommand(o => Debug.WriteLine("Delete")), "Delete")
             };
         }
 

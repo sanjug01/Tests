@@ -110,11 +110,6 @@
     <AppxPackageIncludePrivateSymbols>true</AppxPackageIncludePrivateSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <!--A reference to the entire .Net Framework and Windows SDK are automatically included-->
-    <SDKReference Include="MSTestFramework, Version=11.0" />
-    <SDKReference Include="TestPlatform, Version=11.0" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Converters\InverseBooleanToVisibilityConverterTests.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverterTests.cs" />
     <Compile Include="LifeTimeManager\LifeTimeManagerTests.cs" />
@@ -143,12 +138,23 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RdClient.Shared\RdClient.Shared.csproj">
+      <Project>{ff57219c-0e7b-4cd5-9e02-287cea2d0d83}</Project>
+      <Name>RdClient.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RdClient.Windows\RdClient.Windows.csproj">
       <Project>{a89f0e52-1e86-4d53-81f5-11237460a6e7}</Project>
       <Name>RdClient.Windows</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <SDKReference Include="MSTestFramework, Version=14.0">
+      <Name>MSTest for Managed Projects</Name>
+    </SDKReference>
+    <SDKReference Include="TestPlatform, Version=14.0">
+      <Name>Microsoft Visual Studio Test Core</Name>
+    </SDKReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

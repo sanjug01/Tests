@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Helpers\PhysicalScreenSize.cs" />
     <Compile Include="LifeTimeManagement\ActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
