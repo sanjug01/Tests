@@ -81,7 +81,7 @@ namespace RdClient.Shared.CxWrappers
         
         public void Connect(Credentials credentials, bool fUsingSavedCreds)
         {
-            int xRes = _rdpConnectionCx.SetUserCredentials(credentials.username, credentials.domain, credentials.password, fUsingSavedCreds);
+            int xRes = _rdpConnectionCx.SetUserCredentials(credentials.Username, credentials.Domain, credentials.Password, fUsingSavedCreds);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set user credentials.");
 
             xRes = _rdpConnectionCx.Connect();

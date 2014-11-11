@@ -8,7 +8,7 @@ namespace RdClient.Shared.CxWrappers.Utils
             IRdpProperties properties, 
             Desktop desktop)
         {
-            properties.SetStringProperty("Full Address", desktop.hostName);
+            properties.SetStringProperty("Full Address", desktop.HostName);
         }
 
         public static void ApplyScreenSize(IRdpProperties properties, IPhysicalScreenSize screenSize)

@@ -38,8 +38,8 @@ namespace RdClient.Views
         {
             ConnectionInformation connectionInformation = new ConnectionInformation()
             {
-                Desktop = new Desktop() { hostName = "a3-w81" },
-                Credentials = new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd", haveBeenPersisted = false }
+                Desktop = new Desktop() { HostName = "a3-w81" },
+                Credentials = new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
             };
 
             _navigationService.NavigateToView("SessionView", connectionInformation);
@@ -49,8 +49,8 @@ namespace RdClient.Views
         {
             ConnectionInformation connectionInformation = new ConnectionInformation()
             {
-                Desktop = new Desktop() { hostName = "a3-w81" },
-                Credentials = new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd", haveBeenPersisted = false }
+                Desktop = new Desktop() { HostName = "a3-w81" },
+                Credentials = new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
             };
 
             _navigationService.NavigateToView("TestsView", connectionInformation);
@@ -61,7 +61,7 @@ namespace RdClient.Views
             // new dektop, static user
             AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(
                 null,
-                new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd", haveBeenPersisted = false },
+                new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false },
                 true);
 
             _navigationService.PushModalView("AddOrEditDesktopView", args);
@@ -71,8 +71,8 @@ namespace RdClient.Views
         {
             // edit existing desktop, static user
             AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(
-                new Desktop() { hostName = "a3-w81" },
-                new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd", haveBeenPersisted = false },
+                new Desktop() { HostName = "a3-w81" },
+                new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false },
                 false);
 
             _navigationService.PushModalView("AddOrEditDesktopView", args);

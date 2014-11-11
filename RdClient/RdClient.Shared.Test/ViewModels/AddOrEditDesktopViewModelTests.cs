@@ -54,7 +54,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 Desktop desktop = null;
-                Credentials creds = new Credentials { username = "someuser", password = "somepass", haveBeenPersisted = false };
+                Credentials creds = new Credentials { Username = "someuser", Password = "somepass", HaveBeenPersisted = false };
                 bool isAddingDesktop = true;
                 AddOrEditDesktopViewModelArgs args =
                     new AddOrEditDesktopViewModelArgs(desktop, creds, isAddingDesktop);
@@ -72,8 +72,8 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                Desktop desktop = new Desktop() { hostName = "myPc" };
-                Credentials creds = new Credentials { username = "someuser", password = "somepass", haveBeenPersisted = false };
+                Desktop desktop = new Desktop() { HostName = "myPc" };
+                Credentials creds = new Credentials { Username = "someuser", Password = "somepass", HaveBeenPersisted = false };
                 bool isAddingDesktop = false;
                 AddOrEditDesktopViewModelArgs args =
                     new AddOrEditDesktopViewModelArgs(desktop, creds, isAddingDesktop);
@@ -91,7 +91,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                Desktop desktop = new Desktop() { hostName = "myPc" };
+                Desktop desktop = new Desktop() { HostName = "myPc" };
                 bool isAddingDesktop = false;
 
                 AddOrEditDesktopViewModelArgs args =
@@ -99,7 +99,7 @@ namespace RdClient.Shared.Test.ViewModels
 
                 _addOrEditDesktopViewModel.Presenting(navigation, args);
 
-                Assert.AreEqual(desktop.hostName, _addOrEditDesktopViewModel.Host);
+                Assert.AreEqual(desktop.HostName, _addOrEditDesktopViewModel.Host);
             }
         }
 
@@ -162,7 +162,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
                 object saveParam = new object();
-                Desktop desktop = new Desktop() { hostName = "myPC" };
+                Desktop desktop = new Desktop() { HostName = "myPC" };
                 bool isAddingDesktop = false;
 
                 AddOrEditDesktopViewModelArgs args =
@@ -186,7 +186,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
                 object saveParam = new object();
-                Desktop desktop = new Desktop() { hostName = "myPC" };
+                Desktop desktop = new Desktop() { HostName = "myPC" };
                 bool isAddingDesktop = false;
 
                 AddOrEditDesktopViewModelArgs args =
@@ -200,7 +200,7 @@ namespace RdClient.Shared.Test.ViewModels
                 _addOrEditDesktopViewModel.Host = "MyNewPC_not_updated";
                 _addOrEditDesktopViewModel.CancelCommand.Execute(saveParam);
 
-                Assert.AreEqual(desktop.hostName, _addOrEditDesktopViewModel.Host);
+                Assert.AreEqual(desktop.HostName, _addOrEditDesktopViewModel.Host);
             }
         }
     }

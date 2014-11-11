@@ -25,8 +25,8 @@ namespace RdClient.Shared.Test.Model
             using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
             {
                 bool connectionMatches = false;
-                Desktop desktop = new Desktop() { hostName = "narf" };
-                Credentials credentials = new Credentials() { username = "narf", domain = "zod", password = "poit", haveBeenPersisted = true };
+                Desktop desktop = new Desktop() { HostName = "narf" };
+                Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
                 ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
                 SessionModel sm = new SessionModel(factory);
@@ -34,7 +34,7 @@ namespace RdClient.Shared.Test.Model
 
                 factory.Expect("CreateInstance", new List<object>(), connection);
 
-                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.hostName }, 0);
+                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
                 connection.Expect("Connect", new List<object>() { credentials, true }, 0);
 
                 sm.Connect(connectionInformation);
@@ -49,15 +49,15 @@ namespace RdClient.Shared.Test.Model
             using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
             using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
             {
-                Desktop desktop = new Desktop() { hostName = "narf" };
-                Credentials credentials = new Credentials() { username = "narf", domain = "zod", password = "poit", haveBeenPersisted = true };
+                Desktop desktop = new Desktop() { HostName = "narf" };
+                Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
                 ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
                 SessionModel sm = new SessionModel(factory);
 
                 factory.Expect("CreateInstance", new List<object>(), connection);
 
-                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.hostName }, 0);
+                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
                 connection.Expect("Connect", new List<object>() { credentials, true }, 0);
 
                 sm.Connect(connectionInformation);
@@ -77,15 +77,15 @@ namespace RdClient.Shared.Test.Model
             using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
             using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
             {
-                Desktop desktop = new Desktop() { hostName = "narf" };
-                Credentials credentials = new Credentials() { username = "narf", domain = "zod", password = "poit", haveBeenPersisted = true };
+                Desktop desktop = new Desktop() { HostName = "narf" };
+                Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
                 ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
                 SessionModel sm = new SessionModel(factory);
 
                 factory.Expect("CreateInstance", new List<object>(), connection);
 
-                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.hostName }, 0);
+                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
                 connection.Expect("Connect", new List<object>() { credentials, true }, 0);
 
                 sm.Connect(connectionInformation);
@@ -105,15 +105,15 @@ namespace RdClient.Shared.Test.Model
             using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
             using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
             {
-                Desktop desktop = new Desktop() { hostName = "narf" };
-                Credentials credentials = new Credentials() { username = "narf", domain = "zod", password = "poit", haveBeenPersisted = true };
+                Desktop desktop = new Desktop() { HostName = "narf" };
+                Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
                 ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
                 SessionModel sm = new SessionModel(factory);
 
                 factory.Expect("CreateInstance", new List<object>(), connection);
 
-                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.hostName }, 0);
+                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
                 connection.Expect("Connect", new List<object>() { credentials, true }, 0);
 
                 sm.Connect(connectionInformation);
@@ -133,15 +133,15 @@ namespace RdClient.Shared.Test.Model
             using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
             using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
             {
-                Desktop desktop = new Desktop() { hostName = "narf" };
-                Credentials credentials = new Credentials() { username = "narf", domain = "zod", password = "poit", haveBeenPersisted = true };
+                Desktop desktop = new Desktop() { HostName = "narf" };
+                Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
                 ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
                 SessionModel sm = new SessionModel(factory);
 
                 factory.Expect("CreateInstance", new List<object>(), connection);
 
-                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.hostName }, 0);
+                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
                 connection.Expect("Connect", new List<object>() { credentials, true }, 0);
 
                 sm.Connect(connectionInformation);
@@ -161,15 +161,15 @@ namespace RdClient.Shared.Test.Model
             using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
             using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
             {
-                Desktop desktop = new Desktop() { hostName = "narf" };
-                Credentials credentials = new Credentials() { username = "narf", domain = "zod", password = "poit", haveBeenPersisted = true };
+                Desktop desktop = new Desktop() { HostName = "narf" };
+                Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
                 ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
                 SessionModel sm = new SessionModel(factory);
 
                 factory.Expect("CreateInstance", new List<object>(), connection);
 
-                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.hostName }, 0);
+                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
                 connection.Expect("Connect", new List<object>() { credentials, true }, 0);
 
                 sm.Connect(connectionInformation);

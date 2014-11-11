@@ -13,7 +13,7 @@ namespace RdClient.Shared.Test.CxWrappers
         {
             using(Mock.RdpProperties properties = new Mock.RdpProperties())
             {
-                Desktop desktop = new Desktop() { hostName = "narf" };
+                Desktop desktop = new Desktop() { HostName = "narf" };
 
                 properties.Expect("SetStringProperty", new List<object>() { "Full Address", "narf" }, 0);
 

@@ -3,6 +3,6 @@ namespace RdClient.Shared.Models
 {
     public class Desktop
     {
-        public string hostName;
+        public string HostName { get; set; }
     }
 }

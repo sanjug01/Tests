@@ -81,14 +81,14 @@ namespace RdClient.Shared.ViewModels
                 // update combo box and combo box selection, if necesary
                 if(null != _credentials)
                 {
-                    int idx = this.UserOptions.IndexOf(Credentials.username);
+                    int idx = this.UserOptions.IndexOf(Credentials.Username);
                     if (0 <= idx)
                     {
                         this.SelectedUserOptionsIndex = idx;
                     }
                     else
                     { 
-                        this.UserOptions.Insert(0, Credentials.username);
+                        this.UserOptions.Insert(0, Credentials.Username);
                         this.SelectedUserOptionsIndex = 0;
                     }
 
@@ -144,7 +144,7 @@ namespace RdClient.Shared.ViewModels
         {
             if (null != _desktop)
             {
-                this.Host = _desktop.hostName;
+                this.Host = _desktop.HostName;
             }
             else
             {

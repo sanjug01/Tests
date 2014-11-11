@@ -20,8 +20,8 @@ namespace RdClient.Shared.Test.ViewModels
 
                 ConnectionInformation connectionInformation = new ConnectionInformation()
                 {
-                    Desktop = new Desktop() { hostName = "narf" },
-                    Credentials = new Credentials() { username = "don pedro", domain = "Spain", password = "Chorizo" }
+                    Desktop = new Desktop() { HostName = "narf" },
+                    Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                 };
                 
                 sessionModel.Expect("Connect", new List<object>() { connectionInformation }, 0);
@@ -42,8 +42,8 @@ namespace RdClient.Shared.Test.ViewModels
 
                 ConnectionInformation connectionInformation = new ConnectionInformation()
                 {
-                    Desktop = new Desktop() { hostName = "narf" },
-                    Credentials = new Credentials() { username = "don pedro", domain = "Spain", password = "Chorizo" }
+                    Desktop = new Desktop() { HostName = "narf" },
+                    Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                 };
 
                 sessionModel.Expect("Disconnect", new List<object>() { }, 0);
