@@ -36,6 +36,7 @@ namespace RdClient.Shared.ViewModels
             {
                 new SegoeGlyphBarButtonModel(SegoeGlyph.Back, new RelayCommand(o => Debug.WriteLine("Plop")), "Plop"),
                 new SegoeGlyphBarButtonModel(SegoeGlyph.Forward, new RelayCommand(o => Debug.WriteLine("Flop")), "Flop"),
+                new SeparatorBarItemModel(),
                 new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, new RelayCommand(o => Debug.WriteLine("Delete")), "Delete")
             };
         }

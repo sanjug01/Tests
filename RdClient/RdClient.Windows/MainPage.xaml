@@ -6,6 +6,7 @@
     xmlns:views="using:RdClient.Views"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:conv="using:RdClient.Converters"
+    xmlns:helpers="using:RdClient.Helpers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -30,14 +31,33 @@
                             <StackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <AppBarButton
-                                Icon="{Binding Glyph, Converter={StaticResource segoeToSymbolIcon}}"
-                                Label="{Binding Label}"
-                                Command="{Binding Command}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemTemplateSelector>
+                        <!--
+                        helpers:TypeNameDataTemplateSelector lists item templates keyed with the name of a bar item model class.
+                        x:Key of the <DataTemplate> elements may be one of the following:
+                            › SegoeGlyphBarButtonModel - Glyph property may be converted to an icon by conv:SegoeGlyphToSymbolIconConverter.
+                        -->
+                        <helpers:TypeNameDataTemplateSelector>
+                            <helpers:TypeNameDataTemplateSelector.Templates>
+                                <!-- SegoeGlyphBarButtonModel -->
+                                <DataTemplate x:Key="SegoeGlyphBarButtonModel">
+                                    <AppBarButton
+                                        Icon="{Binding Glyph, Converter={StaticResource segoeToSymbolIcon}}"
+                                        Label="{Binding Label}"
+                                        Command="{Binding Command}"/>
+                                </DataTemplate>
+                                <!-- SeparatorBarItemModel -->
+                                <DataTemplate x:Key="SeparatorBarItemModel">
+                                    <Rectangle Width="2" VerticalAlignment="Stretch"
+                                               Fill="{ThemeResource AppBarSeparatorForegroundThemeBrush}">
+                                        <Rectangle.Margin>
+                                            <Thickness Left="0" Right="0" Top="8" Bottom="12"/>
+                                        </Rectangle.Margin>
+                                    </Rectangle>
+                                </DataTemplate>
+                            </helpers:TypeNameDataTemplateSelector.Templates>
+                        </helpers:TypeNameDataTemplateSelector>
+                    </ItemsControl.ItemTemplateSelector>
                 </ItemsControl>
             </Grid>
         </AppBar>
