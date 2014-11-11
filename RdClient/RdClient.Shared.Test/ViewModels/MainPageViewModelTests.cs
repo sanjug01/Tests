@@ -8,7 +8,7 @@
     public class MainPageViewModelTests
     {
         private MainPageViewModel _vm;
-        private IEnumerable<BarItemModel> _visibleModels = new[] { new TestBarItemModel() };
+        private IList<BarItemModel> _visibleModels;
 
         private class TestBarItemModel : BarItemModel
         {
@@ -19,12 +19,14 @@
         public void SetUpTest()
         {
             _vm = new MainPageViewModel();
+            _visibleModels = new List<BarItemModel>() { new TestBarItemModel() };
         }
 
         [TestCleanup]
         public void TearDownTest()
         {
             _vm = null;
+            _visibleModels = null;
         }
 
         [TestMethod]
@@ -107,7 +109,39 @@
         }
 
         [TestMethod]
-        public void ButtonVisible_ExecuteShgowBar_BarShowsButtonHides()
+        public void HasVisibleModels_HideAllModels_AllUIHidden()
+        {
+            _vm.BarItems = _visibleModels;
+            Assert.IsTrue(_vm.IsShowBarButtonVisible);
+            Assert.IsFalse(_vm.IsBarVisible);
+            _visibleModels[0].IsVisible = false;
+            Assert.IsFalse(_vm.IsShowBarButtonVisible);
+            Assert.IsFalse(_vm.IsBarVisible);
+        }
+
+        [TestMethod]
+        public void HasVisibleModels_ShowBarHideAllModels_AllUIHidden()
+        {
+            _vm.BarItems = _visibleModels;
+            _vm.ShowBar.Execute(null);
+            Assert.IsFalse(_vm.IsShowBarButtonVisible);
+            Assert.IsTrue(_vm.IsBarVisible);
+            _visibleModels[0].IsVisible = false;
+            Assert.IsFalse(_vm.IsShowBarButtonVisible);
+            Assert.IsFalse(_vm.IsBarVisible);
+        }
+
+        [TestMethod]
+        public void NoVisibleModels_AllUIHidden()
+        {
+            _visibleModels[0].IsVisible = false;
+            _vm.BarItems = _visibleModels;
+            Assert.IsFalse(_vm.IsShowBarButtonVisible);
+            Assert.IsFalse(_vm.IsBarVisible);
+        }
+
+        [TestMethod]
+        public void ButtonVisible_ExecuteShowBar_BarShowsButtonHides()
         {
             _vm.BarItems = _visibleModels;
             _vm.ShowBar.Execute(null);

@@ -170,10 +170,8 @@ namespace RdClient.Navigation
             // create a bar site object for the view, request the collection of application bar items,
             // and upate the application bar with the new 
             //
-            IEnumerable<BarItemModel> barItems = QueryApplicationBarItems();
-
             _appBarViewModel.IsBarSticky = false;
-            _appBarViewModel.BarItems = barItems;
+            _appBarViewModel.BarItems = QueryApplicationBarItems();
         }
 
         private IEnumerable<BarItemModel> QueryApplicationBarItems()

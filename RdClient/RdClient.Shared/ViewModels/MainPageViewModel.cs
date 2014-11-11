@@ -2,12 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics;
     using System.Windows.Input;
 
     public sealed class MainPageViewModel : Helpers.MutableObject, IApplicationBarViewModel
     {
         private IEnumerable<BarItemModel> _barItems;
+        private int _visibleItemsCount;
         private bool _isShowBarButtonVisible;
         private bool _isBarVisible;
         private bool _isBarSticky;
@@ -15,6 +17,7 @@
 
         public MainPageViewModel()
         {
+            _visibleItemsCount = 0;
             _isShowBarButtonVisible = false;
             _isBarVisible = false;
             _isBarSticky = false;
@@ -26,10 +29,32 @@
             get { return _barItems; }
             set
             {
-                if(this.SetProperty<IEnumerable<BarItemModel>>(ref _barItems, value))
+                if(!object.ReferenceEquals(_barItems, value))
                 {
+                    //
+                    // Unsubscribe from all item model property changed notifications
+                    //
+                    if(null != _barItems)
+                    {
+                        foreach (BarItemModel model in _barItems)
+                            model.PropertyChanged -= this.OnItemModelPropertyChanged;
+                    }
+
+                    _visibleItemsCount = 0;
+                    this.SetProperty<IEnumerable<BarItemModel>>(ref _barItems, value);
+
+                    if (null != value)
+                    {
+                        foreach (BarItemModel model in value)
+                        {
+                            model.PropertyChanged += this.OnItemModelPropertyChanged;
+                            if (model.IsVisible)
+                                ++_visibleItemsCount;
+                        }
+                    }
                     this.IsBarVisible = false;
-                    this.IsShowBarButtonVisible = VisibleBarItemsPresent(_barItems);
+                    this.IsShowBarButtonVisible = 0 != _visibleItemsCount;
+                    _showBar.EmitCanExecuteChanged();
                 }
             }
         }
@@ -57,7 +82,7 @@
                     if (value)
                         this.IsShowBarButtonVisible = false;
                     else
-                        this.IsShowBarButtonVisible = VisibleBarItemsPresent(_barItems);
+                        this.IsShowBarButtonVisible = 0 != _visibleItemsCount;
                 }
             }
         }
@@ -79,23 +104,29 @@
             }
         }
 
-        private static bool VisibleBarItemsPresent(IEnumerable<BarItemModel> items)
+        private void OnItemModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            bool itemsPresent = false;
-
-            if (null != items)
+            if (e.PropertyName.Equals("IsVisible"))
             {
-                foreach (BarItemModel model in items)
+                if (((BarItemModel)sender).IsVisible)
                 {
-                    if (model.IsVisible)
+                    if (0 == _visibleItemsCount++)
                     {
-                        itemsPresent = true;
-                        break;
+                        this.IsBarVisible = false;
+                        this.IsShowBarButtonVisible = true;
+                        _showBar.EmitCanExecuteChanged();
+                    }
+                }
+                else
+                {
+                    if (0 == --_visibleItemsCount)
+                    {
+                        this.IsBarVisible = false;
+                        this.IsShowBarButtonVisible = false;
+                        _showBar.EmitCanExecuteChanged();
                     }
                 }
             }
-
-            return itemsPresent;
         }
     }
 }
