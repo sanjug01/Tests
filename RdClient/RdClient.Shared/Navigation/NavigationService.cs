@@ -145,9 +145,11 @@ namespace RdClient.Navigation
 
         private void CallPresenting(IPresentableView view, object activationParameter)
         {
-            if (view.ViewModel != null)
+            IViewModel vm = view.ViewModel;
+
+            if (null != vm)
             {
-                view.ViewModel.Presenting(this, activationParameter);
+                vm.Presenting(this, activationParameter);
             }
             view.Presenting(this, activationParameter);
         }
@@ -155,9 +157,11 @@ namespace RdClient.Navigation
 
         private void CallDismissing(IPresentableView view)
         {
-            if (view.ViewModel != null)
+            IViewModel vm = view.ViewModel;
+
+            if (null != vm)
             {
-                view.ViewModel.Dismissing();
+                vm.Dismissing();
             }
             view.Dismissing();
         }

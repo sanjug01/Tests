@@ -24,6 +24,7 @@
         [TestMethod]
         public void NewViewModel_CorrectApplicationBarProperties()
         {
+            Assert.IsNull(_vm.BarItems);
             Assert.IsFalse(_vm.IsShowBarButtonVisible);
             Assert.IsFalse(_vm.IsBarVisible);
             Assert.IsFalse(_vm.IsBarSticky);
@@ -63,6 +64,18 @@
             Assert.IsTrue(_vm.IsBarSticky);
             Assert.IsTrue(1 == reportedProperties.Count);
             Assert.AreEqual(reportedProperties[0], "IsBarSticky");
+        }
+
+        [TestMethod]
+        public void NewViewModel_ChangeBarItems_ChangeReported()
+        {
+            IList<string> reportedProperties = new List<string>();
+
+            _vm.PropertyChanged += (s, e) => reportedProperties.Add(e.PropertyName);
+            _vm.BarItems = new List<BarItemModel>();
+            Assert.IsNotNull(_vm.BarItems);
+            Assert.IsTrue(1 == reportedProperties.Count);
+            Assert.AreEqual(reportedProperties[0], "BarItems");
         }
 
         [TestMethod]

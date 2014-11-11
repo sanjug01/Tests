@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Windows.Input;
 
-    public sealed class MainPageViewModel : ViewModelBase, IApplicationBarViewModel
+    public sealed class MainPageViewModel : Helpers.MutableObject, IApplicationBarViewModel
     {
         private IEnumerable<BarItemModel> _barItems;
         private bool _isShowBarButtonVisible;
@@ -23,7 +23,21 @@
         public IEnumerable<BarItemModel> BarItems
         {
             get { return _barItems; }
-            set { this.SetProperty<IEnumerable<BarItemModel>>(ref _barItems, value); }
+            set
+            {
+                if(this.SetProperty<IEnumerable<BarItemModel>>(ref _barItems, value))
+                {
+                    this.IsBarVisible = false;
+
+                    if (!VisibleBarItemsPresent(_barItems))
+                    {
+                        //
+                        // If there are no bar items or all items are hidden, hide the bar UI
+                        //
+                        this.IsShowBarButtonVisible = false;
+                    }
+                }
+            }
         }
 
         public bool IsShowBarButtonVisible
@@ -31,7 +45,8 @@
             get { return _isShowBarButtonVisible; }
             set
             {
-                this.SetProperty<bool>(ref _isShowBarButtonVisible, value);
+                if (this.SetProperty<bool>(ref _isShowBarButtonVisible, value))
+                    _showBar.EmitCanExecuteChanged();
             }
         }
 
@@ -68,9 +83,23 @@
             }
         }
 
-        protected override void OnPresenting(object activationParameter)
+        private static bool VisibleBarItemsPresent(IEnumerable<BarItemModel> items)
         {
-            //throw new NotImplementedException();
+            bool itemsPresent = false;
+
+            if (null != items)
+            {
+                foreach (BarItemModel model in items)
+                {
+                    if (model.IsVisible)
+                    {
+                        itemsPresent = true;
+                        break;
+                    }
+                }
+            }
+
+            return itemsPresent;
         }
     }
 }
