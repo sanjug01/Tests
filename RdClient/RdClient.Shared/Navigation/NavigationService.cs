@@ -98,9 +98,6 @@ namespace RdClient.Navigation
             if(_modalStack.Count == 0)
             {
                 EmitPushingFirstModalView();
-                _appBarViewModel.IsBarSticky = false;
-                _appBarViewModel.IsBarVisible = false;
-                _appBarViewModel.IsShowBarButtonVisible = false;
                 _appBarViewModel.BarItems = null;
             }
 
@@ -176,8 +173,6 @@ namespace RdClient.Navigation
             IEnumerable<BarItemModel> barItems = QueryApplicationBarItems();
 
             _appBarViewModel.IsBarSticky = false;
-            _appBarViewModel.IsBarVisible = false;
-            _appBarViewModel.IsShowBarButtonVisible = null != barItems && 0 == _modalStack.Count;
             _appBarViewModel.BarItems = barItems;
         }
 

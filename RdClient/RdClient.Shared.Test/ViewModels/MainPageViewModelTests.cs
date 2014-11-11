@@ -8,6 +8,12 @@
     public class MainPageViewModelTests
     {
         private MainPageViewModel _vm;
+        private IEnumerable<BarItemModel> _visibleModels = new[] { new TestBarItemModel() };
+
+        private class TestBarItemModel : BarItemModel
+        {
+            public TestBarItemModel() { }
+        }
 
         [TestInitialize]
         public void SetUpTest()
@@ -28,18 +34,6 @@
             Assert.IsFalse(_vm.IsShowBarButtonVisible);
             Assert.IsFalse(_vm.IsBarVisible);
             Assert.IsFalse(_vm.IsBarSticky);
-        }
-
-        [TestMethod]
-        public void NewViewModel_ChangeIsShowBarButtonVisible_ChangeReported()
-        {
-            IList<string> reportedProperties = new List<string>();
-
-            _vm.PropertyChanged += (s, e) => reportedProperties.Add(e.PropertyName);
-            _vm.IsShowBarButtonVisible = true;
-            Assert.IsTrue(_vm.IsShowBarButtonVisible);
-            Assert.IsTrue(1 == reportedProperties.Count);
-            Assert.AreEqual(reportedProperties[0], "IsShowBarButtonVisible");
         }
 
         [TestMethod]
@@ -85,27 +79,47 @@
         }
 
         [TestMethod]
-        public void NewViewModel_SetShowButtonVisible_CanExecuteShowBar()
+        public void NewBar_SetVisibleModels_ShowButtonVisible()
         {
-            _vm.IsShowBarButtonVisible = true;
-            Assert.IsTrue(_vm.ShowBar.CanExecute(null));
+            IList<string> reportedProperties = new List<string>();
+
+            _vm.PropertyChanged += (s, e) => reportedProperties.Add(e.PropertyName);
+            _vm.BarItems = _visibleModels;
+
+            Assert.IsTrue(_vm.IsShowBarButtonVisible);
+            Assert.AreEqual(2, reportedProperties.Count);
+            Assert.AreEqual("BarItems", reportedProperties[0]);
+            Assert.AreEqual("IsShowBarButtonVisible", reportedProperties[1]);
         }
 
         [TestMethod]
-        public void ButtonVisible_MakeBarVisible_ButtonHides()
+        public void NewBar_SetAndClearVisibleModels_AllUIHidden()
         {
-            _vm.IsShowBarButtonVisible = true;
-            _vm.IsBarVisible = true;
+            IList<string> reportedProperties = new List<string>();
+
+            _vm.PropertyChanged += (s, e) => reportedProperties.Add(e.PropertyName);
+            _vm.BarItems = _visibleModels;
+            Assert.IsTrue(_vm.IsShowBarButtonVisible);
+            Assert.IsFalse(_vm.IsBarVisible);
+            _vm.BarItems = null;
             Assert.IsFalse(_vm.IsShowBarButtonVisible);
+            Assert.IsFalse(_vm.IsBarVisible);
         }
 
         [TestMethod]
         public void ButtonVisible_ExecuteShgowBar_BarShowsButtonHides()
         {
-            _vm.IsShowBarButtonVisible = true;
+            _vm.BarItems = _visibleModels;
             _vm.ShowBar.Execute(null);
             Assert.IsTrue(_vm.IsBarVisible);
             Assert.IsFalse(_vm.IsShowBarButtonVisible);
+        }
+
+        [TestMethod]
+        public void ShowAppBar_ClearBarItems_AllUIHidden()
+        {
+            _vm.BarItems = new BarItemModel[] { new TestBarItemModel(), new TestBarItemModel() };
+            Assert.IsTrue(_vm.IsShowBarButtonVisible);
         }
     }
 }

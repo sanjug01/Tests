@@ -21,7 +21,16 @@
     <Page.BottomAppBar>
         <AppBar
             IsSticky="{Binding IsBarSticky}"
-            Visibility="{Binding IsBarVisible, Converter={StaticResource boolToVisibility}}">
+            IsOpen="{Binding IsBarVisible, Mode=TwoWay}">
+            <Grid>
+                <ItemsControl ItemsSource="{Binding BarItems}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Grid>
         </AppBar>
     </Page.BottomAppBar>
 

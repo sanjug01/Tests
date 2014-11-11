@@ -1,7 +1,9 @@
 ﻿using RdClient.Navigation;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
+using RdClient.Shared.Navigation;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Windows.Input;
@@ -13,8 +15,10 @@ namespace RdClient.Shared.ViewModels
     /// view model to support integrated tests.
     ///      * these tests should be removed from shiped product.
     /// </summary>
-    public class TestsViewModel : ViewModelBase
+    public sealed class TestsViewModel : ViewModelBase, IApplicationBarItemsSource
     {
+        private readonly IEnumerable<BarItemModel> _barItems;
+
         public ICommand StressTestCommand { get; private set; }
         public ICommand GoHomeCommand { get; private set; }
 
@@ -26,6 +30,12 @@ namespace RdClient.Shared.ViewModels
         {
             StressTestCommand = new RelayCommand(new Action<object>(StressTest));
             GoHomeCommand = new RelayCommand(new Action<object>(GoHome));
+
+            _barItems = new List<BarItemModel>()
+            {
+                new BarItem(new RelayCommand(o=>{}), "plop"),
+                new BarItem(new RelayCommand(o=>{}), "flop")
+            };
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -76,6 +86,18 @@ namespace RdClient.Shared.ViewModels
         void GoHome(object o)
         {
             NavigationService.NavigateToView("view1", null);
+        }
+
+        IEnumerable<BarItemModel> IApplicationBarItemsSource.GetItems(IApplicationBarSite applicationBarSite)
+        {
+            return _barItems;
+        }
+
+        private class BarItem : BarButtonModel
+        {
+            public BarItem(ICommand command, string label) : base(command, label)
+            {
+            }
         }
     }
 }

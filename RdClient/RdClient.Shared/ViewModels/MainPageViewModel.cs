@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Windows.Input;
 
     public sealed class MainPageViewModel : Helpers.MutableObject, IApplicationBarViewModel
@@ -28,14 +29,7 @@
                 if(this.SetProperty<IEnumerable<BarItemModel>>(ref _barItems, value))
                 {
                     this.IsBarVisible = false;
-
-                    if (!VisibleBarItemsPresent(_barItems))
-                    {
-                        //
-                        // If there are no bar items or all items are hidden, hide the bar UI
-                        //
-                        this.IsShowBarButtonVisible = false;
-                    }
+                    this.IsShowBarButtonVisible = VisibleBarItemsPresent(_barItems);
                 }
             }
         }
@@ -43,7 +37,7 @@
         public bool IsShowBarButtonVisible
         {
             get { return _isShowBarButtonVisible; }
-            set
+            private set
             {
                 if (this.SetProperty<bool>(ref _isShowBarButtonVisible, value))
                     _showBar.EmitCanExecuteChanged();
@@ -62,6 +56,8 @@
                     //
                     if (value)
                         this.IsShowBarButtonVisible = false;
+                    else
+                        this.IsShowBarButtonVisible = VisibleBarItemsPresent(_barItems);
                 }
             }
         }

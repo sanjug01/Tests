@@ -10,7 +10,7 @@
         /// <summary>
         /// Property tracks visibility of the clickable control that executes the ShowBar command.
         /// </summary>
-        bool IsShowBarButtonVisible { get; set; }
+        bool IsShowBarButtonVisible { get; }
         /// <summary>
         /// Property tracks visibility of the application bar.
         /// </summary>
