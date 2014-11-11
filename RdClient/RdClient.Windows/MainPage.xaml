@@ -14,18 +14,11 @@
     <Page.Resources>
         <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
         <conv:SegoeGlyphToSymbolIconConverter x:Key="segoeToSymbolIcon"/>
-    </Page.Resources>
-    
-    <Page.DataContext>
-        <vm:MainPageViewModel />
-    </Page.DataContext>
-    
-    <Page.BottomAppBar>
-        <AppBar
-            IsSticky="{Binding IsBarSticky}"
-            IsOpen="{Binding IsBarVisible, Mode=TwoWay}">
+        
+        <DataTemplate x:Key="landscapeAppBar">
             <Grid>
-                <ItemsControl ItemsSource="{Binding BarItems}">
+                <ItemsControl
+                    ItemsSource="{Binding BarItems}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal"/>
@@ -40,7 +33,7 @@
                         -->
                         <helpers:TypeNameDataTemplateSelector>
                             <helpers:TypeNameDataTemplateSelector.Templates>
-                                
+
                                 <!-- SegoeGlyphBarButtonModel -->
                                 <DataTemplate x:Key="SegoeGlyphBarButtonModel">
                                     <AppBarButton
@@ -49,7 +42,7 @@
                                         Command="{Binding Command}"
                                         Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}}"/>
                                 </DataTemplate>
-                                
+
                                 <!-- SeparatorBarItemModel -->
                                 <DataTemplate x:Key="SeparatorBarItemModel">
                                     <Rectangle Width="2" VerticalAlignment="Stretch"
@@ -63,6 +56,18 @@
                     </ItemsControl.ItemTemplateSelector>
                 </ItemsControl>
             </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    
+    <Page.DataContext>
+        <vm:MainPageViewModel />
+    </Page.DataContext>
+    
+    <Page.BottomAppBar>
+        <AppBar
+            IsSticky="{Binding IsBarSticky}"
+            IsOpen="{Binding IsBarVisible, Mode=TwoWay}"
+            ContentTemplate="{StaticResource landscapeAppBar}">
         </AppBar>
     </Page.BottomAppBar>
 
@@ -72,6 +77,8 @@
         <views:ModalStackContainer
             x:Name="ModalStackContainer"
             Visibility="Collapsed"/>
+        
+        <!-- Button that shows the application bar -->
         <Button
             VerticalAlignment="Bottom"
             HorizontalAlignment="Stretch"
