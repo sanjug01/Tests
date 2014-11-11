@@ -1,5 +1,6 @@
 ﻿using RdClient.Navigation;
 using RdClient.Shared.Models;
+using RdClient.Shared.ViewModels;
 using System.Diagnostics.Contracts;
 using Windows.UI.Xaml.Controls;
 
@@ -37,8 +38,8 @@ namespace RdClient.Views
         {
             ConnectionInformation connectionInformation = new ConnectionInformation()
             {
-                Desktop = new Desktop() { hostName = "a3-w81" },
-                Credentials = new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd", haveBeenPersisted = false }
+                Desktop = new Desktop() { HostName = "a3-w81" },
+                Credentials = new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
             };
 
             _navigationService.NavigateToView("SessionView", connectionInformation);
@@ -48,8 +49,8 @@ namespace RdClient.Views
         {
             ConnectionInformation connectionInformation = new ConnectionInformation()
             {
-                Desktop = new Desktop() { hostName = "a3-w81" },
-                Credentials = new Credentials() { username = "tslabadmin", domain = "", password = "1234AbCd", haveBeenPersisted = false }
+                Desktop = new Desktop() { HostName = "a3-w81" },
+                Credentials = new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
             };
 
             _navigationService.NavigateToView("TestsView", connectionInformation);
@@ -57,15 +58,24 @@ namespace RdClient.Views
 
         private void AddDesktopButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            // new dektop
-            _navigationService.PushModalView("AddOrEditDesktopView", null);
+            // new dektop, static user
+            AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(
+                null,
+                new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false },
+                true);
+
+            _navigationService.PushModalView("AddOrEditDesktopView", args);
         }
 
         private void EditDesktopButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            // edit existing desktop
-            Desktop d = new Desktop() { hostName = "a3-w81" };
-            _navigationService.PushModalView("AddOrEditDesktopView", d);
+            // edit existing desktop, static user
+            AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(
+                new Desktop() { HostName = "a3-w81" },
+                new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false },
+                false);
+
+            _navigationService.PushModalView("AddOrEditDesktopView", args);
         }
     }
 }

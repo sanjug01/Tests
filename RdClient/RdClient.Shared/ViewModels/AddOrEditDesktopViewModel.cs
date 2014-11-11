@@ -4,10 +4,25 @@ using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics.Contracts;
 using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
+    public class AddOrEditDesktopViewModelArgs
+    {
+        public AddOrEditDesktopViewModelArgs(Desktop desktop, Credentials credentials, bool isAddingDesktop = true)
+        {
+            this.Desktop = desktop;
+            this.Credentials = credentials;
+            this.IsAddingDesktop = isAddingDesktop;
+        }
+
+        public Desktop Desktop { get; private set; }
+        public Credentials Credentials { get; private set; }
+        public bool IsAddingDesktop { get; private set; }
+
+    }
     public class AddOrEditDesktopViewModel : ViewModelBase
     {
         public AddOrEditDesktopViewModel()
@@ -17,11 +32,28 @@ namespace RdClient.Shared.ViewModels
 
             IsAddingDesktop = true;
             _desktop = null;
-            
+            _credentials = null;
+
+            this.UserOptions = new ObservableCollection<string>();
+            this.UserOptions.Add("Enter every time(d)");
+            this.UserOptions.Add("Add credentials(d)");
+            this.SelectedUserOptionsIndex = 0;
+
             this.ResetCachedDesktopData();
 
             PresentableView = null;
         }
+
+        public ObservableCollection<string> UserOptions { get; set; }
+        public int SelectedUserOptionsIndex 
+        { 
+            get { return _selectedUserOptionsIndex; }
+            set
+            {
+                SetProperty(ref _selectedUserOptionsIndex, value, "SelectedUserOptionsIndex");
+            }
+        }
+
 
         public IPresentableView PresentableView { private get; set; }
 
@@ -39,9 +71,34 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
+        public Credentials Credentials
+        {
+            get { return _credentials; }
+            set
+            {
+                SetProperty(ref _credentials, value, "Credentials");
+
+                // update combo box and combo box selection, if necesary
+                if(null != _credentials)
+                {
+                    int idx = this.UserOptions.IndexOf(Credentials.Username);
+                    if (0 <= idx)
+                    {
+                        this.SelectedUserOptionsIndex = idx;
+                    }
+                    else
+                    { 
+                        this.UserOptions.Insert(0, Credentials.Username);
+                        this.SelectedUserOptionsIndex = 0;
+                    }
+
+                }
+            }
+        }
+
         public bool IsAddingDesktop {
             get { return _isAddingDesktop; }
-            set { SetProperty(ref _isAddingDesktop, value, "IsAddingDesktop"); }
+            private set { SetProperty(ref _isAddingDesktop, value, "IsAddingDesktop"); }
         }
 
         public string Host
@@ -87,28 +144,24 @@ namespace RdClient.Shared.ViewModels
         {
             if (null != _desktop)
             {
-                this.Host = _desktop.hostName;
+                this.Host = _desktop.HostName;
             }
             else
             {
                 this.Host = string.Empty;
             }
+
         }
 
         protected override void OnPresenting(object activationParameter)
         {
-            if (null == activationParameter)
-            {
-                // add
-                IsAddingDesktop = true;
-                Desktop = null;
-            }
-            else
-            {
-                //edit
-                IsAddingDesktop = false;
-                Desktop = activationParameter as Desktop;
-            }
+            Contract.Requires(null != activationParameter as AddOrEditDesktopViewModelArgs);
+            AddOrEditDesktopViewModelArgs args = activationParameter as AddOrEditDesktopViewModelArgs;
+
+            this.IsAddingDesktop = args.IsAddingDesktop;
+            this.Desktop = args.Desktop;
+            this.Credentials = args.Credentials;
+
         }
 
         private bool _isAddingDesktop;
@@ -118,7 +171,9 @@ namespace RdClient.Shared.ViewModels
         private readonly RelayCommand _cancelCommand;
 
         private Desktop _desktop;
+        private Credentials _credentials;
 
+        private int _selectedUserOptionsIndex;
 
     }
 }

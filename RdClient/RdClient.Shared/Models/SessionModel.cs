@@ -47,7 +47,7 @@ namespace RdClient.Shared.Models
             Credentials credentials = connectionInformation.Credentials;
 
             RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
-            _rdpConnection.Connect(credentials, credentials.haveBeenPersisted);
+            _rdpConnection.Connect(credentials, credentials.HaveBeenPersisted);
         }
 
         public void Disconnect()
