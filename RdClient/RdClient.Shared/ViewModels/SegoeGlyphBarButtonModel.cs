@@ -9,6 +9,7 @@
     public enum SegoeGlyph : ushort
     {
         Trash = 0xE107,
+        Home = 0xE10F,
         Forward = 0xe111,
         Back = 0xE112,
         Settings = 0xE115,

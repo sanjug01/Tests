@@ -18,7 +18,7 @@ namespace RdClient.Shared.ViewModels
     /// </summary>
     public sealed class TestsViewModel : ViewModelBase, IApplicationBarItemsSource
     {
-        private readonly IEnumerable<BarItemModel> _barItems;
+        private readonly BarItemModel _separatorItem, _homeItem, _backItem, _forwardItem, _deleteItem;
 
         public ICommand StressTestCommand { get; private set; }
         public ICommand GoHomeCommand { get; private set; }
@@ -32,13 +32,11 @@ namespace RdClient.Shared.ViewModels
             StressTestCommand = new RelayCommand(new Action<object>(StressTest));
             GoHomeCommand = new RelayCommand(new Action<object>(GoHome));
 
-            _barItems = new List<BarItemModel>()
-            {
-                new SegoeGlyphBarButtonModel(SegoeGlyph.Back, new RelayCommand(o => Debug.WriteLine("Plop")), "Plop"),
-                new SegoeGlyphBarButtonModel(SegoeGlyph.Forward, new RelayCommand(o => Debug.WriteLine("Flop")), "Flop"),
-                new SeparatorBarItemModel(),
-                new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, new RelayCommand(o => Debug.WriteLine("Delete")), "Delete")
-            };
+            _separatorItem = new SeparatorBarItemModel();
+            _homeItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => GoHome(o)), "Home");
+            _backItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Back, new RelayCommand(o => _backItem.IsVisible = false), "Back");
+            _forwardItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Forward, new RelayCommand(o => _backItem.IsVisible = true), "Forward");
+            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, new RelayCommand(o => Debug.WriteLine("Delete")), "Delete");
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -93,14 +91,15 @@ namespace RdClient.Shared.ViewModels
 
         IEnumerable<BarItemModel> IApplicationBarItemsSource.GetItems(IApplicationBarSite applicationBarSite)
         {
-            return _barItems;
-        }
-
-        private class BarItem : BarButtonModel
-        {
-            public BarItem(ICommand command, string label) : base(command, label)
+            return new BarItemModel[]
             {
-            }
+                _homeItem,
+                _separatorItem,
+                _backItem,
+                _forwardItem,
+                _separatorItem,
+                _deleteItem
+            };
         }
     }
 }

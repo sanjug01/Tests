@@ -36,24 +36,27 @@
                         helpers:TypeNameDataTemplateSelector lists item templates keyed with the name of a bar item model class.
                         x:Key of the <DataTemplate> elements may be one of the following:
                             › SegoeGlyphBarButtonModel - Glyph property may be converted to an icon by conv:SegoeGlyphToSymbolIconConverter.
+                            › SeparatorBarItemModel - a vertical bar that may separate groups of buttons into logical groups
                         -->
                         <helpers:TypeNameDataTemplateSelector>
                             <helpers:TypeNameDataTemplateSelector.Templates>
+                                
                                 <!-- SegoeGlyphBarButtonModel -->
                                 <DataTemplate x:Key="SegoeGlyphBarButtonModel">
                                     <AppBarButton
                                         Icon="{Binding Glyph, Converter={StaticResource segoeToSymbolIcon}}"
                                         Label="{Binding Label}"
-                                        Command="{Binding Command}"/>
+                                        Command="{Binding Command}"
+                                        Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}}"/>
                                 </DataTemplate>
+                                
                                 <!-- SeparatorBarItemModel -->
                                 <DataTemplate x:Key="SeparatorBarItemModel">
                                     <Rectangle Width="2" VerticalAlignment="Stretch"
-                                               Fill="{ThemeResource AppBarSeparatorForegroundThemeBrush}">
-                                        <Rectangle.Margin>
-                                            <Thickness Left="0" Right="0" Top="8" Bottom="12"/>
-                                        </Rectangle.Margin>
-                                    </Rectangle>
+                                               Fill="{ThemeResource AppBarSeparatorForegroundThemeBrush}"
+                                               Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}}"
+                                               Margin="0, 8, 0, 12"/>
+
                                 </DataTemplate>
                             </helpers:TypeNameDataTemplateSelector.Templates>
                         </helpers:TypeNameDataTemplateSelector>

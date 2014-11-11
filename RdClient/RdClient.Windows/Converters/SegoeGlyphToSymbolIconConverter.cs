@@ -24,6 +24,7 @@
             _glyphTranslation = new SortedDictionary<SegoeGlyph, Symbol>()
             {
                 { SegoeGlyph.Trash, Symbol.Delete },
+                { SegoeGlyph.Home, Symbol.Home },
                 { SegoeGlyph.Forward, Symbol.Forward },
                 { SegoeGlyph.Back, Symbol.Back },
                 { SegoeGlyph.Settings, Symbol.Setting },

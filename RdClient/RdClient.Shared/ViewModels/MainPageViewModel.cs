@@ -108,6 +108,11 @@
         {
             if (e.PropertyName.Equals("IsVisible"))
             {
+                //
+                // When visibility of a bar element changes update visibility of the bar UI -
+                // if the last button got hidden, hide the bar and button that shows it; also,
+                // update the command bound to the button that shows the bar.
+                //
                 if (((BarItemModel)sender).IsVisible)
                 {
                     if (0 == _visibleItemsCount++)
