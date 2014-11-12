@@ -105,6 +105,16 @@ namespace RdClient.Shared.Test.Model
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddDuplicateDesktopThrowsException()
+        {
+            Desktop existingDesktop = _actualDesktops[_testData.RandomSource.Next(0, _actualDesktops.Count)];
+            Desktop desktopWithSameId = _testData.NewValidDesktop();
+            desktopWithSameId.Id = existingDesktop.Id;
+            _dataModel.Desktops.Add(desktopWithSameId);
+        }
+
+        [TestMethod]
         public void EditDesktopSavesItToStorage()
         {
             Desktop desktop = _actualDesktops[_testData.RandomSource.Next(0, _actualDesktops.Count)];
@@ -126,6 +136,16 @@ namespace RdClient.Shared.Test.Model
             Credentials cred = _testData.NewValidCredential();
             _mockStorage.Expect("SaveCredential", new List<object>() { cred }, 0);
             _dataModel.Credentials.Add(cred);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void AddDuplicateCredentialThrowsException()
+        {
+            Credentials existingCred = _actualCredentials[_testData.RandomSource.Next(0, _actualCredentials.Count)];
+            Credentials credWithSameId = _testData.NewValidCredential();
+            credWithSameId.Id = existingCred.Id;
+            _dataModel.Credentials.Add(credWithSameId);
         }
 
         [TestMethod]
