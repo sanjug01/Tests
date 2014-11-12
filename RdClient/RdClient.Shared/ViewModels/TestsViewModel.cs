@@ -42,7 +42,7 @@ namespace RdClient.Shared.ViewModels
 
         private readonly ObservableCollection<Desktop> _desktops;
         private readonly ObservableCollection<Credentials> _users;
-        private int _selectedDesktopsCount;
+        private IList<object> _selectedDesktops;
 
 
         public ICommand StressTestCommand { get; private set; }
@@ -54,12 +54,12 @@ namespace RdClient.Shared.ViewModels
         public ObservableCollection<Desktop> Desktops { get { return _desktops; } }
         public ObservableCollection<Credentials> Users { get { return _users; } }
 
-        public int SelectedDesktopsCount
+        public IList<object> SelectedDesktops
         {
-            private get { return _selectedDesktopsCount; }
+            private get { return _selectedDesktops; }
             set
             {
-                SetProperty(ref _selectedDesktopsCount, value, "SelectedDesktopsCount");
+                SetProperty(ref _selectedDesktops, value, "SelectedDesktops");
                 EditDesktopCommand.EmitCanExecuteChanged();
                 DeleteDesktopCommand.EmitCanExecuteChanged();
             }
@@ -85,7 +85,7 @@ namespace RdClient.Shared.ViewModels
 
             _desktops = new ObservableCollection<Desktop>();
             _users = new ObservableCollection<Credentials>();
-            SelectedDesktopsCount = 0;
+            _selectedDesktops = null;
             this.LoadTestData();
         }
 
@@ -225,9 +225,6 @@ namespace RdClient.Shared.ViewModels
                 _deleteItem
             };
         }
-
-
-
 
         private void LoadTestData()
         {
