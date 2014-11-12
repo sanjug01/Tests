@@ -14,6 +14,13 @@
         private bool _isBarVisible;
         private bool _isBarSticky;
         private readonly RelayCommand _showBar;
+        private AppBarLayout _appBarLayout;
+
+        public enum AppBarLayout
+        {
+            Landscape,
+            Portrait
+        }
 
         public MainPageViewModel()
         {
@@ -22,6 +29,7 @@
             _isBarVisible = false;
             _isBarSticky = false;
             _showBar = new RelayCommand(o => this.ShowApplicationBar(), o => _isShowBarButtonVisible);
+            _appBarLayout = AppBarLayout.Portrait;
         }
 
         public IEnumerable<BarItemModel> BarItems
@@ -102,6 +110,12 @@
                 this.IsShowBarButtonVisible = false;
                 this.IsBarVisible = true;
             }
+        }
+
+        public AppBarLayout ApplicationBarLayout
+        {
+            get { return _appBarLayout; }
+            set { this.SetProperty<AppBarLayout>(ref _appBarLayout, value); }
         }
 
         private void OnItemModelPropertyChanged(object sender, PropertyChangedEventArgs e)
