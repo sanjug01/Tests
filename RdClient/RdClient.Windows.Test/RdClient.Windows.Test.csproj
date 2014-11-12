@@ -110,8 +110,10 @@
     <AppxPackageIncludePrivateSymbols>true</AppxPackageIncludePrivateSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Converters\BarItemsAlignmentFilteringConverterTests.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverterTests.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverterTests.cs" />
+    <Compile Include="Converters\StringToDictionaryObjectConverterTests.cs" />
     <Compile Include="LifeTimeManager\LifeTimeManagerTests.cs" />
     <Compile Include="Mock\RootFrameManager.cs" />
     <Compile Include="Mock\SuspensionArgs.cs" />

@@ -3,6 +3,7 @@ using RdClient.Shared.Navigation;
 using RdClient.Shared.ViewModels;
 using System;
 using System.Diagnostics.Contracts;
+using Windows.Graphics.Display;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -16,6 +17,13 @@ namespace RdClient
         public MainPage()
         {
             this.InitializeComponent();
+            //
+            // Set initial orientation.
+            // TODO: handle orientation based on the actual dimentions of the view.
+            //
+            DisplayInformation di = DisplayInformation.GetForCurrentView();
+            OnOrientationChanged(di, null);
+            di.OrientationChanged += OnOrientationChanged;
 
             _viewFactory = new PresentableViewFactory<PresentableViewConstructor>();
             _navigationService = new NavigationService(this, _viewFactory, this.DataContext as IApplicationBarViewModel);
@@ -65,6 +73,30 @@ namespace RdClient
         {
             this.ModalStackContainer.Visibility = Visibility.Collapsed;
             this.TransitionAnimationContainer.IsEnabled = true;
+        }
+
+        private void OnOrientationChanged(DisplayInformation sender, object e)
+        {
+            //
+            // If the view model implements ILayoutAwareViewModel, tell it to update the layout for the new orientation.
+            // Ignore flipped orientations, care only about portrait and landscape layouts.
+            //
+            ILayoutAwareViewModel lavm = this.DataContext as ILayoutAwareViewModel;
+
+            if (null != lavm)
+            {
+                switch (sender.CurrentOrientation)
+                {
+                    case DisplayOrientations.Portrait:
+                    case DisplayOrientations.PortraitFlipped:
+                        lavm.OrientationChanged(ViewOrientation.Portrait);
+                        break;
+
+                    default:
+                        lavm.OrientationChanged(ViewOrientation.Landscape);
+                        break;
+                }
+            }
         }
     }
 }

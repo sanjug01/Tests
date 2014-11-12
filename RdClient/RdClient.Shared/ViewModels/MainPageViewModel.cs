@@ -6,7 +6,7 @@
     using System.Diagnostics;
     using System.Windows.Input;
 
-    public sealed class MainPageViewModel : Helpers.MutableObject, IApplicationBarViewModel
+    public sealed class MainPageViewModel : Helpers.MutableObject, IApplicationBarViewModel, ILayoutAwareViewModel
     {
         private IEnumerable<BarItemModel> _barItems;
         private int _visibleItemsCount;
@@ -14,6 +14,7 @@
         private bool _isBarVisible;
         private bool _isBarSticky;
         private readonly RelayCommand _showBar;
+        private ViewOrientation _appBarLayout;
 
         public MainPageViewModel()
         {
@@ -22,6 +23,7 @@
             _isBarVisible = false;
             _isBarSticky = false;
             _showBar = new RelayCommand(o => this.ShowApplicationBar(), o => _isShowBarButtonVisible);
+            _appBarLayout = ViewOrientation.Landscape;
         }
 
         public IEnumerable<BarItemModel> BarItems
@@ -95,6 +97,11 @@
 
         public ICommand ShowBar { get { return _showBar; } }
 
+        void ILayoutAwareViewModel.OrientationChanged(ViewOrientation orientation)
+        {
+            this.ApplicationBarLayout = orientation;
+        }
+
         private void ShowApplicationBar()
         {
             if (_isShowBarButtonVisible)
@@ -102,6 +109,12 @@
                 this.IsShowBarButtonVisible = false;
                 this.IsBarVisible = true;
             }
+        }
+
+        public ViewOrientation ApplicationBarLayout
+        {
+            get { return _appBarLayout; }
+            private set { this.SetProperty<ViewOrientation>(ref _appBarLayout, value); }
         }
 
         private void OnItemModelPropertyChanged(object sender, PropertyChangedEventArgs e)

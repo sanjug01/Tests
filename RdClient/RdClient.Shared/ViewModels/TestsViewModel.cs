@@ -81,7 +81,8 @@ namespace RdClient.Shared.ViewModels
 
             _addItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Add, AddDesktopCommand, "Add");
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, "Edit");
-            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete");
+            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete",
+                BarItemModel.ItemAlignment.Right);
 
             _desktops = new ObservableCollection<Desktop>();
             _users = new ObservableCollection<Credentials>();
