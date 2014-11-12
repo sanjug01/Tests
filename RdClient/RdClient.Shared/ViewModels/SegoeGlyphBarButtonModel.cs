@@ -15,6 +15,8 @@
         Settings = 0xE115,
         Find = 0xE11A,
         People = 0xE125,
+        Add = 0xE109,
+        Edit = 0xE104,
     }
 
     /// <summary>

@@ -45,7 +45,11 @@ namespace RdClient.Shared.ViewModels
 
         private void AddDesktopCommandExecute(object o)
         {
-            // TBD
+            // static credentials
+            Credentials user = new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false };
+
+            AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(null, user, true);
+            NavigationService.PushModalView("AddOrEditDesktopView", args);
         }
 
         private bool CanAddDesktopCommandExecute()
@@ -56,15 +60,23 @@ namespace RdClient.Shared.ViewModels
             {
                 return false;
             }
-            return (maxAllowedDesktops < this.Desktops.Count);
+            return (maxAllowedDesktops > this.Desktops.Count);
         }
 
         public RelayCommand EditDesktopCommand { get; private set; }
 
         private void EditDesktopCommandExecute(object o)
         {
-            // TBD
-            Debug.WriteLine("Edit Desktop!");
+            Contract.Requires(null == this.SelectedDesktops);
+
+            if (this.SelectedDesktops.Count > 0) { 
+                // static credentials
+                Credentials user = new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false };
+                Desktop desktop = this.SelectedDesktops[0] as Desktop;
+
+                AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(desktop, user, false);
+                NavigationService.PushModalView("AddOrEditDesktopView", args);
+            }
         }
 
         private bool CanEditDesktopCommandExecute()
@@ -80,6 +92,21 @@ namespace RdClient.Shared.ViewModels
         private void DeleteDesktopCommandExecute(object o)
         {
             Debug.WriteLine("Delete Desktop(s)!");
+            this.NavigationService.PushModalView("DialogMessage", 
+                new DialogMessageArgs("Delete desktops(d)",
+                    () => { this.DeleteSelectedDesktops(); }, 
+                    () => { },
+                    "Delete(d)"));
+        }
+
+        private void DeleteSelectedDesktops()
+        {
+            int c = SelectedDesktops.Count;
+            while (c > 0)
+            {
+                this.Desktops.Remove(SelectedDesktops[0] as Desktop);
+                c--;
+            }
         }
 
         private bool CanDeleteDesktopCommandExecute()
@@ -109,8 +136,8 @@ namespace RdClient.Shared.ViewModels
             _backItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Back, new RelayCommand(o => _backItem.IsVisible = false), "Back");
             _forwardItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Forward, new RelayCommand(o => _backItem.IsVisible = true), "Forward");
 
-            _addItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, AddDesktopCommand, "Add");
-            _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, EditDesktopCommand, "Edit");
+            _addItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Add, AddDesktopCommand, "Add");
+            _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, "Edit");
             _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete");
 
             _desktops = new ObservableCollection<Desktop>();
@@ -205,6 +232,8 @@ namespace RdClient.Shared.ViewModels
                 _users.Add(user);
 
             }
+
+            AddDesktopCommand.EmitCanExecuteChanged();
         }
 
         private IList<object> _selectedDesktops;

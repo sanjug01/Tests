@@ -29,7 +29,9 @@
                 { SegoeGlyph.Back, Symbol.Back },
                 { SegoeGlyph.Settings, Symbol.Setting },
                 { SegoeGlyph.Find, Symbol.Find },
-                { SegoeGlyph.People, Symbol.People }
+                { SegoeGlyph.People, Symbol.People },
+                { SegoeGlyph.Add, Symbol.Add },
+                { SegoeGlyph.Edit, Symbol.Edit },
             };
             //
             // Getting TypeInfo for a type is not free, so we do it once and use the cached value
