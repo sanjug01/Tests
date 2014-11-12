@@ -12,7 +12,7 @@
         public string Label { get { return _label; } }
         public ICommand Command { get { return _command; } }
 
-        protected BarButtonModel(ICommand command, string label)
+        protected BarButtonModel(ICommand command, string label, ItemAlignment alignment = ItemAlignment.Left) : base(alignment)
         {
             Contract.Requires(null != command);
 

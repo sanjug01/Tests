@@ -110,6 +110,7 @@
     <AppxPackageIncludePrivateSymbols>true</AppxPackageIncludePrivateSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Converters\BarItemsAlignmentFilteringConverterTests.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverterTests.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverterTests.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverterTests.cs" />

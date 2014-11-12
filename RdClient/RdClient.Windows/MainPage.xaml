@@ -14,7 +14,9 @@
     <Page.Resources>
         <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
         <conv:SegoeGlyphToSymbolIconConverter x:Key="segoeToSymbolIcon"/>
-        
+        <conv:BarItemsAlignmentFilteringConverter x:Key="leftAlignedFilter" Alignment="Left" />
+        <conv:BarItemsAlignmentFilteringConverter x:Key="rightAlignedFilter" Alignment="Right" />
+
         <!-- Converter that defines a dictionary of applicatrion bar layout templates for different screen orientations -->
         <conv:StringToDictionaryObjectConverter x:Key="appBarLayoutSelector" DefaultObject="Landscape">
             <conv:StringToDictionaryObjectConverter.Dictionary>
@@ -33,7 +35,10 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <!-- Items in the left column -->
-                        <ItemsControl Grid.Column="0" HorizontalAlignment="Left" ItemsSource="{Binding BarItems}">
+                        <ItemsControl
+                            Grid.Column="0"
+                            HorizontalAlignment="Left"
+                            ItemsSource="{Binding BarItems, Converter={StaticResource leftAlignedFilter}}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal"/>
@@ -71,7 +76,10 @@
                             </ItemsControl.ItemTemplateSelector>
                         </ItemsControl>
                         <!-- Items in the right column -->
-                        <ItemsControl Grid.Column="1" HorizontalAlignment="Right" ItemsSource="{Binding BarItems}">
+                        <ItemsControl
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            ItemsSource="{Binding BarItems, Converter={StaticResource rightAlignedFilter}}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal"/>

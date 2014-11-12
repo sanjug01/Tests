@@ -26,8 +26,8 @@
 
         public SegoeGlyph Glyph { get { return _glyph; } }
 
-        public SegoeGlyphBarButtonModel(SegoeGlyph glyph, ICommand command, string label)
-            : base(command, label)
+        public SegoeGlyphBarButtonModel(SegoeGlyph glyph, ICommand command, string label, ItemAlignment alignment = ItemAlignment.Left)
+            : base(command, label, alignment)
         {
             _glyph = glyph;
         }
