@@ -440,7 +440,7 @@
     <DataTemplate x:Key="rdDesktopTile">
         <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Width="220" Height="160" Background="Gray">
             <Border Background="{StaticResource rdTestGrayBrush}">
-                <Image Stretch="UniformToFill" AutomationProperties.Name="{Binding FriendlyName}">
+                <Image Stretch="UniformToFill" AutomationProperties.Name="{Binding HostName}">
                     <Image.Source>
                         <BitmapImage UriSource="{Binding Image}"/>
                     </Image.Source>
@@ -448,7 +448,7 @@
             </Border>
 
             <Border VerticalAlignment="Bottom" Height="36">
-                <TextBlock Text="{Binding Host}" Style="{StaticResource rdDesktopTileCaption}" VerticalAlignment="Bottom" Padding="20,12"/>
+                <TextBlock Text="{Binding HostName}" Style="{StaticResource rdDesktopTileCaption}" VerticalAlignment="Bottom" Padding="20,12"/>
             </Border>
         </Grid>
     </DataTemplate>

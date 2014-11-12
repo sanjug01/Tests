@@ -1,44 +1,65 @@
 ﻿<Page
-    x:Class="RdClient.Views.TestsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RdClient.Views"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:System="using:System"
+    x:Class="RdClient.Views.TestsView"
     mc:Ignorable="d"
     Loaded="Page_Loaded">
 
     <Page.Resources>
         <vm:TestsViewModel x:Key="TestsViewModel" x:Name="TestViewModel"/>
     </Page.Resources>
-    
-    <Grid Background="CornflowerBlue">
-        <SwapChainPanel x:Name="TestSwapChainPanel"/>
-        <Grid   
-            Background="black"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            ManipulationMode="TranslateX, TranslateInertia"
-            >
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Background="Aqua" Grid.Column="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="12" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+            <ListView
+				          x:Name="desktopsView"
+				          ItemsSource="{Binding Desktops, Source={StaticResource TestsViewModel}}" 
+				          ItemTemplate="{StaticResource rdDesktopTile}"
+				          SelectionMode="Multiple" SelectionChanged="DesktopsList_SelectionChanged" 
+                  />
+        </Grid>
 
-            <Button Grid.Column="0" BorderBrush="Transparent" BorderThickness="0" Margin="0" FontFamily="Segoe UI Symbol" 
-                    Content="StressTest" 
-                    Command="{Binding Source={StaticResource TestsViewModel}, Path=StressTestCommand}" />
-            
-            <Button Grid.Column="2" BorderBrush="Transparent" BorderThickness="0" Margin="0" FontFamily="Segoe UI Symbol" 
-                    Content="Home" 
-                    Command="{Binding Source={StaticResource TestsViewModel}, Path=GoHomeCommand}" />
+        <Grid Background="CornflowerBlue" Grid.Column="1" >
+            <SwapChainPanel x:Name="TestSwapChainPanel"/>
+            <Grid   
+				Background="black"
+				HorizontalAlignment="Center"
+				VerticalAlignment="Top"
+				ManipulationMode="TranslateX, TranslateInertia"
+                        >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
+                <Button Grid.Column="0" BorderBrush="Transparent" BorderThickness="0" Margin="0" FontFamily="Segoe UI Symbol" 
+					Content="StressTest" 
+					Command="{Binding StressTestCommand, Source={StaticResource TestsViewModel}}" />
+
+                <Button Grid.Column="2" BorderBrush="Transparent" BorderThickness="0" Margin="0" FontFamily="Segoe UI Symbol" 
+					Content="Home" 
+					Command="{Binding GoHomeCommand, Source={StaticResource TestsViewModel}}" />
+
+            </Grid>
         </Grid>
     </Grid>
 </Page>

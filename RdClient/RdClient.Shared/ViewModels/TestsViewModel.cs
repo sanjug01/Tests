@@ -8,20 +8,88 @@ using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace RdClient.Shared.ViewModels
 {
-    
+    /// <summary>
+    /// wrapper for activation parameters when presenting the TestsView
+    /// </summary>
+    public class TestsViewModelArgs
+    {
+        public TestsViewModelArgs(Desktop desktop, Credentials credentials)
+        {
+            this.Desktop = desktop;
+            this.Credentials = credentials;
+        }
+
+        public Desktop Desktop { get; private set; }
+        public Credentials Credentials { get; private set; }
+    }
+
     /// <summary>
     /// view model to support integrated tests.
     ///      * these tests should be removed from shiped product.
     /// </summary>
     public sealed class TestsViewModel : ViewModelBase, IApplicationBarItemsSource
     {
-        private readonly BarItemModel _separatorItem, _homeItem, _backItem, _forwardItem, _deleteItem;
+        private readonly BarItemModel _separatorItem, _homeItem, _backItem, _forwardItem;
+        private readonly BarItemModel _addItem;
+        private readonly BarItemModel _editItem;
+        private readonly BarItemModel _deleteItem;        
 
         public ICommand StressTestCommand { get; private set; }
         public ICommand GoHomeCommand { get; private set; }
+
+        public RelayCommand AddDesktopCommand { get; private set; }
+
+        private void AddDesktopCommandExecute(object o)
+        {
+            // TBD
+        }
+
+        private bool CanAddDesktopCommandExecute()
+        {
+            // can always add, unless we use a maximum number
+            int maxAllowedDesktops = 20;
+            if (null == this.Desktops)
+            {
+                return false;
+            }
+            return (maxAllowedDesktops < this.Desktops.Count);
+        }
+
+        public RelayCommand EditDesktopCommand { get; private set; }
+
+        private void EditDesktopCommandExecute(object o)
+        {
+            // TBD
+            Debug.WriteLine("Edit Desktop!");
+        }
+
+        private bool CanEditDesktopCommandExecute()
+        {
+            if (null == this.SelectedDesktops)
+            {
+                return false;
+            }
+            return (1 == this.SelectedDesktops.Count);
+        }
+
+        public RelayCommand DeleteDesktopCommand { get; private set; }
+        private void DeleteDesktopCommandExecute(object o)
+        {
+            Debug.WriteLine("Delete Desktop(s)!");
+        }
+
+        private bool CanDeleteDesktopCommandExecute()
+        {
+            if (null == this.SelectedDesktops)
+            {
+                return false;
+            }
+            return (1 <= this.SelectedDesktops.Count);
+        }
 
         public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
 
@@ -32,11 +100,24 @@ namespace RdClient.Shared.ViewModels
             StressTestCommand = new RelayCommand(new Action<object>(StressTest));
             GoHomeCommand = new RelayCommand(new Action<object>(GoHome));
 
+            AddDesktopCommand = new RelayCommand(o => this.AddDesktopCommandExecute(o), o => this.CanAddDesktopCommandExecute());
+            EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => this.CanEditDesktopCommandExecute());
+            DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => this.CanDeleteDesktopCommandExecute());
+
             _separatorItem = new SeparatorBarItemModel();
             _homeItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => GoHome(o)), "Home");
             _backItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Back, new RelayCommand(o => _backItem.IsVisible = false), "Back");
             _forwardItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Forward, new RelayCommand(o => _backItem.IsVisible = true), "Forward");
-            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, new RelayCommand(o => Debug.WriteLine("Delete")), "Delete");
+
+            _addItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, AddDesktopCommand, "Add");
+            _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, EditDesktopCommand, "Edit");
+            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete");
+
+            _desktops = new ObservableCollection<Desktop>();
+            _users = new ObservableCollection<Credentials>();
+            _selectedDesktops = null;
+            this.LoadTestData();
+
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -98,8 +179,50 @@ namespace RdClient.Shared.ViewModels
                 _backItem,
                 _forwardItem,
                 _separatorItem,
+                _addItem,
+                _editItem,
                 _deleteItem
             };
         }
+
+        public ObservableCollection<Desktop> Desktops { get { return _desktops; } }
+        public ObservableCollection<Credentials> Users { get { return _users; } }
+
+        private readonly ObservableCollection<Desktop> _desktops;
+        private readonly ObservableCollection<Credentials> _users;
+
+        private void LoadTestData()
+        {
+            Contract.Requires(null != _desktops);
+            Contract.Requires(null != _users);
+
+            for(int i = 0; i < 10; i++ )
+            {
+                Desktop desktop = new Desktop() { HostName = "testhost" + i };
+                _desktops.Add(desktop);
+
+                Credentials user = new Credentials() { Username = "testuser" + i, Domain = "TestDomain.com", Password = "1234AbCd", HaveBeenPersisted = false };
+                _users.Add(user);
+
+            }
+        }
+
+        private IList<object> _selectedDesktops;
+        /// <summary>
+        /// All selected desktop - multiple selection
+        /// </summary>
+        public IList<object> SelectedDesktops
+        {
+            private get { return _selectedDesktops; }
+            set
+            {
+                SetProperty(ref _selectedDesktops, value, "SelectedDesktops");
+                EditDesktopCommand.EmitCanExecuteChanged();
+                DeleteDesktopCommand.EmitCanExecuteChanged();
+            }
+        }
+
+
+
     }
 }

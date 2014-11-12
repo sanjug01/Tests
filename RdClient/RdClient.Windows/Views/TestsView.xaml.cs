@@ -38,5 +38,11 @@ namespace RdClient.Views
 
             this.TestViewModel.RdpConnectionFactory = factory;
         }
+
+        private void DesktopsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // desktopsView.SelectedItems is not bindable - so we need to update the model on SelectionChanged
+            this.TestViewModel.SelectedDesktops = this.desktopsView.SelectedItems;
+        }
     }
 }
