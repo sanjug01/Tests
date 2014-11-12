@@ -3,6 +3,7 @@ using RdClient.Shared.Navigation;
 using RdClient.Shared.ViewModels;
 using System;
 using System.Diagnostics.Contracts;
+using Windows.Graphics.Display;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -16,6 +17,22 @@ namespace RdClient
         public MainPage()
         {
             this.InitializeComponent();
+            //
+            // TODO: add more uniform handling of orientation
+            //
+            DisplayInformation di = DisplayInformation.GetForCurrentView();
+            di.OrientationChanged += OnOrientationChanged;
+            switch (di.CurrentOrientation)
+            {
+                case DisplayOrientations.Portrait:
+                case DisplayOrientations.PortraitFlipped:
+                    ((MainPageViewModel)DataContext).ApplicationBarLayout = MainPageViewModel.AppBarLayout.Portrait;
+                    break;
+
+                default:
+                    ((MainPageViewModel)DataContext).ApplicationBarLayout = MainPageViewModel.AppBarLayout.Landscape;
+                    break;
+            }
 
             _viewFactory = new PresentableViewFactory<PresentableViewConstructor>();
             _navigationService = new NavigationService(this, _viewFactory, this.DataContext as IApplicationBarViewModel);
@@ -65,6 +82,24 @@ namespace RdClient
         {
             this.ModalStackContainer.Visibility = Visibility.Collapsed;
             this.TransitionAnimationContainer.IsEnabled = true;
+        }
+
+        private void OnOrientationChanged(DisplayInformation sender, object e)
+        {
+            //
+            // TODO: notify the navigation service about new orientation in a less hacky fashion
+            //
+            switch(sender.CurrentOrientation)
+            {
+                case DisplayOrientations.Portrait:
+                case DisplayOrientations.PortraitFlipped:
+                    ((MainPageViewModel)DataContext).ApplicationBarLayout = MainPageViewModel.AppBarLayout.Portrait;
+                    break;
+
+                default:
+                    ((MainPageViewModel)DataContext).ApplicationBarLayout = MainPageViewModel.AppBarLayout.Landscape;
+                    break;
+            }
         }
     }
 }

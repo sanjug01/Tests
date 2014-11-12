@@ -14,6 +14,152 @@
     <Page.Resources>
         <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
         <conv:SegoeGlyphToSymbolIconConverter x:Key="segoeToSymbolIcon"/>
+        
+        <!-- Converter that defines a dictionary of applicatrion bar layout templates for different screen orientations -->
+        <conv:StringToDictionaryObjectConverter x:Key="appBarLayoutSelector" DefaultObject="Landscape">
+            <conv:StringToDictionaryObjectConverter.Dictionary>
+                
+                <!--
+                [DEFAULT LAYOUT]
+                Left-to-right landscape app bar layout - 1-row/2-column grid that shows 2 sets of items -
+                aligned to the left and to the right.
+                Each column hosts an ItemsControl that shows bar items filtered for the column's position.
+                Column 0 shows items aligned to the left; column 1 - right-aligned items.
+                -->
+                <DataTemplate x:Key="Landscape">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <!-- Items in the left column -->
+                        <ItemsControl Grid.Column="0" HorizontalAlignment="Left" ItemsSource="{Binding BarItems}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplateSelector>
+                                <!--
+                                helpers:TypeNameDataTemplateSelector lists item templates keyed with the name of a bar item model class.
+                                x:Key of the <DataTemplate> elements may be one of the following:
+                                    › SegoeGlyphBarButtonModel - Glyph property may be converted to an icon by conv:SegoeGlyphToSymbolIconConverter.
+                                    › SeparatorBarItemModel - a vertical bar that may separate groups of buttons into logical groups
+                                -->
+                                <helpers:TypeNameDataTemplateSelector>
+                                    <helpers:TypeNameDataTemplateSelector.Templates>
+
+                                        <!-- SegoeGlyphBarButtonModel -->
+                                        <DataTemplate x:Key="SegoeGlyphBarButtonModel">
+                                            <AppBarButton
+                                        Icon="{Binding Glyph, Converter={StaticResource segoeToSymbolIcon}}"
+                                        Label="{Binding Label}"
+                                        Command="{Binding Command}"
+                                        Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}}"/>
+                                        </DataTemplate>
+
+                                        <!-- SeparatorBarItemModel -->
+                                        <DataTemplate x:Key="SeparatorBarItemModel">
+                                            <Rectangle Width="2" VerticalAlignment="Stretch"
+                                               Fill="{ThemeResource AppBarSeparatorForegroundThemeBrush}"
+                                               Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}}"
+                                               Margin="0, 8, 0, 12"/>
+
+                                        </DataTemplate>
+                                    </helpers:TypeNameDataTemplateSelector.Templates>
+                                </helpers:TypeNameDataTemplateSelector>
+                            </ItemsControl.ItemTemplateSelector>
+                        </ItemsControl>
+                        <!-- Items in the right column -->
+                        <ItemsControl Grid.Column="1" HorizontalAlignment="Right" ItemsSource="{Binding BarItems}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplateSelector>
+                                <!--
+                                helpers:TypeNameDataTemplateSelector lists item templates keyed with the name of a bar item model class.
+                                x:Key of the <DataTemplate> elements may be one of the following:
+                                    › SegoeGlyphBarButtonModel - Glyph property may be converted to an icon by conv:SegoeGlyphToSymbolIconConverter.
+                                    › SeparatorBarItemModel - a vertical bar that may separate groups of buttons into logical groups
+                                -->
+                                <helpers:TypeNameDataTemplateSelector>
+                                    <helpers:TypeNameDataTemplateSelector.Templates>
+
+                                        <!-- SegoeGlyphBarButtonModel -->
+                                        <DataTemplate x:Key="SegoeGlyphBarButtonModel">
+                                            <AppBarButton
+                                        Icon="{Binding Glyph, Converter={StaticResource segoeToSymbolIcon}}"
+                                        Label="{Binding Label}"
+                                        Command="{Binding Command}"
+                                        Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}}"/>
+                                        </DataTemplate>
+
+                                        <!-- SeparatorBarItemModel -->
+                                        <DataTemplate x:Key="SeparatorBarItemModel">
+                                            <Rectangle Width="2" VerticalAlignment="Stretch"
+                                               Fill="{ThemeResource AppBarSeparatorForegroundThemeBrush}"
+                                               Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}}"
+                                               Margin="0, 8, 0, 12"/>
+
+                                        </DataTemplate>
+                                    </helpers:TypeNameDataTemplateSelector.Templates>
+                                </helpers:TypeNameDataTemplateSelector>
+                            </ItemsControl.ItemTemplateSelector>
+                        </ItemsControl>
+                    </Grid>
+                </DataTemplate>
+
+                <!--
+                Left-to-right portrait app bar layout - one row of buttons not sorted into left- and right-aligned.
+                -->
+                <DataTemplate x:Key="Portrait">
+                    <Grid>
+                        <!-- All items -->
+                        <ItemsControl HorizontalAlignment="Left" ItemsSource="{Binding BarItems}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplateSelector>
+                                <!--
+                                helpers:TypeNameDataTemplateSelector lists item templates keyed with the name of a bar item model class.
+                                x:Key of the <DataTemplate> elements may be one of the following:
+                                    › SegoeGlyphBarButtonModel - Glyph property may be converted to an icon by conv:SegoeGlyphToSymbolIconConverter.
+                                    › SeparatorBarItemModel - a vertical bar that may separate groups of buttons into logical groups
+                                -->
+                                <helpers:TypeNameDataTemplateSelector>
+                                    <helpers:TypeNameDataTemplateSelector.Templates>
+
+                                        <!-- SegoeGlyphBarButtonModel -->
+                                        <DataTemplate x:Key="SegoeGlyphBarButtonModel">
+                                            <AppBarButton
+                                        Icon="{Binding Glyph, Converter={StaticResource segoeToSymbolIcon}}"
+                                        Label="{Binding Label}"
+                                        Command="{Binding Command}"
+                                        Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}}"/>
+                                        </DataTemplate>
+
+                                        <!-- SeparatorBarItemModel -->
+                                        <DataTemplate x:Key="SeparatorBarItemModel">
+                                            <Rectangle Width="2" VerticalAlignment="Stretch"
+                                               Fill="{ThemeResource AppBarSeparatorForegroundThemeBrush}"
+                                               Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}}"
+                                               Margin="0, 8, 0, 12"/>
+
+                                        </DataTemplate>
+                                    </helpers:TypeNameDataTemplateSelector.Templates>
+                                </helpers:TypeNameDataTemplateSelector>
+                            </ItemsControl.ItemTemplateSelector>
+                        </ItemsControl>
+                    </Grid>
+                </DataTemplate>
+
+            </conv:StringToDictionaryObjectConverter.Dictionary>
+        </conv:StringToDictionaryObjectConverter>
+        
     </Page.Resources>
     
     <Page.DataContext>
@@ -23,46 +169,8 @@
     <Page.BottomAppBar>
         <AppBar
             IsSticky="{Binding IsBarSticky}"
-            IsOpen="{Binding IsBarVisible, Mode=TwoWay}">
-            <Grid>
-                <ItemsControl ItemsSource="{Binding BarItems}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplateSelector>
-                        <!--
-                        helpers:TypeNameDataTemplateSelector lists item templates keyed with the name of a bar item model class.
-                        x:Key of the <DataTemplate> elements may be one of the following:
-                            › SegoeGlyphBarButtonModel - Glyph property may be converted to an icon by conv:SegoeGlyphToSymbolIconConverter.
-                            › SeparatorBarItemModel - a vertical bar that may separate groups of buttons into logical groups
-                        -->
-                        <helpers:TypeNameDataTemplateSelector>
-                            <helpers:TypeNameDataTemplateSelector.Templates>
-                                
-                                <!-- SegoeGlyphBarButtonModel -->
-                                <DataTemplate x:Key="SegoeGlyphBarButtonModel">
-                                    <AppBarButton
-                                        Icon="{Binding Glyph, Converter={StaticResource segoeToSymbolIcon}}"
-                                        Label="{Binding Label}"
-                                        Command="{Binding Command}"
-                                        Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}}"/>
-                                </DataTemplate>
-                                
-                                <!-- SeparatorBarItemModel -->
-                                <DataTemplate x:Key="SeparatorBarItemModel">
-                                    <Rectangle Width="2" VerticalAlignment="Stretch"
-                                               Fill="{ThemeResource AppBarSeparatorForegroundThemeBrush}"
-                                               Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}}"
-                                               Margin="0, 8, 0, 12"/>
-
-                                </DataTemplate>
-                            </helpers:TypeNameDataTemplateSelector.Templates>
-                        </helpers:TypeNameDataTemplateSelector>
-                    </ItemsControl.ItemTemplateSelector>
-                </ItemsControl>
-            </Grid>
+            IsOpen="{Binding IsBarVisible, Mode=TwoWay}"
+            ContentTemplate="{Binding ApplicationBarLayout, Converter={StaticResource appBarLayoutSelector}}">
         </AppBar>
     </Page.BottomAppBar>
 
@@ -72,6 +180,8 @@
         <views:ModalStackContainer
             x:Name="ModalStackContainer"
             Visibility="Collapsed"/>
+        
+        <!-- Button that shows the application bar -->
         <Button
             VerticalAlignment="Bottom"
             HorizontalAlignment="Stretch"
