@@ -18,21 +18,12 @@ namespace RdClient
         {
             this.InitializeComponent();
             //
-            // TODO: add more uniform handling of orientation
+            // Set initial orientation.
+            // TODO: handle orientation based on the actual dimentions of the view.
             //
             DisplayInformation di = DisplayInformation.GetForCurrentView();
+            OnOrientationChanged(di, null);
             di.OrientationChanged += OnOrientationChanged;
-            switch (di.CurrentOrientation)
-            {
-                case DisplayOrientations.Portrait:
-                case DisplayOrientations.PortraitFlipped:
-                    ((MainPageViewModel)DataContext).ApplicationBarLayout = MainPageViewModel.AppBarLayout.Portrait;
-                    break;
-
-                default:
-                    ((MainPageViewModel)DataContext).ApplicationBarLayout = MainPageViewModel.AppBarLayout.Landscape;
-                    break;
-            }
 
             _viewFactory = new PresentableViewFactory<PresentableViewConstructor>();
             _navigationService = new NavigationService(this, _viewFactory, this.DataContext as IApplicationBarViewModel);
@@ -87,18 +78,24 @@ namespace RdClient
         private void OnOrientationChanged(DisplayInformation sender, object e)
         {
             //
-            // TODO: notify the navigation service about new orientation in a less hacky fashion
+            // If the view model implements ILayoutAwareViewModel, tell it to update the layout for the new orientation.
+            // Ignore flipped orientations, care only about portrait and landscape layouts.
             //
-            switch(sender.CurrentOrientation)
-            {
-                case DisplayOrientations.Portrait:
-                case DisplayOrientations.PortraitFlipped:
-                    ((MainPageViewModel)DataContext).ApplicationBarLayout = MainPageViewModel.AppBarLayout.Portrait;
-                    break;
+            ILayoutAwareViewModel lavm = this.DataContext as ILayoutAwareViewModel;
 
-                default:
-                    ((MainPageViewModel)DataContext).ApplicationBarLayout = MainPageViewModel.AppBarLayout.Landscape;
-                    break;
+            if (null != lavm)
+            {
+                switch (sender.CurrentOrientation)
+                {
+                    case DisplayOrientations.Portrait:
+                    case DisplayOrientations.PortraitFlipped:
+                        lavm.OrientationChanged(ViewOrientation.Portrait);
+                        break;
+
+                    default:
+                        lavm.OrientationChanged(ViewOrientation.Landscape);
+                        break;
+                }
             }
         }
     }

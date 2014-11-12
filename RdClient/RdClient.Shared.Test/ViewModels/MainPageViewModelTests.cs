@@ -155,5 +155,36 @@
             _vm.BarItems = new BarItemModel[] { new TestBarItemModel(), new TestBarItemModel() };
             Assert.IsTrue(_vm.IsShowBarButtonVisible);
         }
+
+        [TestMethod]
+        public void NewViewModel_LandscapeOrientation()
+        {
+            Assert.AreEqual(_vm.ApplicationBarLayout, ViewOrientation.Landscape);
+        }
+
+        [TestMethod]
+        public void NewViewModel_ChangeOrientationToLandscape_ChangeNotReported()
+        {
+            IList<string> propertyReported = new List<string>();
+            ILayoutAwareViewModel lavm = _vm;
+
+            _vm.PropertyChanged += (s, e) => propertyReported.Add(e.PropertyName);
+            lavm.OrientationChanged(ViewOrientation.Landscape);
+            Assert.AreEqual(_vm.ApplicationBarLayout, ViewOrientation.Landscape);
+            Assert.AreEqual(0, propertyReported.Count);
+        }
+
+        [TestMethod]
+        public void NewViewModel_ChangeOrientationToPortrait_ChangeReported()
+        {
+            IList<string> propertyReported = new List<string>();
+            ILayoutAwareViewModel lavm = _vm;
+
+            _vm.PropertyChanged += (s, e) => propertyReported.Add(e.PropertyName);
+            lavm.OrientationChanged(ViewOrientation.Portrait);
+            Assert.AreEqual(_vm.ApplicationBarLayout, ViewOrientation.Portrait);
+            Assert.AreEqual(1, propertyReported.Count);
+            Assert.AreEqual("ApplicationBarLayout", propertyReported[0]);
+        }
     }
 }

@@ -36,7 +36,9 @@ namespace RdClient.Shared.ViewModels
             _homeItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => GoHome(o)), "Home");
             _backItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Back, new RelayCommand(o => _backItem.IsVisible = false), "Back");
             _forwardItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Forward, new RelayCommand(o => _backItem.IsVisible = true), "Forward");
-            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, new RelayCommand(o => Debug.WriteLine("Delete")), "Delete");
+            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, new RelayCommand(o => Debug.WriteLine("Delete")),
+                "Delete",
+                BarItemModel.ItemAlignment.Right);
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -97,7 +99,6 @@ namespace RdClient.Shared.ViewModels
                 _separatorItem,
                 _backItem,
                 _forwardItem,
-                _separatorItem,
                 _deleteItem
             };
         }
