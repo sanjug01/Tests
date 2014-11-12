@@ -1,11 +1,35 @@
 ﻿
 namespace RdClient.Shared.Models
 {
-    public class Credentials
+    public class Credentials : ModelBase
     {
-        public string Username { get; set; }
-        public string Domain { get; set; }
-        public string Password { get; set; }
-        public bool HaveBeenPersisted { get; set; }
+        private string _username;
+        private string _domain;
+        private string _password;
+        private bool _haveBeenPersisted;
+
+        public string Username
+        {
+            get { return _username; }
+            set { SetProperty(ref _username, value); }
+        }
+
+        public string Domain
+        {
+            get { return _domain; }
+            set { SetProperty(ref _domain, value); }
+        }
+
+        public string Password
+        {
+            get { return _password; }
+            set { SetProperty(ref _password, value); }
+        }
+
+        public bool HaveBeenPersisted
+        {
+            get { return _haveBeenPersisted; }
+            set { SetProperty(ref _haveBeenPersisted, value); }
+        }
     }
 }
