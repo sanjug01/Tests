@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace RdClient.Shared.Models
 {
-    public interface IDataStorageFactory
-    {
-        IDataStorage GetDataStorage();
-    }
-
     public interface IDataStorage
     {
         Task<IList<Desktop>> LoadDesktops();

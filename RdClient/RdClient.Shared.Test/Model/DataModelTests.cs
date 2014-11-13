@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading.Tasks;
 
 using RdClient.Shared.Models;
+
 
 namespace RdClient.Shared.Test.Model
 {
@@ -9,7 +11,7 @@ namespace RdClient.Shared.Test.Model
     {
         protected override IDataModel GetDataModel(Models.IDataStorage storage)
         {
-            return new DataModel() { Storage = storage };
+            return DataModel.NewDataModel(storage).Result;
         }
     }
 }

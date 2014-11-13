@@ -1,11 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-
-using RdClient.Shared.Models;
-using RdClient.Shared.Test.Mock;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+
+using RdClient.Shared.Models;
+using RdClient.Shared.Test.Mock;
 
 namespace RdClient.Shared.Test.Model
 {
@@ -26,18 +26,19 @@ namespace RdClient.Shared.Test.Model
             return "rand" + RandomSource.Next();
         }
 
-        public Desktop NewValidDesktop()
-        {
-            return new Desktop() { HostName = NewRandomString(), CredentialId = Guid.NewGuid() };
+        public Desktop NewValidDesktop(Guid credId)
+        {            
+            return new Desktop() { HostName = NewRandomString(), CredentialId = credId };
         }
 
-        public List<Desktop> NewSmallListOfDesktops()
+        public List<Desktop> NewSmallListOfDesktops(List<Credentials> creds)
         {
             int count = RandomSource.Next(3, 10);
             List<Desktop> desktops = new List<Desktop>(count);
             for (int i = 0; i < count; i++)
             {
-                desktops.Add(NewValidDesktop());
+                Guid credId = creds[_rand.Next(0, creds.Count)].Id;
+                desktops.Add(NewValidDesktop(credId));
             }
             return desktops;
         }
@@ -80,13 +81,12 @@ namespace RdClient.Shared.Test.Model
         public void TestSetup()
         {
             _testData = new TestData();
-            _mockStorage = new Mock.DataStorage();
-            _expectedDesktops = _testData.NewSmallListOfDesktops();
+            _mockStorage = new Mock.DataStorage();            
             _expectedCreds = _testData.NewSmallListOfCredentials();
+            _expectedDesktops = _testData.NewSmallListOfDesktops(_expectedCreds);
             _mockStorage.Expect("LoadDesktops", new List<object>() { }, _expectedDesktops);
             _mockStorage.Expect("LoadCredentials", new List<object>() { }, _expectedCreds);
             _dataModel = GetDataModel(_mockStorage);
-            _dataModel.LoadFromStorage().Wait();
             _actualDesktops = _dataModel.Desktops;
             _actualCredentials = _dataModel.Credentials;
         }
@@ -105,29 +105,11 @@ namespace RdClient.Shared.Test.Model
         }
 
         [TestMethod]
-        public async Task AddDesktopSavesItToStorage()
+        public void AddDesktopSavesItToStorage()
         {
-            Desktop desktop = _testData.NewValidDesktop();
+            Desktop desktop = _testData.NewValidDesktop(Guid.Empty);
             _mockStorage.Expect("SaveDesktop", new List<object>(){desktop}, 0);
             _dataModel.Desktops.Add(desktop);            
-        }
-
-        [TestMethod]        
-        public void AddDuplicateDesktopThrowsException()
-        {
-            Desktop existingDesktop = _actualDesktops[_testData.RandomSource.Next(0, _actualDesktops.Count)];
-            Desktop desktopWithSameId = _testData.NewValidDesktop();
-            desktopWithSameId.Id = existingDesktop.Id;
-            bool gotException = false;
-            try
-            {
-                _dataModel.Desktops.Add(desktopWithSameId);
-            }
-            catch (ArgumentException)
-            {
-                gotException = true;
-            }
-            Assert.IsTrue(gotException, "Did not get expected exception when adding a duplicate desktop to the DataModel");
         }
 
         [TestMethod]
@@ -152,16 +134,6 @@ namespace RdClient.Shared.Test.Model
             Credentials cred = _testData.NewValidCredential();
             _mockStorage.Expect("SaveCredential", new List<object>() { cred }, 0);
             _dataModel.Credentials.Add(cred);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void AddDuplicateCredentialThrowsException()
-        {
-            Credentials existingCred = _actualCredentials[_testData.RandomSource.Next(0, _actualCredentials.Count)];
-            Credentials credWithSameId = _testData.NewValidCredential();
-            credWithSameId.Id = existingCred.Id;
-            _dataModel.Credentials.Add(credWithSameId);
         }
 
         [TestMethod]
@@ -197,22 +169,22 @@ namespace RdClient.Shared.Test.Model
         public void GetDesktopWithIdReturnsAddedDesktop()
         {
             Desktop expectedDesktop = _actualDesktops[_testData.RandomSource.Next(0, _actualDesktops.Count)];
-            Desktop actualDesktop = _dataModel.GetDesktopWithId(expectedDesktop.Id);
+            Desktop actualDesktop = _dataModel.GetObjectWithId(expectedDesktop.Id) as Desktop;
             Assert.AreSame(expectedDesktop, actualDesktop);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void GetDesktopWithIdThrowsExceptionIfIdNotAdded()
-        {            
-            _dataModel.GetDesktopWithId(Guid.NewGuid());
+        {
+            _dataModel.GetObjectWithId(Guid.NewGuid());
         }
 
         [TestMethod]
         public void GetCredentialWithIdReturnsAddedCredential()
         {
             Credentials expectedCred = _actualCredentials[_testData.RandomSource.Next(0, _actualCredentials.Count)];
-            Credentials actualCred = _dataModel.GetCredentialWithId(expectedCred.Id);
+            Credentials actualCred = _dataModel.GetObjectWithId(expectedCred.Id) as Credentials;
             Assert.AreSame(expectedCred, actualCred);
         }
 
@@ -220,7 +192,7 @@ namespace RdClient.Shared.Test.Model
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void GetCredentialWithIdThrowsExceptionIfIdNotAdded()
         {
-            _dataModel.GetCredentialWithId(Guid.NewGuid());
+            _dataModel.GetObjectWithId(Guid.NewGuid());
         }
     }
 

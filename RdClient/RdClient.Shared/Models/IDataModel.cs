@@ -7,20 +7,8 @@ using System.Threading.Tasks;
 
 namespace RdClient.Shared.Models
 {
-    public interface IDataModelFactory
-    {
-        IDataModel GetDataModel();
-    }
-
     public interface IDataModel
     {
-        IDataStorage Storage
-        {
-            set;
-        }
-
-        Task LoadFromStorage();
-
         ObservableCollection<Desktop> Desktops
         {
             get;
@@ -31,8 +19,8 @@ namespace RdClient.Shared.Models
             get;
         }
 
-        Desktop GetDesktopWithId(Guid id);
+        ModelBase GetObjectWithId(Guid id);
 
-        Credentials GetCredentialWithId(Guid id);
+        bool ContainsObjectWithId(Guid id);
     }
 }

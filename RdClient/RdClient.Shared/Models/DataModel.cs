@@ -13,14 +13,39 @@ namespace RdClient.Shared.Models
         private IDataStorage _storage;
         private ObservableCollection<Desktop> _desktops;
         private ObservableCollection<Credentials> _creds;
+        private IDictionary<Guid, ModelBase> _byId;
 
-        public IDataStorage Storage
+        private DataModel (IDataStorage storage)
         {
-            set 
-            { 
-                _storage = value;
-            }
+            _storage = storage;
+            _byId = new Dictionary<Guid, ModelBase>();
         }
+
+        public static async Task<IDataModel> NewDataModel(IDataStorage storage)
+        {
+            DataModel dataModel = new DataModel(storage);
+            await dataModel.LoadFromStorage();
+            return dataModel;
+        }
+
+        private async Task LoadFromStorage()
+        {
+            _desktops = new ObservableCollection<Desktop>(await _storage.LoadDesktops());
+            foreach (Desktop desktop in _desktops)
+            {
+                _byId.Add(desktop.Id, desktop);
+                desktop.PropertyChanged += desktop_PropertyChanged;
+            }
+            _desktops.CollectionChanged += desktopsChanged;
+            _creds = new ObservableCollection<Credentials>(await _storage.LoadCredentials());
+            foreach (Credentials cred in _creds)
+            {
+                _byId.Add(cred.Id, cred);
+                cred.PropertyChanged += cred_PropertyChanged;
+            }
+            _creds.CollectionChanged += credentialsChanged;
+        }
+        
 
         public ObservableCollection<Desktop> Desktops
         {
@@ -32,85 +57,21 @@ namespace RdClient.Shared.Models
             get { return _creds; }
         }
 
-        public Desktop GetDesktopWithId(Guid id)
+        public bool ContainsObjectWithId(Guid id)
         {
-            Desktop desktop = TryGetDesktopWithId(id);
-            if (desktop == null)
-            {
-                throw new ArgumentOutOfRangeException("Desktop with that id was not found" + id);
-            }
-            return desktop;
-        }
+            return _byId.ContainsKey(id);
+        }        
 
-        private Desktop TryGetDesktopWithId(Guid id)
+        public ModelBase GetObjectWithId(Guid id)
         {
-            return _desktops.Where(d => d.Id == id).FirstOrDefault();
-        }
-
-        private Credentials TryGetCredentialWithId(Guid id)
-        {
-            return _creds.Where(c => c.Id == id).FirstOrDefault();
-        }
-
-        public Credentials GetCredentialWithId(Guid id)
-        {
-            Credentials cred = TryGetCredentialWithId(id);
-            if (cred == null)
+            ModelBase value;
+            if (_byId.TryGetValue(id, out value))
             {
-                throw new ArgumentOutOfRangeException("Credential with that id was not found" + id);
+                return value;
             }
-            return cred;
-        }
-
-        public async Task LoadFromStorage()
-        {
-            if (_desktops != null)
-            {                
-                _desktops.CollectionChanged -= _desktops_CollectionChanged;
-            }
-            _desktops = new ObservableCollection<Desktop>(await _storage.LoadDesktops());
-            _desktops.CollectionChanged += _desktops_CollectionChanged;
-
-            if (_creds != null)
+            else
             {
-                _creds.CollectionChanged -= _creds_CollectionChanged;
-            }
-            _creds = new ObservableCollection<Credentials>(await _storage.LoadCredentials());
-            _creds.CollectionChanged += _creds_CollectionChanged;
-        }
-
-        async void _creds_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            IList removedItems = e.OldItems;
-            IList addedItems = e.NewItems;
-            if (e.Action == NotifyCollectionChangedAction.Reset)
-            {
-                removedItems = _creds;
-                addedItems = sender as IList;
-            }
-            if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
-            {
-                foreach (Credentials cred in addedItems)
-                {
-                    if (TryGetCredentialWithId(cred.Id) != null)
-                    {
-                        throw new ArgumentException("Cannot add duplicate credential. A credential with that Id is already present: " + cred.Id);
-                    }
-                    await _storage.SaveCredential(cred);
-                    cred.PropertyChanged += cred_PropertyChanged;
-                }
-            }
-            if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace)
-            {
-                foreach (Credentials cred in removedItems)
-                {
-                    cred.PropertyChanged -= cred_PropertyChanged;
-                    foreach (Desktop desktop in _desktops.Where(d => d.CredentialId == cred.Id))
-                    {
-                        desktop.CredentialId = Guid.Empty;
-                    }
-                    await _storage.DeleteCredential(cred);
-                }
+                throw new ArgumentOutOfRangeException("Could not find an object with that id: " + id);
             }
         }
 
@@ -119,40 +80,87 @@ namespace RdClient.Shared.Models
             await _storage.SaveCredential(sender as Credentials);
         }
 
-        async void _desktops_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            IList removedItems = e.OldItems;
-            IList addedItems = e.NewItems;
-            if (e.Action == NotifyCollectionChangedAction.Reset)
-            {
-                removedItems = _desktops;
-                addedItems = sender as IList;
-            }
-            if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
-            {
-                foreach (Desktop desktop in addedItems)
-                {
-                    if (TryGetDesktopWithId(desktop.Id) != null)
-                    {
-                        throw new ArgumentException("Cannot add duplicate desktop. A desktop with that Id is already present: " + desktop.Id);
-                    }
-                    await _storage.SaveDesktop(desktop);
-                    desktop.PropertyChanged += desktop_PropertyChanged;
-                }
-            }
-            if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace)
-            {
-                foreach (Desktop desktop in removedItems)
-                {
-                    desktop.PropertyChanged -= desktop_PropertyChanged;
-                    await _storage.DeleteDesktop(desktop);
-                }
-            }
-        }
-
         async void desktop_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             await _storage.SaveDesktop(sender as Desktop);
+        }
+
+        async void desktopsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (Desktop desktop in e.NewItems)
+                {
+                    if (ContainsObjectWithId(desktop.Id))
+                    {
+                        throw new InvalidOperationException("Cannot add desktop. An object with that Id is already present: " + desktop.Id);
+                    }
+                    if (desktop.CredentialId != Guid.Empty && !ContainsObjectWithId(desktop.CredentialId))
+                    {
+                        throw new InvalidOperationException("Cannot add desktop. It references a credential that has not been added to the model: " + desktop.CredentialId);
+                    }
+                    await _storage.SaveDesktop(desktop);
+                    _byId.Add(desktop.Id, desktop);
+                    desktop.PropertyChanged += desktop_PropertyChanged;                    
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (Desktop desktop in e.OldItems)
+                {
+                    if (!ContainsObjectWithId(desktop.Id))
+                    {
+                        throw new InvalidOperationException("Cannot remove desktop. An object with that Id was not found: " + desktop.Id);
+                    }
+                    desktop.PropertyChanged -= desktop_PropertyChanged;
+                    _byId.Remove(desktop.Id);
+                    await _storage.DeleteDesktop(desktop);
+                    
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Only add or remove operations are supported");
+            }
+        }
+
+        async void credentialsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (Credentials cred in e.NewItems)
+                {
+                    if (ContainsObjectWithId(cred.Id))
+                    {
+                        throw new InvalidOperationException("Cannot add credential. An object with that Id is already present: " + cred.Id);
+                    }
+                    await _storage.SaveCredential(cred);
+                    _byId.Add(cred.Id, cred);
+                    cred.PropertyChanged += cred_PropertyChanged;
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (Credentials cred in e.OldItems)
+                {
+                    if (!ContainsObjectWithId(cred.Id))
+                    {
+                        throw new InvalidOperationException("Cannot remove credential. An object with that Id was not found: " + cred.Id);
+                    }
+                    foreach (Desktop desktop in _desktops.Where(d => d.CredentialId == cred.Id))
+                    {
+                        desktop.CredentialId = Guid.Empty;
+                    }
+                    cred.PropertyChanged -= cred_PropertyChanged;
+                    _byId.Remove(cred.Id);
+                    await _storage.DeleteCredential(cred);
+                    
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Only add or remove operations are supported");
+            }
         }
     }
 }
