@@ -33,10 +33,17 @@ namespace RdClient.Shared.ViewModels
     /// </summary>
     public sealed class TestsViewModel : ViewModelBase, IApplicationBarItemsSource
     {
-        private readonly BarItemModel _separatorItem, _homeItem, _backItem, _forwardItem;
+        private readonly BarItemModel _separatorItem, _homeItem, _backItem, _forwardItem, _rightSeparatorItem;
+
+        // manage desktops appbar items
         private readonly BarItemModel _addItem;
         private readonly BarItemModel _editItem;
         private readonly BarItemModel _deleteItem;
+
+        // tests appbar items
+        private readonly BarItemModel _testStressItem;
+        private readonly BarItemModel _testConnectItem;
+        private readonly BarItemModel _testDesktopsItem;
 
         private ConnectionInformation _connectionInformation;
 
@@ -44,12 +51,17 @@ namespace RdClient.Shared.ViewModels
         private readonly ObservableCollection<Credentials> _users;
         private IList<object> _selectedDesktops;
 
+        private RelayCommand AddDesktopCommand { get; set; }
+        private RelayCommand EditDesktopCommand { get; set; }
+        private RelayCommand DeleteDesktopCommand { get; set; }
+        private RelayCommand ConnectTestCommand { get; set; }
+        private RelayCommand DesktopsTestCommand { get; set; }
+
+
 
         public ICommand StressTestCommand { get; private set; }
         public ICommand GoHomeCommand { get; private set; }
-        public RelayCommand AddDesktopCommand { get; private set; }
-        public RelayCommand EditDesktopCommand { get; private set; }
-        public RelayCommand DeleteDesktopCommand { get; private set; }
+
         public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
         public ObservableCollection<Desktop> Desktops { get { return _desktops; } }
         public ObservableCollection<Credentials> Users { get { return _users; } }
@@ -74,6 +86,9 @@ namespace RdClient.Shared.ViewModels
             EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => this.CanEditDesktopCommandExecute());
             DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => this.CanDeleteDesktopCommandExecute());
 
+            ConnectTestCommand = new RelayCommand(new Action<object>(ConnectTests));
+            DesktopsTestCommand = new RelayCommand(new Action<object>(DesktopTests));
+
             _separatorItem = new SeparatorBarItemModel();
             _homeItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => GoHome(o)), "Home");
             _backItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Back, new RelayCommand(o => _backItem.IsVisible = false), "Back");
@@ -82,6 +97,14 @@ namespace RdClient.Shared.ViewModels
             _addItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Add, AddDesktopCommand, "Add");
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, "Edit");
             _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete",
+                BarItemModel.ItemAlignment.Right);
+
+            _rightSeparatorItem = new SeparatorBarItemModel(BarItemModel.ItemAlignment.Right);
+            _testStressItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, StressTestCommand, "StressTest",
+                BarItemModel.ItemAlignment.Right);
+            _testConnectItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, ConnectTestCommand, "ConnectTests",
+                BarItemModel.ItemAlignment.Right);
+            _testDesktopsItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, DesktopsTestCommand, "DesktopsTests",
                 BarItemModel.ItemAlignment.Right);
 
             _desktops = new ObservableCollection<Desktop>();
@@ -95,7 +118,8 @@ namespace RdClient.Shared.ViewModels
             // static credentials
             Credentials user = new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false };
 
-            AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(null, user, true);
+            AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(null, user, true,
+                newDesktop => { this.Desktops.Add(newDesktop); });
             NavigationService.PushModalView("AddOrEditDesktopView", args);
         }
 
@@ -118,8 +142,12 @@ namespace RdClient.Shared.ViewModels
                 // static credentials
                 Credentials user = new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false };
                 Desktop desktop = this.SelectedDesktops[0] as Desktop;
+                int desktopIndex = this.Desktops.IndexOf(desktop);
 
-                AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(desktop, user, false);
+                // delegate is not necessary, since the selected desktop will be directly updated, but refreshing the list may be required
+                AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(desktop, user, false,
+                    updatedDesktop => { this.Desktops[desktopIndex] = updatedDesktop; });
+
                 NavigationService.PushModalView("AddOrEditDesktopView", args);
             }
         }
@@ -207,6 +235,85 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
+        /// <summary>
+        /// This test verifies the sequence Add desktop, connect/disconnect, delete desktop
+        /// </summary>
+        /// <param name="o">test parameter</param>
+        private void ConnectTests(object o)
+        {
+            Debug.WriteLine("Running connect tests  ........");
+
+            // TBD
+
+            Debug.WriteLine("Running connect tests  ........ COMPLETED , without errors");
+        }
+
+        /// <summary>
+        /// This test verifies Add/Edit/Delete desktops functionality.
+        /// </summary>
+        /// <param name="o"> test parameter</param>
+        private void DesktopTests(object o)
+        {
+            Debug.WriteLine("Running desktop management tests   .......");
+            bool delegateCalled = false;
+            string returnHostName="some_host";
+            string expectedHostName;
+            AddOrEditDesktopViewModel vm = new AddOrEditDesktopViewModel();
+
+            Desktop testDesktop = new Desktop() { HostName = "test_host" };
+            Credentials testUser = new Credentials() { Username = "test_user", Domain = "", Password = "test_password", HaveBeenPersisted = false };
+
+            // Test 1: add desktop, cancel
+            AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(null, testUser, true,
+                newDesktop => { delegateCalled = true; });
+
+            vm.Presenting(null, args);
+            vm.Host = "unsaved_new_host";
+            vm.CancelCommand.Execute(null);           
+            RdTrace.IfCondThrow(delegateCalled, "Add desktop and cancel should not call saveDelegate!");
+
+
+            // Test 2: add desktop, save
+            delegateCalled = false;
+            args = new AddOrEditDesktopViewModelArgs(null, testUser, true,
+                newDesktop => { delegateCalled = true; returnHostName = newDesktop.HostName; });
+
+            vm.Presenting(null, args);
+            vm.Host = "saved_new_host";
+            expectedHostName = vm.Host;
+            vm.SaveCommand.Execute(null);
+            RdTrace.IfCondThrow(!delegateCalled, "Add desktop and save should call saveDelegate!");
+            RdTrace.IfCondThrow(returnHostName != expectedHostName, "Add user and save should save host name!");
+
+
+            // Test 3: edit desktop, cancel
+            delegateCalled = false;
+            args = new AddOrEditDesktopViewModelArgs(testDesktop, testUser, false,
+                newDesktop => { delegateCalled = true; });
+
+            vm.Presenting(null, args);
+            vm.Host = "not_updated_host";
+            expectedHostName = testDesktop.HostName;
+            vm.CancelCommand.Execute(null);
+            RdTrace.IfCondThrow(delegateCalled, "Edit desktop and cancel should not call saveDelegate!");
+            RdTrace.IfCondThrow(testDesktop.HostName != expectedHostName, "Edit desktop and cancel should not change host name!");
+
+            // Test 4: edit desktop, save
+            delegateCalled = false;
+            args = new AddOrEditDesktopViewModelArgs(testDesktop, testUser, false,
+                newDesktop => { delegateCalled = true; returnHostName = newDesktop.HostName; });
+
+            vm.Presenting(null, args);
+            vm.Host = "updated_host";
+            expectedHostName = vm.Host;
+            vm.SaveCommand.Execute(null);
+            RdTrace.IfCondThrow(!delegateCalled, "Edit desktop and save should call saveDelegate!");
+            RdTrace.IfCondThrow(returnHostName != expectedHostName, "Edit desktop and save should save host name!");
+            RdTrace.IfCondThrow(testDesktop.HostName != expectedHostName, "Edit desktop and save should save update desktop!");
+
+            Debug.WriteLine("Running desktop management tests   ....... COMPLETED , without errors");
+        }
+
         private void GoHome(object o)
         {
             NavigationService.NavigateToView("view1", null);
@@ -223,7 +330,11 @@ namespace RdClient.Shared.ViewModels
                 _separatorItem,
                 _addItem,
                 _editItem,
-                _deleteItem
+                _deleteItem,
+                _rightSeparatorItem,
+                _testStressItem,
+                _testConnectItem,
+                _testDesktopsItem
             };
         }
 

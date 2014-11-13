@@ -10,8 +10,11 @@
     mc:Ignorable="d"
     Loaded="Page_Loaded">
 
+    <Page.DataContext>
+        <vm:AddOrEditDesktopViewModel/>
+    </Page.DataContext>
+    
     <Page.Resources>
-        <vm:AddOrEditDesktopViewModel x:Key="AddOrEditDesktopViewModel" x:Name="AddOrEditDesktopViewModel"/>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />        
     </Page.Resources>
@@ -44,33 +47,33 @@
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
                                Foreground="{StaticResource rdBlackBrush}" 
                                x:Uid="AddOrEditDesktop-AddCaption" Text="Add PC or Server(d)"
-                               Visibility="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsAddingDesktop, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                               Visibility="{Binding Path=IsAddingDesktop, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
                                Foreground="{StaticResource rdBlackBrush}" 
                                x:Uid="AddOrEditDesktop-EditCaption" Text="Edit PC or Server(d)"
-                               Visibility="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsAddingDesktop, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                               Visibility="{Binding Path=IsAddingDesktop, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
                 </Grid>
 
                 <Border Grid.Row="1" Height="1" Margin="0" />
 
                 <StackPanel Grid.Row="2" Margin="26,12,26,0">
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-PcName" Text="PC Name(d)"/>
-                    <TextBox Margin="0,8" Text="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Margin="0,8" Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
                     <ComboBox Margin="0,8" 
                               x:Uid="AddOrEditDesktop-Credentials-ComboBox"
-                              ItemsSource="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=UserOptions}"
-                              SelectedIndex="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=SelectedUserOptionsIndex, Mode=TwoWay}" />
+                              ItemsSource="{Binding Path=UserOptions}"
+                              SelectedIndex="{Binding Path=SelectedUserOptionsIndex, Mode=TwoWay}" />
 
                     <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" Content="Show additional options(d)" Margin="0,8"
-                            IsChecked="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=IsExpandedViewVisible, Mode=TwoWay}" />
+                            IsChecked="{Binding Path=IsExpandedViewVisible, Mode=TwoWay}" />
 
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
                         <Button x:Uid="AddOrEditDesktop-Save" Content="SAVE(d)" 
-                                Command="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=SaveCommand}" />
+                                Command="{Binding Path=SaveCommand}" />
                         <Button x:Uid="AddOrEditDesktop-Cancel" Content="CANCEL(d)" 
-                                Command="{Binding Source={StaticResource AddOrEditDesktopViewModel}, Path=CancelCommand}" />
+                                Command="{Binding Path=CancelCommand}" />
                     </StackPanel>
                 </StackPanel>
             </Grid>

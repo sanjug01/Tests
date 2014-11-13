@@ -13,7 +13,7 @@ namespace RdClient.Views
     /// </summary>
     public sealed partial class AddOrEditDesktopView : Page, IPresentableView
     {
-        public IViewModel ViewModel { get { return this.AddOrEditDesktopViewModel; } }
+        public IViewModel ViewModel { get { return (IViewModel)this.DataContext; } }
 
         public AddOrEditDesktopView()
         {
@@ -26,7 +26,7 @@ namespace RdClient.Views
 
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
-            this.AddOrEditDesktopViewModel.PresentableView = this;
+            (this.DataContext as AddOrEditDesktopViewModel).PresentableView = this;
         }
 
         public void Dismissing()

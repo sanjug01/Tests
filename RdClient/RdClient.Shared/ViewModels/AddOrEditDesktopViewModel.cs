@@ -9,22 +9,40 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
+    public delegate void SaveDesktopDelegate(Desktop desktop);
     public class AddOrEditDesktopViewModelArgs
     {
-        public AddOrEditDesktopViewModelArgs(Desktop desktop, Credentials credentials, bool isAddingDesktop = true)
+        private readonly SaveDesktopDelegate _saveDelegate;
+
+        public AddOrEditDesktopViewModelArgs(Desktop desktop, Credentials credentials, bool isAddingDesktop = true, SaveDesktopDelegate saveDelegate=null)
         {
             this.Desktop = desktop;
             this.Credentials = credentials;
             this.IsAddingDesktop = isAddingDesktop;
+            _saveDelegate = saveDelegate;
         }
 
         public Desktop Desktop { get; private set; }
         public Credentials Credentials { get; private set; }
         public bool IsAddingDesktop { get; private set; }
+        
+        public SaveDesktopDelegate SaveDelegate { get { return _saveDelegate; } }
 
     }
     public class AddOrEditDesktopViewModel : ViewModelBase
     {
+        private bool _isAddingDesktop;
+        private string _host;
+
+        private readonly RelayCommand _saveCommand;
+        private readonly RelayCommand _cancelCommand;
+
+        private Desktop _desktop;
+        private Credentials _credentials;
+
+        private int _selectedUserOptionsIndex;
+        private SaveDesktopDelegate _saveDelegate;
+
         public AddOrEditDesktopViewModel()
         {
             _saveCommand = new RelayCommand(SaveCommandExecute);
@@ -42,6 +60,7 @@ namespace RdClient.Shared.ViewModels
             this.ResetCachedDesktopData();
 
             PresentableView = null;
+            _saveDelegate = null;
         }
 
         public ObservableCollection<string> UserOptions { get; set; }
@@ -112,14 +131,22 @@ namespace RdClient.Shared.ViewModels
 
         private void SaveCommandExecute(object o)
         {
-            // TODO
+            // saving through _saveDelegate for both edit or add
             if (IsAddingDesktop)
             {
-                // TODO : add new desktop
+                _desktop = new Desktop() { HostName = this.Host };
+                if (null != _saveDelegate)
+                {
+                    _saveDelegate(_desktop);
+                }
             }
             else
             {
-                // TODO : Refresh list of desktops                
+                _desktop.HostName = this.Host;
+                if (null != _saveDelegate)
+                {
+                    _saveDelegate(_desktop);
+                }
             }
 
             this.ResetCachedDesktopData();
@@ -161,19 +188,7 @@ namespace RdClient.Shared.ViewModels
             this.IsAddingDesktop = args.IsAddingDesktop;
             this.Desktop = args.Desktop;
             this.Credentials = args.Credentials;
-
+            this._saveDelegate = args.SaveDelegate;
         }
-
-        private bool _isAddingDesktop;
-        private string _host;
-
-        private readonly RelayCommand _saveCommand;
-        private readonly RelayCommand _cancelCommand;
-
-        private Desktop _desktop;
-        private Credentials _credentials;
-
-        private int _selectedUserOptionsIndex;
-
     }
 }

@@ -20,7 +20,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Background="Aqua" Grid.Column="0">
+        <Grid Background="DarkSlateBlue" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -35,31 +35,6 @@
 
         <Grid Background="CornflowerBlue" Grid.Column="1" >
             <SwapChainPanel x:Name="TestSwapChainPanel"/>
-            <Grid   
-				Background="black"
-				HorizontalAlignment="Center"
-				VerticalAlignment="Top"
-				ManipulationMode="TranslateX, TranslateInertia"
-                        >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="12" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Button Grid.Column="0" BorderBrush="Transparent" BorderThickness="0" Margin="0" FontFamily="Segoe UI Symbol" 
-					Content="StressTest" 
-					Command="{Binding StressTestCommand, Source={StaticResource TestsViewModel}}" />
-
-                <Button Grid.Column="2" BorderBrush="Transparent" BorderThickness="0" Margin="0" FontFamily="Segoe UI Symbol" 
-					Content="Home" 
-					Command="{Binding GoHomeCommand, Source={StaticResource TestsViewModel}}" />
-
-            </Grid>
         </Grid>
     </Grid>
 </Page>
