@@ -13,13 +13,13 @@ namespace RdClient.Shared.Models
 
     public interface IDataStorage
     {
-        Task<List<Desktop>> LoadDesktops();
+        Task<IList<Desktop>> LoadDesktops();
 
         Task SaveDesktop(Desktop desktop);
 
         Task DeleteDesktop(Desktop desktop);
 
-        Task<List<Credentials>> LoadCredentials();
+        Task<IList<Credentials>> LoadCredentials();
 
         Task SaveCredential(Credentials credential);
 

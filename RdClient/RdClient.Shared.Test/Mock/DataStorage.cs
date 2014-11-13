@@ -9,34 +9,34 @@ namespace RdClient.Shared.Test.Mock
     class DataStorage : MockBase, IDataStorage
     {
 
-        public async Task<List<Desktop>> LoadDesktops()
+        public Task<IList<Desktop>> LoadDesktops()
         {
-            return (List <Desktop>)Invoke(new object[] { });
+            return Task.FromResult((IList <Desktop>)Invoke(new object[] { }));
         }
 
-        public async Task SaveDesktop(Desktop desktop)
+        public Task SaveDesktop(Desktop desktop)
         {
-            Invoke(new object[] { desktop });
+            return Task.FromResult(Invoke(new object[] { desktop }));
         }
 
-        public async Task DeleteDesktop(Desktop desktop)
+        public Task DeleteDesktop(Desktop desktop)
         {
-            Invoke(new object[] { desktop });
+            return Task.FromResult(Invoke(new object[] { desktop }));
         }
 
-        public async Task<List<Credentials>> LoadCredentials()
+        public Task<IList<Credentials>> LoadCredentials()
         {
-            return (List<Credentials>)Invoke(new object[] { });
+            return Task.FromResult((IList<Credentials>)Invoke(new object[] { }));
         }
 
-        public async Task SaveCredential(Credentials credential)
+        public Task SaveCredential(Credentials credential)
         {
-            Invoke(new object[] { credential });
+            return Task.FromResult(Invoke(new object[] { credential }));
         }
 
-        public async Task DeleteCredential(Credentials credential)
+        public Task DeleteCredential(Credentials credential)
         {
-            Invoke(new object[] { credential });
+            return Task.FromResult(Invoke(new object[] { credential }));
         }
     }
 }

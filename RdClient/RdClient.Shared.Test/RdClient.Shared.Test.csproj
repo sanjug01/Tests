@@ -89,6 +89,7 @@
     <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\DataModelTests.cs" />
+    <Compile Include="Model\IDataModelTests.cs" />
     <Compile Include="Model\SessionModelTests.cs" />
     <Compile Include="ViewModels\BarButtonModelTests.cs" />
     <Compile Include="ViewModels\BarItemModelTests.cs" />

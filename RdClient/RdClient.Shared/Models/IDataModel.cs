@@ -19,6 +19,8 @@ namespace RdClient.Shared.Models
             set;
         }
 
+        Task LoadFromStorage();
+
         ObservableCollection<Desktop> Desktops
         {
             get;

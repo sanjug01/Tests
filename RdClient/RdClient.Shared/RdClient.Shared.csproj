@@ -67,6 +67,7 @@
     <Compile Include="Helpers\ReadWriteMonitor.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
     <Compile Include="Models\Credentials.cs" />
+    <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\Desktop.cs" />
     <Compile Include="Navigation\ApplicationBarSite.cs" />
     <Compile Include="Models\IDataModel.cs" />
