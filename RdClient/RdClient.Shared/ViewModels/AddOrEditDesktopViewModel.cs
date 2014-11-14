@@ -45,7 +45,8 @@ namespace RdClient.Shared.ViewModels
 
         public AddOrEditDesktopViewModel()
         {
-            _saveCommand = new RelayCommand(SaveCommandExecute);
+            _saveCommand = new RelayCommand(SaveCommandExecute, 
+                o => this.SaveCommandCanExecute());
             _cancelCommand = new RelayCommand(CancelCommandExecute);
 
             IsAddingDesktop = true;
@@ -156,6 +157,21 @@ namespace RdClient.Shared.ViewModels
                 NavigationService.DismissModalView(PresentableView);
             }
         }
+
+        private bool SaveCommandCanExecute()
+        {
+            bool canExecute = false;
+
+            if (this.Host.Trim().Length > 0)
+            {
+                //
+                //  Could do extra validation of the hostname
+                //
+                canExecute = true;
+            }
+            return canExecute;
+        }
+
 
         private void CancelCommandExecute(object o)
         {
