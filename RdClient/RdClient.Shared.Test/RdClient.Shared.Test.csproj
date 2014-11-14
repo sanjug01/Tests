@@ -73,6 +73,7 @@
     <Compile Include="CxWrappers\RdpEventSourceTests.cs" />
     <Compile Include="CxWrappers\RdpUtilsTests.cs" />
     <Compile Include="Helpers\ReadWriteMonitorTests.cs" />
+    <Compile Include="Helpers\TestData.cs" />
     <Compile Include="Mock\BarItemsViewModel.cs" />
     <Compile Include="Mock\DataStorage.cs" />
     <Compile Include="Mock\NavigationService.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\DataModelTests.cs" />
     <Compile Include="Model\IDataModelTests.cs" />
+    <Compile Include="Model\ModelCollectionTests.cs" />
     <Compile Include="Model\SessionModelTests.cs" />
     <Compile Include="ViewModels\BarButtonModelTests.cs" />
     <Compile Include="ViewModels\BarItemModelTests.cs" />

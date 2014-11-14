@@ -11,14 +11,14 @@ namespace RdClient.Shared.Models
     public class DataModel : IDataModel
     {
         private IDataStorage _storage;
-        private ObservableCollection<Desktop> _desktops;
-        private ObservableCollection<Credentials> _creds;
-        private IDictionary<Guid, ModelBase> _byId;
+        private ModelCollection<Desktop> _desktops;
+        private ModelCollection<Credentials> _creds;
 
         private DataModel (IDataStorage storage)
         {
             _storage = storage;
-            _byId = new Dictionary<Guid, ModelBase>();
+            _desktops = new ModelCollection<Desktop>();
+            _creds = new ModelCollection<Credentials>();
         }
 
         public static async Task<IDataModel> NewDataModel(IDataStorage storage)
@@ -29,51 +29,32 @@ namespace RdClient.Shared.Models
         }
 
         private async Task LoadFromStorage()
-        {
-            _desktops = new ObservableCollection<Desktop>(await _storage.LoadDesktops());
-            foreach (Desktop desktop in _desktops)
+        {            
+            foreach (Desktop desktop in await _storage.LoadDesktops())
             {
-                _byId.Add(desktop.Id, desktop);
+                _desktops.Add(desktop);
                 desktop.PropertyChanged += desktop_PropertyChanged;
             }
-            _desktops.CollectionChanged += desktopsChanged;
-            _creds = new ObservableCollection<Credentials>(await _storage.LoadCredentials());
-            foreach (Credentials cred in _creds)
+            _desktops.CollectionChanged += desktopsChanged;            
+            foreach (Credentials cred in await _storage.LoadCredentials())
             {
-                _byId.Add(cred.Id, cred);
+                _creds.Add(cred);
                 cred.PropertyChanged += cred_PropertyChanged;
             }
             _creds.CollectionChanged += credentialsChanged;
         }
-        
 
-        public ObservableCollection<Desktop> Desktops
+
+        public ModelCollection<Desktop> Desktops
         {
             get { return _desktops; }
         }
 
-        public ObservableCollection<Credentials> Credentials
+        public ModelCollection<Credentials> Credentials
         {
             get { return _creds; }
         }
 
-        public bool ContainsObjectWithId(Guid id)
-        {
-            return _byId.ContainsKey(id);
-        }        
-
-        public ModelBase GetObjectWithId(Guid id)
-        {
-            ModelBase value;
-            if (_byId.TryGetValue(id, out value))
-            {
-                return value;
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException("Could not find an object with that id: " + id);
-            }
-        }
 
         async void cred_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -91,16 +72,7 @@ namespace RdClient.Shared.Models
             {
                 foreach (Desktop desktop in e.NewItems)
                 {
-                    if (ContainsObjectWithId(desktop.Id))
-                    {
-                        throw new InvalidOperationException("Cannot add desktop. An object with that Id is already present: " + desktop.Id);
-                    }
-                    if (desktop.CredentialId != Guid.Empty && !ContainsObjectWithId(desktop.CredentialId))
-                    {
-                        throw new InvalidOperationException("Cannot add desktop. It references a credential that has not been added to the model: " + desktop.CredentialId);
-                    }
-                    await _storage.SaveDesktop(desktop);
-                    _byId.Add(desktop.Id, desktop);
+                    await _storage.SaveDesktop(desktop);                    
                     desktop.PropertyChanged += desktop_PropertyChanged;                    
                 }
             }
@@ -108,12 +80,7 @@ namespace RdClient.Shared.Models
             {
                 foreach (Desktop desktop in e.OldItems)
                 {
-                    if (!ContainsObjectWithId(desktop.Id))
-                    {
-                        throw new InvalidOperationException("Cannot remove desktop. An object with that Id was not found: " + desktop.Id);
-                    }
                     desktop.PropertyChanged -= desktop_PropertyChanged;
-                    _byId.Remove(desktop.Id);
                     await _storage.DeleteDesktop(desktop);
                     
                 }
@@ -130,12 +97,7 @@ namespace RdClient.Shared.Models
             {
                 foreach (Credentials cred in e.NewItems)
                 {
-                    if (ContainsObjectWithId(cred.Id))
-                    {
-                        throw new InvalidOperationException("Cannot add credential. An object with that Id is already present: " + cred.Id);
-                    }
-                    await _storage.SaveCredential(cred);
-                    _byId.Add(cred.Id, cred);
+                    await _storage.SaveCredential(cred);                    
                     cred.PropertyChanged += cred_PropertyChanged;
                 }
             }
@@ -143,16 +105,11 @@ namespace RdClient.Shared.Models
             {
                 foreach (Credentials cred in e.OldItems)
                 {
-                    if (!ContainsObjectWithId(cred.Id))
-                    {
-                        throw new InvalidOperationException("Cannot remove credential. An object with that Id was not found: " + cred.Id);
-                    }
                     foreach (Desktop desktop in _desktops.Where(d => d.CredentialId == cred.Id))
                     {
                         desktop.CredentialId = Guid.Empty;
                     }
                     cred.PropertyChanged -= cred_PropertyChanged;
-                    _byId.Remove(cred.Id);
                     await _storage.DeleteCredential(cred);
                     
                 }

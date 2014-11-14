@@ -6,65 +6,10 @@ using System.Threading.Tasks;
 
 using RdClient.Shared.Models;
 using RdClient.Shared.Test.Mock;
+using RdClient.Shared.Test.Helpers;
 
 namespace RdClient.Shared.Test.Model
-{
-    class TestData
-    {
-        private Random _rand = new Random();
-
-        public Random RandomSource
-        { 
-            get
-            {
-                return _rand;
-            }
-        }
-
-        public string NewRandomString()
-        {
-            return "rand" + RandomSource.Next();
-        }
-
-        public Desktop NewValidDesktop(Guid credId)
-        {            
-            return new Desktop() { HostName = NewRandomString(), CredentialId = credId };
-        }
-
-        public List<Desktop> NewSmallListOfDesktops(List<Credentials> creds)
-        {
-            int count = RandomSource.Next(3, 10);
-            List<Desktop> desktops = new List<Desktop>(count);
-            for (int i = 0; i < count; i++)
-            {
-                Guid credId = creds[_rand.Next(0, creds.Count)].Id;
-                desktops.Add(NewValidDesktop(credId));
-            }
-            return desktops;
-        }
-
-        public Credentials NewValidCredential()
-        {
-            return new Credentials()
-            {
-                Domain = NewRandomString(),
-                Username = NewRandomString(),
-                Password = NewRandomString()
-            };
-        }
-
-        public List<Credentials> NewSmallListOfCredentials()
-        {
-            int count = RandomSource.Next(3, 10);
-            List<Credentials> creds = new List<Credentials>(count);
-            for (int i = 0; i < count; i++)
-            {
-                creds.Add(NewValidCredential());
-            }
-            return creds;            
-        }
-    }
-    
+{    
     public abstract class IDataModelTests
     {
         private TestData _testData;
@@ -163,36 +108,6 @@ namespace RdClient.Shared.Test.Model
             Credentials cred = _actualCredentials[_testData.RandomSource.Next(0, _actualCredentials.Count)];
             _mockStorage.Expect("DeleteCredential", new List<object>() { cred }, 0);
             _dataModel.Credentials.Remove(cred);
-        }
-
-        [TestMethod]
-        public void GetDesktopWithIdReturnsAddedDesktop()
-        {
-            Desktop expectedDesktop = _actualDesktops[_testData.RandomSource.Next(0, _actualDesktops.Count)];
-            Desktop actualDesktop = _dataModel.GetObjectWithId(expectedDesktop.Id) as Desktop;
-            Assert.AreSame(expectedDesktop, actualDesktop);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void GetDesktopWithIdThrowsExceptionIfIdNotAdded()
-        {
-            _dataModel.GetObjectWithId(Guid.NewGuid());
-        }
-
-        [TestMethod]
-        public void GetCredentialWithIdReturnsAddedCredential()
-        {
-            Credentials expectedCred = _actualCredentials[_testData.RandomSource.Next(0, _actualCredentials.Count)];
-            Credentials actualCred = _dataModel.GetObjectWithId(expectedCred.Id) as Credentials;
-            Assert.AreSame(expectedCred, actualCred);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void GetCredentialWithIdThrowsExceptionIfIdNotAdded()
-        {
-            _dataModel.GetObjectWithId(Guid.NewGuid());
         }
     }
 

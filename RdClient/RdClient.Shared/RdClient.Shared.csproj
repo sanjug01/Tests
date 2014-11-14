@@ -69,6 +69,7 @@
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\Desktop.cs" />
+    <Compile Include="Models\ModelCollection.cs" />
     <Compile Include="Navigation\ApplicationBarSite.cs" />
     <Compile Include="Models\IDataModel.cs" />
     <Compile Include="Models\IDataStorage.cs" />

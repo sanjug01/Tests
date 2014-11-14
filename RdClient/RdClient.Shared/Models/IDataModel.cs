@@ -9,18 +9,14 @@ namespace RdClient.Shared.Models
 {
     public interface IDataModel
     {
-        ObservableCollection<Desktop> Desktops
+        ModelCollection<Desktop> Desktops
         {
             get;
         }
 
-        ObservableCollection<Credentials> Credentials
+        ModelCollection<Credentials> Credentials
         {
             get;
         }
-
-        ModelBase GetObjectWithId(Guid id);
-
-        bool ContainsObjectWithId(Guid id);
     }
 }
