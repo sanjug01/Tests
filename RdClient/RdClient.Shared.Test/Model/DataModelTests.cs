@@ -67,6 +67,20 @@ namespace RdClient.Shared.Test.Model
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SetStorageToNullThrowsArgumentNullException()
+        {
+            DataModel newDataModel = new DataModel();
+            newDataModel.Storage = null;
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GetDesktopsCollectionBeforeLoadedThrowsInvalidOperationException()
+        {
+            DataModel newDataModel = new DataModel();
+            _actualDesktops = newDataModel.Desktops;
+        }
 
         [TestMethod]
         public void AddDesktopSavesItToStorage()
