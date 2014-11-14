@@ -60,7 +60,7 @@ namespace RdClient.Shared.Test.Model
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public async void LoadFromStorageBeforeSettingStorageThrowsInvalidOperationException()
+        public async Task LoadFromStorageBeforeSettingStorageThrowsInvalidOperationException()
         {
             DataModel newDataModel = new DataModel();
             await newDataModel.LoadFromStorage();
