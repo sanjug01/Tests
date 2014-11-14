@@ -8,35 +8,19 @@ namespace RdClient.Shared.Test.Mock
 {
     class DataStorage : MockBase, IDataStorage
     {
-
-        public Task<IList<Desktop>> LoadDesktops()
+        public Task<IEnumerable<ModelBase>> LoadCollection(string collectionName)
         {
-            return Task.FromResult((IList <Desktop>)Invoke(new object[] { }));
+            return Task.FromResult((IEnumerable<ModelBase>)Invoke(new object[] { collectionName }));
         }
 
-        public Task SaveDesktop(Desktop desktop)
+        public Task SaveItem(string collectionName, ModelBase item)
         {
-            return Task.FromResult(Invoke(new object[] { desktop }));
+            return Task.FromResult(Invoke(new object[] { collectionName, item }));
         }
 
-        public Task DeleteDesktop(Desktop desktop)
+        public Task DeleteItem(string collectionName, ModelBase item)
         {
-            return Task.FromResult(Invoke(new object[] { desktop }));
-        }
-
-        public Task<IList<Credentials>> LoadCredentials()
-        {
-            return Task.FromResult((IList<Credentials>)Invoke(new object[] { }));
-        }
-
-        public Task SaveCredential(Credentials credential)
-        {
-            return Task.FromResult(Invoke(new object[] { credential }));
-        }
-
-        public Task DeleteCredential(Credentials credential)
-        {
-            return Task.FromResult(Invoke(new object[] { credential }));
+            return Task.FromResult(Invoke(new object[] { collectionName, item }));
         }
     }
 }

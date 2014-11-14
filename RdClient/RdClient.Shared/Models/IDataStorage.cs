@@ -8,16 +8,10 @@ namespace RdClient.Shared.Models
 {
     public interface IDataStorage
     {
-        Task<IList<Desktop>> LoadDesktops();
+        Task<IEnumerable<ModelBase>> LoadCollection(string collectionName);
 
-        Task SaveDesktop(Desktop desktop);
+        Task SaveItem(string collectionName, ModelBase item);
 
-        Task DeleteDesktop(Desktop desktop);
-
-        Task<IList<Credentials>> LoadCredentials();
-
-        Task SaveCredential(Credentials credential);
-
-        Task DeleteCredential(Credentials credential);
+        Task DeleteItem(string collectionName, ModelBase item);
     }
 }
