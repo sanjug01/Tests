@@ -161,23 +161,48 @@ namespace RdClient.Shared.ViewModels
             return (1 == this.SelectedDesktops.Count);
         }
 
+        /// <summary>
+        /// execute delete, testable if skipping the dialog confirmation
+        /// </summary>
+        /// <param name="o">optionally pass bool (as a string) parameter to skip or not confirmation dialog</param>
         private void DeleteDesktopCommandExecute(object o)
         {
+            bool requireConfirmation;
+
             Debug.WriteLine("Delete Desktop(s)!");
+            
+            if(!bool.TryParse(o as string, out requireConfirmation))
+            {
+                // by default will require confirmation
+                requireConfirmation= true;
+            }
+
+            if (requireConfirmation) 
+            { 
             this.NavigationService.PushModalView("DialogMessage", 
                 new DialogMessageArgs("Delete desktops(d)",
                     () => { this.DeleteSelectedDesktops(); }, 
                     () => { },
                     "Delete(d)"));
+            }
+            else
+            {
+                this.DeleteSelectedDesktops();
+            }
         }
 
         private void DeleteSelectedDesktops()
         {
-            int c = SelectedDesktops.Count;
-            while (c > 0)
+            if (null != SelectedDesktops)
             {
-                this.Desktops.Remove(SelectedDesktops[0] as Desktop);
-                c--;
+                int c = SelectedDesktops.Count;
+                while (c > 0)
+                {
+                    this.Desktops.Remove(SelectedDesktops[c-1] as Desktop);
+                    c--;
+                }
+
+                SelectedDesktops.Clear();
             }
         }
 
@@ -241,15 +266,79 @@ namespace RdClient.Shared.ViewModels
         /// <param name="o">test parameter</param>
         private void ConnectTests(object o)
         {
-            Debug.WriteLine("Running connect tests  ........");
+            Contract.Requires(null != _connectionInformation);
 
-            // TBD
+            Debug.WriteLine("Running connect tests  ........");
+            bool delegateCalled = false;
+            Credentials testUser = new Credentials() { Username = "test_user", Domain = "", Password = "test_password", HaveBeenPersisted = false };
+            AddOrEditDesktopViewModel vm = new AddOrEditDesktopViewModel();
+            Desktop testDesktop;
+            AddOrEditDesktopViewModelArgs args;
+            string returnHostName = "some_host";
+            string expectedHostName;
+            
+            this.Desktops.Clear();
+
+            // add desktop
+            Debug.WriteLine("   ....... Adding a desktop");
+            delegateCalled = false;
+            args = new AddOrEditDesktopViewModelArgs(null, testUser, true,
+                newDesktop =>
+                {
+                    this.Desktops.Add(newDesktop);
+                    returnHostName = newDesktop.HostName;
+                }
+                );
+
+            vm.Presenting(null, args);
+            vm.Host = "saved_new_host";
+            expectedHostName = vm.Host;
+            vm.SaveCommand.Execute(null);
+            RdTrace.IfCondThrow(!delegateCalled, "Add desktop and save should call saveDelegate!");
+            RdTrace.IfCondThrow(returnHostName != expectedHostName, "Add desktop and save should save host name!");
+
+            // edit desktop - will use _connectionInformation with a valid desktop/user
+            Debug.WriteLine("   ....... Editing the desktop, save changes");
+            delegateCalled = false;
+            RdTrace.IfCondThrow(this.Desktops.Count <= 0, "At least one desktop should exist for the edit test!");
+            testDesktop = this.Desktops[0];
+            int desktopIndex = 0;
+
+            args = new AddOrEditDesktopViewModelArgs(testDesktop, _connectionInformation.Credentials, false,
+                updatedDesktop => { 
+                    this.Desktops[desktopIndex] = updatedDesktop;
+                    returnHostName = updatedDesktop.HostName;
+                }
+                );
+
+            vm.Presenting(null, args);
+            vm.Host = _connectionInformation.Desktop.HostName;
+            expectedHostName = vm.Host;
+            vm.SaveCommand.Execute(null);
+            RdTrace.IfCondThrow(returnHostName != expectedHostName, "Edit desktop and save should save host name!");
+            RdTrace.IfCondThrow(testDesktop.HostName != expectedHostName, "Edit desktop and save should save update desktop!");
+
+            // connect using saved desktop
+
+            // show off
+
+            // disconnect
+
+
+            // delete single desktop - should have no desktops left
+            Debug.WriteLine("   ....... Delete desktop");
+            List<object> deleteList = new List<object>();
+            deleteList.Add(this.Desktops[0]);
+            
+            // TODO: should call delete on ConnectionCenter vm 
+            this.SelectedDesktops = deleteList;
+            this.DeleteDesktopCommand.Execute("false");
 
             Debug.WriteLine("Running connect tests  ........ COMPLETED , without errors");
         }
 
         /// <summary>
-        /// This test verifies Add/Edit/Delete desktops functionality.
+        /// This test verifies Add/Edit/Delete desktops functionality. The changes should be visible in the list of existing desktops after completion.
         /// </summary>
         /// <param name="o"> test parameter</param>
         private void DesktopTests(object o)
@@ -260,10 +349,24 @@ namespace RdClient.Shared.ViewModels
             string expectedHostName;
             AddOrEditDesktopViewModel vm = new AddOrEditDesktopViewModel();
 
-            Desktop testDesktop = new Desktop() { HostName = "test_host" };
+            Desktop testDesktop;
             Credentials testUser = new Credentials() { Username = "test_user", Domain = "", Password = "test_password", HaveBeenPersisted = false };
 
+            // Test 0: delete selected desktops, recommended to have a few desktops in the list
+            // TODO : this test should use the ConnectionCenterViewModel - simulating it for now in the TestViewModel.
+            Debug.WriteLine("   ....... Test 0 - Delete list of desktops");
+            List<object> deleteList = new List<object>();
+            for (int i = 0; i < this.Desktops.Count; i += 2)
+            {
+                // mark one in two for deletion
+                deleteList.Add(this.Desktops[i]);
+            }
+            // TODO: should call delete on ConnectionCenter vm 
+            this.SelectedDesktops = deleteList;
+            this.DeleteDesktopCommand.Execute("false");
+
             // Test 1: add desktop, cancel
+            Debug.WriteLine("   ....... Test 1 - Add desktop, cancel changes");
             AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(null, testUser, true,
                 newDesktop => { delegateCalled = true; });
 
@@ -274,22 +377,32 @@ namespace RdClient.Shared.ViewModels
 
 
             // Test 2: add desktop, save
+            Debug.WriteLine("   ....... Test 2 - Add desktop, save changes");
             delegateCalled = false;
             args = new AddOrEditDesktopViewModelArgs(null, testUser, true,
-                newDesktop => { delegateCalled = true; returnHostName = newDesktop.HostName; });
+                newDesktop => 
+                { 
+                    delegateCalled = true;
+                    this.Desktops.Add(newDesktop);
+                    returnHostName = newDesktop.HostName; 
+                }
+                );
 
             vm.Presenting(null, args);
             vm.Host = "saved_new_host";
             expectedHostName = vm.Host;
             vm.SaveCommand.Execute(null);
             RdTrace.IfCondThrow(!delegateCalled, "Add desktop and save should call saveDelegate!");
-            RdTrace.IfCondThrow(returnHostName != expectedHostName, "Add user and save should save host name!");
+            RdTrace.IfCondThrow(returnHostName != expectedHostName, "Add desktop and save should save host name!");
 
 
             // Test 3: edit desktop, cancel
+            Debug.WriteLine("   ....... Test 3 - Edit desktop, cancel changes");
             delegateCalled = false;
+            RdTrace.IfCondThrow(this.Desktops.Count <= 0 , "At least one desktop should exist for the edit test!");
+            testDesktop = this.Desktops[0];
             args = new AddOrEditDesktopViewModelArgs(testDesktop, testUser, false,
-                newDesktop => { delegateCalled = true; });
+                updatedDesktop => { delegateCalled = true; });
 
             vm.Presenting(null, args);
             vm.Host = "not_updated_host";
@@ -299,9 +412,18 @@ namespace RdClient.Shared.ViewModels
             RdTrace.IfCondThrow(testDesktop.HostName != expectedHostName, "Edit desktop and cancel should not change host name!");
 
             // Test 4: edit desktop, save
+            Debug.WriteLine("   ....... Test 4 - Edit desktop, save changes");
             delegateCalled = false;
+            RdTrace.IfCondThrow(this.Desktops.Count <= 0, "At least one desktop should exist for the edit test!");
+            testDesktop = this.Desktops[0];
+
             args = new AddOrEditDesktopViewModelArgs(testDesktop, testUser, false,
-                newDesktop => { delegateCalled = true; returnHostName = newDesktop.HostName; });
+                updatedDesktop => 
+                { 
+                    delegateCalled = true;
+                    returnHostName = updatedDesktop.HostName; 
+                }
+                );
 
             vm.Presenting(null, args);
             vm.Host = "updated_host";
