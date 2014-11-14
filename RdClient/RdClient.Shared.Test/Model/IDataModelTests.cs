@@ -20,10 +20,10 @@ namespace RdClient.Shared.Test.Model
         private ObservableCollection<Credentials> _actualCredentials;
         private List<Credentials> _expectedCreds;
 
-        protected abstract IDataModel GetDataModel(IDataStorage storage);
+        protected abstract Task<IDataModel> CreateDataModel(IDataStorage storage);
 
         [TestInitialize]
-        public void TestSetup()
+        public async void TestSetup()
         {
             _testData = new TestData();
             _mockStorage = new Mock.DataStorage();            
@@ -31,7 +31,7 @@ namespace RdClient.Shared.Test.Model
             _expectedDesktops = _testData.NewSmallListOfDesktops(_expectedCreds);
             _mockStorage.Expect("LoadDesktops", new List<object>() { }, _expectedDesktops);
             _mockStorage.Expect("LoadCredentials", new List<object>() { }, _expectedCreds);
-            _dataModel = GetDataModel(_mockStorage);
+            _dataModel = await CreateDataModel(_mockStorage);
             _actualDesktops = _dataModel.Desktops;
             _actualCredentials = _dataModel.Credentials;
         }

@@ -11,48 +11,102 @@ namespace RdClient.Shared.Models
     public class DataModel : IDataModel
     {
         private IDataStorage _storage;
+        private bool _loaded;
         private ModelCollection<Desktop> _desktops;
         private ModelCollection<Credentials> _creds;
 
-        private DataModel (IDataStorage storage)
+        public DataModel ()
         {
-            _storage = storage;
-            _desktops = new ModelCollection<Desktop>();
-            _creds = new ModelCollection<Credentials>();
+            _storage = null;
+            _loaded = false;
+            _desktops = null;
+            _creds = null;
         }
 
-        public static async Task<IDataModel> NewDataModel(IDataStorage storage)
+        public IDataStorage Storage
         {
-            DataModel dataModel = new DataModel(storage);
-            await dataModel.LoadFromStorage();
-            return dataModel;
+            set 
+            { 
+                if (Loaded)
+                {
+                    throw new InvalidOperationException("Can't set storage after data has been loaded");
+                }
+                else if (value == null)
+                {
+                    throw new ArgumentNullException("Storage cannot be null");
+                }
+                else
+                {
+                    _storage = value;
+                }
+            }
         }
 
-        private async Task LoadFromStorage()
+        public bool Loaded
+        {
+            get { return _loaded; }
+        }
+
+        public async Task LoadFromStorage()
         {            
-            foreach (Desktop desktop in await _storage.LoadDesktops())
+            if (Loaded)
             {
-                _desktops.Add(desktop);
-                desktop.PropertyChanged += desktop_PropertyChanged;
+                throw new InvalidOperationException("DataModel already loaded. Cannot load again as that would overwrite existing data");
             }
-            _desktops.CollectionChanged += desktopsChanged;            
-            foreach (Credentials cred in await _storage.LoadCredentials())
+            else if (_storage == null)
             {
-                _creds.Add(cred);
-                cred.PropertyChanged += cred_PropertyChanged;
+                throw new InvalidOperationException("Must set Storage first");
             }
-            _creds.CollectionChanged += credentialsChanged;
+            else
+            {
+                _desktops = new ModelCollection<Desktop>();
+                foreach (Desktop desktop in await _storage.LoadDesktops())
+                {
+                    _desktops.Add(desktop);
+                    desktop.PropertyChanged += desktop_PropertyChanged;
+                }
+                _desktops.CollectionChanged += desktopsChanged;
+
+                _creds = new ModelCollection<Credentials>();
+                foreach (Credentials cred in await _storage.LoadCredentials())
+                {
+                    _creds.Add(cred);
+                    cred.PropertyChanged += cred_PropertyChanged;
+                }
+                _creds.CollectionChanged += credentialsChanged;
+                _loaded = true;
+            }
         }
 
 
         public ModelCollection<Desktop> Desktops
         {
-            get { return _desktops; }
+            get 
+            {
+                if (!Loaded)
+                {
+                    throw new InvalidOperationException("Must load from storage first");
+                }
+                else
+                {
+                    return _desktops;
+                }
+            }
         }
 
         public ModelCollection<Credentials> Credentials
         {
-            get { return _creds; }
+            get
+            {
+                if (!Loaded)
+                {
+                    throw new InvalidOperationException("Must load from storage first");
+                }
+                else
+                {
+                    return _creds;
+                }
+            }
         }
 
 

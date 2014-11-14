@@ -9,6 +9,18 @@ namespace RdClient.Shared.Models
 {
     public interface IDataModel
     {
+        IDataStorage Storage
+        {
+            set;
+        }
+
+        bool Loaded
+        {
+            get;
+        }
+
+        Task LoadFromStorage();
+
         ModelCollection<Desktop> Desktops
         {
             get;

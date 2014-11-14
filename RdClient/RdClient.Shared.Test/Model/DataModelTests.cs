@@ -9,9 +9,12 @@ namespace RdClient.Shared.Test.Model
     [TestClass]
     public class DataModelTests : IDataModelTests
     {
-        protected override IDataModel GetDataModel(Models.IDataStorage storage)
+        protected override async Task<IDataModel> CreateDataModel(Models.IDataStorage storage)
         {
-            return DataModel.NewDataModel(storage).Result;
+            IDataModel dataModel = new DataModel();
+            dataModel.Storage = storage;
+            await dataModel.LoadFromStorage();
+            return dataModel;
         }
     }
 }
