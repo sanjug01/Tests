@@ -43,6 +43,7 @@ namespace RdClient.Shared.ViewModels
         // tests appbar items
         private readonly BarItemModel _testStressItem;
         private readonly BarItemModel _testConnectItem;
+        private readonly BarItemModel _testDisconnectItem;
         private readonly BarItemModel _testDesktopsItem;
 
         private ConnectionInformation _connectionInformation;
@@ -55,9 +56,10 @@ namespace RdClient.Shared.ViewModels
         private RelayCommand EditDesktopCommand { get; set; }
         private RelayCommand DeleteDesktopCommand { get; set; }
         private RelayCommand ConnectTestCommand { get; set; }
+        private RelayCommand DisconnectTestCommand { get; set; }
         private RelayCommand DesktopsTestCommand { get; set; }
 
-
+        private SessionModel SessionModel { get; set; }
 
         public ICommand StressTestCommand { get; private set; }
         public ICommand GoHomeCommand { get; private set; }
@@ -87,6 +89,7 @@ namespace RdClient.Shared.ViewModels
             DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => this.CanDeleteDesktopCommandExecute());
 
             ConnectTestCommand = new RelayCommand(new Action<object>(ConnectTests));
+            DisconnectTestCommand = new RelayCommand(new Action<object>(DisconnectTests));
             DesktopsTestCommand = new RelayCommand(new Action<object>(DesktopTests));
 
             _separatorItem = new SeparatorBarItemModel();
@@ -104,12 +107,16 @@ namespace RdClient.Shared.ViewModels
                 BarItemModel.ItemAlignment.Right);
             _testConnectItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, ConnectTestCommand, "ConnectTests",
                 BarItemModel.ItemAlignment.Right);
+            _testDisconnectItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, DisconnectTestCommand, "DisconnectTests",
+                BarItemModel.ItemAlignment.Right);
             _testDesktopsItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, DesktopsTestCommand, "DesktopsTests",
                 BarItemModel.ItemAlignment.Right);
 
             _desktops = new ObservableCollection<Desktop>();
             _users = new ObservableCollection<Credentials>();
             _selectedDesktops = null;
+            this.SessionModel = null;
+
             this.LoadTestData();
         }
 
@@ -162,7 +169,7 @@ namespace RdClient.Shared.ViewModels
         }
 
         /// <summary>
-        /// execute delete, testable if skipping the dialog confirmation
+        /// execute delete, testable only if skipping the dialog confirmation
         /// </summary>
         /// <param name="o">optionally pass bool (as a string) parameter to skip or not confirmation dialog</param>
         private void DeleteDesktopCommandExecute(object o)
@@ -250,18 +257,16 @@ namespace RdClient.Shared.ViewModels
 
             for(i = 0; i < iterations; i++)
             {
-                sm.Connect(_connectionInformation);
-                
+                sm.Connect(_connectionInformation);                
                 are.WaitOne();
-
-                sm.Disconnect();
-                
+                sm.Disconnect();                
                 are.WaitOne();
             }
         }
 
         /// <summary>
-        /// This test verifies the sequence Add desktop, connect/disconnect, delete desktop
+        /// This test verifies the sequence Add desktop, connect
+        ///     The tests sets the SessionModel and should be followed by disconnect tests
         /// </summary>
         /// <param name="o">test parameter</param>
         private void ConnectTests(object o)
@@ -269,7 +274,6 @@ namespace RdClient.Shared.ViewModels
             Contract.Requires(null != _connectionInformation);
 
             Debug.WriteLine("Running connect tests  ........");
-            bool delegateCalled = false;
             Credentials testUser = new Credentials() { Username = "test_user", Domain = "", Password = "test_password", HaveBeenPersisted = false };
             AddOrEditDesktopViewModel vm = new AddOrEditDesktopViewModel();
             Desktop testDesktop;
@@ -281,7 +285,6 @@ namespace RdClient.Shared.ViewModels
 
             // add desktop
             Debug.WriteLine("   ....... Adding a desktop");
-            delegateCalled = false;
             args = new AddOrEditDesktopViewModelArgs(null, testUser, true,
                 newDesktop =>
                 {
@@ -294,12 +297,10 @@ namespace RdClient.Shared.ViewModels
             vm.Host = "saved_new_host";
             expectedHostName = vm.Host;
             vm.SaveCommand.Execute(null);
-            RdTrace.IfCondThrow(!delegateCalled, "Add desktop and save should call saveDelegate!");
             RdTrace.IfCondThrow(returnHostName != expectedHostName, "Add desktop and save should save host name!");
 
             // edit desktop - will use _connectionInformation with a valid desktop/user
             Debug.WriteLine("   ....... Editing the desktop, save changes");
-            delegateCalled = false;
             RdTrace.IfCondThrow(this.Desktops.Count <= 0, "At least one desktop should exist for the edit test!");
             testDesktop = this.Desktops[0];
             int desktopIndex = 0;
@@ -319,22 +320,46 @@ namespace RdClient.Shared.ViewModels
             RdTrace.IfCondThrow(testDesktop.HostName != expectedHostName, "Edit desktop and save should save update desktop!");
 
             // connect using saved desktop
+            this.SessionModel = new SessionModel(RdpConnectionFactory);
+            ConnectionInformation newConnectionInformation = new ConnectionInformation() { Desktop = testDesktop, Credentials = _connectionInformation.Credentials };
+            this.SessionModel.Connect(_connectionInformation);
 
-            // show off
-
-            // disconnect
-
-
-            // delete single desktop - should have no desktops left
-            Debug.WriteLine("   ....... Delete desktop");
-            List<object> deleteList = new List<object>();
-            deleteList.Add(this.Desktops[0]);
-            
-            // TODO: should call delete on ConnectionCenter vm 
-            this.SelectedDesktops = deleteList;
-            this.DeleteDesktopCommand.Execute("false");
+            // show off - until invoking Disconnect tests
 
             Debug.WriteLine("Running connect tests  ........ COMPLETED , without errors");
+        }
+
+        /// <summary>
+        /// This test verifies the sequence disconnect - delete desktop 
+        /// should follow after Connect test to make a visible impact, and will reset the SessionModel
+        /// </summary>
+        /// <param name="o">test parameter</param>
+        private void DisconnectTests(object o)
+        {
+            Debug.WriteLine("Running disconnect tests  ........");
+            if (this.SessionModel != null) 
+            { 
+                // disconnect
+                this.SessionModel.Disconnect();
+                this.SessionModel = null; 
+
+                // delete single desktop - should have no desktops left
+                Debug.WriteLine("   ....... Delete desktop");
+                List<object> deleteList = new List<object>();
+                deleteList.Add(this.Desktops[0]);
+
+                // TODO: should call delete on ConnectionCenter vm 
+                this.SelectedDesktops = deleteList;
+                this.DeleteDesktopCommand.Execute("false");
+
+                Debug.WriteLine("Running disconnect tests  ........ COMPLETED , without errors");
+            }
+            else
+            {
+                Debug.WriteLine("Running  disconnect tests  ........ NOP - should connect first");
+            }
+
+
         }
 
         /// <summary>
@@ -456,6 +481,7 @@ namespace RdClient.Shared.ViewModels
                 _rightSeparatorItem,
                 _testStressItem,
                 _testConnectItem,
+                _testDisconnectItem,
                 _testDesktopsItem
             };
         }
