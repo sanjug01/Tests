@@ -6,27 +6,14 @@
     >
 
     <SolidColorBrush x:Key="rdBlackBrush" Color="Black" />
+    <SolidColorBrush x:Key="rdGrayBrush" Color="Gray" />
     <SolidColorBrush x:Key="rdDarkGrayBrush" Color="#444444" />
     <SolidColorBrush x:Key="rdTestGrayBrush" Color="#969696" />
     <SolidColorBrush x:Key="rdLightGrayBrush" Color="#dddddd" />
     <SolidColorBrush x:Key="rdOrangeBrush" Color="#D24726" />
     <SolidColorBrush x:Key="rdWhiteBrush" Color="White" />
 
-    <x:String x:Key="AddGlyph">&#xE109;</x:String>
-    <x:String x:Key="BackGlyph">&#xE165;</x:String>
-    <x:String x:Key="ChevronGlyph">&#xE26B;</x:String>
-    <x:String x:Key="DeleteGlyph">&#xE107;</x:String>
-    <x:String x:Key="EditGlyph">&#xE104;</x:String>
-    <x:String x:Key="ExploreGlyph">&#xE10C;</x:String>
-    <x:String x:Key="FavoriteGlyph">&#xE113;</x:String>
-    <x:String x:Key="KeyboardGlyph">&#xE087;</x:String>
-    <x:String x:Key="LessGlyph">&#xE0C6;</x:String>
-    <x:String x:Key="MoreGlyph">&#xE0C5;</x:String>
-    <x:String x:Key="SearchGlyph">&#xE11A;</x:String>
-    <x:String x:Key="UnfavoriteGlyph">&#xE195;</x:String>
-    <x:String x:Key="ZoomInGlyph">&#xE258;</x:String>
-    <x:String x:Key="ZoomOutGlyph">&#xE0BD;</x:String>
-
+  
     <!-- 
     ======================================================================================
     DESKTOPS | APPS Pivot 
