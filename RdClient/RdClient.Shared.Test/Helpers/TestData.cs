@@ -36,6 +36,21 @@ namespace RdClient.Shared.Test.Helpers
             return "rand" + RandomSource.Next();
         }
 
+        public ModelBase NewValidModelBaseOrSubclass()
+        {
+            int numClasses = 3;
+            int random = RandomSource.Next(numClasses);
+            switch (random)
+            {
+                case 0:
+                    return NewValidDesktop(Guid.NewGuid());
+                case 1:
+                    return NewValidCredential();
+                default:
+                    return new ModelBase();
+            }
+        }
+
         public Desktop NewValidDesktop(Guid credId)
         {
             return new Desktop() { HostName = NewRandomString(), CredentialId = credId };

@@ -12,8 +12,6 @@ namespace RdClient.Shared.Models
 
         Task<IEnumerable<ModelBase>> LoadCollection(string collectionName);
 
-        Task SaveCollection(string collectionName, IEnumerable<ModelBase> collection);
-
         Task<bool> DeleteCollection(string collectionName);
 
         Task SaveItem(string collectionName, ModelBase item);
