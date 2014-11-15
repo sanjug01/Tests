@@ -14,7 +14,11 @@
     <SolidColorBrush x:Key="rdWhiteBrush" Color="White" />
     <SolidColorBrush x:Key="rdErrorBrush" Color="Red" />
 
-  
+    <Style x:Key="rdEntryFieldGridStyle" TargetType="Grid" >
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
     <!-- 
     ======================================================================================
     DESKTOPS | APPS Pivot 

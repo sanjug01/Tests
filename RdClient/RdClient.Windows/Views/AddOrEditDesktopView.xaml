@@ -14,14 +14,7 @@
     <Page.Resources>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />        
-
-        <Style x:Key="EntryFieldStyle" TargetType="Grid" >
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
-
-    
+        <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />           
     </Page.Resources>
 
     <Grid>
@@ -74,11 +67,11 @@
                                    x:Uid="AddOrEditDesktop-PcName" 
                                    Text="PC Name(d)"/>
                     </StackPanel>
-                    <Grid Style="{StaticResource EntryFieldStyle}" Width="Auto" HorizontalAlignment="Stretch">
+                    <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
                         <TextBlock Margin="4,8" 
                                        Style="{ThemeResource BodyTextBlockStyle}"
                                        x:Uid="AddOrEditDesktop-PcNameHint" 
-                                       Text="Host name or IP address" 
+                                       Text="Host name or IP address(d)" 
                                        Foreground="{StaticResource rdGrayBrush}"
                                        Visibility="{Binding ElementName=txtHostEntry, Path=Text, Converter={StaticResource StringLengthToInvisibilityConverter}}" Width="390" />
 
