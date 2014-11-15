@@ -29,7 +29,7 @@
             HorizontalAlignment="Stretch" 
             VerticalAlignment="Stretch" 
             Opacity="0.8" 
-            Background="#dd000000"
+            Background="#dd000000" Margin="0,-10,0,10"
         />
 
         <Border 
@@ -62,21 +62,36 @@
                 <Border Grid.Row="1" Height="1" Margin="0" />
 
                 <StackPanel Grid.Row="2" Margin="26,12,26,0">
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-PcName" Text="PC Name(d)"/>
-                    <Grid Style="{StaticResource EntryFieldStyle}">
-                        <TextBlock Margin="4,8" 
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Uid="AddOrEditDesktop-PcName-Error"
+                                   Text="(*)" Padding="0,0,8,0"
+                                   ToolTipService.ToolTip="Invalid characters in host name(d)"
                                    Style="{ThemeResource BodyTextBlockStyle}"
-                                   x:Uid="AddOrEditDesktop-PcNameHint" 
-                                   Text="Host name or IP address" 
-                                   Foreground="{StaticResource rdGrayBrush}"
-                                   Visibility="{Binding ElementName=txtHostEntry, Path=Text, Converter={StaticResource StringLengthToInvisibilityConverter}}" />                        
+                                   Foreground="{StaticResource rdErrorBrush}"
+                                   Visibility="{Binding Path=IsHostValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
+                                   />
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   x:Uid="AddOrEditDesktop-PcName" 
+                                   Text="PC Name(d)"/>
+                    </StackPanel>
+                    <Grid Style="{StaticResource EntryFieldStyle}" Width="Auto" HorizontalAlignment="Stretch">
+                        <TextBlock Margin="4,8" 
+                                       Style="{ThemeResource BodyTextBlockStyle}"
+                                       x:Uid="AddOrEditDesktop-PcNameHint" 
+                                       Text="Host name or IP address" 
+                                       Foreground="{StaticResource rdGrayBrush}"
+                                       Visibility="{Binding ElementName=txtHostEntry, Path=Text, Converter={StaticResource StringLengthToInvisibilityConverter}}" Width="390" />
+
                         <TextBox Name="txtHostEntry" 
-                                 Background="Transparent"
-                                 Margin="0,8" 
-                                 Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        </TextBox>
-                    </Grid>
-                        
+                                     Background="Transparent"
+                                     Margin="0,8" 
+                                     Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            </TextBox>
+                          
+                        </Grid>
+
+
+
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
                     <ComboBox Margin="0,8" 
                               x:Uid="AddOrEditDesktop-Credentials-ComboBox"
@@ -87,7 +102,7 @@
                     </ComboBox>
 
                     <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" Content="Show additional options(d)" Margin="0,8"
-                            IsChecked="{Binding Path=IsExpandedViewVisible, Mode=TwoWay}" />
+                            IsChecked="{Binding Path=IsExpandedView, Mode=TwoWay}" />
 
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
                         <Button x:Uid="AddOrEditDesktop-Save" Content="SAVE(d)" 

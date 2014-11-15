@@ -2,10 +2,13 @@
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
+using RdClient.ValidationRules;
+
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
+
 
 namespace RdClient.Shared.ViewModels
 {
@@ -33,6 +36,8 @@ namespace RdClient.Shared.ViewModels
     {
         private bool _isAddingDesktop;
         private string _host;
+        private bool _isHostValid;
+        private bool _isExpandedView;
 
         private readonly RelayCommand _saveCommand;
         private readonly RelayCommand _cancelCommand;
@@ -50,6 +55,9 @@ namespace RdClient.Shared.ViewModels
             _cancelCommand = new RelayCommand(CancelCommandExecute);
 
             IsAddingDesktop = true;
+            IsExpandedView = false;
+            IsHostValid = true;
+
             _desktop = null;
             _credentials = null;
 
@@ -124,14 +132,34 @@ namespace RdClient.Shared.ViewModels
         public string Host
         {
             get { return _host; }
-            set
-            {
-                SetProperty(ref _host, value, "Host");
+            set 
+            { 
+                SetProperty(ref _host, value, "Host"); 
+                _saveCommand.EmitCanExecuteChanged();
             }
+        }
+
+        public bool IsHostValid
+        {
+            get { return _isHostValid; }
+            private set { SetProperty(ref _isHostValid, value, "IsHostValid"); }
+        }
+
+
+        public bool IsExpandedView
+        {
+            get { return _isExpandedView; }
+            set { SetProperty(ref _isExpandedView, value, "IsExpandedView"); }
         }
 
         private void SaveCommandExecute(object o)
         {
+            if (!this.Validate())
+            {
+                // save cannot complete if validation fails.
+                return;
+            }
+
             // saving through _saveDelegate for both edit or add
             if (IsAddingDesktop)
             {
@@ -193,8 +221,24 @@ namespace RdClient.Shared.ViewModels
             {
                 this.Host = string.Empty;
             }
-
         }
+
+        /// <summary>
+        /// This method performs all validation tests.
+        ///     Currently the validation is performed only on Save command
+        /// </summary>
+        /// <returns>true, if all validations pass</returns>
+        private bool Validate()
+        {
+            bool isValid = true;
+            if(!(this.IsHostValid = HostNameValidationRule.Validate(this.Host, System.Globalization.CultureInfo.CurrentCulture)) )
+            {
+                isValid = isValid && this.IsHostValid;
+            }
+
+            return isValid;
+        }
+
 
         protected override void OnPresenting(object activationParameter)
         {

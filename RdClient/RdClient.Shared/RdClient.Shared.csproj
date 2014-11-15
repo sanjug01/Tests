@@ -75,6 +75,7 @@
     <Compile Include="Models\IDataModel.cs" />
     <Compile Include="Models\IDataStorage.cs" />
     <Compile Include="Models\ModelBase.cs" />
+    <Compile Include="ValidationRules\HostNameValidationRule.cs" />
     <Compile Include="ViewModels\BarButtonModel.cs" />
     <Compile Include="ViewModels\BarItemModel.cs" />
     <Compile Include="Navigation\IApplicationBarItemsSource.cs" />

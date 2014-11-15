@@ -12,6 +12,7 @@
     <SolidColorBrush x:Key="rdLightGrayBrush" Color="#dddddd" />
     <SolidColorBrush x:Key="rdOrangeBrush" Color="#D24726" />
     <SolidColorBrush x:Key="rdWhiteBrush" Color="White" />
+    <SolidColorBrush x:Key="rdErrorBrush" Color="Red" />
 
   
     <!-- 
