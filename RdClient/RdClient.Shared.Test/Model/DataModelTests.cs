@@ -107,6 +107,14 @@ namespace RdClient.Shared.Test.Model
         }
 
         [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void GetCredentialsCollectionBeforeLoadedThrowsInvalidOperationException()
+        {
+            DataModel newDataModel = new DataModel();
+            _actualCredentials = newDataModel.Credentials;
+        }
+
+        [TestMethod]
         public void AddCredentialSavesItToStorage()
         {
             Credentials cred = _testData.NewValidCredential();
