@@ -9,15 +9,15 @@ using RdClient.Shared.Helpers;
 namespace RdClient.Shared.Models
 {
     [DataContract]
-    public class ModelBase : INotifyPropertyChanged
+    [KnownType(typeof(Desktop))]
+    [KnownType(typeof(Credentials))]
+    public class ModelBase : INotifyPropertyChanged, IEquatable<ModelBase>
     {
-        
-        private Guid _id;
-
         [DataMember]
+        private Guid _id;
+        
         public Guid Id {
             get { return _id; }
-            set { SetProperty(ref _id, value, "Id");  }
         }
 
         public ModelBase()
@@ -50,6 +50,21 @@ namespace RdClient.Shared.Models
             {
                 eventHandler(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return (obj != null && (obj == this || this.Equals(obj as ModelBase)));
+        }                  
+
+        public bool Equals(ModelBase modelBaseObj)
+        {
+            return ((modelBaseObj != null) && (this.Id.Equals(modelBaseObj.Id)));
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
         }
     }
 }

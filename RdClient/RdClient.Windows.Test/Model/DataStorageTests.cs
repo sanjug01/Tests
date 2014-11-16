@@ -26,7 +26,9 @@ namespace RdClient.Windows.Test.Model
         {
             AppDataStorage dataStorage = new AppDataStorage();
             dataStorage.RootFolder = _storageFolder;
-            dataStorage.Serializer = new DataContractSerializer(typeof(ModelBase));
+            DataContractSerializerSettings serializerSettings = new DataContractSerializerSettings();
+            serializerSettings.PreserveObjectReferences = true;
+            dataStorage.Serializer = new DataContractSerializer(typeof(ModelBase), serializerSettings);
             return dataStorage;
         }
 

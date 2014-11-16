@@ -86,7 +86,15 @@ namespace RdClient.Models
             {
                 using (Stream stream = await file.OpenStreamForReadAsync())
                 {
-                    this.Serializer.ReadObject(stream);
+                    ModelBase item = this.Serializer.ReadObject(stream) as ModelBase;
+                    if (item == null)
+                    {
+                        throw new SerializationException("Failed to deserialize " + file.Path);                        
+                    }
+                    else
+                    {
+                        collection.Add(item);
+                    }
                 }
             }
             return collection;
@@ -118,7 +126,7 @@ namespace RdClient.Models
             StorageFile file = await folder.CreateFileAsync(item.Id.ToString(), CreationCollisionOption.ReplaceExisting);
             using (Stream stream = await file.OpenStreamForWriteAsync())
             {
-                this.Serializer.WriteObject(stream, item);
+                this.Serializer.WriteObject(stream, item);                
             }
 
         }
