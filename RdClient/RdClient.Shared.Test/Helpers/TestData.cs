@@ -1,16 +1,12 @@
-﻿using System;
+﻿using RdClient.Shared.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using RdClient.Shared.Models;
 
 namespace RdClient.Shared.Test.Helpers
 {
     public class TestData
     {
-        private Random _rand = new Random();
+        private Random _rand = new Random(42);
 
         public Random RandomSource
         {
