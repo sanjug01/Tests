@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -135,12 +136,22 @@ namespace RdClient.Shared.Test.Model
         {
             Credentials cred = _actualCredentials[_testData.RandomSource.Next(0, _actualCredentials.Count)];
             Desktop desktop = _actualDesktops[_testData.RandomSource.Next(0, _actualDesktops.Count)];
-            _mockStorage.Expect("SaveItem", new List<object>() { _dataModel.DESKTOP_COLLECTION_NAME, desktop }, 0);//change credId of desktop to match cred
-            desktop.CredentialId = cred.Id;
-
-            _mockStorage.Expect("SaveItem", new List<object>() { _dataModel.DESKTOP_COLLECTION_NAME, desktop }, 0);//remove credId of desktop as cred is removed
+            if (!desktop.CredentialId.Equals(cred.Id))
+            {
+                _mockStorage.Expect("SaveItem", new List<object>() { _dataModel.DESKTOP_COLLECTION_NAME, desktop }, 0);//change credId of desktop to match cred
+                desktop.CredentialId = cred.Id;
+            }
+            IEnumerable<Desktop> desktopsReferencingCred = _actualDesktops.Where(d => d.CredentialId.Equals(cred.Id));
+            foreach (Desktop desktopReferencingCred in desktopsReferencingCred)
+            {
+                _mockStorage.Expect("SaveItem", new List<object>() { _dataModel.DESKTOP_COLLECTION_NAME, desktopReferencingCred }, 0);//remove credId of desktop as cred is removed
+            }
             _mockStorage.Expect("DeleteItem", new List<object>() { _dataModel.CREDENTIAL_COLLECTION_NAME, cred }, 0);
             _dataModel.Credentials.Remove(cred);
+            foreach (Desktop desktopReferencingCred in desktopsReferencingCred)
+            {
+                Assert.AreEqual(Guid.Empty, desktopReferencingCred.CredentialId);
+            }
         }
 
         [TestMethod]

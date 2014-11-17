@@ -2,7 +2,7 @@
 
 namespace RdClient.Shared.Models
 {
-    [DataContract]
+    [DataContract(IsReference = true)]
     public class Credentials : ModelBase
     {
         private string _username;

@@ -8,7 +8,7 @@ using RdClient.Shared.Helpers;
 
 namespace RdClient.Shared.Models
 {
-    [DataContract]
+    [DataContract(IsReference=true)]
     [KnownType(typeof(Desktop))]
     [KnownType(typeof(Credentials))]
     public class ModelBase : INotifyPropertyChanged, IEquatable<ModelBase>

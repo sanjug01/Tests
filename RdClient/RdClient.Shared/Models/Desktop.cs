@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace RdClient.Shared.Models
 {
-    [DataContract]
+    [DataContract(IsReference = true)]
     public class Desktop : ModelBase
     {
         private string _hostName;
