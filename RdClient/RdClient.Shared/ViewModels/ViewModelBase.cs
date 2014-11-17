@@ -1,4 +1,5 @@
 ﻿using RdClient.Navigation;
+using RdClient.Shared.Models;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,10 +15,18 @@ namespace RdClient.Shared.ViewModels
     public abstract class ViewModelBase : Helpers.MutableObject, IViewModel
     {
         private INavigationService _navigationService;
+        private IDataModel _dataModel;
+
         protected INavigationService NavigationService
         {
             get { return _navigationService; }
             private set { SetProperty<INavigationService>(ref _navigationService, value); }
+        }
+
+        public IDataModel DataModel
+        {
+            get { return _dataModel; }
+            set { SetProperty(ref _dataModel, value); }
         }
 
         protected abstract void OnPresenting(object activationParameter);
