@@ -70,6 +70,7 @@
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\Desktop.cs" />
     <Compile Include="Models\ModelCollection.cs" />
+    <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Navigation\ApplicationBarSite.cs" />
     <Compile Include="Models\IDataModel.cs" />
     <Compile Include="Models\IDataStorage.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="ViewModels\BarItemModel.cs" />
     <Compile Include="Navigation\IApplicationBarItemsSource.cs" />
     <Compile Include="Navigation\IApplicationBarSite.cs" />
+    <Compile Include="ViewModels\ConnectionCenterViewModel.cs" />
     <Compile Include="ViewModels\IApplicationBarViewModel.cs" />
     <Compile Include="Models\ISessionModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
