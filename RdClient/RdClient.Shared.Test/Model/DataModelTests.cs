@@ -103,7 +103,7 @@ namespace RdClient.Shared.Test.Model
         public void DeleteDesktopRemovesItFromStorage()
         {
             Desktop desktop = _actualDesktops[_testData.RandomSource.Next(0, _actualDesktops.Count)];
-            _mockStorage.Expect("DeleteItem", new List<object>() { _dataModel.DESKTOP_COLLECTION_NAME, desktop }, 0);
+            _mockStorage.Expect("DeleteItem", new List<object>() { _dataModel.DESKTOP_COLLECTION_NAME, desktop }, true);
             _actualDesktops.Remove(desktop);
         }
 
@@ -146,7 +146,7 @@ namespace RdClient.Shared.Test.Model
             {
                 _mockStorage.Expect("SaveItem", new List<object>() { _dataModel.DESKTOP_COLLECTION_NAME, desktopReferencingCred }, 0);//remove credId of desktop as cred is removed
             }
-            _mockStorage.Expect("DeleteItem", new List<object>() { _dataModel.CREDENTIAL_COLLECTION_NAME, cred }, 0);
+            _mockStorage.Expect("DeleteItem", new List<object>() { _dataModel.CREDENTIAL_COLLECTION_NAME, cred }, true);
             _dataModel.Credentials.Remove(cred);
             foreach (Desktop desktopReferencingCred in desktopsReferencingCred)
             {
@@ -158,7 +158,7 @@ namespace RdClient.Shared.Test.Model
         public void DeleteCredentialRemovesItFromStorage()
         {
             Credentials cred = _actualCredentials[_testData.RandomSource.Next(0, _actualCredentials.Count)];
-            _mockStorage.Expect("DeleteItem", new List<object>() { _dataModel.CREDENTIAL_COLLECTION_NAME, cred }, 0);
+            _mockStorage.Expect("DeleteItem", new List<object>() { _dataModel.CREDENTIAL_COLLECTION_NAME, cred }, true);
             _dataModel.Credentials.Remove(cred);
         }
     }
