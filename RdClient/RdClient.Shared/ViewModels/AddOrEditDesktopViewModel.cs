@@ -101,25 +101,11 @@ namespace RdClient.Shared.ViewModels
         public Credentials Credentials
         {
             get { return _credentials; }
-            set
+            private set 
             {
+                // credentials will  be set only on presenting, from activationParameter
+                // which will also update the credentials's combobox
                 SetProperty(ref _credentials, value, "Credentials");
-
-                // update combo box and combo box selection, if necesary
-                if(null != _credentials)
-                {
-                    int idx = this.UserOptions.IndexOf(Credentials.Username);
-                    if (0 <= idx)
-                    {
-                        this.SelectedUserOptionsIndex = idx;
-                    }
-                    else
-                    { 
-                        this.UserOptions.Insert(0, Credentials.Username);
-                        this.SelectedUserOptionsIndex = 0;
-                    }
-
-                }
             }
         }
 
@@ -248,6 +234,22 @@ namespace RdClient.Shared.ViewModels
             this.Desktop = args.Desktop;
             this.Credentials = args.Credentials;
             this._saveDelegate = args.SaveDelegate;
+
+            // update combo box and combo box selection, if necessary
+            if (null != this.Credentials)
+            {
+                int idx = this.UserOptions.IndexOf(Credentials.Username);
+                if (0 <= idx)
+                {
+                    this.SelectedUserOptionsIndex = idx;
+                }
+                else
+                {
+                    this.UserOptions.Insert(0, Credentials.Username);
+                    this.SelectedUserOptionsIndex = 0;
+                }
+
+            }
         }
     }
 }

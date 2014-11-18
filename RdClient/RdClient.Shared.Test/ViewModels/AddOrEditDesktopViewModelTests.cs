@@ -104,6 +104,32 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
+        public void EditDesktop_ShouldUpdateCredentialsInComboBox()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                Desktop desktop = new Desktop() { HostName = "myPc" };
+                Credentials credentials = new Credentials { Username = "myUser", Domain = "MyDomain.com", Password = "MyPassword" };
+                bool isAddingDesktop = false;
+
+                AddOrEditDesktopViewModelArgs args =
+                    new AddOrEditDesktopViewModelArgs(desktop, credentials, isAddingDesktop);
+
+                int initialCount = _addOrEditDesktopViewModel.UserOptions.Count;
+                _addOrEditDesktopViewModel.Presenting(navigation, args);
+
+                int finalCount = _addOrEditDesktopViewModel.UserOptions.Count;
+                int userIndex = _addOrEditDesktopViewModel.UserOptions.IndexOf(credentials.Username);
+                int selectedUSerIndex = _addOrEditDesktopViewModel.SelectedUserOptionsIndex;
+
+                Assert.AreEqual(credentials, _addOrEditDesktopViewModel.Credentials);
+                Assert.IsTrue(finalCount == initialCount + 1);
+                Assert.IsTrue(userIndex >= 0);
+                Assert.AreEqual(userIndex, selectedUSerIndex);
+            }
+        }
+
+        [TestMethod]
         public void AddDesktop_ShouldSaveNewDesktop()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
