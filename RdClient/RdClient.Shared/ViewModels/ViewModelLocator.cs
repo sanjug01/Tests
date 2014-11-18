@@ -28,6 +28,11 @@ namespace RdClient.Shared.ViewModels
             get { return SetVmDataModelAndReturn(new SessionViewModel()); }
         }
 
+        public AddOrEditDesktopViewModel AddOrEditDesktopViewModel
+        {
+            get { return SetVmDataModelAndReturn(new AddOrEditDesktopViewModel()); }
+        }
+
         private T SetVmDataModelAndReturn<T>(T vm) where T : ViewModelBase
         {
             vm.DataModel = _dataModel;
