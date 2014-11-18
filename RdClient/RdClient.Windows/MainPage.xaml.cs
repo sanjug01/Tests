@@ -3,8 +3,10 @@ using RdClient.Shared.ViewModels;
 using System;
 using System.Diagnostics.Contracts;
 using Windows.Graphics.Display;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace RdClient
 {
@@ -13,16 +15,23 @@ namespace RdClient
         public MainPage()
         {
             this.InitializeComponent();
-            //
-            // Set initial orientation.
-            // TODO: handle orientation based on the actual dimentions of the view.
-            //
-            DisplayInformation di = DisplayInformation.GetForCurrentView();
-            OnOrientationChanged(di, null);
-            di.OrientationChanged += OnOrientationChanged;
 
             this.NavigationService.PushingFirstModalView += OnAddingFirstModalView;
             this.NavigationService.DismissingLastModalView += OnRemovedLastModalView;
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            this.Loaded += OnPageLoaded;
+            this.Unloaded += OnPageUnloaded;
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            this.Loaded -= OnPageLoaded;
+            this.Unloaded -= OnPageUnloaded;
         }
 
         public void PresentView(IPresentableView view)
@@ -58,26 +67,32 @@ namespace RdClient
             this.TransitionAnimationContainer.IsEnabled = true;
         }
 
-        private void OnOrientationChanged(DisplayInformation sender, object e)
+        private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
-            //
-            // If the view model implements ILayoutAwareViewModel, tell it to update the layout for the new orientation.
-            // Ignore flipped orientations, care only about portrait and landscape layouts.
-            //
-            ILayoutAwareViewModel lavm = this.DataContext as ILayoutAwareViewModel;
+            Window.Current.SizeChanged += OnWindowSizeChanged;
+        }
 
-            if (null != lavm)
+        private void OnPageUnloaded(object sender, RoutedEventArgs e)
+        {
+            Window.Current.SizeChanged -= OnWindowSizeChanged;
+        }
+
+        private void OnWindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
+        {
+            if (!e.Size.IsEmpty)
             {
-                switch (sender.CurrentOrientation)
-                {
-                    case DisplayOrientations.Portrait:
-                    case DisplayOrientations.PortraitFlipped:
-                        lavm.OrientationChanged(ViewOrientation.Portrait);
-                        break;
+                //
+                // If the view model implements ILayoutAwareViewModel, tell it to update the layout for the new orientation.
+                // Ignore flipped orientations, care only about portrait and landscape layouts.
+                //
+                ILayoutAwareViewModel lavm = this.DataContext as ILayoutAwareViewModel;
 
-                    default:
-                        lavm.OrientationChanged(ViewOrientation.Landscape);
-                        break;
+                if (null != lavm)
+                {
+                    //
+                    // TODO: Maybe implement a more sophisticated layout detection
+                    //
+                    lavm.OrientationChanged(e.Size.Height < e.Size.Width ? ViewOrientation.Landscape : ViewOrientation.Portrait);
                 }
             }
         }
