@@ -1,0 +1,6 @@
+For each string add a comment containing the following:
+1. For single word strings, whether the word is a verb or a noun.
+2. If the string is not self-explanatory, contextual meaning of the string.
+3. Where the string is showing up in the UI
+4. Lock any part of the string we dont want localized as {Locked=”StringToLock”}
+   eg: {Locked=”/ [ ] " : ; | < > + = , ? * %”}
