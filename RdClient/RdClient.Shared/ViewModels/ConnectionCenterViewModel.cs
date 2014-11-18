@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace RdClient.Shared.ViewModels
 {
-    class ConnectionCenterViewModel : ViewModelBase
+    public class ConnectionCenterViewModel : ViewModelBase
     {
+        protected override void OnPresenting(object activationParameter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

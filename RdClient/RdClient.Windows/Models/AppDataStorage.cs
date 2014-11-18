@@ -10,8 +10,6 @@ using Windows.Storage.Streams;
 
 using RdClient.Shared.Models;
 
-
-
 namespace RdClient.Models
 {
     public class AppDataStorage : IDataStorage

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using RdClient.Shared.Models;
 using RdClient.Shared.ViewModels;
 
-namespace RdClient.Shared.Models
+namespace RdClient.Shared.ViewModels
 {
-    class ViewModelLocator
+    public class ViewModelLocator
     {
         private IDataModel _dataModel;
 

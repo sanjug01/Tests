@@ -3,11 +3,31 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RdClient"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:model="using:RdClient.Shared.Models"
+    xmlns:winmodel="using:RdClient.Models"
     RequestedTheme="Light">
 
     <Application.Resources>
-        <ResourceDictionary Source="Styles/Styles.xaml">
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/Styles.xaml" />
+                <ResourceDictionary>                    
+                    <vm:ViewModelLocator x:Key="viewModelLocator" >
+                        <vm:ViewModelLocator.DataModel>
+                            <model:DataModel>
+                                <model:DataModel.Storage>
+                                    <winmodel:AppDataStorage >
+                                        <winmodel:AppDataStorage.Serializer>
+                                            
+                                        </winmodel:AppDataStorage.Serializer>
+                                    </winmodel:AppDataStorage>
+                                </model:DataModel.Storage>
+                            </model:DataModel>
+                        </vm:ViewModelLocator.DataModel>
+                    </vm:ViewModelLocator>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
-    
 </Application>
