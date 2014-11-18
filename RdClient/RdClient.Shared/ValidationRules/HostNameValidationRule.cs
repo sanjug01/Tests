@@ -5,7 +5,7 @@ namespace RdClient.Shared.ValidationRules
     public class HostNameValidationRule
     {
         // list of illegal caracters - as for android
-        private const string illegalCharacteres = "`~!#@$%^&*()=+{}\\|;'\",< >/?";
+        private const string _illegalCharacters = "`~!#@$%^&*()=+{}\\|;'\",< >/?";
 
         public static bool Validate(object value, CultureInfo cultureInfo)
         {
@@ -23,9 +23,9 @@ namespace RdClient.Shared.ValidationRules
 
         private static bool hasIllegalCharacters(string hostName)
         {
-            for (int i = 0; i < illegalCharacteres.Length; i++ )
+            for (int i = 0; i < _illegalCharacters.Length; i++ )
             {
-                if(hostName.IndexOf(illegalCharacteres[i]) >= 0)
+                if(hostName.IndexOf(_illegalCharacters[i]) >= 0)
                 {
                     return true;
                 }

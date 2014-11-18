@@ -13,7 +13,7 @@ namespace RdClient.Shared.Test.ValidationRules
     public class HostNameValidationRuleTests
     {
         // list of illegal caracters 
-        private const string illegalCharacteres = "`~!#@$%^&*()=+{}\\|;'\",< >/?";
+        private const string _illegalCharacters = "`~!#@$%^&*()=+{}\\|;'\",< >/?";
 
         [TestMethod]
         public void ValidHostNames_ShouldBeValidated()
@@ -41,9 +41,9 @@ namespace RdClient.Shared.Test.ValidationRules
             string suffix = "_2df";
             string core;
             string hostName;
-            for(int i = 0 ; i< illegalCharacteres.Length ; i++)
+            for(int i = 0 ; i< _illegalCharacters.Length ; i++)
             {
-                core = illegalCharacteres[i].ToString();
+                core = _illegalCharacters[i].ToString();
                 hostName = prefix + core + suffix;
                 Assert.IsFalse(HostNameValidationRule.Validate(hostName, CultureInfo.InvariantCulture));
             }
@@ -56,9 +56,9 @@ namespace RdClient.Shared.Test.ValidationRules
             string suffix = "d3f";
             string core = "xy_";
             string hostName;
-            for (int i = 0; i < illegalCharacteres.Length; i++)
+            for (int i = 0; i < _illegalCharacters.Length; i++)
             {
-                prefix = illegalCharacteres[i].ToString();
+                prefix = _illegalCharacters[i].ToString();
                 hostName = prefix + core + suffix;
                 Assert.IsFalse(HostNameValidationRule.Validate(hostName, CultureInfo.InvariantCulture));
             }
@@ -71,9 +71,9 @@ namespace RdClient.Shared.Test.ValidationRules
             string suffix ;
             string core = "_tv_";
             string hostName;
-            for (int i = 0; i < illegalCharacteres.Length; i++)
+            for (int i = 0; i < _illegalCharacters.Length; i++)
             {
-                suffix = illegalCharacteres[i].ToString();
+                suffix = _illegalCharacters[i].ToString();
                 hostName = prefix + core + suffix;
                 Assert.IsFalse(HostNameValidationRule.Validate(hostName, CultureInfo.CurrentCulture));
             }
