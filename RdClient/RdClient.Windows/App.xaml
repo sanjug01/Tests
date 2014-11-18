@@ -12,21 +12,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/Styles.xaml" />
-                <ResourceDictionary>                    
-                    <vm:ViewModelLocator x:Key="viewModelLocator" >
-                        <vm:ViewModelLocator.DataModel>
-                            <model:DataModel>
-                                <model:DataModel.Storage>
-                                    <winmodel:AppDataStorage >
-                                        <winmodel:AppDataStorage.Serializer>
-                                            
-                                        </winmodel:AppDataStorage.Serializer>
-                                    </winmodel:AppDataStorage>
-                                </model:DataModel.Storage>
-                            </model:DataModel>
-                        </vm:ViewModelLocator.DataModel>
-                    </vm:ViewModelLocator>
-                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
