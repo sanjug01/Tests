@@ -7,16 +7,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Loaded="Page_Loaded">
-    
-    <Page.Resources>
-        <vm:SessionViewModel x:Key="SessionViewModel" x:Name="SessionViewModel"/>
-    </Page.Resources>
+    Loaded="Page_Loaded"
+    DataContext="{Binding Source={StaticResource AppViewModelLocator}, Path=SessionViewModel}">      
 
     <Grid Background="green">
         <SwapChainPanel x:Name="SwapChainPanel"/>
         <Button
             VerticalAlignment="Bottom"
-            HorizontalAlignment="Right" Command="{Binding Source={StaticResource SessionViewModel}, Path=DisconnectCommand}">Disconnect</Button>
+            HorizontalAlignment="Right" Command="{Binding DisconnectCommand}">Disconnect</Button>
     </Grid>
 </Page>

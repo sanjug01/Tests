@@ -15,22 +15,22 @@ namespace RdClient.Shared.ViewModels
 
         public IDataModel DataModel
         {
-            get { return _dataModel; }
             set { _dataModel = value; }
         }
 
-        public async Task<ConnectionCenterViewModel> GetConnectionCenterViewModel()
+        public ConnectionCenterViewModel ConnectionCenterViewModel
         {
-            return await SetVmDataModelAndReturn(new ConnectionCenterViewModel());
+            get { return SetVmDataModelAndReturn(new ConnectionCenterViewModel()); }
         }
 
-        private async Task<T> SetVmDataModelAndReturn<T>(T vm) where T : ViewModelBase
+        public SessionViewModel SessionViewModel
         {
-            vm.DataModel = this.DataModel;
-            if (!this.DataModel.Loaded)
-            {
-                await this.DataModel.LoadFromStorage();
-            }
+            get { return SetVmDataModelAndReturn(new SessionViewModel()); }
+        }
+
+        private T SetVmDataModelAndReturn<T>(T vm) where T : ViewModelBase
+        {
+            vm.DataModel = _dataModel;
             return vm;
         }
     }

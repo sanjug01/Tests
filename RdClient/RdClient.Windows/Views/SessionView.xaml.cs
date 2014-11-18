@@ -10,7 +10,7 @@ namespace RdClient.Views
 {
     public sealed partial class SessionView : Page, IPresentableView
     {
-        public IViewModel ViewModel { get { return this.SessionViewModel; } }
+        public IViewModel ViewModel { get { return this.DataContext as IViewModel; } }
 
         public SessionView()
         {
@@ -34,8 +34,9 @@ namespace RdClient.Views
             RdpConnectionFactory factory = new RdpConnectionFactory();
             factory.SwapChainPanel = this.SwapChainPanel;
 
-            this.SessionViewModel.SessionModel = new SessionModel(factory);
-            this.SessionViewModel.ConnectCommand.Execute(null);
+            SessionViewModel sessionViewModel = this.DataContext as SessionViewModel;
+            sessionViewModel.SessionModel = new SessionModel(factory);
+            sessionViewModel.ConnectCommand.Execute(null);
         }
     }
 }

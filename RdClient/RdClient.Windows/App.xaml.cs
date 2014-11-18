@@ -46,8 +46,9 @@ namespace RdClient
             StorageFolder rootFolder = await roamingFolder.CreateFolderAsync("AppDataStorage", CreationCollisionOption.OpenIfExists);
             AppDataStorage dataStorage = new AppDataStorage() { RootFolder = rootFolder, Serializer = serializer };
             DataModel dataModel = new DataModel() { Storage = dataStorage };
+            await dataModel.LoadFromStorage();
             ViewModelLocator vmLocator = new ViewModelLocator() { DataModel = dataModel };
-            Application.Current.Resources.Add("vmLocator", vmLocator);
+            Application.Current.Resources["AppViewModelLocator"] = vmLocator;
 
             _lifeTimeManager.OnLaunched(aa);
         }
