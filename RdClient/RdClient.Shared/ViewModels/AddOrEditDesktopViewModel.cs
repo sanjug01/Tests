@@ -2,13 +2,12 @@
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
-using RdClient.ValidationRules;
+using RdClient.Shared.ValidationRules;
 
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
-
 
 namespace RdClient.Shared.ViewModels
 {

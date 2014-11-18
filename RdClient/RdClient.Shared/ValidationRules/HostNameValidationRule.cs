@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace RdClient.ValidationRules
+namespace RdClient.Shared.ValidationRules
 {
     public class HostNameValidationRule
     {
@@ -25,7 +25,7 @@ namespace RdClient.ValidationRules
         {
             for (int i = 0; i < illegalCharacteres.Length; i++ )
             {
-                if(hostName.IndexOf(illegalCharacteres[i]) > 0)
+                if(hostName.IndexOf(illegalCharacteres[i]) >= 0)
                 {
                     return true;
                 }

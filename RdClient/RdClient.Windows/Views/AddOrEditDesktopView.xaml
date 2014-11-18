@@ -90,8 +90,6 @@
                               x:Uid="AddOrEditDesktop-Credentials-ComboBox"
                               ItemsSource="{Binding Path=UserOptions}"
                               SelectedIndex="{Binding Path=SelectedUserOptionsIndex, Mode=TwoWay}">
-                        <ComboBox.Resources>
-                        </ComboBox.Resources>
                     </ComboBox>
 
                     <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" Content="Show additional options(d)" Margin="0,8"

@@ -16,7 +16,7 @@ namespace RdClient.Converters
             Contract.Requires(value is string);
             Contract.Requires(targetType.Equals(typeof(Visibility)));
 
-            string stringValue = (string)value;
+            string stringValue = value as string;
 
             if (string.IsNullOrEmpty(stringValue))
             {
