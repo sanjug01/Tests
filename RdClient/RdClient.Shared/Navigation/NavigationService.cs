@@ -34,6 +34,7 @@ namespace RdClient.Shared.Navigation
 
         public NavigationService()
         {
+            Contract.Ensures(null != _modalStack);
             _modalStack = new List<IPresentableView>();
         }
 
@@ -49,6 +50,8 @@ namespace RdClient.Shared.Navigation
             Contract.Ensures(null != _presenter);
             Contract.Ensures(null != _viewFactory);
             Contract.Ensures(null != _appBarViewModel);
+            Contract.Ensures(null != _modalStack);
+            _modalStack = new List<IPresentableView>();
 
             Presenter = presenter;
             ViewFactory = viewFactory;
