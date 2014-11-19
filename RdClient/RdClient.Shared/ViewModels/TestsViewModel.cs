@@ -185,12 +185,29 @@ namespace RdClient.Shared.ViewModels
             }
 
             if (requireConfirmation) 
-            { 
-            this.NavigationService.PushModalView("DialogMessage", 
-                new DialogMessageArgs("Delete desktops(d)",
-                    () => { this.DeleteSelectedDesktops(); }, 
-                    () => { },
-                    "Delete(d)"));
+            {
+                string deleteMessage;
+                string deleteMessageTitle;
+
+                int c = SelectedDesktops.Count;
+                if (c == 1)
+                {
+                    deleteMessageTitle = "Delete(d): " + (this.SelectedDesktops[0] as Desktop).HostName;
+                    deleteMessage = "Are you sure you want to delete this connection(d)?";
+                }
+                else
+                {
+                    deleteMessageTitle = "Delete: " + c + " connections(d)";
+                    deleteMessage = "Are you sure you want to delete these connections(d)?";
+                }
+
+                this.NavigationService.PushModalView("DialogMessage", 
+                    new DialogMessageArgs(deleteMessage,
+                        () => { this.DeleteSelectedDesktops(); }, 
+                        () => { },
+                        "Delete(d)",
+                        "Cancel(d)",
+                        deleteMessageTitle) );
             }
             else
             {
