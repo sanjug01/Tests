@@ -29,7 +29,7 @@
                 Assert.IsTrue(dmvm.OkVisible);
                 Assert.IsTrue(dmvm.CancelVisible);
                 Assert.AreEqual("test", dmvm.Message);
-                Assert.AreEqual(5, reportedChanges.Count); // NavigationService, Message, OkVisible, and CancelVisible
+                Assert.AreEqual(5, reportedChanges.Count); // NavigationService, Message, Title, OkVisible, and CancelVisible
                 Assert.IsTrue(reportedChanges.Contains("Message"));
                 Assert.IsTrue(reportedChanges.Contains("Title"));
                 Assert.IsTrue(reportedChanges.Contains("NavigationService"));
@@ -58,7 +58,7 @@
                 Assert.IsFalse(dmvm.OkVisible);
                 Assert.IsFalse(dmvm.CancelVisible);
                 Assert.AreEqual("test", dmvm.Message);
-                Assert.AreEqual(3, reportedChanges.Count); // NavigationService, Message, OkVisible, and CancelVisible
+                Assert.AreEqual(3, reportedChanges.Count); // NavigationService, Message, Title
                 Assert.IsTrue(reportedChanges.Contains("Message"));
                 Assert.IsTrue(reportedChanges.Contains("Title"));
                 Assert.IsTrue(reportedChanges.Contains("NavigationService"));

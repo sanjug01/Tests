@@ -26,14 +26,14 @@ namespace RdClient.Shared.ViewModels
         private readonly string _cancelString;
         public string CancelString { get { return _cancelString; } }
 
-        public DialogMessageArgs(string message, DialogMessageDelegate okDelegate, DialogMessageDelegate cancelDelegate, string okString = "OK (d)", string cancelString = "Cancel (d)", string optionalTitle = "")
+        public DialogMessageArgs(string message, DialogMessageDelegate okDelegate, DialogMessageDelegate cancelDelegate, string okString = "OK (d)", string cancelString = "Cancel (d)", string title = "")
         {
             _message = message;
             _okDelegate = okDelegate;
             _cancelDelegate = cancelDelegate;
             _okString = okString;
             _cancelString = cancelString;
-            _title = optionalTitle;
+            _title = title;
         }
     }
 
