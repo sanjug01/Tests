@@ -1,5 +1,5 @@
 ﻿using System;
-using RdClient.Navigation;
+using RdClient.Shared.Navigation;
 using RdMock;
 
 namespace RdClient.Shared.Test.Mock

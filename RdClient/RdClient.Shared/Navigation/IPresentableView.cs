@@ -1,4 +1,4 @@
-﻿namespace RdClient.Navigation
+﻿namespace RdClient.Shared.Navigation
 {
     /// <summary>
     /// Interface of a UI object that may be presented by the view presenter component (IViewPresenter interface)

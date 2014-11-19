@@ -1,5 +1,4 @@
-﻿using RdClient.Navigation;
-using RdClient.Shared.Navigation;
+﻿using RdClient.Shared.Navigation;
 using RdClient.Shared.ViewModels;
 using System;
 using System.Diagnostics.Contracts;
@@ -11,9 +10,6 @@ namespace RdClient
 {
     public sealed partial class MainPage : Page, IViewPresenter
     {
-        private PresentableViewFactory<PresentableViewConstructor> _viewFactory;
-        private INavigationService _navigationService;
-
         public MainPage()
         {
             this.InitializeComponent();
@@ -25,20 +21,8 @@ namespace RdClient
             OnOrientationChanged(di, null);
             di.OrientationChanged += OnOrientationChanged;
 
-            _viewFactory = new PresentableViewFactory<PresentableViewConstructor>();
-            _navigationService = new NavigationService(this, _viewFactory, this.DataContext as IApplicationBarViewModel);
-
-            _navigationService.PushingFirstModalView += OnAddingFirstModalView;
-            _navigationService.DismissingLastModalView += OnRemovedLastModalView;
-
-            _viewFactory.AddViewClass("ConnectionCenterView", typeof(Views.ConnectionCenterView));
-            _viewFactory.AddViewClass("view1", typeof(Views.View1));
-            _viewFactory.AddViewClass("SessionView", typeof(Views.SessionView));
-            _viewFactory.AddViewClass("TestsView", typeof(Views.TestsView));
-            _viewFactory.AddViewClass("AddOrEditDesktopView", typeof(Views.AddOrEditDesktopView));
-            _viewFactory.AddViewClass("DialogMessage", typeof(Views.DialogMessage));
-
-            _navigationService.NavigateToView("ConnectionCenterView", null);
+            this.NavigationService.PushingFirstModalView += OnAddingFirstModalView;
+            this.NavigationService.DismissingLastModalView += OnRemovedLastModalView;
         }
 
         public void PresentView(IPresentableView view)
@@ -96,6 +80,21 @@ namespace RdClient
                         break;
                 }
             }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.ViewFactory.AddViewClass("ConnectionCenterView", typeof(Views.View1));
+            this.ViewFactory.AddViewClass("SessionView", typeof(Views.SessionView));
+            this.ViewFactory.AddViewClass("TestsView", typeof(Views.TestsView));
+            this.ViewFactory.AddViewClass("AddOrEditDesktopView", typeof(Views.AddOrEditDesktopView));
+            this.ViewFactory.AddViewClass("DialogMessage", typeof(Views.DialogMessage));
+
+            this.NavigationService.Presenter = this;
+            this.NavigationService.AppBarViewModel = this.DataContext as IApplicationBarViewModel;
+
+            this.NavigationService.NavigateToView("view1", null);
+            this.NavigationService.PushModalView("DialogMessage", new DialogMessageArgs("this is a message", () => { }, () => { }));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using RdClient.Navigation;
+﻿using RdClient.Shared.Navigation;
 using RdMock;
 using System;
 
@@ -25,5 +25,19 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { modalView });
         }
 
+        public IViewPresenter Presenter
+        {
+            set {  }
+        }
+
+        public IPresentableViewFactory ViewFactory
+        {
+            set {  }
+        }
+
+        public Shared.ViewModels.IApplicationBarViewModel AppBarViewModel
+        {
+            set {  }
+        }
     }
 }

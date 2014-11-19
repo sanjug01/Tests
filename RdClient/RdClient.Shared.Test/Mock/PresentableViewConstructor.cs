@@ -1,5 +1,4 @@
-﻿using RdClient.Navigation;
-using RdClient.Shared.Navigation;
+﻿using RdClient.Shared.Navigation;
 using RdMock;
 using System;
 

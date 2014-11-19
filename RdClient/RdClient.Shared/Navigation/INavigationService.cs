@@ -1,5 +1,6 @@
-﻿using System;
-namespace RdClient.Navigation
+﻿using RdClient.Shared.ViewModels;
+using System;
+namespace RdClient.Shared.Navigation
 {
     /// <summary>
     /// Interface of a navigation service that navigates the UI between named views.
@@ -10,6 +11,9 @@ namespace RdClient.Navigation
     {
         event EventHandler PushingFirstModalView;
         event EventHandler DismissingLastModalView;
+        IViewPresenter Presenter { set; }
+        IPresentableViewFactory ViewFactory { set; }
+        IApplicationBarViewModel AppBarViewModel { set; }
 
         /// <summary>
         /// Navigate to a view. If the view is not currently shown on the UI, the presenter is asked to present it.

@@ -1,4 +1,4 @@
-﻿using RdClient.Navigation;
+﻿using RdClient.Shared.Navigation;
 using RdClient.Shared.Models;
 using System;
 using System.ComponentModel;
@@ -12,7 +12,7 @@ namespace RdClient.Shared.ViewModels
     /// Implementation of <see cref="INotifyPropertyChanged"/> to simplify ViewModels.
     /// </summary>
 
-    public abstract class ViewModelBase : Helpers.MutableObject, IViewModel
+    public abstract class ViewModelBase : Helpers.MutableObject, IViewModel, IViewModelWithData
     {
         private INavigationService _navigationService;
         private IDataModel _dataModel;

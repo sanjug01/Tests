@@ -1,5 +1,5 @@
 ﻿using System;
-namespace RdClient.Navigation
+namespace RdClient.Shared.Navigation
 {
     /// <summary>
     /// Interface of a factory of presentable views.

@@ -9,7 +9,9 @@
     xmlns:helpers="using:RdClient.Helpers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    xmlns:nav="using:RdClient.Shared.Navigation"
+    mc:Ignorable="d"
+    Loaded="Page_Loaded">
     
     <Page.Resources>
         <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
@@ -166,12 +168,19 @@
                 </DataTemplate>
 
             </conv:StringToDictionaryObjectConverter.Dictionary>
-        </conv:StringToDictionaryObjectConverter>
+        </conv:StringToDictionaryObjectConverter>   
         
+        <nav:NavigationExtensionList x:Key="ExtensionList">
+            <nav:DataModelExtension/>
+        </nav:NavigationExtensionList>
+        <nav:PresentableViewFactoryConcrete x:Key="ViewFactory" x:Name="ViewFactory"/>
+        <nav:NavigationService x:Key="NavigationService" x:Name="NavigationService" 
+                               ViewFactory="{StaticResource ViewFactory}" 
+                               Extensions="{StaticResource ExtensionList}" />
     </Page.Resources>
     
     <Page.DataContext>
-        <vm:MainPageViewModel />
+        <vm:MainPageViewModel/>
     </Page.DataContext>
     
     <Page.BottomAppBar>

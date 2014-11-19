@@ -1,11 +1,13 @@
-﻿namespace RdClient.Navigation
-{
-    using RdClient.Shared.Navigation;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.Contracts;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
-    public sealed class PresentableViewFactory<TPresentableViewConstructor> : IPresentableViewFactory where TPresentableViewConstructor : IPresentableViewConstructor, new()
+namespace RdClient.Shared.Navigation
+{
+    public class PresentableViewFactoryConcrete : PresentableViewFactory<PresentableViewConstructor>
+    { }
+
+    public class PresentableViewFactory<TPresentableViewConstructor> : IPresentableViewFactory where TPresentableViewConstructor : IPresentableViewConstructor, new()
     {
         private readonly IDictionary<string, IPresentableViewConstructor> _viewConstructors;
 
