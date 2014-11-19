@@ -15,6 +15,13 @@ namespace RdClient
         public MainPage()
         {
             this.InitializeComponent();
+            //
+            // Set initial orientation.
+            // TODO: handle orientation based on the actual dimentions of the view.
+            //
+            DisplayInformation di = DisplayInformation.GetForCurrentView();
+            OnOrientationChanged(di, null);
+            di.OrientationChanged += OnOrientationChanged;
 
             this.NavigationService.PushingFirstModalView += OnAddingFirstModalView;
             this.NavigationService.DismissingLastModalView += OnRemovedLastModalView;
