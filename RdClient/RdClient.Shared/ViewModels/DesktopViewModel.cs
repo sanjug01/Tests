@@ -1,4 +1,4 @@
-﻿using RdClient.Navigation;
+﻿using RdClient.Shared.Navigation;
 using RdClient.Shared.Models;
 using System.Windows.Input;
 

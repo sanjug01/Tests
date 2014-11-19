@@ -84,7 +84,7 @@ namespace RdClient
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            this.ViewFactory.AddViewClass("ConnectionCenterView", typeof(Views.View1));
+            this.ViewFactory.AddViewClass("ConnectionCenterView", typeof(Views.ConnectionCenterView));
             this.ViewFactory.AddViewClass("SessionView", typeof(Views.SessionView));
             this.ViewFactory.AddViewClass("TestsView", typeof(Views.TestsView));
             this.ViewFactory.AddViewClass("AddOrEditDesktopView", typeof(Views.AddOrEditDesktopView));
@@ -93,7 +93,7 @@ namespace RdClient
             this.NavigationService.Presenter = this;
             this.NavigationService.AppBarViewModel = this.DataContext as IApplicationBarViewModel;
 
-            this.NavigationService.NavigateToView("view1", null);
+            this.NavigationService.NavigateToView("ConnectionCenterView", null);
             this.NavigationService.PushModalView("DialogMessage", new DialogMessageArgs("this is a message", () => { }, () => { }));
         }
     }

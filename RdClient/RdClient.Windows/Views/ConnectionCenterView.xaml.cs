@@ -1,4 +1,4 @@
-﻿using RdClient.Navigation;
+﻿using RdClient.Shared.Navigation;
 using Windows.UI.Xaml.Controls;
 
 namespace RdClient.Views

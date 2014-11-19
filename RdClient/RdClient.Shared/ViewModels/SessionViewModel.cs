@@ -52,7 +52,7 @@ namespace RdClient.Shared.ViewModels
         {
             RdpDisconnectReason reason = args.DisconnectReason;
             string errorString = DisconnectStrings.GetDisconnectString(reason);
-            DialogMessageArgs dialogArgs = new DialogMessageArgs(errorString, () => { this.NavigationService.NavigateToView("view1", null); }, null);
+            DialogMessageArgs dialogArgs = new DialogMessageArgs(errorString, () => { this.NavigationService.NavigateToView("ConnectionCenterView", null); }, null);
             this.NavigationService.PushModalView("DialogMessage", dialogArgs);
         }
 

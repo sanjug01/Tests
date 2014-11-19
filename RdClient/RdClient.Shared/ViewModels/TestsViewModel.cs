@@ -479,7 +479,7 @@ namespace RdClient.Shared.ViewModels
 
         private void GoHome(object o)
         {
-            NavigationService.NavigateToView("view1", null);
+            NavigationService.NavigateToView("ConnectionCenterView", null);
         }
 
         IEnumerable<BarItemModel> IApplicationBarItemsSource.GetItems(IApplicationBarSite applicationBarSite)
