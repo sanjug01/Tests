@@ -11,6 +11,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nav="using:RdClient.Shared.Navigation"
     mc:Ignorable="d"
+    DataContext="{StaticResource MainPageViewModel}"
     Loaded="Page_Loaded">
     
     <Page.Resources>
@@ -149,7 +150,7 @@
                                                 Icon="{Binding Glyph, Converter={StaticResource segoeToSymbolIcon}}"
                                                 Label="{Binding Label}"
                                                 Command="{Binding Command}"
-                                                Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}, Mode=OneWay}"/>
+                                                Visibility="{Binding IsVisible, Converter={StaticResource boolToVisibility}}"/>
                                         </DataTemplate>
 
                                         <!-- SeparatorBarItemModel -->
@@ -169,8 +170,13 @@
 
             </conv:StringToDictionaryObjectConverter.Dictionary>
         </conv:StringToDictionaryObjectConverter>   
-        
-        <!-- <nav:PresentableViewFactoryConcrete x:Key="ViewFactory" x:Name="ViewFactory"/> -->
+            
+    	<!--
+            View factory is shared between the page and page.
+            The navigation service gets it in its "ViewFactory" property.
+            The page gets the factory as a property named "ViewFactory" from the x:Name attribute.
+        -->        
+        <nav:PresentableViewFactoryConcrete x:Key="ViewFactory" x:Name="ViewFactory"/>
         
         <!--
         Navigation service setup:
@@ -180,17 +186,9 @@
         <nav:DispatchedNavigationService
             x:Key="NavigationService"
             x:Name="NavigationService" 
-            Presenter="{Binding ElementName=ViewPresenter}"
-            AppBarViewModel="{Binding}">
-            
-            <!--
-            View factory is shared between the page and page.
-            The navigation service gets it in its "ViewFactory" property.
-            The page gets the factory as a property named "ViewFactory" from the x:Name attribute.
-            -->
-            <nav:DispatchedNavigationService.ViewFactory>
-                <nav:PresentableViewFactoryConcrete x:Name="ViewFactory"/>
-            </nav:DispatchedNavigationService.ViewFactory>
+            AppBarViewModel="{StaticResource MainPageViewModel}"
+            ViewFactory="{StaticResource ViewFactory}">
+
             
             <!-- Register all navigation extensions -->
             <nav:DispatchedNavigationService.Extensions>
@@ -200,20 +198,16 @@
         </nav:DispatchedNavigationService>
     </Page.Resources>
     
-    <Page.DataContext>
-        <vm:MainPageViewModel/>
-    </Page.DataContext>
-    
     <Page.BottomAppBar>
         <AppBar
-            IsSticky="{Binding IsBarSticky, Mode=OneWay}"
+            IsSticky="{Binding IsBarSticky}"
             IsOpen="{Binding IsBarVisible, Mode=TwoWay}"
-            ContentTemplate="{Binding ApplicationBarLayout, Converter={StaticResource appBarLayoutSelector}, Mode=OneWay}">
+            ContentTemplate="{Binding ApplicationBarLayout, Converter={StaticResource appBarLayoutSelector}}">
         </AppBar>
     </Page.BottomAppBar>
 
     <Grid>
-        <views:ViewPresenter x:Name="ViewPresenter" />
+        <views:ViewPresenter x:Name="ViewPresenter"/>
         
         <!-- Button that shows the application bar -->
         <Button

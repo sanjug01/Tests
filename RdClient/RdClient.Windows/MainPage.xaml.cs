@@ -12,14 +12,7 @@
         public MainPage()
         {
             this.InitializeComponent();
-            //
-            // Set initial orientation.
-            // TODO: handle orientation based on the actual dimentions of the view.
-            //
-            DisplayInformation di = DisplayInformation.GetForCurrentView();
-            OnOrientationChanged(di, null);
-            di.OrientationChanged += OnOrientationChanged;
-
+            this.NavigationService.Presenter = this.ViewPresenter;
             this.NavigationService.PushingFirstModalView += (s, e) => this.ViewPresenter.PresentingFirstModalView();
             this.NavigationService.DismissingLastModalView += (s, e) => this.ViewPresenter.DismissedLastModalView();
 
