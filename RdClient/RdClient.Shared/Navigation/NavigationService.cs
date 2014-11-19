@@ -1,7 +1,6 @@
 ﻿using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 
 namespace RdClient.Shared.Navigation

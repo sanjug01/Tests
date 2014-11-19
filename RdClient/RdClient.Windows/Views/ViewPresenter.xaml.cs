@@ -4,6 +4,8 @@ namespace RdClient.Views
 {
     using RdClient.Shared.Navigation;
     using System;
+    using System.Diagnostics.Contracts;
+    using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
     /// <summary>
@@ -17,19 +19,45 @@ namespace RdClient.Views
             this.InitializeComponent();
         }
 
+        public void PresentingFirstModalView()
+        {
+            //
+            // TODO: get rid of this dependency
+            //
+            this.TransitionAnimationContainer.IsEnabled = false;
+            this.ModalStackContainer.Visibility = Visibility.Visible;
+        }
+
+        public void DismissedLastModalView()
+        {
+            //
+            // TODO: get rid of this dependency
+            //
+            this.ModalStackContainer.Visibility = Visibility.Collapsed;
+            this.TransitionAnimationContainer.IsEnabled = true;
+        }
+
         void IViewPresenter.PresentView(IPresentableView view)
         {
-            throw new NotImplementedException();
+            Contract.Requires(view != null);
+            Contract.Assert(view is UIElement);
+
+            this.TransitionAnimationContainer.ShowContent(view as UIElement);
         }
 
         void IViewPresenter.PushModalView(IPresentableView view)
         {
-            throw new NotImplementedException();
+            Contract.Requires(view != null);
+            Contract.Assert(view is UIElement);
+
+            this.ModalStackContainer.Push(view as UIElement);
         }
 
         void IViewPresenter.DismissModalView(IPresentableView view)
         {
-            throw new NotImplementedException();
+            Contract.Requires(view != null);
+
+            this.ModalStackContainer.Pop();
         }
     }
 }

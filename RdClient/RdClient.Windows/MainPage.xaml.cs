@@ -1,16 +1,13 @@
-﻿using RdClient.Shared.Navigation;
-using RdClient.Shared.ViewModels;
-using System;
-using System.Diagnostics.Contracts;
-using Windows.Graphics.Display;
-using Windows.UI.Core;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
-
-namespace RdClient
+﻿namespace RdClient
 {
-    public sealed partial class MainPage : Page, IViewPresenter
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.ViewModels;
+    using Windows.UI.Core;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Navigation;
+
+    public sealed partial class MainPage : Page
     {
         public MainPage()
         {
@@ -23,8 +20,9 @@ namespace RdClient
             OnOrientationChanged(di, null);
             di.OrientationChanged += OnOrientationChanged;
 
-            this.NavigationService.PushingFirstModalView += OnAddingFirstModalView;
-            this.NavigationService.DismissingLastModalView += OnRemovedLastModalView;
+            this.NavigationService.PushingFirstModalView += (s, e) => this.ViewPresenter.PresentingFirstModalView();
+            this.NavigationService.DismissingLastModalView += (s, e) => this.ViewPresenter.DismissedLastModalView();
+
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -39,39 +37,6 @@ namespace RdClient
             base.OnNavigatedFrom(e);
             this.Loaded -= OnPageLoaded;
             this.Unloaded -= OnPageUnloaded;
-        }
-
-        public void PresentView(IPresentableView view)
-        {
-            Contract.Requires(view != null);
-
-            this.TransitionAnimationContainer.ShowContent(view as UIElement);
-        }
-
-        public void PushModalView(IPresentableView view)
-        {
-            Contract.Requires(view != null);
-
-            this.ModalStackContainer.Push(view as UIElement);
-        }
-
-        public void DismissModalView(IPresentableView view)
-        {
-            Contract.Requires(view != null);
-
-            this.ModalStackContainer.Pop();
-        }
-
-        private void OnAddingFirstModalView(object sender, EventArgs e)
-        {
-            this.TransitionAnimationContainer.IsEnabled = false;
-            this.ModalStackContainer.Visibility = Visibility.Visible;
-        }
-
-        private void OnRemovedLastModalView(object sender, EventArgs e)
-        {
-            this.ModalStackContainer.Visibility = Visibility.Collapsed;
-            this.TransitionAnimationContainer.IsEnabled = true;
         }
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
