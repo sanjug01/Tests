@@ -92,15 +92,13 @@ namespace RdClient
                 // If the view model implements ILayoutAwareViewModel, tell it to update the layout for the new orientation.
                 // Ignore flipped orientations, care only about portrait and landscape layouts.
                 //
-                ILayoutAwareViewModel lavm = this.DataContext as ILayoutAwareViewModel;
-
-                if (null != lavm)
+                this.DataContext.CastAndCall<ILayoutAwareViewModel>(lavm =>
                 {
                     //
                     // TODO: Maybe implement a more sophisticated layout detection
                     //
                     lavm.OrientationChanged(e.Size.Height < e.Size.Width ? ViewOrientation.Landscape : ViewOrientation.Portrait);
-                }
+                });
             }
         }
 
