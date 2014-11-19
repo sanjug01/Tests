@@ -10,7 +10,9 @@ namespace RdClient.Shared.ViewModels
     public class DialogMessageArgs
     {
         private readonly string _message;
+        private readonly string _title;
         public string Message { get { return _message; } }
+        public string Title { get { return _title; } }
 
         private readonly DialogMessageDelegate _okDelegate;
         public DialogMessageDelegate OkDelegate { get { return _okDelegate; } }
@@ -24,13 +26,14 @@ namespace RdClient.Shared.ViewModels
         private readonly string _cancelString;
         public string CancelString { get { return _cancelString; } }
 
-        public DialogMessageArgs(string message, DialogMessageDelegate okDelegate, DialogMessageDelegate cancelDelegate, string okString = "OK (d)", string cancelString = "Cancel (d)")
+        public DialogMessageArgs(string message, DialogMessageDelegate okDelegate, DialogMessageDelegate cancelDelegate, string okString = "OK (d)", string cancelString = "Cancel (d)", string optionalTitle = "")
         {
             _message = message;
             _okDelegate = okDelegate;
             _cancelDelegate = cancelDelegate;
             _okString = okString;
             _cancelString = cancelString;
+            _title = optionalTitle;
         }
     }
 
@@ -45,12 +48,22 @@ namespace RdClient.Shared.ViewModels
         public IPresentableView DialogView { private get; set; }
 
         private string _message;
+        private string _title;
         public string Message
         {
             get { return _message; }
             set
             {
                 SetProperty(ref _message, value, "Message");
+            }
+        }
+
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                SetProperty(ref _title, value, "Title");
             }
         }
 
@@ -99,6 +112,7 @@ namespace RdClient.Shared.ViewModels
             DialogMessageArgs args = (DialogMessageArgs)activationParameter;
 
             this.Message = args.Message;
+            this.Title = args.Title;
 
             if (_okDelegate != args.OkDelegate)
             {
