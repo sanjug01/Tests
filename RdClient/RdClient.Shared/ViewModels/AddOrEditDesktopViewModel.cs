@@ -1,10 +1,7 @@
 ﻿using RdClient.Navigation;
-using RdClient.Shared.CxWrappers;
-using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
 using RdClient.Shared.ValidationRules;
 
-using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
