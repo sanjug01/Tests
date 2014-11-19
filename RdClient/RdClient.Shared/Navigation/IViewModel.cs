@@ -1,5 +1,5 @@
 ﻿using System;
-namespace RdClient.Navigation
+namespace RdClient.Shared.Navigation
 {
     public interface IViewModel
     {

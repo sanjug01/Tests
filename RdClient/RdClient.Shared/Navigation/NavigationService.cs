@@ -1,10 +1,10 @@
-﻿using RdClient.Shared.Navigation;
-using RdClient.Shared.ViewModels;
+﻿using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 
-namespace RdClient.Navigation
+namespace RdClient.Shared.Navigation
 {
     public class NavigationServiceException : Exception
     {
@@ -18,12 +18,25 @@ namespace RdClient.Navigation
         public event EventHandler PushingFirstModalView;
         public event EventHandler DismissingLastModalView;
 
-        private readonly IViewPresenter _presenter;
-        private readonly IPresentableViewFactory _viewFactory;
-        private readonly IApplicationBarViewModel _appBarViewModel;
+        public NavigationExtensionList Extensions { get; set; }
+
+        private IViewPresenter _presenter;
+        public IViewPresenter Presenter { set { _presenter = value; } }
+
+        private IPresentableViewFactory _viewFactory;
+        public IPresentableViewFactory ViewFactory { set { _viewFactory = value; } }
+
+        private IApplicationBarViewModel _appBarViewModel;
+        public IApplicationBarViewModel AppBarViewModel { set { _appBarViewModel = value; } }
+
         private IPresentableView _currentView;
 
         private List<IPresentableView> _modalStack = new List<IPresentableView>();
+
+        public NavigationService()
+        {
+
+        }
 
         public NavigationService(IViewPresenter presenter, IPresentableViewFactory viewFactory, IApplicationBarViewModel appBarViewModel)
         {
@@ -38,9 +51,9 @@ namespace RdClient.Navigation
             Contract.Ensures(null != _viewFactory);
             Contract.Ensures(null != _appBarViewModel);
 
-            _presenter = presenter;
-            _viewFactory = viewFactory;
-            _appBarViewModel = appBarViewModel;
+            Presenter = presenter;
+            ViewFactory = viewFactory;
+            AppBarViewModel = appBarViewModel;
         }
 
         private void EmitPushingFirstModalView()
@@ -146,6 +159,11 @@ namespace RdClient.Navigation
 
             if (null != vm)
             {
+                foreach(INavigationExtension extension in Extensions)
+                {
+                    extension.Presenting(vm);
+                }
+
                 vm.Presenting(this, activationParameter);
             }
             view.Presenting(this, activationParameter);

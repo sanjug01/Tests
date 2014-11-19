@@ -1,4 +1,6 @@
-﻿using RdClient.Navigation;
+﻿using RdClient.Shared.Navigation;
+using RdClient.Shared.CxWrappers;
+using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
 using RdClient.Shared.ValidationRules;
 
@@ -122,10 +124,10 @@ namespace RdClient.Shared.ViewModels
         }
 
         public bool IsHostValid
-        {
+            {
             get { return _isHostValid; }
             private set { SetProperty(ref _isHostValid, value, "IsHostValid"); }
-        }
+            }
 
 
         public bool IsExpandedView
@@ -209,7 +211,7 @@ namespace RdClient.Shared.ViewModels
             if(!(this.IsHostValid = HostNameValidationRule.Validate(this.Host, System.Globalization.CultureInfo.CurrentCulture)) )
             {
                 isValid = isValid && this.IsHostValid;
-            }
+        }
 
             return isValid;
         }

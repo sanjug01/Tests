@@ -1,5 +1,4 @@
-﻿using RdClient.Navigation;
-using System;
+﻿using System;
 namespace RdClient.Shared.Navigation
 {
     public interface IPresentableViewConstructor

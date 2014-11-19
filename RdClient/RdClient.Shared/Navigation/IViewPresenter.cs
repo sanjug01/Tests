@@ -1,4 +1,4 @@
-﻿namespace RdClient.Navigation
+﻿namespace RdClient.Shared.Navigation
 {
     /// <summary>
     /// Responsible for inserting and removing views into the view hierarchy.

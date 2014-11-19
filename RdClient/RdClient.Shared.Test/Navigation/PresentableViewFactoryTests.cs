@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RdClient.Navigation;
 using RdClient.Shared.Navigation;
 using System.Collections.Generic;
 

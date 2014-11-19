@@ -1,10 +1,5 @@
 ﻿using RdClient.CxWrappers.Utils;
-using RdClient.Helpers;
-using RdClient.Navigation;
-using RdClient.Shared;
-using RdClient.Shared.Models;
-using RdClient.Shared.ViewModels;
-using System.Diagnostics.Contracts;
+using RdClient.Shared.Navigation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 

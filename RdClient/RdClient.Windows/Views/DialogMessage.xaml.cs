@@ -1,4 +1,4 @@
-﻿using RdClient.Navigation;
+﻿using RdClient.Shared.Navigation;
 using RdClient.Shared.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
