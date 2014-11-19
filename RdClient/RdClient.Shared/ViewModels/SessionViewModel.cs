@@ -44,7 +44,7 @@ namespace RdClient.Shared.ViewModels
         {
             SessionModel.Disconnect();
 
-            NavigationService.NavigateToView("view1", null);            
+            NavigationService.NavigateToView("ConnectionCenterView", null);            
         }
     }
 }

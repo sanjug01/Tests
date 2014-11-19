@@ -31,15 +31,14 @@ namespace RdClient
             _navigationService.PushingFirstModalView += OnAddingFirstModalView;
             _navigationService.DismissingLastModalView += OnRemovedLastModalView;
 
+            _viewFactory.AddViewClass("ConnectionCenterView", typeof(Views.ConnectionCenterView));
             _viewFactory.AddViewClass("view1", typeof(Views.View1));
             _viewFactory.AddViewClass("SessionView", typeof(Views.SessionView));
             _viewFactory.AddViewClass("TestsView", typeof(Views.TestsView));
             _viewFactory.AddViewClass("AddOrEditDesktopView", typeof(Views.AddOrEditDesktopView));
             _viewFactory.AddViewClass("DialogMessage", typeof(Views.DialogMessage));
 
-            _navigationService.NavigateToView("view1", null);
-
-            _navigationService.PushModalView("DialogMessage", new DialogMessageArgs("this is a message", () => { }, () => { }));
+            _navigationService.NavigateToView("ConnectionCenterView", null);
         }
 
         public void PresentView(IPresentableView view)

@@ -136,7 +136,13 @@
     <Compile Include="Models\AppDataStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CxWrappers\RdpConnectionFactory.cs" />
+    <Compile Include="Views\ConnectionCenterView.xaml.cs">
+      <DependentUpon>ConnectionCenterView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CrossFade.cs" />
+    <Compile Include="Views\DesktopThumbnailView.xaml.cs">
+      <DependentUpon>DesktopThumbnailView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DialogMessage.xaml.cs">
       <DependentUpon>DialogMessage.xaml</DependentUpon>
     </Compile>
@@ -184,6 +190,14 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ConnectionCenterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DesktopThumbnailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DialogMessage.xaml">
       <SubType>Designer</SubType>
