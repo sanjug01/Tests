@@ -22,5 +22,10 @@ namespace RdClient.Shared.Models
             get { return _credId; }
             set { SetProperty(ref _credId, value); }
         }
+
+        public bool HasCredential
+        {
+            get { return !this.CredentialId.Equals(Guid.Empty); }
+        }
     }
 }

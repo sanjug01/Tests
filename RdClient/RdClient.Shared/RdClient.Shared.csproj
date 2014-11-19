@@ -70,6 +70,7 @@
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\Desktop.cs" />
     <Compile Include="Models\ModelCollection.cs" />
+    <Compile Include="ViewModels\DesktopViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Navigation\ApplicationBarSite.cs" />
     <Compile Include="Models\IDataModel.cs" />

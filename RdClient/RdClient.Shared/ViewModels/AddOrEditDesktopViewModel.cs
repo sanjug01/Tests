@@ -149,18 +149,11 @@ namespace RdClient.Shared.ViewModels
             if (IsAddingDesktop)
             {
                 _desktop = new Desktop() { HostName = this.Host };
-                if (null != _saveDelegate)
-                {
-                    _saveDelegate(_desktop);
-                }
+                this.DataModel.Desktops.Add(_desktop);
             }
             else
             {
                 _desktop.HostName = this.Host;
-                if (null != _saveDelegate)
-                {
-                    _saveDelegate(_desktop);
-                }
             }
 
             this.ResetCachedDesktopData();
