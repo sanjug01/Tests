@@ -3,12 +3,14 @@ using RdClient.Shared.Models;
 using System;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
+using RdClient.Shared.Helpers;
+using RdClient.Shared.CxWrappers;
 
 namespace RdClient.Shared.ViewModels
 {
 
 
-    public class SessionViewModel : ViewModelBase
+    public class SessionViewModel : ViewModelBase, IViewModelDisconnectStrings
     {
         private ConnectionInformation _connectionInformation;
 
@@ -19,7 +21,7 @@ namespace RdClient.Shared.ViewModels
         public ICommand ConnectCommand { get { return _connectCommand; } }
 
         public ISessionModel SessionModel { get; set; }
-
+        public DisconnectStrings DisconnectStrings { get; set; }
 
         public SessionViewModel()
         {
@@ -37,7 +39,21 @@ namespace RdClient.Shared.ViewModels
         private void Connect(object o)
         {            
             Contract.Assert(null != _connectionInformation);
+            Contract.Assert(null != SessionModel);
+
+            SessionModel.ConnectionCreated += (sender, args) => {
+                args.RdpConnection.Events.ClientDisconnected += HandleUnexpectedDisconnect;
+            };
+
             SessionModel.Connect(_connectionInformation);
+        }        
+
+        private void HandleUnexpectedDisconnect(object sender, ClientDisconnectedArgs args)
+        {
+            RdpDisconnectReason reason = args.DisconnectReason;
+            string errorString = DisconnectStrings.GetDisconnectString(reason);
+            DialogMessageArgs dialogArgs = new DialogMessageArgs(errorString, () => { this.NavigationService.NavigateToView("view1", null); }, null);
+            this.NavigationService.PushModalView("DialogMessage", dialogArgs);
         }
 
         private void Disconnect(object o)

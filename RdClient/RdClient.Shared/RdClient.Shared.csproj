@@ -75,6 +75,7 @@
     <Compile Include="ViewModels\DesktopViewModel.cs" />
     <Compile Include="Navigation\DataModelExtension.cs" />
     <Compile Include="Navigation\INavigationExtension.cs" />
+    <Compile Include="ViewModels\IViewModelDisconnectStrings.cs" />
     <Compile Include="ViewModels\IViewModelWithData.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Navigation\ApplicationBarSite.cs" />

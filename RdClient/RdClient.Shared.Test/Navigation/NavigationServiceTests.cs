@@ -60,6 +60,7 @@ namespace RdClient.Shared.Test
             {
                 view1.ViewModel = viewModel;
                 NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                navigationService.Extensions = new NavigationExtensionList();
                 object activationParameter = new object();
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
@@ -196,6 +197,7 @@ namespace RdClient.Shared.Test
                 view1.ViewModel = viewModel;
 
                 NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                navigationService.Extensions = new NavigationExtensionList();
                 bool callbackCalled = false;
                 object activationParameter = new object();
 
@@ -446,6 +448,8 @@ namespace RdClient.Shared.Test
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
                 NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                navigationService.Extensions = new NavigationExtensionList();
+
                 Mock.BarItemsViewModel vm = new Mock.BarItemsViewModel();
 
                 vm.Models = new BarItemModel[] { new Mock.TestBarItemModel(BarItemModel.ItemAlignment.Left, true) };
@@ -476,6 +480,8 @@ namespace RdClient.Shared.Test
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
                 NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                navigationService.Extensions = new NavigationExtensionList();
+
                 Mock.BarItemsViewModel vm = new Mock.BarItemsViewModel();
 
                 vm.Models = new BarItemModel[] { new Mock.TestBarItemModel(BarItemModel.ItemAlignment.Left, true) };
@@ -512,6 +518,8 @@ namespace RdClient.Shared.Test
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
                 NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                navigationService.Extensions = new NavigationExtensionList();
+
                 Mock.BarItemsViewModel
                     vm1 = new Mock.BarItemsViewModel(),
                     vm2 = new Mock.BarItemsViewModel();
@@ -554,6 +562,8 @@ namespace RdClient.Shared.Test
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
                 NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                navigationService.Extensions = new NavigationExtensionList();
+
                 Mock.BarItemsViewModel vm = new Mock.BarItemsViewModel();
 
                 vm.Models = new BarItemModel[] { new Mock.TestBarItemModel(BarItemModel.ItemAlignment.Left, true) };
@@ -588,6 +598,7 @@ namespace RdClient.Shared.Test
                 view2.ViewModel = viewModel;
 
                 NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                navigationService.Extensions = new NavigationExtensionList();
 
                 factory.Expect("CreateView", new List<object>() { "foo", null }, view1);
                 vmItems.Expect("Presenting", new List<object>() { navigationService, null }, 0);
@@ -623,6 +634,7 @@ namespace RdClient.Shared.Test
                 view2.ViewModel = viewModel;
 
                 NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                navigationService.Extensions = new NavigationExtensionList();
 
                 factory.Expect("CreateView", new List<object>() { "foo", null }, view1);
                 vmItems.Expect("Presenting", new List<object>() { navigationService, null }, 0);
@@ -663,6 +675,7 @@ namespace RdClient.Shared.Test
                 view2.ViewModel = viewModel;
 
                 NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                navigationService.Extensions = new NavigationExtensionList();
 
                 factory.Expect("CreateView", new List<object>() { "foo", null }, view1);
                 vmItems.Expect("Presenting", new List<object>() { navigationService, null }, 0);

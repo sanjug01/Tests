@@ -171,10 +171,11 @@
         </conv:StringToDictionaryObjectConverter>   
         
         <nav:NavigationExtensionList x:Key="ExtensionList">
-            <nav:DataModelExtension/>
+            <nav:DataModelExtension />
+            <helpers:DisconnectStringsExtension />
         </nav:NavigationExtensionList>
         <nav:PresentableViewFactoryConcrete x:Key="ViewFactory" x:Name="ViewFactory"/>
-        <nav:NavigationService x:Key="NavigationService" x:Name="NavigationService" 
+        <nav:DispatchedNavigationService x:Key="NavigationService" x:Name="NavigationService" 
                                ViewFactory="{StaticResource ViewFactory}" 
                                Extensions="{StaticResource ExtensionList}" />
     </Page.Resources>

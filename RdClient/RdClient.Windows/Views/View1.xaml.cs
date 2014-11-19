@@ -39,7 +39,7 @@ namespace RdClient.Views
             ConnectionInformation connectionInformation = new ConnectionInformation()
             {
                 Desktop = new Desktop() { HostName = "a3-w81" },
-                Credentials = new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
+                Credentials = new Credentials() { Username = "tslabadminx", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
             };
 
             _navigationService.NavigateToView("SessionView", connectionInformation);

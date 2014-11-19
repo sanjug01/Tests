@@ -3,8 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.Resources;
+using Windows.Foundation;
+using Windows.UI.Core;
+using Windows.UI.Xaml;
 
 namespace RdClient.Helpers
 {
@@ -12,7 +17,20 @@ namespace RdClient.Helpers
     {
         public string GetLocalizedString(string key)
         {
-            return ResourceLoader.GetForCurrentView().GetString(key);
+            string result = null;
+
+            ManualResetEvent mre = new ManualResetEvent(false);
+
+            Task task = CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                () =>
+                {
+                    result = ResourceLoader.GetForCurrentView().GetString(key);
+                    mre.Set();
+                }).AsTask();
+
+            mre.WaitOne();
+
+            return result;
         }
     }
 }

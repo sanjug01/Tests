@@ -13,7 +13,7 @@ namespace RdClient.Shared.Navigation
         }
     }
 
-    public sealed class NavigationService : INavigationService
+    public class NavigationService : INavigationService
     {
         public event EventHandler PushingFirstModalView;
         public event EventHandler DismissingLastModalView;
@@ -72,7 +72,7 @@ namespace RdClient.Shared.Navigation
             }
         }
 
-        public void NavigateToView(string viewName, object activationParameter)
+        public virtual void NavigateToView(string viewName, object activationParameter)
         {
             IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
 
@@ -97,7 +97,7 @@ namespace RdClient.Shared.Navigation
             UpdateApplicationBar();
         }
 
-        public void PushModalView(string viewName, object activationParameter)
+        public virtual void PushModalView(string viewName, object activationParameter)
         {
             Contract.Requires(viewName != null);
 
@@ -121,7 +121,7 @@ namespace RdClient.Shared.Navigation
         }
 
 
-        public void DismissModalView(IPresentableView modalView)
+        public virtual void DismissModalView(IPresentableView modalView)
         {
             Contract.Requires(modalView != null);
 
