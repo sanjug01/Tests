@@ -15,27 +15,26 @@ namespace RdClient.Shared.Navigation
 
     public class NavigationService : INavigationService
     {
+        private readonly List<IPresentableView> _modalStack;
+        private IViewPresenter _presenter;
+        private IPresentableViewFactory _viewFactory;
+        private IPresentableView _currentView;
+
         public event EventHandler PushingFirstModalView;
         public event EventHandler DismissingLastModalView;
 
         public NavigationExtensionList Extensions { get; set; }
 
-        private IViewPresenter _presenter;
         public IViewPresenter Presenter { set { _presenter = value; } }
 
-        private IPresentableViewFactory _viewFactory;
         public IPresentableViewFactory ViewFactory { set { _viewFactory = value; } }
 
         private IApplicationBarViewModel _appBarViewModel;
         public IApplicationBarViewModel AppBarViewModel { set { _appBarViewModel = value; } }
 
-        private IPresentableView _currentView;
-
-        private List<IPresentableView> _modalStack = new List<IPresentableView>();
-
         public NavigationService()
         {
-
+            _modalStack = new List<IPresentableView>();
         }
 
         public NavigationService(IViewPresenter presenter, IPresentableViewFactory viewFactory, IApplicationBarViewModel appBarViewModel)
