@@ -121,6 +121,7 @@
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
+    <Compile Include="Helpers\CoreDispatcherDeferredExecution.cs" />
     <Compile Include="Helpers\DisconnectStringsExtension.cs" />
     <Compile Include="Helpers\LocalizedStrings.cs" />
     <Compile Include="Helpers\PhysicalScreenSize.cs" />
