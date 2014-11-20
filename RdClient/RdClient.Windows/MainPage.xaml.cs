@@ -68,11 +68,9 @@
             this.ViewFactory.AddViewClass("AddOrEditDesktopView", typeof(Views.AddOrEditDesktopView));
             this.ViewFactory.AddViewClass("DialogMessage", typeof(Views.DialogMessage));
 
-            this.NavigationService.Presenter = this;
             this.NavigationService.AppBarViewModel = this.DataContext as IApplicationBarViewModel;
 
             this.NavigationService.NavigateToView("ConnectionCenterView", null);
-            this.NavigationService.PushModalView("DialogMessage", new DialogMessageArgs("this is a message", () => { }, () => { }));
         }
     }
 }

@@ -50,9 +50,13 @@ namespace RdClient.Shared.ViewModels
 
         private void HandleUnexpectedDisconnect(object sender, ClientDisconnectedArgs args)
         {
+            IRdpConnection rdpConnection = sender as IRdpConnection;
+            rdpConnection.Events.ClientDisconnected -= HandleUnexpectedDisconnect;
+
             RdpDisconnectReason reason = args.DisconnectReason;
             string errorString = DisconnectStrings.GetDisconnectString(reason);
-            DialogMessageArgs dialogArgs = new DialogMessageArgs(errorString, () => { this.NavigationService.NavigateToView("ConnectionCenterView", null); }, null);
+            DialogMessageArgs dialogArgs = new DialogMessageArgs(errorString, () => {
+            }, null);
             this.NavigationService.PushModalView("DialogMessage", dialogArgs);
         }
 

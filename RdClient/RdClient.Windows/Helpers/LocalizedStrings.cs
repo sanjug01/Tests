@@ -19,16 +19,8 @@ namespace RdClient.Helpers
         {
             string result = null;
 
-            ManualResetEvent mre = new ManualResetEvent(false);
+            result = ResourceLoader.GetForViewIndependentUse().GetString(key);
 
-            Task task = CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                () =>
-                {
-                    result = ResourceLoader.GetForCurrentView().GetString(key);
-                    mre.Set();
-                }).AsTask();
-
-            mre.WaitOne();
 
             return result;
         }
