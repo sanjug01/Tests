@@ -33,6 +33,11 @@ namespace RdClient.Shared.ViewModels
             get { return SetVmDataModelAndReturn(new AddOrEditDesktopViewModel()); }
         }
 
+        public DeleteDesktopsViewModel DeleteDesktopsViewModel
+        {
+            get { return SetVmDataModelAndReturn(new DeleteDesktopsViewModel()); }
+        }
+
         private T SetVmDataModelAndReturn<T>(T vm) where T : ViewModelBase
         {
             vm.DataModel = _dataModel;

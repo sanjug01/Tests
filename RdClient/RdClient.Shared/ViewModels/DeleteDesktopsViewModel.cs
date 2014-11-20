@@ -1,5 +1,6 @@
 ﻿using RdClient.Shared.Navigation;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
 
@@ -8,15 +9,11 @@ namespace RdClient.Shared.ViewModels
 
     public class DeleteDesktopsArgs
     {
-        private readonly string _message;
-        private readonly string _title;
-        public string Message { get { return _message; } }
-        public string Title { get { return _title; } }
+        public IList<object> SelectedDesktops { get; private set; }
 
-        public DeleteDesktopsArgs(string message, , string title = "")
+        public DeleteDesktopsArgs(IList<object> selectedDesktops)
         {
-            _message = message;
-            _title = title;
+            SelectedDesktops = selectedDesktops;
         }
     }
 
@@ -30,40 +27,30 @@ namespace RdClient.Shared.ViewModels
 
         public IPresentableView DialogView { private get; set; }
 
-        private string _message;
-        private string _title;
-        public string Message
+        
+        private IList<object> SelectedDesktops 
+        { 
+            get; 
+            set; 
+        }
+
+        public bool IsSingleSelection
         {
-            get { return _message; }
-            set
+            get { return true; } 
+        }
+
+        public int DesktopsCount
+        {
+            get 
             {
-                SetProperty(ref _message, value, "Message");
+                int count = 0;
+                return count; 
             }
         }
 
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                SetProperty(ref _title, value, "Title");
-            }
-        }
-
-        private string _okString;
-        public string OkString { get { return _okString; } }
-
-        private string _cancelString;
-        public string CancelString { get { return _cancelString; } }
-
-        public bool OkVisible { get { return true;  } }
-
-        public bool CancelVisible { get { return true; } }
 
         public DeleteDesktopsViewModel()
         {
-            _deleteCommand = new RelayCommand(new Action<object>(DeleteDesktops));
-            _cancelCommand = new RelayCommand(new Action<object>(Cancel));
         }
 
         private void DeleteDesktops(object o)
@@ -84,9 +71,7 @@ namespace RdClient.Shared.ViewModels
             Contract.Assert(activationParameter is DeleteDesktopsArgs);
             DeleteDesktopsArgs args = (DeleteDesktopsArgs)activationParameter;
 
-            this.Message = args.Message;
-            this.Title = args.Title;
-
+            this.SelectedDesktops = args.SelectedDesktops;
         }
     }
 }
