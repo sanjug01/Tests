@@ -78,7 +78,9 @@
     <Compile Include="Navigation\Contracts\IApplicationBarSiteContract.cs" />
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
     <Compile Include="Navigation\Extensions\ApplicationBarExtension.cs" />
+    <Compile Include="Navigation\Extensions\DeferredExecutionExtension.cs" />
     <Compile Include="Navigation\Extensions\IApplicationBarSiteControl.cs" />
+    <Compile Include="Navigation\Extensions\IDeferredExecutionSite.cs" />
     <Compile Include="ViewModels\DesktopViewModel.cs" />
     <Compile Include="Navigation\DataModelExtension.cs" />
     <Compile Include="Navigation\INavigationExtension.cs" />
