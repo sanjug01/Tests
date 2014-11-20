@@ -688,7 +688,10 @@ namespace RdClient.Shared.Test
                 view2.ViewModel = viewModel;
 
                 NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
-                navigationService.Extensions = new NavigationExtensionList();
+                navigationService.Extensions = new NavigationExtensionList()
+                    {
+                        new ApplicationBarExtension() { ViewModel = _appBarViewModel }
+                    };
 
                 factory.Expect("CreateView", new List<object>() { "foo", null }, view1);
                 vmItems.Expect("Presenting", new List<object>() { navigationService, null }, 0);
@@ -696,6 +699,7 @@ namespace RdClient.Shared.Test
                 presenter.Expect("PresentView", new List<object>() { view1 }, 0);
 
                 navigationService.NavigateToView("foo", null);
+                Assert.IsNotNull(vmItems.ApplicationBarSite);
                 vmItems.ApplicationBarSite.ShowBar.Execute(null);
                 Assert.IsTrue(_appBarViewModel.IsBarVisible);
 

@@ -21,6 +21,17 @@
             _barViewModel.BarItems = QueryApplicationBarItems(viewModel);
         }
 
+        void INavigationExtension.Dismissed(IViewModel viewModel)
+        {
+            if(null != _lastCreatedSite)
+            {
+                _lastCreatedSite.Deactivate();
+                _lastCreatedSite = null;
+            }
+            _barViewModel.IsBarSticky = false;
+            _barViewModel.BarItems = null;
+        }
+
         private IEnumerable<BarItemModel> QueryApplicationBarItems( IViewModel viewModel )
         {
             IEnumerable<BarItemModel> barItems = null;

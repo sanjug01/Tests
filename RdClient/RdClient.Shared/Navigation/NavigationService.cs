@@ -128,41 +128,63 @@ namespace RdClient.Shared.Navigation
             foreach (IPresentableView view in toDismiss)
             {
                 CallDismissing(view);
-
                 _presenter.DismissModalView(view);
             }
+            //
+            // The view that has become the new active view - either the currently presented view,
+            // of the view at the top of the modal stack.
+            //
+            IPresentableView newActiveView = null;
+            int topModalViewIndex = _modalStack.Count - 1;
 
-            if(_modalStack.Count == 0)
+            if (topModalViewIndex < 0)
             {
                 EmitDismissingLastModalView();
+                newActiveView = _currentView;
+            }
+            else
+            {
+                newActiveView = _modalStack[topModalViewIndex];
+            }
+
+            if( null != newActiveView )
+            {
+                newActiveView.ViewModel.CastAndCall<IViewModel>(vm =>
+                {
+                    foreach (INavigationExtension extension in this.Extensions)
+                        extension.Presenting(vm);
+                });
             }
         }
 
         private void CallPresenting(IPresentableView view, object activationParameter)
         {
-            IViewModel vm = view.ViewModel;
-
-            if (null != vm)
+            view.ViewModel.CastAndCall<IViewModel>( vm =>
             {
-                foreach(INavigationExtension extension in Extensions)
+                foreach (INavigationExtension extension in Extensions)
                 {
                     extension.Presenting(vm);
                 }
 
                 vm.Presenting(this, activationParameter);
-            }
+            });
+
             view.Presenting(this, activationParameter);
         }
 
 
         private void CallDismissing(IPresentableView view)
         {
-            IViewModel vm = view.ViewModel;
-
-            if (null != vm)
+            view.ViewModel.CastAndCall<IViewModel>(vm =>
             {
                 vm.Dismissing();
-            }
+
+                foreach (INavigationExtension extension in Extensions)
+                {
+                    extension.Dismissed(vm);
+                }
+            });
+
             view.Dismissing();
         }
     }

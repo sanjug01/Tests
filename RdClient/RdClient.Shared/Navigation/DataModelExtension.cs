@@ -12,7 +12,15 @@
         {
             viewModel.CastAndCall<IViewModelWithData>(vmd =>
             {
-                // Do something
+                // Deliver the data model to the view model
+            });
+        }
+
+        void INavigationExtension.Dismissed(IViewModel viewModel)
+        {
+            viewModel.CastAndCall<IViewModelWithData>(vmd =>
+            {
+                // Remove the data model from the view model
             });
         }
     }
