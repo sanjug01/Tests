@@ -1,0 +1,78 @@
+<Page
+    x:Class="RdClient.Views.DeleteDesktopsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:cv="using:RdClient.Converters"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:DeleteDesktopsViewModel/>
+    </Page.DataContext>
+
+    <Page.Resources>
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+    </Page.Resources>
+    
+    <Grid>
+        <Border 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch" 
+            Opacity="0.8" 
+            Background="#dd000000"
+        />
+
+        <Border 
+            Background="{StaticResource rdWhiteBrush}" 
+            Width="600" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Top" 
+            BorderThickness="4"
+            Margin="0,128,8,0"
+            >
+            <Grid MinHeight="200" MinWidth="600">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="12"/>
+                </Grid.RowDefinitions>
+        
+                <Grid Grid.Row="0">
+                    <TextBlock 
+                        Margin="24,12,24,12" 
+                        Style="{ThemeResource TitleTextBlockStyle}" 
+                        Foreground="{StaticResource rdBlackBrush}" 
+                        Text="Delete desktops(d)?"
+                        />
+                </Grid>        
+                <TextBlock 
+                    x:Name="Message"
+                    Grid.Row="2"
+                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                    FontSize="16"
+                    Margin="1,0" 
+                    Text="Are you sure you want to delete(d)?" 
+                    TextWrapping="Wrap" />       
+                <StackPanel 
+                    Grid.Row="3"           
+                    Orientation="Horizontal" 
+                    VerticalAlignment="Bottom" 
+                    HorizontalAlignment="Center">
+                    <Button MinWidth="93"
+                            Command="{Binding Path=OkCommand}"
+                            Content="Delete(d)"
+                            />
+                    <Button MinWidth="93"
+                            Command="{Binding Path=CancelCommand}"
+                            Content="Cancel(d)"
+                            />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

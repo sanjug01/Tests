@@ -147,6 +147,9 @@
     <Compile Include="Views\DesktopThumbnailView.xaml.cs">
       <DependentUpon>DesktopThumbnailView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DeleteDesktopsView.xaml.cs">
+      <DependentUpon>DeleteDesktopsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DialogMessage.xaml.cs">
       <DependentUpon>DialogMessage.xaml</DependentUpon>
     </Compile>
@@ -226,6 +229,10 @@
     <Page Include="Views\DesktopThumbnailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DeleteDesktopsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\DialogMessage.xaml">
       <SubType>Designer</SubType>
