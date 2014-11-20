@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.Navigation;
+using RdClient.Shared.Navigation.Extensions;
 using RdClient.Shared.ViewModels;
 using System.Collections.Generic;
 
@@ -448,7 +449,10 @@ namespace RdClient.Shared.Test
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
                 NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
-                navigationService.Extensions = new NavigationExtensionList();
+                navigationService.Extensions = new NavigationExtensionList()
+                    {
+                        new ApplicationBarExtension() { ViewModel = _appBarViewModel }
+                    };
 
                 Mock.BarItemsViewModel vm = new Mock.BarItemsViewModel();
 
@@ -518,7 +522,10 @@ namespace RdClient.Shared.Test
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
                 NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
-                navigationService.Extensions = new NavigationExtensionList();
+                navigationService.Extensions = new NavigationExtensionList()
+                    {
+                        new ApplicationBarExtension() { ViewModel = _appBarViewModel }
+                    };
 
                 Mock.BarItemsViewModel
                     vm1 = new Mock.BarItemsViewModel(),
@@ -562,7 +569,10 @@ namespace RdClient.Shared.Test
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
                 NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
-                navigationService.Extensions = new NavigationExtensionList();
+                navigationService.Extensions = new NavigationExtensionList()
+                    {
+                        new ApplicationBarExtension() { ViewModel = _appBarViewModel }
+                    };
 
                 Mock.BarItemsViewModel vm = new Mock.BarItemsViewModel();
 
@@ -634,7 +644,10 @@ namespace RdClient.Shared.Test
                 view2.ViewModel = viewModel;
 
                 NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
-                navigationService.Extensions = new NavigationExtensionList();
+                navigationService.Extensions = new NavigationExtensionList()
+                    {
+                        new ApplicationBarExtension() { ViewModel = _appBarViewModel }
+                    };
 
                 factory.Expect("CreateView", new List<object>() { "foo", null }, view1);
                 vmItems.Expect("Presenting", new List<object>() { navigationService, null }, 0);
