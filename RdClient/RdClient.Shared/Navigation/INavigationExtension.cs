@@ -1,9 +1,8 @@
-﻿using RdClient.Shared.Navigation;
-using RdClient.Shared.ViewModels;
-using System.Collections.Generic;
-
-namespace RdClient.Shared.Navigation
+﻿namespace RdClient.Shared.Navigation
 {
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+
     public class NavigationExtensionList : List<INavigationExtension>
     {
     }
@@ -11,6 +10,7 @@ namespace RdClient.Shared.Navigation
     /// <summary>
     /// Extension object that the navigation service calls when it presents and dismisses view models.
     /// </summary>
+    [ContractClass(typeof(Contracts.INavigationExtensionContract))]
     public interface INavigationExtension
     {
         /// <summary>

@@ -2,6 +2,7 @@
 {
     using RdClient.Shared.ViewModels;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Interface of an object that provides models for items that may be shown in the application bar.
@@ -9,6 +10,7 @@
     /// The navigation service will retrieve a collection of bar item models upon activation of a new navigation subject,
     /// and will populate the application bar with controls based on the models.
     /// </summary>
+    [ContractClass(typeof(Contracts.IApplicationBarItemsSourceContract))]
     public interface IApplicationBarItemsSource
     {
         /// <summary>

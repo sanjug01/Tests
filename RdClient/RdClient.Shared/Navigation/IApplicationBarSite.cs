@@ -1,12 +1,14 @@
 ﻿namespace RdClient.Shared.Navigation
 {
     using System.ComponentModel;
+    using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
     /// <summary>
     /// Interface of a site of the application bar.
     /// The bar site is responsible for showing and hiding the bar and for tracking the bar's state.
     /// </summary>
+    [ContractClass(typeof(Contracts.IApplicationBarSiteContract))]
     public interface IApplicationBarSite : INotifyPropertyChanged
     {
         /// <summary>
