@@ -72,6 +72,8 @@
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\Desktop.cs" />
     <Compile Include="Models\ModelCollection.cs" />
+    <Compile Include="Navigation\Extensions\ApplicationBarExtension.cs" />
+    <Compile Include="Navigation\IApplicationBarSiteControl.cs" />
     <Compile Include="ViewModels\DesktopViewModel.cs" />
     <Compile Include="Navigation\DataModelExtension.cs" />
     <Compile Include="Navigation\INavigationExtension.cs" />

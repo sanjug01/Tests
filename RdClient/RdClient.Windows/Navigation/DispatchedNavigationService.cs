@@ -14,26 +14,48 @@ namespace RdClient.Shared.Navigation
         }
 
         public override async void NavigateToView(string viewName, object activationParameter)
-        {                        
-            await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+        {
+            if (_dispatcher.HasThreadAccess)
+            {
                 base.NavigateToView(viewName, activationParameter);
-            });
+            }
+            else
+            {
+                await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    base.NavigateToView(viewName, activationParameter);
+                });
+            }
         }
 
         public override async void PushModalView(string viewName, object activationParameter)
         {
-            await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            if (_dispatcher.HasThreadAccess)
             {
                 base.PushModalView(viewName, activationParameter);
-            });
+            }
+            else
+            {
+                await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    base.PushModalView(viewName, activationParameter);
+                });
+            }
         }
 
         public override async void DismissModalView(IPresentableView modalView)
         {
-            await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            if (_dispatcher.HasThreadAccess)
             {
                 base.DismissModalView(modalView);
-            });
+            }
+            else
+            {
+                await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    base.DismissModalView(modalView);
+                });
+            }
         }
     }
 }

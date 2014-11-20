@@ -13,7 +13,6 @@ namespace RdClient.Shared.Navigation
         event EventHandler DismissingLastModalView;
         IViewPresenter Presenter { set; }
         IPresentableViewFactory ViewFactory { set; }
-        IApplicationBarViewModel AppBarViewModel { set; }
 
         /// <summary>
         /// Navigate to a view. If the view is not currently shown on the UI, the presenter is asked to present it.

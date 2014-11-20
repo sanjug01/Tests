@@ -10,6 +10,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nav="using:RdClient.Shared.Navigation"
+    xmlns:navext="using:RdClient.Shared.Navigation.Extensions"
     mc:Ignorable="d"
     DataContext="{StaticResource MainPageViewModel}"
     Loaded="Page_Loaded">
@@ -186,14 +187,13 @@
         <nav:DispatchedNavigationService
             x:Key="NavigationService"
             x:Name="NavigationService" 
-            AppBarViewModel="{StaticResource MainPageViewModel}"
             ViewFactory="{StaticResource ViewFactory}">
-
             
             <!-- Register all navigation extensions -->
             <nav:DispatchedNavigationService.Extensions>
                 <nav:DataModelExtension/>
-		<helpers:DisconnectStringsExtension />
+                <helpers:DisconnectStringsExtension />
+                <navext:ApplicationBarExtension ViewModel="{StaticResource MainPageViewModel}" />
             </nav:DispatchedNavigationService.Extensions>
         </nav:DispatchedNavigationService>
     </Page.Resources>

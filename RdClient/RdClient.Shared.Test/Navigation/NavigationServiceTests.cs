@@ -30,7 +30,7 @@ namespace RdClient.Shared.Test
             using(Mock.ViewFactory factory = new Mock.ViewFactory())
             using(Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 object activationParameter = new object();
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
@@ -59,7 +59,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewModel viewModel = new Mock.ViewModel())
             {
                 view1.ViewModel = viewModel;
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 navigationService.Extensions = new NavigationExtensionList();
                 object activationParameter = new object();
 
@@ -88,7 +88,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
                 bool exceptionThrown = false;
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 object activationParameter = new object();
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, null);
@@ -114,7 +114,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 object activationParameter = new object();
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
@@ -147,7 +147,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 object activationParameter = new object();
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
@@ -170,7 +170,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 bool callbackCalled = false;
                 object activationParameter = new object();
 
@@ -196,7 +196,7 @@ namespace RdClient.Shared.Test
             {
                 view1.ViewModel = viewModel;
 
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 navigationService.Extensions = new NavigationExtensionList();
                 bool callbackCalled = false;
                 object activationParameter = new object();
@@ -227,7 +227,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 bool callbackCalled = false;
                 object activationParameter = new object();
 
@@ -255,7 +255,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 object activationParameter = new object();
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
@@ -280,7 +280,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 bool callbackCalled = false;
                 object activationParameter = new object();
 
@@ -324,7 +324,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 bool exceptionThrown = false;
                 object activationParameter = new object();
 
@@ -359,7 +359,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 bool exceptionThrown = false;
                 object activationParameter = new object();
 
@@ -383,7 +383,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 bool exceptionThrown = false;
                 object activationParameter = new object();
 
@@ -415,7 +415,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 bool exceptionThrown = false;
                 object activationParameter = new object();
 
@@ -447,7 +447,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 navigationService.Extensions = new NavigationExtensionList();
 
                 Mock.BarItemsViewModel vm = new Mock.BarItemsViewModel();
@@ -479,7 +479,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 navigationService.Extensions = new NavigationExtensionList();
 
                 Mock.BarItemsViewModel vm = new Mock.BarItemsViewModel();
@@ -517,7 +517,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 navigationService.Extensions = new NavigationExtensionList();
 
                 Mock.BarItemsViewModel
@@ -561,7 +561,7 @@ namespace RdClient.Shared.Test
             using (Mock.ViewFactory factory = new Mock.ViewFactory())
             using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
             {
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 navigationService.Extensions = new NavigationExtensionList();
 
                 Mock.BarItemsViewModel vm = new Mock.BarItemsViewModel();
@@ -597,7 +597,7 @@ namespace RdClient.Shared.Test
                 view1.ViewModel = vmItems;
                 view2.ViewModel = viewModel;
 
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 navigationService.Extensions = new NavigationExtensionList();
 
                 factory.Expect("CreateView", new List<object>() { "foo", null }, view1);
@@ -633,7 +633,7 @@ namespace RdClient.Shared.Test
                 view1.ViewModel = vmItems;
                 view2.ViewModel = viewModel;
 
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 navigationService.Extensions = new NavigationExtensionList();
 
                 factory.Expect("CreateView", new List<object>() { "foo", null }, view1);
@@ -674,7 +674,7 @@ namespace RdClient.Shared.Test
                 view1.ViewModel = vmItems;
                 view2.ViewModel = viewModel;
 
-                NavigationService navigationService = new NavigationService(presenter, factory, _appBarViewModel);
+                NavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 navigationService.Extensions = new NavigationExtensionList();
 
                 factory.Expect("CreateView", new List<object>() { "foo", null }, view1);

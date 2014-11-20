@@ -38,33 +38,10 @@ namespace RdClient.Shared.Navigation
 
         public IPresentableViewFactory ViewFactory { set { _viewFactory = value; } }
 
-        private IApplicationBarViewModel _appBarViewModel;
-        public IApplicationBarViewModel AppBarViewModel { set { _appBarViewModel = value; } }
-
         public NavigationService()
         {
             Contract.Ensures(null != _modalStack);
             _modalStack = new List<IPresentableView>();
-        }
-
-        public NavigationService(IViewPresenter presenter, IPresentableViewFactory viewFactory, IApplicationBarViewModel appBarViewModel)
-        {
-            Contract.Requires(presenter != null);
-            Contract.Requires(viewFactory != null);
-            //
-            // appBarViewModel one is asserted because in the application the parameter comes from the view model which may
-            // accidentally get replaced with one that doesn't implement the interface.
-            //
-            Contract.Assert(null != appBarViewModel);
-            Contract.Ensures(null != _presenter);
-            Contract.Ensures(null != _viewFactory);
-            Contract.Ensures(null != _appBarViewModel);
-            Contract.Ensures(null != _modalStack);
-            _modalStack = new List<IPresentableView>();
-
-            Presenter = presenter;
-            ViewFactory = viewFactory;
-            AppBarViewModel = appBarViewModel;
         }
 
         private void EmitPushingFirstModalView()
@@ -105,7 +82,6 @@ namespace RdClient.Shared.Navigation
             }
 
             _currentView = view;
-            UpdateApplicationBar();
         }
 
         public virtual void PushModalView(string viewName, object activationParameter)
@@ -122,7 +98,6 @@ namespace RdClient.Shared.Navigation
             if(_modalStack.Count == 0)
             {
                 EmitPushingFirstModalView();
-                _appBarViewModel.BarItems = null;
             }
 
             _modalStack.Add(view);
@@ -160,7 +135,6 @@ namespace RdClient.Shared.Navigation
             if(_modalStack.Count == 0)
             {
                 EmitDismissingLastModalView();
-                UpdateApplicationBar();
             }
         }
 
@@ -190,48 +164,6 @@ namespace RdClient.Shared.Navigation
                 vm.Dismissing();
             }
             view.Dismissing();
-        }
-
-        private void UpdateApplicationBar()
-        {
-            //
-            // If the new view model is there and implements the IApplicationBarItemsSource interface,
-            // create a bar site object for the view, request the collection of application bar items,
-            // and upate the application bar with the new 
-            //
-            _appBarViewModel.IsBarSticky = false;
-            _appBarViewModel.BarItems = QueryApplicationBarItems();
-        }
-
-        private IEnumerable<BarItemModel> QueryApplicationBarItems()
-        {
-            IEnumerable<BarItemModel> barItems = null;
-
-            if (null != _currentView)
-            {
-                IApplicationBarItemsSource itemSource = _currentView.ViewModel as IApplicationBarItemsSource;
-
-                if (null != itemSource)
-                {
-                    IApplicationBarSite site = ApplicationBarSite.Create(_appBarViewModel,
-                        //
-                        // Predicate that the site object calls before making any changes to the view model -
-                        // check if the currently presented view is the one for that the site was created,
-                        // and that there are no modally presented views on the stack.
-                        //
-                        o => this.IsCurrentView(o) && 0 == _modalStack.Count, _currentView,
-                        _appBarViewModel.ShowBar,
-                        () => _appBarViewModel.IsBarVisible = false);
-                    barItems = itemSource.GetItems(site);
-                }
-            }
-
-            return barItems;
-        }
-
-        private bool IsCurrentView(object obj)
-        {
-            return object.ReferenceEquals(obj, _currentView);
         }
     }
 }
