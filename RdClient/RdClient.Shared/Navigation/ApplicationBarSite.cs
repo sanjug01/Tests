@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Navigation
 {
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.ViewModels;
     using System;
     using System.ComponentModel;

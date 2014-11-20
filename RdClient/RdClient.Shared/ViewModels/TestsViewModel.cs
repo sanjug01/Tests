@@ -8,6 +8,7 @@ using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
+using RdClient.Shared.Navigation.Extensions;
 
 namespace RdClient.Shared.ViewModels
 {

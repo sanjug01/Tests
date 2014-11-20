@@ -1,4 +1,4 @@
-﻿namespace RdClient.Shared.Navigation
+﻿namespace RdClient.Shared.Navigation.Extensions
 {
     using RdClient.Shared.ViewModels;
     using System.Collections.Generic;

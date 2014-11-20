@@ -76,7 +76,7 @@
     <Compile Include="Navigation\Contracts\IApplicationBarSiteContract.cs" />
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
     <Compile Include="Navigation\Extensions\ApplicationBarExtension.cs" />
-    <Compile Include="Navigation\IApplicationBarSiteControl.cs" />
+    <Compile Include="Navigation\Extensions\IApplicationBarSiteControl.cs" />
     <Compile Include="ViewModels\DesktopViewModel.cs" />
     <Compile Include="Navigation\DataModelExtension.cs" />
     <Compile Include="Navigation\INavigationExtension.cs" />
@@ -91,8 +91,8 @@
     <Compile Include="ValidationRules\HostNameValidationRule.cs" />
     <Compile Include="ViewModels\BarButtonModel.cs" />
     <Compile Include="ViewModels\BarItemModel.cs" />
-    <Compile Include="Navigation\IApplicationBarItemsSource.cs" />
-    <Compile Include="Navigation\IApplicationBarSite.cs" />
+    <Compile Include="Navigation\Extensions\IApplicationBarItemsSource.cs" />
+    <Compile Include="Navigation\Extensions\IApplicationBarSite.cs" />
     <Compile Include="ViewModels\ConnectionCenterViewModel.cs" />
     <Compile Include="ViewModels\IApplicationBarViewModel.cs" />
     <Compile Include="Models\ISessionModel.cs" />

@@ -1,4 +1,4 @@
-﻿namespace RdClient.Shared.Navigation
+﻿namespace RdClient.Shared.Navigation.Extensions
 {
     using System.ComponentModel;
     using System.Diagnostics.Contracts;

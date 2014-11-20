@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Navigation.Contracts
 {
+    using RdClient.Shared.Navigation.Extensions;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
 

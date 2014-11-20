@@ -1,6 +1,6 @@
 ﻿namespace RdClient.Shared.Test.Mock
 {
-    using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.ViewModels;
     using System.Collections.Generic;
 
