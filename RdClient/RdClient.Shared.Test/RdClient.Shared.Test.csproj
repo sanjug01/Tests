@@ -93,6 +93,7 @@
     <Compile Include="Model\DataModelTests.cs" />
     <Compile Include="Model\ModelCollectionTests.cs" />
     <Compile Include="Model\SessionModelTests.cs" />
+    <Compile Include="Navigation\Extensions\DeferredExecutionExtensionTests.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
     <Compile Include="ViewModels\BarButtonModelTests.cs" />
     <Compile Include="ViewModels\BarItemModelTests.cs" />
