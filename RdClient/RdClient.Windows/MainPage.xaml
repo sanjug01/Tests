@@ -194,6 +194,11 @@
                 <nav:DataModelExtension/>
                 <helpers:DisconnectStringsExtension />
                 <navext:ApplicationBarExtension ViewModel="{StaticResource MainPageViewModel}" />
+                <navext:DeferredExecutionExtension>
+                    <navext:DeferredExecutionExtension.DeferredExecution>
+                        <helpers:CoreDispatcherDeferredExecution Priority="Normal" />
+                    </navext:DeferredExecutionExtension.DeferredExecution>
+                </navext:DeferredExecutionExtension>
             </nav:DispatchedNavigationService.Extensions>
         </nav:DispatchedNavigationService>
     </Page.Resources>
