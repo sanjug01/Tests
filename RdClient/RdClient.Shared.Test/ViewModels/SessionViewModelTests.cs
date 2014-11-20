@@ -47,7 +47,7 @@ namespace RdClient.Shared.Test.ViewModels
                 };
 
                 sessionModel.Expect("Disconnect", new List<object>() { }, 0);
-                navigation.Expect("NavigateToView", new List<object>() { "view1", null }, 0);
+                navigation.Expect("NavigateToView", new List<object>() { "ConnectionCenterView", null }, 0);
 
                 svm.Presenting(navigation, connectionInformation);
                 svm.DisconnectCommand.Execute(null);

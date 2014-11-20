@@ -44,7 +44,7 @@ namespace RdClient.Shared.ViewModels
             NavigationService.PushModalView("AddOrEditDesktopView", new AddOrEditDesktopViewModelArgs(null, null, true));
         }
 
-        void ConnectionCenterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void ConnectionCenterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "DataModel")
             {
@@ -61,7 +61,7 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        void Desktops_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Desktops_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {

@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
+using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
+using System;
 using System.Collections.Generic;
 
 namespace RdClient.Shared.Test.ViewModels
@@ -9,6 +11,8 @@ namespace RdClient.Shared.Test.ViewModels
     [TestClass]
     public class AddOrEditDesktopViewModelTests
     {
+        private TestData _testData;
+
         class TestAddOrEditDesktopViewModel : AddOrEditDesktopViewModel
         {
             public TestAddOrEditDesktopViewModel()
@@ -22,6 +26,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestInitialize]
         public void TestSetUp()
         {
+            _testData = new TestData();
             _addOrEditDesktopViewModel = new TestAddOrEditDesktopViewModel();
         }
         
@@ -134,23 +139,27 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.PresentableView view = new Mock.PresentableView())
-            {
-                object saveParam = new object();
-                Desktop desktop = null;
-                bool isAddingDesktop = true;
+            using (Mock.DataModel dataModel = new Mock.DataModel())
+            {                
+                Desktop expectedDesktop = _testData.NewValidDesktop(Guid.Empty);
+                dataModel.Desktops = new ModelCollection<Desktop>();
+                _addOrEditDesktopViewModel.DataModel = dataModel;
 
+                bool isAddingDesktop = true;
                 AddOrEditDesktopViewModelArgs args =
-                    new AddOrEditDesktopViewModelArgs(desktop, null, isAddingDesktop);
+                    new AddOrEditDesktopViewModelArgs(null, null, isAddingDesktop);
                 
                 _addOrEditDesktopViewModel.PresentableView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
-
                 _addOrEditDesktopViewModel.Presenting(navigation, args);
-
-                _addOrEditDesktopViewModel.Host = "NewPC";
-                _addOrEditDesktopViewModel.SaveCommand.Execute(saveParam);
-
-                // TODO : verification that new desktop is persisted
+                _addOrEditDesktopViewModel.Host = expectedDesktop.HostName;                
+                
+                Assert.AreEqual(0, dataModel.Desktops.Count, "no desktop should be added until save command is executed");
+                _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+                Assert.AreEqual(1, dataModel.Desktops.Count);
+                Desktop savedDesktop = dataModel.Desktops[0];
+                Assert.AreEqual(expectedDesktop.HostName, savedDesktop.HostName);
+                Assert.AreNotEqual(expectedDesktop, savedDesktop, "A new desktop should have been created");
             }
         }
 
@@ -159,25 +168,25 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.PresentableView view = new Mock.PresentableView())
+            using (Mock.DataModel dataModel = new Mock.DataModel())
             {
-                object saveParam = new object();
-                Desktop desktop = null;
+                Desktop expectedDesktop = _testData.NewValidDesktop(Guid.Empty);
+                dataModel.Desktops = new ModelCollection<Desktop>();
+                _addOrEditDesktopViewModel.DataModel = dataModel;
+                
                 bool isAddingDesktop = true;
-
                 AddOrEditDesktopViewModelArgs args =
-                    new AddOrEditDesktopViewModelArgs(desktop, null, isAddingDesktop);
+                    new AddOrEditDesktopViewModelArgs(null, null, isAddingDesktop);
 
                 _addOrEditDesktopViewModel.PresentableView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
 
+                _addOrEditDesktopViewModel.DataModel = dataModel;
                 _addOrEditDesktopViewModel.Presenting(navigation, args);
 
-                _addOrEditDesktopViewModel.Host = "NewPC_not_saved";
-                _addOrEditDesktopViewModel.CancelCommand.Execute(saveParam);
-
-                Assert.IsTrue(string.IsNullOrEmpty(_addOrEditDesktopViewModel.Host));
-
-                // TODO : verification that new desktop is not persisted
+                _addOrEditDesktopViewModel.Host = expectedDesktop.HostName;
+                _addOrEditDesktopViewModel.CancelCommand.Execute(null);
+                Assert.AreEqual(0, dataModel.Desktops.Count, "no desktop should be added when cancel command is executed");
             }
         }
 
@@ -186,6 +195,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.PresentableView view = new Mock.PresentableView())
+            using (Mock.DataModel dataModel = new Mock.DataModel())
             {
                 object saveParam = new object();
                 Desktop desktop = new Desktop() { HostName = "myPC" };

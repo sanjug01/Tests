@@ -75,6 +75,7 @@
     <Compile Include="Helpers\ReadWriteMonitorTests.cs" />
     <Compile Include="Helpers\TestData.cs" />
     <Compile Include="Mock\BarItemsViewModel.cs" />
+    <Compile Include="Mock\DataModel.cs" />
     <Compile Include="Mock\DataStorage.cs" />
     <Compile Include="Mock\NavigationService.cs" />
     <Compile Include="Mock\PhysicalScreenSize.cs" />
