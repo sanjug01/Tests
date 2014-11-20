@@ -124,8 +124,7 @@ namespace RdClient.Shared.ViewModels
             // static credentials
             Credentials user = new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false };
 
-            AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(null, user, true,
-                newDesktop => { this.Desktops.Add(newDesktop); });
+            AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(null, user, true);
             NavigationService.PushModalView("AddOrEditDesktopView", args);
         }
 
@@ -151,8 +150,7 @@ namespace RdClient.Shared.ViewModels
                 int desktopIndex = this.Desktops.IndexOf(desktop);
 
                 // delegate is not necessary, since the selected desktop will be directly updated, but refreshing the list may be required
-                AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(desktop, user, false,
-                    updatedDesktop => { this.Desktops[desktopIndex] = updatedDesktop; });
+                AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(desktop, user, false);
 
                 NavigationService.PushModalView("AddOrEditDesktopView", args);
             }
@@ -301,13 +299,7 @@ namespace RdClient.Shared.ViewModels
 
             // add desktop
             Debug.WriteLine("   ....... Adding a desktop");
-            args = new AddOrEditDesktopViewModelArgs(null, testUser, true,
-                newDesktop =>
-                {
-                    this.Desktops.Add(newDesktop);
-                    returnHostName = newDesktop.HostName;
-                }
-                );
+            args = new AddOrEditDesktopViewModelArgs(null, testUser, true);
 
             vm.Presenting(null, args);
             vm.Host = "saved_new_host";
@@ -319,14 +311,8 @@ namespace RdClient.Shared.ViewModels
             Debug.WriteLine("   ....... Editing the desktop, save changes");
             RdTrace.IfCondThrow(this.Desktops.Count <= 0, "At least one desktop should exist for the edit test!");
             testDesktop = this.Desktops[0];
-            int desktopIndex = 0;
 
-            args = new AddOrEditDesktopViewModelArgs(testDesktop, _connectionInformation.Credentials, false,
-                updatedDesktop => { 
-                    this.Desktops[desktopIndex] = updatedDesktop;
-                    returnHostName = updatedDesktop.HostName;
-                }
-                );
+            args = new AddOrEditDesktopViewModelArgs(testDesktop, _connectionInformation.Credentials, false);
 
             vm.Presenting(null, args);
             vm.Host = _connectionInformation.Desktop.HostName;
@@ -408,8 +394,7 @@ namespace RdClient.Shared.ViewModels
 
             // Test 1: add desktop, cancel
             Debug.WriteLine("   ....... Test 1 - Add desktop, cancel changes");
-            AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(null, testUser, true,
-                newDesktop => { delegateCalled = true; });
+            AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(null, testUser, true);
 
             vm.Presenting(null, args);
             vm.Host = "unsaved_new_host";
@@ -420,14 +405,7 @@ namespace RdClient.Shared.ViewModels
             // Test 2: add desktop, save
             Debug.WriteLine("   ....... Test 2 - Add desktop, save changes");
             delegateCalled = false;
-            args = new AddOrEditDesktopViewModelArgs(null, testUser, true,
-                newDesktop => 
-                { 
-                    delegateCalled = true;
-                    this.Desktops.Add(newDesktop);
-                    returnHostName = newDesktop.HostName; 
-                }
-                );
+            args = new AddOrEditDesktopViewModelArgs(null, testUser, true);
 
             vm.Presenting(null, args);
             vm.Host = "saved_new_host";
@@ -442,8 +420,7 @@ namespace RdClient.Shared.ViewModels
             delegateCalled = false;
             RdTrace.IfCondThrow(this.Desktops.Count <= 0 , "At least one desktop should exist for the edit test!");
             testDesktop = this.Desktops[0];
-            args = new AddOrEditDesktopViewModelArgs(testDesktop, testUser, false,
-                updatedDesktop => { delegateCalled = true; });
+            args = new AddOrEditDesktopViewModelArgs(testDesktop, testUser, false);
 
             vm.Presenting(null, args);
             vm.Host = "not_updated_host";
@@ -458,13 +435,7 @@ namespace RdClient.Shared.ViewModels
             RdTrace.IfCondThrow(this.Desktops.Count <= 0, "At least one desktop should exist for the edit test!");
             testDesktop = this.Desktops[0];
 
-            args = new AddOrEditDesktopViewModelArgs(testDesktop, testUser, false,
-                updatedDesktop => 
-                { 
-                    delegateCalled = true;
-                    returnHostName = updatedDesktop.HostName; 
-                }
-                );
+            args = new AddOrEditDesktopViewModelArgs(testDesktop, testUser, false);
 
             vm.Presenting(null, args);
             vm.Host = "updated_host";

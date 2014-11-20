@@ -10,25 +10,18 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public delegate void SaveDesktopDelegate(Desktop desktop);
     public class AddOrEditDesktopViewModelArgs
     {
-        private readonly SaveDesktopDelegate _saveDelegate;
-
-        public AddOrEditDesktopViewModelArgs(Desktop desktop, Credentials credentials, bool isAddingDesktop = true, SaveDesktopDelegate saveDelegate=null)
+        public AddOrEditDesktopViewModelArgs(Desktop desktop, Credentials credentials, bool isAddingDesktop = true)
         {
             this.Desktop = desktop;
             this.Credentials = credentials;
             this.IsAddingDesktop = isAddingDesktop;
-            _saveDelegate = saveDelegate;
         }
 
         public Desktop Desktop { get; private set; }
         public Credentials Credentials { get; private set; }
-        public bool IsAddingDesktop { get; private set; }
-        
-        public SaveDesktopDelegate SaveDelegate { get { return _saveDelegate; } }
-
+        public bool IsAddingDesktop { get; private set; }        
     }
     public class AddOrEditDesktopViewModel : ViewModelBase
     {
@@ -44,7 +37,6 @@ namespace RdClient.Shared.ViewModels
         private Credentials _credentials;
 
         private int _selectedUserOptionsIndex;
-        private SaveDesktopDelegate _saveDelegate;
 
         public AddOrEditDesktopViewModel()
         {
@@ -67,7 +59,6 @@ namespace RdClient.Shared.ViewModels
             this.ResetCachedDesktopData();
 
             PresentableView = null;
-            _saveDelegate = null;
         }
 
         public ObservableCollection<string> UserOptions { get; set; }
@@ -225,7 +216,6 @@ namespace RdClient.Shared.ViewModels
             this.IsAddingDesktop = args.IsAddingDesktop;
             this.Desktop = args.Desktop;
             this.Credentials = args.Credentials;
-            this._saveDelegate = args.SaveDelegate;
 
             // update combo box and combo box selection, if necessary
             if (null != this.Credentials)
