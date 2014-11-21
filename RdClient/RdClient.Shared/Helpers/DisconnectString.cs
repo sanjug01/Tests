@@ -1,19 +1,16 @@
 ﻿using RdClient.Shared.CxWrappers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RdClient.Shared.Helpers
 {
-    public class DisconnectStrings
+    public class DisconnectString
     {
-        private readonly ILocalizedStrings _localizedStrings;
+        private readonly ILocalizedString _localizedStrings;
 
         private Dictionary<RdpDisconnectCode, string> codeMap = new Dictionary<RdpDisconnectCode,string>();
 
-        public DisconnectStrings(ILocalizedStrings localizedStrings)
+        public DisconnectString(ILocalizedString localizedStrings)
         {
             _localizedStrings = localizedStrings;
 

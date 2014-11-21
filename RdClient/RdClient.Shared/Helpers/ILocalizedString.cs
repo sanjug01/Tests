@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RdClient.Shared.Helpers
 {
-    public interface ILocalizedStrings
+    public interface ILocalizedString
     {
         string GetLocalizedString(string key);
     }

@@ -1,13 +1,13 @@
-﻿using RdClient.Shared.Navigation;
-using RdClient.Shared.CxWrappers;
+﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
+using RdClient.Shared.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Windows.Input;
-using System.Collections.ObjectModel;
 
 namespace RdClient.Shared.ViewModels
 {

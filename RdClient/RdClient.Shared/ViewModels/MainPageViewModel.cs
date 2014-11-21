@@ -9,9 +9,6 @@
 
     public sealed class MainPageViewModel : Helpers.MutableObject, IApplicationBarViewModel, ILayoutAwareViewModel
     {
-        public IPresentableViewFactory ViewFactory { get; set; }
-        public INavigationService NavigationService { get; set; }
-
         private IEnumerable<BarItemModel> _barItems;
         private int _visibleItemsCount;
         private bool _isShowBarButtonVisible;

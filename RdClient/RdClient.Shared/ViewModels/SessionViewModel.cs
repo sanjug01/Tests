@@ -10,7 +10,7 @@ namespace RdClient.Shared.ViewModels
 {
 
 
-    public class SessionViewModel : ViewModelBase, IViewModelDisconnectStrings
+    public class SessionViewModel : ViewModelBase, IViewModelDisconnectString
     {
         private ConnectionInformation _connectionInformation;
 
@@ -21,7 +21,7 @@ namespace RdClient.Shared.ViewModels
         public ICommand ConnectCommand { get { return _connectCommand; } }
 
         public ISessionModel SessionModel { get; set; }
-        public DisconnectStrings DisconnectStrings { get; set; }
+        public DisconnectString DisconnectString { get; set; }
 
         public SessionViewModel()
         {
@@ -54,7 +54,7 @@ namespace RdClient.Shared.ViewModels
             rdpConnection.Events.ClientDisconnected -= HandleUnexpectedDisconnect;
 
             RdpDisconnectReason reason = args.DisconnectReason;
-            string errorString = DisconnectStrings.GetDisconnectString(reason);
+            string errorString = DisconnectString.GetDisconnectString(reason);
             DialogMessageArgs dialogArgs = new DialogMessageArgs(errorString, () => {
             }, null);
             this.NavigationService.PushModalView("DialogMessage", dialogArgs);

@@ -192,7 +192,7 @@
             <!-- Register all navigation extensions -->
             <nav:DispatchedNavigationService.Extensions>
                 <nav:DataModelExtension/>
-                <helpers:DisconnectStringsExtension />
+                <helpers:DisconnectStringExtension />
                 <navext:ApplicationBarExtension ViewModel="{StaticResource MainPageViewModel}" />
             </nav:DispatchedNavigationService.Extensions>
         </nav:DispatchedNavigationService>

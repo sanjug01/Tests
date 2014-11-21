@@ -121,8 +121,8 @@
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
-    <Compile Include="Helpers\DisconnectStringsExtension.cs" />
-    <Compile Include="Helpers\LocalizedStrings.cs" />
+    <Compile Include="Helpers\DisconnectStringExtension.cs" />
+    <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\PhysicalScreenSize.cs" />
     <Compile Include="Helpers\TypeNameDataTemplateSelector.cs" />
     <Compile Include="LifeTimeManagement\ActivationArgs.cs" />

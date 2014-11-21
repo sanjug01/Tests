@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace RdClient.Shared.ViewModels
 {
-    public interface IViewModelDisconnectStrings
+    public interface IViewModelDisconnectString
     {
-        DisconnectStrings DisconnectStrings { get; set; }
+        DisconnectString DisconnectString { get; set; }
     }
 }

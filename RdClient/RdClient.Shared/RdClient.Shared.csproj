@@ -60,9 +60,9 @@
     <Compile Include="CxWrappers\RdpEventSource.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
-    <Compile Include="Helpers\DisconnectStrings.cs" />
+    <Compile Include="Helpers\DisconnectString.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />
-    <Compile Include="Helpers\ILocalizedStrings.cs" />
+    <Compile Include="Helpers\ILocalizedString.cs" />
     <Compile Include="Helpers\IPhysicalScreenSize.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
