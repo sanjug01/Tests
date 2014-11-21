@@ -1,5 +1,7 @@
 ﻿using RdClient.Shared.Navigation;
 using RdClient.Shared.Models;
+
+using System.Collections.Generic;
 using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
@@ -83,7 +85,12 @@ namespace RdClient.Shared.ViewModels
 
         private void DeleteCommandExecute(object o)
         {
-            this.DataModel.Desktops.Remove(this.Desktop);
+            List<object> deleteList = new List<object>();
+            deleteList.Add(this.Desktop);
+
+            DeleteDesktopsArgs args = new DeleteDesktopsArgs(deleteList);
+            NavigationService.PushModalView("DeleteDesktopsView", args);
+            
         }
     }
 }
