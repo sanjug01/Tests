@@ -121,10 +121,10 @@
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
+    <Compile Include="DesignTime\FakeConnectionCenterViewModel.cs" />
     <Compile Include="Helpers\DisconnectStringExtension.cs" />
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="DesignTime\FakeDesktopModel.cs" />
-
     <Compile Include="Helpers\PhysicalScreenSize.cs" />
     <Compile Include="Helpers\TypeNameDataTemplateSelector.cs" />
     <Compile Include="LifeTimeManagement\ActivationArgs.cs" />

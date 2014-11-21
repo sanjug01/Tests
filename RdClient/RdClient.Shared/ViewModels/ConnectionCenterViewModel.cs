@@ -7,10 +7,10 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class ConnectionCenterViewModel : ViewModelBase
+    public class ConnectionCenterViewModel : ViewModelBase, IConnectionCenterViewModel
     {
         private readonly RelayCommand _addDesktopCommand;
-        private ObservableCollection<DesktopViewModel> _desktopViewModels;
+        private ObservableCollection<IDesktopViewModel> _desktopViewModels;
 
         public ConnectionCenterViewModel()
         {
@@ -18,7 +18,7 @@ namespace RdClient.Shared.ViewModels
             this.PropertyChanged += ConnectionCenterViewModel_PropertyChanged;
         }
 
-        public ObservableCollection<DesktopViewModel> DesktopViewModels
+        public ObservableCollection<IDesktopViewModel> DesktopViewModels
         {
             get { return _desktopViewModels; }
             private set 
@@ -54,7 +54,7 @@ namespace RdClient.Shared.ViewModels
         {
             if (e.PropertyName == "DataModel")
             {
-                ObservableCollection<DesktopViewModel> desktopVMs = new ObservableCollection<DesktopViewModel>();
+                ObservableCollection<IDesktopViewModel> desktopVMs = new ObservableCollection<IDesktopViewModel>();
                 foreach (Desktop desktop in this.DataModel.Desktops)
                 {
                     DesktopViewModel vm = new DesktopViewModel(desktop);
