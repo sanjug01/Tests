@@ -5,12 +5,16 @@
     xmlns:local="using:RdClient.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:design="using:RdClient.DesignTime"
     mc:Ignorable="d"
-    d:DesignHeight="256"
-    d:DesignWidth="284">
+    d:DesignHeight="256" Width="273">
+    
+    <d:UserControl.DataContext>
+        <design:FakeDesktopViewModel />
+    </d:UserControl.DataContext>
 
     <StackPanel>
-        <Grid Background="#9D9D9D">
+        <Grid Background="{StaticResource ConnectionCenterDesktopPlaceholderIconColor}">
             <Grid Height="256" Width="Auto"> 
                 <Grid.Background>
                     <ImageBrush ImageSource="ms-appx:///Assets/desktop_placeholder.png" Stretch="None" AlignmentX="Center" AlignmentY="Center"/>
@@ -28,8 +32,8 @@
                 <Button Command="{Binding ConnectCommand}" Grid.Column="0" Grid.Row="0" Content="Connect(d)" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 <Button Command="{Binding EditCommand}" Grid.Column="1" Grid.Row="0" Content="Edit(d)" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Button Command="{Binding DeleteCommand}" Grid.Column="2" Grid.Row="0" Content="Delete(d)" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Background="#AA000000">
-                    <TextBlock Text="{Binding Desktop.HostName}" HorizontalAlignment="Left" VerticalAlignment="Bottom" TextWrapping="NoWrap" Foreground="#DDDDDD" FontFamily="Calibri" FontSize="24" Margin="5,5,5,5"/>
+                <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Background="{StaticResource ConnectionCenterHostnameBackgroundColor}" Margin="0,0,0,0">
+                    <TextBlock Text="{Binding Desktop.HostName}" Style="{StaticResource ConnectionCenterRegularTextStyle}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,5,5,5"/>
                 </Grid>            
             </Grid>
         </Grid>

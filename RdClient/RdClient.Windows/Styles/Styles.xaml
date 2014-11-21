@@ -5,6 +5,40 @@
     xmlns:c="using:RdClient.Converters"
     >
 
+    <!-- 
+    ======================================================================================
+    Connection Center styles 
+    ======================================================================================
+    -->    
+    <SolidColorBrush x:Key="ConnectionCenterDesktopPlaceholderIconColor" Color="#9D9D9D" />
+    <SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="#AA000000" />
+    <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="#404040" />
+    <SolidColorBrush x:Key="ConnectionCenterScrollViewBackgroundBrush" Color="Black" />
+    <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="#DDDDDD"/>
+    <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="#FFFFFF"/>
+    <Style x:Key="ConnectionCenterLargeTextStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}"/>
+        <Setter Property="FontFamily" Value="Calibri"/>
+        <Setter Property="FontSize" Value="72"/>
+    </Style>
+    <Style x:Key="ConnectionCenterRegularTextStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}"/>
+        <Setter Property="FontFamily" Value="Calibri"/>
+        <Setter Property="FontSize" Value="24"/>
+    </Style>
+    <Style x:Key="ConnectionCenterBarButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="#00FF00FF"/>
+        <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}"/>
+        <Setter Property="FontFamily" Value="Segoe UI Symbol" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+    </Style>
+
+
+    <!-- 
+    ======================================================================================
+    ======================================================================================
+    -->
     <SolidColorBrush x:Key="rdBlackBrush" Color="Black" />
     <SolidColorBrush x:Key="rdGrayBrush" Color="Gray" />
     <SolidColorBrush x:Key="rdDarkGrayBrush" Color="#444444" />

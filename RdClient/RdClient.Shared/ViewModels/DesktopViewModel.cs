@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class DesktopViewModel : ViewModelBase
+    public class DesktopViewModel : ViewModelBase, IDesktopViewModel
     {
         private readonly RelayCommand _editCommand;
         private readonly RelayCommand _connectCommand;
