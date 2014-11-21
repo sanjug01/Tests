@@ -171,60 +171,10 @@ namespace RdClient.Shared.ViewModels
         /// <param name="o">optionally pass bool (as a string) parameter to skip or not confirmation dialog</param>
         private void DeleteDesktopCommandExecute(object o)
         {
-            bool requireConfirmation;
-
             Debug.WriteLine("Delete Desktop(s)!");
             
-            if(!bool.TryParse(o as string, out requireConfirmation))
-            {
-                // by default will require confirmation
-                requireConfirmation= true;
-            }
-
-            if (requireConfirmation) 
-            {
-                string deleteMessage;
-                string deleteMessageTitle;
-
-                int c = SelectedDesktops.Count;
-                if (c == 1)
-                {
-                    deleteMessageTitle = "Delete(d): " + (this.SelectedDesktops[0] as Desktop).HostName;
-                    deleteMessage = "Are you sure you want to delete this connection(d)?";
-                }
-                else
-                {
-                    deleteMessageTitle = "Delete: " + c + " connections(d)";
-                    deleteMessage = "Are you sure you want to delete these connections(d)?";
-                }
-
-                this.NavigationService.PushModalView("DialogMessage", 
-                    new DialogMessageArgs(deleteMessage,
-                        () => { this.DeleteSelectedDesktops(); }, 
-                        () => { },
-                        "Delete(d)",
-                        "Cancel(d)",
-                        deleteMessageTitle) );
-            }
-            else
-            {
-                this.DeleteSelectedDesktops();
-            }
-        }
-
-        private void DeleteSelectedDesktops()
-        {
-            if (null != SelectedDesktops)
-            {
-                int c = SelectedDesktops.Count;
-                while (c > 0)
-                {
-                    this.Desktops.Remove(SelectedDesktops[c-1] as Desktop);
-                    c--;
-                }
-
-                SelectedDesktops.Clear();
-            }
+            // use DeleteDesktopsView to confirm deletion
+            this.NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.SelectedDesktops));
         }
 
         private bool CanDeleteDesktopCommandExecute()

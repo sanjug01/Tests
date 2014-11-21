@@ -67,6 +67,7 @@
             this.ViewFactory.AddViewClass("TestsView", typeof(Views.TestsView));
             this.ViewFactory.AddViewClass("AddOrEditDesktopView", typeof(Views.AddOrEditDesktopView));
             this.ViewFactory.AddViewClass("DialogMessage", typeof(Views.DialogMessage));
+            this.ViewFactory.AddViewClass("DeleteDesktopsView", typeof(Views.DeleteDesktopsView));
 
             this.NavigationService.NavigateToView("ConnectionCenterView", null);
         }
