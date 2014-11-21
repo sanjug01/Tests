@@ -94,6 +94,7 @@
     <Compile Include="Model\ModelCollectionTests.cs" />
     <Compile Include="Model\SessionModelTests.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
+    <Compile Include="ViewModels\DeleteDesktopsViewModelTests.cs" />
     <Compile Include="ViewModels\BarButtonModelTests.cs" />
     <Compile Include="ViewModels\BarItemModelTests.cs" />
     <Compile Include="Navigation\NavigationServiceTests.cs" />

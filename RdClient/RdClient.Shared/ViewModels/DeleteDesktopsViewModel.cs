@@ -79,6 +79,8 @@ namespace RdClient.Shared.ViewModels
 
         private void DeleteDesktops(object o)
         {
+            Contract.Requires(null != this.DataModel);
+
             if (null != SelectedDesktops)
             {
                 int c = SelectedDesktops.Count;
