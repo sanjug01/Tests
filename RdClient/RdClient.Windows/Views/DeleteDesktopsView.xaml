@@ -12,7 +12,7 @@
     >    
 
     <Page.Resources>
-        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <cv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
     </Page.Resources>
     
@@ -42,13 +42,31 @@
                 </Grid.RowDefinitions>
         
                 <Grid Grid.Row="0">
-                    <TextBlock 
-                        x:Uid="DeleteSingleDesktop-Title"
-                        Margin="24,12,24,12" 
-                        Style="{ThemeResource TitleTextBlockStyle}" 
-                        Foreground="{StaticResource rdBlackBrush}" 
-                        Text="Delete desktop(d)?"
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                        <TextBlock 
+                            x:Uid="DeleteSingleDesktop-Title"
+                            Margin="24,12,24,12" 
+                            Style="{ThemeResource TitleTextBlockStyle}" 
+                            Foreground="{StaticResource rdBlackBrush}" 
+                            Text="Delete connection(d):"
+                            Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource  BooleanToVisibilityConverter}}"
+                            />
+                        <TextBlock 
+                            x:Uid="DeleteMultipleDesktop-Title"
+                            Margin="24,12,24,12" 
+                            Style="{ThemeResource TitleTextBlockStyle}" 
+                            Foreground="{StaticResource rdBlackBrush}" 
+                            Text="Delete connections(d):"
+                            Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                            />
+                        <TextBlock 
+                            x:Uid="DeleteSingleDesktop-SelectionLabel"
+                            Margin="24,12,24,12" 
+                            Style="{ThemeResource TitleTextBlockStyle}" 
+                            Foreground="{StaticResource rdBlackBrush}" 
+                            Text="{Binding Path=SelectionLabel}"
                         />
+                    </StackPanel>
                 </Grid>        
                 <TextBlock 
                     x:Uid="DeleteSingleDesktop-Message"
@@ -56,8 +74,20 @@
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     FontSize="16"
                     Margin="1,0" 
-                    Text="Are you sure you want to delete(d)?" 
-                    TextWrapping="Wrap" />       
+                    Text="Are you sure you want to delete this connection(d)?" 
+                    TextWrapping="Wrap" 
+                    Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource BooleanToVisibilityConverter}}"                    
+                    />
+                <TextBlock 
+                    x:Uid="DeleteMultipleDesktop-Message"
+                    Grid.Row="2"
+                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                    FontSize="16"
+                    Margin="1,0" 
+                    Text="Are you sure you want to delete these connections(d)?" 
+                    TextWrapping="Wrap" 
+                    Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource InverseBooleanToVisibilityConverter}}"                    
+                    />
                 <StackPanel 
                     Grid.Row="3"           
                     Orientation="Horizontal" 
