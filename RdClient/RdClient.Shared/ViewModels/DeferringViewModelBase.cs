@@ -8,12 +8,12 @@
     /// <summary>
     /// Base class for view models that wish to defer execution of actions delegates to the UI thread.
     /// </summary>
-    public abstract class ViewModelWithDeferredExecutionBase : ViewModelBase, IDeferredExecutionSite
+    public abstract class DeferringViewModelBase : ViewModelBase, IDeferredExecutionSite
     {
         private readonly ReaderWriterLockSlim _monitor;
         private IDeferredExecution _dispatcher;
 
-        protected ViewModelWithDeferredExecutionBase()
+        protected DeferringViewModelBase()
         {
             _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         }
