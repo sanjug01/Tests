@@ -1,6 +1,7 @@
 ﻿using RdClient.Shared.Models;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -29,6 +30,12 @@ namespace RdClient.Shared.ViewModels
         public ICommand AddDesktopCommand
         {
             get { return _addDesktopCommand; }
+
+        }
+
+        public bool HasDesktops
+        {
+            get { return this.DataModel.Desktops.Count > 0; }
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -58,6 +65,16 @@ namespace RdClient.Shared.ViewModels
                 }
                 this.DesktopViewModels = desktopVMs;
                 this.DataModel.Desktops.CollectionChanged += Desktops_CollectionChanged;
+                this.EmitPropertyChanged("HasDesktops");
+                ((INotifyPropertyChanged)this.DesktopViewModels).PropertyChanged += DesktopViewModels_PropertyChanged;
+            }
+        }
+
+        private void DesktopViewModels_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("Count"))
+            {
+                this.EmitPropertyChanged("HasDesktops");
             }
         }
 

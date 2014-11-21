@@ -5,30 +5,87 @@
     xmlns:local="using:RdClient.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:c="using:RdClient.Converters"
     mc:Ignorable="d"
     DataContext="{Binding Source={StaticResource AppViewModelLocator}, Path=ConnectionCenterViewModel}">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+            <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="#404040" />
+            <SolidColorBrush x:Key="ConnectionCenterScrollViewBackgroundBrush" Color="Black" />
+
+            <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="#DDDDDD"/>
+            <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="#FFFFFF"/>
+            <Style x:Key="ConnectionCenterLargeTextStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}"/>
+                <Setter Property="FontFamily" Value="Calibri"/>
+                <Setter Property="FontSize" Value="72"/>
+            </Style>
+            <Style x:Key="ConnectionCenterRegularTextStyle" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}"/>
+                <Setter Property="FontFamily" Value="Calibri"/>
+                <Setter Property="FontSize" Value="24"/>
+            </Style>            
+            
+            <Style x:Key="ConnectionCenterBarButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="#00FF00FF"/>                
+                <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}"/>
+                <Setter Property="FontFamily" Value="Segoe UI Symbol" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="VerticalAlignment" Value="Bottom" />
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80" />
-            <RowDefinition Height="80" />
+            <RowDefinition Height="70" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Background="Black" /> 
-        <Grid Grid.Row="1" Background="Orange">
-            <Button Command="{Binding AddDesktopCommand}" HorizontalAlignment="Right">Add Desktop(d)</Button>
-        </Grid>
-        <Grid Grid.Row="2" Background="White">
-            <ItemsControl ItemsSource="{Binding DesktopViewModels}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <local:DesktopThumbnailView />
-                    </DataTemplate>                    
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Grid>
+        <Button Command="{Binding AddDesktopCommand}" VerticalAlignment="Bottom" Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}">
+            <SymbolIcon Symbol="Add" />
+        </Button>
+        <ScrollViewer
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            HorizontalScrollMode="Enabled"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollMode="Disabled"
+            VerticalScrollBarVisibility="Disabled"
+            Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}"            
+        >
+            <StackPanel Orientation="Horizontal" Margin="20,20,20,20">
+                <ItemsControl ItemsSource="{Binding DesktopViewModels}" Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapGrid />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>                        
+                        <DataTemplate>
+                            <StackPanel Margin="5,5,5,5">
+                                <local:DesktopThumbnailView />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Grid Visibility="{Binding HasDesktops, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Width="Auto"  Margin="20,20,20,20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Style="{StaticResource ConnectionCenterLargeTextStyle}">It's Lonely here...</TextBlock>
+                    <TextBlock Grid.Row="1" Style="{StaticResource ConnectionCenterRegularTextStyle}">Add some desktops</TextBlock>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

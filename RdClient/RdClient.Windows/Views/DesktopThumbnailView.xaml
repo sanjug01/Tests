@@ -6,14 +6,32 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
-    
-    <Grid>
-        <Button Command="{Binding ConnectCommand}" Content="Connect(d)" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-        <Button Command="{Binding EditCommand}" Content="Edit(d)" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-        <Button Command="{Binding DeleteCommand}" Content="Delete(d)" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-        <TextBlock Text="{Binding Desktop.HostName}" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" FontFamily="Calibri" FontSize="72" />
+    d:DesignHeight="256"
+    d:DesignWidth="284">
 
-    </Grid>
+    <StackPanel>
+        <Grid Background="#9D9D9D">
+            <Grid Height="256" Width="Auto"> 
+                <Grid.Background>
+                    <ImageBrush ImageSource="ms-appx:///Assets/desktop_placeholder.png" Stretch="None" AlignmentX="Center" AlignmentY="Center"/>
+                </Grid.Background>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>        
+                <Button Command="{Binding ConnectCommand}" Grid.Column="0" Grid.Row="0" Content="Connect(d)" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Button Command="{Binding EditCommand}" Grid.Column="1" Grid.Row="0" Content="Edit(d)" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Command="{Binding DeleteCommand}" Grid.Column="2" Grid.Row="0" Content="Delete(d)" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Background="#AA000000">
+                    <TextBlock Text="{Binding Desktop.HostName}" HorizontalAlignment="Left" VerticalAlignment="Bottom" TextWrapping="NoWrap" Foreground="#DDDDDD" FontFamily="Calibri" FontSize="24" Margin="5,5,5,5"/>
+                </Grid>            
+            </Grid>
+        </Grid>
+    </StackPanel>
 </UserControl>
