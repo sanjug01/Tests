@@ -30,7 +30,6 @@ namespace RdClient.Shared.ViewModels
         public ICommand AddDesktopCommand
         {
             get { return _addDesktopCommand; }
-
         }
 
         public bool HasDesktops
