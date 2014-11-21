@@ -66,7 +66,6 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-
         public DeleteDesktopsViewModel()
         {
             _selectedDesktops = null;
@@ -83,11 +82,9 @@ namespace RdClient.Shared.ViewModels
 
             if (null != SelectedDesktops)
             {
-                int c = SelectedDesktops.Count;
-                while (c > 0)
+                for(int i=0; i< SelectedDesktops.Count; i++)
                 {
-                    this.DataModel.Desktops.Remove(SelectedDesktops[c - 1] as Desktop);
-                    c--;
+                    this.DataModel.Desktops.Remove(SelectedDesktops[i] as Desktop);
                 }
 
                 SelectedDesktops.Clear();
@@ -110,9 +107,9 @@ namespace RdClient.Shared.ViewModels
             this.SelectedDesktops = args.SelectedDesktops;
 
             int count = 0;
-            if (null != _selectedDesktops)
+            if (null != this.SelectedDesktops)
             {
-                count = _selectedDesktops.Count;
+                count = this.SelectedDesktops.Count;
             }
             this.DesktopsCount =  count; 
 
