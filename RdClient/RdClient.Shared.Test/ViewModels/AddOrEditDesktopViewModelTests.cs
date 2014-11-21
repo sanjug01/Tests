@@ -50,6 +50,10 @@ namespace RdClient.Shared.Test.ViewModels
                 _addOrEditDesktopViewModel.Presenting(navigation, args);
 
                 Assert.IsTrue(string.IsNullOrEmpty(_addOrEditDesktopViewModel.Host));
+                Assert.IsFalse(_addOrEditDesktopViewModel.IsExpandedView);
+                Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
+                Assert.IsFalse(_addOrEditDesktopViewModel.SaveCommand.CanExecute(null));
+                Assert.IsTrue(_addOrEditDesktopViewModel.CancelCommand.CanExecute(null));
             }
         }
 
@@ -73,6 +77,24 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
+        public void AddDesktop_CanSaveIfHostNameNotEmpty()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                Desktop desktop = null;
+                Credentials creds = new Credentials { Username = "someuser", Password = "somepass", HaveBeenPersisted = false };
+                bool isAddingDesktop = true;
+                AddOrEditDesktopViewModelArgs args =
+                    new AddOrEditDesktopViewModelArgs(desktop, creds, isAddingDesktop);
+
+                _addOrEditDesktopViewModel.Presenting(navigation, args);
+                _addOrEditDesktopViewModel.Host = "MyPC";
+                Assert.IsTrue(_addOrEditDesktopViewModel.SaveCommand.CanExecute(null));
+                Assert.IsTrue(_addOrEditDesktopViewModel.CancelCommand.CanExecute(null));
+            }
+        }
+
+        [TestMethod]
         public void EditDesktop_PresentingShouldPassArgs()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
@@ -88,6 +110,25 @@ namespace RdClient.Shared.Test.ViewModels
                 Assert.AreEqual(desktop, _addOrEditDesktopViewModel.Desktop);
                 Assert.AreEqual(creds, _addOrEditDesktopViewModel.Credentials);
                 Assert.IsFalse(_addOrEditDesktopViewModel.IsAddingDesktop);
+            }
+        }
+
+        [TestMethod]
+        public void EditDesktop_CannotSaveIfHostNameIsEmpty()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                Desktop desktop = new Desktop() { HostName = "myPc" };
+                Credentials creds = new Credentials { Username = "someuser", Password = "somepass", HaveBeenPersisted = false };
+                bool isAddingDesktop = false;
+                AddOrEditDesktopViewModelArgs args =
+                    new AddOrEditDesktopViewModelArgs(desktop, creds, isAddingDesktop);
+
+                _addOrEditDesktopViewModel.Presenting(navigation, args);
+                _addOrEditDesktopViewModel.Host = String.Empty;
+
+                Assert.IsFalse(_addOrEditDesktopViewModel.SaveCommand.CanExecute(null));
+                Assert.IsTrue(_addOrEditDesktopViewModel.CancelCommand.CanExecute(null));
             }
         }
 
@@ -237,6 +278,80 @@ namespace RdClient.Shared.Test.ViewModels
                 _addOrEditDesktopViewModel.CancelCommand.Execute(saveParam);
 
                 Assert.AreEqual(desktop.HostName, _addOrEditDesktopViewModel.Host);
+            }
+        }
+
+        [TestMethod]
+        public void AddDesktop_SaveShouldValidateHostName()
+        {
+            string invalidHostName = "+MyPC";
+            string validHostName = "MyPC";
+
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.PresentableView view = new Mock.PresentableView())
+            using (Mock.DataModel dataModel = new Mock.DataModel())
+            {
+                dataModel.Desktops = new ModelCollection<Desktop>();
+                _addOrEditDesktopViewModel.DataModel = dataModel;
+
+                bool isAddingDesktop = true;
+                AddOrEditDesktopViewModelArgs args =
+                    new AddOrEditDesktopViewModelArgs(null, null, isAddingDesktop);
+
+                _addOrEditDesktopViewModel.PresentableView = view;
+                navigation.Expect("DismissModalView", new List<object> { view }, 0);
+                _addOrEditDesktopViewModel.Presenting(navigation, args);
+                Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
+
+                _addOrEditDesktopViewModel.Host = invalidHostName;
+
+                Assert.AreEqual(0, dataModel.Desktops.Count, "no desktop should be added until save command is executed");
+                _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+                Assert.AreEqual(0, dataModel.Desktops.Count, "Should not add desktop with invalid name!");
+                Assert.IsFalse(_addOrEditDesktopViewModel.IsHostValid);
+
+                // update name and save again
+                _addOrEditDesktopViewModel.Host = validHostName;
+                _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+                Assert.AreEqual(1, dataModel.Desktops.Count, "Should add desktop with valid name!");
+                Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
+
+                Desktop savedDesktop = dataModel.Desktops[0];
+                Assert.AreEqual(validHostName, savedDesktop.HostName);
+            }
+        }
+
+        [TestMethod]
+        public void EditDesktop_SaveShouldValidateHostName()
+        {
+            string invalidHostName = "MyNewPC+";
+            string validHostName = "MyNewPC";
+
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.PresentableView view = new Mock.PresentableView())
+            using (Mock.DataModel dataModel = new Mock.DataModel())
+            {
+                object saveParam = new object();
+                Desktop desktop = new Desktop() { HostName = "myPC" };
+                bool isAddingDesktop = false;
+
+                AddOrEditDesktopViewModelArgs args =
+                    new AddOrEditDesktopViewModelArgs(desktop, null, isAddingDesktop);
+
+                _addOrEditDesktopViewModel.PresentableView = view;
+                navigation.Expect("DismissModalView", new List<object> { view }, 0);
+                Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
+
+                _addOrEditDesktopViewModel.Presenting(navigation, args);
+
+                _addOrEditDesktopViewModel.Host = invalidHostName;
+                _addOrEditDesktopViewModel.SaveCommand.Execute(saveParam);
+                Assert.IsFalse(_addOrEditDesktopViewModel.IsHostValid);
+
+                // update name and save again
+                _addOrEditDesktopViewModel.Host = validHostName;
+                _addOrEditDesktopViewModel.SaveCommand.Execute(saveParam);
+                Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
             }
         }
     }
