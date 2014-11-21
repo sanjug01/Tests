@@ -84,13 +84,8 @@ namespace RdClient.Shared.ViewModels
         }
 
         private void DeleteCommandExecute(object o)
-        {
-            List<object> deleteList = new List<object>();
-            deleteList.Add(this.Desktop);
-
-            DeleteDesktopsArgs args = new DeleteDesktopsArgs(deleteList);
-            NavigationService.PushModalView("DeleteDesktopsView", args);
-            
+        {            
+            NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.Desktop));            
         }
     }
 }

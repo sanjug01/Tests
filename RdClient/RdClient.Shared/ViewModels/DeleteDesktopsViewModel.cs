@@ -17,6 +17,13 @@ namespace RdClient.Shared.ViewModels
         {
             SelectedDesktops = selectedDesktops;
         }
+
+        public DeleteDesktopsArgs(Desktop desktop)
+        {
+            // create a single object list
+            SelectedDesktops =  new List<object>();
+            SelectedDesktops.Add(desktop);            
+        }
     }
 
     public class DeleteDesktopsViewModel : ViewModelBase

@@ -14,6 +14,7 @@ namespace RdClient.Shared.Test.ViewModels
         private TestData _testData;
         private List<object> _emptyDesktopsSelection;
         private List<object> _singleDesktopSelection;
+        private Desktop _singleDesktop;
         private List<object> _multiDesktopsSelection;
 
         private Mock.DataModel _dataModel;
@@ -37,8 +38,10 @@ namespace RdClient.Shared.Test.ViewModels
 
             _emptyDesktopsSelection = new List<object>();
 
+            // can pass a single desktop or a selection with a single element
             _singleDesktopSelection = new List<object>();
-            _singleDesktopSelection.Add(_testData.NewValidDesktop(Guid.Empty));
+            _singleDesktop = _testData.NewValidDesktop(Guid.Empty);
+            _singleDesktopSelection.Add(_singleDesktop);
 
             _multiDesktopsSelection = new List<object>();
             _multiDesktopsSelection.Add(_testData.NewValidDesktop(Guid.Empty));
@@ -90,6 +93,23 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktopSelection);
                 string hostName = (_singleDesktopSelection[0] as Desktop).HostName;
+
+                _deleteDesktopsViewModel.Presenting(navigation, args);
+
+                Assert.AreEqual(1, _deleteDesktopsViewModel.DesktopsCount);
+                Assert.IsTrue(_deleteDesktopsViewModel.IsSingleSelection);
+                Assert.IsFalse(String.IsNullOrEmpty(_deleteDesktopsViewModel.SelectionLabel));
+                Assert.IsTrue(_deleteDesktopsViewModel.SelectionLabel.IndexOf(hostName) >= 0);
+            }
+        }
+
+        [TestMethod]
+        public void DeleteDesktops_ShouldUpdateDataForSingleDesktop()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktop);
+                string hostName = _singleDesktop.HostName;
 
                 _deleteDesktopsViewModel.Presenting(navigation, args);
 
@@ -207,7 +227,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
                 int initialCount, finalCount;
-                DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktopSelection);
+                DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktop);
 
                 _deleteDesktopsViewModel.DialogView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
