@@ -189,8 +189,15 @@ namespace RdClient.Shared.ViewModels
 
         protected override void OnPresenting(object activationParameter)
         {
-            Contract.Requires(null != activationParameter as ConnectionInformation);
-            _connectionInformation = activationParameter as ConnectionInformation;
+            Contract.Requires(null != activationParameter as TestsViewModelArgs);
+
+            TestsViewModelArgs args = activationParameter as TestsViewModelArgs;
+            _connectionInformation = new ConnectionInformation()
+            {
+                Desktop = args.Desktop,
+                Credentials = args.Credentials
+            };
+
         }
 
         private void StressTest(object o)
