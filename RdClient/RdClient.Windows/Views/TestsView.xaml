@@ -8,28 +8,28 @@
     xmlns:System="using:System"
     x:Class="RdClient.Views.TestsView"
     mc:Ignorable="d"
+    DataContext="{Binding Source={StaticResource AppViewModelLocator}, Path=TestsViewModel}"    
     Loaded="Page_Loaded">
 
     <Page.Resources>
-        <vm:TestsViewModel x:Key="TestsViewModel" x:Name="TestViewModel"/>
         <MenuFlyout x:Name="contextMenuFlyout">
             <MenuFlyoutItem 
                 x:Uid="Menu-GoHome" 
                 Text="Go Home(d)" 
-                Command="{Binding GoHomeCommand, Source={StaticResource TestsViewModel}}"/>
+                Command="{Binding GoHomeCommand}"/>
             <MenuFlyoutSeparator/>
             <MenuFlyoutItem 
                 x:Uid="Menu-AddDesktop"                 
                 Text="Add desktop(d)" 
-                Command="{Binding AddDesktopCommand, Source={StaticResource TestsViewModel}}"/>
+                Command="{Binding AddDesktopCommand}"/>
             <MenuFlyoutItem 
                 x:Uid="Menu-EditDesktop"                 
                 Text="Edit desktop(d)" 
-                Command="{Binding EditDesktopCommand, Source={StaticResource TestsViewModel}}"/>
+                Command="{Binding EditDesktopCommand}"/>
             <MenuFlyoutItem 
                 x:Uid="Menu-DeleteDesktops"
                 Text="Delete desktop(d)" 
-                Command="{Binding DeleteDesktopCommand, Source={StaticResource TestsViewModel}}"/>
+                Command="{Binding DeleteDesktopCommand}"/>
         </MenuFlyout>
     </Page.Resources>
     
@@ -47,7 +47,7 @@
             
             <ListView
                 x:Name="desktopsView"
-                ItemsSource="{Binding Desktops, Source={StaticResource TestsViewModel}}" 
+                ItemsSource="{Binding Desktops}" 
                 ItemTemplate="{StaticResource rdDesktopTile}"
                 SelectionMode="Multiple" 
                 SelectionChanged="DesktopsList_SelectionChanged"

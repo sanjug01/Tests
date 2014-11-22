@@ -48,6 +48,9 @@ namespace RdClient.Shared.ViewModels
 
         private ConnectionInformation _connectionInformation;
 
+        /// <summary>
+        /// only test data to be added to the global datamodel
+        /// </summary>
         private readonly ObservableCollection<Desktop> _desktops;
         private readonly ObservableCollection<Credentials> _users;
         private IList<object> _selectedDesktops;
@@ -66,7 +69,14 @@ namespace RdClient.Shared.ViewModels
         public ICommand GoHomeCommand { get; private set; }
 
         public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
-        public ObservableCollection<Desktop> Desktops { get { return _desktops; } }
+        public ObservableCollection<Desktop> Desktops 
+        { 
+            get 
+            {
+                Contract.Requires(null != this.DataModel);
+                return this.DataModel.Desktops; 
+            } 
+        }
         public ObservableCollection<Credentials> Users { get { return _users; } }
 
         public IList<object> SelectedDesktops
@@ -196,6 +206,13 @@ namespace RdClient.Shared.ViewModels
                 Credentials = args.Credentials
             };
 
+            LoadTestData();
+        }
+
+        public override void Dismissing()
+        {
+            ResetTestData();
+            base.Dismissing();
         }
 
         private void StressTest(object o)
@@ -447,8 +464,12 @@ namespace RdClient.Shared.ViewModels
             };
         }
 
+        /// <summary>
+        /// append test data to the actual DataModel
+        /// </summary>
         private void LoadTestData()
         {
+            Contract.Requires(null != this.DataModel);
             Contract.Requires(null != _desktops);
             Contract.Requires(null != _users);
 
@@ -456,13 +477,37 @@ namespace RdClient.Shared.ViewModels
             {
                 Desktop desktop = new Desktop() { HostName = "testhost" + i };
                 _desktops.Add(desktop);
+                this.DataModel.Desktops.Add(desktop);
 
                 Credentials user = new Credentials() { Username = "testuser" + i, Domain = "TestDomain.com", Password = "1234AbCd", HaveBeenPersisted = false };
                 _users.Add(user);
-
+                this.DataModel.Credentials.Add(user);
             }
 
             AddDesktopCommand.EmitCanExecuteChanged();
         }
+
+        /// <summary>
+        /// removing testData, but preserving everything else
+        /// should be used when dismissing this view.
+        /// </summary>
+        private void ResetTestData()
+        {
+            Contract.Requires(null != this.DataModel);
+            Contract.Requires(null != _desktops);
+            Contract.Requires(null != _users);
+
+            foreach (Desktop desktop in _desktops)
+            {
+                this.DataModel.Desktops.Remove(desktop);
+            }
+
+            foreach (Credentials creds in _users)
+            {
+                this.DataModel.Credentials.Remove(creds);
+            }
+        }
+
+
     }
 }
