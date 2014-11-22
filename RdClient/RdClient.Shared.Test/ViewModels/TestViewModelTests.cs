@@ -25,6 +25,23 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
+        public void TestsViewModel_VerifySelectNoDesktop()
+        {
+            TestsViewModel vm = new TestsViewModel();
+
+            Assert.IsTrue(vm.Desktops.Count > 0);
+
+            IList<object> newSelection = new List<object>();
+            newSelection.Add(vm.Desktops[0]);
+
+            vm.SelectedDesktops = newSelection;
+
+            // verify Edit, Delete cannnot execute
+            Assert.IsFalse(vm.EditDesktopCommand.CanExecute(null));
+            Assert.IsFalse(vm.DeleteDesktopCommand.CanExecute(null));
+        }
+
+        [TestMethod]
         public void TestsViewModel_VerifySelectOneDesktop()
         {
             TestsViewModel vm = new TestsViewModel();
@@ -36,7 +53,9 @@ namespace RdClient.Shared.Test.ViewModels
 
             vm.SelectedDesktops = newSelection;
 
-            // should verify Edit, Delete can execute
+            // verify Edit, Delete can execute
+            Assert.IsTrue(vm.EditDesktopCommand.CanExecute(null));
+            Assert.IsTrue(vm.DeleteDesktopCommand.CanExecute(null));
         }
 
         [TestMethod]
@@ -55,7 +74,9 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(newSelection.Count > 0);
             vm.SelectedDesktops = newSelection;
 
-            // should verify Edit cannot execute, Delete can execute
+            // verify Edit cannot execute, Delete can execute
+            Assert.IsFalse(vm.EditDesktopCommand.CanExecute(null));
+            Assert.IsTrue(vm.DeleteDesktopCommand.CanExecute(null));
         }
 
         [TestMethod]
