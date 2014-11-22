@@ -12,8 +12,27 @@
 
     <Page.Resources>
         <vm:TestsViewModel x:Key="TestsViewModel" x:Name="TestViewModel"/>
+        <MenuFlyout x:Name="contextMenuFlyout">
+            <MenuFlyoutItem 
+                x:Uid="Menu-GoHome" 
+                Text="Go Home(d)" 
+                Command="{Binding GoHomeCommand, Source={StaticResource TestsViewModel}}"/>
+            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem 
+                x:Uid="Menu-AddDesktop"                 
+                Text="Add desktop(d)" 
+                Command="{Binding AddDesktopCommand, Source={StaticResource TestsViewModel}}"/>
+            <MenuFlyoutItem 
+                x:Uid="Menu-EditDesktop"                 
+                Text="Edit desktop(d)" 
+                Command="{Binding EditDesktopCommand, Source={StaticResource TestsViewModel}}"/>
+            <MenuFlyoutItem 
+                x:Uid="Menu-DeleteDesktops"
+                Text="Delete desktop(d)" 
+                Command="{Binding DeleteDesktopCommand, Source={StaticResource TestsViewModel}}"/>
+        </MenuFlyout>
     </Page.Resources>
-
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -25,12 +44,16 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            
             <ListView
-				          x:Name="desktopsView"
-				          ItemsSource="{Binding Desktops, Source={StaticResource TestsViewModel}}" 
-				          ItemTemplate="{StaticResource rdDesktopTile}"
-				          SelectionMode="Multiple" SelectionChanged="DesktopsList_SelectionChanged" 
-                  />
+                x:Name="desktopsView"
+                ItemsSource="{Binding Desktops, Source={StaticResource TestsViewModel}}" 
+                ItemTemplate="{StaticResource rdDesktopTile}"
+                SelectionMode="Multiple" 
+                SelectionChanged="DesktopsList_SelectionChanged"
+                PointerReleased="DesktopsView_PointerReleased"
+                FlyoutBase.AttachedFlyout="{StaticResource contextMenuFlyout}"
+                />
         </Grid>
 
         <Grid Background="CornflowerBlue" Grid.Column="1" >

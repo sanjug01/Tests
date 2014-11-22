@@ -106,6 +106,7 @@
     <Compile Include="ViewModels\RelayCommandTests.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModelTests.cs" />
     <Compile Include="ViewModels\SessionViewModelTests.cs" />
+    <Compile Include="ViewModels\TestViewModelTests.cs" />
     <Compile Include="ViewModels\ViewModelBaseTests.cs" />
   </ItemGroup>
   <ItemGroup>
