@@ -25,16 +25,11 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void TestsViewModel_VerifySelectNoDesktop()
+        public void TestsViewModel_VerifyNoSelectedDesktop()
         {
             TestsViewModel vm = new TestsViewModel();
 
             Assert.IsTrue(vm.Desktops.Count > 0);
-
-            IList<object> newSelection = new List<object>();
-            newSelection.Add(vm.Desktops[0]);
-
-            vm.SelectedDesktops = newSelection;
 
             // verify Edit, Delete cannnot execute
             Assert.IsFalse(vm.EditDesktopCommand.CanExecute(null));
