@@ -71,12 +71,12 @@
             this.ViewFactory.AddViewClass("DialogMessage", typeof(Views.DialogMessage));
             this.ViewFactory.AddViewClass("DeleteDesktopsView", typeof(Views.DeleteDesktopsView));
 
-            // this.NavigationService.NavigateToView("TestsView", null);
-            this.NavigationService.NavigateToView("ConnectionCenterView",
-                new TestsViewModelArgs(
-                    new Desktop() { HostName = "a3-w81" },
-                    new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
-                    ));
+            this.NavigationService.NavigateToView("ConnectionCenterView", null);
+            ////this.NavigationService.NavigateToView("TestsView",
+            ////    new TestsViewModelArgs(
+            ////        new Desktop() { HostName = "a3-w81" },
+            ////        new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
+            ////        ));
 
         }
     }

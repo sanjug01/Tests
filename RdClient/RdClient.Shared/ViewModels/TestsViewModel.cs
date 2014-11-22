@@ -127,8 +127,6 @@ namespace RdClient.Shared.ViewModels
             _users = new ObservableCollection<Credentials>();
             _selectedDesktops = null;
             this.SessionModel = null;
-
-            this.LoadTestData();
         }
 
         private void AddDesktopCommandExecute(object o)
