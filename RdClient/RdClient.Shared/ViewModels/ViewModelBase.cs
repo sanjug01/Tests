@@ -29,20 +29,41 @@ namespace RdClient.Shared.ViewModels
             set { SetProperty(ref _dataModel, value); }
         }
 
-        protected abstract void OnPresenting(object activationParameter);
+        /// <summary>
+        /// Overridable called immediately after a navigation service has been attached to the view model.
+        /// </summary>
+        /// <param name="activationParameter"></param>
+        /// <remarks>Default implementation does nothing.</remarks>
+        protected virtual void OnPresenting(object activationParameter)
+        {
+        }
 
-        public void Presenting(INavigationService navigationService, object activationParameter)
+        /// <summary>
+        /// Overridable called after detaching the navigation service from the view model.
+        /// </summary>
+        /// <remarks>
+        /// Default implementation does nothing.
+        /// After this method has been called, the view model must not use any services that may have
+        /// been provided to it by navigation extensions. All extensions will have been called to clean up
+        /// the view model before calling OnDismissed.
+        /// </remarks>
+        protected virtual void OnDismissed()
+        {
+        }
+
+        void IViewModel.Presenting(INavigationService navigationService, object activationParameter)
         {
             Contract.Requires(navigationService != null);
             Contract.Ensures(null != _navigationService);
 
             this.NavigationService = navigationService;
-            OnPresenting(activationParameter);
+            this.OnPresenting(activationParameter);
         }
 
-        public virtual void Dismissing()
+        void IViewModel.Dismissing()
         {
             SetProperty<INavigationService>(ref _navigationService, null);
+            this.OnDismissed();
         }
     }
 

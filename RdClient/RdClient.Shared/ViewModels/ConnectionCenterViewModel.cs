@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.Models;
+using RdClient.Shared.Navigation;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace RdClient.Shared.ViewModels
 
         protected override void OnPresenting(object activationParameter)
         {                        
-            foreach (DesktopViewModel vm in this.DesktopViewModels)
+            foreach (IViewModel vm in this.DesktopViewModels)
             {
                 vm.Presenting(this.NavigationService, null);
             }
@@ -53,7 +54,12 @@ namespace RdClient.Shared.ViewModels
                 {
                     DesktopViewModel vm = new DesktopViewModel(desktop);
                     vm.DataModel = this.DataModel;
-                    vm.Presenting(this.NavigationService, desktop);                                       
+                    //
+                    // TODO:    REFACTOR THIS! View models in collections do not participate in nav service activities
+                    //          and should not rely on the IViewModel interface.
+                    //          In this case, the desktop view models are not being presented.
+                    //
+                    ((IViewModel)vm).Presenting(this.NavigationService, desktop);                                       
                     desktopVMs.Add(vm);
                 }
                 this.DesktopViewModels = desktopVMs;
@@ -69,7 +75,12 @@ namespace RdClient.Shared.ViewModels
                 {
                     DesktopViewModel vm = new DesktopViewModel(desktop);
                     vm.DataModel = this.DataModel;
-                    vm.Presenting(this.NavigationService, null);
+                    //
+                    // TODO:    REFACTOR THIS! View models in collections do not participate in nav service activities
+                    //          and should not rely on the IViewModel interface.
+                    //          In this case, the desktop view models are not being presented.
+                    //
+                    ((IViewModel)vm).Presenting(this.NavigationService, null);
                     this.DesktopViewModels.Add(vm);
                 }
             }

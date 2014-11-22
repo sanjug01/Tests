@@ -1,12 +1,9 @@
 ﻿namespace RdClient.Shared.Test.ViewModels
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using RdClient.Shared.Navigation;
     using RdClient.Shared.ViewModels;
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     [TestClass]
     public class DialogMessageViewModelTests
@@ -24,7 +21,11 @@
 
                 dmvm.PropertyChanged += (sender, args) => reportedChanges.Add(args.PropertyName);
                 dmvm.DialogView = view;
-                dmvm.Presenting(navigation, dma);
+                //
+                // TODO:    REFACTOR THIS!
+                //          Make the navigation service present "dmvm"
+                //
+                ((IViewModel)dmvm).Presenting(navigation, dma);
 
                 Assert.IsTrue(dmvm.OkVisible);
                 Assert.IsTrue(dmvm.CancelVisible);
@@ -53,7 +54,11 @@
 
                 dmvm.PropertyChanged += (sender, args) => reportedChanges.Add(args.PropertyName);
                 dmvm.DialogView = view;
-                dmvm.Presenting(navigation, dma);
+                //
+                // TODO:    REFACTOR THIS!
+                //          Make the navigation service present "dmvm"
+                //
+                ((IViewModel)dmvm).Presenting(navigation, dma);
 
                 Assert.IsFalse(dmvm.OkVisible);
                 Assert.IsFalse(dmvm.CancelVisible);
@@ -81,7 +86,11 @@
 
                 dmvm.PropertyChanged += (sender, args) => { propertyChangedCount++; };
                 dmvm.DialogView = view;
-                dmvm.Presenting(navigation, dma);
+                //
+                // TODO:    REFACTOR THIS!
+                //          Make the navigation service present "dmvm"
+                //
+                ((IViewModel)dmvm).Presenting(navigation, dma);
                 dmvm.OkCommand.Execute(null);
 
                 Assert.IsTrue(dmvm.OkVisible);
@@ -107,7 +116,11 @@
 
                 dmvm.PropertyChanged += (sender, args) => { propertyChangedCount++; };
                 dmvm.DialogView = view;
-                dmvm.Presenting(navigation, dma);
+                //
+                // TODO:    REFACTOR THIS!
+                //          Make the navigation service present "dmvm"
+                //
+                ((IViewModel)dmvm).Presenting(navigation, dma);
                 dmvm.CancelCommand.Execute(null);
 
                 Assert.IsFalse(dmvm.OkVisible);
