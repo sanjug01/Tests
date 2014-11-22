@@ -50,15 +50,16 @@ namespace RdClient.Shared.ViewModels
         private readonly ObservableCollection<Desktop> _desktops;
         private readonly ObservableCollection<Credentials> _users;
         private IList<object> _selectedDesktops;
+        private SessionModel SessionModel { get; set; }
 
-        private RelayCommand AddDesktopCommand { get; set; }
-        private RelayCommand EditDesktopCommand { get; set; }
-        private RelayCommand DeleteDesktopCommand { get; set; }
         private RelayCommand ConnectTestCommand { get; set; }
         private RelayCommand DisconnectTestCommand { get; set; }
         private RelayCommand DesktopsTestCommand { get; set; }
 
-        private SessionModel SessionModel { get; set; }
+        public RelayCommand AddDesktopCommand { get; set; }
+        public RelayCommand EditDesktopCommand { get; set; }
+        public RelayCommand DeleteDesktopCommand { get; set; }
+
 
         public ICommand StressTestCommand { get; private set; }
         public ICommand GoHomeCommand { get; private set; }

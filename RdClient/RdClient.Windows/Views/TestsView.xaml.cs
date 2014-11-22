@@ -39,5 +39,11 @@ namespace RdClient.Views
             // desktopsView.SelectedItems is not bindable - so we need to update the model on SelectionChanged
             this.TestViewModel.SelectedDesktops = this.desktopsView.SelectedItems;
         }
+
+        private void DesktopsView_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            FrameworkElement listView = sender as FrameworkElement;
+            Flyout.ShowAttachedFlyout(listView);
+        }
     }
 }
