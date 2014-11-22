@@ -14,64 +14,28 @@ namespace RdClient.Shared.Test.ViewModels
     [TestClass]
     public class TestsViewModelTests
     {
+        TestsViewModel _vm;
+        TestsViewModelArgs _defaultArgs;
 
-        [TestMethod]
-        public void TestsViewModel_VerifyTestDataNotEmpty()
+        [TestInitialize]
+        public void TestSetUp()
         {
-            TestsViewModel vm = new TestsViewModel();
-
-            Assert.IsTrue(vm.Desktops.Count > 0);
-            Assert.IsTrue(vm.Users.Count > 0);
+            _vm = new TestsViewModel();
+            _defaultArgs = new TestsViewModelArgs(
+                new Desktop() { HostName = "DefaultPC" },
+                new Credentials() { Username = "DefaultUser", Domain = "DefaultDomain", Password = "DefaultPwd" }
+                );
+            
+            Mock.DataModel mockDataModel = new Mock.DataModel();
+            mockDataModel.Desktops = new ModelCollection<Desktop>();
+            mockDataModel.Credentials = new ModelCollection<Credentials>();
+            _vm.DataModel = mockDataModel;
         }
 
-        [TestMethod]
-        public void TestsViewModel_VerifyNoSelectedDesktop()
+        [TestCleanup]
+        public void TestTearDown()
         {
-            TestsViewModel vm = new TestsViewModel();
-
-            Assert.IsTrue(vm.Desktops.Count > 0);
-
-            // verify Edit, Delete cannnot execute
-            Assert.IsFalse(vm.EditDesktopCommand.CanExecute(null));
-            Assert.IsFalse(vm.DeleteDesktopCommand.CanExecute(null));
-        }
-
-        [TestMethod]
-        public void TestsViewModel_VerifySelectOneDesktop()
-        {
-            TestsViewModel vm = new TestsViewModel();
-
-            Assert.IsTrue(vm.Desktops.Count > 0);
-
-            IList<object> newSelection = new List<object>();
-            newSelection.Add(vm.Desktops[0]);
-
-            vm.SelectedDesktops = newSelection;
-
-            // verify Edit, Delete can execute
-            Assert.IsTrue(vm.EditDesktopCommand.CanExecute(null));
-            Assert.IsTrue(vm.DeleteDesktopCommand.CanExecute(null));
-        }
-
-        [TestMethod]
-        public void TestsViewModel_VerifySelectMultipleDesktops()
-        {
-            TestsViewModel vm = new TestsViewModel();
-
-            Assert.IsTrue(vm.Desktops.Count > 0);
-
-            IList<object> newSelection = new List<object>();
-            for (int i = 0; i < vm.Desktops.Count; i = i + 2)
-            {
-                newSelection.Add(vm.Desktops[i]);
-            }
-
-            Assert.IsTrue(newSelection.Count > 0);
-            vm.SelectedDesktops = newSelection;
-
-            // verify Edit cannot execute, Delete can execute
-            Assert.IsFalse(vm.EditDesktopCommand.CanExecute(null));
-            Assert.IsTrue(vm.DeleteDesktopCommand.CanExecute(null));
+            _vm = null;
         }
 
         [TestMethod]
@@ -79,14 +43,84 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                TestsViewModel vm = new TestsViewModel();
-
                 TestsViewModelArgs args = new TestsViewModelArgs(
                     new Desktop() { HostName = "narf" },
                     new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                     );
 
+                _vm.Presenting(navigation, args);
+            }
+        }
+
+        [TestMethod]
+        public void TestsViewModel_VerifyTestDataNotEmpty()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                // test data is loaded only on presented
+                Assert.IsTrue(_vm.Desktops.Count == 0);
+                Assert.IsTrue(_vm.Users.Count == 0);
+
+                _vm.Presenting(navigation, _defaultArgs);
+
+                Assert.IsTrue(_vm.Desktops.Count > 0);
+                Assert.IsTrue(_vm.Users.Count > 0);
+            }
+        }
+
+        [TestMethod]
+        public void TestsViewModel_VerifyNoSelectedDesktop()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                _vm.Presenting(navigation, _defaultArgs);
+                Assert.IsTrue(_vm.Desktops.Count > 0);
+                // verify Edit, Delete cannnot execute
+                Assert.IsFalse(_vm.EditDesktopCommand.CanExecute(null));
+                Assert.IsFalse(_vm.DeleteDesktopCommand.CanExecute(null));
+            }
+        }
+
+        [TestMethod]
+        public void TestsViewModel_VerifySelectOneDesktop()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                _vm.Presenting(navigation, _defaultArgs);
+                Assert.IsTrue(_vm.Desktops.Count > 0);
+
+                IList<object> newSelection = new List<object>();
+                newSelection.Add(_vm.Desktops[0]);
+
+                _vm.SelectedDesktops = newSelection;
+
+                // verify Edit, Delete can execute
+                Assert.IsTrue(_vm.EditDesktopCommand.CanExecute(null));
+                Assert.IsTrue(_vm.DeleteDesktopCommand.CanExecute(null));
+            }
+        }
+
+        [TestMethod]
+        public void TestsViewModel_VerifySelectMultipleDesktops()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                _vm.Presenting(navigation, _defaultArgs);
+                Assert.IsTrue(_vm.Desktops.Count > 0);
+
+                IList<object> newSelection = new List<object>();
+                for (int i = 0; i < _vm.Desktops.Count; i = i + 2)
+                {
+                    newSelection.Add(_vm.Desktops[i]);
+                }
+
                 ((IViewModel)vm).Presenting(navigation, args, null);
+                Assert.IsTrue(newSelection.Count > 0);
+                _vm.SelectedDesktops = newSelection;
+
+                // verify Edit cannot execute, Delete can execute
+                Assert.IsFalse(_vm.EditDesktopCommand.CanExecute(null));
+                Assert.IsTrue(_vm.DeleteDesktopCommand.CanExecute(null));
             }
         }
 
@@ -95,9 +129,6 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                TestsViewModel vm = new TestsViewModel();
-
-
                 TestsViewModelArgs args = new TestsViewModelArgs(
                     new Desktop() { HostName = "narf" },
                     new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
@@ -109,8 +140,6 @@ namespace RdClient.Shared.Test.ViewModels
                 vm.GoHomeCommand.Execute(null);
             }
         }
-
-
 
         public void TestsViewModel_VerifyAppBarCommands()
         {

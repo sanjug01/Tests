@@ -73,8 +73,14 @@ namespace RdClient.Shared.ViewModels
         { 
             get 
             {
-                Contract.Requires(null != this.DataModel);
-                return this.DataModel.Desktops; 
+                if (null != this.DataModel)
+                {
+                    return this.DataModel.Desktops;
+                }
+                else
+                {
+                    return this._desktops;
+                }
             } 
         }
         public ObservableCollection<Credentials> Users { get { return _users; } }
@@ -467,7 +473,6 @@ namespace RdClient.Shared.ViewModels
         /// </summary>
         private void LoadTestData()
         {
-            Contract.Requires(null != this.DataModel);
             Contract.Requires(null != _desktops);
             Contract.Requires(null != _users);
 
@@ -475,11 +480,22 @@ namespace RdClient.Shared.ViewModels
             {
                 Desktop desktop = new Desktop() { HostName = "testhost" + i };
                 _desktops.Add(desktop);
-                this.DataModel.Desktops.Add(desktop);
 
                 Credentials user = new Credentials() { Username = "testuser" + i, Domain = "TestDomain.com", Password = "1234AbCd", HaveBeenPersisted = false };
                 _users.Add(user);
-                this.DataModel.Credentials.Add(user);
+            }
+
+            if (null != DataModel)
+            {
+                foreach (Desktop desktop in _desktops)
+                {
+                    this.DataModel.Desktops.Add(desktop);
+                }
+
+                foreach (Credentials creds in _users)
+                {
+                    this.DataModel.Credentials.Add(creds);
+                }
             }
 
             AddDesktopCommand.EmitCanExecuteChanged();
@@ -491,18 +507,20 @@ namespace RdClient.Shared.ViewModels
         /// </summary>
         private void ResetTestData()
         {
-            Contract.Requires(null != this.DataModel);
             Contract.Requires(null != _desktops);
             Contract.Requires(null != _users);
 
-            foreach (Desktop desktop in _desktops)
-            {
-                this.DataModel.Desktops.Remove(desktop);
-            }
+            if (null != DataModel) 
+            { 
+                foreach (Desktop desktop in _desktops)
+                {
+                    this.DataModel.Desktops.Remove(desktop);
+                }
 
-            foreach (Credentials creds in _users)
-            {
-                this.DataModel.Credentials.Remove(creds);
+                foreach (Credentials creds in _users)
+                {
+                    this.DataModel.Credentials.Remove(creds);
+                }
             }
         }
 
