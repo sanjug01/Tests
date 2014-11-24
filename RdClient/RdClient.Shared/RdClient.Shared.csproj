@@ -86,6 +86,9 @@
     <Compile Include="ViewModels\DesktopViewModel.cs" />
     <Compile Include="Navigation\DataModelExtension.cs" />
     <Compile Include="Navigation\INavigationExtension.cs" />
+    <Compile Include="ValidationRules\IllegalCharacterValidationRule.cs" />
+    <Compile Include="ValidationRules\UsernameValidationRule.cs" />
+    <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\IConnectionCenterViewModel.cs" />
     <Compile Include="ViewModels\IDesktopViewModel.cs" />
     <Compile Include="ViewModels\IViewModelDisconnectStrings.cs" />

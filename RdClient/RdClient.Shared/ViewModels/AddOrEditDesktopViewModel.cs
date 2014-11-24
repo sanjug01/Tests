@@ -42,7 +42,6 @@ namespace RdClient.Shared.ViewModels
             _cancelCommand = new RelayCommand(CancelCommandExecute);
 
             IsAddingDesktop = true;
-            IsExpandedView = false;
             IsHostValid = true;
 
             _desktop = null;
@@ -118,12 +117,6 @@ namespace RdClient.Shared.ViewModels
         }
 
 
-        public bool IsExpandedView
-        {
-            get { return _isExpandedView; }
-            set { SetProperty(ref _isExpandedView, value, "IsExpandedView"); }
-        }
-
         private void SaveCommandExecute(object o)
         {
             if (!this.Validate())
@@ -195,8 +188,9 @@ namespace RdClient.Shared.ViewModels
         /// <returns>true, if all validations pass</returns>
         private bool Validate()
         {
+            HostNameValidationRule rule = new HostNameValidationRule();
             bool isValid = true;
-            if(!(this.IsHostValid = HostNameValidationRule.Validate(this.Host, System.Globalization.CultureInfo.CurrentCulture)) )
+            if (!(this.IsHostValid = rule.Validate(this.Host, System.Globalization.CultureInfo.CurrentCulture)))
             {
                 isValid = isValid && this.IsHostValid;
             }
