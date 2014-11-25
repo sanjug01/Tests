@@ -82,6 +82,9 @@
     <Compile Include="Navigation\Extensions\DeferredExecutionExtension.cs" />
     <Compile Include="Navigation\Extensions\IApplicationBarSiteControl.cs" />
     <Compile Include="Navigation\Extensions\IDeferredExecutionSite.cs" />
+    <Compile Include="Navigation\IPresentationCompletion.cs" />
+    <Compile Include="Navigation\IPresentationResult.cs" />
+    <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModel.cs" />
     <Compile Include="ViewModels\DesktopViewModel.cs" />
     <Compile Include="Navigation\DataModelExtension.cs" />

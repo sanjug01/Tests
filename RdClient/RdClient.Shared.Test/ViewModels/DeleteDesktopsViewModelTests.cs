@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
+using RdClient.Shared.Navigation;
 using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
@@ -78,7 +79,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 DeleteDesktopsArgs args = new DeleteDesktopsArgs(_emptyDesktopsSelection);
-                _deleteDesktopsViewModel.Presenting(navigation, args);
+                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
 
                 Assert.AreEqual(0,_deleteDesktopsViewModel.DesktopsCount);
                 Assert.IsFalse(_deleteDesktopsViewModel.IsSingleSelection);
@@ -94,7 +95,7 @@ namespace RdClient.Shared.Test.ViewModels
                 DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktopSelection);
                 string hostName = (_singleDesktopSelection[0] as Desktop).HostName;
 
-                _deleteDesktopsViewModel.Presenting(navigation, args);
+                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
 
                 Assert.AreEqual(1, _deleteDesktopsViewModel.DesktopsCount);
                 Assert.IsTrue(_deleteDesktopsViewModel.IsSingleSelection);
@@ -111,7 +112,7 @@ namespace RdClient.Shared.Test.ViewModels
                 DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktop);
                 string hostName = _singleDesktop.HostName;
 
-                _deleteDesktopsViewModel.Presenting(navigation, args);
+                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
 
                 Assert.AreEqual(1, _deleteDesktopsViewModel.DesktopsCount);
                 Assert.IsTrue(_deleteDesktopsViewModel.IsSingleSelection);
@@ -129,7 +130,7 @@ namespace RdClient.Shared.Test.ViewModels
                 string hostName = (_multiDesktopsSelection[0] as Desktop).HostName;
                 string hostName2 = (_multiDesktopsSelection[2] as Desktop).HostName;
 
-                _deleteDesktopsViewModel.Presenting(navigation, args);
+                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
 
                 Assert.AreEqual(_multiDesktopsSelection.Count, _deleteDesktopsViewModel.DesktopsCount);
                 Assert.IsFalse(_deleteDesktopsViewModel.IsSingleSelection);
@@ -149,7 +150,7 @@ namespace RdClient.Shared.Test.ViewModels
                 _deleteDesktopsViewModel.DialogView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
 
-                _deleteDesktopsViewModel.Presenting(navigation, args);
+                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
                 _deleteDesktopsViewModel.DeleteCommand.Execute(null);
             }
         }
@@ -164,7 +165,7 @@ namespace RdClient.Shared.Test.ViewModels
                 _deleteDesktopsViewModel.DialogView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
 
-                _deleteDesktopsViewModel.Presenting(navigation, args);
+                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
                 _deleteDesktopsViewModel.CancelCommand.Execute(null);
             }
         }
@@ -183,7 +184,7 @@ namespace RdClient.Shared.Test.ViewModels
                 _deleteDesktopsViewModel.DataModel = _dataModel;
                 initialCount = _dataModel.Desktops.Count;
 
-                _deleteDesktopsViewModel.Presenting(navigation, args);
+                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
                 Assert.IsTrue(_deleteDesktopsViewModel.DesktopsCount > 0);
 
 
@@ -208,7 +209,7 @@ namespace RdClient.Shared.Test.ViewModels
                 _deleteDesktopsViewModel.DataModel = _dataModel;
                 initialCount = _dataModel.Desktops.Count;
 
-                _deleteDesktopsViewModel.Presenting(navigation, args);
+                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
                 deletedCount = _deleteDesktopsViewModel.DesktopsCount;
                 Assert.IsTrue(deletedCount > 0);
 
@@ -235,7 +236,7 @@ namespace RdClient.Shared.Test.ViewModels
                 _deleteDesktopsViewModel.DataModel = _dataModel;
                 initialCount = _dataModel.Desktops.Count;
 
-                _deleteDesktopsViewModel.Presenting(navigation, args);
+                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
                 Assert.IsTrue(_deleteDesktopsViewModel.DesktopsCount > 0);
 
 

@@ -15,6 +15,7 @@ namespace RdClient.Shared.ViewModels
     public abstract class ViewModelBase : Helpers.MutableObject, IViewModel, IViewModelWithData
     {
         private INavigationService _navigationService;
+        private IPresentationResult _presentationResult;
         private IDataModel _dataModel;
 
         protected INavigationService NavigationService
@@ -27,6 +28,11 @@ namespace RdClient.Shared.ViewModels
         {
             get { return _dataModel; }
             set { SetProperty(ref _dataModel, value); }
+        }
+
+        protected void SetModalResult(object result)
+        {
+            _presentationResult.SetResult(result);
         }
 
         /// <summary>
@@ -51,12 +57,13 @@ namespace RdClient.Shared.ViewModels
         {
         }
 
-        void IViewModel.Presenting(INavigationService navigationService, object activationParameter)
+        void IViewModel.Presenting(INavigationService navigationService, object activationParameter, IPresentationResult presentationResult)
         {
             Contract.Requires(navigationService != null);
             Contract.Ensures(null != _navigationService);
 
             this.NavigationService = navigationService;
+            _presentationResult = presentationResult;
             this.OnPresenting(activationParameter);
         }
 

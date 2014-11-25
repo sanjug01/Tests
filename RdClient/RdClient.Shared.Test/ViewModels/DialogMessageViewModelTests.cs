@@ -25,7 +25,7 @@
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present "dmvm"
                 //
-                ((IViewModel)dmvm).Presenting(navigation, dma);
+                ((IViewModel)dmvm).Presenting(navigation, dma, null);
 
                 Assert.IsTrue(dmvm.OkVisible);
                 Assert.IsTrue(dmvm.CancelVisible);
@@ -58,7 +58,7 @@
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present "dmvm"
                 //
-                ((IViewModel)dmvm).Presenting(navigation, dma);
+                ((IViewModel)dmvm).Presenting(navigation, dma, null);
 
                 Assert.IsFalse(dmvm.OkVisible);
                 Assert.IsFalse(dmvm.CancelVisible);
@@ -90,7 +90,7 @@
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present "dmvm"
                 //
-                ((IViewModel)dmvm).Presenting(navigation, dma);
+                ((IViewModel)dmvm).Presenting(navigation, dma, null);
                 dmvm.OkCommand.Execute(null);
 
                 Assert.IsTrue(dmvm.OkVisible);
@@ -120,7 +120,7 @@
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present "dmvm"
                 //
-                ((IViewModel)dmvm).Presenting(navigation, dma);
+                ((IViewModel)dmvm).Presenting(navigation, dma, null);
                 dmvm.CancelCommand.Execute(null);
 
                 Assert.IsFalse(dmvm.OkVisible);

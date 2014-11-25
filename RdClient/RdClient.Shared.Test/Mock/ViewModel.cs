@@ -5,9 +5,9 @@ namespace RdClient.Shared.Test.Mock
 {
     public class ViewModel : MockBase, IViewModel
     {
-        public void Presenting(INavigationService navigationService, object activationParameter)
+        public void Presenting(INavigationService navigationService, object activationParameter, IPresentationResult presentationResult)
         {
-            Invoke(new object[] { navigationService, activationParameter });
+            Invoke(new object[] { navigationService, activationParameter, presentationResult });
         }
 
         public void Dismissing()

@@ -15,9 +15,9 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { viewName, activationParameter });
         }
 
-        public void PushModalView(string viewName, object activationParameter)
+        public void PushModalView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
-            Invoke(new object[] { viewName, activationParameter });                
+            Invoke(new object[] { viewName, activationParameter, presentationCompletion });
         }
 
         public void DismissModalView(IPresentableView modalView)

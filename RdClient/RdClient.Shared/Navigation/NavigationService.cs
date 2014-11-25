@@ -14,11 +14,44 @@ namespace RdClient.Shared.Navigation
 
     public class NavigationService : INavigationService
     {
-        private readonly List<IPresentableView> _modalStack;
+        private readonly List<PresentedModalView> _modalStack;
         private NavigationExtensionList _extensions;
         private IViewPresenter _presenter;
         private IPresentableViewFactory _viewFactory;
         private IPresentableView _currentView;
+
+        private sealed class PresentedModalView : IPresentationResult
+        {
+            private readonly IPresentableView _view;
+            private readonly IPresentationCompletion _completion;
+            private object _result;
+
+            public IPresentableView View { get { return _view; } }
+
+            public PresentedModalView(IPresentableView view, IPresentationCompletion completion)
+            {
+                Contract.Requires(null != view);
+                Contract.Ensures(null != _view);
+                _view = view;
+                _completion = completion;
+            }
+
+            public bool HasView(IPresentableView view)
+            {
+                return object.ReferenceEquals(view, _view);
+            }
+
+            public void ReportCompletion()
+            {
+                if (null != _completion)
+                    _completion.EmitCompleted(_result);
+            }
+
+            void IPresentationResult.SetResult(object result)
+            {
+                _result = result;
+            }
+        }
 
         public event EventHandler PushingFirstModalView;
         public event EventHandler DismissingLastModalView;
@@ -41,7 +74,7 @@ namespace RdClient.Shared.Navigation
         public NavigationService()
         {
             Contract.Ensures(null != _modalStack);
-            _modalStack = new List<IPresentableView>();
+            _modalStack = new List<PresentedModalView>();
         }
 
         private void EmitPushingFirstModalView()
@@ -74,7 +107,7 @@ namespace RdClient.Shared.Navigation
                 CallDismissing(_currentView);
             }
 
-            CallPresenting(view, activationParameter);
+            CallPresenting(view, activationParameter, null);
 
             if (!object.ReferenceEquals(_currentView, view))
             {
@@ -84,13 +117,13 @@ namespace RdClient.Shared.Navigation
             _currentView = view;
         }
 
-        public virtual void PushModalView(string viewName, object activationParameter)
+        public virtual void PushModalView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
             Contract.Requires(viewName != null);
 
             IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
 
-            if (object.ReferenceEquals(view, _currentView) || _modalStack.Contains(view))
+            if (object.ReferenceEquals(view, _currentView) || null != _modalStack.Find(pmv => pmv.HasView(view)))
             {
                 throw new NavigationServiceException("trying to modally display a view which is already shown.");
             }
@@ -100,8 +133,9 @@ namespace RdClient.Shared.Navigation
                 EmitPushingFirstModalView();
             }
 
-            _modalStack.Add(view);
-            CallPresenting(view, activationParameter);
+            PresentedModalView presentedView = new PresentedModalView(view, presentationCompletion);
+            _modalStack.Add(presentedView);
+            CallPresenting(view, activationParameter, presentedView);
 
             _presenter.PushModalView(view);
         }
@@ -111,8 +145,9 @@ namespace RdClient.Shared.Navigation
         {
             Contract.Requires(modalView != null);
 
-            List<IPresentableView> toDismiss = new List<IPresentableView>();
-            int toDismissIndex = _modalStack.IndexOf(modalView);
+            List<PresentedModalView> toDismiss = new List<PresentedModalView>();
+
+            int toDismissIndex = _modalStack.FindIndex(pmv => pmv.HasView(modalView));
 
             if (toDismissIndex < 0)
             {
@@ -120,15 +155,14 @@ namespace RdClient.Shared.Navigation
             }
 
             toDismiss = _modalStack.GetRange(toDismissIndex, _modalStack.Count - toDismissIndex);
-
             _modalStack.RemoveRange(toDismissIndex, _modalStack.Count - toDismissIndex);
-
             toDismiss.Reverse();
 
-            foreach (IPresentableView view in toDismiss)
+            foreach (PresentedModalView presentedView in toDismiss)
             {
-                CallDismissing(view);
-                _presenter.DismissModalView(view);
+                CallDismissing(presentedView.View);
+                _presenter.DismissModalView(presentedView.View);
+                presentedView.ReportCompletion();
             }
             //
             // The view that has become the new active view - either the currently presented view,
@@ -144,7 +178,7 @@ namespace RdClient.Shared.Navigation
             }
             else
             {
-                newActiveView = _modalStack[topModalViewIndex];
+                newActiveView = _modalStack[topModalViewIndex].View;
             }
 
             if( null != newActiveView )
@@ -157,7 +191,7 @@ namespace RdClient.Shared.Navigation
             }
         }
 
-        private void CallPresenting(IPresentableView view, object activationParameter)
+        private void CallPresenting(IPresentableView view, object activationParameter, IPresentationResult presentationResult)
         {
             view.ViewModel.CastAndCall<IViewModel>( vm =>
             {
@@ -166,7 +200,7 @@ namespace RdClient.Shared.Navigation
                     extension.Presenting(vm);
                 }
 
-                vm.Presenting(this, activationParameter);
+                vm.Presenting(this, activationParameter, presentationResult);
             });
 
             view.Presenting(this, activationParameter);

@@ -29,7 +29,7 @@ namespace RdClient.Shared.Test.ViewModels
                 // TODO:    REFACTOR THIS!
                 //          Present the view model using the nav service
                 //
-                ((IViewModel)svm).Presenting(navigation, connectionInformation);
+                ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
                 svm.ConnectCommand.Execute(null);
             }
         }
@@ -56,7 +56,7 @@ namespace RdClient.Shared.Test.ViewModels
                 // TODO:    REFACTOR THIS!
                 //          Present the view model using the nav service
                 //
-                ((IViewModel)svm).Presenting(navigation, connectionInformation);
+                ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
                 svm.DisconnectCommand.Execute(null);
             }
         }

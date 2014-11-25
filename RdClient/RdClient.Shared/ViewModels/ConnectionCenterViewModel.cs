@@ -42,7 +42,7 @@ namespace RdClient.Shared.ViewModels
         {                        
             foreach (IViewModel vm in this.DesktopViewModels)
             {
-                vm.Presenting(this.NavigationService, null);
+                vm.Presenting(this.NavigationService, null, null);
             }
         }
 
@@ -65,7 +65,7 @@ namespace RdClient.Shared.ViewModels
                     //          and should not rely on the IViewModel interface.
                     //          In this case, the desktop view models are not being presented.
                     //
-                    ((IViewModel)vm).Presenting(this.NavigationService, desktop);                                       
+                    ((IViewModel)vm).Presenting(this.NavigationService, desktop, null);                                       
                     desktopVMs.Add(vm);
                 }
                 this.DesktopViewModels = desktopVMs;
@@ -96,7 +96,7 @@ namespace RdClient.Shared.ViewModels
                     //          and should not rely on the IViewModel interface.
                     //          In this case, the desktop view models are not being presented.
                     //
-                    ((IViewModel)vm).Presenting(this.NavigationService, null);
+                    ((IViewModel)vm).Presenting(this.NavigationService, null, null);
                     this.DesktopViewModels.Add(vm);
                 }
             }

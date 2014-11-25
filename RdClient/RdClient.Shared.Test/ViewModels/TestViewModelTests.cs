@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.Models;
+using RdClient.Shared.Navigation;
 using RdClient.Shared.ViewModels;
-
 using System;
 using System.Collections.Generic;
 
@@ -86,7 +86,7 @@ namespace RdClient.Shared.Test.ViewModels
                     new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                     );
 
-                vm.Presenting(navigation, args);
+                ((IViewModel)vm).Presenting(navigation, args, null);
             }
         }
 
@@ -105,7 +105,7 @@ namespace RdClient.Shared.Test.ViewModels
 
                 navigation.Expect("NavigateToView", new List<object>() { "ConnectionCenterView", null }, 0);
 
-                vm.Presenting(navigation, args);
+                ((IViewModel)vm).Presenting(navigation, args, null);
                 vm.GoHomeCommand.Execute(null);
             }
         }
