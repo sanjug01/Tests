@@ -11,6 +11,7 @@
 
     <Page.Resources>
         <vm:AddUserViewModel x:Key="AddUserViewModel" x:Name="AddUserViewModel"/>
+        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
     </Page.Resources>
@@ -89,6 +90,13 @@
                                          Margin="0,8" 
                                          Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
+                    
+                    <CheckBox 
+                        Name="chkStoreCredentials"
+                        Content="Store Credentials (d)" VerticalAlignment="Stretch"
+                        IsChecked="{Binding Path=StoreCredentials, Mode=TwoWay}"
+                        Visibility="{Binding Path=ShowSave, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
                         <Button x:Uid="AddUser-Ok" Content="Ok (d)" 
                                 Command="{Binding Path=OkCommand}" />

@@ -48,8 +48,7 @@ namespace RdClient.Shared.ViewModels
 
         private void AddDesktopExecute(object o)
         {
-            //NavigationService.PushModalView("AddOrEditDesktopView", new AddOrEditDesktopViewModelArgs(null, null, true));
-            NavigationService.PushModalView("AddUserView", null);
+            NavigationService.PushModalView("AddOrEditDesktopView", new AddDesktopViewModelArgs());
         }
 
         private void ConnectionCenterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

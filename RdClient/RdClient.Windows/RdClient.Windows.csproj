@@ -121,6 +121,7 @@
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
+    <Compile Include="Converters\UserComboBoxElementConverter.cs" />
     <Compile Include="DesignTime\FakeConnectionCenterViewModel.cs" />
     <Compile Include="Helpers\CoreDispatcherDeferredExecution.cs" />
     <Compile Include="Helpers\DisconnectStringExtension.cs" />
@@ -170,9 +171,6 @@
     </Compile>
     <Compile Include="Views\TransitionAnimationContainer.xaml.cs">
       <DependentUpon>TransitionAnimationContainer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\View1.xaml.cs">
-      <DependentUpon>View1.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SessionView.xaml.cs">
       <DependentUpon>SessionView.xaml</DependentUpon>
@@ -269,10 +267,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TransitionAnimationContainer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\View1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
