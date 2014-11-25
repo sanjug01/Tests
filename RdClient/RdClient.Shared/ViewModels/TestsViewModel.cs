@@ -260,7 +260,7 @@ namespace RdClient.Shared.ViewModels
             Debug.WriteLine("   ....... Adding a desktop");
             args = new AddOrEditDesktopViewModelArgs(null, testUser, true);
 
-            vm.Presenting(null, args);
+            ((IViewModel)vm).Presenting(null, args);
             vm.Host = "saved_new_host";
             expectedHostName = vm.Host;
             vm.SaveCommand.Execute(null);
@@ -273,7 +273,13 @@ namespace RdClient.Shared.ViewModels
 
             args = new AddOrEditDesktopViewModelArgs(testDesktop, _connectionInformation.Credentials, false);
 
-            vm.Presenting(null, args);
+            //
+            // TODO:    REFACTOR THIS!
+            //          The IViewModel contract requires a valid navigation service object.
+            //          This particular view model does not participate in the navigation service
+            //          activities and must not implement the IViewModel interface.
+            //
+            ((IViewModel)vm).Presenting(null, args);
             vm.Host = _connectionInformation.Desktop.HostName;
             expectedHostName = vm.Host;
             vm.SaveCommand.Execute(null);
@@ -355,7 +361,13 @@ namespace RdClient.Shared.ViewModels
             Debug.WriteLine("   ....... Test 1 - Add desktop, cancel changes");
             AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(null, testUser, true);
 
-            vm.Presenting(null, args);
+            //
+            // TODO:    REFACTOR THIS!
+            //          The IViewModel contract requires a valid navigation service object.
+            //          This particular view model does not participate in the navigation service
+            //          activities and must not implement the IViewModel interface.
+            //
+            ((IViewModel)vm).Presenting(null, args);
             vm.Host = "unsaved_new_host";
             vm.CancelCommand.Execute(null);           
             RdTrace.IfCondThrow(delegateCalled, "Add desktop and cancel should not call saveDelegate!");
@@ -366,7 +378,13 @@ namespace RdClient.Shared.ViewModels
             delegateCalled = false;
             args = new AddOrEditDesktopViewModelArgs(null, testUser, true);
 
-            vm.Presenting(null, args);
+            //
+            // TODO:    REFACTOR THIS!
+            //          The IViewModel contract requires a valid navigation service object.
+            //          This particular view model does not participate in the navigation service
+            //          activities and must not implement the IViewModel interface.
+            //
+            ((IViewModel)vm).Presenting(null, args);
             vm.Host = "saved_new_host";
             expectedHostName = vm.Host;
             vm.SaveCommand.Execute(null);
@@ -381,7 +399,7 @@ namespace RdClient.Shared.ViewModels
             testDesktop = this.Desktops[0];
             args = new AddOrEditDesktopViewModelArgs(testDesktop, testUser, false);
 
-            vm.Presenting(null, args);
+            ((IViewModel)vm).Presenting(null, args);
             vm.Host = "not_updated_host";
             expectedHostName = testDesktop.HostName;
             vm.CancelCommand.Execute(null);
@@ -396,7 +414,7 @@ namespace RdClient.Shared.ViewModels
 
             args = new AddOrEditDesktopViewModelArgs(testDesktop, testUser, false);
 
-            vm.Presenting(null, args);
+            ((IViewModel)vm).Presenting(null, args);
             vm.Host = "updated_host";
             expectedHostName = vm.Host;
             vm.SaveCommand.Execute(null);
