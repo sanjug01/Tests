@@ -7,6 +7,7 @@
     public interface IApplicationBarViewModel : INotifyPropertyChanged
     {
         IEnumerable<BarItemModel> BarItems { get; set; }
+        bool IsBarAvailable { get; }
         /// <summary>
         /// Property tracks visibility of the clickable control that executes the ShowBar command.
         /// </summary>

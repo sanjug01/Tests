@@ -58,8 +58,13 @@
                     this.IsBarVisible = false;
                     this.IsShowBarButtonVisible = 0 != _visibleItemsCount;
                     _showBar.EmitCanExecuteChanged();
+                    EmitPropertyChanged("IsBarAvailable");
                 }
             }
+        }
+        public bool IsBarAvailable
+        {
+            get { return null != _barItems; }
         }
 
         public bool IsShowBarButtonVisible

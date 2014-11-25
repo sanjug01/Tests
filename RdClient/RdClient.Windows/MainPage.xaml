@@ -205,6 +205,7 @@
     
     <Page.BottomAppBar>
         <AppBar
+            Visibility="{Binding IsBarAvailable, Converter={StaticResource boolToVisibility}}"
             IsSticky="{Binding IsBarSticky}"
             IsOpen="{Binding IsBarVisible, Mode=TwoWay}"
             ContentTemplate="{Binding ApplicationBarLayout, Converter={StaticResource appBarLayoutSelector}}">

@@ -70,8 +70,9 @@
             _vm.PropertyChanged += (s, e) => reportedProperties.Add(e.PropertyName);
             _vm.BarItems = new List<BarItemModel>();
             Assert.IsNotNull(_vm.BarItems);
-            Assert.IsTrue(1 == reportedProperties.Count);
-            Assert.AreEqual(reportedProperties[0], "BarItems");
+            Assert.IsTrue(2 == reportedProperties.Count);
+            Assert.IsTrue(reportedProperties.Contains("BarItems"));
+            Assert.IsTrue(reportedProperties.Contains("IsBarAvailable"));
         }
 
         [TestMethod]
@@ -89,9 +90,10 @@
             _vm.BarItems = _visibleModels;
 
             Assert.IsTrue(_vm.IsShowBarButtonVisible);
-            Assert.AreEqual(2, reportedProperties.Count);
-            Assert.AreEqual("BarItems", reportedProperties[0]);
-            Assert.AreEqual("IsShowBarButtonVisible", reportedProperties[1]);
+            Assert.AreEqual(3, reportedProperties.Count);
+            Assert.IsTrue(reportedProperties.Contains("BarItems"));
+            Assert.IsTrue(reportedProperties.Contains("IsShowBarButtonVisible"));
+            Assert.IsTrue(reportedProperties.Contains("IsBarAvailable"));
         }
 
         [TestMethod]
@@ -101,9 +103,11 @@
 
             _vm.PropertyChanged += (s, e) => reportedProperties.Add(e.PropertyName);
             _vm.BarItems = _visibleModels;
+            Assert.IsTrue(_vm.IsBarAvailable);
             Assert.IsTrue(_vm.IsShowBarButtonVisible);
             Assert.IsFalse(_vm.IsBarVisible);
             _vm.BarItems = null;
+            Assert.IsFalse(_vm.IsBarAvailable);
             Assert.IsFalse(_vm.IsShowBarButtonVisible);
             Assert.IsFalse(_vm.IsBarVisible);
         }
