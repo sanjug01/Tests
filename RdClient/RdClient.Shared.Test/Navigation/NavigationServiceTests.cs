@@ -2,6 +2,7 @@
 using RdClient.Shared.Navigation;
 using RdClient.Shared.Navigation.Extensions;
 using RdClient.Shared.ViewModels;
+using System;
 using System.Collections.Generic;
 
 namespace RdClient.Shared.Test
@@ -722,6 +723,70 @@ namespace RdClient.Shared.Test
                 Assert.IsFalse(_appBarViewModel.IsBarVisible);
                 Assert.IsFalse(_appBarViewModel.IsShowBarButtonVisible);
                 Assert.IsFalse(_appBarViewModel.ShowBar.CanExecute(null));
+            }
+        }
+
+        [TestMethod]
+        public void PresentModalWithCompletion_SetResult_ResultPassed()
+        {
+            using (Mock.PresentableView baseView = new Mock.PresentableView())
+            using (Mock.PresentableView modalView = new Mock.PresentableView())
+            using (Mock.ViewFactory factory = new Mock.ViewFactory())
+            using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
+            {
+                IList<PresentationCompletionEventArgs> completions = new List<PresentationCompletionEventArgs>();
+                object modalResult = new object();
+                IPresentationCompletion completion = new TestModalCompletion();
+                TestModalViewModel modalViewModel = new TestModalViewModel();
+
+                modalView.ViewModel = modalViewModel;
+                completion.Completed += (s, e) => completions.Add(e);
+
+                INavigationService navigationService = new NavigationService()
+                {
+                    Presenter = presenter,
+                    ViewFactory = factory
+                };
+
+                factory.Expect("CreateView", new List<object>() { "foo", null }, baseView);
+                baseView.Expect("Presenting", new List<object>() { navigationService, null }, 0);
+                presenter.Expect("PresentView", new List<object>() { baseView }, 0);
+                navigationService.NavigateToView("foo", null);
+
+                factory.Expect("CreateView", new List<object>() { "bar", null }, modalView);
+                modalView.Expect("Presenting", new List<object>() { navigationService, null }, 0);
+                presenter.Expect("PushModalView", new List<object>() { modalView }, 0);
+                navigationService.PushModalView("bar", null, completion);
+
+                modalViewModel.ReportResult(modalResult);
+
+                modalView.Expect("Dismissing", new List<object>() { }, 0);
+                presenter.Expect("DismissModalView", new List<object>() { modalView }, 0);
+                navigationService.DismissModalView(modalView);
+
+                Assert.AreEqual(1, completions.Count);
+                Assert.AreSame(completions[0].Result, modalResult);
+                Assert.AreSame(modalView, completions[0].View);
+            }
+        }
+
+        private sealed class TestModalCompletion : IPresentationCompletion
+        {
+
+            public event EventHandler<PresentationCompletionEventArgs> Completed;
+
+            void IPresentationCompletion.EmitCompleted(IPresentableView view, object result)
+            {
+                if (null != this.Completed)
+                    this.Completed(this, new PresentationCompletionEventArgs(view, result));
+            }
+        }
+
+        private sealed class TestModalViewModel : ViewModelBase
+        {
+            public void ReportResult(object result)
+            {
+                this.SetModalResult(result);
             }
         }
     }

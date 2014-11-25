@@ -9,6 +9,6 @@
     public interface IPresentationCompletion
     {
         event EventHandler<PresentationCompletionEventArgs> Completed;
-        void EmitCompleted(object result);
+        void EmitCompleted(IPresentableView view, object result);
     }
 }
