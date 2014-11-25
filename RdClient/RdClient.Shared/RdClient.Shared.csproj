@@ -52,6 +52,12 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Converters\BarItemsAlignmentFilteringConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
+    <Compile Include="Converters\StringLengthToInvisibilityConverter.cs" />
+    <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
     <Compile Include="CxWrappers\IRdpConnection.cs" />
     <Compile Include="CxWrappers\IRdpConnectionFactory.cs" />
     <Compile Include="CxWrappers\IRdpEventHandlers.cs" />
