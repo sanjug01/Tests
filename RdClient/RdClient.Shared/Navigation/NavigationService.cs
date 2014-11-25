@@ -1,5 +1,4 @@
-﻿using RdClient.Shared.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
@@ -20,18 +19,22 @@ namespace RdClient.Shared.Navigation
         private IPresentableViewFactory _viewFactory;
         private IPresentableView _currentView;
 
-        private sealed class PresentedModalView : IPresentationResult
+        private sealed class PresentedModalView : IModalPresentationContext
         {
+            private readonly INavigationService _navigationService;
             private readonly IPresentableView _view;
             private readonly IPresentationCompletion _completion;
             private object _result;
 
             public IPresentableView View { get { return _view; } }
 
-            public PresentedModalView(IPresentableView view, IPresentationCompletion completion)
+            public PresentedModalView(INavigationService navigationService, IPresentableView view, IPresentationCompletion completion)
             {
+                Contract.Requires(null != navigationService);
                 Contract.Requires(null != view);
+                Contract.Ensures(null != _navigationService);
                 Contract.Ensures(null != _view);
+                _navigationService = navigationService;
                 _view = view;
                 _completion = completion;
             }
@@ -47,9 +50,10 @@ namespace RdClient.Shared.Navigation
                     _completion.Completed(_view, _result);
             }
 
-            void IPresentationResult.SetResult(object result)
+            void IModalPresentationContext.Dismiss(object result)
             {
                 _result = result;
+                _navigationService.DismissModalView(_view);
             }
         }
 
@@ -133,7 +137,7 @@ namespace RdClient.Shared.Navigation
                 EmitPushingFirstModalView();
             }
 
-            PresentedModalView presentedView = new PresentedModalView(view, presentationCompletion);
+            PresentedModalView presentedView = new PresentedModalView(this, view, presentationCompletion);
             _modalStack.Add(presentedView);
             CallPresenting(view, activationParameter, presentedView);
 
@@ -191,7 +195,7 @@ namespace RdClient.Shared.Navigation
             }
         }
 
-        private void CallPresenting(IPresentableView view, object activationParameter, IPresentationResult presentationResult)
+        private void CallPresenting(IPresentableView view, object activationParameter, IModalPresentationContext presentationResult)
         {
             view.ViewModel.CastAndCall<IViewModel>( vm =>
             {

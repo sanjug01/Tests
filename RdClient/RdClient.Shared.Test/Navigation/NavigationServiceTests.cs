@@ -736,7 +736,7 @@ namespace RdClient.Shared.Test
             {
                 IList<PresentationCompletionEventArgs> completions = new List<PresentationCompletionEventArgs>();
                 object modalResult = new object();
-                TestModalCompletion completion = new TestModalCompletion();
+                ModalPresentationCompletion completion = new ModalPresentationCompletion();
                 TestModalViewModel modalViewModel = new TestModalViewModel();
 
                 modalView.ViewModel = modalViewModel;
@@ -758,11 +758,10 @@ namespace RdClient.Shared.Test
                 presenter.Expect("PushModalView", new List<object>() { modalView }, 0);
                 navigationService.PushModalView("bar", null, completion);
 
-                modalViewModel.ReportResult(modalResult);
 
                 modalView.Expect("Dismissing", new List<object>() { }, 0);
                 presenter.Expect("DismissModalView", new List<object>() { modalView }, 0);
-                navigationService.DismissModalView(modalView);
+                modalViewModel.ReportResult(modalResult);
 
                 Assert.AreEqual(1, completions.Count);
                 Assert.AreSame(completions[0].Result, modalResult);
@@ -770,23 +769,11 @@ namespace RdClient.Shared.Test
             }
         }
 
-        private sealed class TestModalCompletion : IPresentationCompletion
-        {
-
-            public event EventHandler<PresentationCompletionEventArgs> Completed;
-
-            void IPresentationCompletion.Completed(IPresentableView view, object result)
-            {
-                if (null != this.Completed)
-                    this.Completed(this, new PresentationCompletionEventArgs(view, result));
-            }
-        }
-
         private sealed class TestModalViewModel : ViewModelBase
         {
             public void ReportResult(object result)
             {
-                this.SetModalResult(result);
+                this.DismissModal(result);
             }
         }
     }
