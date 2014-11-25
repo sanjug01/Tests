@@ -44,7 +44,7 @@ namespace RdClient.Shared.Navigation
             public void ReportCompletion()
             {
                 if (null != _completion)
-                    _completion.EmitCompleted(_view, _result);
+                    _completion.Completed(_view, _result);
             }
 
             void IPresentationResult.SetResult(object result)

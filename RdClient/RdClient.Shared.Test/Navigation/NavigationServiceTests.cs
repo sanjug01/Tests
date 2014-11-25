@@ -736,7 +736,7 @@ namespace RdClient.Shared.Test
             {
                 IList<PresentationCompletionEventArgs> completions = new List<PresentationCompletionEventArgs>();
                 object modalResult = new object();
-                IPresentationCompletion completion = new TestModalCompletion();
+                TestModalCompletion completion = new TestModalCompletion();
                 TestModalViewModel modalViewModel = new TestModalViewModel();
 
                 modalView.ViewModel = modalViewModel;
@@ -775,7 +775,7 @@ namespace RdClient.Shared.Test
 
             public event EventHandler<PresentationCompletionEventArgs> Completed;
 
-            void IPresentationCompletion.EmitCompleted(IPresentableView view, object result)
+            void IPresentationCompletion.Completed(IPresentableView view, object result)
             {
                 if (null != this.Completed)
                     this.Completed(this, new PresentationCompletionEventArgs(view, result));
