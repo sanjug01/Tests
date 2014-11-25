@@ -93,6 +93,7 @@
     <Compile Include="Model\DataModelTests.cs" />
     <Compile Include="Model\ModelCollectionTests.cs" />
     <Compile Include="Model\SessionModelTests.cs" />
+    <Compile Include="Navigation\Extensions\DeferredExecutionExtensionTests.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModelTests.cs" />
     <Compile Include="ViewModels\BarButtonModelTests.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Navigation\PresentableViewConstructorTests.cs" />
     <Compile Include="Navigation\PresentableViewFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\DeferringViewModelBaseTests.cs" />
     <Compile Include="ViewModels\DialogMessageViewModelTests.cs" />
     <Compile Include="ViewModels\MainPageViewModelTests.cs" />
     <Compile Include="ViewModels\RelayCommandTests.cs" />

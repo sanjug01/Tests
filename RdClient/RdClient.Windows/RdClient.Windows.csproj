@@ -122,6 +122,7 @@
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
     <Compile Include="DesignTime\FakeConnectionCenterViewModel.cs" />
+    <Compile Include="Helpers\CoreDispatcherDeferredExecution.cs" />
     <Compile Include="Helpers\DisconnectStringExtension.cs" />
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="DesignTime\FakeDesktopModel.cs" />

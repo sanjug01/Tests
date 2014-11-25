@@ -1,4 +1,4 @@
-﻿namespace RdClient.Shared.Navigation
+﻿namespace RdClient.Shared.Navigation.Extensions
 {
     /// <summary>
     /// Control interface that may be implemented by the application bar site

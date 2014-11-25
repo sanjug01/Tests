@@ -1,6 +1,7 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
+using RdClient.Shared.Navigation.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -176,7 +177,7 @@ namespace RdClient.Shared.ViewModels
             
             // use DeleteDesktopsView to confirm deletion
             this.NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.SelectedDesktops));
-        }
+                }
 
         private bool CanDeleteDesktopCommandExecute()
         {
