@@ -1,5 +1,9 @@
 ﻿using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
+using RdClient.Shared.Navigation.Extensions;
+
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -8,17 +12,53 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class ConnectionCenterViewModel : ViewModelBase, IConnectionCenterViewModel
+    public class ConnectionCenterViewModel : ViewModelBase, IConnectionCenterViewModel, IApplicationBarItemsSource
     {
         private readonly RelayCommand _addDesktopCommand;
+
         private ObservableCollection<IDesktopViewModel> _desktopViewModels;
         private int _selectedCount;
+
+        // app bar items
+        private readonly BarItemModel _separatorItem, _rightSeparatorItem;
+        private readonly BarItemModel _addItem;
+        private readonly BarItemModel _editItem;
+        private readonly BarItemModel _deleteItem;
+        private readonly BarItemModel _testsItem;
 
         public ConnectionCenterViewModel()
         {
             _addDesktopCommand = new RelayCommand(AddDesktopExecute);
+            EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => this.CanEditDesktopCommandExecute());
+            DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => this.CanDeleteDesktopCommandExecute());
+            TestsCommand = new RelayCommand(new Action<object>(GotoTests));
+
+            _separatorItem = new SeparatorBarItemModel();
+
+            _addItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Add, AddDesktopCommand, "Add");
+            _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, "Edit");
+            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete",
+                BarItemModel.ItemAlignment.Right);
+
+            _rightSeparatorItem = new SeparatorBarItemModel(BarItemModel.ItemAlignment.Right);
+            _testsItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, TestsCommand, "Tests",
+                BarItemModel.ItemAlignment.Right);
+
             this.PropertyChanged += ConnectionCenterViewModel_PropertyChanged;
             _selectedCount = 0;
+        }
+
+        IEnumerable<BarItemModel> IApplicationBarItemsSource.GetItems(IApplicationBarSite applicationBarSite)
+        {
+            return new BarItemModel[]
+            {               
+                _addItem,
+                _separatorItem,
+                _editItem,
+                _deleteItem,
+                _rightSeparatorItem,
+                _testsItem,
+            };
         }
 
         public ObservableCollection<IDesktopViewModel> DesktopViewModels
@@ -34,6 +74,10 @@ namespace RdClient.Shared.ViewModels
         {
             get { return _addDesktopCommand; }
         }
+
+        public RelayCommand EditDesktopCommand { get; private set; }
+        public RelayCommand DeleteDesktopCommand { get; private set; }
+        public RelayCommand TestsCommand { get; private set; }
 
         public bool HasDesktops
         {
@@ -88,22 +132,30 @@ namespace RdClient.Shared.ViewModels
             if (e.PropertyName.Equals("Count"))
             {
                 this.EmitPropertyChanged("HasDesktops");
+                this.UpdateSelection();
             }
+        }
+
+        private void UpdateSelection()
+        {
+            _selectedCount = 0;
+            foreach (DesktopViewModel vm in this.DesktopViewModels)
+            {
+                if (vm.IsSelected)
+                {
+                    _selectedCount++;
+                }
+            }
+            this.EmitPropertyChanged("SelectedCount");
+            EditDesktopCommand.EmitCanExecuteChanged();
+            DeleteDesktopCommand.EmitCanExecuteChanged();
         }
 
         private void DesktopSelection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals("IsSelected"))
             {
-                _selectedCount = 0;
-                foreach (DesktopViewModel vm in this.DesktopViewModels)
-                {
-                    if(vm.IsSelected)
-                    {
-                        _selectedCount++;
-                    }
-                }
-                this.EmitPropertyChanged("SelectedCount");
+                this.UpdateSelection();
             }
         }
 
@@ -132,6 +184,55 @@ namespace RdClient.Shared.ViewModels
                     this.DesktopViewModels.Remove(vm);
                 }
             }
+        }
+
+        private void EditDesktopCommandExecute(object o)
+        {
+            // extract first selected desktops - should be a single one
+            foreach (DesktopViewModel vm in this.DesktopViewModels)
+            {
+                if (vm.IsSelected)
+                {
+                    NavigationService.PushModalView("AddOrEditDesktopView", 
+                        new EditDesktopViewModelArgs(vm.Desktop));
+                    break;
+                }
+            }
+        }
+
+        private bool CanEditDesktopCommandExecute()
+        {
+            return (1 == this.SelectedCount);
+        }
+
+        private void DeleteDesktopCommandExecute(object o)
+        {
+            // extract list of selected desktops
+            List<object> selectedDesktops = new List<object>();
+
+            foreach (DesktopViewModel vm in this.DesktopViewModels)
+            {
+                if (vm.IsSelected)
+                {
+                    selectedDesktops.Add(vm.Desktop);
+                }
+            }
+
+            if (selectedDesktops.Count > 0)
+            {
+                this.NavigationService.PushModalView("DeleteDesktopsView",
+                    new DeleteDesktopsArgs(selectedDesktops));
+            }
+        }
+
+        private bool CanDeleteDesktopCommandExecute()
+        {
+            return (this.SelectedCount >= 1);
+        }
+
+        private void GotoTests(object o)
+        {
+            NavigationService.NavigateToView("TestsView", null);
         }
     }
 }

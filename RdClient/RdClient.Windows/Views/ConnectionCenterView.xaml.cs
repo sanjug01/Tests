@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.Navigation;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace RdClient.Views
@@ -20,5 +21,12 @@ namespace RdClient.Views
         public void Presenting(INavigationService navigationService, object activationParameter) { }
 
         public void Dismissing() { }
+
+
+        private void ItemsControl_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            FrameworkElement desktopsView = sender as FrameworkElement;
+            Flyout.ShowAttachedFlyout(desktopsView);
+        }
     }
 }

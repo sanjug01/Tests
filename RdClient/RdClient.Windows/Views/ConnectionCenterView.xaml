@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Converters"
+    xmlns:System="using:System"    
     xmlns:design="using:RdClient.DesignTime"
     mc:Ignorable="d"
     DataContext="{Binding Source={StaticResource AppViewModelLocator}, Path=ConnectionCenterViewModel}">
@@ -18,7 +19,28 @@
         <ResourceDictionary>
             <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+            <MenuFlyout x:Name="optionsMenuFlyout">
+                <MenuFlyoutItem 
+                    x:Uid="Menu-AddDesktop"                 
+                    Text="Add desktop(d)" 
+                    Command="{Binding AddDesktopCommand}"/>
+                <MenuFlyoutSeparator/>
+                <MenuFlyoutItem 
+                    x:Uid="Menu-EditDesktop"                 
+                    Text="Edit desktop(d)" 
+                    Command="{Binding EditDesktopCommand}"/>
+                <MenuFlyoutItem 
+                    x:Uid="Menu-DeleteDesktops"
+                    Text="Delete desktop(d)" 
+                    Command="{Binding DeleteDesktopCommand}"/>
+                <MenuFlyoutSeparator/>
+                <MenuFlyoutItem 
+                    x:Uid="Menu-TestPage"
+                    Text="Tests(d)" 
+                    Command="{Binding TestsCommand}"/>                
+            </MenuFlyout>
         </ResourceDictionary>
+
     </Page.Resources>
 
     <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}">
@@ -44,7 +66,11 @@
             Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}"            
         >
             <StackPanel Orientation="Horizontal" Margin="20,20,20,20">
-                <ItemsControl ItemsSource="{Binding DesktopViewModels}" Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ItemsControl 
+                        ItemsSource="{Binding DesktopViewModels}" 
+                        Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        FlyoutBase.AttachedFlyout="{StaticResource optionsMenuFlyout}"
+                        PointerReleased="ItemsControl_PointerReleased">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapGrid />
@@ -52,7 +78,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>                        
                         <DataTemplate>
-                            <StackPanel Margin="5,5,5,5">
+                            <StackPanel Margin="5,5,5,5">                   
                                 <local:DesktopThumbnailView />
                             </StackPanel>
                         </DataTemplate>
