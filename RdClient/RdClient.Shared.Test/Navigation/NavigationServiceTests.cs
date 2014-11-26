@@ -193,6 +193,70 @@ namespace RdClient.Shared.Test
         }
 
         [TestMethod]
+        public void Push2ModalViews_PresentsBoth()
+        {
+            using (Mock.PresentableView view1 = new Mock.PresentableView())
+            using (Mock.PresentableView view2 = new Mock.PresentableView())
+            using (Mock.ViewFactory factory = new Mock.ViewFactory())
+            using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
+            {
+                INavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
+                bool callbackCalled = false;
+                object activationParameter = new object();
+
+                navigationService.PushingFirstModalView += (sender, args) => { callbackCalled = true; };
+
+                factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
+                view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+
+                navigationService.PushModalView("foo", activationParameter);
+
+                factory.Expect("CreateView", new List<object>() { "bar", activationParameter }, view2);
+                view2.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                presenter.Expect("PushModalView", new List<object>() { view2 }, 0);
+
+                navigationService.PushModalView("bar", activationParameter);
+
+                Assert.IsTrue(callbackCalled);
+            }
+        }
+
+        [TestMethod]
+        public void Push2ModalViewsAndDismissTop_Dismissed()
+        {
+            using (Mock.PresentableView view1 = new Mock.PresentableView())
+            using (Mock.PresentableView view2 = new Mock.PresentableView())
+            using (Mock.ViewFactory factory = new Mock.ViewFactory())
+            using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
+            {
+                INavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
+                bool callbackCalled = false;
+                object activationParameter = new object();
+
+                navigationService.PushingFirstModalView += (sender, args) => { callbackCalled = true; };
+
+                factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
+                view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+
+                navigationService.PushModalView("foo", activationParameter);
+
+                factory.Expect("CreateView", new List<object>() { "bar", activationParameter }, view2);
+                view2.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                presenter.Expect("PushModalView", new List<object>() { view2 }, 0);
+
+                navigationService.PushModalView("bar", activationParameter);
+
+                view2.Expect("Dismissing", new List<object>() { }, 0);
+                presenter.Expect("DismissModalView", new List<object>() { view2 }, 0);
+                navigationService.DismissModalView(view2);
+
+                Assert.IsTrue(callbackCalled);
+            }
+        }
+
+        [TestMethod]
         public void PushDismissModalView_ShouldPresentDismissView()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())

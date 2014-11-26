@@ -49,6 +49,7 @@
 
         protected override void DisposeManagedState()
         {
+            base.DisposeManagedState();
             _monitor.Dispose();
         }
 
