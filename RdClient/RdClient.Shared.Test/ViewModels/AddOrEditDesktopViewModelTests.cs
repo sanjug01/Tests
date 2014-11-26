@@ -95,7 +95,7 @@ namespace RdClient.Shared.Test.ViewModels
                 AddOrEditDesktopViewModelArgs args =
                     new AddOrEditDesktopViewModelArgs(desktop, creds, isAddingDesktop);
 
-                _addOrEditDesktopViewModel.Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
                 _addOrEditDesktopViewModel.Host = "MyPC";
                 Assert.IsTrue(_addOrEditDesktopViewModel.SaveCommand.CanExecute(null));
                 Assert.IsTrue(_addOrEditDesktopViewModel.CancelCommand.CanExecute(null));
@@ -136,7 +136,7 @@ namespace RdClient.Shared.Test.ViewModels
                 AddOrEditDesktopViewModelArgs args =
                     new AddOrEditDesktopViewModelArgs(desktop, creds, isAddingDesktop);
 
-                _addOrEditDesktopViewModel.Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
                 _addOrEditDesktopViewModel.Host = String.Empty;
 
                 Assert.IsFalse(_addOrEditDesktopViewModel.SaveCommand.CanExecute(null));
@@ -336,7 +336,7 @@ namespace RdClient.Shared.Test.ViewModels
 
                 _addOrEditDesktopViewModel.PresentableView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
-                _addOrEditDesktopViewModel.Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
                 Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
 
                 _addOrEditDesktopViewModel.Host = invalidHostName;
@@ -378,7 +378,7 @@ namespace RdClient.Shared.Test.ViewModels
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
                 Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
 
-                _addOrEditDesktopViewModel.Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
 
                 _addOrEditDesktopViewModel.Host = invalidHostName;
                 _addOrEditDesktopViewModel.SaveCommand.Execute(saveParam);
