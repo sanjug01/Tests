@@ -3,9 +3,11 @@
     using RdClient.Shared.Navigation.Extensions;
     using System;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
+    [DebuggerNonUserCode] // exclude from code coverage
     [ContractClassFor(typeof(IApplicationBarSite))]
     abstract class IApplicationBarSiteContract : IApplicationBarSite
     {

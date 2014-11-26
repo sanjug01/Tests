@@ -37,6 +37,7 @@ namespace RdClient.Shared.ViewModels
 
         public void Execute(object parameter)
         {
+            ThrowIfDisposed();
             _execute(parameter);
         }
 

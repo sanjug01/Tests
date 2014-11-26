@@ -1,13 +1,13 @@
 ﻿namespace RdClient.Shared.Test.Navigation.Extensions
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RdClient.Shared.Helpers;
-using RdClient.Shared.Navigation;
-using RdClient.Shared.Navigation.Extensions;
-using RdClient.Shared.ViewModels;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Input;
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
+    using RdClient.Shared.ViewModels;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Windows.Input;
 
     [TestClass]
     public sealed class ApplicationBarExtensionTests
@@ -90,6 +90,7 @@ using System.Windows.Input;
             Assert.AreSame(tvm2.Models, _barVM.BarItems);
         }
 
+        [DebuggerNonUserCode] // exclude from code coverage
         private sealed class TestAppBarViewModel : MutableObject, IApplicationBarViewModel
         {
             private readonly RelayCommand _doNothing;

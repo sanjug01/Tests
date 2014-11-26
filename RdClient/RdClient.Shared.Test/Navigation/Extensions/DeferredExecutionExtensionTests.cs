@@ -6,12 +6,14 @@
     using RdClient.Shared.Navigation.Extensions;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     [TestClass]
     public class DeferredExecutionExtensionTests
     {
         private sealed class TestDeferredExecution : IDeferredExecution
         {
+            [DebuggerNonUserCode] // exclude from code coverage
             void IDeferredExecution.Defer(Action action)
             {
                 throw new System.NotImplementedException();
@@ -28,11 +30,13 @@
                 set { this.SetProperty<IDeferredExecution>(ref _deferredExecution, value); }
             }
 
+            [DebuggerNonUserCode] // exclude from code coverage
             public void Presenting(INavigationService navigationService, object activationParameter, IModalPresentationContext presentationResult)
             {
                 throw new System.NotImplementedException();
             }
 
+            [DebuggerNonUserCode] // exclude from code coverage
             public void Dismissing()
             {
                 throw new System.NotImplementedException();

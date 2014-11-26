@@ -54,6 +54,7 @@
 
             TestMulableObject mo = new TestMulableObject(() => ++disposedManaged, () => ++disposedNative);
 
+            mo.Use(); // bump up code coverage
             mo.Dispose();
             Assert.AreEqual(1, disposedManaged);
             Assert.AreEqual(1, disposedNative);

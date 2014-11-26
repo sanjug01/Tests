@@ -4,10 +4,12 @@
     using RdClient.Shared.Navigation;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     [TestClass]
     public sealed class ModalPresentationCompletionTests
     {
+        [DebuggerNonUserCode] // exclude from code coverage
         private sealed class TestView : IPresentableView
         {
             IViewModel IPresentableView.ViewModel { get { return null; } }

@@ -1,8 +1,10 @@
 ﻿namespace RdClient.Shared.Navigation.Contracts
 {
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
 
+    [DebuggerNonUserCode] // exclude from code coverage
     [ContractClassFor(typeof(IPresentationCompletion))]
     abstract class IPresentationCompletionContract : IPresentationCompletion
     {

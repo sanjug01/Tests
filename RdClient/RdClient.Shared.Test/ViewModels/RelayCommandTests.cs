@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.ViewModels;
 using System;
+using System.Collections.Generic;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -13,8 +14,7 @@ namespace RdClient.Shared.Test.ViewModels
             bool actionCalled = false;
             Int32 actionParam = 0;
 
-            Action<object> action = (o) => { actionCalled = true; actionParam = (Int32) o; };
-            RelayCommand rc = new RelayCommand(action);
+            RelayCommand rc = new RelayCommand(o => { actionCalled = true; actionParam = (Int32)o; });
 
             rc.Execute(3);
 
@@ -28,9 +28,8 @@ namespace RdClient.Shared.Test.ViewModels
             bool canExecute = false;
             bool predicateCalled = false;
 
-            Action<object> action = (o) => {  };
             Predicate<object> predicate = (o) => { predicateCalled = true; return ((Int32)o).Equals(3); };
-            RelayCommand rc = new RelayCommand(action, predicate);
+            RelayCommand rc = new RelayCommand(o => { }, predicate);
 
             canExecute = rc.CanExecute(3);
 
@@ -43,8 +42,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             bool canExecute = false;
 
-            Action<object> action = (o) => { };
-            RelayCommand rc = new RelayCommand(action, null);
+            RelayCommand rc = new RelayCommand(o => { }, null);
 
             canExecute = rc.CanExecute(3);
 
@@ -55,8 +53,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void CanExecuteChangedEmitted()
         {
             bool canExecuteChanged = false;
-            Action<object> action = (o) => { };
-            RelayCommand rc = new RelayCommand(action, null);
+            RelayCommand rc = new RelayCommand(o => { }, null);
 
             rc.EmitCanExecuteChanged();
             Assert.IsFalse(canExecuteChanged);
@@ -66,6 +63,89 @@ namespace RdClient.Shared.Test.ViewModels
             rc.EmitCanExecuteChanged();
 
             Assert.IsTrue(canExecuteChanged);
+        }
+
+        [TestMethod]
+        public void NewRelayCommand_DisposeAndExecute_Throws()
+        {
+            RelayCommand rc = new RelayCommand(o => { });
+
+            rc.Dispose();
+
+            try
+            {
+                rc.Execute(null);
+                Assert.Fail("Unexpected success");
+            }
+            catch (ObjectDisposedException)
+            {
+                // Success
+            }
+            catch
+            {
+                Assert.Fail("Unexpected exception");
+            }
+        }
+
+        [TestMethod]
+        public void NewRelayCommand_DisposeAndSubscribe_Throws()
+        {
+            RelayCommand rc = new RelayCommand(o => { });
+
+            rc.Dispose();
+
+            try
+            {
+                rc.CanExecuteChanged += (s, e) => { };
+                Assert.Fail("Unexpected success");
+            }
+            catch (ObjectDisposedException)
+            {
+                // Success
+            }
+            catch
+            {
+                Assert.Fail("Unexpected exception");
+            }
+        }
+
+        [TestMethod]
+        public void NewRelayCommand_SubscribeDisposeAndUnsubscribe_Throws()
+        {
+            RelayCommand rc = new RelayCommand(o => { });
+            EventHandler handler = (s, e) => { };
+
+            rc.CanExecuteChanged += handler;
+            rc.Dispose();
+
+            try
+            {
+                rc.CanExecuteChanged -= handler;
+                Assert.Fail("Unexpected success");
+            }
+            catch (ObjectDisposedException)
+            {
+                // Success
+            }
+            catch
+            {
+                Assert.Fail("Unexpected exception");
+            }
+        }
+
+        [TestMethod]
+        public void NewRelayCommand_SubscribeUnsubscribe_StopsEvents()
+        {
+            IList<EventArgs> reported = new List<EventArgs>();
+            RelayCommand rc = new RelayCommand(o => { });
+            EventHandler handler = (s, e) => reported.Add(e);
+
+            rc.CanExecuteChanged += handler;
+            rc.EmitCanExecuteChanged();
+            Assert.AreEqual(1, reported.Count);
+            rc.CanExecuteChanged -= handler;
+            rc.EmitCanExecuteChanged();
+            Assert.AreEqual(1, reported.Count);
         }
     }
 }

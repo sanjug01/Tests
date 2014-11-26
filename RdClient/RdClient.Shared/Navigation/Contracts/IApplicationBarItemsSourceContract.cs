@@ -2,8 +2,10 @@
 {
     using RdClient.Shared.Navigation.Extensions;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
 
+    [DebuggerNonUserCode] // exclude from code coverage
     [ContractClassFor(typeof(IApplicationBarItemsSource))]
     abstract class IApplicationBarItemsSourceContract : IApplicationBarItemsSource
     {
