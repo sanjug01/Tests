@@ -260,7 +260,7 @@ namespace RdClient.Shared.ViewModels
             Debug.WriteLine("   ....... Adding a desktop");
             args = new AddOrEditDesktopViewModelArgs(null, testUser, true);
 
-            ((IViewModel)vm).Presenting(null, args);
+            ((IViewModel)vm).Presenting(null, args, null);
             vm.Host = "saved_new_host";
             expectedHostName = vm.Host;
             vm.SaveCommand.Execute(null);
@@ -279,7 +279,7 @@ namespace RdClient.Shared.ViewModels
             //          This particular view model does not participate in the navigation service
             //          activities and must not implement the IViewModel interface.
             //
-            ((IViewModel)vm).Presenting(null, args);
+            ((IViewModel)vm).Presenting(null, args, null);
             vm.Host = _connectionInformation.Desktop.HostName;
             expectedHostName = vm.Host;
             vm.SaveCommand.Execute(null);
@@ -367,7 +367,7 @@ namespace RdClient.Shared.ViewModels
             //          This particular view model does not participate in the navigation service
             //          activities and must not implement the IViewModel interface.
             //
-            ((IViewModel)vm).Presenting(null, args);
+            ((IViewModel)vm).Presenting(null, args, null);
             vm.Host = "unsaved_new_host";
             vm.CancelCommand.Execute(null);           
             RdTrace.IfCondThrow(delegateCalled, "Add desktop and cancel should not call saveDelegate!");
@@ -384,7 +384,7 @@ namespace RdClient.Shared.ViewModels
             //          This particular view model does not participate in the navigation service
             //          activities and must not implement the IViewModel interface.
             //
-            ((IViewModel)vm).Presenting(null, args);
+            ((IViewModel)vm).Presenting(null, args, null);
             vm.Host = "saved_new_host";
             expectedHostName = vm.Host;
             vm.SaveCommand.Execute(null);
@@ -399,7 +399,7 @@ namespace RdClient.Shared.ViewModels
             testDesktop = this.Desktops[0];
             args = new AddOrEditDesktopViewModelArgs(testDesktop, testUser, false);
 
-            ((IViewModel)vm).Presenting(null, args);
+            ((IViewModel)vm).Presenting(null, args, null);
             vm.Host = "not_updated_host";
             expectedHostName = testDesktop.HostName;
             vm.CancelCommand.Execute(null);
@@ -414,7 +414,7 @@ namespace RdClient.Shared.ViewModels
 
             args = new AddOrEditDesktopViewModelArgs(testDesktop, testUser, false);
 
-            ((IViewModel)vm).Presenting(null, args);
+            ((IViewModel)vm).Presenting(null, args, null);
             vm.Host = "updated_host";
             expectedHostName = vm.Host;
             vm.SaveCommand.Execute(null);

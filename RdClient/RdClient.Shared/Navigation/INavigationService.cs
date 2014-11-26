@@ -31,7 +31,7 @@ namespace RdClient.Shared.Navigation
         /// </summary>
         /// <param name="viewName">Name of the view as registered in the view factory.</param>
         /// <param name="activationParameter">A user determined parameter passed to the view.</param>
-        void PushModalView(string viewName, object activationParameter);
+        void PushModalView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion = null);
         /// <summary>
         /// Dismisses a modal view. If the view is not the top view on the stack, the views on the stack which are above it are dismissed as well from top to bottom.
         /// </summary>

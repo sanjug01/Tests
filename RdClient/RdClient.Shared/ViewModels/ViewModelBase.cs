@@ -1,13 +1,10 @@
-﻿using RdClient.Shared.Navigation;
-using RdClient.Shared.Models;
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Runtime.CompilerServices;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
+
     /// <summary>
     /// Implementation of <see cref="INotifyPropertyChanged"/> to simplify ViewModels.
     /// </summary>
@@ -15,6 +12,7 @@ namespace RdClient.Shared.ViewModels
     public abstract class ViewModelBase : Helpers.MutableObject, IViewModel, IViewModelWithData
     {
         private INavigationService _navigationService;
+        private IModalPresentationContext _presentationContext;
         private IDataModel _dataModel;
 
         protected INavigationService NavigationService
@@ -27,6 +25,22 @@ namespace RdClient.Shared.ViewModels
         {
             get { return _dataModel; }
             set { SetProperty(ref _dataModel, value); }
+        }
+
+        /// <summary>
+        /// View models may call this method to dismiss themselves from the modal stack.
+        /// </summary>
+        /// <param name="result">Arbitrary object that will be passed to the presentation completion handler
+        /// passed to INavigationService.PushModalView.</param>
+        protected void DismissModal(object result)
+        {
+            Contract.Ensures(null == _presentationContext);
+
+            if (null != _presentationContext)
+            {
+                _presentationContext.Dismiss(result);
+                _presentationContext = null;
+            }
         }
 
         /// <summary>
@@ -51,12 +65,13 @@ namespace RdClient.Shared.ViewModels
         {
         }
 
-        void IViewModel.Presenting(INavigationService navigationService, object activationParameter)
+        void IViewModel.Presenting(INavigationService navigationService, object activationParameter, IModalPresentationContext presentationContext)
         {
             Contract.Requires(navigationService != null);
             Contract.Ensures(null != _navigationService);
 
             this.NavigationService = navigationService;
+            _presentationContext = presentationContext;
             this.OnPresenting(activationParameter);
         }
 

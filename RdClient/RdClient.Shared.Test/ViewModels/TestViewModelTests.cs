@@ -86,7 +86,7 @@ namespace RdClient.Shared.Test.ViewModels
                     new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                     );
 
-                ((IViewModel)vm).Presenting(navigation, args);
+                ((IViewModel)vm).Presenting(navigation, args, null);
             }
         }
 
@@ -105,7 +105,7 @@ namespace RdClient.Shared.Test.ViewModels
 
                 navigation.Expect("NavigateToView", new List<object>() { "ConnectionCenterView", null }, 0);
 
-                ((IViewModel)vm).Presenting(navigation, args);
+                ((IViewModel)vm).Presenting(navigation, args, null);
                 vm.GoHomeCommand.Execute(null);
             }
         }

@@ -77,11 +77,16 @@
     <Compile Include="Navigation\Contracts\IApplicationBarItemsSourceContract.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarSiteContract.cs" />
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
+    <Compile Include="Navigation\Contracts\IPresentationCompletionContract.cs" />
     <Compile Include="Navigation\Extensions\ApplicationBarExtension.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExeption.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtension.cs" />
     <Compile Include="Navigation\Extensions\IApplicationBarSiteControl.cs" />
     <Compile Include="Navigation\Extensions\IDeferredExecutionSite.cs" />
+    <Compile Include="Navigation\IPresentationCompletion.cs" />
+    <Compile Include="Navigation\IModalPresentationContext.cs" />
+    <Compile Include="Navigation\ModalPresentationCompletion.cs" />
+    <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModel.cs" />
     <Compile Include="ViewModels\DesktopViewModel.cs" />
     <Compile Include="Navigation\DataModelExtension.cs" />

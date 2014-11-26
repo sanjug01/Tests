@@ -28,7 +28,7 @@
                 set { this.SetProperty<IDeferredExecution>(ref _deferredExecution, value); }
             }
 
-            public void Presenting(INavigationService navigationService, object activationParameter)
+            public void Presenting(INavigationService navigationService, object activationParameter, IModalPresentationContext presentationResult)
             {
                 throw new System.NotImplementedException();
             }

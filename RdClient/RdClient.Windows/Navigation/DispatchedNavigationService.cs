@@ -28,17 +28,17 @@ namespace RdClient.Shared.Navigation
             }
         }
 
-        public override async void PushModalView(string viewName, object activationParameter)
+        public override async void PushModalView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
             if (_dispatcher.HasThreadAccess)
             {
-                base.PushModalView(viewName, activationParameter);
+                base.PushModalView(viewName, activationParameter, presentationCompletion);
             }
             else
             {
                 await _dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    base.PushModalView(viewName, activationParameter);
+                    base.PushModalView(viewName, activationParameter, presentationCompletion);
                 });
             }
         }

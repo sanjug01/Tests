@@ -51,7 +51,7 @@ namespace RdClient.Shared.Test.ViewModels
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present the view model.
                 //
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
                 Assert.IsTrue(string.IsNullOrEmpty(_addOrEditDesktopViewModel.Host));
                 Assert.IsFalse(_addOrEditDesktopViewModel.IsExpandedView);
@@ -76,7 +76,7 @@ namespace RdClient.Shared.Test.ViewModels
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present the view model.
                 //
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
                 Assert.AreEqual(desktop, _addOrEditDesktopViewModel.Desktop);
                 Assert.AreEqual(creds, _addOrEditDesktopViewModel.Credentials);
@@ -95,7 +95,7 @@ namespace RdClient.Shared.Test.ViewModels
                 AddOrEditDesktopViewModelArgs args =
                     new AddOrEditDesktopViewModelArgs(desktop, creds, isAddingDesktop);
 
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
                 _addOrEditDesktopViewModel.Host = "MyPC";
                 Assert.IsTrue(_addOrEditDesktopViewModel.SaveCommand.CanExecute(null));
                 Assert.IsTrue(_addOrEditDesktopViewModel.CancelCommand.CanExecute(null));
@@ -117,7 +117,7 @@ namespace RdClient.Shared.Test.ViewModels
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present the view model.
                 //
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
                 Assert.AreEqual(desktop, _addOrEditDesktopViewModel.Desktop);
                 Assert.AreEqual(creds, _addOrEditDesktopViewModel.Credentials);
@@ -136,7 +136,7 @@ namespace RdClient.Shared.Test.ViewModels
                 AddOrEditDesktopViewModelArgs args =
                     new AddOrEditDesktopViewModelArgs(desktop, creds, isAddingDesktop);
 
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
                 _addOrEditDesktopViewModel.Host = String.Empty;
 
                 Assert.IsFalse(_addOrEditDesktopViewModel.SaveCommand.CanExecute(null));
@@ -159,7 +159,7 @@ namespace RdClient.Shared.Test.ViewModels
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present the view model.
                 //
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
                 Assert.AreEqual(desktop.HostName, _addOrEditDesktopViewModel.Host);
             }
@@ -182,7 +182,7 @@ namespace RdClient.Shared.Test.ViewModels
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present the view model.
                 //
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
                 int finalCount = _addOrEditDesktopViewModel.UserOptions.Count;
                 int userIndex = _addOrEditDesktopViewModel.UserOptions.IndexOf(credentials.Username);
@@ -216,7 +216,7 @@ namespace RdClient.Shared.Test.ViewModels
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present the view model.
                 //
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
                 _addOrEditDesktopViewModel.Host = expectedDesktop.HostName;                
                 
                 Assert.AreEqual(0, dataModel.Desktops.Count, "no desktop should be added until save command is executed");
@@ -251,7 +251,7 @@ namespace RdClient.Shared.Test.ViewModels
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present the view model.
                 //
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
                 _addOrEditDesktopViewModel.Host = expectedDesktop.HostName;
                 _addOrEditDesktopViewModel.CancelCommand.Execute(null);
@@ -280,7 +280,7 @@ namespace RdClient.Shared.Test.ViewModels
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present the view model.
                 //
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
                 _addOrEditDesktopViewModel.Host = "myNewPC";
                 _addOrEditDesktopViewModel.SaveCommand.Execute(saveParam);
@@ -308,7 +308,7 @@ namespace RdClient.Shared.Test.ViewModels
                 // TODO:    REFACTOR THIS!
                 //          Make the navigation service present the view model.
                 //
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
                 _addOrEditDesktopViewModel.Host = "MyNewPC_not_updated";
                 _addOrEditDesktopViewModel.CancelCommand.Execute(saveParam);
@@ -336,7 +336,7 @@ namespace RdClient.Shared.Test.ViewModels
 
                 _addOrEditDesktopViewModel.PresentableView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
                 Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
 
                 _addOrEditDesktopViewModel.Host = invalidHostName;
@@ -378,7 +378,7 @@ namespace RdClient.Shared.Test.ViewModels
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
                 Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
 
-                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
                 _addOrEditDesktopViewModel.Host = invalidHostName;
                 _addOrEditDesktopViewModel.SaveCommand.Execute(saveParam);
