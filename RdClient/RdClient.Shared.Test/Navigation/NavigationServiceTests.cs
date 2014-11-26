@@ -471,12 +471,15 @@ namespace RdClient.Shared.Test
 
                 navigationService.NavigateToView("foo", null);
 
+                Assert.IsNotNull(_appBarViewModel.ShowBar);
                 Assert.IsTrue(_appBarViewModel.IsShowBarButtonVisible);
                 Assert.IsFalse(_appBarViewModel.IsBarVisible);
                 Assert.IsFalse(_appBarViewModel.IsBarSticky);
                 Assert.IsNotNull(_appBarViewModel.BarItems);
                 Assert.IsInstanceOfType(_appBarViewModel.BarItems, typeof(BarItemModel[]));
                 Assert.AreEqual(((BarItemModel[])_appBarViewModel.BarItems).Length, 1);
+                Assert.IsNotNull(vm.ApplicationBarSite.ShowBar);
+                Assert.IsNotNull(vm.ApplicationBarSite.HideBar);
             }
         }
 
