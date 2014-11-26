@@ -19,5 +19,7 @@ namespace RdClient.Shared.Test.Mock
         public ModelCollection<Desktop> Desktops { get; set; }
 
         public ModelCollection<Credentials> Credentials { get; set; }
+
+        public ModelCollection<Thumbnail> Thumbnails { get; set; }
     }
 }

@@ -30,5 +30,10 @@ namespace RdClient.Shared.Models
         {
             get;
         }
+
+        ModelCollection<Thumbnail> Thumbnails
+        {
+            get;
+        }
     }
 }

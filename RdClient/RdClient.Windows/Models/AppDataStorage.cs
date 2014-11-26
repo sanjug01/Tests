@@ -137,7 +137,8 @@ namespace RdClient.Models
             {
                 throw new InvalidOperationException("Must initialize first");
             }
-
+            Task serializationPrep = item.PrepForSerialization();
+			serializationPrep.Wait();
             Task<StorageFolder> folderTask = this.RootFolder.CreateFolderAsync(collectionName, CreationCollisionOption.OpenIfExists).AsTask<StorageFolder>();
             folderTask.Wait();
 

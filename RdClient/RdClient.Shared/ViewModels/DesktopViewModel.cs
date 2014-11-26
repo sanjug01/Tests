@@ -3,6 +3,7 @@ using RdClient.Shared.Models;
 
 using System.Collections.Generic;
 using System.Windows.Input;
+using Windows.UI.Xaml.Media;
 
 namespace RdClient.Shared.ViewModels
 {
@@ -38,7 +39,7 @@ namespace RdClient.Shared.ViewModels
             { 
                 SetProperty(ref _desktop, value);
             }
-        }
+        }        
 
         public Credentials Credential
         {
@@ -63,6 +64,20 @@ namespace RdClient.Shared.ViewModels
             set
             {
                 SetProperty(ref _isSelected, value);
+            }
+        }
+
+        public Thumbnail Thumbnail
+        {
+            get 
+            { 
+                if (!this.Desktop.HasThumbnail)
+                {
+                    Thumbnail thumbnail = new Thumbnail();
+                    this.Desktop.ThumbnailId = thumbnail.Id;
+                    this.DataModel.Thumbnails.Add(thumbnail);
+                }
+                return this.DataModel.Thumbnails.GetItemWithId(this.Desktop.ThumbnailId);
             }
         }
 
@@ -111,6 +126,7 @@ namespace RdClient.Shared.ViewModels
             {
                 Desktop = this.Desktop,
                 Credentials = credentials
+                Thumbnail = this.Thumbnail
             };
 
             NavigationService.NavigateToView("SessionView", connectionInformation);            

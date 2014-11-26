@@ -22,6 +22,8 @@ namespace RdClient.Shared.Models
         private readonly IRdpConnectionFactory _connectionFactory;
 
         private IRdpConnection _rdpConnection;
+
+        private Snapshotter _snapshotter;
         
         private void EmitConnectionCreated(ConnectionCreatedArgs args)
         {
@@ -46,6 +48,11 @@ namespace RdClient.Shared.Models
 
             Desktop desktop = connectionInformation.Desktop;
             Credentials credentials = connectionInformation.Credentials;
+            Thumbnail thumbnail = connectionInformation.Thumbnail;
+            if (thumbnail != null)
+            {
+                _snapshotter = new Snapshotter(_rdpConnection, thumbnail);
+            }
 
             RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
             _rdpConnection.Connect(credentials, credentials.HaveBeenPersisted);

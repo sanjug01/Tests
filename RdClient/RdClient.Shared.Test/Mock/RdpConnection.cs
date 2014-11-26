@@ -2,6 +2,7 @@
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Models;
 using RdMock;
+using System;
 
 namespace RdClient.Shared.Test.Mock
 {
@@ -84,6 +85,12 @@ namespace RdClient.Shared.Test.Mock
         public void SetBoolProperty(string propertyName, bool value)
         {
             Invoke(new object[] { propertyName, value });
+        }
+
+
+        public void GetSnapshot(out int width, out int height, out byte[] bytes)
+        {
+            throw new NotImplementedException();
         }
     }
 }

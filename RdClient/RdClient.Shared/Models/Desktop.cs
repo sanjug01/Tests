@@ -8,6 +8,7 @@ namespace RdClient.Shared.Models
     {
         private string _hostName;
         private Guid _credId;
+        private Guid _thumbnailId;
         
         [DataMember]
         public string HostName
@@ -26,6 +27,18 @@ namespace RdClient.Shared.Models
         public bool HasCredential
         {
             get { return !this.CredentialId.Equals(Guid.Empty); }
+        }
+
+        [DataMember]
+        public Guid ThumbnailId
+        {
+            get { return _thumbnailId; }
+            set { SetProperty(ref _thumbnailId, value); }
+        }
+
+        public bool HasThumbnail
+        {
+            get { return !Guid.Empty.Equals(this.ThumbnailId); }
         }
     }
 }
