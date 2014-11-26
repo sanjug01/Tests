@@ -12,6 +12,7 @@ namespace RdClient.Shared.ViewModels
         private readonly RelayCommand _connectCommand;
         private readonly RelayCommand _deleteCommand;
         private Desktop _desktop;
+        private bool _isSelected;
 
         public DesktopViewModel(Desktop desktop)
         {
@@ -44,6 +45,15 @@ namespace RdClient.Shared.ViewModels
                     cred = null;
                 }
                 return cred;
+            }
+        }
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                SetProperty(ref _isSelected, value);
             }
         }
 

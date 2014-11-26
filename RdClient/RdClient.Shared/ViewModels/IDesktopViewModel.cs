@@ -14,6 +14,8 @@ namespace RdClient.Shared.ViewModels
 
         Credentials Credential { get; }
 
+        bool IsSelected { get; set; }
+
         ICommand EditCommand { get; }
 
         ICommand ConnectCommand { get; }

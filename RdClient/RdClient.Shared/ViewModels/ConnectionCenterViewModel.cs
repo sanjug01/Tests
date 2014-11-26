@@ -12,11 +12,13 @@ namespace RdClient.Shared.ViewModels
     {
         private readonly RelayCommand _addDesktopCommand;
         private ObservableCollection<IDesktopViewModel> _desktopViewModels;
+        private int _selectedCount;
 
         public ConnectionCenterViewModel()
         {
             _addDesktopCommand = new RelayCommand(AddDesktopExecute);
             this.PropertyChanged += ConnectionCenterViewModel_PropertyChanged;
+            _selectedCount = 0;
         }
 
         public ObservableCollection<IDesktopViewModel> DesktopViewModels
@@ -36,6 +38,11 @@ namespace RdClient.Shared.ViewModels
         public bool HasDesktops
         {
             get { return this.DataModel.Desktops.Count > 0; }
+        }
+
+        public int SelectedCount
+        {
+            get { return _selectedCount; }
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -67,6 +74,7 @@ namespace RdClient.Shared.ViewModels
                     //
                     ((IViewModel)vm).Presenting(this.NavigationService, desktop, null);                                       
                     desktopVMs.Add(vm);
+                    vm.PropertyChanged += DesktopSelection_PropertyChanged;
                 }
                 this.DesktopViewModels = desktopVMs;
                 this.DataModel.Desktops.CollectionChanged += Desktops_CollectionChanged;
@@ -80,6 +88,22 @@ namespace RdClient.Shared.ViewModels
             if (e.PropertyName.Equals("Count"))
             {
                 this.EmitPropertyChanged("HasDesktops");
+            }
+        }
+
+        private void DesktopSelection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("IsSelected"))
+            {
+                _selectedCount = 0;
+                foreach (DesktopViewModel vm in this.DesktopViewModels)
+                {
+                    if(vm.IsSelected)
+                    {
+                        _selectedCount++;
+                    }
+                }
+                this.EmitPropertyChanged("SelectedCount");
             }
         }
 

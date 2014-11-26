@@ -18,6 +18,8 @@ namespace RdClient.DesignTime
             get { return _cred; }
         }
 
+        public bool IsSelected { get; set; }
+
         public System.Windows.Input.ICommand EditCommand
         {
             get { return null; }
