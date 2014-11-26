@@ -64,7 +64,7 @@
         }
         public bool IsBarAvailable
         {
-            get { return null != _barItems; }
+            get { return null != _barItems && 0 != _visibleItemsCount; }
         }
 
         public bool IsShowBarButtonVisible
@@ -139,6 +139,7 @@
                         this.IsBarVisible = false;
                         this.IsShowBarButtonVisible = true;
                         _showBar.EmitCanExecuteChanged();
+                        EmitPropertyChanged("IsBarAvailable");
                     }
                 }
                 else
@@ -148,6 +149,7 @@
                         this.IsBarVisible = false;
                         this.IsShowBarButtonVisible = false;
                         _showBar.EmitCanExecuteChanged();
+                        EmitPropertyChanged("IsBarAvailable");
                     }
                 }
             }

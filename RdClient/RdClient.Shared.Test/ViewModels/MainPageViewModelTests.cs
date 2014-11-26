@@ -1,6 +1,8 @@
 ﻿namespace RdClient.Shared.Test.ViewModels
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.ViewModels;
     using System.Collections.Generic;
 
@@ -189,6 +191,136 @@
             Assert.AreEqual(_vm.ApplicationBarLayout, ViewOrientation.Portrait);
             Assert.AreEqual(1, propertyReported.Count);
             Assert.AreEqual("ApplicationBarLayout", propertyReported[0]);
+        }
+
+        [TestMethod]
+        public void PresentViewWithButtonModels_ShowAndHideAppBar_ShowsAndHides()
+        {
+            IPresentableViewFactory factory = new PresentableViewFactoryConcrete();
+            MainPageViewModel mainVM = new MainPageViewModel();
+
+            factory.AddViewClass("view", typeof(TestViewWithModelWithBarItems), false);
+
+            NavigationService nav = new NavigationService()
+            {
+                ViewFactory = factory,
+                Presenter = new TestViewPresenter(),
+                Extensions = new NavigationExtensionList() { new ApplicationBarExtension() { ViewModel = mainVM } }
+            };
+
+            PresentationParameter param = new PresentationParameter();
+            nav.NavigateToView("view", param);
+            Assert.IsNotNull(param.ViewModel);
+            Assert.IsTrue(param.ViewModel.BarSite.ShowBar.CanExecute(null));
+            param.ViewModel.BarSite.ShowBar.Execute(null);
+            Assert.IsTrue(param.ViewModel.BarSite.IsBarVisible);
+            param.ViewModel.BarSite.HideBar.Execute(null);
+            Assert.IsFalse(param.ViewModel.BarSite.IsBarVisible);
+        }
+
+        [TestMethod]
+        public void PresentViewWithButtonModels_ShowBarHideAllModels_BarUIHides()
+        {
+            IPresentableViewFactory factory = new PresentableViewFactoryConcrete();
+            MainPageViewModel mainVM = new MainPageViewModel();
+
+            factory.AddViewClass("view", typeof(TestViewWithModelWithBarItems), false);
+
+            NavigationService nav = new NavigationService()
+            {
+                ViewFactory = factory,
+                Presenter = new TestViewPresenter(),
+                Extensions = new NavigationExtensionList() { new ApplicationBarExtension() { ViewModel = mainVM } }
+            };
+
+            PresentationParameter param = new PresentationParameter();
+            nav.NavigateToView("view", param);
+            Assert.IsNotNull(param.ViewModel);
+            Assert.IsTrue(param.ViewModel.BarSite.ShowBar.CanExecute(null));
+            param.ViewModel.BarSite.ShowBar.Execute(null);
+            Assert.IsTrue(param.ViewModel.BarSite.IsBarVisible);
+            param.ViewModel.Models[0].IsVisible = false;
+            Assert.IsFalse(mainVM.IsBarVisible);
+            Assert.IsFalse(mainVM.IsShowBarButtonVisible);
+        }
+
+        [TestMethod]
+        public void PresentViewWithButtonModels_ShowBarHideAllModelsShowModel_BarUIReappears()
+        {
+            IPresentableViewFactory factory = new PresentableViewFactoryConcrete();
+            MainPageViewModel mainVM = new MainPageViewModel();
+
+            factory.AddViewClass("view", typeof(TestViewWithModelWithBarItems), false);
+
+            NavigationService nav = new NavigationService()
+            {
+                ViewFactory = factory,
+                Presenter = new TestViewPresenter(),
+                Extensions = new NavigationExtensionList() { new ApplicationBarExtension() { ViewModel = mainVM } }
+            };
+
+            PresentationParameter param = new PresentationParameter();
+            nav.NavigateToView("view", param);
+            Assert.IsNotNull(param.ViewModel);
+            Assert.IsTrue(param.ViewModel.BarSite.ShowBar.CanExecute(null));
+            param.ViewModel.BarSite.ShowBar.Execute(null);
+            Assert.IsTrue(param.ViewModel.BarSite.IsBarVisible);
+            param.ViewModel.Models[0].IsVisible = false;
+            Assert.IsFalse(mainVM.IsBarVisible);
+            Assert.IsFalse(mainVM.IsShowBarButtonVisible);
+            Assert.IsFalse(mainVM.IsBarAvailable);
+            param.ViewModel.Models[0].IsVisible = true;
+            Assert.IsTrue(mainVM.IsBarAvailable);
+            Assert.IsFalse(mainVM.IsBarVisible);
+            Assert.IsTrue(mainVM.IsShowBarButtonVisible);
+        }
+
+        private sealed class PresentationParameter
+        {
+            public TestViewModel ViewModel;
+        }
+
+        private class TestViewWithModelWithBarItems : IPresentableView
+        {
+            private readonly IViewModel _viewModel;
+
+            public TestViewWithModelWithBarItems()
+            {
+                _viewModel = new TestViewModel();
+            }
+
+            IViewModel IPresentableView.ViewModel { get { return _viewModel; } }
+
+            void IPresentableView.Activating(object activationParameter) { }
+
+            void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
+
+            void IPresentableView.Dismissing() { }
+        }
+
+        private sealed class TestViewModel : ViewModelBase, IApplicationBarItemsSource
+        {
+            public readonly BarItemModel[] Models = new BarItemModel[] { new SeparatorBarItemModel() };
+            public IApplicationBarSite BarSite;
+
+            IEnumerable<BarItemModel> IApplicationBarItemsSource.GetItems(IApplicationBarSite applicationBarSite)
+            {
+                this.BarSite = applicationBarSite;
+                return this.Models;
+            }
+
+            protected override void OnPresenting(object activationParameter)
+            {
+                base.OnPresenting(activationParameter);
+                ((PresentationParameter)activationParameter).ViewModel = this;
+            }
+        }
+
+        private sealed class TestViewPresenter : IViewPresenter
+        {
+            void IViewPresenter.PresentView(IPresentableView view) { }
+            void IViewPresenter.PushModalView(IPresentableView view) { }
+            void IViewPresenter.DismissModalView(IPresentableView view) { }
         }
     }
 }
