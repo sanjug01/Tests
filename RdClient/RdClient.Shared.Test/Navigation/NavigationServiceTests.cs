@@ -1,16 +1,27 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RdClient.Shared.Navigation;
-using RdClient.Shared.Navigation.Extensions;
-using RdClient.Shared.ViewModels;
-using System;
-using System.Collections.Generic;
-
-namespace RdClient.Shared.Test
+﻿namespace RdClient.Shared.Test
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
+    using RdClient.Shared.ViewModels;
+    using System.Collections.Generic;
+
     [TestClass]
     public class NavigationServiceTests
     {
         private IApplicationBarViewModel _appBarViewModel;
+
+        /// <summary>
+        /// Imitation view model that dismisses itself and reports a result object.
+        /// Used in the functional test of returning results of modal dialog presenting.
+        /// </summary>
+        private sealed class TestModalViewModel : ViewModelBase
+        {
+            public void ReportResult(object result)
+            {
+                this.DismissModal(result);
+            }
+        }
 
         [TestInitialize]
         public void SetUpTest()
@@ -766,14 +777,6 @@ namespace RdClient.Shared.Test
                 Assert.AreEqual(1, completions.Count);
                 Assert.AreSame(completions[0].Result, modalResult);
                 Assert.AreSame(modalView, completions[0].View);
-            }
-        }
-
-        private sealed class TestModalViewModel : ViewModelBase
-        {
-            public void ReportResult(object result)
-            {
-                this.DismissModal(result);
             }
         }
     }
