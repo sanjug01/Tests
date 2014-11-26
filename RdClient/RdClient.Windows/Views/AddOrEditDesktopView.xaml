@@ -92,9 +92,6 @@
                               SelectedIndex="{Binding Path=SelectedUserOptionsIndex, Mode=TwoWay}">
                     </ComboBox>
 
-                    <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" Content="Show additional options(d)" Margin="0,8"
-                            IsChecked="{Binding Path=IsExpandedView, Mode=TwoWay}" />
-
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
                         <Button x:Uid="AddOrEditDesktop-Save" Content="SAVE(d)" 
                                 Command="{Binding Path=SaveCommand}" />

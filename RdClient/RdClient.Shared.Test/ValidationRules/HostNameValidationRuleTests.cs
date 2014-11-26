@@ -18,25 +18,29 @@ namespace RdClient.Shared.Test.ValidationRules
         [TestMethod]
         public void ValidHostNames_ShouldBeValidated()
         {
+            HostNameValidationRule rule = new HostNameValidationRule();
+
             string hostName = "aBC";
-            Assert.IsTrue(HostNameValidationRule.Validate(hostName, CultureInfo.CurrentCulture));
+            Assert.IsTrue(rule.Validate(hostName, CultureInfo.CurrentCulture));
 
             hostName = "abc.mydomain.com";
-            Assert.IsTrue(HostNameValidationRule.Validate(hostName, CultureInfo.CurrentCulture));
+            Assert.IsTrue(rule.Validate(hostName, CultureInfo.CurrentCulture));
 
             hostName = "_myHost123Cd";
-            Assert.IsTrue(HostNameValidationRule.Validate(hostName, CultureInfo.CurrentCulture));
+            Assert.IsTrue(rule.Validate(hostName, CultureInfo.CurrentCulture));
 
             hostName = "23.24.11.22";
-            Assert.IsTrue(HostNameValidationRule.Validate(hostName, CultureInfo.CurrentCulture));
+            Assert.IsTrue(rule.Validate(hostName, CultureInfo.CurrentCulture));
 
             hostName = "mypc.com";
-            Assert.IsTrue(HostNameValidationRule.Validate(hostName, CultureInfo.CurrentCulture));
+            Assert.IsTrue(rule.Validate(hostName, CultureInfo.CurrentCulture));
         }
 
         [TestMethod]
         public void HostNamesHasInvalidCharacters_ShouldFailValidation()
         {
+            HostNameValidationRule rule = new HostNameValidationRule();
+
             string prefix = "a1b";
             string suffix = "_2df";
             string core;
@@ -45,13 +49,15 @@ namespace RdClient.Shared.Test.ValidationRules
             {
                 core = _illegalCharacters[i].ToString();
                 hostName = prefix + core + suffix;
-                Assert.IsFalse(HostNameValidationRule.Validate(hostName, CultureInfo.InvariantCulture));
+                Assert.IsFalse(rule.Validate(hostName, CultureInfo.InvariantCulture));
             }
         }
 
         [TestMethod]
         public void HostNamesStartsWithInvalidCharacters_ShouldFailValidation()
         {
+            HostNameValidationRule rule = new HostNameValidationRule();
+
             string prefix ;
             string suffix = "d3f";
             string core = "xy_";
@@ -60,13 +66,15 @@ namespace RdClient.Shared.Test.ValidationRules
             {
                 prefix = _illegalCharacters[i].ToString();
                 hostName = prefix + core + suffix;
-                Assert.IsFalse(HostNameValidationRule.Validate(hostName, CultureInfo.InvariantCulture));
+                Assert.IsFalse(rule.Validate(hostName, CultureInfo.InvariantCulture));
             }
         }
 
         [TestMethod]
         public void HostNameEndsWithInvalidCharacters_ShouldFailValidation()
         {
+            HostNameValidationRule rule = new HostNameValidationRule();
+
             string prefix="pq";
             string suffix ;
             string core = "_tv_";
@@ -75,7 +83,7 @@ namespace RdClient.Shared.Test.ValidationRules
             {
                 suffix = _illegalCharacters[i].ToString();
                 hostName = prefix + core + suffix;
-                Assert.IsFalse(HostNameValidationRule.Validate(hostName, CultureInfo.CurrentCulture));
+                Assert.IsFalse(rule.Validate(hostName, CultureInfo.CurrentCulture));
             }
         }
     }

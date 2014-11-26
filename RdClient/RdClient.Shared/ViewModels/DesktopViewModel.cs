@@ -41,7 +41,7 @@ namespace RdClient.Shared.ViewModels
                 }
                 else
                 {
-                    cred = new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false };
+                    cred = null;
                 }
                 return cred;
             }
@@ -69,18 +69,37 @@ namespace RdClient.Shared.ViewModels
 
         private void EditCommandExecute(object o)
         {
-            NavigationService.PushModalView("AddOrEditDesktopView", new AddOrEditDesktopViewModelArgs(this.Desktop, null, false));
+            NavigationService.PushModalView("AddOrEditDesktopView", new EditDesktopViewModelArgs(this.Desktop));
         }
 
         private void ConnectCommandExecute(object o)
+        {            
+            if(this.Credential != null)
+            {
+                InternalConnect(this.Credential, false);
+            }
+            else
+            {
+                AddUserViewArgs args = new AddUserViewArgs(this.Desktop, InternalConnect, true);
+                NavigationService.PushModalView("AddUserView", args);
+            }
+        }
+
+        private void InternalConnect(Credentials credentials, bool storeCredentials)
         {
+            if(storeCredentials)
+            {
+                this.Desktop.CredentialId = credentials.Id;
+                this.DataModel.Credentials.Add(credentials);
+            }
+
             ConnectionInformation connectionInformation = new ConnectionInformation()
             {
                 Desktop = this.Desktop,
-                Credentials = this.Credential
+                Credentials = credentials
             };
 
-            NavigationService.NavigateToView("SessionView", connectionInformation);
+            NavigationService.NavigateToView("SessionView", connectionInformation);            
         }
 
         private void DeleteCommandExecute(object o)

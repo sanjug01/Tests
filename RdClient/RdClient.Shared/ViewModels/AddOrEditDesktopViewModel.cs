@@ -7,98 +7,113 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class AddOrEditDesktopViewModelArgs
+    public class AddDesktopViewModelArgs
     {
-        public AddOrEditDesktopViewModelArgs(Desktop desktop, Credentials credentials, bool isAddingDesktop = true)
+        public AddDesktopViewModelArgs()
         {
-            this.Desktop = desktop;
-            this.Credentials = credentials;
-            this.IsAddingDesktop = isAddingDesktop;
+        }    
+    }
+    public class EditDesktopViewModelArgs
+    {
+        private readonly Desktop _desktop;
+        public Desktop Desktop { get {return _desktop; } }
+
+        public EditDesktopViewModelArgs(Desktop desktop)
+        {
+            _desktop = desktop;
+        }
+    }
+
+    public enum UserComboBoxType
+    {
+        Credentials,
+        AskEveryTime,
+        AddNew
+    }
+
+    public class UserComboBoxElement
+    {
+        private readonly Credentials _credentials;
+        public Credentials Credentials { get { return _credentials; } }
+
+        private readonly UserComboBoxType _userComboBoxType;
+        public UserComboBoxType UserComboBoxType { get { return _userComboBoxType; } }
+
+        public UserComboBoxElement(UserComboBoxType userComboBoxType, Credentials  credentials = null)
+        {            
+            _userComboBoxType  = userComboBoxType;
+            _credentials = credentials;
         }
 
-        public Desktop Desktop { get; private set; }
-        public Credentials Credentials { get; private set; }
-        public bool IsAddingDesktop { get; private set; }        
+        public override string ToString() 
+        {
+            string description;
+
+            switch (this.UserComboBoxType)
+            {
+                case UserComboBoxType.AddNew:
+                    description = "Add New (d)";
+                    break;
+                case UserComboBoxType.AskEveryTime:
+                    description = "Ask Every Time (d)";
+                    break;
+                case UserComboBoxType.Credentials:
+                    description = this.Credentials.Username;
+                    break;
+                default:
+                    description = "";
+                    break;
+            }
+
+            return description;
+        }
     }
+
     public class AddOrEditDesktopViewModel : ViewModelBase
     {
-        private bool _isAddingDesktop;
         private string _host;
         private bool _isHostValid;
-        private bool _isExpandedView;
 
         private readonly RelayCommand _saveCommand;
         private readonly RelayCommand _cancelCommand;
 
         private Desktop _desktop;
-        private Credentials _credentials;
 
         private int _selectedUserOptionsIndex;
 
-        public AddOrEditDesktopViewModel()
-        {
-            _saveCommand = new RelayCommand(SaveCommandExecute, 
-                o => this.SaveCommandCanExecute());
-            _cancelCommand = new RelayCommand(CancelCommandExecute);
-
-            IsAddingDesktop = true;
-            IsExpandedView = false;
-            IsHostValid = true;
-
-            _desktop = null;
-            _credentials = null;
-
-            this.UserOptions = new ObservableCollection<string>();
-            this.UserOptions.Add("Enter every time(d)");
-            this.UserOptions.Add("Add credentials(d)");
-            this.SelectedUserOptionsIndex = 0;
-
-            this.ResetCachedDesktopData();
-
-            PresentableView = null;
-        }
-
-        public ObservableCollection<string> UserOptions { get; set; }
+        public ObservableCollection<UserComboBoxElement> UserOptions { get; set; }
         public int SelectedUserOptionsIndex 
         { 
             get { return _selectedUserOptionsIndex; }
             set
             {
                 SetProperty(ref _selectedUserOptionsIndex, value, "SelectedUserOptionsIndex");
+
+                int idx = (int) value;
+                if(this.UserOptions.Count > 0 && this.UserOptions[idx].UserComboBoxType == UserComboBoxType.AddNew)
+                {
+                    AddUserViewArgs args = new AddUserViewArgs(this.Desktop, (credentials, store) =>
+                        {
+                            this.Desktop.CredentialId = credentials.Id;
+                            this.DataModel.Credentials.Add(credentials);
+                            Update();
+                        }
+                        , false);
+                    NavigationService.PushModalView("AddUserView", args);
+                }
             }
         }
-
 
         public IPresentableView PresentableView { private get; set; }
 
         public ICommand SaveCommand { get { return _saveCommand; } }
 
         public ICommand CancelCommand { get { return _cancelCommand; } }
-        
+
         public Desktop Desktop
         {
             get { return _desktop; }
-            set
-            {
-                SetProperty(ref _desktop, value, "Desktop");
-                ResetCachedDesktopData();
-            }
-        }
-
-        public Credentials Credentials
-        {
-            get { return _credentials; }
-            private set 
-            {
-                // credentials will  be set only on presenting, from activationParameter
-                // which will also update the credentials's combobox
-                SetProperty(ref _credentials, value, "Credentials");
-            }
-        }
-
-        public bool IsAddingDesktop {
-            get { return _isAddingDesktop; }
-            private set { SetProperty(ref _isAddingDesktop, value, "IsAddingDesktop"); }
+            private set { this.SetProperty<Desktop>(ref _desktop, value); }
         }
 
         public string Host
@@ -117,11 +132,19 @@ namespace RdClient.Shared.ViewModels
             private set { SetProperty(ref _isHostValid, value, "IsHostValid"); }
         }
 
-
-        public bool IsExpandedView
+        public AddOrEditDesktopViewModel()
         {
-            get { return _isExpandedView; }
-            set { SetProperty(ref _isExpandedView, value, "IsExpandedView"); }
+            _saveCommand = new RelayCommand(SaveCommandExecute,
+                o =>
+                {
+                    return (this.Host != null);
+                });
+            _cancelCommand = new RelayCommand(CancelCommandExecute);
+
+            IsHostValid = true;
+
+            this.UserOptions = new ObservableCollection<UserComboBoxElement>();
+            this.SelectedUserOptionsIndex = 0;
         }
 
         private void SaveCommandExecute(object o)
@@ -132,60 +155,29 @@ namespace RdClient.Shared.ViewModels
                 return;
             }
 
-            // saving through _saveDelegate for both edit or add
-            if (IsAddingDesktop)
+            this.Desktop.HostName = this.Host;
+
+            bool found = false;
+            foreach (Desktop desktop in this.DataModel.Desktops)
             {
-                _desktop = new Desktop() { HostName = this.Host };
-                this.DataModel.Desktops.Add(_desktop);
-            }
-            else
-            {
-                _desktop.HostName = this.Host;
+                if (desktop.Id == this.Desktop.Id)
+                {
+                    found = true;
+                    break;
+                }
             }
 
-            this.ResetCachedDesktopData();
-
-            if (null != NavigationService && null != PresentableView)
+            if (found == false)
             {
-                NavigationService.DismissModalView(PresentableView);
+                this.DataModel.Desktops.Add(this.Desktop);
             }
+
+            NavigationService.DismissModalView(PresentableView);
         }
-
-        private bool SaveCommandCanExecute()
-        {
-            bool canExecute = false;
-
-            if (this.Host.Trim().Length > 0)
-            {
-                //
-                //  Could do extra validation of the hostname
-                //
-                canExecute = true;
-            }
-            return canExecute;
-        }
-
 
         private void CancelCommandExecute(object o)
         {
-            this.ResetCachedDesktopData();
-
-            if (null != NavigationService && null != PresentableView)
-            {
-                NavigationService.DismissModalView(PresentableView);
-            }
-        }
-
-        private void ResetCachedDesktopData()
-        {
-            if (null != _desktop)
-            {
-                this.Host = _desktop.HostName;
-            }
-            else
-            {
-                this.Host = string.Empty;
-            }
+            NavigationService.DismissModalView(PresentableView);
         }
 
         /// <summary>
@@ -195,8 +187,9 @@ namespace RdClient.Shared.ViewModels
         /// <returns>true, if all validations pass</returns>
         private bool Validate()
         {
+            HostNameValidationRule rule = new HostNameValidationRule();
             bool isValid = true;
-            if(!(this.IsHostValid = HostNameValidationRule.Validate(this.Host, System.Globalization.CultureInfo.CurrentCulture)) )
+            if (!(this.IsHostValid = rule.Validate(this.Host, System.Globalization.CultureInfo.CurrentCulture)))
             {
                 isValid = isValid && this.IsHostValid;
             }
@@ -204,31 +197,53 @@ namespace RdClient.Shared.ViewModels
             return isValid;
         }
 
+        private void Update()
+        {
+            this.UserOptions.Clear();
+            this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
+            this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
+            foreach (Credentials credentials in this.DataModel.Credentials)
+            {
+                this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credentials));
+            }
+
+            if (this.Desktop.CredentialId != null)
+            {
+                int idx = 0;
+                for (idx = 0; idx < this.UserOptions.Count; idx++)
+                {
+                    if (this.UserOptions[idx].UserComboBoxType == UserComboBoxType.Credentials &&
+                        this.UserOptions[idx].Credentials.Id == this.Desktop.CredentialId)
+                        break;
+                }
+
+                if (idx == this.UserOptions.Count)
+                {
+                    idx = 0;
+                }
+
+                this.SelectedUserOptionsIndex = idx;
+            }
+        }
+
 
         protected override void OnPresenting(object activationParameter)
         {
-            Contract.Requires(null != activationParameter as AddOrEditDesktopViewModelArgs);
-            AddOrEditDesktopViewModelArgs args = activationParameter as AddOrEditDesktopViewModelArgs;
+            Contract.Requires(null != activationParameter);
 
-            this.IsAddingDesktop = args.IsAddingDesktop;
-            this.Desktop = args.Desktop;
-            this.Credentials = args.Credentials;
-
-            // update combo box and combo box selection, if necessary
-            if (null != this.Credentials)
+            AddDesktopViewModelArgs addArgs = activationParameter as AddDesktopViewModelArgs;
+            EditDesktopViewModelArgs editArgs = activationParameter as EditDesktopViewModelArgs;
+            if (editArgs != null)
             {
-                int idx = this.UserOptions.IndexOf(Credentials.Username);
-                if (0 <= idx)
-                {
-                    this.SelectedUserOptionsIndex = idx;
-                }
-                else
-                {
-                    this.UserOptions.Insert(0, Credentials.Username);
-                    this.SelectedUserOptionsIndex = 0;
-                }
+                this.Desktop = editArgs.Desktop;
 
             }
+            else if(addArgs != null)
+            {
+                this.Desktop = new Desktop();
+            }
+
+            Update();
         }
     }
 }

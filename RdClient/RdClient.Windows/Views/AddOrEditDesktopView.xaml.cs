@@ -26,7 +26,7 @@ namespace RdClient.Views
 
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
-            (this.DataContext as AddOrEditDesktopViewModel).PresentableView = this;
+            (this.ViewModel as AddOrEditDesktopViewModel).PresentableView = this;
         }
 
         public void Dismissing()
