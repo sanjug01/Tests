@@ -183,11 +183,6 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        private bool CanEditDesktopCommandExecute()
-        {
-            return (1 == this.SelectedCount);
-        }
-
         private void DeleteDesktopCommandExecute(object o)
         {
             // extract list of selected desktops
@@ -206,11 +201,6 @@ namespace RdClient.Shared.ViewModels
                 this.NavigationService.PushModalView("DeleteDesktopsView",
                     new DeleteDesktopsArgs(selectedDesktops));
             }
-        }
-
-        private bool CanDeleteDesktopCommandExecute()
-        {
-            return (this.SelectedCount >= 1);
         }
 
         private void GotoTests(object o)
