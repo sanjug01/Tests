@@ -72,12 +72,6 @@
             this.ViewFactory.AddViewClass("DeleteDesktopsView", typeof(Views.DeleteDesktopsView));
 
             this.NavigationService.NavigateToView("ConnectionCenterView", null);
-            ////this.NavigationService.NavigateToView("TestsView",
-            ////    new TestsViewModelArgs(
-            ////        new Desktop() { HostName = "a3-w81" },
-            ////        new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
-            ////        ));
-
         }
     }
 }

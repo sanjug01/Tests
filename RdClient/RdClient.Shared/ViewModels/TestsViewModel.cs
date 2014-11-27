@@ -167,20 +167,13 @@ namespace RdClient.Shared.ViewModels
 
         private void EditDesktopCommandExecute(object o)
         {
-            //Contract.Requires(null == this.SelectedDesktops);
+            Contract.Requires(null != this.SelectedDesktops);
 
-            //if (this.SelectedDesktops.Count > 0) { 
-            //    // static credentials
-            //    Credentials user = new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false };
-            //    Desktop desktop = this.SelectedDesktops[0] as Desktop;
-            //    int desktopIndex = this.Desktops.IndexOf(desktop);
-
-            //    // delegate is not necessary, since the selected desktop will be directly updated, but refreshing the list may be required
-            //    AddOrEditDesktopViewModelArgs args = new AddOrEditDesktopViewModelArgs(desktop, user, false);
-
-            //    NavigationService.PushModalView("AddOrEditDesktopView", args);
-            //}
+            if (this.SelectedDesktops.Count > 0) {
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(this.SelectedDesktops[0] as Desktop);
+                NavigationService.PushModalView("AddOrEditDesktopView", args);
             }
+        }
 
         private bool CanEditDesktopCommandExecute()
         {
@@ -192,16 +185,15 @@ namespace RdClient.Shared.ViewModels
         }
 
         /// <summary>
-        /// execute delete, testable only if skipping the dialog confirmation
+        /// execute delete
         /// </summary>
-        /// <param name="o">optionally pass bool (as a string) parameter to skip or not confirmation dialog</param>
+        /// <param name="o">optional parameter</param>
         private void DeleteDesktopCommandExecute(object o)
         {
-            Debug.WriteLine("Delete Desktop(s)!");
-            
-            // use DeleteDesktopsView to confirm deletion
-            this.NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.SelectedDesktops));
-                }
+            Debug.WriteLine("Delete Desktop(s)!");            
+            this.NavigationService.PushModalView("DeleteDesktopsView", 
+                new DeleteDesktopsArgs(this.SelectedDesktops));
+        }
 
         private bool CanDeleteDesktopCommandExecute()
         {
