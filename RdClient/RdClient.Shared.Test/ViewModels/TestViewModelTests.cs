@@ -48,7 +48,7 @@ namespace RdClient.Shared.Test.ViewModels
                     new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                     );
 
-                _vm.Presenting(navigation, args);
+                ((IViewModel)_vm).Presenting(navigation, args, null);
             }
         }
 
@@ -61,10 +61,28 @@ namespace RdClient.Shared.Test.ViewModels
                 Assert.IsTrue(_vm.Desktops.Count == 0);
                 Assert.IsTrue(_vm.Users.Count == 0);
 
-                _vm.Presenting(navigation, _defaultArgs);
+                ((IViewModel)_vm).Presenting(navigation, _defaultArgs, null);
 
                 Assert.IsTrue(_vm.Desktops.Count > 0);
                 Assert.IsTrue(_vm.Users.Count > 0);
+            }
+        }
+
+        [TestMethod]
+        public void TestsViewModel_VerifyTestDataCleanupOnDismiss()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                // test data is loaded only on presented
+                ((IViewModel)_vm).Presenting(navigation, _defaultArgs, null);
+
+                Assert.IsTrue(_vm.Desktops.Count > 0);
+                Assert.IsTrue(_vm.Users.Count > 0);
+
+                // test data is cleanup on dismissing
+                ((IViewModel)_vm).Dismissing();
+                Assert.IsTrue(_vm.Desktops.Count == 0);
+                Assert.IsTrue(_vm.Users.Count == 0);
             }
         }
 
@@ -73,7 +91,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                _vm.Presenting(navigation, _defaultArgs);
+                ((IViewModel)_vm).Presenting(navigation, _defaultArgs, null);
                 Assert.IsTrue(_vm.Desktops.Count > 0);
                 // verify Edit, Delete cannnot execute
                 Assert.IsFalse(_vm.EditDesktopCommand.CanExecute(null));
@@ -86,7 +104,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                _vm.Presenting(navigation, _defaultArgs);
+                ((IViewModel)_vm).Presenting(navigation, _defaultArgs, null);
                 Assert.IsTrue(_vm.Desktops.Count > 0);
 
                 IList<object> newSelection = new List<object>();
@@ -105,7 +123,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                _vm.Presenting(navigation, _defaultArgs);
+                ((IViewModel)_vm).Presenting(navigation, _defaultArgs, null);
                 Assert.IsTrue(_vm.Desktops.Count > 0);
 
                 IList<object> newSelection = new List<object>();
@@ -114,7 +132,6 @@ namespace RdClient.Shared.Test.ViewModels
                     newSelection.Add(_vm.Desktops[i]);
                 }
 
-                ((IViewModel)vm).Presenting(navigation, args, null);
                 Assert.IsTrue(newSelection.Count > 0);
                 _vm.SelectedDesktops = newSelection;
 
@@ -136,8 +153,8 @@ namespace RdClient.Shared.Test.ViewModels
 
                 navigation.Expect("NavigateToView", new List<object>() { "ConnectionCenterView", null }, 0);
 
-                ((IViewModel)vm).Presenting(navigation, args, null);
-                vm.GoHomeCommand.Execute(null);
+                ((IViewModel)_vm).Presenting(navigation, args, null);
+                _vm.GoHomeCommand.Execute(null);
             }
         }
 

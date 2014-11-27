@@ -73,13 +73,21 @@ namespace RdClient.Shared.ViewModels
     {
         private string _host;
         private bool _isHostValid;
+        private bool _isAddingDesktop;
 
         private readonly RelayCommand _saveCommand;
         private readonly RelayCommand _cancelCommand;
-
         private Desktop _desktop;
-
         private int _selectedUserOptionsIndex;
+
+        public bool IsAddingDesktop
+        {
+            get { return _isAddingDesktop; }
+            private set 
+            {
+                this.SetProperty(ref _isAddingDesktop, value, "IsAddingDesktop");
+            }
+        }
 
         public ObservableCollection<UserComboBoxElement> UserOptions { get; set; }
         public int SelectedUserOptionsIndex 
@@ -199,6 +207,8 @@ namespace RdClient.Shared.ViewModels
 
         private void Update()
         {
+            this.Host = this.Desktop.HostName;
+
             this.UserOptions.Clear();
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
@@ -236,11 +246,12 @@ namespace RdClient.Shared.ViewModels
             if (editArgs != null)
             {
                 this.Desktop = editArgs.Desktop;
-
+                this.IsAddingDesktop = false;
             }
             else if(addArgs != null)
             {
                 this.Desktop = new Desktop();
+                this.IsAddingDesktop = true;
             }
 
             Update();

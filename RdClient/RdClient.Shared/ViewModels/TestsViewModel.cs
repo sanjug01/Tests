@@ -83,7 +83,20 @@ namespace RdClient.Shared.ViewModels
                 }
             } 
         }
-        public ObservableCollection<Credentials> Users { get { return _users; } }
+        public ObservableCollection<Credentials> Users 
+        { 
+            get 
+            {
+                if (null != this.DataModel)
+                {
+                    return this.DataModel.Credentials;
+                }
+                else
+                {
+                    return this._users;
+                }
+            } 
+        }
 
         public IList<object> SelectedDesktops
         {
@@ -213,10 +226,9 @@ namespace RdClient.Shared.ViewModels
             LoadTestData();
         }
 
-        public override void Dismissing()
+        protected override void OnDismissed()
         {
             ResetTestData();
-            base.Dismissing();
         }
 
         private void StressTest(object o)
