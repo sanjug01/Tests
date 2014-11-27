@@ -22,11 +22,5 @@ namespace RdClient.Views
 
         public void Dismissing() { }
 
-
-        private void ItemsControl_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            FrameworkElement desktopsView = sender as FrameworkElement;
-            Flyout.ShowAttachedFlyout(desktopsView);
-        }
     }
 }

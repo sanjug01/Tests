@@ -6,21 +6,27 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class DesktopViewModel : ViewModelBase, IDesktopViewModel
+    public class DesktopViewModel : Helpers.MutableObject, IDesktopViewModel
     {
         private readonly RelayCommand _editCommand;
         private readonly RelayCommand _connectCommand;
         private readonly RelayCommand _deleteCommand;
         private Desktop _desktop;
         private bool _isSelected;
+        private readonly IDataModel _dataModel;
+        private readonly INavigationService _navService;
 
-        public DesktopViewModel(Desktop desktop)
+        public DesktopViewModel(Desktop desktop, INavigationService navService, IDataModel dataModel)
         {
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
+            _dataModel = dataModel;
+            _navService = navService;
             this.Desktop = desktop;
         }
+
+
 
         public Desktop Desktop
         {
@@ -38,7 +44,7 @@ namespace RdClient.Shared.ViewModels
                 Credentials cred;
                 if (this.Desktop.HasCredential)
                 {
-                    cred = this.DataModel.Credentials.GetItemWithId(this.Desktop.CredentialId);
+                    cred = _dataModel.Credentials.GetItemWithId(this.Desktop.CredentialId);
                 }
                 else
                 {
@@ -72,14 +78,9 @@ namespace RdClient.Shared.ViewModels
             get { return _deleteCommand; }
         }
 
-        protected override void OnPresenting(object activationParameter)
-        {
-
-        }
-
         private void EditCommandExecute(object o)
         {
-            NavigationService.PushModalView("AddOrEditDesktopView", new EditDesktopViewModelArgs(this.Desktop));
+            _navService.PushModalView("AddOrEditDesktopView", new EditDesktopViewModelArgs(this.Desktop));
         }
 
         private void ConnectCommandExecute(object o)
@@ -91,7 +92,7 @@ namespace RdClient.Shared.ViewModels
             else
             {
                 AddUserViewArgs args = new AddUserViewArgs(this.Desktop, InternalConnect, true);
-                NavigationService.PushModalView("AddUserView", args);
+                _navService.PushModalView("AddUserView", args);
             }
         }
 
@@ -100,7 +101,7 @@ namespace RdClient.Shared.ViewModels
             if(storeCredentials)
             {
                 this.Desktop.CredentialId = credentials.Id;
-                this.DataModel.Credentials.Add(credentials);
+                this._dataModel.Credentials.Add(credentials);
             }
 
             ConnectionInformation connectionInformation = new ConnectionInformation()
@@ -109,12 +110,12 @@ namespace RdClient.Shared.ViewModels
                 Credentials = credentials
             };
 
-            NavigationService.NavigateToView("SessionView", connectionInformation);            
+            _navService.NavigateToView("SessionView", connectionInformation);            
         }
 
         private void DeleteCommandExecute(object o)
         {            
-            NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.Desktop));            
+            _navService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.Desktop));            
         }
     }
 }

@@ -29,21 +29,21 @@ namespace RdClient.Shared.ViewModels
         public ConnectionCenterViewModel()
         {
             _addDesktopCommand = new RelayCommand(AddDesktopExecute);
-            EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => this.CanEditDesktopCommandExecute());
-            DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => this.CanDeleteDesktopCommandExecute());
+            EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => (1 == this.SelectedCount) );
+            DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
             TestsCommand = new RelayCommand(new Action<object>(GotoTests));
 
             _separatorItem = new SeparatorBarItemModel();
 
             _addItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Add, AddDesktopCommand, "Add");
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, "Edit");
-            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete",
-                BarItemModel.ItemAlignment.Right);
+            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete");
 
             _rightSeparatorItem = new SeparatorBarItemModel(BarItemModel.ItemAlignment.Right);
             _testsItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, TestsCommand, "Tests",
                 BarItemModel.ItemAlignment.Right);
 
+            this.DesktopViewModels = null;
             this.PropertyChanged += ConnectionCenterViewModel_PropertyChanged;
             _selectedCount = 0;
         }
@@ -52,8 +52,6 @@ namespace RdClient.Shared.ViewModels
         {
             return new BarItemModel[]
             {               
-                _addItem,
-                _separatorItem,
                 _editItem,
                 _deleteItem,
                 _rightSeparatorItem,
@@ -91,10 +89,6 @@ namespace RdClient.Shared.ViewModels
 
         protected override void OnPresenting(object activationParameter)
         {                        
-            foreach (IViewModel vm in this.DesktopViewModels)
-            {
-                vm.Presenting(this.NavigationService, null, null);
-            }
         }
 
         private void AddDesktopExecute(object o)
@@ -109,17 +103,11 @@ namespace RdClient.Shared.ViewModels
                 ObservableCollection<IDesktopViewModel> desktopVMs = new ObservableCollection<IDesktopViewModel>();
                 foreach (Desktop desktop in this.DataModel.Desktops)
                 {
-                    DesktopViewModel vm = new DesktopViewModel(desktop);
-                    vm.DataModel = this.DataModel;
-                    //
-                    // TODO:    REFACTOR THIS! View models in collections do not participate in nav service activities
-                    //          and should not rely on the IViewModel interface.
-                    //          In this case, the desktop view models are not being presented.
-                    //
-                    ((IViewModel)vm).Presenting(this.NavigationService, desktop, null);                                       
+                    DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel);
                     desktopVMs.Add(vm);
                     vm.PropertyChanged += DesktopSelection_PropertyChanged;
                 }
+
                 this.DesktopViewModels = desktopVMs;
                 this.DataModel.Desktops.CollectionChanged += Desktops_CollectionChanged;
                 this.EmitPropertyChanged("HasDesktops");
@@ -165,14 +153,8 @@ namespace RdClient.Shared.ViewModels
             {
                 foreach (Desktop desktop in e.NewItems)
                 {
-                    DesktopViewModel vm = new DesktopViewModel(desktop);
-                    vm.DataModel = this.DataModel;
-                    //
-                    // TODO:    REFACTOR THIS! View models in collections do not participate in nav service activities
-                    //          and should not rely on the IViewModel interface.
-                    //          In this case, the desktop view models are not being presented.
-                    //
-                    ((IViewModel)vm).Presenting(this.NavigationService, null, null);
+                    DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel);
+                    vm.PropertyChanged += DesktopSelection_PropertyChanged;
                     this.DesktopViewModels.Add(vm);
                 }
             }
@@ -181,6 +163,7 @@ namespace RdClient.Shared.ViewModels
                 var vmsToRemove = this.DesktopViewModels.Where(vm => e.OldItems.Contains(vm.Desktop)).ToList();
                 foreach (DesktopViewModel vm in vmsToRemove)
                 {
+                    vm.PropertyChanged -= DesktopSelection_PropertyChanged;
                     this.DesktopViewModels.Remove(vm);
                 }
             }

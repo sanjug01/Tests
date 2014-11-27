@@ -24,20 +24,6 @@
                     x:Uid="Menu-AddDesktop"                 
                     Text="Add desktop(d)" 
                     Command="{Binding AddDesktopCommand}"/>
-                <MenuFlyoutSeparator/>
-                <MenuFlyoutItem 
-                    x:Uid="Menu-EditDesktop"                 
-                    Text="Edit desktop(d)" 
-                    Command="{Binding EditDesktopCommand}"/>
-                <MenuFlyoutItem 
-                    x:Uid="Menu-DeleteDesktops"
-                    Text="Delete desktop(d)" 
-                    Command="{Binding DeleteDesktopCommand}"/>
-                <MenuFlyoutSeparator/>
-                <MenuFlyoutItem 
-                    x:Uid="Menu-TestPage"
-                    Text="Tests(d)" 
-                    Command="{Binding TestsCommand}"/>                
             </MenuFlyout>
         </ResourceDictionary>
 
@@ -52,7 +38,8 @@
             <RowDefinition Height="70" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Command="{Binding AddDesktopCommand}" VerticalAlignment="Bottom" Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}">
+        <Button VerticalAlignment="Bottom" Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}"
+                Flyout="{StaticResource optionsMenuFlyout}">
             <SymbolIcon Symbol="Add" />
         </Button>
         <ScrollViewer
@@ -68,9 +55,7 @@
             <StackPanel Orientation="Horizontal" Margin="20,20,20,20">
                 <ItemsControl 
                         ItemsSource="{Binding DesktopViewModels}" 
-                        Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"
-                        FlyoutBase.AttachedFlyout="{StaticResource optionsMenuFlyout}"
-                        PointerReleased="ItemsControl_PointerReleased">
+                        Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapGrid />
