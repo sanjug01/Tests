@@ -88,7 +88,12 @@ namespace RdClient.Shared.ViewModels
         }
 
         protected override void OnPresenting(object activationParameter)
-        {                        
+        {
+            // update NavigationService for all DesktopViewModels
+            foreach (DesktopViewModel vm in this.DesktopViewModels)
+            {
+                vm.NavigationService = this.NavigationService;
+            }
         }
 
         private void AddDesktopExecute(object o)

@@ -13,20 +13,23 @@ namespace RdClient.Shared.ViewModels
         private readonly RelayCommand _deleteCommand;
         private Desktop _desktop;
         private bool _isSelected;
-        private readonly IDataModel _dataModel;
-        private readonly INavigationService _navService;
+        private IDataModel _dataModel;
 
         public DesktopViewModel(Desktop desktop, INavigationService navService, IDataModel dataModel)
         {
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
-            _dataModel = dataModel;
-            _navService = navService;
             this.Desktop = desktop;
+
+            /// DesktopVieModel does not require Presenting/Dismissing, 
+            //          but stil needs DataModel and NavigationService
+            //          NavigationService may be initialized later while presenting the parent view
+            _dataModel = dataModel;
+            this.NavigationService = navService;
         }
 
-
+        public INavigationService NavigationService { private get; set; }
 
         public Desktop Desktop
         {
@@ -80,7 +83,7 @@ namespace RdClient.Shared.ViewModels
 
         private void EditCommandExecute(object o)
         {
-            _navService.PushModalView("AddOrEditDesktopView", new EditDesktopViewModelArgs(this.Desktop));
+            NavigationService.PushModalView("AddOrEditDesktopView", new EditDesktopViewModelArgs(this.Desktop));
         }
 
         private void ConnectCommandExecute(object o)
@@ -92,7 +95,7 @@ namespace RdClient.Shared.ViewModels
             else
             {
                 AddUserViewArgs args = new AddUserViewArgs(this.Desktop, InternalConnect, true);
-                _navService.PushModalView("AddUserView", args);
+                NavigationService.PushModalView("AddUserView", args);
             }
         }
 
@@ -110,12 +113,12 @@ namespace RdClient.Shared.ViewModels
                 Credentials = credentials
             };
 
-            _navService.NavigateToView("SessionView", connectionInformation);            
+            NavigationService.NavigateToView("SessionView", connectionInformation);            
         }
 
         private void DeleteCommandExecute(object o)
-        {            
-            _navService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.Desktop));            
+        {
+            NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.Desktop));            
         }
     }
 }
