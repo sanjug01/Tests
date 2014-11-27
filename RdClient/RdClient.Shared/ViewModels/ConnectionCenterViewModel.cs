@@ -232,7 +232,13 @@ namespace RdClient.Shared.ViewModels
 
         private void GotoTests(object o)
         {
-            NavigationService.NavigateToView("TestsView", null);
+            // using valid test data
+            NavigationService.NavigateToView("TestsView", 
+                new TestsViewModelArgs(
+                    new Desktop() { HostName = "a3-w81" },
+                    new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
+                    ));
         }
     }
 }
+
