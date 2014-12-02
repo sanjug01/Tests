@@ -54,10 +54,15 @@ namespace RdClient.Shared.ViewModels
             rdpConnection.Events.ClientDisconnected -= HandleUnexpectedDisconnect;
 
             RdpDisconnectReason reason = args.DisconnectReason;
-            string errorString = DisconnectString.GetDisconnectString(reason);
-            DialogMessageArgs dialogArgs = new DialogMessageArgs(errorString, () => {
-            }, null);
-            this.NavigationService.PushModalView("DialogMessage", dialogArgs);
+
+            if(reason.Code != RdpDisconnectCode.UserInitiated)
+            {
+                string errorString = DisconnectString.GetDisconnectString(reason);
+                DialogMessageArgs dialogArgs = new DialogMessageArgs(errorString, () =>
+                {
+                }, null);
+                this.NavigationService.PushModalView("DialogMessage", dialogArgs);
+            }
         }
 
         private void Disconnect(object o)
