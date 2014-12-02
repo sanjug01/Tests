@@ -207,8 +207,6 @@ namespace RdClient.Shared.ViewModels
 
         private void Update()
         {
-            this.Host = this.Desktop.HostName;
-
             this.UserOptions.Clear();
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
@@ -246,6 +244,7 @@ namespace RdClient.Shared.ViewModels
             if (editArgs != null)
             {
                 this.Desktop = editArgs.Desktop;
+                this.Host = this.Desktop.HostName;
                 this.IsAddingDesktop = false;
             }
             else if(addArgs != null)
