@@ -164,6 +164,7 @@ namespace RdClient.Shared.ViewModels
             }
 
             this.Desktop.HostName = this.Host;
+            this.Desktop.CredentialId = this.UserOptions[this.SelectedUserOptionsIndex].Credentials.Id;
 
             bool found = false;
             foreach (Desktop desktop in this.DataModel.Desktops)
