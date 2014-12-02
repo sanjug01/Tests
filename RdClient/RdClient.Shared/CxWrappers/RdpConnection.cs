@@ -45,14 +45,6 @@ namespace RdClient.Shared.CxWrappers
         {
             int xRes;
 
-            // remove from connection store
-            RdClientCx.RdpConnectionStore rdpConnectionStore;
-            xRes = RdClientCx.RdpConnectionStore.GetConnectionStore(out rdpConnectionStore);
-            RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
-            rdpConnectionStore.RemoveConnection(_rdpConnectionCx);
-            rdpConnectionStore = null;
-
-
             _rdpConnectionCx.OnClientConnected -= OnClientConnectedHandler;
             _rdpConnectionCx.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
             _rdpConnectionCx.OnClientDisconnected -= OnClientDisconnectedHandler;
@@ -70,6 +62,13 @@ namespace RdClient.Shared.CxWrappers
             _rdpConnectionCx.OnRemoteAppWindowDeleted -= OnRemoteAppWindowDeletedHandler;
             _rdpConnectionCx.OnRemoteAppWindowTitleUpdated -= OnRemoteAppWindowTitleUpdatedHandler;
             _rdpConnectionCx.OnRemoteAppWindowIconUpdated -= OnRemoteAppWindowIconUpdatedHandler;
+
+            // remove from connection store
+            RdClientCx.RdpConnectionStore rdpConnectionStore;
+            xRes = RdClientCx.RdpConnectionStore.GetConnectionStore(out rdpConnectionStore);
+            RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
+            rdpConnectionStore.RemoveConnection(_rdpConnectionCx);
+            rdpConnectionStore = null;
 
             //
             // Terminate the connection object.
