@@ -42,16 +42,16 @@ namespace RdClient.Shared.ViewModels
             Contract.Assert(null != SessionModel);
 
             SessionModel.ConnectionCreated += (sender, args) => {
-                args.RdpConnection.Events.ClientDisconnected += HandleUnexpectedDisconnect;
+                args.RdpConnection.Events.ClientDisconnected += HandleDisconnected;
             };
 
             SessionModel.Connect(_connectionInformation);
         }        
 
-        private void HandleUnexpectedDisconnect(object sender, ClientDisconnectedArgs args)
+        private void HandleDisconnected(object sender, ClientDisconnectedArgs args)
         {
             IRdpConnection rdpConnection = sender as IRdpConnection;
-            rdpConnection.Events.ClientDisconnected -= HandleUnexpectedDisconnect;
+            rdpConnection.Events.ClientDisconnected -= HandleDisconnected;
 
             RdpDisconnectReason reason = args.DisconnectReason;
 
@@ -63,13 +63,13 @@ namespace RdClient.Shared.ViewModels
                 }, null);
                 this.NavigationService.PushModalView("DialogMessage", dialogArgs);
             }
+
+            NavigationService.NavigateToView("ConnectionCenterView", null);            
         }
 
         private void Disconnect(object o)
         {
             SessionModel.Disconnect();
-
-            NavigationService.NavigateToView("ConnectionCenterView", null);            
         }
     }
 }
