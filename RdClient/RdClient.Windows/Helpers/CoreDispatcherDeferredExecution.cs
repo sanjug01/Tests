@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Helpers
 {
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Navigation;
     using System;
     using System.Diagnostics.Contracts;
     using Windows.UI.Core;
@@ -19,7 +20,14 @@
         /// </summary>
         public readonly DependencyProperty PriorityProperty = DependencyProperty.Register("Priority",
             typeof(CoreDispatcherPriority), typeof(CoreDispatcherDeferredExecution),
-            new PropertyMetadata(CoreDispatcherPriority.Normal));
+            new PropertyMetadata(CoreDispatcherPriority.Normal,
+                (s, e) => s.CastAndCall<CoreDispatcherDeferredExecution>(disp => disp.CachePriority((CoreDispatcherPriority)e.NewValue))));
+        //
+        // Cached value of the Priority dependency property used to call the dispatcher
+        // on worker threads. The cached value is updated by the property change callback
+        // of the dependency property.
+        //
+        private volatile CoreDispatcherPriority _cachedPriotity;
 
         /// <summary>
         /// Convenience accessor property for the PriorityProperty dependency property.
@@ -46,8 +54,13 @@
                 //
                 // Post the action for execution with the configured priority.
                 //
-                var ignore = this.Dispatcher.RunAsync(this.Priority, () => action());
+                var ignore = this.Dispatcher.RunAsync(_cachedPriotity, () => action());
             }
+        }
+
+        private void CachePriority(CoreDispatcherPriority priority)
+        {
+            _cachedPriotity = priority;
         }
     }
 }
