@@ -75,9 +75,9 @@ namespace RdClient.Shared.ViewModels
                 {
                     Thumbnail thumbnail = new Thumbnail();
                     this.Desktop.ThumbnailId = thumbnail.Id;
-                    this.DataModel.Thumbnails.Add(thumbnail);
+                    _dataModel.Thumbnails.Add(thumbnail);
                 }
-                return this.DataModel.Thumbnails.GetItemWithId(this.Desktop.ThumbnailId);
+                return _dataModel.Thumbnails.GetItemWithId(this.Desktop.ThumbnailId);
             }
         }
 
@@ -125,7 +125,7 @@ namespace RdClient.Shared.ViewModels
             ConnectionInformation connectionInformation = new ConnectionInformation()
             {
                 Desktop = this.Desktop,
-                Credentials = credentials
+                Credentials = credentials,
                 Thumbnail = this.Thumbnail
             };
 
