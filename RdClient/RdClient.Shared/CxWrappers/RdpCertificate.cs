@@ -1,0 +1,92 @@
+﻿using RdClient.Shared.CxWrappers.Utils;
+using RdClient.Shared.Models;
+using System;
+using System.Diagnostics.Contracts;
+using Windows.Security.Cryptography.Certificates;
+
+namespace RdClient.Shared.CxWrappers
+{
+    
+    public class RdpCertificateError : IRdpCertificateError
+    {
+        private RdClientCx.ServerCertificateError _serverCertificateError;
+        public RdpCertificateError(RdClientCx.ServerCertificateError serverCertificateError)
+        {
+            _serverCertificateError = serverCertificateError;
+        }
+
+        public int ErrorCode 
+        { 
+            get {return _serverCertificateError.errorCode; }
+        }
+
+        public CertificateErrors ErrorFlags 
+        { 
+            get { return (CertificateErrors) _serverCertificateError.errorFlags; } 
+        }
+
+        public ServerCertificateErrorSource ErrorSource 
+        { 
+            get { return (ServerCertificateErrorSource) _serverCertificateError.errorSource; } 
+        }
+    }
+
+    /// <summary>
+    /// wrapper class for both the server certificate with certificate error property
+    /// </summary>
+    public class RdpCertificate : IRdpCertificate
+    {
+        private Certificate _serverCertificate;
+
+        public IRdpCertificateError Error {get; private set; }
+        public RdpCertificate(Certificate certificate, RdClientCx.ServerCertificateError serverCertificateError)
+        {
+            Contract.Requires(certificate != null);
+
+            _serverCertificate = certificate;
+            Error = new RdpCertificateError(serverCertificateError);
+        }
+
+        public string FriendlyName 
+        { 
+            get {return _serverCertificate.FriendlyName; }
+        }
+        public bool HasPrivateKey 
+        { 
+            get {return _serverCertificate.HasPrivateKey; }
+        }
+        public bool IsStronglyProtected 
+        { 
+            get {return _serverCertificate.IsStronglyProtected; }
+        }
+        public string Issuer 
+        { 
+            get {return _serverCertificate.Issuer; }
+        }
+        byte[] SerialNumber 
+        { 
+            get {return _serverCertificate.SerialNumber; }
+        }
+        public string Subject 
+        { 
+            get {return _serverCertificate.Subject; } 
+        }
+        public DateTimeOffset ValidFrom 
+        { 
+            get {return _serverCertificate.ValidFrom; }
+        }
+        public DateTimeOffset ValidTo 
+        {
+            get { return _serverCertificate.ValidTo; }
+        }
+
+        byte[] GetHashValue()
+        { 
+            return _serverCertificate.GetHashValue();  
+        }
+        public byte[] GetHashValue(string hashAlgorithmName)
+        { 
+            return _serverCertificate.GetHashValue(hashAlgorithmName);  
+        }
+    }
+}

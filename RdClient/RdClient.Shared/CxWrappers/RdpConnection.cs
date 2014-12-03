@@ -1,6 +1,7 @@
 ﻿using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
 using System.Diagnostics.Contracts;
+using Windows.Security.Cryptography.Certificates;
 
 namespace RdClient.Shared.CxWrappers
 {
@@ -261,6 +262,26 @@ namespace RdClient.Shared.CxWrappers
         {
             _eventProxy.EmitRemoteAppWindowIconUpdated(this, new RemoteAppWindowIconUpdatedArgs(windowId, icon, iconWidth, iconHeight));
         }
+
+        public IRdpCertificate GetServerCertificate()
+        {
+            RdpCertificate rdpCertificate = null;
+
+            RdClientCx.ServerCertificateError certErrors;
+            Certificate cert = null;
+            if (null != _rdpConnectionCx)
+            {
+                _rdpConnectionCx.GetServerCertificateDetails(out cert);
+                if (null != cert)
+                {
+                    _rdpConnectionCx.GetServerCertificateValidationErrors(out certErrors);
+                    rdpCertificate = new RdpCertificate(cert, certErrors);
+                }
+            }
+
+            return rdpCertificate;
+        }
+
 
     }
 }
