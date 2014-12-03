@@ -13,7 +13,8 @@ namespace RdClient.Shared.Models
 {
     class Snapshotter
     {
-        private readonly TimeSpan snapShotPeriod = new TimeSpan(0, 0, 15);
+        private readonly TimeSpan firstSnapshotTime = new TimeSpan(0, 0, 1);
+        private readonly TimeSpan snapshotPeriod = new TimeSpan(0, 0, 15);
         private IRdpConnection _connection;
         private Thumbnail _thumbnail;
         private ThreadPoolTimer _timer;
@@ -28,8 +29,7 @@ namespace RdClient.Shared.Models
 
         private async void Events_FirstGraphicsUpdate(object sender, FirstGraphicsUpdateArgs e)
         {
-            await TakeSnapshot();
-            _timer = ThreadPoolTimer.CreatePeriodicTimer(async (timer) => await TakeSnapshot(), snapShotPeriod);
+            _timer = ThreadPoolTimer.CreateTimer(async (timer) => await this.TakeFirstSnapshot(), firstSnapshotTime);
         }
 
         private void Events_ClientDisconnected(object sender, ClientDisconnectedArgs e)
@@ -38,6 +38,12 @@ namespace RdClient.Shared.Models
             {
                 _timer.Cancel();               
             }
+        }
+
+        private async Task TakeFirstSnapshot()
+        {
+            _timer = ThreadPoolTimer.CreatePeriodicTimer(async (timer) => await this.TakeSnapshot(), snapshotPeriod);
+            await TakeSnapshot();            
         }
 
         private async Task TakeSnapshot()

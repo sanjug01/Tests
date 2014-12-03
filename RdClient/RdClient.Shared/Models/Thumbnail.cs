@@ -18,30 +18,34 @@ namespace RdClient.Shared.Models
 {
     [DataContract(IsReference = true)]
     public class Thumbnail : ModelBase
-    {        
-        private bool _hasImage = false;
-        private ImageSource _bmp = new BitmapImage();
-
-        [DataMember]
-        private IRandomAccessStream _encodedImageStream = new InMemoryRandomAccessStream();
+    {
+        private const uint THUMBNAIL_HEIGHT = 256;
+        private ImageSource _image;
+        private byte[] _imageBytes;        
 
         public async Task Update(uint width, uint height, byte[] imageBytes)
         {
-            BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, _encodedImageStream).AsTask().ConfigureAwait(false);
-            encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore, width, height, 96.0, 96.0, imageBytes);
-            await encoder.FlushAsync();
-            UpdateImageSource();
+            byte[] encodedBytes;
+            using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
+            {
+                BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream).AsTask().ConfigureAwait(false);
+                encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore, width, height, 96.0, 96.0, imageBytes);
+                encoder.BitmapTransform.ScaledHeight = THUMBNAIL_HEIGHT;
+                encoder.BitmapTransform.ScaledWidth = Convert.ToUInt32(width * THUMBNAIL_HEIGHT / (double) height);
+                encoder.BitmapTransform.InterpolationMode = BitmapInterpolationMode.Fant;
+                await encoder.FlushAsync().AsTask().ConfigureAwait(false);
+                encodedBytes = new byte[stream.Size];
+                stream.Seek(0);
+                await stream.ReadAsync(encodedBytes.AsBuffer(), (uint) stream.Size, InputStreamOptions.None);
+            }
+            this.ImageBytes = encodedBytes;
         }
 
         public bool HasImage
         {
             get
             {
-                return _hasImage;
-            }
-            private set
-            {
-                SetProperty(ref _hasImage, value);
+                return (this.Image != null);
             }
         }
 
@@ -49,11 +53,26 @@ namespace RdClient.Shared.Models
         {
             get
             {
-               return _bmp;
+               return _image;
             }
             private set
             {
-                SetProperty(ref _bmp, value);
+                SetProperty(ref _image, value);
+            }
+        }
+
+        [DataMember]
+        private byte[] ImageBytes
+        {
+            get
+            {
+                return _imageBytes;
+            }
+
+            set
+            {
+                _imageBytes = value;
+                this.UpdateImageSource();
             }
         }
 
@@ -63,9 +82,13 @@ namespace RdClient.Shared.Models
                 async () =>
                 {
                     BitmapImage newImage = new BitmapImage();
-                    await newImage.SetSourceAsync(_encodedImageStream);
+                    using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
+                    {
+                        await stream.WriteAsync(this.ImageBytes.AsBuffer());
+                        stream.Seek(0);
+                        await newImage.SetSourceAsync(stream);
+                    }
                     this.Image = newImage;
-                    this.HasImage = true;
                 });
         }
     }
