@@ -269,14 +269,11 @@ namespace RdClient.Shared.CxWrappers
 
             RdClientCx.ServerCertificateError certErrors;
             Certificate cert = null;
-            if (null != _rdpConnectionCx)
+            _rdpConnectionCx.GetServerCertificateDetails(out cert);
+            if (null != cert)
             {
-                _rdpConnectionCx.GetServerCertificateDetails(out cert);
-                if (null != cert)
-                {
-                    _rdpConnectionCx.GetServerCertificateValidationErrors(out certErrors);
-                    rdpCertificate = new RdpCertificate(cert, certErrors);
-                }
+                _rdpConnectionCx.GetServerCertificateValidationErrors(out certErrors);
+                rdpCertificate = new RdpCertificate(cert, certErrors);
             }
 
             return rdpCertificate;
