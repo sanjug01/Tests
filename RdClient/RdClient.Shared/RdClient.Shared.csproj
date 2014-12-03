@@ -95,6 +95,7 @@
     <Compile Include="Models\Credentials.cs" />
     <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\Desktop.cs" />
+    <Compile Include="Models\IThumbnail.cs" />
     <Compile Include="Models\ModelCollection.cs" />
     <Compile Include="Models\Snapshotter.cs" />
     <Compile Include="Models\Thumbnail.cs" />

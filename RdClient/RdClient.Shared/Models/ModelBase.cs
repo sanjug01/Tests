@@ -68,10 +68,5 @@ namespace RdClient.Shared.Models
         {
             return this.Id.GetHashCode();
         }
-
-        /* Do any work required before the object can be serialized
-         * Serialization itself is synchronous, so any needed work should be done here
-         */
-        public virtual async Task PrepForSerialization() {}
     }
 }

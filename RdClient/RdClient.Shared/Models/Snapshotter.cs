@@ -45,7 +45,7 @@ namespace RdClient.Shared.Models
             int width, height;
             byte[] bytes;
             _connection.GetSnapshot(out width, out height, out bytes);
-            _thumbnail.Update((uint)width, (uint)height, bytes);
+            await _thumbnail.Update((uint)width, (uint)height, bytes);
         }
     }
 }

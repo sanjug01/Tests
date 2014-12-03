@@ -17,9 +17,11 @@ namespace RdClient.Shared.Test.Model
         private Mock.DataStorage _mockStorage;
         private DataModel _dataModel;
         private List<Desktop> _expectedDesktops;
+        private List<Credentials> _expectedCreds;
+        private List<Thumbnail> _expectedThumbnails;
         private ObservableCollection<Desktop> _actualDesktops;
         private ObservableCollection<Credentials> _actualCredentials;
-        private List<Credentials> _expectedCreds;
+        private ObservableCollection<Thumbnail> _actualThumbnails;
 
         [TestInitialize]
         public void TestSetup()
@@ -28,15 +30,18 @@ namespace RdClient.Shared.Test.Model
             _mockStorage = new Mock.DataStorage();
             _expectedCreds = _testData.NewSmallListOfCredentials();
             _expectedDesktops = _testData.NewSmallListOfDesktops(_expectedCreds);
+            _expectedThumbnails = new List<Thumbnail>();
             _dataModel = new DataModel();
             Assert.IsFalse(_dataModel.Loaded);            
             _dataModel.Storage = _mockStorage;
             _mockStorage.Expect("LoadCollection", new List<object>() { _dataModel.DESKTOP_COLLECTION_NAME }, _expectedDesktops);
             _mockStorage.Expect("LoadCollection", new List<object>() { _dataModel.CREDENTIAL_COLLECTION_NAME }, _expectedCreds);
+            _mockStorage.Expect("LoadCollection", new List<object>() { _dataModel.THUMBNAIL_COLLECTION_NAME }, _expectedThumbnails);
             _dataModel.LoadFromStorage();
             Assert.IsTrue(_dataModel.Loaded);
             _actualDesktops = _dataModel.Desktops;
             _actualCredentials = _dataModel.Credentials;
+            _actualThumbnails = _dataModel.Thumbnails;
         }
 
         [TestCleanup]
@@ -50,6 +55,7 @@ namespace RdClient.Shared.Test.Model
         {
             CollectionAssert.AreEqual(_expectedDesktops, _actualDesktops);
             CollectionAssert.AreEqual(_expectedCreds, _actualCredentials);
+            CollectionAssert.AreEqual(_expectedThumbnails, _actualThumbnails);
         }
 
         [TestMethod]
