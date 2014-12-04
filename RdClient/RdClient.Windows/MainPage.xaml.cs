@@ -59,7 +59,11 @@
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            (this.DataContext as MainPageViewModel).Initialize(new ObjectFactory(), this.ViewPresenter);
+            AppInitializer initializer = (this.Resources["AppInitializer"] as AppInitializer);
+
+            initializer.AppBarViewModel = this.DataContext as IApplicationBarViewModel;
+            initializer.ViewPresenter = this.ViewPresenter;
+            initializer.Initialiaze();
         }
     }
 }

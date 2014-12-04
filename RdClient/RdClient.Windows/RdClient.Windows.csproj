@@ -117,7 +117,7 @@
     </Compile>
     <Compile Include="DesignTime\FakeConnectionCenterViewModel.cs" />
     <Compile Include="Factories\NavigationServiceFactory.cs" />
-    <Compile Include="Factories\ObjectFactory.cs" />
+    <Compile Include="Factories\AppInitializer.cs" />
     <Compile Include="Helpers\CoreDispatcherDeferredExecution.cs" />
     <Compile Include="Factories\DataModelFactory.cs" />
     <Compile Include="Helpers\DisconnectStringExtension.cs" />

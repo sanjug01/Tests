@@ -12,14 +12,18 @@
     xmlns:nav="using:RdClient.Shared.Navigation"
     xmlns:navext="using:RdClient.Shared.Navigation.Extensions"
     xmlns:design="using:RdClient.DesignTime"
+    xmlns:fac="using:RdClient.Factories"
     mc:Ignorable="d"
     Loaded="Page_Loaded">
 
     <Page.DataContext>
-        <vm:MainPageViewModel/>
+        <vm:MainPageViewModel />
     </Page.DataContext>
     
     <Page.Resources>
+        <fac:AppInitializer x:Key="AppInitializer" 
+                            LandingPage="ConnectionCenterView"/>
+        
         <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
         <conv:SegoeGlyphToSymbolIconConverter x:Key="segoeToSymbolIcon"/>
         <conv:BarItemsAlignmentFilteringConverter x:Key="leftAlignedFilter" Alignment="Left" />

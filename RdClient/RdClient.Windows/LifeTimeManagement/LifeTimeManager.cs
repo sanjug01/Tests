@@ -1,5 +1,4 @@
 ﻿using RdClient.LifeTimeManagement;
-using RdClient.Shared.Factories;
 using RdClient.Shared.Models;
 using System.Diagnostics.Contracts;
 using System.Threading.Tasks;

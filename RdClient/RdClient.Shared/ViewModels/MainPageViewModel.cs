@@ -1,6 +1,5 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.Factories;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
@@ -19,9 +18,6 @@
         private readonly RelayCommand _showBar;
         private ViewOrientation _appBarLayout;
 
-        private INavigationService _navigationService;
-        private IDataModel _dataModel;
-
         public MainPageViewModel()
         {
             _visibleItemsCount = 0;
@@ -30,23 +26,6 @@
             _isBarSticky = false;
             _showBar = new RelayCommand(o => this.ShowApplicationBar(), o => _isShowBarButtonVisible);
             _appBarLayout = ViewOrientation.Landscape;
-        }
-
-        public void Initialize(IObjectFactory objectFactory, IViewPresenter viewPresenter)
-        {
-            _dataModel = objectFactory.CreateDataModel();
-
-            _navigationService = objectFactory.CreateNavigationService();
-
-            _navigationService.Presenter = viewPresenter;
-            _navigationService.PushingFirstModalView += (s, e) => viewPresenter.PresentingFirstModalView();
-            _navigationService.DismissingLastModalView += (s, e) => viewPresenter.DismissedLastModalView();
-
-            _navigationService.Extensions.Add(objectFactory.CreateDataModelExtension(_dataModel));
-            _navigationService.Extensions.Add(objectFactory.CreateDeferredExecutionExtension());
-            _navigationService.Extensions.Add(objectFactory.CreateApplicationBarExtension(this));
-            _navigationService.Extensions.Add(objectFactory.CreateDisconnectStringExtension());
-            _navigationService.NavigateToView("ConnectionCenterView", null);
         }
 
         public IEnumerable<BarItemModel> BarItems
