@@ -20,9 +20,13 @@
         /// </summary>
         /// <param name="view">the view to be removed</param>
         void DismissModalView(IPresentableView view);
-
+        /// <summary>
+        /// called after the first modal view is pushed onto the stack
+        /// </summary>
         void PresentingFirstModalView();
+        /// <summary>
+        /// called after the last modal view has been popped from the stack
+        /// </summary>
         void DismissedLastModalView();
-
     }
 }

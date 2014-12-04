@@ -22,7 +22,7 @@ namespace RdClient.Factories
         {
             Contract.Assert(this.ViewPresenter != null);
             Contract.Assert(this.AppBarViewModel != null);
-            Contract.Assert(this.LandingPage != null);
+            Contract.Assert(string.IsNullOrEmpty(this.LandingPage) == false);
 
             _dataModel = this.CreateDataModel();
 
