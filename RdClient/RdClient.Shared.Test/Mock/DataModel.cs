@@ -11,9 +11,9 @@ namespace RdClient.Shared.Test.Mock
 
         public bool Loaded { get; set; }
 
-        public Task LoadFromStorage()
+        public void LoadFromStorage()
         {
-            return Task.FromResult(Invoke(new object[] { }));
+            Invoke(new object[] { });
         }
 
         public ModelCollection<Desktop> Desktops { get; set; }

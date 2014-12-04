@@ -57,9 +57,9 @@
             }
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            await (this.DataContext as MainPageViewModel).Initialize(new ObjectFactory(), this.ViewPresenter);
+            (this.DataContext as MainPageViewModel).Initialize(new ObjectFactory(), this.ViewPresenter);
         }
     }
 }

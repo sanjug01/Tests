@@ -26,15 +26,19 @@ namespace RdClient.Windows.Test.Model
             return dataStorage;
         }
 
-        public override async Task DataStorageSetup()
+        public override void DataStorageSetup()
         {
             StorageFolder tempFolder = ApplicationData.Current.TemporaryFolder;
-            _storageFolder = await tempFolder.CreateFolderAsync("AppDataStorageTests", CreationCollisionOption.ReplaceExisting);             
+            Task<StorageFolder> folderTask = tempFolder.CreateFolderAsync("AppDataStorageTests", CreationCollisionOption.ReplaceExisting).AsTask<StorageFolder>();
+            folderTask.Wait();
+
+            _storageFolder = folderTask.Result;             
         }
 
-        public override async Task DataStorageCleanup()
+        public override void DataStorageCleanup()
         {
-            await _storageFolder.DeleteAsync();
+            Task deleteTask = _storageFolder.DeleteAsync().AsTask();
+            deleteTask.Wait();
         }
     }
 }

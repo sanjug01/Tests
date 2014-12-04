@@ -8,14 +8,14 @@ namespace RdClient.Shared.Models
 {
     public interface IDataStorage
     {
-        Task<IEnumerable<string>> GetCollectionNames();
+        IEnumerable<string> GetCollectionNames();
 
-        Task<IEnumerable<ModelBase>> LoadCollection(string collectionName);
+        IEnumerable<ModelBase> LoadCollection(string collectionName);
 
-        Task<bool> DeleteCollection(string collectionName);
+        void DeleteCollection(string collectionName);
 
-        Task SaveItem(string collectionName, ModelBase item);
+        void SaveItem(string collectionName, ModelBase item);
 
-        Task<bool> DeleteItem(string collectionName, ModelBase item);
+        void DeleteItem(string collectionName, ModelBase item);
     }
 }

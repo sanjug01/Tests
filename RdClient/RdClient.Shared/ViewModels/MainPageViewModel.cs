@@ -32,9 +32,9 @@
             _appBarLayout = ViewOrientation.Landscape;
         }
 
-        public async Task Initialize(IObjectFactory objectFactory, IViewPresenter viewPresenter)
+        public void Initialize(IObjectFactory objectFactory, IViewPresenter viewPresenter)
         {
-            _dataModel = await objectFactory.CreateDataModel();
+            _dataModel = objectFactory.CreateDataModel();
 
             _navigationService = objectFactory.CreateNavigationService();
 

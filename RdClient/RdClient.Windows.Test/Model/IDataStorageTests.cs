@@ -22,9 +22,9 @@ namespace RdClient.Windows.Test.Model
 
         public abstract IDataStorage GetDataStorage();
 
-        public abstract Task DataStorageSetup();
+        public abstract void DataStorageSetup();
 
-        public abstract Task DataStorageCleanup();
+        public abstract void DataStorageCleanup();
 
         /*
          * Does some basic setup needed by all tests
@@ -32,94 +32,104 @@ namespace RdClient.Windows.Test.Model
          * At the end of this method, a new IDataStorage object has been created, and a single empty collection added 
          */
         [TestInitialize]
-        public async Task TestSetup()
+        public void TestSetup()
         {
             _testData = new TestData();
-            await DataStorageSetup();
+            DataStorageSetup();
             _dataStorage = GetDataStorage();
-            _collectionNames = await _dataStorage.GetCollectionNames();
+            _collectionNames = _dataStorage.GetCollectionNames();
             Assert.AreEqual(0, _collectionNames.Count());
             _collectionName = "collection" + _testData.NewRandomString();
-            _collection = await _dataStorage.LoadCollection(_collectionName);
+            _collection = _dataStorage.LoadCollection(_collectionName);
             Assert.AreEqual(0, _collection.Count());
-            _collectionNames = await _dataStorage.GetCollectionNames();
+            _collectionNames = _dataStorage.GetCollectionNames();
             Assert.AreEqual(1, _collectionNames.Count());
             Assert.AreEqual(_collectionName, _collectionNames.ElementAt(0));
         }
 
         [TestCleanup]
-        public async Task TestCleanup()
+        public void TestCleanup()
         {
-            await DataStorageCleanup();
+            DataStorageCleanup();
         }
 
         [TestMethod]
-        public async Task TestCollectionPersisted()
+        public void TestCollectionPersisted()
         {
             IDataStorage newDataStorage = GetDataStorage();
-            IEnumerable<string> newCollectionNames = await newDataStorage.GetCollectionNames();
+            IEnumerable<string> newCollectionNames = newDataStorage.GetCollectionNames();
             Assert.AreEqual(1, newCollectionNames.Count());
             Assert.AreEqual(_collectionName, newCollectionNames.ElementAt(0));
         }
 
         [TestMethod]
-        public async Task TestDeleteEmptyCollectionRemovesCollection()
+        public void TestDeleteEmptyCollectionRemovesCollection()
         {
-            await _dataStorage.DeleteCollection(_collectionName);
-            IEnumerable<string> newCollectionNames = await _dataStorage.GetCollectionNames();
+            _dataStorage.DeleteCollection(_collectionName);
+            IEnumerable<string> newCollectionNames = _dataStorage.GetCollectionNames();
             Assert.AreEqual(0, newCollectionNames.Count());
             IDataStorage newDataStorage = GetDataStorage();
-            newCollectionNames = await newDataStorage.GetCollectionNames();
+            newCollectionNames = newDataStorage.GetCollectionNames();
             Assert.AreEqual(0, newCollectionNames.Count());
         }
 
         [TestMethod]
-        public async Task TestDeleteNonEmptyCollectionRemovesCollection()
+        public void TestDeleteNonEmptyCollectionRemovesCollection()
         {
-            await _dataStorage.SaveItem(_collectionName, new ModelBase());
-            await _dataStorage.DeleteCollection(_collectionName);
-            IEnumerable<string> newCollectionNames = await _dataStorage.GetCollectionNames();
+            _dataStorage.SaveItem(_collectionName, new ModelBase());
+            _dataStorage.DeleteCollection(_collectionName);
+            IEnumerable<string> newCollectionNames = _dataStorage.GetCollectionNames();
             Assert.AreEqual(0, newCollectionNames.Count());
             IDataStorage newDataStorage = GetDataStorage();
-            newCollectionNames = await newDataStorage.GetCollectionNames();
+            newCollectionNames = newDataStorage.GetCollectionNames();
             Assert.AreEqual(0, newCollectionNames.Count());
         }
 
         [TestMethod]
-        public async Task TestDeleteCollectionReturnsTrue()
+        public void TestDeleteCollectionReturnsTrue()
         {
-            Assert.IsTrue(await _dataStorage.DeleteCollection(_collectionName));
+            _dataStorage.DeleteCollection(_collectionName);
         }
 
         [TestMethod]
-        public async Task TestDeleteNonExistantCollectionReturnsFalse()
+        public void TestDeleteNonExistantCollectionReturnsFalse()
         {
             string secondCollectionName = _testData.NewRandomString();
             Assert.AreNotEqual(_collectionName, secondCollectionName);
-            Assert.IsFalse(await _dataStorage.DeleteCollection(secondCollectionName));
+            bool exceptionThrown = false;
+
+            try
+            {
+                _dataStorage.DeleteCollection(secondCollectionName);
+            }
+            catch(SerializationException /* e */)
+            {
+                exceptionThrown = true;
+            }
+            Assert.IsTrue(exceptionThrown);
         }
 
         [TestMethod]
-        public async Task TestSaveModelBaseSucceeds()
+        public void TestSaveModelBaseSucceeds()
         {
             ModelBase item = new ModelBase();
-            await _dataStorage.SaveItem(_collectionName, item);
-            _collection = await _dataStorage.LoadCollection(_collectionName);
+            _dataStorage.SaveItem(_collectionName, item);
+            _collection = _dataStorage.LoadCollection(_collectionName);
             Assert.AreEqual(1, _collection.Count());
             Assert.AreEqual(item, _collection.First());
             IDataStorage newDataStorage = GetDataStorage();
-            _collection = await newDataStorage.LoadCollection(_collectionName);
+            _collection = newDataStorage.LoadCollection(_collectionName);
             Assert.AreEqual(1, _collection.Count());
             Assert.AreEqual(item, _collection.First());
         }
 
         [TestMethod]
-        public async Task TestDesktopPersisted()
+        public void TestDesktopPersisted()
         {
             Desktop desktop = _testData.NewValidDesktop(Guid.NewGuid());
-            await _dataStorage.SaveItem(_collectionName, desktop);
+            _dataStorage.SaveItem(_collectionName, desktop);
             IDataStorage newDataStorage = GetDataStorage();
-            _collection = await newDataStorage.LoadCollection(_collectionName);
+            _collection = newDataStorage.LoadCollection(_collectionName);
             Assert.AreEqual(1, _collection.Count());
             Desktop retreivedDesktop = _collection.First() as Desktop;
             Assert.AreEqual(desktop, retreivedDesktop);
@@ -128,12 +138,12 @@ namespace RdClient.Windows.Test.Model
         }
 
         [TestMethod]
-        public async Task TestCredentialPersisted()
+        public void TestCredentialPersisted()
         {
             Credentials cred = _testData.NewValidCredential();
-            await _dataStorage.SaveItem(_collectionName, cred);
+            _dataStorage.SaveItem(_collectionName, cred);
             IDataStorage newDataStorage = GetDataStorage();
-            _collection = await newDataStorage.LoadCollection(_collectionName);
+            _collection = newDataStorage.LoadCollection(_collectionName);
             Assert.AreEqual(1, _collection.Count());
             Credentials retreivedCred = _collection.First() as Credentials;
             Assert.AreEqual(cred, retreivedCred);
@@ -144,45 +154,54 @@ namespace RdClient.Windows.Test.Model
         }
 
         [TestMethod]
-        public async Task TestSaveExistingItemOverwritesItem()
+        public void TestSaveExistingItemOverwritesItem()
         {
             Credentials cred = _testData.NewValidCredential();
-            await _dataStorage.SaveItem(_collectionName, cred);
+            _dataStorage.SaveItem(_collectionName, cred);
             cred.Password = _testData.NewRandomString();
-            await _dataStorage.SaveItem(_collectionName, cred);
+            _dataStorage.SaveItem(_collectionName, cred);
             IDataStorage newDataStorage = GetDataStorage();
-            _collection = await newDataStorage.LoadCollection(_collectionName);
+            _collection = newDataStorage.LoadCollection(_collectionName);
             Assert.AreEqual(1, _collection.Count());
             Credentials retreivedCred = _collection.First() as Credentials;
             Assert.AreEqual(cred.Password, retreivedCred.Password);
         }
 
         [TestMethod]
-        public async Task TestDeleteItemRemovesItem()
+        public void TestDeleteItemRemovesItem()
         {
             ModelBase item = new ModelBase();
-            await _dataStorage.SaveItem(_collectionName, item);
-            await _dataStorage.DeleteItem(_collectionName, item);
-            _collection = await _dataStorage.LoadCollection(_collectionName);
+            _dataStorage.SaveItem(_collectionName, item);
+            _dataStorage.DeleteItem(_collectionName, item);
+            _collection = _dataStorage.LoadCollection(_collectionName);
             Assert.AreEqual(0, _collection.Count());
             IDataStorage newDataStorage = GetDataStorage();
-            _collection = await newDataStorage.LoadCollection(_collectionName);
+            _collection = newDataStorage.LoadCollection(_collectionName);
             Assert.AreEqual(0, _collection.Count());
         }
 
         [TestMethod]
-        public async Task TestDeleteItemReturnsTrue()
+        public void TestDeleteItemReturnsTrue()
         {
             ModelBase item = new ModelBase();
-            await _dataStorage.SaveItem(_collectionName, item);
-            Assert.IsTrue(await _dataStorage.DeleteItem(_collectionName, item));
+            _dataStorage.SaveItem(_collectionName, item);
+            _dataStorage.DeleteItem(_collectionName, item);
         }
 
         [TestMethod]
-        public async Task TestDeleteNonExistentItemReturnsFalse()
+        public void TestDeleteNonExistentItemReturnsFalse()
         {
             ModelBase item = new ModelBase();
-            Assert.IsFalse(await _dataStorage.DeleteItem(_collectionName, item));
+            bool exceptionThrown = false;
+            try 
+            { 
+                _dataStorage.DeleteItem(_collectionName, item);
+            }
+            catch(SerializationException /* e */)
+            {
+                exceptionThrown = true;
+            }
+            Assert.IsTrue(exceptionThrown);
         }
     }
 

@@ -9,6 +9,7 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 
 using RdClient.Shared.Models;
+using Windows.Foundation;
 
 namespace RdClient.Models
 {
@@ -63,26 +64,41 @@ namespace RdClient.Models
             }
         }
 
-        public async Task<IEnumerable<string>> GetCollectionNames()
+        public IEnumerable<string> GetCollectionNames()
         {
             if (!Initialized)
             {
                 throw new InvalidOperationException("Must initialize first");
             }
-            return (await this.RootFolder.GetFoldersAsync()).Select(s => s.Name);
+
+            Task<IReadOnlyList<StorageFolder>> folderTask = this.RootFolder.GetFoldersAsync().AsTask<IReadOnlyList<StorageFolder>>();
+            folderTask.Wait();
+
+            IReadOnlyList<StorageFolder> folderList = folderTask.Result;
+
+            return folderList.Select(s => s.Name);
         }
 
-        public async Task<IEnumerable<ModelBase>> LoadCollection(string collectionName)
+        public IEnumerable<ModelBase> LoadCollection(string collectionName)
         {
             if (!Initialized)
             {
                 throw new InvalidOperationException("Must initialize first");
             }
             List<ModelBase> collection = new List<ModelBase>();
-            StorageFolder folder = await this.RootFolder.CreateFolderAsync(collectionName, CreationCollisionOption.OpenIfExists);
-            foreach (StorageFile file in await folder.GetFilesAsync())
+            
+            Task<StorageFolder> folderTask = this.RootFolder.CreateFolderAsync(collectionName, CreationCollisionOption.OpenIfExists).AsTask<StorageFolder>();
+            folderTask.Wait();
+
+            Task<IReadOnlyList<StorageFile>> filesTask = folderTask.Result.GetFilesAsync().AsTask<IReadOnlyList<StorageFile>>();
+            filesTask.Wait();
+
+            foreach (StorageFile file in filesTask.Result)
             {
-                using (Stream stream = await file.OpenStreamForReadAsync())
+                Task<Stream> streamTask = file.OpenStreamForReadAsync();
+                streamTask.Wait();
+
+                using (Stream stream = streamTask.Result)
                 {
                     ModelBase item = this.Serializer.ReadObject(stream) as ModelBase;
                     if (item == null)
@@ -98,55 +114,79 @@ namespace RdClient.Models
             return collection;
         }
 
-        public async Task<bool> DeleteCollection(string collectionName)
+        public void DeleteCollection(string collectionName)
         {
             if (!Initialized)
             {
                 throw new InvalidOperationException("Must initialize first");
             }
-            bool deleted = false;
-            StorageFolder folder = await this.RootFolder.TryGetItemAsync(collectionName) as StorageFolder;
-            if (folder != null)
+
+            Task<IStorageItem> folderTask = this.RootFolder.TryGetItemAsync(collectionName).AsTask<IStorageItem>();
+            folderTask.Wait();
+
+            StorageFolder folder = folderTask.Result as StorageFolder;
+ 
+            if(folder == null)
             {
-                await folder.DeleteAsync();
-                deleted = true;
+                throw new SerializationException("Failed to delete folder: " + collectionName);
             }
-            return deleted;            
+
+            Task deleteTask = folder.DeleteAsync().AsTask();
+            deleteTask.Wait();
         }
 
-        public async Task SaveItem(string collectionName, ModelBase item)
+        public void SaveItem(string collectionName, ModelBase item)
         {
             if (!Initialized)
             {
                 throw new InvalidOperationException("Must initialize first");
             }
-            StorageFolder folder = await this.RootFolder.CreateFolderAsync(collectionName, CreationCollisionOption.OpenIfExists);
-            StorageFile file = await folder.CreateFileAsync(item.Id.ToString(), CreationCollisionOption.ReplaceExisting);
-            using (Stream stream = await file.OpenStreamForWriteAsync())
+
+            Task<StorageFolder> folderTask = this.RootFolder.CreateFolderAsync(collectionName, CreationCollisionOption.OpenIfExists).AsTask<StorageFolder>();
+            folderTask.Wait();
+
+            Task<StorageFile> fileTask = folderTask.Result.CreateFileAsync(item.Id.ToString(), CreationCollisionOption.ReplaceExisting).AsTask<StorageFile>();
+            fileTask.Wait();
+
+            Task<Stream> streamTask = fileTask.Result.OpenStreamForWriteAsync();
+            streamTask.Wait();
+
+            using (Stream stream = streamTask.Result)
             {
                 this.Serializer.WriteObject(stream, item);                
             }
-
         }
 
-        public async Task<bool> DeleteItem(string collectionName, ModelBase item)
+        public void DeleteItem(string collectionName, ModelBase item)
         {
             if (!Initialized)
             {
                 throw new InvalidOperationException("Must initialize first");
             }
-            bool deleted = false;
-            StorageFolder folder = await this.RootFolder.TryGetItemAsync(collectionName) as StorageFolder;
+
+            Task<IStorageItem> folderTask = this.RootFolder.TryGetItemAsync(collectionName).AsTask<IStorageItem>();
+            folderTask.Wait();
+
+            StorageFolder folder = folderTask.Result as StorageFolder;
+            if (folder == null)
+            {
+                throw new SerializationException("Couldn't find folder: " + collectionName + " for item " + item);
+            }
+
             if (folder != null)
             {
-                StorageFile file = await folder.TryGetItemAsync(item.Id.ToString()) as StorageFile;
-                if (file != null)
+                Task<IStorageItem> fileTask = folder.TryGetItemAsync(item.Id.ToString()).AsTask<IStorageItem>();
+                fileTask.Wait();
+
+                StorageFile file = fileTask.Result as StorageFile;
+                if (file == null)
                 {
-                    await file.DeleteAsync();
-                    deleted = true;
+                    throw new SerializationException("Couldn't find file: " + item);
                 }
+
+                Task deleteTask = file.DeleteAsync().AsTask();
+                deleteTask.Wait();                
             }
-            return deleted;
         }
     }
 }

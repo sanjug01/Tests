@@ -7,7 +7,7 @@ namespace RdClient.Shared.Factories
 {
     public interface IObjectFactory
     {
-        Task<IDataModel> CreateDataModel();
+        IDataModel CreateDataModel();
         INavigationService CreateNavigationService();
         INavigationExtension CreateDataModelExtension(IDataModel dataModel);
         INavigationExtension CreateDisconnectStringExtension();

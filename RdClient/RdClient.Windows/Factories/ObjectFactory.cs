@@ -11,9 +11,9 @@ namespace RdClient.Factories
         private DataModelFactory _dataModelFactory = new DataModelFactory();
         private NavigationServiceFactory _navigationServiceFactory = new NavigationServiceFactory();
 
-        public async Task<IDataModel> CreateDataModel()
+        public IDataModel CreateDataModel()
         {
-            return await _dataModelFactory.CreateDataModel();
+            return _dataModelFactory.CreateDataModel();
         }
 
         public INavigationService CreateNavigationService()

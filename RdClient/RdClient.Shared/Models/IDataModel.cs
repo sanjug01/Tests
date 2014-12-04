@@ -19,7 +19,7 @@ namespace RdClient.Shared.Models
             get;
         }
 
-        Task LoadFromStorage();
+        void LoadFromStorage();
 
         ModelCollection<Desktop> Desktops
         {

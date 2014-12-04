@@ -22,7 +22,7 @@ namespace RdClient.Shared.Test.Model
         private List<Credentials> _expectedCreds;
 
         [TestInitialize]
-        public async void TestSetup()
+        public void TestSetup()
         {
             _testData = new TestData();
             _mockStorage = new Mock.DataStorage();
@@ -33,7 +33,7 @@ namespace RdClient.Shared.Test.Model
             _dataModel.Storage = _mockStorage;
             _mockStorage.Expect("LoadCollection", new List<object>() { _dataModel.DESKTOP_COLLECTION_NAME }, _expectedDesktops);
             _mockStorage.Expect("LoadCollection", new List<object>() { _dataModel.CREDENTIAL_COLLECTION_NAME }, _expectedCreds);
-            await _dataModel.LoadFromStorage();
+            _dataModel.LoadFromStorage();
             Assert.IsTrue(_dataModel.Loaded);
             _actualDesktops = _dataModel.Desktops;
             _actualCredentials = _dataModel.Credentials;
@@ -61,10 +61,10 @@ namespace RdClient.Shared.Test.Model
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public async Task LoadFromStorageBeforeSettingStorageThrowsInvalidOperationException()
+        public void LoadFromStorageBeforeSettingStorageThrowsInvalidOperationException()
         {
             DataModel newDataModel = new DataModel();
-            await newDataModel.LoadFromStorage();
+            newDataModel.LoadFromStorage();
         }
 
         [TestMethod]

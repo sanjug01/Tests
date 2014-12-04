@@ -8,29 +8,29 @@ namespace RdClient.Shared.Test.Mock
 {
     class DataStorage : MockBase, IDataStorage
     {
-        public Task<IEnumerable<string>> GetCollectionNames()
+        public IEnumerable<string> GetCollectionNames()
         {
-            return Task.FromResult((IEnumerable<string>)Invoke(new object[] { }));
+            return (IEnumerable<string>) Invoke(new object[] { });
         }        
 
-        public Task<IEnumerable<ModelBase>> LoadCollection(string collectionName)
+        public IEnumerable<ModelBase> LoadCollection(string collectionName)
         {
-            return Task.FromResult((IEnumerable<ModelBase>)Invoke(new object[] { collectionName }));
+            return (IEnumerable<ModelBase>) Invoke(new object[] { collectionName });
         }
 
-        public Task<bool> DeleteCollection(string collectionName)
+        public void DeleteCollection(string collectionName)
         {
-            return Task.FromResult((bool)Invoke(new object[] { collectionName }));
+            Invoke(new object[] { collectionName });
         }
 
-        public Task SaveItem(string collectionName, ModelBase item)
+        public void SaveItem(string collectionName, ModelBase item)
         {
-            return Task.FromResult(Invoke(new object[] { collectionName, item }));
+            Invoke(new object[] { collectionName, item });
         }
 
-        public Task<bool> DeleteItem(string collectionName, ModelBase item)
+        public void DeleteItem(string collectionName, ModelBase item)
         {
-            return Task.FromResult((bool)Invoke(new object[] { collectionName, item }));
+            Invoke(new object[] { collectionName, item });
         }
     }
 }
