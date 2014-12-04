@@ -10,7 +10,7 @@ namespace RdClient.Shared.CxWrappers
         bool IsStronglyProtected { get; }
         string Issuer { get; }
         byte[] SerialNumber { get; }
-        public string Subject { get; }
+        string Subject { get; }
 
         DateTimeOffset ValidFrom { get; }
         DateTimeOffset ValidTo { get; }
@@ -18,7 +18,7 @@ namespace RdClient.Shared.CxWrappers
         byte[] GetHashValue();
         byte[] GetHashValue(string hashAlgorithmName);
 
-        IRdpCertificate Error { get; }
+        IRdpCertificateError Error { get; }
         // Windows.Storage.Streams.IBuffer GetCertificateBlob();
     }
 }

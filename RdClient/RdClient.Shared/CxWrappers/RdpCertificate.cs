@@ -63,7 +63,7 @@ namespace RdClient.Shared.CxWrappers
         { 
             get {return _serverCertificate.Issuer; }
         }
-        byte[] SerialNumber 
+        public byte[] SerialNumber 
         { 
             get {return _serverCertificate.SerialNumber; }
         }
@@ -80,7 +80,7 @@ namespace RdClient.Shared.CxWrappers
             get { return _serverCertificate.ValidTo; }
         }
 
-        byte[] GetHashValue()
+        public byte[] GetHashValue()
         { 
             return _serverCertificate.GetHashValue();  
         }
