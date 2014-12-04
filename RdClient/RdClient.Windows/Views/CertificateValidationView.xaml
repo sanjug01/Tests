@@ -1,0 +1,150 @@
+﻿<Page
+    x:Class="RdClient.Views.CertificateValidationView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Views"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:c="using:RdClient.Converters"    
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:CertificateValidationViewModel/>
+    </Page.DataContext>
+    
+    <Page.Resources>
+        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
+    </Page.Resources>
+
+
+
+    <Grid>
+        <Border 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch" 
+            Opacity="0.8" 
+            Background="#dd000000" Margin="0,-10,0,10"
+        />
+
+        <Border 
+            Background="{StaticResource rdWhiteBrush}" 
+            Width="580" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Top" 
+            BorderThickness="4"
+            Margin="0,64,8,0"
+            >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="8"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="12"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
+                               Foreground="{StaticResource rdBlackBrush}" 
+                               x:Uid="CertificateValidation-Caption" Text="The certificate can't be verified"/>
+                </Grid>
+
+                <Border Grid.Row="1" Height="1" Margin="0" />
+
+                <StackPanel Grid.Row="2" Margin="26,12,26,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   x:Uid="CertificateValidation-PcNameLabel" 
+                                   Text="Name in certificate from remote:pc"/>
+                    </StackPanel>
+                    <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
+                        <TextBlock Margin="16,8" 
+                                   Style="{ThemeResource BodyTextBlockStyle}"
+                                   x:Uid="CertificateValidation-PcName" 
+                                   Text="{Binding Host}" 
+                                   Foreground="{StaticResource rdGrayBrush}"
+                                   Visibility="Visible" 
+                                   Width="600" />
+                    </Grid>
+
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="CertificateValidation-ReasonsLabel" Text="It may not be safe to connect to this PC because of the following reasons:"/>                    
+                    <ListView>
+                        <!-- TODO: load list of erros from the ViewModel -->
+                        <ListViewItem Foreground="{StaticResource rdGrayBrush}" Height="28" Margin="16,0">
+                            Not from a trusted certifying authority
+                        </ListViewItem>
+                        <ListViewItem Foreground="{StaticResource rdGrayBrush}" Height="28" Margin="16,0">
+                            Other reasons ....
+                        </ListViewItem>
+                    </ListView>
+
+                    <CheckBox x:Uid="CertificateValidation-MoreDetailsLabel" 
+                              Content="More Details ..." Margin="0,8,0,0"
+                              IsChecked="{Binding Path=IsExpandedView, Mode=TwoWay}" />  
+
+                    <!--StackPanel -->
+                    <StackPanel Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Background="WhiteSmoke">
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   x:Uid="CertificateValidation-IssuerLabel" 
+                                   Text="Certificate issuer" />
+                        <TextBlock Margin="16,8" 
+                                       Style="{ThemeResource BodyTextBlockStyle}"
+                                       x:Uid="CertificateValidation-Issuer" 
+                                       Text="{Binding CertificateIssuer}" 
+                                       Foreground="{StaticResource rdGrayBrush}" />
+
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   x:Uid="CertificateValidation-ThumbprintLabel" 
+                                   Text="Certificate thumbprint" />
+                        <TextBlock Margin="16,8" 
+                                       Style="{ThemeResource BodyTextBlockStyle}"
+                                       x:Uid="CertificateValidation-Thumbprint" 
+                                       Text="{Binding CertificateThumbprint}" 
+                                       Foreground="{StaticResource rdGrayBrush}" />
+
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   x:Uid="CertificateValidation-ValidBeforeLabel" 
+                                   Text="Certificate valid before" />
+                        <TextBlock Margin="16,8" 
+                                       Style="{ThemeResource BodyTextBlockStyle}"
+                                       x:Uid="CertificateValidation-ValidBefore" 
+                                       Text="{Binding CertificateValidAfter}" 
+                                       Foreground="{StaticResource rdGrayBrush}" />
+
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   x:Uid="CertificateValidation-ValidAfterLabel" 
+                                   Text="Certificate valid after" />
+                        <TextBlock Margin="16,8" 
+                                       Style="{ThemeResource BodyTextBlockStyle}"
+                                       x:Uid="CertificateValidation-ValidAfter" 
+                                       Text="{Binding CertificateValidAfter}" 
+                                       Foreground="{StaticResource rdGrayBrush}" />
+
+                    </StackPanel>
+
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                               Margin="0,20,0,8"
+                               x:Uid="CertificateValidation-ConnectAnywayLAbel" 
+                               Text="Do you want to connect anyway?"/>
+                    <CheckBox x:Uid="CertificateValidation-DontAskLabel" 
+                              Content="Don't ask me again for connection to this computer" Margin="16,0" 
+                              Foreground="{StaticResource rdGrayBrush}" 
+                              IsChecked="{Binding IsDontAsk, Mode=TwoWay}" />                    
+                    
+                    <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
+                        <Button x:Uid="CertificateValidation-Connect" Content="Connect" 
+                                Command="{Binding Path=SaveCommand}" />
+                        <Button x:Uid="CertificateValidation-Cancel" Content="Cancel" 
+                                Command="{Binding Path=CancelCommand}" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+    </Grid>
+
+</Page>
+
