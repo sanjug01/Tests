@@ -8,8 +8,11 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:cv="using:RdClient.Converters"
     mc:Ignorable="d"
-    DataContext="{Binding Source={StaticResource AppViewModelLocator}, Path=DeleteDesktopsViewModel}"
     >    
+    
+    <Page.DataContext>
+        <vm:DeleteDesktopsViewModel/>
+    </Page.DataContext>
 
     <Page.Resources>
         <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

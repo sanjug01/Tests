@@ -8,8 +8,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Loaded="Page_Loaded"
-    DataContext="{Binding Source={StaticResource AppViewModelLocator}, Path=SessionViewModel}">      
-
+    >
+    
+    <Page.DataContext>
+        <vm:SessionViewModel />
+    </Page.DataContext>
+    
     <Grid Background="green">
         <SwapChainPanel x:Name="SwapChainPanel"/>
         <Button

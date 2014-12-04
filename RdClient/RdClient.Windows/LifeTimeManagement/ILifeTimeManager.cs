@@ -1,4 +1,5 @@
 ﻿
+using System.Threading.Tasks;
 namespace RdClient.LifeTimeManagement
 {
     public interface ILifeTimeManager

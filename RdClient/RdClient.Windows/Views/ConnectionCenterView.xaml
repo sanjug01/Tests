@@ -8,12 +8,16 @@
     xmlns:c="using:RdClient.Converters"
     xmlns:System="using:System"    
     xmlns:design="using:RdClient.DesignTime"
-    mc:Ignorable="d"
-    DataContext="{Binding Source={StaticResource AppViewModelLocator}, Path=ConnectionCenterViewModel}">
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    mc:Ignorable="d">
     
     <d:Page.DataContext>
         <design:FakeConnectionCenterViewModel />
     </d:Page.DataContext>
+    
+    <Page.DataContext>
+        <vm:ConnectionCenterViewModel />
+    </Page.DataContext>
 
     <Page.Resources>
         <ResourceDictionary>

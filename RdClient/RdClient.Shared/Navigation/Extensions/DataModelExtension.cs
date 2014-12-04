@@ -1,9 +1,13 @@
-﻿namespace RdClient.Shared.Navigation
+﻿namespace RdClient.Shared.Navigation.Extensions
 {
+    using RdClient.Shared.Models;
     using RdClient.Shared.ViewModels;
 
     public sealed class DataModelExtension : INavigationExtension
     {
+
+        public IDataModel DataModel { private get; set; }
+
         public DataModelExtension()
         {
         }
@@ -12,7 +16,7 @@
         {
             viewModel.CastAndCall<IViewModelWithData>(vmd =>
             {
-                // Deliver the data model to the view model
+                vmd.DataModel = this.DataModel;
             });
         }
 
@@ -20,7 +24,7 @@
         {
             viewModel.CastAndCall<IViewModelWithData>(vmd =>
             {
-                // Remove the data model from the view model
+                // vmd.DataModel = null;
             });
         }
     }

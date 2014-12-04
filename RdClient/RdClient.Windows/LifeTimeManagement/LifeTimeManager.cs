@@ -1,5 +1,8 @@
 ﻿using RdClient.LifeTimeManagement;
+using RdClient.Shared.Factories;
+using RdClient.Shared.Models;
 using System.Diagnostics.Contracts;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 
 namespace RdClient
@@ -19,7 +22,6 @@ namespace RdClient
         {
             if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
             {
-                // TODO: Load state from previously suspended application
             }
 
             _rootFrameManager.LoadRoot(e);

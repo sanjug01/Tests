@@ -69,6 +69,7 @@
     <Compile Include="CxWrappers\RdpEventSource.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
+    <Compile Include="Factories\IObjectFactory.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
     <Compile Include="Helpers\DisconnectString.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />
@@ -98,7 +99,7 @@
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModel.cs" />
     <Compile Include="ViewModels\DesktopViewModel.cs" />
-    <Compile Include="Navigation\DataModelExtension.cs" />
+    <Compile Include="Navigation\Extensions\DataModelExtension.cs" />
     <Compile Include="Navigation\INavigationExtension.cs" />
     <Compile Include="ValidationRules\IllegalCharacterValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameValidationRule.cs" />
@@ -108,7 +109,6 @@
     <Compile Include="ViewModels\IViewModelDisconnectStrings.cs" />
     <Compile Include="Navigation\NavigationExtensions.cs" />
     <Compile Include="ViewModels\IViewModelWithData.cs" />
-    <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Navigation\ApplicationBarSite.cs" />
     <Compile Include="Models\IDataModel.cs" />
     <Compile Include="Models\IDataStorage.cs" />

@@ -25,6 +25,9 @@ namespace RdClient.LifeTimeManagement
         private bool _prelaunchActivated;
         public bool PrelaunchActivated { get { return _prelaunchActivated; } }
 
+        private object _parameter;
+        public object Parameter { get { return _parameter; } set { _parameter = value; } }
+
         public ActivationArgs(
             string arguments,
             string titleId,
@@ -32,7 +35,8 @@ namespace RdClient.LifeTimeManagement
             ApplicationExecutionState previousExecutionState,
             SplashScreen splashscreen,
             int currentlyShownApplicationViewId,
-            bool prelaunchActivated)
+            bool prelaunchActivated,
+            object parameter)
         {
             _arguments = arguments;
             _titleId = titleId;
@@ -41,6 +45,7 @@ namespace RdClient.LifeTimeManagement
             _splashScreen = splashscreen;
             _currentlyShownApplicationViewId = currentlyShownApplicationViewId;
             _prelaunchActivated = prelaunchActivated;
+            _parameter = parameter;
         }
     }
 }

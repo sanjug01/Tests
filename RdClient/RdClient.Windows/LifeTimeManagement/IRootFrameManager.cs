@@ -1,4 +1,6 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using RdClient.Shared.Models;
+using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 
 namespace RdClient.LifeTimeManagement
 {

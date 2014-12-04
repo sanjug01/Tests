@@ -1,8 +1,8 @@
 ﻿namespace RdClient
 {
+    using RdClient.Factories;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.ViewModels;
-    using RdClient.Shared.Models;
     using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
@@ -13,10 +13,6 @@
         public MainPage()
         {
             this.InitializeComponent();
-            this.NavigationService.Presenter = this.ViewPresenter;
-            this.NavigationService.PushingFirstModalView += (s, e) => this.ViewPresenter.PresentingFirstModalView();
-            this.NavigationService.DismissingLastModalView += (s, e) => this.ViewPresenter.DismissedLastModalView();
-
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -61,17 +57,9 @@
             }
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            this.ViewFactory.AddViewClass("ConnectionCenterView", typeof(Views.ConnectionCenterView));
-            this.ViewFactory.AddViewClass("SessionView", typeof(Views.SessionView));
-            this.ViewFactory.AddViewClass("TestsView", typeof(Views.TestsView));
-            this.ViewFactory.AddViewClass("AddOrEditDesktopView", typeof(Views.AddOrEditDesktopView));
-            this.ViewFactory.AddViewClass("AddUserView", typeof(Views.AddUserView));
-            this.ViewFactory.AddViewClass("DialogMessage", typeof(Views.DialogMessage));
-            this.ViewFactory.AddViewClass("DeleteDesktopsView", typeof(Views.DeleteDesktopsView));
-
-            this.NavigationService.NavigateToView("ConnectionCenterView", null);
+            await (this.DataContext as MainPageViewModel).Initialize(new ObjectFactory(), this.ViewPresenter);
         }
     }
 }

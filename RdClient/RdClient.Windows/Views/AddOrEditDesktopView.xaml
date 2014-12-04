@@ -8,8 +8,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Converters"    
     mc:Ignorable="d"
-    Loaded="Page_Loaded"
-    DataContext="{Binding Source={StaticResource AppViewModelLocator}, Path=AddOrEditDesktopViewModel}">
+    Loaded="Page_Loaded">
+    
+    <Page.DataContext>
+        <vm:AddOrEditDesktopViewModel />
+    </Page.DataContext>
     
     <Page.Resources>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

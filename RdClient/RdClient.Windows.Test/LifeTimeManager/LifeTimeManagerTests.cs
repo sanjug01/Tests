@@ -29,7 +29,7 @@ namespace RdClient.Windows.Test
         [TestMethod]
         public void OnLaunched()
         {
-            IActivationArgs args = new ActivationArgs("", "", ActivationKind.Launch, ApplicationExecutionState.Terminated, null as SplashScreen, 0, false);
+            IActivationArgs args = new ActivationArgs("", "", ActivationKind.Launch, ApplicationExecutionState.Terminated, null as SplashScreen, 0, false, null);
             _lifeTimeManager.OnLaunched(args);
 
             Assert.AreEqual(1, _rootFrameManager.LoadedCount);

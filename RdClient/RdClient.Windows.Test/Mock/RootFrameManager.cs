@@ -1,4 +1,5 @@
 ﻿using RdClient.LifeTimeManagement;
+using RdClient.Shared.Models;
 using Windows.UI.Xaml.Controls;
 
 namespace RdClient.Windows.Test.Mock
@@ -8,6 +9,11 @@ namespace RdClient.Windows.Test.Mock
         private IActivationArgs _launchActivatedArgs;
         private int _loadedCount = 0;
         private int _activatedCount = 0;
+
+        public IDataModel DataModel
+        {
+            get { return null; }
+        }
 
         public IActivationArgs LaunchActivatedArgs
         { 

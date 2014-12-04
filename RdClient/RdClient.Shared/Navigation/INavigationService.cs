@@ -13,7 +13,8 @@ namespace RdClient.Shared.Navigation
         event EventHandler DismissingLastModalView;
         IViewPresenter Presenter { set; }
         IPresentableViewFactory ViewFactory { set; }
-
+        NavigationExtensionList Extensions { get; }
+            
         /// <summary>
         /// Navigate to a view. If the view is not currently shown on the UI, the presenter is asked to present it.
         /// Otherwise (for example when the view is already navigated to) the Presenting() callback is called with the new parameter

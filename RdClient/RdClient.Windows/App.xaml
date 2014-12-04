@@ -10,8 +10,6 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            <vm:ViewModelLocator x:Key="AppViewModelLocator" />
-            <vm:MainPageViewModel x:Key="MainPageViewModel" />
             <ResourceDictionary.MergedDictionaries>               
                 <ResourceDictionary Source="Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>

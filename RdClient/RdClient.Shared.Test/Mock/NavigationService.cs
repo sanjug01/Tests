@@ -39,5 +39,11 @@ namespace RdClient.Shared.Test.Mock
         {
             set {  }
         }
+
+        public NavigationExtensionList Extensions
+        {
+            get;
+            set;
+        }
     }
 }

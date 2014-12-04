@@ -20,5 +20,9 @@
         /// </summary>
         /// <param name="view">the view to be removed</param>
         void DismissModalView(IPresentableView view);
+
+        void PresentingFirstModalView();
+        void DismissedLastModalView();
+
     }
 }

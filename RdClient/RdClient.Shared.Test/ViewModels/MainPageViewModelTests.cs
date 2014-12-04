@@ -321,6 +321,8 @@
             void IViewPresenter.PresentView(IPresentableView view) { }
             void IViewPresenter.PushModalView(IPresentableView view) { }
             void IViewPresenter.DismissModalView(IPresentableView view) { }
+            void IViewPresenter.PresentingFirstModalView() { }
+            void IViewPresenter.DismissedLastModalView() { }
         }
     }
 }

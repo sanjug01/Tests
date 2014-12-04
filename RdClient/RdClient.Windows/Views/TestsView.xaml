@@ -8,9 +8,12 @@
     xmlns:System="using:System"
     x:Class="RdClient.Views.TestsView"
     mc:Ignorable="d"
-    DataContext="{Binding Source={StaticResource AppViewModelLocator}, Path=TestsViewModel}"    
     Loaded="Page_Loaded">
 
+    <Page.DataContext>
+        <vm:TestsViewModel/>
+    </Page.DataContext>
+    
     <Page.Resources>
         <MenuFlyout x:Name="contextMenuFlyout">
             <MenuFlyoutItem 

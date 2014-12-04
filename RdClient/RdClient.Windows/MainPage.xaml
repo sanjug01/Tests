@@ -11,9 +11,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nav="using:RdClient.Shared.Navigation"
     xmlns:navext="using:RdClient.Shared.Navigation.Extensions"
+    xmlns:design="using:RdClient.DesignTime"
     mc:Ignorable="d"
-    DataContext="{StaticResource MainPageViewModel}"
     Loaded="Page_Loaded">
+
+    <Page.DataContext>
+        <vm:MainPageViewModel/>
+    </Page.DataContext>
     
     <Page.Resources>
         <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
@@ -170,37 +174,7 @@
                 </DataTemplate>
 
             </conv:StringToDictionaryObjectConverter.Dictionary>
-        </conv:StringToDictionaryObjectConverter>   
-            
-    	<!--
-            View factory is shared between the page and page.
-            The navigation service gets it in its "ViewFactory" property.
-            The page gets the factory as a property named "ViewFactory" from the x:Name attribute.
-        -->        
-        <nav:PresentableViewFactoryConcrete x:Key="ViewFactory" x:Name="ViewFactory"/>
-        
-        <!--
-        Navigation service setup:
-            view presenter - the "ViewPresenter" control hosted in the root grid
-            application bar view model is the page's view model
-        -->
-        <nav:DispatchedNavigationService
-            x:Key="NavigationService"
-            x:Name="NavigationService" 
-            ViewFactory="{StaticResource ViewFactory}">
-            
-            <!-- Register all navigation extensions -->
-            <nav:DispatchedNavigationService.Extensions>
-                <nav:DataModelExtension/>
-                <helpers:DisconnectStringExtension />
-                <navext:ApplicationBarExtension ViewModel="{StaticResource MainPageViewModel}" />
-                <navext:DeferredExecutionExtension>
-                    <navext:DeferredExecutionExtension.DeferredExecution>
-                        <helpers:CoreDispatcherDeferredExecution Priority="Normal" />
-                    </navext:DeferredExecutionExtension.DeferredExecution>
-                </navext:DeferredExecutionExtension>
-            </nav:DispatchedNavigationService.Extensions>
-        </nav:DispatchedNavigationService>
+        </conv:StringToDictionaryObjectConverter>                       
     </Page.Resources>
     
     <Page.BottomAppBar>

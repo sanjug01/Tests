@@ -1,13 +1,15 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Factories;
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Diagnostics;
+    using System.Threading.Tasks;
     using System.Windows.Input;
 
-    public sealed class MainPageViewModel : Helpers.MutableObject, IApplicationBarViewModel, ILayoutAwareViewModel
+    public sealed class MainPageViewModel : MutableObject, IApplicationBarViewModel, ILayoutAwareViewModel
     {
         private IEnumerable<BarItemModel> _barItems;
         private int _visibleItemsCount;
@@ -17,6 +19,9 @@
         private readonly RelayCommand _showBar;
         private ViewOrientation _appBarLayout;
 
+        private INavigationService _navigationService;
+        private IDataModel _dataModel;
+
         public MainPageViewModel()
         {
             _visibleItemsCount = 0;
@@ -25,6 +30,23 @@
             _isBarSticky = false;
             _showBar = new RelayCommand(o => this.ShowApplicationBar(), o => _isShowBarButtonVisible);
             _appBarLayout = ViewOrientation.Landscape;
+        }
+
+        public async Task Initialize(IObjectFactory objectFactory, IViewPresenter viewPresenter)
+        {
+            _dataModel = await objectFactory.CreateDataModel();
+
+            _navigationService = objectFactory.CreateNavigationService();
+
+            _navigationService.Presenter = viewPresenter;
+            _navigationService.PushingFirstModalView += (s, e) => viewPresenter.PresentingFirstModalView();
+            _navigationService.DismissingLastModalView += (s, e) => viewPresenter.DismissedLastModalView();
+
+            _navigationService.Extensions.Add(objectFactory.CreateDataModelExtension(_dataModel));
+            _navigationService.Extensions.Add(objectFactory.CreateDeferredExecutionExtension());
+            _navigationService.Extensions.Add(objectFactory.CreateApplicationBarExtension(this));
+            _navigationService.Extensions.Add(objectFactory.CreateDisconnectStringExtension());
+            _navigationService.NavigateToView("ConnectionCenterView", null);
         }
 
         public IEnumerable<BarItemModel> BarItems

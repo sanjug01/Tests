@@ -19,5 +19,15 @@ namespace RdClient.Shared.Test.Mock
         {
             Invoke(new object[] { view });
         }
+
+        public void PresentingFirstModalView()
+        {
+            Invoke(new object[] { });
+        }
+
+        public void DismissedLastModalView()
+        {
+            Invoke(new object[] { });
+        }
     }
 }
