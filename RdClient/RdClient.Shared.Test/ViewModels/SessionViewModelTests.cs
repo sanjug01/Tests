@@ -50,12 +50,7 @@ namespace RdClient.Shared.Test.ViewModels
                 };
 
                 sessionModel.Expect("Disconnect", new List<object>() { }, 0);
-                navigation.Expect("NavigateToView", new List<object>() { "ConnectionCenterView", null }, 0);
 
-                //
-                // TODO:    REFACTOR THIS!
-                //          Present the view model using the nav service
-                //
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
                 svm.DisconnectCommand.Execute(null);
             }
