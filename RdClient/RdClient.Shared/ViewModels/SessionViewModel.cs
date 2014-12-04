@@ -8,8 +8,6 @@ using RdClient.Shared.CxWrappers;
 
 namespace RdClient.Shared.ViewModels
 {
-
-
     public class SessionViewModel : ViewModelBase, IViewModelDisconnectString
     {
         private ConnectionInformation _connectionInformation;
