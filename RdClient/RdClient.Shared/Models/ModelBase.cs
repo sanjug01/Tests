@@ -4,9 +4,6 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
-using RdClient.Shared.Helpers;
-using System.Threading.Tasks;
-
 namespace RdClient.Shared.Models
 {
     [DataContract(IsReference=true)]

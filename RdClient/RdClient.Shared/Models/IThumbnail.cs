@@ -1,6 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.Shared.Models

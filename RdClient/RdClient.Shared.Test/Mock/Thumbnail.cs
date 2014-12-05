@@ -1,12 +1,7 @@
-﻿using RdClient.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Models;
 using RdMock;
-using RdClient.Shared.CxWrappers;
-using Windows.UI.Xaml.Media;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.Shared.Test.Mock

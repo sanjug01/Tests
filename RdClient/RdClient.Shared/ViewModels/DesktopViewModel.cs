@@ -1,9 +1,6 @@
-﻿using RdClient.Shared.Navigation;
-using RdClient.Shared.Models;
-
-using System.Collections.Generic;
+﻿using RdClient.Shared.Models;
+using RdClient.Shared.Navigation;
 using System.Windows.Input;
-using Windows.UI.Xaml.Media;
 
 namespace RdClient.Shared.ViewModels
 {

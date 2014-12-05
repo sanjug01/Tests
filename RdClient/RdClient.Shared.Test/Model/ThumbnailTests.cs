@@ -2,15 +2,10 @@
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Test.Helpers;
-using System.Threading.Tasks;
-using Windows.Graphics.Imaging;
-using Windows.Storage.Streams;
-using System;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Runtime.Serialization;
 using System.IO;
-using System.Xml;
-using Windows.UI.Xaml.Media.Imaging;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
+using Windows.Storage.Streams;
 
 namespace RdClient.Shared.Test.Model
 {

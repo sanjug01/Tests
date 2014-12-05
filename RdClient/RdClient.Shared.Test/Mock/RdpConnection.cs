@@ -2,7 +2,6 @@
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Models;
 using RdMock;
-using System;
 
 namespace RdClient.Shared.Test.Mock
 {

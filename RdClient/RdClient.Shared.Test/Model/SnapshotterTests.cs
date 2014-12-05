@@ -1,13 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RdClient.Shared.Models;
-using RdClient.Shared.Test.Mock;
 using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Models;
 using RdClient.Shared.Test.Helpers;
+using System.Collections.Generic;
 
 namespace RdClient.Shared.Test.Model
 {

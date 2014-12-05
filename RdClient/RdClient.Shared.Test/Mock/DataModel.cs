@@ -1,7 +1,5 @@
-﻿using RdMock;
-using RdClient.Shared.Models;
-using System;
-using System.Threading.Tasks;
+﻿using RdClient.Shared.Models;
+using RdMock;
 
 namespace RdClient.Shared.Test.Mock
 {

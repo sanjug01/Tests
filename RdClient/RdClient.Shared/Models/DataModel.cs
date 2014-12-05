@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RdClient.Shared.Models
 {
@@ -81,7 +77,7 @@ namespace RdClient.Shared.Models
                 _creds.CollectionChanged += credentialsChanged;
 
                 _thumbnails = new ModelCollection<Thumbnail>();
-                foreach (Thumbnail thumbnail in await _storage.LoadCollection(THUMBNAIL_COLLECTION_NAME))
+                foreach (Thumbnail thumbnail in _storage.LoadCollection(THUMBNAIL_COLLECTION_NAME))
                 {
                     _thumbnails.Add(thumbnail);
                     thumbnail.PropertyChanged += thumbnail_PropertyChanged;
@@ -209,13 +205,13 @@ namespace RdClient.Shared.Models
             }
         }
 
-        async void thumbnailsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        void thumbnailsChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 foreach (Thumbnail thumb in e.NewItems)
                 {
-                    await _storage.SaveItem(THUMBNAIL_COLLECTION_NAME, thumb);
+                    _storage.SaveItem(THUMBNAIL_COLLECTION_NAME, thumb);
                     thumb.PropertyChanged += thumbnail_PropertyChanged;
                 }
             }
@@ -228,7 +224,7 @@ namespace RdClient.Shared.Models
                         desktop.ThumbnailId = Guid.Empty;
                     }
                     thumb.PropertyChanged -= cred_PropertyChanged;
-                    await _storage.DeleteItem(THUMBNAIL_COLLECTION_NAME, thumb);
+                    _storage.DeleteItem(THUMBNAIL_COLLECTION_NAME, thumb);
 
                 }
             }

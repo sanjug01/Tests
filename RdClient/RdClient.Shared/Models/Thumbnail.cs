@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml.Media.Imaging;
+﻿using RdClient.Shared.CxWrappers;
+using System;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Core;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
-using Windows.UI.Xaml.Media;
-using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
-using RdClient.Shared.CxWrappers;
-
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.Shared.Models
 {

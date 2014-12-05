@@ -1,14 +1,6 @@
 ﻿using RdClient.Shared.CxWrappers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
-using Windows.System.Threading;
-using Windows.UI.Core;
-using Windows.UI.Xaml;
 using RdClient.Shared.Helpers;
+using System;
 
 namespace RdClient.Shared.Models
 {
