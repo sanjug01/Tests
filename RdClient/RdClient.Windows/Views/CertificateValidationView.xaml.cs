@@ -11,16 +11,16 @@ namespace RdClient.Views
             this.InitializeComponent();
         }
 
-        public IViewModel ViewModel
+        IViewModel IPresentableView.ViewModel
         {
             get { return this.DataContext as IViewModel; }
         }
 
-        public void Activating(object activationParameter) { }
+        void IPresentableView.Activating(object activationParameter) { }
 
-        public void Presenting(INavigationService navigationService, object activationParameter) { }
+        void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
 
-        public void Dismissing() { }
+        void IPresentableView.Dismissing() { }
 
     }
 }

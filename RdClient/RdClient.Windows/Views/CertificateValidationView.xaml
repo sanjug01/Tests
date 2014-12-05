@@ -136,9 +136,9 @@
                     
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
                         <Button x:Uid="CertificateValidation-Connect" Content="Connect" 
-                                Command="{Binding Path=SaveCommand}" />
+                                Command="{Binding AcceptCertificateCommand}" />
                         <Button x:Uid="CertificateValidation-Cancel" Content="Cancel" 
-                                Command="{Binding Path=CancelCommand}" />
+                                Command="{Binding CancelCommand}" />
                     </StackPanel>
                 </StackPanel>
             </Grid>

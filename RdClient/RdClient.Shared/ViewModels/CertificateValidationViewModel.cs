@@ -10,8 +10,7 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    // TODO 
-    public class CertificateValidationViewModelArgs
+    public sealed class CertificateValidationViewModelArgs
     {
         public CertificateValidationViewModelArgs(string host, IRdpCertificate certificate)
         {
@@ -22,6 +21,7 @@ namespace RdClient.Shared.ViewModels
         public string Host { get; private set; }
         public IRdpCertificate Certificate { get; private set; }
     }
+
     public class CertificateValidationViewModel : ViewModelBase
     {
         private string _host;
@@ -35,8 +35,7 @@ namespace RdClient.Shared.ViewModels
 
         public CertificateValidationViewModel()
         {
-            _acceptCertificateCommand = new RelayCommand(AcceptCertificateExecute,
-                o => this.AcceptCertificateCommandCanExecute());
+            _acceptCertificateCommand = new RelayCommand(AcceptCertificateExecute, o => (null != this.Certificate) );
             _cancelCommand = new RelayCommand(CancelCommandExecute);
 
             this.IsExpandedView = false;
@@ -49,13 +48,13 @@ namespace RdClient.Shared.ViewModels
         public string Host
         {
             get { return _host; }
-            set { SetProperty(ref _host, value, "Host"); }
+            set { SetProperty(ref _host, value); }
         }
 
         public IRdpCertificate Certificate
         {
             get { return _certificate; }
-            private set { SetProperty(ref _certificate, value, "Certificate"); }
+            private set { SetProperty(ref _certificate, value); }
         }
 
         public string CertificateIssuer { get; private set; }
@@ -68,26 +67,20 @@ namespace RdClient.Shared.ViewModels
         public bool IsExpandedView
         {
             get { return _isExpandedView; }
-            set { SetProperty(ref _isExpandedView, value, "IsExpandedView"); }
+            set { SetProperty(ref _isExpandedView, value); }
         }
 
         public bool IsDontAsk
         {
             get { return _isDontAsk; }
-            set { SetProperty(ref _isDontAsk, value, "IsDontAsk"); }
+            set { SetProperty(ref _isDontAsk, value); }
         }
 
         private void AcceptCertificateExecute(object o)
         {
             DismissModal(true);
         }
-
-        private bool AcceptCertificateCommandCanExecute()
-        {
-            return (null != this.Certificate);
-        }
-
-
+        
         private void CancelCommandExecute(object o)
         {
             DismissModal(false);
