@@ -1,15 +1,11 @@
-﻿using System;
+﻿using RdClient.Shared.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
-using Windows.Storage.Streams;
-
-using RdClient.Shared.Models;
-using Windows.Foundation;
 
 namespace RdClient.Models
 {

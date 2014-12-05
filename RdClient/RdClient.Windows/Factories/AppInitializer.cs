@@ -1,7 +1,6 @@
 ﻿using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.ViewModels;
-using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
 
 namespace RdClient.Factories

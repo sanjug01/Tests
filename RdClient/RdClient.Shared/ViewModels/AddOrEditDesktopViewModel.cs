@@ -145,7 +145,7 @@ namespace RdClient.Shared.ViewModels
             _saveCommand = new RelayCommand(SaveCommandExecute,
                 o =>
                 {
-                    return (this.Host != null);
+                    return (string.IsNullOrEmpty(this.Host) == false);
                 });
             _cancelCommand = new RelayCommand(CancelCommandExecute);
 
@@ -219,7 +219,7 @@ namespace RdClient.Shared.ViewModels
                 this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credentials));
             }
 
-            if (this.Desktop.CredentialId != null)
+            if (this.Desktop.HasCredential)
             {
                 int idx = 0;
                 for (idx = 0; idx < this.UserOptions.Count; idx++)

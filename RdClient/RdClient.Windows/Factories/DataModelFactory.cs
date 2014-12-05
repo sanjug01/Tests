@@ -1,8 +1,6 @@
 ﻿using RdClient.Models;
 using RdClient.Shared.Models;
-using System;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace RdClient.Factories
