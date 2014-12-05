@@ -14,7 +14,7 @@ namespace RdClient.Shared.Models
 {
     public class Snapshotter
     {
-        public readonly TimeSpan firstSnapshotTime = new TimeSpan(0, 0, 1);
+        public readonly TimeSpan firstSnapshotTime = new TimeSpan(0, 0, 2);
         public readonly TimeSpan snapshotPeriod = new TimeSpan(0, 0, 15);
         private IRdpConnection _connection;
         private IThumbnail _thumbnail;

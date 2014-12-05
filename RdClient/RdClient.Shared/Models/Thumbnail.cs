@@ -72,8 +72,11 @@ namespace RdClient.Shared.Models
 
             set
             {
-                _imageBytes = value;
-                this.UpdateImageSource();
+                if (value != null)
+                {
+                    _imageBytes = value;
+                    this.UpdateImageSource();
+                }
             }
         }
 
