@@ -100,7 +100,7 @@ namespace RdClient.Shared.ViewModels
                 int idx = (int) value;
                 if(this.UserOptions.Count > 0 && this.UserOptions[idx].UserComboBoxType == UserComboBoxType.AddNew)
                 {
-                    AddUserViewArgs args = new AddUserViewArgs(this.Desktop, (credentials, store) =>
+                    AddUserViewArgs args = new AddUserViewArgs((credentials, store) =>
                         {
                             this.Desktop.CredentialId = credentials.Id;
                             this.DataModel.Credentials.Add(credentials);

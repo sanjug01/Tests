@@ -19,15 +19,11 @@ namespace RdClient.Shared.ViewModels
         private readonly AddUserViewResultHandler _resultHandler;
         public AddUserViewResultHandler ResultHandler { get { return _resultHandler; } }
 
-        private readonly Desktop _desktop;
-        public Desktop Desktop {get { return _desktop; } }
-
         private readonly bool _showSave;
         public bool ShowSave { get { return _showSave; } }
 
-        public AddUserViewArgs(Desktop desktop, AddUserViewResultHandler resultHandler, bool showSave)
+        public AddUserViewArgs(AddUserViewResultHandler resultHandler, bool showSave)
         {
-            _desktop = desktop;
             _resultHandler = resultHandler;
             _showSave = showSave;
         }

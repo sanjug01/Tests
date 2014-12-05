@@ -94,7 +94,7 @@ namespace RdClient.Shared.ViewModels
             }
             else
             {
-                AddUserViewArgs args = new AddUserViewArgs(this.Desktop, InternalConnect, true);
+                AddUserViewArgs args = new AddUserViewArgs(InternalConnect, true);
                 NavigationService.PushModalView("AddUserView", args);
             }
         }
