@@ -83,6 +83,7 @@
     <Compile Include="Mock\PhysicalScreenSize.cs" />
     <Compile Include="Mock\PresentableView.cs" />
     <Compile Include="Mock\PresentableViewConstructor.cs" />
+    <Compile Include="Mock\RdpCertificate.cs" />
     <Compile Include="Mock\RdpConnection.cs" />
     <Compile Include="Mock\RdpConnectionFactory.cs" />
     <Compile Include="Mock\RdpEvents.cs" />
