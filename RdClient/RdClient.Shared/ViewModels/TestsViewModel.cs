@@ -12,6 +12,34 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
+
+    public sealed  class TestRdpCertificate : IRdpCertificate 
+    {
+        string IRdpCertificate.FriendlyName { get { return "test"; } }
+        bool IRdpCertificate.HasPrivateKey { get { return true; } }
+        bool IRdpCertificate.IsStronglyProtected { get { return true; } }
+        public string Issuer { get { return "testIssuer"; } }
+        public byte[] SerialNumber 
+        {
+            get { return new byte[3] { 1, 2, 3 }; }
+        }
+        string IRdpCertificate.Subject { get { return "testSubject"; } }
+
+        public DateTimeOffset ValidFrom { get { return DateTimeOffset.Now; } }
+        public DateTimeOffset ValidTo { get { return DateTimeOffset.Now.AddDays(1); } }
+
+        byte[] IRdpCertificate.GetHashValue()
+        {
+            return new byte[3] {1,2,3};
+        }
+        byte[] IRdpCertificate.GetHashValue(string hashAlgorithmName)
+        {
+            return new byte[3] {1,2,3};
+        }
+
+        IRdpCertificateError IRdpCertificate.Error { get { return null; } }
+    }
+
     /// <summary>
     /// wrapper for activation parameters when presenting the TestsView
     /// </summary>
@@ -189,12 +217,15 @@ namespace RdClient.Shared.ViewModels
             return (1 == this.SelectedDesktops.Count);
         }
 
+
         private void ValidateCertCommandExecute(object o)
         {
             Contract.Requires(null != this.SelectedDesktops);
 
-            if (this.SelectedDesktops.Count > 0) {
-                CertificateValidationViewModelArgs args = new CertificateValidationViewModelArgs((this.SelectedDesktops[0] as Desktop).HostName, null);
+            if (this.SelectedDesktops.Count > 0) 
+            {
+                TestRdpCertificate testCertificate = new TestRdpCertificate();
+                CertificateValidationViewModelArgs args = new CertificateValidationViewModelArgs((this.SelectedDesktops[0] as Desktop).HostName, testCertificate);
                 NavigationService.PushModalView("CertificateValidationView", args);
             }
         }

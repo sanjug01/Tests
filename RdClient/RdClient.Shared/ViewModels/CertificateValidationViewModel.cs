@@ -26,22 +26,28 @@ namespace RdClient.Shared.ViewModels
     {
         private string _host;
         private IRdpCertificate _certificate;
-        private bool _isDontAsk;
 
         private bool _isExpandedView;
 
         private readonly RelayCommand _acceptCertificateCommand;
+        private readonly RelayCommand _acceptOnceCommand;
         private readonly RelayCommand _cancelCommand;
+        private readonly RelayCommand _showDetailsCommand;
 
         public CertificateValidationViewModel()
         {
-            _acceptCertificateCommand = new RelayCommand(AcceptCertificateExecute, o => (null != this.Certificate) );
+            _acceptCertificateCommand = new RelayCommand(AcceptCertificateExecute);
+            _acceptOnceCommand = new RelayCommand(AcceptCertificateOnceExecute);
             _cancelCommand = new RelayCommand(CancelCommandExecute);
+            _showDetailsCommand = new RelayCommand(ShowDetailsCommandExecute);
 
             this.IsExpandedView = false;
         }
 
         public ICommand AcceptCertificateCommand { get { return _acceptCertificateCommand; } }
+        public ICommand AcceptOnceCommand { get { return _acceptOnceCommand; } }
+        public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
+
 
         public ICommand CancelCommand { get { return _cancelCommand; } }
 
@@ -54,15 +60,12 @@ namespace RdClient.Shared.ViewModels
         public IRdpCertificate Certificate
         {
             get { return _certificate; }
-            private set { SetProperty(ref _certificate, value); }
+            private set 
+            { 
+                SetProperty(ref _certificate, value);
+                _acceptCertificateCommand.EmitCanExecuteChanged();
+            }
         }
-
-        public string CertificateIssuer { get; private set; }
-        public string CertificateThumbprint { get; private set; }
-        public string CertificateValidBefore { get; private set; }
-        public string CertificateValidAfter { get; private set; }
-        public string CertificateSubject { get; private set; }
-        public string CertificateError { get; private set; }
 
         public bool IsExpandedView
         {
@@ -70,13 +73,37 @@ namespace RdClient.Shared.ViewModels
             set { SetProperty(ref _isExpandedView, value); }
         }
 
-        public bool IsDontAsk
+        /// <summary>
+        /// Show or hide the details of the certificate
+        /// </summary>
+        /// <param name="o">true or false</param>
+        private void ShowDetailsCommandExecute(object o)
         {
-            get { return _isDontAsk; }
-            set { SetProperty(ref _isDontAsk, value); }
+            Contract.Assert(null != o);
+            bool showFlag = false;
+            bool.TryParse(o.ToString(), out showFlag);
+
+            this.IsExpandedView = showFlag;
+
         }
 
+        /// <summary>
+        /// Accept certificate, and save it for future sessions
+        ///     It will dismiss the dialog
+        /// </summary>
+        /// <param name="o">param object</param>
         private void AcceptCertificateExecute(object o)
+        {
+            // should save certificate 
+            DismissModal(true);
+        }
+
+        /// <summary>
+        /// Accept certificate, but do not save it for future sessions
+        ///     It will dismiss the dialog
+        /// </summary>
+        /// <param name="o">param object</param>
+        private void AcceptCertificateOnceExecute(object o)
         {
             DismissModal(true);
         }
@@ -86,39 +113,16 @@ namespace RdClient.Shared.ViewModels
             DismissModal(false);
         }
 
-        private void ResetCertificateData()
-        {
-            if(null != this.Certificate)
-            {
-                this.CertificateIssuer = Certificate.Issuer;
-                this.CertificateValidAfter = Certificate.ValidFrom.LocalDateTime.ToString() ;
-                this.CertificateValidBefore = Certificate.ValidTo.LocalDateTime.ToString() ;
-                this.CertificateThumbprint = Certificate.SerialNumber.ToString();
-                this.CertificateSubject = Certificate.Subject;
-            }
-            else
-            {
-                // TODO: should not allow null certificates
-                this.CertificateIssuer = "<None>";
-                this.CertificateValidAfter  = "N/A";
-                this.CertificateValidBefore  = "N/A";
-                this.CertificateThumbprint = "N/A";
-                this.CertificateSubject = "<No subject>";
-            }
-
-            this.IsExpandedView = false;
-            this.IsDontAsk = false;
-            _acceptCertificateCommand.EmitCanExecuteChanged();
-        }
 
         protected override void OnPresenting(object activationParameter)
         {
-            Contract.Requires(null != activationParameter as CertificateValidationViewModelArgs);
+            Contract.Assert(activationParameter is CertificateValidationViewModelArgs);
             CertificateValidationViewModelArgs args = activationParameter as CertificateValidationViewModelArgs;
+            Contract.Assert(null != args.Certificate);
             
             this.Certificate = args.Certificate;
             this.Host = args.Host;
-            this.ResetCertificateData();
+            this.IsExpandedView = false;
         }
     }
 }

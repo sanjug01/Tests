@@ -19,6 +19,5 @@ namespace RdClient.Shared.CxWrappers
         byte[] GetHashValue(string hashAlgorithmName);
 
         IRdpCertificateError Error { get; }
-        // Windows.Storage.Streams.IBuffer GetCertificateBlob();
     }
 }

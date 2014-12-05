@@ -80,9 +80,33 @@
                         </ListViewItem>
                     </ListView>
 
-                    <CheckBox x:Uid="CertificateValidation-MoreDetailsLabel" 
-                              Content="more details ..." Margin="0,8,0,0"
-                              IsChecked="{Binding Path=IsExpandedView, Mode=TwoWay}" />  
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">                                
+                        <Button Background="Transparent"
+                                VerticalAlignment="Center"
+                                Command="{Binding ShowDetailsCommand}"
+                                CommandParameter="true" >
+                            <SymbolIcon Symbol="ZoomIn"/>
+                        </Button>
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   VerticalAlignment="Center"
+                                   x:Uid="CertificateValidation-MoreDetailsLabel"
+                                   Text="More details"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Button Background="Transparent"
+                                VerticalAlignment="Center"
+                                Command="{Binding ShowDetailsCommand}"
+                                CommandParameter="false" >
+                            <SymbolIcon Symbol="ZoomOut"/>
+                        </Button>
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                   VerticalAlignment="Center"
+                                   x:Uid="CertificateValidation-LessDetailsLabel"
+                                   Text="Less details"/>
+                    </StackPanel>
 
                     <!--StackPanel -->
                     <StackPanel Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -93,7 +117,7 @@
                         <TextBlock Margin="16,8" 
                                        Style="{ThemeResource BodyTextBlockStyle}"
                                        x:Uid="CertificateValidation-Issuer" 
-                                       Text="{Binding CertificateIssuer}" 
+                                       Text="{Binding Certificate.Issuer}" 
                                        Foreground="{StaticResource rdGrayBrush}" />
 
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
@@ -102,7 +126,7 @@
                         <TextBlock Margin="16,8" 
                                        Style="{ThemeResource BodyTextBlockStyle}"
                                        x:Uid="CertificateValidation-Thumbprint" 
-                                       Text="{Binding CertificateThumbprint}" 
+                                       Text="{Binding Certificate.SerialNumber}" 
                                        Foreground="{StaticResource rdGrayBrush}" />
 
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
@@ -111,7 +135,7 @@
                         <TextBlock Margin="16,8" 
                                        Style="{ThemeResource BodyTextBlockStyle}"
                                        x:Uid="CertificateValidation-ValidBefore" 
-                                       Text="{Binding CertificateValidAfter}" 
+                                       Text="{Binding Certificate.ValidTo}" 
                                        Foreground="{StaticResource rdGrayBrush}" />
 
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
@@ -120,7 +144,7 @@
                         <TextBlock Margin="16,8" 
                                        Style="{ThemeResource BodyTextBlockStyle}"
                                        x:Uid="CertificateValidation-ValidAfter" 
-                                       Text="{Binding CertificateValidAfter}" 
+                                       Text="{Binding Certificate.ValidFrom}" 
                                        Foreground="{StaticResource rdGrayBrush}" />
 
                     </StackPanel>
@@ -129,16 +153,16 @@
                                Margin="0,20,0,8"
                                x:Uid="CertificateValidation-ConnectAnywayLAbel" 
                                Text="Do you want to connect anyway?"/>
-                    <CheckBox x:Uid="CertificateValidation-DontAskLabel" 
-                              Content="Don't ask me again for connection to this computer" Margin="16,0" 
-                              Foreground="{StaticResource rdGrayBrush}" 
-                              IsChecked="{Binding IsDontAsk, Mode=TwoWay}" />                    
+                
                     
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
-                        <Button x:Uid="CertificateValidation-Connect" Content="Connect" 
-                                Command="{Binding AcceptCertificateCommand}" />
-                        <Button x:Uid="CertificateValidation-Cancel" Content="Cancel" 
+                        <Button x:Uid="CertificateValidation-Cancel" Content="Don't connect" 
                                 Command="{Binding CancelCommand}" />
+                        <Button x:Uid="CertificateValidation-Connect" Content="Connect once" 
+                                Command="{Binding AcceptOnceCommand}" />
+                        <Button x:Uid="CertificateValidation-Connect" Content="Connect always" 
+                                Command="{Binding AcceptCertificateCommand}" />
+
                     </StackPanel>
                 </StackPanel>
             </Grid>
