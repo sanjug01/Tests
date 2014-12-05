@@ -81,7 +81,7 @@
                     </ListView>
 
                     <CheckBox x:Uid="CertificateValidation-MoreDetailsLabel" 
-                              Content="More Details ..." Margin="0,8,0,0"
+                              Content="more details ..." Margin="0,8,0,0"
                               IsChecked="{Binding Path=IsExpandedView, Mode=TwoWay}" />  
 
                     <!--StackPanel -->
