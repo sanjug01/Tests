@@ -78,6 +78,7 @@
     <Compile Include="Mock\BarItemsViewModel.cs" />
     <Compile Include="Mock\DataModel.cs" />
     <Compile Include="Mock\DataStorage.cs" />
+    <Compile Include="Mock\LocalizedString.cs" />
     <Compile Include="Mock\NavigationService.cs" />
     <Compile Include="Mock\PhysicalScreenSize.cs" />
     <Compile Include="Mock\PresentableView.cs" />

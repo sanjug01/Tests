@@ -10,9 +10,9 @@ namespace RdClient.Shared.Test.Mock
 #pragma warning disable 67 // warning CS0067: the event <...> is never used
         public event EventHandler<ConnectionCreatedArgs> ConnectionCreated;
 
-        public void ClientAsyncDisconnectHandler(object sender, ClientAsyncDisconnectArgs args)
+        public void EmitConnectionCreated(ConnectionCreatedArgs args)
         {
-            Invoke(new object[] { sender, args });
+            ConnectionCreated(this, args);
         }
 
         public void Connect(ConnectionInformation connectionInformation)

@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.ViewModels;
@@ -35,7 +37,7 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void SessionViewModel_ShouldDisconnect_ShouldNavigateHome()
+        public void SessionViewModel_ShouldDisconnect()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.SessionModel sessionModel = new Mock.SessionModel())
@@ -53,6 +55,78 @@ namespace RdClient.Shared.Test.ViewModels
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
                 svm.DisconnectCommand.Execute(null);
+            }
+        }
+
+        [TestMethod]
+        public void SessionViewModel_ShouldCallHandleDisconnect_ShouldNavigateToHome()
+        {
+            RdpEventSource eventSource = new RdpEventSource();
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
+            {                
+                ConnectionInformation connectionInformation = new ConnectionInformation()
+                {
+                    Desktop = new Desktop() { HostName = "narf" },
+                    Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
+                };
+
+                sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
+                navigation.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
+
+                SessionViewModel svm = new SessionViewModel();
+                svm.SessionModel = sessionModel;
+
+                ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
+
+                svm.ConnectCommand.Execute(null);
+
+                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
+                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
+
+                RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0);
+                ClientDisconnectedArgs clientDisconnectedArgs = new ClientDisconnectedArgs(reason);
+
+                eventSource.EmitClientDisconnected(rdpConnection, clientDisconnectedArgs);
+            }
+        }
+
+        [TestMethod]
+        public void SessionViewModel_ShouldCallHandleDisconnect_ShouldDisplayError()
+        {
+            RdpEventSource eventSource = new RdpEventSource();
+            DisconnectString disconnectString = new DisconnectString(new Mock.LocalizedString());
+
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
+            {
+                ConnectionInformation connectionInformation = new ConnectionInformation()
+                {
+                    Desktop = new Desktop() { HostName = "narf" },
+                    Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
+                };
+
+                sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
+                navigation.Expect("PushModalView", new List<object> { "DialogMessage", null, null }, null);
+                navigation.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
+
+                SessionViewModel svm = new SessionViewModel();
+                svm.SessionModel = sessionModel;
+                svm.DisconnectString = disconnectString;
+
+                ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
+
+                svm.ConnectCommand.Execute(null);
+
+                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
+                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
+
+                RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.ServerDeniedConnection, 0, 0);
+                ClientDisconnectedArgs clientDisconnectedArgs = new ClientDisconnectedArgs(reason);
+
+                eventSource.EmitClientDisconnected(rdpConnection, clientDisconnectedArgs);
             }
         }
     }
