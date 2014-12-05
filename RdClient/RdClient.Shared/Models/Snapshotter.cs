@@ -8,50 +8,50 @@ using Windows.ApplicationModel.Core;
 using Windows.System.Threading;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
+using RdClient.Shared.Helpers;
 
 namespace RdClient.Shared.Models
 {
-    class Snapshotter
+    public class Snapshotter
     {
-        private readonly TimeSpan firstSnapshotTime = new TimeSpan(0, 0, 1);
-        private readonly TimeSpan snapshotPeriod = new TimeSpan(0, 0, 15);
+        public readonly TimeSpan firstSnapshotTime = new TimeSpan(0, 0, 1);
+        public readonly TimeSpan snapshotPeriod = new TimeSpan(0, 0, 15);
         private IRdpConnection _connection;
-        private Thumbnail _thumbnail;
-        private ThreadPoolTimer _timer;
+        private IThumbnail _thumbnail;
+        private ITimerFactory _timerFactory;
+        private ITimer _timer;
 
-        public Snapshotter(IRdpConnection connection, Thumbnail thumbnail)
+        public Snapshotter(IRdpConnection connection, IThumbnail thumbnail, ITimerFactory timerFactory)
         {
             _connection = connection;
             _thumbnail = thumbnail;
             _connection.Events.FirstGraphicsUpdate += Events_FirstGraphicsUpdate;
-            _connection.Events.ClientDisconnected += Events_ClientDisconnected;                       
+            _connection.Events.ClientDisconnected += Events_ClientDisconnected;
+            _timerFactory = timerFactory;        
         }
 
-        private async void Events_FirstGraphicsUpdate(object sender, FirstGraphicsUpdateArgs e)
+        private void Events_FirstGraphicsUpdate(object sender, FirstGraphicsUpdateArgs e)
         {
-            _timer = ThreadPoolTimer.CreateTimer(async (timer) => await this.TakeFirstSnapshot(), firstSnapshotTime);
+            _timer = _timerFactory.CreateTimer(this.TakeFirstSnapshot, firstSnapshotTime, false);
         }
 
         private void Events_ClientDisconnected(object sender, ClientDisconnectedArgs e)
         {
             if (_timer != null)
             {
-                _timer.Cancel();               
+                _timer.Cancel();  
             }
         }
 
-        private async Task TakeFirstSnapshot()
+        private void TakeFirstSnapshot()
         {
-            _timer = ThreadPoolTimer.CreatePeriodicTimer(async (timer) => await this.TakeSnapshot(), snapshotPeriod);
-            await TakeSnapshot();            
+            this.TakeSnapshot();            
+            _timer = _timerFactory.CreateTimer(this.TakeSnapshot, snapshotPeriod, true);            
         }
 
-        private async Task TakeSnapshot()
+        private async void TakeSnapshot()
         {
-            int width, height;
-            byte[] bytes;
-            _connection.GetSnapshot(out width, out height, out bytes);
-            await _thumbnail.Update((uint)width, (uint)height, bytes);
+            await _thumbnail.Update(_connection.GetSnapshot());
         }
     }
 }

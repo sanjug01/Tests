@@ -13,6 +13,6 @@ namespace RdClient.Shared.CxWrappers
         void Resume();
         void TerminateInstance();
         void HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer);
-        void GetSnapshot(out int width, out int height, out byte[] bytes);
+        IRdpScreenSnapshot GetSnapshot();
     }
 }

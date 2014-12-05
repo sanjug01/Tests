@@ -1,6 +1,7 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.CxWrappers.Utils;
+using RdClient.Shared.Helpers;
 using System;
 using System.Diagnostics.Contracts;
 
@@ -48,10 +49,10 @@ namespace RdClient.Shared.Models
 
             Desktop desktop = connectionInformation.Desktop;
             Credentials credentials = connectionInformation.Credentials;
-            Thumbnail thumbnail = connectionInformation.Thumbnail;
+            IThumbnail thumbnail = connectionInformation.Thumbnail;
             if (thumbnail != null)
             {
-                _snapshotter = new Snapshotter(_rdpConnection, thumbnail);
+                _snapshotter = new Snapshotter(_rdpConnection, thumbnail, new WinrtThreadPoolTimerFactory());
             }
 
             RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);

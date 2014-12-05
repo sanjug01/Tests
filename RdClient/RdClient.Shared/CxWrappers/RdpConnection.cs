@@ -176,10 +176,13 @@ namespace RdClient.Shared.CxWrappers
             RdTrace.IfFailXResultThrow(xRes, "Failed to set bool property: " + propertyName);
         }
 
-        public void GetSnapshot(out int width, out int height, out byte[] bytes)
+        public IRdpScreenSnapshot GetSnapshot()
         {
+            int width, height;
+            byte[] bytes;
             int xRes = _rdpConnectionCx.GetSnapshot(out width, out height, out bytes);
             RdTrace.IfFailXResultThrow(xRes, "Failed to get session snapshot");
+            return new RdpScreenSnapshot(width, height, bytes);
         }
 
         void OnClientConnectedHandler(RdClientCx.RdpConnection sender)

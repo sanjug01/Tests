@@ -14,6 +14,14 @@ namespace RdClient.Shared.Test.Mock
 
         public event EventHandler<ClientDisconnectedArgs> ClientDisconnected;
 
+        public void FireClientDisconnected(ClientDisconnectedArgs e)
+        {
+            if (ClientDisconnected != null)
+            {
+                ClientDisconnected(this, e);
+            }
+        }
+
         public event EventHandler<UserCredentialsRequestArgs> UserCredentialsRequest;
 
         public event EventHandler<MouseCursorShapeChangedArgs> MouseCursorShapeChanged;
@@ -33,6 +41,14 @@ namespace RdClient.Shared.Test.Mock
         public event EventHandler<StatusInfoReceivedArgs> StatusInfoReceived;
 
         public event EventHandler<FirstGraphicsUpdateArgs> FirstGraphicsUpdate;
+
+        public void FireFirstGraphicsUpdate(FirstGraphicsUpdateArgs e)
+        {
+            if (FirstGraphicsUpdate != null)
+            {
+                FirstGraphicsUpdate(this, e);
+            }
+        }
 
         public event EventHandler<RemoteAppWindowCreatedArgs> RemoteAppWindowCreated;
 

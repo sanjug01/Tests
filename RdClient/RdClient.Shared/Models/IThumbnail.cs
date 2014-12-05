@@ -1,14 +1,16 @@
-﻿using System;
+﻿using RdClient.Shared.CxWrappers;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.Shared.Models
 {
-    interface IThumbnail
+    public interface IThumbnail
     {
         bool HasImage { get; }
 
-        ImageSource Image { get; }
+        BitmapImage Image { get; }
 
-        void Update(uint width, uint height, byte[] imageBytes);
+        Task Update(IRdpScreenSnapshot snapshot);
     }
 }

@@ -12,26 +12,27 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+using RdClient.Shared.CxWrappers;
 
 
 namespace RdClient.Shared.Models
 {
     [DataContract(IsReference = true)]
-    public class Thumbnail : ModelBase
+    public class Thumbnail : ModelBase, IThumbnail
     {
-        private const uint THUMBNAIL_HEIGHT = 256;
-        private ImageSource _image;
+        public const uint THUMBNAIL_HEIGHT = 256;
+        private BitmapImage _image;
         private byte[] _imageBytes;        
 
-        public async Task Update(uint width, uint height, byte[] imageBytes)
+        public async Task Update(IRdpScreenSnapshot snapshot)
         {
             byte[] encodedBytes;
             using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
             {
                 BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream).AsTask().ConfigureAwait(false);
-                encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore, width, height, 96.0, 96.0, imageBytes);
+                encoder.SetPixelData(snapshot.PixelFormat, BitmapAlphaMode.Ignore, snapshot.Width, snapshot.Height, 96.0, 96.0, snapshot.Bytes);
                 encoder.BitmapTransform.ScaledHeight = THUMBNAIL_HEIGHT;
-                encoder.BitmapTransform.ScaledWidth = Convert.ToUInt32(width * THUMBNAIL_HEIGHT / (double) height);
+                encoder.BitmapTransform.ScaledWidth = Convert.ToUInt32(snapshot.Width * THUMBNAIL_HEIGHT / (double) snapshot.Height);
                 encoder.BitmapTransform.InterpolationMode = BitmapInterpolationMode.Fant;
                 await encoder.FlushAsync().AsTask().ConfigureAwait(false);
                 encodedBytes = new byte[stream.Size];
@@ -49,7 +50,7 @@ namespace RdClient.Shared.Models
             }
         }
 
-        public ImageSource Image
+        public BitmapImage Image
         {
             get
             {

@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Models;
+﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Models;
 using System;
 using System.Collections.Generic;
 
@@ -30,6 +31,13 @@ namespace RdClient.Shared.Test.Helpers
         public string NewRandomString()
         {
             return "rand" + RandomSource.Next();
+        }
+
+        public RdpScreenSnapshot NewValidScreenSnapshot(int width, int height)
+        {
+            byte[] bytes = new byte[width * height * 4];
+            this.RandomSource.NextBytes(bytes);
+            return new RdpScreenSnapshot(width, height, bytes);
         }
 
         public ModelBase NewValidModelBaseOrSubclass()

@@ -221,7 +221,7 @@ namespace RdClient.Shared.Models
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                foreach (Thumbnail thumb in e.NewItems)
+                foreach (Thumbnail thumb in e.OldItems)
                 {
                     foreach (Desktop desktop in _desktops.Where(d => d.ThumbnailId == thumb.Id))
                     {

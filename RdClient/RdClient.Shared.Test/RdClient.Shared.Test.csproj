@@ -17,6 +17,7 @@
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
     <TargetFrameworkProfile />
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,6 +56,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Runtime.InteropServices.WindowsRuntime" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.WindowsRuntime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5.1\System.Runtime.WindowsRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.XML" />
+    <Reference Include="Windows" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -71,11 +80,14 @@
   <ItemGroup>
     <Compile Include="CxWrappers\RdpEventArgsTests.cs" />
     <Compile Include="CxWrappers\RdpEventSourceTests.cs" />
+    <Compile Include="CxWrappers\RdpScreenSnapshotTests.cs" />
     <Compile Include="CxWrappers\RdpUtilsTests.cs" />
     <Compile Include="Helpers\MutableObjectTests.cs" />
     <Compile Include="Helpers\ReadWriteMonitorTests.cs" />
     <Compile Include="Helpers\TestData.cs" />
     <Compile Include="Mock\BarItemsViewModel.cs" />
+    <Compile Include="Mock\RdpScreenSnapshot.cs" />
+    <Compile Include="Mock\Thumbnail.cs" />
     <Compile Include="Mock\DataModel.cs" />
     <Compile Include="Mock\DataStorage.cs" />
     <Compile Include="Mock\LocalizedString.cs" />
@@ -89,12 +101,15 @@
     <Compile Include="Mock\RdpProperties.cs" />
     <Compile Include="Mock\SessionModel.cs" />
     <Compile Include="Mock\TestBarItemModel.cs" />
+    <Compile Include="Mock\Timer.cs" />
     <Compile Include="Mock\ViewFactory.cs" />
     <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\DataModelTests.cs" />
     <Compile Include="Model\ModelCollectionTests.cs" />
     <Compile Include="Model\SessionModelTests.cs" />
+    <Compile Include="Model\SnapshotterTests.cs" />
+    <Compile Include="Model\ThumbnailTests.cs" />
     <Compile Include="Navigation\Extensions\ApplicationBarExtensionTests.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtensionTests.cs" />
     <Compile Include="Navigation\ModalPresentationCompletionTests.cs" />

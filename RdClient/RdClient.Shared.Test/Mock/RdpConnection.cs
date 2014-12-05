@@ -87,10 +87,9 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { propertyName, value });
         }
 
-
-        public void GetSnapshot(out int width, out int height, out byte[] bytes)
+        public IRdpScreenSnapshot GetSnapshot()
         {
-            throw new NotImplementedException();
-        }
+            return (RdpScreenSnapshot) Invoke(new object[] { });
+        }        
     }
 }
