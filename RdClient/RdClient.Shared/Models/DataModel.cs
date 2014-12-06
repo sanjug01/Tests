@@ -6,9 +6,9 @@ namespace RdClient.Shared.Models
 {
     public class DataModel : IDataModel
     {
-        public readonly string DESKTOP_COLLECTION_NAME = "Desktops";
-        public readonly string CREDENTIAL_COLLECTION_NAME = "Credentials";
-        public readonly string THUMBNAIL_COLLECTION_NAME = "Thumbnails";
+        public static readonly string DESKTOP_COLLECTION_NAME = "Desktops";
+        public static readonly string CREDENTIAL_COLLECTION_NAME = "Credentials";
+        public static readonly string THUMBNAIL_COLLECTION_NAME = "Thumbnails";
 
         private IDataStorage _storage;
         private bool _loaded;

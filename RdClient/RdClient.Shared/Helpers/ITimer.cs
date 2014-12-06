@@ -11,12 +11,4 @@ namespace RdClient.Shared.Helpers
     {
         void Cancel();
     }
-
-    public interface ITimer2
-    {
-        void Start(Action<ITimer2> callback, TimeSpan period, bool repeating = true);
-        void Stop();
-        TimeSpan Period { get; }
-        bool Running { get; }
-    }
 }

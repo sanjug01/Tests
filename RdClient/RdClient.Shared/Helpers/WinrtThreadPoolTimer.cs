@@ -3,28 +3,28 @@ using Windows.System.Threading;
 
 namespace RdClient.Shared.Helpers
 {
-    public class WinrtThreadPoolTimerFactory : ITimerFactory
+    public sealed class WinrtThreadPoolTimerFactory : ITimerFactory
     {
         public ITimer CreateTimer(Action callback, TimeSpan period, bool recurring)
-        {            
-            if (recurring)
-            {
-                return new WinrtThreadPoolTimer(ThreadPoolTimer.CreatePeriodicTimer((timer) => callback(), period));
-            }
-            else
-            {
-                return new WinrtThreadPoolTimer(ThreadPoolTimer.CreateTimer((timer) => callback(), period));
-            }
+        {
+            return new WinrtThreadPoolTimer(callback, period, recurring);
         }
     }
 
     public class WinrtThreadPoolTimer : ITimer
     {
-        private ThreadPoolTimer _timer;
+        private readonly ThreadPoolTimer _timer;
 
-        public WinrtThreadPoolTimer(ThreadPoolTimer timer)
+        public WinrtThreadPoolTimer(Action callback, TimeSpan period, bool recurring)
         {
-            _timer = timer;
+            if (recurring)
+            {
+                _timer = ThreadPoolTimer.CreatePeriodicTimer((timer) => callback(), period);
+            }
+            else
+            {
+                _timer = ThreadPoolTimer.CreateTimer((timer) => callback(), period);
+            }            
         }
 
         public void Cancel()

@@ -7,7 +7,7 @@ namespace RdClient.Shared.Test.Helpers
 {
     public class TestData
     {
-        private Random _rand = new Random(42);
+        private readonly Random _rand = new Random(42);
 
         public Random RandomSource
         {

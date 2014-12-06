@@ -1,6 +1,14 @@
 ﻿using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
+using System.ComponentModel;
 using System.Windows.Input;
+using Windows.ApplicationModel.Core;
+using Windows.Storage.Streams;
+using Windows.UI.Core;
+using Windows.UI.Xaml.Media.Imaging;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System;
+using System.Threading.Tasks;
 
 namespace RdClient.Shared.ViewModels
 {
@@ -12,6 +20,7 @@ namespace RdClient.Shared.ViewModels
         private Desktop _desktop;
         private bool _isSelected;
         private IDataModel _dataModel;
+        private BitmapImage _thumbnailImage;
 
         public DesktopViewModel(Desktop desktop, INavigationService navService, IDataModel dataModel)
         {
@@ -25,6 +34,32 @@ namespace RdClient.Shared.ViewModels
             //          NavigationService may be initialized later while presenting the parent view
             _dataModel = dataModel;
             this.NavigationService = navService;
+            this.Thumbnail.PropertyChanged += Thumbnail_PropertyChanged;
+            this.UpdateThumbnailImage();
+        }
+
+        void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if ("ImageBytes".Equals(e.PropertyName))
+            {
+                UpdateThumbnailImage();
+            }
+        }
+
+        private async void UpdateThumbnailImage()
+        {
+            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                async () =>
+                {
+                    BitmapImage newImage = new BitmapImage();
+                    using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
+                    {
+                        await stream.WriteAsync(this.Thumbnail.ImageBytes.AsBuffer());
+                        stream.Seek(0);
+                        await newImage.SetSourceAsync(stream);
+                    }
+                    this.ThumbnailImage = newImage;
+                });
         }
 
         public INavigationService NavigationService { private get; set; }
@@ -61,6 +96,18 @@ namespace RdClient.Shared.ViewModels
             set
             {
                 SetProperty(ref _isSelected, value);
+            }
+        }
+
+        public BitmapImage ThumbnailImage
+        {
+            get
+            {
+                return _thumbnailImage;
+            }
+            private set
+            {
+                SetProperty(ref _thumbnailImage, value);
             }
         }
 

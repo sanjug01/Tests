@@ -18,6 +18,6 @@ namespace RdClient.Shared.Test.Mock
 
         public ModelCollection<Credentials> Credentials { get; set; }
 
-        public ModelCollection<RdClient.Shared.Models.Thumbnail> Thumbnails { get; set; }
+        public ModelCollection<Models.Thumbnail> Thumbnails { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace RdClient.Shared.Models
         public readonly TimeSpan snapshotPeriod = new TimeSpan(0, 0, 15);
         private IRdpConnection _connection;
         private IThumbnail _thumbnail;
-        private ITimerFactory _timerFactory;
+        private readonly ITimerFactory _timerFactory;
         private ITimer _timer;
 
         public Snapshotter(IRdpConnection connection, IThumbnail thumbnail, ITimerFactory timerFactory)
@@ -24,11 +24,13 @@ namespace RdClient.Shared.Models
 
         private void Events_FirstGraphicsUpdate(object sender, FirstGraphicsUpdateArgs e)
         {
+            _connection.Events.FirstGraphicsUpdate -= Events_FirstGraphicsUpdate; //only expecting this event once
             _timer = _timerFactory.CreateTimer(this.TakeFirstSnapshot, firstSnapshotTime, false);
         }
 
         private void Events_ClientDisconnected(object sender, ClientDisconnectedArgs e)
         {
+            _connection.Events.ClientDisconnected -= Events_ClientDisconnected; //only expecting this event once
             if (_timer != null)
             {
                 _timer.Cancel();  

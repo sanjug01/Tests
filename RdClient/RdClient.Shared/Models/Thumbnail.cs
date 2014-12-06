@@ -12,10 +12,10 @@ using Windows.UI.Xaml.Media.Imaging;
 namespace RdClient.Shared.Models
 {
     [DataContract(IsReference = true)]
-    public class Thumbnail : ModelBase, IThumbnail
+    public sealed class Thumbnail : ModelBase, IThumbnail
     {
         public const uint THUMBNAIL_HEIGHT = 256;
-        private BitmapImage _image;
+
         private byte[] _imageBytes;        
 
         public async Task Update(IRdpScreenSnapshot snapshot)
@@ -36,58 +36,34 @@ namespace RdClient.Shared.Models
             this.ImageBytes = encodedBytes;
         }
 
-        public bool HasImage
-        {
-            get
-            {
-                return (this.Image != null);
-            }
-        }
-
-        public BitmapImage Image
-        {
-            get
-            {
-               return _image;
-            }
-            private set
-            {
-                SetProperty(ref _image, value);
-            }
-        }
-
         [DataMember]
-        private byte[] ImageBytes
+        public byte[] ImageBytes
         {
             get
             {
                 return _imageBytes;
             }
 
-            set
+            private set
             {
-                if (value != null)
-                {
-                    _imageBytes = value;
-                    this.UpdateImageSource();
-                }
+                SetProperty(ref _imageBytes, value);
             }
         }
 
-        private async void UpdateImageSource()
-        {
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                async () =>
-                {
-                    BitmapImage newImage = new BitmapImage();
-                    using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
-                    {
-                        await stream.WriteAsync(this.ImageBytes.AsBuffer());
-                        stream.Seek(0);
-                        await newImage.SetSourceAsync(stream);
-                    }
-                    this.Image = newImage;
-                });
-        }
+        //private async void UpdateImageSource()
+        //{
+        //    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+        //        async () =>
+        //        {
+        //            BitmapImage newImage = new BitmapImage();
+        //            using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
+        //            {
+        //                await stream.WriteAsync(this.ImageBytes.AsBuffer());
+        //                stream.Seek(0);
+        //                await newImage.SetSourceAsync(stream);
+        //            }
+        //            this.Image = newImage;
+        //        });
+        //}
     }
 }
