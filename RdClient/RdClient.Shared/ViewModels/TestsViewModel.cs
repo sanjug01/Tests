@@ -12,34 +12,6 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-
-    public sealed  class TestRdpCertificate : IRdpCertificate 
-    {
-        string IRdpCertificate.FriendlyName { get { return "test"; } }
-        bool IRdpCertificate.HasPrivateKey { get { return true; } }
-        bool IRdpCertificate.IsStronglyProtected { get { return true; } }
-        public string Issuer { get { return "testIssuer"; } }
-        public byte[] SerialNumber 
-        {
-            get { return new byte[3] { 1, 2, 3 }; }
-        }
-        string IRdpCertificate.Subject { get { return "testSubject"; } }
-
-        public DateTimeOffset ValidFrom { get { return DateTimeOffset.Now; } }
-        public DateTimeOffset ValidTo { get { return DateTimeOffset.Now.AddDays(1); } }
-
-        byte[] IRdpCertificate.GetHashValue()
-        {
-            return new byte[3] {1,2,3};
-        }
-        byte[] IRdpCertificate.GetHashValue(string hashAlgorithmName)
-        {
-            return new byte[3] {1,2,3};
-        }
-
-        IRdpCertificateError IRdpCertificate.Error { get { return null; } }
-    }
-
     /// <summary>
     /// wrapper for activation parameters when presenting the TestsView
     /// </summary>
@@ -66,7 +38,6 @@ namespace RdClient.Shared.ViewModels
         // manage desktops appbar items
         private readonly BarItemModel _addItem;
         private readonly BarItemModel _editItem;
-        private readonly BarItemModel _validateCertItem;
         private readonly BarItemModel _deleteItem;
 
         // tests appbar items
@@ -91,7 +62,6 @@ namespace RdClient.Shared.ViewModels
 
         public RelayCommand AddDesktopCommand { get; set; }
         public RelayCommand EditDesktopCommand { get; set; }
-        public RelayCommand ValidateCertCommand { get; set; }
         public RelayCommand DeleteDesktopCommand { get; set; }
 
 
@@ -135,7 +105,6 @@ namespace RdClient.Shared.ViewModels
             {
                 SetProperty(ref _selectedDesktops, value, "SelectedDesktops");
                 EditDesktopCommand.EmitCanExecuteChanged();
-                ValidateCertCommand.EmitCanExecuteChanged();
                 DeleteDesktopCommand.EmitCanExecuteChanged();
             }
         }
@@ -147,7 +116,6 @@ namespace RdClient.Shared.ViewModels
 
             AddDesktopCommand = new RelayCommand(o => this.AddDesktopCommandExecute(o), o => this.CanAddDesktopCommandExecute());
             EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => this.CanEditDesktopCommandExecute());
-            ValidateCertCommand = new RelayCommand(o => this.ValidateCertCommandExecute(o), o => (null != this.SelectedDesktops) && (1 == this.SelectedDesktops.Count) );
             DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => this.CanDeleteDesktopCommandExecute());
 
             ConnectTestCommand = new RelayCommand(new Action<object>(ConnectTests));
@@ -161,7 +129,6 @@ namespace RdClient.Shared.ViewModels
 
             _addItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Add, AddDesktopCommand, "Add");
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, "Edit");
-            _validateCertItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, ValidateCertCommand, "Validate Certificate");
             _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete",
                 BarItemModel.ItemAlignment.Right);
 
@@ -217,15 +184,12 @@ namespace RdClient.Shared.ViewModels
             return (1 == this.SelectedDesktops.Count);
         }
 
-
         private void ValidateCertCommandExecute(object o)
         {
             Contract.Requires(null != this.SelectedDesktops);
 
-            if (this.SelectedDesktops.Count > 0) 
-            {
-                TestRdpCertificate testCertificate = new TestRdpCertificate();
-                CertificateValidationViewModelArgs args = new CertificateValidationViewModelArgs((this.SelectedDesktops[0] as Desktop).HostName, testCertificate);
+            if (this.SelectedDesktops.Count > 0) {
+                CertificateValidationViewModelArgs args = new CertificateValidationViewModelArgs((this.SelectedDesktops[0] as Desktop).HostName, null);
                 NavigationService.PushModalView("CertificateValidationView", args);
             }
         }
@@ -509,7 +473,6 @@ namespace RdClient.Shared.ViewModels
                 _separatorItem,
                 _addItem,
                 _editItem,
-                _validateCertItem,
                 _deleteItem,
                 _rightSeparatorItem,
                 _testStressItem,
