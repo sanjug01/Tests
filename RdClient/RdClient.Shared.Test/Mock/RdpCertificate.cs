@@ -46,7 +46,7 @@ namespace RdClient.Shared.Test.Mock
         }
         public byte[] GetHashValue(string hashAlgorithmName)
         {
-            return (byte[])Invoke(new object[] { });
+            return (byte[])Invoke(new object[] { hashAlgorithmName });
         }
     }
 }

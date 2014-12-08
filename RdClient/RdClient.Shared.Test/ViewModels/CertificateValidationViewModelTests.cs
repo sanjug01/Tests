@@ -37,7 +37,6 @@ namespace RdClient.Shared.Test.ViewModels
 
             _testCertificate = new Mock.RdpCertificate();
             _testCertificate.FriendlyName = "Test FriendlyName";
-            _testCertificate.Bytes = new byte[3] { 1, 2, 3 };
             _testCertificate.Issuer = "TestIssuer";
             _testCertificate.HasPrivateKey = true;
             _testCertificate.IsStronglyProtected = true;
@@ -54,7 +53,6 @@ namespace RdClient.Shared.Test.ViewModels
         [TestCleanup]
         public void TestTearDown()
         {
-            _vm = null;
         }
 
 
@@ -74,14 +72,16 @@ namespace RdClient.Shared.Test.ViewModels
         public void CertificateValidation_ShouldNotSaveOnCancel()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.DataModel dataModel = new Mock.DataModel())
             {
+                _vm.DataModel = dataModel;
                 ((IViewModel)_vm).Presenting(navigation, _testArgs, null);
 
-                // TODO: navigation got more complicated and this test may need additional mocks
-                // navigation.Expect("DismissModalView", new List<object> { null, false }, null);
+                navigation.Expect("DismissModalView", new List<object> { null, false }, null);
                 _vm.CancelCommand.Execute(null);
 
-                // TODO: data model hookup
+                // Fail this test until data model supports certificates persistance
+                Assert.IsTrue(false);
             }
         }
 
@@ -89,11 +89,15 @@ namespace RdClient.Shared.Test.ViewModels
         public void CertificateValidation_ShouldValidateWithSaving()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.DataModel dataModel = new Mock.DataModel())
             {
+                _vm.DataModel = dataModel;
                 ((IViewModel)_vm).Presenting(navigation, _testArgs, null);
+                navigation.Expect("DismissModalView", new List<object> { null, false }, null);
                 _vm.AcceptCertificateCommand.Execute(null);
 
-                // TODO: data model hookup + navigation
+                // Fail this test until data model supports certificates persistance
+                Assert.IsTrue(false);
             }
         }
 
@@ -101,10 +105,15 @@ namespace RdClient.Shared.Test.ViewModels
         public void CertificateValidation_ShouldValidateWithoutSaving()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.DataModel dataModel = new Mock.DataModel())
             {
+                _vm.DataModel = dataModel;
                 ((IViewModel)_vm).Presenting(navigation, _testArgs, null);
+                navigation.Expect("DismissModalView", new List<object> { null, false }, null);
                 _vm.AcceptOnceCommand.Execute(null);
-                // TODO: data model hookup + navigation
+
+                // Fail this test until data model supports certificates persistance
+                Assert.IsTrue(false);
             }
         }
 
