@@ -49,7 +49,7 @@ namespace RdClient.Shared.ViewModels
         public ICommand AcceptCertificateCommand { get { return _acceptCertificateCommand; } }
         public ICommand AcceptOnceCommand { get { return _acceptOnceCommand; } }
         public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
-        public ICommand ShowDetailsCommand { get { return _hideDetailsCommand; } }
+        public ICommand HideDetailsCommand { get { return _hideDetailsCommand; } }
         public ICommand CancelCommand { get { return _cancelCommand; } }
 
         public string Host

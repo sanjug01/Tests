@@ -49,13 +49,7 @@ namespace RdClient.Shared.Test.ViewModels
 
             _context = new TestModalPresentationContext();
         }
-
-        [TestCleanup]
-        public void TestTearDown()
-        {
-        }
-
-
+        
         [TestMethod]
         public void CertificateValidationViewModel_VerifyPresenting()
         {
