@@ -184,16 +184,6 @@ namespace RdClient.Shared.ViewModels
             return (1 == this.SelectedDesktops.Count);
         }
 
-        private void ValidateCertCommandExecute(object o)
-        {
-            Contract.Requires(null != this.SelectedDesktops);
-
-            if (this.SelectedDesktops.Count > 0) {
-                CertificateValidationViewModelArgs args = new CertificateValidationViewModelArgs((this.SelectedDesktops[0] as Desktop).HostName, null);
-                NavigationService.PushModalView("CertificateValidationView", args);
-            }
-        }
-
         /// <summary>
         /// execute delete
         /// </summary>
