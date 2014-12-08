@@ -84,8 +84,7 @@
                                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">                                
                         <Button Background="Transparent"
                                 VerticalAlignment="Center"
-                                Command="{Binding ShowDetailsCommand}"
-                                CommandParameter="true" >
+                                Command="{Binding ShowDetailsCommand}">
                             <SymbolIcon Symbol="ZoomIn"/>
                         </Button>
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
@@ -98,8 +97,7 @@
                                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Button Background="Transparent"
                                 VerticalAlignment="Center"
-                                Command="{Binding ShowDetailsCommand}"
-                                CommandParameter="false" >
+                                Command="{Binding HideDetailsCommand}">
                             <SymbolIcon Symbol="ZoomOut"/>
                         </Button>
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 

@@ -33,13 +33,15 @@ namespace RdClient.Shared.ViewModels
         private readonly RelayCommand _acceptOnceCommand;
         private readonly RelayCommand _cancelCommand;
         private readonly RelayCommand _showDetailsCommand;
+        private readonly RelayCommand _hideDetailsCommand;
 
         public CertificateValidationViewModel()
         {
             _acceptCertificateCommand = new RelayCommand(AcceptCertificateExecute);
-            _acceptOnceCommand = new RelayCommand(AcceptCertificateOnceExecute);
-            _cancelCommand = new RelayCommand(CancelCommandExecute);
-            _showDetailsCommand = new RelayCommand(ShowDetailsCommandExecute);
+            _acceptOnceCommand = new RelayCommand((o) => { DismissModal(true); });
+            _cancelCommand = new RelayCommand((o) => { DismissModal(false); });
+            _showDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = true; });
+            _hideDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = false; });
 
             this.IsExpandedView = false;
         }
@@ -47,8 +49,7 @@ namespace RdClient.Shared.ViewModels
         public ICommand AcceptCertificateCommand { get { return _acceptCertificateCommand; } }
         public ICommand AcceptOnceCommand { get { return _acceptOnceCommand; } }
         public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
-
-
+        public ICommand ShowDetailsCommand { get { return _hideDetailsCommand; } }
         public ICommand CancelCommand { get { return _cancelCommand; } }
 
         public string Host
@@ -74,20 +75,6 @@ namespace RdClient.Shared.ViewModels
         }
 
         /// <summary>
-        /// Show or hide the details of the certificate
-        /// </summary>
-        /// <param name="o">true or false</param>
-        private void ShowDetailsCommandExecute(object o)
-        {
-            Contract.Assert(null != o);
-            bool showFlag = false;
-            bool.TryParse(o.ToString(), out showFlag);
-
-            this.IsExpandedView = showFlag;
-
-        }
-
-        /// <summary>
         /// Accept certificate, and save it for future sessions
         ///     It will dismiss the dialog
         /// </summary>
@@ -97,22 +84,6 @@ namespace RdClient.Shared.ViewModels
             // should save certificate 
             DismissModal(true);
         }
-
-        /// <summary>
-        /// Accept certificate, but do not save it for future sessions
-        ///     It will dismiss the dialog
-        /// </summary>
-        /// <param name="o">param object</param>
-        private void AcceptCertificateOnceExecute(object o)
-        {
-            DismissModal(true);
-        }
-        
-        private void CancelCommandExecute(object o)
-        {
-            DismissModal(false);
-        }
-
 
         protected override void OnPresenting(object activationParameter)
         {
