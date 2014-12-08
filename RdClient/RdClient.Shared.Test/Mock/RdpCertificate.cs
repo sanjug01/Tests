@@ -7,7 +7,14 @@ namespace RdClient.Shared.Test.Mock
 {
     public class RdpCertificateError : MockBase, IRdpCertificateError
     {
-        public RdpCertificateError(int errorCode = 0, CertificateErrors errorFlags = CertificateErrors.UntrustedRoot, ServerCertificateErrorSource errorSource = ServerCertificateErrorSource.None) 
+        /// <summary>
+        ///     Constructs a RdpCertificateError mock object and assigns initial value to its properties.
+        ///     The properties get randomly chosen default values, if not given
+        /// </summary>
+        /// <param name="errorCode">initial errorCode value</param>
+        /// <param name="errorFlags">initial errorFlags value</param>
+        /// <param name="errorSource">initial errorSource value</param>
+        public RdpCertificateError(int errorCode = 1, CertificateErrors errorFlags = CertificateErrors.UntrustedRoot, ServerCertificateErrorSource errorSource = ServerCertificateErrorSource.None) 
         {
             ErrorCode = errorCode;
             ErrorFlags = errorFlags;
@@ -33,16 +40,13 @@ namespace RdClient.Shared.Test.Mock
         public DateTimeOffset ValidFrom { get; set; }
         public DateTimeOffset ValidTo { get; set; }
 
-        public byte[] Bytes { private get; set; }
         public byte[] GetHashValue()
         {
-            Invoke(new object[] { });
-            return this.Bytes;
+            return (byte[]) Invoke(new object[] { });
         }
         public byte[] GetHashValue(string hashAlgorithmName)
         {
-            Invoke(new object[] { hashAlgorithmName });
-            return this.Bytes;
+            return (byte[])Invoke(new object[] { });
         }
     }
 }
