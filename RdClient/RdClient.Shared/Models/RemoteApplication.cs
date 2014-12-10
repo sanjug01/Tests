@@ -5,7 +5,7 @@
     [DataContract(IsReference = true)]
     public sealed class RemoteApplication : RemoteResource
     {
-        public RemoteApplication(Workspace workspace) : base(workspace)
+        public RemoteApplication(Workspace parentWorkspace) : base(parentWorkspace)
         {
         }
     }
