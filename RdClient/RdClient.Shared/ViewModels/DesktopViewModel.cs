@@ -23,12 +23,14 @@ namespace RdClient.Shared.ViewModels
         private IDataModel _dataModel;
         private BitmapImage _thumbnailImage;
         private IExecutionDeferrer _executionDeferrer;
+        private bool _thumbnailUpdateNeeded;
 
         public DesktopViewModel(Desktop desktop, INavigationService navService, IDataModel dataModel, IExecutionDeferrer executionDeferrer)
         {
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
+            _thumbnailUpdateNeeded = true;
             _executionDeferrer = executionDeferrer;
             this.Desktop = desktop;
 
@@ -39,6 +41,14 @@ namespace RdClient.Shared.ViewModels
             this.NavigationService = navService;
             this.Thumbnail.PropertyChanged += Thumbnail_PropertyChanged;
             this.UpdateThumbnailImage(this.Thumbnail.ImageBytes);
+        }
+
+        public void Presented()
+        {
+            if (_thumbnailUpdateNeeded)
+            {
+                UpdateThumbnailImage(this.Thumbnail.ImageBytes);
+            }
         }
 
         void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -53,7 +63,7 @@ namespace RdClient.Shared.ViewModels
         {
             if (imageBytes != null)
             {
-                _executionDeferrer.TryDeferToUI(                
+                _thumbnailUpdateNeeded = !_executionDeferrer.TryDeferToUI(                
                     async () =>
                     {
                         BitmapImage newImage = new BitmapImage();

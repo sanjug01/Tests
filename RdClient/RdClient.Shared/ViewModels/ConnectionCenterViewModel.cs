@@ -91,8 +91,9 @@ namespace RdClient.Shared.ViewModels
         {
             // update NavigationService for all DesktopViewModels
             foreach (DesktopViewModel vm in this.DesktopViewModels)
-            {
+            {                
                 vm.NavigationService = this.NavigationService;
+                vm.Presented();
             }
         }
 
