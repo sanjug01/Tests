@@ -120,8 +120,6 @@
     <Compile Include="Factories\AppInitializer.cs" />
     <Compile Include="Helpers\CoreDispatcherDeferredExecution.cs" />
     <Compile Include="Factories\DataModelFactory.cs" />
-    <Compile Include="Helpers\DisconnectStringExtension.cs" />
-    <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="DesignTime\FakeDesktopModel.cs" />
     <Compile Include="Helpers\PhysicalScreenSize.cs" />
     <Compile Include="Helpers\TypeNameDataTemplateSelector.cs" />
@@ -153,8 +151,8 @@
     <Compile Include="Views\DeleteDesktopsView.xaml.cs">
       <DependentUpon>DeleteDesktopsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DialogMessage.xaml.cs">
-      <DependentUpon>DialogMessage.xaml</DependentUpon>
+    <Compile Include="Views\ErrorMessage.xaml.cs">
+      <DependentUpon>ErrorMessage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ModalStackContainer.xaml.cs">
       <DependentUpon>ModalStackContainer.xaml</DependentUpon>
@@ -242,7 +240,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\DialogMessage.xaml">
+    <Page Include="Views\ErrorMessage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
+using RdClient.Shared.CxWrappers.Errors;
 using System;
 
 namespace RdClient.Shared.Test.CxWrappers

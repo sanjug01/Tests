@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
+using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Models;
 using System.Collections.Generic;
 

@@ -1,7 +1,7 @@
 ﻿using RdClient.Shared.Helpers;
 using Windows.ApplicationModel.Resources;
 
-namespace RdClient.Helpers
+namespace RdClient.Shared.Helpers
 {
     public class LocalizedString : ILocalizedString
     {
@@ -10,7 +10,6 @@ namespace RdClient.Helpers
             string result = null;
 
             result = ResourceLoader.GetForViewIndependentUse().GetString(key);
-
 
             return result;
         }

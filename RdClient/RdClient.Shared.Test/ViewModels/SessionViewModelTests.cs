@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
+using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
@@ -96,7 +97,6 @@ namespace RdClient.Shared.Test.ViewModels
         public void SessionViewModel_ShouldCallHandleDisconnect_ShouldDisplayError()
         {
             RdpEventSource eventSource = new RdpEventSource();
-            DisconnectString disconnectString = new DisconnectString(new Mock.LocalizedString());
 
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.SessionModel sessionModel = new Mock.SessionModel())
@@ -114,7 +114,6 @@ namespace RdClient.Shared.Test.ViewModels
 
                 SessionViewModel svm = new SessionViewModel();
                 svm.SessionModel = sessionModel;
-                svm.DisconnectString = disconnectString;
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
 

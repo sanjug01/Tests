@@ -1,20 +1,26 @@
 <Page
-    x:Class="RdClient.Views.DialogMessage"
+    x:Class="RdClient.Views.ErrorMessage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RdClient.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:shelpers="using:RdClient.Shared.Helpers"
     xmlns:cv="using:RdClient.Converters"
     mc:Ignorable="d">
 
     <Page.DataContext>
-        <vm:DialogMessageViewModel/>
+        <vm:ErrorMessageViewModel/>
     </Page.DataContext>
 
     <Page.Resources>
         <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+        <cv:RdpErrorToLocalizedStringConverter x:Key="RdpErrorToLocalizedStringConverter">
+            <cv:RdpErrorToLocalizedStringConverter.LocalizedString>
+                <shelpers:LocalizedString/>
+            </cv:RdpErrorToLocalizedStringConverter.LocalizedString>
+        </cv:RdpErrorToLocalizedStringConverter>
     </Page.Resources>
     
     <Grid>
@@ -51,12 +57,12 @@
                         />
                 </Grid>        
                 <TextBlock 
-                    x:Name="Message"
+                    x:Name="Error"
                     Grid.Row="2"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     FontSize="16"
                     Margin="1,0" 
-                    Text="{Binding Path=Message}" 
+                    Text="{Binding Path=Error, Converter={StaticResource RdpErrorToLocalizedStringConverter}}" 
                     TextWrapping="Wrap" />       
                 <StackPanel 
                     Grid.Row="3"           

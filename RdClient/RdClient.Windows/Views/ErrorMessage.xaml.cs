@@ -8,11 +8,11 @@ namespace RdClient.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class DialogMessage : Page, IPresentableView
+    public sealed partial class ErrorMessage : Page, IPresentableView
     {
         public IViewModel ViewModel { get { return (IViewModel)this.DataContext; } }
 
-        public DialogMessage()
+        public ErrorMessage()
         {
             this.InitializeComponent();
         }
@@ -24,7 +24,7 @@ namespace RdClient.Views
 
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
-            (this.DataContext as DialogMessageViewModel).DialogView = this;
+            (this.DataContext as ErrorMessageViewModel).DialogView = this;
         }
 
         public void Dismissing()

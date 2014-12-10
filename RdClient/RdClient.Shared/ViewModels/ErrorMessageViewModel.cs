@@ -1,24 +1,26 @@
-﻿using RdClient.Shared.Navigation;
+﻿using RdClient.Shared.CxWrappers.Errors;
+using RdClient.Shared.Navigation;
 using System;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public delegate void DialogMessageDelegate();
+    public delegate void ErrorMessageDelegate();
 
-    public class DialogMessageArgs
+    public class ErrorMessageArgs
     {
-        private readonly string _message;
+        private readonly IRdpError _error;
+        public IRdpError Error { get { return _error; } }
+
         private readonly string _title;
-        public string Message { get { return _message; } }
         public string Title { get { return _title; } }
 
-        private readonly DialogMessageDelegate _okDelegate;
-        public DialogMessageDelegate OkDelegate { get { return _okDelegate; } }
+        private readonly ErrorMessageDelegate _okDelegate;
+        public ErrorMessageDelegate OkDelegate { get { return _okDelegate; } }
 
-        private readonly DialogMessageDelegate _cancelDelegate;
-        public DialogMessageDelegate CancelDelegate { get { return _cancelDelegate; } }
+        private readonly ErrorMessageDelegate _cancelDelegate;
+        public ErrorMessageDelegate CancelDelegate { get { return _cancelDelegate; } }
 
         private readonly string _okString;
         public string OkString { get { return _okString; } }
@@ -26,9 +28,9 @@ namespace RdClient.Shared.ViewModels
         private readonly string _cancelString;
         public string CancelString { get { return _cancelString; } }
 
-        public DialogMessageArgs(string message, DialogMessageDelegate okDelegate, DialogMessageDelegate cancelDelegate, string okString = "OK (d)", string cancelString = "Cancel (d)", string title = "")
+        public ErrorMessageArgs(IRdpError error, ErrorMessageDelegate okDelegate, ErrorMessageDelegate cancelDelegate, string okString = "OK (d)", string cancelString = "Cancel (d)", string title = "")
         {
-            _message = message;
+            _error = error;
             _okDelegate = okDelegate;
             _cancelDelegate = cancelDelegate;
             _okString = okString;
@@ -37,7 +39,7 @@ namespace RdClient.Shared.ViewModels
         }
     }
 
-    public class DialogMessageViewModel : ViewModelBase
+    public class ErrorMessageViewModel : ViewModelBase
     {
         private readonly ICommand _okCommand;
         public ICommand OkCommand { get { return _okCommand; } }
@@ -47,23 +49,23 @@ namespace RdClient.Shared.ViewModels
 
         public IPresentableView DialogView { private get; set; }
 
-        private string _message;
-        private string _title;
-        public string Message
+        private IRdpError _message;
+        public IRdpError Error
         {
             get { return _message; }
             set
             {
-                SetProperty(ref _message, value, "Message");
+                SetProperty(ref _message, value);
             }
         }
 
+        private string _title;
         public string Title
         {
             get { return _title; }
             set
             {
-                SetProperty(ref _title, value, "Title");
+                SetProperty(ref _title, value);
             }
         }
 
@@ -73,13 +75,13 @@ namespace RdClient.Shared.ViewModels
         private string _cancelString;
         public string CancelString { get { return _cancelString; } }
 
-        private DialogMessageDelegate _okDelegate;
+        private ErrorMessageDelegate _okDelegate;
         public bool OkVisible { get { return _okDelegate != null;  } }
 
-        private DialogMessageDelegate _cancelDelegate;
+        private ErrorMessageDelegate _cancelDelegate;
         public bool CancelVisible { get { return _cancelDelegate != null; } }
 
-        public DialogMessageViewModel()
+        public ErrorMessageViewModel()
         {
             _okCommand = new RelayCommand(new Action<object>(Ok));
             _cancelCommand = new RelayCommand(new Action<object>(Cancel));
@@ -107,11 +109,11 @@ namespace RdClient.Shared.ViewModels
 
         protected override void OnPresenting(object activationParameter)
         {
-            Contract.Requires(null != activationParameter as DialogMessageArgs);
-            Contract.Assert(activationParameter is DialogMessageArgs);
-            DialogMessageArgs args = (DialogMessageArgs)activationParameter;
+            Contract.Requires(null != activationParameter as ErrorMessageArgs);
+            Contract.Assert(activationParameter is ErrorMessageArgs);
+            ErrorMessageArgs args = (ErrorMessageArgs)activationParameter;
 
-            this.Message = args.Message;
+            this.Error = args.Error;
             this.Title = args.Title;
 
             if (_okDelegate != args.OkDelegate)

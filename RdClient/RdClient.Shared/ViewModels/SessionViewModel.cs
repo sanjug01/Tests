@@ -1,14 +1,15 @@
-﻿using RdClient.Shared.Navigation;
+﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.CxWrappers.Errors;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
+using RdClient.Shared.Navigation;
 using System;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
-using RdClient.Shared.Helpers;
-using RdClient.Shared.CxWrappers;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class SessionViewModel : ViewModelBase, IViewModelDisconnectString
+    public class SessionViewModel : ViewModelBase
     {
         private ConnectionInformation _connectionInformation;
 
@@ -55,8 +56,7 @@ namespace RdClient.Shared.ViewModels
 
             if(reason.Code != RdpDisconnectCode.UserInitiated)
             {
-                string errorString = DisconnectString.GetDisconnectString(reason);
-                DialogMessageArgs dialogArgs = new DialogMessageArgs(errorString, () =>
+                ErrorMessageArgs dialogArgs = new ErrorMessageArgs(reason, () =>
                 {
                 }, null);
                 this.NavigationService.PushModalView("DialogMessage", dialogArgs);

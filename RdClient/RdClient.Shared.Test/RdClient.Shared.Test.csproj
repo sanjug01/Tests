@@ -109,7 +109,7 @@
     <Compile Include="Navigation\PresentableViewFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\DeferringViewModelBaseTests.cs" />
-    <Compile Include="ViewModels\DialogMessageViewModelTests.cs" />
+    <Compile Include="ViewModels\ErrorMessageViewModelTests.cs" />
     <Compile Include="ViewModels\MainPageViewModelTests.cs" />
     <Compile Include="ViewModels\RelayCommandTests.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModelTests.cs" />

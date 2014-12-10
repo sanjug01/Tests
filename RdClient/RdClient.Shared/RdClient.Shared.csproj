@@ -54,10 +54,21 @@
   <ItemGroup>
     <Compile Include="Converters\BarItemsAlignmentFilteringConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\ErrorLocalizers\IErrorLocalizer.cs" />
+    <Compile Include="Converters\ErrorLocalizers\RdpDisconnectReasonLocalizer.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\RdpErrorToLocalizedStringConverter.cs" />
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
+    <Compile Include="CxWrappers\Errors\AdalError.cs" />
+    <Compile Include="CxWrappers\Errors\AutoReconnectError.cs" />
+    <Compile Include="CxWrappers\Errors\LogonError.cs" />
+    <Compile Include="CxWrappers\Errors\NetBIOSResolveError.cs" />
+    <Compile Include="CxWrappers\Errors\RadcError.cs" />
+    <Compile Include="CxWrappers\Errors\RdpDisconnectReason.cs" />
+    <Compile Include="CxWrappers\Errors\IRdpError.cs" />
+    <Compile Include="CxWrappers\Errors\XPlatError.cs" />
     <Compile Include="CxWrappers\IRdpCertificate.cs" />
     <Compile Include="CxWrappers\IRdpCertificateErrors.cs" />
     <Compile Include="CxWrappers\IRdpConnection.cs" />
@@ -67,6 +78,7 @@
     <Compile Include="CxWrappers\RdpCertificate.cs" />
     <Compile Include="CxWrappers\RdpConnection.cs" />
     <Compile Include="CxWrappers\RdpEventSource.cs" />
+    <Compile Include="CxWrappers\RdpTypeConverter.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
@@ -75,6 +87,7 @@
     <Compile Include="Helpers\IDeferredExecution.cs" />
     <Compile Include="Helpers\ILocalizedString.cs" />
     <Compile Include="Helpers\IPhysicalScreenSize.cs" />
+    <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
     <Compile Include="Helpers\ReadWriteMonitor.cs" />
@@ -105,7 +118,6 @@
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\IConnectionCenterViewModel.cs" />
     <Compile Include="ViewModels\IDesktopViewModel.cs" />
-    <Compile Include="ViewModels\IViewModelDisconnectStrings.cs" />
     <Compile Include="Navigation\NavigationExtensions.cs" />
     <Compile Include="ViewModels\IViewModelWithData.cs" />
     <Compile Include="Navigation\ApplicationBarSite.cs" />
@@ -124,7 +136,7 @@
     <Compile Include="Navigation\IPresentableViewConstructor.cs" />
     <Compile Include="Navigation\PresentableViewConstructor.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModel.cs" />
-    <Compile Include="ViewModels\DialogMessageViewModel.cs" />
+    <Compile Include="ViewModels\ErrorMessageViewModel.cs" />
     <Compile Include="Navigation\IViewModel.cs" />
     <Compile Include="ViewModels\ILayoutAwareViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />

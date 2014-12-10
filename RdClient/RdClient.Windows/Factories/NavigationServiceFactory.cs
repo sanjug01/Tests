@@ -17,7 +17,7 @@ namespace RdClient.Factories
             viewFactory.AddViewClass("TestsView", typeof(Views.TestsView));
             viewFactory.AddViewClass("AddOrEditDesktopView", typeof(Views.AddOrEditDesktopView));
             viewFactory.AddViewClass("AddUserView", typeof(Views.AddUserView));
-            viewFactory.AddViewClass("DialogMessage", typeof(Views.DialogMessage));
+            viewFactory.AddViewClass("DialogMessage", typeof(Views.ErrorMessage));
             viewFactory.AddViewClass("DeleteDesktopsView", typeof(Views.DeleteDesktopsView));
 
             DispatchedNavigationService navigationService = new DispatchedNavigationService();
@@ -32,11 +32,6 @@ namespace RdClient.Factories
             dataModelExtension.DataModel = dataModel;
 
             return dataModelExtension;
-        }
-
-        public INavigationExtension CreateDisconnectStringExtension()
-        {
-            return new DisconnectStringExtension();
         }
 
         public INavigationExtension CreateDeferredExecutionExtension()

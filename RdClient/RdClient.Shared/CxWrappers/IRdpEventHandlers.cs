@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RdClient.Shared.CxWrappers.Errors;
+using System;
 namespace RdClient.Shared.CxWrappers
 {
     public class ClientConnectedArgs : EventArgs

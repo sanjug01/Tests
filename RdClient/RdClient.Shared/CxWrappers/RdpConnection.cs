@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.CxWrappers.Utils;
+﻿using RdClient.Shared.CxWrappers.Errors;
+using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
 using System.Diagnostics.Contracts;
 using Windows.Security.Cryptography.Certificates;
@@ -120,7 +121,7 @@ namespace RdClient.Shared.CxWrappers
 
         public void HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
         {
-            int xRes = _rdpConnectionCx.HandleAsyncDisconnectResult(RdpTypeConverter.ConvertToCxRdpDisconnectReason(disconnectReason), reconnectToServer);
+            int xRes = _rdpConnectionCx.HandleAsyncDisconnectResult(RdpTypeConverter.ConvertToCx(disconnectReason), reconnectToServer);
             RdTrace.IfFailXResultThrow(xRes, "Failed async disconnect.");
         }
 
@@ -180,12 +181,12 @@ namespace RdClient.Shared.CxWrappers
 
         void OnClientAsyncDisconnectHandler(RdClientCx.RdpConnection sender, RdClientCx.RdpDisconnectReason disconnectReason)
         {
-            _eventProxy.EmitClientAsyncDisconnect(this, new ClientAsyncDisconnectArgs(RdpTypeConverter.ConvertFromCxRdpDisconnectReason(disconnectReason)));
+            _eventProxy.EmitClientAsyncDisconnect(this, new ClientAsyncDisconnectArgs(RdpTypeConverter.ConvertFromCx(disconnectReason)));
         }
 
         void OnClientDisconnectedHandler(RdClientCx.RdpConnection sender, RdClientCx.RdpDisconnectReason disconnectReason)
         {
-            _eventProxy.EmitClientDisconnected(this, new ClientDisconnectedArgs(RdpTypeConverter.ConvertFromCxRdpDisconnectReason(disconnectReason)));
+            _eventProxy.EmitClientDisconnected(this, new ClientDisconnectedArgs(RdpTypeConverter.ConvertFromCx(disconnectReason)));
         }
 
         void OnUserCredentialsRequestHandler(RdClientCx.RdpConnection sender, int secLayer)
