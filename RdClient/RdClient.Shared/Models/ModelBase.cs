@@ -10,12 +10,14 @@
     [KnownType(typeof(Desktop))]
     [KnownType(typeof(RemoteApplication))]
     [KnownType(typeof(Credentials))]
+    [KnownType(typeof(TrustedCertificate))]
     public class ModelBase : INotifyPropertyChanged, IEquatable<ModelBase>
     {
         [DataMember]
         private Guid _id;
         
-        public Guid Id {
+        public Guid Id
+        {
             get { return _id; }
         }
 

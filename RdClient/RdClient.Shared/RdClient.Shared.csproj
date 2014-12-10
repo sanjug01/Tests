@@ -88,6 +88,7 @@
     <Compile Include="Models\ModelCollection.cs" />
     <Compile Include="Models\OnPremiseWorkspace.cs" />
     <Compile Include="Models\RemoteResource.cs" />
+    <Compile Include="Models\TrustedCertificate.cs" />
     <Compile Include="Models\Workspace.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarItemsSourceContract.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarSiteContract.cs" />
@@ -115,7 +116,6 @@
     <Compile Include="Navigation\NavigationExtensions.cs" />
     <Compile Include="ViewModels\IViewModelWithData.cs" />
     <Compile Include="Navigation\ApplicationBarSite.cs" />
-    <Compile Include="Models\IDataModel.cs" />
     <Compile Include="Models\IDataStorage.cs" />
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="ValidationRules\HostNameValidationRule.cs" />

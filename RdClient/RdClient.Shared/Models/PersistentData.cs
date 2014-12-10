@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.CxWrappers;
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
 
@@ -9,8 +10,8 @@
     public sealed class PersistentData
     {
         private readonly LocalWorkspace _localWorkspace;
-        private readonly ObservableCollection<OnPremiseWorkspace> _onPremiseWorkspaces;
-        private readonly ObservableCollection<CloudWorkspace> _cloudWorkspaces;
+        private readonly ModelCollection<OnPremiseWorkspace> _onPremiseWorkspaces;
+        private readonly ModelCollection<CloudWorkspace> _cloudWorkspaces;
         private readonly ModelCollection<Credentials> _credentials;
         IDataStorage _storage;
 
@@ -38,8 +39,8 @@
         public PersistentData()
         {
             _localWorkspace = new LocalWorkspace(this);
-            _onPremiseWorkspaces = new ObservableCollection<OnPremiseWorkspace>();
-            _cloudWorkspaces = new ObservableCollection<CloudWorkspace>();
+            _onPremiseWorkspaces = new ModelCollection<OnPremiseWorkspace>();
+            _cloudWorkspaces = new ModelCollection<CloudWorkspace>();
             _credentials = new ModelCollection<Credentials>();
         }
 
@@ -53,6 +54,28 @@
         {
             Contract.Assert(null != _storage);
             _storage.Save(this);
+        }
+
+        public void TrustCertificate(IRdpCertificate certificate)
+        {
+            //
+            // TODO: add the certificate to the white list.
+            //
+        }
+
+        public bool IsCertificateTrusted(IRdpCertificate certificate)
+        {
+            //
+            // TODO: find the certificate in the white list
+            //
+            return false;
+        }
+
+        public void ClearAllTrustedCertificates()
+        {
+            //
+            // TODO: remove all trusted certificates
+            //
         }
     }
 }

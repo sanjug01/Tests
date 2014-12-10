@@ -14,8 +14,15 @@
         /// Tell the remote resource to always accept a certificate.
         /// </summary>
         /// <param name="certificate">Certificate reported by the RDP layer.</param>
-        public virtual void AcceptCertificate(IRdpCertificate certificate)
+        /// <remarks>Default implementation delegates establishing of trust to the parent workspace.</remarks>
+        public virtual void TrustCertificate(IRdpCertificate certificate)
         {
+            _parentWorkspace.TrustCertificate(certificate);
+        }
+
+        public virtual bool IsCertificateTrusted(IRdpCertificate certificate)
+        {
+            return _parentWorkspace.IsCertificateTrusted(certificate);
         }
 
         /// <summary>

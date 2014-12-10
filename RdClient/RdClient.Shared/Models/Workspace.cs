@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.CxWrappers;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -23,6 +24,22 @@
         public ModelCollection<RemoteResource> Connections
         {
             get { return _connections; }
+        }
+
+        public virtual void TrustCertificate(IRdpCertificate certificate)
+        {
+            //
+            // Delegate adding the certificate to the white list to the root data model object.
+            //
+            _persistentData.TrustCertificate(certificate);
+        }
+
+        public virtual bool IsCertificateTrusted(IRdpCertificate certificate)
+        {
+            //
+            // Delegate the check to the root data model object.
+            //
+            return _persistentData.IsCertificateTrusted(certificate);
         }
     }
 }
