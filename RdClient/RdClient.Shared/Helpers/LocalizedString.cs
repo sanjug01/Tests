@@ -1,9 +1,9 @@
 ﻿using RdClient.Shared.Helpers;
 using Windows.ApplicationModel.Resources;
 
-namespace RdClient.Helpers
+namespace RdClient.Shared.Helpers
 {
-    public class LocalizedString : ILocalizedString
+    public class LocalizedString : IStringTable
     {
         public string GetLocalizedString(string key)
         {
@@ -11,6 +11,10 @@ namespace RdClient.Helpers
 
             result = ResourceLoader.GetForViewIndependentUse().GetString(key);
 
+            if(string.IsNullOrEmpty(result))
+            {
+                result = key;
+            }
 
             return result;
         }

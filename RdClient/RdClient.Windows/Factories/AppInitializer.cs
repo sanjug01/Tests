@@ -34,7 +34,6 @@ namespace RdClient.Factories
             _navigationService.Extensions.Add(this.CreateDataModelExtension(_dataModel));
             _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension());
             _navigationService.Extensions.Add(this.CreateApplicationBarExtension(this.AppBarViewModel));
-            _navigationService.Extensions.Add(this.CreateDisconnectStringExtension());
             _navigationService.NavigateToView(this.LandingPage, null);
         }
 
@@ -51,11 +50,6 @@ namespace RdClient.Factories
         public INavigationExtension CreateDataModelExtension(RdDataModel dataModel)
         {
             return _navigationServiceFactory.CreateDataModelExtension(dataModel);
-        }
-
-        public INavigationExtension CreateDisconnectStringExtension()
-        {
-            return _navigationServiceFactory.CreateDisconnectStringExtension();
         }
 
         public INavigationExtension CreateDeferredExecutionExtension()

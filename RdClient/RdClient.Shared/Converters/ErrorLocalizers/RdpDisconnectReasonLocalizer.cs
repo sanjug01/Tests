@@ -1,20 +1,23 @@
-﻿using RdClient.Shared.CxWrappers;
-using RdClient.Shared.CxWrappers.Errors;
+﻿using RdClient.Shared.CxWrappers.Errors;
+using RdClient.Shared.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 
-namespace RdClient.Shared.Helpers
+namespace RdClient.Shared.Converters.ErrorLocalizers
 {
-    public class DisconnectString
+    public class RdpDisconnectReasonLocalizer : IErrorLocalizer
     {
-        private readonly IStringTable _localizedStrings;
-
-        private Dictionary<RdpDisconnectCode, string> codeMap = new Dictionary<RdpDisconnectCode,string>();
-
-        public DisconnectString(IStringTable localizedStrings)
+        private IStringTable _localizedStrings;
+        public IStringTable LocalizedString
         {
-            _localizedStrings = localizedStrings;
+            set { _localizedStrings = value; }
+        }
 
+        private Dictionary<RdpDisconnectCode, string> codeMap = new Dictionary<RdpDisconnectCode, string>();
+
+        public RdpDisconnectReasonLocalizer()
+        {
             codeMap[RdpDisconnectCode.AccountDisabled] = "Disconnect_AccountDisabled_String";
             codeMap[RdpDisconnectCode.AccountExpired] = "Disconnect_AccountExpired_String";
             codeMap[RdpDisconnectCode.AccountLockedOut] = "Disconnect_AccountLockedOut_String";
@@ -66,12 +69,16 @@ namespace RdClient.Shared.Helpers
             codeMap[RdpDisconnectCode.VersionMismatch] = "Disconnect_VersionMismatch_String";
         }
 
-        public string GetDisconnectString(RdpDisconnectReason reason)
+        public string LocalizeError(IRdpError error)
         {
+            Contract.Assert(error is RdpDisconnectReason);
+            RdpDisconnectReason reason = (RdpDisconnectReason)error;
+
             string localizedKey;
             string localizedValue;
 
-            if(codeMap.ContainsKey(reason.Code))
+
+            if (codeMap.ContainsKey(reason.Code))
             {
                 localizedKey = codeMap[reason.Code];
             }

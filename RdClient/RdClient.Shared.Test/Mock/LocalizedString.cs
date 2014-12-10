@@ -2,7 +2,7 @@
 
 namespace RdClient.Shared.Test.Mock
 {
-    public class LocalizedString : ILocalizedString
+    public class LocalizedString : IStringTable
     {
         public string GetLocalizedString(string key)
         {

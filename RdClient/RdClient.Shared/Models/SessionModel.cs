@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.CxWrappers.Utils;
 using System;
 using System.Diagnostics.Contracts;
