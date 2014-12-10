@@ -1067,39 +1067,39 @@ pointer</value>
     <comment>Noun. Level of tracing desired. Text of the ComboBox item.</comment>
   </data>
   <data name="CertificateError_Critical_String" xml:space="preserve">
-    <value>CertificateError_Critical_String</value>
+    <value>critical certificate error (d)</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_Expired_String" xml:space="preserve">
-    <value>certificate is expired</value>
+    <value>certificate is expired  (d)</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_MismatchedCert_String" xml:space="preserve">
-    <value>certificate mismatch</value>
+    <value>certificate mismatch  (d)</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_NameMismatch_String" xml:space="preserve">
-    <value>certificate name mismatch</value>
+    <value>certificate name mismatch  (d)</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_RevocationUnknown_String" xml:space="preserve">
-    <value>certificate revocation unknown</value>
+    <value>certificate revocation unknown  (d)</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_Revoked_String" xml:space="preserve">
-    <value>revoked certificate</value>
+    <value>revoked certificate  (d)</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_UnknownError_String" xml:space="preserve">
-    <value>CertificateError_UnknownError_String</value>
+    <value>unknown certificate error  (d)</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_UntrustedRoot_String" xml:space="preserve">
-    <value>untrusted certificate</value>
+    <value>untrusted certificate  (d)</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_WrongEKU_String" xml:space="preserve">
-    <value>certificate wrong EKU</value>
+    <value>certificate wrong EKU (d)</value>
     <comment>Certificate error</comment>
   </data>
 </root>

@@ -1,7 +1,9 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Utils;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RdClient.Shared.Models
@@ -22,6 +24,8 @@ namespace RdClient.Shared.Models
         private readonly IRdpConnectionFactory _connectionFactory;
 
         private IRdpConnection _rdpConnection;
+
+        private List<IRdpCertificate> _acceptedCertificates;
         
         private void EmitConnectionCreated(ConnectionCreatedArgs args)
         {
@@ -35,8 +39,7 @@ namespace RdClient.Shared.Models
         {
             Contract.Requires(connectionFactory != null);
             _connectionFactory = connectionFactory;
-
-            ConnectionCreated += OnConnectionCreated;
+            _acceptedCertificates = new List<IRdpCertificate>();
         }
 
         public void Connect(ConnectionInformation connectionInformation)
@@ -57,56 +60,7 @@ namespace RdClient.Shared.Models
 
             _rdpConnection = null;
         }
-
-        private void OnConnectionCreated(object sender, ConnectionCreatedArgs args)
-        {
-            // args.RdpConnection.Events.ClientAsyncDisconnect += ClientAsyncDisconnectHandler;
-        }
-
-        ////public void ClientAsyncDisconnectHandler(object sender, ClientAsyncDisconnectArgs args)
-        ////{
-        ////    bool reconnect;
-
-        ////    switch (args.DisconnectReason.Code)
-        ////    {
-        ////        case RdpDisconnectCode.PreAuthLogonFailed:
-        ////            {
-        ////                reconnect = false;
-        ////            }
-        ////            break;
-        ////        case RdpDisconnectCode.FreshCredsRequired:
-        ////            {
-        ////                reconnect = false;
-        ////            }
-        ////            break;
-
-        ////        case RdpDisconnectCode.CertValidationFailed:
-        ////            {
-        ////                // let the vm handle it
-        ////                reconnect = true;
-        ////            }
-        ////            break;
-
-        ////        case RdpDisconnectCode.CredSSPUnsupported:
-        ////            {
-        ////                reconnect = false;
-        ////            }
-        ////            break;
-
-        ////        default:
-        ////            {
-        ////                //
-        ////                // For all other reasons, we just disconnect.
-        ////                // We'll handle showing any appropriate dialogs to the user in OnClientDisconnectedHandler.
-        ////                //
-        ////                reconnect = false;
-        ////            }
-        ////            break;
-        ////    }
-
-        ////    _rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
-        ////}
-
+        
         /// <summary>
         ///   Adds certificate to the list of accepted certificate (temporary or persistent)
         /// </summary>
@@ -114,16 +68,28 @@ namespace RdClient.Shared.Models
         /// <param name="alwaysAccept">indicates if should persist this certificate or not.</param>
         void ISessionModel.AcceptCertificate(IRdpCertificate certificate, bool alwaysAccept)
         {
-            // TBD
+            Contract.Assert(null != certificate);
+
+            // should add to the datamodel too, only if alwaysAccept
+            _acceptedCertificates.Add(certificate);            
         }
 
         /// <summary>
-        /// verifies that the presented certificate has been accepted either for current session or always
+        /// verifies that the presented certificate has been accepted either only for current session or always
         /// </summary>
-        /// <param name="certificate"></param>
+        /// <param name="certificate">preented certificate</param>
         /// <returns>true if certificates has been accepted</returns>
         bool ISessionModel.IsCertificateAccepted(IRdpCertificate certificate)
         {
+            Contract.Assert(null != certificate);
+            foreach(IRdpCertificate accepterCertificate in _acceptedCertificates)
+            {
+                // compare serial numbers
+                if (certificate.SerialNumber.SequenceEqual<byte>(accepterCertificate.SerialNumber))
+                {
+                    return true;
+                }
+            }
             return false;
         }
     }
