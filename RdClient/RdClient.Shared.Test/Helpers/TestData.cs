@@ -49,7 +49,7 @@ namespace RdClient.Shared.Test.Helpers
 
         public Desktop NewValidDesktop(Guid credId)
         {
-            PersistentData data = new PersistentData();
+            RdDataModel data = new RdDataModel();
             return new Desktop(data.LocalWorkspace) { HostName = NewRandomString(), CredentialId = credId };
         }
 

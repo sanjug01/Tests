@@ -5,7 +5,7 @@
     /// </summary>
     public sealed class CloudWorkspace : Workspace
     {
-        public CloudWorkspace(PersistentData persistentData)
+        public CloudWorkspace(RdDataModel persistentData)
             : base(persistentData)
         {
             //

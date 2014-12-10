@@ -22,12 +22,12 @@
             }
         }
 
-        void IDataStorage.Load(PersistentData persistentData)
+        void IDataStorage.Load(RdDataModel persistentData)
         {
             throw new System.NotImplementedException();
         }
 
-        void IDataStorage.Save(PersistentData persistentData)
+        void IDataStorage.Save(RdDataModel persistentData)
         {
             throw new System.NotImplementedException();
         }

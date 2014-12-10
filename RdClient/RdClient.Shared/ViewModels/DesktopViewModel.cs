@@ -13,9 +13,9 @@ namespace RdClient.Shared.ViewModels
         private readonly RelayCommand _deleteCommand;
         private Desktop _desktop;
         private bool _isSelected;
-        private PersistentData _dataModel;
+        private RdDataModel _dataModel;
 
-        public DesktopViewModel(Desktop desktop, INavigationService navService, PersistentData dataModel)
+        public DesktopViewModel(Desktop desktop, INavigationService navService, RdDataModel dataModel)
         {
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);

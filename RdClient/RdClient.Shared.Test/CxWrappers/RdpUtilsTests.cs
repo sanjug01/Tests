@@ -11,7 +11,7 @@ namespace RdClient.Shared.Test.CxWrappers
         [TestMethod]
         public void ApplyDesktop()
         {
-            PersistentData data = new PersistentData();
+            RdDataModel data = new RdDataModel();
 
             using(Mock.RdpProperties properties = new Mock.RdpProperties())
             {

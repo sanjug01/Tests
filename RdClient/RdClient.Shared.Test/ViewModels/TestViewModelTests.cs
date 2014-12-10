@@ -14,14 +14,14 @@ namespace RdClient.Shared.Test.ViewModels
     [TestClass]
     public class TestsViewModelTests
     {
-        PersistentData _dataModel;
+        RdDataModel _dataModel;
         TestsViewModel _vm;
         TestsViewModelArgs _defaultArgs;
 
         [TestInitialize]
         public void TestSetUp()
         {
-            _dataModel = new PersistentData();
+            _dataModel = new RdDataModel();
             _vm = new TestsViewModel();
             _defaultArgs = new TestsViewModelArgs(
                 new Desktop(_dataModel.LocalWorkspace) { HostName = "DefaultPC" },

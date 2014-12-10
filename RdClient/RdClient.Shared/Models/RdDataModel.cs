@@ -9,7 +9,7 @@
     /// <summary>
     /// Core data model of the application - collection of all persistent objects.
     /// </summary>
-    public sealed class PersistentData
+    public sealed class RdDataModel
     {
         private readonly LocalWorkspace _localWorkspace;
         private readonly ModelCollection<OnPremiseWorkspace> _onPremiseWorkspaces;
@@ -44,7 +44,7 @@
             set { _storage = value; }
         }
 
-        public PersistentData()
+        public RdDataModel()
         {
             _localWorkspace = new LocalWorkspace(this);
             _onPremiseWorkspaces = new ModelCollection<OnPremiseWorkspace>();

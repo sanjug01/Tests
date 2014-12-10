@@ -13,7 +13,7 @@ namespace RdClient.Shared.Test.ViewModels
     public class AddOrEditDesktopViewModelTests
     {
         private TestData _testData;
-        private PersistentData _dataModel;
+        private RdDataModel _dataModel;
         private TestAddOrEditDesktopViewModel _addOrEditDesktopViewModel;
 
         class TestAddOrEditDesktopViewModel : AddOrEditDesktopViewModel
@@ -30,7 +30,7 @@ namespace RdClient.Shared.Test.ViewModels
             _testData = new TestData();
             _addOrEditDesktopViewModel = new TestAddOrEditDesktopViewModel();
 
-            _dataModel = new PersistentData();
+            _dataModel = new RdDataModel();
             _addOrEditDesktopViewModel.DataModel = _dataModel;
         }
 

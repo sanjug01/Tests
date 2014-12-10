@@ -5,7 +5,7 @@
     /// </summary>
     public sealed class OnPremiseWorkspace : Workspace
     {
-        public OnPremiseWorkspace(PersistentData persistentData)
+        public OnPremiseWorkspace(RdDataModel persistentData)
             : base(persistentData)
         {
             //

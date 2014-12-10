@@ -8,10 +8,10 @@
     /// </summary>
     public abstract class Workspace : ModelBase
     {
-        private readonly PersistentData _persistentData;
+        private readonly RdDataModel _persistentData;
         private readonly ModelCollection<RemoteResource> _connections;
 
-        protected Workspace(PersistentData persistentData)
+        protected Workspace(RdDataModel persistentData)
         {
             Contract.Requires(null != persistentData);
             Contract.Ensures(null != _persistentData);

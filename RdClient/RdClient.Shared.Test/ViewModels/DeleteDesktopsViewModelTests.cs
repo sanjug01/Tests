@@ -18,14 +18,14 @@ namespace RdClient.Shared.Test.ViewModels
         private Desktop _singleDesktop;
         private List<object> _multiDesktopsSelection;
 
-        private PersistentData _dataModel;
+        private RdDataModel _dataModel;
 
         class TestDeleteDesktopsViewModel : DeleteDesktopsViewModel
         {
             public TestDeleteDesktopsViewModel()
             {
                 DialogView = new Mock.PresentableView();
-                DataModel = new PersistentData();
+                DataModel = new RdDataModel();
             }
         }
 
@@ -50,7 +50,7 @@ namespace RdClient.Shared.Test.ViewModels
             _multiDesktopsSelection.Add(_testData.NewValidDesktop(Guid.Empty));
 
             // data model contains the selection plus additional random test data
-            _dataModel = new PersistentData();
+            _dataModel = new RdDataModel();
 
             _dataModel.LocalWorkspace.Connections.Add(_singleDesktopSelection[0] as Desktop);
             _dataModel.LocalWorkspace.Connections.Add(_testData.NewValidDesktop(Guid.Empty));

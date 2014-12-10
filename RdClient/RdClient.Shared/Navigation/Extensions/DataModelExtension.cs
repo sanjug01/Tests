@@ -6,7 +6,7 @@
     public sealed class DataModelExtension : INavigationExtension
     {
 
-        public PersistentData DataModel { private get; set; }
+        public RdDataModel DataModel { private get; set; }
 
         public DataModelExtension()
         {

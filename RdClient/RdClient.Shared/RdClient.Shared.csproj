@@ -82,7 +82,7 @@
     <Compile Include="Models\CloudWorkspace.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
     <Compile Include="Models\Credentials.cs" />
-    <Compile Include="Models\PersistentData.cs" />
+    <Compile Include="Models\RdDataModel.cs" />
     <Compile Include="Models\Desktop.cs" />
     <Compile Include="Models\LocalWorkspace.cs" />
     <Compile Include="Models\ModelCollection.cs" />

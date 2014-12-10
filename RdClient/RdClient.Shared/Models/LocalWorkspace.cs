@@ -5,7 +5,7 @@
     /// </summary>
     public sealed class LocalWorkspace : Workspace
     {
-        public LocalWorkspace(PersistentData persistentData) : base(persistentData)
+        public LocalWorkspace(RdDataModel persistentData) : base(persistentData)
         {
         }
     }

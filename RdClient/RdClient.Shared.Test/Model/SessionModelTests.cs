@@ -8,12 +8,12 @@ namespace RdClient.Shared.Test.Model
     [TestClass]
     public class SessionModelTests
     {
-        private PersistentData _dataModel;
+        private RdDataModel _dataModel;
 
         [TestInitialize]
         public void SetUpTest()
         {
-            _dataModel = new PersistentData();
+            _dataModel = new RdDataModel();
         }
 
         [TestCleanup]
