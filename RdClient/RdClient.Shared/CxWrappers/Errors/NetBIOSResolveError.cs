@@ -10,7 +10,7 @@
             _error = error;
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return "NetBIOSResolve Error: " + this.Error;
         }

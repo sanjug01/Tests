@@ -35,7 +35,7 @@ namespace RdClient.Shared.Test.Model
             BitmapDecoder decoder;
             using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
             {
-                await stream.WriteAsync(_thumb.ImageBytes.AsBuffer());
+                await stream.WriteAsync(_thumb.EncodedImageBytes.AsBuffer());
                 stream.Seek(0);
                 decoder = await BitmapDecoder.CreateAsync(stream);
                 PixelDataProvider pixelData = await decoder.GetPixelDataAsync();
@@ -58,7 +58,7 @@ namespace RdClient.Shared.Test.Model
             }
             Assert.IsNotNull(deserializedThumbnail);
             Assert.AreEqual(_thumb, deserializedThumbnail);
-            CollectionAssert.AreEqual(_thumb.ImageBytes, deserializedThumbnail.ImageBytes);
+            CollectionAssert.AreEqual(_thumb.EncodedImageBytes, deserializedThumbnail.EncodedImageBytes);
         }
 
     }

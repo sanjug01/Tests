@@ -6,7 +6,7 @@ namespace RdClient.Shared.CxWrappers
     {
         uint Width { get; }
         uint Height { get; }
-        byte[] Bytes { get; }
+        byte[] RawImage { get; }
         BitmapPixelFormat PixelFormat { get; }
     }
 }

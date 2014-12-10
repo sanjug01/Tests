@@ -40,14 +40,14 @@ namespace RdClient.Shared.ViewModels
             _dataModel = dataModel;
             this.NavigationService = navService;
             this.Thumbnail.PropertyChanged += Thumbnail_PropertyChanged;
-            this.UpdateThumbnailImage(this.Thumbnail.ImageBytes);
+            this.UpdateThumbnailImage(this.Thumbnail.EncodedImageBytes);
         }
 
         public void Presented()
         {
             if (_thumbnailUpdateNeeded)
             {
-                UpdateThumbnailImage(this.Thumbnail.ImageBytes);
+                UpdateThumbnailImage(this.Thumbnail.EncodedImageBytes);
             }
         }
 
@@ -172,9 +172,9 @@ namespace RdClient.Shared.ViewModels
 
         void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (this.Thumbnail != null && "ImageBytes".Equals(e.PropertyName))
+            if (this.Thumbnail != null && "EncodedImageBytes".Equals(e.PropertyName))
             {
-                UpdateThumbnailImage(this.Thumbnail.ImageBytes);
+                UpdateThumbnailImage(this.Thumbnail.EncodedImageBytes);
             }
         }
 

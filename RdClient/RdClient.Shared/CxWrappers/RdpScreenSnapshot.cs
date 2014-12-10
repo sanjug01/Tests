@@ -9,7 +9,7 @@ namespace RdClient.Shared.CxWrappers
         public const int BYTES_PER_PIXEL = 4;
         public uint Width { get; private set; }
         public uint Height { get; private set; }
-        public byte[] Bytes { get; private set; }
+        public byte[] RawImage { get; private set; }
         public BitmapPixelFormat PixelFormat { get; private set;}
 
         public RdpScreenSnapshot(int width, int height, byte[] bytes)
@@ -19,7 +19,7 @@ namespace RdClient.Shared.CxWrappers
             this.Height = Convert.ToUInt32(height);
             if (bytes.Length == this.Width * this.Height * BYTES_PER_PIXEL)
             {
-                this.Bytes = bytes;                
+                this.RawImage = bytes;                
             }
             else
             {

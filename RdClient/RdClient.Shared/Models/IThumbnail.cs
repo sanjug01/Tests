@@ -17,6 +17,6 @@ namespace RdClient.Shared.Models
     {
         Task Update(IRdpScreenSnapshot snapshot);
 
-        byte[] ImageBytes { get; }
+        byte[] EncodedImageBytes { get; }
     }
 }

@@ -56,7 +56,7 @@ namespace RdClient.Shared.Test.CxWrappers
             RdpScreenSnapshot snapshot = new RdpScreenSnapshot(validWidth, validHeight, buffer);
             Assert.IsTrue(validHeight == snapshot.Height);
             Assert.IsTrue(validWidth == snapshot.Width);
-            Assert.AreEqual(buffer, snapshot.Bytes);
+            Assert.AreEqual(buffer, snapshot.RawImage);
             Assert.AreNotEqual(BitmapPixelFormat.Unknown, snapshot.PixelFormat);
         }
     }

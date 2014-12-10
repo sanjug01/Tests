@@ -9,7 +9,7 @@ namespace RdClient.Shared.Test.Mock
 
         public uint Height { get; set; }
 
-        public byte[] Bytes { get; set; }
+        public byte[] RawImage { get; set; }
 
         public BitmapPixelFormat PixelFormat { get; set; }
     }

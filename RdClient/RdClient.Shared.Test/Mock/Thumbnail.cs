@@ -7,7 +7,7 @@ namespace RdClient.Shared.Test.Mock
 {
     public class Thumbnail : MockBase, IThumbnail
     {
-        public byte[] ImageBytes { get; set; }
+        public byte[] EncodedImageBytes { get; set; }
 
         public Task Update(IRdpScreenSnapshot snapshot)
         {
