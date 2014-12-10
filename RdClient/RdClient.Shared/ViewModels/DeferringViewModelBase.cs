@@ -20,13 +20,24 @@
 
         protected void DeferToUI(Action action)
         {
-            using(ReadWriteMonitor.Read(_monitor))
+            if (!TryDeferToUI(action))
             {
-                if (null == _dispatcher)
-                    throw new DeferredExecutionExeption("Cannot defer execution from an inactive view model");
-
-                _dispatcher.Defer(action);
+                throw new DeferredExecutionExeption("Cannot defer execution from an inactive view model");
             }
+        }
+
+        protected bool TryDeferToUI(Action action)
+        {
+            bool succeeded = false;
+            using (ReadWriteMonitor.Read(_monitor))
+            {
+                if (null != _dispatcher)
+                {
+                    _dispatcher.Defer(action);
+                    succeeded = true;
+                }
+            }
+            return succeeded;
         }
 
         protected override void DisposeManagedState()

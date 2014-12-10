@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System;
 using System.Threading.Tasks;
+using RdClient.Shared.Navigation.Extensions;
 
 namespace RdClient.Shared.ViewModels
 {
@@ -21,12 +22,14 @@ namespace RdClient.Shared.ViewModels
         private bool _isSelected;
         private IDataModel _dataModel;
         private BitmapImage _thumbnailImage;
+        private IExecutionDeferrer _executionDeferrer;
 
-        public DesktopViewModel(Desktop desktop, INavigationService navService, IDataModel dataModel)
+        public DesktopViewModel(Desktop desktop, INavigationService navService, IDataModel dataModel, IExecutionDeferrer executionDeferrer)
         {
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
+            _executionDeferrer = executionDeferrer;
             this.Desktop = desktop;
 
             /// DesktopVieModel does not require Presenting/Dismissing, 
@@ -40,18 +43,17 @@ namespace RdClient.Shared.ViewModels
 
         void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            IThumbnail thumb = sender as IThumbnail;
-            if (thumb != null && "ImageBytes".Equals(e.PropertyName))
+            if (this.Thumbnail != null && "ImageBytes".Equals(e.PropertyName))
             {                
-                UpdateThumbnailImage(thumb.ImageBytes);
+                UpdateThumbnailImage(this.Thumbnail.ImageBytes);
             }
         }
 
-        private async void UpdateThumbnailImage(byte[] imageBytes)
+        private void UpdateThumbnailImage(byte[] imageBytes)
         {
             if (imageBytes != null)
             {
-                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                _executionDeferrer.TryDeferToUI(                
                     async () =>
                     {
                         BitmapImage newImage = new BitmapImage();

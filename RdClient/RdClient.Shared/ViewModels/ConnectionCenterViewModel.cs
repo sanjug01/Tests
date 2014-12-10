@@ -1,7 +1,7 @@
-﻿using RdClient.Shared.Models;
+﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.Navigation.Extensions;
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class ConnectionCenterViewModel : ViewModelBase, IConnectionCenterViewModel, IApplicationBarItemsSource
+    public class ConnectionCenterViewModel : DeferringViewModelBase, IConnectionCenterViewModel, IApplicationBarItemsSource, IExecutionDeferrer
     {
         private readonly RelayCommand _addDesktopCommand;
 
@@ -108,7 +108,7 @@ namespace RdClient.Shared.ViewModels
                 ObservableCollection<IDesktopViewModel> desktopVMs = new ObservableCollection<IDesktopViewModel>();
                 foreach (Desktop desktop in this.DataModel.Desktops)
                 {
-                    DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel);
+                    DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel, this);
                     desktopVMs.Add(vm);
                     vm.PropertyChanged += DesktopSelection_PropertyChanged;
                 }
@@ -158,7 +158,7 @@ namespace RdClient.Shared.ViewModels
             {
                 foreach (Desktop desktop in e.NewItems)
                 {
-                    DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel);
+                    DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel, this);
                     vm.PropertyChanged += DesktopSelection_PropertyChanged;
                     this.DesktopViewModels.Add(vm);
                 }
@@ -216,6 +216,16 @@ namespace RdClient.Shared.ViewModels
                     new Desktop() { HostName = "a3-w81" },
                     new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
                     ));
+        }
+
+        bool IExecutionDeferrer.TryDeferToUI(Action action)
+        {
+            return this.TryDeferToUI(action);
+        }
+
+        void IExecutionDeferrer.DeferToUI(Action action)
+        {
+            this.DeferToUI(action);
         }
     }
 }
