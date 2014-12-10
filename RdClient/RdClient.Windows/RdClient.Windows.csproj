@@ -151,8 +151,8 @@
     <Compile Include="Views\DeleteDesktopsView.xaml.cs">
       <DependentUpon>DeleteDesktopsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ErrorMessage.xaml.cs">
-      <DependentUpon>ErrorMessage.xaml</DependentUpon>
+    <Compile Include="Views\ErrorMessageView.xaml.cs">
+      <DependentUpon>ErrorMessageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ModalStackContainer.xaml.cs">
       <DependentUpon>ModalStackContainer.xaml</DependentUpon>
@@ -240,7 +240,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ErrorMessage.xaml">
+    <Page Include="Views\ErrorMessageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

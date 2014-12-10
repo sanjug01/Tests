@@ -8,8 +8,8 @@ namespace RdClient.Shared.Converters.ErrorLocalizers
 {
     public class RdpDisconnectReasonLocalizer : IErrorLocalizer
     {
-        private ILocalizedString _localizedStrings;
-        public ILocalizedString LocalizedString
+        private IStringTable _localizedStrings;
+        public IStringTable LocalizedString
         {
             set { _localizedStrings = value; }
         }

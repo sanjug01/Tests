@@ -109,7 +109,7 @@ namespace RdClient.Shared.Test.ViewModels
                 };
 
                 sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
-                navigation.Expect("PushModalView", new List<object> { "DialogMessage", null, null }, null);
+                navigation.Expect("PushModalView", new List<object> { "ErrorMessageView", null, null }, null);
                 navigation.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
 
                 SessionViewModel svm = new SessionViewModel();

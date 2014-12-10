@@ -59,7 +59,7 @@ namespace RdClient.Shared.ViewModels
                 ErrorMessageArgs dialogArgs = new ErrorMessageArgs(reason, () =>
                 {
                 }, null);
-                this.NavigationService.PushModalView("DialogMessage", dialogArgs);
+                this.NavigationService.PushModalView("ErrorMessageView", dialogArgs);
             }
 
             NavigationService.NavigateToView("ConnectionCenterView", null);            

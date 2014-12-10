@@ -7,11 +7,11 @@ namespace RdClient.Shared.Helpers
 {
     public class DisconnectString
     {
-        private readonly ILocalizedString _localizedStrings;
+        private readonly IStringTable _localizedStrings;
 
         private Dictionary<RdpDisconnectCode, string> codeMap = new Dictionary<RdpDisconnectCode,string>();
 
-        public DisconnectString(ILocalizedString localizedStrings)
+        public DisconnectString(IStringTable localizedStrings)
         {
             _localizedStrings = localizedStrings;
 

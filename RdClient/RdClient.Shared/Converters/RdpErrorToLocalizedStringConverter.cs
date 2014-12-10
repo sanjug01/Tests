@@ -12,8 +12,8 @@ namespace RdClient.Converters
     {
         private Dictionary<string, Type> _localizerMap = new Dictionary<string,Type>();
 
-        private ILocalizedString _localizedString;
-        public ILocalizedString LocalizedString { set { _localizedString = value; } }
+        private IStringTable _localizedString;
+        public IStringTable LocalizedString { set { _localizedString = value; } }
 
         public RdpErrorToLocalizedStringConverter()
         {

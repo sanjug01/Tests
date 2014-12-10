@@ -5,7 +5,7 @@ namespace RdClient.Shared.Converters.ErrorLocalizers
 {
     public interface IErrorLocalizer
     {
-        ILocalizedString LocalizedString { set; }
+        IStringTable LocalizedString { set; }
         string LocalizeError(IRdpError error);
     }
 }
