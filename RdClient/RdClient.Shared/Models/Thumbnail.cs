@@ -49,21 +49,5 @@ namespace RdClient.Shared.Models
                 SetProperty(ref _imageBytes, value);
             }
         }
-
-        //private async void UpdateImageSource()
-        //{
-        //    await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-        //        async () =>
-        //        {
-        //            BitmapImage newImage = new BitmapImage();
-        //            using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
-        //            {
-        //                await stream.WriteAsync(this.ImageBytes.AsBuffer());
-        //                stream.Seek(0);
-        //                await newImage.SetSourceAsync(stream);
-        //            }
-        //            this.Image = newImage;
-        //        });
-        //}
     }
 }

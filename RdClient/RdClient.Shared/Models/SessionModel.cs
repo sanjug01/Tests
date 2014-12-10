@@ -22,6 +22,8 @@ namespace RdClient.Shared.Models
 
         private readonly IRdpConnectionFactory _connectionFactory;
 
+        private readonly ITimerFactory _timerFactory;
+
         private IRdpConnection _rdpConnection;
 
         private Snapshotter _snapshotter;
@@ -34,10 +36,11 @@ namespace RdClient.Shared.Models
             }
         }
 
-        public SessionModel(IRdpConnectionFactory connectionFactory)
+        public SessionModel(IRdpConnectionFactory connectionFactory, ITimerFactory timerFactory)
         {
             Contract.Requires(connectionFactory != null);
             _connectionFactory = connectionFactory;
+            _timerFactory = timerFactory;
 
             ConnectionCreated += OnConnectionCreated;
         }
@@ -52,7 +55,7 @@ namespace RdClient.Shared.Models
             IThumbnail thumbnail = connectionInformation.Thumbnail;
             if (thumbnail != null)
             {
-                _snapshotter = new Snapshotter(_rdpConnection, thumbnail, new WinrtThreadPoolTimerFactory());
+                _snapshotter = new Snapshotter(_rdpConnection, thumbnail, _timerFactory);
             }
 
             RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
