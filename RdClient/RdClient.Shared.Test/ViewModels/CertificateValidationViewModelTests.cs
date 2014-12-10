@@ -62,67 +62,6 @@ namespace RdClient.Shared.Test.ViewModels
             }
         }
 
-        [TestMethod]
-        public void CertificateValidation_ShouldNotSaveOnCancel()
-        {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.DataModel dataModel = new Mock.DataModel())
-            {
-                _vm.DataModel = dataModel;
-                ((IViewModel)_vm).Presenting(navigation, _testArgs, null);
-
-                navigation.Expect("DismissModalView", new List<object> { null, false }, null);
-                _vm.CancelCommand.Execute(null);
-
-                // Fail this test until data model supports certificates persistance
-                Assert.IsTrue(false);
-            }
-        }
-
-        [TestMethod]
-        public void CertificateValidation_ShouldValidateWithSaving()
-        {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.DataModel dataModel = new Mock.DataModel())
-            {
-                _vm.DataModel = dataModel;
-                ((IViewModel)_vm).Presenting(navigation, _testArgs, null);
-                navigation.Expect("DismissModalView", new List<object> { null, false }, null);
-                _vm.AcceptCertificateCommand.Execute(null);
-
-                // Fail this test until data model supports certificates persistance
-                Assert.IsTrue(false);
-            }
-        }
-
-        [TestMethod]
-        public void CertificateValidation_ShouldValidateWithoutSaving()
-        {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.DataModel dataModel = new Mock.DataModel())
-            {
-                _vm.DataModel = dataModel;
-                ((IViewModel)_vm).Presenting(navigation, _testArgs, null);
-                navigation.Expect("DismissModalView", new List<object> { null, false }, null);
-                _vm.AcceptOnceCommand.Execute(null);
-
-                // Fail this test until data model supports certificates persistance
-                Assert.IsTrue(false);
-            }
-        }
-
-        [TestMethod]
-        public void CertificateValidation_ShouldUseDelegateOnCancel()
-        {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            {
-                ((IViewModel)_vm).Presenting(navigation, _testArgs, _context );
-                Assert.AreNotEqual(false, _context.Result);
-
-                _vm.CancelCommand.Execute(null);
-                Assert.AreEqual(false, _context.Result);
-            }
-        }
 
         [TestMethod]
         public void CertificateValidation_ShouldUseDelegateOnConnectAlways()
@@ -130,10 +69,11 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 ((IViewModel)_vm).Presenting(navigation, _testArgs, _context);
-                Assert.AreNotEqual(false, _context.Result);
 
                 _vm.AcceptCertificateCommand.Execute(null);
-                Assert.AreEqual(true, _context.Result);
+
+                Assert.IsTrue(_context.Result is CertificateValidationResult);
+                Assert.AreEqual(CertificateValidationResult.AcceptType.AcceptedAlways, (_context.Result as CertificateValidationResult).Result);
             }
         }
 
@@ -143,10 +83,23 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 ((IViewModel)_vm).Presenting(navigation, _testArgs, _context);
-                Assert.AreNotEqual(false, _context.Result);
 
                 _vm.AcceptOnceCommand.Execute(null);
-                Assert.AreEqual(true, _context.Result);
+                Assert.IsTrue(_context.Result is CertificateValidationResult);
+                Assert.AreEqual(CertificateValidationResult.AcceptType.AcceptedOnce, (_context.Result as CertificateValidationResult).Result);
+            }
+        }
+
+        [TestMethod]
+        public void CertificateValidation_ShouldUseDelegateOnCancel()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                ((IViewModel)_vm).Presenting(navigation, _testArgs, _context);
+
+                _vm.CancelCommand.Execute(null);
+                Assert.IsTrue(_context.Result is CertificateValidationResult);
+                Assert.AreEqual(CertificateValidationResult.AcceptType.Denied, (_context.Result as CertificateValidationResult).Result);
             }
         }
 

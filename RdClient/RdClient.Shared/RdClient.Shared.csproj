@@ -57,6 +57,7 @@
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverter.cs" />
+    <Compile Include="Converters\ByteArrayToStringConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
     <Compile Include="CxWrappers\IRdpCertificate.cs" />
     <Compile Include="CxWrappers\IRdpCertificateErrors.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="CxWrappers\RdpEventSource.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
+    <Compile Include="Helpers\CertificateErrorHelper.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
     <Compile Include="Helpers\DisconnectString.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />

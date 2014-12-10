@@ -68,6 +68,8 @@ namespace RdClient.Shared.Test.Model
             }
         }
 
+/**
+ * ***** The AsyncDisconnect handler has been removed from SessionModel *****
         [TestMethod]
         public void ClientAsyncDisconnectHandler_PreAuthLogonFailed()
         {
@@ -92,7 +94,7 @@ namespace RdClient.Shared.Test.Model
 
                 connection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, false }, 0);
 
-                sm.ClientAsyncDisconnectHandler(null, args);
+                // sm.ClientAsyncDisconnectHandler(null, args);
             }
         }
 
@@ -120,7 +122,7 @@ namespace RdClient.Shared.Test.Model
 
                 connection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, false }, 0);
 
-                sm.ClientAsyncDisconnectHandler(null, args);
+                // sm.ClientAsyncDisconnectHandler(null, args);
             }
         }
 
@@ -148,7 +150,7 @@ namespace RdClient.Shared.Test.Model
 
                 connection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, true }, 0);
 
-                sm.ClientAsyncDisconnectHandler(null, args);
+                // sm.ClientAsyncDisconnectHandler(null, args);
             }
         }
 
@@ -176,8 +178,9 @@ namespace RdClient.Shared.Test.Model
 
                 connection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, false }, 0);
 
-                sm.ClientAsyncDisconnectHandler(null, args);
+                // sm.ClientAsyncDisconnectHandler(null, args);
             }
         }
+ * **/
     }
 }

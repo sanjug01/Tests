@@ -22,6 +22,23 @@ namespace RdClient.Shared.ViewModels
         public IRdpCertificate Certificate { get; private set; }
     }
 
+    public sealed class CertificateValidationResult
+    {
+        public enum AcceptType
+        {
+            Denied,
+            AcceptedOnce,
+            AcceptedAlways
+        }
+
+        public CertificateValidationResult(AcceptType result)
+        {
+            this.Result = result;
+        }
+
+        public AcceptType Result { get; private set; }
+    }
+
     public class CertificateValidationViewModel : ViewModelBase
     {
         private string _host;
@@ -37,9 +54,9 @@ namespace RdClient.Shared.ViewModels
 
         public CertificateValidationViewModel()
         {
-            _acceptCertificateCommand = new RelayCommand(AcceptCertificateExecute);
-            _acceptOnceCommand = new RelayCommand((o) => { DismissModal(true); });
-            _cancelCommand = new RelayCommand((o) => { DismissModal(false); });
+            _acceptCertificateCommand = new RelayCommand((o) => { DismissModal(new CertificateValidationResult(CertificateValidationResult.AcceptType.AcceptedAlways)); });
+            _acceptOnceCommand = new RelayCommand((o) => { DismissModal(new CertificateValidationResult(CertificateValidationResult.AcceptType.AcceptedOnce)); });
+            _cancelCommand = new RelayCommand((o) => { DismissModal(new CertificateValidationResult(CertificateValidationResult.AcceptType.Denied)); });
             _showDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = true; });
             _hideDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = false; });
 
@@ -72,17 +89,6 @@ namespace RdClient.Shared.ViewModels
         {
             get { return _isExpandedView; }
             set { SetProperty(ref _isExpandedView, value); }
-        }
-
-        /// <summary>
-        /// Accept certificate, and save it for future sessions
-        ///     It will dismiss the dialog
-        /// </summary>
-        /// <param name="o">param object</param>
-        private void AcceptCertificateExecute(object o)
-        {
-            // should save certificate 
-            DismissModal(true);
         }
 
         protected override void OnPresenting(object activationParameter)

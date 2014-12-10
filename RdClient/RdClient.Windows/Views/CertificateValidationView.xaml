@@ -17,6 +17,7 @@
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
+        <c:ByteArrayToStringConverter x:Key="ByteArrayToStringConverter" />        
     </Page.Resources>
 
 
@@ -124,7 +125,7 @@
                         <TextBlock Margin="16,8" 
                                        Style="{ThemeResource BodyTextBlockStyle}"
                                        x:Uid="CertificateValidation-Thumbprint" 
-                                       Text="{Binding Certificate.SerialNumber}" 
+                                       Text="{Binding Certificate.SerialNumber, Converter={StaticResource ByteArrayToStringConverter}}" 
                                        Foreground="{StaticResource rdGrayBrush}" />
 
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
