@@ -11,9 +11,11 @@ namespace RdClient.Shared.Test.CxWrappers
         [TestMethod]
         public void ApplyDesktop()
         {
+            PersistentData data = new PersistentData();
+
             using(Mock.RdpProperties properties = new Mock.RdpProperties())
             {
-                Desktop desktop = new Desktop() { HostName = "narf" };
+                Desktop desktop = new Desktop(data.LocalWorkspace) { HostName = "narf" };
 
                 properties.Expect("SetStringProperty", new List<object>() { "Full Address", "narf" }, 0);
 

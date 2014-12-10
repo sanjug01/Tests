@@ -1,13 +1,18 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace RdClient.Shared.Models
+﻿namespace RdClient.Shared.Models
 {
+    using System;
+    using System.Runtime.Serialization;
+
     [DataContract(IsReference = true)]
-    public class Desktop : ModelBase
+    public sealed class Desktop : RemoteResource
     {
         private string _hostName;
         private Guid _credId;
+
+        public Desktop(Workspace parentWorkspace)
+            : base(parentWorkspace)
+        {
+        }
         
         [DataMember]
         public string HostName

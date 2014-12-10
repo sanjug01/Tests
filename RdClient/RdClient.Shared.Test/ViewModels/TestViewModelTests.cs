@@ -14,28 +14,29 @@ namespace RdClient.Shared.Test.ViewModels
     [TestClass]
     public class TestsViewModelTests
     {
+        PersistentData _dataModel;
         TestsViewModel _vm;
         TestsViewModelArgs _defaultArgs;
 
         [TestInitialize]
         public void TestSetUp()
         {
+            _dataModel = new PersistentData();
             _vm = new TestsViewModel();
             _defaultArgs = new TestsViewModelArgs(
-                new Desktop() { HostName = "DefaultPC" },
+                new Desktop(_dataModel.LocalWorkspace) { HostName = "DefaultPC" },
                 new Credentials() { Username = "DefaultUser", Domain = "DefaultDomain", Password = "DefaultPwd" }
                 );
             
-            Mock.DataModel mockDataModel = new Mock.DataModel();
-            mockDataModel.Desktops = new ModelCollection<Desktop>();
-            mockDataModel.Credentials = new ModelCollection<Credentials>();
-            _vm.DataModel = mockDataModel;
+            _vm.DataModel = _dataModel;
         }
 
         [TestCleanup]
         public void TestTearDown()
         {
             _vm = null;
+            _dataModel = null;
+            _defaultArgs = null;
         }
 
         [TestMethod]
@@ -44,7 +45,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 TestsViewModelArgs args = new TestsViewModelArgs(
-                    new Desktop() { HostName = "narf" },
+                    new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" },
                     new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                     );
 
@@ -147,7 +148,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 TestsViewModelArgs args = new TestsViewModelArgs(
-                    new Desktop() { HostName = "narf" },
+                    new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" },
                     new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                     );
 

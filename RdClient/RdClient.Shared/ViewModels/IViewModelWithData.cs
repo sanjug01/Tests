@@ -4,6 +4,6 @@ namespace RdClient.Shared.ViewModels
 {
     interface IViewModelWithData
     {
-        IDataModel DataModel { get; set; }
+        PersistentData DataModel { get; set; }
     }
 }

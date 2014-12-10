@@ -1,15 +1,14 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-
-using RdClient.Shared.Helpers;
-
-namespace RdClient.Shared.Models
+﻿namespace RdClient.Shared.Models
 {
-    [DataContract(IsReference=true)]
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.Serialization;
+
+    [DataContract(IsReference = true)]
     [KnownType(typeof(Desktop))]
+    [KnownType(typeof(RemoteApplication))]
     [KnownType(typeof(Credentials))]
     public class ModelBase : INotifyPropertyChanged, IEquatable<ModelBase>
     {

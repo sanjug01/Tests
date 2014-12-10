@@ -18,14 +18,14 @@ namespace RdClient.Shared.Test.ViewModels
         private Desktop _singleDesktop;
         private List<object> _multiDesktopsSelection;
 
-        private Mock.DataModel _dataModel;
+        private PersistentData _dataModel;
 
         class TestDeleteDesktopsViewModel : DeleteDesktopsViewModel
         {
             public TestDeleteDesktopsViewModel()
             {
                 DialogView = new Mock.PresentableView();
-                DataModel = new Mock.DataModel() { Desktops = new ModelCollection<Desktop>() };
+                DataModel = new PersistentData();
             }
         }
 
@@ -50,16 +50,15 @@ namespace RdClient.Shared.Test.ViewModels
             _multiDesktopsSelection.Add(_testData.NewValidDesktop(Guid.Empty));
 
             // data model contains the selection plus additional random test data
-            _dataModel = new Mock.DataModel();
-            _dataModel.Desktops = new ModelCollection<Desktop>();
+            _dataModel = new PersistentData();
 
-            _dataModel.Desktops.Add(_singleDesktopSelection[0] as Desktop);
-            _dataModel.Desktops.Add(_testData.NewValidDesktop(Guid.Empty));
+            _dataModel.LocalWorkspace.Connections.Add(_singleDesktopSelection[0] as Desktop);
+            _dataModel.LocalWorkspace.Connections.Add(_testData.NewValidDesktop(Guid.Empty));
 
-            _dataModel.Desktops.Add(_multiDesktopsSelection[0] as Desktop);
-            _dataModel.Desktops.Add(_multiDesktopsSelection[1] as Desktop);
-            _dataModel.Desktops.Add(_multiDesktopsSelection[2] as Desktop);
-            _dataModel.Desktops.Add(_testData.NewValidDesktop(Guid.Empty));
+            _dataModel.LocalWorkspace.Connections.Add(_multiDesktopsSelection[0] as Desktop);
+            _dataModel.LocalWorkspace.Connections.Add(_multiDesktopsSelection[1] as Desktop);
+            _dataModel.LocalWorkspace.Connections.Add(_multiDesktopsSelection[2] as Desktop);
+            _dataModel.LocalWorkspace.Connections.Add(_testData.NewValidDesktop(Guid.Empty));
 
             _deleteDesktopsViewModel = new TestDeleteDesktopsViewModel();
         }
@@ -182,14 +181,14 @@ namespace RdClient.Shared.Test.ViewModels
                 _deleteDesktopsViewModel.DialogView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
                 _deleteDesktopsViewModel.DataModel = _dataModel;
-                initialCount = _dataModel.Desktops.Count;
+                initialCount = _dataModel.LocalWorkspace.Connections.Count;
 
                 ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
                 Assert.IsTrue(_deleteDesktopsViewModel.DesktopsCount > 0);
 
 
                 _deleteDesktopsViewModel.CancelCommand.Execute(null);
-                finalCount = _dataModel.Desktops.Count;
+                finalCount = _dataModel.LocalWorkspace.Connections.Count;
 
                 Assert.AreEqual(initialCount, finalCount);
             }
@@ -207,7 +206,7 @@ namespace RdClient.Shared.Test.ViewModels
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
 
                 _deleteDesktopsViewModel.DataModel = _dataModel;
-                initialCount = _dataModel.Desktops.Count;
+                initialCount = _dataModel.LocalWorkspace.Connections.Count;
 
                 ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
                 deletedCount = _deleteDesktopsViewModel.DesktopsCount;
@@ -215,7 +214,7 @@ namespace RdClient.Shared.Test.ViewModels
 
 
                 _deleteDesktopsViewModel.DeleteCommand.Execute(null);
-                finalCount = _dataModel.Desktops.Count;
+                finalCount = _dataModel.LocalWorkspace.Connections.Count;
 
                 Assert.AreEqual(initialCount, finalCount + deletedCount);
             }
@@ -234,14 +233,14 @@ namespace RdClient.Shared.Test.ViewModels
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
 
                 _deleteDesktopsViewModel.DataModel = _dataModel;
-                initialCount = _dataModel.Desktops.Count;
+                initialCount = _dataModel.LocalWorkspace.Connections.Count;
 
                 ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
                 Assert.IsTrue(_deleteDesktopsViewModel.DesktopsCount > 0);
 
 
                 _deleteDesktopsViewModel.DeleteCommand.Execute(null);
-                finalCount = _dataModel.Desktops.Count;
+                finalCount = _dataModel.LocalWorkspace.Connections.Count;
 
                 Assert.AreEqual(initialCount, finalCount + 1);
             }

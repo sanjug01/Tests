@@ -15,6 +15,7 @@ namespace RdClient.Windows.Test.Model
     [TestClass]
     public class DataStorageTests : IDataStorageTests
     {
+#if false
         private StorageFolder _storageFolder;
 
         public override IDataStorage GetDataStorage()
@@ -40,5 +41,6 @@ namespace RdClient.Windows.Test.Model
             Task deleteTask = _storageFolder.DeleteAsync().AsTask();
             deleteTask.Wait();
         }
+#endif
     }
 }

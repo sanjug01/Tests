@@ -169,19 +169,11 @@ namespace RdClient.Shared.ViewModels
                 this.Desktop.CredentialId = this.UserOptions[this.SelectedUserOptionsIndex].Credentials.Id;
             }
 
-            bool found = false;
-            foreach (Desktop desktop in this.DataModel.Desktops)
-            {
-                if (desktop.Id == this.Desktop.Id)
-                {
-                    found = true;
-                    break;
-                }
-            }
+            bool found = this.DataModel.LocalWorkspace.Connections.ContainsItemWithId(this.Desktop.Id);
 
             if (found == false)
             {
-                this.DataModel.Desktops.Add(this.Desktop);
+                this.DataModel.LocalWorkspace.Connections.Add(this.Desktop);
             }
 
             NavigationService.DismissModalView(PresentableView);
@@ -253,7 +245,7 @@ namespace RdClient.Shared.ViewModels
             }
             else if(addArgs != null)
             {
-                this.Desktop = new Desktop();
+                this.Desktop = new Desktop(this.DataModel.LocalWorkspace);
                 this.IsAddingDesktop = true;
             }
 

@@ -13,9 +13,10 @@ namespace RdClient.Shared.Test.Model
     [TestClass]
     public class DataModelTests
     {
+#if false
         private TestData _testData;
         private Mock.DataStorage _mockStorage;
-        private DataModel _dataModel;
+        private PersistentData _dataModel;
         private List<Desktop> _expectedDesktops;
         private ObservableCollection<Desktop> _actualDesktops;
         private ObservableCollection<Credentials> _actualCredentials;
@@ -28,7 +29,7 @@ namespace RdClient.Shared.Test.Model
             _mockStorage = new Mock.DataStorage();
             _expectedCreds = _testData.NewSmallListOfCredentials();
             _expectedDesktops = _testData.NewSmallListOfDesktops(_expectedCreds);
-            _dataModel = new DataModel();
+            _dataModel = new PersistentData();
             Assert.IsFalse(_dataModel.Loaded);            
             _dataModel.Storage = _mockStorage;
             _mockStorage.Expect("LoadCollection", new List<object>() { _dataModel.DESKTOP_COLLECTION_NAME }, _expectedDesktops);
@@ -63,7 +64,7 @@ namespace RdClient.Shared.Test.Model
         [ExpectedException(typeof(InvalidOperationException))]
         public void LoadFromStorageBeforeSettingStorageThrowsInvalidOperationException()
         {
-            DataModel newDataModel = new DataModel();
+            PersistentData newDataModel = new PersistentData();
             newDataModel.LoadFromStorage();
         }
 
@@ -71,7 +72,7 @@ namespace RdClient.Shared.Test.Model
         [ExpectedException(typeof(ArgumentNullException))]
         public void SetStorageToNullThrowsArgumentNullException()
         {
-            DataModel newDataModel = new DataModel();
+            PersistentData newDataModel = new PersistentData();
             newDataModel.Storage = null;
         }
 
@@ -79,7 +80,7 @@ namespace RdClient.Shared.Test.Model
         [ExpectedException(typeof(InvalidOperationException))]
         public void GetDesktopsCollectionBeforeLoadedThrowsInvalidOperationException()
         {
-            DataModel newDataModel = new DataModel();
+            PersistentData newDataModel = new PersistentData();
             _actualDesktops = newDataModel.Desktops;
         }
 
@@ -111,7 +112,7 @@ namespace RdClient.Shared.Test.Model
         [ExpectedException(typeof(InvalidOperationException))]
         public void GetCredentialsCollectionBeforeLoadedThrowsInvalidOperationException()
         {
-            DataModel newDataModel = new DataModel();
+            PersistentData newDataModel = new PersistentData();
             _actualCredentials = newDataModel.Credentials;
         }
 
@@ -161,5 +162,6 @@ namespace RdClient.Shared.Test.Model
             _mockStorage.Expect("DeleteItem", new List<object>() { _dataModel.CREDENTIAL_COLLECTION_NAME, cred }, true);
             _dataModel.Credentials.Remove(cred);
         }
+#endif
     }
 }

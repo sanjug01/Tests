@@ -7,7 +7,7 @@ namespace RdClient.DesignTime
     public class FakeDesktopViewModel : IDesktopViewModel
     {
         private Credentials _cred = new Credentials() { Domain = "adomain", HaveBeenPersisted = false, Password = "1234AbCd", Username = "exampleUser" };
-        private Desktop _desktop = new Desktop() { HostName = "ExampleHostname" };
+        private Desktop _desktop = new Desktop(new PersistentData().LocalWorkspace) { HostName = "ExampleHostname" };
         public Desktop Desktop
         {
             get { return _desktop; }

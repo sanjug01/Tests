@@ -32,5 +32,15 @@ namespace RdClient.Shared.Test.Mock
         {
             Invoke(new object[] { collectionName, item });
         }
+
+        void IDataStorage.Load(PersistentData persistentData)
+        {
+            Invoke(new object[] { persistentData });
+        }
+
+        void IDataStorage.Save(PersistentData persistentData)
+        {
+            Invoke(new object[] { persistentData });
+        }
     }
 }

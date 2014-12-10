@@ -8,6 +8,19 @@ namespace RdClient.Shared.Test.Model
     [TestClass]
     public class SessionModelTests
     {
+        private PersistentData _dataModel;
+
+        [TestInitialize]
+        public void SetUpTest()
+        {
+            _dataModel = new PersistentData();
+        }
+
+        [TestCleanup]
+        public void TearDownTest()
+        {
+            _dataModel = null;
+        }
 
         [TestMethod]
         public void ConnectionCreatedArgs_Constructor()
@@ -25,7 +38,7 @@ namespace RdClient.Shared.Test.Model
             using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
             {
                 bool connectionMatches = false;
-                Desktop desktop = new Desktop() { HostName = "narf" };
+                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" };
                 Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
                 ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
@@ -49,7 +62,7 @@ namespace RdClient.Shared.Test.Model
             using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
             using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
             {
-                Desktop desktop = new Desktop() { HostName = "narf" };
+                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" };
                 Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
                 ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
@@ -77,7 +90,7 @@ namespace RdClient.Shared.Test.Model
             using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
             using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
             {
-                Desktop desktop = new Desktop() { HostName = "narf" };
+                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" };
                 Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
                 ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
@@ -105,7 +118,7 @@ namespace RdClient.Shared.Test.Model
             using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
             using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
             {
-                Desktop desktop = new Desktop() { HostName = "narf" };
+                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" };
                 Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
                 ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
@@ -133,7 +146,7 @@ namespace RdClient.Shared.Test.Model
             using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
             using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
             {
-                Desktop desktop = new Desktop() { HostName = "narf" };
+                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" };
                 Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
                 ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
@@ -161,7 +174,7 @@ namespace RdClient.Shared.Test.Model
             using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
             using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
             {
-                Desktop desktop = new Desktop() { HostName = "narf" };
+                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" };
                 Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
                 ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 

@@ -13,7 +13,7 @@
     {
         private INavigationService _navigationService;
         private IModalPresentationContext _presentationContext;
-        private IDataModel _dataModel;
+        private PersistentData _dataModel;
 
         protected INavigationService NavigationService
         {
@@ -21,7 +21,7 @@
             private set { SetProperty<INavigationService>(ref _navigationService, value); }
         }
 
-        public IDataModel DataModel
+        public PersistentData DataModel
         {
             get { return _dataModel; }
             set { SetProperty(ref _dataModel, value); }
