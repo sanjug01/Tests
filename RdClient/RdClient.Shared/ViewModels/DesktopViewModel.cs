@@ -51,33 +51,6 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (this.Thumbnail != null && "ImageBytes".Equals(e.PropertyName))
-            {                
-                UpdateThumbnailImage(this.Thumbnail.ImageBytes);
-            }
-        }
-
-        private void UpdateThumbnailImage(byte[] imageBytes)
-        {
-            if (imageBytes != null)
-            {
-                _thumbnailUpdateNeeded = !_executionDeferrer.TryDeferToUI(                
-                    async () =>
-                    {
-                        BitmapImage newImage = new BitmapImage();
-                        using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
-                        {
-                            await stream.WriteAsync(imageBytes.AsBuffer());
-                            stream.Seek(0);
-                            await newImage.SetSourceAsync(stream);
-                        }
-                        this.ThumbnailImage = newImage;
-                    });
-            }
-        }
-
         public INavigationService NavigationService { private get; set; }
 
         public Desktop Desktop
@@ -195,6 +168,33 @@ namespace RdClient.Shared.ViewModels
         private void DeleteCommandExecute(object o)
         {
             NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.Desktop));            
+        }
+
+        void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (this.Thumbnail != null && "ImageBytes".Equals(e.PropertyName))
+            {
+                UpdateThumbnailImage(this.Thumbnail.ImageBytes);
+            }
+        }
+
+        private void UpdateThumbnailImage(byte[] imageBytes)
+        {
+            if (imageBytes != null)
+            {
+                _thumbnailUpdateNeeded = !_executionDeferrer.TryDeferToUI(
+                    async () =>
+                    {
+                        BitmapImage newImage = new BitmapImage();
+                        using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
+                        {
+                            await stream.WriteAsync(imageBytes.AsBuffer());
+                            stream.Seek(0);
+                            await newImage.SetSourceAsync(stream);
+                        }
+                        this.ThumbnailImage = newImage;
+                    });
+            }
         }
     }
 }

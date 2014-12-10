@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class ConnectionCenterViewModel : DeferringViewModelBase, IConnectionCenterViewModel, IApplicationBarItemsSource, IExecutionDeferrer
+    public class ConnectionCenterViewModel : DeferringViewModelBase, IConnectionCenterViewModel, IApplicationBarItemsSource
     {
         private readonly RelayCommand _addDesktopCommand;
 
@@ -217,16 +217,6 @@ namespace RdClient.Shared.ViewModels
                     new Desktop() { HostName = "a3-w81" },
                     new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
                     ));
-        }
-
-        bool IExecutionDeferrer.TryDeferToUI(Action action)
-        {
-            return this.TryDeferToUI(action);
-        }
-
-        void IExecutionDeferrer.DeferToUI(Action action)
-        {
-            this.DeferToUI(action);
         }
     }
 }

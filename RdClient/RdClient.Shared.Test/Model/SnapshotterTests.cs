@@ -49,7 +49,7 @@ namespace RdClient.Shared.Test.Model
         [TestMethod]
         public void TestTimerStartedCorrectlyOnFirstGraphicsUpdate()
         {
-            EmitFirstGraphicsUpdate();
+            _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
             Assert.AreEqual(1, _mockTimer.CallsToStart);
             Assert.IsTrue(_mockTimer.Running);
             Assert.AreEqual(_snapshotter.firstSnapshotTime, _mockTimer.Period);
@@ -59,7 +59,7 @@ namespace RdClient.Shared.Test.Model
         [TestMethod]
         public void TestRepeatingTimerCreatedCorrectlyAfterFirstSnapshot()
         {
-            EmitFirstGraphicsUpdate();
+            _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
             Assert.IsNotNull(_mockTimer.Callback);
             _mockTimer.Callback();            
             Assert.AreEqual(2, _mockTimer.CallsToStart);
@@ -73,7 +73,7 @@ namespace RdClient.Shared.Test.Model
         {
             Mock.RdpScreenSnapshot snapshot = new Mock.RdpScreenSnapshot();
             //first snapshot
-            EmitFirstGraphicsUpdate();       
+            _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());       
             _mockConnection.Expect("GetSnapshot", new List<object>() { }, snapshot);
             _mockThumb.Expect("Update", new List<object>() { snapshot }, 0);
             _mockTimer.Callback();
@@ -87,37 +87,24 @@ namespace RdClient.Shared.Test.Model
         [TestMethod]
         public void TestTimerCancelledOnDisconnectBeforeFirstGraphicsUpdate()
         {
-            EmitClientDisconnected();            
+            _eventSource.EmitClientDisconnected(_mockConnection, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.UnknownError, 0, 0)));            
             Assert.IsFalse(_mockTimer.Running);
         }
 
         [TestMethod]
         public void TestTimerCancelledOnDisconnectBeforeFirstSnapshot()
         {
-            EmitFirstGraphicsUpdate();
-            EmitClientDisconnected();            
+            _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
+            _eventSource.EmitClientDisconnected(_mockConnection, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.UnknownError, 0, 0)));            
             Assert.IsFalse(_mockTimer.Running);
         }
 
         public void TestTimerCancelledOnDisconnectAfterFirstSnapshot()
         {
-            EmitFirstGraphicsUpdate();
+            _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
             _mockTimer.Callback();
-            EmitClientDisconnected();
+            _eventSource.EmitClientDisconnected(_mockConnection, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.UnknownError, 0, 0)));
             Assert.IsFalse(_mockTimer.Running);
         }
-
-        private void EmitFirstGraphicsUpdate()
-        {
-            _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
-        }
-
-        
-        private void EmitClientDisconnected()
-        {
-            //Snapshotter doesn't care about disconnect reason            
-            _eventSource.EmitClientDisconnected(_mockConnection, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.UnknownError, 0, 0)));
-        }
-
     }
 }
