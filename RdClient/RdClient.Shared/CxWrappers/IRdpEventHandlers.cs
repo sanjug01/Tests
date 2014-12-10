@@ -87,11 +87,11 @@ namespace RdClient.Shared.CxWrappers
 
     public class ClientAutoReconnectingArgs : EventArgs
     {
-        public int DisconnectReason { get; private set; }
+        public AutoReconnectError DisconnectReason { get; private set; }
         public int AttemptCount { get; private set; }
         public ClientAutoReconnectingContinueDelegate ContinueDelegate { get; private set; }
 
-        public ClientAutoReconnectingArgs(int disconnectReason, int attemptCount, ClientAutoReconnectingContinueDelegate continueDelegate)
+        public ClientAutoReconnectingArgs(AutoReconnectError disconnectReason, int attemptCount, ClientAutoReconnectingContinueDelegate continueDelegate)
         {
             DisconnectReason = disconnectReason;
             AttemptCount = attemptCount;

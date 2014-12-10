@@ -139,12 +139,13 @@ namespace RdClient.Shared.Test.CxWrappers
         public void ClientAutoReconnecting_Emits()
         {
             int called = 0;
+            AutoReconnectError error = new AutoReconnectError(23);
 
-            _eventSource.EmitClientAutoReconnecting(_mockRdpConnection, new ClientAutoReconnectingArgs(23, 5, (b) => {}) );
+            _eventSource.EmitClientAutoReconnecting(_mockRdpConnection, new ClientAutoReconnectingArgs(error, 5, (b) => { }));
 
             _eventSource.ClientAutoReconnecting += (src, args) => { called++; };
 
-            _eventSource.EmitClientAutoReconnecting(_mockRdpConnection, new ClientAutoReconnectingArgs(23, 5, (b) => {}) );
+            _eventSource.EmitClientAutoReconnecting(_mockRdpConnection, new ClientAutoReconnectingArgs(error, 5, (b) => { }));
 
             Assert.AreEqual(1, called);
         }

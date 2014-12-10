@@ -86,11 +86,12 @@ namespace RdClient.Shared.Test.CxWrappers
         public void ClientAutoReconnectingArgs_Constructor()
         {
             bool reconnecting = false;
-            ClientAutoReconnectingArgs cara = new ClientAutoReconnectingArgs(23, 42, (reconnecting_) => { reconnecting = reconnecting_; });
+            AutoReconnectError error = new AutoReconnectError(23);
+            ClientAutoReconnectingArgs cara = new ClientAutoReconnectingArgs(error, 42, (reconnecting_) => { reconnecting = reconnecting_; });
 
             cara.ContinueDelegate(true);
 
-            Assert.AreEqual(23, cara.DisconnectReason);
+            Assert.AreEqual(error, cara.DisconnectReason);
             Assert.AreEqual(42, cara.AttemptCount);
             Assert.IsTrue(reconnecting);
         }

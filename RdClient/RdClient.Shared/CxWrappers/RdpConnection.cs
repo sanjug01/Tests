@@ -219,7 +219,7 @@ namespace RdClient.Shared.CxWrappers
             bool _continueReconnecting = false;
             ClientAutoReconnectingContinueDelegate shouldContinue = (__continueReconnecting) => { _continueReconnecting = __continueReconnecting; };
 
-            _eventProxy.EmitClientAutoReconnecting(this, new ClientAutoReconnectingArgs(disconnectReason, attemptCount, shouldContinue));
+            _eventProxy.EmitClientAutoReconnecting(this, new ClientAutoReconnectingArgs(new AutoReconnectError(disconnectReason), attemptCount, shouldContinue));
 
             continueReconnecting = _continueReconnecting;
         }
