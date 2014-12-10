@@ -19,6 +19,38 @@
             _adalStatus = adalStatus;
         }
 
+        public override string ToString()
+        {
+            string status = "";
+
+            switch(this.AdalStatusType)
+            {
+                case (AdalStatus.Failed):
+                    status = "Failed";
+                    break;
+                case (AdalStatus.Succeeded):
+                    status = "Succeeded";
+                    break;
+                case (AdalStatus.Canceled):
+                    status = "Canceled";
+                    break;
+                case (AdalStatus.UserMismatch):
+                    status = "UserMismatch";
+                    break;
+                case (AdalStatus.Denied):
+                    status = "Denied";
+                    break;
+                case (AdalStatus.Unknown):
+                    status = "Denied";
+                    break;
+                default:
+                    status = "undefined error?!";
+                    break;
+            }
+
+            return "AdalError: " + status;
+        }
+
         public string Category
         {
             get { return "AdalError"; }

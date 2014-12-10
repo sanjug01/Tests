@@ -10,6 +10,11 @@
             _error = error;
         }
 
+        public string ToString()
+        {
+            return "Logon Error: " + this.Error;
+        }
+
         public string Category
         {
             get { return "LogonError"; }

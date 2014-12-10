@@ -10,6 +10,11 @@
             _error = error;
         }
 
+        public override string ToString()
+        {
+            return "AutoReconnectError: " + this.Error;
+        }
+
         public string Category
         {
             get { return "AutoReconnectError"; }
