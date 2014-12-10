@@ -70,15 +70,20 @@
                                    Width="600" />
                     </Grid>
 
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="CertificateValidation-ReasonsLabel" Text="It may not be safe to connect to this PC because of the following reasons:"/>                    
-                    <ListView>
-                        <!-- TODO: load list of erros from the ViewModel -->
-                        <ListViewItem Foreground="{StaticResource rdGrayBrush}" Height="28" Margin="16,0">
-                            Not from a trusted certifying authority
-                        </ListViewItem>
-                        <ListViewItem Foreground="{StaticResource rdGrayBrush}" Height="28" Margin="16,0">
-                            Other reasons ....
-                        </ListViewItem>
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle }" 
+                               x:Uid="CertificateValidation-ReasonsLabel" 
+                               Text="It may not be safe to connect to this PC because of the following reasons:"/>
+                    <ListView ItemsSource="{Binding Path=CertificateErrorsList}"
+                              SelectionMode="None">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                <Setter Property="Margin" Value="16,0" />
+                                <Setter Property="Height" Value="28" />                                
+                                <Setter Property="Style" Value="{ThemeResource BodyTextBlockStyle}" />
+                                <Setter Property="Foreground" Value="{StaticResource rdGrayBrush}" />
+                            </Style>
+                        </ListView.ItemContainerStyle>                        
                     </ListView>
 
                     <StackPanel Orientation="Horizontal"

@@ -72,6 +72,7 @@
     <Compile Include="CxWrappers\RdTrace.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
+    <Compile Include="Helpers\CertificateErrorString.cs" />
     <Compile Include="Helpers\DisconnectString.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />
     <Compile Include="Helpers\IDeferredExecution.cs" />
