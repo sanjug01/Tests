@@ -82,9 +82,11 @@
     <Compile Include="CxWrappers\RdpEventSourceTests.cs" />
     <Compile Include="CxWrappers\RdpScreenSnapshotTests.cs" />
     <Compile Include="CxWrappers\RdpUtilsTests.cs" />
+    <Compile Include="Helpers\ITimerTests.cs" />
     <Compile Include="Helpers\MutableObjectTests.cs" />
     <Compile Include="Helpers\ReadWriteMonitorTests.cs" />
     <Compile Include="Helpers\TestData.cs" />
+    <Compile Include="Helpers\WinrtThreadPoolTimerTests.cs" />
     <Compile Include="Mock\BarItemsViewModel.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
     <Compile Include="Mock\Thumbnail.cs" />

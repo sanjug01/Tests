@@ -35,31 +35,35 @@ namespace RdClient.Shared.ViewModels
             _dataModel = dataModel;
             this.NavigationService = navService;
             this.Thumbnail.PropertyChanged += Thumbnail_PropertyChanged;
-            this.UpdateThumbnailImage();
+            this.UpdateThumbnailImage(this.Thumbnail.ImageBytes);
         }
 
         void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if ("ImageBytes".Equals(e.PropertyName))
-            {
-                UpdateThumbnailImage();
+            IThumbnail thumb = sender as IThumbnail;
+            if (thumb != null && "ImageBytes".Equals(e.PropertyName))
+            {                
+                UpdateThumbnailImage(thumb.ImageBytes);
             }
         }
 
-        private async void UpdateThumbnailImage()
+        private async void UpdateThumbnailImage(byte[] imageBytes)
         {
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                async () =>
-                {
-                    BitmapImage newImage = new BitmapImage();
-                    using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
+            if (imageBytes != null)
+            {
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                    async () =>
                     {
-                        await stream.WriteAsync(this.Thumbnail.ImageBytes.AsBuffer());
-                        stream.Seek(0);
-                        await newImage.SetSourceAsync(stream);
-                    }
-                    this.ThumbnailImage = newImage;
-                });
+                        BitmapImage newImage = new BitmapImage();
+                        using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
+                        {
+                            await stream.WriteAsync(imageBytes.AsBuffer());
+                            stream.Seek(0);
+                            await newImage.SetSourceAsync(stream);
+                        }
+                        this.ThumbnailImage = newImage;
+                    });
+            }
         }
 
         public INavigationService NavigationService { private get; set; }

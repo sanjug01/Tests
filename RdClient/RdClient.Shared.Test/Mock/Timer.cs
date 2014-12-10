@@ -6,47 +6,39 @@ namespace RdClient.Shared.Test.Mock
 {
     public class TimerFactory : MockBase, ITimerFactory
     {
-        public Mock.Timer Timer { get; private set; }
-        private int _createTimerCalls = 0;
-
-        public int CreateTimerCalls
+        public ITimer CreateTimer()
         {
-            get
-            {
-                return _createTimerCalls;
-            }
-        }
-
-        public ITimer CreateTimer(Action callback, TimeSpan period, bool recurring)
-        {
-            _createTimerCalls++;
-            if (this.Timer != null)
-            {
-                this.Timer.Dispose();
-            }
-            this.Timer = new Mock.Timer() { Callback = callback, Period = period, Recurring = recurring };
-            return this.Timer;
-        }
-
-        public override void Dispose()
-        {
-            if (this.Timer != null)
-            {
-                this.Timer.Dispose();
-            }
-            base.Dispose();
+            return (ITimer) Invoke(new object[] { });
         }
     }
 
-    public class Timer : MockBase, ITimer
+    public class Timer : ITimer
     {
-        public Action Callback { get; set; }
-        public TimeSpan Period { get; set; }
-        public bool Recurring { get; set; }
+        public Action Callback { get; private set; }
+        public TimeSpan Period { get; private set; }
+        public bool Recurring { get; private set; }
+        public bool Running { get; private set; }
+        public int CallsToStart { get; private set; }
 
-        public void Cancel()
+        public Timer()
         {
-            Invoke(new object[] { });
+            this.Running = false;
+            this.CallsToStart = 0;
+        }
+
+
+        public void Start(Action callback, TimeSpan period, bool recurring)
+        {
+            this.Callback = callback;
+            this.Period = period;
+            this.Recurring = recurring;
+            this.Running = true;
+            this.CallsToStart++;
+        }
+
+        public void Stop()
+        {
+            this.Running = false;
         }
     }
 }

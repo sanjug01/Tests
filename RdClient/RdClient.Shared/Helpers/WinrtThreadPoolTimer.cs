@@ -1,35 +1,58 @@
 ﻿using System;
+using System.Threading;
 using Windows.System.Threading;
 
 namespace RdClient.Shared.Helpers
 {
     public sealed class WinrtThreadPoolTimerFactory : ITimerFactory
     {
-        public ITimer CreateTimer(Action callback, TimeSpan period, bool recurring)
+        public ITimer CreateTimer()
         {
-            return new WinrtThreadPoolTimer(callback, period, recurring);
+            return new WinrtThreadPoolTimer();
         }
     }
 
     public class WinrtThreadPoolTimer : ITimer
     {
-        private readonly ThreadPoolTimer _timer;
+        private ThreadPoolTimer _timer;
+        private readonly ReaderWriterLockSlim _monitor;
 
-        public WinrtThreadPoolTimer(Action callback, TimeSpan period, bool recurring)
+        public WinrtThreadPoolTimer()
         {
-            if (recurring)
-            {
-                _timer = ThreadPoolTimer.CreatePeriodicTimer((timer) => callback(), period);
-            }
-            else
-            {
-                _timer = ThreadPoolTimer.CreateTimer((timer) => callback(), period);
-            }            
+            _monitor = new ReaderWriterLockSlim();
         }
 
-        public void Cancel()
+        public void Start(Action callback, TimeSpan period, bool recurring)
         {
-            _timer.Cancel();
+            using (ReadWriteMonitor.Write(_monitor))
+            {
+                if (_timer != null)
+                {
+                    throw new InvalidOperationException("Cannot start timer as it is already running");
+                }
+                {
+                    if (recurring)
+                    {
+                        _timer = ThreadPoolTimer.CreatePeriodicTimer((timer) => callback(), period);
+                    }
+                    else
+                    {
+                        _timer = ThreadPoolTimer.CreateTimer((timer) => callback(), period);
+                    }
+                }
+            }
+        }
+
+        public void Stop()
+        {
+            using (ReadWriteMonitor.Write(_monitor))
+            {
+                if (_timer != null)
+                {
+                    _timer.Cancel();
+                    _timer = null;
+                }
+            }
         }
     }
 }

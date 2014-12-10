@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Test.Helpers;
 using System.Collections.Generic;
@@ -10,77 +11,113 @@ namespace RdClient.Shared.Test.Model
     public class SnapshotterTests
     {
         private TestData _testData;
-        private Mock.RdpEvents _mockEvents;
         private Mock.RdpConnection _mockConnection;
         private Mock.Thumbnail _mockThumb;
+        private Mock.Timer _mockTimer;
         private Mock.TimerFactory _mockTimerFactory;
+        private RdpEventSource _eventSource;
         private Snapshotter _snapshotter;
 
         [TestInitialize]
         public void TestSetup()
         {
             _testData = new TestData();
-            _mockEvents = new Mock.RdpEvents();
-            _mockConnection = new Mock.RdpConnection(_mockEvents);
+            _eventSource = new RdpEventSource();
+            _mockConnection = new Mock.RdpConnection(_eventSource);
             _mockThumb = new Mock.Thumbnail();
+            _mockTimer = new Mock.Timer();
             _mockTimerFactory = new Mock.TimerFactory();
+            _mockTimerFactory.Expect("CreateTimer", new List<object>() { }, _mockTimer);
             _snapshotter = new Snapshotter(_mockConnection, _mockThumb, _mockTimerFactory);
         }
 
         [TestCleanup]
         public void TestCleanup()
         {
-            _mockEvents.Dispose();
             _mockConnection.Dispose();
             _mockThumb.Dispose();
             _mockTimerFactory.Dispose();
         }
 
         [TestMethod]
-        public void TestTimerCreatedCorrectlyOnFirstGraphicsUpdate()
-        {   
-            Assert.AreEqual(0, _mockTimerFactory.CreateTimerCalls);
-            _mockEvents.FireFirstGraphicsUpdate(new FirstGraphicsUpdateArgs());
-            Assert.AreEqual(1, _mockTimerFactory.CreateTimerCalls);
-            Assert.AreEqual(_snapshotter.firstSnapshotTime, _mockTimerFactory.Timer.Period);
-            Assert.AreEqual(false, _mockTimerFactory.Timer.Recurring);
+        public void TestTimerNotStartedBeforeFirstGraphicsUpdate()
+        {
+            Assert.AreEqual(0, _mockTimer.CallsToStart);
+            Assert.IsFalse(_mockTimer.Running);
+        }
+
+        [TestMethod]
+        public void TestTimerStartedCorrectlyOnFirstGraphicsUpdate()
+        {
+            EmitFirstGraphicsUpdate();
+            Assert.AreEqual(1, _mockTimer.CallsToStart);
+            Assert.IsTrue(_mockTimer.Running);
+            Assert.AreEqual(_snapshotter.firstSnapshotTime, _mockTimer.Period);
+            Assert.IsFalse(_mockTimer.Recurring);
         }
 
         [TestMethod]
         public void TestRepeatingTimerCreatedCorrectlyAfterFirstSnapshot()
         {
-            _mockEvents.FireFirstGraphicsUpdate(new FirstGraphicsUpdateArgs());
-            Assert.AreEqual(1, _mockTimerFactory.CreateTimerCalls);
-            _mockTimerFactory.Timer.Callback();
-            Assert.AreEqual(2, _mockTimerFactory.CreateTimerCalls);
-            Assert.AreEqual(_snapshotter.snapshotPeriod, _mockTimerFactory.Timer.Period);
-            Assert.AreEqual(true, _mockTimerFactory.Timer.Recurring);
+            EmitFirstGraphicsUpdate();
+            Assert.IsNotNull(_mockTimer.Callback);
+            _mockTimer.Callback();            
+            Assert.AreEqual(2, _mockTimer.CallsToStart);
+            Assert.IsTrue(_mockTimer.Running);
+            Assert.AreEqual(_snapshotter.snapshotPeriod, _mockTimer.Period);
+            Assert.AreEqual(true, _mockTimer.Recurring);
         }
 
         [TestMethod]
         public void TestSnapshotTakenWhenTimerCallbacksExecuted()
         {
-            //first snapshot
-            _mockEvents.FireFirstGraphicsUpdate(new FirstGraphicsUpdateArgs());
             Mock.RdpScreenSnapshot snapshot = new Mock.RdpScreenSnapshot();
+            //first snapshot
+            EmitFirstGraphicsUpdate();       
             _mockConnection.Expect("GetSnapshot", new List<object>() { }, snapshot);
             _mockThumb.Expect("Update", new List<object>() { snapshot }, 0);
-            _mockTimerFactory.Timer.Callback();
+            _mockTimer.Callback();
             //repeating snapshot
             snapshot = new Mock.RdpScreenSnapshot();
             _mockConnection.Expect("GetSnapshot", new List<object>() { }, snapshot);
             _mockThumb.Expect("Update", new List<object>() { snapshot }, 0);
-            _mockTimerFactory.Timer.Callback();
+            _mockTimer.Callback();
         }
 
         [TestMethod]
-        public void TestTimerCancelledOnDisconnect()
+        public void TestTimerCancelledOnDisconnectBeforeFirstGraphicsUpdate()
         {
-            _mockEvents.FireFirstGraphicsUpdate(new FirstGraphicsUpdateArgs());
-            _mockTimerFactory.Timer.Expect("Cancel", new List<object>() { }, 0);
-            _mockEvents.FireClientDisconnected(new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.UnknownError, 0, 0)));            
+            EmitClientDisconnected();            
+            Assert.IsFalse(_mockTimer.Running);
         }
 
+        [TestMethod]
+        public void TestTimerCancelledOnDisconnectBeforeFirstSnapshot()
+        {
+            EmitFirstGraphicsUpdate();
+            EmitClientDisconnected();            
+            Assert.IsFalse(_mockTimer.Running);
+        }
+
+        public void TestTimerCancelledOnDisconnectAfterFirstSnapshot()
+        {
+            EmitFirstGraphicsUpdate();
+            _mockTimer.Callback();
+            EmitClientDisconnected();
+            Assert.IsFalse(_mockTimer.Running);
+        }
+
+        private void EmitFirstGraphicsUpdate()
+        {
+            _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
+        }
+
+        
+        private void EmitClientDisconnected()
+        {
+            //Snapshotter doesn't care about disconnect reason            
+            _eventSource.EmitClientDisconnected(_mockConnection, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.UnknownError, 0, 0)));
+        }
 
     }
 }

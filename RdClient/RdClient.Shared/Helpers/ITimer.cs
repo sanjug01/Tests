@@ -4,11 +4,13 @@ namespace RdClient.Shared.Helpers
 {
     public interface ITimerFactory
     {
-        ITimer CreateTimer(Action callback, TimeSpan period, bool recurring);
+        ITimer CreateTimer();
     }
 
     public interface ITimer
     {
-        void Cancel();
+        void Start(Action callback, TimeSpan period, bool recurring);
+
+        void Stop();
     }
 }
