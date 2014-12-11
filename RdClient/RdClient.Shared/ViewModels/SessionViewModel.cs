@@ -95,35 +95,10 @@ namespace RdClient.Shared.ViewModels
             }
             else
             {
-                switch (args.DisconnectReason.Code)
-                {
-                    case RdpDisconnectCode.PreAuthLogonFailed:
-                        {
-                            reconnect = false;
-                        }
-                        break;
-                    case RdpDisconnectCode.FreshCredsRequired:
-                        {
-                            reconnect = false;
-                        }
-                        break;
-
-                    case RdpDisconnectCode.CredSSPUnsupported:
-                        {
-                            reconnect = false;
-                        }
-                        break;
-
-                    default:
-                        {
-                            //
-                            // For all other reasons, we just disconnect.
-                            // We'll handle showing any appropriate dialogs to the user in OnClientDisconnectedHandler.
-                            //
-                            reconnect = false;
-                        }
-                        break;
-                }
+                // May need to further manage PreAuthLogonFailed/FreshCredsRequired/CredSSPUnsupported
+                // For all other reasons, we just disconnect.
+                // We'll handle showing any appropriate dialogs to the user in OnClientDisconnectedHandler.
+                reconnect = false;
                 rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
             }
         }        

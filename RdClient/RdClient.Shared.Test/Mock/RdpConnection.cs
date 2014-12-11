@@ -85,7 +85,7 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { propertyName, value });
         }
 
-        IRdpCertificate IRdpConnection.GetServerCertificate()
+        public IRdpCertificate GetServerCertificate()
         {
             return (IRdpCertificate)Invoke(new object[] { });
         }
