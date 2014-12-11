@@ -62,6 +62,47 @@ namespace RdClient.Shared.Test.ViewModels
             }
         }
 
+        [TestMethod]
+        public void CertificateValidationViewModel_VerifyListOfErrorsUpdated()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                
+                Mock.RdpCertificateError testError = new Mock.RdpCertificateError();
+
+                // 6 error flags
+                testError.ErrorFlags = CertificateErrors.Revoked 
+                    | CertificateErrors.NameMismatch 
+                    | CertificateErrors.UntrustedRoot 
+                    | CertificateErrors.Expired
+                    | CertificateErrors.CertOrChainInvalid
+                    | CertificateErrors.MismatchedCert;
+                _testCertificate.Error = testError;
+                ((IViewModel)_vm).Presenting(navigation, _testArgs, null);
+
+                // error list should have 6 items
+                Assert.AreEqual(6, _vm.CertificateErrorsList.Count);
+            }
+        }
+
+        [TestMethod]
+        public void CertificateValidationViewModel_ShowAndHideDetails()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                ((IViewModel)_vm).Presenting(navigation, _testArgs, null);
+                Assert.IsFalse(_vm.IsExpandedView);
+
+                // show extra details
+                _vm.ShowDetailsCommand.Execute(null);
+                Assert.IsTrue(_vm.IsExpandedView);
+
+                // hide it back
+                _vm.HideDetailsCommand.Execute(null);
+                Assert.IsFalse(_vm.IsExpandedView);
+            }
+        }
+
 
         [TestMethod]
         public void CertificateValidation_ShouldUseDelegateOnConnectAlways()
