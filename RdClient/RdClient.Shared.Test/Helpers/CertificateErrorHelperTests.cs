@@ -28,7 +28,7 @@
                 CertificateErrors.WrongEKU,
                 CertificateErrors.Critical };
 
-            // exclusive flawgs, avoid Critical
+            // exclusive flags, avoid Critical
             _someFlags = new CertificateErrors[] { 
                 CertificateErrors.Expired, 
                 CertificateErrors.NameMismatch,

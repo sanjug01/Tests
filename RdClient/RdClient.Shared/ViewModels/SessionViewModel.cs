@@ -76,14 +76,14 @@ namespace RdClient.Shared.ViewModels
 
                             switch(acceptCertificateResult.Result)
                             {
-                                case CertificateValidationResult.AcceptType.Denied:
+                                case CertificateValidationResult.CertificateTrustLevel.Denied:
                                     reconnect = false;
                                     break;
-                                case CertificateValidationResult.AcceptType.AcceptedOnce:
+                                case CertificateValidationResult.CertificateTrustLevel.AcceptedOnce:
                                     reconnect = true;
                                     this.SessionModel.AcceptCertificate(serverCertificate, false);
                                     break;
-                                case CertificateValidationResult.AcceptType.AcceptedAlways:
+                                case CertificateValidationResult.CertificateTrustLevel.AcceptedAlways:
                                     reconnect = true;
                                     this.SessionModel.AcceptCertificate(serverCertificate, true);
                                     break;

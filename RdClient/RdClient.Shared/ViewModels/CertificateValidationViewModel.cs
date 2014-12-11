@@ -25,19 +25,19 @@ namespace RdClient.Shared.ViewModels
 
     public sealed class CertificateValidationResult
     {
-        public enum AcceptType
+        public enum CertificateTrustLevel
         {
             Denied,
             AcceptedOnce,
             AcceptedAlways
         }
 
-        public CertificateValidationResult(AcceptType result)
+        public CertificateValidationResult(CertificateTrustLevel result)
         {
             this.Result = result;
         }
 
-        public AcceptType Result { get; private set; }
+        public CertificateTrustLevel Result { get; private set; }
     }
 
     public class CertificateValidationViewModel : ViewModelBase
@@ -55,9 +55,9 @@ namespace RdClient.Shared.ViewModels
 
         public CertificateValidationViewModel()
         {
-            _acceptCertificateCommand = new RelayCommand((o) => { DismissModal(new CertificateValidationResult(CertificateValidationResult.AcceptType.AcceptedAlways)); });
-            _acceptOnceCommand = new RelayCommand((o) => { DismissModal(new CertificateValidationResult(CertificateValidationResult.AcceptType.AcceptedOnce)); });
-            _cancelCommand = new RelayCommand((o) => { DismissModal(new CertificateValidationResult(CertificateValidationResult.AcceptType.Denied)); });
+            _acceptCertificateCommand = new RelayCommand((o) => { DismissModal(new CertificateValidationResult(CertificateValidationResult.CertificateTrustLevel.AcceptedAlways)); });
+            _acceptOnceCommand = new RelayCommand((o) => { DismissModal(new CertificateValidationResult(CertificateValidationResult.CertificateTrustLevel.AcceptedOnce)); });
+            _cancelCommand = new RelayCommand((o) => { DismissModal(new CertificateValidationResult(CertificateValidationResult.CertificateTrustLevel.Denied)); });
             _showDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = true; });
             _hideDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = false; });
 

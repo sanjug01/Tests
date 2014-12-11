@@ -114,7 +114,7 @@ namespace RdClient.Shared.Test.ViewModels
                 _vm.AcceptCertificateCommand.Execute(null);
 
                 Assert.IsTrue(_context.Result is CertificateValidationResult);
-                Assert.AreEqual(CertificateValidationResult.AcceptType.AcceptedAlways, (_context.Result as CertificateValidationResult).Result);
+                Assert.AreEqual(CertificateValidationResult.CertificateTrustLevel.AcceptedAlways, (_context.Result as CertificateValidationResult).Result);
             }
         }
 
@@ -127,7 +127,7 @@ namespace RdClient.Shared.Test.ViewModels
 
                 _vm.AcceptOnceCommand.Execute(null);
                 Assert.IsTrue(_context.Result is CertificateValidationResult);
-                Assert.AreEqual(CertificateValidationResult.AcceptType.AcceptedOnce, (_context.Result as CertificateValidationResult).Result);
+                Assert.AreEqual(CertificateValidationResult.CertificateTrustLevel.AcceptedOnce, (_context.Result as CertificateValidationResult).Result);
             }
         }
 
@@ -140,7 +140,7 @@ namespace RdClient.Shared.Test.ViewModels
 
                 _vm.CancelCommand.Execute(null);
                 Assert.IsTrue(_context.Result is CertificateValidationResult);
-                Assert.AreEqual(CertificateValidationResult.AcceptType.Denied, (_context.Result as CertificateValidationResult).Result);
+                Assert.AreEqual(CertificateValidationResult.CertificateTrustLevel.Denied, (_context.Result as CertificateValidationResult).Result);
             }
         }
 
