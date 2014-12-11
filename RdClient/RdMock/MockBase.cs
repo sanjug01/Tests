@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 // The MockBase class is a basic mocking framework which reduces the amount of typing required to implement mock classes.
 //
@@ -81,11 +82,18 @@ namespace RdMock
             Justification = "Intended for test"), 
         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly",
             Justification = "Intended for test")]
+
         public void Dispose()
         {
             if (_calls.Count > 0)
             {
-                throw new MockException("Expected " + _calls.Count + " more calls before exiting scope.");
+                StringBuilder msg = new StringBuilder();
+                msg.AppendFormat("{0} expected {1} more calls before exiting scope. Missed calls = ", this.GetType(), _calls.Count);
+                foreach (MockCall call in _calls)
+                {
+                    msg.AppendFormat("{0}() ", call.functionName);
+                }
+                throw new MockException(msg.ToString());
             }
         }
 

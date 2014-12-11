@@ -1,7 +1,7 @@
 ﻿using RdClient.CxWrappers.Utils;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.ViewModels;
-
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -34,6 +34,7 @@ namespace RdClient.Views
             factory.SwapChainPanel = this.TestSwapChainPanel;
 
             (this.DataContext as TestsViewModel).RdpConnectionFactory = factory;
+            (this.DataContext as TestsViewModel).TimerFactory = new WinrtThreadPoolTimerFactory();
         }
 
         private void DesktopsList_SelectionChanged(object sender, SelectionChangedEventArgs e)

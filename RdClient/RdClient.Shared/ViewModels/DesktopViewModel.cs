@@ -1,8 +1,15 @@
-﻿using RdClient.Shared.Navigation;
-using RdClient.Shared.Models;
-
-using System.Collections.Generic;
+﻿using RdClient.Shared.Models;
+using RdClient.Shared.Navigation;
+using System.ComponentModel;
 using System.Windows.Input;
+using Windows.ApplicationModel.Core;
+using Windows.Storage.Streams;
+using Windows.UI.Core;
+using Windows.UI.Xaml.Media.Imaging;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System;
+using System.Threading.Tasks;
+using RdClient.Shared.Navigation.Extensions;
 
 namespace RdClient.Shared.ViewModels
 {
@@ -14,12 +21,17 @@ namespace RdClient.Shared.ViewModels
         private Desktop _desktop;
         private bool _isSelected;
         private RdDataModel _dataModel;
+        private BitmapImage _thumbnailImage;
+        private IExecutionDeferrer _executionDeferrer;
+        private bool _thumbnailUpdateNeeded;
 
-        public DesktopViewModel(Desktop desktop, INavigationService navService, RdDataModel dataModel)
+        public DesktopViewModel(Desktop desktop, INavigationService navService, RdDataModel dataModel, IExecutionDeferrer executionDeferrer)
         {
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
+            _thumbnailUpdateNeeded = true;
+            _executionDeferrer = executionDeferrer;
             this.Desktop = desktop;
 
             /// DesktopVieModel does not require Presenting/Dismissing, 
@@ -27,6 +39,16 @@ namespace RdClient.Shared.ViewModels
             //          NavigationService may be initialized later while presenting the parent view
             _dataModel = dataModel;
             this.NavigationService = navService;
+            this.Thumbnail.PropertyChanged += Thumbnail_PropertyChanged;
+            this.UpdateThumbnailImage(this.Thumbnail.EncodedImageBytes);
+        }
+
+        public void Presented()
+        {
+            if (_thumbnailUpdateNeeded)
+            {
+                UpdateThumbnailImage(this.Thumbnail.EncodedImageBytes);
+            }
         }
 
         public INavigationService NavigationService { private get; set; }
@@ -63,6 +85,32 @@ namespace RdClient.Shared.ViewModels
             set
             {
                 SetProperty(ref _isSelected, value);
+            }
+        }
+
+        public BitmapImage ThumbnailImage
+        {
+            get
+            {
+                return _thumbnailImage;
+            }
+            private set
+            {
+                SetProperty(ref _thumbnailImage, value);
+            }
+        }
+
+        public Thumbnail Thumbnail
+        {
+            get 
+            { 
+                if (!this.Desktop.HasThumbnail)
+                {
+                    Thumbnail thumbnail = new Thumbnail();
+                    this.Desktop.ThumbnailId = thumbnail.Id;
+                    _dataModel.Thumbnails.Add(thumbnail);
+        }
+                return _dataModel.Thumbnails.GetItemWithId(this.Desktop.ThumbnailId);
             }
         }
 
@@ -110,7 +158,8 @@ namespace RdClient.Shared.ViewModels
             ConnectionInformation connectionInformation = new ConnectionInformation()
             {
                 Desktop = this.Desktop,
-                Credentials = credentials
+                Credentials = credentials,
+                Thumbnail = this.Thumbnail
             };
 
             NavigationService.NavigateToView("SessionView", connectionInformation);            
@@ -119,6 +168,33 @@ namespace RdClient.Shared.ViewModels
         private void DeleteCommandExecute(object o)
         {
             NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.Desktop));            
+        }
+
+        void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (this.Thumbnail != null && "EncodedImageBytes".Equals(e.PropertyName))
+            {
+                UpdateThumbnailImage(this.Thumbnail.EncodedImageBytes);
+            }
+        }
+
+        private void UpdateThumbnailImage(byte[] imageBytes)
+        {
+            if (imageBytes != null)
+            {
+                _thumbnailUpdateNeeded = !_executionDeferrer.TryDeferToUI(
+                    async () =>
+                    {
+                        BitmapImage newImage = new BitmapImage();
+                        using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
+                        {
+                            await stream.WriteAsync(imageBytes.AsBuffer());
+                            stream.Seek(0);
+                            await newImage.SetSourceAsync(stream);
+                        }
+                        this.ThumbnailImage = newImage;
+                    });
+            }
         }
     }
 }

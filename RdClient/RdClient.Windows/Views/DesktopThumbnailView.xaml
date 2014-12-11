@@ -17,7 +17,7 @@
         <Grid Background="{StaticResource ConnectionCenterDesktopPlaceholderIconColor}">
             <Grid Height="256" Width="Auto"> 
                 <Grid.Background>
-                    <ImageBrush ImageSource="ms-appx:///Assets/desktop_placeholder.png" Stretch="None" AlignmentX="Center" AlignmentY="Center"/>
+                    <ImageBrush ImageSource="{Binding ThumbnailImage}" Stretch="Uniform"  AlignmentX="Center" AlignmentY="Center"/>
                 </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

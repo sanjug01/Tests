@@ -16,6 +16,7 @@
         private readonly ModelCollection<CloudWorkspace> _cloudWorkspaces;
         private readonly ModelCollection<Credentials> _credentials;
         private readonly ModelCollection<TrustedCertificate> _trustedCertificates;
+        private readonly ModelCollection<Thumbnail> _thumbnails;
         IDataStorage _storage;
 
         public LocalWorkspace LocalWorkspace
@@ -43,6 +44,11 @@
             get { return _trustedCertificates; }
         }
 
+        public ModelCollection<Thumbnail> Thumbnails
+        {
+            get { return _thumbnails; }
+        }
+
         public IDataStorage Storage
         {
             get { return _storage; }
@@ -56,6 +62,7 @@
             _cloudWorkspaces = new ModelCollection<CloudWorkspace>();
             _credentials = new ModelCollection<Credentials>();
             _trustedCertificates = new ModelCollection<TrustedCertificate>();
+            _thumbnails = new ModelCollection<Thumbnail>();
         }
 
         public void Load()

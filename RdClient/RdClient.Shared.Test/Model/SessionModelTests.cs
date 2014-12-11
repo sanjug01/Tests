@@ -9,189 +9,65 @@ namespace RdClient.Shared.Test.Model
     [TestClass]
     public class SessionModelTests
     {
-        private RdDataModel _dataModel;
+        SessionModel _sm;
+        Mock.RdpConnection _connection;
+        Mock.RdpConnectionFactory _connectionFactory;
+        Mock.TimerFactory _timerFactory;
+        Mock.Timer _timer;
+        Mock.Thumbnail _thumbnail;
+        bool _connectionMatches;
 
         [TestInitialize]
-        public void SetUpTest()
+        public void TestSetup()
         {
-            _dataModel = new RdDataModel();
+            _connection = new Mock.RdpConnection(null);
+            _connectionFactory = new Mock.RdpConnectionFactory();
+            _timerFactory = new Mock.TimerFactory();
+            _timer = new Mock.Timer();
+            _connectionMatches = false;
+
+            Desktop desktop = new Desktop() { HostName = "narf" };
+            Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
+            _thumbnail = new Mock.Thumbnail();
+            ConnectionInformation _connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials, Thumbnail = _thumbnail };
+
+            _sm = new SessionModel(_connectionFactory, _timerFactory);
+
+            _connectionFactory.Expect("CreateInstance", new List<object>(), _connection);
+            _timerFactory.Expect("CreateTimer", new List<object>(), _timer);
+            _connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
+            _connection.Expect("Connect", new List<object>() { credentials, true }, 0);
+            
+            _sm.ConnectionCreated += (sender, args) => { _connectionMatches = (_connection == (IRdpConnection)args.RdpConnection); };
+            _sm.Connect(_connectionInformation);
         }
 
         [TestCleanup]
-        public void TearDownTest()
+        public void TestCleanup()
         {
-            _dataModel = null;
+            _timerFactory.Dispose();
+            _connectionFactory.Dispose();
+            _connection.Dispose();
         }
 
         [TestMethod]
         public void ConnectionCreatedArgs_Constructor()
         {
-            IRdpConnection connection = new Mock.RdpConnection(null);
-            ConnectionCreatedArgs cca = new ConnectionCreatedArgs(connection);
-
-            Assert.AreEqual(connection, cca.RdpConnection);
+            ConnectionCreatedArgs cca = new ConnectionCreatedArgs(_connection);
+            Assert.AreEqual(_connection, cca.RdpConnection);
         }
 
         [TestMethod]
         public void SessionModel_ShouldConnect()
         {
-            using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
-            using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
-            {
-                bool connectionMatches = false;
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" };
-                Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
-                ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
-
-                SessionModel sm = new SessionModel(factory);
-                sm.ConnectionCreated += (sender, args) => { connectionMatches = (connection == (IRdpConnection)args.RdpConnection); };
-
-                factory.Expect("CreateInstance", new List<object>(), connection);
-
-                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
-                connection.Expect("Connect", new List<object>() { credentials, true }, 0);
-
-                sm.Connect(connectionInformation);
-
-                Assert.IsTrue(connectionMatches);
-            }
+            Assert.IsTrue(_connectionMatches);            
         }
 
         [TestMethod]
         public void SessionModel_ShouldDisconnect()
         {
-            using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
-            using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
-            {
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" };
-                Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
-                ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
-
-                SessionModel sm = new SessionModel(factory);
-
-                factory.Expect("CreateInstance", new List<object>(), connection);
-
-                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
-                connection.Expect("Connect", new List<object>() { credentials, true }, 0);
-
-                sm.Connect(connectionInformation);
-
-                connection.Expect("Disconnect", new List<object>() { }, 0);
-
-                sm.Disconnect();
-            }
-        }
-
-        [TestMethod]
-        public void ClientAsyncDisconnectHandler_PreAuthLogonFailed()
-        {
-            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.PreAuthLogonFailed, 0, 0);
-            ClientAsyncDisconnectArgs args = new ClientAsyncDisconnectArgs(reason);
-
-            using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
-            using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
-            {
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" };
-                Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
-                ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
-
-                SessionModel sm = new SessionModel(factory);
-
-                factory.Expect("CreateInstance", new List<object>(), connection);
-
-                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
-                connection.Expect("Connect", new List<object>() { credentials, true }, 0);
-
-                sm.Connect(connectionInformation);
-
-                connection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, false }, 0);
-
-                sm.ClientAsyncDisconnectHandler(null, args);
-            }
-        }
-
-        [TestMethod]
-        public void ClientAsyncDisconnectHandler_FreshCredsRequired()
-        {
-            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0);
-            ClientAsyncDisconnectArgs args = new ClientAsyncDisconnectArgs(reason);
-
-            using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
-            using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
-            {
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" };
-                Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
-                ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
-
-                SessionModel sm = new SessionModel(factory);
-
-                factory.Expect("CreateInstance", new List<object>(), connection);
-
-                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
-                connection.Expect("Connect", new List<object>() { credentials, true }, 0);
-
-                sm.Connect(connectionInformation);
-
-                connection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, false }, 0);
-
-                sm.ClientAsyncDisconnectHandler(null, args);
-            }
-        }
-
-        [TestMethod]
-        public void ClientAsyncDisconnectHandler_CertValidationFailed()
-        {
-            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.CertValidationFailed, 0, 0);
-            ClientAsyncDisconnectArgs args = new ClientAsyncDisconnectArgs(reason);
-
-            using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
-            using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
-            {
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" };
-                Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
-                ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
-
-                SessionModel sm = new SessionModel(factory);
-
-                factory.Expect("CreateInstance", new List<object>(), connection);
-
-                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
-                connection.Expect("Connect", new List<object>() { credentials, true }, 0);
-
-                sm.Connect(connectionInformation);
-
-                connection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, true }, 0);
-
-                sm.ClientAsyncDisconnectHandler(null, args);
-            }
-        }
-
-        [TestMethod]
-        public void ClientAsyncDisconnectHandler_CredSSPUnsupported()
-        {
-            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.CredSSPUnsupported, 0, 0);
-            ClientAsyncDisconnectArgs args = new ClientAsyncDisconnectArgs(reason);
-
-            using (Mock.RdpConnection connection = new Mock.RdpConnection(null))
-            using (Mock.RdpConnectionFactory factory = new Mock.RdpConnectionFactory())
-            {
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" };
-                Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
-                ConnectionInformation connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
-
-                SessionModel sm = new SessionModel(factory);
-
-                factory.Expect("CreateInstance", new List<object>(), connection);
-
-                connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
-                connection.Expect("Connect", new List<object>() { credentials, true }, 0);
-
-                sm.Connect(connectionInformation);
-
-                connection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, false }, 0);
-
-                sm.ClientAsyncDisconnectHandler(null, args);
-            }
+                _connection.Expect("Disconnect", new List<object>() { }, 0);
+                _sm.Disconnect();            
         }
     }
 }

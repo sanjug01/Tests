@@ -85,5 +85,15 @@ namespace RdClient.Shared.Test.Mock
         {
             Invoke(new object[] { propertyName, value });
         }
+
+        public IRdpScreenSnapshot GetSnapshot()
+        {
+            return (IRdpScreenSnapshot) Invoke(new object[] { });
+        }        
+
+        public IRdpCertificate GetServerCertificate()
+        {
+            return (IRdpCertificate)Invoke(new object[] { });
+        }
     }
 }

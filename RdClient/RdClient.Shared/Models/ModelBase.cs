@@ -10,6 +10,7 @@
     [KnownType(typeof(Desktop))]
     [KnownType(typeof(RemoteApplication))]
     [KnownType(typeof(Credentials))]
+    [KnownType(typeof(Thumbnail))]
     [KnownType(typeof(TrustedCertificate))]
     public class ModelBase : INotifyPropertyChanged, IEquatable<ModelBase>
     {

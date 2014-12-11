@@ -1,7 +1,7 @@
-﻿using RdClient.Shared.Models;
+﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.Navigation.Extensions;
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class ConnectionCenterViewModel : ViewModelBase, IConnectionCenterViewModel, IApplicationBarItemsSource
+    public class ConnectionCenterViewModel : DeferringViewModelBase, IConnectionCenterViewModel, IApplicationBarItemsSource
     {
         private readonly RelayCommand _addDesktopCommand;
 
@@ -93,6 +93,7 @@ namespace RdClient.Shared.ViewModels
             foreach (DesktopViewModel vm in this.DesktopViewModels)
             {
                 vm.NavigationService = this.NavigationService;
+                vm.Presented();
             }
         }
 
@@ -111,7 +112,7 @@ namespace RdClient.Shared.ViewModels
                 {
                     rr.CastAndCall<Desktop>(desktop =>
                     {
-                        DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel);
+                        DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel, this);
                         desktopVMs.Add(vm);
                         vm.PropertyChanged += DesktopSelection_PropertyChanged;
                     });
@@ -162,7 +163,7 @@ namespace RdClient.Shared.ViewModels
             {
                 foreach (Desktop desktop in e.NewItems)
                 {
-                    DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel);
+                    DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel, this);
                     vm.PropertyChanged += DesktopSelection_PropertyChanged;
                     this.DesktopViewModels.Add(vm);
                 }

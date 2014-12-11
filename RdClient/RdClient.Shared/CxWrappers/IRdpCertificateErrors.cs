@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.Models;
+using System;
 
 namespace RdClient.Shared.CxWrappers
 {
@@ -9,6 +10,7 @@ namespace RdClient.Shared.CxWrappers
         CredSSP = 2,
     }
 
+    [Flags]
     public enum CertificateErrors
     {
         Expired = 1,

@@ -1,5 +1,6 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Errors;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.Navigation.Extensions;
@@ -71,6 +72,8 @@ namespace RdClient.Shared.ViewModels
 
         public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
 
+        public ITimerFactory TimerFactory { private get; set; }
+
         public ObservableCollection<RemoteConnection> Desktops 
         { 
             get 
@@ -85,6 +88,7 @@ namespace RdClient.Shared.ViewModels
                 }
             } 
         }
+
         public ObservableCollection<Credentials> Users 
         { 
             get 
@@ -230,7 +234,7 @@ namespace RdClient.Shared.ViewModels
             int iterations = 3;
             int i;
             AutoResetEvent are = new AutoResetEvent(false);
-            SessionModel sm = new SessionModel(RdpConnectionFactory);
+            SessionModel sm = new SessionModel(RdpConnectionFactory, TimerFactory);
             IRdpConnection rdpConnection = null;
 
             EventHandler<ClientDisconnectedArgs> disconnectHandler = (s, a) => {

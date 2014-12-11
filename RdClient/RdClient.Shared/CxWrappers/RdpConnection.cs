@@ -77,7 +77,7 @@ namespace RdClient.Shared.CxWrappers
             //
             xRes = _rdpConnectionCx.TerminateInstance();
             RdTrace.IfFailXResultThrow(xRes, "Unable to terminate RDP connection.");
-            _rdpConnectionCx = null;
+            _rdpConnectionCx = null;            
         }
         
         public void Connect(Credentials credentials, bool fUsingSavedCreds)
@@ -172,6 +172,15 @@ namespace RdClient.Shared.CxWrappers
         {
             int xRes = _rdpConnectionCx.SetBoolProperty(propertyName, value);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set bool property: " + propertyName);
+        }
+
+        public IRdpScreenSnapshot GetSnapshot()
+        {
+            int width, height;
+            byte[] bytes;
+            int xRes = _rdpConnectionCx.GetSnapshot(out width, out height, out bytes);
+            RdTrace.IfFailXResultThrow(xRes, "Failed to get session snapshot");
+            return new RdpScreenSnapshot(width, height, bytes);
         }
 
         void OnClientConnectedHandler(RdClientCx.RdpConnection sender)

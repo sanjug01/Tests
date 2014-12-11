@@ -8,7 +8,7 @@
     /// <summary>
     /// Base class for view models that wish to defer execution of actions delegates to the UI thread.
     /// </summary>
-    public abstract class DeferringViewModelBase : ViewModelBase, IDeferredExecutionSite
+    public abstract class DeferringViewModelBase : ViewModelBase, IDeferredExecutionSite, IExecutionDeferrer
     {
         private readonly ReaderWriterLockSlim _monitor;
         private IDeferredExecution _dispatcher;
@@ -18,15 +18,26 @@
             _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         }
 
-        protected void DeferToUI(Action action)
+        public void DeferToUI(Action action)
         {
-            using(ReadWriteMonitor.Read(_monitor))
+            if (!TryDeferToUI(action))
             {
-                if (null == _dispatcher)
-                    throw new DeferredExecutionExeption("Cannot defer execution from an inactive view model");
-
-                _dispatcher.Defer(action);
+                throw new DeferredExecutionExeption("Cannot defer execution from an inactive view model");
             }
+        }
+
+        public bool TryDeferToUI(Action action)
+        {
+            bool succeeded = false;
+            using (ReadWriteMonitor.Read(_monitor))
+            {
+                if (null != _dispatcher)
+                {
+                    _dispatcher.Defer(action);
+                    succeeded = true;
+                }
+            }
+            return succeeded;
         }
 
         protected override void DisposeManagedState()

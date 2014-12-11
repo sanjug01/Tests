@@ -142,5 +142,118 @@ namespace RdClient.Shared.Test.ViewModels
                 eventSource.EmitClientDisconnected(rdpConnection, clientDisconnectedArgs);
             }
         }
+
+        [TestMethod]
+        public void SessionViewModel_HandleAsyncDisconnect_ConnectionShouldHandleDisconnect()
+        {
+            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0);
+            ClientAsyncDisconnectArgs clientAsyncDisconnectArgs = new ClientAsyncDisconnectArgs(reason);
+            RdpEventSource eventSource = new RdpEventSource();
+            bool connectionShouldReconnect = false;
+
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
+            {
+                ConnectionInformation connectionInformation = new ConnectionInformation()
+                {
+                    Desktop = new Desktop() { HostName = "narf" },
+                    Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
+                };
+
+                sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
+                rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, connectionShouldReconnect }, 0);
+
+                SessionViewModel svm = new SessionViewModel();
+                svm.SessionModel = sessionModel;
+
+                ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
+
+                svm.ConnectCommand.Execute(null);
+
+                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
+                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
+
+                eventSource.EmitClientAsyncDisconnect(rdpConnection, clientAsyncDisconnectArgs);
+            }
+        }
+
+        [TestMethod]
+        public void SessionViewModel_HandleAsyncDisconnect_ShouldDisplayCertificateValidation()
+        {
+            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.CertValidationFailed, 0, 0);
+            ClientAsyncDisconnectArgs clientAsyncDisconnectArgs = new ClientAsyncDisconnectArgs(reason);
+            RdpEventSource eventSource = new RdpEventSource();
+            bool isCertificateAccepted = false;
+
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
+            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
+            {
+                ConnectionInformation connectionInformation = new ConnectionInformation()
+                {
+                    Desktop = new Desktop() { HostName = "narf" },
+                    Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
+                };
+
+                rdpConnection.Expect("GetServerCertificate", new List<object> { }, rdpCertificate);
+                sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
+                sessionModel.Expect("IsCertificateAccepted", new List<object> { rdpCertificate }, isCertificateAccepted);
+                navigation.Expect("PushModalView", new List<object> { "CertificateValidationView", null, null }, null);
+
+                SessionViewModel svm = new SessionViewModel();
+                svm.SessionModel = sessionModel;
+
+                ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
+
+                svm.ConnectCommand.Execute(null);
+
+                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
+                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
+
+                eventSource.EmitClientAsyncDisconnect(rdpConnection, clientAsyncDisconnectArgs);
+            }
+        }
+
+        [TestMethod]
+        public void SessionViewModel_HandleAsyncDisconnect_ShouldReconnectIfCertificateAccepted()
+        {
+            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.CertValidationFailed, 0, 0);
+            ClientAsyncDisconnectArgs clientAsyncDisconnectArgs = new ClientAsyncDisconnectArgs(reason);
+            RdpEventSource eventSource = new RdpEventSource();
+            bool isCertificateAccepted = true;
+            bool connectionShouldReconnect = true;
+
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
+            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
+            {
+                ConnectionInformation connectionInformation = new ConnectionInformation()
+                {
+                    Desktop = new Desktop() { HostName = "narf" },
+                    Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
+                };
+
+                rdpConnection.Expect("GetServerCertificate", new List<object> { }, rdpCertificate);
+                sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
+                sessionModel.Expect("IsCertificateAccepted", new List<object> { rdpCertificate }, isCertificateAccepted);
+                rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, connectionShouldReconnect }, 0);
+
+                SessionViewModel svm = new SessionViewModel();
+                svm.SessionModel = sessionModel;
+
+                ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
+
+                svm.ConnectCommand.Execute(null);
+
+                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
+                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
+
+                eventSource.EmitClientAsyncDisconnect(rdpConnection, clientAsyncDisconnectArgs);
+            }
+        }
+
     }
 }

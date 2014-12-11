@@ -350,7 +350,7 @@ pointer</value>
     <value>To connect to Microsoft RemoteApp, sign in with an appropriate user account. This could be your Microsoft account or organizational account. Check with your admin if you need more info.</value>
     <comment>Text located in the AcquireAdalToken dialog.</comment>
   </data>
-    <data name="DialogAzureSignOut_SignOutTitle.Text" xml:space="preserve">
+  <data name="DialogAzureSignOut_SignOutTitle.Text" xml:space="preserve">
     <value>(r)Sign out and continue</value>
     <comment>Title of the AzureSignOut dialog.</comment>
   </data>
@@ -983,12 +983,12 @@ pointer</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="Disconnect_ErrorCode_String" xml:space="preserve">
-    <value>Inquiring minds may find this error code helpful: &#x202a;0x{0}&#x202c; </value>
-    <comment>Disconnection error located in the disconnect error dialog. {Locked="&#x202a;0x{0}&#x202c;"}</comment>
+    <value>Inquiring minds may find this error code helpful: ‪0x{0}‬ </value>
+    <comment>Disconnection error located in the disconnect error dialog. {Locked="‪0x{0}‬"}</comment>
   </data>
   <data name="Disconnect_ExtendedErrorCode_String" xml:space="preserve">
-    <value>Inquiring minds may find this error code helpful: &#x202a;0x{0}&#x202c; (extended)</value>
-    <comment>Disconnection error located in the disconnect error dialog. {Locked="&#x202a;0x{0}&#x202c;"}</comment>
+    <value>Inquiring minds may find this error code helpful: ‪0x{0}‬ (extended)</value>
+    <comment>Disconnection error located in the disconnect error dialog. {Locked="‪0x{0}‬"}</comment>
   </data>
   <data name="FeedDownloadError_CompleteFailure_String" xml:space="preserve">
     <value>(r)We were unable to download the remote resources. Please refresh and try again after a few minutes.</value>
@@ -1065,5 +1065,41 @@ pointer</value>
   <data name="UcLoggingOptions_TraceLevel_Warning.Content" xml:space="preserve">
     <value>Warning</value>
     <comment>Noun. Level of tracing desired. Text of the ComboBox item.</comment>
+  </data>
+  <data name="CertificateError_Critical_String" xml:space="preserve">
+    <value>critical certificate error (d)</value>
+    <comment>Certificate error</comment>
+  </data>
+  <data name="CertificateError_Expired_String" xml:space="preserve">
+    <value>certificate is expired  (d)</value>
+    <comment>Certificate error</comment>
+  </data>
+  <data name="CertificateError_MismatchedCert_String" xml:space="preserve">
+    <value>certificate mismatch  (d)</value>
+    <comment>Certificate error</comment>
+  </data>
+  <data name="CertificateError_NameMismatch_String" xml:space="preserve">
+    <value>certificate name mismatch  (d)</value>
+    <comment>Certificate error</comment>
+  </data>
+  <data name="CertificateError_RevocationUnknown_String" xml:space="preserve">
+    <value>certificate revocation unknown  (d)</value>
+    <comment>Certificate error</comment>
+  </data>
+  <data name="CertificateError_Revoked_String" xml:space="preserve">
+    <value>revoked certificate  (d)</value>
+    <comment>Certificate error</comment>
+  </data>
+  <data name="CertificateError_UnknownError_String" xml:space="preserve">
+    <value>unknown certificate error  (d)</value>
+    <comment>Certificate error</comment>
+  </data>
+  <data name="CertificateError_UntrustedRoot_String" xml:space="preserve">
+    <value>untrusted certificate  (d)</value>
+    <comment>Certificate error</comment>
+  </data>
+  <data name="CertificateError_WrongEKU_String" xml:space="preserve">
+    <value>certificate wrong EKU (d)</value>
+    <comment>Certificate error</comment>
   </data>
 </root>

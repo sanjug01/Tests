@@ -5,6 +5,7 @@ using RdClient.Shared.ViewModels;
 using System.Diagnostics.Contracts;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using RdClient.Shared.Helpers;
 
 namespace RdClient.Views
 {
@@ -35,7 +36,7 @@ namespace RdClient.Views
             factory.SwapChainPanel = this.SwapChainPanel;
 
             SessionViewModel sessionViewModel = this.DataContext as SessionViewModel;
-            sessionViewModel.SessionModel = new SessionModel(factory);
+            sessionViewModel.SessionModel = new SessionModel(factory, new WinrtThreadPoolTimerFactory());
             sessionViewModel.ConnectCommand.Execute(null);
         }
     }

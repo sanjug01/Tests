@@ -8,7 +8,8 @@
     {
         private string _hostName;
         private Guid _credId;
-
+        private Guid _thumbnailId;
+        
         public Desktop(Workspace parentWorkspace)
             : base(parentWorkspace)
         {
@@ -38,6 +39,18 @@
         public bool HasCredential
         {
             get { return !this.CredentialId.Equals(Guid.Empty); }
+        }
+
+        [DataMember]
+        public Guid ThumbnailId
+        {
+            get { return _thumbnailId; }
+            set { SetProperty(ref _thumbnailId, value); }
+        }
+
+        public bool HasThumbnail
+        {
+            get { return !Guid.Empty.Equals(this.ThumbnailId); }
         }
     }
 }
