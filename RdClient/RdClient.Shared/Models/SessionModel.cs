@@ -3,7 +3,10 @@ using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RdClient.Shared.Models
 {
@@ -27,6 +30,8 @@ namespace RdClient.Shared.Models
         private IRdpConnection _rdpConnection;
 
         private Snapshotter _snapshotter;
+        private List<IRdpCertificate> _acceptedCertificates;
+
         
         private void EmitConnectionCreated(ConnectionCreatedArgs args)
         {
@@ -43,6 +48,7 @@ namespace RdClient.Shared.Models
             _timerFactory = timerFactory;
 
             ConnectionCreated += OnConnectionCreated;
+            _acceptedCertificates = new List<IRdpCertificate>();
         }
 
         public void Connect(ConnectionInformation connectionInformation)
@@ -68,53 +74,37 @@ namespace RdClient.Shared.Models
 
             _rdpConnection = null;
         }
-
-        private void OnConnectionCreated(object sender, ConnectionCreatedArgs args)
+        
+        /// <summary>
+        ///   Adds certificate to the list of accepted certificate (temporary or persistent)
+        /// </summary>
+        /// <param name="certificate">presented certificate</param>
+        /// <param name="alwaysAccept">indicates if should persist this certificate or not.</param>
+        void ISessionModel.AcceptCertificate(IRdpCertificate certificate, bool alwaysAccept)
         {
-            args.RdpConnection.Events.ClientAsyncDisconnect += ClientAsyncDisconnectHandler;
+            Contract.Assert(null != certificate);
+
+            // should add to the datamodel too, only if alwaysAccept
+            _acceptedCertificates.Add(certificate);            
         }
 
-        public void ClientAsyncDisconnectHandler(object sender, ClientAsyncDisconnectArgs args)
+        /// <summary>
+        /// verifies that the presented certificate has been accepted either only for current session or always
+        /// </summary>
+        /// <param name="certificate">preented certificate</param>
+        /// <returns>true if certificates has been accepted</returns>
+        bool ISessionModel.IsCertificateAccepted(IRdpCertificate certificate)
         {
-            bool reconnect;
-
-            switch (args.DisconnectReason.Code)
+            Contract.Assert(null != certificate);
+            foreach(IRdpCertificate accepterCertificate in _acceptedCertificates)
             {
-                case RdpDisconnectCode.PreAuthLogonFailed:
-                    {
-                        reconnect = false;
-                    }
-                    break;
-                case RdpDisconnectCode.FreshCredsRequired:
-                    {
-                        reconnect = false;
-                    }
-                    break;
-
-                case RdpDisconnectCode.CertValidationFailed:
-                    {
-                        reconnect = true;
-                    }
-                    break;
-
-                case RdpDisconnectCode.CredSSPUnsupported:
-                    {
-                        reconnect = false;
-                    }
-                    break;
-
-                default:
-                    {
-                        //
-                        // For all other reasons, we just disconnect.
-                        // We'll handle showing any appropriate dialogs to the user in OnClientDisconnectedHandler.
-                        //
-                        reconnect = false;
-                    }
-                    break;
+                // compare serial numbers
+                if (certificate.SerialNumber.SequenceEqual<byte>(accepterCertificate.SerialNumber))
+                {
+                    return true;
+                }
             }
-
-            _rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
+            return false;
         }
     }
 }

@@ -60,6 +60,7 @@
     <Compile Include="Converters\RdpErrorToLocalizedStringConverter.cs" />
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverter.cs" />
+    <Compile Include="Converters\ByteArrayToStringConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
     <Compile Include="CxWrappers\Errors\AdalError.cs" />
     <Compile Include="CxWrappers\Errors\AutoReconnectError.cs" />
@@ -83,7 +84,9 @@
     <Compile Include="CxWrappers\RdpScreenSnapshot.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
+    <Compile Include="Helpers\CertificateErrorHelper.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
+    <Compile Include="Helpers\CertificateErrorString.cs" />
     <Compile Include="Helpers\DisconnectString.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />
     <Compile Include="Helpers\IDeferredExecution.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="Navigation\IModalPresentationContext.cs" />
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
+    <Compile Include="ViewModels\CertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModel.cs" />
     <Compile Include="ViewModels\DesktopViewModel.cs" />
     <Compile Include="Navigation\Extensions\DataModelExtension.cs" />

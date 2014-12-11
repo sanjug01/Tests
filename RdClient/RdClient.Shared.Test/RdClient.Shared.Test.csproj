@@ -83,6 +83,7 @@
     <Compile Include="CxWrappers\RdpScreenSnapshotTests.cs" />
     <Compile Include="CxWrappers\RdpUtilsTests.cs" />
     <Compile Include="Helpers\ITimerTests.cs" />
+    <Compile Include="Helpers\CertificateErrorHelperTests.cs" />
     <Compile Include="Helpers\MutableObjectTests.cs" />
     <Compile Include="Helpers\ReadWriteMonitorTests.cs" />
     <Compile Include="Helpers\TestData.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Mock\PhysicalScreenSize.cs" />
     <Compile Include="Mock\PresentableView.cs" />
     <Compile Include="Mock\PresentableViewConstructor.cs" />
+    <Compile Include="Mock\RdpCertificate.cs" />
     <Compile Include="Mock\RdpConnection.cs" />
     <Compile Include="Mock\RdpConnectionFactory.cs" />
     <Compile Include="Mock\RdpEvents.cs" />
@@ -118,6 +120,7 @@
     <Compile Include="Navigation\PresentationCompletionEventArgsTests.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
     <Compile Include="ViewModels\AddUserViewModelTests.cs" />
+    <Compile Include="ViewModels\CertificateValidationViewModelTests.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModelTests.cs" />
     <Compile Include="ViewModels\BarButtonModelTests.cs" />
     <Compile Include="ViewModels\BarItemModelTests.cs" />

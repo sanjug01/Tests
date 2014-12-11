@@ -69,45 +69,5 @@ namespace RdClient.Shared.Test.Model
                 _connection.Expect("Disconnect", new List<object>() { }, 0);
                 _sm.Disconnect();            
         }
-
-        [TestMethod]
-        public void ClientAsyncDisconnectHandler_PreAuthLogonFailed()
-        {
-            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.PreAuthLogonFailed, 0, 0);
-            ClientAsyncDisconnectArgs args = new ClientAsyncDisconnectArgs(reason);
-
-            _connection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, false }, 0);
-            _sm.ClientAsyncDisconnectHandler(null, args);            
-        }
-
-        [TestMethod]
-        public void ClientAsyncDisconnectHandler_FreshCredsRequired()
-        {
-            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0);
-            ClientAsyncDisconnectArgs args = new ClientAsyncDisconnectArgs(reason);
-
-            _connection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, false }, 0);
-            _sm.ClientAsyncDisconnectHandler(null, args);            
-        }
-
-        [TestMethod]
-        public void ClientAsyncDisconnectHandler_CertValidationFailed()
-        {
-            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.CertValidationFailed, 0, 0);
-            ClientAsyncDisconnectArgs args = new ClientAsyncDisconnectArgs(reason);
-
-            _connection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, true }, 0);
-            _sm.ClientAsyncDisconnectHandler(null, args);            
-        }
-
-        [TestMethod]
-        public void ClientAsyncDisconnectHandler_CredSSPUnsupported()
-        {
-            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.CredSSPUnsupported, 0, 0);
-            ClientAsyncDisconnectArgs args = new ClientAsyncDisconnectArgs(reason);
-
-            _connection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, false }, 0);
-            _sm.ClientAsyncDisconnectHandler(null, args);            
-        }
     }
 }

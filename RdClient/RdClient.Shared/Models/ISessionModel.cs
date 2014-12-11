@@ -8,5 +8,7 @@ namespace RdClient.Shared.Models
 
         void Connect(ConnectionInformation connectionInformation);
         void Disconnect();
+        void AcceptCertificate(IRdpCertificate certificate, bool alwaysAccept = false);
+        bool IsCertificateAccepted(IRdpCertificate certificate);
     }
 }
