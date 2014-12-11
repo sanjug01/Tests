@@ -21,6 +21,7 @@ namespace RdClient.Shared.ViewModels
 
         public ISessionModel SessionModel { get; set; }
         public DisconnectString DisconnectString { get; set; }
+        public MouseViewModel MouseViewModel { get; set; }
 
         public SessionViewModel()
         {

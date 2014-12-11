@@ -11,11 +11,24 @@
     >
     
     <Page.DataContext>
-        <vm:SessionViewModel />
+        <vm:SessionViewModel>
+            <vm:SessionViewModel.MouseViewModel>
+                <vm:MouseViewModel/>
+            </vm:SessionViewModel.MouseViewModel>
+        </vm:SessionViewModel>
     </Page.DataContext>
     
     <Grid Background="green">
         <SwapChainPanel x:Name="SwapChainPanel"/>
+
+        <Border x:Name="MouseLayer" 
+                Background="Transparent" 
+                VerticalAlignment="Stretch" 
+                HorizontalAlignment="Stretch" 
+                ManipulationMode="All"            
+                IsHitTestVisible="True"
+            />
+        
         <Button
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right" Command="{Binding DisconnectCommand}">Disconnect</Button>
