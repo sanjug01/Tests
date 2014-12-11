@@ -91,7 +91,6 @@
     <Compile Include="Mock\ViewFactory.cs" />
     <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
-    <Compile Include="Model\DataModelTests.cs" />
     <Compile Include="Model\ModelCollectionTests.cs" />
     <Compile Include="Model\RdDataModelTests.cs" />
     <Compile Include="Model\SessionModelTests.cs" />
