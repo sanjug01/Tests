@@ -8,5 +8,12 @@
         public RemoteApplication(Workspace parentWorkspace) : base(parentWorkspace)
         {
         }
+
+        /// <summary>
+        /// Default constructor for loading objects by a serializer.
+        /// </summary>
+        public RemoteApplication()
+        {
+        }
     }
 }

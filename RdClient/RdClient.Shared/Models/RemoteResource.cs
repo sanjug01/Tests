@@ -8,7 +8,7 @@
     /// </summary>
     public abstract class RemoteResource : ModelBase
     {
-        private readonly Workspace _parentWorkspace;
+        private Workspace _parentWorkspace;
 
         /// <summary>
         /// Tell the remote resource to always accept a certificate.
@@ -36,12 +36,29 @@
             _parentWorkspace = parentWorkspace;
         }
 
+        protected RemoteResource()
+        {
+        }
+
         /// <summary>
         /// Make the workspace available to child classes.
         /// </summary>
         protected Workspace ParentWorkspace
         {
             get { return _parentWorkspace; }
+        }
+
+        /// <summary>
+        /// Serialization requires a default constructor that cannot attach the new object to
+        /// a parent workspace. In serialization scenarios a workspace may be attached to a loaded object.
+        /// </summary>
+        /// <param name="parentWorkspace">New parent workspace.</param>
+        public void AttachToWorkspace(Workspace parentWorkspace)
+        {
+            Contract.Requires(null != parentWorkspace);
+            Contract.Ensures(null != _parentWorkspace);
+            Contract.Assert(null == _parentWorkspace);
+            _parentWorkspace = parentWorkspace;
         }
     }
 }

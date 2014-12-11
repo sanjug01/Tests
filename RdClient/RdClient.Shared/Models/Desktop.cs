@@ -13,6 +13,13 @@
             : base(parentWorkspace)
         {
         }
+
+        /// <summary>
+        /// Default constructor for loading objects by a serializer.
+        /// </summary>
+        public Desktop()
+        {
+        }
         
         [DataMember]
         public string HostName
