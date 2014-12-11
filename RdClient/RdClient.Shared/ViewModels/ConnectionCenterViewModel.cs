@@ -107,7 +107,7 @@ namespace RdClient.Shared.ViewModels
             {
                 ObservableCollection<IDesktopViewModel> desktopVMs = new ObservableCollection<IDesktopViewModel>();
 
-                foreach (RemoteResource rr in this.DataModel.LocalWorkspace.Connections)
+                foreach (RemoteConnection rr in this.DataModel.LocalWorkspace.Connections)
                 {
                     rr.CastAndCall<Desktop>(desktop =>
                     {

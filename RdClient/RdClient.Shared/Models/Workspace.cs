@@ -9,7 +9,7 @@
     public abstract class Workspace : ModelBase
     {
         private readonly RdDataModel _persistentData;
-        private readonly ModelCollection<RemoteResource> _connections;
+        private readonly ModelCollection<RemoteConnection> _connections;
 
         protected Workspace(RdDataModel persistentData)
         {
@@ -18,10 +18,10 @@
             Contract.Ensures(null != _connections);
 
             _persistentData = persistentData;
-            _connections = new ModelCollection<RemoteResource>();
+            _connections = new ModelCollection<RemoteConnection>();
         }
 
-        public ModelCollection<RemoteResource> Connections
+        public ModelCollection<RemoteConnection> Connections
         {
             get { return _connections; }
         }

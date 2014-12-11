@@ -3,7 +3,7 @@
     using System.Runtime.Serialization;
 
     [DataContract(IsReference = true)]
-    public sealed class RemoteApplication : RemoteResource
+    public sealed class RemoteApplication : RemoteConnection
     {
         public RemoteApplication(Workspace parentWorkspace) : base(parentWorkspace)
         {

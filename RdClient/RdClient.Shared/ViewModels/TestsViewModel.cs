@@ -52,7 +52,7 @@ namespace RdClient.Shared.ViewModels
         /// <summary>
         /// only test data to be added to the global datamodel
         /// </summary>
-        private readonly ObservableCollection<RemoteResource> _desktops;
+        private readonly ObservableCollection<RemoteConnection> _desktops;
         private readonly ObservableCollection<Credentials> _users;
         private IList<object> _selectedDesktops;
         private SessionModel SessionModel { get; set; }
@@ -71,7 +71,7 @@ namespace RdClient.Shared.ViewModels
 
         public IRdpConnectionFactory RdpConnectionFactory { private get; set; }
 
-        public ObservableCollection<RemoteResource> Desktops 
+        public ObservableCollection<RemoteConnection> Desktops 
         { 
             get 
             {
@@ -144,7 +144,7 @@ namespace RdClient.Shared.ViewModels
             _testDesktopsItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, DesktopsTestCommand, "DesktopsTests",
                 BarItemModel.ItemAlignment.Right);
 
-            _desktops = new ObservableCollection<RemoteResource>();
+            _desktops = new ObservableCollection<RemoteConnection>();
             _users = new ObservableCollection<Credentials>();
             _selectedDesktops = null;
             this.SessionModel = null;

@@ -6,7 +6,7 @@
     /// <summary>
     /// Common root of "resource" objects - remote desktops and remote applications.
     /// </summary>
-    public abstract class RemoteResource : ModelBase
+    public abstract class RemoteConnection : ModelBase
     {
         private Workspace _parentWorkspace;
 
@@ -29,14 +29,14 @@
         /// A resource is always associated with a workspace.
         /// </summary>
         /// <param name="workspace">Workspace to that the resource belongs.</param>
-        protected RemoteResource(Workspace parentWorkspace)
+        protected RemoteConnection(Workspace parentWorkspace)
         {
             Contract.Requires(null != parentWorkspace);
             Contract.Ensures(null != _parentWorkspace);
             _parentWorkspace = parentWorkspace;
         }
 
-        protected RemoteResource()
+        protected RemoteConnection()
         {
         }
 

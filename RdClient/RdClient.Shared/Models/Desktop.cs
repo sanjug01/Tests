@@ -4,7 +4,7 @@
     using System.Runtime.Serialization;
 
     [DataContract(IsReference = true)]
-    public sealed class Desktop : RemoteResource
+    public sealed class Desktop : RemoteConnection
     {
         private string _hostName;
         private Guid _credId;

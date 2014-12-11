@@ -100,7 +100,7 @@
     <Compile Include="Models\LocalWorkspace.cs" />
     <Compile Include="Models\ModelCollection.cs" />
     <Compile Include="Models\OnPremiseWorkspace.cs" />
-    <Compile Include="Models\RemoteResource.cs" />
+    <Compile Include="Models\RemoteConnection.cs" />
     <Compile Include="Models\TrustedCertificate.cs" />
     <Compile Include="Models\Workspace.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarItemsSourceContract.cs" />
