@@ -47,7 +47,6 @@ namespace RdClient.Shared.Models
             _connectionFactory = connectionFactory;
             _timerFactory = timerFactory;
 
-            ConnectionCreated += OnConnectionCreated;
             _acceptedCertificates = new List<IRdpCertificate>();
         }
 

@@ -6,11 +6,11 @@ namespace RdClient.Shared.Helpers
 {
     public class CertificateErrorString
     {
-        private readonly ILocalizedString _localizedStrings;
+        private readonly IStringTable _localizedStrings;
 
         private Dictionary<CertificateErrors, string> codeMap = new Dictionary<CertificateErrors, string>();
 
-        public CertificateErrorString(ILocalizedString localizedStrings)
+        public CertificateErrorString(IStringTable localizedStrings)
         {
             _localizedStrings = localizedStrings;
                        
