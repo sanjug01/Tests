@@ -51,7 +51,7 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        public INavigationService NavigationService { private get; set; }
+        public INavigationService NavigationService { get; set; }
 
         public Desktop Desktop
         {
@@ -170,7 +170,7 @@ namespace RdClient.Shared.ViewModels
             NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.Desktop));            
         }
 
-        void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (this.Thumbnail != null && "EncodedImageBytes".Equals(e.PropertyName))
             {
