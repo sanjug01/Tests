@@ -28,6 +28,11 @@
             get { return _onPremiseWorkspaces; }
         }
 
+        public ModelCollection<CloudWorkspace> CloudWorkspaces
+        {
+            get { return _cloudWorkspaces; }
+        }
+
         public ModelCollection<Credentials> Credentials
         {
             get { return _credentials; }
