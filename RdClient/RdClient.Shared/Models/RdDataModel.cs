@@ -105,7 +105,7 @@
             catch(InvalidOperationException)
             {
                 //
-                // There is no trust; just assert that there ist't
+                // There is no trust; just assert that there isnt't
                 //
                 Contract.Assert(!trusted);
             }
