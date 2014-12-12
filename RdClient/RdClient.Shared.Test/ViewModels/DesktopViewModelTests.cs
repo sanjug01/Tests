@@ -11,7 +11,7 @@ namespace RdClient.Shared.Test.ViewModels
     public class DesktopViewModelTests
     {
         private TestData _testData;
-        private Mock.DataModel _dataModel;
+        private RdDataModel _dataModel;
         private Mock.NavigationService _navService;
         private Desktop _desktop;
         private Credentials _cred;
@@ -21,15 +21,12 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestSetup()
         {
             _testData = new TestData();
-            _dataModel = new Mock.DataModel();
-            _dataModel.Credentials = new ModelCollection<Credentials>();
-            _dataModel.Desktops = new ModelCollection<Desktop>();
-            _dataModel.Thumbnails = new ModelCollection<Thumbnail>();
+            _dataModel = new RdDataModel();
             _navService = new Mock.NavigationService();
             _cred = _testData.NewValidCredential();
             _desktop = _testData.NewValidDesktop(_cred.Id);
             _dataModel.Credentials.Add(_cred);
-            _dataModel.Desktops.Add(_desktop);
+            _dataModel.LocalWorkspace.Connections.Add(_desktop);
             _vm = new DesktopViewModel(_desktop, _navService, _dataModel, null);
         }
 
@@ -37,7 +34,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestCleanup()
         {
             _navService.Dispose();
-            _dataModel.Dispose();
+            _dataModel = null;
         }
 
         [TestMethod]

@@ -14,7 +14,7 @@ namespace RdClient.Shared.Test.ViewModels
     public class ConnectionCenterViewModelTests
     {
         private TestData _testData;
-        private Mock.DataModel _dataModel;
+        private RdDataModel _dataModel;
         private Mock.NavigationService _navService;
         private ConnectionCenterViewModel _vm;
 
@@ -23,19 +23,16 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _testData = new TestData();
             _navService = new Mock.NavigationService();
-            _dataModel = new Mock.DataModel();            
-            _dataModel.Credentials = new ModelCollection<Credentials>();
+            _dataModel = new RdDataModel();            
             List<Credentials> creds = _testData.NewSmallListOfCredentials();
             foreach(Credentials cred in creds)
             {
                 _dataModel.Credentials.Add(cred);
             }
-            _dataModel.Desktops = new ModelCollection<Desktop>();
             foreach(Desktop desktop in _testData.NewSmallListOfDesktops(creds))
             {
-                _dataModel.Desktops.Add(desktop);
+                _dataModel.LocalWorkspace.Connections.Add(desktop);
             }
-            _dataModel.Thumbnails = new ModelCollection<Thumbnail>();
             _vm = new ConnectionCenterViewModel();
             _vm.DataModel = _dataModel;
             ((IViewModel)_vm).Presenting(_navService, null, null);            
@@ -45,7 +42,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestCleanup()
         {
             _navService.Dispose();
-            _dataModel.Dispose();
+            _dataModel = null;
         }
 
         [TestMethod]
@@ -93,9 +90,9 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestHasDesktopsReturnsFalseIfThereAreNoDesktops()
         {
-            foreach(Desktop desktop in _dataModel.Desktops.ToList())
+            foreach (Desktop desktop in _dataModel.LocalWorkspace.Connections.ToList())
             {
-                _dataModel.Desktops.Remove(desktop);
+                _dataModel.LocalWorkspace.Connections.Remove(desktop);
             }
             Assert.IsFalse(_vm.HasDesktops);
         }
@@ -130,14 +127,14 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestDesktopViewModelAddedWhenDesktopAdded()
         {
-            _dataModel.Desktops.Add(_testData.NewValidDesktop(Guid.Empty));
+            _dataModel.LocalWorkspace.Connections.Add(_testData.NewValidDesktop(Guid.Empty));
             AssertDesktopViewModelsMatchDesktops();
         }
 
         [TestMethod]
         public void TestDesktopViewModelRemovedWhenDesktopRemoved()
         {
-            _dataModel.Desktops.RemoveAt(_testData.RandomSource.Next(_dataModel.Desktops.Count));
+            _dataModel.LocalWorkspace.Connections.RemoveAt(_testData.RandomSource.Next(_dataModel.LocalWorkspace.Connections.Count));
             AssertDesktopViewModelsMatchDesktops();
         }
 
@@ -155,8 +152,8 @@ namespace RdClient.Shared.Test.ViewModels
         private void AssertDesktopViewModelsMatchDesktops()
         {
             //checking there are the same number of DesktopViewModels as Desktops and that each Desktop is represented by a DesktopViewModel is sufficient
-            Assert.AreEqual(_dataModel.Desktops.Count, _vm.DesktopViewModels.Count);
-            foreach (Desktop desktop in _dataModel.Desktops)
+            Assert.AreEqual(_dataModel.LocalWorkspace.Connections.Count, _vm.DesktopViewModels.Count);
+            foreach (Desktop desktop in _dataModel.LocalWorkspace.Connections)
             {
                 Assert.IsTrue(_vm.DesktopViewModels.Any((dvm) => dvm.Desktop.Equals(desktop)));
             }
