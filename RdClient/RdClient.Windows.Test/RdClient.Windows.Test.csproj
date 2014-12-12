@@ -116,6 +116,7 @@
     <Compile Include="Converters\StringLengthToInvisibilityConverterTests.cs" />
     <Compile Include="Converters\ByteArrayToStringConverterTests.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverterTests.cs" />
+    <Compile Include="Helpers\DataStorageExtensionsTests.cs" />
     <Compile Include="LifeTimeManager\LifeTimeManagerTests.cs" />
     <Compile Include="Mock\RootFrameManager.cs" />
     <Compile Include="Mock\SuspensionArgs.cs" />

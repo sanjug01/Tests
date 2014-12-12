@@ -34,6 +34,11 @@
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public virtual void CopyTo(ModelBase destination)
+        {
+            destination._id = _id;
+        }
+
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] String propertyName = null)
         {
             Debug.WriteLine("propertyName: {0}, storage: {1}, value: {2}", propertyName, storage, value);

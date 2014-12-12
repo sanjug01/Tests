@@ -43,9 +43,9 @@
         }
 
         /// <summary>
-        /// Make the workspace available to child classes.
+        /// Reference to the workspace wi that the connection belongs.
         /// </summary>
-        protected Workspace ParentWorkspace
+        public Workspace ParentWorkspace
         {
             get { return _parentWorkspace; }
         }

@@ -30,12 +30,34 @@
             _connections = new ModelCollection<RemoteConnection>();
         }
 
+        public override void CopyTo(ModelBase destination)
+        {
+            Contract.Assert(destination is Workspace);
+            Workspace destinationWorkspace = (Workspace)destination;
+
+            base.CopyTo(destination);
+            destinationWorkspace.Connections.Clear();
+            //
+            // After an object was loaded by the contract serializer, the _connections field may be null;
+            //
+            if (null != _connections)
+            {
+                foreach (RemoteConnection rc in _connections)
+                    destinationWorkspace._connections.Add(rc);
+            }
+        }
+
         public void AttachToDataModel(RdDataModel dataModel)
         {
             Contract.Assert(null == _dataModel);
             Contract.Requires(null != dataModel);
             Contract.Ensures(null != _dataModel);
             _dataModel = dataModel;
+        }
+
+        public RdDataModel ParentDataModel
+        {
+            get { return _dataModel; }
         }
 
         public ModelCollection<RemoteConnection> Connections

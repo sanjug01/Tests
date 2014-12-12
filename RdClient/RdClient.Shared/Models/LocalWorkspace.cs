@@ -8,7 +8,7 @@
     [DataContract(IsReference = true)]
     public sealed class LocalWorkspace : Workspace
     {
-        public LocalWorkspace(RdDataModel persistentData) : base(persistentData)
+        public LocalWorkspace(RdDataModel dataModel) : base(dataModel)
         {
         }
 
