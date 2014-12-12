@@ -170,7 +170,7 @@ namespace RdClient.Shared.ViewModels
             NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.Desktop));            
         }
 
-        void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (this.Thumbnail != null && "EncodedImageBytes".Equals(e.PropertyName))
             {

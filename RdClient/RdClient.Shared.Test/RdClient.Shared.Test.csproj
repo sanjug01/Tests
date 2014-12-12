@@ -137,6 +137,8 @@
     <Compile Include="ViewModels\SegoeGlyphBarButtonModelTests.cs" />
     <Compile Include="ViewModels\SessionViewModelTests.cs" />
     <Compile Include="ViewModels\TestViewModelTests.cs" />
+    <Compile Include="ViewModels\DesktopViewModelTests.cs" />
+    <Compile Include="ViewModels\ConnectionCenterViewModelTests.cs" />
     <Compile Include="ViewModels\ViewModelBaseTests.cs" />
   </ItemGroup>
   <ItemGroup>
