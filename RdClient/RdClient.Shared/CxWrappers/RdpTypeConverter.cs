@@ -4,6 +4,29 @@ namespace RdClient.Shared.CxWrappers
 {
     class RdpTypeConverter
     {
+        public static RdClientCx.MouseEventType ConvertToCx(MouseEventType cxType)
+        {
+            switch(cxType)
+            {
+                case (MouseEventType.LeftPress):
+                    return RdClientCx.MouseEventType.LeftPress;
+                case (MouseEventType.LeftRelease):
+                    return RdClientCx.MouseEventType.LeftRelease;
+                case (MouseEventType.RightPress):
+                    return RdClientCx.MouseEventType.RightPress;
+                case (MouseEventType.RightRelease):
+                    return RdClientCx.MouseEventType.RightRelease;
+                case (MouseEventType.Move):
+                    return RdClientCx.MouseEventType.Move;
+                case (MouseEventType.MouseWheel):
+                    return RdClientCx.MouseEventType.MouseWheel;
+                case (MouseEventType.MouseHWheel):
+                    return RdClientCx.MouseEventType.MouseHWheel;
+                default:
+                    return RdClientCx.MouseEventType.LeftRelease;
+            }
+        }
+
         public static XPlatError.XResult32 ConvertFromCx(int error)
         {
             XPlatError.XResult32 xresult;

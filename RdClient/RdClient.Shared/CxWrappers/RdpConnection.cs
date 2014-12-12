@@ -183,6 +183,13 @@ namespace RdClient.Shared.CxWrappers
             return new RdpScreenSnapshot(width, height, bytes);
         }
 
+        public void SendMouseEvent(MouseEventType type, float xPos, float yPos)
+        {
+            int xRes = _rdpConnectionCx.SendMouseEvent(RdpTypeConverter.ConvertToCx(type), xPos, yPos);
+            RdTrace.IfFailXResultThrow(xRes, "Failed to send mouse event.");
+        }
+
+
         void OnClientConnectedHandler(RdClientCx.RdpConnection sender)
         {
             _eventProxy.EmitClientConnected(this, new ClientConnectedArgs());

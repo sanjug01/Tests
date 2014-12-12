@@ -9,6 +9,7 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
+
     public class SessionViewModel : ViewModelBase
     {
         private ConnectionInformation _connectionInformation;
@@ -44,6 +45,7 @@ namespace RdClient.Shared.ViewModels
             SessionModel.ConnectionCreated += (sender, args) => {
                 args.RdpConnection.Events.ClientDisconnected += HandleDisconnected;
                 args.RdpConnection.Events.ClientAsyncDisconnect += HandleAsyncDisconnect;
+                this.MouseViewModel.RdpConnection = args.RdpConnection;
             };
 
             SessionModel.Connect(_connectionInformation);

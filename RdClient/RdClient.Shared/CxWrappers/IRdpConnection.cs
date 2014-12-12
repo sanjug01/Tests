@@ -15,5 +15,6 @@ namespace RdClient.Shared.CxWrappers
         void HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer);
         IRdpScreenSnapshot GetSnapshot();
         IRdpCertificate GetServerCertificate();
+        void SendMouseEvent(MouseEventType type, float xPos, float yPos);
     }
 }

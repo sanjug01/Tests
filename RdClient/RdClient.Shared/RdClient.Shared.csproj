@@ -76,6 +76,7 @@
     <Compile Include="CxWrappers\IRdpConnectionFactory.cs" />
     <Compile Include="CxWrappers\IRdpEventHandlers.cs" />
     <Compile Include="CxWrappers\IRdpProperties.cs" />
+    <Compile Include="CxWrappers\MouseEventTypes.cs" />
     <Compile Include="CxWrappers\RdpCertificate.cs" />
     <Compile Include="CxWrappers\IRdpScreenSnapshot.cs" />
     <Compile Include="CxWrappers\RdpConnection.cs" />

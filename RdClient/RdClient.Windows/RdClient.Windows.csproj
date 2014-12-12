@@ -163,6 +163,7 @@
     <Compile Include="Views\AddOrEditDesktopView.xaml.cs">
       <DependentUpon>AddOrEditDesktopView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MouseLayerControl.cs" />
     <Compile Include="Views\TestsView.xaml.cs">
       <DependentUpon>TestsView.xaml</DependentUpon>
     </Compile>
@@ -224,6 +225,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
