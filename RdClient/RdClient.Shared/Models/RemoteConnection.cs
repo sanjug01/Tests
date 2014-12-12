@@ -2,10 +2,12 @@
 {
     using RdClient.Shared.CxWrappers;
     using System.Diagnostics.Contracts;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// Common root of "resource" objects - remote desktops and remote applications.
     /// </summary>
+    [DataContract(IsReference=true)]
     public abstract class RemoteConnection : ModelBase
     {
         private Workspace _parentWorkspace;

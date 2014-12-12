@@ -7,11 +7,16 @@
     using System.Runtime.Serialization;
 
     [DataContract(IsReference = true)]
+    [KnownType(typeof(RemoteConnection))]
     [KnownType(typeof(Desktop))]
     [KnownType(typeof(RemoteApplication))]
     [KnownType(typeof(Credentials))]
     [KnownType(typeof(Thumbnail))]
     [KnownType(typeof(TrustedCertificate))]
+    [KnownType(typeof(Workspace))]
+    [KnownType(typeof(LocalWorkspace))]
+    [KnownType(typeof(CloudWorkspace))]
+    [KnownType(typeof(OnPremiseWorkspace))]
     public class ModelBase : INotifyPropertyChanged, IEquatable<ModelBase>
     {
         [DataMember]

@@ -57,7 +57,8 @@
 
         protected override void ClearItems()
         {
-            throw new InvalidOperationException("Clearing collection is not supported");
+            _dictionary.Clear();
+            base.ClearItems();
         }
 
         protected override void SetItem(int index, T item)
