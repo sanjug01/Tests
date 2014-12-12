@@ -122,15 +122,6 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void TestDesktopViewModelsProvidedWithNavigationService()
-        {
-            foreach(DesktopViewModel dvm in _vm.DesktopViewModels)
-            {
-                Assert.AreEqual(_navService, dvm.NavigationService);
-            }
-        }
-
-        [TestMethod]
         public void TestDesktopViewModelsMatchDataModelDesktops()
         {
             AssertDesktopViewModelsMatchDesktops();

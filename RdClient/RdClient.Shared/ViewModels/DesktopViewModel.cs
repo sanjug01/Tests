@@ -51,7 +51,7 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        public INavigationService NavigationService { get; set; }
+        public INavigationService NavigationService { private get; set; }
 
         public Desktop Desktop
         {
