@@ -14,7 +14,7 @@ namespace RdClient.Shared.Models
     [DataContract(IsReference = true)]
     public sealed class Thumbnail : ModelBase, IThumbnail
     {
-        public const uint THUMBNAIL_HEIGHT = 256;
+        public const uint THUMBNAIL_HEIGHT = 276;
 
         private byte[] _imageBytes;        
 

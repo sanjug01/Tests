@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:design="using:RdClient.DesignTime"
     mc:Ignorable="d"
-    d:DesignHeight="256" Width="273">
+    d:DesignHeight="276" Width="342">
     
     <d:UserControl.DataContext>
         <design:FakeDesktopViewModel />
@@ -15,9 +15,9 @@
 
     <StackPanel>
         <Grid Background="{StaticResource ConnectionCenterDesktopPlaceholderIconColor}">
-            <Grid Height="256" Width="Auto"> 
+            <Grid Height="276" Width="342"> 
                 <Grid.Background>
-                    <ImageBrush ImageSource="{Binding ThumbnailImage}" Stretch="Uniform"  AlignmentX="Center" AlignmentY="Center"/>
+                    <ImageBrush ImageSource="{Binding ThumbnailImage}" Stretch="UniformToFill"  AlignmentX="Center" AlignmentY="Center"/>
                 </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -26,7 +26,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>        
                 <Button Command="{Binding ConnectCommand}" Grid.Column="0" Grid.Row="0" Content="Connect(d)" HorizontalAlignment="Left" VerticalAlignment="Center"/>

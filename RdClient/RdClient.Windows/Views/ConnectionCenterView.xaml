@@ -9,12 +9,12 @@
     xmlns:System="using:System"    
     xmlns:design="using:RdClient.DesignTime"
     xmlns:vm="using:RdClient.Shared.ViewModels"
-    mc:Ignorable="d">
-    
+    mc:Ignorable="d" Height="768" Width="1366">
+
     <d:Page.DataContext>
         <design:FakeConnectionCenterViewModel />
     </d:Page.DataContext>
-    
+
     <Page.DataContext>
         <vm:ConnectionCenterViewModel />
     </Page.DataContext>
@@ -39,15 +39,23 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="70" />
+            <RowDefinition Height="38" />
+            <RowDefinition Height="38" />
+            <RowDefinition Height="72" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button VerticalAlignment="Bottom" Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}"
-                Flyout="{StaticResource optionsMenuFlyout}">
-            <SymbolIcon Symbol="Add" />
+        <Grid Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
+            <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Text="Remote Desktop" VerticalAlignment="Center" Margin="68,0,0,0"/>
+        </Grid>
+        <Button VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="0" Style="{StaticResource ConnectionCenterBarButtonStyle}"
+            Flyout="{StaticResource optionsMenuFlyout}">
+            <SymbolIcon Symbol="Add" />            
         </Button>
+        <Grid Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
+            <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Text="Desktops" VerticalAlignment="Center" Margin="68,0,0,0"/>
+        </Grid>        
         <ScrollViewer
-            Grid.Row="1"
+            Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             HorizontalScrollMode="Enabled"
@@ -56,7 +64,7 @@
             VerticalScrollBarVisibility="Disabled"
             Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}"            
         >
-            <StackPanel Orientation="Horizontal" Margin="20,20,20,20">
+            <StackPanel Orientation="Horizontal" Margin="68,0,0,10">
                 <ItemsControl 
                         ItemsSource="{Binding DesktopViewModels}" 
                         Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -65,9 +73,9 @@
                             <WrapGrid />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>                        
+                    <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="5,5,5,5">                   
+                            <StackPanel Margin="0,0,20,20">
                                 <local:DesktopThumbnailView />
                             </StackPanel>
                         </DataTemplate>
@@ -81,8 +89,9 @@
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Style="{StaticResource ConnectionCenterLargeTextStyle}">It's Lonely here...</TextBlock>
                     <TextBlock Grid.Row="1" Style="{StaticResource ConnectionCenterRegularTextStyle}">Add some desktops</TextBlock>
-                </Grid>
+                </Grid>                
             </StackPanel>
         </ScrollViewer>
     </Grid>
+    
 </Page>

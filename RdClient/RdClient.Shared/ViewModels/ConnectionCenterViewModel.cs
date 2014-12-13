@@ -53,9 +53,7 @@ namespace RdClient.Shared.ViewModels
             return new BarItemModel[]
             {               
                 _editItem,
-                _deleteItem,
-                _rightSeparatorItem,
-                _testsItem,
+                _deleteItem
             };
         }
 

@@ -6,7 +6,7 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:model="using:RdClient.Shared.Models"
     xmlns:winmodel="using:RdClient.Models"
-    RequestedTheme="Light">
+    RequestedTheme="Dark">
 
     <Application.Resources>
         <ResourceDictionary>
