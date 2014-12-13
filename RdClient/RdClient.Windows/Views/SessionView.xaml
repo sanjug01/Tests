@@ -23,12 +23,13 @@
         <SwapChainPanel x:Name="SwapChainPanel"/>
 
         <controls:MouseLayerControl x:Name="MouseLayer" 
-                                    Background="Transparent"
                                     VerticalAlignment="Stretch"
                                     HorizontalAlignment="Stretch"
                                     MousePointer="{Binding MouseViewModel.MousePointer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    />
-        
+                                    MousePointerShape="{Binding MouseViewModel.MousePointerShape}"/>
+
+
+
         <Button
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right" Command="{Binding DisconnectCommand}">Disconnect</Button>

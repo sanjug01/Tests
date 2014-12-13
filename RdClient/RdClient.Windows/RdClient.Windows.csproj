@@ -115,6 +115,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MouseLayerControl.xaml.cs">
+      <DependentUpon>MouseLayerControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DesignTime\FakeConnectionCenterViewModel.cs" />
     <Compile Include="Factories\NavigationServiceFactory.cs" />
     <Compile Include="Factories\AppInitializer.cs" />
@@ -163,7 +166,6 @@
     <Compile Include="Views\AddOrEditDesktopView.xaml.cs">
       <DependentUpon>AddOrEditDesktopView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MouseLayerControl.cs" />
     <Compile Include="Views\TestsView.xaml.cs">
       <DependentUpon>TestsView.xaml</DependentUpon>
     </Compile>
@@ -224,11 +226,11 @@
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Controls\MouseLayerControl.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\Generic.xaml">
+    <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,13 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 
-// The Templated Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234235
+// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace RdClient.Controls
 {
-    using Windows.UI.Input;
     // int mouseState, float x, float y;
     // mouseState is:
     // 0: LeftPress
@@ -19,9 +29,21 @@ namespace RdClient.Controls
     // 6: RightRelease
     using MousePointer = Tuple<int, float, float>;
 
-    public class MouseLayerControl : Control
+    public sealed partial class MouseLayerControl : UserControl
     {
+
         private PointerPoint _lastPointerPoint;
+
+        public MouseLayerControl()
+        {
+            this.InitializeComponent();
+
+            this.PointerCanceled += PointerCanceledHandler;
+            this.PointerReleased += PointerReleasedHandler;
+            this.PointerPressed += PointerPressedHandler;
+            this.PointerMoved += PointerMovedHandler;
+        }
+
 
         public static readonly DependencyProperty MousePointerProperty = DependencyProperty.Register(
             "MousePointer", typeof(MousePointer),
@@ -38,14 +60,26 @@ namespace RdClient.Controls
 
         }
 
-        public MouseLayerControl()
-        {
-            this.DefaultStyleKey = typeof(MouseLayerControl);
+        public static readonly DependencyProperty MousePointerShapeProperty = DependencyProperty.Register(
+            "MousePointerShape", typeof(ImageSource),
+            typeof(MouseLayerControl), new PropertyMetadata(true, MousePointerShapePropertyChanged));
 
-            this.PointerCanceled += PointerCanceledHandler;
-            this.PointerReleased += PointerReleasedHandler;
-            this.PointerPressed += PointerPressedHandler;
-            this.PointerMoved += PointerMovedHandler;
+        public ImageSource MousePointerShape
+        {
+            get { return (ImageSource)GetValue(MousePointerProperty); }
+            set { SetValue(MousePointerProperty, value); }
+        }
+        private static void MousePointerShapePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            MouseLayerControl mlc = d as MouseLayerControl;
+
+            mlc.MousePointerShapeElement.Source = e.NewValue as ImageSource;
+        }
+
+
+        void MousePointerShapeChangedHandler()
+        {
+            
         }
 
         void PointerCanceledHandler(object sender, PointerRoutedEventArgs args)

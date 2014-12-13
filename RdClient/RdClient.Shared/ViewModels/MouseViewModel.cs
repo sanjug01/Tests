@@ -1,14 +1,14 @@
-﻿using RdClient.Shared.Helpers;
+﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Helpers;
+using RdClient.Shared.Navigation.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.CxWrappers;
+
     using MousePointer = Tuple<int, float, float>;
 
     public class MouseViewModel : MutableObject
@@ -22,8 +22,87 @@ namespace RdClient.Shared.ViewModels
             } 
         }
 
+        private ImageSource _mousePointerShape;
+        public ImageSource MousePointerShape { get { return _mousePointerShape; } set { SetProperty(ref _mousePointerShape, value); } }
+
         private IRdpConnection _rdpConnection;
-        public IRdpConnection RdpConnection { set { _rdpConnection = value; } }
+        public IRdpConnection RdpConnection { 
+            set { 
+                if(_rdpConnection != null)
+                {
+                    _rdpConnection.Events.MouseCursorShapeChanged -= OnMouseCursorShapeChanged;
+                    _rdpConnection.Events.MouseCursorPositionChanged -= OnMouseCursorPositionChanged;
+
+                }
+
+                _rdpConnection = value;
+                _rdpConnection.Events.MouseCursorShapeChanged += OnMouseCursorShapeChanged;
+                _rdpConnection.Events.MouseCursorPositionChanged += OnMouseCursorPositionChanged;
+            } 
+        }
+
+        public IExecutionDeferrer DeferredExecution { private get; set; }
+
+        public MouseViewModel()
+        {
+        }
+
+        private void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
+        {
+            this.DeferredExecution.DeferToUI(() => {
+                WriteableBitmap spBitmap = null;
+
+                if (null != args.Buffer)
+                {
+                    try
+                    {
+                        spBitmap = new WriteableBitmap(args.Width, args.Height);
+                    }
+                    catch (OutOfMemoryException e)
+                    {
+                        RdTrace.TraceErr(String.Format("Failed to allocate memory for WriteableBitmap! Exception: {0}", e.Message));
+                        return;
+                    }
+
+                    //
+                    // Write pixel buffer to bitmap stream.
+                    //
+                    using (System.IO.Stream stream = spBitmap.PixelBuffer.AsStream())
+                    {
+                        byte alpha;
+
+                        stream.Position = 0;
+
+                        //
+                        // The format used by the WriteableBitmap is ARGB32 (premultiplied RGB).
+                        // So the pixels in the Pixel array of a WriteableBitmap are stored as
+                        // pre-multiplied colors. Each color channel is pre-multiplied by the alpha value.
+                        //
+                        for (int i = 0; i < args.Buffer.Length; i += 4)
+                        {
+                            alpha = args.Buffer[i];
+
+                            //
+                            // Copy the ARGB color in reverse order, using WriteByte.
+                            // WriteByte writes a byte to the current position in the stream and advances
+                            // the position within the stream by one byte.
+                            //
+                            stream.WriteByte((byte)((args.Buffer[i + 3] * alpha) / 255));
+                            stream.WriteByte((byte)((args.Buffer[i + 2] * alpha) / 255));
+                            stream.WriteByte((byte)((args.Buffer[i + 1] * alpha) / 255));
+                            stream.WriteByte(alpha);
+                        };
+                    }
+
+                    this.MousePointerShape = spBitmap;
+                }
+            });
+        }
+
+        private void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args)
+        {
+
+        }
 
         private void OnMousePointerChanged()
         {

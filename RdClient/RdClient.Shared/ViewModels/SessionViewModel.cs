@@ -10,7 +10,7 @@ using System.Windows.Input;
 namespace RdClient.Shared.ViewModels
 {
 
-    public class SessionViewModel : ViewModelBase
+    public class SessionViewModel : DeferringViewModelBase
     {
         private ConnectionInformation _connectionInformation;
 
@@ -46,6 +46,7 @@ namespace RdClient.Shared.ViewModels
                 args.RdpConnection.Events.ClientDisconnected += HandleDisconnected;
                 args.RdpConnection.Events.ClientAsyncDisconnect += HandleAsyncDisconnect;
                 this.MouseViewModel.RdpConnection = args.RdpConnection;
+                this.MouseViewModel.DeferredExecution = this;
             };
 
             SessionModel.Connect(_connectionInformation);
