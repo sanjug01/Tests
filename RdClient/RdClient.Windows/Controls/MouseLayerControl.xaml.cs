@@ -28,6 +28,7 @@ namespace RdClient.Controls
     // 5: RightPress
     // 6: RightRelease
     using MousePointer = Tuple<int, float, float>;
+    using Position = Tuple<float, float>;
 
     public sealed partial class MouseLayerControl : UserControl
     {
@@ -36,12 +37,12 @@ namespace RdClient.Controls
 
         public MouseLayerControl()
         {
-            this.InitializeComponent();
+            this.InitializeComponent();            
 
-            this.PointerCanceled += PointerCanceledHandler;
-            this.PointerReleased += PointerReleasedHandler;
-            this.PointerPressed += PointerPressedHandler;
-            this.PointerMoved += PointerMovedHandler;
+            this.AddHandler(PointerCanceledEvent, new PointerEventHandler(PointerCanceledHandler), true);
+            this.AddHandler(PointerReleasedEvent, new PointerEventHandler(PointerReleasedHandler), true);
+            this.AddHandler(PointerPressedEvent, new PointerEventHandler(PointerPressedHandler), true);
+            this.AddHandler(PointerMovedEvent, new PointerEventHandler(PointerMovedHandler), true);
         }
 
 
@@ -76,6 +77,23 @@ namespace RdClient.Controls
             mlc.MousePointerShapeElement.Source = e.NewValue as ImageSource;
         }
 
+        public static readonly DependencyProperty MousePointerShapePositionProperty = DependencyProperty.Register(
+            "MousePointerShapePosition", typeof(Position),
+            typeof(MouseLayerControl), new PropertyMetadata(true, MousePointerShapePositionPropertyChanged));
+
+        public Position MousePointerShapePosition
+        {
+            get { return (Position)GetValue(MousePointerShapePositionProperty); }
+            set { SetValue(MousePointerProperty, value); }
+        }
+        private static void MousePointerShapePositionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            MouseLayerControl mlc = d as MouseLayerControl;
+            Position position = e.NewValue as Position;
+
+            mlc.MousePointerShapeElementTranslateTransform.X = position.Item1;
+            mlc.MousePointerShapeElementTranslateTransform.Y = position.Item2;
+        }
 
         void MousePointerShapeChangedHandler()
         {

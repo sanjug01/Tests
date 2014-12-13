@@ -23,10 +23,13 @@
         <SwapChainPanel x:Name="SwapChainPanel"/>
 
         <controls:MouseLayerControl x:Name="MouseLayer" 
-                                    VerticalAlignment="Stretch"
-                                    HorizontalAlignment="Stretch"
+                                    Background="Red"
+                                    VerticalContentAlignment="Stretch"
+                                    HorizontalContentAlignment="Stretch"
                                     MousePointer="{Binding MouseViewModel.MousePointer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    MousePointerShape="{Binding MouseViewModel.MousePointerShape}"/>
+                                    MousePointerShape="{Binding MouseViewModel.MousePointerShape}"
+                                    MousePointerShapePosition="{Binding MouseViewModel.MousePointerShapePosition}"/>
+                                    
 
 
 

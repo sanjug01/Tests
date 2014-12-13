@@ -10,6 +10,7 @@ namespace RdClient.Shared.ViewModels
 {
 
     using MousePointer = Tuple<int, float, float>;
+    using Position = Tuple<float, float>;
 
     public class MouseViewModel : MutableObject
     {
@@ -24,6 +25,9 @@ namespace RdClient.Shared.ViewModels
 
         private ImageSource _mousePointerShape;
         public ImageSource MousePointerShape { get { return _mousePointerShape; } set { SetProperty(ref _mousePointerShape, value); } }
+
+        private Position _mousePointerShapePosition;
+        public Position MousePointerShapePosition { get { return _mousePointerShapePosition; } set { SetProperty(ref _mousePointerShapePosition, value); } }
 
         private IRdpConnection _rdpConnection;
         public IRdpConnection RdpConnection { 
@@ -137,6 +141,8 @@ namespace RdClient.Shared.ViewModels
                     eventType = MouseEventType.Unknown;
                     break;
             }
+
+            this.MousePointerShapePosition = new Position(xPos, yPos);
 
             if(_rdpConnection != null)
             {

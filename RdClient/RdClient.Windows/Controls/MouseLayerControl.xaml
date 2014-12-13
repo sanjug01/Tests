@@ -8,8 +8,16 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-    
-    <Canvas>
-        <Image x:Name="MousePointerShapeElement"/>
-    </Canvas>
+
+    <Grid Background="Transparent">
+        <Canvas>
+            <Image x:Name="MousePointerShapeElement">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <TranslateTransform x:Name="MousePointerShapeElementTranslateTransform"/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+        </Canvas>
+    </Grid>
 </UserControl>
