@@ -34,8 +34,8 @@
             Assert.AreEqual(0, _model.OnPremiseWorkspaces.Count);
             Assert.IsNotNull(_model.CloudWorkspaces);
             Assert.AreEqual(0, _model.CloudWorkspaces.Count);
-            Assert.IsNotNull(_model.Credentials);
-            Assert.AreEqual(0, _model.Credentials.Count);
+            Assert.IsNotNull(_model.LocalWorkspace.Credentials);
+            Assert.AreEqual(0, _model.LocalWorkspace.Credentials.Count);
             Assert.IsNotNull(_model.TrustedCertificates);
             Assert.AreEqual(0, _model.TrustedCertificates.Count);
             Assert.IsNull(_model.Storage);

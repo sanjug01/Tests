@@ -95,7 +95,7 @@ namespace RdClient.Shared.ViewModels
             {
                 if (null != this.DataModel)
                 {
-                    return this.DataModel.Credentials;
+                    return this.DataModel.LocalWorkspace.Credentials;
                 }
                 else
                 {
@@ -504,7 +504,7 @@ namespace RdClient.Shared.ViewModels
 
                 foreach (Credentials creds in _users)
                 {
-                    this.DataModel.Credentials.Add(creds);
+                    this.DataModel.LocalWorkspace.Credentials.Add(creds);
                 }
             }
 
@@ -529,7 +529,7 @@ namespace RdClient.Shared.ViewModels
 
                 foreach (Credentials creds in _users)
                 {
-                    this.DataModel.Credentials.Remove(creds);
+                    this.DataModel.LocalWorkspace.Credentials.Remove(creds);
                 }
             }
         }

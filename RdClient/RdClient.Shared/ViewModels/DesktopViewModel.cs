@@ -69,7 +69,7 @@ namespace RdClient.Shared.ViewModels
                 Credentials cred;
                 if (this.Desktop.HasCredential)
                 {
-                    cred = _dataModel.Credentials.GetItemWithId(this.Desktop.CredentialId);
+                    cred = _dataModel.LocalWorkspace.Credentials.GetItemWithId(this.Desktop.CredentialId);
                 }
                 else
                 {
@@ -152,7 +152,7 @@ namespace RdClient.Shared.ViewModels
             if(storeCredentials)
             {
                 this.Desktop.CredentialId = credentials.Id;
-                this._dataModel.Credentials.Add(credentials);
+                this._dataModel.LocalWorkspace.Credentials.Add(credentials);
             }
 
             ConnectionInformation connectionInformation = new ConnectionInformation()

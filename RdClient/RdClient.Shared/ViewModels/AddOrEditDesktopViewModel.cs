@@ -103,7 +103,7 @@ namespace RdClient.Shared.ViewModels
                     AddUserViewArgs args = new AddUserViewArgs((credentials, store) =>
                         {
                             this.Desktop.CredentialId = credentials.Id;
-                            this.DataModel.Credentials.Add(credentials);
+                            this.DataModel.LocalWorkspace.Credentials.Add(credentials);
                             Update();
                         }
                         , false);
@@ -206,7 +206,7 @@ namespace RdClient.Shared.ViewModels
             this.UserOptions.Clear();
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
-            foreach (Credentials credentials in this.DataModel.Credentials)
+            foreach (Credentials credentials in this.DataModel.LocalWorkspace.Credentials)
             {
                 this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credentials));
             }

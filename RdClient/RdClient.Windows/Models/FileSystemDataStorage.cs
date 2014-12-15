@@ -109,6 +109,10 @@
                 workspaceFolder.GetFolderAndCall("connections", connectionsFolder => ReadModelCollection(workspace.Connections, connectionsFolder));
                 foreach (RemoteConnection rc in workspace.Connections)
                     rc.AttachToWorkspace(workspace);
+                //
+                // TODO: load credentials from the pasword vault
+                //
+                workspaceFolder.GetFolderAndCall("credentials", credentialsFolder => ReadModelCollection(workspace.Credentials, credentialsFolder));
             }
 
             private void WriteWorkspace(Workspace workspace, StorageFolder workspaceFolder)
@@ -119,6 +123,11 @@
                 workspaceFolder.CreateWriteStreamAndCall(".workspace", stream => _modelSerializer.WriteObject(stream, workspace));
                 workspaceFolder.CreateFolderAndCall("connections", connectionsFolder =>
                     WriteModelCollection(workspace.Connections, connectionsFolder));
+                //
+                // TODO: save credentials in the pasword vault
+                //
+                workspaceFolder.CreateFolderAndCall("credentials", credentialsFolder =>
+                    WriteModelCollection(workspace.Credentials, credentialsFolder));
             }
         }
 

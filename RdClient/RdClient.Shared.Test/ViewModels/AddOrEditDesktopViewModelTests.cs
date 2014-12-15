@@ -128,7 +128,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 Credentials credentials = new Credentials() { Username = "foo", Password = "bar" };
-                _addOrEditDesktopViewModel.DataModel.Credentials.Add(credentials);
+                _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Credentials.Add(credentials);
 
                 Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "foo" };
                 _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Add(desktop);
@@ -173,7 +173,7 @@ namespace RdClient.Shared.Test.ViewModels
                 Credentials credentials = new Credentials { Username = "Don Pedro", Password = "secret" };
                 Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "myPc", CredentialId = credentials.Id };
 
-                _addOrEditDesktopViewModel.DataModel.Credentials.Add(credentials);
+                _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Credentials.Add(credentials);
                 _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Add(desktop);
 
                 EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);

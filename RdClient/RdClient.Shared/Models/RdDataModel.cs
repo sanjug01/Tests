@@ -14,7 +14,6 @@
         private readonly LocalWorkspace _localWorkspace;
         private readonly ModelCollection<OnPremiseWorkspace> _onPremiseWorkspaces;
         private readonly ModelCollection<CloudWorkspace> _cloudWorkspaces;
-        private readonly ModelCollection<Credentials> _credentials;
         private readonly ModelCollection<TrustedCertificate> _trustedCertificates;
         private readonly ModelCollection<Thumbnail> _thumbnails;
         IDataStorage _storage;
@@ -32,11 +31,6 @@
         public ModelCollection<CloudWorkspace> CloudWorkspaces
         {
             get { return _cloudWorkspaces; }
-        }
-
-        public ModelCollection<Credentials> Credentials
-        {
-            get { return _credentials; }
         }
 
         public ModelCollection<TrustedCertificate> TrustedCertificates
@@ -60,7 +54,6 @@
             _localWorkspace = new LocalWorkspace(this);
             _onPremiseWorkspaces = new ModelCollection<OnPremiseWorkspace>();
             _cloudWorkspaces = new ModelCollection<CloudWorkspace>();
-            _credentials = new ModelCollection<Credentials>();
             _trustedCertificates = new ModelCollection<TrustedCertificate>();
             _thumbnails = new ModelCollection<Thumbnail>();
         }

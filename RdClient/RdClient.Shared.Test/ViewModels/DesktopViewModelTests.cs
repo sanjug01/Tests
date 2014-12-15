@@ -25,7 +25,7 @@ namespace RdClient.Shared.Test.ViewModels
             _navService = new Mock.NavigationService();
             _cred = _testData.NewValidCredential();
             _desktop = _testData.NewValidDesktop(_cred.Id);
-            _dataModel.Credentials.Add(_cred);
+            _dataModel.LocalWorkspace.Credentials.Add(_cred);
             _dataModel.LocalWorkspace.Connections.Add(_desktop);
             _vm = new DesktopViewModel(_desktop, _navService, _dataModel, null);
         }

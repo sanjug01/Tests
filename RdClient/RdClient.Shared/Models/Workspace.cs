@@ -11,23 +11,19 @@
     public abstract class Workspace : ModelBase
     {
         private RdDataModel _dataModel;
-        private readonly ModelCollection<RemoteConnection> _connections;
+        private ModelCollection<RemoteConnection> _connections;
+        private ModelCollection<Credentials> _credentials;
 
         protected Workspace(RdDataModel dataModel)
         {
             Contract.Requires(null != dataModel);
             Contract.Ensures(null != _dataModel);
-            Contract.Ensures(null != _connections);
 
             _dataModel = dataModel;
-            _connections = new ModelCollection<RemoteConnection>();
         }
 
         protected Workspace()
         {
-            Contract.Ensures(null != _connections);
-
-            _connections = new ModelCollection<RemoteConnection>();
         }
 
         public override void CopyTo(ModelBase destination)
@@ -62,7 +58,22 @@
 
         public ModelCollection<RemoteConnection> Connections
         {
-            get { return _connections; }
+            get
+            {
+                if (null == _connections)
+                    _connections = new ModelCollection<RemoteConnection>();
+                return _connections;
+            }
+        }
+
+        public ModelCollection<Credentials> Credentials
+        {
+            get
+            {
+                if (null == _credentials)
+                    _credentials = new ModelCollection<Credentials>();
+                return _credentials;
+            }
         }
 
         public virtual void TrustCertificate(IRdpCertificate certificate)

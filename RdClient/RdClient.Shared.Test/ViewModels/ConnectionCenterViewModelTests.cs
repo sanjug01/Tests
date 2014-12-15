@@ -27,7 +27,7 @@ namespace RdClient.Shared.Test.ViewModels
             List<Credentials> creds = _testData.NewSmallListOfCredentials();
             foreach(Credentials cred in creds)
             {
-                _dataModel.Credentials.Add(cred);
+                _dataModel.LocalWorkspace.Credentials.Add(cred);
             }
             foreach(Desktop desktop in _testData.NewSmallListOfDesktops(creds))
             {
