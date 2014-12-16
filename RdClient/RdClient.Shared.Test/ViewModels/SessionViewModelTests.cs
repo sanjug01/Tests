@@ -12,6 +12,20 @@ namespace RdClient.Shared.Test.ViewModels
     [TestClass]
     public class SessionViewModelTests
     {
+        private RdDataModel _dataModel;
+
+        [TestInitialize]
+        public void SetUpTest()
+        {
+            _dataModel = new RdDataModel();
+        }
+
+        [TestCleanup]
+        public void TearDownTest()
+        {
+            _dataModel = null;
+        }
+
         [TestMethod]
         public void SessionViewModel_ShouldConnect()
         {
@@ -23,7 +37,7 @@ namespace RdClient.Shared.Test.ViewModels
 
                 ConnectionInformation connectionInformation = new ConnectionInformation()
                 {
-                    Desktop = new Desktop() { HostName = "narf" },
+                    Desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" },
                     Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                 };
                 
@@ -48,7 +62,7 @@ namespace RdClient.Shared.Test.ViewModels
 
                 ConnectionInformation connectionInformation = new ConnectionInformation()
                 {
-                    Desktop = new Desktop() { HostName = "narf" },
+                    Desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" },
                     Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                 };
 
@@ -69,7 +83,7 @@ namespace RdClient.Shared.Test.ViewModels
             {                
                 ConnectionInformation connectionInformation = new ConnectionInformation()
                 {
-                    Desktop = new Desktop() { HostName = "narf" },
+                    Desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" },
                     Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                 };
 
@@ -104,7 +118,7 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 ConnectionInformation connectionInformation = new ConnectionInformation()
                 {
-                    Desktop = new Desktop() { HostName = "narf" },
+                    Desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" },
                     Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                 };
 

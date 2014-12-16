@@ -1,4 +1,4 @@
-﻿<Page
+﻿<UserControl
     x:Class="RdClient.Views.SessionView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -8,19 +8,25 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Loaded="Page_Loaded"
     >
     
-    <Page.DataContext>
+    <UserControl.DataContext>
         <vm:SessionViewModel>
             <vm:SessionViewModel.MouseViewModel>
                 <vm:MouseViewModel/>
             </vm:SessionViewModel.MouseViewModel>
         </vm:SessionViewModel>
-    </Page.DataContext>
+    </UserControl.DataContext>
 
     <Grid Background="green">
-        <SwapChainPanel x:Name="SwapChainPanel"/>
+	<!--
+        Attach the "Connect" command of the view model to the ConnectCommand
+        property of the sesion panel. The session panel will execute the command
+        as soon as its swap chain panel will have initialized.
+        -->
+        <local:RdSessionPanel
+            ConnectCommand="{Binding ConnectCommand}" />
+
 
         <controls:MouseLayerControl x:Name="MouseLayer" 
                                     Background="Red"
@@ -28,13 +34,10 @@
                                     HorizontalContentAlignment="Stretch"
                                     MousePointer="{Binding MouseViewModel.MousePointer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     MousePointerShape="{Binding MouseViewModel.MousePointerShape}"
-                                    MousePointerShapePosition="{Binding MouseViewModel.MousePointerShapePosition}"/>
-                                    
-
-
+                                    MousePointerShapePosition="{Binding MouseViewModel.MousePointerShapePosition}"/>        
 
         <Button
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right" Command="{Binding DisconnectCommand}">Disconnect</Button>
     </Grid>
-</Page>
+</UserControl>

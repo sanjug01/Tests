@@ -91,7 +91,7 @@ namespace RdClient.Shared.ViewModels
             {
                 for(int i=0; i< SelectedDesktops.Count; i++)
                 {
-                    this.DataModel.Desktops.Remove(SelectedDesktops[i] as Desktop);
+                    this.DataModel.LocalWorkspace.Connections.Remove(SelectedDesktops[i] as Desktop);
                 }
 
                 SelectedDesktops.Clear();

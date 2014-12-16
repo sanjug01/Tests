@@ -10,11 +10,6 @@ namespace RdClient.Windows.Test.Mock
         private int _loadedCount = 0;
         private int _activatedCount = 0;
 
-        public IDataModel DataModel
-        {
-            get { return null; }
-        }
-
         public IActivationArgs LaunchActivatedArgs
         { 
             get { return _launchActivatedArgs; } 

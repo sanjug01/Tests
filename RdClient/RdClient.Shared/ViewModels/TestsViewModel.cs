@@ -53,7 +53,7 @@ namespace RdClient.Shared.ViewModels
         /// <summary>
         /// only test data to be added to the global datamodel
         /// </summary>
-        private readonly ObservableCollection<Desktop> _desktops;
+        private readonly ObservableCollection<RemoteConnection> _desktops;
         private readonly ObservableCollection<Credentials> _users;
         private IList<object> _selectedDesktops;
         private SessionModel SessionModel { get; set; }
@@ -74,13 +74,13 @@ namespace RdClient.Shared.ViewModels
 
         public ITimerFactory TimerFactory { private get; set; }
 
-        public ObservableCollection<Desktop> Desktops 
+        public ObservableCollection<RemoteConnection> Desktops 
         { 
             get 
             {
                 if (null != this.DataModel)
                 {
-                    return this.DataModel.Desktops;
+                    return this.DataModel.LocalWorkspace.Connections;
                 }
                 else
                 {
@@ -88,13 +88,14 @@ namespace RdClient.Shared.ViewModels
                 }
             } 
         }
+
         public ObservableCollection<Credentials> Users 
         { 
             get 
             {
                 if (null != this.DataModel)
                 {
-                    return this.DataModel.Credentials;
+                    return this.DataModel.LocalWorkspace.Credentials;
                 }
                 else
                 {
@@ -147,7 +148,7 @@ namespace RdClient.Shared.ViewModels
             _testDesktopsItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, DesktopsTestCommand, "DesktopsTests",
                 BarItemModel.ItemAlignment.Right);
 
-            _desktops = new ObservableCollection<Desktop>();
+            _desktops = new ObservableCollection<RemoteConnection>();
             _users = new ObservableCollection<Credentials>();
             _selectedDesktops = null;
             this.SessionModel = null;
@@ -487,7 +488,7 @@ namespace RdClient.Shared.ViewModels
 
             for(int i = 0; i < 10; i++ )
             {
-                Desktop desktop = new Desktop() { HostName = "testhost" + i };
+                Desktop desktop = new Desktop(this.DataModel.LocalWorkspace) { HostName = "testhost" + i };
                 _desktops.Add(desktop);
 
                 Credentials user = new Credentials() { Username = "testuser" + i, Domain = "TestDomain.com", Password = "1234AbCd", HaveBeenPersisted = false };
@@ -498,12 +499,12 @@ namespace RdClient.Shared.ViewModels
             {
                 foreach (Desktop desktop in _desktops)
                 {
-                    this.DataModel.Desktops.Add(desktop);
+                    this.DataModel.LocalWorkspace.Connections.Add(desktop);
                 }
 
                 foreach (Credentials creds in _users)
                 {
-                    this.DataModel.Credentials.Add(creds);
+                    this.DataModel.LocalWorkspace.Credentials.Add(creds);
                 }
             }
 
@@ -523,12 +524,12 @@ namespace RdClient.Shared.ViewModels
             { 
                 foreach (Desktop desktop in _desktops)
                 {
-                    this.DataModel.Desktops.Remove(desktop);
+                    this.DataModel.LocalWorkspace.Connections.Remove(desktop);
                 }
 
                 foreach (Credentials creds in _users)
                 {
-                    this.DataModel.Credentials.Remove(creds);
+                    this.DataModel.LocalWorkspace.Credentials.Remove(creds);
                 }
             }
         }

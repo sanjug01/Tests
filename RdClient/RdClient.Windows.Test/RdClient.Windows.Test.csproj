@@ -116,10 +116,12 @@
     <Compile Include="Converters\StringLengthToInvisibilityConverterTests.cs" />
     <Compile Include="Converters\ByteArrayToStringConverterTests.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverterTests.cs" />
+    <Compile Include="Helpers\DataStorageExtensionsTests.cs" />
     <Compile Include="LifeTimeManager\LifeTimeManagerTests.cs" />
     <Compile Include="Mock\RootFrameManager.cs" />
     <Compile Include="Mock\SuspensionArgs.cs" />
     <Compile Include="Model\DataStorageTests.cs" />
+    <Compile Include="Model\FileSystemDataStorageTests.cs" />
     <Compile Include="Model\IDataStorageTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -154,6 +156,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <SDKReference Include="Microsoft.VCLibs, Version=12.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows</Name>
+    </SDKReference>
     <SDKReference Include="MSTestFramework, Version=11.0">
       <Name>MSTest for Managed Projects</Name>
     </SDKReference>

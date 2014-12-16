@@ -57,7 +57,8 @@ namespace RdClient.Shared.Test.Helpers
 
         public Desktop NewValidDesktop(Guid credId)
         {
-            return new Desktop() { HostName = NewRandomString(), CredentialId = credId };
+            RdDataModel data = new RdDataModel();
+            return new Desktop(data.LocalWorkspace) { HostName = NewRandomString(), CredentialId = credId };
         }
 
         public List<Desktop> NewSmallListOfDesktops(List<Credentials> creds)

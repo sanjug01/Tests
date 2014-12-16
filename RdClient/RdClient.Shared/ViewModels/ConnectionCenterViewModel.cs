@@ -79,7 +79,7 @@ namespace RdClient.Shared.ViewModels
 
         public bool HasDesktops
         {
-            get { return this.DataModel.Desktops.Count > 0; }
+            get { return this.DataModel.LocalWorkspace.Connections.Count > 0; }
         }
 
         public int SelectedCount
@@ -91,7 +91,7 @@ namespace RdClient.Shared.ViewModels
         {
             // update NavigationService for all DesktopViewModels
             foreach (DesktopViewModel vm in this.DesktopViewModels)
-            {                
+            {
                 vm.NavigationService = this.NavigationService;
                 vm.Presented();
             }
@@ -107,15 +107,19 @@ namespace RdClient.Shared.ViewModels
             if (e.PropertyName == "DataModel")
             {
                 ObservableCollection<IDesktopViewModel> desktopVMs = new ObservableCollection<IDesktopViewModel>();
-                foreach (Desktop desktop in this.DataModel.Desktops)
+
+                foreach (RemoteConnection rr in this.DataModel.LocalWorkspace.Connections)
                 {
-                    DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel, this);
-                    desktopVMs.Add(vm);
-                    vm.PropertyChanged += DesktopSelection_PropertyChanged;
+                    rr.CastAndCall<Desktop>(desktop =>
+                    {
+                        DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel, this);
+                        desktopVMs.Add(vm);
+                        vm.PropertyChanged += DesktopSelection_PropertyChanged;
+                    });
                 }
 
                 this.DesktopViewModels = desktopVMs;
-                this.DataModel.Desktops.CollectionChanged += Desktops_CollectionChanged;
+                this.DataModel.LocalWorkspace.Connections.CollectionChanged += Desktops_CollectionChanged;
                 this.EmitPropertyChanged("HasDesktops");
                 ((INotifyPropertyChanged)this.DesktopViewModels).PropertyChanged += DesktopViewModels_PropertyChanged;
             }
@@ -214,7 +218,7 @@ namespace RdClient.Shared.ViewModels
             // using valid test data
             NavigationService.NavigateToView("TestsView", 
                 new TestsViewModelArgs(
-                    new Desktop() { HostName = "a3-w81" },
+                    new Desktop(this.DataModel.LocalWorkspace) { HostName = "a3-w81" },
                     new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
                     ));
         }

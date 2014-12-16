@@ -20,12 +20,12 @@ namespace RdClient.Shared.ViewModels
         private readonly RelayCommand _deleteCommand;
         private Desktop _desktop;
         private bool _isSelected;
-        private IDataModel _dataModel;
+        private RdDataModel _dataModel;
         private BitmapImage _thumbnailImage;
         private IExecutionDeferrer _executionDeferrer;
         private bool _thumbnailUpdateNeeded;
 
-        public DesktopViewModel(Desktop desktop, INavigationService navService, IDataModel dataModel, IExecutionDeferrer executionDeferrer)
+        public DesktopViewModel(Desktop desktop, INavigationService navService, RdDataModel dataModel, IExecutionDeferrer executionDeferrer)
         {
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
@@ -60,7 +60,7 @@ namespace RdClient.Shared.ViewModels
             { 
                 SetProperty(ref _desktop, value);
             }
-        }        
+        }
 
         public Credentials Credential
         {
@@ -69,7 +69,7 @@ namespace RdClient.Shared.ViewModels
                 Credentials cred;
                 if (this.Desktop.HasCredential)
                 {
-                    cred = _dataModel.Credentials.GetItemWithId(this.Desktop.CredentialId);
+                    cred = _dataModel.LocalWorkspace.Credentials.GetItemWithId(this.Desktop.CredentialId);
                 }
                 else
                 {
@@ -109,7 +109,7 @@ namespace RdClient.Shared.ViewModels
                     Thumbnail thumbnail = new Thumbnail();
                     this.Desktop.ThumbnailId = thumbnail.Id;
                     _dataModel.Thumbnails.Add(thumbnail);
-                }
+        }
                 return _dataModel.Thumbnails.GetItemWithId(this.Desktop.ThumbnailId);
             }
         }
@@ -152,7 +152,7 @@ namespace RdClient.Shared.ViewModels
             if(storeCredentials)
             {
                 this.Desktop.CredentialId = credentials.Id;
-                this._dataModel.Credentials.Add(credentials);
+                this._dataModel.LocalWorkspace.Credentials.Add(credentials);
             }
 
             ConnectionInformation connectionInformation = new ConnectionInformation()
@@ -170,7 +170,7 @@ namespace RdClient.Shared.ViewModels
             NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.Desktop));            
         }
 
-        void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (this.Thumbnail != null && "EncodedImageBytes".Equals(e.PropertyName))
             {

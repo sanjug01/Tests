@@ -27,7 +27,7 @@ namespace RdClient.Factories
             return navigationService;
         }
 
-        public INavigationExtension CreateDataModelExtension(IDataModel dataModel)
+        public INavigationExtension CreateDataModelExtension(RdDataModel dataModel)
         {
             DataModelExtension dataModelExtension = new DataModelExtension();
             dataModelExtension.DataModel = dataModel;

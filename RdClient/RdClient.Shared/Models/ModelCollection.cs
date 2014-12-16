@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RdClient.Shared.Models
+﻿namespace RdClient.Shared.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+
     public class ModelCollection<T> : ObservableCollection<T> where T : ModelBase
     {     
-        private IDictionary<Guid, T> _dictionary;
+        private readonly IDictionary<Guid, T> _dictionary;
 
         public ModelCollection()
         {
@@ -61,12 +57,21 @@ namespace RdClient.Shared.Models
 
         protected override void ClearItems()
         {
-            throw new InvalidOperationException("Clearing collection is not supported");
+            _dictionary.Clear();
+            base.ClearItems();
         }
 
         protected override void SetItem(int index, T item)
         {
             throw new InvalidOperationException("Replacing an item is not supported");       
+        }
+
+        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            base.OnCollectionChanged(e);
+            //
+            // TODO: process the change and mark the collection dirty.
+            //
         }
     }
 }

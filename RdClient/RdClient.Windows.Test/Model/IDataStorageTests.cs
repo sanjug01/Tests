@@ -14,6 +14,7 @@ namespace RdClient.Windows.Test.Model
 {    
     public abstract class IDataStorageTests
     {
+#if false
         private TestData _testData = new TestData();
         private IDataStorage _dataStorage;
         private IEnumerable<string> _collectionNames;
@@ -285,5 +286,6 @@ namespace RdClient.Windows.Test.Model
             }
             return creds;
         }
+#endif
     }
 }

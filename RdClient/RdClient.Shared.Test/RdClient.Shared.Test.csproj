@@ -92,7 +92,6 @@
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
     <Compile Include="Mock\Thumbnail.cs" />
-    <Compile Include="Mock\DataModel.cs" />
     <Compile Include="Mock\DataStorage.cs" />
     <Compile Include="Mock\LocalizedString.cs" />
     <Compile Include="Mock\NavigationService.cs" />
@@ -107,14 +106,16 @@
     <Compile Include="Mock\SessionModel.cs" />
     <Compile Include="Mock\TestBarItemModel.cs" />
     <Compile Include="Mock\Timer.cs" />
+    <Compile Include="Mock\TestRdpCertificate.cs" />
     <Compile Include="Mock\ViewFactory.cs" />
     <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
-    <Compile Include="Model\DataModelTests.cs" />
     <Compile Include="Model\ModelCollectionTests.cs" />
+    <Compile Include="Model\RdDataModelTests.cs" />
     <Compile Include="Model\SessionModelTests.cs" />
     <Compile Include="Model\SnapshotterTests.cs" />
     <Compile Include="Model\ThumbnailTests.cs" />
+    <Compile Include="Model\TrustedCertificateTests.cs" />
     <Compile Include="Navigation\Extensions\ApplicationBarExtensionTests.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtensionTests.cs" />
     <Compile Include="Navigation\ModalPresentationCompletionTests.cs" />
@@ -138,6 +139,8 @@
     <Compile Include="ViewModels\SegoeGlyphBarButtonModelTests.cs" />
     <Compile Include="ViewModels\SessionViewModelTests.cs" />
     <Compile Include="ViewModels\TestViewModelTests.cs" />
+    <Compile Include="ViewModels\DesktopViewModelTests.cs" />
+    <Compile Include="ViewModels\ConnectionCenterViewModelTests.cs" />
     <Compile Include="ViewModels\ViewModelBaseTests.cs" />
   </ItemGroup>
   <ItemGroup>

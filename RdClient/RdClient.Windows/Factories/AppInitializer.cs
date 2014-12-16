@@ -7,7 +7,7 @@ namespace RdClient.Factories
 {
     public class AppInitializer
     {
-        private IDataModel _dataModel;
+        private RdDataModel _dataModel;
         private INavigationService _navigationService;
 
         private DataModelFactory _dataModelFactory = new DataModelFactory();
@@ -37,7 +37,7 @@ namespace RdClient.Factories
             _navigationService.NavigateToView(this.LandingPage, null);
         }
 
-        public IDataModel CreateDataModel()
+        public RdDataModel CreateDataModel()
         {
             return _dataModelFactory.CreateDataModel();
         }
@@ -47,7 +47,7 @@ namespace RdClient.Factories
             return _navigationServiceFactory.CreateNavigationService();
         }
 
-        public INavigationExtension CreateDataModelExtension(IDataModel dataModel)
+        public INavigationExtension CreateDataModelExtension(RdDataModel dataModel)
         {
             return _navigationServiceFactory.CreateDataModelExtension(dataModel);
         }

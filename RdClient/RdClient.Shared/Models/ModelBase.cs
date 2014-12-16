@@ -1,21 +1,29 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
-
-namespace RdClient.Shared.Models
+﻿namespace RdClient.Shared.Models
 {
-    [DataContract(IsReference=true)]
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Runtime.CompilerServices;
+    using System.Runtime.Serialization;
+
+    [DataContract(IsReference = true)]
+    [KnownType(typeof(RemoteConnection))]
     [KnownType(typeof(Desktop))]
+    [KnownType(typeof(RemoteApplication))]
     [KnownType(typeof(Credentials))]
     [KnownType(typeof(Thumbnail))]
+    [KnownType(typeof(TrustedCertificate))]
+    [KnownType(typeof(Workspace))]
+    [KnownType(typeof(LocalWorkspace))]
+    [KnownType(typeof(CloudWorkspace))]
+    [KnownType(typeof(OnPremiseWorkspace))]
     public class ModelBase : INotifyPropertyChanged, IEquatable<ModelBase>
     {
         [DataMember]
         private Guid _id;
         
-        public Guid Id {
+        public Guid Id
+        {
             get { return _id; }
         }
 
@@ -25,6 +33,11 @@ namespace RdClient.Shared.Models
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void CopyTo(ModelBase destination)
+        {
+            destination._id = _id;
+        }
 
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] String propertyName = null)
         {

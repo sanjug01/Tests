@@ -108,12 +108,5 @@ namespace RdClient.Shared.Test.Model
         {
             _collection[_testData.RandomSource.Next(0, _collection.Count)] = new ModelBase();
         }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void ClearCollectionThrowsInvalidOperationException()
-        {
-            _collection.Clear();
-        }
     }
 }

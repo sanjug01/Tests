@@ -103,7 +103,7 @@ namespace RdClient.Shared.ViewModels
                     AddUserViewArgs args = new AddUserViewArgs((credentials, store) =>
                         {
                             this.Desktop.CredentialId = credentials.Id;
-                            this.DataModel.Credentials.Add(credentials);
+                            this.DataModel.LocalWorkspace.Credentials.Add(credentials);
                             Update();
                         }
                         , false);
@@ -169,19 +169,11 @@ namespace RdClient.Shared.ViewModels
                 this.Desktop.CredentialId = this.UserOptions[this.SelectedUserOptionsIndex].Credentials.Id;
             }
 
-            bool found = false;
-            foreach (Desktop desktop in this.DataModel.Desktops)
-            {
-                if (desktop.Id == this.Desktop.Id)
-                {
-                    found = true;
-                    break;
-                }
-            }
+            bool found = this.DataModel.LocalWorkspace.Connections.ContainsItemWithId(this.Desktop.Id);
 
             if (found == false)
             {
-                this.DataModel.Desktops.Add(this.Desktop);
+                this.DataModel.LocalWorkspace.Connections.Add(this.Desktop);
             }
 
             NavigationService.DismissModalView(PresentableView);
@@ -214,7 +206,7 @@ namespace RdClient.Shared.ViewModels
             this.UserOptions.Clear();
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
-            foreach (Credentials credentials in this.DataModel.Credentials)
+            foreach (Credentials credentials in this.DataModel.LocalWorkspace.Credentials)
             {
                 this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credentials));
             }
@@ -253,7 +245,7 @@ namespace RdClient.Shared.ViewModels
             }
             else if(addArgs != null)
             {
-                this.Desktop = new Desktop();
+                this.Desktop = new Desktop(this.DataModel.LocalWorkspace);
                 this.IsAddingDesktop = true;
             }
 
