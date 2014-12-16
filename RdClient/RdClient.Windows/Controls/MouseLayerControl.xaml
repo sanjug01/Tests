@@ -6,12 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    xmlns:Extensions="using:WinRTXamlToolkit.Controls.Extensions"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    VerticalContentAlignment="Stretch"
+    HorizontalContentAlignment="Stretch">
 
-    <Grid>
-        <Canvas>
+        <Canvas VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent">
             <Image x:Name="MousePointerShapeElement">
                 <Image.RenderTransform>
                     <TransformGroup>
@@ -20,5 +20,4 @@
                 </Image.RenderTransform>
             </Image>
         </Canvas>
-    </Grid>
 </UserControl>
