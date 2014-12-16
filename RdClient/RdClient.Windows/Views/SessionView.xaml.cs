@@ -1,15 +1,14 @@
 ﻿using RdClient.CxWrappers.Utils;
-using RdClient.Shared.Navigation;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
+using RdClient.Shared.Navigation;
 using RdClient.Shared.ViewModels;
-using System.Diagnostics.Contracts;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using RdClient.Shared.Helpers;
 
 namespace RdClient.Views
 {
-    public sealed partial class SessionView : Page, IPresentableView
+    public sealed partial class SessionView : UserControl, IPresentableView
     {
         public IViewModel ViewModel { get { return this.DataContext as IViewModel; } }
 
@@ -18,26 +17,16 @@ namespace RdClient.Views
             this.InitializeComponent();
         }
 
-        public void Activating(object activationParameter)
+        void IPresentableView.Activating(object activationParameter)
         {            
         }
 
-        public void Presenting(INavigationService navigationService, object activationParameter)
+        void IPresentableView.Presenting(INavigationService navigationService, object activationParameter)
         {
         }
 
-        public void Dismissing()
+        void IPresentableView.Dismissing()
         {
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            RdpConnectionFactory factory = new RdpConnectionFactory();
-            factory.SwapChainPanel = this.SwapChainPanel;
-
-            SessionViewModel sessionViewModel = this.DataContext as SessionViewModel;
-            sessionViewModel.SessionModel = new SessionModel(factory, new WinrtThreadPoolTimerFactory());
-            sessionViewModel.ConnectCommand.Execute(null);
         }
     }
 }

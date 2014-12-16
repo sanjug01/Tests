@@ -1,4 +1,4 @@
-﻿<Page
+﻿<UserControl
     x:Class="RdClient.Views.SessionView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,18 +6,22 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Loaded="Page_Loaded"
-    >
+    mc:Ignorable="d">
     
-    <Page.DataContext>
+    <UserControl.DataContext>
         <vm:SessionViewModel />
-    </Page.DataContext>
+    </UserControl.DataContext>
     
     <Grid Background="green">
-        <SwapChainPanel x:Name="SwapChainPanel"/>
+        <!--
+        Attach the "Connect" command of the view model to the ConnectCommand
+        property of the sesion panel. The session panel will execute the command
+        as soon as its swap chain panel will have initialized.
+        -->
+        <local:RdSessionPanel
+            ConnectCommand="{Binding ConnectCommand}" />
         <Button
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right" Command="{Binding DisconnectCommand}">Disconnect</Button>
     </Grid>
-</Page>
+</UserControl>

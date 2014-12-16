@@ -38,6 +38,14 @@ namespace RdClient.Shared.ViewModels
         private void Connect(object o)
         {            
             Contract.Assert(null != _connectionInformation);
+
+            if( null == this.SessionModel )
+            {
+                //
+                // Session model may be passed to the command as a parameter.
+                //
+                this.SessionModel = o as ISessionModel;
+            }
             Contract.Assert(null != SessionModel);
 
             SessionModel.ConnectionCreated += (sender, args) => {
