@@ -9,7 +9,7 @@
     xmlns:System="using:System"    
     xmlns:design="using:RdClient.DesignTime"
     xmlns:vm="using:RdClient.Shared.ViewModels"
-    mc:Ignorable="d" Height="768" Width="1366">
+    mc:Ignorable="d">
 
     <d:Page.DataContext>
         <design:FakeConnectionCenterViewModel />
@@ -30,68 +30,87 @@
                     Command="{Binding AddDesktopCommand}"/>
             </MenuFlyout>
         </ResourceDictionary>
-
     </Page.Resources>
 
-    <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
+    <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}" RequestedTheme="Dark">
         <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
             <RowDefinition Height="38" />
-            <RowDefinition Height="38" />
-            <RowDefinition Height="72" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
-            <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Text="Remote Desktop" VerticalAlignment="Center" Margin="68,0,0,0"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="68" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}" />
+        <TextBlock Grid.Row="0" Grid.Column="1" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center">
+            Remote Desktop (d)
+        </TextBlock>
+
+        <Grid Grid.Row="1" Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" />
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}" Flyout="{StaticResource optionsMenuFlyout}">
+                <SymbolIcon Symbol="Add" />
+            </Button>
         </Grid>
-        <Button VerticalAlignment="Bottom" Grid.Row="1" Grid.Column="0" Style="{StaticResource ConnectionCenterBarButtonStyle}"
-            Flyout="{StaticResource optionsMenuFlyout}">
-            <SymbolIcon Symbol="Add" />            
-        </Button>
-        <Grid Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
-            <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Text="Desktops" VerticalAlignment="Center" Margin="68,0,0,0"/>
-        </Grid>        
-        <ScrollViewer
-            Grid.Row="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            HorizontalScrollMode="Enabled"
-            HorizontalScrollBarVisibility="Auto"
-            VerticalScrollMode="Disabled"
-            VerticalScrollBarVisibility="Disabled"
-            Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}"            
-        >
-            <StackPanel Orientation="Horizontal" Margin="68,0,0,10">
-                <ItemsControl 
-                        ItemsSource="{Binding DesktopViewModels}" 
-                        Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapGrid />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Margin="0,0,20,20">
-                                <local:DesktopThumbnailView />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <Grid Visibility="{Binding HasDesktops, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Width="Auto"  Margin="20,20,20,20">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Style="{StaticResource ConnectionCenterLargeTextStyle}">It's Lonely here...</TextBlock>
-                    <TextBlock Grid.Row="1" Style="{StaticResource ConnectionCenterRegularTextStyle}">Add some desktops</TextBlock>
-                </Grid>                
-            </StackPanel>
-        </ScrollViewer>
+        
+        <Grid Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}" />
+        <Grid Grid.Row="2" Grid.Column="1" Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="72" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>            
+            <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" VerticalAlignment="Center">
+                Desktops (d)
+            </TextBlock>
+            <ScrollViewer Grid.Row="1" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto" VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Disabled">
+                <StackPanel Orientation="Horizontal">
+                    <ItemsControl 
+                            ItemsSource="{Binding DesktopViewModels}" 
+                            Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapGrid />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,0,20,20">
+                                    <local:DesktopThumbnailView />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="1" Visibility="{Binding HasDesktops, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="72" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="21" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Style="{ThemeResource SubheaderTextBlockStyle}">
+                It's Lonely here :( (d)
+            </TextBlock>
+            <TextBlock Grid.Row="3" Style="{ThemeResource BodyTextBlockStyle}">
+                To get started, add the remote desktop that you want to connect to
+                using this device. You can add remote resources to work with apps and 
+                desktops your administrator has set up for you. (d)
+            </TextBlock>
+        </Grid>
     </Grid>
     
 </Page>

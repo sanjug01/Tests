@@ -18,8 +18,11 @@ namespace RdClient.Shared.ViewModels
         private readonly RelayCommand _editCommand;
         private readonly RelayCommand _connectCommand;
         private readonly RelayCommand _deleteCommand;
+        private readonly RelayCommand _toggleSelectedCommand;
+        private readonly RelayCommand _toggleSelectionEnabledCommand;
         private Desktop _desktop;
         private bool _isSelected;
+        private bool _selectionEnabled;
         private RdDataModel _dataModel;
         private BitmapImage _thumbnailImage;
         private IExecutionDeferrer _executionDeferrer;
@@ -30,6 +33,8 @@ namespace RdClient.Shared.ViewModels
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
+            _toggleSelectedCommand = new RelayCommand(ToggleSelectedCommandExecute);
+            _toggleSelectionEnabledCommand = new RelayCommand(ToggleSelectionEnabledCommandExecute);
             _thumbnailUpdateNeeded = true;
             _executionDeferrer = executionDeferrer;
             this.Desktop = desktop;
@@ -79,12 +84,29 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
+        public bool SelectionEnabled
+        {
+            get { return _selectionEnabled; }
+            set 
+            {
+                if (!value)
+                {
+                    this.IsSelected = false;
+                }
+                SetProperty(ref _selectionEnabled, value); 
+
+            }
+        }
+
         public bool IsSelected
         {
             get { return _isSelected; }
             set
             {
-                SetProperty(ref _isSelected, value);
+                if (this.SelectionEnabled)
+                {
+                    SetProperty(ref _isSelected, value);
+                }
             }
         }
 
@@ -129,21 +151,47 @@ namespace RdClient.Shared.ViewModels
             get { return _deleteCommand; }
         }
 
+        public ICommand ToggleSelectedCommand
+        {
+            get { return _toggleSelectedCommand; }
+        }
+
+        public ICommand ToggleSelectionEnabledCommand
+        {
+            get { return _toggleSelectionEnabledCommand; }
+        }
+
+        private void ToggleSelectedCommandExecute(object o)
+        {
+            if (this.SelectionEnabled)
+            {
+                this.IsSelected = !this.IsSelected;
+            }            
+        }
+
+        private void ToggleSelectionEnabledCommandExecute(object o)
+        {
+            this.SelectionEnabled = !this.SelectionEnabled;
+        }
+
         private void EditCommandExecute(object o)
         {
             NavigationService.PushModalView("AddOrEditDesktopView", new EditDesktopViewModelArgs(this.Desktop));
         }
 
         private void ConnectCommandExecute(object o)
-        {            
-            if(this.Credential != null)
+        {
+            if (!this.SelectionEnabled)
             {
-                InternalConnect(this.Credential, false);
-            }
-            else
-            {
-                AddUserViewArgs args = new AddUserViewArgs(InternalConnect, true);
-                NavigationService.PushModalView("AddUserView", args);
+                if (this.Credential != null)
+                {
+                    InternalConnect(this.Credential, false);
+                }
+                else
+                {
+                    AddUserViewArgs args = new AddUserViewArgs(InternalConnect, true);
+                    NavigationService.PushModalView("AddUserView", args);
+                }
             }
         }
 
