@@ -1,12 +1,12 @@
 ﻿namespace RdClient.Shared.Helpers
 {
     using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.IO;
-using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.Storage.Search;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Threading.Tasks;
+    using Windows.Storage;
+    using Windows.Storage.Search;
 
     /// <summary>
     /// Collection of extension methods that remove asynchronous access to the data storage objects.
