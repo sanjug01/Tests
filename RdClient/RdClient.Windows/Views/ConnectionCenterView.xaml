@@ -54,8 +54,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}" Flyout="{StaticResource optionsMenuFlyout}">
-                <SymbolIcon Symbol="Add" />
+            <Button Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}" Flyout="{StaticResource optionsMenuFlyout}" FontFamily="ms-appx:///Assets/SegMDL2.1.12.ttf#Segoe MDL2 Assets">
+                &#xE710;
             </Button>
         </Grid>
         

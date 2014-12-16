@@ -137,6 +137,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Content Include="Assets\SegMDL2.1.12.ttf" />
     <None Include="Models\AppDataStorage.cs" />
     <Compile Include="Models\FileSystemDataStorage.cs" />
     <Compile Include="Navigation\DispatchedNavigationService.cs" />
