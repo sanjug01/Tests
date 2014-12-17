@@ -18,8 +18,6 @@ namespace RdClient.Shared.ViewModels
         private readonly RelayCommand _editCommand;
         private readonly RelayCommand _connectCommand;
         private readonly RelayCommand _deleteCommand;
-        private readonly RelayCommand _toggleSelectedCommand;
-        private readonly RelayCommand _toggleSelectionEnabledCommand;
         private Desktop _desktop;
         private bool _isSelected;
         private bool _selectionEnabled;
@@ -33,8 +31,6 @@ namespace RdClient.Shared.ViewModels
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
-            _toggleSelectedCommand = new RelayCommand(ToggleSelectedCommandExecute);
-            _toggleSelectionEnabledCommand = new RelayCommand(ToggleSelectionEnabledCommandExecute);
             _thumbnailUpdateNeeded = true;
             _executionDeferrer = executionDeferrer;
             this.Desktop = desktop;
@@ -149,29 +145,6 @@ namespace RdClient.Shared.ViewModels
         public ICommand DeleteCommand
         {
             get { return _deleteCommand; }
-        }
-
-        public ICommand ToggleSelectedCommand
-        {
-            get { return _toggleSelectedCommand; }
-        }
-
-        public ICommand ToggleSelectionEnabledCommand
-        {
-            get { return _toggleSelectionEnabledCommand; }
-        }
-
-        private void ToggleSelectedCommandExecute(object o)
-        {
-            if (this.SelectionEnabled)
-            {
-                this.IsSelected = !this.IsSelected;
-            }            
-        }
-
-        private void ToggleSelectionEnabledCommandExecute(object o)
-        {
-            this.SelectionEnabled = !this.SelectionEnabled;
         }
 
         private void EditCommandExecute(object o)

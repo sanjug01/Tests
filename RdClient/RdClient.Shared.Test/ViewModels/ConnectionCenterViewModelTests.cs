@@ -143,10 +143,9 @@ namespace RdClient.Shared.Test.ViewModels
         {
             IEnumerable<BarItemModel> barItems = (_vm as IApplicationBarItemsSource).GetItems(null);
             IEnumerable<SegoeGlyphBarButtonModel> barButtons = barItems.OfType<SegoeGlyphBarButtonModel>();
-            Assert.AreEqual(3, barButtons.Count());
+            Assert.AreEqual(2, barButtons.Count());
             Assert.IsTrue(barButtons.Any((b) => b.Command.Equals(_vm.EditDesktopCommand)), "ApplicationBarItems should contain a button linked to EditDesktopCommand");
             Assert.IsTrue(barButtons.Any((b) => b.Command.Equals(_vm.DeleteDesktopCommand)), "ApplicationBarItems should contain a button linked to DeleteDesktopCommand");
-            Assert.IsTrue(barButtons.Any((b) => b.Command.Equals(_vm.TestsCommand)), "ApplicationBarItems should contain a button linked to TestsCommand");
         }
 
         private void AssertDesktopViewModelsMatchDesktops()

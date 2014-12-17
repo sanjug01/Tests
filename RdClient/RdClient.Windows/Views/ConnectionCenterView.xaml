@@ -53,10 +53,16 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}" Flyout="{StaticResource optionsMenuFlyout}" FontFamily="ms-appx:///Assets/SegMDL2.1.12.ttf#Segoe MDL2 Assets">
-                &#xE710;
-            </Button>
+            <Button Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}" Flyout="{StaticResource optionsMenuFlyout}" Content="{StaticResource AddIcon}" />
+            <Button Grid.Column="2" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource MultiSelectIcon}" Command="{Binding ToggleDesktopSelectionCommand}"/>
+            <Button Grid.Column="3" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource SearchIcon}" />
+            <Button Grid.Column="4" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource SettingsIcon}" />
+            <Button Grid.Column="5" Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}" Content="{StaticResource MoreIcon}" />
         </Grid>
         
         <Grid Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}" />

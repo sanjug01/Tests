@@ -14,34 +14,23 @@ namespace RdClient.Shared.ViewModels
 {
     public class ConnectionCenterViewModel : DeferringViewModelBase, IConnectionCenterViewModel, IApplicationBarItemsSource
     {
-        private readonly RelayCommand _addDesktopCommand;
-
         private ObservableCollection<IDesktopViewModel> _desktopViewModels;
         private int _selectedCount;
+        private bool _desktopsSelectable;
 
         // app bar items
-        private readonly BarItemModel _separatorItem, _rightSeparatorItem;
-        private readonly BarItemModel _addItem;
         private readonly BarItemModel _editItem;
         private readonly BarItemModel _deleteItem;
-        private readonly BarItemModel _testsItem;
 
         public ConnectionCenterViewModel()
         {
-            _addDesktopCommand = new RelayCommand(AddDesktopExecute);
-            EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => (1 == this.SelectedCount) );
-            DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
-            TestsCommand = new RelayCommand(new Action<object>(GotoTests));
+            this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);
+            this.EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => (1 == this.SelectedCount) );
+            this.DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
+            this.ToggleDesktopSelectionCommand = new RelayCommand(this.ToggleDesktopSelectionCommandExecute);
 
-            _separatorItem = new SeparatorBarItemModel();
-
-            _addItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Add, AddDesktopCommand, "Add");
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, "Edit");
             _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete");
-
-            _rightSeparatorItem = new SeparatorBarItemModel(BarItemModel.ItemAlignment.Right);
-            _testsItem = new SegoeGlyphBarButtonModel(SegoeGlyph.People, TestsCommand, "Tests",
-                BarItemModel.ItemAlignment.Right);
 
             this.DesktopViewModels = null;
             this.PropertyChanged += ConnectionCenterViewModel_PropertyChanged;
@@ -66,14 +55,10 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        public ICommand AddDesktopCommand
-        {
-            get { return _addDesktopCommand; }
-        }
-
+        public ICommand AddDesktopCommand { get; private set; }
         public RelayCommand EditDesktopCommand { get; private set; }
         public RelayCommand DeleteDesktopCommand { get; private set; }
-        public RelayCommand TestsCommand { get; private set; }
+        public RelayCommand ToggleDesktopSelectionCommand { get; private set; }
 
         public bool HasDesktops
         {
@@ -83,6 +68,22 @@ namespace RdClient.Shared.ViewModels
         public int SelectedCount
         {
             get { return _selectedCount; }
+        }
+
+        public bool DesktopsSelectable
+        {
+            get
+            {
+                return _desktopsSelectable;
+            }
+            set
+            {
+                _desktopsSelectable = value;
+                foreach (DesktopViewModel vm in this.DesktopViewModels)
+                {
+                    vm.SelectionEnabled = value;
+                }                
+            }
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -211,14 +212,10 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        private void GotoTests(object o)
+        private void ToggleDesktopSelectionCommandExecute(object o)
         {
-            // using valid test data
-            NavigationService.NavigateToView("TestsView", 
-                new TestsViewModelArgs(
-                    new Desktop(this.DataModel.LocalWorkspace) { HostName = "a3-w81" },
-                    new Credentials() { Username = "tslabadmin", Domain = "", Password = "1234AbCd", HaveBeenPersisted = false }
-                    ));
+
+            this.DesktopsSelectable = !this.DesktopsSelectable;
         }
     }
 }
