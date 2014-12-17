@@ -8,12 +8,14 @@ namespace RdClient.Shared.Test.Mock
     {
         public bool TryDeferToUI(Action action)
         {
+            action();
             return (bool)Invoke(new object[] { action });
         }
 
         public void DeferToUI(Action action)
         {
-            throw new NotImplementedException();
+            action();
+            Invoke(new object[] { action });
         }
     }
 }

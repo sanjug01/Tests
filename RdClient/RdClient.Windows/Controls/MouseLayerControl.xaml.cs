@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Media;
 
 namespace RdClient.Controls
 {
+    using Windows.UI.Core;
     // int mouseState, float x, float y;
     // mouseState is:
     // 0: LeftPress
@@ -23,20 +24,32 @@ namespace RdClient.Controls
 
     public sealed partial class MouseLayerControl : UserControl
     {
-
+        private CoreCursor _exitCursor;
         private PointerPoint _lastPointerPoint;
 
         public MouseLayerControl()
         {
-            this.InitializeComponent();
-            
+            this.InitializeComponent();                       
 
             this.AddHandler(PointerCanceledEvent, new PointerEventHandler(PointerCanceledHandler), true);
             this.AddHandler(PointerReleasedEvent, new PointerEventHandler(PointerReleasedHandler), true);
             this.AddHandler(PointerPressedEvent, new PointerEventHandler(PointerPressedHandler), true);
             this.AddHandler(PointerMovedEvent, new PointerEventHandler(PointerMovedHandler), true);
+
+            this.PointerEntered += OnPointerEntered;
+            this.PointerExited += OnPointerExited;
         }
 
+        private void OnPointerEntered(object sender, PointerRoutedEventArgs args)
+        {
+            _exitCursor = Window.Current.CoreWindow.PointerCursor;
+            Window.Current.CoreWindow.PointerCursor = null;
+        }
+
+        private void OnPointerExited(object sender, PointerRoutedEventArgs args)
+        {
+            Window.Current.CoreWindow.PointerCursor = _exitCursor;
+        }
 
         public static readonly DependencyProperty MousePointerProperty = DependencyProperty.Register(
             "MousePointer", typeof(MousePointer),

@@ -11,13 +11,13 @@
     VerticalContentAlignment="Stretch"
     HorizontalContentAlignment="Stretch">
 
-        <Canvas VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent">
-            <Image x:Name="MousePointerShapeElement">
-                <Image.RenderTransform>
-                    <TransformGroup>
-                        <TranslateTransform x:Name="MousePointerShapeElementTranslateTransform"/>
-                    </TransformGroup>
-                </Image.RenderTransform>
-            </Image>
-        </Canvas>
+    <Canvas VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent">
+        <Image x:Name="MousePointerShapeElement" CacheMode="BitmapCache">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <TranslateTransform x:Name="MousePointerShapeElementTranslateTransform"/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
+    </Canvas>
 </UserControl>

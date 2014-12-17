@@ -14,6 +14,8 @@ namespace RdClient.Shared.ViewModels
 
     public class MouseViewModel : MutableObject
     {
+        private float _xHotspot = (float)0.0;
+        private float _yHotspot = (float)0.0;
         private MousePointer _mousePointer;
         public MousePointer MousePointer { 
             get { return _mousePointer; } 
@@ -26,8 +28,11 @@ namespace RdClient.Shared.ViewModels
         private ImageSource _mousePointerShape;
         public ImageSource MousePointerShape { get { return _mousePointerShape; } set { SetProperty(ref _mousePointerShape, value); } }
 
-        private Position _mousePointerShapePosition;
-        public Position MousePointerShapePosition { get { return _mousePointerShapePosition; } set { SetProperty(ref _mousePointerShapePosition, value); } }
+        private Position _mousePointerShapePosition = new Position((float) 0.0, (float) 0.0);
+        public Position MousePointerShapePosition { 
+            get { return new Position(_mousePointerShapePosition.Item1 - _xHotspot, _mousePointerShapePosition.Item2 - _yHotspot); } 
+            set { SetProperty(ref _mousePointerShapePosition, value); } 
+        }
 
         private IRdpConnection _rdpConnection;
         public IRdpConnection RdpConnection { 
@@ -53,6 +58,9 @@ namespace RdClient.Shared.ViewModels
 
         private void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
         {
+            _xHotspot = args.XHotspot;
+            _yHotspot = args.YHotspot;
+
             this.DeferredExecution.DeferToUI(() => {
                 WriteableBitmap spBitmap = null;
 
