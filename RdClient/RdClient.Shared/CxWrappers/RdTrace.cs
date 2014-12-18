@@ -18,12 +18,12 @@ namespace RdClient.Shared.CxWrappers
 
         static RdTrace()
         {
-            RdClientCx.Tracer.Initialize();
+            //RdClientCx.Tracer.Initialize();
         }
 
         private static void TraceInternal(string tag, TraceLevel traceLevel, string fileName, uint lineNumber, string functionName, string message)
         {
-            RdClientCx.Tracer.Trace(tag, traceLevel, fileName, lineNumber, functionName, message);
+            //RdClientCx.Tracer.Trace(tag, traceLevel, fileName, lineNumber, functionName, message);
         }
 
         public static void TraceErr(

@@ -31,13 +31,38 @@ namespace RdClient.Controls
         {
             this.InitializeComponent();                       
 
-            this.AddHandler(PointerCanceledEvent, new PointerEventHandler(PointerCanceledHandler), true);
-            this.AddHandler(PointerReleasedEvent, new PointerEventHandler(PointerReleasedHandler), true);
-            this.AddHandler(PointerPressedEvent, new PointerEventHandler(PointerPressedHandler), true);
-            this.AddHandler(PointerMovedEvent, new PointerEventHandler(PointerMovedHandler), true);
+            this.PointerCanceled += OnPointerCanceled;
+            this.PointerReleased += OnPointerReleased;
+            this.PointerPressed += OnPointerPressed;
+            this.PointerMoved += OnPointerMoved;
+
+            this.ManipulationStarted += OnManipulationStarted;
+            this.ManipulationInertiaStarting += OnManipulationInertiaStarting;
+            this.ManipulationDelta += OnManipulationDelta;
+            this.ManipulationCompleted += OnManipulationCompleted;
 
             this.PointerEntered += OnPointerEntered;
             this.PointerExited += OnPointerExited;
+        }
+
+        private void OnManipulationStarted(object sender, ManipulationStartedRoutedEventArgs args)
+        {
+
+        }
+
+        private void OnManipulationInertiaStarting(object sender, ManipulationInertiaStartingRoutedEventArgs args)
+        {
+
+        }
+
+        private void OnManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs args)
+        {
+
+        }
+
+        private void OnManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs args)
+        {
+
         }
 
         private void OnPointerEntered(object sender, PointerRoutedEventArgs args)
@@ -105,12 +130,12 @@ namespace RdClient.Controls
             
         }
 
-        void PointerCanceledHandler(object sender, PointerRoutedEventArgs args)
+        void OnPointerCanceled(object sender, PointerRoutedEventArgs args)
         {
 
         }
 
-        void PointerReleasedHandler(object sender, PointerRoutedEventArgs args)
+        void OnPointerReleased(object sender, PointerRoutedEventArgs args)
         {
             PointerPoint point = args.GetCurrentPoint(this);
             float x = (float)point.Position.X;
@@ -128,7 +153,7 @@ namespace RdClient.Controls
             _lastPointerPoint = point;
         }
 
-        void PointerPressedHandler(object sender, PointerRoutedEventArgs args)
+        void OnPointerPressed(object sender, PointerRoutedEventArgs args)
         {
             PointerPoint point = args.GetCurrentPoint(this);
             float x = (float) point.Position.X;
@@ -146,7 +171,7 @@ namespace RdClient.Controls
             _lastPointerPoint = point;
         }
 
-        void PointerMovedHandler(object sender, PointerRoutedEventArgs args)
+        void OnPointerMoved(object sender, PointerRoutedEventArgs args)
         {
             PointerPoint point = args.GetCurrentPoint(this);
             float x = (float)point.Position.X;
