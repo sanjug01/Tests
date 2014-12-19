@@ -1102,4 +1102,22 @@ pointer</value>
     <value>certificate wrong EKU (d)</value>
     <comment>Certificate error</comment>
   </data>
+  <data name="ConnectionCenter_DayZero.Text" xml:space="preserve">
+    <value>To get started, add the remote desktop that you want to connect to using this device. You can add remote resources to work with apps and desktops your administrator has set up for you.</value>
+  </data>
+  <data name="ConnectionCenter_DayZeroTitle.Text" xml:space="preserve">
+    <value>It's lonely here :(</value>
+  </data>
+  <data name="ConnectionCenter_DesktopLabel.Text" xml:space="preserve">
+    <value>Desktops</value>
+    <comment>The text that is the header for the desktops section</comment>
+  </data>
+  <data name="ConnectionCenter_TitleHeader.Text" xml:space="preserve">
+    <value>Remote Desktop</value>
+    <comment>The text at the top of the screen on the connection center</comment>
+  </data>
+  <data name="Menu-AddDesktop.Text" xml:space="preserve">
+    <value>Add Desktop</value>
+    <comment>Option to add PC or Server</comment>
+  </data>
 </root>

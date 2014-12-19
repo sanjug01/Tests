@@ -197,7 +197,6 @@
     <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\ssleay32.dll">
       <Link>ssleay32.dll</Link>
     </Content>
-    <Content Include="Assets\desktop_placeholder.png" />
     <Content Include="Assets\desktop_placeholder.scale-100.png" />
     <Content Include="Assets\desktop_placeholder.scale-140.png" />
     <Content Include="Assets\desktop_placeholder.scale-180.png" />

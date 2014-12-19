@@ -44,9 +44,7 @@
         </Grid.ColumnDefinitions>
         
         <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}" />
-        <TextBlock Grid.Row="0" Grid.Column="1" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center">
-            Remote Desktop (d)
-        </TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="1" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center" x:Uid="ConnectionCenter_TitleHeader" Text="Remote Desktop (d)" />        
 
         <Grid Grid.Row="1" Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" />
         <Grid Grid.Row="1" Grid.Column="1">
@@ -70,10 +68,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="72" />
                 <RowDefinition Height="*" />
-            </Grid.RowDefinitions>            
-            <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" VerticalAlignment="Center">
-                Desktops (d)
-            </TextBlock>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" VerticalAlignment="Center" x:Uid="ConnectionCenter_DesktopLabel" Text="Desktops (d)" />
             <ScrollViewer Grid.Row="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
                     <ItemsControl 
@@ -108,10 +104,8 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Style="{ThemeResource SubheaderTextBlockStyle}">
-                It's Lonely here :( (d)
-            </TextBlock>
-            <TextBlock Grid.Row="3" Style="{ThemeResource BodyTextBlockStyle}">
+            <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Style="{ThemeResource SubheaderTextBlockStyle}" x:Uid="ConnectionCenter_DayZeroTitle" Text="It's lonely here :( (d)" />
+            <TextBlock Grid.Row="3" Style="{ThemeResource BodyTextBlockStyle}" x:Uid="ConnectionCenter_DayZero">
                 To get started, add the remote desktop that you want to connect to
                 using this device. You can add remote resources to work with apps and 
                 desktops your administrator has set up for you. (d)

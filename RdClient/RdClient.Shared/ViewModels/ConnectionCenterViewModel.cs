@@ -111,7 +111,7 @@ namespace RdClient.Shared.ViewModels
                 {
                     rr.CastAndCall<Desktop>(desktop =>
                     {
-                        DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel, this);
+                        DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel, this) { SelectionEnabled = this.DesktopsSelectable };
                         desktopVMs.Add(vm);
                         vm.PropertyChanged += DesktopSelection_PropertyChanged;
                     });
@@ -162,7 +162,7 @@ namespace RdClient.Shared.ViewModels
             {
                 foreach (Desktop desktop in e.NewItems)
                 {
-                    DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel, this);
+                    DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel, this) { SelectionEnabled = this.DesktopsSelectable };
                     vm.PropertyChanged += DesktopSelection_PropertyChanged;
                     this.DesktopViewModels.Add(vm);
                 }
