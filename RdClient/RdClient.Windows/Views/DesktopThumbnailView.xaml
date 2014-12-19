@@ -11,7 +11,8 @@
     xmlns:design="using:RdClient.DesignTime"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d"
-    d:DesignHeight="276" Width="342">
+    d:DesignHeight="276" Width="342"
+    RequestedTheme="Dark">
     
     <d:UserControl.DataContext>
         <design:FakeDesktopViewModel />
@@ -20,25 +21,24 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />          
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel>        
-        <Grid Background="{StaticResource ConnectionCenterDesktopPlaceholderIconColor}" Height="276" Width="342">   
-            <Grid> 
-                <Grid.Background>
-                    <ImageBrush ImageSource="{Binding ThumbnailImage}" Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Center"/>
-                </Grid.Background>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="1" Background="{StaticResource ConnectionCenterHostnameBackgroundColor}">
-                    <TextBlock Text="{Binding Desktop.HostName}" Style="{StaticResource ConnectionCenterRegularTextStyle}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,5,5"/>                    
-                </Grid>
-                <Button Grid.RowSpan="2" Style="{StaticResource InvisibleButtonStyle}" Command="{Binding ConnectCommand}" />
-                <CheckBox Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5,5,5,5" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" Visibility="{Binding SelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+    <StackPanel> 
+        <Grid Background="{StaticResource ConnectionCenterDesktopPlaceholderIconColor}" Height="276" Width="342">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="42" />
+            </Grid.RowDefinitions>
+            <Image Source="ms-appx:///Assets/desktop_placeholder.png" Visibility="{Binding HasThumbnailImage, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Image Grid.RowSpan="2" Source="{Binding ThumbnailImage}" Visibility="{Binding HasThumbnailImage, Converter={StaticResource BooleanToVisibilityConverter}}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Grid Grid.Row="1" Background="{StaticResource ConnectionCenterHostnameBackgroundColor}">
+                <TextBlock Text="{Binding Desktop.HostName}" Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0"/>
             </Grid>
+            <Button Grid.RowSpan="2" Style="{StaticResource InvisibleButtonStyle}" Command="{Binding ConnectCommand}">
+            </Button>
+            <CheckBox Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" Visibility="{Binding SelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
     </StackPanel>
 </UserControl>

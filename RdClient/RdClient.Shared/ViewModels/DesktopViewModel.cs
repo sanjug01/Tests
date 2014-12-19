@@ -25,6 +25,7 @@ namespace RdClient.Shared.ViewModels
         private BitmapImage _thumbnailImage;
         private IExecutionDeferrer _executionDeferrer;
         private bool _thumbnailUpdateNeeded;
+        private bool _hasThumbnailImage;
 
         public DesktopViewModel(Desktop desktop, INavigationService navService, RdDataModel dataModel, IExecutionDeferrer executionDeferrer)
         {
@@ -116,6 +117,12 @@ namespace RdClient.Shared.ViewModels
             {
                 SetProperty(ref _thumbnailImage, value);
             }
+        }
+
+        public bool HasThumbnailImage
+        {
+            get { return _hasThumbnailImage; }
+            set { SetProperty(ref _hasThumbnailImage, value); }
         }
 
         public Thumbnail Thumbnail
@@ -214,8 +221,10 @@ namespace RdClient.Shared.ViewModels
                             await newImage.SetSourceAsync(stream);
                         }
                         this.ThumbnailImage = newImage;
+                        this.HasThumbnailImage = this.ThumbnailImage != null && this.ThumbnailImage.PixelHeight > 0 && this.ThumbnailImage.PixelHeight > 0;
                     });
-            }
+                    
+            }            
         }
     }
 }

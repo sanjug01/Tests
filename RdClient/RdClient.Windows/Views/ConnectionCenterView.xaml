@@ -58,8 +58,8 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}" Flyout="{StaticResource optionsMenuFlyout}" Content="{StaticResource AddIcon}" />
-            <Button Grid.Column="2" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource MultiSelectIcon}" Command="{Binding ToggleDesktopSelectionCommand}"/>
+            <Button Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource AddIcon}" Flyout="{StaticResource optionsMenuFlyout}" />
+            <Button Grid.Column="2" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource MultiSelectIcon}" Command="{Binding ToggleDesktopSelectionCommand}" />
             <Button Grid.Column="3" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource SearchIcon}" />
             <Button Grid.Column="4" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource SettingsIcon}" />
             <Button Grid.Column="5" Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}" Content="{StaticResource MoreIcon}" />
@@ -74,14 +74,14 @@
             <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" VerticalAlignment="Center">
                 Desktops (d)
             </TextBlock>
-            <ScrollViewer Grid.Row="1" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto" VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Disabled">
-                <StackPanel Orientation="Horizontal">
+            <ScrollViewer Grid.Row="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
+                <StackPanel Orientation="Vertical">
                     <ItemsControl 
                             ItemsSource="{Binding DesktopViewModels}" 
                             Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapGrid />
+                                <WrapGrid Orientation="Horizontal" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
