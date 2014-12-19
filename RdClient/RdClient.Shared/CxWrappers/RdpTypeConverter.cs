@@ -298,18 +298,18 @@ namespace RdClient.Shared.CxWrappers
 
             switch (radcErrorCode)
             {
-                //case (RdClientCx.RadcErrorCode.ErrorCompleteFailure):
-                //    radcStatus = RadcError.RadcStatus.CompleteFailure;
-                //    break;
-                //case (RdClientCx.RadcErrorCode.ErrorCompleteFailureOnFirstSignIn):
-                //    radcStatus = RadcError.RadcStatus.CompleteFailureOnFirstSignIn;
-                //    break;
-                //case (RdClientCx.RadcErrorCode.ErrorNetworkFailure):
-                //    radcStatus = RadcError.RadcStatus.NetworkFailure;
-                //    break;
-                //case (RdClientCx.RadcErrorCode.ErrorPartialFailure):
-                //    radcStatus = RadcError.RadcStatus.PartialFailure;
-                //    break;
+                case (RdClientCx.RadcErrorCode.ErrorCompleteFailure):
+                    radcStatus = RadcError.RadcStatus.CompleteFailure;
+                    break;
+                case (RdClientCx.RadcErrorCode.ErrorCompleteFailureOnFirstSignIn):
+                    radcStatus = RadcError.RadcStatus.CompleteFailureOnFirstSignIn;
+                    break;
+                case (RdClientCx.RadcErrorCode.ErrorNetworkFailure):
+                    radcStatus = RadcError.RadcStatus.NetworkFailure;
+                    break;
+                case (RdClientCx.RadcErrorCode.ErrorPartialFailure):
+                    radcStatus = RadcError.RadcStatus.PartialFailure;
+                    break;
                 default:
                     radcStatus = RadcError.RadcStatus.Unknown;
                     break;

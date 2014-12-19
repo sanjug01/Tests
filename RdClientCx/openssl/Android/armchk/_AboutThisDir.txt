@@ -1,4 +1,4 @@
-CURRENTLY COMPILED VERSION: OpenSSL 1.0.1h armchk
+CURRENTLY COMPILED VERSION: OpenSSL 1.0.1g armchk
 
 These are the static libraries for armv5 (thumb) generated for the Android platform.
 

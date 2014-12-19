@@ -1,6 +1,6 @@
 ﻿#!/bin/bash
 # Change NDK path below to your NDK directory
-export NDK=/cygdrive/e/Android/NDK/android-ndk-r10c/
+export NDK=/cygdrive/e/Android/NDK/android-ndk-r10b/
 $NDK/build/tools/make-standalone-toolchain.sh --platform=android-15 --toolchain=arm-linux-androideabi-4.8 --install-dir=$PWD/android-toolchain-arm --system=windows-x86_64
 chmod -R 777 android-toolchain-arm
 export TOOLCHAIN_PATH=$PWD/android-toolchain-arm/bin
