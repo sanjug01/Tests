@@ -16,6 +16,8 @@ namespace RdClient.Shared.ViewModels
 
         bool IsSelected { get; set; }
 
+        bool SelectionEnabled { get; set; }
+
         ICommand EditCommand { get; }
 
         ICommand ConnectCommand { get; }

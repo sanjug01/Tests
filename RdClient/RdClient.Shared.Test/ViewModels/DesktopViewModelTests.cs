@@ -108,5 +108,39 @@ namespace RdClient.Shared.Test.ViewModels
             _navService.Expect("PushModalView", new List<object> { "DeleteDesktopsView", null, null }, 0);
             _vm.DeleteCommand.Execute(null);
         }
+
+        [TestMethod]
+        public void TestSelectionEnabledInitiallyFalse()
+        {
+            Assert.IsFalse(_vm.SelectionEnabled);
+        }
+
+        [TestMethod]
+        public void TestSelectingFailsIfSelectionIsNotEnabled()
+        {
+            _vm.SelectionEnabled = false;
+            Assert.IsFalse(_vm.IsSelected);
+            _vm.IsSelected = true;
+            Assert.IsFalse(_vm.IsSelected);
+        }
+
+        [TestMethod]
+        public void TestSelectingSucceedsIfSelectionIsEnabled()
+        {
+            _vm.SelectionEnabled = true;
+            Assert.IsFalse(_vm.IsSelected);
+            _vm.IsSelected = true;
+            Assert.IsTrue(_vm.IsSelected);
+        }
+
+        [TestMethod]
+        public void TestDisablingSelectionSetsSelectedToFalse()
+        {
+            _vm.SelectionEnabled = true;            
+            _vm.IsSelected = true;
+            Assert.IsTrue(_vm.IsSelected);
+            _vm.SelectionEnabled = false;
+            Assert.IsFalse(_vm.IsSelected);
+        }
     }
 }

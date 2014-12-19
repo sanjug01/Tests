@@ -8,6 +8,13 @@ namespace RdClient.DesignTime
     {
         private Credentials _cred = new Credentials() { Domain = "adomain", HaveBeenPersisted = false, Password = "1234AbCd", Username = "exampleUser" };
         private Desktop _desktop = new Desktop(new RdDataModel().LocalWorkspace) { HostName = "ExampleHostname" };
+
+        public FakeDesktopViewModel()
+        {
+            this.IsSelected = true;
+            this.SelectionEnabled = true;
+        }
+
         public Desktop Desktop
         {
             get { return _desktop; }
@@ -34,5 +41,7 @@ namespace RdClient.DesignTime
         {
             get { return null; }
         }
+
+        public bool SelectionEnabled { get; set; }
     }
 }

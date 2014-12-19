@@ -122,7 +122,7 @@ namespace RdClient.Shared.ViewModels
         public bool HasThumbnailImage
         {
             get { return _hasThumbnailImage; }
-            set { SetProperty(ref _hasThumbnailImage, value); }
+            private set { SetProperty(ref _hasThumbnailImage, value); }
         }
 
         public Thumbnail Thumbnail
@@ -134,7 +134,7 @@ namespace RdClient.Shared.ViewModels
                     Thumbnail thumbnail = new Thumbnail();
                     this.Desktop.ThumbnailId = thumbnail.Id;
                     _dataModel.Thumbnails.Add(thumbnail);
-        }
+                }
                 return _dataModel.Thumbnails.GetItemWithId(this.Desktop.ThumbnailId);
             }
         }
@@ -161,18 +161,15 @@ namespace RdClient.Shared.ViewModels
 
         private void ConnectCommandExecute(object o)
         {
-            if (!this.SelectionEnabled)
+            if (this.Credential != null)
             {
-                if (this.Credential != null)
-                {
-                    InternalConnect(this.Credential, false);
-                }
-                else
-                {
-                    AddUserViewArgs args = new AddUserViewArgs(InternalConnect, true);
-                    NavigationService.PushModalView("AddUserView", args);
-                }
+                InternalConnect(this.Credential, false);
             }
+            else
+            {
+                AddUserViewArgs args = new AddUserViewArgs(InternalConnect, true);
+                NavigationService.PushModalView("AddUserView", args);
+            }            
         }
 
         private void InternalConnect(Credentials credentials, bool storeCredentials)
@@ -223,8 +220,7 @@ namespace RdClient.Shared.ViewModels
                         this.ThumbnailImage = newImage;
                         this.HasThumbnailImage = this.ThumbnailImage != null && this.ThumbnailImage.PixelHeight > 0 && this.ThumbnailImage.PixelHeight > 0;
                     });
-                    
-            }            
+            }
         }
     }
 }

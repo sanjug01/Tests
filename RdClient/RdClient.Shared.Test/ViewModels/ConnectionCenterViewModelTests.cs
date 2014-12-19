@@ -151,6 +151,58 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(barButtons.Any((b) => b.Command.Equals(_vm.DeleteDesktopCommand)), "ApplicationBarItems should contain a button linked to DeleteDesktopCommand");
         }
 
+        [TestMethod]
+        public void TestDesktopsSelectableInitiallyFalse()
+        {
+            Assert.IsFalse(_vm.DesktopsSelectable);
+        }
+
+        [TestMethod]
+        public void TestToggleDesktopSelectionCommandEnablesSelection()
+        {
+            _vm.ToggleDesktopSelectionCommand.Execute(null);
+            Assert.IsTrue(_vm.DesktopsSelectable);
+            _vm.ToggleDesktopSelectionCommand.Execute(null);
+            Assert.IsFalse(_vm.DesktopsSelectable);
+        }
+
+        [TestMethod]
+        public void TestDesktopsSelectableSetsDesktopViewModelsEnableSelection()
+        {
+            _vm.DesktopsSelectable = true;
+            AssertDesktopViewModelSelectionEnabledMatchesDesktopsSelectable();
+            _vm.DesktopsSelectable = false;
+            AssertDesktopViewModelSelectionEnabledMatchesDesktopsSelectable();
+        }
+
+        [TestMethod]
+        public void TestAddDesktopWhenSelectionEnabledEnablesSelectionOnNewDesktopViewModel()
+        {
+            _vm.DesktopsSelectable = true;
+            Desktop newDesktop = _testData.NewValidDesktop(Guid.Empty);
+            _dataModel.LocalWorkspace.Connections.Add(newDesktop);
+            IDesktopViewModel dvm = _vm.DesktopViewModels.Single(d => newDesktop.Equals(d.Desktop));
+            Assert.IsTrue(dvm.SelectionEnabled);
+        }
+
+        [TestMethod]
+        public void TestAddDesktopWhenSelectionDisabledDisablesSelectionOnNewDesktopViewModel()
+        {
+            _vm.DesktopsSelectable = false;
+            Desktop newDesktop = _testData.NewValidDesktop(Guid.Empty);
+            _dataModel.LocalWorkspace.Connections.Add(newDesktop);
+            IDesktopViewModel dvm = _vm.DesktopViewModels.Single(d => newDesktop.Equals(d.Desktop));
+            Assert.IsFalse(dvm.SelectionEnabled);
+        }
+
+        private void AssertDesktopViewModelSelectionEnabledMatchesDesktopsSelectable()
+        {
+            foreach (DesktopViewModel dvm in _vm.DesktopViewModels)
+            {
+                Assert.AreEqual(_vm.DesktopsSelectable, dvm.SelectionEnabled);
+            }
+        }
+
         private void AssertDesktopViewModelsMatchDesktops()
         {
             //checking there are the same number of DesktopViewModels as Desktops and that each Desktop is represented by a DesktopViewModel is sufficient
