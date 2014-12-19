@@ -28,6 +28,7 @@ namespace RdClient.Shared.ViewModels
             this.EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => (1 == this.SelectedCount) );
             this.DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
             this.ToggleDesktopSelectionCommand = new RelayCommand(this.ToggleDesktopSelectionCommandExecute);
+            this.GoToSettingsCommand = new RelayCommand(this.GoToSettingsCommandExecute);
 
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, "Edit", BarItemModel.ItemAlignment.Right);
             _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete", BarItemModel.ItemAlignment.Right);
@@ -50,6 +51,7 @@ namespace RdClient.Shared.ViewModels
         public RelayCommand EditDesktopCommand { get; private set; }
         public RelayCommand DeleteDesktopCommand { get; private set; }
         public RelayCommand ToggleDesktopSelectionCommand { get; private set; }
+        public RelayCommand GoToSettingsCommand { get; private set; }
 
         public bool HasDesktops
         {
@@ -217,6 +219,11 @@ namespace RdClient.Shared.ViewModels
         {
 
             this.DesktopsSelectable = !this.DesktopsSelectable;
+        }
+
+        private void GoToSettingsCommandExecute(object o)
+        {
+            this.NavigationService.NavigateToView("SettingsView", null);
         }
     }
 }
