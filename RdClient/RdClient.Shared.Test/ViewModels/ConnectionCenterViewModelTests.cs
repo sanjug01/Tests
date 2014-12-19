@@ -61,6 +61,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestEditDesktopBringsUpEditViewIfDesktopSelected()
         {
+            _vm.DesktopsSelectable = true;
             _vm.DesktopViewModels[_testData.RandomSource.Next(_vm.DesktopViewModels.Count)].IsSelected = true;
             _navService.Expect("PushModalView", new List<object> { "AddOrEditDesktopView", null, null }, 0);
             _vm.EditDesktopCommand.Execute(null);
@@ -69,6 +70,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestDeleteDesktopCommandBringsUpDeleteDesktopsViewIfDesktopSelected()
         {
+            _vm.DesktopsSelectable = true;
             _vm.DesktopViewModels[_testData.RandomSource.Next(_vm.DesktopViewModels.Count)].IsSelected = true;
             _navService.Expect("PushModalView", new List<object> { "DeleteDesktopsView", null, null }, 0);
             _vm.DeleteDesktopCommand.Execute(null);
@@ -106,6 +108,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestSelectedCountIncrementsAndDecrements()
         {
+            _vm.DesktopsSelectable = true;
             foreach(DesktopViewModel dvm in _vm.DesktopViewModels)
             {
                 dvm.IsSelected = true;

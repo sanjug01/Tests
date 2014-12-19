@@ -65,6 +65,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestIsSelectedSetCorrectly()
         {
+            _vm.SelectionEnabled = true;
             _vm.IsSelected = true;
             Assert.IsTrue(_vm.IsSelected);
             _vm.IsSelected = false;

@@ -68,7 +68,7 @@
     ======================================================================================
     -->            
     <SolidColorBrush x:Key="ConnectionCenterDesktopPlaceholderIconColor" Color="#9D9D9D" />
-    <SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="#A6000000" />
+    <SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="#59000000" />
     <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="#555555" />
     <SolidColorBrush x:Key="ConnectionCenterScrollViewBackgroundBrush" Color="#000000" />
     <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="#FFFFFF"/>

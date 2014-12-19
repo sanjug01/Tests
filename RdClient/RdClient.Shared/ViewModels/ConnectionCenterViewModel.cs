@@ -29,21 +29,12 @@ namespace RdClient.Shared.ViewModels
             this.DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
             this.ToggleDesktopSelectionCommand = new RelayCommand(this.ToggleDesktopSelectionCommandExecute);
 
-            _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, "Edit");
-            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete");
+            _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, "Edit", BarItemModel.ItemAlignment.Right);
+            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete", BarItemModel.ItemAlignment.Right);
 
             this.DesktopViewModels = null;
             this.PropertyChanged += ConnectionCenterViewModel_PropertyChanged;
-            _selectedCount = 0;
-        }
-
-        IEnumerable<BarItemModel> IApplicationBarItemsSource.GetItems(IApplicationBarSite applicationBarSite)
-        {
-            return new BarItemModel[]
-            {               
-                _editItem,
-                _deleteItem
-            };
+            this.SelectedCount = 0;
         }
 
         public ObservableCollection<IDesktopViewModel> DesktopViewModels
@@ -55,7 +46,7 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        public ICommand AddDesktopCommand { get; private set; }
+        public RelayCommand AddDesktopCommand { get; private set; }
         public RelayCommand EditDesktopCommand { get; private set; }
         public RelayCommand DeleteDesktopCommand { get; private set; }
         public RelayCommand ToggleDesktopSelectionCommand { get; private set; }
@@ -68,6 +59,7 @@ namespace RdClient.Shared.ViewModels
         public int SelectedCount
         {
             get { return _selectedCount; }
+            private set { SetProperty(ref _selectedCount, value); }
         }
 
         public bool DesktopsSelectable
@@ -78,12 +70,21 @@ namespace RdClient.Shared.ViewModels
             }
             set
             {
-                _desktopsSelectable = value;
+                SetProperty(ref _desktopsSelectable, value);
                 foreach (DesktopViewModel vm in this.DesktopViewModels)
                 {
                     vm.SelectionEnabled = value;
                 }                
             }
+        }
+
+        IEnumerable<BarItemModel> IApplicationBarItemsSource.GetItems(IApplicationBarSite applicationBarSite)
+        {
+            return new BarItemModel[]
+            {               
+                _editItem,
+                _deleteItem
+            };
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -135,15 +136,15 @@ namespace RdClient.Shared.ViewModels
 
         private void UpdateSelection()
         {
-            _selectedCount = 0;
+            int newSelectedCount = 0;            
             foreach (DesktopViewModel vm in this.DesktopViewModels)
             {
                 if (vm.IsSelected)
                 {
-                    _selectedCount++;
+                    newSelectedCount++;
                 }
             }
-            this.EmitPropertyChanged("SelectedCount");
+            this.SelectedCount = newSelectedCount;            
             EditDesktopCommand.EmitCanExecuteChanged();
             DeleteDesktopCommand.EmitCanExecuteChanged();
         }

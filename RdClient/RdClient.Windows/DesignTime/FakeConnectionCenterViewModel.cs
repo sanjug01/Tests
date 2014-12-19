@@ -27,7 +27,7 @@ namespace RdClient.DesignTime
             _destopViewModels.Add(new FakeDesktopViewModel());
         }
 
-        public ICommand AddDesktopCommand
+        public RelayCommand AddDesktopCommand
         {
             get { return null; }
         }

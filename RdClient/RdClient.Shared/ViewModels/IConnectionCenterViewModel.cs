@@ -1,10 +1,11 @@
-﻿using System;
+﻿using System.Collections.ObjectModel;
+
 namespace RdClient.Shared.ViewModels
 {
     public interface IConnectionCenterViewModel
     {
-        System.Windows.Input.ICommand AddDesktopCommand { get; }
-        System.Collections.ObjectModel.ObservableCollection<IDesktopViewModel> DesktopViewModels { get; }
+        RelayCommand AddDesktopCommand { get; }
+        ObservableCollection<IDesktopViewModel> DesktopViewModels { get; }
         bool HasDesktops { get; }
     }
 }
