@@ -67,7 +67,11 @@
     ======================================================================================
     -->
     <SolidColorBrush x:Key="SettingsNavBarBackgroundBrush" Color="#1A1A1A" />
+    <SolidColorBrush x:Key="SettingsSelectedItemBackgroundBrush" Color="#454545" />
     <SolidColorBrush x:Key="SettingsBackgroundBrush" Color="#FFFFFF" />
+    <GridLength x:Key="SettingsTopPadding">120</GridLength>
+    <GridLength x:Key="SettingsMargin">72</GridLength>
+    <GridLength x:Key="SettingsItemHeight">48</GridLength>
 
 
     <!-- 

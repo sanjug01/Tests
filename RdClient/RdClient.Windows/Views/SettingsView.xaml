@@ -6,8 +6,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:c="using:RdClient.Converters"
     mc:Ignorable="d"
 >
+    <Page.Resources>
+        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Page.Resources>
+    
     <Page.DataContext>
         <vm:SettingsViewModel />
     </Page.DataContext>
@@ -17,11 +22,31 @@
             <ColumnDefinition Width="*" MinWidth="384" />
             <ColumnDefinition Width="2.5*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Background="{StaticResource SettingsNavBarBackgroundBrush}">
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Content="Back" Command="{Binding GoBackCommand}" />    
+        <Grid Grid.Column="0" Background="{StaticResource SettingsNavBarBackgroundBrush}" RequestedTheme="Dark">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{StaticResource SettingsMargin}" />
+                <ColumnDefinition Width="*" />                
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{StaticResource SettingsTopPadding}" />
+                <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="40" Style="{ThemeResource NavigationBackButtonNormalStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding GoBackCommand}" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Style="{ThemeResource SubheaderTextBlockStyle}" Text="Settings (d)" />
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
+                <ListBox SelectedIndex="0">
+                    <ListBoxItem IsSelected="{Binding Path=ShowGeneralSettings, Mode=TwoWay}">General</ListBoxItem>
+                    <ListBoxItem IsSelected="{Binding Path=ShowGatewaySettings, Mode=TwoWay}">Gateways</ListBoxItem>
+                    <ListBoxItem IsSelected="{Binding Path=ShowUserSettings, Mode=TwoWay}">User names</ListBoxItem>
+                </ListBox>
+            </StackPanel>
         </Grid>
-        <Grid Grid.Column="1" Background="{StaticResource SettingsBackgroundBrush}">
-            
+        <Grid Grid.Column="1" Background="{StaticResource SettingsBackgroundBrush}" RequestedTheme="Light">
+            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Text="General Settings" Visibility="{Binding Path=ShowGeneralSettings, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Text="Gateway Settings" Visibility="{Binding Path=ShowGatewaySettings, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Text="User Settings" Visibility="{Binding Path=ShowUserSettings, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
         
     </Grid>
