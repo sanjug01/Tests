@@ -115,6 +115,18 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AppHeaderControl.xaml.cs">
+      <DependentUpon>AppHeaderControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConnectionCenterTitleBar.xaml.cs">
+      <DependentUpon>ConnectionCenterTitleBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DesktopsListControl.xaml.cs">
+      <DependentUpon>DesktopsListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ItsLonelyHereControl.xaml.cs">
+      <DependentUpon>ItsLonelyHereControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MouseLayerControl.xaml.cs">
       <DependentUpon>MouseLayerControl.xaml</DependentUpon>
     </Compile>
@@ -230,6 +242,22 @@
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\AppHeaderControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ConnectionCenterTitleBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DesktopsListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ItsLonelyHereControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MouseLayerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -1,0 +1,38 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.ConnectionCenterTitleBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:RdClient.Controls"    
+    mc:Ignorable="d"
+    d:DesignHeight="{StaticResource ConnectionCenterTitleBarHeight}"
+    d:DesignWidth="1024">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <MenuFlyout x:Name="AddConnectionMenuFlyout">
+                <MenuFlyoutItem 
+                    x:Uid="Menu-AddDesktop"                 
+                    Text="Add desktop(d)" 
+                    Command="{Binding AddDesktopCommand}"/>
+            </MenuFlyout>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource AddIcon}" Flyout="{StaticResource AddConnectionMenuFlyout}" />
+        <Button Grid.Column="2" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource MultiSelectIcon}" Command="{Binding ToggleDesktopSelectionCommand}" />
+        <Button Grid.Column="3" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource SearchIcon}" />
+        <Button Grid.Column="4" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource SettingsIcon}" />
+        <Button Grid.Column="5" Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}" Content="{StaticResource MoreIcon}" />
+    </Grid>
+</UserControl>

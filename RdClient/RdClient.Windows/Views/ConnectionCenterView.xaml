@@ -9,6 +9,8 @@
     xmlns:System="using:System"    
     xmlns:design="using:RdClient.DesignTime"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:controls="using:RdClient.Controls"
+    RequestedTheme="Dark"
     mc:Ignorable="d">
 
     <d:Page.DataContext>
@@ -23,94 +25,25 @@
         <ResourceDictionary>
             <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-            <MenuFlyout x:Name="optionsMenuFlyout">
-                <MenuFlyoutItem 
-                    x:Uid="Menu-AddDesktop"                 
-                    Text="Add desktop(d)" 
-                    Command="{Binding AddDesktopCommand}"/>
-            </MenuFlyout>
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}" RequestedTheme="Dark">
+    <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="38" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="68" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        
-        <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}" />
-        <TextBlock Grid.Row="0" Grid.Column="1" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center" x:Uid="ConnectionCenter_TitleHeader" Text="Remote Desktop (d)" />        
-
-        <Grid Grid.Row="1" Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" />
-        <Grid Grid.Row="1" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource AddIcon}" Flyout="{StaticResource optionsMenuFlyout}" />
-            <Button Grid.Column="2" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource MultiSelectIcon}" Command="{Binding ToggleDesktopSelectionCommand}" />
-            <Button Grid.Column="3" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource SearchIcon}" />
-            <Button Grid.Column="4" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource SettingsIcon}" />
-            <Button Grid.Column="5" Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}" Content="{StaticResource MoreIcon}" />
+        <Grid Grid.Row="0">
+            <controls:AppHeaderControl />
         </Grid>
-        
-        <Grid Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}" />
-        <Grid Grid.Row="2" Grid.Column="1" Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="72" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" VerticalAlignment="Center" x:Uid="ConnectionCenter_DesktopLabel" Text="Desktops (d)" />
-            <ScrollViewer Grid.Row="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
-                <StackPanel Orientation="Vertical">
-                    <ItemsControl 
-                            ItemsSource="{Binding DesktopViewModels}" 
-                            Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapGrid Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="0,0,20,20">
-                                    <local:DesktopThumbnailView />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </ScrollViewer>
-        </Grid>
-        <Grid Grid.Row="2" Grid.Column="1" Visibility="{Binding HasDesktops, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="72" />
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="21" />
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Style="{ThemeResource SubheaderTextBlockStyle}" x:Uid="ConnectionCenter_DayZeroTitle" Text="It's lonely here :( (d)" />
-            <TextBlock Grid.Row="3" Style="{ThemeResource BodyTextBlockStyle}" x:Uid="ConnectionCenter_DayZero">
-                To get started, add the remote desktop that you want to connect to
-                using this device. You can add remote resources to work with apps and 
-                desktops your administrator has set up for you. (d)
-            </TextBlock>
-        </Grid>
+        <Grid Grid.Row="1">
+            <controls:ConnectionCenterTitleBar />            
+        </Grid>        
+        <Grid Grid.Row="2">
+            <controls:DesktopsListControl Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <controls:ItsLonelyHereControl Visibility="{Binding HasDesktops, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+        </Grid>       
     </Grid>
     
 </Page>

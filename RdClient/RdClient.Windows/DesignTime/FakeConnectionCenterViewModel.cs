@@ -39,7 +39,7 @@ namespace RdClient.DesignTime
 
         public bool HasDesktops
         {
-            get { return _destopViewModels.Count > 0; }
+            get { return true; }
         }
     }
 }
