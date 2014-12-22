@@ -130,6 +130,9 @@
     <Compile Include="Controls\MouseLayerControl.xaml.cs">
       <DependentUpon>MouseLayerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SessionView.xaml.cs">
+      <DependentUpon>SessionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DesignTime\FakeConnectionCenterViewModel.cs" />
     <Compile Include="Factories\NavigationServiceFactory.cs" />
     <Compile Include="Factories\AppInitializer.cs" />
@@ -180,7 +183,7 @@
     <Compile Include="Views\AddOrEditDesktopView.xaml.cs">
       <DependentUpon>AddOrEditDesktopView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RdSessionPanel.xaml.cs">
+    <Compile Include="Controls\RdSessionPanel.xaml.cs">
       <DependentUpon>RdSessionPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TestsView.xaml.cs">
@@ -188,9 +191,6 @@
     </Compile>
     <Compile Include="Views\TransitionAnimationContainer.xaml.cs">
       <DependentUpon>TransitionAnimationContainer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SessionView.xaml.cs">
-      <DependentUpon>SessionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ViewPresenter.xaml.cs">
       <DependentUpon>ViewPresenter.xaml</DependentUpon>
@@ -262,6 +262,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\SessionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -302,7 +306,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\RdSessionPanel.xaml">
+    <Page Include="Controls\RdSessionPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -311,10 +315,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TransitionAnimationContainer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SessionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

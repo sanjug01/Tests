@@ -24,9 +24,7 @@
         property of the sesion panel. The session panel will execute the command
         as soon as its swap chain panel will have initialized.
         -->
-        <local:RdSessionPanel
-            ConnectCommand="{Binding ConnectCommand}" />
-
+        <controls:RdSessionPanel ConnectCommand="{Binding ConnectCommand}" />
 
         <controls:MouseLayerControl x:Name="MouseLayer" 
                                     Background="Red"
