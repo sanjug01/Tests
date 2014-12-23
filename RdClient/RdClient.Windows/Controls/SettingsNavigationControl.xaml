@@ -15,25 +15,20 @@
         <design:FakeSettingsViewModel />
     </d:UserControl.DataContext>
 
-    <Grid Background="{StaticResource SettingsNavBarBackgroundBrush}" RequestedTheme="Dark">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{StaticResource SettingsMargin}" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Grid Background="{StaticResource SettingsNavBarBackgroundBrush}" RequestedTheme="Dark">        
         <Grid.RowDefinitions>
             <RowDefinition Height="{StaticResource SettingsTopPadding}" />
             <RowDefinition Height="{StaticResource SettingsItemHeight}" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Style="{ThemeResource NavigationBackButtonNormalStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding GoBackCommand}" RequestedTheme="Dark"/>
-        <TextBlock Grid.Row="1" Grid.Column="1" Style="{ThemeResource SubheaderTextBlockStyle}" Text="Settings (d)" />
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
-            <ListBox SelectedIndex="0" BorderThickness="0">
-                
-                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowGeneralSettings, Mode=TwoWay}">General</ListBoxItem>
-                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowGatewaySettings, Mode=TwoWay}">Gateways</ListBoxItem>
-                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowUserSettings, Mode=TwoWay}">User names</ListBoxItem>
+        <Button Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource SettingsBackButtonStyle}" Command="{Binding GoBackCommand}" />
+        <TextBlock Grid.Row="1" Style="{ThemeResource SubheaderTextBlockStyle}" Padding="{StaticResource SettingsMarginPadding}" Text="Settings (d)" />
+        <StackPanel Grid.Row="2">
+            <ListBox SelectedIndex="0" BorderThickness="0">                
+                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowGeneralSettings, Mode=TwoWay}">General (d)</ListBoxItem>
+                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowGatewaySettings, Mode=TwoWay}">Gateways (d)</ListBoxItem>
+                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowUserSettings, Mode=TwoWay}">User names (d)</ListBoxItem>
             </ListBox>
         </StackPanel>
     </Grid>

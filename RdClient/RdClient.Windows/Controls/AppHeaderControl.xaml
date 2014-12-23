@@ -13,7 +13,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{StaticResource ConnectionCenterMargin}" />
             <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>        
         <TextBlock Grid.Column="1" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center" x:Uid="ConnectionCenter_TitleHeader" Text="Remote Desktop (d)" />
     </Grid>
 </UserControl>
