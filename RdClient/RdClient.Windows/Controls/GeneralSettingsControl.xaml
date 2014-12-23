@@ -12,15 +12,16 @@
 
     <Grid Background="{StaticResource SettingsBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource SettingsTopPadding}" />
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{StaticResource SettingsMargin}" />
+            <ColumnDefinition Width="{StaticResource SettingsItemColumnWidth}" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Row="1" Grid.Column="1">
-            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Text="General Settings" />
-        </Grid>        
+        <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="General (d)" />
+        <TextBlock Grid.Row="1" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" Text="Show thumbnails for Desktops (d)" />
+        <ToggleSwitch Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

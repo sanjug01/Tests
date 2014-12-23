@@ -12,15 +12,19 @@
 
     <Grid Background="{StaticResource SettingsBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource SettingsTopPadding}" />
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{StaticResource SettingsMargin}" />
+            <ColumnDefinition Width="{StaticResource SettingsItemColumnWidth}" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Row="1" Grid.Column="1">
-            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Text="User Settings" />
-        </Grid>
+        <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="Add new user (d)" />
+        <TextBlock Grid.Row="1" Style="{ThemeResource BodyTextBlockStyle}" Text="[+]    Add a user name (d)" />
+        <TextBlock Grid.Row="3" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="User names (d)" />
+        <TextBlock Grid.Row="4" Style="{ThemeResource BodyTextBlockStyle}" Text="[ ]    user1.contoso.com (d)" />
     </Grid>
 </UserControl>

@@ -110,6 +110,7 @@
     <Thickness x:Key="SettingsMarginPadding">72,0</Thickness>
     <GridLength x:Key="SettingsItemHeight">48</GridLength>
     <x:Double x:Key="SettingsItemHeightDouble">48</x:Double>
+    <GridLength x:Key="SettingsItemColumnWidth">428</GridLength>
 
     <Style x:Key="SettingsListBoxItemStyle" TargetType="ListBoxItem">
         <Setter Property="Margin" Value="0" />

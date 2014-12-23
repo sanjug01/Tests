@@ -12,15 +12,14 @@
 
     <Grid Background="{StaticResource SettingsBackgroundBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource SettingsTopPadding}" />
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{StaticResource SettingsMargin}" />
+            <ColumnDefinition Width="{StaticResource SettingsItemColumnWidth}" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Row="1" Grid.Column="1">
-            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Text="Gateway Settings" />
-        </Grid>
+        <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="Gateway Settings" />
     </Grid>
 </UserControl>
