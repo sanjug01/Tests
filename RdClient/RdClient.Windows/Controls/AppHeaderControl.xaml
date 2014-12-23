@@ -9,7 +9,7 @@
     d:DesignHeight="{StaticResource AppHeaderHeight}"
     d:DesignWidth="1024">
 
-    <Grid Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}" Height="{StaticResource AppHeaderHeight}" RequestedTheme="Dark">
+    <Grid Background="{StaticResource AppHeaderBackgroundBrush}" Height="{StaticResource AppHeaderHeight}" RequestedTheme="Dark">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{StaticResource ConnectionCenterMargin}" />
             <ColumnDefinition Width="*" />

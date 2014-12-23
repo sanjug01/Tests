@@ -140,6 +140,7 @@
     <Compile Include="ViewModels\IConnectionCenterViewModel.cs" />
     <Compile Include="ViewModels\IDesktopViewModel.cs" />
     <Compile Include="Navigation\NavigationExtensions.cs" />
+    <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="ViewModels\IViewModelWithData.cs" />
     <Compile Include="Navigation\ApplicationBarSite.cs" />
     <Compile Include="Models\IDataStorage.cs" />

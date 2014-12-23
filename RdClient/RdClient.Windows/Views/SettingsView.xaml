@@ -1,14 +1,20 @@
 ﻿<Page
     x:Class="RdClient.Views.SettingsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:RdClient.Views"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:RdClient.Views"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:controls="using:RdClient.Controls"
     xmlns:c="using:RdClient.Converters"
+    xmlns:design="using:RdClient.DesignTime"    
     mc:Ignorable="d"
 >
+    <d:Page.DataContext>
+        <design:FakeSettingsViewModel />
+    </d:Page.DataContext>
+    
     <Page.Resources>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
@@ -17,37 +23,28 @@
         <vm:SettingsViewModel />
     </Page.DataContext>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="384" />
-            <ColumnDefinition Width="2.5*" />
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Background="{StaticResource SettingsNavBarBackgroundBrush}" RequestedTheme="Dark">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <controls:AppHeaderControl />
+        </Grid>
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{StaticResource SettingsMargin}" />
-                <ColumnDefinition Width="*" />                
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="{StaticResource SettingsTopPadding}" />
-                <RowDefinition Height="{StaticResource SettingsItemHeight}" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="40" Style="{ThemeResource NavigationBackButtonNormalStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Command="{Binding GoBackCommand}" />
-            <TextBlock Grid.Row="1" Grid.Column="1" Style="{ThemeResource SubheaderTextBlockStyle}" Text="Settings (d)" />
-            <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
-                <ListBox SelectedIndex="0">
-                    <ListBoxItem IsSelected="{Binding Path=ShowGeneralSettings, Mode=TwoWay}">General</ListBoxItem>
-                    <ListBoxItem IsSelected="{Binding Path=ShowGatewaySettings, Mode=TwoWay}">Gateways</ListBoxItem>
-                    <ListBoxItem IsSelected="{Binding Path=ShowUserSettings, Mode=TwoWay}">User names</ListBoxItem>
-                </ListBox>
-            </StackPanel>
-        </Grid>
-        <Grid Grid.Column="1" Background="{StaticResource SettingsBackgroundBrush}" RequestedTheme="Light">
-            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Text="General Settings" Visibility="{Binding Path=ShowGeneralSettings, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Text="Gateway Settings" Visibility="{Binding Path=ShowGatewaySettings, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Text="User Settings" Visibility="{Binding Path=ShowUserSettings, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        </Grid>
+                <ColumnDefinition Width="*" MinWidth="384" />
+                <ColumnDefinition Width="2.5*" />
+            </Grid.ColumnDefinitions>            
+            <Grid Grid.Column="0">
+                <controls:SettingsNavigationControl />
+            </Grid>
+            <Grid Grid.Column="1">
+                <controls:GeneralSettingsControl Visibility="{Binding Path=ShowGeneralSettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <controls:UserSettingsControl Visibility="{Binding Path=ShowUserSettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <controls:GatewaySettingsControl Visibility="{Binding Path=ShowGatewaySettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Grid>
         
+        </Grid>
     </Grid>
 </Page>

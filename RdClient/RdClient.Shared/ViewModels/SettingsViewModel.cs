@@ -2,7 +2,7 @@
 
 namespace RdClient.Shared.ViewModels
 {
-    public class SettingsViewModel : ViewModelBase 
+    public class SettingsViewModel : ViewModelBase, ISettingsViewModel 
     {
         private RelayCommand _goBackCommand;
         private bool _showGeneralSettings;
@@ -11,7 +11,7 @@ namespace RdClient.Shared.ViewModels
 
         public SettingsViewModel()
         {
-            _goBackCommand = new RelayCommand(this.GoBackCommandExecute);
+            _goBackCommand = new RelayCommand(this.GoBackCommandExecute);            
         }
 
         public ICommand GoBackCommand
