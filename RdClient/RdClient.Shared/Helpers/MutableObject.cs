@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Helpers
 {
+    using System;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Runtime.CompilerServices;
@@ -13,6 +14,21 @@
         protected MutableObject()
         {
             _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        }
+
+        protected IDisposable LockRead()
+        {
+            return ReadWriteMonitor.Read(_monitor);
+        }
+
+        protected IDisposable LockUngradeableRead()
+        {
+            return ReadWriteMonitor.UpgradeableRead(_monitor);
+        }
+
+        protected IDisposable LockWrite()
+        {
+            return ReadWriteMonitor.Write(_monitor);
         }
 
         protected void EmitPropertyChanged(PropertyChangedEventArgs e)
@@ -45,12 +61,6 @@
                 this.EmitPropertyChanged(propertyName);
                 return true;
             }
-        }
-
-        protected override void DisposeManagedState()
-        {
-            base.DisposeManagedState();
-            _monitor.Dispose();
         }
 
         public event PropertyChangedEventHandler PropertyChanged

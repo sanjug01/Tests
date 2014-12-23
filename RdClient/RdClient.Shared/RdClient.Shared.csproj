@@ -100,6 +100,10 @@
     <Compile Include="Helpers\RdClientException.cs" />
     <Compile Include="Helpers\ReadWriteMonitor.cs" />
     <Compile Include="Helpers\WinrtThreadPoolTimer.cs" />
+    <Compile Include="Input\CoreWindowKeyboardCore.cs" />
+    <Compile Include="Input\IKeyboardCapture.cs" />
+    <Compile Include="Input\IKeyboardCaptureSink.cs" />
+    <Compile Include="Input\KeystrokeEventArgs.cs" />
     <Compile Include="Models\RemoteApplication.cs" />
     <Compile Include="Models\CloudWorkspace.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
@@ -188,6 +192,7 @@
     <TargetPlatform Include="Windows, Version=8.1" />
     <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
