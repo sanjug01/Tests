@@ -4,6 +4,7 @@ using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -141,6 +142,14 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(_vm.IsSelected);
             _vm.SelectionEnabled = false;
             Assert.IsFalse(_vm.IsSelected);
+        }
+
+        [TestMethod]
+        public void TestHasThumbnailImageIsFalseWhenThumbnailImageIsNull()
+        {
+            Thumbnail thumb = _dataModel.Thumbnails.GetItemWithId(_vm.Thumbnail.Id);
+            Assert.IsNull(thumb.EncodedImageBytes);
+            Assert.IsFalse(_vm.HasThumbnailImage);
         }
     }
 }

@@ -57,7 +57,7 @@ namespace RdClient.Shared.ViewModels
                 this.MouseViewModel.DeferredExecution = this;
             };
 
-            SessionModel.Connect(_connectionInformation);
+            SessionModel.Connect(_connectionInformation, new WinrtThreadPoolTimerFactory(), this.DataModel.Settings);
         }
 
         void HandleAsyncDisconnect(object sender, ClientAsyncDisconnectArgs args)

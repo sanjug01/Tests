@@ -39,5 +39,11 @@ namespace RdClient.Shared.Test.ViewModels
             _navService.Expect("NavigateToView", new List<object>() { "ConnectionCenterView", null }, 0);
             _vm.GoBackCommand.Execute(null);
         }
+
+        [TestMethod]
+        public void TestSettingsLoadedFromDataModel()
+        {
+            Assert.AreEqual(_vm.GeneralSettings, _dataModel.Settings);
+        }
     }
 }

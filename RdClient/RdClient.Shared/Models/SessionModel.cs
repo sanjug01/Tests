@@ -20,16 +20,9 @@ namespace RdClient.Shared.Models
     public class SessionModel : ISessionModel
     {
         public event EventHandler<ConnectionCreatedArgs> ConnectionCreated;
-
         private readonly IRdpConnectionFactory _connectionFactory;
-
-        private readonly ITimerFactory _timerFactory;
-
         private IRdpConnection _rdpConnection;
-
-        private Snapshotter _snapshotter;
         private List<IRdpCertificate> _acceptedCertificates;
-
         
         private void EmitConnectionCreated(ConnectionCreatedArgs args)
         {
@@ -39,16 +32,14 @@ namespace RdClient.Shared.Models
             }
         }
 
-        public SessionModel(IRdpConnectionFactory connectionFactory, ITimerFactory timerFactory)
+        public SessionModel(IRdpConnectionFactory connectionFactory)
         {
             Contract.Requires(connectionFactory != null);
             _connectionFactory = connectionFactory;
-            _timerFactory = timerFactory;
-
             _acceptedCertificates = new List<IRdpCertificate>();
         }
 
-        public void Connect(ConnectionInformation connectionInformation)
+        public void Connect(ConnectionInformation connectionInformation, ITimerFactory timerFactory, GeneralSettings settings)
         {
             _rdpConnection = _connectionFactory.CreateInstance();
             EmitConnectionCreated(new ConnectionCreatedArgs(_rdpConnection));
@@ -58,7 +49,7 @@ namespace RdClient.Shared.Models
             IThumbnail thumbnail = connectionInformation.Thumbnail;
             if (thumbnail != null)
             {
-                _snapshotter = new Snapshotter(_rdpConnection, thumbnail, _timerFactory);
+                Snapshotter snapshotter = new Snapshotter(_rdpConnection, thumbnail, timerFactory, settings);
             }
 
             RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);

@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Helpers;
 using System;
 namespace RdClient.Shared.Models
 {
@@ -6,7 +7,7 @@ namespace RdClient.Shared.Models
     {
         event EventHandler<ConnectionCreatedArgs> ConnectionCreated;
 
-        void Connect(ConnectionInformation connectionInformation);
+        void Connect(ConnectionInformation connectionInformation, ITimerFactory timerFactory, GeneralSettings settings);
         void Disconnect();
         void AcceptCertificate(IRdpCertificate certificate, bool alwaysAccept = false);
         bool IsCertificateAccepted(IRdpCertificate certificate);

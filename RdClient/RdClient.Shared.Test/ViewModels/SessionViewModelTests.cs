@@ -17,7 +17,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestInitialize]
         public void SetUpTest()
         {
-            _dataModel = new RdDataModel();
+            _dataModel = new RdDataModel();            
         }
 
         [TestCleanup]
@@ -34,6 +34,7 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 SessionViewModel svm = new SessionViewModel();
                 svm.SessionModel = sessionModel;
+                svm.DataModel = _dataModel;
 
                 ConnectionInformation connectionInformation = new ConnectionInformation()
                 {
@@ -41,7 +42,7 @@ namespace RdClient.Shared.Test.ViewModels
                     Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                 };
                 
-                sessionModel.Expect("Connect", new List<object>() { connectionInformation }, 0);
+                sessionModel.Expect("Connect", new List<object>() { connectionInformation, null, null }, 0);
                 //
                 // TODO:    REFACTOR THIS!
                 //          Present the view model using the nav service

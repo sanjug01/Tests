@@ -31,7 +31,7 @@ namespace RdClient.Shared.Test.Model
             _thumbnail = new Mock.Thumbnail();
             ConnectionInformation _connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials, Thumbnail = _thumbnail };
 
-            _sm = new SessionModel(_connectionFactory, _timerFactory);
+            _sm = new SessionModel(_connectionFactory);
 
             _connectionFactory.Expect("CreateInstance", new List<object>(), _connection);
             _timerFactory.Expect("CreateTimer", new List<object>(), _timer);
@@ -39,7 +39,7 @@ namespace RdClient.Shared.Test.Model
             _connection.Expect("Connect", new List<object>() { credentials, true }, 0);
             
             _sm.ConnectionCreated += (sender, args) => { _connectionMatches = (_connection == (IRdpConnection)args.RdpConnection); };
-            _sm.Connect(_connectionInformation);
+            _sm.Connect(_connectionInformation, _timerFactory, new GeneralSettings());
         }
 
         [TestCleanup]

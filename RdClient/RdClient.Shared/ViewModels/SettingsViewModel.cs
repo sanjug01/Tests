@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using RdClient.Shared.Models;
+using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
@@ -8,6 +9,7 @@ namespace RdClient.Shared.ViewModels
         private bool _showGeneralSettings;
         private bool _showGatewaySettings;
         private bool _showUserSettings;
+        private GeneralSettings _generalSettings;
 
         public SettingsViewModel()
         {
@@ -37,12 +39,19 @@ namespace RdClient.Shared.ViewModels
             set { SetProperty(ref _showUserSettings, value); }
         }
 
+        public GeneralSettings GeneralSettings
+        {
+            get { return _generalSettings; }
+            private set { SetProperty(ref _generalSettings, value); }
+        }
+
         protected override void OnPresenting(object activationParameter)
         {
             base.OnPresenting(activationParameter);
             this.ShowGeneralSettings = true;
             this.ShowGatewaySettings = false;
             this.ShowUserSettings = false;
+            this.GeneralSettings = this.DataModel.Settings;
         }
 
         private void GoBackCommandExecute(object parameter)

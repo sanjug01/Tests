@@ -100,6 +100,7 @@
     <Compile Include="Helpers\RdClientException.cs" />
     <Compile Include="Helpers\ReadWriteMonitor.cs" />
     <Compile Include="Helpers\WinrtThreadPoolTimer.cs" />
+    <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Models\RemoteApplication.cs" />
     <Compile Include="Models\CloudWorkspace.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
