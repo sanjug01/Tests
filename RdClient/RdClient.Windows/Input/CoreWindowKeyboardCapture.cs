@@ -14,14 +14,17 @@
         public CoreWindowKeyboardCapture()
         {
             CoreWindow cw = CoreWindow.GetForCurrentThread();
-
-            _core = new CoreWindowKeyboardCore(this);
-
-            cw.Activated += this.OnWindowActivated;
-            cw.Closed += this.OnWindowClosed;
-            cw.KeyDown += this.OnWindowKeyDown;
-            cw.KeyUp += this.OnWindowKeyUp;
-            cw.CharacterReceived += this.OnWindowCharacterReceived;
+            //
+            // CoreWindow may not be available in test scenarios in which case CoreWindow.GetForCurrentThread() returns null.
+            //
+            if (null != cw)
+            {
+                cw.Activated += this.OnWindowActivated;
+                cw.Closed += this.OnWindowClosed;
+                cw.KeyDown += this.OnWindowKeyDown;
+                cw.KeyUp += this.OnWindowKeyUp;
+                cw.CharacterReceived += this.OnWindowCharacterReceived;
+            }
         }
 
         protected override void DisposeManagedState()
@@ -49,6 +52,8 @@
         void IKeyboardCapture.Start()
         {
             Contract.Assert(null == _core);
+            Contract.Ensures(null != _core);
+            _core = new CoreWindowKeyboardCore(this);
         }
 
         void IKeyboardCapture.Stop()
