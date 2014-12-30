@@ -91,10 +91,10 @@ namespace RdClient.Shared.Test.Model
         public void TestSnapshotsNotTakenWhenUseThumbnailsSettingIsFalse()
         {
             _settings.UseThumbnails = false;
-            //first snapshot
+            //initial snapshot timer set on first graphics update
             _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
             _mockTimer.Callback();
-            //repeating snapshot
+            //repeating snapshot set on callback to initial snapshot timer
             _mockTimer.Callback();
         }
 

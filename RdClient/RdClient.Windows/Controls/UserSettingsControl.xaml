@@ -23,8 +23,26 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="Add new user (d)" />
-        <TextBlock Grid.Row="1" Style="{ThemeResource BodyTextBlockStyle}" Text="[+]    Add a user name (d)" />
+        <Grid Grid.Row="1">         
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource AddIcon}"/>
+            <TextBlock Grid.Column="2" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" Text="Add a user name (d)" />   
+            <Button Grid.ColumnSpan="3" Style="{StaticResource InvisibleButtonStyle}" Command="{Binding AddUserCommand}" />
+        </Grid>
+        
         <TextBlock Grid.Row="3" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="User names (d)" />
-        <TextBlock Grid.Row="4" Style="{ThemeResource BodyTextBlockStyle}" Text="[ ]    user1.contoso.com (d)" />
+        <ListBox Grid.Row="4" ItemsSource="{Binding Users}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Username}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>

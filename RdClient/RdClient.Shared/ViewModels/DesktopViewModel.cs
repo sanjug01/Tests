@@ -129,7 +129,7 @@ namespace RdClient.Shared.ViewModels
         {
             get 
             { 
-                if (!this.Desktop.HasThumbnail)
+                if (!this.Desktop.HasThumbnail || !_dataModel.Thumbnails.ContainsItemWithId(this.Desktop.ThumbnailId))
                 {
                     Thumbnail thumbnail = new Thumbnail();
                     this.Desktop.ThumbnailId = thumbnail.Id;
