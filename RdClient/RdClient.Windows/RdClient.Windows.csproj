@@ -121,6 +121,9 @@
     <Compile Include="Controls\ConnectionCenterTitleBar.xaml.cs">
       <DependentUpon>ConnectionCenterTitleBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CredentialControl.xaml.cs">
+      <DependentUpon>CredentialControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DesktopsListControl.xaml.cs">
       <DependentUpon>DesktopsListControl.xaml</DependentUpon>
     </Compile>
@@ -139,8 +142,8 @@
     <Compile Include="Controls\SettingsNavigationControl.xaml.cs">
       <DependentUpon>SettingsNavigationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SettingsCredentialControl.xaml.cs">
-      <DependentUpon>SettingsCredentialControl.xaml</DependentUpon>
+    <Compile Include="Controls\ExtendedCredentialControl.xaml.cs">
+      <DependentUpon>ExtendedCredentialControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\UserSettingsControl.xaml.cs">
       <DependentUpon>UserSettingsControl.xaml</DependentUpon>
@@ -270,6 +273,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\CredentialControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\DesktopsListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -294,7 +301,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\SettingsCredentialControl.xaml">
+    <Page Include="Controls\ExtendedCredentialControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

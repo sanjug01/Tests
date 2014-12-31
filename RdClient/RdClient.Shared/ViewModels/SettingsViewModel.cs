@@ -1,7 +1,9 @@
 ﻿using RdClient.Shared.Models;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Windows.Input;
+using System.Linq;
 
 namespace RdClient.Shared.ViewModels
 {
@@ -15,7 +17,8 @@ namespace RdClient.Shared.ViewModels
         private bool _showGatewaySettings;
         private bool _showUserSettings;
         private GeneralSettings _generalSettings;
-        private ObservableCollection<Credentials> _users;
+        private ObservableCollection<CredentialViewModel> _credentialViewModels;
+        private bool _hasCredentials;
 
         public SettingsViewModel()
         {
@@ -23,6 +26,7 @@ namespace RdClient.Shared.ViewModels
             _editUserCommand = new RelayCommand(this.EditUserCommandExectute);
             _deleteUserCommand = new RelayCommand(this.DeleteUserCommandExectute);
             _addUserCommand = new RelayCommand(this.AddUserCommandExectute);
+            this.PropertyChanged += SettingsViewModel_PropertyChanged;
         }
 
         public ICommand GoBackCommand
@@ -59,20 +63,67 @@ namespace RdClient.Shared.ViewModels
             private set { SetProperty(ref _generalSettings, value); }
         }
 
-        public ObservableCollection<Credentials> Users
+        public ObservableCollection<CredentialViewModel> CredentialsViewModels
         {
-            get { return _users; }
-            private set { SetProperty(ref _users, value); }
+            get { return _credentialViewModels; }
+            private set { SetProperty(ref _credentialViewModels, value); }
+        }
+
+        public bool HasCredentials
+        {
+            get { return _hasCredentials; }
+            private set { SetProperty(ref _hasCredentials, value); }
+        }
+
+        private void SettingsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "DataModel")
+            {
+                ObservableCollection<CredentialViewModel> credVMs = new ObservableCollection<CredentialViewModel>();
+
+                foreach (Credentials cred in this.DataModel.LocalWorkspace.Credentials)
+                {
+                    CredentialViewModel vm = new CredentialViewModel(cred);
+                    credVMs.Add(vm);
+                }
+                this.CredentialsViewModels = credVMs;
+                this.HasCredentials = this.CredentialsViewModels.Count > 0;
+                this.DataModel.LocalWorkspace.Credentials.CollectionChanged += Credentials_CollectionChanged;
+            }
         }
 
         protected override void OnPresenting(object activationParameter)
         {
-            base.OnPresenting(activationParameter);
             this.ShowGeneralSettings = true;
             this.ShowGatewaySettings = false;
             this.ShowUserSettings = false;
             this.GeneralSettings = this.DataModel.Settings;
-            this.Users = this.DataModel.LocalWorkspace.Credentials;
+            foreach (CredentialViewModel vm in this.CredentialsViewModels)
+            {
+                vm.Presented(this.NavigationService, this.DataModel);
+            }
+        }
+
+        private void Credentials_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (Credentials cred in e.NewItems)
+                {
+                    CredentialViewModel vm = new CredentialViewModel(cred);
+                    vm.Presented(this.NavigationService, this.DataModel);
+                    this.CredentialsViewModels.Add(vm);
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                var vmsToRemove = this.CredentialsViewModels.Where(vm => e.OldItems.Contains(vm.Credential)).ToList();
+                foreach (CredentialViewModel vm in vmsToRemove)
+                {
+                    this.CredentialsViewModels.Remove(vm);
+                }
+            }
+            this.HasCredentials = this.CredentialsViewModels.Count > 0;
         }
 
         private void GoBackCommandExecute(object parameter)

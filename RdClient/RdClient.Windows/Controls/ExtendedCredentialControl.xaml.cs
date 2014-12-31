@@ -4,9 +4,9 @@
 
 namespace RdClient.Controls
 {
-    public sealed partial class SettingsCredentialControl : UserControl
+    public sealed partial class ExtendedCredentialControl : UserControl
     {
-        public SettingsCredentialControl()
+        public ExtendedCredentialControl()
         {
             this.InitializeComponent();
         }

@@ -34,12 +34,6 @@
         </Grid>
         
         <TextBlock Grid.Row="3" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="User names (d)" />
-        <ListBox Grid.Row="4" ItemsSource="{Binding Users}" ItemContainerStyle="{StaticResource SettingsCredentialListBoxItemStyle}" BorderThickness="0">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <local:SettingsCredentialControl />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <ListBox Grid.Row="4" ItemsSource="{Binding CredentialsViewModels}" ItemContainerStyle="{StaticResource SettingsCredentialListBoxItemStyle}" BorderThickness="0" />
     </Grid>
 </UserControl>

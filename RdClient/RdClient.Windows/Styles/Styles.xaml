@@ -2,6 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RdClient.Styles"
+    xmlns:controls="using:RdClient.Controls"
     xmlns:c="using:RdClient.Converters"
     >
     
@@ -135,7 +136,8 @@
         <Setter Property="Padding" Value="{StaticResource SettingsMarginPadding}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Template">
+        <Setter Property="IsSelected" Value="{Binding Path=ShowExtended, Mode=TwoWay}" />
+        <Setter Property="Template">           
             <Setter.Value>
                 <ControlTemplate TargetType="ListBoxItem">
                     <Border x:Name="LayoutRoot"
@@ -245,6 +247,12 @@
     <Style x:Key="SettingsDeleteUserButtonStyle" TargetType="Button" BasedOn="{StaticResource SettingsEditUserButtonStyle}">
         <Setter Property="Background" Value="{StaticResource SettingsAddUserButtonBackgroundBrush}" />
     </Style>
+    <DataTemplate x:Key="CredentialDataTemplate">
+        <controls:CredentialControl />
+    </DataTemplate>
+    <DataTemplate x:Key="SelectedCredentialDataTemplate">
+        <controls:ExtendedCredentialControl />
+    </DataTemplate>
     <SolidColorBrush x:Key="CredentialSelectedColor" Color="#1A000000" />
     <Style x:Key="SettingsCredentialListBoxItemStyle" TargetType="ListBoxItem">
         <Setter Property="Margin" Value="0" />
@@ -267,7 +275,7 @@
                                         <DoubleAnimation Storyboard.TargetName="PressedHighlight"
                                                         Storyboard.TargetProperty="Opacity"
                                                         To="0.2"
-                                                        Duration="0" />
+                                                        Duration="0" />                                      
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Pressed">
@@ -275,28 +283,25 @@
                                         <DoubleAnimation Storyboard.TargetName="PressedHighlight"
                                                         Storyboard.TargetProperty="Opacity"
                                                         To="0.5"
-                                                        Duration="0" />
+                                                        Duration="0" />                                        
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
                             <VisualStateGroup x:Name="SelectionStates">
-                                <VisualState x:Name="Unselected" />
-                                <VisualState x:Name="Selected">
+                                <VisualState x:Name="Unselected">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="ItemHighlight"
                                                         Storyboard.TargetProperty="Opacity"
-                                                        To="1"
-                                                        Duration="0" />                                        
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="SelectedUnfocused">
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="ItemHighlight"
-                                                        Storyboard.TargetProperty="Opacity"
-                                                        To="1"
+                                                        To="0"
                                                         Duration="0" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                    Storyboard.TargetProperty="ContentTemplate">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource CredentialDataTemplate}" />
+                                        </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
+                                <VisualState x:Name="Selected" />
+                                <VisualState x:Name="SelectedUnfocused" />
                                 <VisualState x:Name="SelectedDisabled" />
                                 <VisualState x:Name="SelectedPointerOver" />
                                 <VisualState x:Name="SelectedPressed" />
@@ -307,13 +312,13 @@
                             <ContentPresenter x:Name="ContentPresenter"
                                             Content="{TemplateBinding Content}"
                                             ContentTransitions="{TemplateBinding ContentTransitions}"
-                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                            ContentTemplate="{StaticResource SelectedCredentialDataTemplate}"
                                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                             Margin="{TemplateBinding Padding}" />
                             <Rectangle x:Name="ItemHighlight" IsHitTestVisible="False"
                                     Fill="{StaticResource CredentialSelectedColor}"
-                                    Opacity="0" />
+                                    Opacity="1" />
                             <Rectangle x:Name="PressedHighlight" IsHitTestVisible="False"
                                     Fill="{StaticResource BackButtonBackgroundBrush}"
                                     Opacity="0" />
