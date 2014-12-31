@@ -17,7 +17,6 @@ namespace RdClient.Shared.ViewModels
         private RdDataModel _dataModel;
         private RelayCommand _editCommand;
         private RelayCommand _deleteCommand;
-        private bool _showExtended;
 
         public CredentialViewModel(Credentials cred)
         {
@@ -30,12 +29,6 @@ namespace RdClient.Shared.ViewModels
         {
             get { return _cred; }
             private set { SetProperty(ref _cred, value); }
-        }
-
-        public bool ShowExtended
-        {
-            get { return _showExtended; }
-            set { SetProperty(ref _showExtended, value); }
         }
 
         public ICommand EditCommand
@@ -56,7 +49,7 @@ namespace RdClient.Shared.ViewModels
 
         private void EditCommandExecute()
         {
-            AddUserViewArgs addUserArgs = new AddUserViewArgs(null, true);
+            AddUserViewArgs addUserArgs = new AddUserViewArgs(this.Credential, null, false);
             _nav.PushModalView("AddUserView", addUserArgs);        
         }
 

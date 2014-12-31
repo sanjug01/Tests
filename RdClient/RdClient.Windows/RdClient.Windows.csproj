@@ -124,6 +124,9 @@
     <Compile Include="Controls\CredentialControl.xaml.cs">
       <DependentUpon>CredentialControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CredentialListControl.xaml.cs">
+      <DependentUpon>CredentialListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DesktopsListControl.xaml.cs">
       <DependentUpon>DesktopsListControl.xaml</DependentUpon>
     </Compile>
@@ -274,6 +277,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\CredentialControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CredentialListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
