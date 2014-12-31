@@ -4,6 +4,17 @@
     xmlns:local="using:RdClient.Styles"
     xmlns:c="using:RdClient.Converters"
     >
+    
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="InvisibleButtonPointerOverBackgroundThemeBrush" Color="#22FFFFFF" />
+            <SolidColorBrush x:Key="InvisibleButtonPressedBackgroundThemeBrush" Color="#88FFFFFF" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="InvisibleButtonPointerOverBackgroundThemeBrush" Color="#22000000" />
+            <SolidColorBrush x:Key="InvisibleButtonPressedBackgroundThemeBrush" Color="#88000000" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
 
     <FontFamily x:Key="IconFont">ms-appx:///Assets/SegMDL2.1.12.ttf#Segoe MDL2 Assets</FontFamily>
     <x:String x:Key="AddIcon">&#xE710;</x:String>
@@ -36,7 +47,7 @@
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
                                                                        Storyboard.TargetProperty="Background">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource InvisibleButtonPointerOverBackgroundBrush}" />
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource InvisibleButtonPointerOverBackgroundThemeBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -44,7 +55,7 @@
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
                                                                        Storyboard.TargetProperty="Background">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource InvisibleButtonPressedBackgroundBrush}" />
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource InvisibleButtonPressedBackgroundThemeBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -91,6 +102,7 @@
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
     </Style>
     <Style x:Key="ConnectionCenterBarNarrowButtonStyle" TargetType="Button" BasedOn="{StaticResource ConnectionCenterBarButtonStyle}">
         <Setter Property="Width" Value="48" />
@@ -111,6 +123,8 @@
     <GridLength x:Key="SettingsItemHeight">48</GridLength>
     <x:Double x:Key="SettingsItemHeightDouble">48</x:Double>
     <GridLength x:Key="SettingsItemColumnWidth">428</GridLength>
+    <x:Double x:Key="SettingsItemColumnWidthDouble">428</x:Double>
+    <GridLength x:Key="SettingsItemMargin">20</GridLength>
 
     <Style x:Key="SettingsListBoxItemStyle" TargetType="ListBoxItem">
         <Setter Property="Margin" Value="0" />
@@ -199,6 +213,115 @@
         <Setter Property="Foreground" Value="#FFFFFF" />
         <Setter Property="Content" Value="{StaticResource BackIcon}" />
         <Setter Property="Padding" Value="0" />
+    </Style>
+
+    <SolidColorBrush x:Key="SettingsAddUserButtonBackgroundBrush" Color="#B2B2B2" />
+    <SolidColorBrush x:Key="SettingsAddUserButtonForegroundBrush" Color="#000000" />
+    <Style x:Key="SettingsAddUserButtonStyle" TargetType="Button" BasedOn="{StaticResource ConnectionCenterBarButtonStyle}">
+        <Setter Property="Height" Value="35" />
+        <Setter Property="Width" Value="35" />
+        <Setter Property="Background" Value="{StaticResource SettingsAddUserButtonBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource SettingsAddUserButtonForegroundBrush}" />
+    </Style>
+    <SolidColorBrush x:Key="SettingsUserBulletBrush" Color="#3FA9F5" />
+    <Style x:Key="SettingsUserBulletStyle" TargetType="Rectangle">
+        <Setter Property="Fill" Value="{StaticResource SettingsUserBulletBrush}" />
+        <Setter Property="Height" Value="35" />
+        <Setter Property="Width" Value="35" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <Style x:Key="SettingsEditUserButtonStyle" TargetType="Button">
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Width" Value="120" />
+        <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource SettingsUserBulletBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+    <Style x:Key="SettingsDeleteUserButtonStyle" TargetType="Button" BasedOn="{StaticResource SettingsEditUserButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource SettingsAddUserButtonBackgroundBrush}" />
+    </Style>
+    <SolidColorBrush x:Key="CredentialSelectedColor" Color="#1A000000" />
+    <Style x:Key="SettingsCredentialListBoxItemStyle" TargetType="ListBoxItem">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="TabNavigation" Value="Local" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="LayoutRoot"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="0">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PressedHighlight"
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        To="0.2"
+                                                        Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PressedHighlight"
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        To="0.5"
+                                                        Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="SelectionStates">
+                                <VisualState x:Name="Unselected" />
+                                <VisualState x:Name="Selected">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ItemHighlight"
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        To="1"
+                                                        Duration="0" />                                        
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="SelectedUnfocused">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ItemHighlight"
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        To="1"
+                                                        Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="SelectedDisabled" />
+                                <VisualState x:Name="SelectedPointerOver" />
+                                <VisualState x:Name="SelectedPressed" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid x:Name="InnerGrid"
+                            Background="Transparent">                         
+                            <ContentPresenter x:Name="ContentPresenter"
+                                            Content="{TemplateBinding Content}"
+                                            ContentTransitions="{TemplateBinding ContentTransitions}"
+                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            Margin="{TemplateBinding Padding}" />
+                            <Rectangle x:Name="ItemHighlight" IsHitTestVisible="False"
+                                    Fill="{StaticResource CredentialSelectedColor}"
+                                    Opacity="0" />
+                            <Rectangle x:Name="PressedHighlight" IsHitTestVisible="False"
+                                    Fill="{StaticResource BackButtonBackgroundBrush}"
+                                    Opacity="0" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!-- 
@@ -718,8 +841,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
 
 </ResourceDictionary>
 

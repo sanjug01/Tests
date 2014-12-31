@@ -139,6 +139,9 @@
     <Compile Include="Controls\SettingsNavigationControl.xaml.cs">
       <DependentUpon>SettingsNavigationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SettingsCredentialControl.xaml.cs">
+      <DependentUpon>SettingsCredentialControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UserSettingsControl.xaml.cs">
       <DependentUpon>UserSettingsControl.xaml</DependentUpon>
     </Compile>
@@ -288,6 +291,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\SettingsNavigationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SettingsCredentialControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
