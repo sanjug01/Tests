@@ -1,0 +1,29 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.SettingsAddUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <Grid Background="{StaticResource SettingsBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="Add new user (d)" />
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="{StaticResource SettingsItemMargin}" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Style="{StaticResource SettingsAddUserButtonStyle}" Content="{StaticResource AddIcon}" Command="{Binding AddUserCommand}" />
+            <TextBlock Grid.Column="2" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" Text="Add a user name (d)" />
+        </Grid>
+    </Grid>
+</UserControl>

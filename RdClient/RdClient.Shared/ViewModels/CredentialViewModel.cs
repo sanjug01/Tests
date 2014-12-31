@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class CredentialViewModel: MutableObject
+    public class CredentialViewModel: MutableObject, ICredentialViewModel
     {
         private Credentials _cred;
         private INavigationService _nav;

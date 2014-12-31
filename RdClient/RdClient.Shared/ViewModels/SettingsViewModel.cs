@@ -11,21 +11,17 @@ namespace RdClient.Shared.ViewModels
     {
         private RelayCommand _goBackCommand;
         private RelayCommand _addUserCommand;
-        private RelayCommand _editUserCommand;
-        private RelayCommand _deleteUserCommand;
         private bool _showGeneralSettings;
         private bool _showGatewaySettings;
         private bool _showUserSettings;
         private GeneralSettings _generalSettings;
-        private ObservableCollection<CredentialViewModel> _credentialViewModels;
+        private ObservableCollection<ICredentialViewModel> _credentialViewModels;
         private bool _hasCredentials;
 
         public SettingsViewModel()
         {
-            _goBackCommand = new RelayCommand(this.GoBackCommandExecute);
-            _editUserCommand = new RelayCommand(this.EditUserCommandExectute);
-            _deleteUserCommand = new RelayCommand(this.DeleteUserCommandExectute);
-            _addUserCommand = new RelayCommand(this.AddUserCommandExectute);
+            _goBackCommand = new RelayCommand(o => this.GoBackCommandExecute());
+            _addUserCommand = new RelayCommand(o => this.AddUserCommandExectute());
             this.PropertyChanged += SettingsViewModel_PropertyChanged;
         }
 
@@ -63,7 +59,7 @@ namespace RdClient.Shared.ViewModels
             private set { SetProperty(ref _generalSettings, value); }
         }
 
-        public ObservableCollection<CredentialViewModel> CredentialsViewModels
+        public ObservableCollection<ICredentialViewModel> CredentialsViewModels
         {
             get { return _credentialViewModels; }
             private set { SetProperty(ref _credentialViewModels, value); }
@@ -75,23 +71,6 @@ namespace RdClient.Shared.ViewModels
             private set { SetProperty(ref _hasCredentials, value); }
         }
 
-        private void SettingsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "DataModel")
-            {
-                ObservableCollection<CredentialViewModel> credVMs = new ObservableCollection<CredentialViewModel>();
-
-                foreach (Credentials cred in this.DataModel.LocalWorkspace.Credentials)
-                {
-                    CredentialViewModel vm = new CredentialViewModel(cred);
-                    credVMs.Add(vm);
-                }
-                this.CredentialsViewModels = credVMs;
-                this.HasCredentials = this.CredentialsViewModels.Count > 0;
-                this.DataModel.LocalWorkspace.Credentials.CollectionChanged += Credentials_CollectionChanged;
-            }
-        }
-
         protected override void OnPresenting(object activationParameter)
         {
             this.ShowGeneralSettings = true;
@@ -101,6 +80,22 @@ namespace RdClient.Shared.ViewModels
             foreach (CredentialViewModel vm in this.CredentialsViewModels)
             {
                 vm.Presented(this.NavigationService, this.DataModel);
+            }
+        }
+
+        private void SettingsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "DataModel")
+            {
+                ObservableCollection<ICredentialViewModel> credVMs = new ObservableCollection<ICredentialViewModel>();
+                foreach (Credentials cred in this.DataModel.LocalWorkspace.Credentials)
+                {
+                    CredentialViewModel vm = new CredentialViewModel(cred);
+                    credVMs.Add(vm);
+                }
+                this.CredentialsViewModels = credVMs;
+                this.HasCredentials = this.CredentialsViewModels.Count > 0;
+                this.DataModel.LocalWorkspace.Credentials.CollectionChanged += Credentials_CollectionChanged;
             }
         }
 
@@ -126,12 +121,12 @@ namespace RdClient.Shared.ViewModels
             this.HasCredentials = this.CredentialsViewModels.Count > 0;
         }
 
-        private void GoBackCommandExecute(object parameter)
+        private void GoBackCommandExecute()
         {
             this.NavigationService.NavigateToView("ConnectionCenterView", null);
         }
 
-        private void AddUserCommandExectute(object parameter)
+        private void AddUserCommandExectute()
         {
             AddUserViewArgs args = new AddUserViewArgs(this.AddUserCallback, false);
             NavigationService.PushModalView("AddUserView", args);
@@ -140,16 +135,6 @@ namespace RdClient.Shared.ViewModels
         private void AddUserCallback(Credentials creds, bool store)
         {
             this.DataModel.LocalWorkspace.Credentials.Add(creds);
-        }
-
-        private void EditUserCommandExectute(object parameter)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void DeleteUserCommandExectute(object parameter)
-        {
-            throw new NotImplementedException();
         }
     }
 }

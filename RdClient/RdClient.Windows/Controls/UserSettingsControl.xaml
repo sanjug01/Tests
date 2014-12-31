@@ -1,39 +1,37 @@
 ﻿<UserControl
     x:Class="RdClient.Controls.UserSettingsControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:RdClient.Controls"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:RdClient.Controls"
+    xmlns:design="using:RdClient.DesignTime"    
+    xmlns:converters="using:RdClient.Converters"
     mc:Ignorable="d"
     d:DesignHeight="768"
     d:DesignWidth="700"
     RequestedTheme="Light">
 
+    <d:UserControl.DataContext>
+        <design:FakeSettingsViewModel />
+    </d:UserControl.DataContext>
+    
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
+    
     <Grid Background="{StaticResource SettingsBackgroundBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="{StaticResource SettingsItemHeight}" />
-            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
-            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
-            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{StaticResource SettingsItemColumnWidth}" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="Add new user (d)" />
-        <Grid Grid.Row="1">         
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="{StaticResource SettingsItemMargin}" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Style="{StaticResource SettingsAddUserButtonStyle}" Content="{StaticResource AddIcon}" Command="{Binding AddUserCommand}" />
-            <TextBlock Grid.Column="2" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" Text="Add a user name (d)" />   
-        </Grid>
-        
-        <TextBlock Grid.Row="3" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="User names (d)" />
-        <ListBox Grid.Row="4" ItemsSource="{Binding CredentialsViewModels}" ItemContainerStyle="{StaticResource SettingsCredentialListBoxItemStyle}" BorderThickness="0" />
+
+        <local:SettingsAddUserControl Grid.Row="0" />
+        <local:CredentialListControl Grid.Row="2" Visibility="{Binding Path=HasCredentials, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

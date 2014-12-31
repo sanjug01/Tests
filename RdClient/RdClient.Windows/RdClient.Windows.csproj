@@ -142,6 +142,9 @@
     <Compile Include="Controls\MouseLayerControl.xaml.cs">
       <DependentUpon>MouseLayerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SettingsAddUserControl.xaml.cs">
+      <DependentUpon>SettingsAddUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SettingsNavigationControl.xaml.cs">
       <DependentUpon>SettingsNavigationControl.xaml</DependentUpon>
     </Compile>
@@ -152,12 +155,13 @@
       <DependentUpon>UserSettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DesignTime\FakeConnectionCenterViewModel.cs" />
+    <Compile Include="DesignTime\FakeCredentialViewModel.cs" />
     <Compile Include="DesignTime\FakeSettingsViewModel.cs" />
     <Compile Include="Factories\NavigationServiceFactory.cs" />
     <Compile Include="Factories\AppInitializer.cs" />
     <Compile Include="Helpers\CoreDispatcherDeferredExecution.cs" />
     <Compile Include="Factories\DataModelFactory.cs" />
-    <Compile Include="DesignTime\FakeDesktopModel.cs" />
+    <Compile Include="DesignTime\FakeDesktopViewModel.cs" />
     <Compile Include="Helpers\PhysicalScreenSize.cs" />
     <Compile Include="Helpers\TypeNameDataTemplateSelector.cs" />
     <Compile Include="LifeTimeManagement\ActivationArgs.cs" />
@@ -301,6 +305,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MouseLayerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SettingsAddUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
