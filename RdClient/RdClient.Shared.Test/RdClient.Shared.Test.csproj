@@ -88,6 +88,7 @@
     <Compile Include="Helpers\ReadWriteMonitorTests.cs" />
     <Compile Include="Helpers\TestData.cs" />
     <Compile Include="Helpers\WinrtThreadPoolTimerTests.cs" />
+    <Compile Include="Input\CoreWindowKeyboardCoreTests.cs" />
     <Compile Include="Input\KeystrokeEventArgsTests.cs" />
     <Compile Include="Mock\BarItemsViewModel.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
