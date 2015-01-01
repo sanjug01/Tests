@@ -57,6 +57,7 @@
     <Compile Include="Converters\ErrorLocalizers\IErrorLocalizer.cs" />
     <Compile Include="Converters\ErrorLocalizers\RdpDisconnectReasonLocalizer.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\PointerEventConverter.cs" />
     <Compile Include="Converters\RdpErrorToLocalizedStringConverter.cs" />
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverter.cs" />
@@ -97,10 +98,13 @@
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\ITimer.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
+    <Compile Include="Helpers\PointerEvent.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
     <Compile Include="Helpers\ReadWriteMonitor.cs" />
+    <Compile Include="Helpers\StateMachine.cs" />
     <Compile Include="Helpers\WinrtThreadPoolTimer.cs" />
     <Compile Include="Models\GeneralSettings.cs" />
+    <Compile Include="Models\PointerModel.cs" />
     <Compile Include="Models\RemoteApplication.cs" />
     <Compile Include="Models\CloudWorkspace.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />

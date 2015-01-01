@@ -33,7 +33,7 @@
 
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {
-            Debug.WriteLine("propertyName: {0}, storage: {1}, value: {2}", propertyName, storage, value);
+            //Debug.WriteLine("propertyName: {0}, storage: {1}, value: {2}", propertyName, storage, value);
 
             if (object.Equals(storage, value))
             {

@@ -44,11 +44,18 @@ namespace RdClient.Shared.CxWrappers
             _rdpConnectionCx.OnRemoteAppWindowIconUpdated += OnRemoteAppWindowIconUpdatedHandler;
         }
 
+
+        // TODO
+        // TODO
+        // TODO
+        // TODO this has to go away from the destructor.
+        // also, there is a race condition which makes disconnect events to be called multiple times
         ~RdpConnection()
         {
-            if (_rdpConnectionCx != null)
+            int xRes;
+
+            if(_rdpConnectionCx != null)
             {
-                int xRes;
                 _rdpConnectionCx.OnClientConnected -= OnClientConnectedHandler;
                 _rdpConnectionCx.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
                 _rdpConnectionCx.OnClientDisconnected -= OnClientDisconnectedHandler;
@@ -69,6 +76,7 @@ namespace RdClient.Shared.CxWrappers
 
                 // remove from connection store
                 RdClientCx.RdpConnectionStore rdpConnectionStore;
+
                 xRes = RdClientCx.RdpConnectionStore.GetConnectionStore(out rdpConnectionStore);
                 RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
                 rdpConnectionStore.RemoveConnection(_rdpConnectionCx);
@@ -79,8 +87,9 @@ namespace RdClient.Shared.CxWrappers
                 //
                 xRes = _rdpConnectionCx.TerminateInstance();
                 RdTrace.IfFailXResultThrow(xRes, "Unable to terminate RDP connection.");
-                _rdpConnectionCx = null;
-            }
+
+                _rdpConnectionCx = null;   
+            }         
         }
         
         public void Connect(Credentials credentials, bool fUsingSavedCreds)

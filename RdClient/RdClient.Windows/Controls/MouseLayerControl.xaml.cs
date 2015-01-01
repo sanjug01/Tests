@@ -9,6 +9,10 @@ using Windows.UI.Xaml.Media;
 
 namespace RdClient.Controls
 {
+    using RdClient.Shared.Converters;
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Models;
+    using System.Diagnostics;
     using Windows.UI.Core;
     // int mouseState, float x, float y;
     // mouseState is:
@@ -25,7 +29,7 @@ namespace RdClient.Controls
     public sealed partial class MouseLayerControl : UserControl
     {
         private CoreCursor _exitCursor;
-        private PointerPoint _lastPointerPoint;
+        private PointerModel _pointerModel;
 
         public MouseLayerControl()
         {
@@ -36,8 +40,17 @@ namespace RdClient.Controls
             this.AddHandler(PointerPressedEvent, new PointerEventHandler(PointerPressedHandler), true);
             this.AddHandler(PointerMovedEvent, new PointerEventHandler(PointerMovedHandler), true);
 
+            this.ManipulationStarted += ManipulationStartedHandler;
+            this.ManipulationInertiaStarting += ManipulationInertiaStartingHandler;
+            this.ManipulationDelta += ManipulationDeltaHandler;
+            this.ManipulationCompleted += ManipulationCompletedHandler;
+            
             this.PointerEntered += OnPointerEntered;
             this.PointerExited += OnPointerExited;
+
+            _pointerModel = new PointerModel(new WinrtThreadPoolTimer());
+            _pointerModel.MousePointerChanged += (s, o) => { this.MousePointer = o; };
+            this.SizeChanged += (s, o) => { _pointerModel.WindowSize = o.NewSize; };
         }
 
         private void OnPointerEntered(object sender, PointerRoutedEventArgs args)
@@ -105,56 +118,44 @@ namespace RdClient.Controls
             
         }
 
+        void ManipulationStartedHandler(object sender, ManipulationStartedRoutedEventArgs args)
+        {
+            //_pointerModel.ConsumeEvent(PointerEventConverter.ManipulationStartedArgsConverter(args));
+        }
+
+        void ManipulationInertiaStartingHandler(object sender, ManipulationInertiaStartingRoutedEventArgs args)
+        {
+            _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
+        }
+
+        void ManipulationDeltaHandler(object sender, ManipulationDeltaRoutedEventArgs args)
+        {
+            _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationDeltaArgsConverter(args));
+        }
+
+        void ManipulationCompletedHandler(object sender, ManipulationCompletedRoutedEventArgs args)
+        {
+            _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationCompletedArgsConverter(args));
+        }
+
         void PointerCanceledHandler(object sender, PointerRoutedEventArgs args)
         {
-
+            _pointerModel.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
         }
 
         void PointerReleasedHandler(object sender, PointerRoutedEventArgs args)
         {
-            PointerPoint point = args.GetCurrentPoint(this);
-            float x = (float)point.Position.X;
-            float y = (float)point.Position.Y;
-
-            if (_lastPointerPoint.Properties.IsLeftButtonPressed == true && point.Properties.IsLeftButtonPressed == false)
-            {
-                this.MousePointer = new MousePointer(1, x, y);
-            }
-            else if (_lastPointerPoint.Properties.IsRightButtonPressed == true && point.Properties.IsRightButtonPressed == false)
-            {
-                this.MousePointer = new MousePointer(6, x, y);
-            }
-
-            _lastPointerPoint = point;
+            _pointerModel.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
         }
 
         void PointerPressedHandler(object sender, PointerRoutedEventArgs args)
         {
-            PointerPoint point = args.GetCurrentPoint(this);
-            float x = (float) point.Position.X;
-            float y = (float) point.Position.Y;
-
-            if(point.Properties.IsLeftButtonPressed)
-            {
-                this.MousePointer = new MousePointer(0, x, y);
-            }
-            else if(point.Properties.IsRightButtonPressed)
-            {
-                this.MousePointer = new MousePointer(5, x, y);
-            }
-
-            _lastPointerPoint = point;
+            _pointerModel.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
         }
 
         void PointerMovedHandler(object sender, PointerRoutedEventArgs args)
         {
-            PointerPoint point = args.GetCurrentPoint(this);
-            float x = (float)point.Position.X;
-            float y = (float)point.Position.Y;
-
-            this.MousePointer = new MousePointer(4, x, y);
-            
-            _lastPointerPoint = point;
+            _pointerModel.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
         }
     }
 }
