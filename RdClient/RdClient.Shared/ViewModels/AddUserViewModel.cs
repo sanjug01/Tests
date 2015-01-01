@@ -29,7 +29,9 @@ namespace RdClient.Shared.ViewModels
 
         public AddUserViewArgs(AddUserViewResultHandler resultHandler, bool showSave)
             : this(new Credentials(), resultHandler, showSave)
-        { }
+        {
+            _cred.Domain = "";
+        }
 
         public AddUserViewResultHandler ResultHandler { get { return _resultHandler; } }
 

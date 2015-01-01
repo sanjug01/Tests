@@ -27,7 +27,6 @@
         <StackPanel Grid.Row="2">
             <ListBox SelectedIndex="0" BorderThickness="0">                
                 <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowGeneralSettings, Mode=TwoWay}">General (d)</ListBoxItem>
-                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowGatewaySettings, Mode=TwoWay}">Gateways (d)</ListBoxItem>
                 <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowUserSettings, Mode=TwoWay}">User names (d)</ListBoxItem>
             </ListBox>
         </StackPanel>

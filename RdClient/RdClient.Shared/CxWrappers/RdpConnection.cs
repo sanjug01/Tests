@@ -46,39 +46,41 @@ namespace RdClient.Shared.CxWrappers
 
         ~RdpConnection()
         {
-            int xRes;
-            _rdpConnectionCx.OnClientConnected -= OnClientConnectedHandler;
-            _rdpConnectionCx.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
-            _rdpConnectionCx.OnClientDisconnected -= OnClientDisconnectedHandler;
-            _rdpConnectionCx.OnUserCredentialsRequest -= OnUserCredentialsRequestHandler;
-            _rdpConnectionCx.OnMouseCursorShapeChanged -= OnMouseCursorShapeChanged;
-            _rdpConnectionCx.OnMouseCursorPositionChanged -= OnMouseCursorPositionChanged;
-            _rdpConnectionCx.OnMultiTouchEnabledChanged -= OnMultiTouchEnabledChanged;
-            _rdpConnectionCx.OnConnectionHealthStateChanged -= OnConnectionHealthStateChangedHandler;
-            _rdpConnectionCx.OnClientAutoReconnecting -= OnClientAutoReconnectingHandler;
-            _rdpConnectionCx.OnClientAutoReconnectComplete -= OnClientAutoReconnectCompleteHandler;
-            _rdpConnectionCx.OnLoginCompleted -= OnLoginCompletedHandler;
-            _rdpConnectionCx.OnStatusInfoReceived -= OnStatusInfoReceivedHandler;
-            _rdpConnectionCx.OnFirstGraphicsUpdateReceived -= OnFirstGraphicsUpdateHandler;
-            _rdpConnectionCx.OnRemoteAppWindowCreated -= OnRemoteAppWindowCreatedHandler;
-            _rdpConnectionCx.OnRemoteAppWindowDeleted -= OnRemoteAppWindowDeletedHandler;
-            _rdpConnectionCx.OnRemoteAppWindowTitleUpdated -= OnRemoteAppWindowTitleUpdatedHandler;
-            _rdpConnectionCx.OnRemoteAppWindowIconUpdated -= OnRemoteAppWindowIconUpdatedHandler;
+            if (_rdpConnectionCx != null)
+            {
+                int xRes;
+                _rdpConnectionCx.OnClientConnected -= OnClientConnectedHandler;
+                _rdpConnectionCx.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
+                _rdpConnectionCx.OnClientDisconnected -= OnClientDisconnectedHandler;
+                _rdpConnectionCx.OnUserCredentialsRequest -= OnUserCredentialsRequestHandler;
+                _rdpConnectionCx.OnMouseCursorShapeChanged -= OnMouseCursorShapeChanged;
+                _rdpConnectionCx.OnMouseCursorPositionChanged -= OnMouseCursorPositionChanged;
+                _rdpConnectionCx.OnMultiTouchEnabledChanged -= OnMultiTouchEnabledChanged;
+                _rdpConnectionCx.OnConnectionHealthStateChanged -= OnConnectionHealthStateChangedHandler;
+                _rdpConnectionCx.OnClientAutoReconnecting -= OnClientAutoReconnectingHandler;
+                _rdpConnectionCx.OnClientAutoReconnectComplete -= OnClientAutoReconnectCompleteHandler;
+                _rdpConnectionCx.OnLoginCompleted -= OnLoginCompletedHandler;
+                _rdpConnectionCx.OnStatusInfoReceived -= OnStatusInfoReceivedHandler;
+                _rdpConnectionCx.OnFirstGraphicsUpdateReceived -= OnFirstGraphicsUpdateHandler;
+                _rdpConnectionCx.OnRemoteAppWindowCreated -= OnRemoteAppWindowCreatedHandler;
+                _rdpConnectionCx.OnRemoteAppWindowDeleted -= OnRemoteAppWindowDeletedHandler;
+                _rdpConnectionCx.OnRemoteAppWindowTitleUpdated -= OnRemoteAppWindowTitleUpdatedHandler;
+                _rdpConnectionCx.OnRemoteAppWindowIconUpdated -= OnRemoteAppWindowIconUpdatedHandler;
 
-            // remove from connection store
-            RdClientCx.RdpConnectionStore rdpConnectionStore;
-            xRes = RdClientCx.RdpConnectionStore.GetConnectionStore(out rdpConnectionStore);
-            RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
-            rdpConnectionStore.RemoveConnection(_rdpConnectionCx);
-            rdpConnectionStore = null;
+                // remove from connection store
+                RdClientCx.RdpConnectionStore rdpConnectionStore;
+                xRes = RdClientCx.RdpConnectionStore.GetConnectionStore(out rdpConnectionStore);
+                RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
+                rdpConnectionStore.RemoveConnection(_rdpConnectionCx);
+                rdpConnectionStore = null;
 
-            //
-            // Terminate the connection object.
-            //
-            xRes = _rdpConnectionCx.TerminateInstance();
-            RdTrace.IfFailXResultThrow(xRes, "Unable to terminate RDP connection.");
-            _rdpConnectionCx = null;
-            GC.SuppressFinalize(this);
+                //
+                // Terminate the connection object.
+                //
+                xRes = _rdpConnectionCx.TerminateInstance();
+                RdTrace.IfFailXResultThrow(xRes, "Unable to terminate RDP connection.");
+                _rdpConnectionCx = null;
+            }
         }
         
         public void Connect(Credentials credentials, bool fUsingSavedCreds)
