@@ -86,6 +86,7 @@
     <Compile Include="Helpers\CertificateErrorHelperTests.cs" />
     <Compile Include="Helpers\MutableObjectTests.cs" />
     <Compile Include="Helpers\ReadWriteMonitorTests.cs" />
+    <Compile Include="Helpers\StateMachineTests.cs" />
     <Compile Include="Helpers\TestData.cs" />
     <Compile Include="Helpers\WinrtThreadPoolTimerTests.cs" />
     <Compile Include="Input\CoreWindowKeyboardCoreTests.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\ModelCollectionTests.cs" />
+    <Compile Include="Model\PointerModelTests.cs" />
     <Compile Include="Model\RdDataModelTests.cs" />
     <Compile Include="Model\SessionModelTests.cs" />
     <Compile Include="Model\SnapshotterTests.cs" />
