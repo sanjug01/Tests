@@ -11,7 +11,8 @@
     >
     
     <UserControl.DataContext>
-        <vm:SessionViewModel>
+        <vm:SessionViewModel
+            KeyboardCapture="{StaticResource CoreWindowKeyboardCapture}">
             <vm:SessionViewModel.MouseViewModel>
                 <vm:MouseViewModel/>
             </vm:SessionViewModel.MouseViewModel>

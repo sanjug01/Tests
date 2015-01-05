@@ -1,6 +1,7 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Helpers;
+using RdClient.Shared.Input;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using System;
@@ -13,6 +14,7 @@ namespace RdClient.Shared.ViewModels
     public class SessionViewModel : DeferringViewModelBase
     {
         private ConnectionInformation _connectionInformation;
+        private IKeyboardCapture _keyboardCapture;
 
         private readonly ICommand _disconnectCommand;
         public ICommand DisconnectCommand { get { return _disconnectCommand; } }
@@ -23,6 +25,11 @@ namespace RdClient.Shared.ViewModels
         public ISessionModel SessionModel { get; set; }
         public DisconnectString DisconnectString { get; set; }
         public MouseViewModel MouseViewModel { get; set; }
+        public IKeyboardCapture KeyboardCapture
+        {
+            get { return _keyboardCapture; }
+            set { this.SetProperty<IKeyboardCapture>(ref _keyboardCapture, value); }
+        }
 
         public SessionViewModel()
         {
@@ -33,7 +40,26 @@ namespace RdClient.Shared.ViewModels
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Requires(null != activationParameter as ConnectionInformation);
+            Contract.Assert(null != _keyboardCapture);
+
             _connectionInformation = activationParameter as ConnectionInformation;
+            //
+            // TODO: heavy refactoring of the session UI is needed to support multiple sessions
+            //       as a part of thye refactoring tracking current session must be tracked, keyboard
+            //       capture must be started when a new session may send input (either when a connected session
+            //       is presented or a presented session is connected); then, when a session is deactivated
+            //       or disconnected, the keyboard capture must be stopped.
+            //
+            _keyboardCapture.Keystroke += this.OnKeystroke;
+            _keyboardCapture.Start();
+        }
+
+        protected override void OnDismissed()
+        {
+            Contract.Assert(null != _keyboardCapture);
+            _keyboardCapture.Stop();
+            _keyboardCapture.Keystroke -= this.OnKeystroke;
+            base.OnDismissed();
         }
 
 
@@ -137,6 +163,14 @@ namespace RdClient.Shared.ViewModels
         private void Disconnect(object o)
         {
             SessionModel.Disconnect();
+        }
+
+        private void OnKeystroke(object sender, KeystrokeEventArgs e)
+        {
+            //
+            // TODO: send the keystroke over to the session
+            //
+            //this.SessionModel.RdSession.SendKeyboard
         }
     }
 }

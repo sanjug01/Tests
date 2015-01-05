@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Errors;
-using RdClient.Shared.Helpers;
+using RdClient.Shared.Input;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.ViewModels;
@@ -13,6 +13,24 @@ namespace RdClient.Shared.Test.ViewModels
     public class SessionViewModelTests
     {
         private RdDataModel _dataModel;
+
+        private sealed class DummyKeyboardCapture : IKeyboardCapture
+        {
+
+            event System.EventHandler<KeystrokeEventArgs> IKeyboardCapture.Keystroke
+            {
+                add { }
+                remove { }
+            }
+
+            void IKeyboardCapture.Start()
+            {
+            }
+
+            void IKeyboardCapture.Stop()
+            {
+            }
+        }
 
         [TestInitialize]
         public void SetUpTest()
@@ -32,7 +50,7 @@ namespace RdClient.Shared.Test.ViewModels
             using(Mock.NavigationService navigation = new Mock.NavigationService())
             using(Mock.SessionModel sessionModel = new Mock.SessionModel())
             {
-                SessionViewModel svm = new SessionViewModel();
+                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
                 svm.SessionModel = sessionModel;
 
                 ConnectionInformation connectionInformation = new ConnectionInformation()
@@ -57,7 +75,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.SessionModel sessionModel = new Mock.SessionModel())
             {
-                SessionViewModel svm = new SessionViewModel();
+                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
                 svm.SessionModel = sessionModel;
 
                 ConnectionInformation connectionInformation = new ConnectionInformation()
@@ -90,7 +108,7 @@ namespace RdClient.Shared.Test.ViewModels
                 sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
                 navigation.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
 
-                SessionViewModel svm = new SessionViewModel();
+                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
                 svm.SessionModel = sessionModel;
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
@@ -126,7 +144,7 @@ namespace RdClient.Shared.Test.ViewModels
                 navigation.Expect("PushModalView", new List<object> { "ErrorMessageView", null, null }, null);
                 navigation.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
 
-                SessionViewModel svm = new SessionViewModel();
+                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
                 svm.SessionModel = sessionModel;
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
@@ -164,7 +182,7 @@ namespace RdClient.Shared.Test.ViewModels
                 sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
                 rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, connectionShouldReconnect }, 0);
 
-                SessionViewModel svm = new SessionViewModel();
+                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
                 svm.SessionModel = sessionModel;
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
@@ -202,7 +220,7 @@ namespace RdClient.Shared.Test.ViewModels
                 sessionModel.Expect("IsCertificateAccepted", new List<object> { rdpCertificate }, isCertificateAccepted);
                 navigation.Expect("PushModalView", new List<object> { "CertificateValidationView", null, null }, null);
 
-                SessionViewModel svm = new SessionViewModel();
+                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
                 svm.SessionModel = sessionModel;
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
@@ -241,7 +259,7 @@ namespace RdClient.Shared.Test.ViewModels
                 sessionModel.Expect("IsCertificateAccepted", new List<object> { rdpCertificate }, isCertificateAccepted);
                 rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, connectionShouldReconnect }, 0);
 
-                SessionViewModel svm = new SessionViewModel();
+                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
                 svm.SessionModel = sessionModel;
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
