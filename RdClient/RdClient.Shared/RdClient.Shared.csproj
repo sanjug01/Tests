@@ -104,6 +104,7 @@
     <Compile Include="Input\IKeyboardCapture.cs" />
     <Compile Include="Input\IKeyboardCaptureSink.cs" />
     <Compile Include="Input\KeystrokeEventArgs.cs" />
+    <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Models\RemoteApplication.cs" />
     <Compile Include="Models\CloudWorkspace.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModel.cs" />
+    <Compile Include="ViewModels\CredentialViewModel.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModel.cs" />
     <Compile Include="ViewModels\DesktopViewModel.cs" />
     <Compile Include="Navigation\Extensions\DataModelExtension.cs" />
@@ -142,8 +144,10 @@
     <Compile Include="ValidationRules\UsernameValidationRule.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\IConnectionCenterViewModel.cs" />
+    <Compile Include="ViewModels\ICredentialViewModel.cs" />
     <Compile Include="ViewModels\IDesktopViewModel.cs" />
     <Compile Include="Navigation\NavigationExtensions.cs" />
+    <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="ViewModels\IViewModelWithData.cs" />
     <Compile Include="Navigation\ApplicationBarSite.cs" />
     <Compile Include="Models\IDataStorage.cs" />
@@ -169,6 +173,7 @@
     <Compile Include="ViewModels\SegoeGlyphBarButtonModel.cs" />
     <Compile Include="ViewModels\SeparatorBarItemModel.cs" />
     <Compile Include="ViewModels\SessionViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\TestsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Navigation\INavigationService.cs" />

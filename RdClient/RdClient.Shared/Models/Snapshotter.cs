@@ -11,14 +11,16 @@ namespace RdClient.Shared.Models
         private IRdpConnection _connection;
         private IThumbnail _thumbnail;
         private ITimer _timer;
+        private GeneralSettings _settings;
 
-        public Snapshotter(IRdpConnection connection, IThumbnail thumbnail, ITimerFactory timerFactory)
+        public Snapshotter(IRdpConnection connection, IThumbnail thumbnail, ITimerFactory timerFactory, GeneralSettings settings)
         {
             _connection = connection;
             _thumbnail = thumbnail;
             _connection.Events.FirstGraphicsUpdate += Events_FirstGraphicsUpdate;
             _connection.Events.ClientDisconnected += Events_ClientDisconnected;
-            _timer = timerFactory.CreateTimer();      
+            _timer = timerFactory.CreateTimer();
+            _settings = settings;
         }
 
         private void Events_FirstGraphicsUpdate(object sender, FirstGraphicsUpdateArgs e)
@@ -42,7 +44,10 @@ namespace RdClient.Shared.Models
 
         private async void TakeSnapshot()
         {
-            await _thumbnail.Update(_connection.GetSnapshot());
+            if (_settings.UseThumbnails)
+            {
+                await _thumbnail.Update(_connection.GetSnapshot());
+            }
         }
     }
 }

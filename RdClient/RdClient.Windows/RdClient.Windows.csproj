@@ -121,8 +121,20 @@
     <Compile Include="Controls\ConnectionCenterTitleBar.xaml.cs">
       <DependentUpon>ConnectionCenterTitleBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CredentialControl.xaml.cs">
+      <DependentUpon>CredentialControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CredentialListControl.xaml.cs">
+      <DependentUpon>CredentialListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DesktopsListControl.xaml.cs">
       <DependentUpon>DesktopsListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GatewaySettingsControl.xaml.cs">
+      <DependentUpon>GatewaySettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GeneralSettingsControl.xaml.cs">
+      <DependentUpon>GeneralSettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ItsLonelyHereControl.xaml.cs">
       <DependentUpon>ItsLonelyHereControl.xaml</DependentUpon>
@@ -130,16 +142,30 @@
     <Compile Include="Controls\MouseLayerControl.xaml.cs">
       <DependentUpon>MouseLayerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SettingsAddUserControl.xaml.cs">
+      <DependentUpon>SettingsAddUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SettingsNavigationControl.xaml.cs">
+      <DependentUpon>SettingsNavigationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ExtendedCredentialControl.xaml.cs">
+      <DependentUpon>ExtendedCredentialControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UserSettingsControl.xaml.cs">
+      <DependentUpon>UserSettingsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
     <Compile Include="Views\SessionView.xaml.cs">
       <DependentUpon>SessionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="DesignTime\FakeConnectionCenterViewModel.cs" />
+    <Compile Include="DesignTime\FakeCredentialViewModel.cs" />
+    <Compile Include="DesignTime\FakeSettingsViewModel.cs" />
     <Compile Include="Factories\NavigationServiceFactory.cs" />
     <Compile Include="Factories\AppInitializer.cs" />
     <Compile Include="Helpers\CoreDispatcherDeferredExecution.cs" />
     <Compile Include="Factories\DataModelFactory.cs" />
-    <Compile Include="DesignTime\FakeDesktopModel.cs" />
+    <Compile Include="DesignTime\FakeDesktopViewModel.cs" />
     <Compile Include="Helpers\PhysicalScreenSize.cs" />
     <Compile Include="Helpers\TypeNameDataTemplateSelector.cs" />
     <Compile Include="LifeTimeManagement\ActivationArgs.cs" />
@@ -153,6 +179,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Content Include="Assets\desktop_placeholder.png" />
     <Content Include="Assets\SegMDL2.1.12.ttf" />
     <None Include="Models\AppDataStorage.cs" />
     <Compile Include="Models\FileSystemDataStorage.cs" />
@@ -186,6 +213,9 @@
     </Compile>
     <Compile Include="Controls\RdSessionPanel.xaml.cs">
       <DependentUpon>RdSessionPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TestsView.xaml.cs">
       <DependentUpon>TestsView.xaml</DependentUpon>
@@ -251,7 +281,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\CredentialControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CredentialListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\DesktopsListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GatewaySettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GeneralSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -260,6 +306,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MouseLayerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SettingsAddUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SettingsNavigationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ExtendedCredentialControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\UserSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -308,6 +370,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\RdSessionPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -20,6 +20,7 @@ namespace RdClient.Factories
             viewFactory.AddViewClass("ErrorMessageView", typeof(Views.ErrorMessageView));
             viewFactory.AddViewClass("DeleteDesktopsView", typeof(Views.DeleteDesktopsView));
             viewFactory.AddViewClass("CertificateValidationView", typeof(Views.CertificateValidationView));
+            viewFactory.AddViewClass("SettingsView", typeof(Views.SettingsView));
 
             DispatchedNavigationService navigationService = new DispatchedNavigationService();
             navigationService.ViewFactory = viewFactory;

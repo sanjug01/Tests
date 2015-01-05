@@ -16,17 +16,28 @@ namespace RdClient.Shared.ViewModels
 
     public class AddUserViewArgs
     {
+        private readonly Credentials _cred;
         private readonly AddUserViewResultHandler _resultHandler;
-        public AddUserViewResultHandler ResultHandler { get { return _resultHandler; } }
-
         private readonly bool _showSave;
-        public bool ShowSave { get { return _showSave; } }
 
-        public AddUserViewArgs(AddUserViewResultHandler resultHandler, bool showSave)
+        public AddUserViewArgs(Credentials credential, AddUserViewResultHandler resultHandler, bool showSave)
         {
+            _cred = credential;
             _resultHandler = resultHandler;
             _showSave = showSave;
         }
+
+        public AddUserViewArgs(AddUserViewResultHandler resultHandler, bool showSave)
+            : this(new Credentials(), resultHandler, showSave)
+        {
+            _cred.Domain = "";
+        }
+
+        public AddUserViewResultHandler ResultHandler { get { return _resultHandler; } }
+
+        public bool ShowSave { get { return _showSave; } }
+
+        public Credentials User { get { return _cred; } }
     }
 
     public class AddUserViewModel : ViewModelBase, IViewModelWithData
@@ -97,19 +108,20 @@ namespace RdClient.Shared.ViewModels
             Contract.Assert(null != activationParameter as AddUserViewArgs);
             _args = activationParameter as AddUserViewArgs;
             this.ShowSave = _args.ShowSave;
+            this.User = _args.User.Username;
+            this.Password = _args.User.Password;
         }
 
         private void OkCommandHandler(object o)
         {
-            Credentials credentials = new Credentials()
-            {
-                Username = this.User,
-                Password = this.Password,
-                Domain = ""
-            };
+            _args.User.Username = this.User;
+            _args.User.Password = this.Password;
 
             this.NavigationService.DismissModalView(this.PresentableView);
-            _args.ResultHandler(credentials, this.StoreCredentials);
+            if (_args.ResultHandler != null)
+            {
+                _args.ResultHandler(_args.User, this.StoreCredentials);
+            }
         }
 
         private void CancelCommandHandler(object o)

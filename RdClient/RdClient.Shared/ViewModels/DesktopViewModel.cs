@@ -129,7 +129,7 @@ namespace RdClient.Shared.ViewModels
         {
             get 
             { 
-                if (!this.Desktop.HasThumbnail)
+                if (!this.Desktop.HasThumbnail || !_dataModel.Thumbnails.ContainsItemWithId(this.Desktop.ThumbnailId))
                 {
                     Thumbnail thumbnail = new Thumbnail();
                     this.Desktop.ThumbnailId = thumbnail.Id;
@@ -218,7 +218,10 @@ namespace RdClient.Shared.ViewModels
                             await newImage.SetSourceAsync(stream);
                         }
                         this.ThumbnailImage = newImage;
-                        this.HasThumbnailImage = this.ThumbnailImage != null && this.ThumbnailImage.PixelHeight > 0 && this.ThumbnailImage.PixelHeight > 0;
+                        this.HasThumbnailImage = _dataModel.Settings.UseThumbnails 
+                                                    && this.ThumbnailImage != null 
+                                                    && this.ThumbnailImage.PixelHeight > 0 
+                                                    && this.ThumbnailImage.PixelHeight > 0;
                     });
             }
         }

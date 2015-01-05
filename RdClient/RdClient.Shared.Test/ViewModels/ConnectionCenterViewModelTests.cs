@@ -195,6 +195,13 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsFalse(dvm.SelectionEnabled);
         }
 
+        [TestMethod]
+        public void TestGoToSettingsCommandNavigatesToSettingsView()
+        {
+            _navService.Expect("NavigateToView", new List<object>() { "SettingsView", null }, 0);
+            _vm.GoToSettingsCommand.Execute(null);
+        }
+
         private void AssertDesktopViewModelSelectionEnabledMatchesDesktopsSelectable()
         {
             foreach (DesktopViewModel dvm in _vm.DesktopViewModels)

@@ -1,0 +1,34 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.SettingsNavigationControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:RdClient.Controls"
+    xmlns:design="using:RdClient.DesignTime"
+    mc:Ignorable="d"
+    d:DesignHeight="730"
+    d:DesignWidth="384"
+    >
+
+    <d:UserControl.DataContext>
+        <design:FakeSettingsViewModel />
+    </d:UserControl.DataContext>
+
+    <Grid Background="{StaticResource SettingsNavBarBackgroundBrush}" RequestedTheme="Dark">        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{StaticResource SettingsTopPadding}" />
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource SettingsBackButtonStyle}" Command="{Binding GoBackCommand}" />
+        <TextBlock Grid.Row="1" Style="{ThemeResource SubheaderTextBlockStyle}" Padding="{StaticResource SettingsMarginPadding}" Text="Settings (d)" />
+        <StackPanel Grid.Row="2">
+            <ListBox SelectedIndex="0" BorderThickness="0">                
+                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowGeneralSettings, Mode=TwoWay}">General (d)</ListBoxItem>
+                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowUserSettings, Mode=TwoWay}">User names (d)</ListBoxItem>
+            </ListBox>
+        </StackPanel>
+    </Grid>
+</UserControl>

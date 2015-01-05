@@ -34,7 +34,7 @@ namespace RdClient.Controls
 
             RdpConnectionFactory factory = new RdpConnectionFactory() { SwapChainPanel = this.SwapChainPanel };
 
-            this.ConnectCommand.Execute(new SessionModel(factory, new WinrtThreadPoolTimerFactory()));
+            this.ConnectCommand.Execute(new SessionModel(factory));
         }
 
         private static void OnConnectCommandPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)

@@ -234,7 +234,7 @@ namespace RdClient.Shared.ViewModels
             int iterations = 3;
             int i;
             AutoResetEvent are = new AutoResetEvent(false);
-            SessionModel sm = new SessionModel(RdpConnectionFactory, TimerFactory);
+            SessionModel sm = new SessionModel(RdpConnectionFactory);
             IRdpConnection rdpConnection = null;
 
             EventHandler<ClientDisconnectedArgs> disconnectHandler = (s, a) => {
@@ -258,7 +258,7 @@ namespace RdClient.Shared.ViewModels
 
             for(i = 0; i < iterations; i++)
             {
-                sm.Connect(_connectionInformation);                
+                sm.Connect(_connectionInformation, TimerFactory, this.DataModel.Settings);                
                 are.WaitOne();
                 sm.Disconnect();                
                 are.WaitOne();

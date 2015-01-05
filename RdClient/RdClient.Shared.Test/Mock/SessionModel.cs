@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdMock;
 using System;
@@ -15,9 +16,9 @@ namespace RdClient.Shared.Test.Mock
             ConnectionCreated(this, args);
         }
 
-        public void Connect(ConnectionInformation connectionInformation)
+        public void Connect(ConnectionInformation connectionInformation, ITimerFactory timerFactory, GeneralSettings settings)
         {
-            Invoke(new object[] { connectionInformation });
+            Invoke(new object[] { connectionInformation, timerFactory, settings });
         }
 
         public void Disconnect()

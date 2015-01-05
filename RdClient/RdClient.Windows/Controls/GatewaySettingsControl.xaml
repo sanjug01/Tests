@@ -1,0 +1,25 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.GatewaySettingsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="768"
+    d:DesignWidth="700"
+    RequestedTheme="Light">
+
+    <Grid Background="{StaticResource SettingsBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{StaticResource SettingsItemColumnWidth}" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="Gateway Settings" />
+    </Grid>
+</UserControl>

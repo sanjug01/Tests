@@ -1,0 +1,32 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.GeneralSettingsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:RdClient.Controls"
+    xmlns:design="using:RdClient.DesignTime"
+    mc:Ignorable="d"
+    d:DesignHeight="768"
+    d:DesignWidth="700"
+    RequestedTheme="Light">
+
+    <d:UserControl.DataContext>
+        <design:FakeSettingsViewModel />
+    </d:UserControl.DataContext>
+
+    <Grid Background="{StaticResource SettingsBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{StaticResource SettingsItemColumnWidth}" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="General (d)" />
+        <TextBlock Grid.Row="1" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" Text="Show thumbnails for Desktops (d)" />
+        <ToggleSwitch Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" IsOn="{Binding Path=GeneralSettings.UseThumbnails, Mode=TwoWay}"/>
+    </Grid>
+</UserControl>
