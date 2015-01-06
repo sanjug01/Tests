@@ -74,7 +74,7 @@
         {
             Contract.Requires(null != e);
 
-            using(LockUngradeableRead())
+            using(LockUpgradeableRead())
             {
                 if (null != _keystroke)
                     _keystroke(this, e);

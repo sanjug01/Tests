@@ -21,7 +21,7 @@
             return ReadWriteMonitor.Read(_monitor);
         }
 
-        protected IDisposable LockUngradeableRead()
+        protected IDisposable LockUpgradeableRead()
         {
             return ReadWriteMonitor.UpgradeableRead(_monitor);
         }
