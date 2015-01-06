@@ -15,26 +15,51 @@ namespace RdClient.Shared.Models
 {
     public class DoubleClickTimer
     {
+        public enum ClickTimerType
+        {
+            LeftClick,
+            RightClick
+        }
+
         private ITimer _timer;
         private double _interval;
-        private Action _action;
+        private Dictionary<ClickTimerType, Action> _actions;
+        private ClickTimerType _timerType;
 
         private bool _expired;
-        public bool IsExpired { get { return _expired; } }
-
-        public DoubleClickTimer(ITimer timer, double interval, Action action)
+        public bool IsExpired(ClickTimerType timerType)
         {
-            _action = action;
+            bool matchingType = (timerType == _timerType);
+
+            if (matchingType == false)
+            {
+                return true;
+            }
+            else
+            {
+                return _expired;
+            }
+        }
+
+        public DoubleClickTimer(ITimer timer, double interval)
+        {
+            _actions = new Dictionary<ClickTimerType, Action>();
             _timer = timer;
             _interval = interval;
             _expired = true;
         }
 
-        public void Reset()
+        public void AddAction(ClickTimerType timerType, Action action)
         {
+            _actions[timerType] = action;
+        }
+
+        public void Reset(ClickTimerType timerType)
+        {
+            _timerType = timerType;
             _expired = false;
             _timer.Stop();
-            _timer.Start(() => { _expired = true; _action(); }, TimeSpan.FromMilliseconds(_interval), false);
+            _timer.Start(() => { _expired = true; _actions[timerType](); }, TimeSpan.FromMilliseconds(_interval), false);
         }
 
         public void Stop()
@@ -57,71 +82,111 @@ namespace RdClient.Shared.Models
         private StateMachine _stateMachine = new StateMachine();
 
         private Dictionary<uint, PointerEvent> _trackedPointerEvents = new Dictionary<uint, PointerEvent>();
+        private uint _mainPointerId;
         private PointerType _lastPointerType = PointerType.Mouse;
         private DoubleClickTimer _doubleClicktimer;
 
         public PointerModel(ITimer timer)
         {
-            _doubleClicktimer = new DoubleClickTimer(timer, 750, MouseLeftClick);         
+            _doubleClicktimer = new DoubleClickTimer(timer, 750);
+            _doubleClicktimer.AddAction(DoubleClickTimer.ClickTimerType.LeftClick, MouseLeftClick);
+            _doubleClicktimer.AddAction(DoubleClickTimer.ClickTimerType.RightClick, MouseRightClick);
 
-            _stateMachine.AddTransition("Idle", "LeftDown", 
-            (o) => { return
-                (o as PointerEvent).Inertia == false &&
-                NumberOfContacts(o as PointerEvent) == 1 &&
-                _doubleClicktimer.IsExpired == true; },
-            (o) => { });            
-            _stateMachine.AddTransition("Idle", "LeftDoubleDown", 
-            (o) => { return 
-                NumberOfContacts(o as PointerEvent) == 1 &&
-                _doubleClicktimer.IsExpired == false; },
+            _stateMachine.AddTransition("Idle", "LeftDown",
+            (o) =>
+            {
+                return
+                    (o as PointerEvent).Inertia == false &&
+                    NumberOfContacts(o as PointerEvent) == 1 &&
+                    _doubleClicktimer.IsExpired(DoubleClickTimer.ClickTimerType.LeftClick) == true;
+            },
+            (o) => { });
+            _stateMachine.AddTransition("Idle", "LeftDoubleDown",
+            (o) =>
+            {
+                return
+                    NumberOfContacts(o as PointerEvent) == 1 &&
+                    _doubleClicktimer.IsExpired(DoubleClickTimer.ClickTimerType.LeftClick) == false;
+            },
             (o) => { _doubleClicktimer.Stop(); });
             _stateMachine.AddTransition("Idle", "Inertia",
             (o) => { return (o as PointerEvent).Inertia == true; },
             (o) => { MouseMove(o as PointerEvent); });
 
-            _stateMachine.AddTransition("LeftDown", "Move", 
-            (o) => { return MoveThresholdExceeded(o as PointerEvent); }, 
+            _stateMachine.AddTransition("LeftDown", "Move",
+            (o) => { return MoveThresholdExceeded(o as PointerEvent); },
             (o) => { MouseMove(o as PointerEvent); });
             _stateMachine.AddTransition("LeftDown", "RightDown",
-            (o) => { return NumberOfContacts(o as PointerEvent) == 2; },
+            (o) =>
+            {
+                return
+                    NumberOfContacts(o as PointerEvent) == 2 &&
+                    _doubleClicktimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == true;
+            },
             (o) => { });
-            _stateMachine.AddTransition("LeftDown", "Idle", 
+            _stateMachine.AddTransition("LeftDown", "RightDoubleDown",
+            (o) =>
+            {
+                return
+                    NumberOfContacts(o as PointerEvent) == 2 &&
+                    _doubleClicktimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == false;
+            },
+            (o) => { _doubleClicktimer.Stop();});
+            _stateMachine.AddTransition("LeftDown", "Idle",
             (o) => { return NumberOfContacts(o as PointerEvent) == 0; },
-            (o) => { _doubleClicktimer.Reset(); });
+            (o) =>
+            {
+                if (_doubleClicktimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick))
+                    _doubleClicktimer.Reset(DoubleClickTimer.ClickTimerType.LeftClick);
+            });
 
             _stateMachine.AddTransition("RightDown", "LeftDown",
             (o) => { return NumberOfContacts(o as PointerEvent) == 1; },
-            (o) => { MouseRightClick(); });
+            (o) => { _doubleClicktimer.Reset(DoubleClickTimer.ClickTimerType.RightClick); });
             _stateMachine.AddTransition("RightDown", "Idle",
             (o) => { return NumberOfContacts(o as PointerEvent) == 0; },
-            (o) => { MouseRightClick(); });
+            (o) => { _doubleClicktimer.Reset(DoubleClickTimer.ClickTimerType.RightClick); });
 
-            _stateMachine.AddTransition("LeftDoubleDown", "LeftDrag", 
+            _stateMachine.AddTransition("LeftDoubleDown", "LeftDrag",
             (o) => { return MoveThresholdExceeded(o as PointerEvent); },
             (o) => { UpdateCursorPosition(o as PointerEvent); ChangeMousePointer(0); });
             _stateMachine.AddTransition("LeftDoubleDown", "Idle",
             (o) => { return NumberOfContacts(o as PointerEvent) == 0; },
             (o) => { MouseLeftClick(); MouseLeftClick(); });
 
-            _stateMachine.AddTransition("Move", "Move",
-            (o) => { return  MoveThresholdExceeded(o as PointerEvent); }, 
-            (o) => { MouseMove(o as PointerEvent); });
-            _stateMachine.AddTransition("Move", "Idle", 
-            (o) => { return NumberOfContacts(o as PointerEvent) == 0; }, 
+            _stateMachine.AddTransition("RightDoubleDown", "RightDrag",
+            (o) => { return MoveThresholdExceeded(o as PointerEvent); },
+            (o) => { UpdateCursorPosition(o as PointerEvent); ChangeMousePointer(5); });
+            _stateMachine.AddTransition("RightDoubleDown", "Idle",
+            (o) => { return NumberOfContacts(o as PointerEvent) == 0; },
             (o) => { });
 
-            _stateMachine.AddTransition("LeftDrag", "LeftDrag", 
+            _stateMachine.AddTransition("Move", "Move",
             (o) => { return MoveThresholdExceeded(o as PointerEvent); },
             (o) => { MouseMove(o as PointerEvent); });
-            _stateMachine.AddTransition("LeftDrag", "Idle", 
+            _stateMachine.AddTransition("Move", "Idle",
+            (o) => { return NumberOfContacts(o as PointerEvent) == 0; },
+            (o) => { });
+
+            _stateMachine.AddTransition("LeftDrag", "LeftDrag",
+            (o) => { return MoveThresholdExceeded(o as PointerEvent); },
+            (o) => { MouseMove(o as PointerEvent); });
+            _stateMachine.AddTransition("LeftDrag", "Idle",
             (o) => { return NumberOfContacts(o as PointerEvent) == 0; },
             (o) => { ChangeMousePointer(1); });
 
-            _stateMachine.AddTransition("Inertia", "Inertia", 
-            (o) => { return (o as PointerEvent).Inertia == true; }, 
+            _stateMachine.AddTransition("RightDrag", "RightDrag",
+            (o) => { return MoveThresholdExceeded(o as PointerEvent); },
             (o) => { MouseMove(o as PointerEvent); });
-            _stateMachine.AddTransition("Inertia", "Idle", 
-            (o) => { return (o as PointerEvent).Inertia == false; }, 
+            _stateMachine.AddTransition("RightDrag", "Idle",
+            (o) => { return NumberOfContacts(o as PointerEvent) == 0; },
+            (o) => { ChangeMousePointer(6); });
+
+            _stateMachine.AddTransition("Inertia", "Inertia",
+            (o) => { return (o as PointerEvent).Inertia == true; },
+            (o) => { MouseMove(o as PointerEvent); });
+            _stateMachine.AddTransition("Inertia", "Idle",
+            (o) => { return (o as PointerEvent).Inertia == false; },
             (o) => { });
 
             _stateMachine.SetStart("Idle");
@@ -155,13 +220,13 @@ namespace RdClient.Shared.Models
             double deltaX = 0.0;
             double deltaY = 0.0;
 
-            if (_trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
+            if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
             {
                 PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
                 deltaX = pointerEvent.Position.X - lastPointerEvent.Position.X;
                 deltaY = pointerEvent.Position.Y - lastPointerEvent.Position.Y;
             }
-            else if(pointerEvent.Inertia == true)
+            else if (pointerEvent.Inertia == true)
             {
                 deltaX = pointerEvent.Delta.X;
                 deltaY = pointerEvent.Delta.Y;
@@ -175,7 +240,7 @@ namespace RdClient.Shared.Models
         {
             int result = _trackedPointerEvents.Count;
 
-            if(_trackedPointerEvents.ContainsKey(pointerEvent.PointerId) && !pointerEvent.LeftButton)
+            if (_trackedPointerEvents.ContainsKey(pointerEvent.PointerId) && !pointerEvent.LeftButton)
             {
                 result -= 1;
             }
@@ -191,7 +256,7 @@ namespace RdClient.Shared.Models
         {
             bool result = false;
 
-            if(_trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
+            if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
             {
                 PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
                 result = Math.Abs(lastPointerEvent.Position.X - pointerEvent.Position.X) > 0.5 && Math.Abs(lastPointerEvent.Position.Y - pointerEvent.Position.Y) > 0.5;
@@ -204,8 +269,8 @@ namespace RdClient.Shared.Models
         {
             PointerEvent pointerEvent = parameter as PointerEvent;
 
-            float x = (float) pointerEvent.Position.X;
-            float y = (float) pointerEvent.Position.Y;
+            float x = (float)pointerEvent.Position.X;
+            float y = (float)pointerEvent.Position.Y;
             int buttonState = 4;
 
             if (_trackedPointerEvents.ContainsKey(0))
@@ -253,12 +318,17 @@ namespace RdClient.Shared.Models
             //    _trackedPointerEvents[0] = pointerEvent;
             //}
             //else 
-                if (pointerEvent.PointerType == PointerType.Touch)
+            if (pointerEvent.PointerType == PointerType.Touch)
             {
                 _stateMachine.DoTransition(pointerEvent);
 
                 if (pointerEvent.LeftButton)
                 {
+                    if (_trackedPointerEvents.Count == 0)
+                    {
+                        _mainPointerId = pointerEvent.PointerId;
+                    }
+
                     _trackedPointerEvents[pointerEvent.PointerId] = pointerEvent;
                 }
                 else if (pointerEvent.LeftButton == false && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
