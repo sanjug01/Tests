@@ -4,6 +4,7 @@ using RdClient.Shared.Navigation;
 using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -44,6 +45,49 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestSettingsLoadedFromDataModel()
         {
             Assert.AreEqual(_vm.GeneralSettings, _dataModel.Settings);
+        }
+
+        [TestMethod]
+        public void TestAddUserCommandShowsAddUserView()
+        {
+            _navService.Expect("PushModalView", new List<object>() { "AddUserView", null }, 0);
+            _vm.AddUserCommand.Execute(null);
+        }
+
+        [TestMethod]
+        public void HasCredentialsFalseWhenDataModelHasNoCredentials()
+        {
+            Assert.AreEqual(0, _dataModel.LocalWorkspace.Credentials.Count);
+            Assert.IsFalse(_vm.HasCredentials);
+        }
+
+        [TestMethod]
+        public void AddCredentialToDataModelAddsMatchingCredentialViewModel()
+        {
+            Credentials cred = _testData.NewValidCredential();
+            _dataModel.LocalWorkspace.Credentials.Add(cred);
+            Assert.AreEqual(cred, _vm.CredentialsViewModels[0].Credential);
+        }
+
+        [TestMethod]
+        public void HasCredentialsTrueAfterAddingCredentialToDataModel()
+        {
+            Assert.IsFalse(_vm.HasCredentials);
+            _dataModel.LocalWorkspace.Credentials.Add(_testData.NewValidCredential());
+            Assert.IsTrue(_vm.HasCredentials);
+        }
+
+        [TestMethod]
+        public void HasCredentialsFalseAfterRemovingLastCredentialFromDataModel()
+        {
+            _dataModel.LocalWorkspace.Credentials.Add(_testData.NewValidCredential());
+            Assert.IsTrue(_vm.HasCredentials);
+            foreach (Credentials cred in _dataModel.LocalWorkspace.Credentials.ToList())
+            {
+                _dataModel.LocalWorkspace.Credentials.Remove(cred);
+            }
+            Assert.AreEqual(0, _vm.CredentialsViewModels.Count);
+            Assert.IsFalse(_vm.HasCredentials);            
         }
     }
 }
