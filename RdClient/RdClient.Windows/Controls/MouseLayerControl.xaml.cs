@@ -49,7 +49,7 @@ namespace RdClient.Controls
             this.PointerExited += OnPointerExited;
 
             _pointerModel = new PointerModel(new WinrtThreadPoolTimer());
-            _pointerModel.MousePointerChanged += (s, o) => { this.MousePointer = o; };
+            _pointerModel.MousePointerChanged += (s, o) => { var ignore = this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { this.MousePointer = o; }); };
             this.SizeChanged += (s, o) => { _pointerModel.WindowSize = o.NewSize; };
         }
 
