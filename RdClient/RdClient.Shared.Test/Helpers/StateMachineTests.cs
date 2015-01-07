@@ -11,15 +11,22 @@ namespace RdClient.Shared.Test.Helpers
     [TestClass]
     public class StateMachineTests
     {
+        enum TestStates
+        { 
+            Narf,
+            Zod,
+            Poit
+        }
+
         [TestMethod]
         public void StateMachine_ShouldTransition()
         {
-            StateMachine sm = new StateMachine();
+            StateMachine<TestStates, string> sm = new StateMachine<TestStates, string>();
             bool actionCalled = false;
 
-            sm.AddTransition("narf", "zod", (o) => { return true; }, (o) => { actionCalled = true; });
-            sm.SetStart("narf");
-            sm.DoTransition("whatever");
+            sm.AddTransition(TestStates.Narf, TestStates.Zod, (o) => { return true; }, (o) => { actionCalled = true; });
+            sm.SetStart(TestStates.Narf);
+            sm.Consume("whatever");
 
             Assert.IsTrue(actionCalled);
         }
@@ -27,13 +34,13 @@ namespace RdClient.Shared.Test.Helpers
         [TestMethod]
         public void StateMachine_ShouldSetParam()
         {
-            StateMachine sm = new StateMachine();
+            StateMachine<TestStates, object> sm = new StateMachine<TestStates, object>();
             bool actionCalled = false;
             int param = 0;
 
-            sm.AddTransition("narf", "zod", (o) => { return (int)o == 23; }, (o) => { param = (int)o; actionCalled = true; });
-            sm.SetStart("narf");
-            sm.DoTransition(23);
+            sm.AddTransition(TestStates.Narf, TestStates.Zod, (o) => { return (int)o == 23; }, (o) => { param = (int)o; actionCalled = true; });
+            sm.SetStart(TestStates.Narf);
+            sm.Consume(23);
 
             Assert.IsTrue(actionCalled);
             Assert.AreEqual(23, param);
@@ -42,7 +49,7 @@ namespace RdClient.Shared.Test.Helpers
         [TestMethod]
         public void StateMachine_ShouldTransitionTwice()
         {
-            StateMachine sm = new StateMachine();
+            StateMachine<TestStates, int> sm = new StateMachine<TestStates, int>();
             bool action1Called = false;
             bool action2Called = false;
             bool action3Called = false;
@@ -51,13 +58,13 @@ namespace RdClient.Shared.Test.Helpers
             int param2 = 0;
             int param3 = 0;
 
-            sm.AddTransition("narf", "zod", (o) => { return (int)o == 23; }, (o) => { param1 = (int)o; action1Called = true; });
-            sm.AddTransition("narf", "poit", (o) => { return (int)o == 7; }, (o) => { param2 = (int)o; action2Called = true; });
-            sm.AddTransition("zod", "poit", (o) => { return (int)o == 42; }, (o) => { param3 = (int)o; action3Called = true; });
+            sm.AddTransition(TestStates.Narf, TestStates.Zod, (o) => { return o == 23; }, (o) => { param1 = o; action1Called = true; });
+            sm.AddTransition(TestStates.Narf, TestStates.Poit, (o) => { return o == 7; }, (o) => { param2 = o; action2Called = true; });
+            sm.AddTransition(TestStates.Zod, TestStates.Zod, (o) => { return o == 42; }, (o) => { param3 = o; action3Called = true; });
 
-            sm.SetStart("narf");
-            sm.DoTransition(23);
-            sm.DoTransition(42);
+            sm.SetStart(TestStates.Narf);
+            sm.Consume(23);
+            sm.Consume(42);
 
             Assert.IsTrue(action1Called);
             Assert.IsFalse(action2Called);
@@ -69,12 +76,12 @@ namespace RdClient.Shared.Test.Helpers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [ExpectedException(typeof(KeyNotFoundException))]
         public void StateMachine_InvalidStateFails()
         {
-            StateMachine sm = new StateMachine();
+            StateMachine<TestStates, int> sm = new StateMachine<TestStates, int>();
 
-            sm.DoTransition(23);
+            sm.Consume(23);
         }
     }
 }
