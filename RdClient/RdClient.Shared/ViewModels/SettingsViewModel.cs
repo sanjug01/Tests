@@ -1,9 +1,8 @@
 ﻿using RdClient.Shared.Models;
-using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Windows.Input;
 using System.Linq;
+using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {

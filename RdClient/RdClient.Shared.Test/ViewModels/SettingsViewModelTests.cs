@@ -3,7 +3,6 @@ using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
