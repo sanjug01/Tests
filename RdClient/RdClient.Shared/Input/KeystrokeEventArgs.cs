@@ -5,7 +5,7 @@
     public sealed class KeystrokeEventArgs : EventArgs
     {
         private readonly int _keyCode;
-        private bool _isScanCode, _isExtendedKey, _isKeyReleased;
+        private readonly bool _isScanCode, _isExtendedKey, _isKeyReleased;
 
         public int KeyCode { get { return _keyCode; } }
         public bool IsScanCode { get { return _isScanCode; } }
