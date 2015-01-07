@@ -1,6 +1,7 @@
 ﻿namespace RdClient.LifeTimeManagement
 {
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.LifeTimeManagement;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 

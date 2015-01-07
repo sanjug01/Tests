@@ -155,8 +155,6 @@
       <DependentUpon>UserSettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
-    <Compile Include="LifeTimeManagement\LaunchEventArgs.cs" />
-    <Compile Include="LifeTimeManagement\SuspendEventArgs.cs" />
     <Compile Include="Views\SessionView.xaml.cs">
       <DependentUpon>SessionView.xaml</DependentUpon>
     </Compile>
@@ -171,10 +169,6 @@
     <Compile Include="Helpers\PhysicalScreenSize.cs" />
     <Compile Include="Helpers\TypeNameDataTemplateSelector.cs" />
     <Compile Include="LifeTimeManagement\ActivationArgs.cs" />
-    <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
-    <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
-    <Compile Include="LifeTimeManagement\IRootFrameManager.cs" />
-    <Compile Include="LifeTimeManagement\ISuspensionArgs.cs" />
     <Compile Include="LifeTimeManagement\LifeTimeManager.cs" />
     <Compile Include="LifeTimeManagement\RootFrameManager.cs" />
     <Compile Include="LifeTimeManagement\SuspensionArgs.cs" />

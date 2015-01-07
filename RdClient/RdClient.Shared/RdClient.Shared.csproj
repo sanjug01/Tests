@@ -104,6 +104,12 @@
     <Compile Include="Input\IKeyboardCapture.cs" />
     <Compile Include="Input\IKeyboardCaptureSink.cs" />
     <Compile Include="Input\KeystrokeEventArgs.cs" />
+    <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
+    <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
+    <Compile Include="LifeTimeManagement\IRootFrameManager.cs" />
+    <Compile Include="LifeTimeManagement\ISuspensionArgs.cs" />
+    <Compile Include="LifeTimeManagement\LaunchEventArgs.cs" />
+    <Compile Include="LifeTimeManagement\SuspendEventArgs.cs" />
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Models\RemoteApplication.cs" />
     <Compile Include="Models\CloudWorkspace.cs" />

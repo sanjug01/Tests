@@ -1,4 +1,4 @@
-﻿namespace RdClient.LifeTimeManagement
+﻿namespace RdClient.Shared.LifeTimeManagement
 {
     using System;
 

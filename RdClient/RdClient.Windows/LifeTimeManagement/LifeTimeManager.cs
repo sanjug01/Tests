@@ -1,6 +1,7 @@
 ﻿namespace RdClient
 {
     using RdClient.LifeTimeManagement;
+    using RdClient.Shared.LifeTimeManagement;
     using System;
     using System.Diagnostics.Contracts;
     using Windows.ApplicationModel.Activation;

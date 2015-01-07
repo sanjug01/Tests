@@ -1,8 +1,9 @@
-﻿using Windows.ApplicationModel.Activation;
-
-namespace RdClient.LifeTimeManagement
+﻿namespace RdClient.LifeTimeManagement
 {
-    public class ActivationArgs : IActivationArgs
+    using RdClient.Shared.LifeTimeManagement;
+    using Windows.ApplicationModel.Activation;
+
+    public class ActivationArgs : IActivationArgs, IApplicationViewActivatedEventArgs, IPrelaunchActivatedEventArgs
     {
         private string _arguments;
         public string Arguments { get { return _arguments; } }

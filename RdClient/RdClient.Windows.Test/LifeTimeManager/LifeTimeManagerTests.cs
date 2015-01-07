@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.LifeTimeManagement;
+using RdClient.Shared.LifeTimeManagement;
 using System;
 using Windows.ApplicationModel.Activation;
 
