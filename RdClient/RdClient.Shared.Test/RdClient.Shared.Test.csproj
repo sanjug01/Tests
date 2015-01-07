@@ -123,6 +123,7 @@
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
     <Compile Include="ViewModels\AddUserViewModelTests.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModelTests.cs" />
+    <Compile Include="ViewModels\CredentialViewModelTests.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModelTests.cs" />
     <Compile Include="ViewModels\BarButtonModelTests.cs" />
     <Compile Include="ViewModels\BarItemModelTests.cs" />
