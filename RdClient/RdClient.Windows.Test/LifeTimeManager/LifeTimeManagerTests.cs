@@ -15,8 +15,7 @@ namespace RdClient.Windows.Test
         public void TestSetup()
         {
             _rootFrameManager = new Mock.RootFrameManager();
-            _lifeTimeManager = new LifeTimeManager();
-            _lifeTimeManager.Initialize(_rootFrameManager);
+            _lifeTimeManager = new LifeTimeManager() { RootFrameManager = _rootFrameManager };
         }
 
         [TestCleanup]

@@ -1,29 +1,36 @@
-﻿using RdClient.LifeTimeManagement;
-using RdClient.Shared.Models;
-using System.Diagnostics.Contracts;
-using System.Threading.Tasks;
-using Windows.ApplicationModel.Activation;
-
-namespace RdClient
+﻿namespace RdClient
 {
-    public class LifeTimeManager : ILifeTimeManager
+    using RdClient.LifeTimeManagement;
+    using System;
+    using System.Diagnostics.Contracts;
+    using Windows.ApplicationModel.Activation;
+
+    public sealed class LifeTimeManager : ILifeTimeManager
     {
         private IRootFrameManager _rootFrameManager;
+        private EventHandler<LaunchEventArgs> _launched;
+        private EventHandler<SuspendEventArgs> _suspending;
 
-        public void Initialize(IRootFrameManager rootFrameManager)
+        public IRootFrameManager RootFrameManager
         {
-            Contract.Requires(rootFrameManager != null);
-
-            _rootFrameManager = rootFrameManager;
+            get { return _rootFrameManager; }
+            set { _rootFrameManager = value; }
         }
 
         public void OnLaunched(IActivationArgs e)
         {
+            Contract.Assert(null != _rootFrameManager);
+
             if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
             {
             }
 
-            _rootFrameManager.LoadRoot(e);
+            EmitLaunched(e.PreviousExecutionState, e);
+
+            if (ApplicationExecutionState.Running != e.PreviousExecutionState)
+            {
+                _rootFrameManager.LoadRoot(e);
+            }
         }
 
         public void OnSuspending(object sender, ISuspensionArgs e)
@@ -31,9 +38,34 @@ namespace RdClient
             var deferral = e.SuspendingOperation.Deferral;
 
             // TODO: Save application state and stop any background activity
+            EmitSuspending(e);
 
             deferral.Complete();
         }
 
+
+        event EventHandler<LaunchEventArgs> ILifeTimeManager.Launched
+        {
+            add { _launched += value; }
+            remove { _launched -= value; }
+        }
+
+        event EventHandler<SuspendEventArgs> ILifeTimeManager.Suspending
+        {
+            add { _suspending += value; }
+            remove { _suspending -= value; }
+        }
+
+        private void EmitLaunched(ApplicationExecutionState previousState, IActivationArgs args)
+        {
+            if (null != _launched)
+                _launched(this, new LaunchEventArgs(previousState, args));
+        }
+
+        private void EmitSuspending(ISuspensionArgs args)
+        {
+            if (null != _suspending)
+                _suspending(this, new SuspendEventArgs(args));
+        }
     }
 }

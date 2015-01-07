@@ -1,17 +1,10 @@
-﻿using System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-
-using RdClient.Shared.Helpers;
-using RdClient.Shared.Models;
-using System.Runtime.Serialization;
-using Windows.Storage;
-using RdClient.Models;
-using System.Threading.Tasks;
-
-namespace RdClient.LifeTimeManagement
+﻿namespace RdClient.LifeTimeManagement
 {
-    class RootFrameManager : IRootFrameManager
+    using RdClient.Shared.Helpers;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+
+    public sealed class RootFrameManager : IRootFrameManager
     {
         public Frame RootFrame
         {

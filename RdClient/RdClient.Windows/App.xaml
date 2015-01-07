@@ -7,14 +7,23 @@
     xmlns:model="using:RdClient.Shared.Models"
     xmlns:winmodel="using:RdClient.Models"
     xmlns:input="using:RdClient.Input"
+    xmlns:lifetime="using:RdClient.LifeTimeManagement"
     RequestedTheme="Light">
 
     <Application.Resources>
         <ResourceDictionary>
+            
             <ResourceDictionary.MergedDictionaries>               
                 <ResourceDictionary Source="Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <input:CoreWindowKeyboardCapture x:Key="CoreWindowKeyboardCapture"/>
+            
+            <local:LifeTimeManager x:Key="LifeTimeManager" x:Name="LifeTimeManager">
+                <local:LifeTimeManager.RootFrameManager>
+                    <lifetime:RootFrameManager />
+                </local:LifeTimeManager.RootFrameManager>
+            </local:LifeTimeManager>
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>
