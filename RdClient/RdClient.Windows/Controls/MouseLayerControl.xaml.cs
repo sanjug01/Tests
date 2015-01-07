@@ -35,33 +35,9 @@ namespace RdClient.Controls
         {
             this.InitializeComponent();                       
 
-            this.AddHandler(PointerCanceledEvent, new PointerEventHandler(PointerCanceledHandler), true);
-            this.AddHandler(PointerReleasedEvent, new PointerEventHandler(PointerReleasedHandler), true);
-            this.AddHandler(PointerPressedEvent, new PointerEventHandler(PointerPressedHandler), true);
-            this.AddHandler(PointerMovedEvent, new PointerEventHandler(PointerMovedHandler), true);
-
-            this.ManipulationStarted += ManipulationStartedHandler;
-            this.ManipulationInertiaStarting += ManipulationInertiaStartingHandler;
-            this.ManipulationDelta += ManipulationDeltaHandler;
-            this.ManipulationCompleted += ManipulationCompletedHandler;
-            
-            this.PointerEntered += OnPointerEntered;
-            this.PointerExited += OnPointerExited;
-
             _pointerModel = new PointerModel(new WinrtThreadPoolTimer());
             _pointerModel.MousePointerChanged += (s, o) => { var ignore = this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { this.MousePointer = o; }); };
             this.SizeChanged += (s, o) => { _pointerModel.WindowSize = o.NewSize; };
-        }
-
-        private void OnPointerEntered(object sender, PointerRoutedEventArgs args)
-        {
-            _exitCursor = Window.Current.CoreWindow.PointerCursor;
-            Window.Current.CoreWindow.PointerCursor = null;
-        }
-
-        private void OnPointerExited(object sender, PointerRoutedEventArgs args)
-        {
-            Window.Current.CoreWindow.PointerCursor = _exitCursor;
         }
 
         public static readonly DependencyProperty MousePointerProperty = DependencyProperty.Register(
@@ -118,44 +94,50 @@ namespace RdClient.Controls
             
         }
 
-        void ManipulationStartedHandler(object sender, ManipulationStartedRoutedEventArgs args)
-        {
-            //_pointerModel.ConsumeEvent(PointerEventConverter.ManipulationStartedArgsConverter(args));
-        }
-
-        void ManipulationInertiaStartingHandler(object sender, ManipulationInertiaStartingRoutedEventArgs args)
+        protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
         {
             _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
         }
 
-        void ManipulationDeltaHandler(object sender, ManipulationDeltaRoutedEventArgs args)
+        protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs args)
         {
             _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationDeltaArgsConverter(args));
         }
 
-        void ManipulationCompletedHandler(object sender, ManipulationCompletedRoutedEventArgs args)
+        protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs args)
         {
             _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationCompletedArgsConverter(args));
         }
 
-        void PointerCanceledHandler(object sender, PointerRoutedEventArgs args)
+        protected override void OnPointerCanceled(PointerRoutedEventArgs args)
         {
             _pointerModel.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
         }
 
-        void PointerReleasedHandler(object sender, PointerRoutedEventArgs args)
+        protected override void OnPointerReleased(PointerRoutedEventArgs args)
         {
             _pointerModel.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
         }
 
-        void PointerPressedHandler(object sender, PointerRoutedEventArgs args)
+        protected override void OnPointerPressed(PointerRoutedEventArgs args)
         {
             _pointerModel.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
         }
 
-        void PointerMovedHandler(object sender, PointerRoutedEventArgs args)
+        protected override void OnPointerMoved(PointerRoutedEventArgs args)
         {
             _pointerModel.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+        }
+
+        protected override void OnPointerEntered(PointerRoutedEventArgs args)
+        {
+            _exitCursor = Window.Current.CoreWindow.PointerCursor;
+            Window.Current.CoreWindow.PointerCursor = null;
+        }
+
+        protected override void OnPointerExited(PointerRoutedEventArgs args)
+        {
+            Window.Current.CoreWindow.PointerCursor = _exitCursor;
         }
     }
 }
