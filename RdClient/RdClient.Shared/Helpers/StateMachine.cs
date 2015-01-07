@@ -4,18 +4,16 @@ using System.Diagnostics;
 
 namespace RdClient.Shared.Helpers
 {
-    public class StateMachine
+    public sealed class StateMachine<TState, TEvent>
     {
-        public delegate bool Predicate(object arg);
-        public delegate void Action(object arg);
 
-        public class Transition
+        public sealed class Transition
         {
-            public Predicate Predicate { get; private set; }
-            public string Destination { get; private set; }
-            public Action Action { get; private set; }
+            public Predicate<TEvent> Predicate { get; private set; }
+            public TState Destination { get; private set; }
+            public Action<TEvent> Action { get; private set; }
 
-            public Transition(Predicate predicate, string destination, Action action)
+            public Transition(Predicate<TEvent> predicate, TState destination, Action<TEvent> action)
             {
                 Predicate = predicate;
                 Destination = destination;
@@ -23,16 +21,16 @@ namespace RdClient.Shared.Helpers
             }
         }
 
-        private Dictionary<string, List<Transition>> _transitions =  new Dictionary<string,List<Transition>>();
+        private readonly Dictionary<TState, ICollection<Transition>> _transitions = new Dictionary<TState, ICollection<Transition>>();
 
-        private string _state;
+        private TState _state;
 
-        public void SetStart(string start)
+        public void SetStart(TState start)
         {
             _state = start;
         }
 
-        public void AddTransition(string from, string to, Predicate predicate, Action action)
+        public void AddTransition(TState from, TState to, Predicate<TEvent> predicate, Action<TEvent> action)
         {
             if(_transitions.ContainsKey(from) == false)
             {
@@ -42,9 +40,9 @@ namespace RdClient.Shared.Helpers
             _transitions[from].Add(new Transition(predicate, to, action));
         }
 
-        public void DoTransition(object parameter)
+        public void Consume(TEvent parameter)
         {
-            List<Transition> transitions = _transitions[_state];
+            ICollection<Transition> transitions = _transitions[_state];
 
             foreach(Transition transition in transitions)
             {
