@@ -49,6 +49,7 @@
                 <TextBlock Text="{Binding Desktop.HostName}" Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0"/>
             </Grid>
             <Button Grid.RowSpan="2" Style="{StaticResource InvisibleButtonStyle}" 
+                    x:Name="ThumbnailButton"
                     Command="{Binding ConnectCommand}"
                     FlyoutBase.AttachedFlyout="{StaticResource ModifyConnectionMenuFlyout}"
                     PointerPressed="DesktopThumbnail_PointerPressed">

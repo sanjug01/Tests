@@ -1,5 +1,7 @@
-﻿using Windows.UI.Xaml;
+﻿using Windows.UI.Input;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.Devices.Input;
 
 namespace RdClient.Views
 {
@@ -12,7 +14,14 @@ namespace RdClient.Views
 
         private void DesktopThumbnail_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
-            Flyout.ShowAttachedFlyout((FrameworkElement) sender);
+            if (e.Pointer.PointerDeviceType == PointerDeviceType.Mouse)
+            {
+                PointerPoint ptrPt = e.GetCurrentPoint(this.ThumbnailButton);
+                if(ptrPt.Properties.IsRightButtonPressed)
+                {
+                    Flyout.ShowAttachedFlyout((FrameworkElement)sender);
+                }
+            }
         }
     }
 }
