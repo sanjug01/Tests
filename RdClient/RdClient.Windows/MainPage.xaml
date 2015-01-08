@@ -13,15 +13,15 @@
     xmlns:navext="using:RdClient.Shared.Navigation.Extensions"
     xmlns:design="using:RdClient.DesignTime"
     xmlns:fac="using:RdClient.Factories"
-    mc:Ignorable="d"
-    Loaded="Page_Loaded">
+    mc:Ignorable="d">
 
     <Page.DataContext>
         <vm:MainPageViewModel />
     </Page.DataContext>
     
     <Page.Resources>
-        <fac:AppInitializer x:Key="AppInitializer" 
+        <fac:AppInitializer x:Key="AppInitializer"
+                            LifeTimeManager="{StaticResource LifeTimeManager}"
                             LandingPage="ConnectionCenterView"/>
         
         <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>

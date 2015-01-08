@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel;
 
-namespace RdClient.LifeTimeManagement
+namespace RdClient.Shared.LifeTimeManagement
 {
     // The reason why we need a custom interface here is that 
     // In the OnSuspending Event we receive a SuspendingEventArgs parameter which is

@@ -1,8 +1,9 @@
-﻿using System;
-using Windows.ApplicationModel;
-
-namespace RdClient.LifeTimeManagement
+﻿namespace RdClient.LifeTimeManagement
 {
+    using RdClient.Shared.LifeTimeManagement;
+    using System;
+    using Windows.ApplicationModel;
+
     public class SuspensionArgs : ISuspensionArgs
     {
         public class SuspendingOperationWrapper : ISuspendingOperationWrapper
