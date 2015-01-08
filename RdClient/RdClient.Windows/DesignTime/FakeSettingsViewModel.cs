@@ -1,6 +1,5 @@
 ﻿using RdClient.Shared.Models;
 using RdClient.Shared.ViewModels;
-using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
