@@ -3,7 +3,6 @@
     using RdClient.Factories;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.ViewModels;
-    using System.Diagnostics.Contracts;
     using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
@@ -14,13 +13,6 @@
         public MainPage()
         {
             this.InitializeComponent();
-
-            AppInitializer initializer = (this.Resources["AppInitializer"] as AppInitializer);
-            Contract.Assert(null != initializer);
-
-            initializer.AppBarViewModel = this.DataContext as IApplicationBarViewModel;
-            initializer.ViewPresenter = this.ViewPresenter;
-            initializer.Initialiaze();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -63,6 +55,15 @@
                     lavm.OrientationChanged(e.Size.Height < e.Size.Width ? ViewOrientation.Landscape : ViewOrientation.Portrait);
                 });
             }
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            AppInitializer initializer = (this.Resources["AppInitializer"] as AppInitializer);
+
+            initializer.AppBarViewModel = this.DataContext as IApplicationBarViewModel;
+            initializer.ViewPresenter = this.ViewPresenter;
+            initializer.Initialiaze();
         }
     }
 }

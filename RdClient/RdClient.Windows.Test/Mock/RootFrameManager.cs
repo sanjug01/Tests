@@ -1,10 +1,9 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using RdClient.LifeTimeManagement;
+using RdClient.Shared.Models;
+using Windows.UI.Xaml.Controls;
 
 namespace RdClient.Windows.Test.Mock
 {
-    using RdClient.LifeTimeManagement;
-    using RdClient.Shared.LifeTimeManagement;
-
     class RootFrameManager : IRootFrameManager
     {
         private IActivationArgs _launchActivatedArgs;

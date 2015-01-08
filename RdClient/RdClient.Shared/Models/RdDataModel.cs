@@ -1,12 +1,10 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.CxWrappers;
-    using RdClient.Shared.LifeTimeManagement;
     using System;
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
     using System.Linq;
-    using Windows.ApplicationModel.Activation;
 
     /// <summary>
     /// Core data model of the application - collection of all persistent objects.
@@ -19,33 +17,7 @@
         private readonly ModelCollection<TrustedCertificate> _trustedCertificates;
         private readonly ModelCollection<Thumbnail> _thumbnails;
         private readonly GeneralSettings _settings;
-        private ILifeTimeManager _lifeTimeManager;
         IDataStorage _storage;
-
-        public ILifeTimeManager LifeTimeManager
-        {
-            get { return _lifeTimeManager; }
-
-            set
-            {
-                if( !object.ReferenceEquals(_lifeTimeManager, value) )
-                {
-                    if(null != _lifeTimeManager)
-                    {
-                        _lifeTimeManager.Launched -= this.OnLaunched;
-                        _lifeTimeManager.Suspending -= this.OnSuspending;
-                    }
-
-                    _lifeTimeManager = value;
-
-                    if(null != _lifeTimeManager)
-                    {
-                        _lifeTimeManager.Launched += this.OnLaunched;
-                        _lifeTimeManager.Suspending += this.OnSuspending;
-                    }
-                }
-            }
-        }
 
         public LocalWorkspace LocalWorkspace
         {
@@ -154,17 +126,6 @@
             // Remove all trusted certificates
             //
             _trustedCertificates.Clear();
-        }
-
-        private void OnLaunched(object sender, LaunchEventArgs e)
-        {
-            if (ApplicationExecutionState.Running != e.ActivationArgs.PreviousExecutionState)
-                this.Load();
-        }
-
-        private void OnSuspending(object sender, SuspendEventArgs e)
-        {
-            this.Save();
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.LifeTimeManagement;
-using RdClient.Shared.LifeTimeManagement;
 using System;
 using Windows.ApplicationModel.Activation;
 
@@ -16,7 +15,8 @@ namespace RdClient.Windows.Test
         public void TestSetup()
         {
             _rootFrameManager = new Mock.RootFrameManager();
-            _lifeTimeManager = new LifeTimeManager() { RootFrameManager = _rootFrameManager };
+            _lifeTimeManager = new LifeTimeManager();
+            _lifeTimeManager.Initialize(_rootFrameManager);
         }
 
         [TestCleanup]

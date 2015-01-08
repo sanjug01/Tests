@@ -1,11 +1,10 @@
-﻿namespace RdClient.Factories
-{
-    using RdClient.Shared.LifeTimeManagement;
-    using RdClient.Shared.Models;
-    using RdClient.Shared.Navigation;
-    using RdClient.Shared.ViewModels;
-    using System.Diagnostics.Contracts;
+﻿using RdClient.Shared.Models;
+using RdClient.Shared.Navigation;
+using RdClient.Shared.ViewModels;
+using System.Diagnostics.Contracts;
 
+namespace RdClient.Factories
+{
     public class AppInitializer
     {
         private RdDataModel _dataModel;
@@ -17,14 +16,12 @@
         public IViewPresenter ViewPresenter { private get; set; }
         public IApplicationBarViewModel AppBarViewModel { private get; set; }
         public string LandingPage { private get; set; }
-        public ILifeTimeManager LifeTimeManager { private get; set; }
 
         public void Initialiaze()
         {
             Contract.Assert(this.ViewPresenter != null);
             Contract.Assert(this.AppBarViewModel != null);
             Contract.Assert(string.IsNullOrEmpty(this.LandingPage) == false);
-            Contract.Assert(null != this.LifeTimeManager);
 
             _dataModel = this.CreateDataModel();
 
@@ -42,7 +39,7 @@
 
         public RdDataModel CreateDataModel()
         {
-            return _dataModelFactory.CreateDataModel(this.LifeTimeManager);
+            return _dataModelFactory.CreateDataModel();
         }
 
         public INavigationService CreateNavigationService()
