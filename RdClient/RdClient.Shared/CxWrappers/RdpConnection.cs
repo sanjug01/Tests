@@ -133,6 +133,7 @@ namespace RdClient.Shared.CxWrappers
 
         public void HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
         {
+            // TODO fix crash when this is called after Disconnect() has set _rdpConnectionCx to null
             int xRes = _rdpConnectionCx.HandleAsyncDisconnectResult(RdpTypeConverter.ConvertToCx(disconnectReason), reconnectToServer);
             RdTrace.IfFailXResultThrow(xRes, "Failed async disconnect.");
         }

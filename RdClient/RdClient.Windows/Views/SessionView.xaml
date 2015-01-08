@@ -5,17 +5,21 @@
     xmlns:local="using:RdClient.Views"
     xmlns:controls="using:RdClient.Controls"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:input="using:RdClient.Input"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     >
+       
     
     <UserControl.DataContext>
-        <vm:SessionViewModel
-            KeyboardCapture="{StaticResource CoreWindowKeyboardCapture}">
+        <vm:SessionViewModel>
             <vm:SessionViewModel.MouseViewModel>
                 <vm:MouseViewModel/>
             </vm:SessionViewModel.MouseViewModel>
+            <vm:SessionViewModel.KeyboardCapture>
+                <input:CoreWindowKeyboardCapture/>
+            </vm:SessionViewModel.KeyboardCapture>
         </vm:SessionViewModel>
     </UserControl.DataContext>
 
