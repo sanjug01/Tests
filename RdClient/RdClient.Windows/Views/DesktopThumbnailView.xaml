@@ -24,14 +24,13 @@
             <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
             <MenuFlyout x:Name="ModifyConnectionMenuFlyout"
-                        Placement="Right"
-                        >
+                        Placement="Right">
                 <MenuFlyoutItem 
-                    x:Uid="Menu-EditDesktop"                 
+                    x:Uid="Common_EditMenuFlyoutItem"                 
                     Text="Edit desktop(d)" 
                     Command="{Binding EditCommand}"/>
                 <MenuFlyoutItem 
-                    x:Uid="Menu-DeleteDesktop"                 
+                    x:Uid="Common_DeleteMenuFlyoutItem"                 
                     Text="Delete desktop(d)" 
                     Command="{Binding DeleteCommand}"/>                
             </MenuFlyout>            
