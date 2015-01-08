@@ -2,6 +2,7 @@
 {
     using RdClient.LifeTimeManagement;
     using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.LifeTimeManagement;
     using System.Diagnostics.Contracts;
     using Windows.ApplicationModel;
     using Windows.ApplicationModel.Activation;
@@ -9,6 +10,8 @@
 
     public sealed partial class App : Application
     {
+        private ILifeTimeManager _lifeTimeManager;
+
         public App()
         {
             this.InitializeComponent();
@@ -19,8 +22,6 @@
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Contract.Assert(null != this.LifeTimeManager);
-
             ActivationArgs aa = new ActivationArgs(
                 e.Arguments,
                 e.TileId,
@@ -36,12 +37,25 @@
 
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            Contract.Assert(null != this.LifeTimeManager);
-
             SuspensionArgs.SuspendingOperationWrapper mso = new SuspensionArgs.SuspendingOperationWrapper(e.SuspendingOperation.Deadline, e.SuspendingOperation.GetDeferral());
             SuspensionArgs sa = new SuspensionArgs(mso);
 
             this.LifeTimeManager.OnSuspending(sender, sa);
+        }
+
+        private ILifeTimeManager LifeTimeManager
+        {
+            get
+            {
+                Contract.Ensures(null != Contract.Result<ILifeTimeManager>());
+                if(null == _lifeTimeManager)
+                {
+                    _lifeTimeManager = this.Resources["LifeTimeManager"] as ILifeTimeManager;
+                    Contract.Assert(null != _lifeTimeManager);
+                }
+
+                return _lifeTimeManager;
+            }
         }
     }
 }

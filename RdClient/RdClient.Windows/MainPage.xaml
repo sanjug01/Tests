@@ -21,7 +21,8 @@
     </Page.DataContext>
     
     <Page.Resources>
-        <fac:AppInitializer x:Key="AppInitializer" 
+        <fac:AppInitializer x:Key="AppInitializer"
+                            LifeTimeManager="{StaticResource LifeTimeManager}"
                             LandingPage="ConnectionCenterView"/>
         
         <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>

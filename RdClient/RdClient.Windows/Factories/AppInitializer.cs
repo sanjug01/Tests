@@ -1,10 +1,11 @@
-﻿using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using RdClient.Shared.ViewModels;
-using System.Diagnostics.Contracts;
-
-namespace RdClient.Factories
+﻿namespace RdClient.Factories
 {
+    using RdClient.Shared.LifeTimeManagement;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.ViewModels;
+    using System.Diagnostics.Contracts;
+
     public class AppInitializer
     {
         private RdDataModel _dataModel;
@@ -16,6 +17,7 @@ namespace RdClient.Factories
         public IViewPresenter ViewPresenter { private get; set; }
         public IApplicationBarViewModel AppBarViewModel { private get; set; }
         public string LandingPage { private get; set; }
+        public ILifeTimeManager LifeTimeManager { private get; set; }
 
         public void Initialiaze()
         {

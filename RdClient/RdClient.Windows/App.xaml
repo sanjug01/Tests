@@ -16,14 +16,16 @@
             <ResourceDictionary.MergedDictionaries>               
                 <ResourceDictionary Source="Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
             <input:CoreWindowKeyboardCapture x:Key="CoreWindowKeyboardCapture"/>
-            
-            <local:LifeTimeManager x:Key="LifeTimeManager" x:Name="LifeTimeManager">
-                <local:LifeTimeManager.RootFrameManager>
-                    <lifetime:RootFrameManager />
-                </local:LifeTimeManager.RootFrameManager>
-            </local:LifeTimeManager>
-            
+
+            <lifetime:LifeTimeManager x:Key="LifeTimeManager">
+                <lifetime:LifeTimeManager.RootFrameManager>
+                    <lifetime:RootFrameManager/>
+                </lifetime:LifeTimeManager.RootFrameManager>
+            </lifetime:LifeTimeManager>
+
         </ResourceDictionary>
     </Application.Resources>
+
 </Application>

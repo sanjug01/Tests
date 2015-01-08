@@ -1,6 +1,5 @@
-﻿namespace RdClient
+﻿namespace RdClient.LifeTimeManagement
 {
-    using RdClient.LifeTimeManagement;
     using RdClient.Shared.LifeTimeManagement;
     using System;
     using System.Diagnostics.Contracts;
