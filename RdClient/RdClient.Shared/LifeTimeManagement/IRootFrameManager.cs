@@ -1,8 +1,7 @@
-﻿using RdClient.Shared.Models;
-using System.Threading.Tasks;
+﻿using RdClient.Shared.LifeTimeManagement;
 using Windows.UI.Xaml.Controls;
 
-namespace RdClient.LifeTimeManagement
+namespace RdClient.Shared.LifeTimeManagement
 {
     public interface IRootFrameManager
     {
