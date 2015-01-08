@@ -1,6 +1,5 @@
-﻿using Windows.UI.Xaml.Controls;
-
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
+﻿using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace RdClient.Views
 {
@@ -9,6 +8,11 @@ namespace RdClient.Views
         public DesktopThumbnailView()
         {
             this.InitializeComponent();
+        }
+
+        private void Button_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            Flyout.ShowAttachedFlyout((FrameworkElement) sender);
         }
     }
 }
