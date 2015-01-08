@@ -138,13 +138,14 @@
     <Compile Include="Navigation\IModalPresentationContext.cs" />
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
+    <Compile Include="ValidationRules\IValidationRule.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\CredentialViewModel.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModel.cs" />
     <Compile Include="ViewModels\DesktopViewModel.cs" />
     <Compile Include="Navigation\Extensions\DataModelExtension.cs" />
     <Compile Include="Navigation\INavigationExtension.cs" />
-    <Compile Include="ValidationRules\IllegalCharacterValidationRule.cs" />
+    <Compile Include="ValidationRules\CharacterOccurenceValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameValidationRule.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\IConnectionCenterViewModel.cs" />

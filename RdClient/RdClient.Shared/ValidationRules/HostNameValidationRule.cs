@@ -2,7 +2,7 @@
 
 namespace RdClient.Shared.ValidationRules
 {
-    public class HostNameValidationRule : IllegalCharacterValidationRule
+    public class HostNameValidationRule : CharacterOccurenceValidationRule
     {
         // list of illegal caracters - as for android
         public HostNameValidationRule() : base("`~!#@$%^&*()=+{}\\|;'\",< >/?")

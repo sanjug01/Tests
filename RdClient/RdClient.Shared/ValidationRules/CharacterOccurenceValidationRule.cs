@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace RdClient.Shared.ValidationRules
 {
-    public class IllegalCharacterValidationRule
+    public class CharacterOccurenceValidationRule : IValidationRule
     {
         private readonly string _illegalCharacters;
         protected string IllegalCharacters { get { return _illegalCharacters; } }
 
-        public IllegalCharacterValidationRule(string illegalCharacters)
+        public CharacterOccurenceValidationRule(string illegalCharacters)
         {
             _illegalCharacters = illegalCharacters;
         }
