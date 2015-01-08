@@ -24,6 +24,7 @@
             Contract.Assert(this.ViewPresenter != null);
             Contract.Assert(this.AppBarViewModel != null);
             Contract.Assert(string.IsNullOrEmpty(this.LandingPage) == false);
+            Contract.Assert(null != this.LifeTimeManager);
 
             _dataModel = this.CreateDataModel();
 
@@ -41,7 +42,7 @@
 
         public RdDataModel CreateDataModel()
         {
-            return _dataModelFactory.CreateDataModel();
+            return _dataModelFactory.CreateDataModel(this.LifeTimeManager);
         }
 
         public INavigationService CreateNavigationService()

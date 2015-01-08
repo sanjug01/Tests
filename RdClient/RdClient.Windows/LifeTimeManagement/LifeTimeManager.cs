@@ -21,16 +21,12 @@
         {
             Contract.Assert(null != _rootFrameManager);
 
-            if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-            {
-            }
-
-            EmitLaunched(e.PreviousExecutionState, e);
-
             if (ApplicationExecutionState.Running != e.PreviousExecutionState)
             {
                 _rootFrameManager.LoadRoot(e);
             }
+
+            EmitLaunched(e);
         }
 
         public void OnSuspending(object sender, ISuspensionArgs e)
@@ -56,10 +52,10 @@
             remove { _suspending -= value; }
         }
 
-        private void EmitLaunched(ApplicationExecutionState previousState, IActivationArgs args)
+        private void EmitLaunched(IActivationArgs args)
         {
             if (null != _launched)
-                _launched(this, new LaunchEventArgs(previousState, args));
+                _launched(this, new LaunchEventArgs(args));
         }
 
         private void EmitSuspending(ISuspensionArgs args)
