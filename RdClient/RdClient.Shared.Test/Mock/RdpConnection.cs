@@ -100,5 +100,10 @@ namespace RdClient.Shared.Test.Mock
         {
             Invoke(new object[] { type, xPos, yPos });
         }
+
+        public void SendKeyEvent(int keyValue, bool scanCode, bool extended, bool keyUp)
+        {
+            Invoke(new object[] { keyValue, scanCode, extended, keyUp });
+        }
     }
 }

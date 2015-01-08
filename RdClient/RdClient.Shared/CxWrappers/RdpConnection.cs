@@ -201,6 +201,12 @@ namespace RdClient.Shared.CxWrappers
             RdTrace.IfFailXResultThrow(xRes, "Failed to send mouse event.");
         }
 
+        public void SendKeyEvent(int keyValue, bool scanCode, bool extended, bool keyUp)
+        {
+            int xRes = _rdpConnectionCx.SendKeyEvent(keyValue, scanCode, extended, keyUp);
+            RdTrace.IfFailXResultThrow(xRes, "Failed to send key event.");
+        }
+
 
         void OnClientConnectedHandler(RdClientCx.RdpConnection sender)
         {
