@@ -10,7 +10,7 @@ namespace RdClient.Views
             this.InitializeComponent();
         }
 
-        private void Button_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void DesktopThumbnail_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             Flyout.ShowAttachedFlyout((FrameworkElement) sender);
         }

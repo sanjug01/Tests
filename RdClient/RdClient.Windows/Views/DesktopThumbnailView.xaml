@@ -51,7 +51,7 @@
             <Button Grid.RowSpan="2" Style="{StaticResource InvisibleButtonStyle}" 
                     Command="{Binding ConnectCommand}"
                     FlyoutBase.AttachedFlyout="{StaticResource ModifyConnectionMenuFlyout}"
-                    PointerPressed="Button_PointerPressed">
+                    PointerPressed="DesktopThumbnail_PointerPressed">
             </Button>
             <CheckBox Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" Visibility="{Binding SelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
