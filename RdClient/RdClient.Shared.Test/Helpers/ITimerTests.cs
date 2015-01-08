@@ -44,7 +44,7 @@ namespace RdClient.Shared.Test.Helpers
         public void TestStartRecurringTimerCallsCallbackMultipleTimes()
         {
             int timerCallbacks = 0;
-            TimeSpan shortTimespan = new TimeSpan(0, 0, 0, 0, 1); //1ms timer period
+            TimeSpan shortTimespan = TimeSpan.FromMilliseconds(1.0d);
             _timer.Start(() => System.Threading.Interlocked.Increment(ref timerCallbacks), shortTimespan, true);
             Thread.Sleep(10);
             _timer.Stop();
@@ -55,7 +55,7 @@ namespace RdClient.Shared.Test.Helpers
         public void TestStartNonRecurringTimerCallsCallbackSingleTime()
         {
             int timerCallbacks = 0;
-            TimeSpan shortTimespan = new TimeSpan(0, 0, 0, 0, 1); //1ms timer period
+            TimeSpan shortTimespan = TimeSpan.FromMilliseconds(1.0d);
             _timer.Start(() => System.Threading.Interlocked.Increment(ref timerCallbacks), shortTimespan, false);
             Thread.Sleep(10);
             _timer.Stop();
