@@ -18,10 +18,22 @@
         <design:FakeDesktopViewModel />
     </d:UserControl.DataContext>
 
+
     <UserControl.Resources>
         <ResourceDictionary>
             <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />          
+            <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+            <MenuFlyout x:Name="ModifyConnectionMenuFlyout"
+                        Placement="Right">
+                <MenuFlyoutItem 
+                    x:Uid="Common_EditMenuFlyoutItem"                 
+                    Text="Edit desktop(d)" 
+                    Command="{Binding EditCommand}"/>
+                <MenuFlyoutItem 
+                    x:Uid="Common_DeleteMenuFlyoutItem"                 
+                    Text="Delete desktop(d)" 
+                    Command="{Binding DeleteCommand}"/>                
+            </MenuFlyout>            
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -36,7 +48,11 @@
             <Grid Grid.Row="1" Background="{StaticResource ConnectionCenterHostnameBackgroundColor}">
                 <TextBlock Text="{Binding Desktop.HostName}" Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0"/>
             </Grid>
-            <Button Grid.RowSpan="2" Style="{StaticResource InvisibleButtonStyle}" Command="{Binding ConnectCommand}">
+            <Button Grid.RowSpan="2" Style="{StaticResource InvisibleButtonStyle}" 
+                    x:Name="ThumbnailButton"
+                    Command="{Binding ConnectCommand}"
+                    FlyoutBase.AttachedFlyout="{StaticResource ModifyConnectionMenuFlyout}"
+                    PointerPressed="DesktopThumbnail_PointerPressed">
             </Button>
             <CheckBox Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" Visibility="{Binding SelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
