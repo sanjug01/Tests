@@ -110,6 +110,12 @@
             Contract.Assert(null != _sink);
 
             base.DisposeManagedState();
+            ClearState();
+            _sink = null;
+        }
+
+        public void ClearState()
+        {
             //
             // Release all pressed keys in arbitrary order.
             // TODO: release modifier keys after alphanumeric ones.
@@ -117,40 +123,77 @@
             foreach (var kc in _pressedKeys)
                 kc.Value.Up(_sink);
             _pressedKeys.Clear();
-            _sink = null;
+        }
+
+        public bool ProcessAcceleratorKeyEvent(CoreAcceleratorKeyEventType eventType, VirtualKey virtualKey, CorePhysicalKeyStatus physicalKeyStatus)
+        {
+            bool completelyHandled = false;
+
+            switch(eventType)
+            {
+                case CoreAcceleratorKeyEventType.SystemKeyDown:
+                case CoreAcceleratorKeyEventType.KeyDown:
+                    ProcessKeyDown(virtualKey, physicalKeyStatus);
+                    break;
+
+                case CoreAcceleratorKeyEventType.SystemKeyUp:
+                case CoreAcceleratorKeyEventType.KeyUp:
+                    ProcessKeyUp(virtualKey, physicalKeyStatus);
+                    break;
+
+                case CoreAcceleratorKeyEventType.Character:
+                case CoreAcceleratorKeyEventType.UnicodeCharacter:
+                    ProcessCharacterReceived((uint)virtualKey, physicalKeyStatus);
+                    completelyHandled = true;
+                    break;
+
+                case CoreAcceleratorKeyEventType.SystemCharacter:
+                    completelyHandled = true;
+                    break;
+            }
+
+            return completelyHandled;
         }
 
         public void ProcessKeyDown(VirtualKey virtualKey, CorePhysicalKeyStatus physicalKeyStatus)
         {
             Contract.Assert(null != _sink);
-            //
-            // 1. If the key is not marked as pressed, mark it.
-            // 2. If the key will be followed up with a character code, don't send anything;
-            //    otherwise, send the scan code.
-            //
-            PressedKeyInfo keyInfo;
 
-            if (!_pressedKeys.TryGetValue(physicalKeyStatus.ScanCode, out keyInfo))
+            if (!IsVirtualKeyIgnored(virtualKey))
             {
-                keyInfo = new PressedKeyInfo(virtualKey, physicalKeyStatus);
-                _pressedKeys.Add(physicalKeyStatus.ScanCode, keyInfo);
-            }
+                //
+                // 1. If the key is not marked as pressed, mark it.
+                // 2. If the key will be followed up with a character code, don't send anything;
+                //    otherwise, send the scan code.
+                //
+                PressedKeyInfo keyInfo;
 
-            keyInfo.Down(_sink);
+                if (!_pressedKeys.TryGetValue(physicalKeyStatus.ScanCode, out keyInfo))
+                {
+                    keyInfo = new PressedKeyInfo(virtualKey, physicalKeyStatus);
+                    _pressedKeys.Add(physicalKeyStatus.ScanCode, keyInfo);
+                }
+
+                keyInfo.Down(_sink);
+            }
         }
 
         public void ProcessKeyUp(VirtualKey virtualKey, CorePhysicalKeyStatus physicalKeyStatus)
         {
             Contract.Assert(null != _sink);
-            //
-            // 1. If the key is not marked as pressed, don't do anything.
-            //
-            PressedKeyInfo keyInfo;
 
-            if(_pressedKeys.TryGetValue(physicalKeyStatus.ScanCode, out keyInfo))
+            if (!IsVirtualKeyIgnored(virtualKey))
             {
-                _pressedKeys.Remove(physicalKeyStatus.ScanCode);
-                keyInfo.Up(_sink);
+                //
+                // 1. If the key is not marked as pressed, don't do anything.
+                //
+                PressedKeyInfo keyInfo;
+
+                if (_pressedKeys.TryGetValue(physicalKeyStatus.ScanCode, out keyInfo))
+                {
+                    _pressedKeys.Remove(physicalKeyStatus.ScanCode);
+                    keyInfo.Up(_sink);
+                }
             }
         }
 
@@ -163,6 +206,12 @@
             {
                 keyInfo.Character(_sink, keyCode);
             }
+        }
+
+        private static bool IsVirtualKeyIgnored(VirtualKey virtualKey)
+        {
+            return VirtualKey.LeftWindows == virtualKey
+                || VirtualKey.RightWindows == virtualKey;
         }
     }
 }

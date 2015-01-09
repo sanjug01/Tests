@@ -4,48 +4,86 @@
     using RdClient.Shared.Input;
     using System;
     using System.Diagnostics.Contracts;
+    using System.Threading;
     using Windows.UI.Core;
+    using Windows.UI.Xaml;
 
-    public sealed class CoreWindowKeyboardCapture : MutableObject, IKeyboardCapture, IKeyboardCaptureSink
+    public sealed class CoreWindowKeyboardCapture : DependencyObject, IDisposable, IKeyboardCapture, IKeyboardCaptureSink
     {
+        private int _disposed;
+        private CoreWindow _coreWindow;
         private EventHandler<KeystrokeEventArgs> _keystroke;
         private CoreWindowKeyboardCore _core;
 
         public CoreWindowKeyboardCapture()
         {
-            CoreWindow cw = CoreWindow.GetForCurrentThread();
-            //
-            // CoreWindow may not be available in test scenarios in which case CoreWindow.GetForCurrentThread() returns null.
-            //
-            if (null != cw)
-            {
-                cw.Activated += this.OnWindowActivated;
-                cw.Closed += this.OnWindowClosed;
-                cw.KeyDown += this.OnWindowKeyDown;
-                cw.KeyUp += this.OnWindowKeyUp;
-                cw.CharacterReceived += this.OnWindowCharacterReceived;
-            }
+            _disposed = 0;
         }
 
-        protected override void DisposeManagedState()
+        ~CoreWindowKeyboardCapture()
         {
-            base.DisposeManagedState();
-            _core.Dispose();
-            _core = null;
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (0 == Interlocked.CompareExchange(ref _disposed, 1, 0))
+            {
+                if (disposing)
+                {
+                    if( null != _coreWindow )
+                    {
+                        this.Dispatcher.AcceleratorKeyActivated -= this.OnAcceleratorKeyActivated;
+                        _coreWindow.Activated -= this.OnWindowActivated;
+                        _coreWindow.Closed -= this.OnWindowClosed;
+                        _coreWindow = null;
+                    }
+                }
+
+                _core.Dispose();
+                _core = null;
+            }
+            else
+            {
+                throw new ObjectDisposedException(GetType().FullName);
+            }
         }
 
         event EventHandler<KeystrokeEventArgs> IKeyboardCapture.Keystroke
         {
             add
             {
-                using(LockWrite())
-                    _keystroke += value;
+                if(null == _keystroke)
+                {
+                    Contract.Assert(null == _coreWindow);
+                    _coreWindow = CoreWindow.GetForCurrentThread();
+                    Contract.Assert(null != _coreWindow);
+                    this.Dispatcher.AcceleratorKeyActivated += this.OnAcceleratorKeyActivated;
+                    _coreWindow.Activated += this.OnWindowActivated;
+                    _coreWindow.Closed += this.OnWindowClosed;
+                }
+
+                _keystroke += value;
             }
 
             remove
             {
-                using (LockWrite())
-                    _keystroke -= value;
+                _keystroke -= value;
+
+                if(null == _keystroke)
+                {
+                    Contract.Assert(null != _coreWindow);
+                    this.Dispatcher.AcceleratorKeyActivated -= this.OnAcceleratorKeyActivated;
+                    _coreWindow.Activated -= this.OnWindowActivated;
+                    _coreWindow.Closed -= this.OnWindowClosed;
+                    _coreWindow = null;
+                }
             }
         }
 
@@ -74,48 +112,43 @@
         {
             Contract.Requires(null != e);
 
-            using(LockUpgradeableRead())
+            if (null != _keystroke)
+                _keystroke(this, e);
+        }
+
+        private void OnAcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs e)
+        {
+            if(null != _core)
             {
-                if (null != _keystroke)
-                    _keystroke(this, e);
+                _core.ProcessAcceleratorKeyEvent(e.EventType, e.VirtualKey, e.KeyStatus);
             }
         }
 
         private void OnWindowActivated(CoreWindow sender, WindowActivatedEventArgs e)
         {
+            if (null != _core)
+            {
+                switch (e.WindowActivationState)
+                {
+                    case CoreWindowActivationState.CodeActivated:
+                    case CoreWindowActivationState.PointerActivated:
+                        break;
+
+                    case CoreWindowActivationState.Deactivated:
+                        _core.ClearState();
+                        break;
+
+                    default:
+                        Contract.Assert(false);
+                        break;
+                }
+            }
         }
 
         private void OnWindowClosed(CoreWindow sender, CoreWindowEventArgs e)
         {
             sender.Activated -= this.OnWindowActivated;
             sender.Closed -= this.OnWindowClosed;
-            sender.KeyDown -= this.OnWindowKeyDown;
-            sender.KeyUp -= this.OnWindowKeyUp;
-            sender.CharacterReceived -= this.OnWindowCharacterReceived;
-        }
-
-        private void OnWindowKeyDown(CoreWindow sender, KeyEventArgs e)
-        {
-            if(null != _core)
-            {
-                _core.ProcessKeyDown(e.VirtualKey, e.KeyStatus);
-            }
-        }
-
-        private void OnWindowKeyUp(CoreWindow sender, KeyEventArgs e)
-        {
-            if (null != _core)
-            {
-                _core.ProcessKeyUp(e.VirtualKey, e.KeyStatus);
-            }
-        }
-
-        private void OnWindowCharacterReceived(CoreWindow sender, CharacterReceivedEventArgs e)
-        {
-            if (null != _core)
-            {
-                _core.ProcessCharacterReceived(e.KeyCode, e.KeyStatus);
-            }
         }
     }
 }
