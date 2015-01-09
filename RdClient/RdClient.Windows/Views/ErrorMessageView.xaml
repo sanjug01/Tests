@@ -72,12 +72,14 @@
                     <Button MinWidth="93"
                             Visibility="{Binding Path=OkVisible, Converter={StaticResource BooleanToVisibility}}"
                             Command="{Binding Path=OkCommand}"
-                            Content="{Binding OkString}"
+                            x:Uid="Common_Button_Ok"
+                            Content="Ok (d)"
                             />
-                    <Button MinWidth="93"
+                    <Button MinWidth="93"                            
                             Visibility="{Binding Path=CancelVisible, Converter={StaticResource BooleanToVisibility}}"
                             Command="{Binding Path=CancelCommand}"
-                            Content="{Binding CancelString}"
+                            x:Uid="Common_Button_Cancel"
+                            Content="Cancel (d)"
                             />
                 </StackPanel>
             </Grid>

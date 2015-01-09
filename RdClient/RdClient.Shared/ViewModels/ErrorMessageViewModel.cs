@@ -11,75 +11,32 @@ namespace RdClient.Shared.ViewModels
     public class ErrorMessageArgs
     {
         private readonly IRdpError _error;
-        public IRdpError Error { get { return _error; } }
-
-        private readonly string _title;
-        public string Title { get { return _title; } }
-
         private readonly ErrorMessageDelegate _okDelegate;
-        public ErrorMessageDelegate OkDelegate { get { return _okDelegate; } }
-
         private readonly ErrorMessageDelegate _cancelDelegate;
-        public ErrorMessageDelegate CancelDelegate { get { return _cancelDelegate; } }
 
-        private readonly string _okString;
-        public string OkString { get { return _okString; } }
-
-        private readonly string _cancelString;
-        public string CancelString { get { return _cancelString; } }
-
-        public ErrorMessageArgs(IRdpError error, ErrorMessageDelegate okDelegate, ErrorMessageDelegate cancelDelegate, string okString = "OK (d)", string cancelString = "Cancel (d)", string title = "")
+        public ErrorMessageArgs(IRdpError error, ErrorMessageDelegate okDelegate, ErrorMessageDelegate cancelDelegate)
         {
             _error = error;
             _okDelegate = okDelegate;
             _cancelDelegate = cancelDelegate;
-            _okString = okString;
-            _cancelString = cancelString;
-            _title = title;
         }
+
+        public IRdpError Error { get { return _error; } }
+
+        
+        public ErrorMessageDelegate OkDelegate { get { return _okDelegate; } }
+
+        
+        public ErrorMessageDelegate CancelDelegate { get { return _cancelDelegate; } }
     }
 
     public class ErrorMessageViewModel : ViewModelBase
     {
         private readonly ICommand _okCommand;
-        public ICommand OkCommand { get { return _okCommand; } }
-
         private readonly ICommand _cancelCommand;
-        public ICommand CancelCommand { get { return _cancelCommand; } }
-
-        public IPresentableView DialogView { private get; set; }
-
-        private IRdpError _message;
-        public IRdpError Error
-        {
-            get { return _message; }
-            set
-            {
-                SetProperty(ref _message, value);
-            }
-        }
-
-        private string _title;
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                SetProperty(ref _title, value);
-            }
-        }
-
-        private string _okString;
-        public string OkString { get { return _okString; } }
-
-        private string _cancelString;
-        public string CancelString { get { return _cancelString; } }
-
         private ErrorMessageDelegate _okDelegate;
-        public bool OkVisible { get { return _okDelegate != null;  } }
-
         private ErrorMessageDelegate _cancelDelegate;
-        public bool CancelVisible { get { return _cancelDelegate != null; } }
+        private IRdpError _error;
 
         public ErrorMessageViewModel()
         {
@@ -87,9 +44,50 @@ namespace RdClient.Shared.ViewModels
             _cancelCommand = new RelayCommand(new Action<object>(Cancel));
         }
 
+        public ICommand OkCommand { get { return _okCommand; } }
+
+        
+        public ICommand CancelCommand { get { return _cancelCommand; } }
+
+        public IPresentableView DialogView { private get; set; }
+        
+        public IRdpError Error
+        {
+            get { return _error; }
+            set
+            {
+                SetProperty(ref _error, value);
+            }
+        }
+        
+        public bool OkVisible { get { return _okDelegate != null;  } }
+        
+        public bool CancelVisible { get { return _cancelDelegate != null; } }
+
+        protected override void OnPresenting(object activationParameter)
+        {
+            Contract.Requires(null != activationParameter as ErrorMessageArgs);
+            Contract.Assert(activationParameter is ErrorMessageArgs);
+            ErrorMessageArgs args = (ErrorMessageArgs)activationParameter;
+
+            this.Error = args.Error;
+
+            if (_okDelegate != args.OkDelegate)
+            {
+                _okDelegate = args.OkDelegate;
+                EmitPropertyChanged("OkVisible");
+            }
+
+            if (_cancelDelegate != args.CancelDelegate)
+            {
+                _cancelDelegate = args.CancelDelegate;
+                EmitPropertyChanged("CancelVisible");
+            }
+        }
+
         private void Ok(object o)
         {
-            NavigationService.DismissModalView(DialogView);
+            NavigationService.DismissModalView(DialogView);            
 
             if(_okDelegate != null)
             {
@@ -105,31 +103,6 @@ namespace RdClient.Shared.ViewModels
             {
                 _cancelDelegate();
             }
-        }
-
-        protected override void OnPresenting(object activationParameter)
-        {
-            Contract.Requires(null != activationParameter as ErrorMessageArgs);
-            Contract.Assert(activationParameter is ErrorMessageArgs);
-            ErrorMessageArgs args = (ErrorMessageArgs)activationParameter;
-
-            this.Error = args.Error;
-            this.Title = args.Title;
-
-            if (_okDelegate != args.OkDelegate)
-            {
-                _okDelegate = args.OkDelegate;
-                EmitPropertyChanged("OkVisible");
-            }
-
-            if (_cancelDelegate != args.CancelDelegate)
-            {
-                _cancelDelegate = args.CancelDelegate;
-                EmitPropertyChanged("CancelVisible");
-            }
-
-            _okString = args.OkString;
-            _cancelString = args.CancelString;
         }
     }
 }
