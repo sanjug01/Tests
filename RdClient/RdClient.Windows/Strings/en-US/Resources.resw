@@ -512,4 +512,10 @@
   <data name="SessionView-DisconnectButton.Content" xml:space="preserve">
     <value>Disconnect</value>
   </data>
+  <data name="AddOrEditDesktop-PcName-Error.Text" xml:space="preserve">
+    <value>(*)</value>
+  </data>
+  <data name="AddUser-Username-Error.Text" xml:space="preserve">
+    <value>(*)</value>
+  </data>
 </root>
