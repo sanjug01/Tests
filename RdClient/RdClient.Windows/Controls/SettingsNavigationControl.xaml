@@ -23,11 +23,11 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Button Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource SettingsBackButtonStyle}" Command="{Binding GoBackCommand}" />
-        <TextBlock Grid.Row="1" Style="{ThemeResource SubheaderTextBlockStyle}" Padding="{StaticResource SettingsMarginPadding}" Text="Settings (d)" />
+        <TextBlock Grid.Row="1" Style="{ThemeResource SubheaderTextBlockStyle}" Padding="{StaticResource SettingsMarginPadding}" x:Uid="Settings_NavBar_Title" Text="Settings (d)" />
         <StackPanel Grid.Row="2">
-            <ListBox SelectedIndex="0" BorderThickness="0">                
-                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowGeneralSettings, Mode=TwoWay}">General (d)</ListBoxItem>
-                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowUserSettings, Mode=TwoWay}">User names (d)</ListBoxItem>
+            <ListBox SelectedIndex="0" BorderThickness="0">
+                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowGeneralSettings, Mode=TwoWay}" x:Uid="Settings_NavBarItem_General">General (d)</ListBoxItem>
+                <ListBoxItem Style="{StaticResource SettingsListBoxItemStyle}" IsSelected="{Binding Path=ShowUserSettings, Mode=TwoWay}" x:Uid="Settings_NavBarItem_Users">User names (d)</ListBoxItem>
             </ListBox>
         </StackPanel>
     </Grid>

@@ -15,7 +15,7 @@
             <RowDefinition Height="{StaticResource SettingsItemHeight}" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="Add new user (d)" />
+        <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" x:Uid="Settings_Users_AddUser_Title" Text="Add new user (d)" />
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -23,7 +23,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Style="{StaticResource SettingsAddUserButtonStyle}" Content="{StaticResource AddIcon}" Command="{Binding AddUserCommand}" />
-            <TextBlock Grid.Column="2" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" Text="Add a user name (d)" />
+            <TextBlock Grid.Column="2" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" x:Uid="Settings_Users_AddUser_Detail" Text="Add a user name (d)" />
         </Grid>
     </Grid>
 </UserControl>
