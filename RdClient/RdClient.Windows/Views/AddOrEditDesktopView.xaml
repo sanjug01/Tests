@@ -96,9 +96,9 @@
                     </ComboBox>
 
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
-                        <Button x:Uid="AddOrEditDesktop-Save" Content="SAVE(d)" 
+                        <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
                                 Command="{Binding Path=SaveCommand}" />
-                        <Button x:Uid="AddOrEditDesktop-Cancel" Content="CANCEL(d)" 
+                        <Button x:Uid="Common_Button_Cancel" Content="Cancel(d)" 
                                 Command="{Binding Path=CancelCommand}" />
                     </StackPanel>
                 </StackPanel>

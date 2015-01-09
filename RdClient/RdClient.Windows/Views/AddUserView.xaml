@@ -58,7 +58,7 @@
                                    Visibility="{Binding Path=IsUsernameValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
                                    />
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   x:Uid="AddUSer-User" 
+                                   x:Uid="AddUser-User" 
                                    Text="User (d)"/>
                     </StackPanel>
                     <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
@@ -93,14 +93,15 @@
                     
                     <CheckBox 
                         Name="chkStoreCredentials"
+                        x:Uid="AddUser-StoreCredentials-Checkbox"
                         Content="Store Credentials (d)" VerticalAlignment="Stretch"
                         IsChecked="{Binding Path=StoreCredentials, Mode=TwoWay}"
                         Visibility="{Binding Path=ShowSave, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
-                        <Button x:Uid="AddUser-Ok" Content="Ok (d)" 
+                        <Button x:Uid="Common_Button_Ok" Content="Ok (d)" 
                                 Command="{Binding Path=OkCommand}" />
-                        <Button x:Uid="AddUser-Cancel" Content="Cancel (d)" 
+                        <Button x:Uid="Common_Button_Cancel" Content="Cancel (d)" 
                                 Command="{Binding Path=CancelCommand}" />
                     </StackPanel>
                 </StackPanel>

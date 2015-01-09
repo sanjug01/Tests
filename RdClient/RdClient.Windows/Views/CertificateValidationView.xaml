@@ -49,7 +49,7 @@
                 <Grid Grid.Row="0">
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
                                Foreground="{StaticResource rdBlackBrush}" 
-                               x:Uid="CertificateValidation-Caption" Text="The certificate can't be verified"/>
+                               x:Uid="CertificateValidation-Caption" Text="The certificate can't be verified (d)"/>
                 </Grid>
 
                 <Border Grid.Row="1" Height="1" Margin="0" />
@@ -58,12 +58,11 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    x:Uid="CertificateValidation-PcNameLabel" 
-                                   Text="Name in certificate from remote:pc"/>
+                                   Text="Name in certificate from remote:pc (d)"/>
                     </StackPanel>
                     <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
                         <TextBlock Margin="16,8" 
-                                   Style="{ThemeResource BodyTextBlockStyle}"
-                                   x:Uid="CertificateValidation-PcName" 
+                                   Style="{ThemeResource BodyTextBlockStyle}"                                   
                                    Text="{Binding Host}" 
                                    Foreground="{StaticResource rdGrayBrush}"
                                    Visibility="Visible" 
@@ -72,7 +71,7 @@
 
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle }" 
                                x:Uid="CertificateValidation-ReasonsLabel" 
-                               Text="It may not be safe to connect to this PC because of the following reasons:"/>
+                               Text="It may not be safe to connect to this PC because of the following reasons: (d)"/>
                     <ListView ItemsSource="{Binding Path=CertificateErrorsList}"
                               SelectionMode="None">
                         <ListView.ItemContainerStyle>
@@ -96,7 +95,7 @@
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    VerticalAlignment="Center"
                                    x:Uid="CertificateValidation-MoreDetailsLabel"
-                                   Text="More details"/>
+                                   Text="More details (d)"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal"
@@ -109,7 +108,7 @@
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    VerticalAlignment="Center"
                                    x:Uid="CertificateValidation-LessDetailsLabel"
-                                   Text="Less details"/>
+                                   Text="Less details (d)"/>
                     </StackPanel>
 
                     <!--StackPanel -->
@@ -117,37 +116,33 @@
                                 Background="WhiteSmoke">
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    x:Uid="CertificateValidation-IssuerLabel" 
-                                   Text="Certificate issuer" />
+                                   Text="Certificate issuer (d)" />
                         <TextBlock Margin="16,8" 
-                                       Style="{ThemeResource BodyTextBlockStyle}"
-                                       x:Uid="CertificateValidation-Issuer" 
+                                       Style="{ThemeResource BodyTextBlockStyle}"                                       
                                        Text="{Binding Certificate.Issuer}" 
                                        Foreground="{StaticResource rdGrayBrush}" />
 
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    x:Uid="CertificateValidation-ThumbprintLabel" 
-                                   Text="Certificate thumbprint" />
+                                   Text="Certificate thumbprint (d)" />
                         <TextBlock Margin="16,8" 
-                                       Style="{ThemeResource BodyTextBlockStyle}"
-                                       x:Uid="CertificateValidation-Thumbprint" 
+                                       Style="{ThemeResource BodyTextBlockStyle}"                                       
                                        Text="{Binding Certificate.SerialNumber, Converter={StaticResource ByteArrayToStringConverter}}" 
                                        Foreground="{StaticResource rdGrayBrush}" />
 
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    x:Uid="CertificateValidation-ValidBeforeLabel" 
-                                   Text="Certificate valid before" />
+                                   Text="Certificate valid before (d)" />
                         <TextBlock Margin="16,8" 
-                                       Style="{ThemeResource BodyTextBlockStyle}"
-                                       x:Uid="CertificateValidation-ValidBefore" 
+                                       Style="{ThemeResource BodyTextBlockStyle}"                                        
                                        Text="{Binding Certificate.ValidTo}" 
                                        Foreground="{StaticResource rdGrayBrush}" />
 
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    x:Uid="CertificateValidation-ValidAfterLabel" 
-                                   Text="Certificate valid after" />
+                                   Text="Certificate valid after (d)" />
                         <TextBlock Margin="16,8" 
-                                       Style="{ThemeResource BodyTextBlockStyle}"
-                                       x:Uid="CertificateValidation-ValidAfter" 
+                                       Style="{ThemeResource BodyTextBlockStyle}"                                       
                                        Text="{Binding Certificate.ValidFrom}" 
                                        Foreground="{StaticResource rdGrayBrush}" />
 
@@ -155,16 +150,16 @@
 
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                Margin="0,20,0,8"
-                               x:Uid="CertificateValidation-ConnectAnywayLAbel" 
-                               Text="Do you want to connect anyway?"/>
+                               x:Uid="CertificateValidation-ConnectAnywayLabel" 
+                               Text="Do you want to connect anyway? (d)"/>
                 
                     
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
-                        <Button x:Uid="CertificateValidation-Cancel" Content="Don't connect" 
+                        <Button x:Uid="CertificateValidation-CancelButton" Content="Don't connect (d)" 
                                 Command="{Binding CancelCommand}" />
-                        <Button x:Uid="CertificateValidation-Connect" Content="Connect once" 
+                        <Button x:Uid="CertificateValidation-ConnectOnceButton" Content="Connect once (d)" 
                                 Command="{Binding AcceptOnceCommand}" />
-                        <Button x:Uid="CertificateValidation-Connect" Content="Connect always" 
+                        <Button x:Uid="CertificateValidation-AlwaysConnectButton" Content="Connect always (d)" 
                                 Command="{Binding AcceptCertificateCommand}" />
 
                     </StackPanel>
