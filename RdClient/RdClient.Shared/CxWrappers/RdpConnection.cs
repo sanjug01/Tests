@@ -101,17 +101,20 @@ namespace RdClient.Shared.CxWrappers
             RdTrace.IfFailXResultThrow(xRes, "Failed to connect.");
         }
 
+        public void Cleanup()
+        {
+            int xRes = _rdpConnectionStoreCx.RemoveConnection(_rdpConnectionCx);
+            RdTrace.IfFailXResultThrow(xRes, "Failed to disconnect remove connection from store.");
+
+            _rdpConnectionCx = null;
+        }
+
         public void Disconnect()
         {
             int xRes = _rdpConnectionCx.Disconnect();
             RdTrace.IfFailXResultThrow(xRes, "Failed to disconnect.");
             
             TerminateInstance();
-            
-            xRes = _rdpConnectionStoreCx.RemoveConnection(_rdpConnectionCx);
-            RdTrace.IfFailXResultThrow(xRes, "Failed to disconnect remove connection from store.");
-
-            _rdpConnectionCx = null;
         }
 
         public void Suspend()
