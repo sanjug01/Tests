@@ -355,12 +355,30 @@
     <value>Add Desktop</value>
     <comment>Option to add PC or Server</comment>
   </data>
-  <data name="Common_DeleteMenuFlyoutItem" xml:space="preserve">
+  <data name="Common_DeleteItem" xml:space="preserve">
     <value>Delete</value>
-    <comment>Verb. Text in a pop out menu.</comment>
+    <comment>Verb. Text in a button or pop out menu that is pressed to delete an item.</comment>
   </data>
-  <data name="Common_EditMenuFlyoutItem" xml:space="preserve">
+  <data name="Common_EditItem" xml:space="preserve">
     <value>Edit</value>
-    <comment>Verb. Text in a pop out menu.</comment>
+    <comment>Verb. Text in a button or pop out menu that is pressed to edit an item.</comment>
+  </data>
+  <data name="Settings_Gateways_Title.Text" xml:space="preserve">
+    <value>Gateways</value>
+  </data>
+  <data name="Settings_General_Title.Text" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="Settings_NavBar_Title.Text" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings_Users_AddUser_Detail.Text" xml:space="preserve">
+    <value>Add a user name</value>
+  </data>
+  <data name="Settings_Users_AddUser_Title.Text" xml:space="preserve">
+    <value>Add new user</value>
+  </data>
+  <data name="Settings_Users_Title.Text" xml:space="preserve">
+    <value>User names</value>
   </data>
 </root>

@@ -26,12 +26,12 @@
             <MenuFlyout x:Name="ModifyConnectionMenuFlyout"
                         Placement="Right">
                 <MenuFlyoutItem 
-                    x:Uid="Common_EditMenuFlyoutItem"                 
-                    Text="Edit desktop(d)" 
+                    x:Uid="Common_EditItem"                 
+                    Text="Edit(d)" 
                     Command="{Binding EditCommand}"/>
                 <MenuFlyoutItem 
-                    x:Uid="Common_DeleteMenuFlyoutItem"                 
-                    Text="Delete desktop(d)" 
+                    x:Uid="Common_DeleteItem"                 
+                    Text="Delete(d)" 
                     Command="{Binding DeleteCommand}"/>                
             </MenuFlyout>            
         </ResourceDictionary>
