@@ -40,6 +40,19 @@
         }
 
         [TestMethod]
+        public void NewTrustedCertificate_MatchesCertificateWithSameHashAndSerialNumber()
+        {
+            IRdpCertificate
+                rdpc1 = new Mock.TestRdpCertificate(new byte[] { 1, 2, 3 }, new byte[] { 4, 5, 6 },
+                new DateTimeOffset(), new DateTimeOffset()),
+                rdpc2 = new Mock.TestRdpCertificate(new byte[] { 1, 2, 3 }, new byte[] { 4, 5, 6 },
+                new DateTimeOffset(), new DateTimeOffset());
+
+            TrustedCertificate cert = new TrustedCertificate(rdpc1);
+            Assert.IsTrue(cert.IsMatchingCertificate(rdpc2));
+        }
+
+        [TestMethod]
         public void NewTrustedCertificate_DontMatchDifferentSerialNumber()
         {
             IRdpCertificate

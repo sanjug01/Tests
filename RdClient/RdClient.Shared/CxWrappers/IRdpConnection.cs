@@ -12,6 +12,7 @@ namespace RdClient.Shared.CxWrappers
         void Suspend();
         void Resume();
         void TerminateInstance();
+        void Cleanup();
         void HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer);
         IRdpScreenSnapshot GetSnapshot();
         IRdpCertificate GetServerCertificate();

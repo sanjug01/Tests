@@ -95,7 +95,7 @@ namespace RdClient.Shared.ViewModels
             if (reason.Code == RdpDisconnectCode.CertValidationFailed)
             {
                 IRdpCertificate serverCertificate = rdpConnection.GetServerCertificate();
-                if(this.SessionModel.IsCertificateAccepted(serverCertificate))
+                if (this.SessionModel.IsCertificateAccepted(serverCertificate) || this.DataModel.IsCertificateTrusted(serverCertificate))
                 {
                     reconnect = true;
                     rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
@@ -120,11 +120,11 @@ namespace RdClient.Shared.ViewModels
                                     break;
                                 case CertificateValidationResult.CertificateTrustLevel.AcceptedOnce:
                                     reconnect = true;
-                                    this.SessionModel.AcceptCertificate(serverCertificate, false);
+                                    this.SessionModel.AcceptCertificate(serverCertificate);
                                     break;
                                 case CertificateValidationResult.CertificateTrustLevel.AcceptedAlways:
                                     reconnect = true;
-                                    this.SessionModel.AcceptCertificate(serverCertificate, true);
+                                    this.DataModel.TrustCertificate(serverCertificate);
                                     break;
                             }
                             rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
@@ -146,6 +146,7 @@ namespace RdClient.Shared.ViewModels
         {
             IRdpConnection rdpConnection = sender as IRdpConnection;
             rdpConnection.Events.ClientDisconnected -= HandleDisconnected;
+            rdpConnection.Cleanup();
 
             RdpDisconnectReason reason = args.DisconnectReason;
 

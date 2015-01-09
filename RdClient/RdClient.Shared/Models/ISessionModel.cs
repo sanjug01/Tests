@@ -9,7 +9,7 @@ namespace RdClient.Shared.Models
 
         void Connect(ConnectionInformation connectionInformation, ITimerFactory timerFactory, GeneralSettings settings);
         void Disconnect();
-        void AcceptCertificate(IRdpCertificate certificate, bool alwaysAccept = false);
+        void AcceptCertificate(IRdpCertificate certificate);
         bool IsCertificateAccepted(IRdpCertificate certificate);
     }
 }
