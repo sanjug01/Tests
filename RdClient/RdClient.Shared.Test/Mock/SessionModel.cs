@@ -26,9 +26,9 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { });
         }
 
-        public void AcceptCertificate(IRdpCertificate certificate, bool alwaysAccept = false)
+        public void AcceptCertificate(IRdpCertificate certificate)
         {
-            Invoke(new object[] { certificate, alwaysAccept });
+            Invoke(new object[] { certificate });
         }
         public bool IsCertificateAccepted(IRdpCertificate certificate)
         {

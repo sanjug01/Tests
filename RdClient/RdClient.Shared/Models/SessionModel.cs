@@ -67,12 +67,9 @@ namespace RdClient.Shared.Models
         ///   Adds certificate to the list of accepted certificate (temporary or persistent)
         /// </summary>
         /// <param name="certificate">presented certificate</param>
-        /// <param name="alwaysAccept">indicates if should persist this certificate or not.</param>
-        void ISessionModel.AcceptCertificate(IRdpCertificate certificate, bool alwaysAccept)
+        void ISessionModel.AcceptCertificate(IRdpCertificate certificate)
         {
             Contract.Assert(null != certificate);
-
-            // should add to the datamodel too, only if alwaysAccept
             _acceptedCertificates.Add(certificate);            
         }
 

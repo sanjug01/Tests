@@ -189,5 +189,57 @@ namespace RdClient.Shared.Test.Model
             Assert.AreEqual(new MousePointer(6, (float)10.0, (float)10.0), mousePointers[2]);
             Assert.AreEqual(3, mousePointers.Count);
         }
+
+        [TestMethod]
+        public void PointerModel_Mouse_ShouldLeftDrag()
+        {
+            List<MousePointer> mousePointers = new List<MousePointer>();
+            TestTimer timer = new TestTimer();
+            PointerModel pointerModel = new PointerModel(timer);
+            pointerModel.WindowSize = new Size(250.0, 250.0);
+            pointerModel.MousePointerChanged += (s, o) => { mousePointers.Add(o as MousePointer); };
+
+            List<PointerEvent> pointerEvents = new List<PointerEvent>();
+
+            pointerEvents.Add(new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Mouse, 3));
+            pointerEvents.Add(new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Mouse, 3));
+            pointerEvents.Add(new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Mouse, 3));
+
+            foreach (PointerEvent pe in pointerEvents)
+            {
+                pointerModel.ConsumeEvent(pe);
+            }
+
+            Assert.AreEqual(new MousePointer(0, (float)0.0, (float)0.0), mousePointers[0]);
+            Assert.AreEqual(new MousePointer(4, (float)10.0, (float)10.0), mousePointers[1]);
+            Assert.AreEqual(new MousePointer(1, (float)10.0, (float)10.0), mousePointers[2]);
+            Assert.AreEqual(3, mousePointers.Count);
+        }
+
+        [TestMethod]
+        public void PointerModel_Mouse_ShouldRightDrag()
+        {
+            List<MousePointer> mousePointers = new List<MousePointer>();
+            TestTimer timer = new TestTimer();
+            PointerModel pointerModel = new PointerModel(timer);
+            pointerModel.WindowSize = new Size(250.0, 250.0);
+            pointerModel.MousePointerChanged += (s, o) => { mousePointers.Add(o as MousePointer); };
+
+            List<PointerEvent> pointerEvents = new List<PointerEvent>();
+
+            pointerEvents.Add(new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), false, true, PointerType.Mouse, 3));
+            pointerEvents.Add(new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, true, PointerType.Mouse, 3));
+            pointerEvents.Add(new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Mouse, 3));
+
+            foreach (PointerEvent pe in pointerEvents)
+            {
+                pointerModel.ConsumeEvent(pe);
+            }
+
+            Assert.AreEqual(new MousePointer(5, (float)0.0, (float)0.0), mousePointers[0]);
+            Assert.AreEqual(new MousePointer(4, (float)10.0, (float)10.0), mousePointers[1]);
+            Assert.AreEqual(new MousePointer(6, (float)10.0, (float)10.0), mousePointers[2]);
+            Assert.AreEqual(3, mousePointers.Count);
+        }
     }
 }

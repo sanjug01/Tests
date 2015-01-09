@@ -3,6 +3,7 @@ namespace RdClient.Shared.Models
     using RdClient.Shared.CxWrappers;
     using System;
     using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Runtime.Serialization;
 
     [DataContract(IsReference = true)]
@@ -49,8 +50,8 @@ namespace RdClient.Shared.Models
             Contract.Requires(null != certificate);
             Contract.Assert(null != _hash);
             Contract.Assert(null != _serialNumber);
-            return Array.Equals(certificate.SerialNumber, _serialNumber)
-                && Array.Equals(certificate.GetHashValue(), _hash);
+            return _serialNumber.SequenceEqual(certificate.SerialNumber)
+                && _hash.SequenceEqual(certificate.GetHashValue());            
         }
     }
 }

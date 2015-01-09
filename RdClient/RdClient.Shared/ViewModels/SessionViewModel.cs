@@ -96,27 +96,27 @@ namespace RdClient.Shared.ViewModels
             TryDeferToUI(() =>
             {
                 _currentRdpConnection = null;
-                IRdpConnection rdpConnection = sender as IRdpConnection;
-                RdpDisconnectReason reason = args.DisconnectReason;
-                bool reconnect = false;
+            IRdpConnection rdpConnection = sender as IRdpConnection;
+            RdpDisconnectReason reason = args.DisconnectReason;
+            bool reconnect = false;
 
-                if (reason.Code == RdpDisconnectCode.CertValidationFailed)
+            if (reason.Code == RdpDisconnectCode.CertValidationFailed)
+            {
+                IRdpCertificate serverCertificate = rdpConnection.GetServerCertificate();
+                if (this.SessionModel.IsCertificateAccepted(serverCertificate) || this.DataModel.IsCertificateTrusted(serverCertificate))
                 {
-                    IRdpCertificate serverCertificate = rdpConnection.GetServerCertificate();
-                    if (this.SessionModel.IsCertificateAccepted(serverCertificate))
-                    {
-                        reconnect = true;
-                        rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
-                    }
-                    else
-                    {
-                        // present CertificateValidation dialog and reconnect only if certificate is accepted
-                        CertificateValidationViewModelArgs certArgs = new CertificateValidationViewModelArgs(
-                            _connectionInformation.Desktop.HostName,
-                            serverCertificate);
-                        ModalPresentationCompletion certValidationCompletion = new ModalPresentationCompletion();
+                    reconnect = true;
+                    rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
+                }
+                else
+                {
+                    // present CertificateValidation dialog and reconnect only if certificate is accepted
+                    CertificateValidationViewModelArgs certArgs = new CertificateValidationViewModelArgs(
+                        _connectionInformation.Desktop.HostName,
+                        serverCertificate);
+                    ModalPresentationCompletion certValidationCompletion = new ModalPresentationCompletion();
 
-                        certValidationCompletion.Completed += (s, e) =>
+                    certValidationCompletion.Completed += (s, e) =>
                         {
                             Contract.Assert(e.Result is CertificateValidationResult);
                             CertificateValidationResult acceptCertificateResult = e.Result as CertificateValidationResult;
@@ -128,28 +128,28 @@ namespace RdClient.Shared.ViewModels
                                     break;
                                 case CertificateValidationResult.CertificateTrustLevel.AcceptedOnce:
                                     reconnect = true;
-                                    this.SessionModel.AcceptCertificate(serverCertificate, false);
+                                    this.SessionModel.AcceptCertificate(serverCertificate);
                                     break;
                                 case CertificateValidationResult.CertificateTrustLevel.AcceptedAlways:
                                     reconnect = true;
-                                    this.SessionModel.AcceptCertificate(serverCertificate, true);
+                                    this.DataModel.TrustCertificate(serverCertificate);
                                     break;
                             }
                             rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
                         };
-                        this.NavigationService.PushModalView("CertificateValidationView", certArgs, certValidationCompletion);
-                    }
+                    this.NavigationService.PushModalView("CertificateValidationView", certArgs, certValidationCompletion);
                 }
-                else
-                {
-                    // May need to further manage PreAuthLogonFailed/FreshCredsRequired/CredSSPUnsupported
-                    // For all other reasons, we just disconnect.
-                    // We'll handle showing any appropriate dialogs to the user in OnClientDisconnectedHandler.
-                    reconnect = false;
-                    rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
-                }
+            }
+            else
+            {
+                // May need to further manage PreAuthLogonFailed/FreshCredsRequired/CredSSPUnsupported
+                // For all other reasons, we just disconnect.
+                // We'll handle showing any appropriate dialogs to the user in OnClientDisconnectedHandler.
+                reconnect = false;
+                rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
+            }
             });
-        }
+        }        
 
         private void HandleConnected(object sender, ClientConnectedArgs e)
         {
@@ -165,20 +165,20 @@ namespace RdClient.Shared.ViewModels
             TryDeferToUI(() =>
             {
                 _currentRdpConnection = null;
-                IRdpConnection rdpConnection = sender as IRdpConnection;
-                rdpConnection.Events.ClientDisconnected -= HandleDisconnected;
+            IRdpConnection rdpConnection = sender as IRdpConnection;
+            rdpConnection.Events.ClientDisconnected -= HandleDisconnected;
 
-                RdpDisconnectReason reason = args.DisconnectReason;
+            RdpDisconnectReason reason = args.DisconnectReason;
 
                 if (reason.Code != RdpDisconnectCode.UserInitiated)
+            {
+                ErrorMessageArgs dialogArgs = new ErrorMessageArgs(reason, () =>
                 {
-                    ErrorMessageArgs dialogArgs = new ErrorMessageArgs(reason, () =>
-                    {
-                    }, null);
-                    this.NavigationService.PushModalView("ErrorMessageView", dialogArgs);
-                }
+                }, null);
+                this.NavigationService.PushModalView("ErrorMessageView", dialogArgs);
+            }
 
-                NavigationService.NavigateToView("ConnectionCenterView", null);
+            NavigationService.NavigateToView("ConnectionCenterView", null);            
             });
         }
 
