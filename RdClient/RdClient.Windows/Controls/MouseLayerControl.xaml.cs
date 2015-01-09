@@ -96,17 +96,26 @@ namespace RdClient.Controls
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
         {
-            _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
+            if(args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
+            {
+                _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
+            }
         }
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs args)
         {
-            _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationDeltaArgsConverter(args));
+            if (args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
+            {
+                _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationDeltaArgsConverter(args));
+            }
         }
 
         protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs args)
         {
-            _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationCompletedArgsConverter(args));
+            if (args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
+            {
+                _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationCompletedArgsConverter(args));
+            }
         }
 
         protected override void OnPointerCanceled(PointerRoutedEventArgs args)

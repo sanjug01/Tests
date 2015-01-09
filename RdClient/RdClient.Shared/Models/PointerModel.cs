@@ -304,24 +304,23 @@ namespace RdClient.Shared.Models
             float y = (float)pointerEvent.Position.Y;
             int buttonState = 4;
 
-            if (MouseLeftButton(pointerEvent.PointerId) == false && pointerEvent.LeftButton == true)
+            if (MouseLeftButton(0) == false && pointerEvent.LeftButton == true)
             {
                 buttonState = 0;
             }
-            else if (MouseLeftButton(pointerEvent.PointerId) == true && pointerEvent.LeftButton == false)
+            else if (MouseLeftButton(0) == true && pointerEvent.LeftButton == false)
             {
                 buttonState = 1;
             }
-            else if (MouseRightButton(pointerEvent.PointerId) == false && pointerEvent.RightButton == true)
+            else if (MouseRightButton(0) == false && pointerEvent.RightButton == true)
             {
                 buttonState = 5;
             }
-            else if (MouseRightButton(pointerEvent.PointerId) == true && pointerEvent.RightButton == false)
+            else if (MouseRightButton(0) == true && pointerEvent.RightButton == false)
             {
                 buttonState = 6;
             }
             
-
             _cursorPosition.X = x;
             _cursorPosition.Y = y;
             ChangeMousePointer(buttonState);
@@ -340,12 +339,12 @@ namespace RdClient.Shared.Models
             if (pointerEvent.PointerType == PointerType.Mouse)
             {
                 MouseRecognizer(pointerEvent);
-                _trackedPointerEvents[pointerEvent.PointerId] = pointerEvent;
+                _trackedPointerEvents[0] = pointerEvent;
             }
             else if (pointerEvent.PointerType == PointerType.Pen)
             {
                 MouseRecognizer(pointerEvent);
-                _trackedPointerEvents[pointerEvent.PointerId] = pointerEvent;
+                _trackedPointerEvents[0] = pointerEvent;
             }
             else if (pointerEvent.PointerType == PointerType.Touch)
             {
