@@ -25,8 +25,8 @@
             <ColumnDefinition Width="{StaticResource SettingsItemColumnWidth}" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="General (d)" />
-        <TextBlock Grid.Row="1" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" Text="Show thumbnails for Desktops (d)" />
+        <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" x:Uid="Settings_Users_Title" Text="General (d)" />
+        <TextBlock Grid.Row="1" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" x:Uid="Settings_General_ShowThumbnails" Text="Show thumbnails for Desktops (d)" />
         <ToggleSwitch Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" IsOn="{Binding Path=GeneralSettings.UseThumbnails, Mode=TwoWay}"/>
     </Grid>
 </UserControl>

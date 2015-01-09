@@ -51,21 +51,21 @@
                 <StackPanel Grid.Row="2" Margin="26,12,26,0">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock x:Uid="AddUser-Username-Error"
-                                   Text="(*)" Padding="0,0,8,0"
+                                   Text="(*)(d)" Padding="0,0,8,0"
                                    ToolTipService.ToolTip="Invalid characters in user name(d)"
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Foreground="{StaticResource rdErrorBrush}"
                                    Visibility="{Binding Path=IsUsernameValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
                                    />
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   x:Uid="AddUSer-User" 
+                                   x:Uid="AddUser-User" 
                                    Text="User (d)"/>
                     </StackPanel>
                     <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
                         <TextBlock Margin="4,8" 
                                        Style="{ThemeResource BodyTextBlockStyle}"
                                        x:Uid="AddUser-UserHint" 
-                                       Text="Username" 
+                                       Text="Username (d)" 
                                        Foreground="{StaticResource rdGrayBrush}"
                                        Visibility="{Binding ElementName=txtUser, Path=Text, Converter={StaticResource StringLengthToInvisibilityConverter}}" Width="390" />
 
@@ -81,7 +81,7 @@
                         <TextBlock Margin="4,8" 
                                            Style="{ThemeResource BodyTextBlockStyle}"
                                            x:Uid="AddUser-PasswordHint" 
-                                           Text="Password" 
+                                           Text="Password (d)" 
                                            Foreground="{StaticResource rdGrayBrush}"
                                            Visibility="{Binding ElementName=txtPassword, Path=Password, Converter={StaticResource StringLengthToInvisibilityConverter}}" Width="390" />
 
@@ -93,14 +93,15 @@
                     
                     <CheckBox 
                         Name="chkStoreCredentials"
+                        x:Uid="AddUser-StoreCredentials-Checkbox"
                         Content="Store Credentials (d)" VerticalAlignment="Stretch"
                         IsChecked="{Binding Path=StoreCredentials, Mode=TwoWay}"
                         Visibility="{Binding Path=ShowSave, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
-                        <Button x:Uid="AddUser-Ok" Content="Ok (d)" 
+                        <Button x:Uid="Common_Button_Ok" Content="Ok (d)" 
                                 Command="{Binding Path=OkCommand}" />
-                        <Button x:Uid="AddUser-Cancel" Content="Cancel (d)" 
+                        <Button x:Uid="Common_Button_Cancel" Content="Cancel (d)" 
                                 Command="{Binding Path=CancelCommand}" />
                     </StackPanel>
                 </StackPanel>
