@@ -167,6 +167,7 @@ namespace RdClient.Shared.ViewModels
                 _currentRdpConnection = null;
             IRdpConnection rdpConnection = sender as IRdpConnection;
             rdpConnection.Events.ClientDisconnected -= HandleDisconnected;
+            rdpConnection.Cleanup();
 
             RdpDisconnectReason reason = args.DisconnectReason;
 
