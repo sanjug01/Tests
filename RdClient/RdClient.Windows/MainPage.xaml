@@ -199,7 +199,7 @@
             HorizontalAlignment="Stretch"
             Visibility="{Binding IsShowBarButtonVisible, Converter={StaticResource boolToVisibility}}"
             Command="{Binding ShowBar}">
-            <TextBlock FontSize="12">show application bar</TextBlock>
+            <TextBlock FontSize="12" x:Uid="MainPage-ShowApplicationBarLabel" Text="show application bar(d)" />
         </Button>
     </Grid>
 </Page>

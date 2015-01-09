@@ -506,6 +506,9 @@
   <data name="DeleteDesktopsView-Title-DeleteSingle.Text" xml:space="preserve">
     <value>Delete connection</value>
   </data>
+  <data name="MainPage-ShowApplicationBarLabel.Text" xml:space="preserve">
+    <value>show application bar</value>
+  </data>
   <data name="SessionView-DisconnectButton.Content" xml:space="preserve">
     <value>Disconnect</value>
   </data>
