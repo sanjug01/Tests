@@ -26,6 +26,11 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { credentials, fUsingSavedCreds });
         }
 
+        public void Cleanup()
+        {
+            Invoke(new object[] { });
+        }
+
         public void Disconnect()
         {
             Invoke(new object[] {});
