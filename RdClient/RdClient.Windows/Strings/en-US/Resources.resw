@@ -355,4 +355,12 @@
     <value>Add Desktop</value>
     <comment>Option to add PC or Server</comment>
   </data>
+  <data name="Common_DeleteMenuFlyoutItem" xml:space="preserve">
+    <value>Delete</value>
+    <comment>Verb. Text in a pop out menu.</comment>
+  </data>
+  <data name="Common_EditMenuFlyoutItem" xml:space="preserve">
+    <value>Edit</value>
+    <comment>Verb. Text in a pop out menu.</comment>
+  </data>
 </root>
