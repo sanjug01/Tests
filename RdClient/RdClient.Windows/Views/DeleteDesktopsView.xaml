@@ -47,7 +47,7 @@
                 <Grid Grid.Row="0">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                         <TextBlock 
-                            x:Uid="DeleteSingleDesktop-Title"
+                            x:Uid="DeleteDesktopsView-Title-DeleteSingle"
                             Margin="24,12,24,12" 
                             Style="{ThemeResource TitleTextBlockStyle}" 
                             Foreground="{StaticResource rdBlackBrush}" 
@@ -55,7 +55,7 @@
                             Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource  BooleanToVisibilityConverter}}"
                             />
                         <TextBlock 
-                            x:Uid="DeleteMultipleDesktop-Title"
+                            x:Uid="DeleteDesktopsView-Title-DeleteMultiple"
                             Margin="24,12,24,12" 
                             Style="{ThemeResource TitleTextBlockStyle}" 
                             Foreground="{StaticResource rdBlackBrush}" 
@@ -72,7 +72,7 @@
                     </StackPanel>
                 </Grid>        
                 <TextBlock 
-                    x:Uid="DeleteSingleDesktop-Message"
+                    x:Uid="DeleteDesktopsView-Message-DeleteSingle"
                     Grid.Row="2"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     FontSize="16"
@@ -82,7 +82,7 @@
                     Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource BooleanToVisibilityConverter}}"                    
                     />
                 <TextBlock 
-                    x:Uid="DeleteMultipleDesktop-Message"
+                    x:Uid="DeleteDesktopsView-Message-DeleteMultiple"
                     Grid.Row="2"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     FontSize="16"
@@ -98,10 +98,12 @@
                     HorizontalAlignment="Center">
                     <Button MinWidth="93"
                             Command="{Binding Path=DeleteCommand}"
+                            x:Uid="Common_Button_DeleteItem"
                             Content="Delete(d)"
                             />
                     <Button MinWidth="93"
                             Command="{Binding Path=CancelCommand}"
+                            x:Uid="Common_Button_Cancel"
                             Content="Cancel(d)"
                             />
                 </StackPanel>
