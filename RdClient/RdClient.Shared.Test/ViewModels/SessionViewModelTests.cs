@@ -13,6 +13,7 @@ namespace RdClient.Shared.Test.ViewModels
     public class SessionViewModelTests
     {
         private RdDataModel _dataModel;
+        private MouseViewModel _mouseViewModel;
 
         private sealed class DummyKeyboardCapture : IKeyboardCapture
         {
@@ -35,13 +36,15 @@ namespace RdClient.Shared.Test.ViewModels
         [TestInitialize]
         public void SetUpTest()
         {
-            _dataModel = new RdDataModel();            
+            _dataModel = new RdDataModel();
+            _mouseViewModel = new MouseViewModel();
         }
 
         [TestCleanup]
         public void TearDownTest()
         {
             _dataModel = null;
+            _mouseViewModel = null;
         }
 
         [TestMethod]
@@ -50,9 +53,12 @@ namespace RdClient.Shared.Test.ViewModels
             using(Mock.NavigationService navigation = new Mock.NavigationService())
             using(Mock.SessionModel sessionModel = new Mock.SessionModel())
             {
-                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
-                svm.SessionModel = sessionModel;
-                svm.DataModel = _dataModel;
+                SessionViewModel svm = new SessionViewModel() { 
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
 
                 ConnectionInformation connectionInformation = new ConnectionInformation()
                 {
@@ -76,8 +82,13 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.SessionModel sessionModel = new Mock.SessionModel())
             {
-                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
-                svm.SessionModel = sessionModel;
+                SessionViewModel svm = new SessionViewModel()
+                {
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
 
                 ConnectionInformation connectionInformation = new ConnectionInformation()
                 {
@@ -106,11 +117,17 @@ namespace RdClient.Shared.Test.ViewModels
                     Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                 };
 
-                sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
+                sessionModel.Expect("Connect", new List<object> { connectionInformation, null, null }, null);
+                rdpConnection.Expect("Cleanup", new List<object> { }, null);
                 navigation.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
 
-                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
-                svm.SessionModel = sessionModel;
+                SessionViewModel svm = new SessionViewModel()
+                {
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
 
@@ -141,12 +158,18 @@ namespace RdClient.Shared.Test.ViewModels
                     Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                 };
 
-                sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
+                sessionModel.Expect("Connect", new List<object> { connectionInformation, null, null }, null);
+                rdpConnection.Expect("Cleanup", new List<object> { }, null);
                 navigation.Expect("PushModalView", new List<object> { "ErrorMessageView", null, null }, null);
                 navigation.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
 
-                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
-                svm.SessionModel = sessionModel;
+                SessionViewModel svm = new SessionViewModel()
+                {
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
 
@@ -180,11 +203,16 @@ namespace RdClient.Shared.Test.ViewModels
                     Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
                 };
 
-                sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
+                sessionModel.Expect("Connect", new List<object> { connectionInformation, null, null }, null);
                 rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, connectionShouldReconnect }, 0);
 
-                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
-                svm.SessionModel = sessionModel;
+                SessionViewModel svm = new SessionViewModel()
+                {
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
 
@@ -217,12 +245,17 @@ namespace RdClient.Shared.Test.ViewModels
                 };
 
                 rdpConnection.Expect("GetServerCertificate", new List<object> { }, rdpCertificate);
-                sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
+                sessionModel.Expect("Connect", new List<object> { connectionInformation, null, null }, null);
                 sessionModel.Expect("IsCertificateAccepted", new List<object> { rdpCertificate }, isCertificateAccepted);
                 navigation.Expect("PushModalView", new List<object> { "CertificateValidationView", null, null }, null);
 
-                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
-                svm.SessionModel = sessionModel;
+                SessionViewModel svm = new SessionViewModel()
+                {
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
 
@@ -256,12 +289,17 @@ namespace RdClient.Shared.Test.ViewModels
                 };
 
                 rdpConnection.Expect("GetServerCertificate", new List<object> { }, rdpCertificate);
-                sessionModel.Expect("Connect", new List<object> { connectionInformation }, null);
+                sessionModel.Expect("Connect", new List<object> { connectionInformation, null, null }, null);
                 sessionModel.Expect("IsCertificateAccepted", new List<object> { rdpCertificate }, isCertificateAccepted);
                 rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, connectionShouldReconnect }, 0);
 
-                SessionViewModel svm = new SessionViewModel() { KeyboardCapture = new DummyKeyboardCapture() };
-                svm.SessionModel = sessionModel;
+                SessionViewModel svm = new SessionViewModel()
+                {
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
 
