@@ -36,11 +36,6 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] {});
         }
 
-        public void Cleanup()
-        {
-            Invoke(new object[] { });
-        }
-
         public void Suspend()
         {
             Invoke(new object[] { });
