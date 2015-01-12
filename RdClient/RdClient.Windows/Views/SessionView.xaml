@@ -41,6 +41,10 @@
 
         <Button
             VerticalAlignment="Bottom"
-            HorizontalAlignment="Right" Command="{Binding DisconnectCommand}">Disconnect</Button>
+            HorizontalAlignment="Right" 
+            Command="{Binding DisconnectCommand}"
+            x:Uid="SessionView-DisconnectButton"
+            Content="Disconnect (d)">            
+        </Button>
     </Grid>
 </UserControl>

@@ -117,695 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Common_AppTitle.Title" xml:space="preserve">
-    <value>REMOTE DESKTOP</value>
-    <comment>Application name. Found at the top of some pages.</comment>
-  </data>
-  <data name="Common_CancelButton.Content" xml:space="preserve">
-    <value>cancel</value>
-    <comment>Verb. Text of the cancel button.</comment>
-  </data>
-  <data name="Common_CancelAppBarButton.Label" xml:space="preserve">
-    <value>cancel</value>
-    <comment>Verb. Located in the horizontal application bar below the cancel button.</comment>
-  </data>
-  <data name="Common_SaveAppBarButton.Label" xml:space="preserve">
-    <value>save</value>
-    <comment>Verb. Located in the horizontal application bar below the save button.</comment>
-  </data>
-  <data name="Common_DeleteAppBarButton.Label" xml:space="preserve">
-    <value>delete</value>
-    <comment>Verb. Text in the horizontal application bar.</comment>
-  </data>
-  <data name="Common_AddAppBarButton.Label" xml:space="preserve">
-    <value>add</value>
-    <comment>Verb. Located in the horizontal application bar below the add button.</comment>
-  </data>
-  <data name="Common_GoBackAppBarButton.Label" xml:space="preserve">
-    <value>resume</value>
-    <comment>Verb. Located in the horizontal application bar below the Resume button.</comment>
-  </data>
-  <data name="Common_DeleteMenuFlyoutItem.Text" xml:space="preserve">
-    <value>delete</value>
-    <comment>Verb. Text in a pop out menu.</comment>
-  </data>
-  <data name="Common_EditMenuFlyoutItem.Text" xml:space="preserve">
-    <value>edit</value>
-    <comment>Verb. Text in a pop out menu.</comment>
-  </data>
-  <data name="Common_PinToStartMenuFlyoutItem.Text" xml:space="preserve">
-    <value>pin to start</value>
-    <comment>Gives the user the option to pin the desktop to the start screen. Text in a pop out menu.</comment>
-  </data>
-  <data name="Common_ConnectQueryBlock.Text" xml:space="preserve">
-    <value>Do you want to connect anyway?</value>
-    <comment>Text in a dialog.</comment>
-  </data>
-  <data name="Common_DoNotAskAgainCheckBox.Text" xml:space="preserve">
-    <value>Don't ask again for this PC</value>
-    <comment>Text of checkbox located in a dialog.</comment>
-  </data>
-  <data name="Common_CloseCommandString" xml:space="preserve">
-    <value>close</value>
-    <comment>Verb. Text of the close button appearing in a dialog.</comment>
-  </data>
-  <data name="Common_CancelCommandString" xml:space="preserve">
-    <value>cancel</value>
-    <comment>Verb. Text of the cancel button appearing in a dialog.</comment>
-  </data>
-  <data name="Common_ConnectCommandString" xml:space="preserve">
-    <value>connect</value>
-    <comment>Verb. Text of the connect button appearing in a dialog.</comment>
-  </data>
-  <data name="Common_DeleteCommandString" xml:space="preserve">
-    <value>delete</value>
-    <comment>Verb. Text of delete button appearing in a dialog.</comment>
-  </data>
-  <data name="Common_DeletionWarningString" xml:space="preserve">
-    <value>{0} will be deleted.</value>
-    <comment>Warns the user that the placeholder item will be deleted. The placeholder can either be the name of a desktop, the name of a gateway or a username. Shown in a dialog.</comment>
-  </data>
-  <data name="Common_Credentials.Header" xml:space="preserve">
-    <value>Credentials</value>
-    <comment>Noun. Header of the ComboBox.</comment>
-  </data>
-  <data name="Common_Credentials_PromptForCredentialsString" xml:space="preserve">
-    <value>Enter every time</value>
-    <comment>Text of the ComboBox item.</comment>
-  </data>
-  <data name="Common_Credentials_AddCredentialsString" xml:space="preserve">
-    <value>Add credentials</value>
-    <comment>Text of the ComboBox item.</comment>
-  </data>
-  <data name="Common_General_Header.Header" xml:space="preserve">
-    <value>general</value>
-    <comment>Noun. Header of the general pivot.</comment>
-  </data>
-  <data name="Common_MainViewModel_InvalidUserName_Title" xml:space="preserve">
-    <value>Invalid user name</value>
-    <comment>Title of a error dialog.</comment>
-  </data>
-  <data name="Common_PrivacyStatementHyperlinkButton.Text" xml:space="preserve">
-    <value>Privacy Statement</value>
-    <comment>Text appearing in a hyperlink button.</comment>
-  </data>
-  <data name="Common_AddMicrosoftRemoteAppTitle.Title" xml:space="preserve">
-    <value>ADD MICROSOFT REMOTEAPP</value>
-    <comment>Title of a dialog.</comment>
-  </data>
-  <data name="Common_EditMicrosoftRemoteAppTitle.Title" xml:space="preserve">
-    <value>EDIT MICROSOFT REMOTEAPP</value>
-    <comment>Title of a page.</comment>
-  </data>
-  <data name="CommandBar_MousePointerButton.Label" xml:space="preserve">
-    <value>mouse
-pointer</value>
-    <comment>Located in the vertical application bar below the mouse pointer button.</comment>
-  </data>
-  <data name="MainViewModel_BlankPCNameDialog_Title" xml:space="preserve">
-    <value>Blank PC name</value>
-    <comment>Title of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_BlankPCNameDialog_Text" xml:space="preserve">
-    <value>The PC name can't be blank.</value>
-    <comment>Text of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_BlankGatewayServerNameDialog_Title" xml:space="preserve">
-    <value>Blank server name</value>
-    <comment>Title of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_BlankGatewayServerNameDialog_Text" xml:space="preserve">
-    <value>The server name can't be blank.</value>
-    <comment>Text of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_CredentialLimitReachedDialog_Title" xml:space="preserve">
-    <value>Can't add credentials</value>
-    <comment>Title of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_CredentialLimitReachedDialog_Text" xml:space="preserve">
-    <value>You've reached the limit of how many credentials you can add. Remove any you don't need, and try again.</value>
-    <comment>Text of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_InvalidPCNameDialog_Title" xml:space="preserve">
-    <value>Invalid PC name</value>
-    <comment>Title of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_InvalidGatewayServerNameDialog_Text" xml:space="preserve">
-    <value>The server name can't contain spaces, tabs, or the following characters: ` ~ ! @ # $ % ^ &amp; * ( ) = + { } \ | ; ' " , &lt; &gt; / ?</value>
-    <comment>Text of a error dialog. {Locked="` ~ ! @ # $ % ^ &amp; * ( ) = + { } \ | ; ' " , &lt; &gt; / ?"}</comment>
-  </data>
-  <data name="MainViewModel_InvalidGatewayServerNameDialog_Title" xml:space="preserve">
-    <value>Invalid server name</value>
-    <comment>Title of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_InvalidPCNameDialog_Text" xml:space="preserve">
-    <value>The PC name can't contain spaces, tabs, or the following characters: ` ~ ! @ # $ % ^ &amp; * ( ) = + { } \ | ; ' " , &lt; &gt; / ?</value>
-    <comment>Text of a error dialog. {Locked="` ~ ! @ # $ % ^ &amp; * ( ) = + { } \ | ; ' " , &lt; &gt; / ?"}</comment>
-  </data>
-  <data name="MainViewModel_InvalidCredentialsDialog_Title" xml:space="preserve">
-    <value>Invalid credentials</value>
-    <comment>Title of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_InvalidCredentialsDialog_Text" xml:space="preserve">
-    <value>The user name cannot be blank.</value>
-    <comment>Text of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_DeleteCredentials_Title" xml:space="preserve">
-    <value>Delete credentials?</value>
-    <comment>Title of a dialog.</comment>
-  </data>
-  <data name="MainViewModel_DeleteDesktop_Title" xml:space="preserve">
-    <value>Delete desktop?</value>
-    <comment>Title of a dialog.</comment>
-  </data>
-  <data name="MainViewModel_DeleteGateway_Title" xml:space="preserve">
-    <value>Delete gateway?</value>
-    <comment>Title of a dialog.</comment>
-  </data>
-  <data name="MainViewModel_InvalidUserNameFormat_Text" xml:space="preserve">
-    <value>The format of the user name is incorrect.</value>
-    <comment>Text of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_UserNameAlreadyExists_Title" xml:space="preserve">
-    <value>User name already exists</value>
-    <comment>Title of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_UserNameAlreadyExists_Text" xml:space="preserve">
-    <value>The user name you are trying to add already exists.</value>
-    <comment>Text of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_FriendlyNameAlreadyExists_Title" xml:space="preserve">
-    <value>Friendly name already exists</value>
-    <comment>Title of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_FriendlyNameAlreadyExists_Text" xml:space="preserve">
-    <value>The friendly name you are trying to add already exists.</value>
-    <comment>Text of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_InvalidCharactersInUserName_Text" xml:space="preserve">
-    <value>The user name can't contain the following characters: / [ ] " : ; | &lt; &gt; + = , ? * %</value>
-    <comment>Text of a error dialog. {Locked="/ [ ] " : ; | &lt; &gt; + = , ? * %"}</comment>
-  </data>
-  <data name="MainViewModel_NetworkUnavailable_Title" xml:space="preserve">
-    <value>Check your connection</value>
-    <comment>Title of a error dialog.</comment>
-  </data>
-  <data name="MainViewModel_NetworkUnavailable_Text" xml:space="preserve">
-    <value>Your device can't connect to a network. Check your cellular data or Wi-Fi connection, and try again.</value>
-    <comment>Text of a error dialog.</comment>
-  </data>
-  <data name="DialogAddResource_AddNewTitle.Title" xml:space="preserve">
-    <value>ADD NEW</value>
-    <comment>Title of the add resource dialog.</comment>
-  </data>
-  <data name="DialogAddResource_DesktopHeader.Text" xml:space="preserve">
-    <value>Desktop</value>
-    <comment>Header of a list item located in the add resource dialog.</comment>
-  </data>
-  <data name="DialogAddResource_DesktopDescriptionText.Text" xml:space="preserve">
-    <value>Connect to the desktop of a remote PC and get to all your apps, files, and network resources.</value>
-    <comment>Description of a list item located in the add resource dialog.</comment>
-  </data>
-  <data name="DialogAddResource_RemoteAppHeader.Text" xml:space="preserve">
-    <value>Microsoft RemoteApp</value>
-    <comment>Header of a list item located in the add resource dialog.</comment>
-  </data>
-  <data name="DialogAddResource_RemoteAppDescriptionText.Text" xml:space="preserve">
-    <value>Get to apps available from Microsoft RemoteApp.</value>
-    <comment>Description of a list item located in the add resource dialog.</comment>
-  </data>
-  <data name="DialogAddResource_RemoteAppLink.Text" xml:space="preserve">
-    <value>Tell me more</value>
-    <comment>Hyperlink providing more information about RemoteApp located in the add resource dialog.</comment>
-  </data>
-  <data name="DialogAddResource_RemoteResourcesHeader.Text" xml:space="preserve">
-    <value>Remote resources</value>
-    <comment>Header of a list item located in the add resource dialog.</comment>
-  </data>
-  <data name="DialogAddResource_RemoteResourcesDescriptionText.Text" xml:space="preserve">
-    <value>Get to apps and desktops published by your admin.</value>
-    <comment>Description of a list item located in the add resource dialog.</comment>
-  </data>
-  <data name="DialogAcquireAdalToken_NewSignInText.Text" xml:space="preserve">
-    <value>To connect to Microsoft RemoteApp, sign in with an appropriate user account. This could be your Microsoft account or organizational account. Check with your admin if you need more info.</value>
-    <comment>Text located in the AcquireAdalToken dialog.</comment>
-  </data>
-  <data name="DialogAzureSignOut_SignOutTitle.Text" xml:space="preserve">
-    <value>(r)Sign out and continue</value>
-    <comment>Title of the AzureSignOut dialog.</comment>
-  </data>
-  <data name="DialogAzureSignOut_SignOutWarningText.Text" xml:space="preserve">
-    <value>(r)Looks like you are already signed into an account. To continue you will be signed out of the account. Do you wish to continue?</value>
-    <comment>Text located in the AzureSignOut dialog.</comment>
-  </data>
-  <data name="DialogAzureSignOut_ContinueCommandString" xml:space="preserve">
-    <value>(r)continue</value>
-    <comment>Verb. Text of the continue button appearing in the AzureSignOut dialog.</comment>
-  </data>
-  <data name="DialogRefreshAdalToken_SignInAgainTitle.Text" xml:space="preserve">
-    <value>Sign in again</value>
-    <comment>Title of the RefreshAdalToken dialog.</comment>
-  </data>
-  <data name="DialogRefreshAdalToken_RefreshTokenExpiredText.Text" xml:space="preserve">
-    <value>To continue, sign in again with your user account.</value>
-    <comment>Text located in the RefreshAdalToken dialog.</comment>
-  </data>
-  <data name="DialogRefreshAdalToken_ContinueCommandString" xml:space="preserve">
-    <value>continue</value>
-    <comment>Verb. Text of the continue button appearing in the RefreshAdalToken dialog.</comment>
-  </data>
-  <data name="DialogDemoPrompt_DemoText.Text" xml:space="preserve">
-    <value>It looks like your admin hasn't set up any apps yet. Would you like to start a free trial?</value>
-    <comment>Text located in the DemoPrompt dialog.</comment>
-  </data>
-  <data name="DialogDemoPrompt_YesCommandString" xml:space="preserve">
-    <value>yes</value>
-    <comment>Text located on the button in the DemoPrompt dialog.</comment>
-  </data>
-  <data name="DialogDemoPrompt_NoCommandString" xml:space="preserve">
-    <value>no</value>
-    <comment>Text located on the button in the DemoPrompt dialog.</comment>
-  </data>
-  <data name="DialogCredPrompt_EnterCredentialsTitle.Text" xml:space="preserve">
-    <value>Enter your credentials</value>
-    <comment>Title of the connection dialog.</comment>
-  </data>
-  <data name="DialogCredPrompt_EnterCredentialsInstruction.Text" xml:space="preserve">
-    <value>These credentials will be used to connect to the remote PC.</value>
-    <comment>Text in the connection dialog.</comment>
-  </data>
-  <data name="DialogCredPrompt_InvalidCredentialsTitle.Text" xml:space="preserve">
-    <value>Your credentials didn't work</value>
-    <comment>Title of the connection dialog.</comment>
-  </data>
-  <data name="DialogCredPrompt_InvalidCredentialsInstruction.Text" xml:space="preserve">
-    <value>The credentials that were used to connect to the remote PC didn't work. Enter different credentials and try again.</value>
-    <comment>Text in the connection dialog.</comment>
-  </data>
-  <data name="DialogCredPrompt_FreshCredentialsRequiredInstruction.Text" xml:space="preserve">
-    <value>The remote PC does not accept saved credentials. Enter your credentials and try again.</value>
-    <comment>Text in the credential dialog when fresh credentials are required.</comment>
-  </data>
-  <data name="DialogCredPrompt_CheckBox.Content" xml:space="preserve">
-    <value>Save credentials</value>
-    <comment>Text of checkbox located in a dialog asking the user if he wants to save his credentials.</comment>
-  </data>
-  <data name="DialogDisconnectError_Title.Text" xml:space="preserve">
-    <value>Connection error</value>
-    <comment>Title of the disconnection error dialog.</comment>
-  </data>
-  <data name="PageAbout_Header.Header" xml:space="preserve">
-    <value>about</value>
-    <comment>Noun. Title of the About page.</comment>
-  </data>
-  <data name="PageAbout_FullAppName.Text" xml:space="preserve">
-    <value>Microsoft Remote Desktop Preview</value>
-    <comment>Text in the About page.</comment>
-  </data>
-  <data name="PageAbout_AppVersion.Text" xml:space="preserve">
-    <value>Version</value>
-    <comment>Noun. Text in the About page.</comment>
-  </data>
-  <data name="PageAbout_Copyright.Text" xml:space="preserve">
-    <value>© 2014 Microsoft Corporation</value>
-    <comment>Text in the About page.</comment>
-  </data>
-  <data name="PageAbout_RateAndReview.Text" xml:space="preserve">
-    <value>Rate and review</value>
-    <comment>Text in the About page.</comment>
-  </data>
-  <data name="PageAbout_RecommendNewFeatures.Text" xml:space="preserve">
-    <value>Recommend new features</value>
-    <comment>Text in the About page.</comment>
-  </data>
-  <data name="PageAbout_Terms.Text" xml:space="preserve">
-    <value>Terms of use</value>
-    <comment>Text in the About page.</comment>
-  </data>
-  <data name="PageAbout_ThirdParty.Text" xml:space="preserve">
-    <value>Third-party notices</value>
-    <comment>Text in the About page.</comment>
-  </data>
-  <data name="PageEditDesktop_Title.Title" xml:space="preserve">
-    <value>EDIT DESKTOP</value>
-    <comment>Title of the edit desktop page.</comment>
-  </data>
-  <data name="PageEditCredentials_Title.Title" xml:space="preserve">
-    <value>EDIT CREDENTIALS</value>
-    <comment>Title of the edit credentials page.</comment>
-  </data>
-  <data name="PageMain_RefreshAppBarButton.Label" xml:space="preserve">
-    <value>refresh</value>
-    <comment>Verb. Text in the horizontal application bar.</comment>
-  </data>
-  <data name="PageMain_SettingsAppBarButton.Label" xml:space="preserve">
-    <value>settings</value>
-    <comment>Noun. Text in the horizontal application bar.</comment>
-  </data>
-  <data name="PageMain_AboutAppBarButton.Label" xml:space="preserve">
-    <value>about</value>
-    <comment>Noun. Text in the horizontal application bar.</comment>
-  </data>
-  <data name="PageMain_AppBarMenu_Help.Label" xml:space="preserve">
-    <value>help</value>
-    <comment>Noun. Text in the horizontal application bar.</comment>
-  </data>
-  <data name="PageMain_TestExpireAdalButton.Label" xml:space="preserve">
-    <value>expire access token</value>
-    <comment>Noun. Text in the horizontal application bar.</comment>
-  </data>
-  <data name="PageMain_TestAppBarButton.Label" xml:space="preserve">
-    <value>tests</value>
-    <comment>Noun. Text in the horizontal application bar.</comment>
-  </data>
-  <data name="PageMain_Desktops_Header.Header" xml:space="preserve">
-    <value>desktops</value>
-    <comment>Noun. Title of the main page which displays a list of desktops.</comment>
-  </data>
-  <data name="PageMain_Desktops_NoDesktops.Text" xml:space="preserve">
-    <value>To get started, add a remote PC that you want to connect to using this device.</value>
-    <comment>Text in the main page.</comment>
-  </data>
-  <data name="PageMain_Apps_Header.Header" xml:space="preserve">
-    <value>apps</value>
-    <comment>Noun. Title of the main page which displays a list of apps.</comment>
-  </data>
-  <data name="PageMain_Apps_NoApps.Text" xml:space="preserve">
-    <value>To get started, subscribe to a feed that you want to connect to using this device.</value>
-    <comment>Text in the main page.</comment>
-  </data>
-  <data name="PageMainOverlay_ProgressBar_PreAdal_Text" xml:space="preserve">
-    <value>Getting things ready...</value>
-    <comment>Text in the main page.</comment>
-  </data>
-  <data name="PageMainOverlay_ProgressBar_PostAdal_Text" xml:space="preserve">
-    <value>Finding your apps...</value>
-    <comment>Text in the main page.</comment>
-  </data>
-  <data name="UcAddEditDesktop_General_PcName.Header" xml:space="preserve">
-    <value>PC name</value>
-    <comment>Header of textbox located in the general pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_General_PcName.PlaceholderText" xml:space="preserve">
-    <value>Host name or IP address</value>
-    <comment>Placeholder text for the textbox located in the general pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_General_CredentialsBlurb.Text" xml:space="preserve">
-    <value>When connecting to a remote PC, you can use a saved user name and password or enter them every time.</value>
-    <comment>Text in the general pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_General_SetupHelp.Text" xml:space="preserve">
-    <value>Need help setting up the remote PC?</value>
-    <comment>Text in the general pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_Header.Header" xml:space="preserve">
-    <value>advanced</value>
-    <comment>Noun. Header of the advanced pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_FriendlyName.Header" xml:space="preserve">
-    <value>Friendly name (optional)</value>
-    <comment>Header of textbox located in the advanced pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_FriendlyName.PlaceholderText" xml:space="preserve">
-    <value>For example, Home or Work</value>
-    <comment>Placeholder text for the textbox located in the advanced pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_Gateway.Header" xml:space="preserve">
-    <value>Gateway</value>
-    <comment>Noun. Header of the ComboBox.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_Gateway_NoGatewayString" xml:space="preserve">
-    <value>No gateway</value>
-    <comment>Text of the ComboBox item.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_Gateway_AddGatewayString" xml:space="preserve">
-    <value>Add gateway</value>
-    <comment>Text of the ComboBox item.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_Sound.Header" xml:space="preserve">
-    <value>Sound</value>
-    <comment>Noun. Header of ComboBox located in the advanced pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_Sound_Disabled.Content" xml:space="preserve">
-    <value>Don't play sounds</value>
-    <comment>Text of the ComboBox item located in the advanced pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_Sound_Local.Content" xml:space="preserve">
-    <value>Play on this device</value>
-    <comment>Text of the ComboBox item located in the advanced pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_Sound_Remote.Content" xml:space="preserve">
-    <value>Play on remote PC</value>
-    <comment>Text of the ComboBox item located in the advanced pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_RemoteDesktopGateway.Text" xml:space="preserve">
-    <value>Gateway</value>
-    <comment>Noun. Text located in the advanced pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_SwapMouseButtons.Content" xml:space="preserve">
-    <value>Swap mouse buttons</value>
-    <comment>Text of checkbox located in the advanced pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAddEditDesktop_Advanced_AdminMode.Content" xml:space="preserve">
-    <value>Connect to admin session</value>
-    <comment>Text of checkbox located in the advanced pivot in the AddEditDesktop user control.</comment>
-  </data>
-  <data name="UcAzureFeedAccount_AccountText.Text" xml:space="preserve">
-    <value>Account</value>
-    <comment>Text located in the UcAzureFeedAccount user control.</comment>
-  </data>
-  <data name="UcAzureFeedAccount_SignOutButton.Content" xml:space="preserve">
-    <value>sign out</value>
-    <comment>Text on a button. Located located in the UcAzureFeedAccount user control.</comment>
-  </data>
-  <data name="UcAzureFeedInvites_InvitationDescriptionText.Text" xml:space="preserve">
-    <value>Select the invitations you want to accept. Each invitation includes one or more apps you can connect to remotely. Only accept invitations from people you trust.</value>
-    <comment>Text located in the UcAzureFeedInvites user control.</comment>
-  </data>
-  <data name="UcAzureFeedInvites_InvitedByText.Text" xml:space="preserve">
-    <value>Invited by:</value>
-    <comment>Text located in the UcAzureFeedInvites user control.</comment>
-  </data>
-  <data name="UcAzureFeedInvites_SignOut_Title" xml:space="preserve">
-    <value>(r)Sign Out</value>
-    <comment>Text located in the sign out dialog.</comment>
-  </data>
-  <data name="UcAzureFeedInvites_SignOutWarningString" xml:space="preserve">
-    <value>(r)We will sign you out if you do not accept any invitation. Are you sure you want to continue?</value>
-    <comment>Text located in the sign out dialog.</comment>
-  </data>
-  <data name="PageNewDesktop_Title.Title" xml:space="preserve">
-    <value>ADD DESKTOP</value>
-    <comment>Title of the new desktop page.</comment>
-  </data>
-  <data name="PageNewUser_Title.Title" xml:space="preserve">
-    <value>ADD CREDENTIALS</value>
-    <comment>Title of the new user page.</comment>
-  </data>
-  <data name="PageSettings_Title.Title" xml:space="preserve">
-    <value>SETTINGS</value>
-    <comment>Noun. Title of the settings page.</comment>
-  </data>
-  <data name="PageSettings_Credentials_Header.Header" xml:space="preserve">
-    <value>credentials</value>
-    <comment>Noun. Header of the credentails pivot in the settings page.</comment>
-  </data>
-  <data name="PageSettings_General_ShowDesktopThumbnails.Content" xml:space="preserve">
-    <value>Show desktop thumbnails</value>
-    <comment>Text of checkbox located in the general pivot of the settings page.</comment>
-  </data>
-  <data name="PageSettings_Credentials_NoCredsExist.Text" xml:space="preserve">
-    <value>Credentials are saved user names and passwords that can be used to connect to a remote PC. You can add, edit and delete credentials.</value>
-    <comment>Text in the credentails pivot of the settings page.</comment>
-  </data>
-  <data name="PageSettings_Credentials_CredsExist.Text" xml:space="preserve">
-    <value>You can edit and delete saved user names and passwords, or add more to the list.</value>
-    <comment>Text in the credentials pivot of the settings page.</comment>
-  </data>
-  <data name="PageSettings_Gateways_Header.Header" xml:space="preserve">
-    <value>gateways</value>
-    <comment>Noun. Header of the gateway pivot in the settings page.</comment>
-  </data>
-  <data name="PageSettings_Gateways_NoGatewaysExist.Text" xml:space="preserve">
-    <value>A gateway enables access to remote PCs on a private network from any Internet-connected device. You can add, edit and delete gateways.</value>
-    <comment>Text in the gateway pivot of the settings page.</comment>
-  </data>
-  <data name="PageSettings_Gateways_GatewaysExist.Text" xml:space="preserve">
-    <value>You can edit and delete saved gateways, or add more to the list.</value>
-    <comment>Text in the gateway pivot of the settings page.</comment>
-  </data>
-  <data name="UcAddEditUser_UserName.Header" xml:space="preserve">
-    <value>User name</value>
-    <comment>Noun. Header of textbox located in the AddEditUser user control.</comment>
-  </data>
-  <data name="UcAddEditUser_UserName.PlaceholderText" xml:space="preserve">
-    <value>domain\user or user@domain</value>
-    <comment>Placeholder text for the textbox located in the AddEditUser user control.</comment>
-  </data>
-  <data name="UcAddEditUser_Password.Header" xml:space="preserve">
-    <value>Password</value>
-    <comment>Noun. Header of passwordbox located in the AddEditUser user control.</comment>
-  </data>
-  <data name="PageThirdPartyNotice_Header.Header" xml:space="preserve">
-    <value>third-party notices</value>
-    <comment>Header of the pivot in third-party notices page</comment>
-  </data>
-  <data name="PageThirdPartyNotice_Content.PlaceholderText" xml:space="preserve">
-    <value>Loading third-party notices...</value>
-    <comment>Placeholder text while the third-party notices load. Located in the third-party notices page.</comment>
-  </data>
-  <data name="PageTerms_Header.Header" xml:space="preserve">
-    <value>terms of use</value>
-    <comment>Header of the pivot in terms of use page</comment>
-  </data>
-  <data name="PageTerms_Content.PlaceholderText" xml:space="preserve">
-    <value>Loading terms of use...</value>
-    <comment>Placeholder text while the terms of use load. Located in the terms of use page.</comment>
-  </data>
-  <data name="UcArcOverlay_RemoteConnectionLostText.Text" xml:space="preserve">
-    <value>The connection to the remote PC was lost.</value>
-    <comment>Text located in the AutoReconnecting Overlay.</comment>
-  </data>
-  <data name="UcArcOverlay_ReconnectingText.Text" xml:space="preserve">
-    <value>Trying to reconnect...</value>
-    <comment>Text located in the AutoReconnecting Overlay.</comment>
-  </data>
-  <data name="DialogNoCredSSP_Title.Text" xml:space="preserve">
-    <value>The identity of the remote PC can't be verified</value>
-    <comment>Title of a dialog.</comment>
-  </data>
-  <data name="DialogNoCredSSP_ExplainBlock.Text" xml:space="preserve">
-    <value>This problem can occur if the remote PC is running a version of Windows that is not configured to support server authentication.</value>
-    <comment>Text in dialog.</comment>
-  </data>
-  <data name="DialogCertError_Title_Title.Text" xml:space="preserve">
-    <value>The certificate of the remote PC can't be verified</value>
-    <comment>Header of the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_PCNameInCertHeader.Text" xml:space="preserve">
-    <value>PC name in the certificate:</value>
-    <comment>Header for the PC name in the certificate. Located in the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_CertIssuerHeader.Text" xml:space="preserve">
-    <value>Certificate issuer:</value>
-    <comment>Header for the certificate issuer. Located in the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_CertThumbprintHeader.Text" xml:space="preserve">
-    <value>Certificate thumbprint:</value>
-    <comment>Header for the certificate thumbprint. Located in the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_CertIssuesHeader.Text" xml:space="preserve">
-    <value>Certificate issues:</value>
-    <comment>Header for the list of issues with the certificate. Located in the certificate error  dialog.</comment>
-  </data>
-  <data name="DialogCertError_RevokedText.Text" xml:space="preserve">
-    <value>- Identified as untrusted</value>
-    <comment>Issue with the certificate. Located in the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_UntrustedRootText.Text" xml:space="preserve">
-    <value>- Not from a trusted certifying authority</value>
-    <comment>Issue with the certificate. Located in the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_ExpiredText.Text" xml:space="preserve">
-    <value>- Expired or not yet valid</value>
-    <comment>Issue with the certificate. Located in the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_NameMismatchText.Text" xml:space="preserve">
-    <value>- PC name is incorrect</value>
-    <comment>Issue with the certificate. Located in the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_WrongEkuText.Text" xml:space="preserve">
-    <value>- Not valid for authentication</value>
-    <comment>Issue with the certificate. Located in the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_CertOrChainInvalidText.Text" xml:space="preserve">
-    <value>- Contains corrupt data</value>
-    <comment>Issue with the certificate. Located in the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_RevocationUnknownText.Text" xml:space="preserve">
-    <value>- Unknown revocation status</value>
-    <comment>Issue with the certificate. Located in the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_ConnectQueryBlock.Text" xml:space="preserve">
-    <value>It may not be safe to connect to this PC. Do you want to connect anyway?</value>
-    <comment>Text in the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_FatalNotificationBlock.Text" xml:space="preserve">
-    <value>It's not safe to connect to this PC. The connection will be canceled.</value>
-    <comment>Text in the certificate error dialog.</comment>
-  </data>
-  <data name="DialogCertError_DoNotAskAgainCheckBox.Content" xml:space="preserve">
-    <value>Don't ask again for this certificate</value>
-    <comment>Text of checkbox located in the certificate error dialog.</comment>
-  </data>
-  <data name="UcAddEditGateway_ServerName.Header" xml:space="preserve">
-    <value>Server name</value>
-    <comment>Header of textbox located in the AddEditGatewat user control.</comment>
-  </data>
-  <data name="UcAddEditGateway_ServerName.PlaceholderText" xml:space="preserve">
-    <value>Host name or IP address</value>
-    <comment>Placeholder text for the textbox located in the AddEditGateway user control.</comment>
-  </data>
-  <data name="PageNewGateway_Title.Title" xml:space="preserve">
-    <value>ADD GATEWAY</value>
-    <comment>Title of the new gateway page.</comment>
-  </data>
-  <data name="PageEditGateway_Title.Title" xml:space="preserve">
-    <value>EDIT GATEWAY</value>
-    <comment>Title of the edit gateway page.</comment>
-  </data>
-  <data name="Status_OpeningRemotePort_String" xml:space="preserve">
-    <value>Initiating remote connection...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
-  <data name="Status_EstablishingSecureConnection_String" xml:space="preserve">
-    <value>Securing remote connection...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
-  <data name="Status_ConfiguringRemoteConnection_String" xml:space="preserve">
-    <value>Configuring remote session...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
-  <data name="Status_NetworkAutoDetect_String" xml:space="preserve">
-    <value>Estimating connection quality...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
-  <data name="Status_SbFindingDestination_String" xml:space="preserve">
-    <value>Finding the destination PC...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
-  <data name="Status_SbLoadingDestination_String" xml:space="preserve">
-    <value>Preparing the destination PC...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
-  <data name="Status_SbBringSessionOnline_String" xml:space="preserve">
-    <value>Bringing the destination PC online...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
-  <data name="Status_SbRedirectingToDestination_String" xml:space="preserve">
-    <value>Redirecting to the destination PC...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
-  <data name="Status_VmLoading_String" xml:space="preserve">
-    <value>Loading the destination PC image...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
-  <data name="Status_VmWaking_String" xml:space="preserve">
-    <value>Waking the destination PC...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
-  <data name="Status_VmStarting_String" xml:space="preserve">
-    <value>Bringing the destination PC online...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
-  <data name="Status_VmStartingSessionMonitoring_String" xml:space="preserve">
-    <value>Acquiring network information for the destination PC...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
-  <data name="Status_VmRetryingSessionMonitoring_String" xml:space="preserve">
-    <value>Reacquiring network information for the destination PC...</value>
-    <comment>Status message while connecting to a desktop. Shown in the connection sequence overlay.</comment>
-  </data>
   <data name="Disconnect_ServerTool_String" xml:space="preserve">
     <value>Your admin might have ended your session. Try connecting again. If that doesn't work, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
@@ -990,116 +301,40 @@ pointer</value>
     <value>Inquiring minds may find this error code helpful: ‪0x{0}‬ (extended)</value>
     <comment>Disconnection error located in the disconnect error dialog. {Locked="‪0x{0}‬"}</comment>
   </data>
-  <data name="FeedDownloadError_CompleteFailure_String" xml:space="preserve">
-    <value>(r)We were unable to download the remote resources. Please refresh and try again after a few minutes.</value>
-    <comment>Text in a pop-up error dialog when feed download fails.</comment>
-  </data>
-  <data name="FeedDownloadError_CompleteFailureFirstSignIn_String" xml:space="preserve">
-    <value>(r)We were unable to download the remote resources. Please sign in again after a few minutes.</value>
-    <comment>Text in a pop-up error dialog when feed download fails during first sign in.</comment>
-  </data>
-  <data name="FeedDownloadError_PartialFailure_String" xml:space="preserve">
-    <value>(r)There were some problems updating the list of apps. Please wait a few minutes and try again.</value>
-    <comment>Text in a pop-up error dialog when feed download fails partially.</comment>
-  </data>
-  <data name="FeedDownloadError_NetworkFailure_String" xml:space="preserve">
-    <value>(r)We encountered network connectivity issues when trying to update the list of apps. Please check your connection and try again.</value>
-    <comment>Text in a pop-up error dialog when we encounter network related errors.</comment>
-  </data>
-  <data name="FeedDownloadError_Title_String" xml:space="preserve">
-    <value>(r)Errors encountered.</value>
-    <comment>Title of the pop-up error dialog when we encounter errors during feed download.</comment>
-  </data>
-  <data name="StatusBar_Discover" xml:space="preserve">
-    <value>Finding your apps...</value>
-    <comment>Text in the status bar when refreshing feeds.</comment>
-  </data>
-  <data name="StatusBar_Syncing" xml:space="preserve">
-    <value>Syncing...</value>
-    <comment>Text in the status bar when syncing consent status/feeds between client and server.</comment>
-  </data>
-  <data name="StatusBar_RetrievingInvitations" xml:space="preserve">
-    <value>(r)Retrieving your invitations...</value>
-    <comment>Text in the status bar when editing feeds.</comment>
-  </data>
-  <data name="UcDisconnectionOverlayMessage.Text" xml:space="preserve">
-    <value>Disconnecting...</value>
-    <comment>Text located in the Disconnection Overlay.</comment>
-  </data>
-  <data name="UcLoggingOptions_EnableTrace.Content" xml:space="preserve">
-    <value>Enable logging</value>
-    <comment>Text of checkbox located in the LoggingOptions user control.</comment>
-  </data>
-  <data name="UcLoggingOptions_SendTrace.Content" xml:space="preserve">
-    <value>send logs</value>
-    <comment>Text of the send logs button located in the LoggingOptions user control.</comment>
-  </data>
-  <data name="Mail_Trace_Subject" xml:space="preserve">
-    <value>Windows Phone Remote Desktop Log</value>
-    <comment>Subject of the email.</comment>
-  </data>
-  <data name="UcLoggingOptions_TraceLevel.Header" xml:space="preserve">
-    <value>Logging level</value>
-    <comment>Header of the ComboBox located in the LoggingOptions user control.</comment>
-  </data>
-  <data name="UcLoggingOptions_TraceLevel_Critical.Content" xml:space="preserve">
-    <value>Critical</value>
-    <comment>Noun. Level of tracing desired. Text of the ComboBox item.</comment>
-  </data>
-  <data name="UcLoggingOptions_TraceLevel_Debug.Content" xml:space="preserve">
-    <value>Debug</value>
-    <comment>Noun. Level of tracing desired. Text of the ComboBox item.</comment>
-  </data>
-  <data name="UcLoggingOptions_TraceLevel_Disabled.Content" xml:space="preserve">
-    <value>Disabled</value>
-    <comment>Noun. Level of tracing desired. Text of the ComboBox item.</comment>
-  </data>
-  <data name="UcLoggingOptions_TraceLevel_Error.Content" xml:space="preserve">
-    <value>Error</value>
-    <comment>Noun. Level of tracing desired. Text of the ComboBox item.</comment>
-  </data>
-  <data name="UcLoggingOptions_TraceLevel_Normal.Content" xml:space="preserve">
-    <value>Normal</value>
-    <comment>Noun. Level of tracing desired. Text of the ComboBox item.</comment>
-  </data>
-  <data name="UcLoggingOptions_TraceLevel_Warning.Content" xml:space="preserve">
-    <value>Warning</value>
-    <comment>Noun. Level of tracing desired. Text of the ComboBox item.</comment>
-  </data>
   <data name="CertificateError_Critical_String" xml:space="preserve">
-    <value>critical certificate error (d)</value>
+    <value>critical certificate error</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_Expired_String" xml:space="preserve">
-    <value>certificate is expired  (d)</value>
+    <value>certificate is expired</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_MismatchedCert_String" xml:space="preserve">
-    <value>certificate mismatch  (d)</value>
+    <value>certificate mismatch</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_NameMismatch_String" xml:space="preserve">
-    <value>certificate name mismatch  (d)</value>
+    <value>certificate name mismatch</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_RevocationUnknown_String" xml:space="preserve">
-    <value>certificate revocation unknown  (d)</value>
+    <value>certificate revocation unknown</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_Revoked_String" xml:space="preserve">
-    <value>revoked certificate  (d)</value>
+    <value>revoked certificate</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_UnknownError_String" xml:space="preserve">
-    <value>unknown certificate error  (d)</value>
+    <value>unknown certificate error</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_UntrustedRoot_String" xml:space="preserve">
-    <value>untrusted certificate  (d)</value>
+    <value>untrusted certificate</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_WrongEKU_String" xml:space="preserve">
-    <value>certificate wrong EKU (d)</value>
+    <value>certificate wrong EKU</value>
     <comment>Certificate error</comment>
   </data>
   <data name="ConnectionCenter_DayZero.Text" xml:space="preserve">
@@ -1119,5 +354,168 @@ pointer</value>
   <data name="Menu-AddDesktop.Text" xml:space="preserve">
     <value>Add Desktop</value>
     <comment>Option to add PC or Server</comment>
+  </data>
+  <data name="Common_Flyout_DeleteItem.Text" xml:space="preserve">
+    <value>Delete</value>
+    <comment>Verb. Text in a button or pop out menu that is pressed to delete an item.</comment>
+  </data>
+  <data name="Common_Flyout_EditItem.Text" xml:space="preserve">
+    <value>Edit</value>
+    <comment>Verb. Text in a button or pop out menu that is pressed to edit an item.</comment>
+  </data>
+  <data name="Settings_Gateways_Title.Text" xml:space="preserve">
+    <value>Gateways</value>
+    <comment>Noun. Title of the Gateways section in the global settings page</comment>
+  </data>
+  <data name="Settings_General_Title.Text" xml:space="preserve">
+    <value>General</value>
+    <comment>Noun. Title of the General settings section in the global settings page</comment>
+  </data>
+  <data name="Settings_NavBar_Title.Text" xml:space="preserve">
+    <value>Settings</value>
+    <comment>Noun. Main title of the global settings page</comment>
+  </data>
+  <data name="Settings_Users_AddUser_Detail.Text" xml:space="preserve">
+    <value>Add a user name</value>
+    <comment>Text in User settings page that describes what add user does in more detail</comment>
+  </data>
+  <data name="Settings_Users_AddUser_Title.Text" xml:space="preserve">
+    <value>Add new user</value>
+    <comment>Title above add user button in the user settings section of the global settings page</comment>
+  </data>
+  <data name="Settings_Users_Title.Text" xml:space="preserve">
+    <value>User names</value>
+    <comment>Title of the User settings section of the global settings page</comment>
+  </data>
+  <data name="Common_Button_DeleteItem.Content" xml:space="preserve">
+    <value>Delete</value>
+    <comment>Verb. Text in a button that is pressed to delete an item.</comment>
+  </data>
+  <data name="Common_Button_EditItem.Content" xml:space="preserve">
+    <value>Edit</value>
+    <comment>Verb. Text in a button that is pressed to edit an item.</comment>
+  </data>
+  <data name="Settings_General_ShowThumbnails.Text" xml:space="preserve">
+    <value>Show thumbnails for Desktops</value>
+    <comment>Text next to the toggle switch that changes whether thumbnails are saved and displayed for desktop connections</comment>
+  </data>
+  <data name="Settings_NavBarItem_General.Content" xml:space="preserve">
+    <value>General</value>
+    <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show General Settings</comment>
+  </data>
+  <data name="Settings_NavBarItem_Users.Content" xml:space="preserve">
+    <value>User names</value>
+    <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show User Settings</comment>
+  </data>
+  <data name="AddOrEditDesktop-AddCaption.Text" xml:space="preserve">
+    <value>Add PC or Server</value>
+  </data>
+  <data name="AddOrEditDesktop-Credentials.Text" xml:space="preserve">
+    <value>User name</value>
+  </data>
+  <data name="AddOrEditDesktop-EditCaption.Text" xml:space="preserve">
+    <value>Edit PC or Server</value>
+  </data>
+  <data name="AddOrEditDesktop-PcName-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Invalid characters in host name</value>
+  </data>
+  <data name="AddOrEditDesktop-PcName.Text" xml:space="preserve">
+    <value>PC Name</value>
+  </data>
+  <data name="AddOrEditDesktop-PcNameHint.Text" xml:space="preserve">
+    <value>Host name or IP address</value>
+  </data>
+  <data name="AddUser-AddCaption.Text" xml:space="preserve">
+    <value>Enter Credentials</value>
+  </data>
+  <data name="AddUser-Password.Text" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="AddUser-PasswordHint.Text" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="AddUser-StoreCredentials-Checkbox.Content" xml:space="preserve">
+    <value>Store Credentials</value>
+  </data>
+  <data name="AddUser-User.Text" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="AddUser-UserHint.Text" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="AddUser-Username-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Invalid characters in user name</value>
+  </data>
+  <data name="CertificateValidation-AlwaysConnectButton.Content" xml:space="preserve">
+    <value>Always connect</value>
+  </data>
+  <data name="CertificateValidation-CancelButton.Content" xml:space="preserve">
+    <value>Don't connect</value>
+  </data>
+  <data name="CertificateValidation-Caption.Text" xml:space="preserve">
+    <value>The certificate can't be verified</value>
+  </data>
+  <data name="CertificateValidation-ConnectAnywayLabel.Text" xml:space="preserve">
+    <value>Do you want to connect anyway?</value>
+  </data>
+  <data name="CertificateValidation-ConnectOnceButton.Content" xml:space="preserve">
+    <value>Connect once</value>
+  </data>
+  <data name="CertificateValidation-IssuerLabel.Text" xml:space="preserve">
+    <value>Certificate issuer</value>
+  </data>
+  <data name="CertificateValidation-LessDetailsLabel.Text" xml:space="preserve">
+    <value>Less details</value>
+  </data>
+  <data name="CertificateValidation-MoreDetailsLabel.Text" xml:space="preserve">
+    <value>More details</value>
+  </data>
+  <data name="CertificateValidation-PcNameLabel.Text" xml:space="preserve">
+    <value>Name in certificate from remote:pc</value>
+  </data>
+  <data name="CertificateValidation-ReasonsLabel.Text" xml:space="preserve">
+    <value>It may not be safe to connect to this PC because of the following reasons:</value>
+  </data>
+  <data name="CertificateValidation-ThumbprintLabel.Text" xml:space="preserve">
+    <value>Certificate thumbprint</value>
+  </data>
+  <data name="CertificateValidation-ValidAfterLabel.Text" xml:space="preserve">
+    <value>Certificate valid after</value>
+  </data>
+  <data name="CertificateValidation-ValidBeforeLabel.Text" xml:space="preserve">
+    <value>Certificate valid before</value>
+  </data>
+  <data name="Common_Button_Cancel.Content" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_Button_Ok.Content" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Common_Button_SaveItem.Content" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="DeleteDesktopsView-Message-DeleteMultiple.Text" xml:space="preserve">
+    <value>Are you sure you want to delete these connections?</value>
+  </data>
+  <data name="DeleteDesktopsView-Message-DeleteSingle.Text" xml:space="preserve">
+    <value>Are you sure you want to delete this connection?</value>
+  </data>
+  <data name="DeleteDesktopsView-Title-DeleteMultiple.Text" xml:space="preserve">
+    <value>Delete connections</value>
+  </data>
+  <data name="DeleteDesktopsView-Title-DeleteSingle.Text" xml:space="preserve">
+    <value>Delete connection</value>
+  </data>
+  <data name="MainPage-ShowApplicationBarLabel.Text" xml:space="preserve">
+    <value>show application bar</value>
+  </data>
+  <data name="SessionView-DisconnectButton.Content" xml:space="preserve">
+    <value>Disconnect</value>
+  </data>
+  <data name="AddOrEditDesktop-PcName-Error.Text" xml:space="preserve">
+    <value>(*)</value>
+  </data>
+  <data name="AddUser-Username-Error.Text" xml:space="preserve">
+    <value>(*)</value>
   </data>
 </root>

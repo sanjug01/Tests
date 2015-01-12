@@ -20,6 +20,6 @@
             <ColumnDefinition Width="{StaticResource SettingsItemColumnWidth}" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="Gateway Settings" />
+        <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" Text="Gateway Settings (d)" />
     </Grid>
 </UserControl>

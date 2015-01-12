@@ -60,7 +60,7 @@
                 <StackPanel Grid.Row="2" Margin="26,12,26,0">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock x:Uid="AddOrEditDesktop-PcName-Error"
-                                   Text="(*)" Padding="0,0,8,0"
+                                   Text="(*)(d)" Padding="0,0,8,0"
                                    ToolTipService.ToolTip="Invalid characters in host name(d)"
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Foreground="{StaticResource rdErrorBrush}"
@@ -96,9 +96,9 @@
                     </ComboBox>
 
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
-                        <Button x:Uid="AddOrEditDesktop-Save" Content="SAVE(d)" 
+                        <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
                                 Command="{Binding Path=SaveCommand}" />
-                        <Button x:Uid="AddOrEditDesktop-Cancel" Content="CANCEL(d)" 
+                        <Button x:Uid="Common_Button_Cancel" Content="Cancel(d)" 
                                 Command="{Binding Path=CancelCommand}" />
                     </StackPanel>
                 </StackPanel>
