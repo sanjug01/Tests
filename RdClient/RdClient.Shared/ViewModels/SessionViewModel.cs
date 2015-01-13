@@ -13,18 +13,27 @@ namespace RdClient.Shared.ViewModels
 
     public class SessionViewModel : DeferringViewModelBase
     {
+        private const int MaxReconnectAttempts = 20;
         private ConnectionInformation _connectionInformation;
         private IKeyboardCapture _keyboardCapture;
+
         //
         // TODO: get rid of _currentRdpConnectionshortcut after the session view will have been re-architected
         //
         private IRdpConnection _currentRdpConnection;
+
+        private bool  _isReconnecting;
+        private bool _isCancelReconnecting;
+
 
         private readonly ICommand _disconnectCommand;
         public ICommand DisconnectCommand { get { return _disconnectCommand; } }
 
         private readonly ICommand _connectCommand;
         public ICommand ConnectCommand { get { return _connectCommand; } }
+
+        private readonly ICommand _cancelReconnectCommand;
+        public ICommand CancelReconnectCommand { get { return _cancelReconnectCommand; } }
 
         public ISessionModel SessionModel { get; set; }
         public DisconnectString DisconnectString { get; set; }
@@ -35,10 +44,19 @@ namespace RdClient.Shared.ViewModels
             set { this.SetProperty<IKeyboardCapture>(ref _keyboardCapture, value); }
         }
 
+        public bool IsReconnecting
+        {
+            get { return _isReconnecting; }
+            set { this.SetProperty(ref _isReconnecting, value); }
+        }
+
+
         public SessionViewModel()
         {
+            _isReconnecting = false;
             _disconnectCommand = new RelayCommand(new Action<object>(Disconnect));
             _connectCommand = new RelayCommand(new Action<object>(Connect));
+            _cancelReconnectCommand = new RelayCommand(o => { _isCancelReconnecting = true; });
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -84,11 +102,60 @@ namespace RdClient.Shared.ViewModels
                 args.RdpConnection.Events.ClientConnected += HandleConnected;
                 args.RdpConnection.Events.ClientDisconnected += HandleDisconnected;
                 args.RdpConnection.Events.ClientAsyncDisconnect += HandleAsyncDisconnect;
+                args.RdpConnection.Events.ConnectionHealthStateChanged += HandleConnectionHealthStateChanged;
+                args.RdpConnection.Events.ClientAutoReconnecting += HanldeClientAutoReconnecting;
+                args.RdpConnection.Events.ClientAutoReconnectComplete += HandleClientAutoReconnectComplete;
                 this.MouseViewModel.RdpConnection = args.RdpConnection;
                 this.MouseViewModel.DeferredExecution = this;
             };
 
+            _isCancelReconnecting = false;
             SessionModel.Connect(_connectionInformation, new WinrtThreadPoolTimerFactory(), this.DataModel.Settings);
+        }
+
+        void HandleClientAutoReconnectComplete(object sender, ClientAutoReconnectCompleteArgs e)
+        {
+            this.DeferToUI(() =>
+                {
+                    this.IsReconnecting = false;
+                }
+            );
+        }
+
+        void HanldeClientAutoReconnecting(object sender, ClientAutoReconnectingArgs e)
+        {
+            // TODO: should dismiss keyboard            
+            bool continueReconnecting = !_isCancelReconnecting;
+
+            if(null != e)
+            {
+                // reconnecting allowed                
+                if (e.AttemptCount > MaxReconnectAttempts)
+                {
+                    continueReconnecting = false;
+                }
+                e.ContinueDelegate.Invoke(continueReconnecting);
+            }
+
+            this.DeferToUI(() =>
+                {
+                    this.IsReconnecting = continueReconnecting;
+                }
+            );
+
+        }
+
+        void HandleConnectionHealthStateChanged(object sender, ConnectionHealthStateChangedArgs e)
+        {
+            IRdpConnection rdpConnection = sender as IRdpConnection;
+            if ((int)RdClientCx.ConnectionHealthState.Warn == e.ConnectionState)
+            {
+                this.HanldeClientAutoReconnecting(sender, null);                
+            }
+            else if ((int)RdClientCx.ConnectionHealthState.Connected == e.ConnectionState)
+            {
+                this.HandleClientAutoReconnectComplete(sender, null);                
+            }
         }
 
         void HandleAsyncDisconnect(object sender, ClientAsyncDisconnectArgs args)
