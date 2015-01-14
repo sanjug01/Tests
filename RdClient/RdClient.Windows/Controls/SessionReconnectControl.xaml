@@ -9,55 +9,72 @@
     d:DesignHeight="300"
     d:DesignWidth="440">
 
-    <Grid Background="{StaticResource rdWhiteBrush}"
+    <Border 
+          Background="{StaticResource rdWhiteBrush}" 
           Margin="16"
-          Height="200"
+          Height="220"
           Width="400">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="48" />
-            <RowDefinition Height="48" />
-            <RowDefinition Height="48" />            
-            <RowDefinition Height="*" />
-            <RowDefinition Height="48" />
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" 
-                   Style="{ThemeResource SubheaderTextBlockStyle}" 
-                   Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" 
-                   x:Uid="Session_Reconnect_Title" Text="Reconnecting (d)" />
-        <Grid Grid.Row="1" Grid.RowSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="96" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <Grid Margin="16">
             <Grid.RowDefinitions>
                 <RowDefinition Height="48" />
                 <RowDefinition Height="48" />
+                <RowDefinition Height="48" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="48" />
             </Grid.RowDefinitions>
-            <Image Source="ms-appx:///Assets/SmallLogo.png" 
+            <TextBlock 
+                Grid.Row="0" 
+                Style="{ThemeResource TitleTextBlockStyle}" 
+                Foreground="{StaticResource rdBlackBrush}"
+                x:Uid="Session_Reconnect_Title" 
+                Text="Reconnecting (d)" />
+            <Grid Grid.Row="1" Grid.RowSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="64" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="48" />
+                    <RowDefinition Height="48" />
+                </Grid.RowDefinitions>
+                <Image Source="ms-appx:///Assets/SmallLogo.png" 
                    Grid.RowSpan="2"
                    Grid.Column="1"
                    Stretch="None"  HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <TextBlock 
-                Grid.RowSpan ="2" 
-                Grid.Row="0"
-                Grid.Column="2"
-                VerticalAlignment="Top" Style="{ThemeResource BodyTextBlockStyle}" 
-                x:Uid="Session_Reconnect_Message" 
-                Text="The connection has been lost. Attempting to reconnect to your session...(d)" />
-            <TextBlock 
-                Grid.Column="2"
-                Grid.Row="1"                
-                VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" 
-                x:Uid="Session_Reconnect_Details" 
-                Text="Connection attempt: 11 of 20(d)" />
-        </Grid>
-        <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right"
+                <TextBlock 
+                    Grid.RowSpan ="2" 
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    VerticalAlignment="Top" Style="{ThemeResource BodyTextBlockStyle}" 
+                    x:Uid="Session_Reconnect_Message" 
+                    Text="The connection has been lost. Attempting to reconnect to your session...(d)" />
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="2"
+                            Grid.Row="1"                
+                            VerticalAlignment="Center">
+                    <TextBlock 
+                         Style="{ThemeResource BodyTextBlockStyle}" 
+                        x:Uid="Session_Reconnect_Details" 
+                        Text="Connection attempts(d):" />
+                    <TextBlock 
+                         Style="{ThemeResource BodyTextBlockStyle}" 
+                        x:Uid="Session_Reconnect_Attempts" 
+                        Margin="8,0"
+                        Text="{Binding Path=ReconnectAttempts}" />                    
+                    <TextBlock 
+                         Style="{ThemeResource BodyTextBlockStyle}" 
+                        x:Uid="Session_Reconnect_MaxAttempts" 
+                        Text="of 20(d)" />                    
+                </StackPanel>
+            </Grid>
+            <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right"
                     Grid.Row="4">
-            <Button x:Uid="Common_Button_Cancel" 
+                <Button x:Uid="Common_Button_Cancel" 
                     Content="Cancel(d)" 
                     Command="{Binding Path=CancelReconnectCommand}" 
                     />
-        </StackPanel>
-    </Grid>
+            </StackPanel>
+        </Grid>
+    </Border>
 </UserControl>

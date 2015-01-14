@@ -46,6 +46,7 @@ namespace RdClient.Shared.Models
         {
             if (_settings.UseThumbnails)
             {
+                // TODO : this cause AccessViolation if connection is lost/reconnecting- see bug 1341660			
                 await _thumbnail.Update(_connection.GetSnapshot());
             }
         }

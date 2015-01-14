@@ -24,7 +24,7 @@ namespace RdClient.Shared.ViewModels
 
         private bool  _isReconnecting;
         private bool _isCancelReconnecting;
-
+        private int _reconnectAttempts;
 
         private readonly ICommand _disconnectCommand;
         public ICommand DisconnectCommand { get { return _disconnectCommand; } }
@@ -50,10 +50,17 @@ namespace RdClient.Shared.ViewModels
             set { this.SetProperty(ref _isReconnecting, value); }
         }
 
+        public int ReconnectAttempts
+        {
+            get { return _reconnectAttempts; }
+            set { this.SetProperty(ref _reconnectAttempts, value); }
+        }
+
 
         public SessionViewModel()
         {
             _isReconnecting = false;
+            _reconnectAttempts = 0;
             _disconnectCommand = new RelayCommand(new Action<object>(Disconnect));
             _connectCommand = new RelayCommand(new Action<object>(Connect));
             _cancelReconnectCommand = new RelayCommand(o => { _isCancelReconnecting = true; });
@@ -126,10 +133,12 @@ namespace RdClient.Shared.ViewModels
         {
             // TODO: should dismiss keyboard            
             bool continueReconnecting = !_isCancelReconnecting;
+            int connectAttempts = 0;
 
             if(null != e)
             {
                 // reconnecting allowed                
+                connectAttempts = e.AttemptCount;
                 if (e.AttemptCount > MaxReconnectAttempts)
                 {
                     continueReconnecting = false;
@@ -139,7 +148,8 @@ namespace RdClient.Shared.ViewModels
 
             this.DeferToUI(() =>
                 {
-                    this.IsReconnecting = continueReconnecting;
+                    this.ReconnectAttempts = connectAttempts; 
+                    this.IsReconnecting = continueReconnecting;                    
                 }
             );
 
