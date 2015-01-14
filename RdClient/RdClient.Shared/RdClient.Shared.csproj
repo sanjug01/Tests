@@ -105,7 +105,6 @@
     <Compile Include="Helpers\StateMachine.cs" />
     <Compile Include="Helpers\WinrtThreadPoolTimer.cs" />
     <Compile Include="Input\CharacterKey.cs" />
-    <Compile Include="Input\CoreWindowKeyboardCore.cs" />
     <Compile Include="Input\DummyVirtualKey.cs" />
     <Compile Include="Input\ExtendedKey.cs" />
     <Compile Include="Input\IKeyboardCapture.cs" />

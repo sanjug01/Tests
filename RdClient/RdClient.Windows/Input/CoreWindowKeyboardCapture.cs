@@ -12,7 +12,7 @@
         private int _disposed;
         private CoreWindow _coreWindow;
         private EventHandler<KeystrokeEventArgs> _keystroke;
-        private CoreWindowKeyboardCore _core;
+        private KeyboardState _keyboardState;
 
         public CoreWindowKeyboardCapture()
         {
@@ -45,8 +45,8 @@
                     }
                 }
 
-                _core.Dispose();
-                _core = null;
+                _keyboardState.Clear();
+                _keyboardState = null;
             }
             else
             {
@@ -88,17 +88,17 @@
 
         void IKeyboardCapture.Start()
         {
-            Contract.Assert(null == _core);
-            Contract.Ensures(null != _core);
-            _core = new CoreWindowKeyboardCore(this);
+            Contract.Assert(null == _keyboardState);
+            Contract.Ensures(null != _keyboardState);
+            _keyboardState = new KeyboardState(this);
         }
 
         void IKeyboardCapture.Stop()
         {
-            if (null != _core)
+            if (null != _keyboardState)
             {
-                _core.Dispose();
-                _core = null;
+                _keyboardState.Clear();
+                _keyboardState = null;
             }
         }
 
@@ -117,15 +117,15 @@
 
         private void OnAcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs e)
         {
-            if(null != _core)
+            if (null != _keyboardState)
             {
-                _core.ProcessAcceleratorKeyEvent(e.EventType, e.VirtualKey, e.KeyStatus);
+                e.Handled = _keyboardState.UpdateState(e.EventType, e.VirtualKey, e.KeyStatus);
             }
         }
 
         private void OnWindowActivated(CoreWindow sender, WindowActivatedEventArgs e)
         {
-            if (null != _core)
+            if (null != _keyboardState)
             {
                 switch (e.WindowActivationState)
                 {
@@ -134,7 +134,7 @@
                         break;
 
                     case CoreWindowActivationState.Deactivated:
-                        _core.ClearState();
+                        _keyboardState.Clear();
                         break;
 
                     default:
@@ -148,6 +148,8 @@
         {
             sender.Activated -= this.OnWindowActivated;
             sender.Closed -= this.OnWindowClosed;
+            if (null != _keyboardState)
+                _keyboardState.Clear();
         }
     }
 }
