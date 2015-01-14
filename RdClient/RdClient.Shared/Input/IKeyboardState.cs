@@ -5,9 +5,12 @@
 
     public interface IKeyboardState
     {
-        void PushVirtualKey(VirtualKey virtualKey, IVirtualKey vk);
-        IVirtualKey ReleaseVirtualKey(VirtualKey virtualKey);
-        void RegisterCharacterKey(CorePhysicalKeyStatus keyStatus, IVirtualKey vk);
-        IVirtualKey UnregisterCharacterKey(CorePhysicalKeyStatus keyStatus);
+        void RegisterVirtualKey(VirtualKey virtualKey, IVirtualKey vk);
+
+        IVirtualKey UnregisterVirtualKey(VirtualKey virtualKey);
+
+        void RegisterPhysicalKey(CorePhysicalKeyStatus keyStatus, IVirtualKey vk);
+
+        IVirtualKey UnregisterPhysicalKey(CorePhysicalKeyStatus keyStatus);
     }
 }

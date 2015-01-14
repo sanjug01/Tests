@@ -29,14 +29,14 @@
             _physicalKeys = new SortedDictionary<CorePhysicalKeyStatus, PhysicalKeyDataContainer>(new ScanCodeComparer());
         }
 
-        protected void RegisterCharacterKey(CorePhysicalKeyStatus keyStatus)
+        protected void RegisterPhysicalKey(CorePhysicalKeyStatus keyStatus)
         {
-            _keyboardState.RegisterCharacterKey(keyStatus, this);
+            _keyboardState.RegisterPhysicalKey(keyStatus, this);
         }
 
-        protected void UnregisterCharacterKey(CorePhysicalKeyStatus keyStatus)
+        protected void UnregisterPhysicalKey(CorePhysicalKeyStatus keyStatus)
         {
-            IVirtualKey vk = _keyboardState.UnregisterCharacterKey(keyStatus);
+            IVirtualKey vk = _keyboardState.UnregisterPhysicalKey(keyStatus);
             Contract.Assert(object.ReferenceEquals(vk, this));
         }
 
@@ -87,7 +87,7 @@
                         //
                         if (0 == _physicalKeys.Count)
                         {
-                            IVirtualKey vk = _keyboardState.ReleaseVirtualKey(_virtualKey);
+                            IVirtualKey vk = _keyboardState.UnregisterVirtualKey(_virtualKey);
                             Contract.Assert(object.ReferenceEquals(vk, this));
                         }
                     }
@@ -132,7 +132,7 @@
                 }
             } while (0 != _physicalKeys.Count);
 
-            IVirtualKey vk = _keyboardState.ReleaseVirtualKey(_virtualKey);
+            IVirtualKey vk = _keyboardState.UnregisterVirtualKey(_virtualKey);
             Contract.Assert(object.ReferenceEquals(vk, this));
         }
 

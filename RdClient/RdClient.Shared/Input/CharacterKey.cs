@@ -25,7 +25,7 @@
 
         protected override bool OnPressed(CorePhysicalKeyStatus keyStatus, PhysicalKeyDataContainer dataContainer)
         {
-            this.RegisterCharacterKey(keyStatus);
+            this.RegisterPhysicalKey(keyStatus);
             return false;
         }
 
@@ -36,7 +36,7 @@
                 this.ReportKeyEvent((int)pc.Character, false, keyStatus.IsExtendedKey, true);
             });
 
-            this.UnregisterCharacterKey(keyStatus);
+            this.UnregisterPhysicalKey(keyStatus);
         }
 
         protected override void OnCharacter(char character, CoreAcceleratorKeyEventType eventType, CorePhysicalKeyStatus keyStatus, PhysicalKeyDataContainer dataContainer)

@@ -58,7 +58,7 @@
 
         private IVirtualKey AddVirtualKey(VirtualKey virtualKey, IVirtualKey vk)
         {
-            _keyboardState.PushVirtualKey(virtualKey, vk);
+            _keyboardState.RegisterVirtualKey(virtualKey, vk);
             return vk;
         }
 
