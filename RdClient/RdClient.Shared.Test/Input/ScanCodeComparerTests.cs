@@ -1,7 +1,7 @@
 ﻿namespace RdClient.Shared.Test.Input
 {
-    using Keyboardist.Input;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using RdClient.Shared.Input;
     using System.Collections.Generic;
     using Windows.UI.Core;
 
