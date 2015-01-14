@@ -45,7 +45,7 @@
                     break;
 
                 case VirtualKeyClass.Character:
-                    key = AddVirtualKey(virtualKey, new CharacterKey(virtualKey, _keyboardSink, _keyboardState));
+                    key = AddVirtualKey(virtualKey, new ExtendedKey(virtualKey, _keyboardSink, _keyboardState));
                     break;
 
                 default:
