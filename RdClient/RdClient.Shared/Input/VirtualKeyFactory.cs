@@ -49,7 +49,7 @@
                     break;
 
                 default:
-                    key = new DummyVirtualKey();
+                    key = DummyVirtualKey.Dummy;
                     break;
             }
 
