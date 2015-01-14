@@ -107,7 +107,10 @@
     <Compile Include="Input\CoreWindowKeyboardCore.cs" />
     <Compile Include="Input\IKeyboardCapture.cs" />
     <Compile Include="Input\IKeyboardCaptureSink.cs" />
+    <Compile Include="Input\IPhysicalKeyData.cs" />
     <Compile Include="Input\KeystrokeEventArgs.cs" />
+    <Compile Include="Input\PhysicalKeyDataContainer.cs" />
+    <Compile Include="Input\ScanCodeComparer.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
     <Compile Include="LifeTimeManagement\IRootFrameManager.cs" />

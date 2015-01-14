@@ -1,6 +1,5 @@
 ﻿namespace RdClient.Input
 {
-    using RdClient.Shared.Helpers;
     using RdClient.Shared.Input;
     using System;
     using System.Diagnostics.Contracts;
