@@ -62,13 +62,19 @@
 #endif
 
             bool completelyProcessed = false;
+            IVirtualKey key = null;
 
             switch(eventType)
             {
                 case CoreAcceleratorKeyEventType.Character:
                 case CoreAcceleratorKeyEventType.UnicodeCharacter:
                 case CoreAcceleratorKeyEventType.SystemCharacter:
-                    completelyProcessed = GetPhysicalKey(keyStatus).Update(eventType, virtualKey, keyStatus);
+                    //
+                    // For character events virtualKey carries the Unicode code point of the character
+                    // instead of a virtual key code. If a virtual key object tracking a key expects a character,
+                    // it had registered itself as a physical key. Retrieve the registered physical key handler.
+                    //
+                    key = GetPhysicalKey(keyStatus);
                     break;
 
                 case CoreAcceleratorKeyEventType.DeadCharacter:
@@ -77,9 +83,12 @@
                     break;
 
                 default:
-                    completelyProcessed = GetVirtualKey(virtualKey).Update(eventType, virtualKey, keyStatus);
+                    key = GetVirtualKey(virtualKey);
                     break;
             }
+
+            if (null != key)
+                completelyProcessed = key.Update(eventType, virtualKey, keyStatus);
 
             return completelyProcessed;
         }
@@ -177,18 +186,9 @@
 
         private IVirtualKey GetPhysicalKey(CorePhysicalKeyStatus keyStatus)
         {
-            Contract.Ensures(null != Contract.Result<IVirtualKey>());
+            IVirtualKey key = null;
 
-            IVirtualKey key;
-
-            if (!_characterKeys.TryGetValue(keyStatus, out key))
-            {
-                //
-                // The physical key is not registered, but the method must return a valid object.
-                // Return a dummy virtual key.
-                //
-                key = DummyVirtualKey.Dummy;
-            }
+            _characterKeys.TryGetValue(keyStatus, out key);
 
             return key;
         }
