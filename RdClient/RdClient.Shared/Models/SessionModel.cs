@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Helpers;
 using System;
@@ -17,9 +18,43 @@ namespace RdClient.Shared.Models
         }
     }
 
+    public class ConnectionAutoReconnectingArgs : EventArgs
+    {
+        public AutoReconnectError DisconnectReason { get; private set; }
+        public int AttemptCount { get; private set; }
+        public ClientAutoReconnectingContinueDelegate ContinueDelegate { get; private set; }
+
+        public ConnectionAutoReconnectingArgs(ClientAutoReconnectingArgs args)
+        {
+            if(null != args)
+            {
+                DisconnectReason = args.DisconnectReason;
+                AttemptCount = args.AttemptCount;
+                ContinueDelegate = args.ContinueDelegate;
+            }
+            else
+            {
+                DisconnectReason = new AutoReconnectError(0); // not used
+                AttemptCount = 0; 
+                ContinueDelegate = (__continueReconnecting) => {  }; // not used
+            }
+        }
+    }
+
+    public class ConnectionAutoReconnectCompleteArgs : EventArgs
+    {
+        public ConnectionAutoReconnectCompleteArgs(ClientAutoReconnectCompleteArgs clientAutoReconnectCompleteArgs)
+        {
+        }
+    }
+
     public class SessionModel : ISessionModel
     {
+        private const int MaxReconnectAttempts = 20;
         public event EventHandler<ConnectionCreatedArgs> ConnectionCreated;
+        public event EventHandler<ConnectionAutoReconnectingArgs> ConnectionAutoReconnecting;
+        public event EventHandler<ConnectionAutoReconnectCompleteArgs> ConnectionAutoReconnectComplete;
+
         private readonly IRdpConnectionFactory _connectionFactory;
         private IRdpConnection _rdpConnection;
         private List<IRdpCertificate> _acceptedCertificates;
@@ -29,6 +64,22 @@ namespace RdClient.Shared.Models
             if (ConnectionCreated != null)
             {
                 ConnectionCreated(this, args);
+            }
+        }
+
+        private void EmitConnectionAutoReconnecting(ConnectionAutoReconnectingArgs args)
+        {
+            if (ConnectionAutoReconnecting != null)
+            {
+                ConnectionAutoReconnecting(this, args);
+            }
+        }
+
+        private void EmitConnectionAutoReconnectComplete(ConnectionAutoReconnectCompleteArgs args)
+        {
+            if (ConnectionAutoReconnectComplete != null)
+            {
+                ConnectionAutoReconnectComplete(this, args);
             }
         }
 
@@ -44,6 +95,10 @@ namespace RdClient.Shared.Models
             _rdpConnection = _connectionFactory.CreateInstance();
             EmitConnectionCreated(new ConnectionCreatedArgs(_rdpConnection));
 
+            _rdpConnection.Events.ConnectionHealthStateChanged += HandleConnectionHealthStateChanged;
+            _rdpConnection.Events.ClientAutoReconnecting += HanldeClientAutoReconnecting;
+            _rdpConnection.Events.ClientAutoReconnectComplete += HandleClientAutoReconnectComplete;
+
             Desktop desktop = connectionInformation.Desktop;
             Credentials credentials = connectionInformation.Credentials;
             IThumbnail thumbnail = connectionInformation.Thumbnail;
@@ -58,8 +113,10 @@ namespace RdClient.Shared.Models
 
         public void Disconnect()
         {
+            _rdpConnection.Events.ConnectionHealthStateChanged -= HandleConnectionHealthStateChanged;
+            _rdpConnection.Events.ClientAutoReconnecting -= HanldeClientAutoReconnecting;
+            _rdpConnection.Events.ClientAutoReconnectComplete -= HandleClientAutoReconnectComplete;
             _rdpConnection.Disconnect();
-
             _rdpConnection = null;
         }
         
@@ -90,6 +147,38 @@ namespace RdClient.Shared.Models
                 }
             }
             return false;
+        }
+
+        void HandleClientAutoReconnectComplete(object sender, ClientAutoReconnectCompleteArgs e)
+        {
+            EmitConnectionAutoReconnectComplete(new ConnectionAutoReconnectCompleteArgs(e));
+        }
+
+        void HanldeClientAutoReconnecting(object sender, ClientAutoReconnectingArgs e)
+        {
+            if (null != e && e.AttemptCount > MaxReconnectAttempts)
+            {
+                // stop and complete
+                e.ContinueDelegate.Invoke(false);
+                EmitConnectionAutoReconnectComplete(null);
+            }
+            else
+            {
+                EmitConnectionAutoReconnecting(new ConnectionAutoReconnectingArgs(e));
+            }
+        }
+
+        void HandleConnectionHealthStateChanged(object sender, ConnectionHealthStateChangedArgs e)
+        {
+            IRdpConnection rdpConnection = sender as IRdpConnection;
+            if ((int)RdClientCx.ConnectionHealthState.Warn == e.ConnectionState)
+            {
+                this.HanldeClientAutoReconnecting(sender, null);
+            }
+            else if ((int)RdClientCx.ConnectionHealthState.Connected == e.ConnectionState)
+            {
+                this.HandleClientAutoReconnectComplete(sender, null);
+            }
         }
     }
 }
