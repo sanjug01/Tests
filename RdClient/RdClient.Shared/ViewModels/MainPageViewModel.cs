@@ -60,6 +60,7 @@
                     this.IsShowBarButtonVisible = 0 != _visibleItemsCount;
                     _showBar.EmitCanExecuteChanged();
                     EmitPropertyChanged("IsBarAvailable");
+                    EmitPropertyChanged("IsBarSticky");
                 }
             }
         }
@@ -98,7 +99,16 @@
 
         public bool IsBarSticky
         {
-            get { return _isBarSticky; }
+            get
+            {
+                //
+                // If the bar is not available, it is also sticky.
+                // When the bar is not available, al its UI is hidden, but the platform still activates the bar upon a right-click,
+                // which for a non-sticky bar shows a transparent overlay over the entire window that blocks all mouse events.
+                //
+                return this.IsBarAvailable ? _isBarSticky : true;
+            }
+
             set { this.SetProperty<bool>(ref _isBarSticky, value); }
         }
 
@@ -141,6 +151,7 @@
                         this.IsShowBarButtonVisible = true;
                         _showBar.EmitCanExecuteChanged();
                         EmitPropertyChanged("IsBarAvailable");
+                        EmitPropertyChanged("IsBarSticky");
                     }
                 }
                 else
@@ -151,6 +162,7 @@
                         this.IsShowBarButtonVisible = false;
                         _showBar.EmitCanExecuteChanged();
                         EmitPropertyChanged("IsBarAvailable");
+                        EmitPropertyChanged("IsBarSticky");
                     }
                 }
             }
