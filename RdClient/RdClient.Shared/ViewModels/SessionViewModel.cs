@@ -108,9 +108,6 @@ namespace RdClient.Shared.ViewModels
                 args.RdpConnection.Events.ClientConnected += HandleConnected;
                 args.RdpConnection.Events.ClientDisconnected += HandleDisconnected;
                 args.RdpConnection.Events.ClientAsyncDisconnect += HandleAsyncDisconnect;
-                //args.RdpConnection.Events.ConnectionHealthStateChanged += HandleConnectionHealthStateChanged;
-                //args.RdpConnection.Events.ClientAutoReconnecting += HanldeClientAutoReconnecting;
-                //args.RdpConnection.Events.ClientAutoReconnectComplete += HandleClientAutoReconnectComplete;
                 this.MouseViewModel.RdpConnection = args.RdpConnection;
                 this.MouseViewModel.DeferredExecution = this;
             };
