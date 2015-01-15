@@ -25,13 +25,13 @@ namespace RdClient.Controls
     public sealed partial class MouseLayerControl : UserControl
     {
         private CoreCursor _exitCursor;
-        private PointerModel _pointerModel;
+        private PointerManipulator _pointerModel;
 
         public MouseLayerControl()
         {
             this.InitializeComponent();                       
 
-            _pointerModel = new PointerModel(new WinrtThreadPoolTimer());
+            _pointerModel = new PointerManipulator(new WinrtThreadPoolTimer());
             _pointerModel.MousePointerChanged += (s, o) => { var ignore = this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { this.MousePointer = o; }); };
             this.SizeChanged += (s, o) => { _pointerModel.WindowSize = o.NewSize; };
         }

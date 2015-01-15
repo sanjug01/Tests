@@ -38,7 +38,7 @@ namespace RdClient.Shared.Test.Model
         {
             MousePointer mousePointer = new MousePointer(0, (float) 0.0, (float) 0.0);
             TestTimer timer = new TestTimer();
-            PointerModel pointerModel = new PointerModel(timer);
+            PointerManipulator pointerModel = new PointerManipulator(timer);
             pointerModel.WindowSize = new Size(250.0, 250.0);
             pointerModel.MousePointerChanged += (s, o) => { mousePointer = (o as MousePointer); };
 
@@ -59,7 +59,7 @@ namespace RdClient.Shared.Test.Model
             MousePointer mousePointer = new MousePointer(0, (float)0.0, (float)0.0);
             int mousePointerChanges = 0;           
             TestTimer timer = new TestTimer();
-            PointerModel pointerModel = new PointerModel(timer);
+            PointerManipulator pointerModel = new PointerManipulator(timer);
             pointerModel.WindowSize = new Size(250.0, 250.0);
             pointerModel.MousePointerChanged += (s, o) => { mousePointer = (o as MousePointer); mousePointerChanges++;  };
 
@@ -88,7 +88,7 @@ namespace RdClient.Shared.Test.Model
             MousePointer mousePointer = new MousePointer(0, (float)0.0, (float)0.0);
             int mousePointerChanges = 0;
             TestTimer timer = new TestTimer();
-            PointerModel pointerModel = new PointerModel(timer);
+            PointerManipulator pointerModel = new PointerManipulator(timer);
             pointerModel.WindowSize = new Size(250.0, 250.0);
             pointerModel.MousePointerChanged += (s, o) => { mousePointer = (o as MousePointer); mousePointerChanges++; };
 
@@ -124,7 +124,7 @@ namespace RdClient.Shared.Test.Model
         {
             List<MousePointer> mousePointers = new List<MousePointer>();
             TestTimer timer = new TestTimer();
-            PointerModel pointerModel = new PointerModel(timer);
+            PointerManipulator pointerModel = new PointerManipulator(timer);
             pointerModel.WindowSize = new Size(250.0, 250.0);
             pointerModel.MousePointerChanged += (s, o) => { mousePointers.Add(o as MousePointer); };
 
@@ -153,7 +153,7 @@ namespace RdClient.Shared.Test.Model
         {
             List<MousePointer> mousePointers = new List<MousePointer>();
             TestTimer timer = new TestTimer();
-            PointerModel pointerModel = new PointerModel(timer);
+            PointerManipulator pointerModel = new PointerManipulator(timer);
             pointerModel.WindowSize = new Size(250.0, 250.0);
             pointerModel.MousePointerChanged += (s, o) => { mousePointers.Add(o as MousePointer); };
 
@@ -195,7 +195,7 @@ namespace RdClient.Shared.Test.Model
         {
             List<MousePointer> mousePointers = new List<MousePointer>();
             TestTimer timer = new TestTimer();
-            PointerModel pointerModel = new PointerModel(timer);
+            PointerManipulator pointerModel = new PointerManipulator(timer);
             pointerModel.WindowSize = new Size(250.0, 250.0);
             pointerModel.MousePointerChanged += (s, o) => { mousePointers.Add(o as MousePointer); };
 
@@ -221,7 +221,7 @@ namespace RdClient.Shared.Test.Model
         {
             List<MousePointer> mousePointers = new List<MousePointer>();
             TestTimer timer = new TestTimer();
-            PointerModel pointerModel = new PointerModel(timer);
+            PointerManipulator pointerModel = new PointerManipulator(timer);
             pointerModel.WindowSize = new Size(250.0, 250.0);
             pointerModel.MousePointerChanged += (s, o) => { mousePointers.Add(o as MousePointer); };
 
