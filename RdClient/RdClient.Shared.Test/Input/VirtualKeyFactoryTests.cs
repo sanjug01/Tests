@@ -57,5 +57,61 @@
                 Assert.IsInstanceOfType(key, typeof(DummyVirtualKey));
             }
         }
+
+        [TestMethod]
+        public void VirtualKeyFactory_Emoticon_CharacterKey()
+        {
+            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink(), new State());
+            CorePhysicalKeyStatus status = new CorePhysicalKeyStatus()
+            {
+                ScanCode = 0,
+                RepeatCount = 1
+            };
+
+            IVirtualKey key = factory.MakeVirtualKey((VirtualKey)231, status);
+            Assert.IsInstanceOfType(key, typeof(CharacterKey));
+        }
+
+        [TestMethod]
+        public void VirtualKeyFactory_LeftShift_SingleReleaseKey()
+        {
+            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink(), new State());
+            CorePhysicalKeyStatus status = new CorePhysicalKeyStatus()
+            {
+                ScanCode = 42,
+                RepeatCount = 1
+            };
+
+            IVirtualKey key = factory.MakeVirtualKey(VirtualKey.Shift, status);
+            Assert.IsInstanceOfType(key, typeof(SingleReleaseKey));
+        }
+
+        [TestMethod]
+        public void VirtualKeyFactory_RightShift_SingleReleaseKey()
+        {
+            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink(), new State());
+            CorePhysicalKeyStatus status = new CorePhysicalKeyStatus()
+            {
+                ScanCode = 54,
+                RepeatCount = 1
+            };
+
+            IVirtualKey key = factory.MakeVirtualKey(VirtualKey.Shift, status);
+            Assert.IsInstanceOfType(key, typeof(SingleReleaseKey));
+        }
+
+        [TestMethod]
+        public void VirtualKeyFactory_G_ExtendedKey()
+        {
+            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink(), new State());
+            CorePhysicalKeyStatus status = new CorePhysicalKeyStatus()
+            {
+                ScanCode = 34,
+                RepeatCount = 1
+            };
+
+            IVirtualKey key = factory.MakeVirtualKey(VirtualKey.G, status);
+            Assert.IsInstanceOfType(key, typeof(ExtendedKey));
+        }
     }
 }

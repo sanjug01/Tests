@@ -37,18 +37,22 @@
             switch(GetKeyClass(virtualKey, keyStatus))
             {
                 case VirtualKeyClass.Extended:
-                    key = AddVirtualKey(virtualKey, new ExtendedKey(virtualKey, _keyboardSink, _keyboardState));
+                    key = RegisterVirtualKey(virtualKey, new ExtendedKey(virtualKey, _keyboardSink, _keyboardState));
                     break;
 
                 case VirtualKeyClass.ReleaseAll:
-                    key = AddVirtualKey(virtualKey, new SingleReleaseKey(virtualKey, _keyboardSink, _keyboardState));
+                    key = RegisterVirtualKey(virtualKey, new SingleReleaseKey(virtualKey, _keyboardSink, _keyboardState));
                     break;
 
                 case VirtualKeyClass.Character:
-                    key = AddVirtualKey(virtualKey, new ExtendedKey(virtualKey, _keyboardSink, _keyboardState));
+                    key = RegisterVirtualKey(virtualKey, new CharacterKey(virtualKey, _keyboardSink, _keyboardState));
                     break;
 
                 default:
+                    //
+                    // All other classes are served by the single instance of DummyVirtualKey that is not
+                    // registered with the keyboard state object.
+                    //
                     key = DummyVirtualKey.Dummy;
                     break;
             }
@@ -56,7 +60,7 @@
             return key;
         }
 
-        private IVirtualKey AddVirtualKey(VirtualKey virtualKey, IVirtualKey vk)
+        private IVirtualKey RegisterVirtualKey(VirtualKey virtualKey, IVirtualKey vk)
         {
             _keyboardState.RegisterVirtualKey(virtualKey, vk);
             return vk;
@@ -94,22 +98,38 @@
                 case VirtualKey.Down:
                 case VirtualKey.Delete:
                 case VirtualKey.Insert:
+                //
+                // Arithmetic operations in the numeric keypad area
+                //
                 case VirtualKey.Divide:
                 case VirtualKey.Multiply:
                 case VirtualKey.Subtract:
                 case VirtualKey.Add:
-                    keyClass = VirtualKeyClass.Extended;
-                    break;
-
+                //
+                // "Lock" keys
+                //
                 case VirtualKey.CapitalLock:
                 case VirtualKey.NumberKeyLock:
                 case VirtualKey.Scroll:
+                    keyClass = VirtualKeyClass.Extended;
+                    break;
+
+                case (VirtualKey)231:
+                    //
+                    // VirtualKey 231 represents the emoticons on the touch keyboard.
+                    // All emoticon keys share the same scan code 0 (dumb as it is, that is how the keyboard team has done it),
+                    // and only one may be pressed at any time. Pressing the second emoticon key on the touch keyboard immediately
+                    // releases the one already pressed.
+                    // Emoticon key events are tracked by the Character key class that sends Unicode code points instead of scan codes.
+                    //
+                    keyClass = VirtualKeyClass.Character;
                     break;
 
                 default:
                     //
-                    // Alphanumeric
+                    // All other keys are sent as scan codes.
                     //
+#if false
                     if(IsKeyInRange(virtualKey, VirtualKey.A, VirtualKey.Z)
                     || IsKeyInRange(virtualKey, VirtualKey.Number0, VirtualKey.Number9)
                     || IsCharacterScanCode(keyStatus.ScanCode)
@@ -121,6 +141,8 @@
                     {
                         keyClass = VirtualKeyClass.Extended;
                     }
+#endif
+                    keyClass = VirtualKeyClass.Extended;
                     break;
             }
 
