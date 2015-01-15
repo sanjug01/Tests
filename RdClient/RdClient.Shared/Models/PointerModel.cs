@@ -95,7 +95,7 @@ namespace RdClient.Shared.Models
 
         public PointerModel(ITimer timer)
         {
-            _doubleClicktimer = new DoubleClickTimer(timer, 750);
+            _doubleClicktimer = new DoubleClickTimer(timer, 300);
             _doubleClicktimer.AddAction(DoubleClickTimer.ClickTimerType.LeftClick, MouseLeftClick);
             _doubleClicktimer.AddAction(DoubleClickTimer.ClickTimerType.RightClick, MouseRightClick);
 

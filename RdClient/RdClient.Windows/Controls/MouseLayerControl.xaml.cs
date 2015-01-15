@@ -96,6 +96,8 @@ namespace RdClient.Controls
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
         {
+            args.TranslationBehavior.DesiredDeceleration = 0.002;
+
             if(args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
             {
                 _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
