@@ -44,28 +44,23 @@
                                     MousePointerShape="{Binding MouseViewModel.MousePointerShape}"
                                     MousePointerShapePosition="{Binding MouseViewModel.MousePointerShapePosition}"/>
 
-        <controls:SessionReconnectControl 
-            x:Name="SessionReconnectLayer" 
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center"
-            Visibility="{Binding Path=IsReconnecting, Converter={StaticResource BooleanToVisibilityConverter}}"
-            />
+        <controls:SessionReconnectControl x:Name="SessionReconnectLayer" 
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          Visibility="{Binding Path=IsReconnecting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-        <StackPanel
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Right" 
-            Orientation="Horizontal">
+        <StackPanel VerticalAlignment="Bottom"
+                    HorizontalAlignment="Right" 
+                    Orientation="Horizontal">
             
             <TextBox Text="Disconnected. Attempting to reconnect (d)....." 
-                x:Uid="SessionView-ReconnectingMessage"                   
-                Visibility="{Binding Path=IsReconnecting, Converter={StaticResource BooleanToVisibilityConverter}}"
-            />
+                     x:Uid="SessionView-ReconnectingMessage"                   
+                     Visibility="{Binding Path=IsReconnecting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             
             <Button
-                Command="{Binding DisconnectCommand}"
                 x:Uid="SessionView-DisconnectButton"
-                Content="Disconnect (d)">            
-        </Button>
+                Command="{Binding DisconnectCommand}"                
+                Content="Disconnect (d)"/>
         </StackPanel>
     </Grid>
 </UserControl>
