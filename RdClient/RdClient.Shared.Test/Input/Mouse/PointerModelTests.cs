@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.Helpers;
-using RdClient.Shared.Models;
+using RdClient.Shared.Input.Mouse;
 using System.Collections.Generic;
 using Windows.Foundation;
 using MousePointer = System.Tuple<int, float, float>;

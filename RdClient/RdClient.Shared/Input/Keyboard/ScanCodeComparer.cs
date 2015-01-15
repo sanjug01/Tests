@@ -1,4 +1,4 @@
-﻿namespace RdClient.Shared.Input
+﻿namespace RdClient.Shared.Input.Keyboard
 {
     using System.Collections.Generic;
     using Windows.UI.Core;

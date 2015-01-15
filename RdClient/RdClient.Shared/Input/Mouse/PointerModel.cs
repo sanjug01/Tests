@@ -5,7 +5,7 @@ using Windows.Foundation;
 using MousePointer = System.Tuple<int, float, float>;
 
 
-namespace RdClient.Shared.Models
+namespace RdClient.Shared.Input.Mouse
 {
     public class DoubleClickTimer
     {

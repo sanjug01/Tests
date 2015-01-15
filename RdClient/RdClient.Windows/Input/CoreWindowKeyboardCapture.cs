@@ -1,6 +1,6 @@
 ﻿namespace RdClient.Input
 {
-    using RdClient.Shared.Input;
+    using RdClient.Shared.Input.Keyboard;
     using System;
     using System.Diagnostics.Contracts;
     using System.Threading;

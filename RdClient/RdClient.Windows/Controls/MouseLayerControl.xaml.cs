@@ -1,18 +1,14 @@
 ﻿using System;
-using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace RdClient.Controls
 {
     using RdClient.Shared.Converters;
     using RdClient.Shared.Helpers;
-    using RdClient.Shared.Models;
-    using System.Diagnostics;
+    using RdClient.Shared.Input.Mouse;
     using Windows.UI.Core;
     // int mouseState, float x, float y;
     // mouseState is:

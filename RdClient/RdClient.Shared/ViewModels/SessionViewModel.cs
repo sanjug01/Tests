@@ -1,7 +1,7 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Helpers;
-using RdClient.Shared.Input;
+using RdClient.Shared.Input.Keyboard;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using System;
