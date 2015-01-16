@@ -1,5 +1,4 @@
-﻿using System;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
@@ -7,21 +6,9 @@ using Windows.UI.Xaml.Media;
 namespace RdClient.Controls
 {
     using RdClient.Shared.Converters;
-    using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Mouse;
     using Windows.Foundation;
     using Windows.UI.Core;
-    // int mouseState, float x, float y;
-    // mouseState is:
-    // 0: LeftPress
-    // 1: LeftRelease
-    // 2: MouseHWheel
-    // 3: Mousewheel
-    // 4: Move
-    // 5: RightPress
-    // 6: RightRelease
-    using MousePointer = Tuple<int, float, float>;
-    using Position = Tuple<float, float>;
 
     public sealed partial class MouseLayerControl : UserControl
     {
@@ -30,10 +17,6 @@ namespace RdClient.Controls
         public MouseLayerControl()
         {
             this.InitializeComponent();                       
-
-            //_pointerModel = new PointerManipulator(new WinrtThreadPoolTimer());
-            //_pointerModel.MousePointerChanged += (s, o) => { var ignore = this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { this.MousePointer = o; }); };
-            //this.SizeChanged += (s, o) => { _pointerModel.WindowSize = o.NewSize; };
         }
 
         public static readonly DependencyProperty PointerEventConsumerProperty = DependencyProperty.Register(
