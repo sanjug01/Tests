@@ -35,7 +35,21 @@ namespace RdClient.Shared.ViewModels
         public Point MousePosition 
         {
             get { return new Point(_mousePosition.X - _xHotspot, _mousePosition.Y - _yHotspot); }
-            set { SetProperty(ref _mousePosition, value); } 
+            set {
+                Point p = new Point(
+                    Math.Max(0.0, Math.Min(value.X, this.ViewSize.Width)),
+                    Math.Max(0.0, Math.Min(value.Y, this.ViewSize.Height))
+                );
+
+                SetProperty(ref _mousePosition, p); 
+            } 
+        }
+
+        private Size _viewSize = new Size(0.0,0.0);
+        public Size ViewSize
+        {
+            get { return _viewSize; }
+            set { SetProperty(ref _viewSize, value); }
         }
 
         private IRdpConnection _rdpConnection;

@@ -9,7 +9,7 @@
     xmlns:c="using:RdClient.Converters"        
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
+    mc:Ignorable="d"    
     >
        
     
@@ -34,7 +34,8 @@
         property of the sesion panel. The session panel will execute the command
         as soon as its swap chain panel will have initialized.
         -->
-        <controls:RdSessionPanel ConnectCommand="{Binding ConnectCommand}" />
+        <controls:RdSessionPanel ConnectCommand="{Binding ConnectCommand}"
+                                 ViewSize="{Binding MouseViewModel.ViewSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <controls:MouseLayerControl x:Name="MouseLayer" 
                                     Background="Red"

@@ -28,5 +28,18 @@ namespace RdClient.Shared.Test.ViewModels
                 Assert.AreEqual(new Point(10.0, 10.0), mvm.MousePosition);
             }
         }
+
+        [TestMethod]
+        public void MouseViewModel_MousePositionClamping()
+        {
+            MouseViewModel mvm = new MouseViewModel();
+            mvm.ViewSize = new Size(10.0, 10.0);
+
+            mvm.MousePosition = new Point(20.0, 20.0);
+            Assert.AreEqual(new Point(10.0, 10.0), mvm.MousePosition);
+
+            mvm.MousePosition = new Point(-5.0, -5.0);
+            Assert.AreEqual(new Point(0.0, 0.0), mvm.MousePosition);
+        }
     }
 }
