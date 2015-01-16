@@ -142,9 +142,16 @@
             IVirtualKey registeredKey;
 
             if (!_characterKeys.TryGetValue(keyStatus, out registeredKey))
+            {
                 _characterKeys.Add(keyStatus, vk);
+            }
             else
-                throw new ArgumentException("Duplicate physical key registration", "vk");
+            {
+                if (!object.ReferenceEquals(vk, registeredKey))
+                {
+                    throw new ArgumentException("Duplicate physical key registration", "vk");
+                }
+            }
         }
 
         IVirtualKey IKeyboardState.UnregisterPhysicalKey(CorePhysicalKeyStatus keyStatus)

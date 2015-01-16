@@ -50,20 +50,6 @@
             }
         }
 
-        private sealed class KeyEventArgs : EventArgs
-        {
-            public readonly int KeyCode;
-            public readonly bool IsScanCode, IsExtendedKey, IsKeyReleased;
-
-            public KeyEventArgs(int keyCode, bool isScanCode, bool isExtendedKey, bool isKeyReleased)
-            {
-                KeyCode = keyCode;
-                IsScanCode = isScanCode;
-                IsExtendedKey = isExtendedKey;
-                IsKeyReleased = isKeyReleased;
-            }
-        }
-
         private sealed class VirtualKeyEventArgs : EventArgs
         {
             public readonly CoreAcceleratorKeyEventType EventType;
@@ -86,8 +72,6 @@
 
             void IKeyboardCaptureSink.ReportKeystroke(int keyCode, bool isScanCode, bool isExtendedKey, bool isKeyReleased)
             {
-                if (null != this.Keystroke)
-                    this.Keystroke(this, new KeyEventArgs(keyCode, isScanCode, isExtendedKey, isKeyReleased));
             }
         }
 
@@ -204,6 +188,17 @@
             _iState.RegisterPhysicalKey(status, key);
             Assert.AreSame(key, _iState.UnregisterPhysicalKey(status));
             Assert.AreNotSame(key, _iState.UnregisterPhysicalKey(status));
+        }
+
+        [TestMethod]
+        public void KeyboardState_RegisterSamePhysicalKey_Registers()
+        {
+            TestKey key = new TestKey();
+            CorePhysicalKeyStatus status = new CorePhysicalKeyStatus() { ScanCode = 50 };
+
+            _iState.RegisterPhysicalKey(status, key);
+            _iState.RegisterPhysicalKey(status, key);
+            Assert.AreSame(key, _iState.UnregisterPhysicalKey(status));
         }
 
         [TestMethod]
