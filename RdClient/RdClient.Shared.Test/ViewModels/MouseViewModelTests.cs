@@ -17,6 +17,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.RdpConnection connection = new Mock.RdpConnection(eventSource))
             {
                 MouseViewModel mvm = new MouseViewModel();
+                mvm.ViewSize = new Size(20.0, 20.0);
 
                 mvm.RdpConnection = connection;
 
