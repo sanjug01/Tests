@@ -2,9 +2,14 @@
 
 namespace RdClient.Shared.Input.Mouse
 {
+    public interface ITestNarf
+    {
+        int Get();
+    }
+
     public interface IPointerEventConsumer
     {
-        void Reset();
         void ConsumeEvent(PointerEvent pointerEvent);
+        void Reset();
     }
 }

@@ -9,29 +9,33 @@ using Windows.UI.Xaml.Media.Imaging;
 namespace RdClient.Shared.ViewModels
 {
 
-    using MousePointer = Tuple<int, float, float>;
-    using Position = Tuple<float, float>;
+    using RdClient.Shared.Input.Mouse;
+    using Windows.Foundation;
 
-    public class MouseViewModel : MutableObject
+    public class MouseViewModel : MutableObject, IPointerManipulator
     {
         private float _xHotspot = (float)0.0;
         private float _yHotspot = (float)0.0;
-        private MousePointer _mousePointer;
-        public MousePointer MousePointer { 
-            get { return _mousePointer; } 
-            set {
-                SetProperty(ref _mousePointer, value);
-                OnMousePointerChanged();
-            } 
+
+        private IPointerEventConsumer _pointerEventConsumer;
+        public IPointerEventConsumer PointerEventConsumer
+        {
+            get { return _pointerEventConsumer; }
+            set { SetProperty(ref _pointerEventConsumer, value); }
         }
 
-        private ImageSource _mousePointerShape;
-        public ImageSource MousePointerShape { get { return _mousePointerShape; } set { SetProperty(ref _mousePointerShape, value); } }
+        private ImageSource _mouseShape;
+        public ImageSource MouseShape 
+        { 
+            get { return _mouseShape; } 
+            set { SetProperty(ref _mouseShape, value); } 
+        }
 
-        private Position _mousePointerShapePosition = new Position((float) 0.0, (float) 0.0);
-        public Position MousePointerShapePosition { 
-            get { return new Position(_mousePointerShapePosition.Item1 - _xHotspot, _mousePointerShapePosition.Item2 - _yHotspot); } 
-            set { SetProperty(ref _mousePointerShapePosition, value); } 
+        private Point _mousePosition = new Point(0.0, 0.0);
+        public Point MousePosition 
+        {
+            get { return new Point(_mousePosition.X - _xHotspot, _mousePosition.Y - _yHotspot); }
+            set { SetProperty(ref _mousePosition, value); } 
         }
 
         private IRdpConnection _rdpConnection;
@@ -54,6 +58,7 @@ namespace RdClient.Shared.ViewModels
 
         public MouseViewModel()
         {
+            this.PointerEventConsumer = new PointerEventConsumer(new WinrtThreadPoolTimer(), this);
         }
 
         private void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
@@ -106,7 +111,7 @@ namespace RdClient.Shared.ViewModels
                         };
                     }
 
-                    this.MousePointerShape = spBitmap;
+                    this.MouseShape = spBitmap;
                 }
             });
         }
@@ -116,45 +121,11 @@ namespace RdClient.Shared.ViewModels
 
         }
 
-        private void OnMousePointerChanged()
+        public void SendMouseAction(MouseEventType eventType)
         {
-            float xPos = this.MousePointer.Item2;
-            float yPos = this.MousePointer.Item3;
-            MouseEventType eventType = MouseEventType.Unknown;
-
-            switch(this.MousePointer.Item1)
+            if (_rdpConnection != null)
             {
-                case(0):
-                    eventType = MouseEventType.LeftPress;
-                    break;
-                case (1):
-                    eventType = MouseEventType.LeftRelease;
-                    break;
-                case (2):
-                    eventType = MouseEventType.MouseHWheel;
-                    break;
-                case (3):
-                    eventType = MouseEventType.MouseWheel;
-                    break;
-                case (4):
-                    eventType = MouseEventType.Move;
-                    break;
-                case (5):
-                    eventType = MouseEventType.RightPress;
-                    break;
-                case (6):
-                    eventType = MouseEventType.RightRelease;
-                    break;
-                default:
-                    eventType = MouseEventType.Unknown;
-                    break;
-            }
-
-            this.MousePointerShapePosition = new Position(xPos, yPos);
-
-            if(_rdpConnection != null)
-            {
-                _rdpConnection.SendMouseEvent(eventType, xPos, yPos);            
+                _rdpConnection.SendMouseEvent(eventType, (float) this.MousePosition.X, (float) this.MousePosition.Y);
             }
         }
     }

@@ -1,12 +1,11 @@
-﻿using RdClient.Shared.Helpers;
+﻿using RdClient.Shared.CxWrappers;
 using Windows.Foundation;
+
 namespace RdClient.Shared.Input.Mouse
 {
     public interface IPointerManipulator
     {
-        Point CursorPosition { get; set; }
-        Size WindowSize { get; set; }
-
-        void ChangeMousePointer(PointerEventType eventType);
+        Point MousePosition { get; set; }
+        void SendMouseAction(MouseEventType eventType);
     }
 }

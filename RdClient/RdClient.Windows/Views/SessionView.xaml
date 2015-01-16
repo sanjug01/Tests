@@ -40,9 +40,9 @@
                                     Background="Red"
                                     VerticalContentAlignment="Stretch"
                                     HorizontalContentAlignment="Stretch"
-                                    MousePointer="{Binding MouseViewModel.MousePointer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    MousePointerShape="{Binding MouseViewModel.MousePointerShape}"
-                                    MousePointerShapePosition="{Binding MouseViewModel.MousePointerShapePosition}"/>
+                                    PointerEventConsumer="{Binding MouseViewModel.PointerEventConsumer}"
+                                    MouseShape="{Binding MouseViewModel.MouseShape}"
+                                    MousePosition="{Binding MouseViewModel.MousePosition}"/>
 
         <controls:SessionReconnectControl x:Name="SessionReconnectLayer" 
                                           VerticalAlignment="Center"

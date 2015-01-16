@@ -9,6 +9,7 @@ namespace RdClient.Controls
     using RdClient.Shared.Converters;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Mouse;
+    using Windows.Foundation;
     using Windows.UI.Core;
     // int mouseState, float x, float y;
     // mouseState is:
@@ -25,69 +26,61 @@ namespace RdClient.Controls
     public sealed partial class MouseLayerControl : UserControl
     {
         private CoreCursor _exitCursor;
-        private PointerManipulator _pointerModel;
 
         public MouseLayerControl()
         {
             this.InitializeComponent();                       
 
-            _pointerModel = new PointerManipulator(new WinrtThreadPoolTimer());
-            _pointerModel.MousePointerChanged += (s, o) => { var ignore = this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { this.MousePointer = o; }); };
-            this.SizeChanged += (s, o) => { _pointerModel.WindowSize = o.NewSize; };
+            //_pointerModel = new PointerManipulator(new WinrtThreadPoolTimer());
+            //_pointerModel.MousePointerChanged += (s, o) => { var ignore = this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { this.MousePointer = o; }); };
+            //this.SizeChanged += (s, o) => { _pointerModel.WindowSize = o.NewSize; };
         }
 
-        public static readonly DependencyProperty MousePointerProperty = DependencyProperty.Register(
-            "MousePointer", typeof(MousePointer),
-            typeof(MouseLayerControl), new PropertyMetadata(true, MousePointerPropertyChanged));
-
-        public MousePointer MousePointer
+        public static readonly DependencyProperty PointerEventConsumerProperty = DependencyProperty.Register(
+            "PointerEventConsumer", typeof(PointerEventConsumer),
+            typeof(MouseLayerControl), new PropertyMetadata(true, PointerEventConsumerPropertyChanged));
+        public PointerEventConsumer PointerEventConsumer
         {
-            get { return (MousePointer)GetValue(MousePointerProperty); }
-            set { SetValue(MousePointerProperty, value); }
+            private get { return (PointerEventConsumer)GetValue(PointerEventConsumerProperty); }
+            set { SetValue(PointerEventConsumerProperty, value); }
         }
-
-        private static void MousePointerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void PointerEventConsumerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-
+            IPointerEventConsumer pec = e.NewValue as IPointerEventConsumer;
         }
 
-        public static readonly DependencyProperty MousePointerShapeProperty = DependencyProperty.Register(
-            "MousePointerShape", typeof(ImageSource),
-            typeof(MouseLayerControl), new PropertyMetadata(true, MousePointerShapePropertyChanged));
-
-        public ImageSource MousePointerShape
+        public static readonly DependencyProperty MouseShapeProperty = DependencyProperty.Register(
+            "MouseShape", typeof(ImageSource),
+            typeof(MouseLayerControl), new PropertyMetadata(true, MouseShapePropertyChanged));
+        public ImageSource MouseShape
         {
-            get { return (ImageSource)GetValue(MousePointerProperty); }
-            set { SetValue(MousePointerProperty, value); }
+            private get { return (ImageSource)GetValue(MouseShapeProperty); }
+            set { SetValue(MouseShapeProperty, value); }
         }
-        private static void MousePointerShapePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+
+        private static void MouseShapePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             MouseLayerControl mlc = d as MouseLayerControl;
             
-            mlc.MousePointerShapeElement.Source = e.NewValue as ImageSource;
+            mlc.MouseShapeElement.Source = e.NewValue as ImageSource;
         }
 
-        public static readonly DependencyProperty MousePointerShapePositionProperty = DependencyProperty.Register(
-            "MousePointerShapePosition", typeof(Position),
-            typeof(MouseLayerControl), new PropertyMetadata(true, MousePointerShapePositionPropertyChanged));
-
-        public Position MousePointerShapePosition
+        public static readonly DependencyProperty MousePositionProperty = DependencyProperty.Register(
+            "MousePosition", typeof(Point),
+            typeof(MouseLayerControl), new PropertyMetadata(true, MousePositionPropertyPropertyChanged));
+        public Point MousePosition
         {
-            get { return (Position)GetValue(MousePointerShapePositionProperty); }
-            set { SetValue(MousePointerProperty, value); }
+            private get { return (Point)GetValue(MousePositionProperty); }
+            set { SetValue(MousePositionProperty, value); }
         }
-        private static void MousePointerShapePositionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+
+        private static void MousePositionPropertyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             MouseLayerControl mlc = d as MouseLayerControl;
-            Position position = e.NewValue as Position;
+            Point position = (Point) e.NewValue;
 
-            mlc.MousePointerShapeElementTranslateTransform.X = position.Item1;
-            mlc.MousePointerShapeElementTranslateTransform.Y = position.Item2;
-        }
-
-        void MousePointerShapeChangedHandler()
-        {
-            
+            mlc.MouseShapeElementTranslateTransform.X = position.X;
+            mlc.MouseShapeElementTranslateTransform.Y = position.Y;
         }
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
@@ -96,7 +89,7 @@ namespace RdClient.Controls
 
             if(args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
             {
-                _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
+                PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
             }
         }
 
@@ -104,7 +97,7 @@ namespace RdClient.Controls
         {
             if (args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
             {
-                _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationDeltaArgsConverter(args));
+                PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationDeltaArgsConverter(args));
             }
         }
 
@@ -112,28 +105,28 @@ namespace RdClient.Controls
         {
             if (args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
             {
-                _pointerModel.ConsumeEvent(PointerEventConverter.ManipulationCompletedArgsConverter(args));
+                PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationCompletedArgsConverter(args));
             }
         }
 
         protected override void OnPointerCanceled(PointerRoutedEventArgs args)
         {
-            _pointerModel.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
         }
 
         protected override void OnPointerReleased(PointerRoutedEventArgs args)
         {
-            _pointerModel.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
         }
 
         protected override void OnPointerPressed(PointerRoutedEventArgs args)
         {
-            _pointerModel.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
         }
 
         protected override void OnPointerMoved(PointerRoutedEventArgs args)
-        {
-            _pointerModel.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+        {            
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
         }
 
         protected override void OnPointerEntered(PointerRoutedEventArgs args)

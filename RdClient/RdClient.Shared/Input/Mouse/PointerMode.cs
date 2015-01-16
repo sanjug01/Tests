@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Helpers;
+﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,14 +96,14 @@ namespace RdClient.Shared.Input.Mouse
 
             _stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.LeftDrag,
             (o) => { return MoveThresholdExceeded(o); },
-            (o) => { UpdateCursorPosition(o); _pointerManipulator.ChangeMousePointer(PointerEventType.LeftPress); });
+            (o) => { UpdateCursorPosition(o); _pointerManipulator.SendMouseAction(MouseEventType.LeftPress); });
             _stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.Idle,
             (o) => { return NumberOfContacts(o) == 0; },
             (o) => { MouseLeftClick(); MouseLeftClick(); });
 
             _stateMachine.AddTransition(PointerState.RightDoubleDown, PointerState.RightDrag,
             (o) => { return MoveThresholdExceeded(o); },
-            (o) => { UpdateCursorPosition(o); _pointerManipulator.ChangeMousePointer(PointerEventType.RightPress); });
+            (o) => { UpdateCursorPosition(o); _pointerManipulator.SendMouseAction(MouseEventType.RightPress); });
             _stateMachine.AddTransition(PointerState.RightDoubleDown, PointerState.Idle,
             (o) => { return NumberOfContacts(o) == 0; },
             (o) => { });
@@ -119,14 +120,14 @@ namespace RdClient.Shared.Input.Mouse
             (o) => { MouseMove(o); });
             _stateMachine.AddTransition(PointerState.LeftDrag, PointerState.Idle,
             (o) => { return NumberOfContacts(o) == 0; },
-            (o) => { _pointerManipulator.ChangeMousePointer(PointerEventType.LeftRelease); });
+            (o) => { _pointerManipulator.SendMouseAction(MouseEventType.LeftRelease); });
 
             _stateMachine.AddTransition(PointerState.RightDrag, PointerState.RightDrag,
             (o) => { return MoveThresholdExceeded(o); },
             (o) => { MouseMove(o); });
             _stateMachine.AddTransition(PointerState.RightDrag, PointerState.Idle,
             (o) => { return NumberOfContacts(o) == 0; },
-            (o) => { _pointerManipulator.ChangeMousePointer(PointerEventType.RightRelease); });
+            (o) => { _pointerManipulator.SendMouseAction(MouseEventType.RightRelease); });
 
             _stateMachine.AddTransition(PointerState.Inertia, PointerState.Inertia,
             (o) => { return (o).Inertia == true; },
@@ -169,26 +170,24 @@ namespace RdClient.Shared.Input.Mouse
 
         private void MouseLeftClick()
         {
-            _pointerManipulator.ChangeMousePointer(PointerEventType.LeftPress);
-            _pointerManipulator.ChangeMousePointer(PointerEventType.LeftRelease);
+            _pointerManipulator.SendMouseAction(MouseEventType.LeftPress);
+            _pointerManipulator.SendMouseAction(MouseEventType.LeftRelease);
         }
 
         private void MouseRightClick()
         {
-            _pointerManipulator.ChangeMousePointer(PointerEventType.RightPress);
-            _pointerManipulator.ChangeMousePointer(PointerEventType.RightRelease);
+            _pointerManipulator.SendMouseAction(MouseEventType.RightPress);
+            _pointerManipulator.SendMouseAction(MouseEventType.RightRelease);
         }
 
         private void MouseMove(PointerEvent pointerEvent)
         {
             UpdateCursorPosition(pointerEvent);
-            _pointerManipulator.ChangeMousePointer(PointerEventType.Move);
+            _pointerManipulator.SendMouseAction(MouseEventType.Move);
         }
 
         public void UpdateCursorPosition(PointerEvent pointerEvent)
         {
-            Point oldPoint = _pointerManipulator.CursorPosition;
-            Point newPoint = new Point();
             double deltaX = 0.0;
             double deltaY = 0.0;
 
@@ -204,11 +203,7 @@ namespace RdClient.Shared.Input.Mouse
                 deltaY = pointerEvent.Delta.Y;
             }
 
-
-            newPoint.X = Math.Min(Math.Max(0.0, oldPoint.X + deltaX), _pointerManipulator.WindowSize.Width);
-            newPoint.Y = Math.Min(Math.Max(0.0, oldPoint.Y + deltaY), _pointerManipulator.WindowSize.Height);
-
-            _pointerManipulator.CursorPosition = newPoint;
+            _pointerManipulator.MousePosition = new Point(_pointerManipulator.MousePosition.X + deltaX, _pointerManipulator.MousePosition.Y + deltaY);
         }
 
         public void ConsumeEvent(PointerEvent pointerEvent)

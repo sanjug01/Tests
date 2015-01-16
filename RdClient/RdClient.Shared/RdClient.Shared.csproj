@@ -133,7 +133,7 @@
     <Compile Include="LifeTimeManagement\LaunchEventArgs.cs" />
     <Compile Include="LifeTimeManagement\SuspendEventArgs.cs" />
     <Compile Include="Models\GeneralSettings.cs" />
-    <Compile Include="Input\Mouse\PointerModel.cs" />
+    <Compile Include="Input\Mouse\PointerEventConsumer.cs" />
     <Compile Include="Models\RemoteApplication.cs" />
     <Compile Include="Models\CloudWorkspace.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />

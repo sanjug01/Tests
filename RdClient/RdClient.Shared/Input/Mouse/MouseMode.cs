@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Helpers;
+﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,27 +48,27 @@ namespace RdClient.Shared.Input.Mouse
 
             float x = (float)pointerEvent.Position.X;
             float y = (float)pointerEvent.Position.Y;
-            PointerEventType buttonState = PointerEventType.Move;
+            MouseEventType buttonState = MouseEventType.Move;
 
             if (MouseLeftButton(0) == false && pointerEvent.LeftButton == true)
             {
-                buttonState = PointerEventType.LeftPress;
+                buttonState = MouseEventType.LeftPress;
             }
             else if (MouseLeftButton(0) == true && pointerEvent.LeftButton == false)
             {
-                buttonState = PointerEventType.LeftRelease;
+                buttonState = MouseEventType.LeftRelease;
             }
             else if (MouseRightButton(0) == false && pointerEvent.RightButton == true)
             {
-                buttonState = PointerEventType.RightPress;
+                buttonState = MouseEventType.RightPress;
             }
             else if (MouseRightButton(0) == true && pointerEvent.RightButton == false)
             {
-                buttonState = PointerEventType.RightRelease;
+                buttonState = MouseEventType.RightRelease;
             }
 
-            _pointerManipulator.CursorPosition = new Point(x, y);
-            _pointerManipulator.ChangeMousePointer(buttonState);
+            _pointerManipulator.MousePosition = new Point(x, y);
+            _pointerManipulator.SendMouseAction(buttonState);
         }
 
         public void ConsumeEvent(PointerEvent pointerEvent)
