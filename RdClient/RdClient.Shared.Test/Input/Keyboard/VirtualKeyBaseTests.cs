@@ -189,6 +189,12 @@
         }
 
         [TestMethod]
+        public void DummyVirtualKey_Clear_CodeCoverageBumbsUp()
+        {
+            DummyVirtualKey.Dummy.Clear();
+        }
+
+        [TestMethod]
         public void NewVirtualKey_ConstructedCorrectly()
         {
             State state = new State();
