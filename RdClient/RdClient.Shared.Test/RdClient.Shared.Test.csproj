@@ -89,6 +89,7 @@
     <Compile Include="Helpers\StateMachineTests.cs" />
     <Compile Include="Helpers\TestData.cs" />
     <Compile Include="Helpers\WinrtThreadPoolTimerTests.cs" />
+    <Compile Include="Input\Keyboard\KeyboardStateTests.cs" />
     <Compile Include="Input\Keyboard\KeystrokeEventArgsTests.cs" />
     <Compile Include="Input\Keyboard\PhysicalKeyDataContainerTests.cs" />
     <Compile Include="Input\Keyboard\ScanCodeComparerTests.cs" />

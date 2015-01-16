@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Input.Keyboard
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
@@ -12,13 +13,17 @@
         private readonly IDictionary<CorePhysicalKeyStatus, IVirtualKey> _characterKeys;
         private readonly IVirtualKeyFactory _vkFactory;
 
-        public KeyboardState(IKeyboardCaptureSink keyboardSink)
+        public KeyboardState(IKeyboardCaptureSink keyboardSink, IVirtualKeyFactory keyFactory)
         {
             Contract.Requires(null != keyboardSink);
+            Contract.Requires(null != keyFactory);
+            Contract.Ensures(null != _vkFactory);
+            Contract.Ensures(null != _characterKeys);
+            Contract.Ensures(null != _vkStates);
 
             _vkStates = new SortedDictionary<VirtualKey, IVirtualKey>();
             _characterKeys = new SortedDictionary<CorePhysicalKeyStatus, IVirtualKey>(new ScanCodeComparer());
-            _vkFactory = new VirtualKeyFactory(keyboardSink, this);
+            _vkFactory = keyFactory;
         }
 
         /// <summary>
@@ -139,7 +144,7 @@
             if (!_characterKeys.TryGetValue(keyStatus, out registeredKey))
                 _characterKeys.Add(keyStatus, vk);
             else
-                Contract.Assert(object.ReferenceEquals(registeredKey, vk));
+                throw new ArgumentException("Duplicate physical key registration", "vk");
         }
 
         IVirtualKey IKeyboardState.UnregisterPhysicalKey(CorePhysicalKeyStatus keyStatus)
@@ -178,7 +183,7 @@
                 // The key is not in the collection of pressed virtual keys;
                 // create a "new virtual key" object that will add an actual 
                 //
-                key = new NewVirtualKey(virtualKey, _vkFactory);
+                key = new NewVirtualKey(virtualKey, _vkFactory, this);
             }
 
             return key;

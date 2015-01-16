@@ -27,6 +27,10 @@
             _keyboardState = keyboardState;
             _keyboardSink = keyboardSink;
             _physicalKeys = new SortedDictionary<CorePhysicalKeyStatus, PhysicalKeyDataContainer>(new ScanCodeComparer());
+            //
+            // Register the key with the keyboard state.
+            //
+            _keyboardState.RegisterVirtualKey(virtualKey, this);
         }
 
         protected void RegisterPhysicalKey(CorePhysicalKeyStatus keyStatus)

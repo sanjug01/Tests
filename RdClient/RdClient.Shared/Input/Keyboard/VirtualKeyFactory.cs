@@ -6,7 +6,6 @@
 
     public sealed class VirtualKeyFactory : IVirtualKeyFactory
     {
-        private readonly IKeyboardState _keyboardState;
         private readonly IKeyboardCaptureSink _keyboardSink;
 
         /// <summary>
@@ -20,15 +19,13 @@
             Character
         }
 
-        public VirtualKeyFactory(IKeyboardCaptureSink keyboardSink, IKeyboardState keyboardState)
+        public VirtualKeyFactory(IKeyboardCaptureSink keyboardSink)
         {
-            Contract.Requires(null != keyboardState);
             Contract.Requires(null != keyboardSink);
-            _keyboardState = keyboardState;
             _keyboardSink = keyboardSink;
         }
 
-        IVirtualKey IVirtualKeyFactory.MakeVirtualKey(VirtualKey virtualKey, CorePhysicalKeyStatus keyStatus)
+        IVirtualKey IVirtualKeyFactory.MakeVirtualKey(VirtualKey virtualKey, CorePhysicalKeyStatus keyStatus, IKeyboardState keyboardState)
         {
             Contract.Ensures(null != Contract.Result<IVirtualKey>());
 
@@ -37,15 +34,15 @@
             switch(GetKeyClass(virtualKey, keyStatus))
             {
                 case VirtualKeyClass.Extended:
-                    key = RegisterVirtualKey(virtualKey, new ExtendedKey(virtualKey, _keyboardSink, _keyboardState));
+                    key = new ExtendedKey(virtualKey, _keyboardSink, keyboardState);
                     break;
 
                 case VirtualKeyClass.ReleaseAll:
-                    key = RegisterVirtualKey(virtualKey, new SingleReleaseKey(virtualKey, _keyboardSink, _keyboardState));
+                    key = new SingleReleaseKey(virtualKey, _keyboardSink, keyboardState);
                     break;
 
                 case VirtualKeyClass.Character:
-                    key = RegisterVirtualKey(virtualKey, new CharacterKey(virtualKey, _keyboardSink, _keyboardState));
+                    key = new CharacterKey(virtualKey, _keyboardSink, keyboardState);
                     break;
 
                 default:
@@ -58,12 +55,6 @@
             }
 
             return key;
-        }
-
-        private IVirtualKey RegisterVirtualKey(VirtualKey virtualKey, IVirtualKey vk)
-        {
-            _keyboardState.RegisterVirtualKey(virtualKey, vk);
-            return vk;
         }
 
         private static VirtualKeyClass GetKeyClass(VirtualKey virtualKey, CorePhysicalKeyStatus keyStatus)

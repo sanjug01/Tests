@@ -191,9 +191,14 @@
         [TestMethod]
         public void NewVirtualKey_ConstructedCorrectly()
         {
-            TestKey key = new TestKey(VirtualKey.Enter, new Sink(), new State());
+            State state = new State();
+            TestKey key = new TestKey(VirtualKey.Enter, new Sink(), state);
 
             Assert.AreEqual(VirtualKey.Enter, key.TestVirtualKey);
+            var registered = state.GetVirtualKeys();
+            Assert.AreEqual(1, registered.Count);
+            Assert.AreEqual(key.TestVirtualKey, registered[0].Key);
+            Assert.AreSame(key, registered[0].Value);
         }
 
         [TestMethod]
@@ -320,7 +325,6 @@
                 IVirtualKey vk = key;
                 CorePhysicalKeyStatus status = new CorePhysicalKeyStatus() { ScanCode = 50, IsExtendedKey = false };
 
-                state.RegisterVirtualKey(VirtualKey.Enter, vk);
                 vk.Update(ev.Item1, VirtualKey.Enter, status);
                 vk.Update(ev.Item2, VirtualKey.Enter, status);
                 var registered = key.TestGetPhysicalKeys();
@@ -352,7 +356,6 @@
                 key.Pressed += (sender, e) => e.DataContainer.KeyData = keyData;
                 key.Released += (sender, e) => releasedArgs.Add(e);
 
-                state.RegisterVirtualKey(VirtualKey.Enter, vk);
                 vk.Update(ev.Item1, VirtualKey.Enter, status);
                 status.IsKeyReleased = true;
                 vk.Update(ev.Item2, VirtualKey.Enter, status);
@@ -424,7 +427,6 @@
 
             key.Released += (sender, e) => ++releasedCount;
 
-            state.RegisterVirtualKey(Key, vk);
             vk.Update(CoreAcceleratorKeyEventType.KeyDown, Key, leftShift);
             vk.Update(CoreAcceleratorKeyEventType.KeyDown, Key, rightShift);
             vk.Clear();
@@ -462,7 +464,6 @@
                 Assert.AreEqual(status.ScanCode, e.KeyStatus.ScanCode);
             };
 
-            state.RegisterVirtualKey(Key, vk);
             vk.Update(CoreAcceleratorKeyEventType.KeyDown, Key, status);
             vk.Update(CoreAcceleratorKeyEventType.Character, (VirtualKey)'a', status);
             Assert.IsTrue(characterCalled);

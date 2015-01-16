@@ -44,7 +44,7 @@
         [TestMethod]
         public void VirtualKeyFactory_IgnoredKeys_DummyVirtualKey()
         {
-            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink(), new State());
+            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink());
             CorePhysicalKeyStatus status = new CorePhysicalKeyStatus()
             {
                 ScanCode = 0,
@@ -53,7 +53,7 @@
 
             foreach(VirtualKey vk in _ignoredKeys)
             {
-                IVirtualKey key = factory.MakeVirtualKey(vk, status);
+                IVirtualKey key = factory.MakeVirtualKey(vk, status, new State());
                 Assert.IsInstanceOfType(key, typeof(DummyVirtualKey));
             }
         }
@@ -61,56 +61,56 @@
         [TestMethod]
         public void VirtualKeyFactory_Emoticon_CharacterKey()
         {
-            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink(), new State());
+            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink());
             CorePhysicalKeyStatus status = new CorePhysicalKeyStatus()
             {
                 ScanCode = 0,
                 RepeatCount = 1
             };
 
-            IVirtualKey key = factory.MakeVirtualKey((VirtualKey)231, status);
+            IVirtualKey key = factory.MakeVirtualKey((VirtualKey)231, status, new State());
             Assert.IsInstanceOfType(key, typeof(CharacterKey));
         }
 
         [TestMethod]
         public void VirtualKeyFactory_LeftShift_SingleReleaseKey()
         {
-            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink(), new State());
+            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink());
             CorePhysicalKeyStatus status = new CorePhysicalKeyStatus()
             {
                 ScanCode = 42,
                 RepeatCount = 1
             };
 
-            IVirtualKey key = factory.MakeVirtualKey(VirtualKey.Shift, status);
+            IVirtualKey key = factory.MakeVirtualKey(VirtualKey.Shift, status, new State());
             Assert.IsInstanceOfType(key, typeof(SingleReleaseKey));
         }
 
         [TestMethod]
         public void VirtualKeyFactory_RightShift_SingleReleaseKey()
         {
-            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink(), new State());
+            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink());
             CorePhysicalKeyStatus status = new CorePhysicalKeyStatus()
             {
                 ScanCode = 54,
                 RepeatCount = 1
             };
 
-            IVirtualKey key = factory.MakeVirtualKey(VirtualKey.Shift, status);
+            IVirtualKey key = factory.MakeVirtualKey(VirtualKey.Shift, status, new State());
             Assert.IsInstanceOfType(key, typeof(SingleReleaseKey));
         }
 
         [TestMethod]
         public void VirtualKeyFactory_G_ExtendedKey()
         {
-            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink(), new State());
+            IVirtualKeyFactory factory = new VirtualKeyFactory(new Sink());
             CorePhysicalKeyStatus status = new CorePhysicalKeyStatus()
             {
                 ScanCode = 34,
                 RepeatCount = 1
             };
 
-            IVirtualKey key = factory.MakeVirtualKey(VirtualKey.G, status);
+            IVirtualKey key = factory.MakeVirtualKey(VirtualKey.G, status, new State());
             Assert.IsInstanceOfType(key, typeof(ExtendedKey));
         }
     }

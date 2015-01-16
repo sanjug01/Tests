@@ -90,7 +90,7 @@
         {
             Contract.Assert(null == _keyboardState);
             Contract.Ensures(null != _keyboardState);
-            _keyboardState = new KeyboardState(this);
+            _keyboardState = new KeyboardState(this, new VirtualKeyFactory(this));
         }
 
         void IKeyboardCapture.Stop()
