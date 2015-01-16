@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
-using System.Collections.Generic;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Test.Input.Mouse

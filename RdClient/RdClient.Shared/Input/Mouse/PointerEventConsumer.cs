@@ -1,9 +1,5 @@
-﻿using RdClient.Shared.CxWrappers;
-using RdClient.Shared.Helpers;
-using System;
+﻿using RdClient.Shared.Helpers;
 using System.Collections.Generic;
-using Windows.Foundation;
-using MousePointer = System.Tuple<int, float, float>;
 
 
 namespace RdClient.Shared.Input.Mouse

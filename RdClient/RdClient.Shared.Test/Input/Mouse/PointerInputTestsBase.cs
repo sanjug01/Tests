@@ -2,11 +2,7 @@
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Mouse;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Test.Input.Mouse
