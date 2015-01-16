@@ -93,6 +93,8 @@
     <Compile Include="Input\Keyboard\PhysicalKeyDataContainerTests.cs" />
     <Compile Include="Input\Keyboard\ScanCodeComparerTests.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactoryTests.cs" />
+    <Compile Include="Input\Mouse\MouseModeTests.cs" />
+    <Compile Include="Input\Mouse\PointerInputTestsBase.cs" />
     <Compile Include="Mock\BarItemsViewModel.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
