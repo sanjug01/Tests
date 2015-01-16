@@ -90,10 +90,12 @@
     <Compile Include="Helpers\TestData.cs" />
     <Compile Include="Helpers\WinrtThreadPoolTimerTests.cs" />
     <Compile Include="Input\Keyboard\CharacterKeyTests.cs" />
+    <Compile Include="Input\Keyboard\ExtendedKeyTests.cs" />
     <Compile Include="Input\Keyboard\KeyboardStateTests.cs" />
     <Compile Include="Input\Keyboard\KeystrokeEventArgsTests.cs" />
     <Compile Include="Input\Keyboard\PhysicalKeyDataContainerTests.cs" />
     <Compile Include="Input\Keyboard\ScanCodeComparerTests.cs" />
+    <Compile Include="Input\Keyboard\TestSink.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyBaseTests.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactoryTests.cs" />
     <Compile Include="Mock\BarItemsViewModel.cs" />

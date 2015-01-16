@@ -66,15 +66,6 @@
             }
         }
 
-        private sealed class Sink : IKeyboardCaptureSink
-        {
-            public event EventHandler<KeyEventArgs> Keystroke;
-
-            void IKeyboardCaptureSink.ReportKeystroke(int keyCode, bool isScanCode, bool isExtendedKey, bool isKeyReleased)
-            {
-            }
-        }
-
         private class TestKey : IVirtualKey
         {
             public event EventHandler Cleared;
@@ -95,7 +86,7 @@
             }
         }
 
-        private Sink _sink;
+        private TestSink _sink;
         private KeyFactory _keyFactory;
         private KeyboardState _state;
         private IKeyboardState _iState;
@@ -103,7 +94,7 @@
         [TestInitialize]
         public void SetUpTest()
         {
-            _sink = new Sink();
+            _sink = new TestSink();
             _keyFactory = new KeyFactory();
             _state = new KeyboardState(_sink, _keyFactory);
             _iState = _state;

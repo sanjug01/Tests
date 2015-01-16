@@ -167,10 +167,9 @@
             IVirtualKey IKeyboardState.UnregisterVirtualKey(VirtualKey virtualKey)
             {
                 IVirtualKey vk;
-                if (!_virtualKeys.TryGetValue(virtualKey, out vk))
-                    vk = DummyVirtualKey.Dummy;
-                else
-                    _virtualKeys.Remove(virtualKey);
+
+                Assert.IsTrue(_virtualKeys.TryGetValue(virtualKey, out vk));
+                _virtualKeys.Remove(virtualKey);
                 return vk;
             }
 
@@ -189,9 +188,13 @@
         }
 
         [TestMethod]
-        public void DummyVirtualKey_Clear_CodeCoverageBumbsUp()
+        public void VirtualKeys_BumpUpCodeCoverage()
         {
+            IVirtualKey key;
+
             DummyVirtualKey.Dummy.Clear();
+            key = new NewVirtualKey(VirtualKey.Enter, new VirtualKeyFactory(new Sink()), new State());
+            key.Clear();
         }
 
         [TestMethod]

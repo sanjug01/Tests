@@ -8,7 +8,7 @@
     using Windows.UI.Core;
 
     [TestClass]
-    public sealed class CharacterKeyTests
+    public sealed class ExtendedKeyTests
     {
         private TestSink _sink;
         private KeyboardState _state;
@@ -24,7 +24,7 @@
 
             IVirtualKey IVirtualKeyFactory.MakeVirtualKey(VirtualKey virtualKey, CorePhysicalKeyStatus keyStatus, IKeyboardState keyboardState)
             {
-                return new CharacterKey(virtualKey, _sink, keyboardState);
+                return new ExtendedKey(virtualKey, _sink, keyboardState);
             }
         }
 
@@ -43,68 +43,11 @@
         }
 
         [TestMethod]
-        public void CharacterKey_DownCharacterUp_UpDownCharacterReported()
+        public void ExtendedKey_DownUp_UpDownReported()
         {
+            const VirtualKey Key = VirtualKey.Enter;
             IList<TestSink.SinkEventArgs> reported = new List<TestSink.SinkEventArgs>();
-            CorePhysicalKeyStatus status = new CorePhysicalKeyStatus() { ScanCode = 0 };
-
-            _sink.Keystroke += (sender, e) =>
-            {
-                reported.Add(e);
-            };
-
-            _state.UpdateState(CoreAcceleratorKeyEventType.KeyDown, (VirtualKey)231, status);
-            _state.UpdateState(CoreAcceleratorKeyEventType.Character, (VirtualKey)'a', status);
-            status.IsKeyReleased = true;
-            _state.UpdateState(CoreAcceleratorKeyEventType.KeyUp, (VirtualKey)231, status);
-
-            Assert.AreEqual(2, reported.Count);
-            Assert.AreEqual((int)'a', reported[0].KeyCode);
-            Assert.IsFalse(reported[0].IsScanCode);
-            Assert.IsFalse(reported[0].IsKeyReleased);
-
-            Assert.AreEqual((int)'a', reported[1].KeyCode);
-            Assert.IsFalse(reported[1].IsScanCode);
-            Assert.IsTrue(reported[1].IsKeyReleased);
-        }
-
-        [TestMethod]
-        public void CharacterKey_DownCharacterDownCharacterUp_UpDownCharacterReported()
-        {
-            IList<TestSink.SinkEventArgs> reported = new List<TestSink.SinkEventArgs>();
-            CorePhysicalKeyStatus status = new CorePhysicalKeyStatus() { ScanCode = 0 };
-
-            _sink.Keystroke += (sender, e) =>
-            {
-                reported.Add(e);
-            };
-
-            _state.UpdateState(CoreAcceleratorKeyEventType.KeyDown, (VirtualKey)231, status);
-            _state.UpdateState(CoreAcceleratorKeyEventType.Character, (VirtualKey)'a', status);
-            _state.UpdateState(CoreAcceleratorKeyEventType.KeyDown, (VirtualKey)231, status);
-            _state.UpdateState(CoreAcceleratorKeyEventType.Character, (VirtualKey)'a', status);
-            status.IsKeyReleased = true;
-            _state.UpdateState(CoreAcceleratorKeyEventType.KeyUp, (VirtualKey)231, status);
-
-            Assert.AreEqual(3, reported.Count);
-            Assert.AreEqual((int)'a', reported[0].KeyCode);
-            Assert.IsFalse(reported[0].IsScanCode);
-            Assert.IsFalse(reported[0].IsKeyReleased);
-            Assert.AreEqual((int)'a', reported[1].KeyCode);
-            Assert.IsFalse(reported[1].IsScanCode);
-            Assert.IsFalse(reported[1].IsKeyReleased);
-
-            Assert.AreEqual((int)'a', reported[2].KeyCode);
-            Assert.IsFalse(reported[2].IsScanCode);
-            Assert.IsTrue(reported[2].IsKeyReleased);
-        }
-
-        [TestMethod]
-        public void CharacterKey_DownUp_NothingReported()
-        {
-            const VirtualKey Key = (VirtualKey)231;
-            IList<TestSink.SinkEventArgs> reported = new List<TestSink.SinkEventArgs>();
-            CorePhysicalKeyStatus status = new CorePhysicalKeyStatus() { ScanCode = 0 };
+            CorePhysicalKeyStatus status = new CorePhysicalKeyStatus() { ScanCode = 50 };
 
             _sink.Keystroke += (sender, e) =>
             {
@@ -115,13 +58,52 @@
             status.IsKeyReleased = true;
             _state.UpdateState(CoreAcceleratorKeyEventType.KeyUp, Key, status);
 
-            Assert.AreEqual(0, reported.Count);
+            Assert.AreEqual(2, reported.Count);
+            Assert.AreEqual((int)status.ScanCode, reported[0].KeyCode);
+            Assert.IsTrue(reported[0].IsScanCode);
+            Assert.IsFalse(reported[0].IsKeyReleased);
+
+            Assert.AreEqual((int)status.ScanCode, reported[1].KeyCode);
+            Assert.IsTrue(reported[1].IsScanCode);
+            Assert.IsTrue(reported[1].IsKeyReleased);
             Assert.IsInstanceOfType(((IKeyboardState)_state).UnregisterPhysicalKey(status), typeof(DummyVirtualKey));
             Assert.IsInstanceOfType(((IKeyboardState)_state).UnregisterVirtualKey(Key), typeof(DummyVirtualKey));
         }
 
         [TestMethod]
-        public void CharacterKey_Up_NothingReported()
+        public void ExtendedKey_DownDownUp_DownDownUpReported()
+        {
+            const VirtualKey Key = VirtualKey.Enter;
+            IList<TestSink.SinkEventArgs> reported = new List<TestSink.SinkEventArgs>();
+            CorePhysicalKeyStatus status = new CorePhysicalKeyStatus() { ScanCode = 50 };
+
+            _sink.Keystroke += (sender, e) =>
+            {
+                reported.Add(e);
+            };
+
+            _state.UpdateState(CoreAcceleratorKeyEventType.KeyDown, Key, status);
+            _state.UpdateState(CoreAcceleratorKeyEventType.KeyDown, Key, status);
+            status.IsKeyReleased = true;
+            _state.UpdateState(CoreAcceleratorKeyEventType.KeyUp, Key, status);
+
+            Assert.AreEqual(3, reported.Count);
+            Assert.AreEqual((int)status.ScanCode, reported[0].KeyCode);
+            Assert.IsTrue(reported[0].IsScanCode);
+            Assert.IsFalse(reported[0].IsKeyReleased);
+            Assert.AreEqual((int)status.ScanCode, reported[1].KeyCode);
+            Assert.IsTrue(reported[1].IsScanCode);
+            Assert.IsFalse(reported[1].IsKeyReleased);
+
+            Assert.AreEqual((int)status.ScanCode, reported[2].KeyCode);
+            Assert.IsTrue(reported[2].IsScanCode);
+            Assert.IsTrue(reported[2].IsKeyReleased);
+            Assert.IsInstanceOfType(((IKeyboardState)_state).UnregisterPhysicalKey(status), typeof(DummyVirtualKey));
+            Assert.IsInstanceOfType(((IKeyboardState)_state).UnregisterVirtualKey(Key), typeof(DummyVirtualKey));
+        }
+
+        [TestMethod]
+        public void ExtendedKey_Up_NothingReported()
         {
             const VirtualKey Key = (VirtualKey)231;
             IList<TestSink.SinkEventArgs> reported = new List<TestSink.SinkEventArgs>();

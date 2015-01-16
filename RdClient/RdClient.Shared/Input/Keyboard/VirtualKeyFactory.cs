@@ -76,35 +76,6 @@
                     keyClass = VirtualKeyClass.ReleaseAll;
                     break;
 
-                case VirtualKey.Control:
-                case VirtualKey.Menu:
-                case VirtualKey.Enter:
-                case VirtualKey.Home:
-                case VirtualKey.End:
-                case VirtualKey.PageUp:
-                case VirtualKey.PageDown:
-                case VirtualKey.Left:
-                case VirtualKey.Right:
-                case VirtualKey.Up:
-                case VirtualKey.Down:
-                case VirtualKey.Delete:
-                case VirtualKey.Insert:
-                //
-                // Arithmetic operations in the numeric keypad area
-                //
-                case VirtualKey.Divide:
-                case VirtualKey.Multiply:
-                case VirtualKey.Subtract:
-                case VirtualKey.Add:
-                //
-                // "Lock" keys
-                //
-                case VirtualKey.CapitalLock:
-                case VirtualKey.NumberKeyLock:
-                case VirtualKey.Scroll:
-                    keyClass = VirtualKeyClass.Extended;
-                    break;
-
                 case (VirtualKey)231:
                     //
                     // VirtualKey 231 represents the emoticons on the touch keyboard.
