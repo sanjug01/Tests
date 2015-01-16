@@ -129,53 +129,11 @@
                     //
                     // All other keys are sent as scan codes.
                     //
-#if false
-                    if(IsKeyInRange(virtualKey, VirtualKey.A, VirtualKey.Z)
-                    || IsKeyInRange(virtualKey, VirtualKey.Number0, VirtualKey.Number9)
-                    || IsCharacterScanCode(keyStatus.ScanCode)
-                    || VirtualKey.Space == virtualKey)
-                    {
-                        keyClass = VirtualKeyClass.Character;
-                    }
-                    else
-                    {
-                        keyClass = VirtualKeyClass.Extended;
-                    }
-#endif
                     keyClass = VirtualKeyClass.Extended;
                     break;
             }
 
             return keyClass;
-        }
-
-        private static bool IsKeyInRange(VirtualKey key, VirtualKey first, VirtualKey last)
-        {
-            return key >= first && key <= last;
-        }
-
-        private static bool IsCharacterScanCode(uint scanCode)
-        {
-            bool character = false;
-
-            switch(scanCode)
-            {
-                case 12:
-                case 13:
-                case 26:
-                case 27:
-                case 39:
-                case 40:
-                case 41:
-                case 43:
-                case 51:
-                case 52:
-                case 53:
-                    character = true;
-                    break;
-            }
-
-            return character;
         }
     }
 }

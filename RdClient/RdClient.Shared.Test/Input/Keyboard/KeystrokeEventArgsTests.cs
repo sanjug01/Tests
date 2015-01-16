@@ -1,4 +1,4 @@
-﻿namespace RdClient.Shared.Test.Input
+﻿namespace RdClient.Shared.Test.Input.Keyboard
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RdClient.Shared.Input.Keyboard;
