@@ -31,6 +31,10 @@
             // so it won't be included in the ForEachPhysicalKey enumeration and must be reported separately.
             //
             this.ReportKeyEvent((int)keyStatus.ScanCode, true, keyStatus.IsExtendedKey, true);
+            //
+            // Remove all physical keys so VirtualKeyBase can remove itself from the keyboard state.
+            //
+            ClearPhysicalKeys();
         }
     }
 }
