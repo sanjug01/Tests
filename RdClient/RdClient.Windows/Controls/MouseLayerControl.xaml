@@ -13,10 +13,10 @@
     ManipulationMode="All">
 
     <Canvas VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent">
-        <Image x:Name="MousePointerShapeElement" CacheMode="BitmapCache">
+        <Image x:Name="MouseShapeElement" CacheMode="BitmapCache">
             <Image.RenderTransform>
                 <TransformGroup>
-                    <TranslateTransform x:Name="MousePointerShapeElementTranslateTransform"/>
+                    <TranslateTransform x:Name="MouseShapeElementTranslateTransform"/>
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>

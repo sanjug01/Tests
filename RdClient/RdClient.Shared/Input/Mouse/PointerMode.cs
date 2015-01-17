@@ -1,69 +1,12 @@
-﻿using RdClient.Shared.Helpers;
+﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Helpers;
 using System;
 using System.Collections.Generic;
 using Windows.Foundation;
-using MousePointer = System.Tuple<int, float, float>;
-
 
 namespace RdClient.Shared.Input.Mouse
 {
-    public class DoubleClickTimer
-    {
-        public enum ClickTimerType
-        {
-            LeftClick,
-            RightClick
-        }
-
-        private ITimer _timer;
-        private double _interval;
-        private Dictionary<ClickTimerType, Action> _actions;
-        private ClickTimerType _timerType;
-
-        private bool _expired;
-        public bool IsExpired(ClickTimerType timerType)
-        {
-            bool matchingType = (timerType == _timerType);
-
-            if (matchingType == false)
-            {
-                return true;
-            }
-            else
-            {
-                return _expired;
-            }
-        }
-
-        public DoubleClickTimer(ITimer timer, double interval)
-        {
-            _actions = new Dictionary<ClickTimerType, Action>();
-            _timer = timer;
-            _interval = interval;
-            _expired = true;
-        }
-
-        public void AddAction(ClickTimerType timerType, Action action)
-        {
-            _actions[timerType] = action;
-        }
-
-        public void Reset(ClickTimerType timerType)
-        {
-            _timerType = timerType;
-            _expired = false;
-            _timer.Stop();
-            _timer.Start(() => { _expired = true; _actions[timerType](); }, TimeSpan.FromMilliseconds(_interval), false);
-        }
-
-        public void Stop()
-        {
-            _expired = true;
-            _timer.Stop();
-        }
-    }
-
-    public class PointerModel
+    public class PointerMode : IPointerEventConsumer
     {
         enum PointerState
         {
@@ -77,24 +20,18 @@ namespace RdClient.Shared.Input.Mouse
             LeftDrag,
             RightDrag
         }
-
-        private Point _cursorPosition = new Point(0.0, 0.0);
-        public Point CursorPosition { set { _cursorPosition = value; } }
-
-        private Size _windowSize = new Size(0.0, 0.0);
-        public Size WindowSize { set { _windowSize = value; } }
-
-        public event EventHandler<MousePointer> MousePointerChanged;
-
-        private StateMachine<PointerState, PointerEvent> _stateMachine = new StateMachine<PointerState, PointerEvent>();
-
+        
         private Dictionary<uint, PointerEvent> _trackedPointerEvents = new Dictionary<uint, PointerEvent>();
         private uint _mainPointerId;
-        private PointerType _lastPointerType = PointerType.Mouse;
         private DoubleClickTimer _doubleClicktimer;
+        
+        private StateMachine<PointerState, PointerEvent> _stateMachine = new StateMachine<PointerState, PointerEvent>();
+        private IPointerManipulator _pointerManipulator;
 
-        public PointerModel(ITimer timer)
+        public PointerMode(ITimer timer, IPointerManipulator pointerManipulator)
         {
+            _pointerManipulator = pointerManipulator;
+
             _doubleClicktimer = new DoubleClickTimer(timer, 300);
             _doubleClicktimer.AddAction(DoubleClickTimer.ClickTimerType.LeftClick, MouseLeftClick);
             _doubleClicktimer.AddAction(DoubleClickTimer.ClickTimerType.RightClick, MouseRightClick);
@@ -156,14 +93,14 @@ namespace RdClient.Shared.Input.Mouse
 
             _stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.LeftDrag,
             (o) => { return MoveThresholdExceeded(o); },
-            (o) => { UpdateCursorPosition(o); ChangeMousePointer(0); });
+            (o) => { UpdateCursorPosition(o); _pointerManipulator.SendMouseAction(MouseEventType.LeftPress); });
             _stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.Idle,
             (o) => { return NumberOfContacts(o) == 0; },
             (o) => { MouseLeftClick(); MouseLeftClick(); });
 
             _stateMachine.AddTransition(PointerState.RightDoubleDown, PointerState.RightDrag,
             (o) => { return MoveThresholdExceeded(o); },
-            (o) => { UpdateCursorPosition(o); ChangeMousePointer(5); });
+            (o) => { UpdateCursorPosition(o); _pointerManipulator.SendMouseAction(MouseEventType.RightPress); });
             _stateMachine.AddTransition(PointerState.RightDoubleDown, PointerState.Idle,
             (o) => { return NumberOfContacts(o) == 0; },
             (o) => { });
@@ -180,14 +117,14 @@ namespace RdClient.Shared.Input.Mouse
             (o) => { MouseMove(o); });
             _stateMachine.AddTransition(PointerState.LeftDrag, PointerState.Idle,
             (o) => { return NumberOfContacts(o) == 0; },
-            (o) => { ChangeMousePointer(1); });
+            (o) => { _pointerManipulator.SendMouseAction(MouseEventType.LeftRelease); });
 
             _stateMachine.AddTransition(PointerState.RightDrag, PointerState.RightDrag,
             (o) => { return MoveThresholdExceeded(o); },
             (o) => { MouseMove(o); });
             _stateMachine.AddTransition(PointerState.RightDrag, PointerState.Idle,
             (o) => { return NumberOfContacts(o) == 0; },
-            (o) => { ChangeMousePointer(6); });
+            (o) => { _pointerManipulator.SendMouseAction(MouseEventType.RightRelease); });
 
             _stateMachine.AddTransition(PointerState.Inertia, PointerState.Inertia,
             (o) => { return (o).Inertia == true; },
@@ -197,50 +134,6 @@ namespace RdClient.Shared.Input.Mouse
             (o) => { });
 
             _stateMachine.SetStart(PointerState.Idle);
-        }
-
-        private void MouseMove(PointerEvent pointerEvent)
-        {
-            UpdateCursorPosition(pointerEvent);
-            ChangeMousePointer(4);
-        }
-
-        private void MouseLeftClick()
-        {
-            ChangeMousePointer(0);
-            ChangeMousePointer(1);
-        }
-
-        private void MouseRightClick()
-        {
-            ChangeMousePointer(5);
-            ChangeMousePointer(6);
-        }
-
-        private void ChangeMousePointer(int eventType)
-        {
-            MousePointerChanged(this, new MousePointer(eventType, (float)_cursorPosition.X, (float)_cursorPosition.Y));
-        }
-
-        private void UpdateCursorPosition(PointerEvent pointerEvent)
-        {
-            double deltaX = 0.0;
-            double deltaY = 0.0;
-
-            if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
-            {
-                PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
-                deltaX = pointerEvent.Position.X - lastPointerEvent.Position.X;
-                deltaY = pointerEvent.Position.Y - lastPointerEvent.Position.Y;
-            }
-            else if (pointerEvent.Inertia == true)
-            {
-                deltaX = pointerEvent.Delta.X;
-                deltaY = pointerEvent.Delta.Y;
-            }
-
-            _cursorPosition.X = Math.Min(Math.Max(0.0, _cursorPosition.X + deltaX), _windowSize.Width);
-            _cursorPosition.Y = Math.Min(Math.Max(0.0, _cursorPosition.Y + deltaY), _windowSize.Height);
         }
 
         private int NumberOfContacts(PointerEvent pointerEvent)
@@ -272,99 +165,68 @@ namespace RdClient.Shared.Input.Mouse
             return result;
         }
 
-        private bool MouseLeftButton(uint id)
+        private void MouseLeftClick()
         {
-            if (_trackedPointerEvents.ContainsKey(id))
-            {
-                return _trackedPointerEvents[id].LeftButton;
-            }
-            else
-            {
-                return false;
-            }
+            _pointerManipulator.SendMouseAction(MouseEventType.LeftPress);
+            _pointerManipulator.SendMouseAction(MouseEventType.LeftRelease);
         }
 
-        private bool MouseRightButton(uint id)
+        private void MouseRightClick()
         {
-            if (_trackedPointerEvents.ContainsKey(id))
-            {
-                return _trackedPointerEvents[id].RightButton;
-            }
-            else
-            {
-                return false;
-            }
+            _pointerManipulator.SendMouseAction(MouseEventType.RightPress);
+            _pointerManipulator.SendMouseAction(MouseEventType.RightRelease);
         }
 
-        private void MouseRecognizer(object parameter)
+        private void MouseMove(PointerEvent pointerEvent)
         {
-            PointerEvent pointerEvent = parameter as PointerEvent;
+            UpdateCursorPosition(pointerEvent);
+            _pointerManipulator.SendMouseAction(MouseEventType.Move);
+        }
 
-            float x = (float)pointerEvent.Position.X;
-            float y = (float)pointerEvent.Position.Y;
-            int buttonState = 4;
+        public void UpdateCursorPosition(PointerEvent pointerEvent)
+        {
+            double deltaX = 0.0;
+            double deltaY = 0.0;
 
-            if (MouseLeftButton(0) == false && pointerEvent.LeftButton == true)
+            if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
             {
-                buttonState = 0;
+                PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
+                deltaX = pointerEvent.Position.X - lastPointerEvent.Position.X;
+                deltaY = pointerEvent.Position.Y - lastPointerEvent.Position.Y;
             }
-            else if (MouseLeftButton(0) == true && pointerEvent.LeftButton == false)
+            else if (pointerEvent.Inertia == true)
             {
-                buttonState = 1;
+                deltaX = pointerEvent.Delta.X;
+                deltaY = pointerEvent.Delta.Y;
             }
-            else if (MouseRightButton(0) == false && pointerEvent.RightButton == true)
-            {
-                buttonState = 5;
-            }
-            else if (MouseRightButton(0) == true && pointerEvent.RightButton == false)
-            {
-                buttonState = 6;
-            }
-            
-            _cursorPosition.X = x;
-            _cursorPosition.Y = y;
-            ChangeMousePointer(buttonState);
+
+            _pointerManipulator.MousePosition = new Point(_pointerManipulator.MousePosition.X + deltaX, _pointerManipulator.MousePosition.Y + deltaY);
         }
 
         public void ConsumeEvent(PointerEvent pointerEvent)
         {
-            if (_lastPointerType != pointerEvent.PointerType)
-            {
-                _stateMachine.SetStart(PointerState.Idle);
-                _doubleClicktimer.Stop();
-                _trackedPointerEvents.Clear();
-            }
-            _lastPointerType = pointerEvent.PointerType;
+            _stateMachine.Consume(pointerEvent);
 
-            if (pointerEvent.PointerType == PointerType.Mouse)
+            if (pointerEvent.LeftButton)
             {
-                MouseRecognizer(pointerEvent);
-                _trackedPointerEvents[0] = pointerEvent;
-            }
-            else if (pointerEvent.PointerType == PointerType.Pen)
-            {
-                MouseRecognizer(pointerEvent);
-                _trackedPointerEvents[0] = pointerEvent;
-            }
-            else if (pointerEvent.PointerType == PointerType.Touch)
-            {
-                _stateMachine.Consume(pointerEvent);
-
-                if (pointerEvent.LeftButton)
+                if (_trackedPointerEvents.Count == 0)
                 {
-                    if (_trackedPointerEvents.Count == 0)
-                    {
-                        _mainPointerId = pointerEvent.PointerId;
-                    }
+                    _mainPointerId = pointerEvent.PointerId;
+                }
 
-                    _trackedPointerEvents[pointerEvent.PointerId] = pointerEvent;
-                }
-                else if (pointerEvent.LeftButton == false && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
-                {
-                    _trackedPointerEvents.Remove(pointerEvent.PointerId);
-                }
+                _trackedPointerEvents[pointerEvent.PointerId] = pointerEvent;
             }
+            else if (pointerEvent.LeftButton == false && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
+            {
+                _trackedPointerEvents.Remove(pointerEvent.PointerId);
+            }
+        }
 
+        public void Reset()
+        {
+            _stateMachine.SetStart(PointerState.Idle);
+            _doubleClicktimer.Stop();
+            _trackedPointerEvents.Clear();
         }
     }
 }

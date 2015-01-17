@@ -3,11 +3,10 @@
 namespace RdClient.Controls
 {
     using RdClient.CxWrappers.Utils;
-    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
-    using RdClient.Shared.ViewModels;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using Windows.Foundation;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
@@ -23,9 +22,20 @@ namespace RdClient.Controls
             set { SetValue(ConnectCommandProperty, value); }
         }
 
+        public static readonly DependencyProperty ViewSizeProperty = DependencyProperty.Register(
+            "ViewSize", typeof(Size),
+            typeof(RdSessionPanel), new PropertyMetadata(true));
+        public Size ViewSize
+        {
+            private get { return (Size)GetValue(ViewSizeProperty); }
+            set { SetValue(ViewSizeProperty, value); }
+        }
+
+
         public RdSessionPanel()
         {
             this.InitializeComponent();
+            this.SizeChanged += (sender, args) => { this.ViewSize = (args as SizeChangedEventArgs).NewSize; };
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
