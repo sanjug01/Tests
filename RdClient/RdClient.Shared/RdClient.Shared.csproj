@@ -99,6 +99,7 @@
     <Compile Include="Helpers\IDeferredExecution.cs" />
     <Compile Include="Helpers\ILocalizedString.cs" />
     <Compile Include="Helpers\IPhysicalScreenSize.cs" />
+    <Compile Include="Helpers\IStateMachine.cs" />
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\ITimer.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
@@ -127,8 +128,10 @@
     <Compile Include="Input\Mouse\DoubleClickTimer.cs" />
     <Compile Include="Input\Mouse\IPointerEventConsumer.cs" />
     <Compile Include="Input\Mouse\IPointerManipulator.cs" />
+    <Compile Include="Input\Mouse\ITouchContext.cs" />
     <Compile Include="Input\Mouse\MouseMode.cs" />
-    <Compile Include="Input\Mouse\PointerMode.cs" />
+    <Compile Include="Input\Mouse\TouchContext.cs" />
+    <Compile Include="Input\Mouse\TouchModeFactory.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
     <Compile Include="LifeTimeManagement\IRootFrameManager.cs" />

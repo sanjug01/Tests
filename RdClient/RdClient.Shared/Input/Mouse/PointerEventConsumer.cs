@@ -9,11 +9,12 @@ namespace RdClient.Shared.Input.Mouse
         private Dictionary<PointerType, IPointerEventConsumer> _pointerConsumers = new Dictionary<PointerType,IPointerEventConsumer>();
         private PointerType _lastPointerType = PointerType.Mouse;
 
-        public PointerEventConsumer(ITimer timer, IPointerManipulator pointerManipulator)
+        public PointerEventConsumer(ITimer timer, IPointerManipulator manipulator)
         {
-            _pointerConsumers[PointerType.Mouse] = new MouseMode(pointerManipulator);
-            _pointerConsumers[PointerType.Pen] = new MouseMode(pointerManipulator);
-            _pointerConsumers[PointerType.Touch] = new PointerMode(timer, pointerManipulator);
+            _pointerConsumers[PointerType.Mouse] = new MouseMode(manipulator);
+            _pointerConsumers[PointerType.Pen] = new MouseMode(manipulator);
+            _pointerConsumers[PointerType.Touch] = TouchModeFactory.CreatePointerMode(timer, manipulator);
+            _pointerConsumers[PointerType.Click] = TouchModeFactory.CreateClickMode(timer, manipulator);
         }
 
         public void ConsumeEvent(PointerEvent pointerEvent)

@@ -63,6 +63,21 @@ namespace RdClient.Shared.Test.Input.Mouse
         }
 
         [TestMethod]
+        public void PointerModel_ShouldLeftClick()
+        {
+            ConsumeEventsHelper(new PointerEvent[] { 
+                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
+                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Touch, 3)
+            });
+
+            AssertionHelper(new TestMousePointerEvent[] { 
+                new TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(10.0, 10.0) },
+                new TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(10.0, 10.00) }
+            });
+        }
+
+
+        [TestMethod]
         public void PointerModel_ShouldLeftDrag()
         {
             ConsumeEventsHelper(new PointerEvent[] { 

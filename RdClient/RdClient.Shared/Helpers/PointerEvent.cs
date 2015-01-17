@@ -7,7 +7,8 @@ namespace RdClient.Shared.Helpers
         Unknown,
         Mouse,
         Pen,
-        Touch
+        Touch,
+        Click
     }
 
     public class PointerEvent

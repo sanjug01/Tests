@@ -4,12 +4,11 @@ using System.Diagnostics;
 
 namespace RdClient.Shared.Helpers
 {
-    public sealed class StateMachine<TState, TEvent>
+    public sealed class StateMachine<TState, TEvent> : IStateMachine<TState,TEvent>
     {
-
         public sealed class Transition
         {
-            public Predicate<TEvent> Predicate { get; private set; }
+            public Predicate<TEvent> Predicate { get; set; }
             public TState Destination { get; private set; }
             public Action<TEvent> Action { get; private set; }
 
