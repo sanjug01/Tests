@@ -99,6 +99,8 @@
     <Compile Include="Input\Keyboard\TestSink.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyBaseTests.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactoryTests.cs" />
+    <Compile Include="Input\Mouse\MouseModeTests.cs" />
+    <Compile Include="Input\Mouse\PointerInputTestsBase.cs" />
     <Compile Include="Mock\BarItemsViewModel.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
@@ -122,7 +124,7 @@
     <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\ModelCollectionTests.cs" />
-    <Compile Include="Input\Mouse\PointerModelTests.cs" />
+    <Compile Include="Input\Mouse\PointerModeTests.cs" />
     <Compile Include="Model\RdDataModelTests.cs" />
     <Compile Include="Model\SessionModelTests.cs" />
     <Compile Include="Model\SnapshotterTests.cs" />
