@@ -2,6 +2,7 @@
 using RdClient.Shared.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Mouse
@@ -67,7 +68,7 @@ namespace RdClient.Shared.Input.Mouse
             if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
             {
                 PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
-                result = Math.Abs(lastPointerEvent.Position.X - pointerEvent.Position.X) > 0.5 && Math.Abs(lastPointerEvent.Position.Y - pointerEvent.Position.Y) > 0.5;
+                result = Math.Abs(lastPointerEvent.Position.X - pointerEvent.Position.X) > 0.01 || Math.Abs(lastPointerEvent.Position.Y - pointerEvent.Position.Y) > 0.01;
             }
 
             return result;
@@ -75,14 +76,12 @@ namespace RdClient.Shared.Input.Mouse
 
         public void MouseLeftClick(PointerEvent pointerEvent)
         {
-            PointerManipulator.MousePosition = pointerEvent.Position;
             PointerManipulator.SendMouseAction(MouseEventType.LeftPress);
             PointerManipulator.SendMouseAction(MouseEventType.LeftRelease);
         }
 
         public void MouseRightClick(PointerEvent pointerEvent)
         {
-            PointerManipulator.MousePosition = pointerEvent.Position;
             PointerManipulator.SendMouseAction(MouseEventType.RightPress);
             PointerManipulator.SendMouseAction(MouseEventType.RightRelease);
         }
@@ -101,8 +100,8 @@ namespace RdClient.Shared.Input.Mouse
             if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
             {
                 PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
-                deltaX = pointerEvent.Position.X - lastPointerEvent.Position.X;
-                deltaY = pointerEvent.Position.Y - lastPointerEvent.Position.Y;
+                deltaX = (pointerEvent.Position.X - lastPointerEvent.Position.X) * 1.4;
+                deltaY = (pointerEvent.Position.Y - lastPointerEvent.Position.Y) * 1.4;
             }
             else if (pointerEvent.Inertia == true)
             {

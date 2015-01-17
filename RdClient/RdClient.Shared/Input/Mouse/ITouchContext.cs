@@ -4,7 +4,7 @@ namespace RdClient.Shared.Input.Mouse
 {
     public interface ITouchContext
     {
-        DoubleClickTimer DoubleClickTimer { get; set; }
+        DoubleClickTimer DoubleClickTimer { get; }
         void MouseLeftClick(PointerEvent pointerEvent);
         void MouseMove(PointerEvent pointerEvent);
         void MouseRightClick(PointerEvent pointerEvent);
@@ -13,6 +13,6 @@ namespace RdClient.Shared.Input.Mouse
         bool MoveThresholdExceeded(PointerEvent pointerEvent);
         int NumberOfContacts(PointerEvent pointerEvent);
         
-        IPointerManipulator PointerManipulator { get; set; }
+        IPointerManipulator PointerManipulator { get; }
     }
 }

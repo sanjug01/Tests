@@ -60,10 +60,20 @@ namespace RdClient.Controls
         private static void MousePositionPropertyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             MouseLayerControl mlc = d as MouseLayerControl;
-            Point position = (Point) e.NewValue;
+            Point position = (Point)e.NewValue;
+            Point hotSpot = mlc.HotSpot;
 
-            mlc.MouseShapeElementTranslateTransform.X = position.X;
-            mlc.MouseShapeElementTranslateTransform.Y = position.Y;
+            mlc.MouseShapeElementTranslateTransform.X = position.X - hotSpot.X;
+            mlc.MouseShapeElementTranslateTransform.Y = position.Y - hotSpot.Y;
+        }
+
+        public static readonly DependencyProperty HotSpotProperty = DependencyProperty.Register(
+            "HotSpot", typeof(Point),
+            typeof(MouseLayerControl), new PropertyMetadata(true));
+        public Point HotSpot
+        {
+            get { return (Point)GetValue(HotSpotProperty); }
+            set { SetValue(HotSpotProperty, value); }
         }
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)

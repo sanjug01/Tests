@@ -14,9 +14,6 @@ namespace RdClient.Shared.ViewModels
 
     public class MouseViewModel : MutableObject, IPointerManipulator
     {
-        private float _xHotspot = (float)0.0;
-        private float _yHotspot = (float)0.0;
-
         private PointerEventConsumer _pointerEventConsumer;
         public PointerEventConsumer PointerEventConsumer
         {
@@ -34,7 +31,7 @@ namespace RdClient.Shared.ViewModels
         private Point _mousePosition = new Point(0.0, 0.0);
         public Point MousePosition 
         {
-            get { return new Point(_mousePosition.X - _xHotspot, _mousePosition.Y - _yHotspot); }
+            get { return new Point(_mousePosition.X, _mousePosition.Y); }
             set {
                 Point p = new Point(
                     Math.Max(0.0, Math.Min(value.X, this.ViewSize.Width)),
@@ -50,6 +47,13 @@ namespace RdClient.Shared.ViewModels
         {
             get { return _viewSize; }
             set { SetProperty(ref _viewSize, value); }
+        }
+
+        private Point _hotSpot = new Point(0.0, 0.0);
+        public Point HotSpot
+        {
+            get { return _hotSpot; }
+            set { SetProperty(ref _hotSpot, value); }
         }
 
         private IRdpConnection _rdpConnection;
@@ -77,8 +81,6 @@ namespace RdClient.Shared.ViewModels
 
         private void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
         {
-            _xHotspot = args.XHotspot;
-            _yHotspot = args.YHotspot;
 
             this.DeferredExecution.DeferToUI(() => {
                 WriteableBitmap spBitmap = null;
@@ -126,6 +128,7 @@ namespace RdClient.Shared.ViewModels
                     }
 
                     this.MouseShape = spBitmap;
+                    this.HotSpot = new Point(args.XHotspot, args.YHotspot);
                 }
             });
         }

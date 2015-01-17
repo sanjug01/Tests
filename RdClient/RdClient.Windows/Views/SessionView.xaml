@@ -43,6 +43,7 @@
                                     HorizontalContentAlignment="Stretch"
                                     PointerEventConsumer="{Binding MouseViewModel.PointerEventConsumer}"
                                     MouseShape="{Binding MouseViewModel.MouseShape}"
+                                    HotSpot="{Binding MouseViewModel.HotSpot}"
                                     MousePosition="{Binding MouseViewModel.MousePosition}"/>
 
         <controls:SessionReconnectControl x:Name="SessionReconnectLayer" 

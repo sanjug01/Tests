@@ -14,11 +14,13 @@ namespace RdClient.Shared.Test.Input.Mouse
         {
             ConsumeEventsHelper(new PointerEvent[] { 
                 new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3)
+                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
+                new PointerEvent(new Point(20.0, 20.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3)
             });
 
             AssertionHelper(new TestMousePointerEvent[] { 
-                new TestMousePointerEvent() { Type = MouseEventType.Move, Position = new Point(10.0, 10.0) }
+                new TestMousePointerEvent() { Type = MouseEventType.Move, Position = new Point(10.0, 10.0) },
+                new TestMousePointerEvent() { Type = MouseEventType.Move, Position = new Point(20.0, 20.0) }
             });
         }
 
