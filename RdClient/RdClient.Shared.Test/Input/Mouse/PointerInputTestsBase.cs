@@ -55,15 +55,16 @@ namespace RdClient.Shared.Test.Input.Mouse
     [TestClass]
     public class PointerInputTestsBase
     {
+        protected TestTimer _timer;
         private PointerEventConsumer _consumer;
         private TestPointerManipulator _manipulator;
 
         [TestInitialize]
         public void PointerModel_TestInitialize()
         {
-            TestTimer timer = new TestTimer();
+            _timer = new TestTimer();
             _manipulator = new TestPointerManipulator();
-            _consumer = new PointerEventConsumer(timer, _manipulator);
+            _consumer = new PointerEventConsumer(_timer, _manipulator);
         }
 
         protected void ConsumeEventsHelper(PointerEvent[] events)

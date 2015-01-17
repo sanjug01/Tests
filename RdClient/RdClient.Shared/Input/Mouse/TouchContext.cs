@@ -25,12 +25,12 @@ namespace RdClient.Shared.Input.Mouse
     }
 
     public class TouchContext : IPointerEventConsumer, ITouchContext
-    {        
+    {
         private Dictionary<uint, PointerEvent> _trackedPointerEvents = new Dictionary<uint, PointerEvent>();
         private uint _mainPointerId;
         public DoubleClickTimer DoubleClickTimer { get; set; }
 
-        private static IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> _stateMachine;
+        private IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> _stateMachine;
         public IPointerManipulator PointerManipulator { get; set; }
 
         public TouchContext(ITimer timer, IPointerManipulator pointerManipulator, IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
@@ -73,14 +73,16 @@ namespace RdClient.Shared.Input.Mouse
             return result;
         }
 
-        public void MouseLeftClick()
+        public void MouseLeftClick(PointerEvent pointerEvent)
         {
+            PointerManipulator.MousePosition = pointerEvent.Position;
             PointerManipulator.SendMouseAction(MouseEventType.LeftPress);
             PointerManipulator.SendMouseAction(MouseEventType.LeftRelease);
         }
 
-        public void MouseRightClick()
+        public void MouseRightClick(PointerEvent pointerEvent)
         {
+            PointerManipulator.MousePosition = pointerEvent.Position;
             PointerManipulator.SendMouseAction(MouseEventType.RightPress);
             PointerManipulator.SendMouseAction(MouseEventType.RightRelease);
         }

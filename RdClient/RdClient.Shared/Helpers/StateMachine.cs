@@ -31,6 +31,8 @@ namespace RdClient.Shared.Helpers
 
         public void AddTransition(TState from, TState to, Predicate<TEvent> predicate, Action<TEvent> action)
         {
+            //Debug.WriteLine("Adding: " + from + " to " + to);
+
             if(_transitions.ContainsKey(from) == false)
             {
                 _transitions[from] = new List<Transition>();
@@ -45,6 +47,7 @@ namespace RdClient.Shared.Helpers
 
             foreach(Transition transition in transitions)
             {
+                //Debug.WriteLine("Trying: " + _state + " to " + transition.Destination);
                 if (transition.Predicate(parameter))
                 {
                     transition.Action(parameter);
@@ -53,6 +56,6 @@ namespace RdClient.Shared.Helpers
                     return;
                 }
             }
-        }
+         }
     }
 }

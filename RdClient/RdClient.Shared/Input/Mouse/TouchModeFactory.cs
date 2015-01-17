@@ -10,7 +10,7 @@ namespace RdClient.Shared.Input.Mouse
 {
     public class TouchModeFactory
     {
-        private static void AddClickModeTransitions(IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
+        private static void AddClickModeTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
         {
             stateMachine.AddTransition(PointerState.Idle, PointerState.LeftDown,
             (o) =>
@@ -50,40 +50,47 @@ namespace RdClient.Shared.Input.Mouse
             (o) =>
             {
                 if (o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick))
-                    o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.LeftClick);
+                    o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.LeftClick, o.Input);
             });
 
             stateMachine.AddTransition(PointerState.RightDown, PointerState.LeftDown,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
-            (o) => { o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.RightClick); });
+            (o) => { o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.RightClick, o.Input); });
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.RightClick); });
+            (o) => { o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.RightClick, o.Input); });
+
+            stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.Idle,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
+            (o) => { o.Context.MouseLeftClick(o.Input); o.Context.MouseLeftClick(o.Input); });
+
+            stateMachine.AddTransition(PointerState.RightDoubleDown, PointerState.Idle,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
+            (o) => { });
         }
 
-        private static void AddMoveTransitions(IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
+        private static void AddMoveTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
         { 
             stateMachine.AddTransition(PointerState.Idle, PointerState.Inertia,
             (o) => { return o.Input.Inertia == true; },
             (o) => { o.Context.MouseMove(o.Input); });
 
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.Move,
-            (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
-            (o) => { o.Context.MouseMove(o.Input); });
+            (o) => { 
+                return o.Context.MoveThresholdExceeded(o.Input); 
+            },
+            (o) => { 
+                o.Context.MouseMove(o.Input); 
+            });
 
             stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.LeftDrag,
             (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
             (o) => { o.Context.UpdateCursorPosition(o.Input); o.Context.PointerManipulator.SendMouseAction(MouseEventType.LeftPress); });
-            stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.Idle,
-            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { o.Context.MouseLeftClick(); o.Context.MouseLeftClick(); });
+
 
             stateMachine.AddTransition(PointerState.RightDoubleDown, PointerState.RightDrag,
             (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
             (o) => { o.Context.UpdateCursorPosition(o.Input); o.Context.PointerManipulator.SendMouseAction(MouseEventType.RightPress); });
-            stateMachine.AddTransition(PointerState.RightDoubleDown, PointerState.Idle,
-            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { });
 
             stateMachine.AddTransition(PointerState.Move, PointerState.Move,
             (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
@@ -118,8 +125,8 @@ namespace RdClient.Shared.Input.Mouse
         {
             IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>>();
 
-            AddClickModeTransitions(stateMachine);
-            AddMoveTransitions(stateMachine);
+            AddClickModeTransitions(ref stateMachine);
+            AddMoveTransitions(ref stateMachine);
 
             stateMachine.SetStart(PointerState.Idle);
 
@@ -130,7 +137,7 @@ namespace RdClient.Shared.Input.Mouse
         {
             IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>>();
 
-            AddClickModeTransitions(stateMachine);
+            AddClickModeTransitions(ref stateMachine);
 
             stateMachine.SetStart(PointerState.Idle);
 

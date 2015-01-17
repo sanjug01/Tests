@@ -17,8 +17,8 @@ namespace RdClient.Shared.ViewModels
         private float _xHotspot = (float)0.0;
         private float _yHotspot = (float)0.0;
 
-        private IPointerEventConsumer _pointerEventConsumer;
-        public IPointerEventConsumer PointerEventConsumer
+        private PointerEventConsumer _pointerEventConsumer;
+        public PointerEventConsumer PointerEventConsumer
         {
             get { return _pointerEventConsumer; }
             set { SetProperty(ref _pointerEventConsumer, value); }

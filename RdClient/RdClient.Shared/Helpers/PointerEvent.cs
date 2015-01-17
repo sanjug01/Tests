@@ -18,7 +18,7 @@ namespace RdClient.Shared.Helpers
         public Point Delta { get; private set; }
         public bool LeftButton { get; private set; }
         public bool RightButton { get; private set; }
-        public PointerType PointerType { get; private set; }
+        public PointerType PointerType { get; set; }
         public uint PointerId { get; private set; }
 
         public PointerEvent(Point position, bool inertia, Point delta, bool leftButton, bool rightButton, PointerType pointerType, uint pointerId)
