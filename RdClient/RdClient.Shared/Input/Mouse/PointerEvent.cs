@@ -1,6 +1,6 @@
 ﻿using Windows.Foundation;
 
-namespace RdClient.Shared.Helpers
+namespace RdClient.Shared.Input.Mouse
 {
     public enum PointerType
     {

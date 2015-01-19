@@ -1,9 +1,4 @@
-﻿using RdClient.Shared.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RdClient.Shared.Input.Mouse;
 using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.UI.Input;

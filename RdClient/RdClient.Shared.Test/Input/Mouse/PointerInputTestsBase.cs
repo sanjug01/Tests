@@ -65,7 +65,7 @@ namespace RdClient.Shared.Test.Input.Mouse
         private PointerEventDispatcher _consumer;
         private TestPointerManipulator _manipulator;
 
-        protected bool ClickModeEnabled { get { return _consumer.ClickModeEnabled; } set { _consumer.ClickModeEnabled = value; } }
+        protected bool ClickModeEnabled { get { return _consumer.DirectModeEnabled; } set { _consumer.DirectModeEnabled = value; } }
 
         [TestInitialize]
         public void PointerModel_TestInitialize()

@@ -99,7 +99,7 @@ namespace RdClient.Shared.ViewModels
         public MouseViewModel()
         {
             this.PointerEventConsumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
-            this.PointerEventConsumer.ClickModeEnabled = true;
+            this.PointerEventConsumer.DirectModeEnabled = true;
         }
 
         private void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)

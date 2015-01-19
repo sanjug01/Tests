@@ -103,7 +103,7 @@
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\ITimer.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
-    <Compile Include="Helpers\PointerEvent.cs" />
+    <Compile Include="Input\Mouse\PointerEvent.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
     <Compile Include="Helpers\ReadWriteMonitor.cs" />
     <Compile Include="Helpers\StateMachine.cs" />
@@ -125,7 +125,7 @@
     <Compile Include="Input\Keyboard\SingleReleaseKey.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyBase.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactory.cs" />
-    <Compile Include="Input\Mouse\ClickTouchContext.cs" />
+    <Compile Include="Input\Mouse\DirectTouchContext.cs" />
     <Compile Include="Input\Mouse\DoubleClickTimer.cs" />
     <Compile Include="Input\Mouse\IPointerEventConsumer.cs" />
     <Compile Include="Input\Mouse\IPointerManipulator.cs" />

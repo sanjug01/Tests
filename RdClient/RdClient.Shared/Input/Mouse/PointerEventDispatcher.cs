@@ -10,17 +10,17 @@ namespace RdClient.Shared.Input.Mouse
         private PointerType _lastPointerType = PointerType.Mouse;
 
         private IPointerEventConsumer _pointerMode;
-        private IPointerEventConsumer _clickMode;
+        private IPointerEventConsumer _directMode;
 
-        private bool _clickModeEnabled = false;
-        public bool ClickModeEnabled {
-            get { return _clickModeEnabled; }
+        private bool _directModeEnabled = false;
+        public bool DirectModeEnabled {
+            get { return _directModeEnabled; }
             set 
             { 
-                _clickModeEnabled = value; 
-                if(_clickModeEnabled)
+                _directModeEnabled = value; 
+                if(_directModeEnabled)
                 {
-                    _pointerConsumers[PointerType.Touch] = _clickMode;
+                    _pointerConsumers[PointerType.Touch] = _directMode;
                 }
                 else
                 {
@@ -32,7 +32,7 @@ namespace RdClient.Shared.Input.Mouse
         public PointerEventDispatcher(ITimer timer, IPointerManipulator manipulator)
         {
             _pointerMode = TouchModeFactory.CreatePointerMode(timer, manipulator);
-            _clickMode = TouchModeFactory.CreateClickMode(timer, manipulator);
+            _directMode = TouchModeFactory.CreateDirectMode(timer, manipulator);
 
             _pointerConsumers[PointerType.Mouse] = new MouseMode(manipulator);
             _pointerConsumers[PointerType.Pen] = new MouseMode(manipulator);

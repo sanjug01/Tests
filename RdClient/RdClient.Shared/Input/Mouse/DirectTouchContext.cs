@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace RdClient.Shared.Input.Mouse
 {
-    public class ClickTouchContext : TouchContext
+    public class DirectTouchContext : TouchContext
     {        
-        public ClickTouchContext(ITimer timer, 
+        public DirectTouchContext(ITimer timer, 
                                  IPointerManipulator manipulator, 
                                  IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine) : base(timer, manipulator, stateMachine)
         {
@@ -33,11 +33,6 @@ namespace RdClient.Shared.Input.Mouse
         public override void UpdateCursorPosition(PointerEvent pointerEvent)
         {
             this.PointerManipulator.MousePosition = pointerEvent.Position;
-        }
-
-        public override bool MoveThresholdExceeded(PointerEvent pointerEvent)
-        {
-            return false;
         }
 
         public override int NumberOfContacts(PointerEvent pointerEvent)
