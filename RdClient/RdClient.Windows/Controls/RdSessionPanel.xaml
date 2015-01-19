@@ -10,7 +10,51 @@
     d:DesignWidth="400" Loaded="OnLoaded">
     
     <Grid Background="Green">
-        <SwapChainPanel x:Name="SwapChainPanel"/>
+        <SwapChainPanel x:Name="SwapChainPanel">
+            <SwapChainPanel.RenderTransform>
+                <TransformGroup x:Name="ScpTransformGroup">
+                    <ScaleTransform x:Name="ScpScaleTransform" CenterX="0" CenterY="0" ScaleX="1.0" ScaleY="1.0"/>
+                    <TranslateTransform x:Name="ScpTranslateTransform" X="0" Y ="0"/>
+                </TransformGroup>
+            </SwapChainPanel.RenderTransform>
+
+            <SwapChainPanel.Resources>
+                <Storyboard x:Name="SwapChainPanelStoryboard">
+                    <DoubleAnimation
+                        x:Name="SwapChainPanelScaleAnimationX"
+                        Duration="0:0:0.40" 
+                        Storyboard.TargetName="ScpScaleTransform" Storyboard.TargetProperty="ScaleX">
+                        <DoubleAnimation.EasingFunction>
+                            <ExponentialEase EasingMode="EaseOut" Exponent="5"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation
+                        x:Name="SwapChainPanelScaleAnimationY" 
+                        Duration="0:0:0.40" 
+                        Storyboard.TargetName="ScpScaleTransform" Storyboard.TargetProperty="ScaleY">
+                        <DoubleAnimation.EasingFunction>
+                            <ExponentialEase EasingMode="EaseOut" Exponent="5"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation 
+                        x:Name="SwapChainPanelTranslateAnimationX"
+                        Duration="0:0:0.40" 
+                        Storyboard.TargetName="ScpTranslateTransform" Storyboard.TargetProperty="X">
+                        <DoubleAnimation.EasingFunction>
+                            <ExponentialEase EasingMode="EaseOut" Exponent="5"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation 
+                        x:Name="SwapChainPanelTranslateAnimationY" 
+                        Duration="0:0:0.40" 
+                        Storyboard.TargetName="ScpTranslateTransform" Storyboard.TargetProperty="Y">
+                        <DoubleAnimation.EasingFunction>
+                            <ExponentialEase EasingMode="EaseOut" Exponent="5"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </SwapChainPanel.Resources>
+        </SwapChainPanel>
     </Grid>
     
 </UserControl>

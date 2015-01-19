@@ -26,6 +26,8 @@
     <x:String x:Key="EditIcon">&#xE70F;</x:String>
     <x:String x:Key="DeleteIcon">&#xE74D;</x:String>
     <x:String x:Key="BackIcon">&#xE112;</x:String>
+    <x:String x:Key="ZoomInIcon">&#xE1A3;</x:String>
+    <x:String x:Key="ZoomOutIcon">&#xE1A4;</x:String>
 
     <SolidColorBrush x:Key="InvisibleButtonPointerOverBackgroundBrush" Color="#22FFFFFF" />
     <SolidColorBrush x:Key="InvisibleButtonPressedBackgroundBrush" Color="#88FFFFFF" />

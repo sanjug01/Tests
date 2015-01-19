@@ -35,6 +35,9 @@ namespace RdClient.Shared.ViewModels
         private readonly ICommand _cancelReconnectCommand;
         public ICommand CancelReconnectCommand { get { return _cancelReconnectCommand; } }
 
+        private readonly ICommand _toggleZoomCommand;
+        public ICommand ToggleZoomCommand { get { return _toggleZoomCommand; } }
+
         public ISessionModel SessionModel { get; set; }
         public DisconnectString DisconnectString { get; set; }
         public MouseViewModel MouseViewModel { get; set; }
@@ -64,6 +67,7 @@ namespace RdClient.Shared.ViewModels
             _disconnectCommand = new RelayCommand(new Action<object>(Disconnect));
             _connectCommand = new RelayCommand(new Action<object>(Connect));
             _cancelReconnectCommand = new RelayCommand(o => { _isCancelledReconnect = true; IsReconnecting = false; });
+            _toggleZoomCommand = new RelayCommand(new Action<object>(ToggleMagnification));
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -257,6 +261,11 @@ namespace RdClient.Shared.ViewModels
             {
                 _currentRdpConnection.SendKeyEvent(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
             }
+        }
+
+        private void ToggleMagnification(object o)
+        {
+            RdTrace.TraceNrm("Toggle Magnification!");
         }
     }
 }

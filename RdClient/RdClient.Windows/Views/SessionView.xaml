@@ -34,7 +34,9 @@
         property of the sesion panel. The session panel will execute the command
         as soon as its swap chain panel will have initialized.
         -->
-        <controls:RdSessionPanel ConnectCommand="{Binding ConnectCommand}"
+        <controls:RdSessionPanel 
+            x:Name="SessionPanel"
+            ConnectCommand="{Binding ConnectCommand}"
                                  ViewSize="{Binding MouseViewModel.ViewSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <controls:MouseLayerControl x:Name="MouseLayer" 
@@ -62,6 +64,16 @@
                 x:Uid="SessionView-DisconnectButton"
                 Command="{Binding DisconnectCommand}"                
                 Content="Disconnect (d)"/>
+            <Button
+                x:Uid="SessionView-ZoomInButton"
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
+                Tapped="ZoomInButton_Tapped"
+                Content="{StaticResource ZoomInIcon}"/>
+            <Button
+                x:Uid="SessionView-ZoomOutButton"
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
+                Tapped="ZoomOutButton_Tapped"
+                Content="{StaticResource ZoomOutIcon}"/>
         </StackPanel>
     </Grid>
 </UserControl>
