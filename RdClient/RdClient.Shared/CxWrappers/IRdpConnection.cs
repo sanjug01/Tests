@@ -17,5 +17,6 @@ namespace RdClient.Shared.CxWrappers
         IRdpScreenSnapshot GetSnapshot();
         IRdpCertificate GetServerCertificate();
         void SendMouseEvent(MouseEventType type, float xPos, float yPos);
+        void SendKeyEvent(int keyValue, bool scanCode, bool extended, bool keyUp);
     }
 }

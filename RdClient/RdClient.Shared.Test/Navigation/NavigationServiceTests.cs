@@ -550,6 +550,7 @@
                 Assert.IsTrue(_appBarViewModel.IsShowBarButtonVisible);
                 Assert.IsFalse(_appBarViewModel.IsBarVisible);
                 Assert.IsFalse(_appBarViewModel.IsBarSticky);
+                Assert.IsTrue(_appBarViewModel.IsBarAvailable);
                 Assert.IsNotNull(_appBarViewModel.BarItems);
                 Assert.IsInstanceOfType(_appBarViewModel.BarItems, typeof(BarItemModel[]));
                 Assert.AreEqual(((BarItemModel[])_appBarViewModel.BarItems).Length, 1);
@@ -591,8 +592,9 @@
 
                 Assert.IsFalse(_appBarViewModel.IsShowBarButtonVisible);
                 Assert.IsFalse(_appBarViewModel.IsBarVisible);
-                Assert.IsFalse(_appBarViewModel.IsBarSticky);
+                Assert.IsTrue(_appBarViewModel.IsBarSticky);
                 Assert.IsNull(_appBarViewModel.BarItems);
+                Assert.IsFalse(_appBarViewModel.IsBarAvailable);
             }
         }
 

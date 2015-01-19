@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RdClient.Shared.Input
+﻿namespace RdClient.Shared.Input.Keyboard
 {
     /// <summary>
     /// Interface of an object that receives RDP keystrokes from CoreWindowKeyboardCore.

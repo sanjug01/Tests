@@ -15,7 +15,7 @@
     xmlns:fac="using:RdClient.Factories"
     mc:Ignorable="d">
 
-    <Page.DataContext>
+    <Page.DataContext>        
         <vm:MainPageViewModel />
     </Page.DataContext>
     

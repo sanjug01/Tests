@@ -26,14 +26,14 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { credentials, fUsingSavedCreds });
         }
 
-        public void Disconnect()
-        {
-            Invoke(new object[] {});
-        }
-
         public void Cleanup()
         {
             Invoke(new object[] { });
+        }
+
+        public void Disconnect()
+        {
+            Invoke(new object[] {});
         }
 
         public void Suspend()
@@ -104,6 +104,11 @@ namespace RdClient.Shared.Test.Mock
         public void SendMouseEvent(MouseEventType type, float xPos, float yPos)
         {
             Invoke(new object[] { type, xPos, yPos });
+        }
+
+        public void SendKeyEvent(int keyValue, bool scanCode, bool extended, bool keyUp)
+        {
+            Invoke(new object[] { keyValue, scanCode, extended, keyUp });
         }
     }
 }

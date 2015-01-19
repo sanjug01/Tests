@@ -1,7 +1,7 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Helpers;
-using RdClient.Shared.Input;
+using RdClient.Shared.Input.Keyboard;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using System;
@@ -13,14 +13,27 @@ namespace RdClient.Shared.ViewModels
 
     public class SessionViewModel : DeferringViewModelBase
     {
+
         private ConnectionInformation _connectionInformation;
         private IKeyboardCapture _keyboardCapture;
+
+        //
+        // TODO: get rid of _currentRdpConnectionshortcut after the session view will have been re-architected
+        //
+        private IRdpConnection _currentRdpConnection;
+
+        private bool  _isReconnecting;
+        private bool _isCancelledReconnect;
+        private int _reconnectAttempts;
 
         private readonly ICommand _disconnectCommand;
         public ICommand DisconnectCommand { get { return _disconnectCommand; } }
 
         private readonly ICommand _connectCommand;
         public ICommand ConnectCommand { get { return _connectCommand; } }
+
+        private readonly ICommand _cancelReconnectCommand;
+        public ICommand CancelReconnectCommand { get { return _cancelReconnectCommand; } }
 
         public ISessionModel SessionModel { get; set; }
         public DisconnectString DisconnectString { get; set; }
@@ -31,10 +44,26 @@ namespace RdClient.Shared.ViewModels
             set { this.SetProperty<IKeyboardCapture>(ref _keyboardCapture, value); }
         }
 
+        public bool IsReconnecting
+        {
+            get { return _isReconnecting; }
+            set { this.SetProperty(ref _isReconnecting, value); }
+        }
+
+        public int ReconnectAttempts
+        {
+            get { return _reconnectAttempts; }
+            set { this.SetProperty(ref _reconnectAttempts, value); }
+        }
+
+
         public SessionViewModel()
         {
+            _isReconnecting = false;
+            _reconnectAttempts = 0;
             _disconnectCommand = new RelayCommand(new Action<object>(Disconnect));
             _connectCommand = new RelayCommand(new Action<object>(Connect));
+            _cancelReconnectCommand = new RelayCommand(o => { _isCancelledReconnect = true; IsReconnecting = false; });
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -62,7 +91,6 @@ namespace RdClient.Shared.ViewModels
             base.OnDismissed();
         }
 
-
         private void Connect(object o)
         {            
             Contract.Assert(null != _connectionInformation);
@@ -77,17 +105,55 @@ namespace RdClient.Shared.ViewModels
             Contract.Assert(null != SessionModel);
 
             SessionModel.ConnectionCreated += (sender, args) => {
+                args.RdpConnection.Events.ClientConnected += HandleConnected;
                 args.RdpConnection.Events.ClientDisconnected += HandleDisconnected;
                 args.RdpConnection.Events.ClientAsyncDisconnect += HandleAsyncDisconnect;
                 this.MouseViewModel.RdpConnection = args.RdpConnection;
                 this.MouseViewModel.DeferredExecution = this;
             };
 
+            SessionModel.ConnectionAutoReconnecting += SessionModel_ConnectionAutoReconnecting;
+            SessionModel.ConnectionAutoReconnectComplete += SessionModel_ConnectionAutoReconnectComplete;
+
+            _isCancelledReconnect = false;
             SessionModel.Connect(_connectionInformation, new WinrtThreadPoolTimerFactory(), this.DataModel.Settings);
+        }
+
+        void SessionModel_ConnectionAutoReconnectComplete(object sender, ConnectionAutoReconnectCompleteArgs e)
+        {
+            this.DeferToUI(() =>
+                {
+                    this.IsReconnecting = false;
+                }
+            );
+        }
+
+        void SessionModel_ConnectionAutoReconnecting(object sender, ConnectionAutoReconnectingArgs e)
+        {
+            Contract.Assert(null != e);
+
+            // TODO: may need to disable user input for the session: keyboard/mouse 
+            if(0 == e.AttemptCount)
+            {
+                // reset cancelledReconnect state
+                _isCancelledReconnect = false;
+            }
+
+            // always continue reconnecting if not canceled
+            e.ContinueDelegate.Invoke(!_isCancelledReconnect);
+            this.DeferToUI(() =>
+                {
+                    this.ReconnectAttempts = e.AttemptCount;
+                    this.IsReconnecting = !_isCancelledReconnect;
+                }
+            );
         }
 
         void HandleAsyncDisconnect(object sender, ClientAsyncDisconnectArgs args)
         {
+            TryDeferToUI(() =>
+            {
+                _currentRdpConnection = null;
             IRdpConnection rdpConnection = sender as IRdpConnection;
             RdpDisconnectReason reason = args.DisconnectReason;
             bool reconnect = false;
@@ -113,7 +179,7 @@ namespace RdClient.Shared.ViewModels
                             Contract.Assert(e.Result is CertificateValidationResult);
                             CertificateValidationResult acceptCertificateResult = e.Result as CertificateValidationResult;
 
-                            switch(acceptCertificateResult.Result)
+                            switch (acceptCertificateResult.Result)
                             {
                                 case CertificateValidationResult.CertificateTrustLevel.Denied:
                                     reconnect = false;
@@ -140,38 +206,57 @@ namespace RdClient.Shared.ViewModels
                 reconnect = false;
                 rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
             }
+            });
         }        
+
+        private void HandleConnected(object sender, ClientConnectedArgs e)
+        {
+            TryDeferToUI(() =>
+            {
+                _currentRdpConnection = sender as IRdpConnection;
+                Contract.Assert(null != _currentRdpConnection);
+            });
+        }
 
         private void HandleDisconnected(object sender, ClientDisconnectedArgs args)
         {
-            IRdpConnection rdpConnection = sender as IRdpConnection;
-            rdpConnection.Events.ClientDisconnected -= HandleDisconnected;
-            rdpConnection.Cleanup();
-
-            RdpDisconnectReason reason = args.DisconnectReason;
-
-            if(reason.Code != RdpDisconnectCode.UserInitiated)
+            TryDeferToUI(() =>
             {
-                ErrorMessageArgs dialogArgs = new ErrorMessageArgs(reason, () =>
-                {
-                }, null);
-                this.NavigationService.PushModalView("ErrorMessageView", dialogArgs);
-            }
+                _currentRdpConnection = null;
+                IRdpConnection rdpConnection = sender as IRdpConnection;
+                rdpConnection.Events.ClientDisconnected -= HandleDisconnected;
+                rdpConnection.Cleanup();
 
-            NavigationService.NavigateToView("ConnectionCenterView", null);            
+                RdpDisconnectReason reason = args.DisconnectReason;
+
+                if (reason.Code != RdpDisconnectCode.UserInitiated)
+                {
+                    ErrorMessageArgs dialogArgs = new ErrorMessageArgs(reason, () =>
+                    {
+                    }, null);
+                    this.NavigationService.PushModalView("ErrorMessageView", dialogArgs);
+                }
+
+                NavigationService.NavigateToView("ConnectionCenterView", null);
+            });
         }
 
         private void Disconnect(object o)
         {
+            SessionModel.ConnectionAutoReconnecting -= SessionModel_ConnectionAutoReconnecting;
+            SessionModel.ConnectionAutoReconnectComplete -= SessionModel_ConnectionAutoReconnectComplete;
             SessionModel.Disconnect();
         }
 
         private void OnKeystroke(object sender, KeystrokeEventArgs e)
         {
             //
-            // TODO: send the keystroke over to the session
+            // TODO: send the keystroke over to the session properly
             //
-            //this.SessionModel.RdSession.SendKeyboard
+            if(null != _currentRdpConnection)
+            {
+                _currentRdpConnection.SendKeyEvent(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
+            }
         }
     }
 }

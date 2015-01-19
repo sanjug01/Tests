@@ -37,7 +37,7 @@
             Assert.IsNull(_vm.BarItems);
             Assert.IsFalse(_vm.IsShowBarButtonVisible);
             Assert.IsFalse(_vm.IsBarVisible);
-            Assert.IsFalse(_vm.IsBarSticky);
+            Assert.IsTrue(_vm.IsBarSticky);
         }
 
         [TestMethod]
@@ -72,9 +72,14 @@
             _vm.PropertyChanged += (s, e) => reportedProperties.Add(e.PropertyName);
             _vm.BarItems = new List<BarItemModel>();
             Assert.IsNotNull(_vm.BarItems);
-            Assert.IsTrue(2 == reportedProperties.Count);
+            Assert.IsTrue(3 == reportedProperties.Count);
             Assert.IsTrue(reportedProperties.Contains("BarItems"));
             Assert.IsTrue(reportedProperties.Contains("IsBarAvailable"));
+            Assert.IsTrue(reportedProperties.Contains("IsBarSticky"));
+            Assert.IsFalse(_vm.IsBarAvailable);
+            Assert.IsTrue(_vm.IsBarSticky);
+            Assert.IsFalse(_vm.IsBarVisible);
+            Assert.IsFalse(_vm.IsShowBarButtonVisible);
         }
 
         [TestMethod]
@@ -92,10 +97,14 @@
             _vm.BarItems = _visibleModels;
 
             Assert.IsTrue(_vm.IsShowBarButtonVisible);
-            Assert.AreEqual(3, reportedProperties.Count);
+            Assert.AreEqual(4, reportedProperties.Count);
             Assert.IsTrue(reportedProperties.Contains("BarItems"));
             Assert.IsTrue(reportedProperties.Contains("IsShowBarButtonVisible"));
             Assert.IsTrue(reportedProperties.Contains("IsBarAvailable"));
+            Assert.IsTrue(reportedProperties.Contains("IsBarSticky"));
+            Assert.IsTrue(_vm.IsBarAvailable);
+            Assert.IsFalse(_vm.IsBarSticky);
+            Assert.IsFalse(_vm.IsBarVisible);
         }
 
         [TestMethod]
@@ -108,10 +117,12 @@
             Assert.IsTrue(_vm.IsBarAvailable);
             Assert.IsTrue(_vm.IsShowBarButtonVisible);
             Assert.IsFalse(_vm.IsBarVisible);
+            Assert.IsFalse(_vm.IsBarSticky);
             _vm.BarItems = null;
             Assert.IsFalse(_vm.IsBarAvailable);
             Assert.IsFalse(_vm.IsShowBarButtonVisible);
             Assert.IsFalse(_vm.IsBarVisible);
+            Assert.IsTrue(_vm.IsBarSticky);
         }
 
         [TestMethod]
@@ -132,9 +143,11 @@
             _vm.ShowBar.Execute(null);
             Assert.IsFalse(_vm.IsShowBarButtonVisible);
             Assert.IsTrue(_vm.IsBarVisible);
+            Assert.IsFalse(_vm.IsBarSticky);
             _visibleModels[0].IsVisible = false;
             Assert.IsFalse(_vm.IsShowBarButtonVisible);
             Assert.IsFalse(_vm.IsBarVisible);
+            Assert.IsTrue(_vm.IsBarSticky);
         }
 
         [TestMethod]
@@ -144,6 +157,8 @@
             _vm.BarItems = _visibleModels;
             Assert.IsFalse(_vm.IsShowBarButtonVisible);
             Assert.IsFalse(_vm.IsBarVisible);
+            Assert.IsFalse(_vm.IsBarAvailable);
+            Assert.IsTrue(_vm.IsBarSticky);
         }
 
         [TestMethod]

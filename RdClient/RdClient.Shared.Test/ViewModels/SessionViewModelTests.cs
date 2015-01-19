@@ -1,10 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Errors;
-using RdClient.Shared.Input;
+using RdClient.Shared.Input.Keyboard;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
+using RdClient.Shared.Navigation.Extensions;
 using RdClient.Shared.ViewModels;
+using System;
 using System.Collections.Generic;
 
 namespace RdClient.Shared.Test.ViewModels
@@ -14,6 +17,7 @@ namespace RdClient.Shared.Test.ViewModels
     {
         private RdDataModel _dataModel;
         private MouseViewModel _mouseViewModel;
+        private TestDeferredExecution _testDispatcher;
 
         private sealed class DummyKeyboardCapture : IKeyboardCapture
         {
@@ -33,11 +37,22 @@ namespace RdClient.Shared.Test.ViewModels
             }
         }
 
+        private sealed class TestDeferredExecution : IDeferredExecution
+        {
+            void IDeferredExecution.Defer(Action action)
+            {
+                action.Invoke();
+            }
+        }
+
         [TestInitialize]
         public void SetUpTest()
         {
             _dataModel = new RdDataModel();
             _mouseViewModel = new MouseViewModel();
+
+            // use the test dispatcher to avoid deferring to UI
+            _testDispatcher = new TestDeferredExecution();
         }
 
         [TestCleanup]
@@ -45,6 +60,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _dataModel = null;
             _mouseViewModel = null;
+            _testDispatcher = null;
         }
 
         [TestMethod]
@@ -53,7 +69,8 @@ namespace RdClient.Shared.Test.ViewModels
             using(Mock.NavigationService navigation = new Mock.NavigationService())
             using(Mock.SessionModel sessionModel = new Mock.SessionModel())
             {
-                SessionViewModel svm = new SessionViewModel() { 
+                SessionViewModel svm = new SessionViewModel()
+                { 
                     KeyboardCapture = new DummyKeyboardCapture(),
                     SessionModel = sessionModel,
                     DataModel = _dataModel,
@@ -128,6 +145,7 @@ namespace RdClient.Shared.Test.ViewModels
                     DataModel = _dataModel,
                     MouseViewModel = _mouseViewModel
                 };
+                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
 
@@ -170,6 +188,7 @@ namespace RdClient.Shared.Test.ViewModels
                     DataModel = _dataModel,
                     MouseViewModel = _mouseViewModel
                 };
+                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
 
@@ -213,6 +232,7 @@ namespace RdClient.Shared.Test.ViewModels
                     DataModel = _dataModel,
                     MouseViewModel = _mouseViewModel
                 };
+                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
 
@@ -256,6 +276,7 @@ namespace RdClient.Shared.Test.ViewModels
                     DataModel = _dataModel,
                     MouseViewModel = _mouseViewModel
                 };
+                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
 
@@ -300,6 +321,7 @@ namespace RdClient.Shared.Test.ViewModels
                     DataModel = _dataModel,
                     MouseViewModel = _mouseViewModel
                 };
+                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
 
                 ((IViewModel)svm).Presenting(navigation, connectionInformation, null);
 

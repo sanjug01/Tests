@@ -10,10 +10,22 @@ namespace RdClient.Shared.Test.Mock
     {
 #pragma warning disable 67 // warning CS0067: the event <...> is never used
         public event EventHandler<ConnectionCreatedArgs> ConnectionCreated;
+        public event EventHandler<ConnectionAutoReconnectingArgs> ConnectionAutoReconnecting;
+        public event EventHandler<ConnectionAutoReconnectCompleteArgs> ConnectionAutoReconnectComplete;
 
         public void EmitConnectionCreated(ConnectionCreatedArgs args)
         {
             ConnectionCreated(this, args);
+        }
+
+        private void EmitConnectionAutoReconnecting(ConnectionAutoReconnectingArgs args)
+        {
+            ConnectionAutoReconnecting(this, args);
+        }
+
+        public void EmitConnectionAutoReconnectComplete(ConnectionAutoReconnectCompleteArgs args)
+        {
+            ConnectionAutoReconnectComplete(this, args);
         }
 
         public void Connect(ConnectionInformation connectionInformation, ITimerFactory timerFactory, GeneralSettings settings)

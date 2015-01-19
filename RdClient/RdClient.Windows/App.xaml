@@ -6,7 +6,6 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:model="using:RdClient.Shared.Models"
     xmlns:winmodel="using:RdClient.Models"
-    xmlns:input="using:RdClient.Input"
     xmlns:lifetime="using:RdClient.LifeTimeManagement"
     RequestedTheme="Light">
 
@@ -17,8 +16,6 @@
                 <ResourceDictionary Source="Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-            <input:CoreWindowKeyboardCapture x:Key="CoreWindowKeyboardCapture"/>
-
             <lifetime:LifeTimeManager x:Key="LifeTimeManager">
                 <lifetime:LifeTimeManager.RootFrameManager>
                     <lifetime:RootFrameManager/>

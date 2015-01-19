@@ -5,42 +5,63 @@
     xmlns:local="using:RdClient.Views"
     xmlns:controls="using:RdClient.Controls"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:input="using:RdClient.Input"
+    xmlns:c="using:RdClient.Converters"        
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
+    mc:Ignorable="d"    
     >
+       
     
     <UserControl.DataContext>
-        <vm:SessionViewModel
-            KeyboardCapture="{StaticResource CoreWindowKeyboardCapture}">
+        <vm:SessionViewModel>
             <vm:SessionViewModel.MouseViewModel>
                 <vm:MouseViewModel/>
             </vm:SessionViewModel.MouseViewModel>
+            <vm:SessionViewModel.KeyboardCapture>
+                <input:CoreWindowKeyboardCapture/>
+            </vm:SessionViewModel.KeyboardCapture>
         </vm:SessionViewModel>
     </UserControl.DataContext>
+    
+    <UserControl.Resources>
+        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
 
-    <Grid Background="green">
+    <Grid Background="GreenYellow">
 	<!--
         Attach the "Connect" command of the view model to the ConnectCommand
         property of the sesion panel. The session panel will execute the command
         as soon as its swap chain panel will have initialized.
         -->
-        <controls:RdSessionPanel ConnectCommand="{Binding ConnectCommand}" />
+        <controls:RdSessionPanel ConnectCommand="{Binding ConnectCommand}"
+                                 ViewSize="{Binding MouseViewModel.ViewSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <controls:MouseLayerControl x:Name="MouseLayer" 
                                     Background="Red"
                                     VerticalContentAlignment="Stretch"
                                     HorizontalContentAlignment="Stretch"
-                                    MousePointer="{Binding MouseViewModel.MousePointer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    MousePointerShape="{Binding MouseViewModel.MousePointerShape}"
-                                    MousePointerShapePosition="{Binding MouseViewModel.MousePointerShapePosition}"/>        
+                                    PointerEventConsumer="{Binding MouseViewModel.PointerEventConsumer}"
+                                    MouseShape="{Binding MouseViewModel.MouseShape}"
+                                    MousePosition="{Binding MouseViewModel.MousePosition}"/>
 
-        <Button
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Right" 
-            Command="{Binding DisconnectCommand}"
-            x:Uid="SessionView-DisconnectButton"
-            Content="Disconnect (d)">            
-        </Button>
+        <controls:SessionReconnectControl x:Name="SessionReconnectLayer" 
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          Visibility="{Binding Path=IsReconnecting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        <StackPanel VerticalAlignment="Bottom"
+                    HorizontalAlignment="Right" 
+                    Orientation="Horizontal">
+            
+            <TextBox Text="Disconnected. Attempting to reconnect (d)....." 
+                     x:Uid="SessionView-ReconnectingMessage"                   
+                     Visibility="{Binding Path=IsReconnecting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            
+            <Button
+                x:Uid="SessionView-DisconnectButton"
+                Command="{Binding DisconnectCommand}"                
+                Content="Disconnect (d)"/>
+        </StackPanel>
     </Grid>
 </UserControl>

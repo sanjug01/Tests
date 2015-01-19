@@ -12,6 +12,7 @@ namespace RdClient.Shared.Models
         private IThumbnail _thumbnail;
         private ITimer _timer;
         private GeneralSettings _settings;
+        private bool _isConnectionAvailable;
 
         public Snapshotter(IRdpConnection connection, IThumbnail thumbnail, ITimerFactory timerFactory, GeneralSettings settings)
         {
@@ -19,8 +20,23 @@ namespace RdClient.Shared.Models
             _thumbnail = thumbnail;
             _connection.Events.FirstGraphicsUpdate += Events_FirstGraphicsUpdate;
             _connection.Events.ClientDisconnected += Events_ClientDisconnected;
+            _connection.Events.ConnectionHealthStateChanged += Events_ConnectionHealthStateChanged;
             _timer = timerFactory.CreateTimer();
             _settings = settings;
+            _isConnectionAvailable = true;
+        }
+
+        void Events_ConnectionHealthStateChanged(object sender, ConnectionHealthStateChangedArgs e)
+        {
+            IRdpConnection rdpConnection = sender as IRdpConnection;
+            if ((int)RdClientCx.ConnectionHealthState.Warn == e.ConnectionState)
+            {
+                _isConnectionAvailable = false;
+            }
+            else if ((int)RdClientCx.ConnectionHealthState.Connected == e.ConnectionState)
+            {
+                _isConnectionAvailable = true;
+            }
         }
 
         private void Events_FirstGraphicsUpdate(object sender, FirstGraphicsUpdateArgs e)
@@ -44,7 +60,7 @@ namespace RdClient.Shared.Models
 
         private async void TakeSnapshot()
         {
-            if (_settings.UseThumbnails)
+            if (_settings.UseThumbnails && _isConnectionAvailable)
             {
                 await _thumbnail.Update(_connection.GetSnapshot());
             }

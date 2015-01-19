@@ -10,6 +10,8 @@ namespace RdClient.Shared.CxWrappers
     
     public class RdpConnection : IRdpConnection, IRdpProperties
     {
+        private RdInstrumenter _instrument = new RdInstrumenter();
+
         private RdClientCx.RdpConnection _rdpConnectionCx;
         private RdClientCx.RdpConnectionStore _rdpConnectionStoreCx;
 
@@ -82,11 +84,7 @@ namespace RdClient.Shared.CxWrappers
                 rdpConnectionStore.RemoveConnection(_rdpConnectionCx);
                 rdpConnectionStore = null;
 
-                //
-                // Terminate the connection object.
-                //
-                xRes = _rdpConnectionCx.TerminateInstance();
-                RdTrace.IfFailXResultThrow(xRes, "Unable to terminate RDP connection.");
+                TerminateInstance();
 
                 _rdpConnectionCx = null;   
             }         
@@ -94,6 +92,8 @@ namespace RdClient.Shared.CxWrappers
         
         public void Connect(Credentials credentials, bool fUsingSavedCreds)
         {
+            _instrument.Instrument("Connect");
+
             int xRes = _rdpConnectionCx.SetUserCredentials(credentials.Username, credentials.Domain, credentials.Password, fUsingSavedCreds);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set user credentials.");
 
@@ -103,6 +103,8 @@ namespace RdClient.Shared.CxWrappers
 
         public void Cleanup()
         {
+            _instrument.Instrument("Cleanup");
+
             int xRes = _rdpConnectionStoreCx.RemoveConnection(_rdpConnectionCx);
             RdTrace.IfFailXResultThrow(xRes, "Failed to disconnect remove connection from store.");
 
@@ -111,37 +113,48 @@ namespace RdClient.Shared.CxWrappers
 
         public void Disconnect()
         {
+            _instrument.Instrument("Disconnect");
+
             int xRes = _rdpConnectionCx.Disconnect();
             RdTrace.IfFailXResultThrow(xRes, "Failed to disconnect.");
-            
-            TerminateInstance();
         }
 
         public void Suspend()
         {
+            _instrument.Instrument("Suspend");
+
             int xRes = _rdpConnectionCx.Suspend();
             RdTrace.IfFailXResultThrow(xRes, "Failed to suspend.");
         }
 
         public void Resume()
         {
+            _instrument.Instrument("Resume");
+
             int xRes = _rdpConnectionCx.Resume();
             RdTrace.IfFailXResultThrow(xRes, "Failed to resume.");
         }
 
         public void TerminateInstance()
         {
+            _instrument.Instrument("TerminateInstance");
+
             _rdpConnectionCx.TerminateInstance();
         }
 
         public void HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
         {
+            _instrument.Instrument("HandleAsyncDisconnectResult");
+
+            // TODO fix crash when this is called after Disconnect() has set _rdpConnectionCx to null
             int xRes = _rdpConnectionCx.HandleAsyncDisconnectResult(RdpTypeConverter.ConvertToCx(disconnectReason), reconnectToServer);
             RdTrace.IfFailXResultThrow(xRes, "Failed async disconnect.");
         }
 
         public int GetIntProperty(string propertyName)
         {
+            _instrument.Instrument("GetIntProperty");
+
             int value;
             int xRes = _rdpConnectionCx.GetIntProperty(propertyName, out value);
 
@@ -152,12 +165,16 @@ namespace RdClient.Shared.CxWrappers
 
         public void SetIntProperty(string propertyName, int value)
         {
+            _instrument.Instrument("SetIntProperty");
+
             int xRes = _rdpConnectionCx.SetIntProperty(propertyName, value);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set int property: " + propertyName);
         }
 
         public string GetStringPropery(string propertyName)
         {
+            _instrument.Instrument("GetStringPropery");
+
             string value;
             int xRes = _rdpConnectionCx.GetStringProperty(propertyName, out value);
 
@@ -168,6 +185,8 @@ namespace RdClient.Shared.CxWrappers
 
         public void SetStringProperty(string propertyName, string value)
         {
+            _instrument.Instrument("SetStringProperty");
+
             int xRes = _rdpConnectionCx.SetStringProperty(propertyName, value);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set string property: " + propertyName);
         }
@@ -175,6 +194,8 @@ namespace RdClient.Shared.CxWrappers
 
         public bool GetBoolProperty(string propertyName)
         {
+            _instrument.Instrument("GetBoolProperty");
+
             bool value;
             int xRes = _rdpConnectionCx.GetBoolProperty(propertyName, out value);
 
@@ -185,12 +206,16 @@ namespace RdClient.Shared.CxWrappers
 
         public void SetBoolProperty(string propertyName, bool value)
         {
+            _instrument.Instrument("SetBoolProperty");
+
             int xRes = _rdpConnectionCx.SetBoolProperty(propertyName, value);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set bool property: " + propertyName);
         }
 
         public IRdpScreenSnapshot GetSnapshot()
         {
+            _instrument.Instrument("GetSnapshot");
+
             int width, height;
             byte[] bytes;
             int xRes = _rdpConnectionCx.GetSnapshot(out width, out height, out bytes);
@@ -200,53 +225,81 @@ namespace RdClient.Shared.CxWrappers
 
         public void SendMouseEvent(MouseEventType type, float xPos, float yPos)
         {
+            //_instrument.Instrument("SendMouseEvent");
+
             int xRes = _rdpConnectionCx.SendMouseEvent(RdpTypeConverter.ConvertToCx(type), xPos, yPos);
             RdTrace.IfFailXResultThrow(xRes, "Failed to send mouse event.");
+        }
+
+        public void SendKeyEvent(int keyValue, bool scanCode, bool extended, bool keyUp)
+        {
+            _instrument.Instrument("SendKeyEvent");
+
+            int xRes = _rdpConnectionCx.SendKeyEvent(keyValue, scanCode, extended, keyUp);
+            RdTrace.IfFailXResultThrow(xRes, "Failed to send key event.");
         }
 
 
         void OnClientConnectedHandler(RdClientCx.RdpConnection sender)
         {
+            _instrument.Instrument("OnClientConnectedHandler");
+
             _eventProxy.EmitClientConnected(this, new ClientConnectedArgs());
         }
 
         void OnClientAsyncDisconnectHandler(RdClientCx.RdpConnection sender, RdClientCx.RdpDisconnectReason disconnectReason)
         {
+            _instrument.Instrument("OnClientAsyncDisconnectHandler");
+
             _eventProxy.EmitClientAsyncDisconnect(this, new ClientAsyncDisconnectArgs(RdpTypeConverter.ConvertFromCx(disconnectReason)));
         }
 
         void OnClientDisconnectedHandler(RdClientCx.RdpConnection sender, RdClientCx.RdpDisconnectReason disconnectReason)
         {
+            _instrument.Instrument("OnClientDisconnectedHandler");
+
             _eventProxy.EmitClientDisconnected(this, new ClientDisconnectedArgs(RdpTypeConverter.ConvertFromCx(disconnectReason)));
         }
 
         void OnUserCredentialsRequestHandler(RdClientCx.RdpConnection sender, int secLayer)
         {
+            _instrument.Instrument("OnUserCredentialsRequestHandler");
+
             _eventProxy.EmitUserCredentialsRequest(this, new UserCredentialsRequestArgs(secLayer));
         }
 
         void OnMouseCursorShapeChanged(RdClientCx.RdpConnection sender, byte[] buffer, int width, int height, int xHotspot, int yHotspot)
         {
+            _instrument.Instrument("OnMouseCursorShapeChanged");
+
             _eventProxy.EmitMouseCursorShapeChanged(this, new MouseCursorShapeChangedArgs(buffer, width, height, xHotspot, yHotspot));            
         }
 
         void OnMouseCursorPositionChanged(RdClientCx.RdpConnection sender, int xPos, int yPos)
         {
+            _instrument.Instrument("OnMouseCursorPositionChanged");
+
             _eventProxy.EmitMouseCursorPositionChanged(this, new MouseCursorPositionChangedArgs(xPos, yPos));            
         }
 
         void OnMultiTouchEnabledChanged(RdClientCx.RdpConnection sender, bool multiTouchEnabled)
         {
+            _instrument.Instrument("OnMultiTouchEnabledChanged");
+
             _eventProxy.EmitMultiTouchEnabledChanged(this, new MultiTouchEnabledChangedArgs(multiTouchEnabled));            
         }
 
         void OnConnectionHealthStateChangedHandler(RdClientCx.RdpConnection sender, int connectionState)
         {
+            _instrument.Instrument("OnConnectionHealthStateChangedHandler");
+
             _eventProxy.EmitConnectionHealthStateChanged(this, new ConnectionHealthStateChangedArgs(connectionState));            
         }
 
         void OnClientAutoReconnectingHandler(RdClientCx.RdpConnection sender, int disconnectReason, int attemptCount, out bool continueReconnecting)
         {
+            _instrument.Instrument("OnClientAutoReconnectingHandler");
+
             bool _continueReconnecting = false;
             ClientAutoReconnectingContinueDelegate shouldContinue = (__continueReconnecting) => { _continueReconnecting = __continueReconnecting; };
 
@@ -257,46 +310,64 @@ namespace RdClient.Shared.CxWrappers
 
         void OnClientAutoReconnectCompleteHandler(RdClientCx.RdpConnection sender)
         {
+            _instrument.Instrument("OnClientAutoReconnectCompleteHandler");
+
             _eventProxy.EmitClientAutoReconnectComplete(this, new ClientAutoReconnectCompleteArgs());
         }
 
         void OnLoginCompletedHandler(RdClientCx.RdpConnection sender)
         {
+            _instrument.Instrument("OnLoginCompletedHandler");
+
             _eventProxy.EmitLoginCompleted(this, new LoginCompletedArgs());
         }
 
         void OnStatusInfoReceivedHandler(RdClientCx.RdpConnection sender, int statusCode)
         {
+            _instrument.Instrument("OnStatusInfoReceivedHandler");
+
             _eventProxy.EmitStatusInfoReceived(this, new StatusInfoReceivedArgs(statusCode));
         }
 
         void OnFirstGraphicsUpdateHandler(RdClientCx.RdpConnection sender)
         {
+            _instrument.Instrument("OnFirstGraphicsUpdateHandler");
+
             _eventProxy.EmitFirstGraphicsUpdate(this, new FirstGraphicsUpdateArgs());
         }
 
         void OnRemoteAppWindowCreatedHandler(RdClientCx.RdpConnection sender, uint windowId, string title, byte[] icon, uint iconWidth, uint iconHeight)
         {
+            _instrument.Instrument("OnRemoteAppWindowCreatedHandler");
+
             _eventProxy.EmitRemoteAppWindowCreated(this, new RemoteAppWindowCreatedArgs(windowId, title, icon, iconWidth, iconHeight));
         }
 
         void OnRemoteAppWindowDeletedHandler(RdClientCx.RdpConnection sender, uint windowId)
         {
+            _instrument.Instrument("OnRemoteAppWindowDeletedHandler");
+
             _eventProxy.EmitRemoteAppWindowDeleted(this, new RemoteAppWindowDeletedArgs(windowId));
         }
 
         void OnRemoteAppWindowTitleUpdatedHandler(RdClientCx.RdpConnection sender, uint windowId, string title)
         {
+            _instrument.Instrument("OnRemoteAppWindowTitleUpdatedHandler");
+
             _eventProxy.EmitRemoteAppWindowTitleUpdated(this, new RemoteAppWindowTitleUpdatedArgs(windowId, title));
         }
 
         void OnRemoteAppWindowIconUpdatedHandler(RdClientCx.RdpConnection sender, uint windowId, byte[] icon, uint iconWidth, uint iconHeight)
         {
+            _instrument.Instrument("OnRemoteAppWindowIconUpdatedHandler");
+
             _eventProxy.EmitRemoteAppWindowIconUpdated(this, new RemoteAppWindowIconUpdatedArgs(windowId, icon, iconWidth, iconHeight));
         }
 
         public IRdpCertificate GetServerCertificate()
         {
+            _instrument.Instrument("GetServerCertificate");
+
             RdpCertificate rdpCertificate = null;
 
             RdClientCx.ServerCertificateError certErrors;
