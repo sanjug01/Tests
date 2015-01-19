@@ -141,7 +141,7 @@ namespace RdClient.Shared.Input.Mouse
 
             stateMachine.SetStart(PointerState.Idle);
 
-            return new TouchContext(timer, manipulator, stateMachine);
+            return new ClickTouchContext(timer, manipulator, stateMachine);
         }
     }
 }

@@ -14,35 +14,55 @@ namespace RdClient.Shared.ViewModels
 
     public class MouseViewModel : MutableObject, IPointerManipulator
     {
-        private PointerEventConsumer _pointerEventConsumer;
-        public PointerEventConsumer PointerEventConsumer
+        private PointerEventDispatcher _pointerEventConsumer;
+        public PointerEventDispatcher PointerEventConsumer
         {
             get { return _pointerEventConsumer; }
             set { SetProperty(ref _pointerEventConsumer, value); }
         }
 
         private ImageSource _mouseShape;
-        public ImageSource MouseShape 
-        { 
-            get { return _mouseShape; } 
-            set { SetProperty(ref _mouseShape, value); } 
+        public ImageSource MouseShape
+        {
+            get { return _mouseShape; }
+            set
+            {
+                SetProperty(ref _mouseShape, value);
+            }
         }
 
         private Point _mousePosition = new Point(0.0, 0.0);
-        public Point MousePosition 
+        public Point MousePosition
         {
             get { return new Point(_mousePosition.X, _mousePosition.Y); }
-            set {
-                Point p = new Point(
-                    Math.Max(0.0, Math.Min(value.X, this.ViewSize.Width)),
-                    Math.Max(0.0, Math.Min(value.Y, this.ViewSize.Height))
-                );
+            set
+            {
+                this.DeferredExecution.DeferToUI(() =>
+                {
+                    Point p = new Point(
+                        Math.Max(0.0, Math.Min(value.X, this.ViewSize.Width)),
+                        Math.Max(0.0, Math.Min(value.Y, this.ViewSize.Height))
+                    );
 
-                SetProperty(ref _mousePosition, p); 
-            } 
+                    SetProperty(ref _mousePosition, p);
+                });
+            }
         }
 
-        private Size _viewSize = new Size(0.0,0.0);
+        private double _mouseAcceleration = 1.4;
+        public double MouseAcceleration
+        {
+            get
+            {
+                return _mouseAcceleration;
+            }
+            set
+            {
+                _mouseAcceleration = value;
+            }
+        }
+
+        private Size _viewSize = new Size(0.0, 0.0);
         public Size ViewSize
         {
             get { return _viewSize; }
@@ -57,9 +77,11 @@ namespace RdClient.Shared.ViewModels
         }
 
         private IRdpConnection _rdpConnection;
-        public IRdpConnection RdpConnection { 
-            set { 
-                if(_rdpConnection != null)
+        public IRdpConnection RdpConnection
+        {
+            set
+            {
+                if (_rdpConnection != null)
                 {
                     _rdpConnection.Events.MouseCursorShapeChanged -= OnMouseCursorShapeChanged;
                     _rdpConnection.Events.MouseCursorPositionChanged -= OnMouseCursorPositionChanged;
@@ -69,20 +91,21 @@ namespace RdClient.Shared.ViewModels
                 _rdpConnection = value;
                 _rdpConnection.Events.MouseCursorShapeChanged += OnMouseCursorShapeChanged;
                 _rdpConnection.Events.MouseCursorPositionChanged += OnMouseCursorPositionChanged;
-            } 
+            }
         }
 
         public IExecutionDeferrer DeferredExecution { private get; set; }
 
         public MouseViewModel()
         {
-            this.PointerEventConsumer = new PointerEventConsumer(new WinrtThreadPoolTimer(), this);
+            this.PointerEventConsumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
+            this.PointerEventConsumer.ClickModeEnabled = true;
         }
 
         private void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
         {
-
-            this.DeferredExecution.DeferToUI(() => {
+            this.DeferredExecution.DeferToUI(() =>
+            {
                 WriteableBitmap spBitmap = null;
 
                 if (null != args.Buffer)
@@ -131,6 +154,7 @@ namespace RdClient.Shared.ViewModels
                     this.HotSpot = new Point(args.XHotspot, args.YHotspot);
                 }
             });
+
         }
 
         private void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args)
@@ -142,7 +166,7 @@ namespace RdClient.Shared.ViewModels
         {
             if (_rdpConnection != null)
             {
-                _rdpConnection.SendMouseEvent(eventType, (float) this.MousePosition.X, (float) this.MousePosition.Y);
+                _rdpConnection.SendMouseEvent(eventType, (float)this.MousePosition.X, (float)this.MousePosition.Y);
             }
         }
     }

@@ -125,6 +125,7 @@
     <Compile Include="Input\Keyboard\SingleReleaseKey.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyBase.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactory.cs" />
+    <Compile Include="Input\Mouse\ClickTouchContext.cs" />
     <Compile Include="Input\Mouse\DoubleClickTimer.cs" />
     <Compile Include="Input\Mouse\IPointerEventConsumer.cs" />
     <Compile Include="Input\Mouse\IPointerManipulator.cs" />
@@ -139,7 +140,7 @@
     <Compile Include="LifeTimeManagement\LaunchEventArgs.cs" />
     <Compile Include="LifeTimeManagement\SuspendEventArgs.cs" />
     <Compile Include="Models\GeneralSettings.cs" />
-    <Compile Include="Input\Mouse\PointerEventConsumer.cs" />
+    <Compile Include="Input\Mouse\PointerEventDispatcher.cs" />
     <Compile Include="Models\RemoteApplication.cs" />
     <Compile Include="Models\CloudWorkspace.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />

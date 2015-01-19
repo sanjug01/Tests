@@ -40,6 +40,12 @@ namespace RdClient.Shared.Test.Input.Mouse
     {
         public List<TestMousePointerEvent> _eventLog = new List<TestMousePointerEvent>();
 
+        public double MouseAcceleration
+        {
+            get { return 1.0; }
+            set { }
+        }
+
         public Point MousePosition
         {
             get;
@@ -56,15 +62,17 @@ namespace RdClient.Shared.Test.Input.Mouse
     public class PointerInputTestsBase
     {
         protected TestTimer _timer;
-        private PointerEventConsumer _consumer;
+        private PointerEventDispatcher _consumer;
         private TestPointerManipulator _manipulator;
+
+        protected bool ClickModeEnabled { get { return _consumer.ClickModeEnabled; } set { _consumer.ClickModeEnabled = value; } }
 
         [TestInitialize]
         public void PointerModel_TestInitialize()
         {
             _timer = new TestTimer();
             _manipulator = new TestPointerManipulator();
-            _consumer = new PointerEventConsumer(_timer, _manipulator);
+            _consumer = new PointerEventDispatcher(_timer, _manipulator);
         }
 
         protected void ConsumeEventsHelper(PointerEvent[] events)

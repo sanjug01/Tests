@@ -74,9 +74,10 @@ namespace RdClient.Shared.Test.Input.Mouse
 
             _timer.TriggerCallback();
 
+            // we didn't send any pointer move gestures so the click event should be at the current cursor position which is 0.0
             AssertionHelper(new TestMousePointerEvent[] { 
-                new TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(10.0, 10.0) },
-                new TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(10.0, 10.00) }
+                new TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(0.0, 0.0) },
+                new TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(0.0, 0.0) }
             });
         }
 
@@ -91,11 +92,12 @@ namespace RdClient.Shared.Test.Input.Mouse
                 new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Touch, 3)
             });
 
+            // we didn't send any pointer move gestures so the double click event should be at the current cursor position which is 0.0
             AssertionHelper(new TestMousePointerEvent[] { 
-                new TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(10.0, 10.0) },
-                new TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(10.0, 10.00) },
-                new TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(10.0, 10.0) },
-                new TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(10.0, 10.00) }
+                new TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(0.0, 0.0) },
+                new TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(0.0, 0.0) },
+                new TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(0.0, 0.0) },
+                new TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(0.0, 0.0) }
             });
         }
 

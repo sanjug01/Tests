@@ -5,7 +5,7 @@ namespace RdClient.Shared.Input.Mouse
 {
     public interface IPointerManipulator
     {
-        public bool SupportsMultiTouch { get; }
+        double MouseAcceleration { get; set; }
         Point MousePosition { get; set; }
         void SendMouseAction(MouseEventType eventType);
     }

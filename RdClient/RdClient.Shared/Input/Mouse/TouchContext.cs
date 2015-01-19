@@ -29,14 +29,16 @@ namespace RdClient.Shared.Input.Mouse
     {
         private Dictionary<uint, PointerEvent> _trackedPointerEvents = new Dictionary<uint, PointerEvent>();
         private uint _mainPointerId;
-        public DoubleClickTimer DoubleClickTimer { get; set; }
+        public DoubleClickTimer DoubleClickTimer { get; private set; }
 
         private IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> _stateMachine;
-        public IPointerManipulator PointerManipulator { get; set; }
+        public IPointerManipulator PointerManipulator { get; private set; }
 
-        public TouchContext(ITimer timer, IPointerManipulator pointerManipulator, IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
+        public TouchContext(ITimer timer, 
+                            IPointerManipulator manipulator, 
+                            IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
         {
-            PointerManipulator = pointerManipulator;
+            PointerManipulator = manipulator;
 
             DoubleClickTimer = new DoubleClickTimer(timer, 300);
             DoubleClickTimer.AddAction(DoubleClickTimer.ClickTimerType.LeftClick, MouseLeftClick);
@@ -45,7 +47,7 @@ namespace RdClient.Shared.Input.Mouse
             _stateMachine = stateMachine;
         }
 
-        public int NumberOfContacts(PointerEvent pointerEvent)
+        public virtual int NumberOfContacts(PointerEvent pointerEvent)
         {
             int result = _trackedPointerEvents.Count;
 
@@ -61,7 +63,7 @@ namespace RdClient.Shared.Input.Mouse
             return result;
         }
 
-        public bool MoveThresholdExceeded(PointerEvent pointerEvent)
+        public virtual bool MoveThresholdExceeded(PointerEvent pointerEvent)
         {
             bool result = false;
 
@@ -74,25 +76,25 @@ namespace RdClient.Shared.Input.Mouse
             return result;
         }
 
-        public void MouseLeftClick(PointerEvent pointerEvent)
+        public virtual void MouseLeftClick(PointerEvent pointerEvent)
         {
             PointerManipulator.SendMouseAction(MouseEventType.LeftPress);
             PointerManipulator.SendMouseAction(MouseEventType.LeftRelease);
         }
 
-        public void MouseRightClick(PointerEvent pointerEvent)
+        public virtual void MouseRightClick(PointerEvent pointerEvent)
         {
             PointerManipulator.SendMouseAction(MouseEventType.RightPress);
             PointerManipulator.SendMouseAction(MouseEventType.RightRelease);
         }
 
-        public void MouseMove(PointerEvent pointerEvent)
+        public virtual void MouseMove(PointerEvent pointerEvent)
         {
             UpdateCursorPosition(pointerEvent);
             PointerManipulator.SendMouseAction(MouseEventType.Move);
         }
 
-        public void UpdateCursorPosition(PointerEvent pointerEvent)
+        public virtual void UpdateCursorPosition(PointerEvent pointerEvent)
         {
             double deltaX = 0.0;
             double deltaY = 0.0;
@@ -100,8 +102,8 @@ namespace RdClient.Shared.Input.Mouse
             if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
             {
                 PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
-                deltaX = (pointerEvent.Position.X - lastPointerEvent.Position.X) * 1.4;
-                deltaY = (pointerEvent.Position.Y - lastPointerEvent.Position.Y) * 1.4;
+                deltaX = (pointerEvent.Position.X - lastPointerEvent.Position.X) * this.PointerManipulator.MouseAcceleration;
+                deltaY = (pointerEvent.Position.Y - lastPointerEvent.Position.Y) * this.PointerManipulator.MouseAcceleration;
             }
             else if (pointerEvent.Inertia == true)
             {
