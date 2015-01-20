@@ -8,5 +8,6 @@ namespace RdClient.Shared.Input.Mouse
         double MouseAcceleration { get; set; }
         Point MousePosition { get; set; }
         void SendMouseAction(MouseEventType eventType);
+        void SendTouchAction(PointerActionType type, uint contactId, Point position, ulong frameTime);
     }
 }

@@ -99,7 +99,7 @@ namespace RdClient.Shared.ViewModels
         public MouseViewModel()
         {
             this.PointerEventConsumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
-            this.PointerEventConsumer.DirectModeEnabled = true;
+            this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.MultiTouch;
         }
 
         private void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
@@ -168,6 +168,11 @@ namespace RdClient.Shared.ViewModels
             {
                 _rdpConnection.SendMouseEvent(eventType, (float)this.MousePosition.X, (float)this.MousePosition.Y);
             }
+        }
+
+        public void SendTouchAction(PointerActionType type, uint contactId, Point position, ulong frameTime)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -8,6 +8,12 @@ namespace RdClient.Shared.Input.Mouse
     {
         private PointerEvent _trackedPointerEvent;
         private IPointerManipulator _pointerManipulator;
+
+        public ConsumptionMode ConsumptionMode
+        {
+            set { }
+        }
+
         public MouseMode(IPointerManipulator pointerManipulator)
         {
             _pointerManipulator = pointerManipulator;

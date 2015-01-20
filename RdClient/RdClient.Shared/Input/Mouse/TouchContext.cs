@@ -139,5 +139,10 @@ namespace RdClient.Shared.Input.Mouse
             DoubleClickTimer.Stop();
             _trackedPointerEvents.Clear();
         }
+
+        public ConsumptionMode ConsumptionMode
+        {
+            set { }
+        }
     }
 }

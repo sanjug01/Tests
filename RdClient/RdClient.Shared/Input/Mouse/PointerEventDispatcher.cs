@@ -12,19 +12,25 @@ namespace RdClient.Shared.Input.Mouse
         private IPointerEventConsumer _pointerMode;
         private IPointerEventConsumer _directMode;
 
-        private bool _directModeEnabled = false;
-        public bool DirectModeEnabled {
-            get { return _directModeEnabled; }
+        private ConsumptionMode _consumptionMode = ConsumptionMode.Pointer;
+        public ConsumptionMode ConsumptionMode {
+            get { return _consumptionMode; }
             set 
-            { 
-                _directModeEnabled = value; 
-                if(_directModeEnabled)
+            {
+                _consumptionMode = value;
+
+                switch(_consumptionMode)
                 {
-                    _pointerConsumers[PointerType.Touch] = _directMode;
-                }
-                else
-                {
-                    _pointerConsumers[PointerType.Touch] = _pointerMode;
+                    case ConsumptionMode.Pointer:
+                        _pointerConsumers[PointerType.Touch] = _pointerMode;
+                        break;
+                    case ConsumptionMode.DirectTouch:
+                        _pointerConsumers[PointerType.Touch] = _directMode;
+                        break;
+                    case ConsumptionMode.MultiTouch:
+                        break;
+                    default:
+                        break;
                 }
             } 
         }

@@ -12,7 +12,7 @@ namespace RdClient.Shared.Test.Input.Mouse
         [TestMethod]
         public void PointerModel_ShouldMoveAndClick()
         {
-            this.ClickModeEnabled = true;
+            this.ConsumptionMode = ConsumptionMode.DirectTouch;
 
             ConsumeEventsHelper(new PointerEvent[] { 
                 new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
@@ -21,17 +21,17 @@ namespace RdClient.Shared.Test.Input.Mouse
 
             _timer.TriggerCallback();
 
-            AssertionHelper(new TestMousePointerEvent[] { 
-                new TestMousePointerEvent() { Type = MouseEventType.Move, Position = new Point(10.0, 10.0) },
-                new TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(10.0, 10.0) },
-                new TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(10.0, 10.0) }
+            MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 
+                new Mock.TestMousePointerEvent() { Type = MouseEventType.Move, Position = new Point(10.0, 10.0) },
+                new Mock.TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(10.0, 10.0) },
+                new Mock.TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(10.0, 10.0) }
             });
         }
 
         [TestMethod]
         public void PointerModel_ShouldMoveAndDoubleClick()
         {
-            this.ClickModeEnabled = true;
+            this.ConsumptionMode = ConsumptionMode.DirectTouch;
 
             ConsumeEventsHelper(new PointerEvent[] { 
                 new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
@@ -40,13 +40,13 @@ namespace RdClient.Shared.Test.Input.Mouse
                 new PointerEvent(new Point(12.0, 12.0), false, new Point(0.0, 0.0), false, false, PointerType.Touch, 3),
             });
 
-            AssertionHelper(new TestMousePointerEvent[] { 
-                new TestMousePointerEvent() { Type = MouseEventType.Move, Position = new Point(12.0, 12.0) },
-                new TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(12.0, 12.0) },
-                new TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(12.0, 12.0) },
-                new TestMousePointerEvent() { Type = MouseEventType.Move, Position = new Point(12.0, 12.0) },
-                new TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(12.0, 12.0) },
-                new TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(12.0, 12.0) }
+            MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 
+                new Mock.TestMousePointerEvent() { Type = MouseEventType.Move, Position = new Point(12.0, 12.0) },
+                new Mock.TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(12.0, 12.0) },
+                new Mock.TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(12.0, 12.0) },
+                new Mock.TestMousePointerEvent() { Type = MouseEventType.Move, Position = new Point(12.0, 12.0) },
+                new Mock.TestMousePointerEvent() { Type = MouseEventType.LeftPress, Position = new Point(12.0, 12.0) },
+                new Mock.TestMousePointerEvent() { Type = MouseEventType.LeftRelease, Position = new Point(12.0, 12.0) }
             });
         }
     }
