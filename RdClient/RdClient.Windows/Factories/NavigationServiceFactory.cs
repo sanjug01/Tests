@@ -14,7 +14,6 @@ namespace RdClient.Factories
             IPresentableViewFactory viewFactory = new PresentableViewFactory<PresentableViewConstructor>();
             viewFactory.AddViewClass("ConnectionCenterView", typeof(Views.ConnectionCenterView));
             viewFactory.AddViewClass("SessionView", typeof(Views.SessionView));
-            viewFactory.AddViewClass("TestsView", typeof(Views.TestsView));
             viewFactory.AddViewClass("AddOrEditDesktopView", typeof(Views.AddOrEditDesktopView));
             viewFactory.AddViewClass("AddUserView", typeof(Views.AddUserView));
             viewFactory.AddViewClass("ErrorMessageView", typeof(Views.ErrorMessageView));

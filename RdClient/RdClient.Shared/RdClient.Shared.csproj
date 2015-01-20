@@ -207,7 +207,6 @@
     <Compile Include="ViewModels\SeparatorBarItemModel.cs" />
     <Compile Include="ViewModels\SessionViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
-    <Compile Include="ViewModels\TestsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Navigation\INavigationService.cs" />
     <Compile Include="Navigation\IPresentableView.cs" />
