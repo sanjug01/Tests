@@ -21,6 +21,8 @@ namespace RdClient.Shared.ViewModels
         // app bar items
         private readonly BarItemModel _editItem;
         private readonly BarItemModel _deleteItem;
+        private const string EditItemStringId = "Common_Edit_String";
+        private const string DeleteItemStringId = "Common_Delete_String";
 
         public ConnectionCenterViewModel()
         {
@@ -30,8 +32,8 @@ namespace RdClient.Shared.ViewModels
             this.ToggleDesktopSelectionCommand = new RelayCommand(this.ToggleDesktopSelectionCommandExecute);
             this.GoToSettingsCommand = new RelayCommand(this.GoToSettingsCommandExecute);
 
-            _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, "Edit", BarItemModel.ItemAlignment.Right);
-            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete", BarItemModel.ItemAlignment.Right);
+            _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, EditItemStringId, BarItemModel.ItemAlignment.Right);
+            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, DeleteItemStringId, BarItemModel.ItemAlignment.Right);
 
             this.DesktopViewModels = null;
             this.PropertyChanged += ConnectionCenterViewModel_PropertyChanged;

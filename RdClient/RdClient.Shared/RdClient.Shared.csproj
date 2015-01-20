@@ -60,6 +60,7 @@
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\PointerEventConverter.cs" />
     <Compile Include="Converters\RdpErrorToLocalizedStringConverter.cs" />
+    <Compile Include="Converters\ResourceIdToLocalizedStringConverter.cs" />
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverter.cs" />
     <Compile Include="Converters\ByteArrayToStringConverter.cs" />

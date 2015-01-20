@@ -37,7 +37,7 @@
         [TestMethod]
         public void NewBarButtonModel_CorrectLabel()
         {
-            Assert.AreEqual(CommandLabel, _model.Label);
+            Assert.AreEqual(CommandLabel, _model.LabelStringId);
         }
 
         [TestMethod]
