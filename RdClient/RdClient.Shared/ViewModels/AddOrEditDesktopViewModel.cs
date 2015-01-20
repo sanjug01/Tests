@@ -44,29 +44,6 @@ namespace RdClient.Shared.ViewModels
             _userComboBoxType  = userComboBoxType;
             _credentials = credentials;
         }
-
-        public override string ToString() 
-        {
-            string description;
-
-            switch (this.UserComboBoxType)
-            {
-                case UserComboBoxType.AddNew:
-                    description = "Add New (d)";
-                    break;
-                case UserComboBoxType.AskEveryTime:
-                    description = "Ask Every Time (d)";
-                    break;
-                case UserComboBoxType.Credentials:
-                    description = this.Credentials.Username;
-                    break;
-                default:
-                    description = "";
-                    break;
-            }
-
-            return description;
-        }
     }
 
     public class AddOrEditDesktopViewModel : ViewModelBase
