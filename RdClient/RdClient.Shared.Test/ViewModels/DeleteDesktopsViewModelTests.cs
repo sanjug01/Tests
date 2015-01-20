@@ -13,10 +13,10 @@ namespace RdClient.Shared.Test.ViewModels
     public class DeleteDesktopsViewModelTests
     {
         private TestData _testData;
-        private List<object> _emptyDesktopsSelection;
-        private List<object> _singleDesktopSelection;
+        private List<Desktop> _emptyDesktopsSelection;
+        private List<Desktop> _singleDesktopSelection;
         private Desktop _singleDesktop;
-        private List<object> _multiDesktopsSelection;
+        private List<Desktop> _multiDesktopsSelection;
 
         private RdDataModel _dataModel;
 
@@ -37,14 +37,14 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _testData = new TestData();
 
-            _emptyDesktopsSelection = new List<object>();
+            _emptyDesktopsSelection = new List<Desktop>();
 
             // can pass a single desktop or a selection with a single element
-            _singleDesktopSelection = new List<object>();
+            _singleDesktopSelection = new List<Desktop>();
             _singleDesktop = _testData.NewValidDesktop(Guid.Empty);
             _singleDesktopSelection.Add(_singleDesktop);
 
-            _multiDesktopsSelection = new List<object>();
+            _multiDesktopsSelection = new List<Desktop>();
             _multiDesktopsSelection.Add(_testData.NewValidDesktop(Guid.Empty));
             _multiDesktopsSelection.Add(_testData.NewValidDesktop(Guid.Empty));
             _multiDesktopsSelection.Add(_testData.NewValidDesktop(Guid.Empty));
@@ -82,7 +82,6 @@ namespace RdClient.Shared.Test.ViewModels
 
                 Assert.AreEqual(0,_deleteDesktopsViewModel.DesktopsCount);
                 Assert.IsFalse(_deleteDesktopsViewModel.IsSingleSelection);
-                Assert.IsTrue(String.IsNullOrEmpty(_deleteDesktopsViewModel.SelectionLabel));
             }
         }
 
@@ -97,9 +96,7 @@ namespace RdClient.Shared.Test.ViewModels
                 ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
 
                 Assert.AreEqual(1, _deleteDesktopsViewModel.DesktopsCount);
-                Assert.IsTrue(_deleteDesktopsViewModel.IsSingleSelection);
-                Assert.IsFalse(String.IsNullOrEmpty(_deleteDesktopsViewModel.SelectionLabel));
-                Assert.IsTrue(_deleteDesktopsViewModel.SelectionLabel.IndexOf(hostName) >= 0);
+                Assert.IsTrue(_deleteDesktopsViewModel.IsSingleSelection);                
             }
         }
 
@@ -115,8 +112,6 @@ namespace RdClient.Shared.Test.ViewModels
 
                 Assert.AreEqual(1, _deleteDesktopsViewModel.DesktopsCount);
                 Assert.IsTrue(_deleteDesktopsViewModel.IsSingleSelection);
-                Assert.IsFalse(String.IsNullOrEmpty(_deleteDesktopsViewModel.SelectionLabel));
-                Assert.IsTrue(_deleteDesktopsViewModel.SelectionLabel.IndexOf(hostName) >= 0);
             }
         }
 
@@ -133,9 +128,6 @@ namespace RdClient.Shared.Test.ViewModels
 
                 Assert.AreEqual(_multiDesktopsSelection.Count, _deleteDesktopsViewModel.DesktopsCount);
                 Assert.IsFalse(_deleteDesktopsViewModel.IsSingleSelection);
-                Assert.IsFalse(String.IsNullOrEmpty(_deleteDesktopsViewModel.SelectionLabel));
-                Assert.IsTrue(_deleteDesktopsViewModel.SelectionLabel.IndexOf(hostName) >= 0);
-                Assert.IsTrue(_deleteDesktopsViewModel.SelectionLabel.IndexOf(hostName2) >= 0);
             }
         }
 

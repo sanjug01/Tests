@@ -200,7 +200,7 @@ namespace RdClient.Shared.ViewModels
         private void DeleteDesktopCommandExecute(object o)
         {
             // extract list of selected desktops
-            List<object> selectedDesktops = new List<object>();
+            List<Desktop> selectedDesktops = new List<Desktop>();
 
             foreach (DesktopViewModel vm in this.DesktopViewModels)
             {

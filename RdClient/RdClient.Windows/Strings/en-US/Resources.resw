@@ -534,4 +534,12 @@
     <value>Edit</value>
     <comment>Verb. Text on a button that is pressed to edit an item</comment>
   </data>
+  <data name="Common_ListItemSeparator_String" xml:space="preserve">
+    <value>, </value>
+    <comment>Text used to separate items in a list</comment>
+  </data>
+  <data name="DeleteDesktopsView-Message-NoDesktops" xml:space="preserve">
+    <value>No desktop selected</value>
+    <comment>Message displayed by DeleteDesktopsView when there are no desktops selected for deletion</comment>
+  </data>
 </root>

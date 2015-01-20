@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Converters\BarItemsAlignmentFilteringConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\DesktopsListToLocalizedStringConverter.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverter.cs" />
     <Compile Include="Converters\ErrorLocalizers\IErrorLocalizer.cs" />
     <Compile Include="Converters\ErrorLocalizers\RdpDisconnectReasonLocalizer.cs" />
