@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:RdClient.Shared.ViewModels"
-    xmlns:shelpers="using:RdClient.Shared.Helpers"
+    xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:cv="using:RdClient.Converters"
     mc:Ignorable="d">
 
@@ -18,7 +18,7 @@
         <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <cv:RdpErrorToLocalizedStringConverter x:Key="RdpErrorToLocalizedStringConverter">
             <cv:RdpErrorToLocalizedStringConverter.LocalizedString>
-                <shelpers:LocalizedString/>
+                <helpers:LocalizedString/>
             </cv:RdpErrorToLocalizedStringConverter.LocalizedString>
         </cv:RdpErrorToLocalizedStringConverter>
     </Page.Resources>
