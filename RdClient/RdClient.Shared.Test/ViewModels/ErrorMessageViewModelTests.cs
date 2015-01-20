@@ -37,9 +37,8 @@
                 Assert.IsTrue(dmvm.OkVisible);
                 Assert.IsTrue(dmvm.CancelVisible);
                 Assert.AreEqual(error, dmvm.Error);
-                Assert.AreEqual(5, reportedChanges.Count); // NavigationService, Message, Title, OkVisible, and CancelVisible
+                Assert.AreEqual(4, reportedChanges.Count); // NavigationService, Message, OkVisible, and CancelVisible
                 Assert.IsTrue(reportedChanges.Contains("Error"));
-                Assert.IsTrue(reportedChanges.Contains("Title"));
                 Assert.IsTrue(reportedChanges.Contains("NavigationService"));
                 Assert.IsTrue(reportedChanges.Contains("OkVisible"));
                 Assert.IsTrue(reportedChanges.Contains("CancelVisible"));
@@ -68,9 +67,8 @@
                 Assert.IsFalse(dmvm.OkVisible);
                 Assert.IsFalse(dmvm.CancelVisible);
                 Assert.AreEqual(error, dmvm.Error);
-                Assert.AreEqual(3, reportedChanges.Count); // NavigationService, Message, Title
+                Assert.AreEqual(2, reportedChanges.Count); // NavigationService, Message
                 Assert.IsTrue(reportedChanges.Contains("Error"));
-                Assert.IsTrue(reportedChanges.Contains("Title"));
                 Assert.IsTrue(reportedChanges.Contains("NavigationService"));
             }
         }
@@ -99,7 +97,7 @@
                 Assert.IsTrue(dmvm.OkVisible);
                 Assert.IsFalse(dmvm.CancelVisible);
                 Assert.IsTrue(okCalled);
-                Assert.AreEqual(4, propertyChangedCount); // one for OkVisible, one for CancelVisible, one for setting the message, one for default title
+                Assert.AreEqual(3, propertyChangedCount); // one for OkVisible, one for CancelVisible, one for setting the message
             }
         }
 
@@ -127,7 +125,7 @@
                 Assert.IsFalse(dmvm.OkVisible);
                 Assert.IsTrue(dmvm.CancelVisible);
                 Assert.IsTrue(cancelCalled);
-                Assert.AreEqual(4, propertyChangedCount); // one for OkVisible, one for CancelVisible, one for setting the message, one for default title
+                Assert.AreEqual(3, propertyChangedCount); // one for OkVisible, one for CancelVisible, one for setting the message
             }
         }
     }
