@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Converters"    
+    xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d">
 
     <Page.DataContext>
@@ -17,7 +18,12 @@
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
-        <c:ByteArrayToStringConverter x:Key="ByteArrayToStringConverter" />        
+        <c:ByteArrayToStringConverter x:Key="ByteArrayToStringConverter" />
+        <c:RdpCertificateToErrorListConverter x:Key="RdpCertificateToErrorListConverter">
+            <c:RdpCertificateToErrorListConverter.LocalizedString>
+                <helpers:LocalizedString/>
+            </c:RdpCertificateToErrorListConverter.LocalizedString>
+        </c:RdpCertificateToErrorListConverter>
     </Page.Resources>
 
 
@@ -72,7 +78,7 @@
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle }" 
                                x:Uid="CertificateValidation-ReasonsLabel" 
                                Text="It may not be safe to connect to this PC because of the following reasons: (d)"/>
-                    <ListView ItemsSource="{Binding Path=CertificateErrorsList}"
+                    <ListView ItemsSource="{Binding Path=Certificate, Converter={StaticResource RdpCertificateToErrorListConverter}}"
                               SelectionMode="None">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
