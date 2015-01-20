@@ -100,6 +100,12 @@ namespace RdClient.Shared.ViewModels
 
             DeleteDesktopsArgs args = (DeleteDesktopsArgs)activationParameter;
             this.SelectedDesktops = args.SelectedDesktops;
+            int count = 0;
+            if (null != this.SelectedDesktops)
+            {
+                count = this.SelectedDesktops.Count;
+            }
+            this.DesktopsCount = count; 
         }
     }
 }
