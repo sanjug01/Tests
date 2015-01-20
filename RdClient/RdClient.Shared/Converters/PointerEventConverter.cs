@@ -34,7 +34,14 @@ namespace RdClient.Shared.Converters
 
         public static PointerEvent ManipulationStartedArgsConverter(ManipulationStartedRoutedEventArgs args)
         {
-            PointerEvent pe = new PointerEvent(args.Position, false, args.Cumulative.Translation, false, false, PointerTypeConverter(args.PointerDeviceType), 0);
+            PointerEvent pe = new PointerEvent(
+                args.Position, 
+                false, 
+                args.Cumulative.Translation, 
+                false, 
+                false, 
+                PointerTypeConverter(args.PointerDeviceType), 
+                0);
 
             return pe;
         }
@@ -60,14 +67,16 @@ namespace RdClient.Shared.Converters
             return pe;
         }
 
-        public static PointerEvent PointerArgsConverter(UIElement receiver, PointerRoutedEventArgs args)
+        public static PointerEvent PointerArgsConverter(UIElement receiver, PointerRoutedEventArgs args, PointerActionType actionType)
         {
             PointerPoint ppoint = args.GetCurrentPoint(receiver);
             Point position = new Point(ppoint.Position.X, ppoint.Position.Y);
             PointerEvent pe = new PointerEvent(
                 position, false, new Point(0.0, 0.0),
                 ppoint.Properties.IsLeftButtonPressed, ppoint.Properties.IsRightButtonPressed,
-                PointerTypeConverter(ppoint.PointerDevice.PointerDeviceType), ppoint.PointerId);
+                PointerTypeConverter(ppoint.PointerDevice.PointerDeviceType), ppoint.PointerId,
+                args.GetCurrentPoint(receiver).Timestamp,
+                actionType);
 
             return pe;
         }

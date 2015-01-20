@@ -104,22 +104,22 @@ namespace RdClient.Controls
 
         protected override void OnPointerCanceled(PointerRoutedEventArgs args)
         {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, PointerActionType.Up));
         }
 
         protected override void OnPointerReleased(PointerRoutedEventArgs args)
         {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, PointerActionType.Up));
         }
 
         protected override void OnPointerPressed(PointerRoutedEventArgs args)
         {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, PointerActionType.Down));
         }
 
         protected override void OnPointerMoved(PointerRoutedEventArgs args)
-        {            
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+        {
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, PointerActionType.Update));
         }
 
         protected override void OnPointerEntered(PointerRoutedEventArgs args)

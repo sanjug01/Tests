@@ -10,6 +10,15 @@ namespace RdClient.Shared.Input.Mouse
         Touch
     }
 
+    public enum PointerActionType
+    {
+        Unknown,
+        Up,
+        Down,
+        Update
+    }
+
+
     public class PointerEvent
     {
         public Point Position { get; private set; }
@@ -19,8 +28,19 @@ namespace RdClient.Shared.Input.Mouse
         public bool RightButton { get; private set; }
         public PointerType PointerType { get; set; }
         public uint PointerId { get; private set; }
+        public ulong TimeStamp { get; private set; }
+        public PointerActionType ActionType { get; private set; }
 
-        public PointerEvent(Point position, bool inertia, Point delta, bool leftButton, bool rightButton, PointerType pointerType, uint pointerId)
+        public PointerEvent(
+            Point position, 
+            bool inertia, 
+            Point delta, 
+            bool leftButton, 
+            bool rightButton, 
+            PointerType pointerType, 
+            uint pointerId, 
+            ulong timeStamp = 0, 
+            PointerActionType actionType = PointerActionType.Unknown)
         {
             Position = position;
             Inertia = inertia;
@@ -29,6 +49,8 @@ namespace RdClient.Shared.Input.Mouse
             RightButton = rightButton;
             PointerType = pointerType;
             PointerId = pointerId;
+            TimeStamp = timeStamp;
+            ActionType = actionType;
         }
     }
 }
