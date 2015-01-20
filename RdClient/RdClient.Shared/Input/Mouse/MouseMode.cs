@@ -37,10 +37,8 @@ namespace RdClient.Shared.Input.Mouse
             }
         }
 
-        private void MouseRecognizer(object parameter)
+        private void MouseRecognizer(PointerEvent pointerEvent)
         {
-            PointerEvent pointerEvent = parameter as PointerEvent;
-
             float x = (float)pointerEvent.Position.X;
             float y = (float)pointerEvent.Position.Y;
             MouseEventType buttonState = MouseEventType.Move;
