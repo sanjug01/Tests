@@ -7,18 +7,18 @@
     public abstract class BarButtonModel : BarItemModel
     {
         private readonly ICommand _command;
-        private readonly string _label;
+        private readonly string _labelStringId;
 
-        public string Label { get { return _label; } }
+        public string LabelStringId { get { return _labelStringId; } }
         public ICommand Command { get { return _command; } }
 
-        protected BarButtonModel(ICommand command, string label, ItemAlignment alignment = ItemAlignment.Left) : base(alignment)
+        protected BarButtonModel(ICommand command, string labelStringId, ItemAlignment alignment = ItemAlignment.Left) : base(alignment)
         {
             Contract.Requires(null != command);
 
             _command = command;
             _command.CanExecuteChanged += this.OnCanExecuteCommandChanged;
-            _label = label;
+            _labelStringId = labelStringId;
             this.IsVisible = _command.CanExecute(null);
         }
 

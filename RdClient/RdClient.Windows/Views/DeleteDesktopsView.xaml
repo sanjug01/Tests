@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:cv="using:RdClient.Converters"
+    xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
     >    
     
@@ -17,6 +18,11 @@
     <Page.Resources>
         <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <cv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <cv:DesktopsListToLocalizedStringConverter x:Key="DesktopsListToLocalizedStringConverter">
+            <cv:DesktopsListToLocalizedStringConverter.LocalizedString>
+                <helpers:LocalizedString />
+            </cv:DesktopsListToLocalizedStringConverter.LocalizedString>
+        </cv:DesktopsListToLocalizedStringConverter>
     </Page.Resources>
     
     <Grid>
@@ -63,11 +69,10 @@
                             Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
                             />
                         <TextBlock 
-                            x:Uid="DeleteSingleDesktop-SelectionLabel"
                             Margin="24,12,24,12" 
                             Style="{ThemeResource TitleTextBlockStyle}" 
                             Foreground="{StaticResource rdBlackBrush}" 
-                            Text="{Binding Path=SelectionLabel}"
+                            Text="{Binding Path=SelectedDesktops, Converter={StaticResource DesktopsListToLocalizedStringConverter}}"
                         />
                     </StackPanel>
                 </Grid>        

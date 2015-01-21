@@ -6,7 +6,7 @@ namespace RdClient.Shared.Test.Mock
     {
         public string GetLocalizedString(string key)
         {
-            return key;
+            return "LOCALIZED_" + key;
         }
     }
 }

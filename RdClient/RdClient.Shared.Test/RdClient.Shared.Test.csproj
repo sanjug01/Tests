@@ -78,6 +78,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Converters\DesktopsListToLocalizedStringConverterTests.cs" />
+    <Compile Include="Converters\RdpCertificateToErrorListConverterTests.cs" />
+    <Compile Include="Converters\ResourceIdToLocalizedStringConverterTests.cs" />
+    <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverterTests.cs" />
     <Compile Include="CxWrappers\RdpEventArgsTests.cs" />
     <Compile Include="CxWrappers\RdpEventSourceTests.cs" />
     <Compile Include="CxWrappers\RdpScreenSnapshotTests.cs" />
@@ -154,7 +158,6 @@
     <Compile Include="ViewModels\SegoeGlyphBarButtonModelTests.cs" />
     <Compile Include="ViewModels\SessionViewModelTests.cs" />
     <Compile Include="ViewModels\SettingsViewModelTests.cs" />
-    <Compile Include="ViewModels\TestViewModelTests.cs" />
     <Compile Include="ViewModels\DesktopViewModelTests.cs" />
     <Compile Include="ViewModels\ConnectionCenterViewModelTests.cs" />
     <Compile Include="ViewModels\ViewModelBaseTests.cs" />

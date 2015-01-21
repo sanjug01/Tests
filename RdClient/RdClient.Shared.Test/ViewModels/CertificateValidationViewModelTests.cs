@@ -1,11 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RdClient.Shared.CxWrappers;
-using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
-using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
-using System.Collections.Generic;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -59,29 +55,6 @@ namespace RdClient.Shared.Test.ViewModels
 
                 Assert.IsFalse(_vm.IsExpandedView);
                 Assert.AreEqual(_testHost, _vm.Host);
-            }
-        }
-
-        [TestMethod]
-        public void CertificateValidationViewModel_VerifyListOfErrorsUpdated()
-        {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            {
-                
-                Mock.RdpCertificateError testError = new Mock.RdpCertificateError();
-
-                // 6 error flags
-                testError.ErrorFlags = CertificateErrors.Revoked 
-                    | CertificateErrors.NameMismatch 
-                    | CertificateErrors.UntrustedRoot 
-                    | CertificateErrors.Expired
-                    | CertificateErrors.CertOrChainInvalid
-                    | CertificateErrors.MismatchedCert;
-                _testCertificate.Error = testError;
-                ((IViewModel)_vm).Presenting(navigation, _testArgs, null);
-
-                // error list should have 6 items
-                Assert.AreEqual(6, _vm.CertificateErrorsList.Count);
             }
         }
 

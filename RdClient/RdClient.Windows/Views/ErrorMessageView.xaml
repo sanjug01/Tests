@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:RdClient.Shared.ViewModels"
-    xmlns:shelpers="using:RdClient.Shared.Helpers"
+    xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:cv="using:RdClient.Converters"
     mc:Ignorable="d">
 
@@ -18,7 +18,7 @@
         <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <cv:RdpErrorToLocalizedStringConverter x:Key="RdpErrorToLocalizedStringConverter">
             <cv:RdpErrorToLocalizedStringConverter.LocalizedString>
-                <shelpers:LocalizedString/>
+                <helpers:LocalizedString/>
             </cv:RdpErrorToLocalizedStringConverter.LocalizedString>
         </cv:RdpErrorToLocalizedStringConverter>
     </Page.Resources>
@@ -72,12 +72,14 @@
                     <Button MinWidth="93"
                             Visibility="{Binding Path=OkVisible, Converter={StaticResource BooleanToVisibility}}"
                             Command="{Binding Path=OkCommand}"
-                            Content="{Binding OkString}"
+                            x:Uid="Common_Button_Ok"
+                            Content="Ok (d)"
                             />
-                    <Button MinWidth="93"
+                    <Button MinWidth="93"                            
                             Visibility="{Binding Path=CancelVisible, Converter={StaticResource BooleanToVisibility}}"
                             Command="{Binding Path=CancelCommand}"
-                            Content="{Binding CancelString}"
+                            x:Uid="Common_Button_Cancel"
+                            Content="Cancel (d)"
                             />
                 </StackPanel>
             </Grid>

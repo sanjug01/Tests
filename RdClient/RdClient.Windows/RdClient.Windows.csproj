@@ -216,9 +216,6 @@
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TestsView.xaml.cs">
-      <DependentUpon>TestsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\TransitionAnimationContainer.xaml.cs">
       <DependentUpon>TransitionAnimationContainer.xaml</DependentUpon>
     </Compile>
@@ -378,10 +375,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\TestsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

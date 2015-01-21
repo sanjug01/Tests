@@ -1,11 +1,4 @@
-﻿using RdClient.Shared.Navigation;
-using RdClient.Shared.CxWrappers;
-using RdClient.Shared.CxWrappers.Utils;
-using RdClient.Shared.Helpers;
-using RdClient.Shared.Models;
-using RdClient.Shared.ValidationRules;
-
-using System.Collections.ObjectModel;
+﻿using RdClient.Shared.CxWrappers;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
 
@@ -62,13 +55,7 @@ namespace RdClient.Shared.ViewModels
             _hideDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = false; });
 
             this.IsExpandedView = false;
-
-            // _errorStrings = new CertificateErrorString(new LocalizedString());
-
-            this.CertificateErrorsList = new ObservableCollection<string>();
         }
-
-        public ObservableCollection<string> CertificateErrorsList { get; set; }
 
         public ICommand AcceptCertificateCommand { get { return _acceptCertificateCommand; } }
         public ICommand AcceptOnceCommand { get { return _acceptOnceCommand; } }
@@ -107,36 +94,6 @@ namespace RdClient.Shared.ViewModels
             this.Certificate = args.Certificate;
             this.Host = args.Host;
             this.IsExpandedView = false;
-            LoadErrorStrings();
-        }
-
-        private void LoadErrorStrings()
-        {
-            Contract.Assert(null != this.Certificate);
-
-            // Should use CertificateErrorString to load localizable strings
-            CertificateErrorsList.Clear();
-
-            if (CertificateErrorHelper.ErrorContainsFlag(this.Certificate.Error.ErrorFlags, CertificateErrors.Expired))
-                this.CertificateErrorsList.Add("Certificate expired");
-            if (CertificateErrorHelper.ErrorContainsFlag(this.Certificate.Error.ErrorFlags, CertificateErrors.NameMismatch))
-                this.CertificateErrorsList.Add("Certificate name mismatch");
-            if (CertificateErrorHelper.ErrorContainsFlag(this.Certificate.Error.ErrorFlags, CertificateErrors.UntrustedRoot))
-                this.CertificateErrorsList.Add("Certificate untrusted");
-            if (CertificateErrorHelper.ErrorContainsFlag(this.Certificate.Error.ErrorFlags, CertificateErrors.Revoked))
-                this.CertificateErrorsList.Add("Certificate revoked");
-            if (CertificateErrorHelper.ErrorContainsFlag(this.Certificate.Error.ErrorFlags, CertificateErrors.RevocationUnknown))
-                this.CertificateErrorsList.Add("Certificate revocation unknown");
-            if (CertificateErrorHelper.ErrorContainsFlag(this.Certificate.Error.ErrorFlags, CertificateErrors.CertOrChainInvalid))
-                this.CertificateErrorsList.Add("Certificate or chain invalid");
-            if (CertificateErrorHelper.ErrorContainsFlag(this.Certificate.Error.ErrorFlags, CertificateErrors.MismatchedCert))
-                this.CertificateErrorsList.Add("Certificate mismatch");
-            if (CertificateErrorHelper.ErrorContainsFlag(this.Certificate.Error.ErrorFlags, CertificateErrors.WrongEKU))
-                this.CertificateErrorsList.Add("Certificate wrong EKU");
-            if (CertificateErrorHelper.ErrorContainsFlag(this.Certificate.Error.ErrorFlags, CertificateErrors.Critical))
-                this.CertificateErrorsList.Add("Certificate critical error");
-
-            EmitPropertyChanged("CertificateErrorsList");
         }
     }
 }

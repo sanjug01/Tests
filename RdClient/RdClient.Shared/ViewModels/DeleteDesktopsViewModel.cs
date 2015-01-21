@@ -1,6 +1,5 @@
 ﻿﻿﻿using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -11,9 +10,9 @@ namespace RdClient.Shared.ViewModels
 
     public class DeleteDesktopsArgs
     {
-        public IList<object> SelectedDesktops { get; private set; }
+        public IList<Desktop> SelectedDesktops { get; private set; }
 
-        public DeleteDesktopsArgs(IList<object> selectedDesktops)
+        public DeleteDesktopsArgs(IList<Desktop> selectedDesktops)
         {
             SelectedDesktops = selectedDesktops;
         }
@@ -21,7 +20,7 @@ namespace RdClient.Shared.ViewModels
         public DeleteDesktopsArgs(Desktop desktop)
         {
             // create a single object list
-            SelectedDesktops =  new List<object>();
+            SelectedDesktops =  new List<Desktop>();
             SelectedDesktops.Add(desktop);            
         }
     }
@@ -30,18 +29,17 @@ namespace RdClient.Shared.ViewModels
     {
         private readonly ICommand _deleteCommand;
         private readonly ICommand _cancelCommand;
-        private IList<object> _selectedDesktops;
+        private IList<Desktop> _selectedDesktops;
         private int _desktopsCount;
-        private string _selectionLabel;
 
         public ICommand DeleteCommand { get { return _deleteCommand; } }
         public ICommand CancelCommand { get { return _cancelCommand; } }
         public IPresentableView DialogView { private get; set; }
 
-        private IList<object> SelectedDesktops 
+        public IList<Desktop> SelectedDesktops 
         {
             get { return _selectedDesktops; }
-            set
+            private set
             {
                 SetProperty(ref _selectedDesktops, value, "SelectedDesktops");
                 this.EmitPropertyChanged("DesktopsCount");
@@ -64,23 +62,12 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        public string SelectionLabel
-        {
-            get { return _selectionLabel; }
-            private set
-            {
-                SetProperty(ref _selectionLabel, value, "SelectionLabel");
-            }
-        }
-
         public DeleteDesktopsViewModel()
         {
             _selectedDesktops = null;
             _deleteCommand = new RelayCommand(new Action<object>(DeleteDesktops));
             _cancelCommand = new RelayCommand(new Action<object>(Cancel));
-
             this.DesktopsCount = 0;
-            this.SelectionLabel = "No desktop selected";
         }
 
         private void DeleteDesktops(object o)
@@ -91,7 +78,7 @@ namespace RdClient.Shared.ViewModels
             {
                 for(int i=0; i< SelectedDesktops.Count; i++)
                 {
-                    this.DataModel.LocalWorkspace.Connections.Remove(SelectedDesktops[i] as Desktop);
+                    this.DataModel.LocalWorkspace.Connections.Remove(SelectedDesktops[i]);
                 }
 
                 SelectedDesktops.Clear();
@@ -109,28 +96,15 @@ namespace RdClient.Shared.ViewModels
         {
             Contract.Requires(null != activationParameter as DeleteDesktopsArgs);
             Contract.Assert(activationParameter is DeleteDesktopsArgs);
+
             DeleteDesktopsArgs args = (DeleteDesktopsArgs)activationParameter;
-
             this.SelectedDesktops = args.SelectedDesktops;
-
             int count = 0;
             if (null != this.SelectedDesktops)
             {
                 count = this.SelectedDesktops.Count;
             }
-            this.DesktopsCount =  count; 
-
-            // build a string list from all desktops
-            string label = "";
-            if (this.DesktopsCount > 0)
-            {
-                label = label + (_selectedDesktops[0] as Desktop).HostName;
-                for (int i = 1; i < this.DesktopsCount; i++)
-                {
-                    label = label + "," + (_selectedDesktops[i] as Desktop).HostName;
-                }
-            }
-            this.SelectionLabel = label;
+            this.DesktopsCount = count; 
         }
     }
 }

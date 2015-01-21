@@ -1,14 +1,11 @@
-﻿using RdClient.Shared.Helpers;
-using RdClient.Shared.Models;
+﻿using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.Navigation.Extensions;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
@@ -21,6 +18,8 @@ namespace RdClient.Shared.ViewModels
         // app bar items
         private readonly BarItemModel _editItem;
         private readonly BarItemModel _deleteItem;
+        private const string EditItemStringId = "Common_Edit_String";
+        private const string DeleteItemStringId = "Common_Delete_String";
 
         public ConnectionCenterViewModel()
         {
@@ -30,8 +29,8 @@ namespace RdClient.Shared.ViewModels
             this.ToggleDesktopSelectionCommand = new RelayCommand(this.ToggleDesktopSelectionCommandExecute);
             this.GoToSettingsCommand = new RelayCommand(this.GoToSettingsCommandExecute);
 
-            _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, "Edit", BarItemModel.ItemAlignment.Right);
-            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, "Delete", BarItemModel.ItemAlignment.Right);
+            _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, EditItemStringId, BarItemModel.ItemAlignment.Right);
+            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, DeleteItemStringId, BarItemModel.ItemAlignment.Right);
 
             this.DesktopViewModels = null;
             this.PropertyChanged += ConnectionCenterViewModel_PropertyChanged;
@@ -198,7 +197,7 @@ namespace RdClient.Shared.ViewModels
         private void DeleteDesktopCommandExecute(object o)
         {
             // extract list of selected desktops
-            List<object> selectedDesktops = new List<object>();
+            List<Desktop> selectedDesktops = new List<Desktop>();
 
             foreach (DesktopViewModel vm in this.DesktopViewModels)
             {
