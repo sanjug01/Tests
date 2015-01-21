@@ -2,10 +2,7 @@
 using RdClient.Shared.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace RdClient.Converters
@@ -23,7 +20,7 @@ namespace RdClient.Converters
             IList<Desktop> desktopList = value as IList<Desktop>;
             if (_localizedString == null)
             {
-                return DependencyProperty.UnsetValue;
+                throw new InvalidOperationException("LocalizedString property must be set before Convert is called");
             }
             else if (desktopList == null || desktopList.Count < 1)
             {
@@ -48,7 +45,7 @@ namespace RdClient.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException("ConvertBack not supported");
         }
     }
 }

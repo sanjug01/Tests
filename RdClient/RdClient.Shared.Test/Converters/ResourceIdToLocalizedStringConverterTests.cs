@@ -1,14 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Converters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RdClient.Shared.Helpers;
-using RdClient.Shared.Test.Mock;
 using RdClient.Shared.Test.Helpers;
-using Windows.UI.Xaml;
+using System;
 
 namespace RdClient.Shared.Test.Converters
 {
@@ -37,30 +31,33 @@ namespace RdClient.Shared.Test.Converters
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertBackThrows()
         {
             _converter.ConvertBack(_testData.NewRandomString(), typeof(string), null, null);
         }
 
         [TestMethod]
-        public void ConvertNullReturnsUnsetValue()
+        [ExpectedException(typeof(ArgumentException))]
+        public void ConvertNullThrows()
         {
-            Assert.AreEqual(DependencyProperty.UnsetValue, _converter.Convert(null, typeof(string), null, null));
+            _converter.Convert(null, typeof(string), null, null);
         }
 
         [TestMethod]
-        public void ConvertNonStringReturnsUnsetValue()
+        [ExpectedException(typeof(ArgumentException))]
+        public void ConvertNonStringThrows()
         {
-            Assert.AreEqual(DependencyProperty.UnsetValue, _converter.Convert(new object(), typeof(string), null, null));
+            _converter.Convert(new object(), typeof(string), null, null);
         }
 
         [TestMethod]
-        public void ConvertReturnsUnsetValueIfLocalizedStringPropertyIsNull()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ConvertThrowsIfLocalizedStringPropertyIsNull()
         {
             _converter.LocalizedString = null;
             string inputString = _testData.NewRandomString();
-            Assert.AreEqual(DependencyProperty.UnsetValue, _converter.Convert(inputString, typeof(string), null, null));
+            _converter.Convert(inputString, typeof(string), null, null);
         }
     }
 }

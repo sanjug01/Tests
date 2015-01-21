@@ -36,10 +36,14 @@ namespace RdClient.Converters
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            IRdpCertificate cert = value as IRdpCertificate;            
-            if (cert == null || cert.Error == null || _localizedString == null)
+            IRdpCertificate cert = value as IRdpCertificate;
+            if (_localizedString == null)
             {
-                return DependencyProperty.UnsetValue;
+                throw new InvalidOperationException("LocalizedString property must be set before Convert is called");
+            }     
+            if (cert == null || cert.Error == null)
+            {
+                throw new ArgumentException("value to convert must be a non-null IRdpCertificate with a non-null Error property");
             }
             else
             {
@@ -57,7 +61,7 @@ namespace RdClient.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException("ConvertBack not supported");
         }
     }
 }

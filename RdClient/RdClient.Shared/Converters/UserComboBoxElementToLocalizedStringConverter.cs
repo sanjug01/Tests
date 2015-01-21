@@ -2,10 +2,6 @@
 using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace RdClient.Converters
@@ -28,9 +24,13 @@ namespace RdClient.Converters
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             UserComboBoxElement comboBox = value as UserComboBoxElement;
-            if (comboBox == null || _localizedString == null)
+            if (_localizedString == null)
             {
-                return DependencyProperty.UnsetValue;
+                throw new InvalidOperationException("LocalizedString property must be set before Convert is called");
+            }
+            else if (comboBox == null)
+            {
+                throw new ArgumentException("value to convert must be a non-null UserComboBoxElement");
             }
             else
             {
@@ -53,7 +53,7 @@ namespace RdClient.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException("ConvertBack not supported");
         }
     }
 }

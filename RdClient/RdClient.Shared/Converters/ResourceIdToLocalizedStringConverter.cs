@@ -1,10 +1,5 @@
 ﻿using RdClient.Shared.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace RdClient.Converters
@@ -19,9 +14,13 @@ namespace RdClient.Converters
         {
             string resourceId = value as string;
 
-            if (resourceId == null || _localizedString == null)
+            if (_localizedString == null)
             {
-                return DependencyProperty.UnsetValue;
+                throw new InvalidOperationException("LocalizedString property must be set before Convert is called");
+            }
+            else if (resourceId == null)
+            {
+                throw new ArgumentException("value to convert must be a non-null string");
             }
             else
             {
@@ -31,7 +30,7 @@ namespace RdClient.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException("ConvertBack not supported");
         }
     }    
 }

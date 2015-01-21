@@ -6,9 +6,6 @@ using RdClient.Shared.Test.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
 
 namespace RdClient.Shared.Test.Converters
 {
@@ -69,14 +66,15 @@ namespace RdClient.Shared.Test.Converters
         }
 
         [TestMethod]
-        public void ConvertReturnsUnsetValueIfLocalizedStringPropertyIsNull()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ConvertThrowsIfLocalizedStringPropertyIsNull()
         {
             _converter.LocalizedString = null;
-            Assert.AreEqual(DependencyProperty.UnsetValue, _converter.Convert(_desktops, null, null, null));
+            _converter.Convert(_desktops, null, null, null);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertBackThrows()
         {
             _converter.ConvertBack(_testData.NewRandomString(), null, null, null);

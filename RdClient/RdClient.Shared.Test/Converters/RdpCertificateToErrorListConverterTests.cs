@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml;
 
 namespace RdClient.Shared.Test.Converters
 {
@@ -55,30 +54,33 @@ namespace RdClient.Shared.Test.Converters
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertBackThrows()
         {
             _converter.ConvertBack(new List<string>(), null, null, null);
         }
 
         [TestMethod]
-        public void ConvertNullReturnsUnsetValue()
+        [ExpectedException(typeof(ArgumentException))]
+        public void ConvertNullThrows()
         {
-            Assert.AreEqual(DependencyProperty.UnsetValue, _converter.Convert(null, null, null, null));
+            _converter.Convert(null, null, null, null);
         }
 
         [TestMethod]
-        public void ConvertCertificateWithNullErrorPropertyReturnsUnsetValue()
+        [ExpectedException(typeof(ArgumentException))]
+        public void ConvertCertificateWithNullErrorPropertyThrows()
         {
             _cert.Error = null;
-            Assert.AreEqual(DependencyProperty.UnsetValue, _converter.Convert(_cert, null, null, null));
+            _converter.Convert(_cert, null, null, null);
         }
 
         [TestMethod]
-        public void ConvertReturnsUnsetValueIfLocalizedStringPropertyIsNull()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ConvertThrowsIfLocalizedStringPropertyIsNull()
         {
             _converter.LocalizedString = null;
-            Assert.AreEqual(DependencyProperty.UnsetValue, _converter.Convert(_cert, null, null, null));
+            _converter.Convert(_cert, null, null, null);
         }
     }
 }

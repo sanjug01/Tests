@@ -5,11 +5,6 @@ using RdClient.Shared.Models;
 using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
 
 namespace RdClient.Shared.Test.Converters
 {
@@ -70,26 +65,29 @@ namespace RdClient.Shared.Test.Converters
         }
 
         [TestMethod]
-        public void ConvertNullReturnsUnsetValue()
+        [ExpectedException(typeof(ArgumentException))]
+        public void ConvertNullThrows()
         {            
-            Assert.AreEqual(DependencyProperty.UnsetValue, _converter.Convert(null, null, null, null));
+            _converter.Convert(null, null, null, null);
         }
 
         [TestMethod]
-        public void ConvertWrongTypeReturnsUnsetValue()
+        [ExpectedException(typeof(ArgumentException))]
+        public void ConvertWrongTypeThrows()
         {
-            Assert.AreEqual(DependencyProperty.UnsetValue, _converter.Convert(new object(), null, null, null));
+            _converter.Convert(new object(), null, null, null);
         }
 
         [TestMethod]
-        public void ConvertReturnsUnsetValueIfLocalizedStringPropertyIsNull()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ConvertThrowsIfLocalizedStringPropertyIsNull()
         {
             _converter.LocalizedString = null;
-            Assert.AreEqual(DependencyProperty.UnsetValue, _converter.Convert(_comboBoxElement, null, null, null));
+            _converter.Convert(_comboBoxElement, null, null, null);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertBackThrows()
         {
             _converter.ConvertBack(_comboBoxElement, null, null, null);
