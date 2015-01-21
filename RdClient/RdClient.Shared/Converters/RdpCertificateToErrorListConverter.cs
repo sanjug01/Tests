@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace RdClient.Converters
@@ -35,18 +36,23 @@ namespace RdClient.Converters
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            IRdpCertificate cert = (IRdpCertificate)value;
-            ObservableCollection<string> errorList = new ObservableCollection<string>();
-
-            foreach (CertificateErrors error in _codeMap.Keys)
+            IRdpCertificate cert = value as IRdpCertificate;            
+            if (cert == null || cert.Error == null || _localizedString == null)
             {
-                if (CertificateErrorHelper.ErrorContainsFlag(cert.Error.ErrorFlags, error))
-                {
-                    errorList.Add(_localizedString.GetLocalizedString(_codeMap[error]));
-                }
+                return DependencyProperty.UnsetValue;
             }
-
-            return errorList;
+            else
+            {
+                IList<string> errorList = new List<string>();
+                foreach (CertificateErrors error in _codeMap.Keys)
+                {
+                    if (CertificateErrorHelper.ErrorContainsFlag(cert.Error.ErrorFlags, error))
+                    {
+                        errorList.Add(_localizedString.GetLocalizedString(_codeMap[error]));
+                    }
+                }
+                return errorList;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

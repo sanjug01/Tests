@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace RdClient.Converters
@@ -12,15 +13,19 @@ namespace RdClient.Converters
     public class DesktopsListToLocalizedStringConverter: IValueConverter
     {                
         private IStringTable _localizedString;
-        private const string itemSeparatorStringId = "Common_ListItemSeparator_String";
-        private const string emptyDesktopListStringId = "DeleteDesktopsView-Message-NoDesktops";
+        public const string itemSeparatorStringId = "Common_ListItemSeparator_String";
+        public const string emptyDesktopListStringId = "DeleteDesktopsView-Message-NoDesktops";
 
         public IStringTable LocalizedString { set { _localizedString = value; } }
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            IList<Desktop> desktopList = value as IList<Desktop>;            
-            if (desktopList == null || desktopList.Count < 1)
+            IList<Desktop> desktopList = value as IList<Desktop>;
+            if (_localizedString == null)
+            {
+                return DependencyProperty.UnsetValue;
+            }
+            else if (desktopList == null || desktopList.Count < 1)
             {
                 return _localizedString.GetLocalizedString(emptyDesktopListStringId);
             }

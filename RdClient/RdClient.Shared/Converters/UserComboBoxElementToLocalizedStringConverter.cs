@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace RdClient.Converters
@@ -26,21 +27,28 @@ namespace RdClient.Converters
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            UserComboBoxElement comboBox = (UserComboBoxElement)value;
-            string result;
-            if (_codeMap.ContainsKey(comboBox.UserComboBoxType))
+            UserComboBoxElement comboBox = value as UserComboBoxElement;
+            if (comboBox == null || _localizedString == null)
             {
-                result = _localizedString.GetLocalizedString(_codeMap[comboBox.UserComboBoxType]);
-            }
-            else if (UserComboBoxType.Credentials == comboBox.UserComboBoxType)
-            {
-                result = comboBox.Credentials.Username;
+                return DependencyProperty.UnsetValue;
             }
             else
             {
-                result = "";
+                string result;
+                if (_codeMap.ContainsKey(comboBox.UserComboBoxType))
+                {
+                    result = _localizedString.GetLocalizedString(_codeMap[comboBox.UserComboBoxType]);
+                }
+                else if (UserComboBoxType.Credentials == comboBox.UserComboBoxType && comboBox.Credentials != null)
+                {
+                    result = comboBox.Credentials.Username;
+                }
+                else
+                {
+                    result = "";
+                }
+                return result;
             }
-            return result;            
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
