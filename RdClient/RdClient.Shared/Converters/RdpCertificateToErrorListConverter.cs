@@ -1,14 +1,7 @@
-﻿using RdClient.Shared.Converters.ErrorLocalizers;
-using RdClient.Shared.CxWrappers;
-using RdClient.Shared.CxWrappers.Errors;
+﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace RdClient.Converters

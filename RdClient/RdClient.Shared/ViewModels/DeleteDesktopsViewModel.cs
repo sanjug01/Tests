@@ -1,6 +1,5 @@
 ﻿﻿﻿using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
