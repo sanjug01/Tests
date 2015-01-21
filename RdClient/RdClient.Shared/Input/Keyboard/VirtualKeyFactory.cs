@@ -6,7 +6,6 @@
 
     public sealed class VirtualKeyFactory : IVirtualKeyFactory
     {
-        private readonly IKeyboardState _keyboardState;
         private readonly IKeyboardCaptureSink _keyboardSink;
 
         /// <summary>
@@ -20,15 +19,13 @@
             Character
         }
 
-        public VirtualKeyFactory(IKeyboardCaptureSink keyboardSink, IKeyboardState keyboardState)
+        public VirtualKeyFactory(IKeyboardCaptureSink keyboardSink)
         {
-            Contract.Requires(null != keyboardState);
             Contract.Requires(null != keyboardSink);
-            _keyboardState = keyboardState;
             _keyboardSink = keyboardSink;
         }
 
-        IVirtualKey IVirtualKeyFactory.MakeVirtualKey(VirtualKey virtualKey, CorePhysicalKeyStatus keyStatus)
+        IVirtualKey IVirtualKeyFactory.MakeVirtualKey(VirtualKey virtualKey, CorePhysicalKeyStatus keyStatus, IKeyboardState keyboardState)
         {
             Contract.Ensures(null != Contract.Result<IVirtualKey>());
 
@@ -37,15 +34,15 @@
             switch(GetKeyClass(virtualKey, keyStatus))
             {
                 case VirtualKeyClass.Extended:
-                    key = RegisterVirtualKey(virtualKey, new ExtendedKey(virtualKey, _keyboardSink, _keyboardState));
+                    key = new ExtendedKey(virtualKey, _keyboardSink, keyboardState);
                     break;
 
                 case VirtualKeyClass.ReleaseAll:
-                    key = RegisterVirtualKey(virtualKey, new SingleReleaseKey(virtualKey, _keyboardSink, _keyboardState));
+                    key = new SingleReleaseKey(virtualKey, _keyboardSink, keyboardState);
                     break;
 
                 case VirtualKeyClass.Character:
-                    key = RegisterVirtualKey(virtualKey, new CharacterKey(virtualKey, _keyboardSink, _keyboardState));
+                    key = new CharacterKey(virtualKey, _keyboardSink, keyboardState);
                     break;
 
                 default:
@@ -58,12 +55,6 @@
             }
 
             return key;
-        }
-
-        private IVirtualKey RegisterVirtualKey(VirtualKey virtualKey, IVirtualKey vk)
-        {
-            _keyboardState.RegisterVirtualKey(virtualKey, vk);
-            return vk;
         }
 
         private static VirtualKeyClass GetKeyClass(VirtualKey virtualKey, CorePhysicalKeyStatus keyStatus)
@@ -85,35 +76,6 @@
                     keyClass = VirtualKeyClass.ReleaseAll;
                     break;
 
-                case VirtualKey.Control:
-                case VirtualKey.Menu:
-                case VirtualKey.Enter:
-                case VirtualKey.Home:
-                case VirtualKey.End:
-                case VirtualKey.PageUp:
-                case VirtualKey.PageDown:
-                case VirtualKey.Left:
-                case VirtualKey.Right:
-                case VirtualKey.Up:
-                case VirtualKey.Down:
-                case VirtualKey.Delete:
-                case VirtualKey.Insert:
-                //
-                // Arithmetic operations in the numeric keypad area
-                //
-                case VirtualKey.Divide:
-                case VirtualKey.Multiply:
-                case VirtualKey.Subtract:
-                case VirtualKey.Add:
-                //
-                // "Lock" keys
-                //
-                case VirtualKey.CapitalLock:
-                case VirtualKey.NumberKeyLock:
-                case VirtualKey.Scroll:
-                    keyClass = VirtualKeyClass.Extended;
-                    break;
-
                 case (VirtualKey)231:
                     //
                     // VirtualKey 231 represents the emoticons on the touch keyboard.
@@ -129,53 +91,11 @@
                     //
                     // All other keys are sent as scan codes.
                     //
-#if false
-                    if(IsKeyInRange(virtualKey, VirtualKey.A, VirtualKey.Z)
-                    || IsKeyInRange(virtualKey, VirtualKey.Number0, VirtualKey.Number9)
-                    || IsCharacterScanCode(keyStatus.ScanCode)
-                    || VirtualKey.Space == virtualKey)
-                    {
-                        keyClass = VirtualKeyClass.Character;
-                    }
-                    else
-                    {
-                        keyClass = VirtualKeyClass.Extended;
-                    }
-#endif
                     keyClass = VirtualKeyClass.Extended;
                     break;
             }
 
             return keyClass;
-        }
-
-        private static bool IsKeyInRange(VirtualKey key, VirtualKey first, VirtualKey last)
-        {
-            return key >= first && key <= last;
-        }
-
-        private static bool IsCharacterScanCode(uint scanCode)
-        {
-            bool character = false;
-
-            switch(scanCode)
-            {
-                case 12:
-                case 13:
-                case 26:
-                case 27:
-                case 39:
-                case 40:
-                case 41:
-                case 43:
-                case 51:
-                case 52:
-                case 53:
-                    character = true;
-                    break;
-            }
-
-            return character;
         }
     }
 }

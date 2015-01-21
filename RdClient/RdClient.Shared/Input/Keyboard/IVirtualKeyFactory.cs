@@ -5,6 +5,6 @@
 
     public interface IVirtualKeyFactory
     {
-        IVirtualKey MakeVirtualKey(VirtualKey virtualKey, CorePhysicalKeyStatus keyStatus);
+        IVirtualKey MakeVirtualKey(VirtualKey virtualKey, CorePhysicalKeyStatus keyStatus, IKeyboardState keyboardState);
     }
 }
