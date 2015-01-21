@@ -4,9 +4,26 @@ namespace RdClient.Shared.CxWrappers
 {
     class RdpTypeConverter
     {
-        public static RdClientCx.MouseEventType ConvertToCx(MouseEventType cxType)
+        public static RdClientCx.TouchEventType ConvertToCx(TouchEventType type)
         {
-            switch(cxType)
+            switch(type)
+            {
+                case(TouchEventType.Down):
+                    return RdClientCx.TouchEventType.TouchDown;
+                case(TouchEventType.Up):
+                    return RdClientCx.TouchEventType.TouchUp;
+                case(TouchEventType.Update):
+                    return RdClientCx.TouchEventType.TouchUpdate;
+                case(TouchEventType.Unknown):
+                    return RdClientCx.TouchEventType.TouchUp;
+                default:
+                    return RdClientCx.TouchEventType.TouchUp;
+            }
+        }
+
+        public static RdClientCx.MouseEventType ConvertToCx(MouseEventType type)
+        {
+            switch(type)
             {
                 case (MouseEventType.LeftPress):
                     return RdClientCx.MouseEventType.LeftPress;
@@ -300,9 +317,6 @@ namespace RdClient.Shared.CxWrappers
             {
                 case (RdClientCx.RadcErrorCode.ErrorCompleteFailure):
                     radcStatus = RadcError.RadcStatus.CompleteFailure;
-                    break;
-                case (RdClientCx.RadcErrorCode.ErrorCompleteFailureOnFirstSignIn):
-                    radcStatus = RadcError.RadcStatus.CompleteFailureOnFirstSignIn;
                     break;
                 case (RdClientCx.RadcErrorCode.ErrorNetworkFailure):
                     radcStatus = RadcError.RadcStatus.NetworkFailure;

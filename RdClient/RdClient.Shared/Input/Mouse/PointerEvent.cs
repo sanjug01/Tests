@@ -1,4 +1,5 @@
-﻿using Windows.Foundation;
+﻿using RdClient.Shared.CxWrappers;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Mouse
 {
@@ -10,15 +11,6 @@ namespace RdClient.Shared.Input.Mouse
         Touch
     }
 
-    public enum PointerActionType
-    {
-        Unknown,
-        Up,
-        Down,
-        Update
-    }
-
-
     public class PointerEvent
     {
         public Point Position { get; private set; }
@@ -29,7 +21,7 @@ namespace RdClient.Shared.Input.Mouse
         public PointerType PointerType { get; set; }
         public uint PointerId { get; private set; }
         public ulong TimeStamp { get; private set; }
-        public PointerActionType ActionType { get; private set; }
+        public TouchEventType ActionType { get; private set; }
 
         public PointerEvent(
             Point position, 
@@ -39,8 +31,8 @@ namespace RdClient.Shared.Input.Mouse
             bool rightButton, 
             PointerType pointerType, 
             uint pointerId, 
-            ulong timeStamp = 0, 
-            PointerActionType actionType = PointerActionType.Unknown)
+            ulong timeStamp = 0,
+            TouchEventType actionType = TouchEventType.Unknown)
         {
             Position = position;
             Inertia = inertia;

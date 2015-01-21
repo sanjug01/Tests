@@ -91,6 +91,7 @@
     <Compile Include="CxWrappers\RdpScreenSnapshot.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
+    <Compile Include="CxWrappers\TouchEventType.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
     <Compile Include="Helpers\DataStorageExtensions.cs" />

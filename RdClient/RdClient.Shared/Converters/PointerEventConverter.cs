@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Input.Mouse;
+﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Input.Mouse;
 using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.UI.Input;
@@ -67,7 +68,7 @@ namespace RdClient.Shared.Converters
             return pe;
         }
 
-        public static PointerEvent PointerArgsConverter(UIElement receiver, PointerRoutedEventArgs args, PointerActionType actionType)
+        public static PointerEvent PointerArgsConverter(UIElement receiver, PointerRoutedEventArgs args, TouchEventType actionType)
         {
             PointerPoint ppoint = args.GetCurrentPoint(receiver);
             Point position = new Point(ppoint.Position.X, ppoint.Position.Y);

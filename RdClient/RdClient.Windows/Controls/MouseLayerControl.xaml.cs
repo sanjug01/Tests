@@ -6,6 +6,7 @@ using Windows.UI.Xaml.Media;
 namespace RdClient.Controls
 {
     using RdClient.Shared.Converters;
+    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Input.Mouse;
     using Windows.Foundation;
     using Windows.UI.Core;
@@ -20,11 +21,11 @@ namespace RdClient.Controls
         }
 
         public static readonly DependencyProperty PointerEventConsumerProperty = DependencyProperty.Register(
-            "PointerEventConsumer", typeof(PointerEventDispatcher),
+            "PointerEventConsumer", typeof(IPointerEventConsumer),
             typeof(MouseLayerControl), new PropertyMetadata(true, PointerEventConsumerPropertyChanged));
-        public PointerEventDispatcher PointerEventConsumer
+        public IPointerEventConsumer PointerEventConsumer
         {
-            private get { return (PointerEventDispatcher)GetValue(PointerEventConsumerProperty); }
+            private get { return (IPointerEventConsumer)GetValue(PointerEventConsumerProperty); }
             set { SetValue(PointerEventConsumerProperty, value); }
         }
         private static void PointerEventConsumerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -104,22 +105,22 @@ namespace RdClient.Controls
 
         protected override void OnPointerCanceled(PointerRoutedEventArgs args)
         {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, PointerActionType.Up));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
         }
 
         protected override void OnPointerReleased(PointerRoutedEventArgs args)
         {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, PointerActionType.Up));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
         }
 
         protected override void OnPointerPressed(PointerRoutedEventArgs args)
         {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, PointerActionType.Down));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Down));
         }
 
         protected override void OnPointerMoved(PointerRoutedEventArgs args)
         {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, PointerActionType.Update));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Update));
         }
 
         protected override void OnPointerEntered(PointerRoutedEventArgs args)

@@ -11,6 +11,7 @@ namespace RdClient.Shared.Input.Mouse
 
         private IPointerEventConsumer _pointerMode;
         private IPointerEventConsumer _directMode;
+        private IPointerEventConsumer _multiTouchMode;
 
         private ConsumptionMode _consumptionMode = ConsumptionMode.Pointer;
         public ConsumptionMode ConsumptionMode {
@@ -28,6 +29,7 @@ namespace RdClient.Shared.Input.Mouse
                         _pointerConsumers[PointerType.Touch] = _directMode;
                         break;
                     case ConsumptionMode.MultiTouch:
+                        _pointerConsumers[PointerType.Touch] = _multiTouchMode;
                         break;
                     default:
                         break;
@@ -39,6 +41,7 @@ namespace RdClient.Shared.Input.Mouse
         {
             _pointerMode = TouchModeFactory.CreatePointerMode(timer, manipulator);
             _directMode = TouchModeFactory.CreateDirectMode(timer, manipulator);
+            _multiTouchMode = new MultiTouchMode(manipulator);
 
             _pointerConsumers[PointerType.Mouse] = new MouseMode(manipulator);
             _pointerConsumers[PointerType.Pen] = new MouseMode(manipulator);

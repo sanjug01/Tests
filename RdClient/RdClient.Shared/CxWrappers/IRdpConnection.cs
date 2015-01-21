@@ -1,5 +1,6 @@
 ﻿using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Models;
+using Windows.Foundation;
 
 namespace RdClient.Shared.CxWrappers
 {
@@ -18,5 +19,6 @@ namespace RdClient.Shared.CxWrappers
         IRdpCertificate GetServerCertificate();
         void SendMouseEvent(MouseEventType type, float xPos, float yPos);
         void SendKeyEvent(int keyValue, bool scanCode, bool extended, bool keyUp);
+        void SendTouchEvent(TouchEventType type, uint contactId, Point position, ulong frameTime);
     }
 }

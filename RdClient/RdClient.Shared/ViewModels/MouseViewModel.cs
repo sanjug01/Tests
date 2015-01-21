@@ -170,9 +170,12 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        public void SendTouchAction(PointerActionType type, uint contactId, Point position, ulong frameTime)
+        public void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime)
         {
-            throw new NotImplementedException();
+            if(_rdpConnection != null)
+            {
+                _rdpConnection.SendTouchEvent(type, contactId, position, frameTime);
+            }
         }
     }
 }

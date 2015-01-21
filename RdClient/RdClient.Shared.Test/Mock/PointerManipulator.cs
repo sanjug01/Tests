@@ -1,10 +1,6 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Input.Mouse;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Test.Mock
@@ -17,7 +13,7 @@ namespace RdClient.Shared.Test.Mock
 
     public class TestMultiTouchEvent
     {
-        public PointerActionType ActionType { get; set; }
+        public TouchEventType ActionType { get; set; }
         public uint ContactId { get; set; }
         public Point Position { get; set; }
         public ulong FrameTime { get; set; }
@@ -45,7 +41,7 @@ namespace RdClient.Shared.Test.Mock
             _mouseEventLog.Add(new Mock.TestMousePointerEvent() { Position = MousePosition, Type = type });
         }
 
-        public void SendTouchAction(PointerActionType type, uint contactId, Point position, ulong frameTime)
+        public void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime)
         {
             _touchEventLog.Add(new TestMultiTouchEvent() { ActionType = type, ContactId = contactId, Position = position, FrameTime = frameTime });
         }
