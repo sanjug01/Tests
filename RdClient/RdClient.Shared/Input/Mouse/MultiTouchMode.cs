@@ -1,10 +1,4 @@
 ﻿using RdClient.Shared.CxWrappers;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RdClient.Shared.Input.Mouse
 {
@@ -16,7 +10,6 @@ namespace RdClient.Shared.Input.Mouse
             set { _consumptionMode = value; }
         }
 
-        private Dictionary<uint, PointerEvent> _trackedTouches;
         private PointerEvent _masterTouch;
         private PointerEvent _lastTouch;
         private IPointerManipulator _manipulator;
@@ -24,7 +17,6 @@ namespace RdClient.Shared.Input.Mouse
         public MultiTouchMode(IPointerManipulator manipulator)
         {
             _manipulator = manipulator;
-            _trackedTouches = new Dictionary<uint, PointerEvent>();
         }
 
         private void InvokeManipulator(PointerEvent pointerEvent)
@@ -41,20 +33,15 @@ namespace RdClient.Shared.Input.Mouse
                 _manipulator.SendTouchAction(TouchEventType.Update, pointerEvent.PointerId, pointerEvent.Position, delta);
             }
 
+            _manipulator.MousePosition = pointerEvent.Position;
             _manipulator.SendTouchAction(pointerEvent.ActionType, pointerEvent.PointerId, pointerEvent.Position, delta);
         }
 
         public void ConsumeEvent(PointerEvent pointerEvent)
         {
-
-            if(pointerEvent.ActionType == TouchEventType.Down)
+            if (_masterTouch == null && pointerEvent.ActionType == TouchEventType.Down)
             {
-                if (_masterTouch == null)
-                {
-                    _masterTouch = pointerEvent;
-                }
-
-                _trackedTouches[pointerEvent.PointerId] = pointerEvent;
+                _masterTouch = pointerEvent;
             }
 
             if(_masterTouch != null)
@@ -62,18 +49,13 @@ namespace RdClient.Shared.Input.Mouse
                 this.InvokeManipulator(pointerEvent);
             }
 
-            if (pointerEvent.ActionType == TouchEventType.Up)
-            {
-                if (_trackedTouches.ContainsKey(pointerEvent.PointerId))
-                {
-                    _trackedTouches.Remove(pointerEvent.PointerId);
-                }
-            }
+            _lastTouch = pointerEvent;
         }
 
         public void Reset()
         {
-            _trackedTouches.Clear();
+            // don't reset the master touch because it may crash the stack
+            _lastTouch = null;
         }
     }
 }
