@@ -86,6 +86,9 @@
     <Compile Include="CxWrappers\RdpEventSourceTests.cs" />
     <Compile Include="CxWrappers\RdpScreenSnapshotTests.cs" />
     <Compile Include="CxWrappers\RdpUtilsTests.cs" />
+    <Compile Include="Data\ModelContainerTests.cs" />
+    <Compile Include="Data\PrimaryModelCollectionTests.cs" />
+    <Compile Include="Data\TestModel.cs" />
     <Compile Include="Helpers\ITimerTests.cs" />
     <Compile Include="Helpers\CertificateErrorHelperTests.cs" />
     <Compile Include="Helpers\MutableObjectTests.cs" />
@@ -172,6 +175,7 @@
       <Name>RdMock</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
