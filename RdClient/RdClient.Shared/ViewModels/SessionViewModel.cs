@@ -45,8 +45,8 @@ namespace RdClient.Shared.ViewModels
 
         private sealed class InternalPanUpdate : IPanUpdate
         {
-            override public double X { get; protected set; }
-            override public double Y { get; protected set; }
+            public double X { get; private set; }
+            public double Y { get; private set; }
             public InternalPanUpdate(double x, double y)
             {
                 this.X = x;

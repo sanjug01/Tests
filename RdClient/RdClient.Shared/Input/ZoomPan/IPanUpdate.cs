@@ -3,9 +3,9 @@ using Windows.Foundation;
 
 namespace RdClient.Shared.Input.ZoomPan
 {
-    public abstract class IPanUpdate
+    public interface IPanUpdate
     {
-        abstract public double X { get; protected set; }
-        abstract public double Y { get; protected set; }
+        double X { get; }
+        double Y { get; }
     }
 }
