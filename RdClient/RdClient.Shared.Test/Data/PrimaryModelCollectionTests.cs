@@ -110,5 +110,24 @@
             Assert.AreEqual(savedId, collection.Models[0].Id);
             Assert.AreEqual(ModelStatus.Clean, collection.Models[0].Status);
         }
+
+        [TestMethod]
+        public void LoadPrimaryModelCollection_1TestModelSerializerFails_EmptyCollection()
+        {
+            //
+            // Write one TestModel object to the root directory
+            //
+            TestModel savedModel = new TestModel(10);
+            Guid savedId = Guid.NewGuid();
+            _emptyFolder.CreateFile("dummy.model");
+            _emptyFolder.CreateFile("just_dummy");
+            _serializer.WriteModel(savedModel, _emptyFolder.CreateFile(string.Format("{0}.model", savedId)));
+            //
+            // Load from the root directory and verify that the same object has been loaded
+            //
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder,
+                new FailingModelSerializer());
+            Assert.AreEqual(0, collection.Models.Count);
+        }
     }
 }
