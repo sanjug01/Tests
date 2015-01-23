@@ -93,6 +93,7 @@
     <Compile Include="CxWrappers\RdTrace.cs" />
     <Compile Include="Data\IModelCollection.cs" />
     <Compile Include="Data\IModelContainer.cs" />
+    <Compile Include="Data\IStorageFolder.cs" />
     <Compile Include="Data\ModelContainer.cs" />
     <Compile Include="Data\PrimaryModelCollection.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />

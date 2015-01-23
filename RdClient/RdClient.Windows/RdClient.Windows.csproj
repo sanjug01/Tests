@@ -157,6 +157,7 @@
     <Compile Include="Controls\UserSettingsControl.xaml.cs">
       <DependentUpon>UserSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\ApplicationDataLocalStorageFolder.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
     <Compile Include="Views\SessionView.xaml.cs">
       <DependentUpon>SessionView.xaml</DependentUpon>
