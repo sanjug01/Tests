@@ -36,9 +36,13 @@
         -->
         <controls:RdSessionPanel 
             x:Name="SessionPanel"
+            ZoomUpdate="{Binding ZoomUpdate}"
+            PanUpdate="{Binding PanUpdateParam, Mode=OneWay}"
             ConnectCommand="{Binding ConnectCommand}"
-                                 ViewSize="{Binding MouseViewModel.ViewSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
+            ViewSize="{Binding MouseViewModel.ViewSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <controls:RdSessionPanControl 
+            x:Name="SessionPanControl"/>
+        
         <controls:MouseLayerControl x:Name="MouseLayer" 
                                     Background="Red"
                                     VerticalContentAlignment="Stretch"
@@ -67,13 +71,34 @@
             <Button
                 x:Uid="SessionView-ZoomInButton"
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
-                Tapped="ZoomInButton_Tapped"
+                Command="{Binding ToggleZoomCommand}" CommandParameter="1"
                 Content="{StaticResource ZoomInIcon}"/>
             <Button
                 x:Uid="SessionView-ZoomOutButton"
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
-                Tapped="ZoomOutButton_Tapped"
+                Command="{Binding ToggleZoomCommand}" CommandParameter="2"
                 Content="{StaticResource ZoomOutIcon}"/>
+            <Button
+                x:Uid="SessionView-PanLeft"
+                Command="{Binding PanCommand}" CommandParameter="1"                
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
+                Content="&#xE112;"/>
+            <Button
+                x:Uid="SessionView-PanRight"
+                Command="{Binding PanCommand}" CommandParameter="2"                
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
+                Content="&#xE111;"/>
+            <Button
+                x:Uid="SessionView-PanUp"
+                Command="{Binding PanCommand}" CommandParameter="3"                
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
+                Content="&#xE110;"/>
+            <Button
+                x:Uid="SessionView-PanDown"
+                Command="{Binding PanCommand}" CommandParameter="4"                
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
+                Content="&#xE1FD;"/>
+            
         </StackPanel>
     </Grid>
 </UserControl>

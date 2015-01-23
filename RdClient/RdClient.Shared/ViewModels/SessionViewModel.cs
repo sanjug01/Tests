@@ -2,6 +2,7 @@
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Keyboard;
+using RdClient.Shared.Input.ZoomPan;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using System;
@@ -14,6 +15,45 @@ namespace RdClient.Shared.ViewModels
     public class SessionViewModel : DeferringViewModelBase
     {
 
+        public sealed class InternalZoomUpdate : IZoomUpdate
+        {
+            public ZoomUpdateType ZoomType { get; private set; }
+            
+            public InternalZoomUpdate(ZoomUpdateType type)
+            {
+                ZoomType = type;
+            }
+        }
+
+        private sealed class InternalCustomZoomUpdate : ICustomZoomUpdate
+        {
+            public InternalCustomZoomUpdate(ZoomUpdateType type, double centerX, double centerY, double scaleX, double scaleY)
+            {
+                ZoomType = type;
+                CenterX = centerX;
+                CenterY = centerY;
+                ScaleX = scaleX;
+                ScaleY = scaleY;
+            }
+
+            public ZoomUpdateType ZoomType { get; private set; }
+            public double CenterX { get; private set; }
+            public double CenterY { get; private set; }
+            public double ScaleX { get; private set; }
+            public double ScaleY { get; private set; }            
+        }
+
+        private sealed class InternalPanUpdate : IPanUpdate
+        {
+            override public double X { get; protected set; }
+            override public double Y { get; protected set; }
+            public InternalPanUpdate(double x, double y)
+            {
+                this.X = x;
+                this.Y = y;
+            }
+        }
+
         private ConnectionInformation _connectionInformation;
         private IKeyboardCapture _keyboardCapture;
 
@@ -25,6 +65,20 @@ namespace RdClient.Shared.ViewModels
         private bool  _isReconnecting;
         private bool _isCancelledReconnect;
         private int _reconnectAttempts;
+        private IZoomUpdate _zoomUpdate;
+        private IPanUpdate _panUpdate;
+
+        public IZoomUpdate ZoomUpdate
+        {
+            get { return _zoomUpdate; }
+            private set { this.SetProperty<IZoomUpdate>(ref _zoomUpdate, value); }
+        }
+
+        public IPanUpdate PanUpdateParam
+        {
+            get { return _panUpdate; }
+            private set { this.SetProperty<IPanUpdate>(ref _panUpdate, value); }
+        }
 
         private readonly ICommand _disconnectCommand;
         public ICommand DisconnectCommand { get { return _disconnectCommand; } }
@@ -37,6 +91,8 @@ namespace RdClient.Shared.ViewModels
 
         private readonly ICommand _toggleZoomCommand;
         public ICommand ToggleZoomCommand { get { return _toggleZoomCommand; } }
+        private readonly ICommand _panCommand;
+        public ICommand PanCommand { get { return _panCommand; } }
 
         public ISessionModel SessionModel { get; set; }
         public DisconnectString DisconnectString { get; set; }
@@ -68,6 +124,7 @@ namespace RdClient.Shared.ViewModels
             _connectCommand = new RelayCommand(new Action<object>(Connect));
             _cancelReconnectCommand = new RelayCommand(o => { _isCancelledReconnect = true; IsReconnecting = false; });
             _toggleZoomCommand = new RelayCommand(new Action<object>(ToggleMagnification));
+            _panCommand = new RelayCommand(new Action<object>(PanTranslate));
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -265,7 +322,38 @@ namespace RdClient.Shared.ViewModels
 
         private void ToggleMagnification(object o)
         {
+            // param is 1=zoomIn, 2=zoomOut
+            if(o.ToString().Equals("1"))
+            {
+                this.ZoomUpdate = new InternalZoomUpdate(ZoomUpdateType.ZoomIn);
+            } 
+            else
+            {
+                this.ZoomUpdate = new InternalZoomUpdate(ZoomUpdateType.ZoomOut);
+            }
             RdTrace.TraceNrm("Toggle Magnification!");
+        }
+
+        private void PanTranslate(object o)
+        {
+            // param is 1=left, 2=right, 3=up, 4=down
+            if (o.ToString().Equals("1"))
+            {
+                this.PanUpdateParam = new InternalPanUpdate(-10, 0);
+            }
+            else if (o.ToString().Equals("2"))
+            {
+                this.PanUpdateParam = new InternalPanUpdate(10, 0);
+            }
+            else if (o.ToString().Equals("3"))
+            {
+                this.PanUpdateParam = new InternalPanUpdate(0, 10);
+            }
+            else if (o.ToString().Equals("4"))
+            {
+                this.PanUpdateParam = new InternalPanUpdate(0, -10);
+            }
+            RdTrace.TraceNrm("PanTranslate!");
         }
     }
 }

@@ -129,6 +129,8 @@
     <Compile Include="Input\Mouse\IPointerManipulator.cs" />
     <Compile Include="Input\Mouse\MouseMode.cs" />
     <Compile Include="Input\Mouse\PointerMode.cs" />
+    <Compile Include="Input\ZoomPan\IPanUpdate.cs" />
+    <Compile Include="Input\ZoomPan\IZoomUpdate.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
     <Compile Include="LifeTimeManagement\IRootFrameManager.cs" />

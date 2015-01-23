@@ -24,33 +24,5 @@ namespace RdClient.CxWrappers.Utils
 
             return new RdpConnection(rdpConnectionCx, rdpConnectionStoreCx, new RdpEventSource());
         }
-
-        public void ZoomIn()
-        {
-            // this.SwapChainPanel.Resources.
-            double ScaleFactor = MAX_ZOOM_FACTOR;
-
-            // SwapChainPanelScaleAnimationX
-            // SwapChainPanelScaleAnimationY
-            // SwapChainPanel.
-            // SwapChainPanel.Resources["StoryBoard"]...[]DoubleAnimations
-
-
-            //// ScpScaleTransform
-            // SwapChainPanel.RenderTransform....
-
-            //SwapChainPanelScaleAnimationX.From = ScpScaleTransform.ScaleX;
-            //SwapChainPanelScaleAnimationX.To = ScaleFactor;
-
-            //SwapChainPanelScaleAnimationY.From = ScpScaleTransform.ScaleY;
-            //SwapChainPanelScaleAnimationY.To = ScaleFactor;
-
-            RdTrace.TraceNrm("TestTrace:Magnification:ZoomIn");
-        }
-
-        public void ZoomOut()
-        {
-
-        }
     }
 }

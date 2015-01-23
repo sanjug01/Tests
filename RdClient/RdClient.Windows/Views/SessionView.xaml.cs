@@ -10,6 +10,7 @@ namespace RdClient.Views
         public SessionView()
         {
             this.InitializeComponent();
+            SessionPanControl.HidePanControl();
         }
 
         void IPresentableView.Activating(object activationParameter)
@@ -27,11 +28,13 @@ namespace RdClient.Views
         private void ZoomInButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             SessionPanel.ZoomIn();
+            SessionPanControl.ShowPanControl();
         }
 
         private void ZoomOutButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             SessionPanel.ZoomOut();
+            SessionPanControl.HidePanControl();
         }
     }
 }
