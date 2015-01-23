@@ -10,7 +10,8 @@ namespace RdClient.Shared.ViewModels
 {
 
     using RdClient.Shared.Input.Mouse;
-    using Windows.Foundation;
+using System.Windows.Input;
+using Windows.Foundation;
 
     public class MouseViewModel : MutableObject, IPointerManipulator
     {
@@ -76,6 +77,14 @@ namespace RdClient.Shared.ViewModels
             set { SetProperty(ref _hotSpot, value); }
         }
 
+        private bool _multiTouchEnabled;
+        private ICommand _toggleInputModeCommand;
+        public ICommand ToggleInputModeCommand
+        {
+            get { return _toggleInputModeCommand; }
+            set { SetProperty(ref _toggleInputModeCommand, value); }
+        }
+
         private IRdpConnection _rdpConnection;
         public IRdpConnection RdpConnection
         {
@@ -85,12 +94,13 @@ namespace RdClient.Shared.ViewModels
                 {
                     _rdpConnection.Events.MouseCursorShapeChanged -= OnMouseCursorShapeChanged;
                     _rdpConnection.Events.MouseCursorPositionChanged -= OnMouseCursorPositionChanged;
-
+                    _rdpConnection.Events.MultiTouchEnabledChanged -= OnMultiTouchEnabledChanged;
                 }
 
                 _rdpConnection = value;
                 _rdpConnection.Events.MouseCursorShapeChanged += OnMouseCursorShapeChanged;
                 _rdpConnection.Events.MouseCursorPositionChanged += OnMouseCursorPositionChanged;
+                _rdpConnection.Events.MultiTouchEnabledChanged += OnMultiTouchEnabledChanged;
             }
         }
 
@@ -99,7 +109,33 @@ namespace RdClient.Shared.ViewModels
         public MouseViewModel()
         {
             this.PointerEventConsumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
-            this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.MultiTouch;
+            this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
+            this.ToggleInputModeCommand = new RelayCommand(OnToggleInputModeCommand);
+            _multiTouchEnabled = true;
+        }
+
+        private void OnToggleInputModeCommand(object args)
+        {
+            if (this.PointerEventConsumer.ConsumptionMode == ConsumptionMode.Pointer)
+            {
+                if(_multiTouchEnabled)
+                {
+                    this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.MultiTouch;
+                }
+                else
+                {
+                    this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.DirectTouch;
+                }
+            }
+            else 
+            {
+                this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
+            }
+        }
+
+        private void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs args)
+        {
+            _multiTouchEnabled = args.MultiTouchEnabled;
         }
 
         private void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
