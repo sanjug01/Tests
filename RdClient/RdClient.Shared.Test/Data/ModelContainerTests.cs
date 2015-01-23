@@ -54,5 +54,37 @@
             Assert.AreSame(model, container.Model);
             Assert.AreEqual(ModelStatus.Modified, container.Status);
         }
+
+        [TestMethod]
+        public void ModelContainerForNewModel_StatusToClean_StatusSet()
+        {
+            TestModel model = new TestModel(10);
+            IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForNewModel(model);
+
+            container.Status = ModelStatus.Clean;
+
+            Assert.AreEqual(ModelStatus.Clean, container.Status);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ModelContainerForNewModel_StatusToModified_ExceptionThrown()
+        {
+            TestModel model = new TestModel(10);
+            IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForNewModel(model);
+
+            container.Status = ModelStatus.Modified;
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ModelContainerForExistingModel_StatusToModified_ExceptionThrown()
+        {
+            TestModel model = new TestModel(10);
+            Guid id = Guid.NewGuid();
+            IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForExistingModel(id, model);
+
+            container.Status = ModelStatus.Modified;
+        }
     }
 }
