@@ -30,7 +30,23 @@
         ModelStatus IModelContainer<TModel>.Status
         {
             get { return _status; }
-            set { _status = value; }
+            set
+            {
+                if (value != _status)
+                {
+                    switch (_status)
+                    {
+                        case ModelStatus.Clean:
+                            throw new InvalidOperationException("Cannot change status from Clean");
+
+                        default:
+                            if (ModelStatus.Clean != value)
+                                throw new ArgumentException("Cannot change status to anything but Clean");
+                            break;
+                    }
+                    _status = value;
+                }
+            }
         }
 
         public static IModelContainer<TModel> CreateForNewModel(TModel model)
