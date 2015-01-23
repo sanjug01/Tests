@@ -247,13 +247,17 @@
     <Style x:Key="SettingsDeleteUserButtonStyle" TargetType="Button" BasedOn="{StaticResource SettingsEditUserButtonStyle}">
         <Setter Property="Background" Value="{StaticResource SettingsAddUserButtonBackgroundBrush}" />
     </Style>
+    
     <DataTemplate x:Key="CredentialDataTemplate">
         <controls:CredentialControl />
     </DataTemplate>
+    
     <DataTemplate x:Key="SelectedCredentialDataTemplate">
         <controls:ExtendedCredentialControl />
     </DataTemplate>
+    
     <SolidColorBrush x:Key="CredentialSelectedColor" Color="#1A000000" />
+    
     <Style x:Key="SettingsCredentialListBoxItemStyle" TargetType="ListBoxItem">
         <Setter Property="Margin" Value="0" />
         <Setter Property="TabNavigation" Value="Local" />
@@ -329,6 +333,39 @@
         </Setter>
     </Style>
 
+    <!-- 
+    ======================================================================================
+    Dialog styles 
+    ======================================================================================
+    -->    
+    <SolidColorBrush x:Key="DialogBackgroundColor" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="DialogAcceptButtonBackgroundColor" Color="#0078D7" />
+    <SolidColorBrush x:Key="DialogCancelButtonBackgroundColor" Color="#CCCCCC" />
+    <SolidColorBrush x:Key="DialogButtonForegroundColor" Color="#FFFFFF" />
+
+    <Style x:Key="DialogCancelButtonStyle" TargetType="Button">
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Width" Value="120" />
+        <Setter Property="Foreground" Value="{StaticResource DialogButtonForegroundColor}" />
+        <Setter Property="Background" Value="{StaticResource DialogCancelButtonBackgroundColor}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+    <Style x:Key="DialogAcceptButtonStyle" TargetType="Button" BasedOn="{StaticResource SettingsEditUserButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource DialogAcceptButtonBackgroundColor}" />
+    </Style>
+    
+    <Style x:Key="DialogBorder" TargetType="Border">
+        <Setter Property="Width" Value="434" />
+        <Setter Property="Background" Value="{StaticResource DialogBackgroundColor}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Margin" Value="186" />
+        <Setter Property="Padding" Value="43,15,43,35" />
+    </Style>
     <!-- 
     ======================================================================================
     ======================================================================================
