@@ -7,17 +7,34 @@
     [TestClass]
     public sealed class PrimaryModelCollectionTests
     {
+        IStorageFolder _emptyFolder;
+        IModelSerializer _serializer;
+
+        [TestInitialize]
+        public void SetUpTest()
+        {
+            _emptyFolder = new MemoryStorageFolder();
+            _serializer = new TestModelSerializer();
+        }
+
+        [TestCleanup]
+        public void TearDownTest()
+        {
+            _emptyFolder = null;
+            _serializer = null;
+        }
+
         [TestMethod]
         public void NewPrimaryModelCollection_EmptyModels()
         {
-            IModelCollection<TestModel> collection = new PrimaryModelCollection<TestModel>();
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
             Assert.AreEqual(0, collection.Models.Count);
         }
 
         [TestMethod]
         public void PrimaryModelCollection_AddNewModel_NewModelAdded()
         {
-            IModelCollection<TestModel> collection = new PrimaryModelCollection<TestModel>();
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
             TestModel model = new TestModel(1);
             Guid id = collection.AddNewModel(model);
 
@@ -34,7 +51,7 @@
         [TestMethod]
         public void PrimaryModelCollection_AddRemoveModel_EmptyCollection()
         {
-            IModelCollection<TestModel> collection = new PrimaryModelCollection<TestModel>();
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
             TestModel model = new TestModel(1);
             Guid id = collection.AddNewModel(model);
             TestModel removedModel = collection.RemoveModel(id);
@@ -47,7 +64,7 @@
         [ExpectedException(typeof(InvalidOperationException))]
         public void PrimaryModelCollection_RemoveNonexistingModel_ExceptionThrown()
         {
-            IModelCollection<TestModel> collection = new PrimaryModelCollection<TestModel>();
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
             TestModel model = new TestModel(1);
             collection.AddNewModel(model);
             collection.RemoveModel(Guid.NewGuid());
@@ -56,7 +73,7 @@
         [TestMethod]
         public void PrimaryModelCollection_AddAddRemoveModel_CorrectModelRemoved()
         {
-            IModelCollection<TestModel> collection = new PrimaryModelCollection<TestModel>();
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
 
             collection.AddNewModel(new TestModel(1));
 
