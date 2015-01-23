@@ -3,6 +3,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RdClient.Shared.Data;
     using System;
+    using System.IO;
 
     [TestClass]
     public sealed class PrimaryModelCollectionTests
@@ -89,6 +90,25 @@
                 Assert.AreNotSame(model, container.Model);
                 Assert.AreNotEqual(id, container.Id);
             }
+        }
+
+        [TestMethod]
+        public void LoadPrimaryModelCollection_1TestModel_CleanModelLoaded()
+        {
+            //
+            // Write one TestModel object to the root directory
+            //
+            TestModel savedModel = new TestModel(10);
+            Guid savedId = Guid.NewGuid();
+            _serializer.WriteModel(savedModel, _emptyFolder.CreateFile(string.Format("{0}.model", savedId)));
+            //
+            // Load from the root directory and verify that the same object has been loaded
+            //
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+            Assert.AreEqual(1, collection.Models.Count);
+            Assert.AreEqual(savedModel.Property, collection.Models[0].Model.Property);
+            Assert.AreEqual(savedId, collection.Models[0].Id);
+            Assert.AreEqual(ModelStatus.Clean, collection.Models[0].Status);
         }
     }
 }

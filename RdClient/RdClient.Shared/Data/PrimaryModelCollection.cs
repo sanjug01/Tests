@@ -107,6 +107,7 @@
                             try
                             {
                                 TModel model = serializer.ReadModel<TModel>(fileData);
+                                _originalModels.Add(ModelContainer<TModel>.CreateForExistingModel(objectId, model));
                             }
                             catch(Exception ex)
                             {
