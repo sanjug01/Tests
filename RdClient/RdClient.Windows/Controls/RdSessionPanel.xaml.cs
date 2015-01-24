@@ -18,6 +18,10 @@ namespace RdClient.Controls
     {
 
         private const double MAX_ZOOM_FACTOR = 2.5;
+        private const double MIN_ZOOM_FACTOR = 1.0;
+
+        private Point m_maxTranslationOffset;
+        private Point m_minTranslationOffset;
 
         public DependencyProperty ConnectCommandProperty = DependencyProperty.Register("ConnectCommand",
             typeof(ICommand), typeof(RdSessionPanel),
@@ -118,26 +122,56 @@ namespace RdClient.Controls
             this.SizeChanged += (sender, args) => { this.ViewSize = (args as SizeChangedEventArgs).NewSize; };
 
             ScaleFactor = 1.0;
+            m_maxTranslationOffset.X = 0.0;
+            m_maxTranslationOffset.Y = 0.0;
+            m_minTranslationOffset.X = 0.0;
+            m_minTranslationOffset.Y = 0.0;
 
             SwapChainPanelStoryboard.Completed += SwapChainPanelStoryboard_Completed;
         }
 
         public void ZoomIn()
         {
-            double ScaleFactor = MAX_ZOOM_FACTOR;
+            double targetScaleFactor = MAX_ZOOM_FACTOR;
+
+            // reset the pan transformation
+            SwapChainPanelTranslateAnimationX.From = SwapChainPanelTranslateAnimationX.To;
+            SwapChainPanelTranslateAnimationY.From = SwapChainPanelTranslateAnimationY.To;   
+
+            // trick to do partial zooms
+            targetScaleFactor = ScpScaleTransform.ScaleX + 0.5;
+            if (targetScaleFactor > MAX_ZOOM_FACTOR)
+            {
+                targetScaleFactor = MAX_ZOOM_FACTOR;
+            }
+
             SwapChainPanelScaleAnimationX.From = ScpScaleTransform.ScaleX;
-            SwapChainPanelScaleAnimationX.To = ScaleFactor;
+            SwapChainPanelScaleAnimationX.To = targetScaleFactor;
 
             SwapChainPanelScaleAnimationY.From = ScpScaleTransform.ScaleY;
-            SwapChainPanelScaleAnimationY.To = ScaleFactor;
+            SwapChainPanelScaleAnimationY.To = targetScaleFactor;
+
+            Rect rectCoreWindow = CoreWindow.GetForCurrentThread().Bounds;
+            ScpScaleTransform.CenterX = (rectCoreWindow.Right - rectCoreWindow.Left) / 2;
+            ScpScaleTransform.CenterY = (rectCoreWindow.Bottom - rectCoreWindow.Top) / 2;
 
             SwapChainPanelStoryboard.Begin();
         }
 
         public void ZoomOut()
         {
-            double targetScaleFactor = 1.0;
+            double targetScaleFactor = MIN_ZOOM_FACTOR;
 
+            // reset the pan transformation
+            SwapChainPanelTranslateAnimationX.From = SwapChainPanelTranslateAnimationX.To;
+            SwapChainPanelTranslateAnimationY.From = SwapChainPanelTranslateAnimationY.To;            
+
+            // trick to do partial zooms
+            targetScaleFactor = ScpScaleTransform.ScaleX - 0.5;
+            if (targetScaleFactor < MIN_ZOOM_FACTOR)
+            {
+                targetScaleFactor = MIN_ZOOM_FACTOR;
+            }
 
             SwapChainPanelScaleAnimationX.From = ScpScaleTransform.ScaleX;
             SwapChainPanelScaleAnimationX.To = targetScaleFactor;
@@ -148,35 +182,64 @@ namespace RdClient.Controls
             //
             // Translate (through animation) the swap chain panel to fit the screen
             //
-            //SwapChainPanelTranslateAnimationX.To = CoreWindow.GetForCurrentThread().Bounds.X;
-            //SwapChainPanelTranslateAnimationY.To = CoreWindow.GetForCurrentThread().Bounds.Y;
+            Rect rectCoreWindow = CoreWindow.GetForCurrentThread().Bounds;
+            SwapChainPanelTranslateAnimationX.To = rectCoreWindow.X;
+            SwapChainPanelTranslateAnimationY.To = rectCoreWindow.Y;
 
             SwapChainPanelStoryboard.Begin();
         }
 
         public void ZoomTransform(double centerX, double centerY, double scaleX, double scaleY)
         {
+            // reset the pan transformation
+            SwapChainPanelTranslateAnimationX.From = SwapChainPanelTranslateAnimationX.To;
+            SwapChainPanelTranslateAnimationY.From = SwapChainPanelTranslateAnimationY.To;   
+
             SwapChainPanelScaleAnimationX.From = ScpScaleTransform.ScaleX;
             SwapChainPanelScaleAnimationX.To = scaleX;
 
             SwapChainPanelScaleAnimationY.From = ScpScaleTransform.ScaleY;
             SwapChainPanelScaleAnimationY.To = scaleY;
 
-            // TODO: manage the center
-
+            // manage the center
+            ScpScaleTransform.CenterX = centerX;
+            ScpScaleTransform.CenterY = centerY;
         }
 
         public void PanTransform(double x, double y)
         {
-            SwapChainPanelTranslateAnimationX.From = ScpTranslateTransform.X;
-            SwapChainPanelTranslateAnimationX.To = ScpTranslateTransform.X + x;
+            double panXTo = ScpTranslateTransform.X + x;
+            double panYTo = ScpTranslateTransform.Y + y;
 
-            SwapChainPanelTranslateAnimationY.From = ScpTranslateTransform.Y;
-            SwapChainPanelTranslateAnimationY.To = ScpTranslateTransform.Y + y;
-            
             // reset the zoom transformation
             SwapChainPanelScaleAnimationX.From = SwapChainPanelScaleAnimationX.To;
-            SwapChainPanelScaleAnimationY.From = SwapChainPanelScaleAnimationY.To;
+            SwapChainPanelScaleAnimationY.From = SwapChainPanelScaleAnimationY.To;            
+
+            if (panXTo < m_minTranslationOffset.X)
+            {
+                panXTo = m_minTranslationOffset.X;
+            }
+            else if (panXTo > m_maxTranslationOffset.X)
+            {
+                panXTo = m_maxTranslationOffset.X;
+            }
+
+            if (panYTo < m_minTranslationOffset.Y)
+            {
+                panYTo = m_minTranslationOffset.Y;
+            }
+            else if (panYTo > m_maxTranslationOffset.Y)
+            {
+                panYTo = m_maxTranslationOffset.Y;
+            }
+
+            SwapChainPanelTranslateAnimationX.From = ScpTranslateTransform.X;
+            SwapChainPanelTranslateAnimationX.To = panXTo;
+            ScpTranslateTransform.X = panXTo;
+
+            SwapChainPanelTranslateAnimationY.From = ScpTranslateTransform.Y;
+            SwapChainPanelTranslateAnimationY.To = panYTo;
+            ScpTranslateTransform.Y = panYTo;
 
             SwapChainPanelStoryboard.Begin();
         }
@@ -185,14 +248,19 @@ namespace RdClient.Controls
         {
             ScaleFactor = ScpScaleTransform.ScaleX;
 
-            // TODO : there are more caculation to be done here
-            //Rect rectCoreWindow = CoreWindow.GetForCurrentThread().Bounds;
-            //Rect rectCoreWindowT = ScpScaleTransform.TransformBounds(rectCoreWindow);
+            // TODO : there are more calculations to be done here
+            UpdateTranslationBounds();
+        }
 
-            ////m_maxTranslationOffset.X = rectCoreWindow.Left - rectCoreWindowT.Left;
-            ////m_maxTranslationOffset.Y = rectCoreWindow.Top - rectCoreWindowT.Top;
-            ////m_minTranslationOffset.X = rectCoreWindow.Right - rectCoreWindowT.Right;
-            ////m_minTranslationOffset.Y = rectCoreWindow.Bottom - rectCoreWindowT.Bottom;
+        private void UpdateTranslationBounds()
+        {
+            Rect rectCoreWindow = CoreWindow.GetForCurrentThread().Bounds;
+            Rect rectCoreWindowT = ScpScaleTransform.TransformBounds(rectCoreWindow);
+
+            m_maxTranslationOffset.X = rectCoreWindow.Left - rectCoreWindowT.Left;
+            m_maxTranslationOffset.Y = rectCoreWindow.Top - rectCoreWindowT.Top;
+            m_minTranslationOffset.X = rectCoreWindow.Right - rectCoreWindowT.Right;
+            m_minTranslationOffset.Y = rectCoreWindow.Bottom - rectCoreWindowT.Bottom;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -202,6 +270,7 @@ namespace RdClient.Controls
             RdpConnectionFactory factory = new RdpConnectionFactory() { SwapChainPanel = this.SwapChainPanel };
 
             this.ConnectCommand.Execute(new SessionModel(factory));
+            UpdateTranslationBounds();
         }
 
         private static void OnConnectCommandPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)

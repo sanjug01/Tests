@@ -336,22 +336,23 @@ namespace RdClient.Shared.ViewModels
 
         private void PanTranslate(object o)
         {
+            double defaultPan = 50.0;
             // param is 1=left, 2=right, 3=up, 4=down
             if (o.ToString().Equals("1"))
             {
-                this.PanUpdateParam = new InternalPanUpdate(-10, 0);
+                this.PanUpdateParam = new InternalPanUpdate(-defaultPan, 0);
             }
             else if (o.ToString().Equals("2"))
             {
-                this.PanUpdateParam = new InternalPanUpdate(10, 0);
+                this.PanUpdateParam = new InternalPanUpdate(defaultPan, 0);
             }
             else if (o.ToString().Equals("3"))
             {
-                this.PanUpdateParam = new InternalPanUpdate(0, 10);
+                this.PanUpdateParam = new InternalPanUpdate(0, defaultPan);
             }
             else if (o.ToString().Equals("4"))
             {
-                this.PanUpdateParam = new InternalPanUpdate(0, -10);
+                this.PanUpdateParam = new InternalPanUpdate(0, -defaultPan);
             }
             RdTrace.TraceNrm("PanTranslate!");
         }
