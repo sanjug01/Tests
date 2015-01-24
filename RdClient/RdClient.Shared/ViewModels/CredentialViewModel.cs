@@ -53,14 +53,7 @@ namespace RdClient.Shared.ViewModels
 
         private void DeleteCommandExecute()
         {
-            //Remove all references to this credential first
-            List<Desktop> desktops = _dataModel.LocalWorkspace.Connections.OfType<Desktop>().Where(d => d.CredentialId.Equals(this.Credential.Id)).ToList();
-            foreach(Desktop desktop in desktops)
-            {
-                desktop.CredentialId = Guid.Empty;
-            }
-            //remove this credential
-            _dataModel.LocalWorkspace.Credentials.Remove(this.Credential);
+            _nav.PushModalView("DeleteUserView", this.Credential);
         }
     }
 }

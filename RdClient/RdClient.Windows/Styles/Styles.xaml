@@ -357,7 +357,14 @@
     <Style x:Key="DialogAcceptButtonStyle" TargetType="Button" BasedOn="{StaticResource SettingsEditUserButtonStyle}">
         <Setter Property="Background" Value="{StaticResource DialogAcceptButtonBackgroundColor}" />
     </Style>
-    
+
+    <Style x:Key="ModalBackground" TargetType="Border">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Opacity" Value="0.8" />
+        <Setter Property="Background" Value="#dd000000" />
+    </Style> 
+
     <Style x:Key="DialogBorder" TargetType="Border">
         <Setter Property="Width" Value="434" />
         <Setter Property="Background" Value="{StaticResource DialogBackgroundColor}" />
