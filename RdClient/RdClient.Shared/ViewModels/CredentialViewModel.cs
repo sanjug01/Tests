@@ -1,9 +1,6 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
