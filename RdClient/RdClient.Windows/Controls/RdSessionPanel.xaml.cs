@@ -88,8 +88,8 @@ namespace RdClient.Controls
             {
                 // should be a custom zoom
                 ICustomZoomUpdate customZoomUpdate = zoomUpdate as ICustomZoomUpdate;
+                panel.ZoomTransform(customZoomUpdate.CenterX, customZoomUpdate.CenterY, customZoomUpdate.ScaleX, customZoomUpdate.ScaleY);
             }
-
         }
 
         static readonly DependencyProperty PanUpdateProperty = DependencyProperty.Register(
@@ -112,7 +112,7 @@ namespace RdClient.Controls
             RdSessionPanel panel = sender as RdSessionPanel;
             IPanUpdate panUpdate = e.NewValue as IPanUpdate;
 
-            // TODO apply pan
+            // apply pan
             panel.PanTransform(panUpdate.X, panUpdate.Y);
         }
 
