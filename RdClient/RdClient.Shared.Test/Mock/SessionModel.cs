@@ -18,7 +18,7 @@ namespace RdClient.Shared.Test.Mock
             ConnectionCreated(this, args);
         }
 
-        private void EmitConnectionAutoReconnecting(ConnectionAutoReconnectingArgs args)
+        public void EmitConnectionAutoReconnecting(ConnectionAutoReconnectingArgs args)
         {
             ConnectionAutoReconnecting(this, args);
         }
