@@ -1,12 +1,14 @@
 ﻿namespace RdClient.Shared.Data
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.Contracts;
-    using System.IO;
+    using RdClient.Shared.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.Contracts;
+using System.IO;
+using System.Windows.Input;
 
     public sealed class PrimaryModelCollection<TModel> : IModelCollection<TModel> where TModel : INotifyPropertyChanged
     {
@@ -17,6 +19,8 @@
         private readonly ObservableCollection<IModelContainer<TModel>> _originalModels;
         private readonly ReadOnlyObservableCollection<IModelContainer<TModel>> _wrappedModels;
         private readonly IList<Guid> _removedModelIds;
+        private readonly ISet<Guid> _modifiedModelIds;
+        private readonly RelayCommand _save;
 
         public static IModelCollection<TModel> Load(IStorageFolder folder, IModelSerializer modelSerializer)
         {
@@ -37,12 +41,16 @@
             Contract.Ensures(null != _modelSerializer);
             Contract.Ensures(null != _originalModels);
             Contract.Ensures(null != _wrappedModels);
+            Contract.Ensures(null != _removedModelIds);
+            Contract.Ensures(null != _modifiedModelIds);
 
             _storageFolder = folder;
             _modelSerializer = modelSerializer;
             _originalModels = new ObservableCollection<IModelContainer<TModel>>();
             _wrappedModels = new ReadOnlyObservableCollection<IModelContainer<TModel>>(_originalModels);
             _removedModelIds = new List<Guid>();
+            _modifiedModelIds = new HashSet<Guid>();
+            _save = new RelayCommand(this.Save, this.CanSave);
         }
 
         ReadOnlyObservableCollection<IModelContainer<TModel>> IModelCollection<TModel>.Models
@@ -58,6 +66,8 @@
 
             container.PropertyChanged += this.OnModelContainerPropertyChanged;
             _originalModels.Add(container);
+            _modifiedModelIds.Add(container.Id);
+            _save.EmitCanExecuteChanged();
 
             return container.Id;
         }
@@ -114,6 +124,7 @@
                         //
                         _removedModelIds.Add(id);
                     }
+                    _modifiedModelIds.Remove(id);
                     break;
                 }
                 else
@@ -125,16 +136,28 @@
             if (index == count)
                 throw new KeyNotFoundException(string.Format("Model {0} was not found.", id));
 
+            _save.EmitCanExecuteChanged();
+
             return removedModel;
         }
 
-        void IModelCollection<TModel>.Save()
+        ICommand IModelCollection<TModel>.Save
         {
+            get { return _save; }
+        }
+
+        private void Save(object commandParameter)
+        {
+            int changeCount = 0;
+
             //
             // Delete all deleted objects from the storage folder.
             //
             foreach (Guid removedModelId in _removedModelIds)
+            {
                 _storageFolder.DeleteFile(MakeModelFileName(removedModelId));
+                ++changeCount;
+            }
             _removedModelIds.Clear();
             //
             // Go through all models and save the new and modified ones.
@@ -149,10 +172,20 @@
                         {
                             _modelSerializer.WriteModel(modelContainer.Model, stream);
                             modelContainer.Status = ModelStatus.Clean;
+                            _modifiedModelIds.Remove(modelContainer.Id);
+                            ++changeCount;
                         }
                     }
                 }
             }
+
+            if(0 != changeCount)
+                _save.EmitCanExecuteChanged();
+        }
+
+        private bool CanSave(object commandParameter)
+        {
+            return 0 != _modifiedModelIds.Count || 0 != _removedModelIds.Count;
         }
 
         private void Load()
@@ -211,8 +244,20 @@
         private void OnModelContainerPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             //
-            // TODO: probably, add the sender to a collection of modified containers.
+            // Add ID of the modified container to the set of IDs of modified containers.
             //
+            IModelContainer<TModel> modifiedContainer = (IModelContainer<TModel>)sender;
+
+            if (_modifiedModelIds.Add(modifiedContainer.Id))
+            {
+                //
+                // Only notify the command's subscribers if this is the first change.
+                //
+                if (0 == _removedModelIds.Count && 1 == _modifiedModelIds.Count)
+                {
+                    _save.EmitCanExecuteChanged();
+                }
+            }
         }
     }
 }

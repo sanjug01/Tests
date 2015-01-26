@@ -162,7 +162,7 @@
             Guid modelId = collection.AddNewModel(new TestModel(1));
             int filesNumber = 0;
 
-            collection.Save();
+            collection.Save.Execute(null);
 
             foreach(string fileName in _emptyFolder.GetFiles())
             {
@@ -189,10 +189,10 @@
             IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
             Guid modelId = collection.AddNewModel(new TestModel(1));
 
-            collection.Save();
+            collection.Save.Execute(null);
             collection.Models[0].Model.Property += 1;
             collection.RemoveModel(modelId);
-            collection.Save();
+            collection.Save.Execute(null);
 
             foreach (string fileName in _emptyFolder.GetFiles())
             {
@@ -203,6 +203,111 @@
             {
                 Assert.Fail("Unexpected folder \"{0}\"", folderName);
             }
+        }
+
+        [TestMethod]
+        public void EmptyPrimaryModelCollection_AddModel_SaveCanExecuteChanged()
+        {
+            IList<object> reportedSenders = new List<object>();
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+
+            collection.Save.CanExecuteChanged += (sender, e) => reportedSenders.Add(sender);
+            collection.AddNewModel(new TestModel(10));
+            Assert.AreEqual(1, reportedSenders.Count);
+            Assert.AreSame(collection.Save, reportedSenders[0]);
+            Assert.IsTrue(collection.Save.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void EmptyPrimaryModelCollection_AddModelSave_SaveCanExecuteChanged()
+        {
+            IList<object> reportedSenders = new List<object>();
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+
+            Assert.IsFalse(collection.Save.CanExecute(null));
+
+            Guid modelId = collection.AddNewModel(new TestModel(10));
+            collection.Save.Execute(null);
+            Assert.IsFalse(collection.Save.CanExecute(null));
+            collection.Save.CanExecuteChanged += (sender, e) => reportedSenders.Add(sender);
+            collection.RemoveModel(modelId);
+
+            Assert.AreEqual(1, reportedSenders.Count);
+            Assert.AreSame(collection.Save, reportedSenders[0]);
+            Assert.IsTrue(collection.Save.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void EmptyPrimaryModelCollection_AddRemoveModel_CannotSave()
+        {
+            IList<object> reportedSenders = new List<object>();
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+            collection.Save.CanExecuteChanged += (sender, e) => reportedSenders.Add(sender);
+
+            Assert.IsFalse(collection.Save.CanExecute(null));
+
+            Guid modelId = collection.AddNewModel(new TestModel(10));
+            collection.RemoveModel(modelId);
+
+            Assert.IsFalse(collection.Save.CanExecute(null));
+            Assert.AreEqual(2, reportedSenders.Count);
+            Assert.AreSame(collection.Save, reportedSenders[0]);
+        }
+
+        [TestMethod]
+        public void EmptyPrimaryModelCollection_AddSaveChange_CanSave()
+        {
+            IList<object> reportedSenders = new List<object>();
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+            TestModel model = new TestModel(1);
+
+            Guid modelId = collection.AddNewModel(model);
+            collection.Save.Execute(null);
+            collection.Save.CanExecuteChanged += (sender, e) => reportedSenders.Add(sender);
+
+            model.Property += 1;
+            Assert.AreEqual(1, reportedSenders.Count);
+            Assert.IsTrue(collection.Save.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void EmptyPrimaryModelCollection_AddAddSaveRemoveChange_1CanSaveChangeReported()
+        {
+            IList<object> reportedSenders = new List<object>();
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+            TestModel model = new TestModel(1);
+
+            collection.AddNewModel(model);
+            Guid modelId = collection.AddNewModel(new TestModel(2));
+            collection.Save.Execute(null);
+            collection.Save.CanExecuteChanged += (sender, e) => reportedSenders.Add(sender);
+
+            collection.RemoveModel(modelId);
+            model.Property += 1;
+            Assert.AreEqual(1, reportedSenders.Count);
+            Assert.IsTrue(collection.Save.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void EmptyPrimaryModelCollection_AddAddAddSaveChangeChange_1CanSaveChangeReported()
+        {
+            IList<object> reportedSenders = new List<object>();
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+            TestModel model1 = new TestModel(1), model2 = new TestModel(2);
+
+            collection.AddNewModel(model1);
+            collection.AddNewModel(model2);
+            collection.AddNewModel(new TestModel(3));
+            collection.Save.Execute(null);
+            Assert.IsFalse(collection.Save.CanExecute(null));
+            collection.Save.CanExecuteChanged += (sender, e) => reportedSenders.Add(sender);
+
+            model1.Property += 1;
+            Assert.AreEqual(1, reportedSenders.Count);
+            Assert.IsTrue(collection.Save.CanExecute(null));
+            model2.Property += 1;
+            Assert.AreEqual(1, reportedSenders.Count);
+            Assert.IsTrue(collection.Save.CanExecute(null));
         }
     }
 }

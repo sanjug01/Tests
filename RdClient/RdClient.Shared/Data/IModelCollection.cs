@@ -3,6 +3,7 @@
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Windows.Input;
 
     public interface IModelCollection<TModel> where TModel : INotifyPropertyChanged
     {
@@ -14,6 +15,6 @@
         /// <summary>
         /// Save the collection to the same media from that it was loaded.
         /// </summary>
-        void Save();
+        ICommand Save { get; }
     }
 }

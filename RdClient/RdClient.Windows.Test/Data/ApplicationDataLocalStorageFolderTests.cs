@@ -203,7 +203,7 @@ namespace RdClient.Windows.Test.Data
                 savedCollection.AddNewModel(new TestModel(i));
             }
 
-            savedCollection.Save();
+            savedCollection.Save.Execute(null);
             IModelCollection<TestModel> loadedCollection = PrimaryModelCollection<TestModel>.Load(root.OpenFolder("Collection"), serializer);
             Assert.AreEqual(savedCollection.Models.Count, loadedCollection.Models.Count);
 
