@@ -1,14 +1,14 @@
 ﻿namespace RdClient.Shared.Data
 {
     using RdClient.Shared.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.IO;
-using System.Windows.Input;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
+    using System.IO;
+    using System.Windows.Input;
 
     public sealed class PrimaryModelCollection<TModel> : IModelCollection<TModel> where TModel : INotifyPropertyChanged
     {
