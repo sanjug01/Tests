@@ -4,6 +4,8 @@
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
     using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
 
     [TestClass]
     public sealed class ModelContainerTests
@@ -45,25 +47,35 @@
         [TestMethod]
         public void ModelContainerForExistingModel_ChangeModel_StatusIsModified()
         {
+            IList<PropertyChangedEventArgs> reportedChanges = new List<PropertyChangedEventArgs>();
             TestModel model = new TestModel(10);
             Guid id = Guid.NewGuid();
             IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForExistingModel(id, model);
+            container.PropertyChanged += (sender, e) => reportedChanges.Add(e);
 
             model.Property += 1;
 
             Assert.AreSame(model, container.Model);
             Assert.AreEqual(ModelStatus.Modified, container.Status);
+            Assert.AreEqual(1, reportedChanges.Count);
+            Assert.AreEqual("Status", reportedChanges[0].PropertyName);
         }
 
         [TestMethod]
         public void ModelContainerForNewModel_StatusToClean_StatusSet()
         {
+            IList<PropertyChangedEventArgs> reportedChanges = new List<PropertyChangedEventArgs>();
             TestModel model = new TestModel(10);
             IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForNewModel(model);
+            container.PropertyChanged += (sender, e) => reportedChanges.Add(e);
 
             container.Status = ModelStatus.Clean;
 
             Assert.AreEqual(ModelStatus.Clean, container.Status);
+            //
+            // Verify that a change from any state to Clean is not reported.
+            //
+            Assert.AreEqual(0, reportedChanges.Count);
         }
 
         [TestMethod]

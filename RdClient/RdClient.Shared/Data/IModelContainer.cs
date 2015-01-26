@@ -10,7 +10,7 @@
         Modified
     }
 
-    public interface IModelContainer<TModel> where TModel : INotifyPropertyChanged
+    public interface IModelContainer<TModel> : INotifyPropertyChanged where TModel : INotifyPropertyChanged
     {
         Guid Id { get; }
         TModel Model { get; }

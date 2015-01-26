@@ -9,5 +9,10 @@
         ReadOnlyObservableCollection<IModelContainer<TModel>> Models { get; }
         Guid AddNewModel(TModel newModel);
         TModel RemoveModel(Guid id);
+
+        /// <summary>
+        /// Save the collection to the same media from that it was loaded.
+        /// </summary>
+        void Save();
     }
 }

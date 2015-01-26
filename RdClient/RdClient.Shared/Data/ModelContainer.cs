@@ -1,10 +1,13 @@
 ﻿namespace RdClient.Shared.Data
 {
+    using RdClient.Shared.Helpers;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
 
-    public sealed class ModelContainer<TModel> : IModelContainer<TModel> where TModel : INotifyPropertyChanged
+    public sealed class ModelContainer<TModel> :
+        MutableObject,
+        IModelContainer<TModel> where TModel : INotifyPropertyChanged
     {
         private readonly Guid _id;
         private readonly TModel _model;
@@ -12,10 +15,7 @@
 
         Guid  IModelContainer<TModel>.Id
         {
-            get
-            {
-                return _id;
-            }
+            get { return _id; }
         }
 
         TModel IModelContainer<TModel>.Model
@@ -27,9 +27,10 @@
             }
         }
 
-        ModelStatus IModelContainer<TModel>.Status
+        public ModelStatus Status
         {
             get { return _status; }
+
             set
             {
                 if (value != _status)
@@ -76,7 +77,10 @@
         private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (ModelStatus.Clean == _status)
+            {
                 _status = ModelStatus.Modified;
+                EmitPropertyChanged("Status");
+            }
         }
     }
 }
