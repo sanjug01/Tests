@@ -8,6 +8,7 @@
     {
         ReadOnlyObservableCollection<IModelContainer<TModel>> Models { get; }
         Guid AddNewModel(TModel newModel);
+        TModel GetModel(Guid id);
         TModel RemoveModel(Guid id);
 
         /// <summary>

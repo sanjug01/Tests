@@ -188,5 +188,30 @@ namespace RdClient.Windows.Test.Data
                 Assert.Fail(string.Format("Unexpected subfolder {0}", name));
             }
         }
+
+        [TestMethod]
+        public void LocalStorageFolder_SaveModelCollectionLoadBack_SameCollectionLoaded()
+        {
+            _deleteTestFolder = true;
+
+            IStorageFolder root = new ApplicationDataLocalStorageFolder() { FolderName = RootFolderName };
+            IModelSerializer serializer = new TestModelSerializer();
+            IModelCollection<TestModel> savedCollection = PrimaryModelCollection<TestModel>.Load(root.CreateFolder("Collection"), serializer);
+
+            for(int i = 0; i < 250; ++i)
+            {
+                savedCollection.AddNewModel(new TestModel(i));
+            }
+
+            savedCollection.Save();
+            IModelCollection<TestModel> loadedCollection = PrimaryModelCollection<TestModel>.Load(root.OpenFolder("Collection"), serializer);
+            Assert.AreEqual(savedCollection.Models.Count, loadedCollection.Models.Count);
+
+            foreach(IModelContainer<TestModel> container in savedCollection.Models)
+            {
+                TestModel loadedModel = loadedCollection.GetModel(container.Id);
+                Assert.AreEqual(container.Model.Property, loadedModel.Property);
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RdClient.Shared.Data;
     using System;
+    using System.Collections.Generic;
     using System.IO;
 
     [TestClass]
@@ -50,6 +51,30 @@
         }
 
         [TestMethod]
+        public void PrimaryModelCollection_AddNewModelGetModel_AddedModelReturned()
+        {
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+            TestModel model = new TestModel(1);
+            Guid id = collection.AddNewModel(model);
+            for (int i = 0; i < 100; ++i)
+                collection.AddNewModel(new TestModel(i + 100));
+            TestModel foundModel = collection.GetModel(id);
+
+            Assert.AreSame(model, foundModel);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(KeyNotFoundException))]
+        public void PrimaryModelCollection_AddModelsGetModelWithBadId_Throws()
+        {
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+            TestModel model = new TestModel(1);
+            for (int i = 0; i < 100; ++i)
+                collection.AddNewModel(new TestModel(i));
+            TestModel foundModel = collection.GetModel(Guid.NewGuid());
+        }
+
+        [TestMethod]
         public void PrimaryModelCollection_AddRemoveModel_EmptyCollection()
         {
             IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
@@ -62,7 +87,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof(KeyNotFoundException))]
         public void PrimaryModelCollection_RemoveNonexistingModel_ExceptionThrown()
         {
             IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
@@ -128,6 +153,56 @@
             IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder,
                 new FailingModelSerializer());
             Assert.AreEqual(0, collection.Models.Count);
+        }
+
+        [TestMethod]
+        public void EmptyPrimaryModelCollection_AddModelSave_SavedInStorage()
+        {
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+            Guid modelId = collection.AddNewModel(new TestModel(1));
+            int filesNumber = 0;
+
+            collection.Save();
+
+            foreach(string fileName in _emptyFolder.GetFiles())
+            {
+                ++filesNumber;
+                Assert.AreEqual(string.Format("{0}.model", modelId), fileName);
+            }
+
+            foreach(string folderName in _emptyFolder.GetFolders())
+            {
+                Assert.Fail("Unexpected folder \"{0}\"", folderName);
+            }
+
+            Assert.AreEqual(1, filesNumber);
+
+            foreach(IModelContainer<TestModel> container in collection.Models)
+            {
+                Assert.AreEqual(ModelStatus.Clean, container.Status);
+            }
+        }
+
+        [TestMethod]
+        public void EmptyPrimaryModelCollection_AddModelSaveRemoveSave_StorageIsEmpty()
+        {
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+            Guid modelId = collection.AddNewModel(new TestModel(1));
+
+            collection.Save();
+            collection.Models[0].Model.Property += 1;
+            collection.RemoveModel(modelId);
+            collection.Save();
+
+            foreach (string fileName in _emptyFolder.GetFiles())
+            {
+                Assert.Fail("Unexpected file \"{0}\"", fileName);
+            }
+
+            foreach (string folderName in _emptyFolder.GetFolders())
+            {
+                Assert.Fail("Unexpected folder \"{0}\"", folderName);
+            }
         }
     }
 }

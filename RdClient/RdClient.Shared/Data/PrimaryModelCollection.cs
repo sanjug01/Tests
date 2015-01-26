@@ -62,6 +62,34 @@
             return container.Id;
         }
 
+        TModel IModelCollection<TModel>.GetModel(Guid id)
+        {
+            TModel model = default(TModel);
+
+            int index = 0, count = _originalModels.Count;
+
+            while (index < count)
+            {
+                IModelContainer<TModel> container = _originalModels[index];
+
+                if (id.Equals(container.Id))
+                {
+                    container.PropertyChanged -= this.OnModelContainerPropertyChanged;
+                    model = container.Model;
+                    break;
+                }
+                else
+                {
+                    ++index;
+                }
+            }
+
+            if (index == count)
+                throw new KeyNotFoundException(string.Format("Model {0} was not found.", id));
+
+            return model;
+        }
+
         TModel IModelCollection<TModel>.RemoveModel(Guid id)
         {
             TModel removedModel = default(TModel);
@@ -95,7 +123,7 @@
             }
 
             if (index == count)
-                throw new InvalidOperationException(string.Format("Model {0} was not found.", id));
+                throw new KeyNotFoundException(string.Format("Model {0} was not found.", id));
 
             return removedModel;
         }
@@ -121,12 +149,6 @@
                         {
                             _modelSerializer.WriteModel(modelContainer.Model, stream);
                             modelContainer.Status = ModelStatus.Clean;
-                        }
-                        else
-                        {
-                            //
-                            // TODO: report an error
-                            //
                         }
                     }
                 }
