@@ -3,6 +3,7 @@ using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
 using System;
 using System.Diagnostics.Contracts;
+using Windows.Foundation;
 using Windows.Security.Cryptography.Certificates;
 
 namespace RdClient.Shared.CxWrappers
@@ -229,6 +230,13 @@ namespace RdClient.Shared.CxWrappers
 
             int xRes = _rdpConnectionCx.SendMouseEvent(RdpTypeConverter.ConvertToCx(type), xPos, yPos);
             RdTrace.IfFailXResultThrow(xRes, "Failed to send mouse event.");
+        }
+
+        public void SendTouchEvent(TouchEventType type, uint contactId, Point position, ulong frameTime)
+        {
+            //_instrument.Instrument("SendTouchEvent");
+            int xRes = _rdpConnectionCx.SendTouchEvent(RdpTypeConverter.ConvertToCx(type), contactId, (float)position.X, (float)position.Y, (uint)frameTime);
+            RdTrace.IfFailXResultThrow(xRes, "Failed to send touch event.");
         }
 
         public void SendKeyEvent(int keyValue, bool scanCode, bool extended, bool keyUp)

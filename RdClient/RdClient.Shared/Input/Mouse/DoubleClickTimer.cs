@@ -1,6 +1,7 @@
 ﻿using RdClient.Shared.Helpers;
 using System;
 using System.Collections.Generic;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Mouse
 {
@@ -14,7 +15,7 @@ namespace RdClient.Shared.Input.Mouse
 
         private ITimer _timer;
         private double _interval;
-        private Dictionary<ClickTimerType, Action> _actions;
+        private Dictionary<ClickTimerType, Action<PointerEvent>> _actions;
         private ClickTimerType _timerType;
 
         private bool _expired;
@@ -34,23 +35,23 @@ namespace RdClient.Shared.Input.Mouse
 
         public DoubleClickTimer(ITimer timer, double interval)
         {
-            _actions = new Dictionary<ClickTimerType, Action>();
+            _actions = new Dictionary<ClickTimerType, Action<PointerEvent>>();
             _timer = timer;
             _interval = interval;
             _expired = true;
         }
 
-        public void AddAction(ClickTimerType timerType, Action action)
+        public void AddAction(ClickTimerType timerType, Action<PointerEvent> action)
         {
             _actions[timerType] = action;
         }
 
-        public void Reset(ClickTimerType timerType)
+        public void Reset(ClickTimerType timerType, PointerEvent pointerEvent)
         {
             _timerType = timerType;
             _expired = false;
             _timer.Stop();
-            _timer.Start(() => { _expired = true; _actions[timerType](); }, TimeSpan.FromMilliseconds(_interval), false);
+            _timer.Start(() => { _expired = true; _actions[timerType](pointerEvent); }, TimeSpan.FromMilliseconds(_interval), false);
         }
 
         public void Stop()

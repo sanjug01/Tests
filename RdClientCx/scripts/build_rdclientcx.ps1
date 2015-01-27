@@ -1,4 +1,4 @@
-$SDXROOT = "c:\sdx\clouddv"
+$SDXROOT = "e:\sdx\clouddv"
 
 Function BcxPlatform($platform)
 {
@@ -11,7 +11,7 @@ Function BcxPlatform($platform)
 	$p = New-Object System.Diagnostics.Process
 	$p.StartInfo = $pinfo
 	$p.Start()
-	$p.StandardInput.WriteLine("cd $SDXROOT")
+	$p.StandardInput.WriteLine("cd /D $SDXROOT")
 	$p.StandardInput.WriteLine(".\tools\razzle.cmd $platform no_certcheck no_oacr no_opt")
 	$p.StandardInput.WriteLine("cd .\termsrv\rdp\winrt\RdClientCx\")
 	$p.StandardInput.WriteLine("bcx.cmd")
@@ -20,11 +20,13 @@ Function BcxPlatform($platform)
 }
 
 BcxPlatform "x86chk"
-BcxPlatform "x86fre"
-BcxPlatform "armchk"
-BcxPlatform "armfre"
-
 xcopy $SDXROOT\testsrc\termsrvtestdata\REDIST\WinRTClientBin\Debug ..\WinRTClientBin\Debug /i /s /y
+
+BcxPlatform "x86fre"
 xcopy $SDXROOT\testsrc\termsrvtestdata\REDIST\WinRTClientBin\Release ..\WinRTClientBin\Release /i /s /y
+
+BcxPlatform "armchk"
 xcopy $SDXROOT\termsrv\CloudDv\Externals\ADAL ..\ADAL /i /s /y
+
+BcxPlatform "armfre"
 xcopy $SDXROOT\termsrv\rdp\externals\openssl ..\openssl /i /s /y

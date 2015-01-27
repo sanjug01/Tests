@@ -30,40 +30,25 @@ namespace RdClient.Shared.Test.Input.Mouse
         }
     }
 
-    public class TestMousePointerEvent
-    {
-        public MouseEventType Type { get; set; }
-        public Point Position { get; set; }
-    }
-
-    public class TestPointerManipulator : IPointerManipulator
-    {
-        public List<TestMousePointerEvent> _eventLog = new List<TestMousePointerEvent>();
-
-        public Point MousePosition
-        {
-            get;
-            set;
-        }
-
-        public void SendMouseAction(MouseEventType type)
-        {
-            _eventLog.Add(new TestMousePointerEvent() { Position = MousePosition, Type = type });
-        }
-    }
-
     [TestClass]
     public class PointerInputTestsBase
     {
-        private PointerEventConsumer _consumer;
-        private TestPointerManipulator _manipulator;
+        protected TestTimer _timer;
+        private PointerEventDispatcher _consumer;
+        private Mock.PointerManipulator _manipulator;
+
+        protected ConsumptionMode ConsumptionMode
+        { 
+            get { return _consumer.ConsumptionMode; }
+            set { _consumer.ConsumptionMode = value; }
+        }
 
         [TestInitialize]
         public void PointerModel_TestInitialize()
         {
-            TestTimer timer = new TestTimer();
-            _manipulator = new TestPointerManipulator();
-            _consumer = new PointerEventConsumer(timer, _manipulator);
+            _timer = new TestTimer();
+            _manipulator = new Mock.PointerManipulator();
+            _consumer = new PointerEventDispatcher(_timer, _manipulator);
         }
 
         protected void ConsumeEventsHelper(PointerEvent[] events)
@@ -74,15 +59,15 @@ namespace RdClient.Shared.Test.Input.Mouse
             }
         }
 
-        protected void AssertionHelper(TestMousePointerEvent[] expected)
+        protected void MouseAssertionHelper(Mock.TestMousePointerEvent[] expected)
         {
-            Assert.AreEqual(expected.Length, _manipulator._eventLog.Count);
+            Assert.AreEqual(expected.Length, _manipulator._mouseEventLog.Count);
 
             int i = 0;
             for (i = 0; i < expected.Length; i++)
             {
-                Assert.AreEqual(expected[i].Type, _manipulator._eventLog[i].Type);
-                Assert.AreEqual(expected[i].Position, _manipulator._eventLog[i].Position);
+                Assert.AreEqual(expected[i].Type, _manipulator._mouseEventLog[i].Type);
+                Assert.AreEqual(expected[i].Position, _manipulator._mouseEventLog[i].Position);
             }
         }
     }

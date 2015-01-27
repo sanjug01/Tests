@@ -1,4 +1,4 @@
-CURRENTLY COMPILED VERSION: OpenSSL 1.0.1g armv7chk
+CURRENTLY COMPILED VERSION: OpenSSL 1.0.1h armv7chk
 
 These are the static libraries for armv7 generated for the Android platform.
 

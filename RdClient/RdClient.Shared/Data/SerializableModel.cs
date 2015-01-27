@@ -24,6 +24,25 @@
         {
         }
 
+        public override bool Equals(object obj)
+        {
+            bool equals = false;
+
+            SerializableModel otherModel = obj as SerializableModel;
+
+            if(null != otherModel)
+            {
+                equals = true;
+            }
+
+            return equals;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         protected void SetProperty<TProperty>(ref TProperty property, TProperty newValue,
             [CallerMemberName] string propertyName = null) where TProperty : IEquatable<TProperty>
         {
