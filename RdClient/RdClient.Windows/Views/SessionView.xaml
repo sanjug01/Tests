@@ -36,8 +36,8 @@
         -->
         <controls:RdSessionPanel 
             x:Name="SessionPanel"
-            ZoomUpdate="{Binding ZoomUpdate}"
-            PanUpdate="{Binding PanUpdateParam, Mode=OneWay}"
+            ZoomUpdate="{Binding ZoomUpdate, Mode=OneWay}"
+            PanUpdate="{Binding PanUpdate, Mode=OneWay}"
             ConnectCommand="{Binding ConnectCommand}"
             ViewSize="{Binding MouseViewModel.ViewSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <controls:RdSessionPanControl 

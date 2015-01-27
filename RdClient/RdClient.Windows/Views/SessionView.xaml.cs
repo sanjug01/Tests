@@ -24,17 +24,5 @@ namespace RdClient.Views
         void IPresentableView.Dismissing()
         {
         }
-
-        private void ZoomInButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            SessionPanel.ZoomIn();
-            SessionPanControl.ShowPanControl();
-        }
-
-        private void ZoomOutButton_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            SessionPanel.ZoomOut();
-            SessionPanControl.HidePanControl();
-        }
     }
 }

@@ -2,6 +2,7 @@
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Input.Keyboard;
+using RdClient.Shared.Input.ZoomPan;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
@@ -72,17 +73,17 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void SessionViewModel_ShouldConnect()
         {
-            using(Mock.NavigationService navigation = new Mock.NavigationService())
-            using(Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
             {
                 SessionViewModel svm = new SessionViewModel()
-                { 
+                {
                     KeyboardCapture = new DummyKeyboardCapture(),
                     SessionModel = sessionModel,
                     DataModel = _dataModel,
                     MouseViewModel = _mouseViewModel
                 };
-              
+
                 sessionModel.Expect("Connect", new List<object>() { _testConnectionInfo, null, null }, 0);
                 //
                 // TODO:    REFACTOR THIS!
@@ -121,7 +122,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.SessionModel sessionModel = new Mock.SessionModel())
             using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
-            {                
+            {
                 sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
                 rdpConnection.Expect("Cleanup", new List<object> { }, null);
                 navigation.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
@@ -298,7 +299,10 @@ namespace RdClient.Shared.Test.ViewModels
             }
         }
 
-        /** HERE **/
+        /* ***********************************************************
+         * *************** Reconnecting tests
+         * ***********************************************************
+         */
         [TestMethod]
         public void SessionViewModel_ShouldNotBeReconnecting()
         {
@@ -335,7 +339,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void SessionViewModel_HandleFirstAutoReconnecting_ShouldBeReconnecting()
         {
             RdpEventSource eventSource = new RdpEventSource();
-            bool eventEmitted = false;            
+            bool eventEmitted = false;
 
             // first clientAutoReconnectingArgs would be null and attempts == 0
             int attempts = 0;
@@ -375,7 +379,7 @@ namespace RdClient.Shared.Test.ViewModels
 
                 // After
                 Assert.IsTrue(svm.IsReconnecting);
-                Assert.IsTrue(attempts == svm.ReconnectAttempts);                
+                Assert.IsTrue(attempts == svm.ReconnectAttempts);
 
                 // After a second attempt
                 attempts++;
@@ -400,13 +404,13 @@ namespace RdClient.Shared.Test.ViewModels
             RdpEventSource eventSource = new RdpEventSource();
             bool eventEmitted = false;
             int attempts = 1;
-            
+
             ClientAutoReconnectingArgs clientAutoReconnectingArgs = new ClientAutoReconnectingArgs(
                 new AutoReconnectError(1),
                 attempts,
                 (b) => { eventEmitted = true; });
 
-            ConnectionAutoReconnectingArgs connectionAutoReconnectingArgs = 
+            ConnectionAutoReconnectingArgs connectionAutoReconnectingArgs =
                 new ConnectionAutoReconnectingArgs(clientAutoReconnectingArgs);
 
             using (Mock.NavigationService navigation = new Mock.NavigationService())
@@ -587,5 +591,241 @@ namespace RdClient.Shared.Test.ViewModels
             }
         }
 
+
+        /* ***********************************************************
+         * * *************** Tap&Zoom tests
+         * * ***********************************************************
+         * */
+
+        [TestMethod]
+        public void SessionViewModel_ZoomIn_ShouldNotifyZoomUpdate()
+        {
+            bool notificationFired = false;
+            string zoomParam = SessionViewModel.ZOOM_IN_PARAM;
+            RdpEventSource eventSource = new RdpEventSource();
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
+            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
+            {
+
+                SessionViewModel svm = new SessionViewModel()
+                {
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
+
+                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
+                Assert.IsFalse(notificationFired);
+                svm.PropertyChanged += ((sender, e) => 
+                {
+                    if ("ZoomUpdate".Equals(e.PropertyName))
+                    {
+                        notificationFired = true;
+                    }
+                } );
+
+                svm.ToggleZoomCommand.Execute(zoomParam);
+
+                Assert.IsTrue(notificationFired);
+                Assert.AreEqual(ZoomUpdateType.ZoomIn, svm.ZoomUpdate.ZoomType);
+            }
+        }
+
+        [TestMethod]
+        public void SessionViewModel_ZoomOut_ShouldNotifyZoomUpdate()
+        {
+            bool notificationFired = false;
+            string zoomParam = SessionViewModel.ZOOM_OUT_PARAM;
+            RdpEventSource eventSource = new RdpEventSource();
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
+            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
+            {
+
+                SessionViewModel svm = new SessionViewModel()
+                {
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
+
+                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
+                Assert.IsFalse(notificationFired);
+                svm.PropertyChanged += ((sender, e) =>
+                {
+                    if ("ZoomUpdate".Equals(e.PropertyName))
+                    {
+                        notificationFired = true;
+                    }
+                });
+
+
+                svm.ToggleZoomCommand.Execute(zoomParam);
+
+                Assert.IsTrue(notificationFired);
+                Assert.AreEqual(ZoomUpdateType.ZoomOut, svm.ZoomUpdate.ZoomType);
+            }
+        }
+
+        [TestMethod]
+        public void SessionViewModel_PanLeft_ShouldNotifyPanUpdate()
+        {
+            bool notificationFired = false;
+            string panParam = SessionViewModel.PAN_LEFT_PARAM;
+            RdpEventSource eventSource = new RdpEventSource();
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
+            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
+            {
+
+                SessionViewModel svm = new SessionViewModel()
+                {
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
+
+                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
+                Assert.IsFalse(notificationFired);
+                svm.PropertyChanged += ((sender, e) =>
+                {
+                    if ("PanUpdate".Equals(e.PropertyName))
+                    {
+                        notificationFired = true;
+                    }
+                });
+
+
+                svm.PanCommand.Execute(panParam);
+
+                Assert.IsTrue(notificationFired);
+                Assert.IsTrue(0.0 > svm.PanUpdate.X);
+                Assert.IsTrue(0.0 == svm.PanUpdate.Y);
+            }
+        }
+
+        [TestMethod]
+        public void SessionViewModel_PanRight_ShouldNotifyPanUpdate()
+        {
+            bool notificationFired = false;
+            string panParam = SessionViewModel.PAN_RIGHT_PARAM;
+            RdpEventSource eventSource = new RdpEventSource();
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
+            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
+            {
+
+                SessionViewModel svm = new SessionViewModel()
+                {
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
+
+                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
+                Assert.IsFalse(notificationFired);
+                svm.PropertyChanged += ((sender, e) =>
+                {
+                    if ("PanUpdate".Equals(e.PropertyName))
+                    {
+                        notificationFired = true;
+                    }
+                });
+
+
+                svm.PanCommand.Execute(panParam);
+
+                Assert.IsTrue(notificationFired);
+                Assert.IsTrue(0.0 < svm.PanUpdate.X);
+                Assert.IsTrue(0.0 == svm.PanUpdate.Y);
+            }
+        }
+
+        [TestMethod]
+        public void SessionViewModel_PanUp_ShouldNotifyPanUpdate()
+        {
+            bool notificationFired = false;
+            string panParam = SessionViewModel.PAN_UP_PARAM;
+            RdpEventSource eventSource = new RdpEventSource();
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
+            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
+            {
+
+                SessionViewModel svm = new SessionViewModel()
+                {
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
+
+                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
+                Assert.IsFalse(notificationFired);
+                svm.PropertyChanged += ((sender, e) =>
+                {
+                    if ("PanUpdate".Equals(e.PropertyName))
+                    {
+                        notificationFired = true;
+                    }
+                });
+
+
+                svm.PanCommand.Execute(panParam);
+
+                Assert.IsTrue(notificationFired);
+                Assert.IsTrue(0.0 == svm.PanUpdate.X);
+                Assert.IsTrue(0.0 < svm.PanUpdate.Y);
+            }
+        }
+
+        [TestMethod]
+        public void SessionViewModel_PanDown_ShouldNotifyPanUpdate()
+        {
+            bool notificationFired = false;
+            string panParam = SessionViewModel.PAN_DOWN_PARAM;
+            RdpEventSource eventSource = new RdpEventSource();
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
+            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
+            {
+
+                SessionViewModel svm = new SessionViewModel()
+                {
+                    KeyboardCapture = new DummyKeyboardCapture(),
+                    SessionModel = sessionModel,
+                    DataModel = _dataModel,
+                    MouseViewModel = _mouseViewModel
+                };
+
+                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
+                Assert.IsFalse(notificationFired);
+                svm.PropertyChanged += ((sender, e) =>
+                {
+                    if ("PanUpdate".Equals(e.PropertyName))
+                    {
+                        notificationFired = true;
+                    }
+                });
+
+
+                svm.PanCommand.Execute(panParam);
+
+                Assert.IsTrue(notificationFired);
+                Assert.IsTrue(0.0 == svm.PanUpdate.X);
+                Assert.IsTrue(0.0 > svm.PanUpdate.Y);
+            }
+        }
     }
 }

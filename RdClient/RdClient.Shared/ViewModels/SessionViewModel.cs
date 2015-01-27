@@ -15,12 +15,12 @@ namespace RdClient.Shared.ViewModels
 
     public class SessionViewModel : DeferringViewModelBase
     {
-        public readonly string ZOOM_IN_PARAM = "ZoomIn";
-        public readonly string ZOOM_OUT_PARAM = "ZoomOut";
-        public readonly string PAN_LEFT_PARAM = "PanLeft";
-        public readonly string PAN_RIGHT_PARAM = "PanRight";
-        public readonly string PAN_UP_PARAM = "PanUp";
-        public readonly string PAN_DOWN_PARAM = "PanDown";
+        public static string ZOOM_IN_PARAM = "ZoomIn";
+        public static string ZOOM_OUT_PARAM = "ZoomOut";
+        public static string PAN_LEFT_PARAM = "PanLeft";
+        public static string PAN_RIGHT_PARAM = "PanRight";
+        public static string PAN_UP_PARAM = "PanUp";
+        public static string PAN_DOWN_PARAM = "PanDown";
 
         public sealed class InternalZoomUpdate : IZoomUpdate
         {
@@ -81,7 +81,7 @@ namespace RdClient.Shared.ViewModels
             private set { this.SetProperty<IZoomUpdate>(ref _zoomUpdate, value); }
         }
 
-        public IPanUpdate PanUpdateParam
+        public IPanUpdate PanUpdate
         {
             get { return _panUpdate; }
             private set { this.SetProperty<IPanUpdate>(ref _panUpdate, value); }
@@ -341,8 +341,6 @@ namespace RdClient.Shared.ViewModels
                     this.ZoomUpdate = new InternalZoomUpdate(ZoomUpdateType.ZoomOut);
                 }
             }
-
-            RdTrace.TraceNrm("Toggle Magnification!");
         }
 
         private void PanTranslate(object o)
@@ -354,23 +352,21 @@ namespace RdClient.Shared.ViewModels
                 // param is 1=left, 2=right, 3=up, 4=down
                 if (PAN_LEFT_PARAM.Equals(o.ToString()))
                 {
-                    this.PanUpdateParam = new InternalPanUpdate(-defaultPan, 0);
+                    this.PanUpdate = new InternalPanUpdate(-defaultPan, 0);
                 }
                 else if (PAN_RIGHT_PARAM.Equals(o.ToString()))
                 {
-                    this.PanUpdateParam = new InternalPanUpdate(defaultPan, 0);
+                    this.PanUpdate = new InternalPanUpdate(defaultPan, 0);
                 }
                 else if (PAN_UP_PARAM.Equals(o.ToString()))
                 {
-                    this.PanUpdateParam = new InternalPanUpdate(0, defaultPan);
+                    this.PanUpdate = new InternalPanUpdate(0, defaultPan);
                 }
                 else if (PAN_DOWN_PARAM.ToString().Equals(o.ToString()))
                 {
-                    this.PanUpdateParam = new InternalPanUpdate(0, -defaultPan);
+                    this.PanUpdate = new InternalPanUpdate(0, -defaultPan);
                 }
             }
-
-            RdTrace.TraceNrm("PanTranslate!");
         }
     }
 }
