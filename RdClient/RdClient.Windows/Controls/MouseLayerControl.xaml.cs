@@ -6,6 +6,7 @@ using Windows.UI.Xaml.Media;
 namespace RdClient.Controls
 {
     using RdClient.Shared.Converters;
+    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Input.Mouse;
     using Windows.Foundation;
     using Windows.UI.Core;
@@ -20,11 +21,11 @@ namespace RdClient.Controls
         }
 
         public static readonly DependencyProperty PointerEventConsumerProperty = DependencyProperty.Register(
-            "PointerEventConsumer", typeof(PointerEventConsumer),
+            "PointerEventConsumer", typeof(IPointerEventConsumer),
             typeof(MouseLayerControl), new PropertyMetadata(true, PointerEventConsumerPropertyChanged));
-        public PointerEventConsumer PointerEventConsumer
+        public IPointerEventConsumer PointerEventConsumer
         {
-            private get { return (PointerEventConsumer)GetValue(PointerEventConsumerProperty); }
+            private get { return (IPointerEventConsumer)GetValue(PointerEventConsumerProperty); }
             set { SetValue(PointerEventConsumerProperty, value); }
         }
         private static void PointerEventConsumerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -60,10 +61,20 @@ namespace RdClient.Controls
         private static void MousePositionPropertyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             MouseLayerControl mlc = d as MouseLayerControl;
-            Point position = (Point) e.NewValue;
+            Point position = (Point)e.NewValue;
+            Point hotSpot = mlc.HotSpot;
 
-            mlc.MouseShapeElementTranslateTransform.X = position.X;
-            mlc.MouseShapeElementTranslateTransform.Y = position.Y;
+            mlc.MouseShapeElementTranslateTransform.X = position.X - hotSpot.X;
+            mlc.MouseShapeElementTranslateTransform.Y = position.Y - hotSpot.Y;
+        }
+
+        public static readonly DependencyProperty HotSpotProperty = DependencyProperty.Register(
+            "HotSpot", typeof(Point),
+            typeof(MouseLayerControl), new PropertyMetadata(true));
+        public Point HotSpot
+        {
+            get { return (Point)GetValue(HotSpotProperty); }
+            set { SetValue(HotSpotProperty, value); }
         }
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
@@ -94,22 +105,22 @@ namespace RdClient.Controls
 
         protected override void OnPointerCanceled(PointerRoutedEventArgs args)
         {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
         }
 
         protected override void OnPointerReleased(PointerRoutedEventArgs args)
         {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
         }
 
         protected override void OnPointerPressed(PointerRoutedEventArgs args)
         {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Down));
         }
 
         protected override void OnPointerMoved(PointerRoutedEventArgs args)
-        {            
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args));
+        {
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Update));
         }
 
         protected override void OnPointerEntered(PointerRoutedEventArgs args)

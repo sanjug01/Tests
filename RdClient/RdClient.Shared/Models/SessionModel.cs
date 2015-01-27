@@ -96,7 +96,7 @@ namespace RdClient.Shared.Models
             EmitConnectionCreated(new ConnectionCreatedArgs(_rdpConnection));
 
             _rdpConnection.Events.ConnectionHealthStateChanged += HandleConnectionHealthStateChanged;
-            _rdpConnection.Events.ClientAutoReconnecting += HanldeClientAutoReconnecting;
+            _rdpConnection.Events.ClientAutoReconnecting += HandleClientAutoReconnecting;
             _rdpConnection.Events.ClientAutoReconnectComplete += HandleClientAutoReconnectComplete;
 
             Desktop desktop = connectionInformation.Desktop;
@@ -114,7 +114,7 @@ namespace RdClient.Shared.Models
         public void Disconnect()
         {
             _rdpConnection.Events.ConnectionHealthStateChanged -= HandleConnectionHealthStateChanged;
-            _rdpConnection.Events.ClientAutoReconnecting -= HanldeClientAutoReconnecting;
+            _rdpConnection.Events.ClientAutoReconnecting -= HandleClientAutoReconnecting;
             _rdpConnection.Events.ClientAutoReconnectComplete -= HandleClientAutoReconnectComplete;
             _rdpConnection.Disconnect();
             _rdpConnection = null;
@@ -154,7 +154,7 @@ namespace RdClient.Shared.Models
             EmitConnectionAutoReconnectComplete(new ConnectionAutoReconnectCompleteArgs(e));
         }
 
-        void HanldeClientAutoReconnecting(object sender, ClientAutoReconnectingArgs e)
+        void HandleClientAutoReconnecting(object sender, ClientAutoReconnectingArgs e)
         {
             if (null != e && e.AttemptCount > MaxReconnectAttempts)
             {
@@ -173,7 +173,7 @@ namespace RdClient.Shared.Models
             IRdpConnection rdpConnection = sender as IRdpConnection;
             if ((int)RdClientCx.ConnectionHealthState.Warn == e.ConnectionState)
             {
-                this.HanldeClientAutoReconnecting(sender, null);
+                this.HandleClientAutoReconnecting(sender, null);
             }
             else if ((int)RdClientCx.ConnectionHealthState.Connected == e.ConnectionState)
             {

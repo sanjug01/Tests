@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="RdClient.Windows.App">
-      <m2:VisualElements DisplayName="Remote Desktop" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="RdClient.Windows" ForegroundText="light" BackgroundColor="#d24726">
+      <m2:VisualElements DisplayName="RD Client" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="RdClient.Windows" ForegroundText="light" BackgroundColor="#d24726">
         <m2:DefaultTile Square70x70Logo="Assets\Square70x70Logo.png">
           <m2:ShowNameOnTiles>
             <m2:ShowOn Tile="square150x150Logo" />

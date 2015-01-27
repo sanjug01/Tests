@@ -24,7 +24,7 @@ namespace RdClient.Shared.Test.Helpers
             StateMachine<TestStates, string> sm = new StateMachine<TestStates, string>();
             bool actionCalled = false;
 
-            sm.AddTransition(TestStates.Narf, TestStates.Zod, (o) => { return true; }, (o) => { actionCalled = true; });
+            sm.AddTransition(TestStates.Narf, TestStates.Zod, (o) => { return true; }, (o) => { actionCalled = true;});
             sm.SetStart(TestStates.Narf);
             sm.Consume("whatever");
 
@@ -34,15 +34,13 @@ namespace RdClient.Shared.Test.Helpers
         [TestMethod]
         public void StateMachine_ShouldSetParam()
         {
-            StateMachine<TestStates, object> sm = new StateMachine<TestStates, object>();
-            bool actionCalled = false;
+            StateMachine<TestStates, int> sm = new StateMachine<TestStates, int>();
             int param = 0;
 
-            sm.AddTransition(TestStates.Narf, TestStates.Zod, (o) => { return (int)o == 23; }, (o) => { param = (int)o; actionCalled = true; });
+            sm.AddTransition(TestStates.Narf, TestStates.Zod, (o) => { return (int)o == 23; }, (o) => { param = (int)o; });
             sm.SetStart(TestStates.Narf);
             sm.Consume(23);
 
-            Assert.IsTrue(actionCalled);
             Assert.AreEqual(23, param);
         }
 
@@ -79,6 +77,7 @@ namespace RdClient.Shared.Test.Helpers
         [ExpectedException(typeof(KeyNotFoundException))]
         public void StateMachine_InvalidStateFails()
         {
+            object context = new object();
             StateMachine<TestStates, int> sm = new StateMachine<TestStates, int>();
 
             sm.Consume(23);

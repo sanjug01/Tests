@@ -2,6 +2,7 @@
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Models;
 using RdMock;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Test.Mock
 {
@@ -109,6 +110,11 @@ namespace RdClient.Shared.Test.Mock
         public void SendKeyEvent(int keyValue, bool scanCode, bool extended, bool keyUp)
         {
             Invoke(new object[] { keyValue, scanCode, extended, keyUp });
+        }
+
+        public void SendTouchEvent(TouchEventType type, uint contactId, Point position, ulong frameTime)
+        {
+            Invoke(new object[] { type, contactId, position, frameTime });
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
-using RdClient.Shared.Helpers;
+    using RdClient.Shared.Input.Mouse;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Test.Input.Mouse
@@ -17,10 +17,10 @@ namespace RdClient.Shared.Test.Input.Mouse
                 new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Mouse, 3)
             });
 
-            AssertionHelper(new TestMousePointerEvent[] { 
-                new TestMousePointerEvent() {Type = MouseEventType.LeftPress, Position = new Point(0.0, 0.0) },
-                new TestMousePointerEvent() {Type = MouseEventType.Move, Position = new Point(10.0, 10.0) },
-                new TestMousePointerEvent() {Type = MouseEventType.LeftRelease, Position = new Point(10.0, 10.0) }
+            MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 
+                new Mock.TestMousePointerEvent() {Type = MouseEventType.LeftPress, Position = new Point(0.0, 0.0) },
+                new Mock.TestMousePointerEvent() {Type = MouseEventType.Move, Position = new Point(10.0, 10.0) },
+                new Mock.TestMousePointerEvent() {Type = MouseEventType.LeftRelease, Position = new Point(10.0, 10.0) }
             });
         }
 
@@ -33,10 +33,10 @@ namespace RdClient.Shared.Test.Input.Mouse
                 new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Mouse, 3)
             });
 
-            AssertionHelper(new TestMousePointerEvent[] { 
-                new TestMousePointerEvent() {Type = MouseEventType.RightPress, Position = new Point(0.0, 0.0) },
-                new TestMousePointerEvent() {Type = MouseEventType.Move, Position = new Point(10.0, 10.0) },
-                new TestMousePointerEvent() {Type = MouseEventType.RightRelease, Position = new Point(10.0, 10.0) }
+            MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 
+                new Mock.TestMousePointerEvent() {Type = MouseEventType.RightPress, Position = new Point(0.0, 0.0) },
+                new Mock.TestMousePointerEvent() {Type = MouseEventType.Move, Position = new Point(10.0, 10.0) },
+                new Mock.TestMousePointerEvent() {Type = MouseEventType.RightRelease, Position = new Point(10.0, 10.0) }
             });
         }
     }
