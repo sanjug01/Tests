@@ -97,6 +97,8 @@
     <Compile Include="Data\IStorageFolder.cs" />
     <Compile Include="Data\ModelContainer.cs" />
     <Compile Include="Data\PrimaryModelCollection.cs" />
+    <Compile Include="Data\SerializableModel.cs" />
+    <Compile Include="Data\SerializableModelSerializer.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
     <Compile Include="Helpers\DataStorageExtensions.cs" />
@@ -141,8 +143,12 @@
     <Compile Include="LifeTimeManagement\ISuspensionArgs.cs" />
     <Compile Include="LifeTimeManagement\LaunchEventArgs.cs" />
     <Compile Include="LifeTimeManagement\SuspendEventArgs.cs" />
+    <Compile Include="Models\CloudWorkspaceModel.cs" />
+    <Compile Include="Models\CredentialsModel.cs" />
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Input\Mouse\PointerEventConsumer.cs" />
+    <Compile Include="Models\LocalWorkspaceModel.cs" />
+    <Compile Include="Models\OnPremiseWorkspaceModel.cs" />
     <Compile Include="Models\RemoteApplication.cs" />
     <Compile Include="Models\CloudWorkspace.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
@@ -154,10 +160,13 @@
     <Compile Include="Models\ModelCollection.cs" />
     <Compile Include="Models\OnPremiseWorkspace.cs" />
     <Compile Include="Models\RemoteConnection.cs" />
+    <Compile Include="Data\SerializableCompositionModel.cs" />
+    <Compile Include="Models\RemoteConnectionModel.cs" />
     <Compile Include="Models\TrustedCertificate.cs" />
     <Compile Include="Models\Workspace.cs" />
     <Compile Include="Models\Snapshotter.cs" />
     <Compile Include="Models\Thumbnail.cs" />
+    <Compile Include="Models\WorkspaceModel.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarItemsSourceContract.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarSiteContract.cs" />
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
