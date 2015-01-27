@@ -90,6 +90,8 @@
     <Compile Include="Data\MemoryStorageFolder.cs" />
     <Compile Include="Data\ModelContainerTests.cs" />
     <Compile Include="Data\PrimaryModelCollectionTests.cs" />
+    <Compile Include="Data\SerializableModelSerializerTests.cs" />
+    <Compile Include="Data\SerializableModelTests.cs" />
     <Compile Include="Data\TestModel.cs" />
     <Compile Include="Data\TestModelSerializer.cs" />
     <Compile Include="Helpers\ITimerTests.cs" />

@@ -14,14 +14,6 @@
             DataContractSerializerSettings settings = new DataContractSerializerSettings()
             {
                 PreserveObjectReferences = true,
-                KnownTypes = new Type[]
-                {
-                    typeof(Credentials),
-                    typeof(SerializableModel),
-                    typeof(LocalWorkspaceModel),
-                    typeof(OnPremiseWorkspaceModel),
-                    typeof(CloudWorkspaceModel)
-                }
             };
             _contractSerializer = new DataContractSerializer(typeof(SerializableModel), settings);
         }

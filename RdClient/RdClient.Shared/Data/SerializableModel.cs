@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Data
 {
+    using RdClient.Shared.Models;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
@@ -11,6 +12,10 @@
     /// Base class for all classes saved by the application's data model.
     /// </summary>
     [DataContract(IsReference=true)]
+    [KnownType(typeof(CredentialsModel))]
+    [KnownType(typeof(LocalWorkspaceModel))]
+    [KnownType(typeof(OnPremiseWorkspaceModel))]
+    [KnownType(typeof(CloudWorkspaceModel))]
     public abstract class SerializableModel : INotifyPropertyChanged
     {
         private PropertyChangedEventHandler _propertyChanged;
@@ -22,7 +27,7 @@
         protected void SetProperty<TProperty>(ref TProperty property, TProperty newValue,
             [CallerMemberName] string propertyName = null) where TProperty : IEquatable<TProperty>
         {
-            if(!property.Equals(newValue))
+            if(!object.Equals(property, newValue))
             {
                 property = newValue;
                 EmitPropertyChanged(propertyName);
@@ -39,7 +44,7 @@
                 handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged
         {
             add { _propertyChanged += value; }
             remove { _propertyChanged -= value; }
