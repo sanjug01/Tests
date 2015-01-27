@@ -142,6 +142,7 @@
     <Compile Include="Model\SnapshotterTests.cs" />
     <Compile Include="Model\ThumbnailTests.cs" />
     <Compile Include="Model\TrustedCertificateTests.cs" />
+    <Compile Include="Model\WorkspaceModelTests.cs" />
     <Compile Include="Navigation\Extensions\ApplicationBarExtensionTests.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtensionTests.cs" />
     <Compile Include="Navigation\ModalPresentationCompletionTests.cs" />
