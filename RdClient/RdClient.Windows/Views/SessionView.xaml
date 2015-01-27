@@ -71,31 +71,38 @@
             <Button
                 x:Uid="SessionView-ZoomInButton"
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
-                Command="{Binding ToggleZoomCommand}" CommandParameter="1"
-                Content="{StaticResource ZoomInIcon}"/>
+                Command="{Binding ToggleZoomCommand}" 
+                CommandParameter="ZoomIn"
+                Content="{StaticResource ZoomInIcon}">                
+            </Button>
             <Button
                 x:Uid="SessionView-ZoomOutButton"
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
-                Command="{Binding ToggleZoomCommand}" CommandParameter="2"
+                Command="{Binding ToggleZoomCommand}" 
+                CommandParameter="ZoomOut"
                 Content="{StaticResource ZoomOutIcon}"/>
             <Button
                 x:Uid="SessionView-PanLeft"
-                Command="{Binding PanCommand}" CommandParameter="1"                
+                Command="{Binding PanCommand}" 
+                CommandParameter="PanLeft"                
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
                 Content="&#xE112;"/>
             <Button
                 x:Uid="SessionView-PanRight"
-                Command="{Binding PanCommand}" CommandParameter="2"                
+                Command="{Binding PanCommand}" 
+                CommandParameter="PanRight"
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
                 Content="&#xE111;"/>
             <Button
                 x:Uid="SessionView-PanUp"
-                Command="{Binding PanCommand}" CommandParameter="3"                
+                Command="{Binding PanCommand}" 
+                CommandParameter="PanUp"
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
                 Content="&#xE110;"/>
             <Button
                 x:Uid="SessionView-PanDown"
-                Command="{Binding PanCommand}" CommandParameter="4"                
+                Command="{Binding PanCommand}" 
+                CommandParameter="PanDown"
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
                 Content="&#xE1FD;"/>
             
