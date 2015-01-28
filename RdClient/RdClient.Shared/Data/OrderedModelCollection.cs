@@ -13,7 +13,7 @@
     public sealed class OrderedModelCollection<TModel> : MutableObject
         where TModel : class, INotifyPropertyChanged
     {
-        private readonly IModelCollection<TModel> _sourceCollection;
+        private readonly IList<TModel> _sourceCollection;
         private readonly ObservableCollection<TModel> _orderedCollection;
         private readonly ReadOnlyObservableCollection<TModel> _models;
         private IComparer<TModel> _order;
@@ -30,18 +30,31 @@
             set
             {
                 if (this.SetProperty(ref _order, value))
+                {
                     RebuildCollection();
+                }
             }
         }
 
-        public OrderedModelCollection(IModelCollection<TModel> sourceCollection)
+        public OrderedModelCollection(ReadOnlyObservableCollection<TModel> sourceCollection)
         {
             _sourceCollection = sourceCollection;
             _orderedCollection = new ObservableCollection<TModel>();
             _models = new ReadOnlyObservableCollection<TModel>(_orderedCollection);
+            SubscribeForCollectionUpdates(sourceCollection);
+        }
 
-            INotifyCollectionChanged ncc = sourceCollection.Models;
-            ncc.CollectionChanged += this.OnSourceCollectionChanged;
+        public OrderedModelCollection(ObservableCollection<TModel> sourceCollection)
+        {
+            _sourceCollection = sourceCollection;
+            _orderedCollection = new ObservableCollection<TModel>();
+            _models = new ReadOnlyObservableCollection<TModel>(_orderedCollection);
+            SubscribeForCollectionUpdates(sourceCollection);
+        }
+
+        private void SubscribeForCollectionUpdates(INotifyCollectionChanged sourceCollection)
+        {
+            sourceCollection.CollectionChanged += this.OnSourceCollectionChanged;
         }
 
         private void OnSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -51,28 +64,28 @@
                 switch (e.Action)
                 {
                     case NotifyCollectionChangedAction.Add:
-                        foreach (IModelContainer<TModel> container in e.NewItems)
+                        foreach (TModel model in e.NewItems)
                         {
-                            InsertModelIntoOrderedCollection(container.Model);
-                            container.Model.PropertyChanged += this.OnModelPropertyChanged;
+                            InsertModelIntoOrderedCollection(model);
+                            model.PropertyChanged += this.OnModelPropertyChanged;
                         }
                         break;
 
                     case NotifyCollectionChangedAction.Remove:
-                        foreach (IModelContainer<TModel> container in e.OldItems)
+                        foreach (TModel model in e.OldItems)
                         {
                             //
                             // Remove the model from the ordered collection; first, find the index of the first model in the collection
                             // greater or equal to the removed model, then scan from that index up to the end of the collection
                             // looking for the removed model (comparison may not be unique).
                             //
-                            int modelIndex = _orderedCollection.IndexOfFirstGreaterOrEqual(container.Model, _order);
+                            int modelIndex = _orderedCollection.IndexOfFirstGreaterOrEqual(model, _order);
 
                             if (modelIndex >= 0)
                             {
-                                while(0 == _order.Compare(container.Model, _orderedCollection[modelIndex]))
+                                while(0 == _order.Compare(model, _orderedCollection[modelIndex]))
                                 {
-                                    if(object.ReferenceEquals(container.Model, _orderedCollection[modelIndex]))
+                                    if(object.ReferenceEquals(model, _orderedCollection[modelIndex]))
                                     {
                                         _orderedCollection[modelIndex].PropertyChanged -= this.OnModelPropertyChanged;
                                         _orderedCollection.RemoveAt(modelIndex);
@@ -149,22 +162,27 @@
 
         private void RebuildCollection()
         {
-            List<TModel> models = new List<TModel>(_sourceCollection.Models.Count);
+            if (null == _order)
+            {
+                foreach (TModel model in _orderedCollection)
+                    model.PropertyChanged -= this.OnModelPropertyChanged;
+                _orderedCollection.Clear();
+            }
+            else
+            {
+                List<TModel> models = new List<TModel>(_sourceCollection);
 
-            foreach (IModelContainer<TModel> container in _sourceCollection.Models)
-                models.Add(container.Model);
-
-            if(null != _order)
                 models.Sort(_order);
 
-            foreach (TModel model in _orderedCollection)
-                model.PropertyChanged -= this.OnModelPropertyChanged;
-            _orderedCollection.Clear();
+                foreach (TModel model in _orderedCollection)
+                    model.PropertyChanged -= this.OnModelPropertyChanged;
+                _orderedCollection.Clear();
 
-            foreach (TModel model in models)
-            {
-                _orderedCollection.Add(model);
-                model.PropertyChanged += this.OnModelPropertyChanged;
+                foreach (TModel model in models)
+                {
+                    _orderedCollection.Add(model);
+                    model.PropertyChanged += this.OnModelPropertyChanged;
+                }
             }
         }
     }

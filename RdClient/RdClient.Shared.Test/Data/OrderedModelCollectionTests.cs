@@ -4,6 +4,7 @@
     using RdClient.Shared.Data;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
@@ -31,12 +32,14 @@
             }
         }
 
-        private IModelCollection<TestModel> _collection;
+        private ObservableCollection<TestModel> _source;
+        private ReadOnlyObservableCollection<TestModel> _collection;
 
         [TestInitialize]
         public void SetUpTest()
         {
-            _collection = PrimaryModelCollection<TestModel>.Load(new MemoryStorageFolder(), new TestModelSerializer());
+            _source = new ObservableCollection<TestModel>();
+            _collection = new ReadOnlyObservableCollection<TestModel>(_source);
         }
 
         [TestCleanup]
@@ -57,10 +60,10 @@
         [TestMethod]
         public void NotEmptySource_NewOrderedModelCollection_EmptyOrderedCollection()
         {
-            _collection.AddNewModel(new TestModel(1));
-            _collection.AddNewModel(new TestModel(2));
-            _collection.AddNewModel(new TestModel(3));
-            _collection.AddNewModel(new TestModel(4));
+            _source.Add(new TestModel(1));
+            _source.Add(new TestModel(2));
+            _source.Add(new TestModel(3));
+            _source.Add(new TestModel(4));
 
             OrderedModelCollection<TestModel> orderedCollection = new OrderedModelCollection<TestModel>(_collection);
             Assert.IsNull(orderedCollection.Order);
@@ -74,14 +77,14 @@
             int[] data = new int[] { 1, 2, 3, 4, 6, 7, 8, 9, 10, 50, 5 };
 
             foreach(int i in data)
-                _collection.AddNewModel(new TestModel(i));
+                _source.Add(new TestModel(i));
 
             IComparer<TestModel> order = new ForwardOrder();
             OrderedModelCollection<TestModel> orderedCollection = new OrderedModelCollection<TestModel>(_collection);
             orderedCollection.Order = order;
 
-            Assert.AreEqual(data.Length, _collection.Models.Count);
-            Assert.AreEqual(_collection.Models.Count, orderedCollection.Models.Count);
+            Assert.AreEqual(data.Length, _collection.Count);
+            Assert.AreEqual(_collection.Count, orderedCollection.Models.Count);
             Assert.AreSame(order, orderedCollection.Order);
             VerifyStrictOrder(orderedCollection.Models, order);
         }
@@ -96,10 +99,10 @@
             orderedCollection.Order = order;
 
             foreach (int i in data)
-                _collection.AddNewModel(new TestModel(i));
+                _source.Add(new TestModel(i));
 
-            Assert.AreEqual(data.Length, _collection.Models.Count);
-            Assert.AreEqual(_collection.Models.Count, orderedCollection.Models.Count);
+            Assert.AreEqual(data.Length, _collection.Count);
+            Assert.AreEqual(_collection.Count, orderedCollection.Models.Count);
             Assert.AreSame(order, orderedCollection.Order);
             VerifyStrictOrder(orderedCollection.Models, order);
         }
@@ -113,17 +116,17 @@
             OrderedModelCollection<TestModel> orderedCollection = new OrderedModelCollection<TestModel>(_collection);
 
             foreach (int i in data)
-                _collection.AddNewModel(new TestModel(i));
-            Guid id = _collection.AddNewModel(new TestModel(18));
+                _source.Add(new TestModel(i));
+            TestModel removedModel = new TestModel(18);
+            _source.Add(removedModel);
             orderedCollection.Order = order;
 
             VerifyStrictOrder(orderedCollection.Models, order);
-            TestModel removedModel = _collection.RemoveModel(id);
+            Assert.IsTrue(_source.Remove(removedModel));
             VerifyStrictOrder(orderedCollection.Models, order);
             Assert.AreEqual(data.Length, orderedCollection.Models.Count);
-            foreach (TestModel model in orderedCollection.Models)
-                Assert.AreNotSame(removedModel, model);
-            Assert.AreEqual(18, removedModel.Property);
+            foreach (TestModel m in orderedCollection.Models)
+                Assert.AreNotSame(removedModel, m);
         }
 
         [TestMethod]
@@ -135,15 +138,15 @@
             OrderedModelCollection<TestModel> orderedCollection = new OrderedModelCollection<TestModel>(_collection);
 
             foreach (int i in data)
-                _collection.AddNewModel(new TestModel(i));
-            Guid id = _collection.AddNewModel(new TestModel(18));
+                _source.Add(new TestModel(i));
             orderedCollection.Order = order;
 
             VerifyNonStrictOrder(orderedCollection.Models, order);
 
             for (int i = 0; i < 4; ++i)
             {
-                TestModel removedModel = _collection.RemoveModel(_collection.Models[5].Id);
+                TestModel removedModel = _source[5];
+                _source.Remove(removedModel);
                 VerifyNonStrictOrder(orderedCollection.Models, order);
                 foreach (TestModel model in orderedCollection.Models)
                     Assert.AreNotSame(removedModel, model);
@@ -159,7 +162,7 @@
             OrderedModelCollection<TestModel> orderedCollection = new OrderedModelCollection<TestModel>(_collection);
 
             foreach (int i in data)
-                _collection.AddNewModel(new TestModel(i));
+                _source.Add(new TestModel(i));
             orderedCollection.Order = order;
 
             VerifyStrictOrder(orderedCollection.Models, order);
@@ -179,7 +182,7 @@
             OrderedModelCollection<TestModel> orderedCollection = new OrderedModelCollection<TestModel>(_collection);
 
             foreach (int i in data)
-                _collection.AddNewModel(new TestModel(i));
+                _source.Add(new TestModel(i));
             orderedCollection.Order = order;
 
             VerifyStrictOrder(orderedCollection.Models, order);
@@ -205,7 +208,7 @@
             OrderedModelCollection<TestModel> orderedCollection = new OrderedModelCollection<TestModel>(_collection);
 
             foreach (int i in data)
-                _collection.AddNewModel(new TestModel(i));
+                _source.Add(new TestModel(i));
             orderedCollection.Order = order;
 
             VerifyStrictOrder(orderedCollection.Models, order);
@@ -229,7 +232,7 @@
             OrderedModelCollection<TestModel> orderedCollection = new OrderedModelCollection<TestModel>(_collection);
 
             foreach (int i in data)
-                _collection.AddNewModel(new TestModel(i));
+                _source.Add(new TestModel(i));
             orderedCollection.Order = order;
 
             VerifyStrictOrder(orderedCollection.Models, order);
@@ -252,28 +255,51 @@
             OrderedModelCollection<TestModel> orderedCollection = new OrderedModelCollection<TestModel>(_collection);
 
             foreach (int i in data)
-                _collection.AddNewModel(new TestModel(i));
+                _source.Add(new TestModel(i));
             orderedCollection.Order = order;
 
-            Assert.AreEqual(data.Length, _collection.Models.Count);
-            Assert.AreEqual(_collection.Models.Count, orderedCollection.Models.Count);
+            Assert.AreEqual(data.Length, _source.Count);
+            Assert.AreEqual(_source.Count, orderedCollection.Models.Count);
             Assert.AreSame(order, orderedCollection.Order);
             VerifyStrictOrder(orderedCollection.Models, order);
 
             order = new ReverseOrder();
             orderedCollection.Order = order;
 
-            Assert.AreEqual(data.Length, _collection.Models.Count);
-            Assert.AreEqual(_collection.Models.Count, orderedCollection.Models.Count);
+            Assert.AreEqual(data.Length, _source.Count);
+            Assert.AreEqual(_source.Count, orderedCollection.Models.Count);
             Assert.AreSame(order, orderedCollection.Order);
             VerifyStrictOrder(orderedCollection.Models, order);
+        }
+
+        [TestMethod]
+        public void OrderedModelCollection_ClearOrder_Cleared()
+        {
+            int[] data = new int[] { 1, 2, 3, 4, 6, 7, 8, 9, 10, 50, 5 };
+
+            IComparer<TestModel> order = new ForwardOrder();
+            OrderedModelCollection<TestModel> orderedCollection = new OrderedModelCollection<TestModel>(_collection);
+
+            foreach (int i in data)
+                _source.Add(new TestModel(i));
+            orderedCollection.Order = order;
+
+            Assert.AreEqual(data.Length, _source.Count);
+            Assert.AreEqual(_source.Count, orderedCollection.Models.Count);
+            Assert.AreSame(order, orderedCollection.Order);
+            VerifyStrictOrder(orderedCollection.Models, order);
+
+            orderedCollection.Order = null;
+
+            Assert.AreEqual(0, orderedCollection.Models.Count);
+            Assert.IsNull(orderedCollection.Order);
         }
 
         [TestMethod]
         public void OrderedModelCollection_ChangeOrder_PropertyChangeReported()
         {
             IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
-            OrderedModelCollection<TestModel> orderedCollection = new OrderedModelCollection<TestModel>(_collection);
+            OrderedModelCollection<TestModel> orderedCollection = new OrderedModelCollection<TestModel>(_source);
 
             orderedCollection.PropertyChanged += (sender, e) => changes.Add(e);
             orderedCollection.Order = new ForwardOrder();
