@@ -49,7 +49,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestDeleteCommandShowsDeleteUserView()
         {
-            _navService.Expect("PushModalView", new List<object>() { "DeleteUserView", null, null }, 0);
+            _navService.Expect("PushModalView", new List<object>() { "DeleteUserView", _cred, null }, 0);
             _vm.DeleteCommand.Execute(null);
         }
     }
