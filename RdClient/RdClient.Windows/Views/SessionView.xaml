@@ -11,10 +11,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"    
     >
-       
-    
+
     <UserControl.DataContext>
-        <vm:SessionViewModel>
+        <vm:SessionViewModel x:Name="SessionViewModel">
             <vm:SessionViewModel.MouseViewModel>
                 <vm:MouseViewModel/>
             </vm:SessionViewModel.MouseViewModel>
@@ -28,7 +27,7 @@
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
-    <Grid Background="GreenYellow">
+    <Grid Background="GreenYellow" >
 	<!--
         Attach the "Connect" command of the view model to the ConnectCommand
         property of the sesion panel. The session panel will execute the command
@@ -50,7 +49,32 @@
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"
                                           Visibility="{Binding Path=IsReconnecting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        
+        <Grid Width="Auto" Height="Auto" 
+              Background="Transparent"
+              Opacity="0.6"
+              VerticalAlignment="Top" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button
+                Margin="10,0,10,0"
+                VerticalContentAlignment="Center"
+                Grid.Row="0" Grid.Column="0"
+                Height="60"
+                FontSize="18"
+                Foreground="White"
+                Content="{Binding HostName}" 
+                Command="{Binding ConnectionBarCommand}"
+                VerticalAlignment="Center"/>
+        </Grid>
 
+        <controls:ElephantEarsControl             
+            ElephantEarsShown="{Binding ElephantEarsShown}"/>
+        
         <StackPanel VerticalAlignment="Bottom"
                     HorizontalAlignment="Right" 
                     Orientation="Horizontal">

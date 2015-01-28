@@ -11,10 +11,32 @@ using System.Windows.Input;
 namespace RdClient.Shared.ViewModels
 {
 
-    public class SessionViewModel : DeferringViewModelBase
+    public class SessionViewModel : DeferringViewModelBase, IElephantEarsViewModel
     {
 
         private ConnectionInformation _connectionInformation;
+        public string HostName 
+        { 
+            get
+            {
+                if(_connectionInformation != null)
+                {
+                    return _connectionInformation.Desktop.HostName;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+
+
+        private ICommand _connectionBarcommand;
+        public ICommand ConnectionBarCommand { get { return _connectionBarcommand; } set { SetProperty(ref _connectionBarcommand, value); } }
+
+        private bool _elephantEarsShown;
+        public bool ElephantEarsShown { get { return _elephantEarsShown; } set { SetProperty(ref _elephantEarsShown, value); } }
+
         private IKeyboardCapture _keyboardCapture;
 
         //
@@ -64,6 +86,9 @@ namespace RdClient.Shared.ViewModels
             _disconnectCommand = new RelayCommand(new Action<object>(Disconnect));
             _connectCommand = new RelayCommand(new Action<object>(Connect));
             _cancelReconnectCommand = new RelayCommand(o => { _isCancelledReconnect = true; IsReconnecting = false; });
+
+            _elephantEarsShown = false;
+            this.ConnectionBarCommand = new RelayCommand(o => { this.ElephantEarsShown = !this.ElephantEarsShown; });
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -110,6 +135,7 @@ namespace RdClient.Shared.ViewModels
                 args.RdpConnection.Events.ClientAsyncDisconnect += HandleAsyncDisconnect;
                 this.MouseViewModel.RdpConnection = args.RdpConnection;
                 this.MouseViewModel.DeferredExecution = this;
+                this.MouseViewModel.ElephantEarsViewModel = this;
             };
 
             SessionModel.ConnectionAutoReconnecting += SessionModel_ConnectionAutoReconnecting;

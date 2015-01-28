@@ -85,6 +85,8 @@ using Windows.Foundation;
             set { SetProperty(ref _toggleInputModeCommand, value); }
         }
 
+        public IElephantEarsViewModel ElephantEarsViewModel { private get; set; }
+
         private IRdpConnection _rdpConnection;
         public IRdpConnection RdpConnection
         {
@@ -110,6 +112,7 @@ using Windows.Foundation;
         {
             this.PointerEventConsumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
             this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
+            this.PointerEventConsumer.ConsumedEvent += (s, o) => { this.ElephantEarsViewModel.ElephantEarsShown = false; };
             this.ToggleInputModeCommand = new RelayCommand(OnToggleInputModeCommand);
             _multiTouchEnabled = true;
         }
@@ -131,6 +134,8 @@ using Windows.Foundation;
             {
                 this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
             }
+
+            this.ElephantEarsViewModel.ElephantEarsShown = false;
         }
 
         private void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs args)
@@ -195,7 +200,7 @@ using Windows.Foundation;
 
         private void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args)
         {
-
+            
         }
 
         public void SendMouseAction(MouseEventType eventType)

@@ -4,6 +4,8 @@ namespace RdClient.Shared.Input.Mouse
 {
     public class MultiTouchMode : IPointerEventConsumer
     {
+        public event System.EventHandler<PointerEvent> ConsumedEvent;
+
         private ConsumptionMode _consumptionMode;
         public ConsumptionMode ConsumptionMode
         {
@@ -50,6 +52,11 @@ namespace RdClient.Shared.Input.Mouse
             }
 
             _lastTouch = pointerEvent;
+
+            if (ConsumedEvent != null)
+            {
+                ConsumedEvent(this, pointerEvent);
+            }
         }
 
         public void Reset()
