@@ -41,6 +41,25 @@ namespace RdClient.Shared.Test.Mock
             _mouseEventLog.Add(new Mock.TestMousePointerEvent() { Position = MousePosition, Type = type });
         }
 
+        public void SendMouseWheel(int delta, bool isHorizontal)
+        {
+            Point position;
+            MouseEventType type;
+
+            if(isHorizontal)
+            {
+                position = new Point(delta, 0);
+                type = MouseEventType.MouseHWheel;
+            }
+            else
+            {
+                position = new Point(0, delta);
+                type = MouseEventType.MouseWheel;
+            }
+
+            _mouseEventLog.Add(new Mock.TestMousePointerEvent() { Position = position, Type = type });
+        }
+
         public void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime)
         {
             _touchEventLog.Add(new TestMultiTouchEvent() { ActionType = type, ContactId = contactId, Position = position, FrameTime = frameTime });

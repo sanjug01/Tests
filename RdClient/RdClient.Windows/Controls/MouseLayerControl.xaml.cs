@@ -8,6 +8,7 @@ namespace RdClient.Controls
     using RdClient.Shared.Converters;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Input.Mouse;
+    using System.Diagnostics;
     using Windows.Foundation;
     using Windows.UI.Core;
 
@@ -117,6 +118,12 @@ namespace RdClient.Controls
         {
             PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Down));
         }
+
+        protected override void OnPointerWheelChanged(PointerRoutedEventArgs args)
+        {
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Update));
+        }
+
 
         protected override void OnPointerMoved(PointerRoutedEventArgs args)
         {

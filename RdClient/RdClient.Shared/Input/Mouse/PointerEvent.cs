@@ -22,6 +22,8 @@ namespace RdClient.Shared.Input.Mouse
         public uint PointerId { get; private set; }
         public ulong TimeStamp { get; private set; }
         public TouchEventType ActionType { get; private set; }
+        public int MouseWheelDelta { get; private set; }
+        public bool IsHorizontalMouseWheel { get; private set; }
 
         public PointerEvent(
             Point position, 
@@ -32,7 +34,9 @@ namespace RdClient.Shared.Input.Mouse
             PointerType pointerType, 
             uint pointerId, 
             ulong timeStamp = 0,
-            TouchEventType actionType = TouchEventType.Unknown)
+            TouchEventType actionType = TouchEventType.Unknown,
+            int mouseWheelDelta = 0,
+            bool isHorizontalMouseWheel = false)
         {
             Position = position;
             Inertia = inertia;
@@ -43,6 +47,8 @@ namespace RdClient.Shared.Input.Mouse
             PointerId = pointerId;
             TimeStamp = timeStamp;
             ActionType = actionType;
+            MouseWheelDelta = mouseWheelDelta;
+            IsHorizontalMouseWheel = isHorizontalMouseWheel;
         }
     }
 }
