@@ -10,7 +10,7 @@
     /// <summary>
     /// Observable collection of model objects that may be ordered.
     /// </summary>
-    public sealed class OrderedModelCollection<TModel> : MutableObject
+    public sealed class OrderedObservableCollection<TModel> : MutableObject
         where TModel : class, INotifyPropertyChanged
     {
         private readonly IList<TModel> _sourceCollection;
@@ -36,7 +36,7 @@
             }
         }
 
-        public OrderedModelCollection(ReadOnlyObservableCollection<TModel> sourceCollection)
+        public OrderedObservableCollection(ReadOnlyObservableCollection<TModel> sourceCollection)
         {
             _sourceCollection = sourceCollection;
             _orderedCollection = new ObservableCollection<TModel>();
@@ -44,7 +44,7 @@
             SubscribeForCollectionUpdates(sourceCollection);
         }
 
-        public OrderedModelCollection(ObservableCollection<TModel> sourceCollection)
+        public OrderedObservableCollection(ObservableCollection<TModel> sourceCollection)
         {
             _sourceCollection = sourceCollection;
             _orderedCollection = new ObservableCollection<TModel>();

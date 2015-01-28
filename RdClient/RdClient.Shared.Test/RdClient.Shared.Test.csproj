@@ -89,7 +89,7 @@
     <Compile Include="Data\FailingModelSerializer.cs" />
     <Compile Include="Data\MemoryStorageFolder.cs" />
     <Compile Include="Data\ModelContainerTests.cs" />
-    <Compile Include="Data\OrderedModelCollectionTests.cs" />
+    <Compile Include="Data\OrderedObservableCollectionTests.cs" />
     <Compile Include="Data\PrimaryModelCollectionTests.cs" />
     <Compile Include="Data\SerializableModelSerializerTests.cs" />
     <Compile Include="Data\SerializableModelTests.cs" />
