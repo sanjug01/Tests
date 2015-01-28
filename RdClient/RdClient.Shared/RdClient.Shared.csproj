@@ -153,6 +153,7 @@
     <Compile Include="LifeTimeManagement\ISuspensionArgs.cs" />
     <Compile Include="LifeTimeManagement\LaunchEventArgs.cs" />
     <Compile Include="LifeTimeManagement\SuspendEventArgs.cs" />
+    <Compile Include="Models\ApplicationDataModel.cs" />
     <Compile Include="Models\CloudWorkspaceModel.cs" />
     <Compile Include="Models\CredentialsModel.cs" />
     <Compile Include="Models\DesktopModel.cs" />
