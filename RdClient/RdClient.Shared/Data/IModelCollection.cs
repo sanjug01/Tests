@@ -5,7 +5,7 @@
     using System.ComponentModel;
     using System.Windows.Input;
 
-    public interface IModelCollection<TModel> where TModel : INotifyPropertyChanged
+    public interface IModelCollection<TModel> where TModel : class, INotifyPropertyChanged
     {
         ReadOnlyObservableCollection<IModelContainer<TModel>> Models { get; }
         Guid AddNewModel(TModel newModel);

@@ -8,7 +8,7 @@
     using System.IO;
     using System.Windows.Input;
 
-    public sealed class WorkspaceModel<TWorkspaceData> : SerializableCompositionModel where TWorkspaceData : INotifyPropertyChanged, new()
+    public sealed class WorkspaceModel<TWorkspaceData> : SerializableCompositionModel where TWorkspaceData : class, INotifyPropertyChanged, new()
     {
         private readonly IStorageFolder _folder;
         private readonly IModelSerializer _modelSerializer;

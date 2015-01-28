@@ -10,7 +10,7 @@
     using System.IO;
     using System.Windows.Input;
 
-    public sealed class PrimaryModelCollection<TModel> : IModelCollection<TModel> where TModel : INotifyPropertyChanged
+    public sealed class PrimaryModelCollection<TModel> : IModelCollection<TModel> where TModel : class, INotifyPropertyChanged
     {
         private static readonly string ModelFileExtension = "model";
 

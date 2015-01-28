@@ -7,7 +7,7 @@
 
     public sealed class ModelContainer<TModel> :
         MutableObject,
-        IModelContainer<TModel> where TModel : INotifyPropertyChanged
+        IModelContainer<TModel> where TModel : class, INotifyPropertyChanged
     {
         private readonly Guid _id;
         private readonly TModel _model;

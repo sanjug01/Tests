@@ -5,8 +5,8 @@
 
     public interface IModelSerializer
     {
-        TModel ReadModel<TModel>(Stream stream) where TModel : INotifyPropertyChanged;
+        TModel ReadModel<TModel>(Stream stream) where TModel : class, INotifyPropertyChanged;
 
-        void WriteModel<TModel>(TModel model, Stream stream) where TModel : INotifyPropertyChanged;
+        void WriteModel<TModel>(TModel model, Stream stream) where TModel : class, INotifyPropertyChanged;
     }
 }

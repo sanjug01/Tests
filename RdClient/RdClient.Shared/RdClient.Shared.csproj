@@ -97,6 +97,7 @@
     <Compile Include="Data\IModelSerializer.cs" />
     <Compile Include="Data\IStorageFolder.cs" />
     <Compile Include="Data\ModelContainer.cs" />
+    <Compile Include="Data\OrderedModelCollection.cs" />
     <Compile Include="Data\PrimaryModelCollection.cs" />
     <Compile Include="Data\SerializableModel.cs" />
     <Compile Include="Data\SerializableModelSerializer.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Helpers\DataStorageExtensions.cs" />
     <Compile Include="Helpers\DisconnectString.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\IDeferredExecution.cs" />
     <Compile Include="Helpers\ILocalizedString.cs" />
     <Compile Include="Helpers\IPhysicalScreenSize.cs" />
