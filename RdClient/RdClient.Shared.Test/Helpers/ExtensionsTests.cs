@@ -77,5 +77,13 @@
             Assert.AreEqual(15, list.IndexOfFirstGreaterOrEqual(9, _comparer));
             Assert.AreEqual(0, list.IndexOfFirstGreaterOrEqual(-5, _comparer));
         }
+
+        [TestMethod]
+        public void IndexOfFirstGreaterOrEqual_EmptySequence_Neg1()
+        {
+            IList<int> list = new List<int>();
+
+            Assert.AreEqual(-1, list.IndexOfFirstGreaterOrEqual(1, _comparer));
+        }
     }
 }
