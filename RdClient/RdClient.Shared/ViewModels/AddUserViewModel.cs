@@ -13,27 +13,36 @@ using System.Windows.Input;
 namespace RdClient.Shared.ViewModels
 {
     public delegate void AddUserViewResultHandler(Credentials credentials, bool store);
+    public delegate void AddUserViewCancelledHandler(Credentials credentials);
 
     public class AddUserViewArgs
     {
         private readonly Credentials _cred;
         private readonly AddUserViewResultHandler _resultHandler;
+        private readonly AddUserViewCancelledHandler _cancelledHandler;
         private readonly bool _showSave;
 
-        public AddUserViewArgs(Credentials credential, AddUserViewResultHandler resultHandler, bool showSave)
+        public AddUserViewArgs(Credentials credential, AddUserViewResultHandler resultHandler, AddUserViewCancelledHandler cancelledHandler, bool showSave)
         {
             _cred = credential;
             _resultHandler = resultHandler;
+            _cancelledHandler = cancelledHandler;
             _showSave = showSave;
         }
 
-        public AddUserViewArgs(AddUserViewResultHandler resultHandler, bool showSave)
-            : this(new Credentials(), resultHandler, showSave)
+        public AddUserViewArgs(AddUserViewResultHandler resultHandler, AddUserViewCancelledHandler cancelledHandler, bool showSave)
+            : this(new Credentials(), resultHandler, cancelledHandler, showSave)
         {
             _cred.Domain = "";
         }
 
+        public AddUserViewArgs(AddUserViewResultHandler resultHandler, bool showSave)
+            : this(resultHandler, null, showSave)
+        { }
+
         public AddUserViewResultHandler ResultHandler { get { return _resultHandler; } }
+
+        public AddUserViewCancelledHandler CancelledHandler { get { return _cancelledHandler; } }
 
         public bool ShowSave { get { return _showSave; } }
 
@@ -43,53 +52,11 @@ namespace RdClient.Shared.ViewModels
     public class AddUserViewModel : ViewModelBase, IViewModelWithData
     {
         private AddUserViewArgs _args;
-
-        public IPresentableView PresentableView { private get; set; }
-
         private bool _storeCredentials;
-        public bool StoreCredentials { 
-            get { return _storeCredentials; }
-            set { SetProperty(ref _storeCredentials, value, "StoreCredentials"); } 
-        }
-
-        public bool IsUsernameValid
-        {
-            get {             
-                UsernameValidationRule rule = new UsernameValidationRule();
-                return rule.Validate(this.User, CultureInfo.CurrentCulture); 
-            }
-        }
-
-        public bool ShowSave { get; private set; }
-
         private string _user;
-        public string User
-        {
-            get { return _user; }
-            set
-            {
-                SetProperty(ref _user, value, "User");
-                this.EmitPropertyChanged("IsUsernameValid");
-                _okCommand.EmitCanExecuteChanged();
-            }
-        }
-
         private string _password;
-        public string Password
-        {
-            get { return _password; }
-            set
-            {
-                SetProperty(ref _password, value, "Password");
-                _okCommand.EmitCanExecuteChanged();
-            }
-        }
-
         private readonly RelayCommand _okCommand;
-        public ICommand OkCommand { get { return _okCommand; } }
-
         private readonly RelayCommand _cancelCommand;
-        public ICommand CancelCommand { get { return _cancelCommand; } }
 
         public AddUserViewModel()
         {
@@ -101,6 +68,50 @@ namespace RdClient.Shared.ViewModels
                     (this.Password.Length > 0);
             } );
             _cancelCommand = new RelayCommand(new Action<object>(CancelCommandHandler));
+        }
+
+        public IPresentableView PresentableView { private get; set; }
+
+        public bool ShowSave { get; private set; }
+
+        public ICommand OkCommand { get { return _okCommand; } }
+
+        public ICommand CancelCommand { get { return _cancelCommand; } }
+
+        public bool StoreCredentials
+        {
+            get { return _storeCredentials; }
+            set { SetProperty(ref _storeCredentials, value, "StoreCredentials"); }
+        }
+
+        public bool IsUsernameValid
+        {
+            get
+            {
+                UsernameValidationRule rule = new UsernameValidationRule();
+                return rule.Validate(this.User, CultureInfo.CurrentCulture);
+            }
+        }
+
+        public string User
+        {
+            get { return _user; }
+            set
+            {
+                SetProperty(ref _user, value, "User");
+                this.EmitPropertyChanged("IsUsernameValid");
+                _okCommand.EmitCanExecuteChanged();
+            }
+        }
+
+        public string Password
+        {
+            get { return _password; }
+            set
+            {
+                SetProperty(ref _password, value, "Password");
+                _okCommand.EmitCanExecuteChanged();
+            }
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -126,7 +137,11 @@ namespace RdClient.Shared.ViewModels
 
         private void CancelCommandHandler(object o)
         {
-            this.NavigationService.DismissModalView(this.PresentableView);
+            this.NavigationService.DismissModalView(this.PresentableView);     
+            if (_args.CancelledHandler != null)
+            {
+                _args.CancelledHandler(_args.User);
+            }
         }
     }
 }

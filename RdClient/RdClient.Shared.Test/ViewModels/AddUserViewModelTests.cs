@@ -77,14 +77,31 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
+        public void AddUserViewModel_NullOkHandlerShouldntCrash()
+        {
+            AddUserViewModel auvm = new AddUserViewModel();
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                AddUserViewArgs args = new AddUserViewArgs(null, null, true);
+                ((IViewModel)auvm).Presenting(navigation, args, null);
+
+                navigation.Expect("DismissModalView", new List<object> { null }, null);
+
+                auvm.OkCommand.Execute(null);
+            }
+        }
+
+        [TestMethod]
         public void AddUserViewModel_ShouldCallOkHandler()
         {
             AddUserViewModel auvm = new AddUserViewModel();
             using(Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 bool handlerCalled = false;
+                bool cancelledHandlerCalled = false;
                 AddUserViewResultHandler handler = (Credentials credentials, bool store) => { handlerCalled = true; };
-                AddUserViewArgs args = new AddUserViewArgs(handler, true);
+                AddUserViewCancelledHandler cancelledHandler = (Credentials credentials) => { cancelledHandlerCalled = true; };
+                AddUserViewArgs args = new AddUserViewArgs(handler, cancelledHandler, true);
                 ((IViewModel)auvm).Presenting(navigation, args, null);
 
                 navigation.Expect("DismissModalView", new List<object> { null }, null);
@@ -92,18 +109,36 @@ namespace RdClient.Shared.Test.ViewModels
                 auvm.OkCommand.Execute(null);
 
                 Assert.IsTrue(handlerCalled);
+                Assert.IsFalse(cancelledHandlerCalled);
             }
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShouldCancelDismiss()
+        public void AddUserViewModel_NullCancelHandlerShouldntCrash()
+        {
+            AddUserViewModel auvm = new AddUserViewModel();
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                AddUserViewArgs args = new AddUserViewArgs(null, null, true);
+                ((IViewModel)auvm).Presenting(navigation, args, null);
+
+                navigation.Expect("DismissModalView", new List<object> { null }, null);
+
+                auvm.CancelCommand.Execute(null);
+            }
+        }
+
+        [TestMethod]
+        public void AddUserViewModel_ShouldCallCancelHandler()
         {
             AddUserViewModel auvm = new AddUserViewModel();
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 bool handlerCalled = false;
+                bool cancelledHandlerCalled = false;
                 AddUserViewResultHandler handler = (Credentials credentials, bool store) => { handlerCalled = true; };
-                AddUserViewArgs args = new AddUserViewArgs(handler, true);
+                AddUserViewCancelledHandler cancelledHandler = (Credentials credentials) => { cancelledHandlerCalled = true; };
+                AddUserViewArgs args = new AddUserViewArgs(handler, cancelledHandler, true);
                 ((IViewModel)auvm).Presenting(navigation, args, null);
 
                 navigation.Expect("DismissModalView", new List<object> { null }, null);
@@ -111,6 +146,7 @@ namespace RdClient.Shared.Test.ViewModels
                 auvm.CancelCommand.Execute(null);
 
                 Assert.IsFalse(handlerCalled);
+                Assert.IsTrue(cancelledHandlerCalled);
             }
         }
     }
