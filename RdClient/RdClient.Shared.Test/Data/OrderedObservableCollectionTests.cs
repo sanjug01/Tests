@@ -247,6 +247,51 @@
         }
 
         [TestMethod]
+        public void OrderedObservableCollection_MoveElement_NoChanges()
+        {
+            int[] data = new int[] { 5, 10, 15, 20, 25, 30, 35 };
+
+            IComparer<TestModel> order = new ForwardOrder();
+            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+
+            foreach (int i in data)
+                _source.Add(new TestModel(i));
+            orderedCollection.Order = order;
+
+            VerifyStrictOrder(orderedCollection.Models, order);
+
+            IList<NotifyCollectionChangedEventArgs> changes = new List<NotifyCollectionChangedEventArgs>();
+            ((INotifyCollectionChanged)orderedCollection.Models).CollectionChanged += (sender, e) => changes.Add(e);
+
+            _source.Move(0, 5);
+            Assert.AreEqual(0, changes.Count);
+            VerifyStrictOrder(orderedCollection.Models, order);
+        }
+
+        [TestMethod]
+        public void OrderedObservableCollection_ReplaceElement_Rebuilt()
+        {
+            int[] data = new int[] { 5, 10, 15, 20, 25, 30, 35 };
+
+            IComparer<TestModel> order = new ForwardOrder();
+            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+
+            foreach (int i in data)
+                _source.Add(new TestModel(i));
+            orderedCollection.Order = order;
+
+            VerifyStrictOrder(orderedCollection.Models, order);
+
+            IList<NotifyCollectionChangedEventArgs> changes = new List<NotifyCollectionChangedEventArgs>();
+            ((INotifyCollectionChanged)orderedCollection.Models).CollectionChanged += (sender, e) => changes.Add(e);
+
+            _source[2] = new TestModel(50);
+            Assert.AreNotEqual(0, changes.Count);
+            Assert.AreEqual(data.Length, orderedCollection.Models.Count);
+            VerifyStrictOrder(orderedCollection.Models, order);
+        }
+
+        [TestMethod]
         public void OrderedObservableCollection_ChangeOrder_Reordered()
         {
             int[] data = new int[] { 1, 2, 3, 4, 6, 7, 8, 9, 10, 50, 5 };
