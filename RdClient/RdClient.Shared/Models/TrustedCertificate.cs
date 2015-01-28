@@ -1,7 +1,6 @@
 namespace RdClient.Shared.Models
 {
     using RdClient.Shared.CxWrappers;
-    using System;
     using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Runtime.Serialization;

@@ -3,6 +3,7 @@
     using RdClient.Shared.CxWrappers;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -19,6 +20,20 @@
         private readonly DateTimeOffset
             _validFrom,
             _validTo;
+        public TestRdpCertificate()
+        {
+            Random rnd = new Random();
+
+            _issuer = string.Format("Issuer #{0}", rnd.Next());
+            _serialNumber = new byte[128];
+            rnd.NextBytes(_serialNumber);
+            _friendlyName = string.Format("Test certificate #{0}", rnd.Next());
+            _subject = string.Format("On mice #{0}", rnd.Next());
+            _hash = new byte[64];
+            rnd.NextBytes(_hash);
+            _validFrom = DateTimeOffset.UtcNow;
+            _validTo = DateTimeOffset.UtcNow;
+        }
 
         public TestRdpCertificate(byte[] serialNumber, byte[] hash, DateTimeOffset validFrom, DateTimeOffset valitTo)
         {
@@ -29,6 +44,21 @@
             _hash = hash;
             _validFrom = validFrom;
             _validTo = valitTo;
+        }
+
+        public TestRdpCertificate(string issuer, byte[] serialNumber)
+        {
+            Contract.Assert(null != issuer);
+            Contract.Assert(null != serialNumber);
+
+            _issuer = issuer;
+            _serialNumber = serialNumber;
+            _friendlyName = "test certificate";
+            _subject = "On mice";
+            _hash = new byte[64];
+            (new Random()).NextBytes(_hash);
+            _validFrom = DateTimeOffset.UtcNow;
+            _validTo = DateTimeOffset.UtcNow;
         }
 
         string IRdpCertificate.FriendlyName { get { return _friendlyName; } }

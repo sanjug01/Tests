@@ -86,6 +86,7 @@
     <Compile Include="CxWrappers\RdpEventSourceTests.cs" />
     <Compile Include="CxWrappers\RdpScreenSnapshotTests.cs" />
     <Compile Include="CxWrappers\RdpUtilsTests.cs" />
+    <Compile Include="Data\CertificateTrustTests.cs" />
     <Compile Include="Data\FailingModelSerializer.cs" />
     <Compile Include="Data\MemoryStorageFolder.cs" />
     <Compile Include="Data\ModelContainerTests.cs" />

@@ -1,12 +1,10 @@
 ﻿namespace RdClient.Shared.Data
 {
     using RdClient.Shared.Models;
-    using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;
     using System.Runtime.Serialization;
-    using System.Windows.Input;
 
     /// <summary>
     /// Base class for all classes saved by the application's data model.
@@ -16,6 +14,12 @@
     [KnownType(typeof(LocalWorkspaceModel))]
     [KnownType(typeof(OnPremiseWorkspaceModel))]
     [KnownType(typeof(CloudWorkspaceModel))]
+    [KnownType(typeof(RemoteConnectionModel))]
+    [KnownType(typeof(DesktopModel))]
+    [KnownType(typeof(RemoteApplicationModel))]
+    [KnownType(typeof(ThumbnailModel))]
+    [KnownType(typeof(TrustedCertificate))]
+    [KnownType(typeof(CertificateTrust))]
     public abstract class SerializableModel : INotifyPropertyChanged
     {
         private PropertyChangedEventHandler _propertyChanged;
@@ -43,14 +47,18 @@
             return base.GetHashCode();
         }
 
-        protected void SetProperty<TProperty>(ref TProperty property, TProperty newValue,
-            [CallerMemberName] string propertyName = null) where TProperty : IEquatable<TProperty>
+        protected bool SetProperty<TProperty>(ref TProperty property, TProperty newValue,
+            [CallerMemberName] string propertyName = null)
         {
-            if(!object.Equals(property, newValue))
+            bool valueChanged = !object.Equals(property, newValue);
+
+            if(valueChanged)
             {
                 property = newValue;
                 EmitPropertyChanged(propertyName);
             }
+
+            return valueChanged;
         }
 
         protected void EmitPropertyChanged([CallerMemberName] string propertyName = null)
