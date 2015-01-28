@@ -11,6 +11,16 @@
     public sealed class CertificateTrustTests
     {
         [TestMethod]
+        public void CertificateTrustTests_BumpUpCodeCoverage()
+        {
+            IRdpCertificate cert = new TestRdpCertificate();
+            Assert.IsNotNull(cert.FriendlyName);
+            Assert.IsNotNull(cert.Issuer);
+            Assert.IsNotNull(cert.SerialNumber);
+            Assert.IsNotNull(cert.Subject);
+        }
+
+        [TestMethod]
         public void NewCertificateTrust_IsTrusted_NotTrusted()
         {
             TestRdpCertificate cert = new TestRdpCertificate("Issuer", new byte[] { 0, 1, 2, 3, 4, 5 });
@@ -120,6 +130,66 @@
             {
                 Assert.IsFalse(loadedTrust.IsCertificateTrusted(cert));
             }
+        }
+
+        [TestMethod]
+        public void CertificateTrust_TrustSameIssuerDifferentSerials_BothTrusted()
+        {
+            ICertificateTrust trust = new CertificateTrust();
+
+            IRdpCertificate cert1 = new TestRdpCertificate("Issuer", new byte[] { 0, 1, 2, 3, 4, 5 });
+            IRdpCertificate cert2 = new TestRdpCertificate("Issuer", new byte[] { 0, 1, 2, 3, 4 });
+
+            trust.TrustCertificate(cert1);
+            trust.TrustCertificate(cert2);
+            Assert.IsTrue(trust.IsCertificateTrusted(cert1));
+            Assert.IsTrue(trust.IsCertificateTrusted(cert2));
+
+            cert1 = new TestRdpCertificate("Issuer", new byte[] { 0, 1, 2, 3, 4, 5 });
+            cert2 = new TestRdpCertificate("Issuer", new byte[] { 0, 1, 2, 3, 4, 5, 6 });
+            trust.RemoveAllTrust();
+            trust.TrustCertificate(cert1);
+            trust.TrustCertificate(cert2);
+            Assert.IsTrue(trust.IsCertificateTrusted(cert1));
+            Assert.IsTrue(trust.IsCertificateTrusted(cert2));
+
+            cert1 = new TestRdpCertificate("Issuer", new byte[] { 0, 1, 3, 3, 4, 5 });
+            cert2 = new TestRdpCertificate("Issuer", new byte[] { 0, 1, 2, 3, 4, 5 });
+            trust.RemoveAllTrust();
+            trust.TrustCertificate(cert1);
+            trust.TrustCertificate(cert2);
+            Assert.IsTrue(trust.IsCertificateTrusted(cert1));
+            Assert.IsTrue(trust.IsCertificateTrusted(cert2));
+
+            cert1 = new TestRdpCertificate("Issuer", new byte[] { 0, 1, 2, 3, 4, 5 });
+            cert2 = new TestRdpCertificate("Issuer", new byte[] { 0, 1, 3, 3, 4, 5 });
+            trust.RemoveAllTrust();
+            trust.TrustCertificate(cert1);
+            trust.TrustCertificate(cert2);
+            Assert.IsTrue(trust.IsCertificateTrusted(cert1));
+            Assert.IsTrue(trust.IsCertificateTrusted(cert2));
+        }
+
+        [TestMethod]
+        public void CertificateTrust_TrustSameSerialsDifferentIssuers_BothTrusted()
+        {
+            ICertificateTrust trust = new CertificateTrust();
+
+            IRdpCertificate cert1 = new TestRdpCertificate("Issuer1", new byte[] { 0, 1, 2, 3, 4, 5 });
+            IRdpCertificate cert2 = new TestRdpCertificate("Issuer2", new byte[] { 0, 1, 2, 3, 4, 5 });
+
+            trust.TrustCertificate(cert1);
+            trust.TrustCertificate(cert2);
+            Assert.IsTrue(trust.IsCertificateTrusted(cert1));
+            Assert.IsTrue(trust.IsCertificateTrusted(cert2));
+
+            cert1 = new TestRdpCertificate("Issuer2", new byte[] { 0, 1, 2, 3, 4, 5 });
+            cert2 = new TestRdpCertificate("Issuer1", new byte[] { 0, 1, 2, 3, 4, 5 });
+            trust.RemoveAllTrust();
+            trust.TrustCertificate(cert1);
+            trust.TrustCertificate(cert2);
+            Assert.IsTrue(trust.IsCertificateTrusted(cert1));
+            Assert.IsTrue(trust.IsCertificateTrusted(cert2));
         }
     }
 }
