@@ -35,5 +35,6 @@
             <TranslateTransform x:Name="ElephantEarTransform"
                                 X="100"/>
         </Grid.RenderTransform>
+        
     </Grid>
 </UserControl>

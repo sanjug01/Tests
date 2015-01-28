@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Windows.UI.Xaml;
 namespace RdClient.Shared.ViewModels
 {
     public interface IElephantEarsViewModel
     {
-        bool ElephantEarsShown { get; set; }
+        Visibility ElephantEarsVisible { get; set; }
     }
 }

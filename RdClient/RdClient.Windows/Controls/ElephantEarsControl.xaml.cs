@@ -19,25 +19,25 @@ namespace RdClient.Controls
 {
     public sealed partial class ElephantEarsControl : UserControl
     {
-        public static readonly DependencyProperty ElephantEarsShownProperty = DependencyProperty.Register(
-            "ElephantEarsShown", typeof(bool),
-            typeof(ElephantEarsControl), new PropertyMetadata(false, ElephantEarsShownPropertyChanged));
-        public bool ElephantEarsShown
+        public static readonly DependencyProperty ElephantEarsVisibleProperty = DependencyProperty.Register(
+            "ElephantEarsVisible", typeof(Visibility),
+            typeof(ElephantEarsControl), new PropertyMetadata(false, ElephantEarsVisiblePropertyChanged));
+        public Visibility ElephantEarsVisible
         {
-            private get { return (bool)GetValue(ElephantEarsShownProperty); }
-            set { SetValue(ElephantEarsShownProperty, value); }
+            private get { return (Visibility)GetValue(ElephantEarsVisibleProperty); }
+            set { SetValue(ElephantEarsVisibleProperty, value); }
         }
-        private static void ElephantEarsShownPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void ElephantEarsVisiblePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ElephantEarsControl control = d as ElephantEarsControl;
-            bool shownFlag = (bool)e.NewValue;
-            if (shownFlag)
+            Visibility shownFlag = (Visibility)e.NewValue;
+            if (shownFlag == Visibility.Visible)
             {
-                (control.Resources["ShowElephantEarAnimation"] as Storyboard).Begin();
+                control.ShowElephantEarAnimation.Begin();
             }
             else
             {
-                (control.Resources["HideElephantEarAnimation"] as Storyboard).Begin();
+                control.HideElephantEarAnimation.Begin();
             }
         }
 

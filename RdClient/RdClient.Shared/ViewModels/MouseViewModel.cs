@@ -12,6 +12,7 @@ namespace RdClient.Shared.ViewModels
     using RdClient.Shared.Input.Mouse;
 using System.Windows.Input;
 using Windows.Foundation;
+    using Windows.UI.Xaml;
 
     public class MouseViewModel : MutableObject, IPointerManipulator
     {
@@ -112,7 +113,14 @@ using Windows.Foundation;
         {
             this.PointerEventConsumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
             this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
-            this.PointerEventConsumer.ConsumedEvent += (s, o) => { this.ElephantEarsViewModel.ElephantEarsShown = false; };
+            this.PointerEventConsumer.ConsumedEvent += (s, o) => 
+            {
+                PointerEvent pE = (o as PointerEvent);
+                if(o.LeftButton || o.RightButton)
+                {
+                    this.ElephantEarsViewModel.ElephantEarsVisible = Visibility.Collapsed; 
+                }
+            };
             this.ToggleInputModeCommand = new RelayCommand(OnToggleInputModeCommand);
             _multiTouchEnabled = true;
         }
@@ -135,7 +143,7 @@ using Windows.Foundation;
                 this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
             }
 
-            this.ElephantEarsViewModel.ElephantEarsShown = false;
+            this.ElephantEarsViewModel.ElephantEarsVisible= Visibility.Collapsed;
         }
 
         private void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs args)

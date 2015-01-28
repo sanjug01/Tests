@@ -7,6 +7,7 @@ using RdClient.Shared.Navigation;
 using System;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
+using Windows.UI.Xaml;
 
 namespace RdClient.Shared.ViewModels
 {
@@ -25,7 +26,7 @@ namespace RdClient.Shared.ViewModels
                 }
                 else
                 {
-                    return "";
+                    return String.Empty;
                 }
             }
         }
@@ -34,8 +35,12 @@ namespace RdClient.Shared.ViewModels
         private ICommand _connectionBarcommand;
         public ICommand ConnectionBarCommand { get { return _connectionBarcommand; } set { SetProperty(ref _connectionBarcommand, value); } }
 
-        private bool _elephantEarsShown;
-        public bool ElephantEarsShown { get { return _elephantEarsShown; } set { SetProperty(ref _elephantEarsShown, value); } }
+        private Visibility _elephantEarsVisible;
+        public Visibility ElephantEarsVisible 
+        { 
+            get { return _elephantEarsVisible; } 
+            set { SetProperty(ref _elephantEarsVisible, value); } 
+        }
 
         private IKeyboardCapture _keyboardCapture;
 
@@ -87,8 +92,18 @@ namespace RdClient.Shared.ViewModels
             _connectCommand = new RelayCommand(new Action<object>(Connect));
             _cancelReconnectCommand = new RelayCommand(o => { _isCancelledReconnect = true; IsReconnecting = false; });
 
-            _elephantEarsShown = false;
-            this.ConnectionBarCommand = new RelayCommand(o => { this.ElephantEarsShown = !this.ElephantEarsShown; });
+            _elephantEarsVisible = Visibility.Collapsed;
+            this.ConnectionBarCommand = new RelayCommand(o => 
+            {
+                if(this.ElephantEarsVisible == Visibility.Visible)
+                {
+                    this.ElephantEarsVisible = Visibility.Collapsed;
+                }
+                else
+                {
+                    this.ElephantEarsVisible = Visibility.Visible;
+                }
+            });
         }
 
         protected override void OnPresenting(object activationParameter)

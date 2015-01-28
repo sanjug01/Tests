@@ -73,7 +73,7 @@
         </Grid>
 
         <controls:ElephantEarsControl             
-            ElephantEarsShown="{Binding ElephantEarsShown}"/>
+            ElephantEarsVisible="{Binding ElephantEarsVisible}"/>
         
         <StackPanel VerticalAlignment="Bottom"
                     HorizontalAlignment="Right" 
