@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.Models;
+using RdClient.Shared.Navigation;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace RdClient.Shared.ViewModels
         public SettingsViewModel()
         {
             _goBackCommand = new RelayCommand(o => this.GoBackCommandExecute());
-            _addUserCommand = new RelayCommand(o => this.AddUserCommandExectute());
+            _addUserCommand = new RelayCommand(o => this.AddUserCommandExecute());
             this.PropertyChanged += SettingsViewModel_PropertyChanged;
         }
 
@@ -125,15 +126,19 @@ namespace RdClient.Shared.ViewModels
             this.NavigationService.NavigateToView("ConnectionCenterView", null);
         }
 
-        private void AddUserCommandExectute()
+        private void AddUserCommandExecute()
         {
-            AddUserViewArgs args = new AddUserViewArgs(this.AddUserCallback, false);
-            NavigationService.PushModalView("AddUserView", args);
-        }
-
-        private void AddUserCallback(Credentials creds, bool store)
-        {
-            this.DataModel.LocalWorkspace.Credentials.Add(creds);
+            AddUserViewArgs args = new AddUserViewArgs(new Credentials(), false);
+            ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion();
+            addUserCompleted.Completed += (s, e) =>
+            {
+                CredentialPromptResult result = e.Result as CredentialPromptResult;
+                if (result != null && !result.UserCancelled)
+                {
+                    this.DataModel.LocalWorkspace.Credentials.Add(result.Credential);
+                }
+            };
+            NavigationService.PushModalView("AddUserView", args, addUserCompleted);
         }
     }
 }

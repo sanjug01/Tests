@@ -131,12 +131,12 @@ namespace RdClient.Shared.Test.ViewModels
                 _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Credentials.Add(credentials);
 
                 Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "foo" };
-                _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Add(desktop);
-
-                _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 2;
+                _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Add(desktop);                
 
                 EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
                 ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+
+                _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 2;
 
                 navigation.Expect("DismissModalView", new List<object> { null }, null);
                 _addOrEditDesktopViewModel.SaveCommand.Execute(null);

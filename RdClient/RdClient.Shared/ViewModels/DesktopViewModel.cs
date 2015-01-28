@@ -167,8 +167,17 @@ namespace RdClient.Shared.ViewModels
             }
             else
             {
-                AddUserViewArgs args = new AddUserViewArgs(InternalConnect, true);
-                NavigationService.PushModalView("AddUserView", args);
+                AddUserViewArgs args = new AddUserViewArgs(new Credentials(), true);
+                ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion();
+                addUserCompleted.Completed += (s, e) =>
+                    {
+                        CredentialPromptResult result = e.Result as CredentialPromptResult;
+                        if (result != null && !result.UserCancelled)
+                        {
+                            InternalConnect(result.Credential, result.Save);
+                        }
+                    };
+                NavigationService.PushModalView("AddUserView", args, addUserCompleted);
             }            
         }
 

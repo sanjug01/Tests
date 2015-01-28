@@ -12,44 +12,50 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public delegate void AddUserViewResultHandler(Credentials credentials, bool store);
-    public delegate void AddUserViewCancelledHandler(Credentials credentials);
+    public enum CredentialPromptMode
+    {
+        EnterCredentials,
+        InvalidCredentials,
+        FreshCredentialsNeeded
+    }
+
+    public sealed class CredentialPromptResult
+    {
+        public CredentialPromptResult(Credentials credential, bool save, bool userCancelled)
+        {
+            this.Credential = credential;
+            this.Save = save;
+            this.UserCancelled = userCancelled;
+        }
+
+        public Credentials Credential { get; private set; }
+
+        public bool Save { get; private set; }
+
+        public bool UserCancelled { get; private set; }
+    }
 
     public class AddUserViewArgs
     {
+        private readonly CredentialPromptMode _mode;
         private readonly Credentials _cred;
-        private readonly AddUserViewResultHandler _resultHandler;
-        private readonly AddUserViewCancelledHandler _cancelledHandler;
         private readonly bool _showSave;
 
-        public AddUserViewArgs(Credentials credential, AddUserViewResultHandler resultHandler, AddUserViewCancelledHandler cancelledHandler, bool showSave)
+        public AddUserViewArgs(Credentials credential, bool showSave, CredentialPromptMode mode = CredentialPromptMode.EnterCredentials)
         {
             _cred = credential;
-            _resultHandler = resultHandler;
-            _cancelledHandler = cancelledHandler;
             _showSave = showSave;
+            _mode = mode;
         }
-
-        public AddUserViewArgs(AddUserViewResultHandler resultHandler, AddUserViewCancelledHandler cancelledHandler, bool showSave)
-            : this(new Credentials(), resultHandler, cancelledHandler, showSave)
-        {
-            _cred.Domain = "";
-        }
-
-        public AddUserViewArgs(AddUserViewResultHandler resultHandler, bool showSave)
-            : this(resultHandler, null, showSave)
-        { }
-
-        public AddUserViewResultHandler ResultHandler { get { return _resultHandler; } }
-
-        public AddUserViewCancelledHandler CancelledHandler { get { return _cancelledHandler; } }
 
         public bool ShowSave { get { return _showSave; } }
 
         public Credentials User { get { return _cred; } }
+
+        public CredentialPromptMode Mode { get { return _mode; } }
     }
 
-    public class AddUserViewModel : ViewModelBase, IViewModelWithData
+    public class AddUserViewModel : ViewModelBase
     {
         private AddUserViewArgs _args;
         private bool _storeCredentials;
@@ -57,6 +63,7 @@ namespace RdClient.Shared.ViewModels
         private string _password;
         private readonly RelayCommand _okCommand;
         private readonly RelayCommand _cancelCommand;
+        private CredentialPromptMode _mode;
 
         public AddUserViewModel()
         {
@@ -78,10 +85,16 @@ namespace RdClient.Shared.ViewModels
 
         public ICommand CancelCommand { get { return _cancelCommand; } }
 
+        public CredentialPromptMode Mode
+        {
+            get { return _mode; }
+            set { SetProperty(ref _mode, value); }
+        }
+
         public bool StoreCredentials
         {
             get { return _storeCredentials; }
-            set { SetProperty(ref _storeCredentials, value, "StoreCredentials"); }
+            set { SetProperty(ref _storeCredentials, value); }
         }
 
         public bool IsUsernameValid
@@ -98,7 +111,7 @@ namespace RdClient.Shared.ViewModels
             get { return _user; }
             set
             {
-                SetProperty(ref _user, value, "User");
+                SetProperty(ref _user, value);
                 this.EmitPropertyChanged("IsUsernameValid");
                 _okCommand.EmitCanExecuteChanged();
             }
@@ -109,7 +122,7 @@ namespace RdClient.Shared.ViewModels
             get { return _password; }
             set
             {
-                SetProperty(ref _password, value, "Password");
+                SetProperty(ref _password, value);
                 _okCommand.EmitCanExecuteChanged();
             }
         }
@@ -121,27 +134,19 @@ namespace RdClient.Shared.ViewModels
             this.ShowSave = _args.ShowSave;
             this.User = _args.User.Username;
             this.Password = _args.User.Password;
+            this.Mode = _args.Mode;
         }
 
         private void OkCommandHandler(object o)
         {
             _args.User.Username = this.User;
             _args.User.Password = this.Password;
-
-            this.NavigationService.DismissModalView(this.PresentableView);
-            if (_args.ResultHandler != null)
-            {
-                _args.ResultHandler(_args.User, this.StoreCredentials);
-            }
+            DismissModal(new CredentialPromptResult(_args.User, this.StoreCredentials, false));
         }
 
         private void CancelCommandHandler(object o)
         {
-            this.NavigationService.DismissModalView(this.PresentableView);     
-            if (_args.CancelledHandler != null)
-            {
-                _args.CancelledHandler(_args.User);
-            }
+            DismissModal(new CredentialPromptResult(null, false, true));
         }
     }
 }
