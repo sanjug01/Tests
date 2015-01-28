@@ -10,8 +10,7 @@
     /// <summary>
     /// Observable collection of model objects that may be ordered.
     /// </summary>
-    public sealed class OrderedModelCollection<TModel>
-        : MutableObject
+    public sealed class OrderedModelCollection<TModel> : MutableObject
         where TModel : class, INotifyPropertyChanged
     {
         private readonly IModelCollection<TModel> _sourceCollection;
@@ -19,7 +18,7 @@
         private readonly ReadOnlyObservableCollection<TModel> _models;
         private IComparer<TModel> _order;
 
-        ReadOnlyObservableCollection<TModel> Models
+        public ReadOnlyObservableCollection<TModel> Models
         {
             get { return _models; }
         }
@@ -52,20 +51,40 @@
                 switch (e.Action)
                 {
                     case NotifyCollectionChangedAction.Add:
-                        foreach (IModelContainer<TModel> model in e.NewItems)
+                        foreach (IModelContainer<TModel> container in e.NewItems)
                         {
-                            //
-                            // Insert the new model at an appropriate position;
-                            //
+                            InsertModelIntoOrderedCollection(container.Model);
+                            container.Model.PropertyChanged += this.OnModelPropertyChanged;
                         }
                         break;
 
                     case NotifyCollectionChangedAction.Remove:
-                        foreach (IModelContainer<TModel> model in e.NewItems)
+                        foreach (IModelContainer<TModel> container in e.OldItems)
                         {
                             //
-                            // Insert the new model at an appropriate position;
+                            // Remove the model from the ordered collection; first, find the index of the first model in the collection
+                            // greater or equal to the removed model, then scan from that index up to the end of the collection
+                            // looking for the removed model (comparison may not be unique).
                             //
+                            int modelIndex = _orderedCollection.IndexOfFirstGreaterOrEqual(container.Model, _order);
+
+                            if (modelIndex >= 0)
+                            {
+                                while(0 == _order.Compare(container.Model, _orderedCollection[modelIndex]))
+                                {
+                                    if(object.ReferenceEquals(container.Model, _orderedCollection[modelIndex]))
+                                    {
+                                        _orderedCollection[modelIndex].PropertyChanged -= this.OnModelPropertyChanged;
+                                        _orderedCollection.RemoveAt(modelIndex);
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        ++modelIndex;
+                                        Contract.Assert(modelIndex < _orderedCollection.Count);
+                                    }
+                                }
+                            }
                         }
                         break;
 
@@ -82,6 +101,52 @@
             }
         }
 
+        private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            Contract.Assert(null != _order);
+            //
+            // Remove the changed model and re-insert it at the new appropriate position.
+            //
+            TModel model = (TModel)sender;
+
+            int index = _orderedCollection.IndexOf(model);
+            Contract.Assert(index >= 0);
+            //
+            // If the new position of the model is different (it is greater than the next one or less than the previous one)
+            // remove and re-insert it at the new position.
+            //
+            bool mustMove = false;
+
+            if (index < _orderedCollection.Count - 1 && _order.Compare(model, _orderedCollection[index + 1]) > 0)
+                mustMove = true;
+
+            if (!mustMove)
+            {
+                if (index > 0 && _order.Compare(model, _orderedCollection[index - 1]) < 0)
+                    mustMove = true;
+            }
+
+            if(mustMove)
+            {
+                bool removed = _orderedCollection.Remove(model);
+                Contract.Assert(removed);
+                InsertModelIntoOrderedCollection(model);
+            }
+        }
+
+        private void InsertModelIntoOrderedCollection(TModel model)
+        {
+            //
+            // Insert the new model at an appropriate position;
+            //
+            int insertionPosition = _orderedCollection.IndexOfFirstGreaterOrEqual(model, _order);
+
+            if (insertionPosition < 0)
+                _orderedCollection.Add(model);
+            else
+                _orderedCollection.Insert(insertionPosition, model);
+        }
+
         private void RebuildCollection()
         {
             List<TModel> models = new List<TModel>(_sourceCollection.Models.Count);
@@ -92,10 +157,15 @@
             if(null != _order)
                 models.Sort(_order);
 
+            foreach (TModel model in _orderedCollection)
+                model.PropertyChanged -= this.OnModelPropertyChanged;
             _orderedCollection.Clear();
 
             foreach (TModel model in models)
+            {
                 _orderedCollection.Add(model);
+                model.PropertyChanged += this.OnModelPropertyChanged;
+            }
         }
     }
 }
