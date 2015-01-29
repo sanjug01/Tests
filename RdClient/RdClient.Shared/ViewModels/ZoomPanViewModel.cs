@@ -162,6 +162,7 @@ namespace RdClient.Shared.ViewModels
             private set { this.SetProperty<IZoomPanTransform>(ref _zoomPanTransform, value); }
         }
 
+
         private readonly ICommand _toggleZoomCommand;
         public ICommand ToggleZoomCommand { get { return _toggleZoomCommand; } }
         private readonly ICommand _panCommand;

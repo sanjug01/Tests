@@ -103,14 +103,9 @@ namespace RdClient.Controls
 
             RdpConnectionFactory factory = new RdpConnectionFactory() { SwapChainPanel = this.SwapChainPanel };
 
-            Transform transform = this.SwapChainPanel.RenderTransform;
-            ResourceDictionary dictionary = this.SwapChainPanel.Resources;
-
-            ScaleTransform scaleTransform = this.ScpScaleTransform;
-            TranslateTransform translateTransform = this.ScpTranslateTransform;
-
-            this.WindowRect = CoreWindow.GetForCurrentThread().Bounds;
             this.TransformRect = ScpScaleTransform.TransformBounds(this.WindowRect);
+            // bind the scale transform and the window rect
+            this.WindowRect = CoreWindow.GetForCurrentThread().Bounds;            
 
             this.ConnectCommand.Execute(new SessionModel(factory));
         }

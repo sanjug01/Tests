@@ -9,5 +9,15 @@ namespace RdClient.Shared.Input.ZoomPan
         Rect TransformRect { set; }
 
         IZoomPanTransform ZoomPanTransform { get; }
+        double ScaleCenterX { get; }
+        double ScaleCenterY { get; }
+        double ScaleXFrom  { get; }
+        double ScaleXTo  { get; }
+        double ScaleYFrom { get; }
+        double ScaleYTo { get; }
+        double TranslateXFrom { get; }
+        double TranslateXTo { get; }
+        double TranslateYFrom { get; }
+        double TranslateYTo { get; }
     }
 }

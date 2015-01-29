@@ -28,6 +28,11 @@
     <x:String x:Key="BackIcon">&#xE112;</x:String>
     <x:String x:Key="ZoomInIcon">&#xE1A3;</x:String>
     <x:String x:Key="ZoomOutIcon">&#xE1A4;</x:String>
+    <x:String x:Key="UpIcon">&#xE110;</x:String>
+    <x:String x:Key="DownIcon">&#xE1FD;</x:String>
+    <x:String x:Key="LeftIcon">&#xE112;</x:String>
+    <x:String x:Key="RightIcon">&#xE111;</x:String>
+    
 
     <SolidColorBrush x:Key="InvisibleButtonPointerOverBackgroundBrush" Color="#22FFFFFF" />
     <SolidColorBrush x:Key="InvisibleButtonPressedBackgroundBrush" Color="#88FFFFFF" />

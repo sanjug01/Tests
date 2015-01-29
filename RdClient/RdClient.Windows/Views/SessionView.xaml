@@ -96,26 +96,25 @@
                 Command="{Binding ZoomPanViewModel.PanCommand}" 
                 CommandParameter="{StaticResource PanLeft}"
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
-                Content="&#xE112;"/>
+                Content="{StaticResource LeftIcon}"/>
             <Button
                 x:Uid="SessionView-PanRight"
                 Command="{Binding ZoomPanViewModel.PanCommand}" 
                 CommandParameter="{StaticResource PanRight}"
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
-                Content="&#xE111;"/>
+                Content="{StaticResource RightIcon}"/>
             <Button
                 x:Uid="SessionView-PanUp"
                 Command="{Binding ZoomPanViewModel.PanCommand}" 
                 CommandParameter="{StaticResource PanUp}"
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
-                Content="&#xE110;"/>
+                Content="{StaticResource UpIcon}"/>
             <Button
                 x:Uid="SessionView-PanDown"
                 Command="{Binding ZoomPanViewModel.PanCommand}" 
                 CommandParameter="{StaticResource PanDown}"
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
-                Content="&#xE1FD;"/>
-            
+                Content="{StaticResource DownIcon}"/>            
         </StackPanel>
     </Grid>
 </UserControl>
