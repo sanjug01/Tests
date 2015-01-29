@@ -14,7 +14,11 @@
         <SwapChainPanel x:Name="SwapChainPanel">
             <SwapChainPanel.RenderTransform>
                 <TransformGroup x:Name="ScpTransformGroup">
-                    <ScaleTransform x:Name="ScpScaleTransform" CenterX="0" CenterY="0" ScaleX="1.0" ScaleY="1.0"/>
+                    <ScaleTransform x:Name="ScpScaleTransform" 
+                                    ScaleX="1.0" ScaleY="1.0"
+                                    CenterX="{Binding ZoomPanViewModel.ScaleCenterX}" 
+                                    CenterY="{Binding ZoomPanViewModel.ScaleCenterY}" 
+                                    />
                     <TranslateTransform x:Name="ScpTranslateTransform" X="0" Y ="0"/>
                 </TransformGroup>
             </SwapChainPanel.RenderTransform>
@@ -24,7 +28,8 @@
                     <DoubleAnimation
                         x:Name="SwapChainPanelScaleAnimationX"
                         Duration="0:0:0.40" 
-                        Storyboard.TargetName="ScpScaleTransform" Storyboard.TargetProperty="ScaleX">
+                        Storyboard.TargetName="ScpScaleTransform" Storyboard.TargetProperty="ScaleX"
+                        From="{Binding ZoomPanViewModel.ScaleXFrom}" To="{Binding ZoomPanViewModel.ScaleXTo}">
                         <DoubleAnimation.EasingFunction>
                             <ExponentialEase EasingMode="EaseOut" Exponent="5"/>
                         </DoubleAnimation.EasingFunction>
@@ -32,7 +37,8 @@
                     <DoubleAnimation
                         x:Name="SwapChainPanelScaleAnimationY" 
                         Duration="0:0:0.40" 
-                        Storyboard.TargetName="ScpScaleTransform" Storyboard.TargetProperty="ScaleY">
+                        Storyboard.TargetName="ScpScaleTransform" Storyboard.TargetProperty="ScaleY"
+                        From="{Binding ZoomPanViewModel.ScaleYFrom}" To="{Binding ZoomPanViewModel.ScaleYTo}">
                         <DoubleAnimation.EasingFunction>
                             <ExponentialEase EasingMode="EaseOut" Exponent="5"/>
                         </DoubleAnimation.EasingFunction>
@@ -40,7 +46,8 @@
                     <DoubleAnimation 
                         x:Name="SwapChainPanelTranslateAnimationX"
                         Duration="0:0:0.40" 
-                        Storyboard.TargetName="ScpTranslateTransform" Storyboard.TargetProperty="X">
+                        Storyboard.TargetName="ScpTranslateTransform" Storyboard.TargetProperty="X"
+                        From="{Binding ZoomPanViewModel.TranslateXFrom}" To="{Binding ZoomPanViewModel.TranslateXTo}">
                         <DoubleAnimation.EasingFunction>
                             <ExponentialEase EasingMode="EaseOut" Exponent="5"/>
                         </DoubleAnimation.EasingFunction>
@@ -48,7 +55,8 @@
                     <DoubleAnimation 
                         x:Name="SwapChainPanelTranslateAnimationY" 
                         Duration="0:0:0.40" 
-                        Storyboard.TargetName="ScpTranslateTransform" Storyboard.TargetProperty="Y">
+                        Storyboard.TargetName="ScpTranslateTransform" Storyboard.TargetProperty="Y"
+                        From="{Binding ZoomPanViewModel.TranslateYFrom}" To="{Binding ZoomPanViewModel.TranslateYTo}">
                         <DoubleAnimation.EasingFunction>
                             <ExponentialEase EasingMode="EaseOut" Exponent="5"/>
                         </DoubleAnimation.EasingFunction>

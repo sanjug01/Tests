@@ -3,7 +3,7 @@ using Windows.Foundation;
 
 namespace RdClient.Shared.Input.ZoomPan
 {
-    public interface IPanUpdate
+    public interface IPanTransform : IZoomPanTransform
     {
         double X { get; }
         double Y { get; }

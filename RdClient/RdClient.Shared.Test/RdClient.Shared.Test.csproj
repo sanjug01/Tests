@@ -152,6 +152,7 @@
     <Compile Include="ViewModels\DeferringViewModelBaseTests.cs" />
     <Compile Include="ViewModels\ErrorMessageViewModelTests.cs" />
     <Compile Include="ViewModels\MainPageViewModelTests.cs" />
+    <Compile Include="ViewModels\ZoomPanViewModelTests.cs" />
     <Compile Include="ViewModels\MouseViewModelTests.cs" />
     <Compile Include="ViewModels\RelayCommandTests.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModelTests.cs" />

@@ -594,8 +594,7 @@ namespace RdClient.Shared.Test.ViewModels
 
         /* ***********************************************************
          * * *************** Tap&Zoom tests
-         * * ***********************************************************
-         * */
+
 
         [TestMethod]
         public void SessionViewModel_ZoomIn_ShouldNotifyZoomUpdate()
@@ -827,5 +826,7 @@ namespace RdClient.Shared.Test.ViewModels
                 Assert.IsTrue(0.0 > svm.PanUpdate.Y);
             }
         }
+         ************************************************************
+         * */
     }
 }

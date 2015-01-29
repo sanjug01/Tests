@@ -15,52 +15,6 @@ namespace RdClient.Shared.ViewModels
 
     public class SessionViewModel : DeferringViewModelBase
     {
-        public static string ZOOM_IN_PARAM = "ZoomIn";
-        public static string ZOOM_OUT_PARAM = "ZoomOut";
-        public static string PAN_LEFT_PARAM = "PanLeft";
-        public static string PAN_RIGHT_PARAM = "PanRight";
-        public static string PAN_UP_PARAM = "PanUp";
-        public static string PAN_DOWN_PARAM = "PanDown";
-
-        public sealed class InternalZoomUpdate : IZoomUpdate
-        {
-            public ZoomUpdateType ZoomType { get; private set; }
-            
-            public InternalZoomUpdate(ZoomUpdateType type)
-            {
-                ZoomType = type;
-            }
-        }
-
-        private sealed class InternalCustomZoomUpdate : ICustomZoomUpdate
-        {
-            public InternalCustomZoomUpdate(ZoomUpdateType type, double centerX, double centerY, double scaleX, double scaleY)
-            {
-                ZoomType = type;
-                CenterX = centerX;
-                CenterY = centerY;
-                ScaleX = scaleX;
-                ScaleY = scaleY;
-            }
-
-            public ZoomUpdateType ZoomType { get; private set; }
-            public double CenterX { get; private set; }
-            public double CenterY { get; private set; }
-            public double ScaleX { get; private set; }
-            public double ScaleY { get; private set; }            
-        }
-
-        private sealed class InternalPanUpdate : IPanUpdate
-        {
-            public double X { get; private set; }
-            public double Y { get; private set; }
-            public InternalPanUpdate(double x, double y)
-            {
-                this.X = x;
-                this.Y = y;
-            }
-        }
-
         private ConnectionInformation _connectionInformation;
         private IKeyboardCapture _keyboardCapture;
 
@@ -72,20 +26,6 @@ namespace RdClient.Shared.ViewModels
         private bool  _isReconnecting;
         private bool _isCancelledReconnect;
         private int _reconnectAttempts;
-        private IZoomUpdate _zoomUpdate;
-        private IPanUpdate _panUpdate;
-
-        public IZoomUpdate ZoomUpdate
-        {
-            get { return _zoomUpdate; }
-            private set { this.SetProperty<IZoomUpdate>(ref _zoomUpdate, value); }
-        }
-
-        public IPanUpdate PanUpdate
-        {
-            get { return _panUpdate; }
-            private set { this.SetProperty<IPanUpdate>(ref _panUpdate, value); }
-        }
 
         private readonly ICommand _disconnectCommand;
         public ICommand DisconnectCommand { get { return _disconnectCommand; } }
@@ -96,14 +36,11 @@ namespace RdClient.Shared.ViewModels
         private readonly ICommand _cancelReconnectCommand;
         public ICommand CancelReconnectCommand { get { return _cancelReconnectCommand; } }
 
-        private readonly ICommand _toggleZoomCommand;
-        public ICommand ToggleZoomCommand { get { return _toggleZoomCommand; } }
-        private readonly ICommand _panCommand;
-        public ICommand PanCommand { get { return _panCommand; } }
 
         public ISessionModel SessionModel { get; set; }
         public DisconnectString DisconnectString { get; set; }
         public MouseViewModel MouseViewModel { get; set; }
+        public ZoomPanViewModel ZoomPanViewModel { get; set; }
         public IKeyboardCapture KeyboardCapture
         {
             get { return _keyboardCapture; }
@@ -130,8 +67,6 @@ namespace RdClient.Shared.ViewModels
             _disconnectCommand = new RelayCommand(new Action<object>(Disconnect));
             _connectCommand = new RelayCommand(new Action<object>(Connect));
             _cancelReconnectCommand = new RelayCommand(o => { _isCancelledReconnect = true; IsReconnecting = false; });
-            _toggleZoomCommand = new RelayCommand(new Action<object>(ToggleMagnification));
-            _panCommand = new RelayCommand(new Action<object>(PanTranslate));
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -327,46 +262,5 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        private void ToggleMagnification(object o)
-        {
-            if (null != o )
-            {
-                // param is 1=zoomIn, 2=zoomOut
-                if (ZOOM_IN_PARAM.Equals(o.ToString()))
-                {
-                    this.ZoomUpdate = new InternalZoomUpdate(ZoomUpdateType.ZoomIn);
-                }
-                else if (ZOOM_OUT_PARAM.Equals(o.ToString()))
-                {
-                    this.ZoomUpdate = new InternalZoomUpdate(ZoomUpdateType.ZoomOut);
-                }
-            }
-        }
-
-        private void PanTranslate(object o)
-        {
-            if( null != o)
-            {
-                double defaultPan = 50.0;
-
-                // param is 1=left, 2=right, 3=up, 4=down
-                if (PAN_LEFT_PARAM.Equals(o.ToString()))
-                {
-                    this.PanUpdate = new InternalPanUpdate(-defaultPan, 0);
-                }
-                else if (PAN_RIGHT_PARAM.Equals(o.ToString()))
-                {
-                    this.PanUpdate = new InternalPanUpdate(defaultPan, 0);
-                }
-                else if (PAN_UP_PARAM.Equals(o.ToString()))
-                {
-                    this.PanUpdate = new InternalPanUpdate(0, defaultPan);
-                }
-                else if (PAN_DOWN_PARAM.ToString().Equals(o.ToString()))
-                {
-                    this.PanUpdate = new InternalPanUpdate(0, -defaultPan);
-                }
-            }
-        }
     }
 }

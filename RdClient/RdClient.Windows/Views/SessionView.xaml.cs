@@ -10,7 +10,6 @@ namespace RdClient.Views
         public SessionView()
         {
             this.InitializeComponent();
-            SessionPanControl.HidePanControl();
         }
 
         void IPresentableView.Activating(object activationParameter)
