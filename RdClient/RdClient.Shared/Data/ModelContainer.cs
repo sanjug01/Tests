@@ -11,7 +11,7 @@
     {
         private readonly Guid _id;
         private readonly TModel _model;
-        private ModelStatus _status;
+        private PersistentStatus _status;
 
         Guid  IModelContainer<TModel>.Id
         {
@@ -27,7 +27,7 @@
             }
         }
 
-        public ModelStatus Status
+        public PersistentStatus Status
         {
             get { return _status; }
 
@@ -37,11 +37,11 @@
                 {
                     switch (_status)
                     {
-                        case ModelStatus.Clean:
+                        case PersistentStatus.Clean:
                             throw new InvalidOperationException("Cannot change status from Clean");
 
                         default:
-                            if (ModelStatus.Clean != value)
+                            if (PersistentStatus.Clean != value)
                                 throw new ArgumentException("Cannot change status to anything but Clean");
                             break;
                     }
@@ -54,17 +54,17 @@
         {
             Contract.Requires(null != model);
             Contract.Ensures(null != Contract.Result<ModelContainer<TModel>>());
-            return new ModelContainer<TModel>(Guid.NewGuid(), model, ModelStatus.New);
+            return new ModelContainer<TModel>(Guid.NewGuid(), model, PersistentStatus.New);
         }
 
         public static IModelContainer<TModel> CreateForExistingModel(Guid id, TModel model)
         {
             Contract.Requires(null != model);
             Contract.Ensures(null != Contract.Result<ModelContainer<TModel>>());
-            return new ModelContainer<TModel>(id, model, ModelStatus.Clean);
+            return new ModelContainer<TModel>(id, model, PersistentStatus.Clean);
         }
 
-        private ModelContainer(Guid id, TModel model, ModelStatus status)
+        private ModelContainer(Guid id, TModel model, PersistentStatus status)
         {
             Contract.Requires(null != model);
             Contract.Ensures(null != _model);
@@ -76,9 +76,9 @@
 
         private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (ModelStatus.Clean == _status)
+            if (PersistentStatus.Clean == _status)
             {
-                _status = ModelStatus.Modified;
+                _status = PersistentStatus.Modified;
                 EmitPropertyChanged("Status");
             }
         }

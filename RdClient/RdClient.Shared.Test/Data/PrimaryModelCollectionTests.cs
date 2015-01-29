@@ -44,7 +44,7 @@
 
             foreach(IModelContainer<TestModel> container in collection.Models)
             {
-                Assert.AreEqual(ModelStatus.New, container.Status);
+                Assert.AreEqual(PersistentStatus.New, container.Status);
                 Assert.AreSame(model, container.Model);
                 Assert.AreEqual(id, container.Id);
             }
@@ -133,7 +133,7 @@
             Assert.AreEqual(1, collection.Models.Count);
             Assert.AreEqual(savedModel.Property, collection.Models[0].Model.Property);
             Assert.AreEqual(savedId, collection.Models[0].Id);
-            Assert.AreEqual(ModelStatus.Clean, collection.Models[0].Status);
+            Assert.AreEqual(PersistentStatus.Clean, collection.Models[0].Status);
         }
 
         [TestMethod]
@@ -179,7 +179,7 @@
 
             foreach(IModelContainer<TestModel> container in collection.Models)
             {
-                Assert.AreEqual(ModelStatus.Clean, container.Status);
+                Assert.AreEqual(PersistentStatus.Clean, container.Status);
             }
         }
 

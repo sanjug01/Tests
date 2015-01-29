@@ -116,7 +116,7 @@
                     removedModel = container.Model;
                     _originalModels.RemoveAt(index);
 
-                    if(ModelStatus.New != container.Status)
+                    if(PersistentStatus.New != container.Status)
                     {
                         //
                         // The container was loaded from the storage folder; add the ID of the container
@@ -141,7 +141,7 @@
             return removedModel;
         }
 
-        ICommand IModelCollection<TModel>.Save
+        ICommand IPersistentObject.Save
         {
             get { return _save; }
         }
@@ -164,14 +164,14 @@
             //
             foreach (IModelContainer<TModel> modelContainer in _originalModels)
             {
-                if (ModelStatus.Clean != modelContainer.Status)
+                if (PersistentStatus.Clean != modelContainer.Status)
                 {
                     using(Stream stream = _storageFolder.CreateFile(MakeModelFileName(modelContainer.Id)))
                     {
                         if (null != stream)
                         {
                             _modelSerializer.WriteModel(modelContainer.Model, stream);
-                            modelContainer.Status = ModelStatus.Clean;
+                            modelContainer.Status = PersistentStatus.Clean;
                             _modifiedModelIds.Remove(modelContainer.Id);
                             ++changeCount;
                         }

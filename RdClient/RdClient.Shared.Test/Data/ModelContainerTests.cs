@@ -17,7 +17,7 @@
             IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForNewModel(model);
 
             Assert.AreSame(model, container.Model);
-            Assert.AreEqual(ModelStatus.New, container.Status);
+            Assert.AreEqual(PersistentStatus.New, container.Status);
         }
 
         [TestMethod]
@@ -28,7 +28,7 @@
             IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForExistingModel(id, model);
 
             Assert.AreSame(model, container.Model);
-            Assert.AreEqual(ModelStatus.Clean, container.Status);
+            Assert.AreEqual(PersistentStatus.Clean, container.Status);
             Assert.AreEqual(id, container.Id);
         }
 
@@ -41,7 +41,7 @@
             model.Property += 1;
 
             Assert.AreSame(model, container.Model);
-            Assert.AreEqual(ModelStatus.New, container.Status);
+            Assert.AreEqual(PersistentStatus.New, container.Status);
         }
 
         [TestMethod]
@@ -56,7 +56,7 @@
             model.Property += 1;
 
             Assert.AreSame(model, container.Model);
-            Assert.AreEqual(ModelStatus.Modified, container.Status);
+            Assert.AreEqual(PersistentStatus.Modified, container.Status);
             Assert.AreEqual(1, reportedChanges.Count);
             Assert.AreEqual("Status", reportedChanges[0].PropertyName);
         }
@@ -69,9 +69,9 @@
             IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForNewModel(model);
             container.PropertyChanged += (sender, e) => reportedChanges.Add(e);
 
-            container.Status = ModelStatus.Clean;
+            container.Status = PersistentStatus.Clean;
 
-            Assert.AreEqual(ModelStatus.Clean, container.Status);
+            Assert.AreEqual(PersistentStatus.Clean, container.Status);
             //
             // Verify that a change from any state to Clean is not reported.
             //
@@ -85,7 +85,7 @@
             TestModel model = new TestModel(10);
             IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForNewModel(model);
 
-            container.Status = ModelStatus.Modified;
+            container.Status = PersistentStatus.Modified;
         }
 
         [TestMethod]
@@ -96,7 +96,7 @@
             Guid id = Guid.NewGuid();
             IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForExistingModel(id, model);
 
-            container.Status = ModelStatus.Modified;
+            container.Status = PersistentStatus.Modified;
         }
     }
 }

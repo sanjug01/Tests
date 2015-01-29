@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel;
 
-    public enum ModelStatus
+    public enum PersistentStatus
     {
         Clean,
         New,
@@ -14,6 +14,6 @@
     {
         Guid Id { get; }
         TModel Model { get; }
-        ModelStatus Status { get; set; }
+        PersistentStatus Status { get; set; }
     }
 }

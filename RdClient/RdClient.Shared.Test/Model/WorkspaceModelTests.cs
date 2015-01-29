@@ -50,11 +50,13 @@
             IModelSerializer serializer = new SerializableModelSerializer();
 
             WorkspaceModel<LocalWorkspaceModel> workspace = new WorkspaceModel<LocalWorkspaceModel>(folder, serializer);
-            Assert.IsFalse(workspace.Save.CanExecute(null));
+            IPersistentObject po = workspace;
+
+            Assert.IsFalse(po.Save.CanExecute(null));
             workspace.Credentials.AddNewModel(new CredentialsModel() { Username = "User", Password = "Password", Domain = "Domain" });
-            Assert.IsTrue(workspace.Save.CanExecute(null));
-            workspace.Save.Execute(null);
-            Assert.IsFalse(workspace.Save.CanExecute(null));
+            Assert.IsTrue(po.Save.CanExecute(null));
+            po.Save.Execute(null);
+            Assert.IsFalse(po.Save.CanExecute(null));
 
             List<string> folders = folder.GetFolders().ToList();
             List<string> files = folder.GetFiles().ToList();

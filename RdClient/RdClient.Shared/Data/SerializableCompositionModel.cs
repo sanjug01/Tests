@@ -3,7 +3,7 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
-    public abstract class SerializableCompositionModel
+    public abstract class SerializableCompositionModel : IPersistentObject
     {
         private ICommand _save;
 
@@ -11,7 +11,7 @@
         {
         }
 
-        public ICommand Save
+        ICommand IPersistentObject.Save
         {
             get
             {
