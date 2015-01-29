@@ -1,7 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers.Errors;
-using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
-using System;
 using System.Diagnostics.Contracts;
 using Windows.Foundation;
 using Windows.Security.Cryptography.Certificates;

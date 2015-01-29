@@ -2,12 +2,8 @@
 using RdClient.Shared.Navigation;
 using RdClient.Shared.ValidationRules;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels

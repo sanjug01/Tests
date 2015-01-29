@@ -1,15 +1,12 @@
 ﻿using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
-using System.ComponentModel;
-using System.Windows.Input;
-using Windows.ApplicationModel.Core;
-using Windows.Storage.Streams;
-using Windows.UI.Core;
-using Windows.UI.Xaml.Media.Imaging;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System;
-using System.Threading.Tasks;
 using RdClient.Shared.Navigation.Extensions;
+using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.Shared.ViewModels
 {
