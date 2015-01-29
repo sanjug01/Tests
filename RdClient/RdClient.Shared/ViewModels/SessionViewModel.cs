@@ -13,31 +13,39 @@ namespace RdClient.Shared.ViewModels
 
     public class SessionViewModel : DeferringViewModelBase
     {
-
         private ConnectionInformation _connectionInformation;
         private IKeyboardCapture _keyboardCapture;
-
-        //
-        // TODO: get rid of _currentRdpConnectionshortcut after the session view will have been re-architected
-        //
-        private IRdpConnection _currentRdpConnection;
-
+        private bool _capturingKeyboard;
+        private IRdpConnection _currentRdpConnection; // TODO: get rid of _currentRdpConnectionshortcut after the session view will have been re-architected
         private bool  _isReconnecting;
         private bool _isCancelledReconnect;
         private int _reconnectAttempts;
-
         private readonly ICommand _disconnectCommand;
-        public ICommand DisconnectCommand { get { return _disconnectCommand; } }
-
         private readonly ICommand _connectCommand;
-        public ICommand ConnectCommand { get { return _connectCommand; } }
-
         private readonly ICommand _cancelReconnectCommand;
-        public ICommand CancelReconnectCommand { get { return _cancelReconnectCommand; } }
+        private bool _userCancelled;
+
+        public SessionViewModel()
+        {
+            _isReconnecting = false;
+            _reconnectAttempts = 0;
+            _disconnectCommand = new RelayCommand(new Action<object>(Disconnect));
+            _connectCommand = new RelayCommand(new Action<object>(Connect));
+            _cancelReconnectCommand = new RelayCommand(o => { _isCancelledReconnect = true; IsReconnecting = false; });
+        }
 
         public ISessionModel SessionModel { get; set; }
+
         public DisconnectString DisconnectString { get; set; }
+
         public MouseViewModel MouseViewModel { get; set; }
+
+        public ICommand DisconnectCommand { get { return _disconnectCommand; } }
+        
+        public ICommand ConnectCommand { get { return _connectCommand; } }
+        
+        public ICommand CancelReconnectCommand { get { return _cancelReconnectCommand; } }
+
         public IKeyboardCapture KeyboardCapture
         {
             get { return _keyboardCapture; }
@@ -56,16 +64,6 @@ namespace RdClient.Shared.ViewModels
             set { this.SetProperty(ref _reconnectAttempts, value); }
         }
 
-
-        public SessionViewModel()
-        {
-            _isReconnecting = false;
-            _reconnectAttempts = 0;
-            _disconnectCommand = new RelayCommand(new Action<object>(Disconnect));
-            _connectCommand = new RelayCommand(new Action<object>(Connect));
-            _cancelReconnectCommand = new RelayCommand(o => { _isCancelledReconnect = true; IsReconnecting = false; });
-        }
-
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Requires(null != activationParameter as ConnectionInformation);
@@ -79,16 +77,33 @@ namespace RdClient.Shared.ViewModels
             //       is presented or a presented session is connected); then, when a session is deactivated
             //       or disconnected, the keyboard capture must be stopped.
             //
-            _keyboardCapture.Keystroke += this.OnKeystroke;
-            _keyboardCapture.Start();
+            StartKeyboardCapture();
         }
 
         protected override void OnDismissed()
         {
-            Contract.Assert(null != _keyboardCapture);
-            _keyboardCapture.Stop();
-            _keyboardCapture.Keystroke -= this.OnKeystroke;
+            StopKeyboardCapture();
             base.OnDismissed();
+        }
+
+        private void StartKeyboardCapture()
+        {
+            if (!_capturingKeyboard && _keyboardCapture != null)
+            {
+                _keyboardCapture.Keystroke += this.OnKeystroke;
+                _keyboardCapture.Start();
+                _capturingKeyboard = true;
+            }
+        }
+
+        private void StopKeyboardCapture()
+        {
+            if (_capturingKeyboard && _keyboardCapture != null)
+            {
+                _keyboardCapture.Stop();
+                _keyboardCapture.Keystroke -= this.OnKeystroke;
+                _capturingKeyboard = false;
+            }
         }
 
         private void Connect(object o)
@@ -119,7 +134,7 @@ namespace RdClient.Shared.ViewModels
             SessionModel.Connect(_connectionInformation, new WinrtThreadPoolTimerFactory(), this.DataModel.Settings);
         }
 
-        void SessionModel_ConnectionAutoReconnectComplete(object sender, ConnectionAutoReconnectCompleteArgs e)
+        private void SessionModel_ConnectionAutoReconnectComplete(object sender, ConnectionAutoReconnectCompleteArgs e)
         {
             this.DeferToUI(() =>
                 {
@@ -128,7 +143,7 @@ namespace RdClient.Shared.ViewModels
             );
         }
 
-        void SessionModel_ConnectionAutoReconnecting(object sender, ConnectionAutoReconnectingArgs e)
+        private void SessionModel_ConnectionAutoReconnecting(object sender, ConnectionAutoReconnectingArgs e)
         {
             Contract.Assert(null != e);
 
@@ -149,65 +164,132 @@ namespace RdClient.Shared.ViewModels
             );
         }
 
-        void HandleAsyncDisconnect(object sender, ClientAsyncDisconnectArgs args)
+        private void HandleAsyncDisconnect(object sender, ClientAsyncDisconnectArgs args)
         {
             TryDeferToUI(() =>
             {
                 _currentRdpConnection = null;
-            IRdpConnection rdpConnection = sender as IRdpConnection;
-            RdpDisconnectReason reason = args.DisconnectReason;
-            bool reconnect = false;
+                IRdpConnection rdpConnection = sender as IRdpConnection;
+                RdpDisconnectReason reason = args.DisconnectReason;
+                bool reconnect = false;
 
-            if (reason.Code == RdpDisconnectCode.CertValidationFailed)
+                switch (reason.Code)
+                {
+                    case RdpDisconnectCode.CertValidationFailed:
+                        HandleCertValidationFailed(rdpConnection, reason);
+                        break;
+                    case RdpDisconnectCode.PreAuthLogonFailed:
+                    case RdpDisconnectCode.FreshCredsRequired:
+                        HandleBadCredentials(rdpConnection, reason);
+                        break;
+                    default:
+                        // May need to further manage CredSSPUnsupported
+                        // For all other reasons, we just disconnect.
+                        // We'll handle showing any appropriate dialogs to the user in OnClientDisconnectedHandler.
+                        reconnect = false;
+                        rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
+                        break;
+                }
+            });
+        }      
+
+        private void HandleBadCredentials(IRdpConnection rdpConnection, RdpDisconnectReason reason)
+        {
+            CredentialPromptMode mode;
+            if (reason.Code == RdpDisconnectCode.PreAuthLogonFailed)
             {
-                IRdpCertificate serverCertificate = rdpConnection.GetServerCertificate();
-                if (this.SessionModel.IsCertificateAccepted(serverCertificate) || this.DataModel.IsCertificateTrusted(serverCertificate))
-                {
-                    reconnect = true;
-                    rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
-                }
-                else
-                {
-                    // present CertificateValidation dialog and reconnect only if certificate is accepted
-                    CertificateValidationViewModelArgs certArgs = new CertificateValidationViewModelArgs(
-                        _connectionInformation.Desktop.HostName,
-                        serverCertificate);
-                    ModalPresentationCompletion certValidationCompletion = new ModalPresentationCompletion();
-
-                    certValidationCompletion.Completed += (s, e) =>
-                        {
-                            Contract.Assert(e.Result is CertificateValidationResult);
-                            CertificateValidationResult acceptCertificateResult = e.Result as CertificateValidationResult;
-
-                            switch (acceptCertificateResult.Result)
-                            {
-                                case CertificateValidationResult.CertificateTrustLevel.Denied:
-                                    reconnect = false;
-                                    break;
-                                case CertificateValidationResult.CertificateTrustLevel.AcceptedOnce:
-                                    reconnect = true;
-                                    this.SessionModel.AcceptCertificate(serverCertificate);
-                                    break;
-                                case CertificateValidationResult.CertificateTrustLevel.AcceptedAlways:
-                                    reconnect = true;
-                                    this.DataModel.TrustCertificate(serverCertificate);
-                                    break;
-                            }
-                            rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
-                        };
-                    this.NavigationService.PushModalView("CertificateValidationView", certArgs, certValidationCompletion);
-                }
+                mode = CredentialPromptMode.InvalidCredentials;
+            }
+            else if (reason.Code == RdpDisconnectCode.FreshCredsRequired)
+            {
+                mode = CredentialPromptMode.FreshCredentialsNeeded;
             }
             else
             {
-                // May need to further manage PreAuthLogonFailed/FreshCredsRequired/CredSSPUnsupported
-                // For all other reasons, we just disconnect.
-                // We'll handle showing any appropriate dialogs to the user in OnClientDisconnectedHandler.
-                reconnect = false;
-                rdpConnection.HandleAsyncDisconnectResult(args.DisconnectReason, reconnect);
+                throw new InvalidOperationException();
             }
-            });
-        }        
+            Credentials copyOfCreds = new Credentials();
+            copyOfCreds.CopyValuesFrom(_connectionInformation.Credentials);
+            AddUserViewArgs args = new AddUserViewArgs(copyOfCreds, true, mode);
+            ModalPresentationCompletion completionContext = new ModalPresentationCompletion();
+            completionContext.Completed += (s, e) =>
+            {
+                this.StartKeyboardCapture();//restart keyboard capture that was stopped when credential prompt was shown
+                CredentialPromptResult result = e.Result as CredentialPromptResult;
+                if (result != null && !result.UserCancelled)
+                {
+                    Credentials cred = result.Credential;                    
+                    if (result.Save)//if user chose to save credentials then persist them
+                    {
+                        _connectionInformation.Credentials.CopyValuesFrom(cred);//overwrite previous credentials
+                        _connectionInformation.Desktop.CredentialId = _connectionInformation.Credentials.Id;//update desktop to use these creds
+                        if (!DataModel.LocalWorkspace.Credentials.ContainsItemWithId(_connectionInformation.Credentials.Id))
+                        {
+                            DataModel.LocalWorkspace.Credentials.Add(_connectionInformation.Credentials);//add creds to data model if not already there
+                        }
+                    }
+                    else //just use the creds for this connection (do not persist them)
+                    {
+                        _connectionInformation.Credentials = cred;
+                    }
+                    rdpConnection.SetCredentials(_connectionInformation.Credentials, false);
+                    rdpConnection.HandleAsyncDisconnectResult(reason, true);
+                }
+                else
+                {
+                    _userCancelled = true;
+                    rdpConnection.HandleAsyncDisconnectResult(reason, false);
+                }
+            };
+            this.StopKeyboardCapture();//stop keyboard capture so that text can be entered at credential prompt
+            this.NavigationService.PushModalView("AddUserView", args, completionContext);
+        }
+  
+        private void HandleCertValidationFailed(IRdpConnection rdpConnection, RdpDisconnectReason reason)
+        {
+            bool reconnect = false;
+            IRdpCertificate serverCertificate = rdpConnection.GetServerCertificate();
+            if (reason.Code != RdpDisconnectCode.CertValidationFailed)
+            {
+                throw new InvalidOperationException();
+            }
+            else if (this.SessionModel.IsCertificateAccepted(serverCertificate) || this.DataModel.IsCertificateTrusted(serverCertificate))
+            {
+                reconnect = true;
+                rdpConnection.HandleAsyncDisconnectResult(reason, reconnect);
+            }
+            else
+            {
+                // present CertificateValidation dialog and reconnect only if certificate is accepted
+                CertificateValidationViewModelArgs certArgs = new CertificateValidationViewModelArgs(
+                    _connectionInformation.Desktop.HostName,
+                    serverCertificate);
+                ModalPresentationCompletion certValidationCompletion = new ModalPresentationCompletion();
+
+                certValidationCompletion.Completed += (s, e) =>
+                {
+                    Contract.Assert(e.Result is CertificateValidationResult);
+                    CertificateValidationResult acceptCertificateResult = e.Result as CertificateValidationResult;
+
+                    switch (acceptCertificateResult.Result)
+                    {
+                        case CertificateValidationResult.CertificateTrustLevel.Denied:
+                            reconnect = false;
+                            break;
+                        case CertificateValidationResult.CertificateTrustLevel.AcceptedOnce:
+                            reconnect = true;
+                            this.SessionModel.AcceptCertificate(serverCertificate);
+                            break;
+                        case CertificateValidationResult.CertificateTrustLevel.AcceptedAlways:
+                            reconnect = true;
+                            this.DataModel.TrustCertificate(serverCertificate);
+                            break;
+                    }
+                    rdpConnection.HandleAsyncDisconnectResult(reason, reconnect);
+                };
+                this.NavigationService.PushModalView("CertificateValidationView", certArgs, certValidationCompletion);
+            }
+        }
 
         private void HandleConnected(object sender, ClientConnectedArgs e)
         {
@@ -229,7 +311,7 @@ namespace RdClient.Shared.ViewModels
 
                 RdpDisconnectReason reason = args.DisconnectReason;
 
-                if (reason.Code != RdpDisconnectCode.UserInitiated)
+                if (!_userCancelled && reason.Code != RdpDisconnectCode.UserInitiated)
                 {
                     ErrorMessageArgs dialogArgs = new ErrorMessageArgs(reason, () =>
                     {
