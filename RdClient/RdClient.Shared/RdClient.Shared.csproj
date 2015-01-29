@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Converters\BarItemsAlignmentFilteringConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\CredentialPromptModeToLocalizedMessageConverter.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverter.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverter.cs" />
     <Compile Include="Converters\ErrorLocalizers\IErrorLocalizer.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverter.cs" />
     <Compile Include="Converters\ByteArrayToStringConverter.cs" />
+    <Compile Include="Converters\StringLengthToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
     <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverter.cs" />
     <Compile Include="CxWrappers\Errors\AdalError.cs" />

@@ -24,7 +24,7 @@ namespace RdClient.Views
     /// </summary>
     public sealed partial class AddUserView : Page, IPresentableView
     {
-        public IViewModel ViewModel { get { return this.AddUserViewModel; } }
+        public IViewModel ViewModel { get { return this.DataContext as IViewModel; } }
         public AddUserView()
         {
             this.InitializeComponent();
@@ -36,7 +36,7 @@ namespace RdClient.Views
 
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
-            this.AddUserViewModel.PresentableView = this;
+            (this.ViewModel as AddUserViewModel).PresentableView = this;
         }
 
         public void Dismissing()
