@@ -10,12 +10,17 @@
     RequestedTheme="Light">
 
     <Application.Resources>
+
         <ResourceDictionary>
             
-            <ResourceDictionary.MergedDictionaries>               
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <SolidColorBrush x:Key="AppBarItemForegroundThemeBrush" Color="White" />
+                </ResourceDictionary>
                 <ResourceDictionary Source="Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
+
             <lifetime:LifeTimeManager x:Key="LifeTimeManager">
                 <lifetime:LifeTimeManager.RootFrameManager>
                     <lifetime:RootFrameManager/>

@@ -6,6 +6,8 @@ namespace RdClient.Shared.Input.Mouse
 {
     public class MouseMode : IPointerEventConsumer
     {
+        public event System.EventHandler<PointerEvent> ConsumedEvent;
+
         private PointerEvent _trackedPointerEvent;
         private IPointerManipulator _pointerManipulator;
 
@@ -74,6 +76,10 @@ namespace RdClient.Shared.Input.Mouse
         {
             MouseRecognizer(pointerEvent);
             _trackedPointerEvent = pointerEvent;
+            if (ConsumedEvent != null)
+            {
+                ConsumedEvent(this, pointerEvent);
+            }
         }
 
         public void Reset()

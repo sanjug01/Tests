@@ -7,13 +7,14 @@ using RdClient.Shared.Navigation;
 using System;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
+using Windows.UI.Xaml;
 
 namespace RdClient.Shared.ViewModels
 {
 
-    public class SessionViewModel : DeferringViewModelBase
+    public class SessionViewModel : DeferringViewModelBase, IElephantEarsViewModel
     {
-        private ConnectionInformation _connectionInformation;
+        private ConnectionInformation _connectionInformation;               
         private IKeyboardCapture _keyboardCapture;
         private bool _capturingKeyboard;
         private IRdpConnection _currentRdpConnection; // TODO: get rid of _currentRdpConnectionshortcut after the session view will have been re-architected
@@ -23,15 +24,29 @@ namespace RdClient.Shared.ViewModels
         private readonly ICommand _disconnectCommand;
         private readonly ICommand _connectCommand;
         private readonly ICommand _cancelReconnectCommand;
+        private ICommand _connectionBarcommand;
+        private Visibility _elephantEarsVisible;
         private bool _userCancelled;
 
         public SessionViewModel()
         {
             _isReconnecting = false;
             _reconnectAttempts = 0;
+            _elephantEarsVisible = Visibility.Collapsed;
             _disconnectCommand = new RelayCommand(new Action<object>(Disconnect));
             _connectCommand = new RelayCommand(new Action<object>(Connect));
-            _cancelReconnectCommand = new RelayCommand(o => { _isCancelledReconnect = true; IsReconnecting = false; });
+            _cancelReconnectCommand = new RelayCommand(o => { _isCancelledReconnect = true; IsReconnecting = false; });            
+            this.ConnectionBarCommand = new RelayCommand(o =>
+            {
+                if (this.ElephantEarsVisible == Visibility.Visible)
+                {
+                    this.ElephantEarsVisible = Visibility.Collapsed;
+                }
+                else
+                {
+                    this.ElephantEarsVisible = Visibility.Visible;
+                }
+            });
         }
 
         public ISessionModel SessionModel { get; set; }
@@ -62,6 +77,33 @@ namespace RdClient.Shared.ViewModels
         {
             get { return _reconnectAttempts; }
             set { this.SetProperty(ref _reconnectAttempts, value); }
+        }
+
+        public Visibility ElephantEarsVisible
+        {
+            get { return _elephantEarsVisible; }
+            set { SetProperty(ref _elephantEarsVisible, value); }
+        }
+
+        public ICommand ConnectionBarCommand
+        {
+            get { return _connectionBarcommand; }
+            set { SetProperty(ref _connectionBarcommand, value); }
+        }
+
+        public string HostName
+        {
+            get
+            {
+                if (_connectionInformation != null)
+                {
+                    return _connectionInformation.Desktop.HostName;
+                }
+                else
+                {
+                    return String.Empty;
+                }
+            }
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -125,6 +167,7 @@ namespace RdClient.Shared.ViewModels
                 args.RdpConnection.Events.ClientAsyncDisconnect += HandleAsyncDisconnect;
                 this.MouseViewModel.RdpConnection = args.RdpConnection;
                 this.MouseViewModel.DeferredExecution = this;
+                this.MouseViewModel.ElephantEarsViewModel = this;
             };
 
             SessionModel.ConnectionAutoReconnecting += SessionModel_ConnectionAutoReconnecting;
