@@ -1,117 +1,145 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
+using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
-using System.Collections.Generic;
 
 namespace RdClient.Shared.Test.ViewModels
 {
     [TestClass]
     public class AddUserViewModelTests
     {
+        private TestData _testData;
+        private Mock.ModalPresentationContext _context;
+        private Mock.NavigationService _nav;
+        private AddUserViewArgs _args;
+        private AddUserViewModel _vm;
+
+        [TestInitialize]
+        public void TestSetup()
+        {
+            _testData = new TestData();
+            _nav = new Mock.NavigationService();
+            _context = new Mock.ModalPresentationContext();            
+            _args = new AddUserViewArgs(_testData.NewValidCredential(), true, CredentialPromptMode.FreshCredentialsNeeded);
+            _vm = new AddUserViewModel();
+            ((IViewModel)_vm).Presenting(_nav, _args, _context);
+        }
+
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            _nav.Dispose();
+        }
+
         [TestMethod]
         public void AddUserViewModel_ShouldSetStoreCredentials()
         {
-            AddUserViewModel auvm = new AddUserViewModel();
-
-            auvm.StoreCredentials = true;
-            Assert.IsTrue(auvm.StoreCredentials);
+            _vm.StoreCredentials = true;
+            Assert.IsTrue(_vm.StoreCredentials);
         }
 
         [TestMethod]
         public void AddUserViewModel_ShouldUserNameValid()
         {
-            AddUserViewModel auvm = new AddUserViewModel();
-
-            auvm.User = "Don Pedro";
-            Assert.IsTrue(auvm.IsUsernameValid);
+            _vm.User = "Don Pedro";
+            Assert.IsTrue(_vm.IsUsernameValid);
         }
 
         [TestMethod]
         public void AddUserViewModel_ShouldUserNameInvalid()
         {
-            AddUserViewModel auvm = new AddUserViewModel();
-
-            auvm.User = "Don Pedro>";
-            Assert.IsFalse(auvm.IsUsernameValid);
+            _vm.User = "Don Pedro>";
+            Assert.IsFalse(_vm.IsUsernameValid);
         }
 
         [TestMethod]
         public void AddUserViewModel_ShouldOkCanExecuteTrue()
         {
-            AddUserViewModel auvm = new AddUserViewModel();
-
-            auvm.User = "Don Pedro";
-            auvm.Password = "secret";
-            Assert.IsTrue(auvm.OkCommand.CanExecute(null));
+            _vm.User = "Don Pedro";
+            _vm.Password = "secret";
+            Assert.IsTrue(_vm.OkCommand.CanExecute(null));
         }
 
         [TestMethod]
         public void AddUserViewModel_ShouldOkCanExecuteFalse1()
         {
-            AddUserViewModel auvm = new AddUserViewModel();
-
-            auvm.User = null;
-            auvm.Password = "secret";
-            Assert.IsFalse(auvm.OkCommand.CanExecute(null));
+            _vm.User = null;
+            _vm.Password = "secret";
+            Assert.IsFalse(_vm.OkCommand.CanExecute(null));
         }
 
         [TestMethod]
         public void AddUserViewModel_ShouldOkCanExecuteFalse2()
         {
-            AddUserViewModel auvm = new AddUserViewModel();
-
-            auvm.User = "Don Pedro";
-            auvm.Password = null;
-            Assert.IsFalse(auvm.OkCommand.CanExecute(null));
+            _vm.User = "Don Pedro";
+            _vm.Password = null;
+            Assert.IsFalse(_vm.OkCommand.CanExecute(null));
         }
 
         [TestMethod]
         public void AddUserViewModel_ShouldOkCanExecuteFalse3()
         {
-            AddUserViewModel auvm = new AddUserViewModel();
-
-            auvm.User = "Don Pedro";
-            auvm.Password = "";
-            Assert.IsFalse(auvm.OkCommand.CanExecute(null));
+            _vm.User = "Don Pedro";
+            _vm.Password = "";
+            Assert.IsFalse(_vm.OkCommand.CanExecute(null));
         }
 
         [TestMethod]
         public void AddUserViewModel_ShouldCallOkHandler()
         {
-            AddUserViewModel auvm = new AddUserViewModel();
-            using(Mock.NavigationService navigation = new Mock.NavigationService())
-            {
-                bool handlerCalled = false;
-                AddUserViewResultHandler handler = (Credentials credentials, bool store) => { handlerCalled = true; };
-                AddUserViewArgs args = new AddUserViewArgs(handler, true);
-                ((IViewModel)auvm).Presenting(navigation, args, null);
-
-                navigation.Expect("DismissModalView", new List<object> { null }, null);
-
-                auvm.OkCommand.Execute(null);
-
-                Assert.IsTrue(handlerCalled);
-            }
+            Assert.IsNull(_context.Result);
+            Credentials newCreds = _testData.NewValidCredential();
+            _vm.User = newCreds.Username;
+            _vm.Password = newCreds.Password;
+            _vm.OkCommand.Execute(null);
+            CredentialPromptResult result = _context.Result as CredentialPromptResult;
+            Assert.IsNotNull(result);
+            Assert.IsFalse(result.UserCancelled);
+            Assert.IsNotNull(result.Credential);
+            Assert.AreEqual(newCreds.Username, result.Credential.Username);
+            Assert.AreEqual(newCreds.Password, result.Credential.Password);
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShouldCancelDismiss()
+        public void AddUserViewModel_ShouldCallCancelHandler()
         {
-            AddUserViewModel auvm = new AddUserViewModel();
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            {
-                bool handlerCalled = false;
-                AddUserViewResultHandler handler = (Credentials credentials, bool store) => { handlerCalled = true; };
-                AddUserViewArgs args = new AddUserViewArgs(handler, true);
-                ((IViewModel)auvm).Presenting(navigation, args, null);
+            Assert.IsNull(_context.Result);
+            _vm.CancelCommand.Execute(null);
+            CredentialPromptResult result = _context.Result as CredentialPromptResult;
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.UserCancelled);
+            Assert.IsFalse(result.Save);
+            Assert.IsNull(result.Credential);
+        }
 
-                navigation.Expect("DismissModalView", new List<object> { null }, null);
+        [TestMethod]
+        public void AddUserViewModel_ModeShouldMatchArgsMode()
+        {
+            Assert.AreEqual(_args.Mode, _vm.Mode);            
+        }
 
-                auvm.CancelCommand.Execute(null);
+        [TestMethod]
+        public void AddUserViewModel_PasswordSetByArgs()
+        {
+            Assert.AreEqual(_args.User.Password, _vm.Password);    
+        }
 
-                Assert.IsFalse(handlerCalled);
-            }
+        [TestMethod]
+        public void AddUserViewModel_UsernameSetByArgs()
+        {
+            Assert.AreEqual(_args.User.Username, _vm.User);            
+        }
+
+        [TestMethod]
+        public void AddUserViewModel_ShowSaveSetByArgs()
+        {
+            Assert.AreEqual(_args.ShowSave, _vm.ShowSave);            
+        }
+
+        public void AddUserViewModel_StoreCredentialsInitiallyFalse()
+        {
+            Assert.IsFalse(_vm.StoreCredentials);
         }
     }
 }

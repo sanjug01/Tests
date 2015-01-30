@@ -78,6 +78,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Converters\CredentialPromptModeToLocalizedMessageConverterTests.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverterTests.cs" />
     <Compile Include="Converters\ResourceIdToLocalizedStringConverterTests.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Input\Mouse\ClickModeTests.cs" />
     <Compile Include="Mock\BarItemsViewModel.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
+    <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\PointerManipulator.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
     <Compile Include="Mock\Thumbnail.cs" />

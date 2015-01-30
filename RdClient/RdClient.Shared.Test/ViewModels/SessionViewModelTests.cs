@@ -1,11 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Errors;
-using RdClient.Shared.Input.Keyboard;
 using RdClient.Shared.Helpers;
+using RdClient.Shared.Input.Keyboard;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.Navigation.Extensions;
+using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -19,10 +20,16 @@ namespace RdClient.Shared.Test.ViewModels
         private MouseViewModel _mouseViewModel;
         private TestDeferredExecution _testDispatcher;
         private ConnectionInformation _testConnectionInfo;
+        private Mock.NavigationService _nav;
+        private Mock.SessionModel _sessionModel;
+        private Mock.RdpConnection _rdpConnection;
+        private Mock.RdpCertificate _rdpCertificate;
+        private RdpEventSource _eventSource;
+        private SessionViewModel _vm;
+        private TestData _testData;
 
         private sealed class DummyKeyboardCapture : IKeyboardCapture
         {
-
             event System.EventHandler<KeystrokeEventArgs> IKeyboardCapture.Keystroke
             {
                 add { }
@@ -49,9 +56,9 @@ namespace RdClient.Shared.Test.ViewModels
         [TestInitialize]
         public void SetUpTest()
         {
+            _testData = new TestData();
             _dataModel = new RdDataModel();
             _mouseViewModel = new MouseViewModel();
-
             // use the test dispatcher to avoid deferring to UI
             _testDispatcher = new TestDeferredExecution();
             _testConnectionInfo = new ConnectionInformation()
@@ -59,11 +66,30 @@ namespace RdClient.Shared.Test.ViewModels
                 Desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "narf" },
                 Credentials = new Credentials() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
             };
+            _eventSource = new RdpEventSource();
+            _nav = new Mock.NavigationService();
+            _sessionModel = new Mock.SessionModel();
+            _rdpConnection = new Mock.RdpConnection(_eventSource);
+            _rdpCertificate = new Mock.RdpCertificate();
+            _vm = new SessionViewModel()
+            {
+                KeyboardCapture = new DummyKeyboardCapture(),
+                SessionModel = _sessionModel,
+                DataModel = _dataModel,
+                MouseViewModel = _mouseViewModel
+            };
+            ((IDeferredExecutionSite)_vm).SetDeferredExecution(_testDispatcher);
+            ((ITimerFactorySite)_vm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
+            ((IViewModel)_vm).Presenting(_nav, _testConnectionInfo, null);
         }
 
         [TestCleanup]
         public void TearDownTest()
         {
+            _nav.Dispose();
+            _sessionModel.Dispose();
+            _rdpConnection.Dispose();
+            _rdpCertificate.Dispose();
             _dataModel = null;
             _mouseViewModel = null;
             _testDispatcher = null;
@@ -72,159 +98,71 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void SessionViewModel_ShouldConnect()
         {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
-            {
-                SessionViewModel svm = new SessionViewModel()
-                {
-                    KeyboardCapture = new DummyKeyboardCapture(),
-                    SessionModel = sessionModel,
-                    DataModel = _dataModel,
-                    MouseViewModel = _mouseViewModel
-                };
 
-                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
-
-                sessionModel.Expect("Connect", new List<object>() { _testConnectionInfo, null, null }, 0);
-                //
-                // TODO:    REFACTOR THIS!
-                //          Present the view model using the nav service
-                //
-                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
-                svm.ConnectCommand.Execute(null);
+            _sessionModel.Expect("Connect", new List<object>() { _testConnectionInfo, null, null }, 0);
+            _vm.ConnectCommand.Execute(null);            
             }
-        }
 
         [TestMethod]
         public void SessionViewModel_ShouldDisconnect()
         {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
-            {
-                SessionViewModel svm = new SessionViewModel()
-                {
-                    KeyboardCapture = new DummyKeyboardCapture(),
-                    SessionModel = sessionModel,
-                    DataModel = _dataModel,
-                    MouseViewModel = _mouseViewModel
-                };
-
-                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
-
-                sessionModel.Expect("Disconnect", new List<object>() { }, 0);
-
-                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
-                svm.DisconnectCommand.Execute(null);
+            _sessionModel.Expect("Disconnect", new List<object>() { }, 0);            
+            _vm.DisconnectCommand.Execute(null);            
             }
-        }
 
         [TestMethod]
         public void SessionViewModel_ShouldCallHandleDisconnect_ShouldNavigateToHome()
         {
-            RdpEventSource eventSource = new RdpEventSource();
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
-            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
-            {
-                sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
-                rdpConnection.Expect("Cleanup", new List<object> { }, null);
-                navigation.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
+            _sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
+            _rdpConnection.Expect("Cleanup", new List<object> { }, null);
+            _nav.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
 
-                SessionViewModel svm = new SessionViewModel()
-                {
-                    KeyboardCapture = new DummyKeyboardCapture(),
-                    SessionModel = sessionModel,
-                    DataModel = _dataModel,
-                    MouseViewModel = _mouseViewModel
-                };
-                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
-                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
-                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
+            _vm.ConnectCommand.Execute(null);
 
-                svm.ConnectCommand.Execute(null);
-
-                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
-                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
+            ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
+            _sessionModel.EmitConnectionCreated(connectionCreatedArgs);
 
                 RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0);
                 ClientDisconnectedArgs clientDisconnectedArgs = new ClientDisconnectedArgs(reason);
 
-                eventSource.EmitClientDisconnected(rdpConnection, clientDisconnectedArgs);
+            _eventSource.EmitClientDisconnected(_rdpConnection, clientDisconnectedArgs);            
             }
-        }
 
         [TestMethod]
         public void SessionViewModel_ShouldCallHandleDisconnect_ShouldDisplayError()
         {
-            RdpEventSource eventSource = new RdpEventSource();
+            _sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
+            _rdpConnection.Expect("Cleanup", new List<object> { }, null);
+            _nav.Expect("PushModalView", new List<object> { "ErrorMessageView", null, null }, null);
+            _nav.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
 
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
-            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
-            {
-                sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
-                rdpConnection.Expect("Cleanup", new List<object> { }, null);
-                navigation.Expect("PushModalView", new List<object> { "ErrorMessageView", null, null }, null);
-                navigation.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
+            _vm.ConnectCommand.Execute(null);
 
-                SessionViewModel svm = new SessionViewModel()
-                {
-                    KeyboardCapture = new DummyKeyboardCapture(),
-                    SessionModel = sessionModel,
-                    DataModel = _dataModel,
-                    MouseViewModel = _mouseViewModel
-                };
-                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
-                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
-
-                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
-
-                svm.ConnectCommand.Execute(null);
-
-                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
-                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
+            ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
+            _sessionModel.EmitConnectionCreated(connectionCreatedArgs);
 
                 RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.ServerDeniedConnection, 0, 0);
                 ClientDisconnectedArgs clientDisconnectedArgs = new ClientDisconnectedArgs(reason);
 
-                eventSource.EmitClientDisconnected(rdpConnection, clientDisconnectedArgs);
+            _eventSource.EmitClientDisconnected(_rdpConnection, clientDisconnectedArgs);
             }
-        }
 
         [TestMethod]
         public void SessionViewModel_HandleAsyncDisconnect_ConnectionShouldHandleDisconnect()
         {
-            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0);
+            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.ServerOutOfMemory, 0, 0);
             ClientAsyncDisconnectArgs clientAsyncDisconnectArgs = new ClientAsyncDisconnectArgs(reason);
-            RdpEventSource eventSource = new RdpEventSource();
             bool connectionShouldReconnect = false;
 
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
-            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
-            {
-                sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
-                rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, connectionShouldReconnect }, 0);
+            _sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
+            _rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, connectionShouldReconnect }, 0);
 
-                SessionViewModel svm = new SessionViewModel()
-                {
-                    KeyboardCapture = new DummyKeyboardCapture(),
-                    SessionModel = sessionModel,
-                    DataModel = _dataModel,
-                    MouseViewModel = _mouseViewModel
-                };
-                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
-                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
+            _vm.ConnectCommand.Execute(null);
 
-                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
+            ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
+            _sessionModel.EmitConnectionCreated(connectionCreatedArgs);
 
-                svm.ConnectCommand.Execute(null);
-
-                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
-                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
-
-                eventSource.EmitClientAsyncDisconnect(rdpConnection, clientAsyncDisconnectArgs);
-            }
+            _eventSource.EmitClientAsyncDisconnect(_rdpConnection, clientAsyncDisconnectArgs);            
         }
 
         [TestMethod]
@@ -232,38 +170,19 @@ namespace RdClient.Shared.Test.ViewModels
         {
             RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.CertValidationFailed, 0, 0);
             ClientAsyncDisconnectArgs clientAsyncDisconnectArgs = new ClientAsyncDisconnectArgs(reason);
-            RdpEventSource eventSource = new RdpEventSource();
             bool isCertificateAccepted = false;
 
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
-            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
-            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
-            {
-                rdpConnection.Expect("GetServerCertificate", new List<object> { }, rdpCertificate);
-                sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
-                sessionModel.Expect("IsCertificateAccepted", new List<object> { rdpCertificate }, isCertificateAccepted);
-                navigation.Expect("PushModalView", new List<object> { "CertificateValidationView", null, null }, null);
+            _rdpConnection.Expect("GetServerCertificate", new List<object> { }, _rdpCertificate);
+            _sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
+            _sessionModel.Expect("IsCertificateAccepted", new List<object> { _rdpCertificate }, isCertificateAccepted);
+            _nav.Expect("PushModalView", new List<object> { "CertificateValidationView", null, null }, null);
 
-                SessionViewModel svm = new SessionViewModel()
-                {
-                    KeyboardCapture = new DummyKeyboardCapture(),
-                    SessionModel = sessionModel,
-                    DataModel = _dataModel,
-                    MouseViewModel = _mouseViewModel
-                };
-                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
-                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
+            _vm.ConnectCommand.Execute(null);
 
-                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
+            ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
+            _sessionModel.EmitConnectionCreated(connectionCreatedArgs);
 
-                svm.ConnectCommand.Execute(null);
-
-                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
-                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
-
-                eventSource.EmitClientAsyncDisconnect(rdpConnection, clientAsyncDisconnectArgs);
-            }
+            _eventSource.EmitClientAsyncDisconnect(_rdpConnection, clientAsyncDisconnectArgs);            
         }
 
         [TestMethod]
@@ -271,39 +190,20 @@ namespace RdClient.Shared.Test.ViewModels
         {
             RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.CertValidationFailed, 0, 0);
             ClientAsyncDisconnectArgs clientAsyncDisconnectArgs = new ClientAsyncDisconnectArgs(reason);
-            RdpEventSource eventSource = new RdpEventSource();
             bool isCertificateAccepted = true;
             bool connectionShouldReconnect = true;
 
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
-            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
-            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
-            {
-                rdpConnection.Expect("GetServerCertificate", new List<object> { }, rdpCertificate);
-                sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
-                sessionModel.Expect("IsCertificateAccepted", new List<object> { rdpCertificate }, isCertificateAccepted);
-                rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, connectionShouldReconnect }, 0);
+            _rdpConnection.Expect("GetServerCertificate", new List<object> { }, _rdpCertificate);
+            _sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
+            _sessionModel.Expect("IsCertificateAccepted", new List<object> { _rdpCertificate }, isCertificateAccepted);
+            _rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object>() { reason, connectionShouldReconnect }, 0);
 
-                SessionViewModel svm = new SessionViewModel()
-                {
-                    KeyboardCapture = new DummyKeyboardCapture(),
-                    SessionModel = sessionModel,
-                    DataModel = _dataModel,
-                    MouseViewModel = _mouseViewModel
-                };
-                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
-                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
+            _vm.ConnectCommand.Execute(null);
 
-                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
+            ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
+            _sessionModel.EmitConnectionCreated(connectionCreatedArgs);
 
-                svm.ConnectCommand.Execute(null);
-
-                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
-                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
-
-                eventSource.EmitClientAsyncDisconnect(rdpConnection, clientAsyncDisconnectArgs);
-            }
+            _eventSource.EmitClientAsyncDisconnect(_rdpConnection, clientAsyncDisconnectArgs);            
         }
 
         /* ***********************************************************
@@ -313,40 +213,20 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void SessionViewModel_ShouldNotBeReconnecting()
         {
-            RdpEventSource eventSource = new RdpEventSource();
+            _sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
 
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
-            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
-            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
-            {
-                sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
+            _vm.ConnectCommand.Execute(null);
 
-                SessionViewModel svm = new SessionViewModel()
-                {
-                    KeyboardCapture = new DummyKeyboardCapture(),
-                    SessionModel = sessionModel,
-                    DataModel = _dataModel,
-                    MouseViewModel = _mouseViewModel
-                };
-                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
+            ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
+            _sessionModel.EmitConnectionCreated(connectionCreatedArgs);
 
-                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
-
-                svm.ConnectCommand.Execute(null);
-
-                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
-                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
-
-                Assert.IsFalse(svm.IsReconnecting);
-                Assert.IsTrue(0 == svm.ReconnectAttempts);
-            }
+            Assert.IsFalse(_vm.IsReconnecting);
+            Assert.IsTrue(0 == _vm.ReconnectAttempts);            
         }
 
         [TestMethod]
         public void SessionViewModel_HandleFirstAutoReconnecting_ShouldBeReconnecting()
         {
-            RdpEventSource eventSource = new RdpEventSource();
             bool eventEmitted = false;
 
             // first clientAutoReconnectingArgs would be null and attempts == 0
@@ -356,39 +236,22 @@ namespace RdClient.Shared.Test.ViewModels
             ConnectionAutoReconnectingArgs connectionAutoReconnectingArgs =
                 new ConnectionAutoReconnectingArgs(clientAutoReconnectingArgs);
 
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
-            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
-            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
-            {
-                sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
+            _sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
 
-                SessionViewModel svm = new SessionViewModel()
-                {
-                    KeyboardCapture = new DummyKeyboardCapture(),
-                    SessionModel = sessionModel,
-                    DataModel = _dataModel,
-                    MouseViewModel = _mouseViewModel
-                };
-                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
-                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
+            _vm.ConnectCommand.Execute(null);
 
-                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
-
-                svm.ConnectCommand.Execute(null);
-
-                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
-                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
+            ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
+            _sessionModel.EmitConnectionCreated(connectionCreatedArgs);
 
                 // Before 
-                Assert.IsFalse(svm.IsReconnecting);
-                Assert.IsTrue(0 == svm.ReconnectAttempts);
+            Assert.IsFalse(_vm.IsReconnecting);
+            Assert.IsTrue(0 == _vm.ReconnectAttempts);
                 Assert.IsFalse(eventEmitted);
-                sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
+            _sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
 
                 // After
-                Assert.IsTrue(svm.IsReconnecting);
-                Assert.IsTrue(attempts == svm.ReconnectAttempts);
+            Assert.IsTrue(_vm.IsReconnecting);
+            Assert.IsTrue(attempts == _vm.ReconnectAttempts);                
 
                 // After a second attempt
                 attempts++;
@@ -397,20 +260,18 @@ namespace RdClient.Shared.Test.ViewModels
                     attempts,
                     (b) => { eventEmitted = true; });
                 connectionAutoReconnectingArgs = new ConnectionAutoReconnectingArgs(clientAutoReconnectingArgs);
-                sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
+            _sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
 
-                Assert.IsTrue(svm.IsReconnecting);
-                Assert.IsTrue(attempts == svm.ReconnectAttempts);
+            Assert.IsTrue(_vm.IsReconnecting);
+            Assert.IsTrue(attempts == _vm.ReconnectAttempts);
                 Assert.IsTrue(eventEmitted);
             }
-        }
 
         [TestMethod]
         public void SessionViewModel_HandleAutoReconnecting_ShouldBeReconnecting()
         {
             RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.CertValidationFailed, 0, 0);
             ClientAsyncDisconnectArgs clientAsyncDisconnectArgs = new ClientAsyncDisconnectArgs(reason);
-            RdpEventSource eventSource = new RdpEventSource();
             bool eventEmitted = false;
             int attempts = 1;
 
@@ -422,39 +283,22 @@ namespace RdClient.Shared.Test.ViewModels
             ConnectionAutoReconnectingArgs connectionAutoReconnectingArgs =
                 new ConnectionAutoReconnectingArgs(clientAutoReconnectingArgs);
 
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
-            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
-            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
-            {
-                sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
+            _sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
 
-                SessionViewModel svm = new SessionViewModel()
-                {
-                    KeyboardCapture = new DummyKeyboardCapture(),
-                    SessionModel = sessionModel,
-                    DataModel = _dataModel,
-                    MouseViewModel = _mouseViewModel
-                };
-                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
-                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
+            _vm.ConnectCommand.Execute(null);
 
-                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
-
-                svm.ConnectCommand.Execute(null);
-
-                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
-                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
+            ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
+            _sessionModel.EmitConnectionCreated(connectionCreatedArgs);
 
                 // Before 
-                Assert.IsFalse(svm.IsReconnecting);
-                Assert.IsTrue(0 == svm.ReconnectAttempts);
+            Assert.IsFalse(_vm.IsReconnecting);
+            Assert.IsTrue(0 == _vm.ReconnectAttempts);
                 Assert.IsFalse(eventEmitted);
-                sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
+            _sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
 
                 // After
-                Assert.IsTrue(svm.IsReconnecting);
-                Assert.IsTrue(attempts == svm.ReconnectAttempts);
+            Assert.IsTrue(_vm.IsReconnecting);
+            Assert.IsTrue(attempts == _vm.ReconnectAttempts);
                 Assert.IsTrue(eventEmitted);
 
                 // After a second attempt
@@ -464,20 +308,18 @@ namespace RdClient.Shared.Test.ViewModels
                     attempts,
                     (b) => { eventEmitted = true; });
                 connectionAutoReconnectingArgs = new ConnectionAutoReconnectingArgs(clientAutoReconnectingArgs);
-                sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
+            _sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
 
-                Assert.IsTrue(svm.IsReconnecting);
-                Assert.IsTrue(attempts == svm.ReconnectAttempts);
+            Assert.IsTrue(_vm.IsReconnecting);
+            Assert.IsTrue(attempts == _vm.ReconnectAttempts);
                 Assert.IsTrue(eventEmitted);
             }
-        }
 
         [TestMethod]
         public void SessionViewModel_HandleAutoReconnectComplete_ShouldNotBeReconnecting()
         {
             RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.CertValidationFailed, 0, 0);
             ClientAsyncDisconnectArgs clientAsyncDisconnectArgs = new ClientAsyncDisconnectArgs(reason);
-            RdpEventSource eventSource = new RdpEventSource();
             bool reconnectingEventEmitted = false;
             int attempts = 3;
 
@@ -492,53 +334,34 @@ namespace RdClient.Shared.Test.ViewModels
             ConnectionAutoReconnectCompleteArgs connectionAutoReconnectCompleteArgs =
                 new ConnectionAutoReconnectCompleteArgs(new ClientAutoReconnectCompleteArgs());
 
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
-            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
-            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
-            {
-                sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
+            _sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
 
-                SessionViewModel svm = new SessionViewModel()
-                {
-                    KeyboardCapture = new DummyKeyboardCapture(),
-                    SessionModel = sessionModel,
-                    DataModel = _dataModel,
-                    MouseViewModel = _mouseViewModel
-                };
-                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
-                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
+            _vm.ConnectCommand.Execute(null);
 
-                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
-
-                svm.ConnectCommand.Execute(null);
-
-                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
-                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
+            ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
+            _sessionModel.EmitConnectionCreated(connectionCreatedArgs);
 
                 // Before 
-                Assert.IsFalse(svm.IsReconnecting);
-                Assert.IsTrue(0 == svm.ReconnectAttempts);
+            Assert.IsFalse(_vm.IsReconnecting);
+            Assert.IsTrue(0 == _vm.ReconnectAttempts);
                 Assert.IsFalse(reconnectingEventEmitted);
-                sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
+            _sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
 
                 // After
-                Assert.IsTrue(svm.IsReconnecting);
-                Assert.IsTrue(attempts == svm.ReconnectAttempts);
+            Assert.IsTrue(_vm.IsReconnecting);
+            Assert.IsTrue(attempts == _vm.ReconnectAttempts);
                 Assert.IsTrue(reconnectingEventEmitted);
 
                 // After completion
-                sessionModel.EmitConnectionAutoReconnectComplete(connectionAutoReconnectCompleteArgs);
-                Assert.IsFalse(svm.IsReconnecting);
+            _sessionModel.EmitConnectionAutoReconnectComplete(connectionAutoReconnectCompleteArgs);
+            Assert.IsFalse(_vm.IsReconnecting);            
             }
-        }
 
         [TestMethod]
         public void SessionViewModel_CancelAutoReconnect_ShouldNotBeReconnecting()
         {
             RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.CertValidationFailed, 0, 0);
             ClientAsyncDisconnectArgs clientAsyncDisconnectArgs = new ClientAsyncDisconnectArgs(reason);
-            RdpEventSource eventSource = new RdpEventSource();
             bool shouldContinueReconnecting = false;
             int attempts = 5;
 
@@ -553,39 +376,22 @@ namespace RdClient.Shared.Test.ViewModels
             ConnectionAutoReconnectCompleteArgs connectionAutoReconnectCompleteArgs =
                 new ConnectionAutoReconnectCompleteArgs(new ClientAutoReconnectCompleteArgs());
 
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
-            using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
-            using (Mock.RdpCertificate rdpCertificate = new Mock.RdpCertificate())
-            {
-                sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
+            _sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
 
-                SessionViewModel svm = new SessionViewModel()
-                {
-                    KeyboardCapture = new DummyKeyboardCapture(),
-                    SessionModel = sessionModel,
-                    DataModel = _dataModel,
-                    MouseViewModel = _mouseViewModel
-                };
-                ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
-                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
+            _vm.ConnectCommand.Execute(null);
 
-                ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
-
-                svm.ConnectCommand.Execute(null);
-
-                ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(rdpConnection);
-                sessionModel.EmitConnectionCreated(connectionCreatedArgs);
+            ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
+            _sessionModel.EmitConnectionCreated(connectionCreatedArgs);
 
                 // Before 
-                Assert.IsFalse(svm.IsReconnecting);
-                Assert.IsTrue(0 == svm.ReconnectAttempts);
-                sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
+            Assert.IsFalse(_vm.IsReconnecting);
+            Assert.IsTrue(0 == _vm.ReconnectAttempts);
+            _sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
                 Assert.IsTrue(shouldContinueReconnecting);
 
                 // After cancel
-                svm.CancelReconnectCommand.Execute(null);
-                Assert.IsFalse(svm.IsReconnecting);
+            _vm.CancelReconnectCommand.Execute(null);
+            Assert.IsFalse(_vm.IsReconnecting);
 
 
                 // next event should set shouldCancelReconnecting
@@ -596,11 +402,152 @@ namespace RdClient.Shared.Test.ViewModels
                     (b) => { shouldContinueReconnecting = b; });
 
                 connectionAutoReconnectingArgs = new ConnectionAutoReconnectingArgs(clientAutoReconnectingArgs);
-                sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
+            _sessionModel.EmitConnectionAutoReconnecting(connectionAutoReconnectingArgs);
 
-                Assert.IsFalse(svm.IsReconnecting);
+            Assert.IsFalse(_vm.IsReconnecting);
                 Assert.IsFalse(shouldContinueReconnecting);
             }
+
+        private void SimulateConnect()
+        {
+            _sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
+            _vm.ConnectCommand.Execute(null);
+            ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
+            _sessionModel.EmitConnectionCreated(connectionCreatedArgs);            
         }
+        private void SimulateAsyncDisconnect(RdpDisconnectCode code)
+        {
+            RdpDisconnectReason reason = new RdpDisconnectReason(code, 0, 0);
+            ClientAsyncDisconnectArgs clientAsyncDisconnectArgs = new ClientAsyncDisconnectArgs(reason);
+            _eventSource.EmitClientAsyncDisconnect(_rdpConnection, clientAsyncDisconnectArgs);
+        }
+
+        private void SimulateDisconnect(RdpDisconnectCode code)
+        {
+            RdpDisconnectReason reason = new RdpDisconnectReason(code, 0, 0);
+            ClientDisconnectedArgs disconnectArgs = new ClientDisconnectedArgs(reason);
+            //should cleanup connection on disconnect
+            _rdpConnection.Expect("Cleanup", new List<object> { }, null);
+            _eventSource.EmitClientDisconnected(_rdpConnection, disconnectArgs);
+        }
+
+        [TestMethod]
+        public void PreAuthLogonFailedShowsAddUserViewWithCorrectParameters()
+        {
+            SimulateConnect();
+            _nav.Expect("PushModalView", new List<object> { "AddUserView", null, null }, null, 
+                p => 
+                {
+                    AddUserViewArgs args = p[1] as AddUserViewArgs;
+                    Assert.IsNotNull(args);
+                    Assert.AreEqual(CredentialPromptMode.InvalidCredentials, args.Mode);
+                    Assert.AreEqual(true, args.ShowSave);
+                    Assert.AreNotEqual(_testConnectionInfo.Credentials, args.User, "AddUser should not be directly passed credentials so they aren't overwritten");
+                    Assert.AreEqual(_testConnectionInfo.Credentials.Username, args.User.Username);
+                    Assert.AreEqual(_testConnectionInfo.Credentials.Password, args.User.Password);
+                });
+            SimulateAsyncDisconnect(RdpDisconnectCode.PreAuthLogonFailed);
+        }
+
+        [TestMethod]
+        public void FreshCredsRequiredShowsAddUserViewWithCorrectParameters()
+        {
+            SimulateConnect();
+            _nav.Expect("PushModalView", new List<object> { "AddUserView", null, null }, null,
+                p =>
+                {
+                    AddUserViewArgs args = p[1] as AddUserViewArgs;
+                    Assert.IsNotNull(args);
+                    Assert.AreEqual(CredentialPromptMode.FreshCredentialsNeeded, args.Mode);
+                    Assert.AreEqual(true, args.ShowSave);
+                    Assert.AreNotEqual(_testConnectionInfo.Credentials, args.User, "AddUser should not be directly passed credentials so they aren't overwritten");
+                    Assert.AreEqual(_testConnectionInfo.Credentials.Username, args.User.Username);
+                    Assert.AreEqual(_testConnectionInfo.Credentials.Password, args.User.Password);
+                });
+            SimulateAsyncDisconnect(RdpDisconnectCode.FreshCredsRequired);
+        }
+
+        [TestMethod]
+        public void EnteredCredsSavedWhenUserChoosesTo()
+        {
+            _testConnectionInfo.Desktop = _testData.NewValidDesktop(Guid.Empty);
+            _testConnectionInfo.Credentials = _testData.NewValidCredential();
+            Guid originalCredId = _testConnectionInfo.Credentials.Id;
+            CredentialPromptResult credentialPromptResult = new CredentialPromptResult(_testData.NewValidCredential(), true, false);           
+
+            SimulateConnect();            
+            _nav.Expect("PushModalView", new List<object> { "AddUserView", null, null }, null,
+                p =>
+                {
+                    IPresentationCompletion completionContext = p[2] as IPresentationCompletion;
+                    //connection credentials should be set
+                    _rdpConnection.Expect("SetCredentials", new List<object> { _testConnectionInfo.Credentials, false }, null);
+                    //reconnect should be attempted
+                    _rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object> { null, true }, null);
+                    completionContext.Completed(null, credentialPromptResult);
+                    
+                });            
+            SimulateAsyncDisconnect(RdpDisconnectCode.FreshCredsRequired);
+
+            Assert.AreEqual(originalCredId, _testConnectionInfo.Credentials.Id, "connection credentials should not be overwritten");
+            Assert.AreEqual(credentialPromptResult.Credential.Username, _testConnectionInfo.Credentials.Username, "connection username should be updated to match username entered at the credential prompt");
+            Assert.AreEqual(credentialPromptResult.Credential.Password, _testConnectionInfo.Credentials.Password, "connection password should be updated to match password entered at the credential prompt");
+            Assert.AreEqual(_testConnectionInfo.Credentials.Id, _testConnectionInfo.Desktop.CredentialId, "desktop should be updated to use the saved credentials");            
+            Assert.IsTrue(_dataModel.LocalWorkspace.Credentials.ContainsItemWithId(_testConnectionInfo.Credentials.Id), "credentials should be saved to data model");
+        }
+
+        [TestMethod]
+        public void EnteredCredsNotSavedIfUserChoosesNotTo()
+        {
+            _testConnectionInfo.Desktop = _testData.NewValidDesktop(Guid.Empty);
+            _testConnectionInfo.Credentials = _testData.NewValidCredential();
+            CredentialPromptResult credentialPromptResult = new CredentialPromptResult(_testData.NewValidCredential(), false, false);
+
+            SimulateConnect();
+            _nav.Expect("PushModalView", new List<object> { "AddUserView", null, null }, null,
+                p =>
+                {
+                    IPresentationCompletion completionContext = p[2] as IPresentationCompletion;
+                    //connection credentials should be set
+                    _rdpConnection.Expect("SetCredentials", new List<object> { credentialPromptResult.Credential, false }, null);
+                    //reconnect should be attempted
+                    _rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object> { null, true }, null);
+                    completionContext.Completed(null, credentialPromptResult);
+
+                });
+            SimulateAsyncDisconnect(RdpDisconnectCode.FreshCredsRequired);
+
+            Assert.AreEqual(credentialPromptResult.Credential, _testConnectionInfo.Credentials, "connection credentials should be overwritten");
+            Assert.AreEqual(Guid.Empty, _testConnectionInfo.Desktop.CredentialId, "desktop should not be updated to use the unsaved credentials");
+            Assert.IsFalse(_dataModel.LocalWorkspace.Credentials.ContainsItemWithId(_testConnectionInfo.Credentials.Id), "credentials should not be saved to data model");
+        }
+
+        [TestMethod]
+        public void CancellingCredPromptResultsInDisconnectAndReturnToConnectionCenter()
+        {
+            CredentialPromptResult credentialPromptResult = new CredentialPromptResult(_testData.NewValidCredential(), true, true);                        
+
+            SimulateConnect();
+            _nav.Expect("PushModalView", new List<object> { "AddUserView", null, null }, null,
+                p =>
+                {
+                    IPresentationCompletion completionContext = p[2] as IPresentationCompletion;
+                    //reconnect should not be attempted
+                    _rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object> { null, false }, null);
+                    completionContext.Completed(null, credentialPromptResult);
+
+                });
+            SimulateAsyncDisconnect(RdpDisconnectCode.FreshCredsRequired);
+            
+            Assert.AreNotEqual(credentialPromptResult.Credential, _testConnectionInfo.Credentials, "connection credentials should not be overwritten");
+            Assert.AreNotEqual(credentialPromptResult.Credential.Id, _testConnectionInfo.Desktop.CredentialId, "desktop should not be updated to use the unsaved credentials");
+            Assert.IsFalse(_dataModel.LocalWorkspace.Credentials.ContainsItemWithId(_testConnectionInfo.Credentials.Id), "credentials should not be saved to data model");
+            Assert.IsFalse(_dataModel.LocalWorkspace.Credentials.ContainsItemWithId(credentialPromptResult.Credential.Id), "credentials should not be saved to data model");
+
+            //should return to connection center on disconnect
+            _nav.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
+            SimulateDisconnect(RdpDisconnectCode.FreshCredsRequired);
+        }
+
     }
 }

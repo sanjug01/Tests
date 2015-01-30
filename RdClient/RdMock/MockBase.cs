@@ -63,6 +63,7 @@ namespace RdMock
     {
         public string functionName;
         public IList<object> parameters;
+        public Action<object[]> mockAction;
     }
 
     public struct MockReturn
@@ -97,9 +98,9 @@ namespace RdMock
             }
         }
 
-        public MockBase Expect(string functionName_, IList<object> parameters_, object value_)
+        public MockBase Expect(string functionName_, IList<object> parameters_, object value_, Action<object[]> mockAction_ = null)
         {
-            MockCall call = new MockCall() { functionName = functionName_, parameters = parameters_ };
+            MockCall call = new MockCall() { functionName = functionName_, parameters = parameters_, mockAction = mockAction_ };
             MockReturn retval = new MockReturn() { functionName = functionName_, value = value_ };
 
             _calls.Add(call);
@@ -167,6 +168,11 @@ namespace RdMock
             if( _returns.Count < 1 || _returns[0].functionName.Equals(methodName) == false)
             {
                 throw new MockException("Initialized expectation but missing return value?!");
+            }
+
+            if (call.mockAction != null)
+            {
+                call.mockAction(actualParameterValues);
             }
 
             object retval = _returns[0].value;

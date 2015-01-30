@@ -8,21 +8,11 @@ namespace RdClient.Shared.Test.ViewModels
     [TestClass]
     public class CertificateValidationViewModelTests
     {
-
-        class TestModalPresentationContext : IModalPresentationContext
-        {
-            public object Result { get; private set; }
-            void IModalPresentationContext.Dismiss(object result)
-            {
-                this.Result = result;
-            }            
-        }
-
         private CertificateValidationViewModel _vm;
         private Mock.RdpCertificate _testCertificate;
         private string _testHost;
         private CertificateValidationViewModelArgs _testArgs;
-        private TestModalPresentationContext _context;
+        private Mock.ModalPresentationContext _context;
 
         [TestInitialize]
         public void TestSetUp()
@@ -43,7 +33,7 @@ namespace RdClient.Shared.Test.ViewModels
 
             _testArgs = new CertificateValidationViewModelArgs(_testHost, _testCertificate);
 
-            _context = new TestModalPresentationContext();
+            _context = new Mock.ModalPresentationContext();
         }
         
         [TestMethod]
