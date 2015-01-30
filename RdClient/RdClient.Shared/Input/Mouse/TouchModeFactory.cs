@@ -60,6 +60,22 @@ namespace RdClient.Shared.Input.Mouse
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
             (o) => { o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.RightClick, o.Input); });
+            stateMachine.AddTransition(PointerState.RightDown, PointerState.Scroll,
+            (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
+            (o) => { o.Context.MouseScroll(o.Input); });
+
+            stateMachine.AddTransition(PointerState.Scroll, PointerState.Scroll,
+            (o) => { return 
+                        o.Context.NumberOfContacts(o.Input) > 1 &&
+                        o.Context.MoveThresholdExceeded(o.Input); 
+            },
+            (o) => { o.Context.MouseScroll(o.Input); });
+            stateMachine.AddTransition(PointerState.Scroll, PointerState.LeftDown,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
+            (o) => { });
+            stateMachine.AddTransition(PointerState.Scroll, PointerState.Idle,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
+            (o) => { });
 
             stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },

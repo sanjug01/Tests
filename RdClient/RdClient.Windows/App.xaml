@@ -14,9 +14,6 @@
         <ResourceDictionary>
             
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
-                    <SolidColorBrush x:Key="AppBarItemForegroundThemeBrush" Color="White" />
-                </ResourceDictionary>
                 <ResourceDictionary Source="Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             

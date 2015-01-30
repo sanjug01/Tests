@@ -7,6 +7,13 @@ using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Mouse
 {
+    public enum DragOrientation
+    {
+        Horizontal,
+        Vertical,
+        Unknown
+    }
+
     public enum PointerState
     {
         Idle,
@@ -17,7 +24,8 @@ namespace RdClient.Shared.Input.Mouse
         Move,
         Inertia,
         LeftDrag,
-        RightDrag
+        RightDrag,
+        Scroll
     }
     public class StateEvent<TInput, TContext>
     {
@@ -76,6 +84,52 @@ namespace RdClient.Shared.Input.Mouse
             }
 
             return result;
+        }
+
+        private DragOrientation DragOrientation(PointerEvent pointerEvent)
+        {
+            DragOrientation orientation = Mouse.DragOrientation.Unknown;
+
+            if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
+            {
+                PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
+                double deltaX = Math.Abs(lastPointerEvent.Position.X - pointerEvent.Position.X);
+                double deltaY = Math.Abs(lastPointerEvent.Position.Y - pointerEvent.Position.Y);
+                double delta = Math.Pow(deltaX, 2) - Math.Pow(deltaY * deltaY, 2);
+                
+                if(delta > 0.01)
+                {
+                    orientation = Mouse.DragOrientation.Horizontal;
+                }
+                else if(delta < -0.01)
+                {
+                    orientation = Mouse.DragOrientation.Vertical;
+                }
+            }
+
+            return orientation;
+        }
+
+        public virtual void MouseScroll(PointerEvent pointerEvent)
+        {
+            if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
+            {
+                DragOrientation orientation = this.DragOrientation(pointerEvent);
+
+                PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
+                double delta = 0.0;
+
+                if(orientation == Mouse.DragOrientation.Vertical)
+                {
+                    delta = - (lastPointerEvent.Position.Y - pointerEvent.Position.Y);
+                    PointerManipulator.SendMouseWheel((int)delta * 5, false);
+                }
+                else if(orientation == Mouse.DragOrientation.Horizontal)
+                {
+                    delta = - (lastPointerEvent.Position.X - pointerEvent.Position.X);
+                    PointerManipulator.SendMouseWheel((int)delta * 5, true);
+                }
+            }
         }
 
         public virtual void MouseLeftClick(PointerEvent pointerEvent)

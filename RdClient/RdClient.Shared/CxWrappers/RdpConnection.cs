@@ -227,8 +227,21 @@ namespace RdClient.Shared.CxWrappers
         public void SendMouseEvent(MouseEventType type, float xPos, float yPos)
         {
             //_instrument.Instrument("SendMouseEvent");
+            float _yPos = yPos;
+            float _xPos = xPos;
 
-            int xRes = _rdpConnectionCx.SendMouseEvent(RdpTypeConverter.ConvertToCx(type), xPos, yPos);
+            // This is needed because RdClientCx silently multiplies these values by 2
+            // the reason RdClientCx does this is to achieve a natural scrolling experience
+            // on small screen touch devices. However the universal App targets not only
+            // devices with bigger screens but also receives input events from the hardware
+            // mouse.
+            if(type == MouseEventType.MouseWheel || type == MouseEventType.MouseHWheel)
+            {
+                _xPos = xPos / 2.0f;
+                _yPos = yPos / 2.0f;
+            }
+
+            int xRes = _rdpConnectionCx.SendMouseEvent(RdpTypeConverter.ConvertToCx(type), _xPos, _yPos);
             RdTrace.IfFailXResultThrow(xRes, "Failed to send mouse event.");
         }
 

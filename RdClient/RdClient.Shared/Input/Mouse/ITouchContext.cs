@@ -7,6 +7,7 @@ namespace RdClient.Shared.Input.Mouse
         DoubleClickTimer DoubleClickTimer { get; }
         void MouseLeftClick(PointerEvent pointerEvent);
         void MouseMove(PointerEvent pointerEvent);
+        void MouseScroll(PointerEvent pointerEvent);
         void MouseRightClick(PointerEvent pointerEvent);
         void UpdateCursorPosition(PointerEvent pointerEvent);
 
