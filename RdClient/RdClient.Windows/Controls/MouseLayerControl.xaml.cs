@@ -8,7 +8,6 @@ namespace RdClient.Controls
     using RdClient.Shared.Converters;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Input.Mouse;
-    using System.Diagnostics;
     using Windows.Foundation;
     using Windows.UI.Core;
 
