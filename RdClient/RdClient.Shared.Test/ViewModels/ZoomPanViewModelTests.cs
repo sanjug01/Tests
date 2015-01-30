@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Input.ZoomPan;
 using RdClient.Shared.ViewModels;
 using System.Collections.Generic;
 using Windows.Foundation;
@@ -53,9 +54,9 @@ namespace RdClient.Shared.Test.ViewModels
             _svm.ToggleZoomCommand.Execute(_zoomInTransform);
 
             Assert.IsTrue(notificationFired);
+            Assert.AreEqual(TransformType.ZoomIn, _svm.ZoomPanTransform.TransformType);
             Assert.IsTrue(1.0 < _svm.ScaleXTo);
-            Assert.IsTrue(1.0 < _svm.ScaleYTo);
-            
+            Assert.IsTrue(1.0 < _svm.ScaleYTo);            
         }
 
         [TestMethod]
@@ -74,6 +75,7 @@ namespace RdClient.Shared.Test.ViewModels
             _svm.ToggleZoomCommand.Execute(_zoomOutTransform);
 
             Assert.IsTrue(notificationFired);
+            Assert.AreEqual(TransformType.ZoomOut, _svm.ZoomPanTransform.TransformType);
         }
 
         [TestMethod]
@@ -92,6 +94,7 @@ namespace RdClient.Shared.Test.ViewModels
             _svm.PanCommand.Execute(_panLeftTransform);
 
             Assert.IsTrue(notificationFired);
+            Assert.AreEqual(TransformType.Pan, _svm.ZoomPanTransform.TransformType);
         }
 
         [TestMethod]
@@ -110,6 +113,7 @@ namespace RdClient.Shared.Test.ViewModels
             _svm.PanCommand.Execute(_panRightTransform);
 
             Assert.IsTrue(notificationFired);
+            Assert.AreEqual(TransformType.Pan, _svm.ZoomPanTransform.TransformType);
         }
 
         [TestMethod]
@@ -128,6 +132,7 @@ namespace RdClient.Shared.Test.ViewModels
             _svm.PanCommand.Execute(_panUpTransform);
 
             Assert.IsTrue(notificationFired);
+            Assert.AreEqual(TransformType.Pan, _svm.ZoomPanTransform.TransformType);
         }
 
         [TestMethod]
@@ -146,35 +151,8 @@ namespace RdClient.Shared.Test.ViewModels
             _svm.PanCommand.Execute(_panDownTransform);
 
             Assert.IsTrue(notificationFired);
+            Assert.AreEqual(TransformType.Pan, _svm.ZoomPanTransform.TransformType);
         }
-
-        [TestMethod]
-        public void ZoomPanViewModel_NoZoom_ShouldNotApplyPan()
-        {
-            _svm.WindowRect = _windowRect;
-            _svm.TransformRect = _transformRectNoZoom;
-
-            _svm.PanCommand.Execute(_panLeftTransform);
-            Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
-            Assert.AreEqual(_svm.TranslateXTo, _svm.TranslateXFrom);
-            Assert.AreEqual(_svm.TranslateYTo, _svm.TranslateYFrom);
-
-            _svm.PanCommand.Execute(_panRightTransform);
-            Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
-            Assert.AreEqual(_svm.TranslateXTo, _svm.TranslateXFrom);
-            Assert.AreEqual(_svm.TranslateYTo, _svm.TranslateYFrom);
-
-            _svm.PanCommand.Execute(_panUpTransform);
-            Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
-            Assert.AreEqual(_svm.TranslateXTo, _svm.TranslateXFrom);
-            Assert.AreEqual(_svm.TranslateYTo, _svm.TranslateYFrom);
-
-            _svm.PanCommand.Execute(_panDownTransform);
-            Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
-            Assert.AreEqual(_svm.TranslateXTo, _svm.TranslateXFrom);
-            Assert.AreEqual(_svm.TranslateYTo, _svm.TranslateYFrom);
-        }
-
 
         [TestMethod]
         public void ZoomPanViewModel_ZoomIn_UsesWindowRectCenter()
@@ -230,6 +208,78 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.AreEqual(_svm.ScaleYFrom, _svm.ScaleYTo);                
         }
 
+        [TestMethod]
+        public void ZoomPanViewModel_VerifyScaleFactorLimitsWithCustomZoom()
+        {
+            double maxScale = 2.5;
+            double minScale = 1.0;
+            double centerX = 150;
+            double centerY = 250;
+            double customScaleX = 2.0;
+            double customScaleY = 1.5;
+
+            CustomZoomTransform zoomTransform = new CustomZoomTransform(centerX, centerY, customScaleX, customScaleY);
+            _svm.ToggleZoomCommand.Execute(zoomTransform);
+            Assert.AreEqual(centerX, _svm.ScaleCenterX);
+            Assert.AreEqual(centerY, _svm.ScaleCenterY);
+            Assert.AreEqual(customScaleX, _svm.ScaleXTo);
+            Assert.AreEqual(customScaleY, _svm.ScaleYTo);
+
+            // test boundaries
+            centerX += 25.0;
+            centerY -= 25.0;
+            zoomTransform = new CustomZoomTransform(centerX, centerY, customScaleX, maxScale + 0.5);
+            _svm.ToggleZoomCommand.Execute(zoomTransform);
+            Assert.AreEqual(centerX, _svm.ScaleCenterX);
+            Assert.AreEqual(centerY, _svm.ScaleCenterY);
+            Assert.AreEqual(customScaleX, _svm.ScaleXTo);
+            Assert.AreEqual(maxScale, _svm.ScaleYTo);
+
+            centerX += 25.0;
+            centerY -= 25.0;
+            zoomTransform = new CustomZoomTransform(centerX, centerY, minScale - 0.5, customScaleY);
+            _svm.ToggleZoomCommand.Execute(zoomTransform);
+            Assert.AreEqual(centerX, _svm.ScaleCenterX);
+            Assert.AreEqual(centerY, _svm.ScaleCenterY);
+            Assert.AreEqual(minScale, _svm.ScaleXTo);
+            Assert.AreEqual(customScaleY, _svm.ScaleYTo);
+
+            centerX += 25.0;
+            centerY -= 25.0;
+            zoomTransform = new CustomZoomTransform(centerX, centerY, maxScale + 0.5, minScale - 0.5);
+            _svm.ToggleZoomCommand.Execute(zoomTransform);
+            Assert.AreEqual(centerX, _svm.ScaleCenterX);
+            Assert.AreEqual(centerY, _svm.ScaleCenterY);
+            Assert.AreEqual(maxScale, _svm.ScaleXTo);
+            Assert.AreEqual(minScale, _svm.ScaleYTo);
+        }
+
+        [TestMethod]
+        public void ZoomPanViewModel_NoZoom_ShouldNotApplyPan()
+        {
+            _svm.WindowRect = _windowRect;
+            _svm.TransformRect = _transformRectNoZoom;
+
+            _svm.PanCommand.Execute(_panLeftTransform);
+            Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
+            Assert.AreEqual(_svm.TranslateXTo, _svm.TranslateXFrom);
+            Assert.AreEqual(_svm.TranslateYTo, _svm.TranslateYFrom);
+
+            _svm.PanCommand.Execute(_panRightTransform);
+            Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
+            Assert.AreEqual(_svm.TranslateXTo, _svm.TranslateXFrom);
+            Assert.AreEqual(_svm.TranslateYTo, _svm.TranslateYFrom);
+
+            _svm.PanCommand.Execute(_panUpTransform);
+            Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
+            Assert.AreEqual(_svm.TranslateXTo, _svm.TranslateXFrom);
+            Assert.AreEqual(_svm.TranslateYTo, _svm.TranslateYFrom);
+
+            _svm.PanCommand.Execute(_panDownTransform);
+            Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
+            Assert.AreEqual(_svm.TranslateXTo, _svm.TranslateXFrom);
+            Assert.AreEqual(_svm.TranslateYTo, _svm.TranslateYFrom);
+        }
 
         [TestMethod]
         public void ZoomPanViewModel_AfterZoom_ShouldApplyPan()

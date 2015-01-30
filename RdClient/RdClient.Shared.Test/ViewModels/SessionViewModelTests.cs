@@ -2,7 +2,6 @@
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Input.Keyboard;
-using RdClient.Shared.Input.ZoomPan;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;

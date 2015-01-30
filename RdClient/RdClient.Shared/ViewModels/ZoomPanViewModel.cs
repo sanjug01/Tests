@@ -24,9 +24,9 @@ namespace RdClient.Shared.ViewModels
 
     public class CustomZoomTransform : ICustomZoomTransform
     {
-        public CustomZoomTransform(TransformType type, double centerX, double centerY, double scaleX, double scaleY)
+        public CustomZoomTransform(double centerX, double centerY, double scaleX, double scaleY)
         {
-            TransformType = type;
+            TransformType = TransformType .ZoomCustom;
             CenterX = centerX;
             CenterY = centerY;
             ScaleX = scaleX;
@@ -202,6 +202,11 @@ namespace RdClient.Shared.ViewModels
                 {
                     this.ApplyZoomOut();
                 }
+                else if (TransformType.ZoomCustom == zoomTransform.TransformType)
+                {
+                    ICustomZoomTransform customZoomTransform = (ICustomZoomTransform) zoomTransform;
+                    this.ApplyZoomTransform(customZoomTransform.CenterX, customZoomTransform.CenterY, customZoomTransform.ScaleX, customZoomTransform.ScaleY);
+                }
 
                 this.ZoomPanTransform = new ZoomTransform(zoomTransform.TransformType);
             }
@@ -272,15 +277,36 @@ namespace RdClient.Shared.ViewModels
 
         private void ApplyZoomTransform(double centerX, double centerY, double scaleX, double scaleY)
         {
+            double targetScaleX = scaleX;
+            double targetScaleY = scaleY;
+            
+            if (targetScaleX < MIN_ZOOM_FACTOR)
+            {
+                targetScaleX = MIN_ZOOM_FACTOR;
+            }
+            else if (targetScaleX > MAX_ZOOM_FACTOR)
+            {
+                targetScaleX = MAX_ZOOM_FACTOR;
+            }
+
+            if (targetScaleY < MIN_ZOOM_FACTOR)
+            {
+                targetScaleY = MIN_ZOOM_FACTOR;
+            }
+            else if (targetScaleY > MAX_ZOOM_FACTOR)
+            {
+                targetScaleY = MAX_ZOOM_FACTOR;
+            }
+
             // reset the pan transformation
             this.TranslateXFrom = this.TranslateXTo;
             this.TranslateYFrom = this.TranslateYTo;
 
-            this.ScaleXFrom = this.ScaleXTo;
-            this.ScaleXTo = scaleX;
 
+            this.ScaleXFrom = this.ScaleXTo;
+            this.ScaleXTo = targetScaleX;
             this.ScaleYFrom = this.ScaleYTo;
-            this.ScaleYTo = scaleY;
+            this.ScaleYTo = targetScaleY;
 
             // manage the center
             this.ScaleCenterX = centerX;
