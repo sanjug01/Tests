@@ -54,6 +54,11 @@
             private set { this.SetProperty(ref _localWorkspace, value); }
         }
 
+        public ICertificateTrust CertificsateTrust
+        {
+            get { return _certificateTrust; }
+        }
+
         ICommand IPersistentObject.Save
         {
             get { return _save.Command; }
