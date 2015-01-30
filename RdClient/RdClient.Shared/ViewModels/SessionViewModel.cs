@@ -2,6 +2,7 @@
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Keyboard;
+using RdClient.Shared.Input.ZoomPan;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using System;
@@ -11,6 +12,7 @@ using Windows.UI.Xaml;
 
 namespace RdClient.Shared.ViewModels
 {
+
 
     public class SessionViewModel : DeferringViewModelBase, IElephantEarsViewModel
     {
@@ -61,6 +63,8 @@ namespace RdClient.Shared.ViewModels
         
         public ICommand CancelReconnectCommand { get { return _cancelReconnectCommand; } }
 
+
+        public ZoomPanViewModel ZoomPanViewModel { get; set; }
         public IKeyboardCapture KeyboardCapture
         {
             get { return _keyboardCapture; }

@@ -97,6 +97,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void SessionViewModel_ShouldConnect()
         {
+              
             _sessionModel.Expect("Connect", new List<object>() { _testConnectionInfo, null, null }, 0);
             _vm.ConnectCommand.Execute(null);            
         }
@@ -204,7 +205,10 @@ namespace RdClient.Shared.Test.ViewModels
             _eventSource.EmitClientAsyncDisconnect(_rdpConnection, clientAsyncDisconnectArgs);            
         }
 
-        /** HERE **/
+        /* ***********************************************************
+         * *************** Reconnecting tests
+         * ***********************************************************
+         */
         [TestMethod]
         public void SessionViewModel_ShouldNotBeReconnecting()
         {
@@ -222,7 +226,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void SessionViewModel_HandleFirstAutoReconnecting_ShouldBeReconnecting()
         {
-            bool eventEmitted = false;            
+            bool eventEmitted = false;
 
             // first clientAutoReconnectingArgs would be null and attempts == 0
             int attempts = 0;
@@ -269,13 +273,13 @@ namespace RdClient.Shared.Test.ViewModels
             ClientAsyncDisconnectArgs clientAsyncDisconnectArgs = new ClientAsyncDisconnectArgs(reason);
             bool eventEmitted = false;
             int attempts = 1;
-            
+
             ClientAutoReconnectingArgs clientAutoReconnectingArgs = new ClientAutoReconnectingArgs(
                 new AutoReconnectError(1),
                 attempts,
                 (b) => { eventEmitted = true; });
 
-            ConnectionAutoReconnectingArgs connectionAutoReconnectingArgs = 
+            ConnectionAutoReconnectingArgs connectionAutoReconnectingArgs =
                 new ConnectionAutoReconnectingArgs(clientAutoReconnectingArgs);
 
             _sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
@@ -410,7 +414,6 @@ namespace RdClient.Shared.Test.ViewModels
             ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
             _sessionModel.EmitConnectionCreated(connectionCreatedArgs);            
         }
-
         private void SimulateAsyncDisconnect(RdpDisconnectCode code)
         {
             RdpDisconnectReason reason = new RdpDisconnectReason(code, 0, 0);

@@ -17,6 +17,9 @@
             <vm:SessionViewModel.MouseViewModel>
                 <vm:MouseViewModel/>
             </vm:SessionViewModel.MouseViewModel>
+            <vm:SessionViewModel.ZoomPanViewModel>
+                <vm:ZoomPanViewModel/>
+            </vm:SessionViewModel.ZoomPanViewModel>
             <vm:SessionViewModel.KeyboardCapture>
                 <input:CoreWindowKeyboardCapture/>
             </vm:SessionViewModel.KeyboardCapture>
@@ -25,6 +28,12 @@
     
     <UserControl.Resources>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <vm:PanLeftTransform x:Key="PanLeft"/>
+        <vm:PanRightTransform x:Key="PanRight"/>
+        <vm:PanUpTransform x:Key="PanUp"/>
+        <vm:PanDownTransform x:Key="PanDown"/>
+        <vm:ZoomInTransform x:Key="ZoomIn"/>
+        <vm:ZoomOutTransform x:Key="ZoomOut"/>
     </UserControl.Resources>
 
     <Grid Background="GreenYellow" >
@@ -33,9 +42,16 @@
         property of the sesion panel. The session panel will execute the command
         as soon as its swap chain panel will have initialized.
         -->
-        <controls:RdSessionPanel ConnectCommand="{Binding ConnectCommand}"
-                                 ViewSize="{Binding MouseViewModel.ViewSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <controls:RdSessionPanel 
+            x:Name="SessionPanel"
+            ZoomPanTransform="{Binding ZoomPanViewModel.ZoomPanTransform, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            WindowRect="{Binding ZoomPanViewModel.WindowRect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            TransformRect="{Binding ZoomPanViewModel.TransformRect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            ConnectCommand="{Binding ConnectCommand}"
+            ViewSize="{Binding MouseViewModel.ViewSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+        <!-- controls:RdSessionPanControl x:Name="SessionPanControl" -->
+        
         <controls:MouseLayerControl x:Name="MouseLayer" 
                                     Background="Red"
                                     VerticalContentAlignment="Stretch"
@@ -87,6 +103,43 @@
                 x:Uid="SessionView-DisconnectButton"
                 Command="{Binding DisconnectCommand}"                
                 Content="Disconnect (d)"/>
+            <Button
+                x:Uid="SessionView-ZoomInButton"
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
+                Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
+                CommandParameter="{StaticResource ZoomIn}"
+                Content="{StaticResource ZoomInIcon}">                
+            </Button>
+            <Button
+                x:Uid="SessionView-ZoomOutButton"
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
+                Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
+                CommandParameter="{StaticResource ZoomOut}"
+                Content="{StaticResource ZoomOutIcon}"/>
+            <Button
+                x:Uid="SessionView-PanLeft"
+                Command="{Binding ZoomPanViewModel.PanCommand}" 
+                CommandParameter="{StaticResource PanLeft}"
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
+                Content="{StaticResource LeftIcon}"/>
+            <Button
+                x:Uid="SessionView-PanRight"
+                Command="{Binding ZoomPanViewModel.PanCommand}" 
+                CommandParameter="{StaticResource PanRight}"
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
+                Content="{StaticResource RightIcon}"/>
+            <Button
+                x:Uid="SessionView-PanUp"
+                Command="{Binding ZoomPanViewModel.PanCommand}" 
+                CommandParameter="{StaticResource PanUp}"
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
+                Content="{StaticResource UpIcon}"/>
+            <Button
+                x:Uid="SessionView-PanDown"
+                Command="{Binding ZoomPanViewModel.PanCommand}" 
+                CommandParameter="{StaticResource PanDown}"
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
+                Content="{StaticResource DownIcon}"/>            
         </StackPanel>
     </Grid>
 </UserControl>
