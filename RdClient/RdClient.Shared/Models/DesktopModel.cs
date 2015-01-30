@@ -28,6 +28,11 @@
             }
         }
 
+        public bool HasCredentials
+        {
+            get { return !Guid.Empty.Equals(_credentialsId); }
+        }
+
         public DesktopModel()
         {
             _credentialsId = Guid.Empty;
