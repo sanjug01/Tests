@@ -1,0 +1,165 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.RdSessionPanControl"
+    x:Name="SessionPanControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400" Loaded="OnLoaded">
+    
+        <!-- Pan and Zoom Control -->
+        <Grid Name="PanControl" 
+              Width="60" Height="60" Visibility="Visible" Opacity="10"
+              VerticalAlignment="Center" HorizontalAlignment="Center"
+              ManipulationMode="TranslateX,TranslateY,TranslateInertia"
+              IsHitTestVisible="True"
+              >
+              <!--
+                IsHitTestVisible="{Binding HitTestableElement, ElementName=SessionPanControl, Converter={StaticResource HitTestableIfSelectedConverter}, ConverterParameter=PanKnob}"
+                -->
+
+            <Grid.Resources>
+                <Storyboard x:Name="ShowPanControlStoryboard">
+                    <DoubleAnimation
+                        x:Name="ShowPanControlAnimation"
+                        Duration="0:0:0.20"
+                        Storyboard.TargetName="PanControl" 
+                        Storyboard.TargetProperty="Opacity"
+                        From="0.0" To="1.0">
+                        <DoubleAnimation.EasingFunction>
+                            <ExponentialEase EasingMode="EaseIn"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+                <Storyboard x:Name="HidePanControlStoryboard">
+                    <DoubleAnimation
+                        x:Name="HidePanControlAnimation"
+                        Duration="0:0:0.20" 
+                        Storyboard.TargetName="PanControl" Storyboard.TargetProperty="Opacity" 
+                        From="1.0" To="0.0">
+                        <DoubleAnimation.EasingFunction>
+                            <ExponentialEase EasingMode="EaseOut"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+                <Storyboard x:Name="PositionPanControlStoryboard">
+                    <DoubleAnimation 
+                        x:Name="PositionPanControlAnimationX" 
+                        Duration="0:0:0.40" 
+                        Storyboard.TargetName="PanControlTranslateTransform" Storyboard.TargetProperty="X"
+                        >
+                        <DoubleAnimation.EasingFunction>
+                            <ExponentialEase EasingMode="EaseOut" Exponent="5"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                    <DoubleAnimation 
+                        x:Name="PositionPanControlAnimationY" 
+                        Duration="0:0:0.40" 
+                        Storyboard.TargetName="PanControlTranslateTransform" Storyboard.TargetProperty="Y"
+                        >
+                        <DoubleAnimation.EasingFunction>
+                            <ExponentialEase EasingMode="EaseOut" Exponent="5"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </Grid.Resources>
+
+            <Ellipse Name="PanControlOrb" 
+                     Width="58" Height="58" 
+                     Fill="{Binding PanControlBackgroundBrush, ElementName=SessionPanControl}" 
+                     Opacity="{Binding PanControlOrbOpacity, ElementName=SessionPanControl}"
+                     />
+
+            <Ellipse Name="PanControlOuterCircle" 
+                     IsHitTestVisible="False" Width="60" Height="60" 
+                     Stroke="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}" 
+                     StrokeThickness="2"/>
+
+            <Ellipse Name="PanControlInnerCircle" 
+                     IsHitTestVisible="False" Width="10.5" Height="10.5" 
+                     Stroke="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}" 
+                     Fill="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}"/>
+
+            <Polygon Name="PanControlPolygonPointRight" 
+                     Points="0,0 7.5,7.5 0,15" 
+                     IsHitTestVisible="False" 
+                     Stroke="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}" 
+                     StrokeThickness="0" 
+                     Fill="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}" 
+                     Height="15" Width="15"
+                     Visibility="Visible"
+                     >
+                <!--
+                Visibility="{Binding ScaleFactor, ElementName=SessionPanControl, Converter={StaticResource VisibleIfZoomedConverter}}"
+                -->
+                <Polygon.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="0" CenterX="7.5" CenterY="7.5"/>
+                        <TranslateTransform X="19.5" />
+                    </TransformGroup>
+                </Polygon.RenderTransform>
+            </Polygon>
+
+            <Polygon Name="PanControlPolygonPointBottom" 
+                     Points="0,0 7.5,7.5 0,15" 
+                     IsHitTestVisible="False" 
+                     Stroke="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}" 
+                     StrokeThickness="0" 
+                     Fill="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}" 
+                     Height="15" Width="15">
+                <Polygon.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="90" CenterX="7.5" CenterY="7.5"/>
+                        <TranslateTransform Y="19.5" />
+                    </TransformGroup>
+                </Polygon.RenderTransform>
+            </Polygon>
+
+            <Polygon Name="PanControlPolygonPointLeft" 
+                     Points="0,0 7.5,7.5 0,15" 
+                     IsHitTestVisible="False" 
+                     Stroke="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}" 
+                     StrokeThickness="0" 
+                     Fill="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}" 
+                     Height="15" Width="15"
+                     Visibility="Visible">
+                <!--
+                <Visibility="{Binding ScaleFactor, ElementName=SessionPanControl, Converter={StaticResource VisibleIfZoomedConverter}}">
+                -->
+                <Polygon.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="180" CenterX="7.5" CenterY="7.5"/>
+                        <TranslateTransform X="-19.5" />
+                    </TransformGroup>
+                </Polygon.RenderTransform>
+            </Polygon>
+
+            <Polygon Name="PanControlPolygonPointTop" 
+                     Points="0,0 7.5,7.5 0,15" 
+                     IsHitTestVisible="False" 
+                     Stroke="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}" 
+                     StrokeThickness="0" 
+                     Fill="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}" 
+                     Height="15" Width="15">
+                <Polygon.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="270" CenterX="7.5" CenterY="7.5"/>
+                        <TranslateTransform Y="-19.5" />
+                    </TransformGroup>
+                </Polygon.RenderTransform>
+            </Polygon>
+
+            <Grid.CacheMode>
+                <BitmapCache/>
+            </Grid.CacheMode>
+
+            <Grid.RenderTransform>
+                <TranslateTransform x:Name="PanControlTranslateTransform"/>
+            </Grid.RenderTransform>
+        </Grid>
+
+    
+</UserControl>
