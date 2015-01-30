@@ -1,5 +1,6 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
+using System;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Mouse
@@ -49,27 +50,33 @@ namespace RdClient.Shared.Input.Mouse
         {
             float x = (float)pointerEvent.Position.X;
             float y = (float)pointerEvent.Position.Y;
-            MouseEventType buttonState = MouseEventType.Move;
+
+            _pointerManipulator.MousePosition = new Point(x, y);
 
             if (MouseLeftButton(0) == false && pointerEvent.LeftButton == true)
             {
-                buttonState = MouseEventType.LeftPress;
+                _pointerManipulator.SendMouseAction(MouseEventType.LeftPress);
             }
             else if (MouseLeftButton(0) == true && pointerEvent.LeftButton == false)
             {
-                buttonState = MouseEventType.LeftRelease;
+                _pointerManipulator.SendMouseAction(MouseEventType.LeftRelease);
             }
             else if (MouseRightButton(0) == false && pointerEvent.RightButton == true)
             {
-                buttonState = MouseEventType.RightPress;
+                _pointerManipulator.SendMouseAction(MouseEventType.RightPress);
             }
             else if (MouseRightButton(0) == true && pointerEvent.RightButton == false)
             {
-                buttonState = MouseEventType.RightRelease;
+                _pointerManipulator.SendMouseAction(MouseEventType.RightRelease);
             }
-
-            _pointerManipulator.MousePosition = new Point(x, y);
-            _pointerManipulator.SendMouseAction(buttonState);
+            else if(Math.Abs(pointerEvent.MouseWheelDelta) > 0)
+            {
+                _pointerManipulator.SendMouseWheel(pointerEvent.MouseWheelDelta, pointerEvent.IsHorizontalMouseWheel);
+            }
+            else
+            {
+                _pointerManipulator.SendMouseAction(MouseEventType.Move);
+            }
         }
 
         public void ConsumeEvent(PointerEvent pointerEvent)
