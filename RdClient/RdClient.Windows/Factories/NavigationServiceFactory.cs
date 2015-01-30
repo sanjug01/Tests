@@ -1,4 +1,5 @@
 ﻿using RdClient.Helpers;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.Navigation.Extensions;
@@ -36,13 +37,9 @@ namespace RdClient.Factories
             return dataModelExtension;
         }
 
-        public INavigationExtension CreateDeferredExecutionExtension()
+        public INavigationExtension CreateDeferredExecutionExtension(IDeferredExecution deferredExecution)
         {
-            CoreDispatcherDeferredExecution coreDispatcherExtension = new CoreDispatcherDeferredExecution();
-            coreDispatcherExtension.Priority = CoreDispatcherPriority.Normal;
-            DeferredExecutionExtension deferredExecutionExtension = new DeferredExecutionExtension();
-            deferredExecutionExtension.DeferredExecution = coreDispatcherExtension;
-            return deferredExecutionExtension;
+            return new DeferredExecutionExtension() { DeferredExecution = deferredExecution };
         }
 
         public INavigationExtension CreateApplicationBarExtension(IApplicationBarViewModel applicationBarViewModel)

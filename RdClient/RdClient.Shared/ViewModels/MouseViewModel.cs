@@ -8,10 +8,9 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.Shared.ViewModels
 {
-
     using RdClient.Shared.Input.Mouse;
-using System.Windows.Input;
-using Windows.Foundation;
+    using System.Windows.Input;
+    using Windows.Foundation;
     using Windows.UI.Xaml;
 
     public class MouseViewModel : MutableObject, IPointerManipulator

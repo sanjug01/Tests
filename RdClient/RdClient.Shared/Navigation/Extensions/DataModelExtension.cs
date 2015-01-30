@@ -2,6 +2,7 @@
 {
     using RdClient.Shared.Models;
     using RdClient.Shared.ViewModels;
+    using System.Diagnostics.Contracts;
 
     public sealed class DataModelExtension : INavigationExtension
     {
@@ -14,6 +15,8 @@
 
         void INavigationExtension.Presenting(IViewModel viewModel)
         {
+            Contract.Assert(null != this.DataModel);
+
             viewModel.CastAndCall<IViewModelWithData>(vmd =>
             {
                 vmd.DataModel = this.DataModel;

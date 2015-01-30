@@ -83,6 +83,8 @@ namespace RdClient.Shared.Test.ViewModels
                     MouseViewModel = _mouseViewModel
                 };
 
+                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
+
                 sessionModel.Expect("Connect", new List<object>() { _testConnectionInfo, null, null }, 0);
                 //
                 // TODO:    REFACTOR THIS!
@@ -106,6 +108,8 @@ namespace RdClient.Shared.Test.ViewModels
                     DataModel = _dataModel,
                     MouseViewModel = _mouseViewModel
                 };
+
+                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
 
                 sessionModel.Expect("Disconnect", new List<object>() { }, 0);
 
@@ -134,7 +138,7 @@ namespace RdClient.Shared.Test.ViewModels
                     MouseViewModel = _mouseViewModel
                 };
                 ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
-
+                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
                 ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
 
                 svm.ConnectCommand.Execute(null);
@@ -171,6 +175,7 @@ namespace RdClient.Shared.Test.ViewModels
                     MouseViewModel = _mouseViewModel
                 };
                 ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
+                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
 
                 ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
 
@@ -209,6 +214,7 @@ namespace RdClient.Shared.Test.ViewModels
                     MouseViewModel = _mouseViewModel
                 };
                 ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
+                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
 
                 ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
 
@@ -247,6 +253,7 @@ namespace RdClient.Shared.Test.ViewModels
                     MouseViewModel = _mouseViewModel
                 };
                 ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
+                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
 
                 ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
 
@@ -286,6 +293,7 @@ namespace RdClient.Shared.Test.ViewModels
                     MouseViewModel = _mouseViewModel
                 };
                 ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
+                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
 
                 ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
 
@@ -321,6 +329,7 @@ namespace RdClient.Shared.Test.ViewModels
                     DataModel = _dataModel,
                     MouseViewModel = _mouseViewModel
                 };
+                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
 
                 ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
 
@@ -362,6 +371,7 @@ namespace RdClient.Shared.Test.ViewModels
                     MouseViewModel = _mouseViewModel
                 };
                 ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
+                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
 
                 ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
 
@@ -427,6 +437,7 @@ namespace RdClient.Shared.Test.ViewModels
                     MouseViewModel = _mouseViewModel
                 };
                 ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
+                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
 
                 ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
 
@@ -496,6 +507,7 @@ namespace RdClient.Shared.Test.ViewModels
                     MouseViewModel = _mouseViewModel
                 };
                 ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
+                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
 
                 ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
 
@@ -556,6 +568,7 @@ namespace RdClient.Shared.Test.ViewModels
                     MouseViewModel = _mouseViewModel
                 };
                 ((IDeferredExecutionSite)svm).SetDeferredExecution(_testDispatcher);
+                ((ITimerFactorySite)svm).SetTimerFactory(new WinrtThreadPoolTimerFactory());
 
                 ((IViewModel)svm).Presenting(navigation, _testConnectionInfo, null);
 

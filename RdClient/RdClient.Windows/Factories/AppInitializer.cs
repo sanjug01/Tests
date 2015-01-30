@@ -1,18 +1,22 @@
 ﻿namespace RdClient.Factories
 {
+    using RdClient.Helpers;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.ViewModels;
     using System.Diagnostics.Contracts;
+    using Windows.UI.Core;
 
     public class AppInitializer
     {
         private RdDataModel _dataModel;
         private INavigationService _navigationService;
 
-        private DataModelFactory _dataModelFactory = new DataModelFactory();
-        private NavigationServiceFactory _navigationServiceFactory = new NavigationServiceFactory();
+        private readonly DataModelFactory _dataModelFactory = new DataModelFactory();
+        private readonly NavigationServiceFactory _navigationServiceFactory = new NavigationServiceFactory();
 
         public IViewPresenter ViewPresenter { private get; set; }
         public IApplicationBarViewModel AppBarViewModel { private get; set; }
@@ -23,8 +27,11 @@
         {
             Contract.Assert(this.ViewPresenter != null);
             Contract.Assert(this.AppBarViewModel != null);
-            Contract.Assert(string.IsNullOrEmpty(this.LandingPage) == false);
+            Contract.Assert(!string.IsNullOrEmpty(this.LandingPage));
             Contract.Assert(null != this.LifeTimeManager);
+
+            ITimerFactory timerFactory = new WinrtThreadPoolTimerFactory();
+            IDeferredExecution deferredExecution = new CoreDispatcherDeferredExecution() { Priority = CoreDispatcherPriority.Normal };
 
             _dataModel = this.CreateDataModel();
 
@@ -35,8 +42,9 @@
             _navigationService.DismissingLastModalView += (s, e) => this.ViewPresenter.DismissedLastModalView();
 
             _navigationService.Extensions.Add(this.CreateDataModelExtension(_dataModel));
-            _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension());
+            _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));
             _navigationService.Extensions.Add(this.CreateApplicationBarExtension(this.AppBarViewModel));
+            _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory));
             _navigationService.NavigateToView(this.LandingPage, null);
         }
 
@@ -55,9 +63,9 @@
             return _navigationServiceFactory.CreateDataModelExtension(dataModel);
         }
 
-        public INavigationExtension CreateDeferredExecutionExtension()
+        public INavigationExtension CreateDeferredExecutionExtension(IDeferredExecution deferredExecution)
         {
-            return _navigationServiceFactory.CreateDeferredExecutionExtension();
+            return _navigationServiceFactory.CreateDeferredExecutionExtension(deferredExecution);
         }
 
         public INavigationExtension CreateApplicationBarExtension(IApplicationBarViewModel applicationBarViewModel)

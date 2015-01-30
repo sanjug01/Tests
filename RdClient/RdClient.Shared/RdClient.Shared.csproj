@@ -198,6 +198,8 @@
     <Compile Include="Navigation\Extensions\IApplicationBarSiteControl.cs" />
     <Compile Include="Navigation\Extensions\IDeferredExecutionSite.cs" />
     <Compile Include="Navigation\Extensions\IExecutionDeferrer.cs" />
+    <Compile Include="Navigation\Extensions\ITimerFactorySite.cs" />
+    <Compile Include="Navigation\Extensions\TimerFactoryExtension.cs" />
     <Compile Include="Navigation\IPresentationCompletion.cs" />
     <Compile Include="Navigation\IModalPresentationContext.cs" />
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
