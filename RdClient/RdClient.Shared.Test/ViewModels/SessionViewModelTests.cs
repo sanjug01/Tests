@@ -72,17 +72,17 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void SessionViewModel_ShouldConnect()
         {
-            using(Mock.NavigationService navigation = new Mock.NavigationService())
-            using(Mock.SessionModel sessionModel = new Mock.SessionModel())
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.SessionModel sessionModel = new Mock.SessionModel())
             {
                 SessionViewModel svm = new SessionViewModel()
-                { 
+                {
                     KeyboardCapture = new DummyKeyboardCapture(),
                     SessionModel = sessionModel,
                     DataModel = _dataModel,
                     MouseViewModel = _mouseViewModel
                 };
-              
+
                 sessionModel.Expect("Connect", new List<object>() { _testConnectionInfo, null, null }, 0);
                 //
                 // TODO:    REFACTOR THIS!
@@ -121,7 +121,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.SessionModel sessionModel = new Mock.SessionModel())
             using (Mock.RdpConnection rdpConnection = new Mock.RdpConnection(eventSource))
-            {                
+            {
                 sessionModel.Expect("Connect", new List<object> { _testConnectionInfo, null, null }, null);
                 rdpConnection.Expect("Cleanup", new List<object> { }, null);
                 navigation.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
@@ -298,7 +298,10 @@ namespace RdClient.Shared.Test.ViewModels
             }
         }
 
-        /** HERE **/
+        /* ***********************************************************
+         * *************** Reconnecting tests
+         * ***********************************************************
+         */
         [TestMethod]
         public void SessionViewModel_ShouldNotBeReconnecting()
         {
@@ -335,7 +338,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void SessionViewModel_HandleFirstAutoReconnecting_ShouldBeReconnecting()
         {
             RdpEventSource eventSource = new RdpEventSource();
-            bool eventEmitted = false;            
+            bool eventEmitted = false;
 
             // first clientAutoReconnectingArgs would be null and attempts == 0
             int attempts = 0;
@@ -375,7 +378,7 @@ namespace RdClient.Shared.Test.ViewModels
 
                 // After
                 Assert.IsTrue(svm.IsReconnecting);
-                Assert.IsTrue(attempts == svm.ReconnectAttempts);                
+                Assert.IsTrue(attempts == svm.ReconnectAttempts);
 
                 // After a second attempt
                 attempts++;
@@ -400,13 +403,13 @@ namespace RdClient.Shared.Test.ViewModels
             RdpEventSource eventSource = new RdpEventSource();
             bool eventEmitted = false;
             int attempts = 1;
-            
+
             ClientAutoReconnectingArgs clientAutoReconnectingArgs = new ClientAutoReconnectingArgs(
                 new AutoReconnectError(1),
                 attempts,
                 (b) => { eventEmitted = true; });
 
-            ConnectionAutoReconnectingArgs connectionAutoReconnectingArgs = 
+            ConnectionAutoReconnectingArgs connectionAutoReconnectingArgs =
                 new ConnectionAutoReconnectingArgs(clientAutoReconnectingArgs);
 
             using (Mock.NavigationService navigation = new Mock.NavigationService())
@@ -586,6 +589,5 @@ namespace RdClient.Shared.Test.ViewModels
                 Assert.IsFalse(shouldContinueReconnecting);
             }
         }
-
     }
 }

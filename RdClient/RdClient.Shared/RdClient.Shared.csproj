@@ -135,6 +135,10 @@
     <Compile Include="Input\Mouse\MouseMode.cs" />
     <Compile Include="Input\Mouse\TouchContext.cs" />
     <Compile Include="Input\Mouse\TouchModeFactory.cs" />
+    <Compile Include="Input\ZoomPan\IPanTransform.cs" />
+    <Compile Include="Input\ZoomPan\IZoomPanManipulator.cs" />
+    <Compile Include="Input\ZoomPan\IZoomPanTransform.cs" />
+    <Compile Include="Input\ZoomPan\IZoomTransform.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
     <Compile Include="LifeTimeManagement\IRootFrameManager.cs" />
@@ -209,6 +213,7 @@
     <Compile Include="Navigation\IViewModel.cs" />
     <Compile Include="ViewModels\ILayoutAwareViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\ZoomPanViewModel.cs" />
     <Compile Include="ViewModels\MouseViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\SegoeGlyphBarButtonModel.cs" />
