@@ -12,7 +12,6 @@
 
     public class AppInitializer
     {
-        private RdDataModel _dataModel;
         private INavigationService _navigationService;
 
         private readonly DataModelFactory _dataModelFactory = new DataModelFactory();
@@ -33,7 +32,7 @@
             ITimerFactory timerFactory = new WinrtThreadPoolTimerFactory();
             IDeferredExecution deferredExecution = new CoreDispatcherDeferredExecution() { Priority = CoreDispatcherPriority.Normal };
 
-            _dataModel = this.CreateDataModel();
+            RdDataModel dataModel = this.CreateDataModel();
 
             _navigationService = this.CreateNavigationService();
 
@@ -41,7 +40,7 @@
             _navigationService.PushingFirstModalView += (s, e) => this.ViewPresenter.PresentingFirstModalView();
             _navigationService.DismissingLastModalView += (s, e) => this.ViewPresenter.DismissedLastModalView();
 
-            _navigationService.Extensions.Add(this.CreateDataModelExtension(_dataModel));
+            _navigationService.Extensions.Add(this.CreateDataModelExtension(dataModel));
             _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));
             _navigationService.Extensions.Add(this.CreateApplicationBarExtension(this.AppBarViewModel));
             _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory));

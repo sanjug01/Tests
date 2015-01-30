@@ -3,7 +3,6 @@
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.ViewModels;
-    using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.IO;
