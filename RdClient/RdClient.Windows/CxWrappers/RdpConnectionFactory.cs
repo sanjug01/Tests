@@ -4,7 +4,6 @@ namespace RdClient.CxWrappers.Utils
 {
     public class RdpConnectionFactory : IRdpConnectionFactory
     {
-        private const double MAX_ZOOM_FACTOR = 2.5;
         public SwapChainPanel SwapChainPanel { private get; set; }
 
         public IRdpConnection CreateInstance()
