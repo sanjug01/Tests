@@ -118,6 +118,12 @@ namespace RdClient.Controls
             PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Down));
         }
 
+        protected override void OnPointerWheelChanged(PointerRoutedEventArgs args)
+        {
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Update));
+        }
+
+
         protected override void OnPointerMoved(PointerRoutedEventArgs args)
         {
             PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Update));

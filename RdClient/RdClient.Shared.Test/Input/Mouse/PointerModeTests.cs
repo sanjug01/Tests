@@ -151,5 +151,38 @@ namespace RdClient.Shared.Test.Input.Mouse
                 new Mock.TestMousePointerEvent() { Type = MouseEventType.RightRelease, Position = new Point(10.0, 10.00) }
             });  
         }
+
+
+        [TestMethod]
+        public void PointerModel_ShouldScroll()
+        {
+            ConsumeEventsHelper(new PointerEvent[] { 
+                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
+                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4),
+                new PointerEvent(new Point(0.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
+                new PointerEvent(new Point(10.0, 20.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4)
+            });
+
+            // there is a x5 multiplier in the touch context to make the scrolling more immediate on surface tablets
+            MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 
+                new Mock.TestMousePointerEvent() { Type = MouseEventType.MouseWheel, Position = new Point(0.0, 50.0) }
+            });
+        }
+
+        [TestMethod]
+        public void PointerModel_ShouldHScroll()
+        {
+            ConsumeEventsHelper(new PointerEvent[] { 
+                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
+                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4),
+                new PointerEvent(new Point(10.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
+                new PointerEvent(new Point(20.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4)
+            });
+
+            // there is a x5 multiplier in the touch context to make the scrolling more immediate on surface tablets
+            MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 
+                new Mock.TestMousePointerEvent() { Type = MouseEventType.MouseHWheel, Position = new Point(50.0, 0.0) }
+            });
+        }
     }
 }

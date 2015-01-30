@@ -226,5 +226,28 @@ using Windows.Foundation;
                 _rdpConnection.SendTouchEvent(type, contactId, position, frameTime);
             }
         }
+
+        public void SendMouseWheel(int delta, bool isHorizontal)
+        {
+            float x = 0.0f;
+            float y = 0.0f;
+            MouseEventType type;
+
+            if(isHorizontal)
+            {
+                x = delta;
+                type = MouseEventType.MouseHWheel;
+            }
+            else
+            {
+                y = delta;
+                type = MouseEventType.MouseWheel;
+            }
+
+            if(_rdpConnection != null)
+            {
+                _rdpConnection.SendMouseEvent(type, x, y);
+            }
+        }
     }
 }

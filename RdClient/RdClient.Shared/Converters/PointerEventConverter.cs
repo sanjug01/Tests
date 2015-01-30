@@ -77,7 +77,9 @@ namespace RdClient.Shared.Converters
                 ppoint.Properties.IsLeftButtonPressed, ppoint.Properties.IsRightButtonPressed,
                 PointerTypeConverter(ppoint.PointerDevice.PointerDeviceType), ppoint.PointerId,
                 args.GetCurrentPoint(receiver).Timestamp,
-                actionType);
+                actionType,
+                ppoint.Properties.MouseWheelDelta,
+                ppoint.Properties.IsHorizontalMouseWheel);
 
             return pe;
         }
