@@ -206,5 +206,18 @@ namespace RdMock.Test
 
             Assert.IsTrue(exceptionThrown);
         }
+
+        [TestMethod]
+        public void MockActionReceivesPassedParameters()
+        {
+            object[] passedParams = {3, 'a'};
+            object[] receivedParams = null;
+            using (TestMock tm = new TestMock())
+            {
+                tm.Expect("testMethod2", new List<object>() { null, null }, 0, p => receivedParams = p);
+                tm.testMethod2((int)passedParams[0], (char)passedParams[1]);    
+            }
+            CollectionAssert.AreEqual(passedParams, receivedParams);
+        }
     }
 }
