@@ -96,6 +96,7 @@
     <Compile Include="Data\SerializableModelTests.cs" />
     <Compile Include="Data\TestModel.cs" />
     <Compile Include="Data\TestModelSerializer.cs" />
+    <Compile Include="Helpers\DeferredCommandTests.cs" />
     <Compile Include="Helpers\ExtensionsTests.cs" />
     <Compile Include="Helpers\GroupCommandTests.cs" />
     <Compile Include="Helpers\ITimerTests.cs" />

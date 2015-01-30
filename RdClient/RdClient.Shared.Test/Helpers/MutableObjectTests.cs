@@ -8,6 +8,20 @@
     public sealed class MutableObjectTests
     {
         [TestMethod]
+        public void MutableObject_BumpUpCodeCoverage()
+        {
+            int disposedManaged = 0, disposedNative = 0;
+
+            using (TestMulableObject mo = new TestMulableObject(() => ++disposedManaged, () => ++disposedNative))
+            {
+                // Do nothing
+                using (IDisposable d = mo.LR()) { Assert.IsNotNull(d); }
+                using (IDisposable d = mo.LUR()) { Assert.IsNotNull(d); }
+                using (IDisposable d = mo.LW()) { Assert.IsNotNull(d); }
+            }
+        }
+
+        [TestMethod]
         public void UseMutableObjectInUsing_BumpsUpCodeCoverage()
         {
             int disposedManaged = 0, disposedNative = 0;
@@ -83,6 +97,10 @@
                 _disposedManaged = disposedManaged;
                 _disposedNative = disposedNative;
             }
+
+            public IDisposable LR() { return LockRead(); }
+            public IDisposable LUR() { return LockUpgradeableRead(); }
+            public IDisposable LW() { return LockWrite(); }
 
             public void Use()
             {
