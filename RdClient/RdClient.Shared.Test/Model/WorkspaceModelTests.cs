@@ -7,20 +7,39 @@
     using RdClient.Shared.Test.Data;
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Runtime.Serialization;
     using System.Windows.Input;
 
     [TestClass]
     public sealed class WorkspaceModelTests
     {
-        private class TestWorkspaceData : MutableObject
+        [DataContract]
+        private sealed class TestWorkspaceData : SerializableModel
         {
+            [DataMember(Name = "Property")]
             private int _property;
 
             public int Property
             {
                 get { return _property; }
                 set { this.SetProperty(ref _property, value); }
+            }
+        }
+
+        private sealed class TestModelSerializer : IModelSerializer
+        {
+            private readonly DataContractSerializer _serializer = new DataContractSerializer(typeof(TestWorkspaceData));
+
+            TModel IModelSerializer.ReadModel<TModel>(Stream stream)
+            {
+                return _serializer.ReadObject(stream) as TModel;
+            }
+
+            void IModelSerializer.WriteModel<TModel>(TModel model, Stream stream)
+            {
+                _serializer.WriteObject(stream, model);
             }
         }
 
@@ -77,8 +96,7 @@
             Assert.AreEqual(2, folders.Count);
             Assert.IsTrue(folders.Contains("credentials"));
             Assert.IsTrue(folders.Contains("connections"));
-            Assert.AreEqual(1, files.Count);
-            Assert.AreEqual(".workspace", files[0]);
+            Assert.AreEqual(0, files.Count);
         }
 
         [TestMethod]
@@ -139,6 +157,26 @@
         }
 
         [TestMethod]
+        public void WorkspaceModel_ChangeWorkspaceDataSave_DataSaved()
+        {
+            IStorageFolder folder = new MemoryStorageFolder();
+            IModelSerializer serializer = new TestModelSerializer();
+
+            WorkspaceModel<TestWorkspaceData> workspace = new WorkspaceModel<TestWorkspaceData>(folder, serializer);
+            IPersistentObject po = workspace;
+            Assert.IsFalse(po.Save.CanExecute(null));
+
+            workspace.WorkspaceData.Property += 1;
+            Assert.IsTrue(po.Save.CanExecute(null));
+            po.Save.Execute(null);
+
+            Assert.IsFalse(po.Save.CanExecute(null));
+            IList<string> files = folder.GetFiles().ToList();
+            Assert.AreEqual(1, files.Count);
+            Assert.IsTrue(files.Contains(".workspace"));
+        }
+
+        [TestMethod]
         public void LocalWorkspaceModel_AddDesktopSave_CannotSave()
         {
             IList<ICommand> changes = new List<ICommand>();
@@ -154,7 +192,7 @@
             po.Save.Execute(null);
 
             Assert.IsFalse(po.Save.CanExecute(null));
-            Assert.AreEqual(3, changes.Count);
+            Assert.AreEqual(2, changes.Count);
             foreach(ICommand c in changes)
                 Assert.AreSame(po.Save, c);
         }
@@ -175,7 +213,7 @@
             po.Save.Execute(null);
 
             Assert.IsFalse(po.Save.CanExecute(null));
-            Assert.AreEqual(3, changes.Count);
+            Assert.AreEqual(2, changes.Count);
             foreach (ICommand c in changes)
                 Assert.AreSame(po.Save, c);
         }

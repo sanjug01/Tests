@@ -142,6 +142,7 @@
     <Compile Include="Mock\ViewFactory.cs" />
     <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
+    <Compile Include="Model\ApplicationDataModelTests.cs" />
     <Compile Include="Model\ModelCollectionTests.cs" />
     <Compile Include="Input\Mouse\PointerModeTests.cs" />
     <Compile Include="Model\RdDataModelTests.cs" />

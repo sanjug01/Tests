@@ -9,8 +9,6 @@
         [DataMember(Name = "Thumbnail", IsRequired = false, EmitDefaultValue = false)]
         private ThumbnailModel _thumbnail;
 
-        private ICertificateTrust _certificateTrust;
-
         protected RemoteConnectionModel()
         {
         }
@@ -23,12 +21,6 @@
                     _thumbnail = new ThumbnailModel();
                 return _thumbnail;
             }
-        }
-
-        public ICertificateTrust CertificateTrust
-        {
-            get { return _certificateTrust; }
-            set { this.SetProperty(ref _certificateTrust, value); }
         }
     }
 }

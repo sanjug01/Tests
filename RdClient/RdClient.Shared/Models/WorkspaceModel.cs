@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.ViewModels;
     using System;
     using System.ComponentModel;
@@ -12,17 +13,17 @@
     {
         private readonly IStorageFolder _folder;
         private readonly IModelSerializer _modelSerializer;
-        private readonly RelayCommand _save;
+        private readonly RelayCommand _saveWorkspaceData;
         private readonly TWorkspaceData _workspaceData;
         private readonly IModelCollection<RemoteConnectionModel> _connections;
         private readonly IModelCollection<CredentialsModel> _credentials;
-        private bool _modelDataModified;
+        private readonly GroupCommand _save;
+        private PersistentStatus _modelDataStatus;
 
         public WorkspaceModel(IStorageFolder folder, IModelSerializer modelSerializer)
         {
             _folder = folder;
             _modelSerializer = modelSerializer;
-            _save = new RelayCommand(this.ExecuteSave, this.CanSave);
 
             using (Stream stream = _folder.OpenFile(".workspace"))
             {
@@ -39,11 +40,14 @@
             _workspaceData.PropertyChanged += this.OnWorkspaceDataChanged;
 
             _credentials = PrimaryModelCollection<CredentialsModel>.Load(folder.CreateFolder("credentials"), modelSerializer);
-            _credentials.Save.CanExecuteChanged += this.OnCanSaveChanged;
             _connections = PrimaryModelCollection<RemoteConnectionModel>.Load(folder.CreateFolder("connections"), modelSerializer);
-            _connections.Save.CanExecuteChanged += this.OnCanSaveChanged;
+            _saveWorkspaceData = new RelayCommand(this.SaveWorkspaceData, this.CanSaveWorkspaceData);
+            _modelDataStatus = PersistentStatus.Clean;
 
-            _modelDataModified = false;
+            _save = new GroupCommand();
+            _save.Add(_credentials.Save);
+            _save.Add(_connections.Save);
+            _save.Add(_saveWorkspaceData);
         }
 
         public TWorkspaceData WorkspaceData
@@ -61,49 +65,36 @@
 
         protected override ICommand CreateSaveCommand()
         {
-            return _save;
+            return _save.Command;
         }
 
-        private void ExecuteSave(object parameter)
+        private void SaveWorkspaceData(object parameter)
         {
-            bool couldSave = this.CanSave(parameter);
-
-            if (couldSave)
+            if (PersistentStatus.Clean != _modelDataStatus)
             {
-                _credentials.Save.Execute(parameter);
-                _connections.Save.Execute(parameter);
-
                 using (Stream stream = _folder.CreateFile(".workspace"))
                 {
                     if (null != stream)
                     {
                         _modelSerializer.WriteModel<TWorkspaceData>(_workspaceData, stream);
-                        _modelDataModified = false;
+                        _modelDataStatus = PersistentStatus.Clean;
+                        _saveWorkspaceData.EmitCanExecuteChanged();
                     }
                 }
-
-                if (!CanSave(parameter))
-                    _save.EmitCanExecuteChanged();
             }
         }
 
-        private bool CanSave(object parameter)
+        private bool CanSaveWorkspaceData(object parameter)
         {
-            return _modelDataModified || _credentials.Save.CanExecute(parameter) || _connections.Save.CanExecute(parameter);
-        }
-
-        private void OnCanSaveChanged(object sender, EventArgs e)
-        {
-            if (!_modelDataModified)
-                _save.EmitCanExecuteChanged();
+            return PersistentStatus.Clean != _modelDataStatus;
         }
 
         private void OnWorkspaceDataChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (!_modelDataModified)
+            if (PersistentStatus.Clean == _modelDataStatus)
             {
-                _modelDataModified = true;
-                _save.EmitCanExecuteChanged();
+                _modelDataStatus = PersistentStatus.Modified;
+                _saveWorkspaceData.EmitCanExecuteChanged();
             }
         }
     }
