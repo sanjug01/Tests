@@ -103,9 +103,9 @@ namespace RdClient.Controls
 
             RdpConnectionFactory factory = new RdpConnectionFactory() { SwapChainPanel = this.SwapChainPanel };
 
+            // bind the window rect and transform rect
+            this.WindowRect = CoreWindow.GetForCurrentThread().Bounds;
             this.TransformRect = ScpScaleTransform.TransformBounds(this.WindowRect);
-            // bind the scale transform and the window rect
-            this.WindowRect = CoreWindow.GetForCurrentThread().Bounds;            
 
             this.ConnectCommand.Execute(new SessionModel(factory));
         }
