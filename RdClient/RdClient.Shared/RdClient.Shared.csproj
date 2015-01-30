@@ -110,6 +110,7 @@
     <Compile Include="Helpers\DisconnectString.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />
     <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\GroupCommand.cs" />
     <Compile Include="Helpers\IDeferredExecution.cs" />
     <Compile Include="Helpers\ILocalizedString.cs" />
     <Compile Include="Helpers\IPhysicalScreenSize.cs" />
