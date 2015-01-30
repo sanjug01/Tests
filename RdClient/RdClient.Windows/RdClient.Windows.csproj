@@ -130,6 +130,9 @@
     <Compile Include="Controls\DesktopsListControl.xaml.cs">
       <DependentUpon>DesktopsListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ElephantEarsControl.xaml.cs">
+      <DependentUpon>ElephantEarsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\GatewaySettingsControl.xaml.cs">
       <DependentUpon>GatewaySettingsControl.xaml</DependentUpon>
     </Compile>
@@ -291,6 +294,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\DesktopsListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ElephantEarsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

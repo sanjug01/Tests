@@ -1,5 +1,7 @@
 ﻿using RdClient.Shared.Navigation;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace RdClient.Views
 {

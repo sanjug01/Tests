@@ -6,6 +6,8 @@ namespace RdClient.Shared.Input.Mouse
 {
     public class PointerEventDispatcher : IPointerEventConsumer
     {
+        public event System.EventHandler<PointerEvent> ConsumedEvent;
+
         private Dictionary<PointerType, IPointerEventConsumer> _pointerConsumers = new Dictionary<PointerType,IPointerEventConsumer>();
         private PointerType _lastPointerType = PointerType.Mouse;
 
@@ -58,6 +60,11 @@ namespace RdClient.Shared.Input.Mouse
             _pointerConsumers[pointerEvent.PointerType].ConsumeEvent(pointerEvent);
 
             _lastPointerType = pointerEvent.PointerType;
+
+            if (ConsumedEvent != null)
+            {
+                ConsumedEvent(this, pointerEvent);
+            }
         }
 
         public void Reset()

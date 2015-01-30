@@ -27,6 +27,8 @@ namespace RdClient.Shared.Input.Mouse
 
     public class TouchContext : IPointerEventConsumer, ITouchContext
     {
+        public event System.EventHandler<PointerEvent> ConsumedEvent;
+
         private Dictionary<uint, PointerEvent> _trackedPointerEvents = new Dictionary<uint, PointerEvent>();
         private uint _mainPointerId;
         public DoubleClickTimer DoubleClickTimer { get; private set; }
@@ -130,6 +132,11 @@ namespace RdClient.Shared.Input.Mouse
             else if (pointerEvent.LeftButton == false && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
             {
                 _trackedPointerEvents.Remove(pointerEvent.PointerId);
+            }
+
+            if(ConsumedEvent != null)
+            {
+                ConsumedEvent(this, pointerEvent);
             }
         }
 
