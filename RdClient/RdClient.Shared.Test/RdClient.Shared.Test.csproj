@@ -157,6 +157,7 @@
     <Compile Include="Model\WorkspaceModelTests.cs" />
     <Compile Include="Navigation\Extensions\ApplicationBarExtensionTests.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtensionTests.cs" />
+    <Compile Include="Navigation\Extensions\TimerFactoryExtensionTests.cs" />
     <Compile Include="Navigation\ModalPresentationCompletionTests.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgsTests.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
