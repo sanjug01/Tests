@@ -32,7 +32,9 @@
     <x:String x:Key="DownIcon">&#xE1FD;</x:String>
     <x:String x:Key="LeftIcon">&#xE112;</x:String>
     <x:String x:Key="RightIcon">&#xE111;</x:String>
-    
+    <x:String x:Key="MoreDetailsIcon">&#xE936;</x:String>
+    <x:String x:Key="LessDetailsIcon">&#xE935;</x:String>
+
 
     <SolidColorBrush x:Key="InvisibleButtonPointerOverBackgroundBrush" Color="#22FFFFFF" />
     <SolidColorBrush x:Key="InvisibleButtonPressedBackgroundBrush" Color="#88FFFFFF" />
