@@ -5,10 +5,17 @@ namespace RdClient.Shared.Models
     [DataContract(IsReference = true)]
     public class Credentials : ModelBase
     {
-        private string _username;
-        private string _domain;
-        private string _password;
+        private string _username = "";
+        private string _domain = "";
+        private string _password = "";
         private bool _haveBeenPersisted;
+
+        public void CopyValuesFrom(Credentials cred)
+        {
+            this.Username = cred.Username;
+            this.Domain = cred.Domain;
+            this.Password = cred.Password;
+        }
 
         [DataMember]
         public string Username

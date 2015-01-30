@@ -1,7 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers.Errors;
-using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
-using System;
 using System.Diagnostics.Contracts;
 using Windows.Foundation;
 using Windows.Security.Cryptography.Certificates;
@@ -90,15 +88,19 @@ namespace RdClient.Shared.CxWrappers
                 _rdpConnectionCx = null;   
             }         
         }
+
+        public void SetCredentials(Credentials credentials, bool fUsingSavedCreds)
+        {
+            _instrument.Instrument("SetCredentials");
+            int xRes = _rdpConnectionCx.SetUserCredentials(credentials.Username, credentials.Domain, credentials.Password, fUsingSavedCreds);
+            RdTrace.IfFailXResultThrow(xRes, "Failed to set user credentials.");
+        }
         
         public void Connect(Credentials credentials, bool fUsingSavedCreds)
         {
             _instrument.Instrument("Connect");
-
-            int xRes = _rdpConnectionCx.SetUserCredentials(credentials.Username, credentials.Domain, credentials.Password, fUsingSavedCreds);
-            RdTrace.IfFailXResultThrow(xRes, "Failed to set user credentials.");
-
-            xRes = _rdpConnectionCx.Connect();
+            this.SetCredentials(credentials, fUsingSavedCreds);
+            int xRes = _rdpConnectionCx.Connect();
             RdTrace.IfFailXResultThrow(xRes, "Failed to connect.");
         }
 

@@ -1,15 +1,12 @@
 ﻿using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
-using System.ComponentModel;
-using System.Windows.Input;
-using Windows.ApplicationModel.Core;
-using Windows.Storage.Streams;
-using Windows.UI.Core;
-using Windows.UI.Xaml.Media.Imaging;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System;
-using System.Threading.Tasks;
 using RdClient.Shared.Navigation.Extensions;
+using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.Shared.ViewModels
 {
@@ -167,8 +164,17 @@ namespace RdClient.Shared.ViewModels
             }
             else
             {
-                AddUserViewArgs args = new AddUserViewArgs(InternalConnect, true);
-                NavigationService.PushModalView("AddUserView", args);
+                AddUserViewArgs args = new AddUserViewArgs(new Credentials(), true);
+                ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion();
+                addUserCompleted.Completed += (s, e) =>
+                    {
+                        CredentialPromptResult result = e.Result as CredentialPromptResult;
+                        if (result != null && !result.UserCancelled)
+                        {
+                            InternalConnect(result.Credential, result.Save);
+                        }
+                    };
+                NavigationService.PushModalView("AddUserView", args, addUserCompleted);
             }            
         }
 

@@ -77,14 +77,20 @@ namespace RdClient.Shared.ViewModels
                 int idx = (int) value;
                 if(this.UserOptions.Count > 0 && this.UserOptions[idx].UserComboBoxType == UserComboBoxType.AddNew)
                 {
-                    AddUserViewArgs args = new AddUserViewArgs((credentials, store) =>
+                    AddUserViewArgs args = new AddUserViewArgs(new Credentials(), false);
+                    ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion();
+                    addUserCompleted.Completed += (s, e) =>
+                    {
+                        CredentialPromptResult result = e.Result as CredentialPromptResult;
+                        if (result != null && !result.UserCancelled)
                         {
-                            this.Desktop.CredentialId = credentials.Id;
-                            this.DataModel.LocalWorkspace.Credentials.Add(credentials);
-                            Update();
+                            this.Desktop.CredentialId = result.Credential.Id;
+                            this.DataModel.LocalWorkspace.Credentials.Add(result.Credential);
+                            
                         }
-                        , false);
-                    NavigationService.PushModalView("AddUserView", args);
+                        Update();
+                    };
+                    NavigationService.PushModalView("AddUserView", args, addUserCompleted);
                 }
             }
         }
@@ -188,23 +194,21 @@ namespace RdClient.Shared.ViewModels
                 this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credentials));
             }
 
-            if (this.Desktop.HasCredential)
+            int idx = 0;
+            for (idx = 0; idx < this.UserOptions.Count; idx++)
             {
-                int idx = 0;
-                for (idx = 0; idx < this.UserOptions.Count; idx++)
-                {
-                    if (this.UserOptions[idx].UserComboBoxType == UserComboBoxType.Credentials &&
-                        this.UserOptions[idx].Credentials.Id == this.Desktop.CredentialId)
-                        break;
-                }
-
-                if (idx == this.UserOptions.Count)
-                {
-                    idx = 0;
-                }
-
-                this.SelectedUserOptionsIndex = idx;
+                if (this.Desktop.HasCredential &&
+                    this.UserOptions[idx].UserComboBoxType == UserComboBoxType.Credentials &&
+                    this.UserOptions[idx].Credentials.Id == this.Desktop.CredentialId)
+                    break;
             }
+
+            if (idx == this.UserOptions.Count)
+            {
+                idx = 0;
+            }
+
+            this.SelectedUserOptionsIndex = idx;            
         }
 
 
