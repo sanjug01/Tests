@@ -95,9 +95,10 @@
                                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">                                
                         <Button Background="Transparent"
                                 VerticalAlignment="Center"
-                                Command="{Binding ShowDetailsCommand}">
-                            <SymbolIcon Symbol="ZoomIn"/>
-                        </Button>
+                                Command="{Binding ShowDetailsCommand}"
+                                Style="{StaticResource DialogDetailsButtonStyle}"                
+                                Content="{StaticResource MoreDetailsIcon}"
+                                Margin="-8,8,0,0"/>
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    VerticalAlignment="Center"
                                    x:Uid="CertificateValidation-MoreDetailsLabel"
@@ -108,9 +109,10 @@
                                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Button Background="Transparent"
                                 VerticalAlignment="Center"
-                                Command="{Binding HideDetailsCommand}">
-                            <SymbolIcon Symbol="ZoomOut"/>
-                        </Button>
+                                Command="{Binding HideDetailsCommand}"
+                                Style="{StaticResource DialogDetailsButtonStyle}"                
+                                Content="{StaticResource LessDetailsIcon}"
+                                Margin="-8,8,0,0"/>
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    VerticalAlignment="Center"
                                    x:Uid="CertificateValidation-LessDetailsLabel"

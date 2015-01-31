@@ -7,6 +7,11 @@
     public sealed class Desktop : RemoteConnection
     {
         private string _hostName;
+        private string _friendlyName;
+        private bool _isUseAdminSession;
+        private bool _isSwapMouseButtons;
+        private int _audioMode;
+
         private Guid _credId;
         private Guid _thumbnailId;
         
@@ -28,6 +33,30 @@
             get { return _hostName; }
             set { SetProperty(ref _hostName, value);  }
         }
+
+        public string FriendlyName
+        {
+            get { return _friendlyName; }
+            set { SetProperty(ref _friendlyName, value); }
+        }
+
+        public bool IsUseAdminSession
+        {
+            get { return _isUseAdminSession; }
+            set { SetProperty(ref _isUseAdminSession, value); }
+        }
+
+        public bool IsSwapMouseButtons
+        {
+            get { return _isSwapMouseButtons; }
+            set { SetProperty(ref _isSwapMouseButtons, value); }
+        }
+
+        public int AudioMode
+        {
+            get { return _audioMode; }
+            set { SetProperty(ref _audioMode, value); }
+        }       
 
         [DataMember]
         public Guid CredentialId
