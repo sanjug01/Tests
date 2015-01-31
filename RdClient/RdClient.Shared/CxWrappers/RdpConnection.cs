@@ -215,6 +215,16 @@ namespace RdClient.Shared.CxWrappers
             RdTrace.IfFailXResultThrow(xRes, "Failed to set bool property: " + propertyName);
         }
 
+        /// <summary>
+        /// setting the left handed mouse mode, which is not supported as a bool property
+        /// </summary>
+        /// <param name="value">wether or not to set the left handed mouse mode</param>
+        public void SetLeftHandedMouseMode(bool value)
+        {
+            int xRes = _rdpConnectionCx.SetLeftHandedMouseMode(value);
+            RdTrace.IfFailXResultThrow(xRes, "Failed to set LeftHandedMouseMode: " + value);
+        }
+
         public IRdpScreenSnapshot GetSnapshot()
         {
             _instrument.Instrument("GetSnapshot");

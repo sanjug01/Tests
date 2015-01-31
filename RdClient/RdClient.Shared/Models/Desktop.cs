@@ -34,24 +34,28 @@
             set { SetProperty(ref _hostName, value);  }
         }
 
+        [DataMember]
         public string FriendlyName
         {
             get { return _friendlyName; }
             set { SetProperty(ref _friendlyName, value); }
         }
 
+        [DataMember]
         public bool IsUseAdminSession
         {
             get { return _isUseAdminSession; }
             set { SetProperty(ref _isUseAdminSession, value); }
         }
 
+        [DataMember]
         public bool IsSwapMouseButtons
         {
             get { return _isSwapMouseButtons; }
             set { SetProperty(ref _isSwapMouseButtons, value); }
         }
 
+        [DataMember]
         public int AudioMode
         {
             get { return _audioMode; }

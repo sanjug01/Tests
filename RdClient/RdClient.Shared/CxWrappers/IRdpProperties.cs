@@ -9,5 +9,8 @@ namespace RdClient.Shared.CxWrappers
         void SetStringProperty(string propertyName, string value);
         bool GetBoolProperty(string propertyName);
         void SetBoolProperty(string propertyName, bool value);
+
+        // left handed mouse mode cannot be used as a property
+        void SetLeftHandedMouseMode(bool value);
     }
 }
