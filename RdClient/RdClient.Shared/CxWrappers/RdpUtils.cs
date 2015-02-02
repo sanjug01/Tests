@@ -9,11 +9,23 @@ namespace RdClient.Shared.CxWrappers.Utils
             Desktop desktop)
         {
             properties.SetStringProperty("Full Address", desktop.HostName);
-            properties.SetBoolProperty("Administrative Session", desktop.IsUseAdminSession);
-            properties.SetIntProperty("AudioMode", desktop.AudioMode);
 
-            // left mouse is not a property
-            properties.SetLeftHandedMouseMode(desktop.IsSwapMouseButtons);
+            // extra settings - apply only if not the default values
+            if (desktop.IsUseAdminSession)
+            {
+                properties.SetBoolProperty("Administrative Session", desktop.IsUseAdminSession);
+            }
+
+            if (0 != desktop.AudioMode)
+            {
+                properties.SetIntProperty("AudioMode", desktop.AudioMode);
+            }
+
+            if (desktop.IsSwapMouseButtons)
+            {
+                // left mouse is not a property
+                properties.SetLeftHandedMouseMode(desktop.IsSwapMouseButtons);
+            }
         }
 
         public static void ApplyScreenSize(IRdpProperties properties, IPhysicalScreenSize screenSize)
