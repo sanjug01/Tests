@@ -193,7 +193,7 @@ namespace RdClient.Shared.ViewModels
             this.Desktop.FriendlyName = this.FriendlyName;
             this.Desktop.IsUseAdminSession = this.IsUseAdminSession;
             this.Desktop.IsSwapMouseButtons = this.IsSwapMouseButtons;
-            this.Desktop.AudioMode = this.AudioMode;
+            this.Desktop.AudioMode = (Desktop.AudioModes) this.AudioMode;
 
             if (null != this.UserOptions[this.SelectedUserOptionsIndex].Credentials)
             {
@@ -271,7 +271,7 @@ namespace RdClient.Shared.ViewModels
                 this.Desktop = editArgs.Desktop;
                 this.Host = this.Desktop.HostName;
                 this.FriendlyName = this.Desktop.FriendlyName;
-                this.AudioMode = this.Desktop.AudioMode;
+                this.AudioMode = (int) this.Desktop.AudioMode;
                 this.IsSwapMouseButtons = this.Desktop.IsSwapMouseButtons;
                 this.IsUseAdminSession = this.Desktop.IsUseAdminSession;
 
@@ -281,7 +281,7 @@ namespace RdClient.Shared.ViewModels
             {
                 this.Desktop = new Desktop(this.DataModel.LocalWorkspace);
                 this.FriendlyName = string.Empty;
-                this.AudioMode = 0;
+                this.AudioMode = (int) Desktop.AudioModes.Local;
                 this.IsSwapMouseButtons = false;
                 this.IsUseAdminSession = false;
 

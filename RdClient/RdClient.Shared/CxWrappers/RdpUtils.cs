@@ -10,7 +10,6 @@ namespace RdClient.Shared.CxWrappers.Utils
         {
             properties.SetStringProperty("Full Address", desktop.HostName);
 
-            // extra settings - apply only if not the default values
             if (desktop.IsUseAdminSession)
             {
                 properties.SetBoolProperty("Administrative Session", desktop.IsUseAdminSession);
@@ -18,13 +17,12 @@ namespace RdClient.Shared.CxWrappers.Utils
 
             if (0 != desktop.AudioMode)
             {
-                properties.SetIntProperty("AudioMode", desktop.AudioMode);
+                properties.SetIntProperty("AudioMode", (int) desktop.AudioMode);
             }
 
             if (desktop.IsSwapMouseButtons)
             {
-                // left mouse is not a property
-                properties.SetLeftHandedMouseMode(desktop.IsSwapMouseButtons);
+                properties.SetLeftHandedMouseModeProperty(desktop.IsSwapMouseButtons);
             }
         }
 

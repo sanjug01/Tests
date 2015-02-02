@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Serialization;
 
+
     [DataContract(IsReference = true)]
     public sealed class Desktop : RemoteConnection
     {
@@ -10,11 +11,18 @@
         private string _friendlyName;
         private bool _isUseAdminSession;
         private bool _isSwapMouseButtons;
-        private int _audioMode;
+        private AudioModes _audioMode;
 
         private Guid _credId;
         private Guid _thumbnailId;
-        
+
+        public enum AudioModes
+        {
+            Local = 0,
+            Remote = 1,
+            NoSound = 2
+        }        
+
         public Desktop(Workspace parentWorkspace)
             : base(parentWorkspace)
         {
@@ -56,7 +64,7 @@
         }
 
         [DataMember]
-        public int AudioMode
+        public AudioModes AudioMode
         {
             get { return _audioMode; }
             set { SetProperty(ref _audioMode, value); }

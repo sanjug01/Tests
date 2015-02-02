@@ -22,7 +22,7 @@ namespace RdClient.Shared.Test.CxWrappers
                 // default extra settings will not be applied
                 Assert.AreEqual(false, desktop.IsUseAdminSession);
                 Assert.AreEqual(false, desktop.IsSwapMouseButtons);
-                Assert.AreEqual(0, desktop.AudioMode);
+                Assert.AreEqual(Desktop.AudioModes.Local, desktop.AudioMode);
 
                 RdpPropertyApplier.ApplyDesktop(properties, desktop);
             }
@@ -41,7 +41,7 @@ namespace RdClient.Shared.Test.CxWrappers
                     IsSwapMouseButtons = true, 
                     FriendlyName = "MyPC",
                     IsUseAdminSession = true,
-                    AudioMode = 1
+                    AudioMode = Desktop.AudioModes.Remote
                 };
 
                 properties.Expect("SetStringProperty", new List<object>() { "Full Address", "narf" }, 0);
@@ -49,10 +49,10 @@ namespace RdClient.Shared.Test.CxWrappers
                 // non-default extra settings - will be applied
                 Assert.AreNotEqual(false, desktop.IsUseAdminSession);
                 Assert.AreNotEqual(false, desktop.IsSwapMouseButtons);
-                Assert.AreNotEqual(0, desktop.AudioMode);
+                Assert.AreNotEqual(Desktop.AudioModes.Local, desktop.AudioMode);
                 properties.Expect("SetBoolProperty", new List<object>() { "Administrative Session", true }, 0);
-                properties.Expect("SetIntProperty", new List<object>() { "AudioMode", 1 }, 0);
-                properties.Expect("SetLeftHandedMouseMode", new List<object>() { true }, 0);
+                properties.Expect("SetIntProperty", new List<object>() { "AudioMode", (int) Desktop.AudioModes.Remote }, 0);
+                properties.Expect("SetLeftHandedMouseModeProperty", new List<object>() { true }, 0);
 
                 RdpPropertyApplier.ApplyDesktop(properties, desktop);
             }
