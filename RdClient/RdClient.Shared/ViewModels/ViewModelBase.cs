@@ -2,6 +2,7 @@
 {
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
 

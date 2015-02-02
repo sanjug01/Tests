@@ -1,7 +1,7 @@
-﻿using RdClient.Shared.Models;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.Navigation.Extensions
 {
+    using RdClient.Shared.Models;
+
     interface IViewModelWithData
     {
         RdDataModel DataModel { get; set; }
