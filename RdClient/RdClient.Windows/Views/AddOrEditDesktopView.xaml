@@ -116,7 +116,7 @@
                                 Margin="-8,8,0,0" />
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    VerticalAlignment="Center"
-                                   x:Uid="CertificateValidation-MoreDetailsLabel"
+                                   x:Uid="AddOrEditDesktop-MoreDetailsLabel"
                                    Text="More details (d)"/>
                     </StackPanel>
 
@@ -130,7 +130,7 @@
                                 Margin="-8,8,0,0" /> 
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    VerticalAlignment="Center"
-                                   x:Uid="CertificateValidation-LessDetailsLabel"
+                                   x:Uid="AddOrEditDesktop-LessDetailsLabel"
                                    Text="Less details (d)"/>
                     </StackPanel>
 
@@ -141,7 +141,7 @@
                             <TextBlock Margin="4,8" 
                                        Style="{ThemeResource BodyTextBlockStyle}"
                                        x:Uid="AddOrEditDesktop-PcFriendlyNameHint" 
-                                       Text="Connection frienly name (d)" 
+                                       Text="Connection friendly name (d)" 
                                        Foreground="{StaticResource rdGrayBrush}"
                                        Visibility="{Binding ElementName=txtFriendlyNameEntry, Path=Text, Converter={StaticResource StringLengthToInvisibilityConverter}}" Width="390" />
 
