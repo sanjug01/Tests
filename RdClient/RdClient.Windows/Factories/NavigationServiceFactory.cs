@@ -29,10 +29,13 @@ namespace RdClient.Factories
             return navigationService;
         }
 
-        public INavigationExtension CreateDataModelExtension(RdDataModel dataModel)
+        public INavigationExtension CreateDataModelExtension(RdDataModel dataModel, ApplicationDataModel appDataModel)
         {
-            DataModelExtension dataModelExtension = new DataModelExtension();
-            dataModelExtension.DataModel = dataModel;
+            DataModelExtension dataModelExtension = new DataModelExtension()
+            {
+                DataModel = dataModel,
+                AppDataModel = appDataModel
+            };
 
             return dataModelExtension;
         }

@@ -1,6 +1,8 @@
 ﻿namespace RdClient.Factories
 {
+    using RdClient.Data;
     using RdClient.Helpers;
+    using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
@@ -13,7 +15,9 @@
     public class AppInitializer
     {
         private INavigationService _navigationService;
+        private DeferredCommand _applicationDataSaver;
 
+        private readonly int SaveDataDelayMilliseconds = 100;
         private readonly DataModelFactory _dataModelFactory = new DataModelFactory();
         private readonly NavigationServiceFactory _navigationServiceFactory = new NavigationServiceFactory();
 
@@ -33,6 +37,11 @@
             IDeferredExecution deferredExecution = new CoreDispatcherDeferredExecution() { Priority = CoreDispatcherPriority.Normal };
 
             RdDataModel dataModel = this.CreateDataModel();
+            ApplicationDataModel appDataModel = new ApplicationDataModel()
+            {
+                RootFolder = new ApplicationDataLocalStorageFolder() { FolderName = "RemoteDesktopData" },
+                ModelSerializer = new SerializableModelSerializer()
+            };
 
             _navigationService = this.CreateNavigationService();
 
@@ -40,10 +49,13 @@
             _navigationService.PushingFirstModalView += (s, e) => this.ViewPresenter.PresentingFirstModalView();
             _navigationService.DismissingLastModalView += (s, e) => this.ViewPresenter.DismissedLastModalView();
 
-            _navigationService.Extensions.Add(this.CreateDataModelExtension(dataModel));
+            _navigationService.Extensions.Add(this.CreateDataModelExtension(dataModel, appDataModel));
             _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));
             _navigationService.Extensions.Add(this.CreateApplicationBarExtension(this.AppBarViewModel));
             _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory));
+
+            _applicationDataSaver = new DeferredCommand(appDataModel.Save, deferredExecution, timerFactory, SaveDataDelayMilliseconds);
+
             _navigationService.NavigateToView(this.LandingPage, null);
         }
 
@@ -57,9 +69,9 @@
             return _navigationServiceFactory.CreateNavigationService();
         }
 
-        public INavigationExtension CreateDataModelExtension(RdDataModel dataModel)
+        public INavigationExtension CreateDataModelExtension(RdDataModel dataModel, ApplicationDataModel appDataModel)
         {
-            return _navigationServiceFactory.CreateDataModelExtension(dataModel);
+            return _navigationServiceFactory.CreateDataModelExtension(dataModel, appDataModel);
         }
 
         public INavigationExtension CreateDeferredExecutionExtension(IDeferredExecution deferredExecution)

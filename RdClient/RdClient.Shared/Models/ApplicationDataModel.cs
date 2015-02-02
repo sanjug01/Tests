@@ -8,13 +8,17 @@
 
     public sealed class ApplicationDataModel : MutableObject, IPersistentObject
     {
-        private readonly ISet<ICommand> _saveCommands;
         private readonly GroupCommand _save;
 
         private IStorageFolder _rootFolder;
         private IModelSerializer _modelSerializer;
         private CertificateTrust _certificateTrust;
         private WorkspaceModel<LocalWorkspaceModel> _localWorkspace;
+
+        public ICommand Save
+        {
+            get { return _save.Command; }
+        }
 
         public IStorageFolder RootFolder
         {
@@ -54,7 +58,7 @@
             private set { this.SetProperty(ref _localWorkspace, value); }
         }
 
-        public ICertificateTrust CertificsateTrust
+        public ICertificateTrust CertificateTrust
         {
             get { return _certificateTrust; }
         }
@@ -66,7 +70,6 @@
 
         public ApplicationDataModel()
         {
-            _saveCommands = new HashSet<ICommand>();
             _save = new GroupCommand();
         }
 
@@ -83,9 +86,10 @@
                 this.LocalWorkspace = new WorkspaceModel<LocalWorkspaceModel>(_rootFolder.CreateFolder("LocalWorkspace"), _modelSerializer);
                 SubscribeForPersistentStateUpdates(this.LocalWorkspace);
                 //
-                // Load the certificate trust.
+                // Load the certificate trust (the full name of the class is used so the compiler does not confuse the class
+                // and property of the same name.
                 //
-                _certificateTrust = CertificateTrust.Load(_rootFolder, "CertificateTrust.model", _modelSerializer);
+                _certificateTrust = RdClient.Shared.Data.CertificateTrust.Load(_rootFolder, "CertificateTrust.model", _modelSerializer);
                 SubscribeForPersistentStateUpdates(_certificateTrust);
             }
         }

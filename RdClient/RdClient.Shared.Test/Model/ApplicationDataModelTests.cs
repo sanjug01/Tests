@@ -25,7 +25,7 @@
             Assert.IsNotNull(adm.RootFolder);
             Assert.IsNotNull(adm.ModelSerializer);
             Assert.IsNotNull(adm.LocalWorkspace);
-            Assert.IsNotNull(adm.CertificsateTrust);
+            Assert.IsNotNull(adm.CertificateTrust);
             Assert.IsFalse(po.Save.CanExecute(null));
         }
 
@@ -137,7 +137,7 @@
             IPersistentObject po = adm;
             po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
 
-            adm.CertificsateTrust.TrustCertificate(new TestRdpCertificate());
+            adm.CertificateTrust.TrustCertificate(new TestRdpCertificate());
 
             Assert.IsTrue(po.Save.CanExecute(null));
             Assert.AreEqual(1, changes.Count);
@@ -156,7 +156,7 @@
             IPersistentObject po = adm;
             po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
 
-            adm.CertificsateTrust.TrustCertificate(new TestRdpCertificate());
+            adm.CertificateTrust.TrustCertificate(new TestRdpCertificate());
             po.Save.Execute(null);
 
             IList<string> files = adm.RootFolder.GetFiles().ToList();

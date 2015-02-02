@@ -14,6 +14,7 @@
         private INavigationService _navigationService;
         private IModalPresentationContext _presentationContext;
         private RdDataModel _dataModel;
+        private ApplicationDataModel _appDataModel;
 
         protected INavigationService NavigationService
         {
@@ -25,6 +26,11 @@
         {
             get { return _dataModel; }
             set { SetProperty(ref _dataModel, value); }
+        }
+
+        void IViewModelWithData.SetDataModel(ApplicationDataModel dataModel)
+        {
+            _appDataModel = dataModel;
         }
 
         /// <summary>

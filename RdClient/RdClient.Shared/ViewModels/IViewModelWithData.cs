@@ -5,5 +5,6 @@ namespace RdClient.Shared.ViewModels
     interface IViewModelWithData
     {
         RdDataModel DataModel { get; set; }
+        void SetDataModel(ApplicationDataModel dataModel);
     }
 }
