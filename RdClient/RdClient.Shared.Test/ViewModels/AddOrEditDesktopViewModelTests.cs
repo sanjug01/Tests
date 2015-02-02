@@ -70,6 +70,33 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
+        public void AddDesktop_ShowHideExtraSettings()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                AddDesktopViewModelArgs args =
+                    new AddDesktopViewModelArgs();
+
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+
+                // default hidden
+                Assert.IsFalse(_addOrEditDesktopViewModel.IsExpandedView);
+
+                // show 
+                _addOrEditDesktopViewModel.ShowDetailsCommand.Execute(null);
+                Assert.IsTrue(_addOrEditDesktopViewModel.IsExpandedView);
+
+                // hide again
+                _addOrEditDesktopViewModel.HideDetailsCommand.Execute(null);
+                Assert.IsFalse(_addOrEditDesktopViewModel.IsExpandedView);
+
+                // show again
+                _addOrEditDesktopViewModel.ShowDetailsCommand.Execute(null);
+                Assert.IsTrue(_addOrEditDesktopViewModel.IsExpandedView);
+            }
+        }
+
+        [TestMethod]
         public void EditDesktop_PresentingShouldPassArgs()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
@@ -82,6 +109,34 @@ namespace RdClient.Shared.Test.ViewModels
 
                 Assert.AreEqual(desktop, _addOrEditDesktopViewModel.Desktop);
                 Assert.IsFalse(_addOrEditDesktopViewModel.IsAddingDesktop);
+            }
+        }
+
+        [TestMethod]
+        public void EditDesktop_ShowHideExtraSettings()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "myPc" };
+                EditDesktopViewModelArgs args =
+                    new EditDesktopViewModelArgs(desktop);
+
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+
+                // default hidden
+                Assert.IsFalse(_addOrEditDesktopViewModel.IsExpandedView);
+
+                // show 
+                _addOrEditDesktopViewModel.ShowDetailsCommand.Execute(null);
+                Assert.IsTrue(_addOrEditDesktopViewModel.IsExpandedView);
+
+                // hide again
+                _addOrEditDesktopViewModel.HideDetailsCommand.Execute(null);
+                Assert.IsFalse(_addOrEditDesktopViewModel.IsExpandedView);
+
+                // show again
+                _addOrEditDesktopViewModel.ShowDetailsCommand.Execute(null);
+                Assert.IsTrue(_addOrEditDesktopViewModel.IsExpandedView);
             }
         }
 
@@ -227,6 +282,68 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
+        public void AddDesktop_ShouldSaveNewDesktopWithDefaultExtraSetting()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.PresentableView view = new Mock.PresentableView())
+            {
+                Desktop expectedDesktop = _testData.NewValidDesktop(Guid.Empty);
+
+                AddDesktopViewModelArgs args =
+                    new AddDesktopViewModelArgs();
+
+                _addOrEditDesktopViewModel.PresentableView = view;
+                navigation.Expect("DismissModalView", new List<object> { view }, 0);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+                _addOrEditDesktopViewModel.Host = expectedDesktop.HostName;
+
+                Assert.AreEqual(0, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Count, "no desktop should be added until save command is executed");
+                _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+                Assert.AreEqual(1, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Count);
+                Assert.IsInstanceOfType(_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0], typeof(Desktop));
+                Desktop savedDesktop = (Desktop)_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0];
+
+                Assert.IsTrue(String.IsNullOrEmpty(savedDesktop.FriendlyName));
+                Assert.AreEqual(false, savedDesktop.IsUseAdminSession);
+                Assert.AreEqual(false, savedDesktop.IsSwapMouseButtons);
+                Assert.AreEqual(Desktop.AudioModes.Local, savedDesktop.AudioMode);
+            }
+        }
+
+        [TestMethod]
+        public void AddDesktop_ShouldSaveNewDesktopWithUpdatedExtraSetting()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.PresentableView view = new Mock.PresentableView())
+            {
+                Desktop expectedDesktop = _testData.NewValidDesktop(Guid.Empty);
+
+                AddDesktopViewModelArgs args =
+                    new AddDesktopViewModelArgs();
+
+                _addOrEditDesktopViewModel.PresentableView = view;
+                navigation.Expect("DismissModalView", new List<object> { view }, 0);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+                _addOrEditDesktopViewModel.Host = expectedDesktop.HostName;
+                _addOrEditDesktopViewModel.FriendlyName = "FriendlyPc";
+                _addOrEditDesktopViewModel.AudioMode = (int)Desktop.AudioModes.NoSound;
+                _addOrEditDesktopViewModel.IsSwapMouseButtons = true;
+                _addOrEditDesktopViewModel.IsUseAdminSession = true;
+
+                Assert.AreEqual(0, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Count, "no desktop should be added until save command is executed");
+                _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+                Assert.AreEqual(1, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Count);
+                Assert.IsInstanceOfType(_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0], typeof(Desktop));
+                Desktop savedDesktop = (Desktop)_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0];
+
+                Assert.AreEqual("FriendlyPc", savedDesktop.FriendlyName);
+                Assert.AreEqual(true, savedDesktop.IsUseAdminSession);
+                Assert.AreEqual(true, savedDesktop.IsSwapMouseButtons);
+                Assert.AreEqual(Desktop.AudioModes.NoSound, savedDesktop.AudioMode);
+            }
+        }
+
+        [TestMethod]
         public void CancelAddDesktop_ShouldNotSaveNewDesktop()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
@@ -270,6 +387,41 @@ namespace RdClient.Shared.Test.ViewModels
                 Assert.IsInstanceOfType(_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0], typeof(Desktop));
                 Desktop addedDesktop = (Desktop)_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0];
                 Assert.AreEqual(_addOrEditDesktopViewModel.Host, addedDesktop.HostName);
+            }
+        }
+
+        [TestMethod]
+        public void EditDesktop_ShouldSaveUpdatedDesktopWithExtraSettings()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.PresentableView view = new Mock.PresentableView())
+            {
+                object saveParam = new object();
+                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "myPC" };
+
+                EditDesktopViewModelArgs args =
+                    new EditDesktopViewModelArgs(desktop);
+
+                _addOrEditDesktopViewModel.PresentableView = view;
+                navigation.Expect("DismissModalView", new List<object> { view }, 0);
+
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+
+                _addOrEditDesktopViewModel.Host = "myNewPC";
+                _addOrEditDesktopViewModel.FriendlyName = "FriendlyPc";
+                _addOrEditDesktopViewModel.AudioMode = (int)Desktop.AudioModes.Remote;
+                _addOrEditDesktopViewModel.IsSwapMouseButtons = true;
+                _addOrEditDesktopViewModel.IsUseAdminSession = true;
+                _addOrEditDesktopViewModel.SaveCommand.Execute(saveParam);
+
+                Assert.IsInstanceOfType(_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0], typeof(Desktop));
+                Desktop addedDesktop = (Desktop)_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0];
+                Assert.AreEqual(_addOrEditDesktopViewModel.Host, addedDesktop.HostName);
+
+                Assert.AreEqual("FriendlyPc", addedDesktop.FriendlyName);
+                Assert.AreEqual(true, addedDesktop.IsUseAdminSession);
+                Assert.AreEqual(true, addedDesktop.IsSwapMouseButtons);
+                Assert.AreEqual(Desktop.AudioModes.Remote, addedDesktop.AudioMode);
             }
         }
 
