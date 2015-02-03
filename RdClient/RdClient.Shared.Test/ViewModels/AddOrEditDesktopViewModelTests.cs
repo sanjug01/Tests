@@ -1,6 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RdClient.Shared.Data;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
+using RdClient.Shared.Navigation.Extensions;
+using RdClient.Shared.Test.Data;
 using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
@@ -12,7 +15,7 @@ namespace RdClient.Shared.Test.ViewModels
     public class AddOrEditDesktopViewModelTests
     {
         private TestData _testData;
-        private RdDataModel _dataModel;
+        private ApplicationDataModel _dataModel;
         private TestAddOrEditDesktopViewModel _addOrEditDesktopViewModel;
 
         class TestAddOrEditDesktopViewModel : AddOrEditDesktopViewModel
@@ -29,8 +32,12 @@ namespace RdClient.Shared.Test.ViewModels
             _testData = new TestData();
             _addOrEditDesktopViewModel = new TestAddOrEditDesktopViewModel();
 
-            _dataModel = new RdDataModel();
-            _addOrEditDesktopViewModel.DataModel = _dataModel;
+            _dataModel = new ApplicationDataModel()
+            {
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer()
+            };
+            ((IDataModelSite)_addOrEditDesktopViewModel).SetDataModel(_dataModel);
         }
 
         [TestCleanup]
@@ -44,7 +51,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace);
+                DesktopModel desktop = new DesktopModel();
                 EditDesktopViewModelArgs args =
                     new EditDesktopViewModelArgs(desktop);
 
@@ -74,9 +81,8 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "myPc" };
-                EditDesktopViewModelArgs args =
-                    new EditDesktopViewModelArgs(desktop);
+                DesktopModel desktop = new DesktopModel() { HostName = "myPc" };
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
 
                 ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
@@ -106,18 +112,18 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "foo" };
-                EditDesktopViewModelArgs args =
-                    new EditDesktopViewModelArgs(desktop);
-                _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Add(desktop);
+                DesktopModel desktop = new DesktopModel() { HostName = "foo" };
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
 
                 ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
                 navigation.Expect("DismissModalView", new List<object> { null }, null);
                 _addOrEditDesktopViewModel.SaveCommand.Execute(null);
 
-                Assert.AreEqual(1, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Count);
-                Assert.AreEqual(desktop, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0]);
+                Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
+                Assert.AreEqual(desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
             }
         }
 
@@ -126,11 +132,11 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                Credentials credentials = new Credentials() { Username = "foo", Password = "bar" };
-                _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Credentials.Add(credentials);
+                CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
+                Guid credId = _dataModel.LocalWorkspace.Credentials.AddNewModel(credentials);
 
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "foo" };
-                _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Add(desktop);                
+                DesktopModel desktop = new DesktopModel() { HostName = "foo" };
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);                
 
                 EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
                 ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
@@ -140,10 +146,10 @@ namespace RdClient.Shared.Test.ViewModels
                 navigation.Expect("DismissModalView", new List<object> { null }, null);
                 _addOrEditDesktopViewModel.SaveCommand.Execute(null);
 
-                Assert.AreEqual(1, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Count);
-                Assert.AreEqual(desktop, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0]);
-                Assert.IsInstanceOfType(_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0], typeof(Desktop));
-                Assert.AreEqual(credentials.Id, ((Desktop)_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0]).CredentialId);
+                Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
+                Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
+                Assert.AreSame(desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+                Assert.AreEqual(credId, ((DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model).CredentialsId);
             }
         }
 
@@ -154,8 +160,8 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 Credentials credentials = new Credentials() { Username = "foo", Password = "bar" };
 
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "foo", CredentialId = credentials.Id };
-                _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Add(desktop);
+                DesktopModel desktop = new DesktopModel() { HostName = "foo", CredentialsId = credentials.Id };
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
 
                 EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
                 ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
@@ -169,11 +175,11 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                Credentials credentials = new Credentials { Username = "Don Pedro", Password = "secret" };
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "myPc", CredentialId = credentials.Id };
+                CredentialsModel credentials = new CredentialsModel { Username = "Don Pedro", Password = "secret" };
+                DesktopModel desktop = new DesktopModel() { HostName = "myPc" };
 
-                _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Credentials.Add(credentials);
-                _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Add(desktop);
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+                desktop.CredentialsId = _dataModel.LocalWorkspace.Credentials.AddNewModel(credentials);
 
                 EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
                 ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
@@ -187,9 +193,9 @@ namespace RdClient.Shared.Test.ViewModels
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "myPc" };
+                DesktopModel desktop = new DesktopModel() { HostName = "myPc" };
 
-                _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Add(desktop);
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
 
                 EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
                 ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
@@ -206,23 +212,22 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
-                Desktop expectedDesktop = _testData.NewValidDesktop(Guid.Empty);
+                DesktopModel expectedDesktop = _testData.NewValidDesktop(Guid.Empty);
 
-                AddDesktopViewModelArgs args =
-                    new AddDesktopViewModelArgs();
+                AddDesktopViewModelArgs args = new AddDesktopViewModelArgs();
 
                 _addOrEditDesktopViewModel.PresentableView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
                 ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
                 _addOrEditDesktopViewModel.Host = expectedDesktop.HostName;
 
-                Assert.AreEqual(0, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Count, "no desktop should be added until save command is executed");
+                Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "no desktop should be added until save command is executed");
                 _addOrEditDesktopViewModel.SaveCommand.Execute(null);
-                Assert.AreEqual(1, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Count);
-                Assert.IsInstanceOfType(_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0], typeof(Desktop));
-                Desktop savedDesktop = (Desktop)_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0];
+                Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
+                Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
+                DesktopModel savedDesktop = (DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model;
                 Assert.AreEqual(expectedDesktop.HostName, savedDesktop.HostName);
-                Assert.AreNotEqual(expectedDesktop, savedDesktop, "A new desktop should have been created");
+                Assert.AreNotSame(expectedDesktop, savedDesktop, "A new desktop should have been created");
             }
         }
 
@@ -232,7 +237,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
-                Desktop expectedDesktop = _testData.NewValidDesktop(Guid.Empty);
+                DesktopModel expectedDesktop = _testData.NewValidDesktop(Guid.Empty);
 
                 AddDesktopViewModelArgs args =
                     new AddDesktopViewModelArgs();
@@ -244,7 +249,7 @@ namespace RdClient.Shared.Test.ViewModels
 
                 _addOrEditDesktopViewModel.Host = expectedDesktop.HostName;
                 _addOrEditDesktopViewModel.CancelCommand.Execute(null);
-                Assert.AreEqual(0, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Count, "no desktop should be added when cancel command is executed");
+                Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "no desktop should be added when cancel command is executed");
             }
         }
 
@@ -255,10 +260,11 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
                 object saveParam = new object();
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "myPC" };
+                DesktopModel desktop = new DesktopModel() { HostName = "myPC" };
 
-                EditDesktopViewModelArgs args =
-                    new EditDesktopViewModelArgs(desktop);
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
 
                 _addOrEditDesktopViewModel.PresentableView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
@@ -267,8 +273,8 @@ namespace RdClient.Shared.Test.ViewModels
 
                 _addOrEditDesktopViewModel.Host = "myNewPC";
                 _addOrEditDesktopViewModel.SaveCommand.Execute(saveParam);
-                Assert.IsInstanceOfType(_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0], typeof(Desktop));
-                Desktop addedDesktop = (Desktop)_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0];
+                Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
+                DesktopModel addedDesktop = (DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model;
                 Assert.AreEqual(_addOrEditDesktopViewModel.Host, addedDesktop.HostName);
             }
         }
@@ -280,10 +286,9 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
                 object saveParam = new object();
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "myPC" };
+                DesktopModel desktop = new DesktopModel() { HostName = "myPC" };
 
-                EditDesktopViewModelArgs args =
-                    new EditDesktopViewModelArgs(desktop);
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
 
                 _addOrEditDesktopViewModel.PresentableView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
@@ -306,8 +311,7 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
-                AddDesktopViewModelArgs args =
-                    new AddDesktopViewModelArgs();
+                AddDesktopViewModelArgs args = new AddDesktopViewModelArgs();
 
                 _addOrEditDesktopViewModel.PresentableView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
@@ -316,18 +320,18 @@ namespace RdClient.Shared.Test.ViewModels
 
                 _addOrEditDesktopViewModel.Host = invalidHostName;
 
-                Assert.AreEqual(0, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Count, "no desktop should be added until save command is executed");
+                Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "no desktop should be added until save command is executed");
                 _addOrEditDesktopViewModel.SaveCommand.Execute(null);
-                Assert.AreEqual(0, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Count, "Should not add desktop with invalid name!");
+                Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "Should not add desktop with invalid name!");
                 Assert.IsFalse(_addOrEditDesktopViewModel.IsHostValid);
 
                 // update name and save again
                 _addOrEditDesktopViewModel.Host = validHostName;
                 _addOrEditDesktopViewModel.SaveCommand.Execute(null);
-                Assert.AreEqual(1, _addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections.Count, "Should add desktop with valid name!");
+                Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count, "Should add desktop with valid name!");
                 Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
 
-                Desktop savedDesktop = (Desktop)_addOrEditDesktopViewModel.DataModel.LocalWorkspace.Connections[0];
+                DesktopModel savedDesktop = (DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model;
                 Assert.AreEqual(validHostName, savedDesktop.HostName);
             }
         }
@@ -342,10 +346,9 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
                 object saveParam = new object();
-                Desktop desktop = new Desktop(_dataModel.LocalWorkspace) { HostName = "myPC" };
+                DesktopModel desktop = new DesktopModel() { HostName = "myPC" };
 
-                EditDesktopViewModelArgs args =
-                    new EditDesktopViewModelArgs(desktop);
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
 
                 _addOrEditDesktopViewModel.PresentableView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);

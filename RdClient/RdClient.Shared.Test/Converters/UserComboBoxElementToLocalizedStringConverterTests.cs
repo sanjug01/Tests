@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Converters;
+using RdClient.Shared.Data;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Test.Helpers;
@@ -14,7 +15,7 @@ namespace RdClient.Shared.Test.Converters
         private UserComboBoxElementToLocalizedStringConverter _converter;
         private IStringTable _stringTable;
         private TestData _testData;
-        private Credentials _cred;
+        private IModelContainer<CredentialsModel> _cred;
         private UserComboBoxElement _comboBoxElement;
 
         [TestInitialize]
@@ -32,21 +33,21 @@ namespace RdClient.Shared.Test.Converters
         public void ConvertAddNewComboBoxDoesNotReturnUsername()
         {
             _comboBoxElement = new UserComboBoxElement(UserComboBoxType.AddNew, _cred);
-            Assert.AreNotEqual(_cred.Username, _converter.Convert(_comboBoxElement, null, null, null));
+            Assert.AreNotEqual(_cred.Model.Username, _converter.Convert(_comboBoxElement, null, null, null));
         }
 
         [TestMethod]
         public void ConvertAskEveryTimeComboBoxDoesNotReturnUsername()
         {
             _comboBoxElement = new UserComboBoxElement(UserComboBoxType.AskEveryTime, _cred);
-            Assert.AreNotEqual(_cred.Username, _converter.Convert(_comboBoxElement, null, null, null));
+            Assert.AreNotEqual(_cred.Model.Username, _converter.Convert(_comboBoxElement, null, null, null));
         }
 
         [TestMethod]
         public void ConvertCredentialComboBoxDoesReturnUsername()
         {
             _comboBoxElement = new UserComboBoxElement(UserComboBoxType.Credentials, _cred);
-            Assert.AreEqual(_cred.Username, _converter.Convert(_comboBoxElement, null, null, null));
+            Assert.AreEqual(_cred.Model.Username, _converter.Convert(_comboBoxElement, null, null, null));
         }
 
         [TestMethod]
@@ -59,7 +60,7 @@ namespace RdClient.Shared.Test.Converters
         [TestMethod]
         public void ConvertCredentialComboBoxWithNullUsernameReturnsNull()
         {
-            _cred.Username = null;
+            _cred.Model.Username = null;
             _comboBoxElement = new UserComboBoxElement(UserComboBoxType.Credentials, _cred);
             Assert.AreEqual(null, _converter.Convert(_comboBoxElement, null, null, null));
         }

@@ -9,9 +9,9 @@ namespace RdClient.Shared.Test.Mock
     {
         public byte[] EncodedImageBytes { get; set; }
 
-        public Task Update(IRdpScreenSnapshot snapshot)
+        public void Update(IRdpScreenSnapshot snapshot)
         {
-            return Task.FromResult(Invoke(new object[]{snapshot}));
+            Invoke(new object[]{snapshot});
         }
     }
 }

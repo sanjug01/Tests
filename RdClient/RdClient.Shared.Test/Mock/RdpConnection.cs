@@ -22,12 +22,12 @@ namespace RdClient.Shared.Test.Mock
             }
         }
 
-        public void SetCredentials(Credentials credentials, bool fUsingSavedCreds)
+        public void SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)
         {
             Invoke(new object[] { credentials, fUsingSavedCreds });
         }
 
-        public void Connect(Credentials credentials, bool fUsingSavedCreds)
+        public void Connect(CredentialsModel credentials, bool fUsingSavedCreds)
         {
             Invoke(new object[] { credentials, fUsingSavedCreds });
         }

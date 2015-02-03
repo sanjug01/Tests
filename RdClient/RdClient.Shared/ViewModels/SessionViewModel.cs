@@ -184,7 +184,7 @@ using Windows.UI.Xaml;
             _isCancelledReconnect = false;
 
             Contract.Assert(null != _timerFactory);
-            SessionModel.Connect(_connectionInformation, _timerFactory, this.DataModel.Settings);
+            SessionModel.Connect(_connectionInformation, _timerFactory, this.ApplicationDataModel.Settings);
         }
 
         private void SessionModel_ConnectionAutoReconnectComplete(object sender, ConnectionAutoReconnectCompleteArgs e)
@@ -222,9 +222,9 @@ using Windows.UI.Xaml;
             TryDeferToUI(() =>
             {
                 _currentRdpConnection = null;
-            IRdpConnection rdpConnection = sender as IRdpConnection;
-            RdpDisconnectReason reason = args.DisconnectReason;
-            bool reconnect = false;
+                IRdpConnection rdpConnection = sender as IRdpConnection;
+                RdpDisconnectReason reason = args.DisconnectReason;
+                bool reconnect = false;
 
                 switch (reason.Code)
                 {
@@ -261,30 +261,44 @@ using Windows.UI.Xaml;
             {
                 throw new InvalidOperationException();
             }
-            Credentials copyOfCreds = new Credentials();
-            copyOfCreds.CopyValuesFrom(_connectionInformation.Credentials);
+
+            CredentialsModel copyOfCreds = new CredentialsModel(_connectionInformation.Credentials);
+
             AddUserViewArgs args = new AddUserViewArgs(copyOfCreds, true, mode);
             ModalPresentationCompletion completionContext = new ModalPresentationCompletion();
+
             completionContext.Completed += (s, e) =>
             {
                 this.StartKeyboardCapture();//restart keyboard capture that was stopped when credential prompt was shown
                 CredentialPromptResult result = e.Result as CredentialPromptResult;
+
                 if (result != null && !result.UserCancelled)
                 {
-                    Credentials cred = result.Credential;                    
+                    CredentialsModel cred = result.Credentials;                    
+
                     if (result.Save)//if user chose to save credentials then persist them
                     {
-                        _connectionInformation.Credentials.CopyValuesFrom(cred);//overwrite previous credentials
-                        _connectionInformation.Desktop.CredentialId = _connectionInformation.Credentials.Id;//update desktop to use these creds
+                        _connectionInformation.Credentials.Username = cred.Username;
+                        _connectionInformation.Credentials.Domain = cred.Domain;
+                        _connectionInformation.Credentials.Password = cred.Password;
+
+                        //
+                        // TODO: figure this out and fix
+                        //
+#if false
+                        _connectionInformation.Desktop.CredentialsId = _connectionInformation.Credentials.Id;//update desktop to use these creds
+
                         if (!DataModel.LocalWorkspace.Credentials.ContainsItemWithId(_connectionInformation.Credentials.Id))
                         {
                             DataModel.LocalWorkspace.Credentials.Add(_connectionInformation.Credentials);//add creds to data model if not already there
                         }
+#endif
                     }
                     else //just use the creds for this connection (do not persist them)
                     {
                         _connectionInformation.Credentials = cred;
                     }
+
                     rdpConnection.SetCredentials(_connectionInformation.Credentials, false);
                     rdpConnection.HandleAsyncDisconnectResult(reason, true);
                 }
@@ -306,7 +320,7 @@ using Windows.UI.Xaml;
             {
                 throw new InvalidOperationException();
             }
-            else if (this.SessionModel.IsCertificateAccepted(serverCertificate) || this.DataModel.IsCertificateTrusted(serverCertificate))
+            else if (this.SessionModel.IsCertificateAccepted(serverCertificate) || this.ApplicationDataModel.CertificateTrust.IsCertificateTrusted(serverCertificate))
                 {
                     reconnect = true;
                 rdpConnection.HandleAsyncDisconnectResult(reason, reconnect);
@@ -335,7 +349,7 @@ using Windows.UI.Xaml;
                                     break;
                                 case CertificateValidationResult.CertificateTrustLevel.AcceptedAlways:
                                     reconnect = true;
-                                    this.DataModel.TrustCertificate(serverCertificate);
+                                    this.ApplicationDataModel.CertificateTrust.TrustCertificate(serverCertificate);
                                     break;
                             }
                     rdpConnection.HandleAsyncDisconnectResult(reason, reconnect);

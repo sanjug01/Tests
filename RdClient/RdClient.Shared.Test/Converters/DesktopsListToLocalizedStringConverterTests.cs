@@ -15,7 +15,7 @@ namespace RdClient.Shared.Test.Converters
         private DesktopsListToLocalizedStringConverter _converter;
         private IStringTable _stringTable;
         private TestData _testData;
-        private List<Desktop> _desktops;
+        private IList<DesktopModel> _desktops;
 
         [TestInitialize]
         public void TestSetup()
@@ -38,8 +38,8 @@ namespace RdClient.Shared.Test.Converters
         [TestMethod]
         public void ConvertListWithSingleDesktopReturnsHostname()
         {
-            Desktop desktop = _desktops[0];
-            Assert.AreEqual(desktop.HostName, _converter.Convert(new List<Desktop>() { desktop }, null, null, null));
+            DesktopModel desktop = _desktops[0];
+            Assert.AreEqual(desktop.HostName, _converter.Convert(new List<DesktopModel>() { desktop }, null, null, null));
         }
 
         [TestMethod]

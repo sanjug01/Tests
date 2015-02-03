@@ -17,7 +17,8 @@ namespace RdClient.Converters
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            IList<Desktop> desktopList = value as IList<Desktop>;
+            IList<DesktopModel> desktopList = value as IList<DesktopModel>;
+
             if (_localizedString == null)
             {
                 throw new InvalidOperationException("LocalizedString property must be set before Convert is called");

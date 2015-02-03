@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Models;
+﻿using RdClient.Shared.Data;
+using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.ValidationRules;
 using System.Collections.ObjectModel;
@@ -13,12 +14,14 @@ namespace RdClient.Shared.ViewModels
         {
         }    
     }
+
     public class EditDesktopViewModelArgs
     {
-        private readonly Desktop _desktop;
-        public Desktop Desktop { get {return _desktop; } }
+        private readonly DesktopModel _desktop;
 
-        public EditDesktopViewModelArgs(Desktop desktop)
+        public DesktopModel Desktop { get {return _desktop; } }
+
+        public EditDesktopViewModelArgs(DesktopModel desktop)
         {
             _desktop = desktop;
         }
@@ -33,13 +36,14 @@ namespace RdClient.Shared.ViewModels
 
     public class UserComboBoxElement
     {
-        private readonly Credentials _credentials;
-        public Credentials Credentials { get { return _credentials; } }
+        private readonly IModelContainer<CredentialsModel> _credentials;
+
+        public IModelContainer<CredentialsModel> Credentials { get { return _credentials; } }
 
         private readonly UserComboBoxType _userComboBoxType;
         public UserComboBoxType UserComboBoxType { get { return _userComboBoxType; } }
 
-        public UserComboBoxElement(UserComboBoxType userComboBoxType, Credentials  credentials = null)
+        public UserComboBoxElement(UserComboBoxType userComboBoxType, IModelContainer<CredentialsModel> credentials = null)
         {            
             _userComboBoxType  = userComboBoxType;
             _credentials = credentials;
@@ -54,7 +58,7 @@ namespace RdClient.Shared.ViewModels
 
         private readonly RelayCommand _saveCommand;
         private readonly RelayCommand _cancelCommand;
-        private Desktop _desktop;
+        private DesktopModel _desktop;
         private int _selectedUserOptionsIndex;
 
         public bool IsAddingDesktop
@@ -67,29 +71,33 @@ namespace RdClient.Shared.ViewModels
         }
 
         public ObservableCollection<UserComboBoxElement> UserOptions { get; set; }
+
         public int SelectedUserOptionsIndex 
         { 
             get { return _selectedUserOptionsIndex; }
+
             set
             {
                 SetProperty(ref _selectedUserOptionsIndex, value, "SelectedUserOptionsIndex");
 
-                int idx = (int) value;
+                int idx = value;
+
                 if(this.UserOptions.Count > 0 && this.UserOptions[idx].UserComboBoxType == UserComboBoxType.AddNew)
                 {
-                    AddUserViewArgs args = new AddUserViewArgs(new Credentials(), false);
+                    AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
                     ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion();
-                    addUserCompleted.Completed += (s, e) =>
+
+                    addUserCompleted.Completed += (sender, e) =>
                     {
                         CredentialPromptResult result = e.Result as CredentialPromptResult;
+
                         if (result != null && !result.UserCancelled)
                         {
-                            this.Desktop.CredentialId = result.Credential.Id;
-                            this.DataModel.LocalWorkspace.Credentials.Add(result.Credential);
-                            
+                            this.Desktop.CredentialsId = this.ApplicationDataModel.LocalWorkspace.Credentials.AddNewModel(result.Credentials);
                         }
                         Update();
                     };
+
                     NavigationService.PushModalView("AddUserView", args, addUserCompleted);
                 }
             }
@@ -101,10 +109,10 @@ namespace RdClient.Shared.ViewModels
 
         public ICommand CancelCommand { get { return _cancelCommand; } }
 
-        public Desktop Desktop
+        public DesktopModel Desktop
         {
             get { return _desktop; }
-            private set { this.SetProperty<Desktop>(ref _desktop, value); }
+            private set { this.SetProperty(ref _desktop, value); }
         }
 
         public string Host
@@ -140,26 +148,24 @@ namespace RdClient.Shared.ViewModels
 
         private void SaveCommandExecute(object o)
         {
-            if (!this.Validate())
+            if (this.Validate())
             {
-                // save cannot complete if validation fails.
-                return;
+                this.Desktop.HostName = this.Host;
+
+                if (null != this.UserOptions[this.SelectedUserOptionsIndex].Credentials)
+                {
+                    this.Desktop.CredentialsId = this.UserOptions[this.SelectedUserOptionsIndex].Credentials.Id;
+                }
+
+
+                if (this.IsAddingDesktop)
+                {
+                    this.ApplicationDataModel.LocalWorkspace.Connections.AddNewModel(this.Desktop);
+                }
+
+                //this.DismissModal(null);
+                NavigationService.DismissModalView(PresentableView);
             }
-
-            this.Desktop.HostName = this.Host;
-            if (null != this.UserOptions[this.SelectedUserOptionsIndex].Credentials)
-            {
-                this.Desktop.CredentialId = this.UserOptions[this.SelectedUserOptionsIndex].Credentials.Id;
-            }
-
-            bool found = this.DataModel.LocalWorkspace.Connections.ContainsItemWithId(this.Desktop.Id);
-
-            if (found == false)
-            {
-                this.DataModel.LocalWorkspace.Connections.Add(this.Desktop);
-            }
-
-            NavigationService.DismissModalView(PresentableView);
         }
 
         private void CancelCommandExecute(object o)
@@ -189,7 +195,8 @@ namespace RdClient.Shared.ViewModels
             this.UserOptions.Clear();
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
-            foreach (Credentials credentials in this.DataModel.LocalWorkspace.Credentials)
+
+            foreach (IModelContainer<CredentialsModel> credentials in this.ApplicationDataModel.LocalWorkspace.Credentials.Models)
             {
                 this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credentials));
             }
@@ -197,9 +204,9 @@ namespace RdClient.Shared.ViewModels
             int idx = 0;
             for (idx = 0; idx < this.UserOptions.Count; idx++)
             {
-                if (this.Desktop.HasCredential &&
+                if (this.Desktop.HasCredentials &&
                     this.UserOptions[idx].UserComboBoxType == UserComboBoxType.Credentials &&
-                    this.UserOptions[idx].Credentials.Id == this.Desktop.CredentialId)
+                    this.UserOptions[idx].Credentials.Id == this.Desktop.CredentialsId)
                     break;
             }
 
@@ -214,10 +221,11 @@ namespace RdClient.Shared.ViewModels
 
         protected override void OnPresenting(object activationParameter)
         {
-            Contract.Requires(null != activationParameter);
+            Contract.Assert(null != activationParameter);
 
             AddDesktopViewModelArgs addArgs = activationParameter as AddDesktopViewModelArgs;
             EditDesktopViewModelArgs editArgs = activationParameter as EditDesktopViewModelArgs;
+
             if (editArgs != null)
             {
                 this.Desktop = editArgs.Desktop;
@@ -226,7 +234,7 @@ namespace RdClient.Shared.ViewModels
             }
             else if(addArgs != null)
             {
-                this.Desktop = new Desktop(this.DataModel.LocalWorkspace);
+                this.Desktop = new DesktopModel();
                 this.IsAddingDesktop = true;
             }
 

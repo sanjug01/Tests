@@ -26,8 +26,9 @@ namespace RdClient.Shared.Test.Model
             _timer = new Mock.Timer();
             _connectionMatches = false;
 
-            Desktop desktop = new Desktop() { HostName = "narf" };
-            Credentials credentials = new Credentials() { Username = "narf", Domain = "zod", Password = "poit", HaveBeenPersisted = true };
+            DesktopModel desktop = new DesktopModel() { HostName = "narf" };
+            CredentialsModel credentials = new CredentialsModel() { Username = "narf", Domain = "zod", Password = "poit" };
+
             _thumbnail = new Mock.Thumbnail();
             ConnectionInformation _connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials, Thumbnail = _thumbnail };
 

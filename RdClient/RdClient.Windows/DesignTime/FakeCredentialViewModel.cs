@@ -8,9 +8,9 @@ namespace RdClient.DesignTime
 {
     public class FakeCredentialViewModel : ICredentialViewModel
     {
-        private Credentials _cred = new Credentials() { Domain = "contoso.com", HaveBeenPersisted = true, Password = "1234AbCd", Username = "sampleUser" };
+        private CredentialsModel _cred = new CredentialsModel() { Domain = "contoso.com", Password = "1234AbCd", Username = "sampleUser" };
 
-        public Credentials Credential
+        public CredentialsModel Credentials
         {
             get { return _cred; }
         }
@@ -19,7 +19,7 @@ namespace RdClient.DesignTime
 
         public ICommand EditCommand {get; set; }
 
-        public void Presented(INavigationService navService, RdDataModel dataModel)
+        public void Presented(INavigationService navService, ApplicationDataModel dataModel)
         {
             throw new NotImplementedException();
         }

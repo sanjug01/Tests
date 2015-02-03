@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RdClient.Shared.Data;
 using RdClient.Shared.Models;
+using RdClient.Shared.Test.Data;
 using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System.Collections.Generic;
@@ -10,18 +12,22 @@ namespace RdClient.Shared.Test.ViewModels
     public class CredentialViewModelTests
     {
         private TestData _testData;
-        private RdDataModel _dataModel;
+        private ApplicationDataModel _dataModel;
         private Mock.NavigationService _navService;
-        private Credentials _cred;
+        private CredentialsModel _cred;
         private CredentialViewModel _vm;
 
         [TestInitialize]
         public void TestSetup()
         {
             _testData = new TestData();
-            _dataModel = new RdDataModel();
+            _dataModel = new ApplicationDataModel()
+            {
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer()
+            };
             _navService = new Mock.NavigationService();
-            _cred = _testData.NewValidCredential();
+            _cred = _testData.NewValidCredential().Model;
             _vm = new CredentialViewModel(_cred);
             _vm.Presented(_navService, _dataModel);
         }
@@ -36,7 +42,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestCredMatches()
         {
-            Assert.AreEqual(_cred, _vm.Credential);
+            Assert.AreEqual(_cred, _vm.Credentials);
         }
 
         [TestMethod]

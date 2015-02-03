@@ -1,6 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RdClient.Shared.Data;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
+using RdClient.Shared.Navigation.Extensions;
+using RdClient.Shared.Test.Data;
 using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
@@ -13,10 +16,10 @@ namespace RdClient.Shared.Test.ViewModels
     public class DeleteUserViewModelTests
     {
         private TestData _testData;
-        private RdDataModel _dataModel;
+        private ApplicationDataModel _dataModel;
         private Mock.NavigationService _navService;
         private Mock.PresentableView _view;
-        private Credentials _cred;
+        private IModelContainer<CredentialsModel> _cred;
         private DeleteUserViewModel _vm;
         
         [TestInitialize]
@@ -26,23 +29,31 @@ namespace RdClient.Shared.Test.ViewModels
             _cred = _testData.NewValidCredential();
             _navService = new Mock.NavigationService();
             _view = new Mock.PresentableView();
-            
-            _dataModel = new RdDataModel();
+
+            _dataModel = new ApplicationDataModel()
+            {
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer()
+            };
+
             //add some credentials to the datamodel
-            foreach (Credentials cred in _testData.NewSmallListOfCredentials())
+            foreach (IModelContainer<CredentialsModel> cred in _testData.NewSmallListOfCredentials())
             {
-                _dataModel.LocalWorkspace.Credentials.Add(cred);
+                _dataModel.LocalWorkspace.Credentials.AddNewModel(cred.Model);
             }            
-            _dataModel.LocalWorkspace.Credentials.Add(_cred); //add this credential to the datamodel
+
+            //add this credential to the datamodel
+            _cred = new TemporaryModelContainer<CredentialsModel>(_dataModel.LocalWorkspace.Credentials.AddNewModel(_cred.Model), _cred.Model);
+
             //add some desktops to the datamodel
-            foreach (Desktop desktop in _testData.NewSmallListOfDesktops(_dataModel.LocalWorkspace.Credentials.ToList()))
+            foreach (DesktopModel desktop in _testData.NewSmallListOfDesktops(_dataModel.LocalWorkspace.Credentials.Models.ToList()))
             {
-                _dataModel.LocalWorkspace.Connections.Add(desktop);
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
             }
-            _dataModel.LocalWorkspace.Connections.Add(_testData.NewValidDesktop(_cred.Id)); //Add at least one desktop referencing this credential to the datamodel
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_testData.NewValidDesktop(_cred.Id)); //Add at least one desktop referencing this credential to the datamodel
             
             _vm = new DeleteUserViewModel();
-            _vm.DataModel = _dataModel;
+            ((IDataModelSite)_vm).SetDataModel(_dataModel);
             _vm.PresentableView = _view;
             ((IViewModel)_vm).Presenting(_navService, _cred, null);
         }
@@ -57,7 +68,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void CredentialPropertyMatchesInputCred()
         {
-            Assert.AreEqual(_cred, _vm.Credential);
+            Assert.AreEqual(_cred, _vm.Credentials);
         }
 
         [TestMethod]
@@ -75,18 +86,20 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
+        [ExpectedException(typeof(KeyNotFoundException))]
         public void DeleteCommandDeletesCredFromDataModel()
         {
-            CollectionAssert.Contains(_dataModel.LocalWorkspace.Credentials, _cred);
+            Assert.AreSame(_cred.Model, _dataModel.LocalWorkspace.Credentials.GetModel(_cred.Id));
             _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DeleteCommand.Execute(null);
-            CollectionAssert.DoesNotContain(_dataModel.LocalWorkspace.Credentials, _cred);
+            CredentialsModel model = _dataModel.LocalWorkspace.Credentials.GetModel(_cred.Id);
         }
 
         [TestMethod]
         public void DeleteCommandRemovesReferencesToThisCredentialFromDesktops()
         {
-            Func<bool> desktopsReferenceCred = () => _dataModel.LocalWorkspace.Connections.OfType<Desktop>().Any(d => d.CredentialId.Equals(_cred.Id));
+            Func<bool> desktopsReferenceCred = () =>
+                _dataModel.LocalWorkspace.Connections.Models.OfType<IModelContainer<RemoteConnectionModel>>().Any(d => ((DesktopModel)d.Model).CredentialsId.Equals(_cred.Id));
             Assert.IsTrue(desktopsReferenceCred());
             _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DeleteCommand.Execute(null);
@@ -96,36 +109,39 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void DeleteCommandDeletesOnlyOneCredential()
         {
-            int credCount = _dataModel.LocalWorkspace.Credentials.Count;
+            int credCount = _dataModel.LocalWorkspace.Credentials.Models.Count;
             _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DeleteCommand.Execute(null);
-            Assert.AreEqual(credCount - 1, _dataModel.LocalWorkspace.Credentials.Count);
+            Assert.AreEqual(credCount - 1, _dataModel.LocalWorkspace.Credentials.Models.Count);
         }
 
         [TestMethod]
         public void DeleteCommandDoesNotRemoveReferencesToOtherCredentials()
         {
             //record which credential each desktop references
-            Dictionary<Desktop, Guid> previousCreds = new Dictionary<Desktop, Guid>();
-            foreach (Desktop desktop in _dataModel.LocalWorkspace.Connections)
+            IDictionary<DesktopModel, Guid> previousCreds = new Dictionary<DesktopModel, Guid>();
+
+            foreach (IModelContainer<RemoteConnectionModel> desktop in _dataModel.LocalWorkspace.Connections.Models)
             {
-                previousCreds.Add(desktop, desktop.CredentialId);
+
+                previousCreds.Add((DesktopModel)desktop.Model, ((DesktopModel)desktop.Model).CredentialsId);
             }
             //delete credential
             _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DeleteCommand.Execute(null);
             //check that only desktops referencing the deleted credential are changed
-            foreach (Desktop desktop in _dataModel.LocalWorkspace.Connections)
+            foreach (IModelContainer<RemoteConnectionModel> desktop in _dataModel.LocalWorkspace.Connections.Models)
             {
-                Guid previousCred = previousCreds[desktop];
+                Guid previousCred = previousCreds[(DesktopModel)desktop.Model];
+
                 //desktops referencing deleted cred should now not reference any cred
                 if (previousCred.Equals(_cred.Id))
                 {
-                    Assert.AreEqual(Guid.Empty, desktop.CredentialId);
+                    Assert.AreEqual(Guid.Empty, ((DesktopModel)desktop.Model).CredentialsId);
                 }
                 else //desktops not referencing deleted cred should reference the same cred as before
                 {
-                    Assert.AreEqual(previousCred, desktop.CredentialId);
+                    Assert.AreEqual(previousCred, ((DesktopModel)desktop.Model).CredentialsId);
                 }
 
             }

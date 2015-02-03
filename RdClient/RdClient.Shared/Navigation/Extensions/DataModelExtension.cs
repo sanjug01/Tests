@@ -18,16 +18,15 @@
         {
             Contract.Assert(null != this.DataModel);
 
-            viewModel.CastAndCall<IViewModelWithData>(vmd =>
+            viewModel.CastAndCall<IDataModelSite>(vmd =>
             {
-                vmd.DataModel = this.DataModel;
                 vmd.SetDataModel(this.AppDataModel);
             });
         }
 
         void INavigationExtension.Dismissed(IViewModel viewModel)
         {
-            viewModel.CastAndCall<IViewModelWithData>(vmd =>
+            viewModel.CastAndCall<IDataModelSite>(vmd =>
             {
                 // vmd.DataModel = null;
                 vmd.SetDataModel(null);

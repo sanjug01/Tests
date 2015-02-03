@@ -26,28 +26,34 @@ namespace RdClient.Shared.Test.Model
         }
 
         [TestMethod]
-        public async Task TestImageScaledCorrectly()
+        public void TestImageScaledCorrectly()
         {
             int inputWidth = 16;
             int inputHeight = 9;
             IRdpScreenSnapshot snapshot = _testData.NewValidScreenSnapshot(inputWidth, inputHeight);
-            await _thumb.Update(snapshot);
+            _thumb.Update(snapshot);
             BitmapDecoder decoder;
             using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
             {
-                await stream.WriteAsync(_thumb.EncodedImageBytes.AsBuffer());
+                Task task = stream.WriteAsync(_thumb.EncodedImageBytes.AsBuffer()).AsTask();
+                task.Wait();
                 stream.Seek(0);
-                decoder = await BitmapDecoder.CreateAsync(stream);
-                PixelDataProvider pixelData = await decoder.GetPixelDataAsync();
+                Task<BitmapDecoder> decoderTask = BitmapDecoder.CreateAsync(stream).AsTask<BitmapDecoder>();
+                decoderTask.Wait();
+                decoder = decoderTask.Result;
+
+                Task<PixelDataProvider> pixelDataTask = decoder.GetPixelDataAsync().AsTask<PixelDataProvider>();
+                pixelDataTask.Wait();
+                PixelDataProvider pixelData = pixelDataTask.Result;
             }            
             Assert.IsTrue(decoder.PixelHeight == Thumbnail.THUMBNAIL_HEIGHT);
             Assert.AreEqual(decoder.PixelWidth / (double)decoder.PixelHeight, inputWidth / (double)inputHeight, 0.05d);     
         }
 
         [TestMethod]
-        public async Task TestSerializesCorrectly()
+        public void TestSerializesCorrectly()
         {
-            await _thumb.Update(_testData.NewValidScreenSnapshot(4,3));
+            _thumb.Update(_testData.NewValidScreenSnapshot(4,3));
             Thumbnail deserializedThumbnail;            
             using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
             {

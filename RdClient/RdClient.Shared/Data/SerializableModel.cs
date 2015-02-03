@@ -20,6 +20,7 @@
     [KnownType(typeof(ThumbnailModel))]
     [KnownType(typeof(TrustedCertificate))]
     [KnownType(typeof(CertificateTrust))]
+    [KnownType(typeof(GeneralSettings))]
     public abstract class SerializableModel : INotifyPropertyChanged
     {
         private PropertyChangedEventHandler _propertyChanged;

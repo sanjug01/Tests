@@ -21,7 +21,7 @@ namespace RdClient.Shared.Test.ViewModels
             _testData = new TestData();
             _nav = new Mock.NavigationService();
             _context = new Mock.ModalPresentationContext();            
-            _args = new AddUserViewArgs(_testData.NewValidCredential(), true, CredentialPromptMode.FreshCredentialsNeeded);
+            _args = new AddUserViewArgs(_testData.NewValidCredential().Model, true, CredentialPromptMode.FreshCredentialsNeeded);
             _vm = new AddUserViewModel();
             ((IViewModel)_vm).Presenting(_nav, _args, _context);
         }
@@ -89,16 +89,16 @@ namespace RdClient.Shared.Test.ViewModels
         public void AddUserViewModel_ShouldCallOkHandler()
         {
             Assert.IsNull(_context.Result);
-            Credentials newCreds = _testData.NewValidCredential();
+            CredentialsModel newCreds = _testData.NewValidCredential().Model;
             _vm.User = newCreds.Username;
             _vm.Password = newCreds.Password;
             _vm.OkCommand.Execute(null);
             CredentialPromptResult result = _context.Result as CredentialPromptResult;
             Assert.IsNotNull(result);
             Assert.IsFalse(result.UserCancelled);
-            Assert.IsNotNull(result.Credential);
-            Assert.AreEqual(newCreds.Username, result.Credential.Username);
-            Assert.AreEqual(newCreds.Password, result.Credential.Password);
+            Assert.IsNotNull(result.Credentials);
+            Assert.AreEqual(newCreds.Username, result.Credentials.Username);
+            Assert.AreEqual(newCreds.Password, result.Credentials.Password);
         }
 
         [TestMethod]
@@ -110,7 +110,7 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsNotNull(result);
             Assert.IsTrue(result.UserCancelled);
             Assert.IsFalse(result.Save);
-            Assert.IsNull(result.Credential);
+            Assert.IsNull(result.Credentials);
         }
 
         [TestMethod]
@@ -122,13 +122,13 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void AddUserViewModel_PasswordSetByArgs()
         {
-            Assert.AreEqual(_args.User.Password, _vm.Password);    
+            Assert.AreEqual(_args.Credentials.Password, _vm.Password);    
         }
 
         [TestMethod]
         public void AddUserViewModel_UsernameSetByArgs()
         {
-            Assert.AreEqual(_args.User.Username, _vm.User);            
+            Assert.AreEqual(_args.Credentials.Username, _vm.User);            
         }
 
         [TestMethod]

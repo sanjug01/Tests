@@ -1,13 +1,13 @@
-﻿using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using RdClient.Shared.ValidationRules;
-using System;
-using System.Diagnostics.Contracts;
-using System.Globalization;
-using System.Windows.Input;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.ValidationRules;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Globalization;
+    using System.Windows.Input;
+
     public enum CredentialPromptMode
     {
         EnterCredentials,
@@ -17,14 +17,29 @@ namespace RdClient.Shared.ViewModels
 
     public sealed class CredentialPromptResult
     {
-        public CredentialPromptResult(Credentials credential, bool save, bool userCancelled)
+        public static CredentialPromptResult CreateWithCredentials(CredentialsModel credentials, bool save)
         {
-            this.Credential = credential;
-            this.Save = save;
-            this.UserCancelled = userCancelled;
+            return new CredentialPromptResult(credentials, save);
         }
 
-        public Credentials Credential { get; private set; }
+        public static CredentialPromptResult CreateCancelled()
+        {
+            return new CredentialPromptResult();
+        }
+
+        private CredentialPromptResult()
+        {
+            this.UserCancelled = true;
+        }
+
+        private CredentialPromptResult(CredentialsModel credentials, bool save)
+        {
+            this.Credentials = credentials;
+            this.Save = save;
+            this.UserCancelled = false;
+        }
+
+        public CredentialsModel Credentials { get; private set; }
 
         public bool Save { get; private set; }
 
@@ -34,25 +49,27 @@ namespace RdClient.Shared.ViewModels
     public class AddUserViewArgs
     {
         private readonly CredentialPromptMode _mode;
-        private readonly Credentials _cred;
+        private readonly CredentialsModel _credentials;
         private readonly bool _showSave;
 
-        public AddUserViewArgs(Credentials credential, bool showSave, CredentialPromptMode mode = CredentialPromptMode.EnterCredentials)
+        public AddUserViewArgs(CredentialsModel credentials, bool showSave, CredentialPromptMode mode = CredentialPromptMode.EnterCredentials)
         {
-            _cred = credential;
+            _credentials = credentials;
             _showSave = showSave;
             _mode = mode;
         }
 
         public bool ShowSave { get { return _showSave; } }
 
-        public Credentials User { get { return _cred; } }
+        public CredentialsModel Credentials { get { return _credentials; } }
 
         public CredentialPromptMode Mode { get { return _mode; } }
     }
 
     public class AddUserViewModel : ViewModelBase
     {
+        private readonly UsernameValidationRule _ruleUsername;
+
         private AddUserViewArgs _args;
         private bool _storeCredentials;
         private string _user;
@@ -63,6 +80,8 @@ namespace RdClient.Shared.ViewModels
 
         public AddUserViewModel()
         {
+            _ruleUsername = new UsernameValidationRule();
+
             _okCommand = new RelayCommand(new Action<object>(OkCommandHandler), (o) => {
                 return 
                     (this.User != null) && 
@@ -95,11 +114,7 @@ namespace RdClient.Shared.ViewModels
 
         public bool IsUsernameValid
         {
-            get
-            {
-                UsernameValidationRule rule = new UsernameValidationRule();
-                return rule.Validate(this.User, CultureInfo.CurrentCulture);
-            }
+            get { return _ruleUsername.Validate(this.User, CultureInfo.CurrentCulture); }
         }
 
         public string User
@@ -125,24 +140,27 @@ namespace RdClient.Shared.ViewModels
 
         protected override void OnPresenting(object activationParameter)
         {
-            Contract.Assert(null != activationParameter as AddUserViewArgs);
+            Contract.Assert(activationParameter is AddUserViewArgs);
+
             _args = activationParameter as AddUserViewArgs;
+
             this.ShowSave = _args.ShowSave;
-            this.User = _args.User.Username;
-            this.Password = _args.User.Password;
+            this.User = _args.Credentials.Username;
+            this.Password = _args.Credentials.Password;
             this.Mode = _args.Mode;
         }
 
         private void OkCommandHandler(object o)
         {
-            _args.User.Username = this.User;
-            _args.User.Password = this.Password;
-            DismissModal(new CredentialPromptResult(_args.User, this.StoreCredentials, false));
+            _args.Credentials.Username = this.User;
+            _args.Credentials.Password = this.Password;
+
+            DismissModal(CredentialPromptResult.CreateWithCredentials(_args.Credentials, this.StoreCredentials));
         }
 
         private void CancelCommandHandler(object o)
         {
-            DismissModal(new CredentialPromptResult(null, false, true));
+            DismissModal(CredentialPromptResult.CreateCancelled());
         }
     }
 }

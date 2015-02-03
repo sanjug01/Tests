@@ -1,27 +1,27 @@
-﻿﻿﻿using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Windows.Input;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    ﻿﻿using RdClient.Shared.Data;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
+
 
     public class DeleteDesktopsArgs
     {
-        public IList<Desktop> SelectedDesktops { get; private set; }
+        public IList<IModelContainer<DesktopModel>> SelectedDesktops { get; private set; }
 
-        public DeleteDesktopsArgs(IList<Desktop> selectedDesktops)
+        public DeleteDesktopsArgs(IList<IModelContainer<DesktopModel>> selectedDesktops)
         {
             SelectedDesktops = selectedDesktops;
         }
 
-        public DeleteDesktopsArgs(Desktop desktop)
+        public DeleteDesktopsArgs(IModelContainer<DesktopModel> desktop)
         {
             // create a single object list
-            SelectedDesktops =  new List<Desktop>();
-            SelectedDesktops.Add(desktop);            
+            SelectedDesktops = new List<IModelContainer<DesktopModel>>() { desktop };
         }
     }
 
@@ -29,16 +29,17 @@ namespace RdClient.Shared.ViewModels
     {
         private readonly ICommand _deleteCommand;
         private readonly ICommand _cancelCommand;
-        private IList<Desktop> _selectedDesktops;
+        private IList<IModelContainer<DesktopModel>> _selectedDesktops;
         private int _desktopsCount;
 
         public ICommand DeleteCommand { get { return _deleteCommand; } }
         public ICommand CancelCommand { get { return _cancelCommand; } }
         public IPresentableView DialogView { private get; set; }
 
-        public IList<Desktop> SelectedDesktops 
+        public IList<IModelContainer<DesktopModel>> SelectedDesktops 
         {
             get { return _selectedDesktops; }
+
             private set
             {
                 SetProperty(ref _selectedDesktops, value, "SelectedDesktops");
@@ -57,7 +58,7 @@ namespace RdClient.Shared.ViewModels
             get { return _desktopsCount; }
             private set
             {
-                SetProperty(ref _desktopsCount, value, "DesktopsCount");
+                SetProperty(ref _desktopsCount, value);
                 this.EmitPropertyChanged("IsSingleSelection");
             }
         }
@@ -72,16 +73,17 @@ namespace RdClient.Shared.ViewModels
 
         private void DeleteDesktops(object o)
         {
-            Contract.Requires(null != this.DataModel);
+            Contract.Requires(null != this.ApplicationDataModel);
 
             if (null != SelectedDesktops)
             {
-                for(int i=0; i< SelectedDesktops.Count; i++)
+                foreach(IModelContainer<DesktopModel> container in _selectedDesktops)
                 {
-                    this.DataModel.LocalWorkspace.Connections.Remove(SelectedDesktops[i]);
+                    this.ApplicationDataModel.LocalWorkspace.Connections.RemoveModel(container.Id);
                 }
 
                 SelectedDesktops.Clear();
+                this.DesktopsCount = 0;
             }
 
             NavigationService.DismissModalView(DialogView);

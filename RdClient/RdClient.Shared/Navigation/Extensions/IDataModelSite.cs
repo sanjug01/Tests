@@ -2,9 +2,8 @@
 {
     using RdClient.Shared.Models;
 
-    interface IViewModelWithData
+    public interface IDataModelSite
     {
-        RdDataModel DataModel { get; set; }
         void SetDataModel(ApplicationDataModel dataModel);
     }
 }

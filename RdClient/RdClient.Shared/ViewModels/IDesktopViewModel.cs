@@ -10,9 +10,9 @@ namespace RdClient.Shared.ViewModels
 {
     public interface IDesktopViewModel
     {
-        Desktop Desktop { get; }
+        DesktopModel Desktop { get; }
 
-        Credentials Credential { get; }
+        CredentialsModel Credentials { get; }
 
         bool IsSelected { get; set; }
 

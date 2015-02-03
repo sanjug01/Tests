@@ -7,23 +7,23 @@ namespace RdClient.Shared.ViewModels
 {
     public class CredentialViewModel: MutableObject, ICredentialViewModel
     {
-        private Credentials _cred;
+        private CredentialsModel _credentials;
         private INavigationService _nav;
-        private RdDataModel _dataModel;
+        private ApplicationDataModel _dataModel;
         private RelayCommand _editCommand;
         private RelayCommand _deleteCommand;
 
-        public CredentialViewModel(Credentials cred)
+        public CredentialViewModel(CredentialsModel credentials)
         {
-            this.Credential = cred;
+            _credentials = credentials;
             _editCommand = new RelayCommand((o) => this.EditCommandExecute());
             _deleteCommand = new RelayCommand((o) => this.DeleteCommandExecute());
         }
 
-        public Credentials Credential
+        public CredentialsModel Credentials
         {
-            get { return _cred; }
-            private set { SetProperty(ref _cred, value); }
+            get { return _credentials; }
+            private set { SetProperty(ref _credentials, value); }
         }
 
         public ICommand EditCommand
@@ -36,7 +36,7 @@ namespace RdClient.Shared.ViewModels
             get { return _deleteCommand; }
         }
 
-        public void Presented(INavigationService navService, RdDataModel dataModel)
+        public void Presented(INavigationService navService, ApplicationDataModel dataModel)
         {
             _nav = navService;
             _dataModel = dataModel;
@@ -44,13 +44,14 @@ namespace RdClient.Shared.ViewModels
 
         private void EditCommandExecute()
         {
-            AddUserViewArgs addUserArgs = new AddUserViewArgs(this.Credential, false);
+            AddUserViewArgs addUserArgs = new AddUserViewArgs(this.Credentials, false);
+
             _nav.PushModalView("AddUserView", addUserArgs);        
         }
 
         private void DeleteCommandExecute()
         {
-            _nav.PushModalView("DeleteUserView", this.Credential);
+            _nav.PushModalView("DeleteUserView", this.Credentials);
         }
     }
 }

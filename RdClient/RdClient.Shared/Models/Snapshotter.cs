@@ -58,11 +58,11 @@ namespace RdClient.Shared.Models
             this.TakeSnapshot();       
         }
 
-        private async void TakeSnapshot()
+        private void TakeSnapshot()
         {
             if (_settings.UseThumbnails && _isConnectionAvailable)
             {
-                await _thumbnail.Update(_connection.GetSnapshot());
+                _thumbnail.Update(_connection.GetSnapshot());
             }
         }
     }

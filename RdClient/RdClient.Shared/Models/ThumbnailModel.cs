@@ -11,7 +11,7 @@
     using System.Runtime.InteropServices.WindowsRuntime;
 
     [DataContract(IsReference=true)]
-    public sealed class ThumbnailModel : SerializableModel
+    public sealed class ThumbnailModel : SerializableModel, IThumbnail
     {
         private static readonly uint ThumbnailHeight = 276;
 
@@ -22,15 +22,15 @@
         {
         }
 
+        void IThumbnail.Update(IRdpScreenSnapshot snapshot)
+        {
+            this.EncodedImageBytes = GetSnapshotBytes(snapshot);
+        }
+
         public byte[] EncodedImageBytes
         {
             get { return _encodedImageBytes; }
             set { this.SetProperty<byte[]>(ref _encodedImageBytes, value); }
-        }
-
-        public void Update(IRdpScreenSnapshot snapshot)
-        {
-            this.EncodedImageBytes = GetSnapshotBytes(snapshot);
         }
 
         private BitmapEncoder CreateBitmapEncoderWithStream(IRandomAccessStream stream)

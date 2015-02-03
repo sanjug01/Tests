@@ -89,14 +89,14 @@ namespace RdClient.Shared.CxWrappers
             }         
         }
 
-        public void SetCredentials(Credentials credentials, bool fUsingSavedCreds)
+        public void SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)
         {
             _instrument.Instrument("SetCredentials");
             int xRes = _rdpConnectionCx.SetUserCredentials(credentials.Username, credentials.Domain, credentials.Password, fUsingSavedCreds);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set user credentials.");
         }
         
-        public void Connect(Credentials credentials, bool fUsingSavedCreds)
+        public void Connect(CredentialsModel credentials, bool fUsingSavedCreds)
         {
             _instrument.Instrument("Connect");
             this.SetCredentials(credentials, fUsingSavedCreds);

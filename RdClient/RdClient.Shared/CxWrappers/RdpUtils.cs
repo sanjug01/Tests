@@ -6,7 +6,7 @@ namespace RdClient.Shared.CxWrappers.Utils
     {
         public static void ApplyDesktop(
             IRdpProperties properties, 
-            Desktop desktop)
+            DesktopModel desktop)
         {
             properties.SetStringProperty("Full Address", desktop.HostName);
         }

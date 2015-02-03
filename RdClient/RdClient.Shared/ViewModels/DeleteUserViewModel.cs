@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Models;
+﻿using RdClient.Shared.Data;
+using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace RdClient.Shared.ViewModels
 {
     public class DeleteUserViewModel : ViewModelBase
     {
-        private Credentials _cred;
+        private IModelContainer<CredentialsModel> _cred;
         private readonly ICommand _deleteCommand;
         private readonly ICommand _cancelCommand;
 
@@ -22,7 +23,7 @@ namespace RdClient.Shared.ViewModels
 
         public IPresentableView PresentableView { private get; set; }
 
-        public Credentials Credential
+        public IModelContainer<CredentialsModel> Credentials
         {
             get { return _cred; }
             private set{ SetProperty(ref _cred, value); }
@@ -41,23 +42,29 @@ namespace RdClient.Shared.ViewModels
 
         protected override void OnPresenting(object activationParameter)
         {
-            Contract.Requires(null != activationParameter as Credentials);
-            Contract.Assert(activationParameter is Credentials);
-            this.Credential = activationParameter as Credentials;
+            Contract.Assert(activationParameter is IModelContainer<CredentialsModel>);
+            this.Credentials = (IModelContainer<CredentialsModel>)activationParameter;
         }
 
         private void DeleteCommandExecute()
         {
-            Contract.Requires(null != this.DataModel);
-            Contract.Requires(null != this.Credential);
-            //Remove all references to this credential first
-            List<Desktop> desktops = this.DataModel.LocalWorkspace.Connections.OfType<Desktop>().Where(d => d.CredentialId.Equals(this.Credential.Id)).ToList();
-            foreach (Desktop desktop in desktops)
+            Contract.Assert(null != this.ApplicationDataModel);
+            Contract.Assert(null != this.Credentials);
+            //
+            // Remove all references to this credential first
+            //
+            foreach (IModelContainer<RemoteConnectionModel> container in this.ApplicationDataModel.LocalWorkspace.Connections.Models)
             {
-                desktop.CredentialId = Guid.Empty;
+                if(container.Model is DesktopModel)
+                {
+                    IModelContainer<DesktopModel> d = new TemporaryModelContainer<DesktopModel>(container.Id, (DesktopModel)container.Model);
+
+                    if (this.Credentials.Id.Equals(d.Model.CredentialsId))
+                        d.Model.CredentialsId = Guid.Empty;
+                }
             }
             //remove this credential
-            this.DataModel.LocalWorkspace.Credentials.Remove(this.Credential);
+            this.ApplicationDataModel.LocalWorkspace.Credentials.RemoveModel(this.Credentials.Id);
             
             NavigationService.DismissModalView(this.PresentableView);
         }

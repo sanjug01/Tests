@@ -13,6 +13,7 @@
         private IStorageFolder _rootFolder;
         private IModelSerializer _modelSerializer;
         private CertificateTrust _certificateTrust;
+        private GeneralSettings _settings;
         private WorkspaceModel<LocalWorkspaceModel> _localWorkspace;
 
         public ICommand Save
@@ -63,6 +64,11 @@
             get { return _certificateTrust; }
         }
 
+        public GeneralSettings Settings
+        {
+            get { return _settings; }
+        }
+
         ICommand IPersistentObject.Save
         {
             get { return _save.Command; }
@@ -79,6 +85,7 @@
             {
                 Contract.Assert(null == _localWorkspace);
                 Contract.Assert(null == _certificateTrust);
+                Contract.Assert(null == _settings);
                 //
                 // Create all subcomponents of the data model. This is done only once, when both the root folder and model serializer
                 // have been set (in XAML).
@@ -91,6 +98,9 @@
                 //
                 _certificateTrust = RdClient.Shared.Data.CertificateTrust.Load(_rootFolder, "CertificateTrust.model", _modelSerializer);
                 SubscribeForPersistentStateUpdates(_certificateTrust);
+
+                _settings = GeneralSettings.Load(_rootFolder, "GeneralSettings.model", _modelSerializer);
+                SubscribeForPersistentStateUpdates(_settings);
             }
         }
 

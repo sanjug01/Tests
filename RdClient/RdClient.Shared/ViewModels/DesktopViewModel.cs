@@ -1,37 +1,46 @@
-﻿using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using RdClient.Shared.Navigation.Extensions;
-using System;
-using System.ComponentModel;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Windows.Input;
-using Windows.Storage.Streams;
-using Windows.UI.Xaml.Media.Imaging;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Data;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics;
+    using System.Diagnostics.Contracts;
+    using System.Runtime.InteropServices.WindowsRuntime;
+    using System.Windows.Input;
+    using Windows.Storage.Streams;
+    using Windows.UI.Xaml.Media.Imaging;
+
     public class DesktopViewModel : Helpers.MutableObject, IDesktopViewModel
     {
         private readonly RelayCommand _editCommand;
         private readonly RelayCommand _connectCommand;
         private readonly RelayCommand _deleteCommand;
-        private Desktop _desktop;
+        private readonly DesktopModel _desktop;
+        private readonly Guid _desktopId;
         private bool _isSelected;
         private bool _selectionEnabled;
-        private RdDataModel _dataModel;
+        private ApplicationDataModel _dataModel;
         private BitmapImage _thumbnailImage;
         private IExecutionDeferrer _executionDeferrer;
         private bool _thumbnailUpdateNeeded;
         private bool _hasThumbnailImage;
 
-        public DesktopViewModel(Desktop desktop, INavigationService navService, RdDataModel dataModel, IExecutionDeferrer executionDeferrer)
+        public DesktopViewModel(DesktopModel desktop, Guid desktopId, INavigationService navService, ApplicationDataModel dataModel, IExecutionDeferrer executionDeferrer)
         {
+            Contract.Assert(null != desktop);
+            Contract.Assert(!desktopId.Equals(Guid.Empty));
+
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
             _thumbnailUpdateNeeded = true;
             _executionDeferrer = executionDeferrer;
-            this.Desktop = desktop;
+
+            _desktop = desktop;
+            _desktopId = desktopId;
 
             /// DesktopVieModel does not require Presenting/Dismissing, 
             //          but stil needs DataModel and NavigationService
@@ -52,28 +61,37 @@ namespace RdClient.Shared.ViewModels
 
         public INavigationService NavigationService { private get; set; }
 
-        public Desktop Desktop
+        public Guid DesktopId
         {
-            get { return _desktop; }
-            private set 
-            { 
-                SetProperty(ref _desktop, value);
-            }
+            get { return _desktopId; }
         }
 
-        public Credentials Credential
+        public DesktopModel Desktop
+        {
+            get { return _desktop; }
+        }
+
+        public CredentialsModel Credentials
         {
             get 
             {
-                Credentials cred;
-                if (this.Desktop.HasCredential)
+                CredentialsModel cred = null;
+
+                if (_desktop.HasCredentials)
                 {
-                    cred = _dataModel.LocalWorkspace.Credentials.GetItemWithId(this.Desktop.CredentialId);
+                    try
+                    {
+                        cred = _dataModel.LocalWorkspace.Credentials.GetModel(_desktop.CredentialsId);
+                    }
+                    catch(Exception ex)
+                    {
+                        //
+                        // TODO: perhaps, remove credentials ID from the desktop
+                        //
+                        Debug.WriteLine("Exception {0} when looking up the credentials for desktop {1}", ex, _desktopId);
+                    }
                 }
-                else
-                {
-                    cred = null;
-                }
+
                 return cred;
             }
         }
@@ -122,17 +140,11 @@ namespace RdClient.Shared.ViewModels
             private set { SetProperty(ref _hasThumbnailImage, value); }
         }
 
-        public Thumbnail Thumbnail
+        public ThumbnailModel Thumbnail
         {
             get 
-            { 
-                if (!this.Desktop.HasThumbnail || !_dataModel.Thumbnails.ContainsItemWithId(this.Desktop.ThumbnailId))
-                {
-                    Thumbnail thumbnail = new Thumbnail();
-                    this.Desktop.ThumbnailId = thumbnail.Id;
-                    _dataModel.Thumbnails.Add(thumbnail);
-                }
-                return _dataModel.Thumbnails.GetItemWithId(this.Desktop.ThumbnailId);
+            {
+                return _desktop.Thumbnail;
             }
         }
 
@@ -158,32 +170,35 @@ namespace RdClient.Shared.ViewModels
 
         private void ConnectCommandExecute(object o)
         {
-            if (this.Credential != null)
+            if (this.Credentials != null)
             {
-                InternalConnect(this.Credential, false);
+                InternalConnect(this.Credentials, false);
             }
             else
             {
-                AddUserViewArgs args = new AddUserViewArgs(new Credentials(), true);
+                AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), true);
+
                 ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion();
+
                 addUserCompleted.Completed += (s, e) =>
+                {
+                    CredentialPromptResult result = e.Result as CredentialPromptResult;
+
+                    if (result != null && !result.UserCancelled)
                     {
-                        CredentialPromptResult result = e.Result as CredentialPromptResult;
-                        if (result != null && !result.UserCancelled)
-                        {
-                            InternalConnect(result.Credential, result.Save);
-                        }
-                    };
+                        InternalConnect(result.Credentials, result.Save);
+                    }
+                };
+
                 NavigationService.PushModalView("AddUserView", args, addUserCompleted);
             }            
         }
 
-        private void InternalConnect(Credentials credentials, bool storeCredentials)
+        private void InternalConnect(CredentialsModel credentials, bool storeCredentials)
         {
             if(storeCredentials)
             {
-                this.Desktop.CredentialId = credentials.Id;
-                this._dataModel.LocalWorkspace.Credentials.Add(credentials);
+                this.Desktop.CredentialsId = this._dataModel.LocalWorkspace.Credentials.AddNewModel(credentials);
             }
 
             ConnectionInformation connectionInformation = new ConnectionInformation()
@@ -198,7 +213,7 @@ namespace RdClient.Shared.ViewModels
 
         private void DeleteCommandExecute(object o)
         {
-            NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(this.Desktop));            
+            NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(new TemporaryModelContainer<DesktopModel>(_desktopId, _desktop)));            
         }
 
         private void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -224,10 +239,16 @@ namespace RdClient.Shared.ViewModels
                             await newImage.SetSourceAsync(stream);
                         }
                         this.ThumbnailImage = newImage;
+
+                        this.HasThumbnailImage = this.ThumbnailImage != null
+                                                && this.ThumbnailImage.PixelHeight > 0
+                                                && this.ThumbnailImage.PixelHeight > 0;
+#if false
                         this.HasThumbnailImage = _dataModel.Settings.UseThumbnails 
                                                     && this.ThumbnailImage != null 
                                                     && this.ThumbnailImage.PixelHeight > 0 
                                                     && this.ThumbnailImage.PixelHeight > 0;
+#endif
                     });
             }
         }

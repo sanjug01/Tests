@@ -1,6 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RdClient.Shared.Data;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
+using RdClient.Shared.Navigation.Extensions;
+using RdClient.Shared.Test.Data;
 using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System.Collections.Generic;
@@ -12,7 +15,7 @@ namespace RdClient.Shared.Test.ViewModels
     public class SettingsViewModelTests
     {
         private TestData _testData;
-        private RdDataModel _dataModel;
+        private ApplicationDataModel _dataModel;
         private Mock.NavigationService _navService;
         private SettingsViewModel _vm;
 
@@ -21,9 +24,13 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _testData = new TestData();
             _navService = new Mock.NavigationService();
-            _dataModel = new RdDataModel(); 
+            _dataModel = new ApplicationDataModel()
+            {
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer()
+            };
             _vm = new SettingsViewModel();
-            _vm.DataModel = _dataModel;
+            ((IDataModelSite)_vm).SetDataModel(_dataModel);
             ((IViewModel)_vm).Presenting(_navService, null, null); 
         }
 
@@ -57,34 +64,34 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void HasCredentialsFalseWhenDataModelHasNoCredentials()
         {
-            Assert.AreEqual(0, _dataModel.LocalWorkspace.Credentials.Count);
+            Assert.AreEqual(0, _dataModel.LocalWorkspace.Credentials.Models.Count);
             Assert.IsFalse(_vm.HasCredentials);
         }
 
         [TestMethod]
         public void AddCredentialToDataModelAddsMatchingCredentialViewModel()
         {
-            Credentials cred = _testData.NewValidCredential();
-            _dataModel.LocalWorkspace.Credentials.Add(cred);
-            Assert.AreEqual(cred, _vm.CredentialsViewModels[0].Credential);
+            CredentialsModel cred = _testData.NewValidCredential().Model;
+            _dataModel.LocalWorkspace.Credentials.AddNewModel(cred);
+            Assert.AreEqual(cred, _vm.CredentialsViewModels[0].Credentials);
         }
 
         [TestMethod]
         public void HasCredentialsTrueAfterAddingCredentialToDataModel()
         {
             Assert.IsFalse(_vm.HasCredentials);
-            _dataModel.LocalWorkspace.Credentials.Add(_testData.NewValidCredential());
+            _dataModel.LocalWorkspace.Credentials.AddNewModel(_testData.NewValidCredential().Model);
             Assert.IsTrue(_vm.HasCredentials);
         }
 
         [TestMethod]
         public void HasCredentialsFalseAfterRemovingLastCredentialFromDataModel()
         {
-            _dataModel.LocalWorkspace.Credentials.Add(_testData.NewValidCredential());
+            _dataModel.LocalWorkspace.Credentials.AddNewModel(_testData.NewValidCredential().Model);
             Assert.IsTrue(_vm.HasCredentials);
-            foreach (Credentials cred in _dataModel.LocalWorkspace.Credentials.ToList())
+            foreach (IModelContainer<CredentialsModel> cred in _dataModel.LocalWorkspace.Credentials.Models.ToList())
             {
-                _dataModel.LocalWorkspace.Credentials.Remove(cred);
+                _dataModel.LocalWorkspace.Credentials.RemoveModel(cred.Id);
             }
             Assert.AreEqual(0, _vm.CredentialsViewModels.Count);
             Assert.IsFalse(_vm.HasCredentials);            
@@ -99,8 +106,12 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void OnPresentingSetsGeneralSettings()
         {
-            RdDataModel newDataModel = new RdDataModel();
-            _vm.DataModel = newDataModel;
+            ApplicationDataModel newDataModel = new ApplicationDataModel()
+            {
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer()
+            };
+            ((IDataModelSite)_vm).SetDataModel(newDataModel);
             ((IViewModel)_vm).Presenting(_navService, null, null); 
             Assert.AreEqual(newDataModel.Settings, _vm.GeneralSettings);
         }
@@ -126,17 +137,23 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void NewDataModelRecreatesAllCredentialViewModels()
         {
-            RdDataModel newDataModel = new RdDataModel();
-            List<Credentials> creds = _testData.NewSmallListOfCredentials();
-            foreach (Credentials cred in creds)
+            ApplicationDataModel newDataModel = new ApplicationDataModel()
             {
-                newDataModel.LocalWorkspace.Credentials.Add(cred);
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer()
+            };
+            IList<IModelContainer<CredentialsModel>> creds = _testData.NewSmallListOfCredentials();
+
+            foreach (IModelContainer<CredentialsModel> cred in creds)
+            {
+                newDataModel.LocalWorkspace.Credentials.AddNewModel(cred.Model);
             }
-            _vm.DataModel = newDataModel;
+
+            ((IDataModelSite)_vm).SetDataModel(newDataModel);
             Assert.AreEqual(creds.Count, _vm.CredentialsViewModels.Count);
-            foreach (Credentials cred in creds)
+            foreach (IModelContainer<CredentialsModel> cred in creds)
             {
-                _vm.CredentialsViewModels.Any(vm => cred.Equals(vm.Credential));
+                _vm.CredentialsViewModels.Any(vm => cred.Model.Equals(vm.Credentials));
             }
         }
     }

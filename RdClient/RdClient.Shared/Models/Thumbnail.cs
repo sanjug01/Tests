@@ -18,20 +18,25 @@ namespace RdClient.Shared.Models
 
         private byte[] _imageBytes;        
 
-        public async Task Update(IRdpScreenSnapshot snapshot)
+        public void Update(IRdpScreenSnapshot snapshot)
         {
             byte[] encodedBytes;
             using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
             {
-                BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream).AsTask().ConfigureAwait(false);
+                Task<BitmapEncoder> taskEncoder = BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream).AsTask<BitmapEncoder>();
+                taskEncoder.Wait();
+                BitmapEncoder encoder = taskEncoder.Result;
+
                 encoder.SetPixelData(snapshot.PixelFormat, BitmapAlphaMode.Ignore, snapshot.Width, snapshot.Height, 96.0, 96.0, snapshot.RawImage);
                 encoder.BitmapTransform.ScaledHeight = THUMBNAIL_HEIGHT;
                 encoder.BitmapTransform.ScaledWidth = Convert.ToUInt32(snapshot.Width * THUMBNAIL_HEIGHT / (double) snapshot.Height);
                 encoder.BitmapTransform.InterpolationMode = BitmapInterpolationMode.Fant;
-                await encoder.FlushAsync().AsTask().ConfigureAwait(false);
+
+                encoder.FlushAsync().AsTask().Wait();
+
                 encodedBytes = new byte[stream.Size];
                 stream.Seek(0);
-                await stream.ReadAsync(encodedBytes.AsBuffer(), (uint) stream.Size, InputStreamOptions.None);
+                stream.ReadAsync(encodedBytes.AsBuffer(), (uint) stream.Size, InputStreamOptions.None).AsTask<IBuffer, uint>().Wait();
             }
             this.EncodedImageBytes = encodedBytes;
         }

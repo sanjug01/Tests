@@ -15,7 +15,7 @@ namespace RdClient.Shared.Models
 
     public interface IThumbnail
     {
-        Task Update(IRdpScreenSnapshot snapshot);
+        void Update(IRdpScreenSnapshot snapshot);
 
         byte[] EncodedImageBytes { get; }
     }

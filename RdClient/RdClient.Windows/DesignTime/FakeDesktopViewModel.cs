@@ -1,13 +1,14 @@
 ﻿using RdClient.Shared.Models;
 using RdClient.Shared.ViewModels;
 using System;
+using System.Windows.Input;
 
 namespace RdClient.DesignTime
 {
     public class FakeDesktopViewModel : IDesktopViewModel
     {
-        private Credentials _cred = new Credentials() { Domain = "adomain", HaveBeenPersisted = false, Password = "1234AbCd", Username = "exampleUser" };
-        private Desktop _desktop = new Desktop(new RdDataModel().LocalWorkspace) { HostName = "ExampleHostname" };
+        private CredentialsModel _cred = new CredentialsModel() { Domain = "adomain", Password = "1234AbCd", Username = "exampleUser" };
+        private DesktopModel _desktop = new DesktopModel() { HostName = "ExampleHostname" };
 
         public FakeDesktopViewModel()
         {
@@ -15,29 +16,29 @@ namespace RdClient.DesignTime
             this.SelectionEnabled = true;
         }
 
-        public Desktop Desktop
+        public DesktopModel Desktop
         {
             get { return _desktop; }
         }
 
-        public Credentials Credential
+        public CredentialsModel Credentials
         {
             get { return _cred; }
         }
 
         public bool IsSelected { get; set; }
 
-        public System.Windows.Input.ICommand EditCommand
+        public ICommand EditCommand
         {
             get { return null; }
         }
 
-        public System.Windows.Input.ICommand ConnectCommand
+        public ICommand ConnectCommand
         {
             get { return null; }
         }
 
-        public System.Windows.Input.ICommand DeleteCommand
+        public ICommand DeleteCommand
         {
             get { return null; }
         }

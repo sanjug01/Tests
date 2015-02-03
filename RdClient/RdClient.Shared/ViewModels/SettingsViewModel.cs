@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Models;
+﻿using RdClient.Shared.Data;
+using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -76,48 +77,52 @@ namespace RdClient.Shared.ViewModels
             this.ShowGeneralSettings = true;
             this.ShowGatewaySettings = false;
             this.ShowUserSettings = false;
-            this.GeneralSettings = this.DataModel.Settings;
+            this.GeneralSettings = this.ApplicationDataModel.Settings;
             foreach (CredentialViewModel vm in this.CredentialsViewModels)
             {
-                vm.Presented(this.NavigationService, this.DataModel);
+                vm.Presented(this.NavigationService, this.ApplicationDataModel);
             }
         }
 
         private void SettingsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "DataModel")
+            if (e.PropertyName == "ApplicationDataModel")
             {
                 ObservableCollection<ICredentialViewModel> credVMs = new ObservableCollection<ICredentialViewModel>();
-                foreach (Credentials cred in this.DataModel.LocalWorkspace.Credentials)
+
+                foreach (IModelContainer<CredentialsModel> cred in this.ApplicationDataModel.LocalWorkspace.Credentials.Models)
                 {
-                    CredentialViewModel vm = new CredentialViewModel(cred);
+                    CredentialViewModel vm = new CredentialViewModel(cred.Model);
                     credVMs.Add(vm);
                 }
                 this.CredentialsViewModels = credVMs;
                 this.HasCredentials = this.CredentialsViewModels.Count > 0;
-                this.DataModel.LocalWorkspace.Credentials.CollectionChanged += Credentials_CollectionChanged;
+
+                INotifyCollectionChanged ncc = this.ApplicationDataModel.LocalWorkspace.Credentials.Models;
+                ncc.CollectionChanged += Credentials_CollectionChanged;
             }
         }
 
-        private void Credentials_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Credentials_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                foreach (Credentials cred in e.NewItems)
+                foreach (IModelContainer<CredentialsModel> cred in e.NewItems)
                 {
-                    CredentialViewModel vm = new CredentialViewModel(cred);
-                    vm.Presented(this.NavigationService, this.DataModel);
+                    CredentialViewModel vm = new CredentialViewModel(cred.Model);
+                    vm.Presented(this.NavigationService, this.ApplicationDataModel);
                     this.CredentialsViewModels.Add(vm);
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                var vmsToRemove = this.CredentialsViewModels.Where(vm => e.OldItems.Contains(vm.Credential)).ToList();
-                foreach (CredentialViewModel vm in vmsToRemove)
+                foreach(IModelContainer<CredentialsModel> container in e.OldItems)
                 {
+                    ICredentialViewModel vm = this.CredentialsViewModels.First(cvm => object.ReferenceEquals(cvm.Credentials, container.Model));
                     this.CredentialsViewModels.Remove(vm);
                 }
             }
+
             this.HasCredentials = this.CredentialsViewModels.Count > 0;
         }
 
@@ -128,14 +133,17 @@ namespace RdClient.Shared.ViewModels
 
         private void AddUserCommandExecute()
         {
-            AddUserViewArgs args = new AddUserViewArgs(new Credentials(), false);
+            AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
+
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion();
+
             addUserCompleted.Completed += (s, e) =>
             {
                 CredentialPromptResult result = e.Result as CredentialPromptResult;
+
                 if (result != null && !result.UserCancelled)
                 {
-                    this.DataModel.LocalWorkspace.Credentials.Add(result.Credential);
+                    this.ApplicationDataModel.LocalWorkspace.Credentials.AddNewModel(result.Credentials);
                 }
             };
             NavigationService.PushModalView("AddUserView", args, addUserCompleted);

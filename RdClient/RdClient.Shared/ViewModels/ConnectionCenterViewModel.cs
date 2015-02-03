@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Models;
+﻿using RdClient.Shared.Data;
+using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.Navigation.Extensions;
 using System.Collections.Generic;
@@ -54,7 +55,7 @@ namespace RdClient.Shared.ViewModels
 
         public bool HasDesktops
         {
-            get { return this.DataModel.LocalWorkspace.Connections.Count > 0; }
+            get { return this.ApplicationDataModel.LocalWorkspace.Connections.Models.Count > 0; }
         }
 
         public int SelectedCount
@@ -105,22 +106,29 @@ namespace RdClient.Shared.ViewModels
 
         private void ConnectionCenterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "DataModel")
+            if (e.PropertyName == "ApplicationDataModel")
             {
                 ObservableCollection<IDesktopViewModel> desktopVMs = new ObservableCollection<IDesktopViewModel>();
 
-                foreach (RemoteConnection rr in this.DataModel.LocalWorkspace.Connections)
+                foreach (IModelContainer<RemoteConnectionModel> rcm in this.ApplicationDataModel.LocalWorkspace.Connections.Models)
                 {
-                    rr.CastAndCall<Desktop>(desktop =>
+                    rcm.Model.CastAndCall<DesktopModel>(desktopModel =>
                     {
-                        DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel, this) { SelectionEnabled = this.DesktopsSelectable };
+                        DesktopViewModel vm = new DesktopViewModel(desktopModel, rcm.Id, this.NavigationService, this.ApplicationDataModel, this)
+                        {
+                            SelectionEnabled = this.DesktopsSelectable
+                        };
+
                         desktopVMs.Add(vm);
                         vm.PropertyChanged += DesktopSelection_PropertyChanged;
                     });
                 }
 
                 this.DesktopViewModels = desktopVMs;
-                this.DataModel.LocalWorkspace.Connections.CollectionChanged += Desktops_CollectionChanged;
+
+                INotifyCollectionChanged ncc = this.ApplicationDataModel.LocalWorkspace.Connections.Models;
+                ncc.CollectionChanged += Desktops_CollectionChanged;
+
                 this.EmitPropertyChanged("HasDesktops");
                 ((INotifyPropertyChanged)this.DesktopViewModels).PropertyChanged += DesktopViewModels_PropertyChanged;
             }
@@ -150,7 +158,7 @@ namespace RdClient.Shared.ViewModels
             DeleteDesktopCommand.EmitCanExecuteChanged();
         }
 
-        private void DesktopSelection_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void DesktopSelection_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals("IsSelected"))
             {
@@ -158,24 +166,33 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        private void Desktops_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Desktops_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                foreach (Desktop desktop in e.NewItems)
+                foreach(IModelContainer<RemoteConnectionModel> container in e.NewItems)
                 {
-                    DesktopViewModel vm = new DesktopViewModel(desktop, NavigationService, DataModel, this) { SelectionEnabled = this.DesktopsSelectable };
-                    vm.PropertyChanged += DesktopSelection_PropertyChanged;
-                    this.DesktopViewModels.Add(vm);
+                    if (container.Model is DesktopModel)
+                    {
+                        DesktopViewModel vm = new DesktopViewModel((DesktopModel)container.Model, container.Id, NavigationService, ApplicationDataModel, this)
+                        {
+                            SelectionEnabled = this.DesktopsSelectable
+                        };
+
+                        vm.PropertyChanged += DesktopSelection_PropertyChanged;
+                        this.DesktopViewModels.Add(vm);
+                    }
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                var vmsToRemove = this.DesktopViewModels.Where(vm => e.OldItems.Contains(vm.Desktop)).ToList();
-                foreach (DesktopViewModel vm in vmsToRemove)
+                foreach(IModelContainer<RemoteConnectionModel> container in e.OldItems)
                 {
-                    vm.PropertyChanged -= DesktopSelection_PropertyChanged;
-                    this.DesktopViewModels.Remove(vm);
+                    if(container.Model is DesktopModel)
+                    {
+                        IDesktopViewModel vm = this.DesktopViewModels.First(dvm => object.ReferenceEquals(dvm.Desktop, container.Model));
+                        this.DesktopViewModels.Remove(vm);
+                    }
                 }
             }
         }
@@ -197,17 +214,19 @@ namespace RdClient.Shared.ViewModels
         private void DeleteDesktopCommandExecute(object o)
         {
             // extract list of selected desktops
-            List<Desktop> selectedDesktops = new List<Desktop>();
+            IList<IModelContainer<DesktopModel>> selectedDesktops = null;
 
             foreach (DesktopViewModel vm in this.DesktopViewModels)
             {
                 if (vm.IsSelected)
                 {
-                    selectedDesktops.Add(vm.Desktop);
+                    if (null == selectedDesktops)
+                        selectedDesktops = new List<IModelContainer<DesktopModel>>();
+                    selectedDesktops.Add(new TemporaryModelContainer<DesktopModel>(vm.DesktopId, vm.Desktop));
                 }
             }
 
-            if (selectedDesktops.Count > 0)
+            if (null != selectedDesktops)
             {
                 this.NavigationService.PushModalView("DeleteDesktopsView",
                     new DeleteDesktopsArgs(selectedDesktops));

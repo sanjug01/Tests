@@ -7,6 +7,9 @@ using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using System.Collections.Generic;
 using RdClient.Shared.Navigation.Extensions;
+using RdClient.Shared.Data;
+using System.Collections;
+using RdClient.Shared.Test.Data;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -14,7 +17,7 @@ namespace RdClient.Shared.Test.ViewModels
     public class ConnectionCenterViewModelTests
     {
         private TestData _testData;
-        private RdDataModel _dataModel;
+        private ApplicationDataModel _dataModel;
         private Mock.NavigationService _navService;
         private ConnectionCenterViewModel _vm;
 
@@ -23,18 +26,24 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _testData = new TestData();
             _navService = new Mock.NavigationService();
-            _dataModel = new RdDataModel();            
-            List<Credentials> creds = _testData.NewSmallListOfCredentials();
-            foreach(Credentials cred in creds)
+            _dataModel = new ApplicationDataModel()
             {
-                _dataModel.LocalWorkspace.Credentials.Add(cred);
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer()
+            };
+            IList<IModelContainer<CredentialsModel>> creds = _testData.NewSmallListOfCredentials();
+
+            foreach (IModelContainer<CredentialsModel> cred in creds)
+            {
+                _dataModel.LocalWorkspace.Credentials.AddNewModel(cred.Model);
             }
-            foreach(Desktop desktop in _testData.NewSmallListOfDesktops(creds))
+
+            foreach(DesktopModel desktop in _testData.NewSmallListOfDesktops(creds))
             {
-                _dataModel.LocalWorkspace.Connections.Add(desktop);
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
             }
             _vm = new ConnectionCenterViewModel();
-            _vm.DataModel = _dataModel;
+            ((IDataModelSite)_vm).SetDataModel(_dataModel);
             ((IViewModel)_vm).Presenting(_navService, null, null);            
         }
 
@@ -92,9 +101,9 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestHasDesktopsReturnsFalseIfThereAreNoDesktops()
         {
-            foreach (Desktop desktop in _dataModel.LocalWorkspace.Connections.ToList())
+            foreach (IModelContainer<RemoteConnectionModel> desktop in _dataModel.LocalWorkspace.Connections.Models.ToList())
             {
-                _dataModel.LocalWorkspace.Connections.Remove(desktop);
+                _dataModel.LocalWorkspace.Connections.RemoveModel(desktop.Id);
             }
             Assert.IsFalse(_vm.HasDesktops);
         }
@@ -130,14 +139,16 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestDesktopViewModelAddedWhenDesktopAdded()
         {
-            _dataModel.LocalWorkspace.Connections.Add(_testData.NewValidDesktop(Guid.Empty));
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_testData.NewValidDesktop(Guid.Empty));
             AssertDesktopViewModelsMatchDesktops();
         }
 
         [TestMethod]
         public void TestDesktopViewModelRemovedWhenDesktopRemoved()
         {
-            _dataModel.LocalWorkspace.Connections.RemoveAt(_testData.RandomSource.Next(_dataModel.LocalWorkspace.Connections.Count));
+            IList<IModelContainer<RemoteConnectionModel>> allModels = _dataModel.LocalWorkspace.Connections.Models.ToList<IModelContainer<RemoteConnectionModel>>();
+
+            _dataModel.LocalWorkspace.Connections.RemoveModel(allModels[_testData.RandomSource.Next(allModels.Count)].Id);
             AssertDesktopViewModelsMatchDesktops();
         }
 
@@ -179,8 +190,8 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestAddDesktopWhenSelectionEnabledEnablesSelectionOnNewDesktopViewModel()
         {
             _vm.DesktopsSelectable = true;
-            Desktop newDesktop = _testData.NewValidDesktop(Guid.Empty);
-            _dataModel.LocalWorkspace.Connections.Add(newDesktop);
+            DesktopModel newDesktop = _testData.NewValidDesktop(Guid.Empty);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(newDesktop);
             IDesktopViewModel dvm = _vm.DesktopViewModels.Single(d => newDesktop.Equals(d.Desktop));
             Assert.IsTrue(dvm.SelectionEnabled);
         }
@@ -189,8 +200,8 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestAddDesktopWhenSelectionDisabledDisablesSelectionOnNewDesktopViewModel()
         {
             _vm.DesktopsSelectable = false;
-            Desktop newDesktop = _testData.NewValidDesktop(Guid.Empty);
-            _dataModel.LocalWorkspace.Connections.Add(newDesktop);
+            DesktopModel newDesktop = _testData.NewValidDesktop(Guid.Empty);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(newDesktop);
             IDesktopViewModel dvm = _vm.DesktopViewModels.Single(d => newDesktop.Equals(d.Desktop));
             Assert.IsFalse(dvm.SelectionEnabled);
         }
@@ -213,10 +224,14 @@ namespace RdClient.Shared.Test.ViewModels
         private void AssertDesktopViewModelsMatchDesktops()
         {
             //checking there are the same number of DesktopViewModels as Desktops and that each Desktop is represented by a DesktopViewModel is sufficient
-            Assert.AreEqual(_dataModel.LocalWorkspace.Connections.Count, _vm.DesktopViewModels.Count);
-            foreach (Desktop desktop in _dataModel.LocalWorkspace.Connections)
+            Assert.AreEqual(_dataModel.LocalWorkspace.Connections.Models.Count, _vm.DesktopViewModels.Count);
+
+            foreach (IModelContainer<RemoteConnectionModel> container in _dataModel.LocalWorkspace.Connections.Models)
             {
-                Assert.IsTrue(_vm.DesktopViewModels.Any((dvm) => dvm.Desktop.Equals(desktop)));
+                if (container.Model is DesktopModel)
+                {
+                    Assert.IsTrue(_vm.DesktopViewModels.Any((dvm) => dvm.Desktop.Equals((DesktopModel)container.Model)));
+                }
             }
         }
     }

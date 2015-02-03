@@ -105,6 +105,7 @@
     <Compile Include="Data\PrimaryModelCollection.cs" />
     <Compile Include="Data\SerializableModel.cs" />
     <Compile Include="Data\SerializableModelSerializer.cs" />
+    <Compile Include="Data\TemporaryModelContainer.cs" />
     <Compile Include="Data\TrustedCertificate.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
@@ -224,7 +225,7 @@
     <Compile Include="Navigation\NavigationExtensions.cs" />
     <Compile Include="ViewModels\ISessionViewModel.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
-    <Compile Include="Navigation\Extensions\IViewModelWithData.cs" />
+    <Compile Include="Navigation\Extensions\IDataModelSite.cs" />
     <Compile Include="Navigation\ApplicationBarSite.cs" />
     <Compile Include="Models\IDataStorage.cs" />
     <Compile Include="Models\ModelBase.cs" />

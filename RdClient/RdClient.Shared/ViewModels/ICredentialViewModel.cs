@@ -6,9 +6,9 @@ namespace RdClient.Shared.ViewModels
 {
     public interface ICredentialViewModel
     {
-        Credentials Credential { get; }
+        CredentialsModel Credentials { get; }
         ICommand DeleteCommand { get; }
         ICommand EditCommand { get; }
-        void Presented(INavigationService navService, RdDataModel dataModel);
+        void Presented(INavigationService navService, ApplicationDataModel dataModel);
     }
 }

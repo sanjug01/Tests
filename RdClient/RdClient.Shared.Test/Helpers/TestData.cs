@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Data;
 using RdClient.Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -40,31 +41,15 @@ namespace RdClient.Shared.Test.Helpers
             return new RdpScreenSnapshot(width, height, bytes);
         }
 
-        public ModelBase NewValidModelBaseOrSubclass()
+        public DesktopModel NewValidDesktop(Guid credId)
         {
-            int numClasses = 3;
-            int random = RandomSource.Next(numClasses);
-            switch (random)
-            {
-                case 0:
-                    return NewValidDesktop(Guid.NewGuid());
-                case 1:
-                    return NewValidCredential();
-                default:
-                    return new ModelBase();
-            }
+            return new DesktopModel() { HostName = NewRandomString(), CredentialsId = credId };
         }
 
-        public Desktop NewValidDesktop(Guid credId)
-        {
-            RdDataModel data = new RdDataModel();
-            return new Desktop(data.LocalWorkspace) { HostName = NewRandomString(), CredentialId = credId };
-        }
-
-        public List<Desktop> NewSmallListOfDesktops(List<Credentials> creds)
+        public IList<DesktopModel> NewSmallListOfDesktops(IList<IModelContainer<CredentialsModel>> creds)
         {
             int count = RandomSource.Next(3, 10);
-            List<Desktop> desktops = new List<Desktop>(count);
+            IList<DesktopModel> desktops = new List<DesktopModel>(count);
             for (int i = 0; i < count; i++)
             {
                 Guid credId = creds[_rand.Next(0, creds.Count)].Id;
@@ -73,24 +58,26 @@ namespace RdClient.Shared.Test.Helpers
             return desktops;
         }
 
-        public Credentials NewValidCredential()
+        public IModelContainer<CredentialsModel> NewValidCredential()
         {
-            return new Credentials()
+            return new TemporaryModelContainer<CredentialsModel>(Guid.NewGuid(), new CredentialsModel()
             {
                 Domain = NewRandomString(),
                 Username = NewRandomString(),
                 Password = NewRandomString()
-            };
+            });
         }
 
-        public List<Credentials> NewSmallListOfCredentials()
+        public IList<IModelContainer<CredentialsModel>> NewSmallListOfCredentials()
         {
             int count = RandomSource.Next(3, 10);
-            List<Credentials> creds = new List<Credentials>(count);
+            IList<IModelContainer<CredentialsModel>> creds = new List<IModelContainer<CredentialsModel>>(count);
+
             for (int i = 0; i < count; i++)
             {
                 creds.Add(NewValidCredential());
             }
+
             return creds;
         }
     }

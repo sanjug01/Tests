@@ -41,7 +41,7 @@ namespace RdClient.Converters
                 }
                 else if (UserComboBoxType.Credentials == comboBox.UserComboBoxType && comboBox.Credentials != null)
                 {
-                    result = comboBox.Credentials.Username;
+                    result = comboBox.Credentials.Model.Username;
                 }
                 else
                 {

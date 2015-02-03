@@ -15,7 +15,7 @@ namespace RdClient.Shared.Test.CxWrappers
 
             using(Mock.RdpProperties properties = new Mock.RdpProperties())
             {
-                Desktop desktop = new Desktop(data.LocalWorkspace) { HostName = "narf" };
+                DesktopModel desktop = new DesktopModel() { HostName = "narf" };
 
                 properties.Expect("SetStringProperty", new List<object>() { "Full Address", "narf" }, 0);
 

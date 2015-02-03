@@ -99,16 +99,18 @@ namespace RdClient.Shared.Models
             _rdpConnection.Events.ClientAutoReconnecting += HandleClientAutoReconnecting;
             _rdpConnection.Events.ClientAutoReconnectComplete += HandleClientAutoReconnectComplete;
 
-            Desktop desktop = connectionInformation.Desktop;
-            Credentials credentials = connectionInformation.Credentials;
+            DesktopModel desktop = connectionInformation.Desktop;
+            CredentialsModel credentials = connectionInformation.Credentials;
             IThumbnail thumbnail = connectionInformation.Thumbnail;
+
             if (thumbnail != null)
             {
                 Snapshotter snapshotter = new Snapshotter(_rdpConnection, thumbnail, timerFactory, settings);
             }
 
             RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
-            _rdpConnection.Connect(credentials, credentials.HaveBeenPersisted);
+
+            _rdpConnection.Connect(credentials, true/* TODO: ?????? credentials.HaveBeenPersisted*/);
         }
 
         public void Disconnect()

@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RdClient.Shared.Data;
 using RdClient.Shared.Models;
+using RdClient.Shared.Test.Data;
 using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
@@ -12,23 +14,26 @@ namespace RdClient.Shared.Test.ViewModels
     public class DesktopViewModelTests
     {
         private TestData _testData;
-        private RdDataModel _dataModel;
+        private ApplicationDataModel _dataModel;
         private Mock.NavigationService _navService;
-        private Desktop _desktop;
-        private Credentials _cred;
+        private DesktopModel _desktop;
+        private CredentialsModel _cred;
         private DesktopViewModel _vm;
 
         [TestInitialize]
         public void TestSetup()
         {
             _testData = new TestData();
-            _dataModel = new RdDataModel();
+            _dataModel = new ApplicationDataModel()
+            {
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer()
+            };
             _navService = new Mock.NavigationService();
-            _cred = _testData.NewValidCredential();
-            _desktop = _testData.NewValidDesktop(_cred.Id);
-            _dataModel.LocalWorkspace.Credentials.Add(_cred);
-            _dataModel.LocalWorkspace.Connections.Add(_desktop);
-            _vm = new DesktopViewModel(_desktop, _navService, _dataModel, null);
+            _cred = _testData.NewValidCredential().Model;
+            _desktop = _testData.NewValidDesktop(_dataModel.LocalWorkspace.Credentials.AddNewModel(_cred));
+            _vm = new DesktopViewModel(_desktop, _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop),
+                _navService, _dataModel, null);
         }
 
         [TestCleanup]
@@ -47,14 +52,14 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestCredentialReturnsNullIfDesktopHasNoCredential()
         {
-            _desktop.CredentialId = Guid.Empty;
-            Assert.IsNull(_vm.Credential);
+            _desktop.CredentialsId = Guid.Empty;
+            Assert.IsNull(_vm.Credentials);
         }
 
         [TestMethod]
         public void TestCredentialReturnsCredentialForDesktop()
         {
-            Assert.AreEqual(_cred, _vm.Credential);
+            Assert.AreEqual(_cred, _vm.Credentials);
         }
 
         [TestMethod]
@@ -77,7 +82,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestThumbnailCreatedCorrectly()
         {
             Assert.IsNotNull(_vm.Thumbnail);
-            Assert.AreEqual(_vm.Thumbnail.Id, _desktop.ThumbnailId);
+            Assert.AreSame(_vm.Thumbnail, _desktop.Thumbnail);
         }
 
         [TestMethod]
@@ -98,7 +103,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestConnectCommandExecuteShowsAddUserViewIfNoCredentials()
         {
-            _vm.Desktop.CredentialId = Guid.Empty;
+            _vm.Desktop.CredentialsId = Guid.Empty;
             _navService.Expect("PushModalView", new List<object> { "AddUserView", null, null }, 0);
             _vm.ConnectCommand.Execute(null);
         }
@@ -142,14 +147,6 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(_vm.IsSelected);
             _vm.SelectionEnabled = false;
             Assert.IsFalse(_vm.IsSelected);
-        }
-
-        [TestMethod]
-        public void TestHasThumbnailImageIsFalseWhenThumbnailImageIsNull()
-        {
-            Thumbnail thumb = _dataModel.Thumbnails.GetItemWithId(_vm.Thumbnail.Id);
-            Assert.IsNull(thumb.EncodedImageBytes);
-            Assert.IsFalse(_vm.HasThumbnailImage);
         }
     }
 }

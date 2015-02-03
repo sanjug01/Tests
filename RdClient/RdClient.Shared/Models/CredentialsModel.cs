@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.Data;
+    using System.Diagnostics.Contracts;
     using System.Runtime.Serialization;
     using System.Windows.Input;
 
@@ -10,6 +11,19 @@
         private string _username;
         private string _domain;
         private string _password;
+
+        public CredentialsModel()
+        {
+        }
+
+        public CredentialsModel(CredentialsModel otherModel)
+        {
+            Contract.Assert(null != otherModel);
+
+            _username = otherModel._username;
+            _domain = otherModel.Domain;
+            _password = otherModel.Password;
+        }
 
         [DataMember]
         public string Username

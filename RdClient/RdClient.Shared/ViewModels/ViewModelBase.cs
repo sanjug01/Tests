@@ -10,11 +10,10 @@
     /// Implementation of <see cref="INotifyPropertyChanged"/> to simplify ViewModels.
     /// </summary>
 
-    public abstract class ViewModelBase : Helpers.MutableObject, IViewModel, IViewModelWithData
+    public abstract class ViewModelBase : Helpers.MutableObject, IViewModel, IDataModelSite
     {
         private INavigationService _navigationService;
         private IModalPresentationContext _presentationContext;
-        private RdDataModel _dataModel;
         private ApplicationDataModel _appDataModel;
 
         protected INavigationService NavigationService
@@ -23,15 +22,18 @@
             private set { SetProperty<INavigationService>(ref _navigationService, value); }
         }
 
-        public RdDataModel DataModel
+        void IDataModelSite.SetDataModel(ApplicationDataModel dataModel)
         {
-            get { return _dataModel; }
-            set { SetProperty(ref _dataModel, value); }
+            if(null != dataModel)
+            {
+                this.ApplicationDataModel = dataModel;
+            }
         }
 
-        void IViewModelWithData.SetDataModel(ApplicationDataModel dataModel)
+        protected ApplicationDataModel ApplicationDataModel
         {
-            _appDataModel = dataModel;
+            get { return _appDataModel; }
+            set { SetProperty(ref _appDataModel, value); }
         }
 
         /// <summary>
