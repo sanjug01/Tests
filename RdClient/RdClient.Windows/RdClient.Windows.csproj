@@ -160,6 +160,9 @@
     <Compile Include="Controls\ExtendedCredentialControl.xaml.cs">
       <DependentUpon>ExtendedCredentialControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DesktopExtraSettingsControl.xaml.cs">
+      <DependentUpon>DesktopExtraSettingsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UserSettingsControl.xaml.cs">
       <DependentUpon>UserSettingsControl.xaml</DependentUpon>
     </Compile>
@@ -339,6 +342,10 @@
     <Page Include="Controls\ExtendedCredentialControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DesktopExtraSettingsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\UserSettingsControl.xaml">
       <SubType>Designer</SubType>

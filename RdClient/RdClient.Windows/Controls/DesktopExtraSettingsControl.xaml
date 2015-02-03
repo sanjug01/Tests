@@ -1,0 +1,59 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.DesktopExtraSettingsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:RdClient.Controls"
+    xmlns:design="using:RdClient.DesignTime"    
+    xmlns:converters="using:RdClient.Converters"
+    mc:Ignorable="d"
+    d:DesignHeight="768"
+    d:DesignWidth="700"
+    RequestedTheme="Light">
+
+    
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />        
+    </UserControl.Resources>
+
+    <StackPanel Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Background="WhiteSmoke">
+        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
+        <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
+            <TextBlock Margin="4,8" 
+                                       Style="{ThemeResource BodyTextBlockStyle}"
+                                       x:Uid="AddOrEditDesktop-PcFriendlyNameHint" 
+                                       Text="Connection friendly name (d)" 
+                                       Foreground="{StaticResource rdGrayBrush}"
+                                       Visibility="{Binding ElementName=txtFriendlyNameEntry, Path=Text, Converter={StaticResource StringLengthToInvisibilityConverter}}" Width="390" />
+
+            <TextBox Name="txtFriendlyNameEntry" 
+                                     Background="Transparent"
+                                     Margin="0,8" 
+                                     Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            </TextBox>
+        </Grid>
+
+        <!-- 
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Gateway" Text="Gateway(d)"/>
+                        <ComboBox Margin="0,8"
+                                      ItemsSource="{Binding Path=GatewayOptions}"
+                                      SelectedIndex="{Binding Path=SelectedGatewayOptionsIndex, Mode=TwoWay}" />
+                        -->
+
+        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Sound" Text="Sound(d)"/>
+        <ComboBox Margin="0,8"                                 
+                                SelectedIndex="{Binding Path=AudioMode, Mode=TwoWay}">
+            <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnThisDevice" Content="Play on this device(d)" />
+            <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnRemotePc" Content="Play on remote PC(d)" />
+            <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-DontPlaySounds" Content="Don't play sounds(d)" />
+        </ComboBox>
+
+        <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" Content="Swap mouse buttons(d)" Margin="0,8" 
+                                  IsChecked="{Binding Path=IsSwapMouseButtons, Mode=TwoWay}" />
+        <CheckBox x:Uid="AddOrEditDesktop-ConnectToAdminSession" Content="Connect to admin session(d)" Margin="0,8" 
+                                  IsChecked="{Binding Path=IsUseAdminSession, Mode=TwoWay}" />
+    </StackPanel>
+</UserControl>

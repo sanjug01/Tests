@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RdClient.Views"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:controls="using:RdClient.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Converters"    
@@ -134,44 +135,7 @@
                                    Text="Less details (d)"/>
                     </StackPanel>
 
-                    <StackPanel Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                Background="WhiteSmoke">
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
-                        <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
-                            <TextBlock Margin="4,8" 
-                                       Style="{ThemeResource BodyTextBlockStyle}"
-                                       x:Uid="AddOrEditDesktop-PcFriendlyNameHint" 
-                                       Text="Connection friendly name (d)" 
-                                       Foreground="{StaticResource rdGrayBrush}"
-                                       Visibility="{Binding ElementName=txtFriendlyNameEntry, Path=Text, Converter={StaticResource StringLengthToInvisibilityConverter}}" Width="390" />
-
-                            <TextBox Name="txtFriendlyNameEntry" 
-                                     Background="Transparent"
-                                     Margin="0,8" 
-                                     Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                            </TextBox>
-                        </Grid>
-
-                        <!-- 
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Gateway" Text="Gateway(d)"/>
-                        <ComboBox Margin="0,8"
-                                      ItemsSource="{Binding Path=GatewayOptions}"
-                                      SelectedIndex="{Binding Path=SelectedGatewayOptionsIndex, Mode=TwoWay}" />
-                        -->                        
-
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Sound" Text="Sound(d)"/>
-                        <ComboBox Margin="0,8"                                 
-                                SelectedIndex="{Binding Path=AudioMode, Mode=TwoWay}">
-                            <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnThisDevice" Content="Play on this device(d)" />
-                            <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnRemotePc" Content="Play on remote PC(d)" />
-                            <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-DontPlaySounds" Content="Don't play sounds(d)" />
-                        </ComboBox>
-
-                        <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" Content="Swap mouse buttons(d)" Margin="0,8" 
-                                  IsChecked="{Binding Path=IsSwapMouseButtons, Mode=TwoWay}" />
-                        <CheckBox x:Uid="AddOrEditDesktop-ConnectToAdminSession" Content="Connect to admin session(d)" Margin="0,8" 
-                                  IsChecked="{Binding Path=IsUseAdminSession, Mode=TwoWay}" />
-                    </StackPanel>
+                    <controls:DesktopExtraSettingsControl/>
 
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
                         <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
