@@ -135,7 +135,9 @@
                                    Text="Less details (d)"/>
                     </StackPanel>
 
-                    <controls:DesktopExtraSettingsControl/>
+                    <controls:DesktopExtraSettingsControl
+                        Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        />
 
                     <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
                         <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 

@@ -14,12 +14,10 @@
 
     
     <UserControl.Resources>
-        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />        
     </UserControl.Resources>
 
-    <StackPanel Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                Background="WhiteSmoke">
+    <StackPanel Background="WhiteSmoke">
         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
         <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
             <TextBlock Margin="4,8" 
