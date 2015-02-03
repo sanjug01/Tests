@@ -240,15 +240,10 @@
                         }
                         this.ThumbnailImage = newImage;
 
-                        this.HasThumbnailImage = this.ThumbnailImage != null
-                                                && this.ThumbnailImage.PixelHeight > 0
-                                                && this.ThumbnailImage.PixelHeight > 0;
-#if false
                         this.HasThumbnailImage = _dataModel.Settings.UseThumbnails 
                                                     && this.ThumbnailImage != null 
                                                     && this.ThumbnailImage.PixelHeight > 0 
                                                     && this.ThumbnailImage.PixelHeight > 0;
-#endif
                     });
             }
         }
