@@ -109,8 +109,8 @@ namespace RdClient.Shared.Models
             }
 
             RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
-
-            _rdpConnection.Connect(credentials, true/* TODO: ?????? credentials.HaveBeenPersisted*/);
+            _rdpConnection.SetLeftHandedMouseMode(desktop.IsSwapMouseButtons);
+            _rdpConnection.Connect(credentials, false/* credentials.HaveBeenPersisted TODO: honor the status of the credentials */ );
         }
 
         public void Disconnect()

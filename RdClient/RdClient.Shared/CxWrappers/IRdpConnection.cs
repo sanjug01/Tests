@@ -20,5 +20,7 @@ namespace RdClient.Shared.CxWrappers
         void SendMouseEvent(MouseEventType type, float xPos, float yPos);
         void SendKeyEvent(int keyValue, bool scanCode, bool extended, bool keyUp);
         void SendTouchEvent(TouchEventType type, uint contactId, Point position, ulong frameTime);
+
+        void SetLeftHandedMouseMode(bool value);
     }
 }

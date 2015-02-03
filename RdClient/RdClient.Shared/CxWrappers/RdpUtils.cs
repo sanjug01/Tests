@@ -9,6 +9,8 @@ namespace RdClient.Shared.CxWrappers.Utils
             DesktopModel desktop)
         {
             properties.SetStringProperty("Full Address", desktop.HostName);
+            properties.SetBoolProperty("Administrative Session", desktop.IsAdminSession);
+            properties.SetIntProperty("AudioMode", (int) desktop.AudioMode);            
         }
 
         public static void ApplyScreenSize(IRdpProperties properties, IPhysicalScreenSize screenSize)

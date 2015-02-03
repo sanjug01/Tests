@@ -55,11 +55,36 @@ namespace RdClient.Shared.ViewModels
         private string _host;
         private bool _isHostValid;
         private bool _isAddingDesktop;
+        private bool _isExpandedView;
+        private string _friendlyName;
+        private bool _isSwapMouseButtons;
+        private bool _isUseAdminSession;
+        private int _audioMode;
 
         private readonly RelayCommand _saveCommand;
         private readonly RelayCommand _cancelCommand;
+        private readonly RelayCommand _showDetailsCommand;
+        private readonly RelayCommand _hideDetailsCommand;
         private DesktopModel _desktop;
         private int _selectedUserOptionsIndex;
+
+        public AddOrEditDesktopViewModel()
+        {
+            _saveCommand = new RelayCommand(SaveCommandExecute,
+                o =>
+                {
+                    return (string.IsNullOrEmpty(this.Host) == false);
+                });
+            _cancelCommand = new RelayCommand(CancelCommandExecute);
+            _showDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = true; });
+            _hideDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = false; });
+
+            IsHostValid = true;
+
+            this.UserOptions = new ObservableCollection<UserComboBoxElement>();
+            this.SelectedUserOptionsIndex = 0;
+            this.IsExpandedView = false;
+        }
 
         public bool IsAddingDesktop
         {
@@ -109,6 +134,9 @@ namespace RdClient.Shared.ViewModels
 
         public ICommand CancelCommand { get { return _cancelCommand; } }
 
+        public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
+        public ICommand HideDetailsCommand { get { return _hideDetailsCommand; } }
+
         public DesktopModel Desktop
         {
             get { return _desktop; }
@@ -120,7 +148,7 @@ namespace RdClient.Shared.ViewModels
             get { return _host; }
             set 
             { 
-                SetProperty(ref _host, value, "Host"); 
+                SetProperty(ref _host, value); 
                 _saveCommand.EmitCanExecuteChanged();
             }
         }
@@ -128,22 +156,37 @@ namespace RdClient.Shared.ViewModels
         public bool IsHostValid
         {
             get { return _isHostValid; }
-            private set { SetProperty(ref _isHostValid, value, "IsHostValid"); }
+            private set { SetProperty(ref _isHostValid, value); }
         }
 
-        public AddOrEditDesktopViewModel()
+        public bool IsExpandedView
         {
-            _saveCommand = new RelayCommand(SaveCommandExecute,
-                o =>
+            get { return _isExpandedView; }
+            set { SetProperty(ref _isExpandedView, value); }
+        }
+
+        public string FriendlyName
+        {
+            get { return _friendlyName; }
+            set { SetProperty(ref _friendlyName, value); }
+        }
+
+        public bool IsUseAdminSession
                 {
-                    return (string.IsNullOrEmpty(this.Host) == false);
-                });
-            _cancelCommand = new RelayCommand(CancelCommandExecute);
+            get { return _isUseAdminSession; }
+            set { SetProperty(ref _isUseAdminSession, value); }
+        }
 
-            IsHostValid = true;
+        public bool IsSwapMouseButtons
+        {
+            get { return _isSwapMouseButtons; }
+            set { SetProperty(ref _isSwapMouseButtons, value); }
+        }
 
-            this.UserOptions = new ObservableCollection<UserComboBoxElement>();
-            this.SelectedUserOptionsIndex = 0;
+        public int AudioMode
+        {
+            get { return _audioMode; }
+            set { SetProperty(ref _audioMode, value); }
         }
 
         private void SaveCommandExecute(object o)
@@ -151,6 +194,12 @@ namespace RdClient.Shared.ViewModels
             if (this.Validate())
             {
                 this.Desktop.HostName = this.Host;
+
+                this.Desktop.HostName = this.Host;
+                this.Desktop.FriendlyName = this.FriendlyName;
+                this.Desktop.IsAdminSession = this.IsUseAdminSession;
+                this.Desktop.IsSwapMouseButtons = this.IsSwapMouseButtons;
+                this.Desktop.AudioMode = (AudioMode) this.AudioMode;
 
                 if (null != this.UserOptions[this.SelectedUserOptionsIndex].Credentials)
                 {
@@ -163,7 +212,6 @@ namespace RdClient.Shared.ViewModels
                     this.ApplicationDataModel.LocalWorkspace.Connections.AddNewModel(this.Desktop);
                 }
 
-                //this.DismissModal(null);
                 NavigationService.DismissModalView(PresentableView);
             }
         }
@@ -230,13 +278,24 @@ namespace RdClient.Shared.ViewModels
             {
                 this.Desktop = editArgs.Desktop;
                 this.Host = this.Desktop.HostName;
+                this.FriendlyName = this.Desktop.FriendlyName;
+                this.AudioMode = (int) this.Desktop.AudioMode;
+                this.IsSwapMouseButtons = this.Desktop.IsSwapMouseButtons;
+                this.IsUseAdminSession = this.Desktop.IsAdminSession;
+
                 this.IsAddingDesktop = false;
             }
             else if(addArgs != null)
             {
                 this.Desktop = new DesktopModel();
+                this.FriendlyName = string.Empty;
+                this.AudioMode = (int)RdClient.Shared.Models.AudioMode.Local;
+                this.IsSwapMouseButtons = false;
+                this.IsUseAdminSession = false;
+
                 this.IsAddingDesktop = true;
             }
+            this.IsExpandedView = false;
 
             Update();
         }

@@ -11,13 +11,41 @@ namespace RdClient.Shared.Test.CxWrappers
         [TestMethod]
         public void ApplyDesktop()
         {
-            RdDataModel data = new RdDataModel();
-
             using(Mock.RdpProperties properties = new Mock.RdpProperties())
             {
                 DesktopModel desktop = new DesktopModel() { HostName = "narf" };
 
                 properties.Expect("SetStringProperty", new List<object>() { "Full Address", "narf" }, 0);
+
+                // default extra settings will be applied
+                Assert.AreEqual(default(bool), desktop.IsAdminSession);
+                Assert.AreEqual(default(AudioMode), desktop.AudioMode);
+
+                properties.Expect("SetBoolProperty", new List<object>() { "Administrative Session", default(bool) }, 0);
+                properties.Expect("SetIntProperty", new List<object>() { "AudioMode", (int)default(Desktop.AudioModes) }, 0);
+                RdpPropertyApplier.ApplyDesktop(properties, desktop);
+            }
+        }
+
+        [TestMethod]
+        public void ApplyDesktopWithExtraSettings()
+        {
+            using (Mock.RdpProperties properties = new Mock.RdpProperties())
+            {
+                DesktopModel desktop = new DesktopModel() 
+                { 
+                    HostName = "narf" , 
+                    IsSwapMouseButtons = true, 
+                    FriendlyName = "MyPC",
+                    IsAdminSession = true,
+                    AudioMode = AudioMode.Remote
+                };
+
+                properties.Expect("SetStringProperty", new List<object>() { "Full Address", "narf" }, 0);
+
+                // non-default extra settings - will be applied
+                properties.Expect("SetBoolProperty", new List<object>() { "Administrative Session", true }, 0);
+                properties.Expect("SetIntProperty", new List<object>() { "AudioMode", (int) AudioMode.Remote }, 0);
 
                 RdpPropertyApplier.ApplyDesktop(properties, desktop);
             }

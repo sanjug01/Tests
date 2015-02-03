@@ -448,7 +448,7 @@ namespace RdClient.Shared.Test.ViewModels
                     Assert.IsNotNull(args);
                     Assert.AreEqual(CredentialPromptMode.InvalidCredentials, args.Mode);
                     Assert.AreEqual(true, args.ShowSave);
-                    Assert.AreNotEqual(_testConnectionInfo.Credentials, args.Credentials, "AddUser should not be directly passed credentials so they aren't overwritten");
+                    Assert.AreNotSame(_testConnectionInfo.Credentials, args.Credentials, "AddUser should not be directly passed credentials so they aren't overwritten");
                     Assert.AreEqual(_testConnectionInfo.Credentials.Username, args.Credentials.Username);
                     Assert.AreEqual(_testConnectionInfo.Credentials.Password, args.Credentials.Password);
                 });
@@ -466,7 +466,7 @@ namespace RdClient.Shared.Test.ViewModels
                     Assert.IsNotNull(args);
                     Assert.AreEqual(CredentialPromptMode.FreshCredentialsNeeded, args.Mode);
                     Assert.AreEqual(true, args.ShowSave);
-                    Assert.AreNotEqual(_testConnectionInfo.Credentials, args.Credentials, "AddUser should not be directly passed credentials so they aren't overwritten");
+                    Assert.AreNotSame(_testConnectionInfo.Credentials, args.Credentials, "AddUser should not be directly passed credentials so they aren't overwritten");
                     Assert.AreEqual(_testConnectionInfo.Credentials.Username, args.Credentials.Username);
                     Assert.AreEqual(_testConnectionInfo.Credentials.Password, args.Credentials.Password);
                 });

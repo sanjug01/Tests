@@ -425,6 +425,46 @@
   <data name="AddOrEditDesktop-PcNameHint.Text" xml:space="preserve">
     <value>Host name or IP address</value>
   </data>
+  <data name="AddOrEditDesktop-ConnectToAdminSession" xml:space="preserve">
+    <value>Connect to admin session</value>
+    <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
+  </data>
+  <data name="AddOrEditDesktop-FriendlyName" xml:space="preserve">
+    <value>Friendly name</value>
+    <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
+  </data>
+  <data name="AddOrEditDesktop-LessDetailsLabel" xml:space="preserve">
+    <value>Less details</value>
+    <comment>Text shown on AddOrEditDesktop view</comment>
+  </data>
+  <data name="AddOrEditDesktop-MoreDetailsLabel" xml:space="preserve">
+    <value>More details</value>
+    <comment>Text shown on AddOrEditDesktop view</comment>
+  </data>
+  <data name="AddOrEditDesktop-PcFriendlyNameHint" xml:space="preserve">
+    <value>Connection friendly name</value>
+    <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
+  </data>
+  <data name="AddOrEditDesktop-Sound" xml:space="preserve">
+    <value>Sound</value>
+    <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
+  </data>
+  <data name="AddOrEditDesktop-Sound-DontPlaySounds" xml:space="preserve">
+    <value>Don't play sounds</value>
+    <comment>Text shown on AddOrEditDesktop view - sound option combo</comment>
+  </data>
+  <data name="AddOrEditDesktop-Sound-PlayOnRemotePc" xml:space="preserve">
+    <value>Play on remote PC</value>
+    <comment>Text shown on AddOrEditDesktop view - sound option combo</comment>
+  </data>
+  <data name="AddOrEditDesktop-Sound-PlayOnThisDevice" xml:space="preserve">
+    <value>Play on this device</value>
+    <comment>Text shown on AddOrEditDesktop view - sound option combo</comment>
+  </data>
+  <data name="AddOrEditDesktop-SwapMouseButtons" xml:space="preserve">
+    <value>Swap mouse buttons</value>
+    <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
+  </data>  
   <data name="AddUser-AddCaption.Text" xml:space="preserve">
     <value>Enter Credentials</value>
   </data>

@@ -32,7 +32,9 @@
     <x:String x:Key="DownIcon">&#xE1FD;</x:String>
     <x:String x:Key="LeftIcon">&#xE112;</x:String>
     <x:String x:Key="RightIcon">&#xE111;</x:String>
-    
+    <x:String x:Key="MoreDetailsIcon">&#xE099;</x:String>
+    <x:String x:Key="LessDetailsIcon">&#xE098;</x:String>
+
 
     <SolidColorBrush x:Key="InvisibleButtonPointerOverBackgroundBrush" Color="#22FFFFFF" />
     <SolidColorBrush x:Key="InvisibleButtonPressedBackgroundBrush" Color="#88FFFFFF" />
@@ -363,6 +365,19 @@
     </Style>
     <Style x:Key="DialogAcceptButtonStyle" TargetType="Button" BasedOn="{StaticResource SettingsEditUserButtonStyle}">
         <Setter Property="Background" Value="{StaticResource DialogAcceptButtonBackgroundColor}" />
+    </Style>
+   
+    <Style x:Key="DialogDetailsButtonStyle" TargetType="Button">
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Width" Value="32" />
+        <Setter Property="FontFamily" Value="{StaticResource IconFont}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{StaticResource DialogAcceptButtonBackgroundColor}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
     </Style>
 
     <Style x:Key="ModalBackground" TargetType="Border">

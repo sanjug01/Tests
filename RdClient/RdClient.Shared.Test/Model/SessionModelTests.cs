@@ -37,6 +37,9 @@ namespace RdClient.Shared.Test.Model
             _connectionFactory.Expect("CreateInstance", new List<object>(), _connection);
             _timerFactory.Expect("CreateTimer", new List<object>(), _timer);
             _connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
+            _connection.Expect("SetBoolProperty", new List<object>() { "Administrative Session", desktop.IsAdminSession }, 0);
+            _connection.Expect("SetIntProperty", new List<object>() { "AudioMode", (int) desktop.AudioMode }, 0);
+            _connection.Expect("SetLeftHandedMouseMode", new List<object>() { desktop.IsSwapMouseButtons }, 0);
             _connection.Expect("Connect", new List<object>() { credentials, true }, 0);
             
             _sm.ConnectionCreated += (sender, args) => { _connectionMatches = (_connection == (IRdpConnection)args.RdpConnection); };
@@ -55,7 +58,7 @@ namespace RdClient.Shared.Test.Model
         public void ConnectionCreatedArgs_Constructor()
         {
             ConnectionCreatedArgs cca = new ConnectionCreatedArgs(_connection);
-            Assert.AreEqual(_connection, cca.RdpConnection);
+            Assert.AreSame(_connection, cca.RdpConnection);
         }
 
         [TestMethod]
@@ -67,8 +70,8 @@ namespace RdClient.Shared.Test.Model
         [TestMethod]
         public void SessionModel_ShouldDisconnect()
         {
-                _connection.Expect("Disconnect", new List<object>() { }, 0);
-                _sm.Disconnect();            
+            _connection.Expect("Disconnect", new List<object>() { }, 0);
+            _sm.Disconnect();            
         }
     }
 }
