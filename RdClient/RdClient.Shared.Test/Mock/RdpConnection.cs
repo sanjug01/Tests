@@ -97,7 +97,7 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { propertyName, value });
         }
 
-        public void SetLeftHandedMouseModeProperty(bool value)
+        public void SetLeftHandedMouseMode(bool value)
         {
             Invoke(new object[] { value });
         }

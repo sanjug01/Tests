@@ -36,6 +36,9 @@ namespace RdClient.Shared.Test.Model
             _connectionFactory.Expect("CreateInstance", new List<object>(), _connection);
             _timerFactory.Expect("CreateTimer", new List<object>(), _timer);
             _connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
+            _connection.Expect("SetBoolProperty", new List<object>() { "Administrative Session", desktop.IsUseAdminSession }, 0);
+            _connection.Expect("SetIntProperty", new List<object>() { "AudioMode", (int) desktop.AudioMode }, 0);
+            _connection.Expect("SetLeftHandedMouseMode", new List<object>() { desktop.IsSwapMouseButtons }, 0);
             _connection.Expect("Connect", new List<object>() { credentials, true }, 0);
             
             _sm.ConnectionCreated += (sender, args) => { _connectionMatches = (_connection == (IRdpConnection)args.RdpConnection); };

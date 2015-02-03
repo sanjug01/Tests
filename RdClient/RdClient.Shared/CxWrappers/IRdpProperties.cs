@@ -9,8 +9,5 @@ namespace RdClient.Shared.CxWrappers
         void SetStringProperty(string propertyName, string value);
         bool GetBoolProperty(string propertyName);
         void SetBoolProperty(string propertyName, bool value);
-
-        // left handed mouse mode is a special property that needs to be applied directly to the RDClientCX.RdpConnection
-        void SetLeftHandedMouseModeProperty(bool value);
     }
 }

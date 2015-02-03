@@ -215,7 +215,7 @@ namespace RdClient.Shared.CxWrappers
             RdTrace.IfFailXResultThrow(xRes, "Failed to set bool property: " + propertyName);
         }
 
-        public void SetLeftHandedMouseModeProperty(bool value)
+        public void SetLeftHandedMouseMode(bool value)
         {
             int xRes = _rdpConnectionCx.SetLeftHandedMouseMode(value);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set LeftHandedMouseMode: " + value);

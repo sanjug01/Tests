@@ -2,7 +2,7 @@
 {
     using System;
     using System.Runtime.Serialization;
-
+    using System.ComponentModel;
 
     [DataContract(IsReference = true)]
     public sealed class Desktop : RemoteConnection
@@ -16,6 +16,7 @@
         private Guid _credId;
         private Guid _thumbnailId;
 
+        [DefaultValue(Local)]
         public enum AudioModes
         {
             Local = 0,

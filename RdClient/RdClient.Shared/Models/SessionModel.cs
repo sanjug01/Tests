@@ -108,6 +108,7 @@ namespace RdClient.Shared.Models
             }
 
             RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
+            _rdpConnection.SetLeftHandedMouseMode(desktop.IsSwapMouseButtons);
             _rdpConnection.Connect(credentials, credentials.HaveBeenPersisted);
         }
 
