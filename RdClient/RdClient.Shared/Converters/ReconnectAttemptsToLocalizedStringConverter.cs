@@ -10,7 +10,7 @@ namespace RdClient.Converters
     public class ReconnectAttemptsToLocalizedStringConverter : IValueConverter
     {                
         private IStringTable _localizedString;
-        public const string reconnectAttemptsStringId = "Session_Reconnect_Attempts_String";
+        private readonly string reconnectAttemptsStringId = "Session_Reconnect_Attempts_String";
 
         public IStringTable LocalizedString { set { _localizedString = value; } }
 
@@ -30,7 +30,7 @@ namespace RdClient.Converters
                 int countAttempts = (int) value;
                 string result = String.Format(
                     _localizedString.GetLocalizedString(reconnectAttemptsStringId),
-                    countAttempts.ToString(), SessionModel.MaxReconnectAttempts 
+                    countAttempts, SessionModel.MaxReconnectAttempts 
                     );
                 return result;         
             }
