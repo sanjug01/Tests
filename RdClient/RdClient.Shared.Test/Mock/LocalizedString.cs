@@ -6,7 +6,9 @@ namespace RdClient.Shared.Test.Mock
     {
         public string GetLocalizedString(string key)
         {
-            return "LOCALIZED_" + key;
+            // Mock.LocalizedString simply returns the key passed in with a prefix added
+            //      the prefix may support up to 2 parameters 
+            return "LOCALIZED_"+ "({0}, {1})" + key ;
         }
     }
 }

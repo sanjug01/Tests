@@ -425,46 +425,46 @@
   <data name="AddOrEditDesktop-PcNameHint.Text" xml:space="preserve">
     <value>Host name or IP address</value>
   </data>
-  <data name="AddOrEditDesktop-ConnectToAdminSession" xml:space="preserve">
+  <data name="AddOrEditDesktop-ConnectToAdminSession.Content" xml:space="preserve">
     <value>Connect to admin session</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
-  <data name="AddOrEditDesktop-FriendlyName" xml:space="preserve">
+  <data name="AddOrEditDesktop-FriendlyName.Text" xml:space="preserve">
     <value>Friendly name</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
-  <data name="AddOrEditDesktop-LessDetailsLabel" xml:space="preserve">
+  <data name="AddOrEditDesktop-LessDetailsLabel.Text" xml:space="preserve">
     <value>Less details</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
-  <data name="AddOrEditDesktop-MoreDetailsLabel" xml:space="preserve">
+  <data name="AddOrEditDesktop-MoreDetailsLabel.Text" xml:space="preserve">
     <value>More details</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
-  <data name="AddOrEditDesktop-PcFriendlyNameHint" xml:space="preserve">
+  <data name="AddOrEditDesktop-PcFriendlyNameHint.Text" xml:space="preserve">
     <value>Connection friendly name</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
-  <data name="AddOrEditDesktop-Sound" xml:space="preserve">
+  <data name="AddOrEditDesktop-Sound.Text" xml:space="preserve">
     <value>Sound</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
-  <data name="AddOrEditDesktop-Sound-DontPlaySounds" xml:space="preserve">
+  <data name="AddOrEditDesktop-Sound-DontPlaySounds.Content" xml:space="preserve">
     <value>Don't play sounds</value>
     <comment>Text shown on AddOrEditDesktop view - sound option combo</comment>
   </data>
-  <data name="AddOrEditDesktop-Sound-PlayOnRemotePc" xml:space="preserve">
+  <data name="AddOrEditDesktop-Sound-PlayOnRemotePc.Content" xml:space="preserve">
     <value>Play on remote PC</value>
     <comment>Text shown on AddOrEditDesktop view - sound option combo</comment>
   </data>
-  <data name="AddOrEditDesktop-Sound-PlayOnThisDevice" xml:space="preserve">
+  <data name="AddOrEditDesktop-Sound-PlayOnThisDevice.Content" xml:space="preserve">
     <value>Play on this device</value>
     <comment>Text shown on AddOrEditDesktop view - sound option combo</comment>
   </data>
-  <data name="AddOrEditDesktop-SwapMouseButtons" xml:space="preserve">
+  <data name="AddOrEditDesktop-SwapMouseButtons.Content" xml:space="preserve">
     <value>Swap mouse buttons</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
-  </data>  
+  </data>
   <data name="AddUser-AddCaption.Text" xml:space="preserve">
     <value>Enter Credentials</value>
   </data>
@@ -597,5 +597,17 @@
   <data name="CredentialPrompt_Message_InvalidCredentials_String" xml:space="preserve">
     <value>The credentials that were used to connect to the remote PC didn't work. Enter different credentials and try again.</value>
     <comment>Text in the credential prompt dialog when fresh credentials are required.</comment>
+  </data>
+  <data name="Session_Reconnect_Attempts_String" xml:space="preserve">
+    <value>Connection attempts: {0} of {1}</value>
+    <comment>Label  to warn about the number of reconnect attempts for a lost connection</comment>
+  </data>
+  <data name="Session_Reconnect_Message.Text" xml:space="preserve">
+    <value>The connection has been lost. Attempting to reconnect to your session...</value>
+    <comment>Reconnecting dialog message</comment>
+  </data>
+  <data name="Session_Reconnect_Title.Text" xml:space="preserve">
+    <value>Reconnecting</value>
+    <comment>Reconnecting dialog title</comment>
   </data>
 </root>

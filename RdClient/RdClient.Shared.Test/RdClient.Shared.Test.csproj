@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="Converters\CredentialPromptModeToLocalizedMessageConverterTests.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverterTests.cs" />
+    <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverterTests.cs" />
     <Compile Include="Converters\ResourceIdToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverterTests.cs" />

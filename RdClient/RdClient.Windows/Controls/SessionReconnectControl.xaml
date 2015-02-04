@@ -5,9 +5,19 @@
     xmlns:local="using:RdClient.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:cv="using:RdClient.Converters"
+    xmlns:helpers="using:RdClient.Shared.Helpers"    
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="440">
+
+    <UserControl.Resources>
+        <cv:ReconnectAttemptsToLocalizedStringConverter x:Key="ConnectReattemptsToLocalizedStringConverter">
+            <cv:ReconnectAttemptsToLocalizedStringConverter.LocalizedString>
+                <helpers:LocalizedString />
+            </cv:ReconnectAttemptsToLocalizedStringConverter.LocalizedString>
+        </cv:ReconnectAttemptsToLocalizedStringConverter>
+    </UserControl.Resources>
 
     <Border 
           Background="{StaticResource rdWhiteBrush}" 
@@ -55,17 +65,9 @@
                             VerticalAlignment="Center">
                     <TextBlock 
                          Style="{ThemeResource BodyTextBlockStyle}" 
-                        x:Uid="Session_Reconnect_Details" 
-                        Text="Connection attempts(d):" />
-                    <TextBlock 
-                         Style="{ThemeResource BodyTextBlockStyle}" 
                         x:Uid="Session_Reconnect_Attempts" 
                         Margin="8,0"
-                        Text="{Binding Path=ReconnectAttempts}" />                    
-                    <TextBlock 
-                         Style="{ThemeResource BodyTextBlockStyle}" 
-                        x:Uid="Session_Reconnect_MaxAttempts" 
-                        Text="of 20(d)" />                    
+                        Text="{Binding Path=ReconnectAttempts, Converter={StaticResource ConnectReattemptsToLocalizedStringConverter}}" />                                  
                 </StackPanel>
             </Grid>
             <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right"
