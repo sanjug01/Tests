@@ -599,7 +599,7 @@
     <comment>Text in the credential prompt dialog when fresh credentials are required.</comment>
   </data>
   <data name="Session_Reconnect_Attempts_String" xml:space="preserve">
-    <value>Connection attempts: {0} of {1}</value>
+    <value>Connection attempt: {0} of {1}</value>
     <comment>Label  to warn about the number of reconnect attempts for a lost connection</comment>
   </data>
   <data name="Session_Reconnect_Message.Text" xml:space="preserve">
