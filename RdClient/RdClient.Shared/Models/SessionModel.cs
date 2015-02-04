@@ -50,7 +50,7 @@ namespace RdClient.Shared.Models
 
     public class SessionModel : ISessionModel
     {
-        private const int MaxReconnectAttempts = 20;
+        public static readonly int MaxReconnectAttempts = 20;
         public event EventHandler<ConnectionCreatedArgs> ConnectionCreated;
         public event EventHandler<ConnectionAutoReconnectingArgs> ConnectionAutoReconnecting;
         public event EventHandler<ConnectionAutoReconnectCompleteArgs> ConnectionAutoReconnectComplete;
