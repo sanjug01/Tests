@@ -23,9 +23,7 @@ namespace RdClient.Shared.Models
             byte[] encodedBytes;
             using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
             {
-                Task<BitmapEncoder> taskEncoder = BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream).AsTask<BitmapEncoder>();
-                taskEncoder.Wait();
-                BitmapEncoder encoder = taskEncoder.Result;
+                BitmapEncoder encoder = BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream).AsTask<BitmapEncoder>().Result;
 
                 encoder.SetPixelData(snapshot.PixelFormat, BitmapAlphaMode.Ignore, snapshot.Width, snapshot.Height, 96.0, 96.0, snapshot.RawImage);
                 encoder.BitmapTransform.ScaledHeight = THUMBNAIL_HEIGHT;

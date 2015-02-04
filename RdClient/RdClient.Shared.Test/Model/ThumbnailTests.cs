@@ -35,16 +35,11 @@ namespace RdClient.Shared.Test.Model
             BitmapDecoder decoder;
             using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
             {
-                Task task = stream.WriteAsync(_thumb.EncodedImageBytes.AsBuffer()).AsTask();
-                task.Wait();
+                stream.WriteAsync(_thumb.EncodedImageBytes.AsBuffer()).AsTask().Wait();
                 stream.Seek(0);
-                Task<BitmapDecoder> decoderTask = BitmapDecoder.CreateAsync(stream).AsTask<BitmapDecoder>();
-                decoderTask.Wait();
-                decoder = decoderTask.Result;
+                decoder = BitmapDecoder.CreateAsync(stream).AsTask<BitmapDecoder>().Result;
 
-                Task<PixelDataProvider> pixelDataTask = decoder.GetPixelDataAsync().AsTask<PixelDataProvider>();
-                pixelDataTask.Wait();
-                PixelDataProvider pixelData = pixelDataTask.Result;
+                PixelDataProvider pixelData = decoder.GetPixelDataAsync().AsTask<PixelDataProvider>().Result;
             }            
             Assert.IsTrue(decoder.PixelHeight == Thumbnail.THUMBNAIL_HEIGHT);
             Assert.AreEqual(decoder.PixelWidth / (double)decoder.PixelHeight, inputWidth / (double)inputHeight, 0.05d);     

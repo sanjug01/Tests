@@ -37,7 +37,7 @@
 
             if(null != otherModel)
             {
-                equals = true;
+                equals = otherModel.GetType().Equals(this.GetType());
             }
 
             return equals;

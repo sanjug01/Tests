@@ -51,19 +51,9 @@ namespace RdClient.Shared.ViewModels
             Contract.Assert(null != this.ApplicationDataModel);
             Contract.Assert(null != this.Credentials);
             //
-            // Remove all references to this credential first
+            // Remove the credentials from the data model.
+            // The data model will remove references to the removed credentials from all desktops.
             //
-            foreach (IModelContainer<RemoteConnectionModel> container in this.ApplicationDataModel.LocalWorkspace.Connections.Models)
-            {
-                if(container.Model is DesktopModel)
-                {
-                    IModelContainer<DesktopModel> d = new TemporaryModelContainer<DesktopModel>(container.Id, (DesktopModel)container.Model);
-
-                    if (this.Credentials.Id.Equals(d.Model.CredentialsId))
-                        d.Model.CredentialsId = Guid.Empty;
-                }
-            }
-            //remove this credential
             this.ApplicationDataModel.LocalWorkspace.Credentials.RemoveModel(this.Credentials.Id);
             
             NavigationService.DismissModalView(this.PresentableView);

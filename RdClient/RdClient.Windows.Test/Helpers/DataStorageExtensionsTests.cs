@@ -16,17 +16,14 @@ namespace RdClient.Shared.Test.Helpers
         [ClassInitialize]
         public static void SetUpClass(TestContext context)
         {
-            Task<StorageFolder> task = ApplicationData.Current.LocalFolder.CreateFolderAsync("TestRootFolder").AsTask<StorageFolder>();
-            task.Wait();
-            _testRoot = task.Result;
+            _testRoot = ApplicationData.Current.LocalFolder.CreateFolderAsync("TestRootFolder").AsTask<StorageFolder>().Result;
             Assert.IsNotNull(_testRoot);
         }
 
         [ClassCleanup]
         public static void TearDownClass()
         {
-            Task task = _testRoot.DeleteAsync(StorageDeleteOption.PermanentDelete).AsTask();
-            task.Wait();
+            _testRoot.DeleteAsync(StorageDeleteOption.PermanentDelete).AsTask().Wait();
             _testRoot = null;
         }
 

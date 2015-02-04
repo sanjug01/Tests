@@ -67,12 +67,10 @@ namespace RdClient.Models
                 throw new InvalidOperationException("Must initialize first");
             }
 
-            Task<IReadOnlyList<StorageFolder>> folderTask = this.RootFolder.GetFoldersAsync().AsTask<IReadOnlyList<StorageFolder>>();
-            folderTask.Wait();
-
-            IReadOnlyList<StorageFolder> folderList = folderTask.Result;
-
-            return folderList.Select(s => s.Name);
+            return this.RootFolder.GetFoldersAsync()
+                .AsTask<IReadOnlyList<StorageFolder>>()
+                .Result
+                .Select(s => s.Name);
         }
 
         public IEnumerable<ModelBase> LoadCollection(string collectionName)
@@ -84,17 +82,11 @@ namespace RdClient.Models
             List<ModelBase> collection = new List<ModelBase>();
             
             Task<StorageFolder> folderTask = this.RootFolder.CreateFolderAsync(collectionName, CreationCollisionOption.OpenIfExists).AsTask<StorageFolder>();
-            folderTask.Wait();
-
             Task<IReadOnlyList<StorageFile>> filesTask = folderTask.Result.GetFilesAsync().AsTask<IReadOnlyList<StorageFile>>();
-            filesTask.Wait();
 
             foreach (StorageFile file in filesTask.Result)
             {
-                Task<Stream> streamTask = file.OpenStreamForReadAsync();
-                streamTask.Wait();
-
-                using (Stream stream = streamTask.Result)
+                using (Stream stream = file.OpenStreamForReadAsync().Result)
                 {
                     ModelBase item = this.Serializer.ReadObject(stream) as ModelBase;
                     if (item == null)
@@ -117,18 +109,14 @@ namespace RdClient.Models
                 throw new InvalidOperationException("Must initialize first");
             }
 
-            Task<IStorageItem> folderTask = this.RootFolder.TryGetItemAsync(collectionName).AsTask<IStorageItem>();
-            folderTask.Wait();
-
-            StorageFolder folder = folderTask.Result as StorageFolder;
+            StorageFolder folder = this.RootFolder.TryGetItemAsync(collectionName).AsTask<IStorageItem>().Result as StorageFolder;
  
             if(folder == null)
             {
                 throw new SerializationException("Failed to delete folder: " + collectionName);
             }
 
-            Task deleteTask = folder.DeleteAsync().AsTask();
-            deleteTask.Wait();
+            folder.DeleteAsync().AsTask().Wait();
         }
 
         public void SaveItem(string collectionName, ModelBase item)
@@ -138,16 +126,13 @@ namespace RdClient.Models
                 throw new InvalidOperationException("Must initialize first");
             }
 
-            Task<StorageFolder> folderTask = this.RootFolder.CreateFolderAsync(collectionName, CreationCollisionOption.OpenIfExists).AsTask<StorageFolder>();
-            folderTask.Wait();
+            Task<StorageFolder> folderTask = this.RootFolder.CreateFolderAsync(collectionName, CreationCollisionOption.OpenIfExists)
+                .AsTask<StorageFolder>();
 
-            Task<StorageFile> fileTask = folderTask.Result.CreateFileAsync(item.Id.ToString(), CreationCollisionOption.ReplaceExisting).AsTask<StorageFile>();
-            fileTask.Wait();
+            Task<StorageFile> fileTask = folderTask.Result.CreateFileAsync(item.Id.ToString(), CreationCollisionOption.ReplaceExisting)
+                .AsTask<StorageFile>();
 
-            Task<Stream> streamTask = fileTask.Result.OpenStreamForWriteAsync();
-            streamTask.Wait();
-
-            using (Stream stream = streamTask.Result)
+            using (Stream stream = fileTask.Result.OpenStreamForWriteAsync().Result)
             {
                 this.Serializer.WriteObject(stream, item);                
             }
@@ -160,10 +145,8 @@ namespace RdClient.Models
                 throw new InvalidOperationException("Must initialize first");
             }
 
-            Task<IStorageItem> folderTask = this.RootFolder.TryGetItemAsync(collectionName).AsTask<IStorageItem>();
-            folderTask.Wait();
+            StorageFolder folder = this.RootFolder.TryGetItemAsync(collectionName).AsTask<IStorageItem>().Result as StorageFolder;
 
-            StorageFolder folder = folderTask.Result as StorageFolder;
             if (folder == null)
             {
                 throw new SerializationException("Couldn't find folder: " + collectionName + " for item " + item);
@@ -171,17 +154,14 @@ namespace RdClient.Models
 
             if (folder != null)
             {
-                Task<IStorageItem> fileTask = folder.TryGetItemAsync(item.Id.ToString()).AsTask<IStorageItem>();
-                fileTask.Wait();
+                StorageFile file = folder.TryGetItemAsync(item.Id.ToString()).AsTask<IStorageItem>().Result as StorageFile;
 
-                StorageFile file = fileTask.Result as StorageFile;
                 if (file == null)
                 {
                     throw new SerializationException("Couldn't find file: " + item);
                 }
 
-                Task deleteTask = file.DeleteAsync().AsTask();
-                deleteTask.Wait();                
+                file.DeleteAsync().AsTask().Wait();
             }
         }
     }

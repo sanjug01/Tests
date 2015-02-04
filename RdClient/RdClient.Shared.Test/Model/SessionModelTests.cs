@@ -40,7 +40,7 @@ namespace RdClient.Shared.Test.Model
             _connection.Expect("SetBoolProperty", new List<object>() { "Administrative Session", desktop.IsAdminSession }, 0);
             _connection.Expect("SetIntProperty", new List<object>() { "AudioMode", (int) desktop.AudioMode }, 0);
             _connection.Expect("SetLeftHandedMouseMode", new List<object>() { desktop.IsSwapMouseButtons }, 0);
-            _connection.Expect("Connect", new List<object>() { credentials, true }, 0);
+            _connection.Expect("Connect", new List<object>() { credentials, false/*expect non-saved credentials*/ }, 0);
             
             _sm.ConnectionCreated += (sender, args) => { _connectionMatches = (_connection == (IRdpConnection)args.RdpConnection); };
             _sm.Connect(_connectionInformation, _timerFactory, new GeneralSettings());

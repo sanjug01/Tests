@@ -71,8 +71,7 @@
 
             folder.GetFolderAndCall(folderName, subfolder =>
             {
-                Task task = subfolder.DeleteAsync(StorageDeleteOption.PermanentDelete).AsTask();
-                task.Wait();
+                subfolder.DeleteAsync(StorageDeleteOption.PermanentDelete).AsTask().Wait();
             });
         }
 
@@ -112,8 +111,7 @@
 
             if(null != file)
             {
-                Task task = file.DeleteAsync(StorageDeleteOption.PermanentDelete).AsTask();
-                task.Wait();
+                file.DeleteAsync(StorageDeleteOption.PermanentDelete).AsTask().Wait();
             }
         }
 
@@ -123,9 +121,9 @@
             Contract.Requires(null != queryOptions);
             Contract.Requires(null != action);
 
-            StorageFileQueryResult query = folder.CreateFileQueryWithOptions(queryOptions);
-            Task<IReadOnlyList<StorageFile>> task = query.GetFilesAsync().AsTask<IReadOnlyList<StorageFile>>();
-            task.Wait();
+            Task<IReadOnlyList<StorageFile>> task = folder.CreateFileQueryWithOptions(queryOptions)
+                .GetFilesAsync()
+                .AsTask<IReadOnlyList<StorageFile>>();
 
             foreach(StorageFile file in task.Result)
             {
@@ -135,12 +133,9 @@
 
         public static void OpenReadStreamAndCall(this StorageFile file, Action<Stream> action)
         {
-            Task<Stream> task = file.OpenStreamForReadAsync();
-            task.Wait();
-
-            using(Stream stream = task.Result)
+            using (Stream stream = file.OpenStreamForReadAsync().Result)
             {
-                action(task.Result);
+                action(stream);
             }
         }
 
@@ -154,7 +149,7 @@
             try
             {
                 Task<StorageFolder> task = parentFolder.GetFolderAsync(folderName).AsTask<StorageFolder>();
-                task.Wait();
+                //task.Wait();
                 folder = task.Result;
             }
             catch(FileNotFoundException)
@@ -191,7 +186,6 @@
             Contract.Ensures(null != Contract.Result<StorageFolder>());
 
             Task<StorageFolder> task = parentFolder.CreateFolderAsync(folderName, CreationCollisionOption.ReplaceExisting).AsTask<StorageFolder>();
-            task.Wait();
             Contract.Assert(null != task.Result);
             return task.Result;
         }
@@ -203,7 +197,6 @@
             Contract.Ensures(null != Contract.Result<StorageFolder>());
 
             Task<StorageFolder> task = parentFolder.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists).AsTask<StorageFolder>();
-            task.Wait();
             Contract.Assert(null != task.Result);
             return task.Result;
         }
@@ -217,9 +210,7 @@
 
             try
             {
-                Task<StorageFile> task = folder.GetFileAsync(fileName).AsTask<StorageFile>();
-                task.Wait();
-                file = task.Result;
+                file = folder.GetFileAsync(fileName).AsTask<StorageFile>().Result;
             }
             catch (FileNotFoundException)
             {
@@ -257,9 +248,7 @@
 
             try
             {
-                Task<Stream> task = folder.OpenStreamForReadAsync(fileName);
-                task.Wait();
-                stream = task.Result;
+                stream = folder.OpenStreamForReadAsync(fileName).Result;
             }
             catch (FileNotFoundException)
             {
@@ -293,9 +282,7 @@
             Contract.Requires(null != folder);
             Contract.Requires(null != fileName);
 
-            Task<Stream> task = folder.OpenStreamForWriteAsync(fileName, CreationCollisionOption.ReplaceExisting);
-            task.Wait();
-            return task.Result;
+            return folder.OpenStreamForWriteAsync(fileName, CreationCollisionOption.ReplaceExisting).Result;
         }
     }
 }

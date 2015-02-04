@@ -31,9 +31,8 @@ namespace RdClient.Windows.Test.Model
             //
             try
             {
-                Task<StorageFolder> getTask = ApplicationData.Current.LocalFolder.GetFolderAsync(RootFolderName).AsTask<StorageFolder>();
-                getTask.Wait();
-                getTask.Result.DeleteAsync(StorageDeleteOption.PermanentDelete).AsTask().Wait();
+                ApplicationData.Current.LocalFolder.GetFolderAsync(RootFolderName).AsTask<StorageFolder>()
+                    .Result.DeleteAsync(StorageDeleteOption.PermanentDelete).AsTask().Wait();
             }
             catch (Exception ex)
             {

@@ -52,8 +52,6 @@
                     .GetFoldersAsync()
                     .AsTask<IReadOnlyList<Windows.Storage.StorageFolder>>();
 
-                task.Wait();
-
                 foreach (Windows.Storage.StorageFolder subfolder in task.Result)
                 {
                     folderNames.Add(subfolder.Name);
@@ -72,8 +70,6 @@
                 Task<IReadOnlyList<Windows.Storage.StorageFile>> task = folder.CreateFileQuery()
                     .GetFilesAsync()
                     .AsTask<IReadOnlyList<Windows.Storage.StorageFile>>();
-
-                task.Wait();
 
                 foreach (Windows.Storage.StorageFile file in task.Result)
                 {
@@ -117,9 +113,7 @@
                 try
                 {
                     Task<Windows.Storage.StorageFile> task = folder.GetFileAsync(name).AsTask<Windows.Storage.StorageFile>();
-                    task.Wait();
                     Task<Stream> openTask = task.Result.OpenStreamForReadAsync();
-                    openTask.Wait();
                     stream = openTask.Result;
                 }
                 catch (FileNotFoundException)
@@ -156,13 +150,11 @@
 
             CreateFolderAndCall(folder =>
             {
-                Task<Windows.Storage.StorageFile> task = folder
+                stream = folder
                     .CreateFileAsync(name, Windows.Storage.CreationCollisionOption.ReplaceExisting)
-                    .AsTask<Windows.Storage.StorageFile>();
-
-                Task<Stream> createTask = task.Result.OpenStreamForWriteAsync();
-                createTask.Wait();
-                stream = createTask.Result;
+                    .AsTask<Windows.Storage.StorageFile>()
+                    .Result
+                        .OpenStreamForWriteAsync().Result;
             });
 
             return stream;
@@ -175,7 +167,6 @@
                 try
                 {
                     Task<Windows.Storage.StorageFile> getTask = folder.GetFileAsync(name).AsTask<Windows.Storage.StorageFile>();
-                    getTask.Wait();
                     getTask.Result.DeleteAsync(Windows.Storage.StorageDeleteOption.PermanentDelete).AsTask().Wait();
                 }
                 catch (FileNotFoundException)
@@ -240,11 +231,10 @@
 
             try
             {
-                Task<Windows.Storage.StorageFolder> task = parentFolder
+                openedFolder = parentFolder
                     .GetFolderAsync(folderName)
-                    .AsTask<Windows.Storage.StorageFolder>();
-                task.Wait();
-                openedFolder = task.Result;
+                    .AsTask<Windows.Storage.StorageFolder>()
+                    .Result;
             }
             catch (FileNotFoundException)
             {
@@ -275,11 +265,10 @@
 
         private static Windows.Storage.StorageFolder CreateFolder(Windows.Storage.StorageFolder parentFolder, string folderName)
         {
-            Task<Windows.Storage.StorageFolder> task = parentFolder
+            return parentFolder
                 .CreateFolderAsync(folderName, Windows.Storage.CreationCollisionOption.OpenIfExists)
-                .AsTask<Windows.Storage.StorageFolder>();
-            task.Wait();
-            return task.Result;
+                .AsTask<Windows.Storage.StorageFolder>()
+                .Result;
         }
     }
 }

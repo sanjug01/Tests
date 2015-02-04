@@ -3,6 +3,7 @@
     using System;
     using System.ComponentModel;
 
+    [DefaultValue(PersistentStatus.Clean)]
     public enum PersistentStatus
     {
         Clean,

@@ -222,7 +222,7 @@ namespace RdClient.Shared.ViewModels
                 {
                     if (null == selectedDesktops)
                         selectedDesktops = new List<IModelContainer<DesktopModel>>();
-                    selectedDesktops.Add(new TemporaryModelContainer<DesktopModel>(vm.DesktopId, vm.Desktop));
+                    selectedDesktops.Add(TemporaryModelContainer<DesktopModel>.WrapModel(vm.DesktopId, vm.Desktop));
                 }
             }
 

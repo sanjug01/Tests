@@ -5,6 +5,7 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Test.Data;
     using RdClient.Shared.Test.Mock;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Input;
@@ -13,7 +14,7 @@
     public sealed class ApplicationDataModelTests
     {
         [TestMethod]
-        public void NewApplicationDataModelTests_CannotBeSaved()
+        public void NewApplicationDataModel_CannotBeSaved()
         {
             ApplicationDataModel adm = new ApplicationDataModel()
             {
@@ -30,7 +31,7 @@
         }
 
         [TestMethod]
-        public void NewApplicationDataModelTests_AddLocalDesktop_CanBeSaved()
+        public void NewApplicationDataModel_AddLocalDesktop_CanBeSaved()
         {
             ApplicationDataModel adm = new ApplicationDataModel()
             {
@@ -45,7 +46,7 @@
         }
 
         [TestMethod]
-        public void NewApplicationDataModelTests_AddLocalCredentials_CanBeSaved()
+        public void NewApplicationDataModel_AddLocalCredentials_CanBeSaved()
         {
             ApplicationDataModel adm = new ApplicationDataModel()
             {
@@ -60,7 +61,7 @@
         }
 
         [TestMethod]
-        public void NewApplicationDataModelTests_AddLocalDesktopSave_Saved()
+        public void NewApplicationDataModel_AddLocalDesktopSave_Saved()
         {
             ApplicationDataModel adm = new ApplicationDataModel()
             {
@@ -76,7 +77,7 @@
         }
 
         [TestMethod]
-        public void NewApplicationDataModelTests_AddLocalDesktopSaveChangeDesktop_CanBeSaved()
+        public void NewApplicationDataModel_AddLocalDesktopSaveChangeDesktop_CanBeSaved()
         {
             IList<ICommand> changes = new List<ICommand>();
             ApplicationDataModel adm = new ApplicationDataModel()
@@ -101,7 +102,7 @@
         }
 
         [TestMethod]
-        public void NewApplicationDataModelTests_AddLocalCredentialsSaveChangeCredentials_CanBeSaved()
+        public void NewApplicationDataModel_AddLocalCredentialsSaveChangeCredentials_CanBeSaved()
         {
             IList<ICommand> changes = new List<ICommand>();
             ApplicationDataModel adm = new ApplicationDataModel()
@@ -126,7 +127,7 @@
         }
 
         [TestMethod]
-        public void NewApplicationDataModelTests_TrustCertificate_CanBeSaved()
+        public void NewApplicationDataModel_TrustCertificate_CanBeSaved()
         {
             IList<ICommand> changes = new List<ICommand>();
             ApplicationDataModel adm = new ApplicationDataModel()
@@ -145,7 +146,7 @@
         }
 
         [TestMethod]
-        public void NewApplicationDataModelTests_TrustCertificateSave_CannotBeSaved()
+        public void NewApplicationDataModel_TrustCertificateSave_CannotBeSaved()
         {
             IList<ICommand> changes = new List<ICommand>();
             ApplicationDataModel adm = new ApplicationDataModel()
@@ -166,6 +167,45 @@
             Assert.AreSame(po.Save, changes[1]);
             Assert.AreEqual(1, files.Count);
             Assert.AreEqual("CertificateTrust.model", files[0]);
+        }
+
+        [TestMethod]
+        public void ApplicationDataModel_RemoveCredentials_DesktopsUpdated()
+        {
+            ApplicationDataModel adm = new ApplicationDataModel()
+            {
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer()
+            };
+            IPersistentObject po = adm;
+            Guid credentialsId = adm.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel());
+            for (int i = 0; i < 100; ++i )
+            {
+                DesktopModel desktop = new DesktopModel();
+                if (0 == i % 2)
+                {
+                    desktop.CredentialsId = credentialsId;
+                    Assert.AreEqual(credentialsId, desktop.CredentialsId);
+                    adm.LocalWorkspace.Connections.AddNewModel(new RemoteApplicationModel());
+                }
+                adm.LocalWorkspace.Connections.AddNewModel(desktop);
+            }
+            po.Save.Execute(null);
+
+            adm.LocalWorkspace.Credentials.RemoveModel(credentialsId);
+
+            int desktops = 0;
+
+            foreach(IModelContainer<RemoteConnectionModel> container in adm.LocalWorkspace.Connections.Models)
+            {
+                if(container.Model is DesktopModel)
+                {
+                    Assert.AreEqual(Guid.Empty, ((DesktopModel)container.Model).CredentialsId);
+                    ++desktops;
+                }
+            }
+
+            Assert.AreNotEqual(0, desktops);
         }
     }
 }

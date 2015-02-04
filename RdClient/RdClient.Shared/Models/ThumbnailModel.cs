@@ -35,9 +35,7 @@
 
         private BitmapEncoder CreateBitmapEncoderWithStream(IRandomAccessStream stream)
         {
-            Task<BitmapEncoder> t = BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream).AsTask<BitmapEncoder>();
-            t.Wait();
-            return t.Result;
+            return BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream).AsTask<BitmapEncoder>().Result;
         }
 
         private byte[] GetSnapshotBytes(IRdpScreenSnapshot snapshot)

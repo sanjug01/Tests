@@ -31,15 +31,13 @@ namespace RdClient.Windows.Test.Model
         {
             StorageFolder tempFolder = ApplicationData.Current.TemporaryFolder;
             Task<StorageFolder> folderTask = tempFolder.CreateFolderAsync("AppDataStorageTests", CreationCollisionOption.ReplaceExisting).AsTask<StorageFolder>();
-            folderTask.Wait();
 
             _storageFolder = folderTask.Result;             
         }
 
         public override void DataStorageCleanup()
         {
-            Task deleteTask = _storageFolder.DeleteAsync().AsTask();
-            deleteTask.Wait();
+            _storageFolder.DeleteAsync().AsTask().Wait();
         }
 #endif
     }

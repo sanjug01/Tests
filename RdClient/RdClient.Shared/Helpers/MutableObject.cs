@@ -35,7 +35,7 @@
         {
             PropertyChangedEventHandler handler;
 
-            using (ReadWriteMonitor.Read(_monitor))
+            using (LockRead())
                 handler = _propertyChanged;
 
             if (null != handler)
@@ -67,14 +67,12 @@
         {
             add
             {
-                using (ReadWriteMonitor.Write(_monitor))
-                    _propertyChanged += value;
+                using (LockWrite()) _propertyChanged += value;
             }
 
             remove
             {
-                using (ReadWriteMonitor.Write(_monitor))
-                    _propertyChanged -= value;
+                using (LockWrite()) _propertyChanged -= value;
             }
         }
     }

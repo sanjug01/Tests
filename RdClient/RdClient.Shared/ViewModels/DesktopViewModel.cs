@@ -213,7 +213,7 @@
 
         private void DeleteCommandExecute(object o)
         {
-            NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(new TemporaryModelContainer<DesktopModel>(_desktopId, _desktop)));            
+            NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(TemporaryModelContainer<DesktopModel>.WrapModel(_desktopId, _desktop)));            
         }
 
         private void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)

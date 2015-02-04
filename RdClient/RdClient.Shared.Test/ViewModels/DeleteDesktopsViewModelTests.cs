@@ -54,17 +54,17 @@ namespace RdClient.Shared.Test.ViewModels
 
             // can pass a single desktop or a selection with a single element
             dtm = _testData.NewValidDesktop(Guid.Empty);
-            _singleDesktop = new TemporaryModelContainer<DesktopModel>(_dataModel.LocalWorkspace.Connections.AddNewModel(dtm), dtm);
+            _singleDesktop = TemporaryModelContainer<DesktopModel>.WrapModel(_dataModel.LocalWorkspace.Connections.AddNewModel(dtm), dtm);
             _singleDesktopSelection = new List<IModelContainer<DesktopModel>>() { _singleDesktop };
 
             _multiDesktopsSelection = new List<IModelContainer<DesktopModel>>();
 
             dtm = _testData.NewValidDesktop(Guid.Empty);
-            _multiDesktopsSelection.Add(new TemporaryModelContainer<DesktopModel>(_dataModel.LocalWorkspace.Connections.AddNewModel(dtm), dtm));
+            _multiDesktopsSelection.Add(TemporaryModelContainer<DesktopModel>.WrapModel(_dataModel.LocalWorkspace.Connections.AddNewModel(dtm), dtm));
             dtm = _testData.NewValidDesktop(Guid.Empty);
-            _multiDesktopsSelection.Add(new TemporaryModelContainer<DesktopModel>(_dataModel.LocalWorkspace.Connections.AddNewModel(dtm), dtm));
+            _multiDesktopsSelection.Add(TemporaryModelContainer<DesktopModel>.WrapModel(_dataModel.LocalWorkspace.Connections.AddNewModel(dtm), dtm));
             dtm = _testData.NewValidDesktop(Guid.Empty);
-            _multiDesktopsSelection.Add(new TemporaryModelContainer<DesktopModel>(_dataModel.LocalWorkspace.Connections.AddNewModel(dtm), dtm));
+            _multiDesktopsSelection.Add(TemporaryModelContainer<DesktopModel>.WrapModel(_dataModel.LocalWorkspace.Connections.AddNewModel(dtm), dtm));
 
             _deleteDesktopsViewModel = new TestDeleteDesktopsViewModel(_dataModel);
         }

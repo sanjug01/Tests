@@ -61,9 +61,7 @@ namespace RdClient.Shared.CxWrappers
             {
                 if(_stream == null)
                 {
-                    Task<Stream> task = RootFolder.OpenStreamForWriteAsync("instrument.txt", CreationCollisionOption.OpenIfExists);
-                    task.Wait();
-                    _stream = task.Result;
+                    _stream = RootFolder.OpenStreamForWriteAsync("instrument.txt", CreationCollisionOption.OpenIfExists).Result;
                 }
                 return _stream;
             }

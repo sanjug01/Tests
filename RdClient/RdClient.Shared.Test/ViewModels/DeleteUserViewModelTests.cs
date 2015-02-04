@@ -43,7 +43,7 @@ namespace RdClient.Shared.Test.ViewModels
             }            
 
             //add this credential to the datamodel
-            _cred = new TemporaryModelContainer<CredentialsModel>(_dataModel.LocalWorkspace.Credentials.AddNewModel(_cred.Model), _cred.Model);
+            _cred = TemporaryModelContainer<CredentialsModel>.WrapModel(_dataModel.LocalWorkspace.Credentials.AddNewModel(_cred.Model), _cred.Model);
 
             //add some desktops to the datamodel
             foreach (DesktopModel desktop in _testData.NewSmallListOfDesktops(_dataModel.LocalWorkspace.Credentials.Models.ToList()))

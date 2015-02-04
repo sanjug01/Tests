@@ -60,7 +60,7 @@ namespace RdClient.Shared.Test.Helpers
 
         public IModelContainer<CredentialsModel> NewValidCredential()
         {
-            return new TemporaryModelContainer<CredentialsModel>(Guid.NewGuid(), new CredentialsModel()
+            return TemporaryModelContainer<CredentialsModel>.WrapModel(Guid.NewGuid(), new CredentialsModel()
             {
                 Domain = NewRandomString(),
                 Username = NewRandomString(),
