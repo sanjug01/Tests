@@ -106,6 +106,7 @@
     <Compile Include="Data\SerializableModel.cs" />
     <Compile Include="Data\SerializableModelSerializer.cs" />
     <Compile Include="Data\TemporaryModelContainer.cs" />
+    <Compile Include="Data\TransformingObservableCollection.cs" />
     <Compile Include="Data\TrustedCertificate.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
