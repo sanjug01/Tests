@@ -1,7 +1,8 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.Data;
-    using System.Runtime.Serialization;
+using System.ComponentModel;
+using System.Runtime.Serialization;
 
     [DataContract(IsReference=true)]
     public abstract class RemoteConnectionModel : SerializableModel
@@ -18,9 +19,21 @@
             get
             {
                 if (null == _thumbnail)
+                {
                     _thumbnail = new ThumbnailModel();
+                    _thumbnail.PropertyChanged += this.OnThumbnailChanged;
+                }
                 return _thumbnail;
             }
+        }
+
+        protected virtual void OnThumbnailChanged(IThumbnail sender, PropertyChangedEventArgs e)
+        {
+        }
+
+        private void OnThumbnailChanged(object sender, PropertyChangedEventArgs e)
+        {
+            this.OnThumbnailChanged((IThumbnail)sender, e);
         }
     }
 }

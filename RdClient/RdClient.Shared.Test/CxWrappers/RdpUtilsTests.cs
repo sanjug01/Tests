@@ -22,7 +22,7 @@ namespace RdClient.Shared.Test.CxWrappers
                 Assert.AreEqual(default(AudioMode), desktop.AudioMode);
 
                 properties.Expect("SetBoolProperty", new List<object>() { "Administrative Session", default(bool) }, 0);
-                properties.Expect("SetIntProperty", new List<object>() { "AudioMode", (int)default(Desktop.AudioModes) }, 0);
+                properties.Expect("SetIntProperty", new List<object>() { "AudioMode", (int)default(AudioMode) }, 0);
                 RdpPropertyApplier.ApplyDesktop(properties, desktop);
             }
         }

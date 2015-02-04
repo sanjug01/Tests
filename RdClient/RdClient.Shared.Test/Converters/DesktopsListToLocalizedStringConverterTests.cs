@@ -28,14 +28,6 @@ namespace RdClient.Shared.Test.Converters
         }
 
         [TestMethod]
-        public void ConvertEmptyListReturnsListIsEmptyString()
-        {
-            IList<Desktop> emptyList = new List<Desktop>();
-            string listIsEmptyString = _stringTable.GetLocalizedString(DesktopsListToLocalizedStringConverter.emptyDesktopListStringId);
-            Assert.AreEqual(listIsEmptyString, _converter.Convert(emptyList, null, null, null));
-        }
-
-        [TestMethod]
         public void ConvertListWithSingleDesktopReturnsHostname()
         {
             DesktopModel desktop = _desktops[0];

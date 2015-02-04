@@ -82,5 +82,10 @@
         {
             _credentialsId = Guid.Empty;
         }
+
+        protected override void OnThumbnailChanged(IThumbnail sender, PropertyChangedEventArgs e)
+        {
+            EmitPropertyChanged("Thumbnail");
+        }
     }
 }

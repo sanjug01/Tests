@@ -2,7 +2,6 @@
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RdClient.Shared.Data;
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
@@ -51,7 +50,7 @@
         [TestMethod]
         public void EmptySource_NewOrderedObservableCollection_EmptyOrderedCollection()
         {
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
             Assert.IsNull(orderedCollection.Order);
             Assert.IsNotNull(orderedCollection.Models);
             Assert.AreEqual(0, orderedCollection.Models.Count);
@@ -65,7 +64,7 @@
             _source.Add(new TestModel(3));
             _source.Add(new TestModel(4));
 
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
             Assert.IsNull(orderedCollection.Order);
             Assert.IsNotNull(orderedCollection.Models);
             Assert.AreEqual(0, orderedCollection.Models.Count);
@@ -80,7 +79,7 @@
                 _source.Add(new TestModel(i));
 
             IComparer<TestModel> order = new ForwardOrder();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
             orderedCollection.Order = order;
 
             Assert.AreEqual(data.Length, _collection.Count);
@@ -95,7 +94,7 @@
             int[] data = new int[] { 1, 2, 3, 4, 6, 7, 8, 9, 10, 50, 5 };
 
             IComparer<TestModel> order = new ForwardOrder();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
             orderedCollection.Order = order;
 
             foreach (int i in data)
@@ -113,7 +112,7 @@
             int[] data = new int[] { 5, 10, 15, 20, 25, 30, 35 };
 
             IComparer<TestModel> order = new ForwardOrder();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
 
             foreach (int i in data)
                 _source.Add(new TestModel(i));
@@ -135,7 +134,7 @@
             int[] data = new int[] { 5, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 35 };
 
             IComparer<TestModel> order = new ForwardOrder();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
 
             foreach (int i in data)
                 _source.Add(new TestModel(i));
@@ -159,7 +158,7 @@
             int[] data = new int[] { 5, 10, 15, 20, 25, 30, 35 };
 
             IComparer<TestModel> order = new ForwardOrder();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
 
             foreach (int i in data)
                 _source.Add(new TestModel(i));
@@ -179,7 +178,7 @@
             int[] data = new int[] { 5, 10, 15, 20, 25, 30, 35 };
 
             IComparer<TestModel> order = new ForwardOrder();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
 
             foreach (int i in data)
                 _source.Add(new TestModel(i));
@@ -205,7 +204,7 @@
             int[] data = new int[] { 5, 10, 15, 20, 25, 30, 35 };
 
             IComparer<TestModel> order = new ForwardOrder();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
 
             foreach (int i in data)
                 _source.Add(new TestModel(i));
@@ -229,7 +228,7 @@
             int[] data = new int[] { 5, 10, 15, 20, 25, 30, 35 };
 
             IComparer<TestModel> order = new ForwardOrder();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
 
             foreach (int i in data)
                 _source.Add(new TestModel(i));
@@ -252,7 +251,7 @@
             int[] data = new int[] { 5, 10, 15, 20, 25, 30, 35 };
 
             IComparer<TestModel> order = new ForwardOrder();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
 
             foreach (int i in data)
                 _source.Add(new TestModel(i));
@@ -274,7 +273,7 @@
             int[] data = new int[] { 5, 10, 15, 20, 25, 30, 35 };
 
             IComparer<TestModel> order = new ForwardOrder();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
 
             foreach (int i in data)
                 _source.Add(new TestModel(i));
@@ -297,7 +296,7 @@
             int[] data = new int[] { 1, 2, 3, 4, 6, 7, 8, 9, 10, 50, 5 };
 
             IComparer<TestModel> order = new ForwardOrder();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
 
             foreach (int i in data)
                 _source.Add(new TestModel(i));
@@ -323,7 +322,7 @@
             int[] data = new int[] { 1, 2, 3, 4, 6, 7, 8, 9, 10, 50, 5 };
 
             IComparer<TestModel> order = new ForwardOrder();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_collection);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_collection);
 
             foreach (int i in data)
                 _source.Add(new TestModel(i));
@@ -344,7 +343,7 @@
         public void OrderedObservableCollection_ChangeOrder_PropertyChangeReported()
         {
             IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
-            OrderedObservableCollection<TestModel> orderedCollection = new OrderedObservableCollection<TestModel>(_source);
+            IOrderedObservableCollection<TestModel> orderedCollection = OrderedObservableCollection<TestModel>.Create(_source);
 
             orderedCollection.PropertyChanged += (sender, e) => changes.Add(e);
             orderedCollection.Order = new ForwardOrder();

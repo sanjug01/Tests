@@ -8,7 +8,6 @@
 
     [DataContract(IsReference = true)]
     [KnownType(typeof(RemoteConnection))]
-    [KnownType(typeof(Desktop))]
     [KnownType(typeof(RemoteApplication))]
     [KnownType(typeof(Credentials))]
     [KnownType(typeof(Thumbnail))]

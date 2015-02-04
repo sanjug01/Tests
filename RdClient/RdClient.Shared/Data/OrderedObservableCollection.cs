@@ -10,20 +10,20 @@
     /// <summary>
     /// Observable collection of model objects that may be ordered.
     /// </summary>
-    public sealed class OrderedObservableCollection<TModel> : MutableObject
+    public sealed class OrderedObservableCollection<TModel> : MutableObject, IOrderedObservableCollection<TModel>
         where TModel : class, INotifyPropertyChanged
     {
-        private readonly IList<TModel> _sourceCollection;
+        private readonly IEnumerable<TModel> _sourceCollection;
         private readonly ObservableCollection<TModel> _orderedCollection;
         private readonly ReadOnlyObservableCollection<TModel> _models;
         private IComparer<TModel> _order;
 
-        public ReadOnlyObservableCollection<TModel> Models
+        ReadOnlyObservableCollection<TModel> IOrderedObservableCollection<TModel>.Models
         {
             get { return _models; }
         }
 
-        public IComparer<TModel> Order
+        IComparer<TModel> IOrderedObservableCollection<TModel>.Order
         {
             get { return _order; }
 
@@ -36,20 +36,18 @@
             }
         }
 
-        public OrderedObservableCollection(ReadOnlyObservableCollection<TModel> sourceCollection)
+        public static IOrderedObservableCollection<TModel> Create<TSourceCollection>(TSourceCollection sourceCollection)
+            where TSourceCollection : INotifyCollectionChanged, IEnumerable<TModel>
         {
-            _sourceCollection = sourceCollection;
-            _orderedCollection = new ObservableCollection<TModel>();
-            _models = new ReadOnlyObservableCollection<TModel>(_orderedCollection);
-            SubscribeForCollectionUpdates(sourceCollection);
+            return new OrderedObservableCollection<TModel>(sourceCollection, sourceCollection);
         }
 
-        public OrderedObservableCollection(ObservableCollection<TModel> sourceCollection)
+        private OrderedObservableCollection(INotifyCollectionChanged notifications, IEnumerable<TModel> data)
         {
-            _sourceCollection = sourceCollection;
+            _sourceCollection = data;
             _orderedCollection = new ObservableCollection<TModel>();
             _models = new ReadOnlyObservableCollection<TModel>(_orderedCollection);
-            SubscribeForCollectionUpdates(sourceCollection);
+            SubscribeForCollectionUpdates(notifications);
         }
 
         private void SubscribeForCollectionUpdates(INotifyCollectionChanged sourceCollection)

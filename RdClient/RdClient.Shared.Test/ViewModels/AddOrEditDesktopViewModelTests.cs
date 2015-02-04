@@ -1,16 +1,16 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RdClient.Shared.Data;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using RdClient.Shared.Navigation.Extensions;
-using RdClient.Shared.Test.Data;
-using RdClient.Shared.Test.Helpers;
-using RdClient.Shared.ViewModels;
-using System;
-using System.Collections.Generic;
-
-namespace RdClient.Shared.Test.ViewModels
+﻿namespace RdClient.Shared.Test.ViewModels
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using RdClient.Shared.Data;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
+    using RdClient.Shared.Test.Data;
+    using RdClient.Shared.Test.Helpers;
+    using RdClient.Shared.ViewModels;
+    using System;
+    using System.Collections.Generic;
+
     [TestClass]
     public class AddOrEditDesktopViewModelTests
     {
@@ -329,7 +329,7 @@ namespace RdClient.Shared.Test.ViewModels
                 ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
                 _addOrEditDesktopViewModel.Host = expectedDesktop.HostName;
                 _addOrEditDesktopViewModel.FriendlyName = "FriendlyPc";
-                _addOrEditDesktopViewModel.AudioMode = (int)Desktop.AudioModes.NoSound;
+                _addOrEditDesktopViewModel.AudioMode = (int)AudioMode.NoSound;
                 _addOrEditDesktopViewModel.IsSwapMouseButtons = true;
                 _addOrEditDesktopViewModel.IsUseAdminSession = true;
 

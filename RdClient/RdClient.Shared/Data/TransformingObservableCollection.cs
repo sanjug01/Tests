@@ -7,9 +7,14 @@
 
     public sealed class TransformingObservableCollection<TSource, TTransformed> : ReadOnlyObservableCollection<TTransformed>
     {
-        private readonly Transformator _transformator;
+        private readonly ITransformator _transformator;
 
-        private sealed class Transformator
+        private interface ITransformator
+        {
+            ObservableCollection<TTransformed> Transformed { get; }
+        }
+
+        private sealed class Transformator<TSourceCollection> : ITransformator where TSourceCollection : INotifyCollectionChanged, IEnumerable<TSource>
         {
             private readonly ObservableCollection<TTransformed> _transformed;
             private readonly Func<TSource, TTransformed> _transformation;
@@ -19,7 +24,7 @@
                 get { return _transformed; }
             }
 
-            public Transformator(ReadOnlyObservableCollection<TSource> sourceCollection, Func<TSource, TTransformed> transformation)
+            public Transformator(TSourceCollection sourceCollection, Func<TSource, TTransformed> transformation)
             {
                 _transformed = new ObservableCollection<TTransformed>();
                 _transformation = transformation;
@@ -29,8 +34,7 @@
                     _transformed.Add(transformation(original));
                 }
 
-                INotifyCollectionChanged ncc = sourceCollection;
-                ncc.CollectionChanged += this.OnSourceCollectionChanged;
+                sourceCollection.CollectionChanged += this.OnSourceCollectionChanged;
             }
 
             private void OnSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -47,8 +51,19 @@
 
                     case NotifyCollectionChangedAction.Move:
                         count = e.OldItems.Count;
-                        for (index = 0; index < count; ++index)
-                            _transformed.Move(e.NewStartingIndex + index, e.OldStartingIndex + index);
+
+                        if( e.NewStartingIndex < e.OldStartingIndex)
+                        {
+                            int insertAt = e.NewStartingIndex;
+
+                            for (index = 0; index < count; ++index)
+                                _transformed.Move(e.OldStartingIndex, insertAt++);
+                        }
+                        else
+                        {
+                            for (index = 0; index < count; ++index)
+                                _transformed.Move(e.OldStartingIndex, e.NewStartingIndex);
+                        }
                         break;
 
                     case NotifyCollectionChangedAction.Remove:
@@ -72,16 +87,17 @@
             }
         }
 
-        public static ReadOnlyObservableCollection<TTransformed> Create(
-            ReadOnlyObservableCollection<TSource> sourceCollection,
+        public static ReadOnlyObservableCollection<TTransformed> Create<TWrappedCollection>(
+            TWrappedCollection sourceCollection,
             Func<TSource, TTransformed> transformation)
+                where TWrappedCollection : INotifyCollectionChanged, IEnumerable<TSource>
         {
-            Transformator transformator = new Transformator(sourceCollection, transformation);
+            Transformator<TWrappedCollection> transformator = new Transformator<TWrappedCollection>(sourceCollection, transformation);
 
             return new TransformingObservableCollection<TSource, TTransformed>(transformator);
         }
 
-        private TransformingObservableCollection(Transformator transformator)
+        private TransformingObservableCollection(ITransformator transformator)
             : base(transformator.Transformed)
         {
             _transformator = transformator;
