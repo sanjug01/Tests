@@ -45,8 +45,11 @@
                     }
                 }
 
-                _keyboardState.Clear();
-                _keyboardState = null;
+                if (null != _keyboardState)
+                {
+                    _keyboardState.Clear();
+                    _keyboardState = null;
+                }
             }
             else
             {
