@@ -117,6 +117,22 @@
         }
 
         [TestMethod]
+        public void NewTransformingObservableCollectionWithRemovedHandler_Remove_RemovedHandlerCalled()
+        {
+            List<string> removed = new List<string>();
+            ReadOnlyObservableCollection<string> transformed = TransformingObservableCollection<int, string>
+                .Create(_source, number => number.ToString(), str => removed.Add(str));
+
+            _trueSource.Add(1);
+            _trueSource.Add(2);
+            _trueSource.Add(3);
+            _trueSource.Add(4);
+
+            _trueSource.RemoveAt(0);
+            CollectionAssert.Contains(removed, "1");
+        }
+
+        [TestMethod]
         public void NewTransformingObservableCollection_MoveBackward_MovedTransformedValue()
         {
             ReadOnlyObservableCollection<string> transformed = TransformingObservableCollection<int, string>.Create(_source, number => number.ToString());
@@ -203,6 +219,22 @@
             Assert.AreEqual("6", transformed[1]);
             Assert.AreEqual("7", transformed[2]);
             Assert.AreEqual("8", transformed[3]);
+        }
+
+        [TestMethod]
+        public void NewTransformingObservableCollectionWithRemovedHandler_Reset_EverythingRemoved()
+        {
+            List<string> removed = new List<string>();
+            ResettableObservableList<int> resettableSource = new ResettableObservableList<int>() { 1, 2, 3, 4 };
+            ReadOnlyObservableCollection<string> transformed = TransformingObservableCollection<int, string>
+                .Create(resettableSource, number => number.ToString(), str => removed.Add(str));
+
+            resettableSource.Reset(new int[] { 5, 6, 7, 8 });
+            Assert.AreEqual(4, removed.Count);
+            CollectionAssert.Contains(removed, "1");
+            CollectionAssert.Contains(removed, "2");
+            CollectionAssert.Contains(removed, "3");
+            CollectionAssert.Contains(removed, "4");
         }
     }
 }

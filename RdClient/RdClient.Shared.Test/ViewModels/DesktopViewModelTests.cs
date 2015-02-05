@@ -33,7 +33,10 @@ namespace RdClient.Shared.Test.ViewModels
             _cred = _testData.NewValidCredential().Model;
             _desktop = _testData.NewValidDesktop(_dataModel.LocalWorkspace.Credentials.AddNewModel(_cred));
             _vm = new DesktopViewModel(_desktop, _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop),
-                _navService, _dataModel, null);
+                _dataModel, null)
+                {
+                    NavigationService = _navService
+                };
         }
 
         [TestCleanup]

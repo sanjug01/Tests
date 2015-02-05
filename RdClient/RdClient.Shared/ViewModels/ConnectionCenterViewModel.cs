@@ -6,13 +6,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace RdClient.Shared.ViewModels
 {
     public class ConnectionCenterViewModel : DeferringViewModelBase, IConnectionCenterViewModel, IApplicationBarItemsSource
     {
-        private ObservableCollection<IDesktopViewModel> _desktopViewModels;
+        //private ObservableCollection<IDesktopViewModel> _desktopViewModels;
+        private IOrderedObservableCollection<IModelContainer<RemoteConnectionModel>> _orderedConnections;
+        private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
         private int _selectedCount;
         private bool _desktopsSelectable;
 
@@ -21,6 +24,23 @@ namespace RdClient.Shared.ViewModels
         private readonly BarItemModel _deleteItem;
         private const string EditItemStringId = "Common_Edit_String";
         private const string DeleteItemStringId = "Common_Delete_String";
+
+        private class DesktopModelAlphabeticalComparer : IComparer<IModelContainer<RemoteConnectionModel>>
+        {
+            int IComparer<IModelContainer<RemoteConnectionModel>>.Compare(IModelContainer<RemoteConnectionModel> x, IModelContainer<RemoteConnectionModel> y)
+            {
+                DesktopModel dmX = x.Model as DesktopModel;
+                DesktopModel dmY = y.Model as DesktopModel;
+                int comparison = 0;
+
+                if(null != dmX && null != dmY)
+                {
+                    comparison = string.CompareOrdinal(dmX.HostName, dmY.HostName);
+                }
+
+                return comparison;
+            }
+        }
 
         public ConnectionCenterViewModel()
         {
@@ -33,14 +53,13 @@ namespace RdClient.Shared.ViewModels
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, EditItemStringId, BarItemModel.ItemAlignment.Right);
             _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, DeleteItemStringId, BarItemModel.ItemAlignment.Right);
 
-            this.DesktopViewModels = null;
-            this.PropertyChanged += ConnectionCenterViewModel_PropertyChanged;
             this.SelectedCount = 0;
         }
 
-        public ObservableCollection<IDesktopViewModel> DesktopViewModels
+        public ReadOnlyObservableCollection<IDesktopViewModel> DesktopViewModels
         {
             get { return _desktopViewModels; }
+
             private set 
             {                
                 SetProperty(ref _desktopViewModels, value);
@@ -55,7 +74,7 @@ namespace RdClient.Shared.ViewModels
 
         public bool HasDesktops
         {
-            get { return this.ApplicationDataModel.LocalWorkspace.Connections.Models.Count > 0; }
+            get { return this.DesktopViewModels.Count > 0; }
         }
 
         public int SelectedCount
@@ -91,12 +110,44 @@ namespace RdClient.Shared.ViewModels
 
         protected override void OnPresenting(object activationParameter)
         {
+            if (null == _desktopViewModels)
+            {
+                _orderedConnections = OrderedObservableCollection<IModelContainer<RemoteConnectionModel>>
+                                            .Create(this.ApplicationDataModel.LocalWorkspace.Connections.Models);
+                _orderedConnections.Order = new DesktopModelAlphabeticalComparer();
+                this.DesktopViewModels = TransformingObservableCollection<IModelContainer<RemoteConnectionModel>, IDesktopViewModel>
+                                            .Create(_orderedConnections.Models, this.CreateDesktopViewModel, this.RemovedDesktopViewModel);
+
+                INotifyPropertyChanged npc = this.DesktopViewModels;
+                npc.PropertyChanged += DesktopViewModels_PropertyChanged;
+            }
+            //
             // update NavigationService for all DesktopViewModels
-            foreach (DesktopViewModel vm in this.DesktopViewModels)
+            //
+            foreach (DesktopViewModel vm in _desktopViewModels)
             {
                 vm.NavigationService = this.NavigationService;
                 vm.Presented();
             }
+        }
+
+        private DesktopViewModel CreateDesktopViewModel(IModelContainer<RemoteConnectionModel> container)
+        {
+            Contract.Assert(container.Model is DesktopModel, "Data model for a desktop tile is not DesktopModel");
+
+            DesktopViewModel dvm = new DesktopViewModel((DesktopModel)container.Model, container.Id, this.ApplicationDataModel, this)
+            {
+                SelectionEnabled = this.DesktopsSelectable
+            };
+
+            dvm.PropertyChanged += DesktopSelection_PropertyChanged;
+
+            return dvm;
+        }
+
+        private void RemovedDesktopViewModel(IDesktopViewModel desktopViewModel)
+        {
+            desktopViewModel.PropertyChanged -= this.DesktopSelection_PropertyChanged;
         }
 
         private void AddDesktopExecute(object o)
@@ -104,37 +155,7 @@ namespace RdClient.Shared.ViewModels
             NavigationService.PushModalView("AddOrEditDesktopView", new AddDesktopViewModelArgs());
         }
 
-        private void ConnectionCenterViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "ApplicationDataModel")
-            {
-                ObservableCollection<IDesktopViewModel> desktopVMs = new ObservableCollection<IDesktopViewModel>();
-
-                foreach (IModelContainer<RemoteConnectionModel> rcm in this.ApplicationDataModel.LocalWorkspace.Connections.Models)
-                {
-                    rcm.Model.CastAndCall<DesktopModel>(desktopModel =>
-                    {
-                        DesktopViewModel vm = new DesktopViewModel(desktopModel, rcm.Id, this.NavigationService, this.ApplicationDataModel, this)
-                        {
-                            SelectionEnabled = this.DesktopsSelectable
-                        };
-
-                        desktopVMs.Add(vm);
-                        vm.PropertyChanged += DesktopSelection_PropertyChanged;
-                    });
-                }
-
-                this.DesktopViewModels = desktopVMs;
-
-                INotifyCollectionChanged ncc = this.ApplicationDataModel.LocalWorkspace.Connections.Models;
-                ncc.CollectionChanged += Desktops_CollectionChanged;
-
-                this.EmitPropertyChanged("HasDesktops");
-                ((INotifyPropertyChanged)this.DesktopViewModels).PropertyChanged += DesktopViewModels_PropertyChanged;
-            }
-        }
-
-        private void DesktopViewModels_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void DesktopViewModels_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals("Count"))
             {
@@ -163,37 +184,6 @@ namespace RdClient.Shared.ViewModels
             if (e.PropertyName.Equals("IsSelected"))
             {
                 this.UpdateSelection();
-            }
-        }
-
-        private void Desktops_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                foreach(IModelContainer<RemoteConnectionModel> container in e.NewItems)
-                {
-                    if (container.Model is DesktopModel)
-                    {
-                        DesktopViewModel vm = new DesktopViewModel((DesktopModel)container.Model, container.Id, NavigationService, ApplicationDataModel, this)
-                        {
-                            SelectionEnabled = this.DesktopsSelectable
-                        };
-
-                        vm.PropertyChanged += DesktopSelection_PropertyChanged;
-                        this.DesktopViewModels.Add(vm);
-                    }
-                }
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                foreach(IModelContainer<RemoteConnectionModel> container in e.OldItems)
-                {
-                    if(container.Model is DesktopModel)
-                    {
-                        IDesktopViewModel vm = this.DesktopViewModels.First(dvm => object.ReferenceEquals(dvm.Desktop, container.Model));
-                        this.DesktopViewModels.Remove(vm);
-                    }
-                }
             }
         }
 

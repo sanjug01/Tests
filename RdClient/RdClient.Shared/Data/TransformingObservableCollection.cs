@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
+    using System.Diagnostics.Contracts;
 
     public sealed class TransformingObservableCollection<TSource, TTransformed> : ReadOnlyObservableCollection<TTransformed>
     {
@@ -17,21 +18,26 @@
         private sealed class Transformator<TSourceCollection> : ITransformator where TSourceCollection : INotifyCollectionChanged, IEnumerable<TSource>
         {
             private readonly ObservableCollection<TTransformed> _transformed;
-            private readonly Func<TSource, TTransformed> _transformation;
+            private readonly Func<TSource, TTransformed> _transform;
+            private readonly Action<TTransformed> _removed;
 
             public ObservableCollection<TTransformed> Transformed
             {
                 get { return _transformed; }
             }
 
-            public Transformator(TSourceCollection sourceCollection, Func<TSource, TTransformed> transformation)
+            public Transformator(TSourceCollection sourceCollection, Func<TSource, TTransformed> transform, Action<TTransformed> removed)
             {
+                Contract.Requires(null != sourceCollection);
+                Contract.Requires(null != transform);
+
                 _transformed = new ObservableCollection<TTransformed>();
-                _transformation = transformation;
+                _transform = transform;
+                _removed = removed;
 
                 foreach (TSource original in sourceCollection)
                 {
-                    _transformed.Add(transformation(original));
+                    _transformed.Add(_transform(original));
                 }
 
                 sourceCollection.CollectionChanged += this.OnSourceCollectionChanged;
@@ -46,7 +52,7 @@
                     case NotifyCollectionChangedAction.Add:
                         index = e.NewStartingIndex;
                         foreach (TSource original in e.NewItems)
-                            _transformed.Insert(index++, _transformation(original));
+                            _transformed.Insert(index++, _transform(original));
                         break;
 
                     case NotifyCollectionChangedAction.Move:
@@ -69,19 +75,34 @@
                     case NotifyCollectionChangedAction.Remove:
                         count = e.OldItems.Count;
                         for (index = 0; index < count; ++index)
+                        {
+                            TTransformed removedItem = _transformed[e.OldStartingIndex];
                             _transformed.RemoveAt(e.OldStartingIndex);
+                            if (null != _removed)
+                                _removed(removedItem);
+                        }
                         break;
 
                     case NotifyCollectionChangedAction.Replace:
                         index = e.NewStartingIndex;
                         foreach (TSource original in e.NewItems)
-                            _transformed[index++] = _transformation(original);
+                        {
+                            TTransformed removedItem = _transformed[index];
+                            _transformed[index++] = _transform(original);
+                            if (null != _removed)
+                                _removed(removedItem);
+                        }
                         break;
 
                     default:
+                        if (null != _removed)
+                        {
+                            foreach (TTransformed transformedItem in _transformed)
+                                _removed(transformedItem);
+                        }
                         _transformed.Clear();
                         foreach (TSource original in (IEnumerable<TSource>)sender)
-                            _transformed.Add(_transformation(original));
+                            _transformed.Add(_transform(original));
                         break;
                 }
             }
@@ -89,10 +110,14 @@
 
         public static ReadOnlyObservableCollection<TTransformed> Create<TWrappedCollection>(
             TWrappedCollection sourceCollection,
-            Func<TSource, TTransformed> transformation)
+            Func<TSource, TTransformed> transform,
+            Action<TTransformed> removed = null)
                 where TWrappedCollection : INotifyCollectionChanged, IEnumerable<TSource>
         {
-            Transformator<TWrappedCollection> transformator = new Transformator<TWrappedCollection>(sourceCollection, transformation);
+            Contract.Requires(null != sourceCollection);
+            Contract.Requires(null != transform);
+
+            Transformator<TWrappedCollection> transformator = new Transformator<TWrappedCollection>(sourceCollection, transform, removed);
 
             return new TransformingObservableCollection<TSource, TTransformed>(transformator);
         }

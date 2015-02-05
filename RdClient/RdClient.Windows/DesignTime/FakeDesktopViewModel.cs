@@ -1,14 +1,16 @@
 ﻿using RdClient.Shared.Models;
 using RdClient.Shared.ViewModels;
 using System;
+using System.ComponentModel;
 using System.Windows.Input;
 
 namespace RdClient.DesignTime
 {
-    public class FakeDesktopViewModel : IDesktopViewModel
+    public sealed class FakeDesktopViewModel : IDesktopViewModel
     {
         private CredentialsModel _cred = new CredentialsModel() { Domain = "adomain", Password = "1234AbCd", Username = "exampleUser" };
         private DesktopModel _desktop = new DesktopModel() { HostName = "ExampleHostname" };
+        private PropertyChangedEventHandler _propertyChanged;
 
         public FakeDesktopViewModel()
         {
@@ -44,5 +46,11 @@ namespace RdClient.DesignTime
         }
 
         public bool SelectionEnabled { get; set; }
+
+        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        {
+            add { _propertyChanged += value; }
+            remove { _propertyChanged -= value; }
+        }
     }
 }

@@ -19,16 +19,16 @@
         private readonly RelayCommand _connectCommand;
         private readonly RelayCommand _deleteCommand;
         private readonly DesktopModel _desktop;
+        private readonly ApplicationDataModel _dataModel;
         private readonly Guid _desktopId;
         private bool _isSelected;
         private bool _selectionEnabled;
-        private ApplicationDataModel _dataModel;
         private BitmapImage _thumbnailImage;
         private IExecutionDeferrer _executionDeferrer;
         private bool _thumbnailUpdateNeeded;
         private bool _hasThumbnailImage;
 
-        public DesktopViewModel(DesktopModel desktop, Guid desktopId, INavigationService navService, ApplicationDataModel dataModel, IExecutionDeferrer executionDeferrer)
+        public DesktopViewModel(DesktopModel desktop, Guid desktopId, ApplicationDataModel dataModel, IExecutionDeferrer executionDeferrer)
         {
             Contract.Assert(null != desktop);
             Contract.Assert(!desktopId.Equals(Guid.Empty));
@@ -46,7 +46,6 @@
             //          but stil needs DataModel and NavigationService
             //          NavigationService may be initialized later while presenting the parent view
             _dataModel = dataModel;
-            this.NavigationService = navService;
             this.Thumbnail.PropertyChanged += Thumbnail_PropertyChanged;
             this.UpdateThumbnailImage(this.Thumbnail.EncodedImageBytes);
         }

@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using RdClient.Shared.Models;
 using System.Windows.Input;
+using System.ComponentModel;
 
 namespace RdClient.Shared.ViewModels
 {
-    public interface IDesktopViewModel
+    public interface IDesktopViewModel : INotifyPropertyChanged
     {
         DesktopModel Desktop { get; }
 

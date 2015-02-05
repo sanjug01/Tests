@@ -11,20 +11,22 @@ namespace RdClient.DesignTime
 {
     public class FakeConnectionCenterViewModel : IConnectionCenterViewModel
     {
-        ObservableCollection<IDesktopViewModel> _destopViewModels;
+        private readonly ObservableCollection<IDesktopViewModel> _desktopViewModelsSource;
+        private readonly ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
 
         public FakeConnectionCenterViewModel()
         {
-            _destopViewModels = new ObservableCollection<IDesktopViewModel>();
-            _destopViewModels.Add(new FakeDesktopViewModel());
-            _destopViewModels.Add(new FakeDesktopViewModel());
-            _destopViewModels.Add(new FakeDesktopViewModel());
-            _destopViewModels.Add(new FakeDesktopViewModel());
-            _destopViewModels.Add(new FakeDesktopViewModel());
-            _destopViewModels.Add(new FakeDesktopViewModel());
-            _destopViewModels.Add(new FakeDesktopViewModel());
-            _destopViewModels.Add(new FakeDesktopViewModel());
-            _destopViewModels.Add(new FakeDesktopViewModel());
+            _desktopViewModelsSource = new ObservableCollection<IDesktopViewModel>();
+            _desktopViewModels = new ReadOnlyObservableCollection<IDesktopViewModel>(_desktopViewModelsSource);
+            _desktopViewModelsSource.Add(new FakeDesktopViewModel());
+            _desktopViewModelsSource.Add(new FakeDesktopViewModel());
+            _desktopViewModelsSource.Add(new FakeDesktopViewModel());
+            _desktopViewModelsSource.Add(new FakeDesktopViewModel());
+            _desktopViewModelsSource.Add(new FakeDesktopViewModel());
+            _desktopViewModelsSource.Add(new FakeDesktopViewModel());
+            _desktopViewModelsSource.Add(new FakeDesktopViewModel());
+            _desktopViewModelsSource.Add(new FakeDesktopViewModel());
+            _desktopViewModelsSource.Add(new FakeDesktopViewModel());
         }
 
         public RelayCommand AddDesktopCommand
@@ -32,9 +34,9 @@ namespace RdClient.DesignTime
             get { return null; }
         }
 
-        public ObservableCollection<IDesktopViewModel> DesktopViewModels
+        public ReadOnlyObservableCollection<IDesktopViewModel> DesktopViewModels
         {
-            get { return _destopViewModels; }
+            get { return _desktopViewModels; }
         }
 
         public bool HasDesktops
