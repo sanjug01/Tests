@@ -66,54 +66,7 @@
                                           HorizontalAlignment="Center"
                                           Visibility="{Binding Path=IsReconnecting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         
-        <Grid Width="Auto" Height="Auto" 
-              Background="Transparent"
-              Opacity="0.6"
-              VerticalAlignment="Top" HorizontalAlignment="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal"
-                Grid.Row="0" Grid.Column="0"  Margin="0">
-                <Button
-                    x:Uid="SessionView-ConnectionBar-ZoomInButton"
-                    Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}"                
-                    Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
-                    CommandParameter="{StaticResource ZoomIn}"
-                    Content="{StaticResource ZoomInIcon}"  
-                    />
-                <Button
-                    x:Uid="SessionView-ConnectionBar-ZoomOutButton"
-                    Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}"                
-                    Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
-                    CommandParameter="{StaticResource ZoomOut}"
-                    Content="{StaticResource ZoomOutIcon}"
-                    />
-                <Button
-                    x:Uid="SessionView-ConnectionBar-Keyboard"
-                    Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}"                
-                    Content="{StaticResource KeyboardIcon}"
-                    />
-                <Button
-                    Margin="0,0,0,0"
-                    VerticalContentAlignment="Center"
-                    Height="60"
-                    FontSize="18"
-                    Foreground="White"
-                    Content="{Binding HostName}" 
-                    Command="{Binding ConnectionBarCommand}"
-                    VerticalAlignment="Center"/>
-                <Button
-                    x:Uid="SessionView-ConnectionBar-Disconnect"
-                    Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}"                
-                    Content="{StaticResource DisconnectIcon}"
-                    Command="{Binding DisconnectCommand}"                                 
-                    />                
-            </StackPanel>
-        </Grid>
+        <controls:ConnectionBarControl/>
 
         <controls:ElephantEarsControl             
             ElephantEarsVisible="{Binding ElephantEarsVisible}"/>
@@ -126,23 +79,6 @@
                      x:Uid="SessionView-ReconnectingMessage"                   
                      Visibility="{Binding Path=IsReconnecting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             
-            <Button
-                x:Uid="SessionView-DisconnectButton"
-                Command="{Binding DisconnectCommand}"                
-                Content="Disconnect (d)"/>
-            <Button
-                x:Uid="SessionView-ZoomInButton"
-                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
-                Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
-                CommandParameter="{StaticResource ZoomIn}"
-                Content="{StaticResource ZoomInIcon}">                
-            </Button>
-            <Button
-                x:Uid="SessionView-ZoomOutButton"
-                Style="{StaticResource ConnectionCenterBarButtonStyle}"                
-                Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
-                CommandParameter="{StaticResource ZoomOut}"
-                Content="{StaticResource ZoomOutIcon}"/>
             <Button
                 x:Uid="SessionView-PanLeft"
                 Command="{Binding ZoomPanViewModel.PanCommand}" 

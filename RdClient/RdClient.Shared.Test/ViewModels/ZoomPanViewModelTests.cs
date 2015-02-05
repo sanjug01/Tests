@@ -422,5 +422,26 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.AreEqual(_svm.TranslateYTo, _svm.TranslateYFrom);
         }
 
+        [TestMethod]
+        public void ZoomPanViewModel_ToggleZoom_CannotZoomMore()
+        {
+            // initial
+            Assert.IsTrue(1.0 == _svm.ScaleXTo);
+            Assert.IsTrue(1.0 == _svm.ScaleYTo);
+            Assert.IsTrue(_svm.CanZoomIn);
+            Assert.IsFalse(_svm.CanZoomOut);
+
+            _svm.ToggleZoomCommand.Execute(_zoomInTransform);
+            Assert.IsTrue(1.0 < _svm.ScaleXTo);
+
+            Assert.IsFalse(_svm.CanZoomIn);
+            Assert.IsTrue(_svm.CanZoomOut);
+
+            // zoomOut reverts
+            _svm.ToggleZoomCommand.Execute(_zoomOutTransform);
+            Assert.IsTrue(_svm.CanZoomIn);
+            Assert.IsFalse(_svm.CanZoomOut);
+        }
+
     }
 }

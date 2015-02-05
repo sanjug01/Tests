@@ -102,6 +102,8 @@ namespace RdClient.Shared.ViewModels
         private double _translateXTo;
         private double _translateYFrom;
         private double _translateYTo;
+        private bool _canZoomIn;
+        private bool _canZoomOut;
 
         public double ScaleCenterX
         {
@@ -168,6 +170,18 @@ namespace RdClient.Shared.ViewModels
         private readonly ICommand _panCommand;
         public ICommand PanCommand { get { return _panCommand; } }
 
+        public bool CanZoomIn
+        {
+            get { return _canZoomIn; }
+            set { this.SetProperty(ref _canZoomIn, value); }
+        }
+
+        public bool CanZoomOut
+        {
+            get { return _canZoomOut; }
+            set { this.SetProperty(ref _canZoomOut, value); }
+        }
+
         public ZoomPanViewModel()
         {
             _toggleZoomCommand = new RelayCommand(new Action<object>(ToggleMagnification));
@@ -182,6 +196,8 @@ namespace RdClient.Shared.ViewModels
             ScaleYFrom = 1.0;
             ScaleXTo = 1.0;
             ScaleYTo = 1.0;
+            CanZoomIn = true;
+            CanZoomOut = false;
 
             TranslateXFrom = 0.0;
             TranslateYFrom = 0.0;
@@ -230,12 +246,8 @@ namespace RdClient.Shared.ViewModels
             this.TranslateXFrom = this.TranslateXTo;
             this.TranslateYFrom = this.TranslateYTo;
 
-            // trick to do partial zooms
-            targetScaleFactor = this.ScaleXTo + 0.5;
-            if (targetScaleFactor > MAX_ZOOM_FACTOR)
-            {
-                targetScaleFactor = MAX_ZOOM_FACTOR;
-            }
+            this.CanZoomIn = false;
+            this.CanZoomOut = true;
 
             this.ScaleXFrom = this.ScaleXTo;
             this.ScaleXTo = targetScaleFactor;
@@ -255,12 +267,8 @@ namespace RdClient.Shared.ViewModels
             this.TranslateXFrom = this.TranslateXTo;
             this.TranslateYFrom = this.TranslateYTo;
 
-            // trick to do partial zooms
-            targetScaleFactor = this.ScaleXTo - 0.5;
-            if (targetScaleFactor < MIN_ZOOM_FACTOR)
-            {
-                targetScaleFactor = MIN_ZOOM_FACTOR;
-            }
+            this.CanZoomOut = false;
+            this.CanZoomIn = true;
 
             this.ScaleXFrom = this.ScaleXTo;
             this.ScaleXTo = targetScaleFactor;
@@ -297,6 +305,9 @@ namespace RdClient.Shared.ViewModels
             {
                 targetScaleY = MAX_ZOOM_FACTOR;
             }
+
+            this.CanZoomIn = (targetScaleX < MAX_ZOOM_FACTOR || targetScaleY < MAX_ZOOM_FACTOR);
+            this.CanZoomOut = (targetScaleX > MIN_ZOOM_FACTOR || targetScaleY > MIN_ZOOM_FACTOR);
 
             // reset the pan transformation
             this.TranslateXFrom = this.TranslateXTo;
