@@ -32,8 +32,6 @@
         <vm:PanRightTransform x:Key="PanRight"/>
         <vm:PanUpTransform x:Key="PanUp"/>
         <vm:PanDownTransform x:Key="PanDown"/>
-        <vm:ZoomInTransform x:Key="ZoomIn"/>
-        <vm:ZoomOutTransform x:Key="ZoomOut"/>
     </UserControl.Resources>
 
     <Grid Background="GreenYellow" >
