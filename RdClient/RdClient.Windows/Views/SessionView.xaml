@@ -76,16 +76,43 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Button
-                Margin="10,0,10,0"
-                VerticalContentAlignment="Center"
-                Grid.Row="0" Grid.Column="0"
-                Height="60"
-                FontSize="18"
-                Foreground="White"
-                Content="{Binding HostName}" 
-                Command="{Binding ConnectionBarCommand}"
-                VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"
+                Grid.Row="0" Grid.Column="0"  Margin="0">
+                <Button
+                    x:Uid="SessionView-ConnectionBar-ZoomInButton"
+                    Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}"                
+                    Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
+                    CommandParameter="{StaticResource ZoomIn}"
+                    Content="{StaticResource ZoomInIcon}"  
+                    />
+                <Button
+                    x:Uid="SessionView-ConnectionBar-ZoomOutButton"
+                    Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}"                
+                    Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
+                    CommandParameter="{StaticResource ZoomOut}"
+                    Content="{StaticResource ZoomOutIcon}"
+                    />
+                <Button
+                    x:Uid="SessionView-ConnectionBar-Keyboard"
+                    Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}"                
+                    Content="{StaticResource KeyboardIcon}"
+                    />
+                <Button
+                    Margin="0,0,0,0"
+                    VerticalContentAlignment="Center"
+                    Height="60"
+                    FontSize="18"
+                    Foreground="White"
+                    Content="{Binding HostName}" 
+                    Command="{Binding ConnectionBarCommand}"
+                    VerticalAlignment="Center"/>
+                <Button
+                    x:Uid="SessionView-ConnectionBar-Disconnect"
+                    Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}"                
+                    Content="{StaticResource DisconnectIcon}"
+                    Command="{Binding DisconnectCommand}"                                 
+                    />                
+            </StackPanel>
         </Grid>
 
         <controls:ElephantEarsControl             
