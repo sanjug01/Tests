@@ -68,6 +68,21 @@
 
         <controls:ElephantEarsControl             
             ElephantEarsVisible="{Binding ElephantEarsVisible}"/>
+
+        <StackPanel Orientation="Vertical"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Center"
+                    Width="480"
+                    Background="{StaticResource rdDarkGrayBrush}"
+                    Opacity="0.5"
+                    Visibility="{Binding IsKeyboardEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    >
+            <TextBlock Text="QWERTY" 
+                       FontSize="24"
+                       HorizontalAlignment="Center"/>
+            <TextBlock Text="The keyboard will show here soon." 
+                         HorizontalAlignment="Center"/>
+        </StackPanel>
         
         <StackPanel VerticalAlignment="Bottom"
                     HorizontalAlignment="Right" 

@@ -47,6 +47,7 @@
                     Style="{StaticResource ConnectionCenterBarToggleButtonStyle}"
                     Content="{StaticResource KeyboardIcon}"                
                     Command="{Binding ToogleKeyboardCommand}"
+                    IsChecked="{Binding IsKeyboardEnabled, Mode=TwoWay}"
                     />
             <Button x:Uid="SessionView-ConnectionBar-Title"                
                     Style="{StaticResource ConnectionCenterBarTitleButtonStyle}"

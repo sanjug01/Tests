@@ -22,6 +22,7 @@
         private bool  _isReconnecting;
         private bool _isCancelledReconnect;
         private int _reconnectAttempts;
+        private bool _isKeyboardEnabled;
         private readonly ICommand _disconnectCommand;
         private readonly ICommand _connectCommand;
         private readonly ICommand _cancelReconnectCommand;
@@ -52,9 +53,10 @@
             });
 
             //
-            //  TODO : need to determine if software keyboar is supported and implement show/hide
-            //
+            //  TODO : need to determine if software keyboard is supported and implement show/hide
+            //            
             this._toogleKeyboardCommand = new RelayCommand(new Action<object>(ToggleKeyboard));
+            this.IsKeyboardEnabled = false;
             this.CanShowKeyboard = true;
             }
 
@@ -107,6 +109,11 @@
         {
             get { return _canShowKeyboard; }
             set { SetProperty(ref _canShowKeyboard, value); }
+        }
+        public bool IsKeyboardEnabled
+        {
+            get { return _isKeyboardEnabled; }
+            set { SetProperty(ref _isKeyboardEnabled, value); }
         }
 
         public string HostName
