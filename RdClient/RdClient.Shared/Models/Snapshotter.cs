@@ -62,7 +62,12 @@ namespace RdClient.Shared.Models
         {
             if (_settings.UseThumbnails && _isConnectionAvailable)
             {
-                await _thumbnail.Update(_connection.GetSnapshot());
+                IRdpScreenSnapshot snapshot = _connection.GetSnapshot();
+                //null snapshot means GetSnapshot failed, so skip updating thumbnail.
+                if (snapshot != null)
+                {
+                    await _thumbnail.Update(snapshot);
+                }
             }
         }
     }
