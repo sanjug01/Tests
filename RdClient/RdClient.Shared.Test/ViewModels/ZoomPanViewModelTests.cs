@@ -423,8 +423,31 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void ZoomPanViewModel_ToggleZoom_CannotZoomMore()
+        public void ZoomPanViewModel_TouchModeDisablesToggleZoom()
         {
+            _svm.PointerModeEnabled = false;
+
+            // initial
+            Assert.IsTrue(1.0 == _svm.ScaleXTo);
+            Assert.IsTrue(1.0 == _svm.ScaleYTo);
+            Assert.IsFalse(_svm.CanZoomIn);
+            Assert.IsFalse(_svm.CanZoomOut);
+
+            _svm.ToggleZoomCommand.Execute(_zoomInTransform);
+            Assert.IsFalse(_svm.CanZoomIn);
+            Assert.IsFalse(_svm.CanZoomOut);
+
+            // zoomOut reverts
+            _svm.ToggleZoomCommand.Execute(_zoomOutTransform);
+            Assert.IsFalse(_svm.CanZoomIn);
+            Assert.IsFalse(_svm.CanZoomOut);
+        }
+
+        [TestMethod]
+        public void ZoomPanViewModel_PointerModeToggleZoom_CannotZoomMore()
+        {
+            _svm.PointerModeEnabled = true;
+            
             // initial
             Assert.IsTrue(1.0 == _svm.ScaleXTo);
             Assert.IsTrue(1.0 == _svm.ScaleYTo);
@@ -443,5 +466,67 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsFalse(_svm.CanZoomOut);
         }
 
+        [TestMethod]
+        public void ZoomPanViewModel_SwitchPointerMode_UpdatesCanZoomProperties()
+        {
+            bool updatedCanZoomIn = false;
+            bool updatedCanZoomOut = false;
+
+            _svm.PropertyChanged += (sender, e) =>
+                {
+                    if ("CanZoomIn".Equals(e.PropertyName))
+                    {
+                        updatedCanZoomIn = true;
+                    }
+                    if ("CanZoomOut".Equals(e.PropertyName))
+                    {
+                        updatedCanZoomOut = true;
+                    }
+                };
+
+            // initial
+            Assert.IsTrue(_svm.CanZoomIn);
+            Assert.IsFalse(_svm.CanZoomOut);
+            Assert.IsTrue(_svm.PointerModeEnabled);
+            
+            // switch
+            _svm.PointerModeEnabled = false;
+            Assert.IsTrue(updatedCanZoomIn);
+            Assert.IsTrue(updatedCanZoomOut);
+            Assert.IsFalse(_svm.CanZoomIn);
+            Assert.IsFalse(_svm.CanZoomOut);
+
+            // switch back
+            updatedCanZoomIn = false;
+            updatedCanZoomOut = false;
+            _svm.PointerModeEnabled = true;
+            Assert.IsTrue(updatedCanZoomIn);
+            Assert.IsTrue(updatedCanZoomOut);
+            Assert.IsTrue(_svm.CanZoomIn);
+            Assert.IsFalse(_svm.CanZoomOut);
+
+            // after zoomIn
+            _svm.ToggleZoomCommand.Execute(_zoomInTransform);
+            Assert.IsFalse(_svm.CanZoomIn);
+            Assert.IsTrue(_svm.CanZoomOut);
+
+            // switch
+            updatedCanZoomIn = false;
+            updatedCanZoomOut = false;
+            _svm.PointerModeEnabled = false;
+            Assert.IsTrue(updatedCanZoomIn);
+            Assert.IsTrue(updatedCanZoomOut);
+            Assert.IsFalse(_svm.CanZoomIn);
+            Assert.IsFalse(_svm.CanZoomOut);
+
+            // switch back
+            updatedCanZoomIn = false;
+            updatedCanZoomOut = false;
+            _svm.PointerModeEnabled = true;
+            Assert.IsTrue(updatedCanZoomIn);
+            Assert.IsTrue(updatedCanZoomOut);
+            Assert.IsFalse(_svm.CanZoomIn);
+            Assert.IsTrue(_svm.CanZoomOut);
+        }
     }
 }

@@ -43,25 +43,21 @@
                     CommandParameter="{StaticResource ZoomOut}"
                     Content="{StaticResource ZoomOutIcon}"
                     />
-            <Button
-                    x:Uid="SessionView-ConnectionBar-Keyboard"
-                    Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}"                
-                    Content="{StaticResource KeyboardIcon}"
+            <ToggleButton x:Uid="SessionView-ConnectionBar-Keyboard"
+                    Style="{StaticResource ConnectionCenterBarToggleButtonStyle}"
+                    Content="{StaticResource KeyboardIcon}"                
+                    Command="{Binding ToogleKeyboardCommand}"
                     />
-            <Button
-                    Margin="0,0,0,0"
-                    VerticalContentAlignment="Center"
-                    Height="60"
-                    FontSize="18"
-                    Foreground="White"
+            <Button x:Uid="SessionView-ConnectionBar-Title"                
+                    Style="{StaticResource ConnectionCenterBarTitleButtonStyle}"
                     Content="{Binding HostName}" 
                     Command="{Binding ConnectionBarCommand}"
-                    VerticalAlignment="Center"/>
-            <Button
-                    x:Uid="SessionView-ConnectionBar-Disconnect"
+                    />
+            <Button x:Uid="SessionView-ConnectionBar-Disconnect"                
                     Style="{StaticResource ConnectionCenterBarNarrowButtonStyle}"                
+                    Opacity="0.6"
                     Content="{StaticResource DisconnectIcon}"
-                    Command="{Binding DisconnectCommand}"                                 
+                    Command="{Binding DisconnectCommand}" 
                     />
         </StackPanel>
     </Grid>

@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Media.Imaging;
 namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.Input.Mouse;
+    using RdClient.Shared.Input.ZoomPan;
     using System.Windows.Input;
     using Windows.Foundation;
     using Windows.UI.Xaml;
@@ -87,6 +88,8 @@ namespace RdClient.Shared.ViewModels
 
         public IElephantEarsViewModel ElephantEarsViewModel { private get; set; }
 
+        public IZoomPanManipulator ZoomPanManipulator { private get; set; }
+
         private IRdpConnection _rdpConnection;
         public IRdpConnection RdpConnection
         {
@@ -136,10 +139,12 @@ namespace RdClient.Shared.ViewModels
                 {
                     this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.DirectTouch;
                 }
+                this.ZoomPanManipulator.PointerModeEnabled = false;
             }
             else 
             {
                 this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
+                this.ZoomPanManipulator.PointerModeEnabled = true; ;
             }
 
             this.ElephantEarsViewModel.ElephantEarsVisible= Visibility.Collapsed;
@@ -147,7 +152,7 @@ namespace RdClient.Shared.ViewModels
 
         private void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs args)
         {
-            _multiTouchEnabled = args.MultiTouchEnabled;
+            _multiTouchEnabled = args.MultiTouchEnabled;            
         }
 
         private void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)

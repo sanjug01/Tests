@@ -102,8 +102,10 @@ namespace RdClient.Shared.ViewModels
         private double _translateXTo;
         private double _translateYFrom;
         private double _translateYTo;
+        private bool _pointerModeEnabled;
         private bool _canZoomIn;
         private bool _canZoomOut;
+
 
         public double ScaleCenterX
         {
@@ -158,6 +160,17 @@ namespace RdClient.Shared.ViewModels
         public Rect WindowRect { get; set; }
         public Rect TransformRect { get; set; }
 
+        public bool PointerModeEnabled 
+        {
+            get { return _pointerModeEnabled; }
+            set 
+            { 
+                this.SetProperty(ref _pointerModeEnabled, value);
+                EmitPropertyChanged("CanZoomIn");
+                EmitPropertyChanged("CanZoomOut");
+            }
+        }
+
         public IZoomPanTransform ZoomPanTransform
         {
             get { return _zoomPanTransform; }
@@ -172,13 +185,13 @@ namespace RdClient.Shared.ViewModels
 
         public bool CanZoomIn
         {
-            get { return _canZoomIn; }
+            get { return (_pointerModeEnabled && _canZoomIn); }
             set { this.SetProperty(ref _canZoomIn, value); }
         }
 
         public bool CanZoomOut
         {
-            get { return _canZoomOut; }
+            get { return (_pointerModeEnabled && _canZoomOut); }
             set { this.SetProperty(ref _canZoomOut, value); }
         }
 
@@ -186,6 +199,7 @@ namespace RdClient.Shared.ViewModels
         {
             _toggleZoomCommand = new RelayCommand(new Action<object>(ToggleMagnification));
             _panCommand = new RelayCommand(new Action<object>(PanTranslate));
+            _pointerModeEnabled = true;
 
             WindowRect = new Rect(0, 0, 0, 0);
             TransformRect = new Rect(0, 0, 0, 0);
@@ -305,9 +319,6 @@ namespace RdClient.Shared.ViewModels
             {
                 targetScaleY = MAX_ZOOM_FACTOR;
             }
-
-            this.CanZoomIn = (targetScaleX < MAX_ZOOM_FACTOR || targetScaleY < MAX_ZOOM_FACTOR);
-            this.CanZoomOut = (targetScaleX > MIN_ZOOM_FACTOR || targetScaleY > MIN_ZOOM_FACTOR);
 
             // reset the pan transformation
             this.TranslateXFrom = this.TranslateXTo;

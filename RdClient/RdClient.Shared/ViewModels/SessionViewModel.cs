@@ -1,16 +1,16 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-using RdClient.Shared.CxWrappers;
-using RdClient.Shared.CxWrappers.Errors;
-using RdClient.Shared.Helpers;
-using RdClient.Shared.Input.Keyboard;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
+    using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.CxWrappers.Errors;
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Input.Keyboard;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
-using System;
-using System.Diagnostics.Contracts;
-using System.Windows.Input;
-using Windows.UI.Xaml;
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
+    using Windows.UI.Xaml;
 
     public class SessionViewModel : DeferringViewModelBase, IElephantEarsViewModel, ITimerFactorySite
 {
@@ -25,9 +25,11 @@ using Windows.UI.Xaml;
         private readonly ICommand _disconnectCommand;
         private readonly ICommand _connectCommand;
         private readonly ICommand _cancelReconnectCommand;
+        private readonly ICommand _toogleKeyboardCommand;
         private ICommand _connectionBarcommand;
         private Visibility _elephantEarsVisible;
         private bool _userCancelled;
+        private bool _canShowKeyboard;
 
         public SessionViewModel()
         { 
@@ -48,6 +50,12 @@ using Windows.UI.Xaml;
                     this.ElephantEarsVisible = Visibility.Visible;
                 }
             });
+
+            //
+            //  TODO : need to determine if software keyboar is supported and implement show/hide
+            //
+            this._toogleKeyboardCommand = new RelayCommand(new Action<object>(ToggleKeyboard));
+            this.CanShowKeyboard = true;
             }
 
         public ISessionModel SessionModel { get; set; }
@@ -62,6 +70,7 @@ using Windows.UI.Xaml;
 
         public ICommand CancelReconnectCommand { get { return _cancelReconnectCommand; } }
 
+        public ICommand ToogleKeyboardCommand { get { return _toogleKeyboardCommand; } }
 
         public ZoomPanViewModel ZoomPanViewModel { get; set; }
         public IKeyboardCapture KeyboardCapture
@@ -92,6 +101,12 @@ using Windows.UI.Xaml;
         {
             get { return _connectionBarcommand; }
             set { SetProperty(ref _connectionBarcommand, value); }
+        }
+
+        public bool CanShowKeyboard
+        {
+            get { return _canShowKeyboard; }
+            set { SetProperty(ref _canShowKeyboard, value); }
         }
 
         public string HostName
@@ -176,6 +191,7 @@ using Windows.UI.Xaml;
                 this.MouseViewModel.RdpConnection = args.RdpConnection;
                 this.MouseViewModel.DeferredExecution = this;
                 this.MouseViewModel.ElephantEarsViewModel = this;
+                this.MouseViewModel.ZoomPanManipulator = this.ZoomPanViewModel;
             };
 
             SessionModel.ConnectionAutoReconnecting += SessionModel_ConnectionAutoReconnecting;
@@ -393,5 +409,14 @@ using Windows.UI.Xaml;
                 _currentRdpConnection.SendKeyEvent(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
             }
         }
+
+        private void ToggleKeyboard(object o)
+        {
+            //
+            // TODO
+            //
+        }
+
+
     }
 }
