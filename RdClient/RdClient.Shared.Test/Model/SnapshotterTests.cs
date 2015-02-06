@@ -99,6 +99,18 @@ namespace RdClient.Shared.Test.Model
         }
 
         [TestMethod]
+        public void TestThumbnailNotUpdatedWhenRdpConnectionReturnsNullSnapshot()
+        {
+            //first snapshot
+            _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
+            _mockConnection.Expect("GetSnapshot", new List<object>() { }, null);
+            _mockTimer.Callback();
+            //repeating snapshot
+            _mockConnection.Expect("GetSnapshot", new List<object>() { }, null);
+            _mockTimer.Callback();
+        }
+
+        [TestMethod]
         public void TestTimerCancelledOnDisconnectBeforeFirstGraphicsUpdate()
         {
             _eventSource.EmitClientDisconnected(_mockConnection, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.UnknownError, 0, 0)));            
