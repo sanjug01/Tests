@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 
 namespace RdMock.Test
@@ -44,7 +45,7 @@ namespace RdMock.Test
                     Assert.AreEqual(4, actual);
                 }
             }
-            catch(MockException /* e */)
+            catch(Exception /* e */)
             {
                 exceptionThrown = true;
             }
@@ -55,169 +56,118 @@ namespace RdMock.Test
         [TestMethod]
         public void MockMethodSequence()
         {
-            bool exceptionThrown = false;
-            try
+            using (TestMock tm = new TestMock())
             {
-                using (TestMock tm = new TestMock())
-                {
-                    tm.Expect("testMethod1", new List<object>() { 3 }, 4)
-                      .Expect("testMethod2", new List<object>() { 3, 'a' }, 5)
-                      .Expect("testMethod3", new List<object>() { 23 }, 42);
+                tm.Expect("testMethod1", new List<object>() { 3 }, 4)
+                    .Expect("testMethod2", new List<object>() { 3, 'a' }, 5)
+                    .Expect("testMethod3", new List<object>() { 23 }, 42);
 
-                    int actual1 = tm.testMethod1(3);
-                    int actual2 = tm.testMethod2(3, 'a');
-                    int actual3 = tm.testMethod3(23);
+                int actual1 = tm.testMethod1(3);
+                int actual2 = tm.testMethod2(3, 'a');
+                int actual3 = tm.testMethod3(23);
 
-                    Assert.AreEqual(4, actual1);
-                    Assert.AreEqual(5, actual2);
-                    Assert.AreEqual(42, actual3);
-                }
+                Assert.AreEqual(4, actual1);
+                Assert.AreEqual(5, actual2);
+                Assert.AreEqual(42, actual3);
             }
-            catch (MockException /* e */)
-            {
-                exceptionThrown = true;
-            }
-
-            Assert.IsFalse(exceptionThrown);
-        }
-        
-        [TestMethod]
-        public void MockException()
-        {
-            MockException me = new MockException("test");
-
-            Assert.AreEqual("test", me.Message);
-        }
+        }       
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void MockRemainingExpectations()
         {
-            bool exceptionThrown = false;
-            try
+            using (TestMock tm = new TestMock())
             {
-                using (TestMock tm = new TestMock())
-                {
-                    tm.Expect("testMethod1", new List<object>() { 3 }, 4);
-                }
+                tm.Expect("testMethod1", new List<object>() { 3 }, 4);
             }
-            catch (MockException /* e */)
-            {
-                exceptionThrown = true;
-            }
-
-            Assert.IsTrue(exceptionThrown);
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void MockUnexpectedInvocation()
         {
-            bool exceptionThrown = false;
-            try
+            using (TestMock tm = new TestMock())
             {
-                using (TestMock tm = new TestMock())
-                {
-                    tm.testMethod1(1);
-                }
+                tm.testMethod1(1);
             }
-            catch (MockException /* e */)
-            {
-                exceptionThrown = true;
-            }
-
-            Assert.IsTrue(exceptionThrown);
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void MockParameterCountNotMatching()
         {
-            bool exceptionThrown = false;
-            try
+            using (TestMock tm = new TestMock())
             {
-                using (TestMock tm = new TestMock())
-                {
-                    tm.Expect("testMethod1", new List<object>() { }, 4);
-                    tm.testMethod1(1);
-                }
+                tm.Expect("testMethod1", new List<object>() { }, 4);
+                tm.testMethod1(1);
             }
-            catch (MockException /* e */)
-            {
-                exceptionThrown = true;
-            }
-
-            Assert.IsTrue(exceptionThrown);
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void MockParameterTypeNotMatching()
         {
-            bool exceptionThrown = false;
-            try
+            using (TestMock tm = new TestMock())
             {
-                using (TestMock tm = new TestMock())
-                {
-                    tm.Expect("testMethod1", new List<object>() { 'b' }, 4);
-                    tm.testMethod1(1);
-                }
+                tm.Expect("testMethod1", new List<object>() { 'b' }, 4);
+                tm.testMethod1(1);
             }
-            catch (MockException /* e */)
-            {
-                exceptionThrown = true;
-            }
-
-            Assert.IsTrue(exceptionThrown);
         }
         
         [TestMethod]
         public void MockParameterNull()
         {
-            bool exceptionThrown = false;
-            try
+            using (TestMock tm = new TestMock())
             {
-                using (TestMock tm = new TestMock())
-                {
-                    tm.Expect("testMethod4", new List<object>() { null }, 4);
-                    tm.testMethod4(5);
-                }
+                tm.Expect("testMethod4", new List<object>() { null }, 4);
+                tm.testMethod4(5);
             }
-            catch (MockException /* e */)
-            {
-                exceptionThrown = true;
-            }
-
-            Assert.IsFalse(exceptionThrown);
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void MockParameterValueNotMatching()
         {
-            bool exceptionThrown = false;
-            try
+            using (TestMock tm = new TestMock())
             {
-                using (TestMock tm = new TestMock())
-                {
-                    tm.Expect("testMethod1", new List<object>() { 5 }, 4);
-                    tm.testMethod1(1);
-                }
+                tm.Expect("testMethod1", new List<object>() { 5 }, 4);
+                tm.testMethod1(1);
             }
-            catch (MockException /* e */)
-            {
-                exceptionThrown = true;
-            }
-
-            Assert.IsTrue(exceptionThrown);
         }
 
         [TestMethod]
-        public void MockActionReceivesPassedParameters()
+        public void MockCallbackReceivesPassedParameters()
         {
             object[] passedParams = {3, 'a'};
             object[] receivedParams = null;
             using (TestMock tm = new TestMock())
             {
-                tm.Expect("testMethod2", new List<object>() { null, null }, 0, p => receivedParams = p);
+                tm.Expect("testMethod2",                    
+                    p =>
+                    { 
+                        receivedParams = p; 
+                        return 0; 
+                    });
                 tm.testMethod2((int)passedParams[0], (char)passedParams[1]);    
             }
             CollectionAssert.AreEqual(passedParams, receivedParams);
+        }
+
+        [TestMethod]
+        public void CallToMockReturnsMockCallbackReturnValue()
+        {
+            int expectedReturn = 43;
+            int actualReturn;
+            using (TestMock tm = new TestMock())
+            {
+                tm.Expect("testMethod2",
+                    p =>
+                    {
+                        return expectedReturn;
+                    });
+                actualReturn = tm.testMethod2(3, 'a');
+            }
+            Assert.AreEqual(expectedReturn, actualReturn);
         }
     }
 }
