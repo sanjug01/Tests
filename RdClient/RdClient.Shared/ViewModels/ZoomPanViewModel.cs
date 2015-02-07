@@ -102,9 +102,7 @@ namespace RdClient.Shared.ViewModels
         private double _translateXTo;
         private double _translateYFrom;
         private double _translateYTo;
-        private bool _pointerModeEnabled;
-        private bool _canZoomIn;
-        private bool _canZoomOut;
+        private bool _isZoomInEnabled;
 
 
         public double ScaleCenterX
@@ -160,17 +158,6 @@ namespace RdClient.Shared.ViewModels
         public Rect WindowRect { get; set; }
         public Rect TransformRect { get; set; }
 
-        public bool PointerModeEnabled 
-        {
-            get { return _pointerModeEnabled; }
-            set 
-            { 
-                this.SetProperty(ref _pointerModeEnabled, value);
-                EmitPropertyChanged("CanZoomIn");
-                EmitPropertyChanged("CanZoomOut");
-            }
-        }
-
         public IZoomPanTransform ZoomPanTransform
         {
             get { return _zoomPanTransform; }
@@ -183,23 +170,16 @@ namespace RdClient.Shared.ViewModels
         private readonly ICommand _panCommand;
         public ICommand PanCommand { get { return _panCommand; } }
 
-        public bool CanZoomIn
+        public bool IsZoomInEnabled
         {
-            get { return (_pointerModeEnabled && _canZoomIn); }
-            private set { this.SetProperty(ref _canZoomIn, value); }
-        }
-
-        public bool CanZoomOut
-        {
-            get { return (_pointerModeEnabled && _canZoomOut); }
-            private set { this.SetProperty(ref _canZoomOut, value); }
+            get { return _isZoomInEnabled; }
+            private set { this.SetProperty(ref _isZoomInEnabled, value); }
         }
 
         public ZoomPanViewModel()
         {
             _toggleZoomCommand = new RelayCommand(new Action<object>(ToggleMagnification));
             _panCommand = new RelayCommand(new Action<object>(PanTranslate));
-            _pointerModeEnabled = true;
 
             WindowRect = new Rect(0, 0, 0, 0);
             TransformRect = new Rect(0, 0, 0, 0);
@@ -210,8 +190,7 @@ namespace RdClient.Shared.ViewModels
             ScaleYFrom = 1.0;
             ScaleXTo = 1.0;
             ScaleYTo = 1.0;
-            CanZoomIn = true;
-            CanZoomOut = false;
+            IsZoomInEnabled = true;
 
             TranslateXFrom = 0.0;
             TranslateYFrom = 0.0;
@@ -260,8 +239,7 @@ namespace RdClient.Shared.ViewModels
             this.TranslateXFrom = this.TranslateXTo;
             this.TranslateYFrom = this.TranslateYTo;
 
-            this.CanZoomIn = false;
-            this.CanZoomOut = true;
+            this.IsZoomInEnabled = false;
 
             this.ScaleXFrom = this.ScaleXTo;
             this.ScaleXTo = targetScaleFactor;
@@ -281,8 +259,7 @@ namespace RdClient.Shared.ViewModels
             this.TranslateXFrom = this.TranslateXTo;
             this.TranslateYFrom = this.TranslateYTo;
 
-            this.CanZoomOut = false;
-            this.CanZoomIn = true;
+            this.IsZoomInEnabled = true;
 
             this.ScaleXFrom = this.ScaleXTo;
             this.ScaleXTo = targetScaleFactor;

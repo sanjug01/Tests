@@ -187,7 +187,6 @@
                 this.MouseViewModel.RdpConnection = args.RdpConnection;
                 this.MouseViewModel.DeferredExecution = this;
                 this.MouseViewModel.ElephantEarsViewModel = this;
-                this.MouseViewModel.ZoomPanManipulator = this.ZoomPanViewModel;
             };
 
             SessionModel.ConnectionAutoReconnecting += SessionModel_ConnectionAutoReconnecting;

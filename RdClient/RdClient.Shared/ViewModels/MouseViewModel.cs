@@ -88,8 +88,6 @@ namespace RdClient.Shared.ViewModels
 
         public IElephantEarsViewModel ElephantEarsViewModel { private get; set; }
 
-        public IZoomPanManipulator ZoomPanManipulator { private get; set; }
-
         private IRdpConnection _rdpConnection;
         public IRdpConnection RdpConnection
         {
@@ -139,12 +137,10 @@ namespace RdClient.Shared.ViewModels
                 {
                     this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.DirectTouch;
                 }
-                this.ZoomPanManipulator.PointerModeEnabled = false;
             }
             else 
             {
                 this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
-                this.ZoomPanManipulator.PointerModeEnabled = true; ;
             }
 
             this.ElephantEarsViewModel.ElephantEarsVisible= Visibility.Collapsed;

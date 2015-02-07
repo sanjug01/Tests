@@ -19,7 +19,5 @@ namespace RdClient.Shared.Input.ZoomPan
         double TranslateXTo { get; }
         double TranslateYFrom { get; }
         double TranslateYTo { get; }
-
-        bool PointerModeEnabled { get; set; }
     }
 }
