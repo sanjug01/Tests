@@ -93,6 +93,10 @@
                      Visibility="{Binding Path=IsReconnecting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             
             <Button
+                x:Uid="SessionView-DisconnectButton"
+                Command="{Binding DisconnectCommand}"                
+                Content="Disconnect (d)"/>
+            <Button
                 x:Uid="SessionView-PanLeft"
                 Command="{Binding ZoomPanViewModel.PanCommand}" 
                 CommandParameter="{StaticResource PanLeft}"
