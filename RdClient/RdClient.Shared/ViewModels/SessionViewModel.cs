@@ -26,11 +26,9 @@
         private readonly ICommand _disconnectCommand;
         private readonly ICommand _connectCommand;
         private readonly ICommand _cancelReconnectCommand;
-        private readonly ICommand _toogleKeyboardCommand;
         private ICommand _connectionBarcommand;
         private Visibility _elephantEarsVisible;
         private bool _userCancelled;
-        private bool _canShowKeyboard;
 
         public SessionViewModel()
         { 
@@ -55,9 +53,7 @@
             //
             //  TODO : need to determine if software keyboard is supported and implement show/hide
             //            
-            this._toogleKeyboardCommand = new RelayCommand(new Action<object>(ToggleKeyboard));
             this.IsKeyboardEnabled = false;
-            this.CanShowKeyboard = true;
             }
 
         public ISessionModel SessionModel { get; set; }
@@ -71,8 +67,6 @@
         public ICommand ConnectCommand { get { return _connectCommand; } }
 
         public ICommand CancelReconnectCommand { get { return _cancelReconnectCommand; } }
-
-        public ICommand ToogleKeyboardCommand { get { return _toogleKeyboardCommand; } }
 
         public ZoomPanViewModel ZoomPanViewModel { get; set; }
         public IKeyboardCapture KeyboardCapture
@@ -105,11 +99,6 @@
             set { SetProperty(ref _connectionBarcommand, value); }
         }
 
-        public bool CanShowKeyboard
-        {
-            get { return _canShowKeyboard; }
-            set { SetProperty(ref _canShowKeyboard, value); }
-        }
         public bool IsKeyboardEnabled
         {
             get { return _isKeyboardEnabled; }
@@ -416,14 +405,5 @@
                 _currentRdpConnection.SendKeyEvent(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
             }
         }
-
-        private void ToggleKeyboard(object o)
-        {
-            //
-            // TODO
-            //
-        }
-
-
     }
 }
