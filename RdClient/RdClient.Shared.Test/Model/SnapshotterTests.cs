@@ -62,7 +62,10 @@ namespace RdClient.Shared.Test.Model
         [TestMethod]
         public void TestRepeatingTimerCreatedCorrectlyAfterFirstSnapshot()
         {
+            Mock.RdpScreenSnapshot snapshot = new Mock.RdpScreenSnapshot();
             _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
+            _mockConnection.Expect("GetSnapshot", new List<object>() { }, snapshot);
+            _mockThumb.Expect("Update", new List<object>() { snapshot }, 0);
             Assert.IsNotNull(_mockTimer.Callback);
             _mockTimer.Callback();            
             Assert.AreEqual(2, _mockTimer.CallsToStart);
