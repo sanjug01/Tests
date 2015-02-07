@@ -186,13 +186,13 @@ namespace RdClient.Shared.ViewModels
         public bool CanZoomIn
         {
             get { return (_pointerModeEnabled && _canZoomIn); }
-            set { this.SetProperty(ref _canZoomIn, value); }
+            private set { this.SetProperty(ref _canZoomIn, value); }
         }
 
         public bool CanZoomOut
         {
             get { return (_pointerModeEnabled && _canZoomOut); }
-            set { this.SetProperty(ref _canZoomOut, value); }
+            private set { this.SetProperty(ref _canZoomOut, value); }
         }
 
         public ZoomPanViewModel()
