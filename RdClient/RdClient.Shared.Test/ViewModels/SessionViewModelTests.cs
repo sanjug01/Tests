@@ -435,9 +435,10 @@ namespace RdClient.Shared.Test.ViewModels
         public void PreAuthLogonFailedShowsAddUserViewWithCorrectParameters()
         {
             SimulateConnect();
-            _nav.Expect("PushModalView", new List<object> { "AddUserView", null, null }, null, 
+            _nav.Expect("PushModalView", 
                 p => 
                 {
+                    Assert.AreEqual("AddUserView", p[0]);
                     AddUserViewArgs args = p[1] as AddUserViewArgs;
                     Assert.IsNotNull(args);
                     Assert.AreEqual(CredentialPromptMode.InvalidCredentials, args.Mode);
@@ -445,6 +446,7 @@ namespace RdClient.Shared.Test.ViewModels
                     Assert.AreNotEqual(_testConnectionInfo.Credentials, args.User, "AddUser should not be directly passed credentials so they aren't overwritten");
                     Assert.AreEqual(_testConnectionInfo.Credentials.Username, args.User.Username);
                     Assert.AreEqual(_testConnectionInfo.Credentials.Password, args.User.Password);
+                    return null;
                 });
             SimulateAsyncDisconnect(RdpDisconnectCode.PreAuthLogonFailed);
         }
@@ -453,9 +455,10 @@ namespace RdClient.Shared.Test.ViewModels
         public void FreshCredsRequiredShowsAddUserViewWithCorrectParameters()
         {
             SimulateConnect();
-            _nav.Expect("PushModalView", new List<object> { "AddUserView", null, null }, null,
+            _nav.Expect("PushModalView",
                 p =>
                 {
+                    Assert.AreEqual("AddUserView", p[0]);
                     AddUserViewArgs args = p[1] as AddUserViewArgs;
                     Assert.IsNotNull(args);
                     Assert.AreEqual(CredentialPromptMode.FreshCredentialsNeeded, args.Mode);
@@ -463,6 +466,7 @@ namespace RdClient.Shared.Test.ViewModels
                     Assert.AreNotEqual(_testConnectionInfo.Credentials, args.User, "AddUser should not be directly passed credentials so they aren't overwritten");
                     Assert.AreEqual(_testConnectionInfo.Credentials.Username, args.User.Username);
                     Assert.AreEqual(_testConnectionInfo.Credentials.Password, args.User.Password);
+                    return null;
                 });
             SimulateAsyncDisconnect(RdpDisconnectCode.FreshCredsRequired);
         }
@@ -476,16 +480,17 @@ namespace RdClient.Shared.Test.ViewModels
             CredentialPromptResult credentialPromptResult = new CredentialPromptResult(_testData.NewValidCredential(), true, false);           
 
             SimulateConnect();            
-            _nav.Expect("PushModalView", new List<object> { "AddUserView", null, null }, null,
+            _nav.Expect("PushModalView",
                 p =>
                 {
+                    Assert.AreEqual("AddUserView", p[0]);
                     IPresentationCompletion completionContext = p[2] as IPresentationCompletion;
                     //connection credentials should be set
                     _rdpConnection.Expect("SetCredentials", new List<object> { _testConnectionInfo.Credentials, false }, null);
                     //reconnect should be attempted
                     _rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object> { null, true }, null);
                     completionContext.Completed(null, credentialPromptResult);
-                    
+                    return null;                    
                 });            
             SimulateAsyncDisconnect(RdpDisconnectCode.FreshCredsRequired);
 
@@ -504,16 +509,17 @@ namespace RdClient.Shared.Test.ViewModels
             CredentialPromptResult credentialPromptResult = new CredentialPromptResult(_testData.NewValidCredential(), false, false);
 
             SimulateConnect();
-            _nav.Expect("PushModalView", new List<object> { "AddUserView", null, null }, null,
+            _nav.Expect("PushModalView",
                 p =>
                 {
+                    Assert.AreEqual("AddUserView", p[0]);
                     IPresentationCompletion completionContext = p[2] as IPresentationCompletion;
                     //connection credentials should be set
                     _rdpConnection.Expect("SetCredentials", new List<object> { credentialPromptResult.Credential, false }, null);
                     //reconnect should be attempted
                     _rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object> { null, true }, null);
                     completionContext.Completed(null, credentialPromptResult);
-
+                    return null;
                 });
             SimulateAsyncDisconnect(RdpDisconnectCode.FreshCredsRequired);
 
@@ -528,14 +534,15 @@ namespace RdClient.Shared.Test.ViewModels
             CredentialPromptResult credentialPromptResult = new CredentialPromptResult(_testData.NewValidCredential(), true, true);                        
 
             SimulateConnect();
-            _nav.Expect("PushModalView", new List<object> { "AddUserView", null, null }, null,
+            _nav.Expect("PushModalView",
                 p =>
                 {
+                    Assert.AreEqual("AddUserView", p[0]);
                     IPresentationCompletion completionContext = p[2] as IPresentationCompletion;
                     //reconnect should not be attempted
                     _rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object> { null, false }, null);
                     completionContext.Completed(null, credentialPromptResult);
-
+                    return null;
                 });
             SimulateAsyncDisconnect(RdpDisconnectCode.FreshCredsRequired);
             

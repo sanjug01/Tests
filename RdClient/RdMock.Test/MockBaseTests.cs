@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 
 namespace RdMock.Test
@@ -44,7 +45,7 @@ namespace RdMock.Test
                     Assert.AreEqual(4, actual);
                 }
             }
-            catch(MockException /* e */)
+            catch(Exception /* e */)
             {
                 exceptionThrown = true;
             }
@@ -73,21 +74,13 @@ namespace RdMock.Test
                     Assert.AreEqual(42, actual3);
                 }
             }
-            catch (MockException /* e */)
+            catch (Exception /* e */)
             {
                 exceptionThrown = true;
             }
 
             Assert.IsFalse(exceptionThrown);
-        }
-        
-        [TestMethod]
-        public void MockException()
-        {
-            MockException me = new MockException("test");
-
-            Assert.AreEqual("test", me.Message);
-        }
+        }       
 
         [TestMethod]
         public void MockRemainingExpectations()
@@ -100,7 +93,7 @@ namespace RdMock.Test
                     tm.Expect("testMethod1", new List<object>() { 3 }, 4);
                 }
             }
-            catch (MockException /* e */)
+            catch (Exception /* e */)
             {
                 exceptionThrown = true;
             }
@@ -119,7 +112,7 @@ namespace RdMock.Test
                     tm.testMethod1(1);
                 }
             }
-            catch (MockException /* e */)
+            catch (Exception /* e */)
             {
                 exceptionThrown = true;
             }
@@ -139,7 +132,7 @@ namespace RdMock.Test
                     tm.testMethod1(1);
                 }
             }
-            catch (MockException /* e */)
+            catch (Exception /* e */)
             {
                 exceptionThrown = true;
             }
@@ -159,7 +152,7 @@ namespace RdMock.Test
                     tm.testMethod1(1);
                 }
             }
-            catch (MockException /* e */)
+            catch (Exception /* e */)
             {
                 exceptionThrown = true;
             }
@@ -179,7 +172,7 @@ namespace RdMock.Test
                     tm.testMethod4(5);
                 }
             }
-            catch (MockException /* e */)
+            catch (Exception /* e */)
             {
                 exceptionThrown = true;
             }
@@ -199,7 +192,7 @@ namespace RdMock.Test
                     tm.testMethod1(1);
                 }
             }
-            catch (MockException /* e */)
+            catch (Exception /* e */)
             {
                 exceptionThrown = true;
             }
@@ -208,16 +201,38 @@ namespace RdMock.Test
         }
 
         [TestMethod]
-        public void MockActionReceivesPassedParameters()
+        public void MockCallbackReceivesPassedParameters()
         {
             object[] passedParams = {3, 'a'};
             object[] receivedParams = null;
             using (TestMock tm = new TestMock())
             {
-                tm.Expect("testMethod2", new List<object>() { null, null }, 0, p => receivedParams = p);
+                tm.Expect("testMethod2",                    
+                    p =>
+                    { 
+                        receivedParams = p; 
+                        return 0; 
+                    });
                 tm.testMethod2((int)passedParams[0], (char)passedParams[1]);    
             }
             CollectionAssert.AreEqual(passedParams, receivedParams);
+        }
+
+        [TestMethod]
+        public void CallToMockReturnsMockCallbackReturnValue()
+        {
+            int expectedReturn = 43;
+            int actualReturn;
+            using (TestMock tm = new TestMock())
+            {
+                tm.Expect("testMethod2",
+                    p =>
+                    {
+                        return expectedReturn;
+                    });
+                actualReturn = tm.testMethod2(3, 'a');
+            }
+            Assert.AreEqual(expectedReturn, actualReturn);
         }
     }
 }
