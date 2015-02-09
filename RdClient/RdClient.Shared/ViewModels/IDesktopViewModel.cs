@@ -15,6 +15,8 @@ namespace RdClient.Shared.ViewModels
 
         CredentialsModel Credentials { get; }
 
+        ThumbnailModel Thumbnail { get; }
+
         bool IsSelected { get; set; }
 
         bool SelectionEnabled { get; set; }

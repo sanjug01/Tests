@@ -5,57 +5,59 @@
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
     using System;
-    using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
-    using System.Runtime.InteropServices.WindowsRuntime;
     using System.Windows.Input;
-    using Windows.Storage.Streams;
-    using Windows.UI.Xaml.Media.Imaging;
 
     public class DesktopViewModel : Helpers.MutableObject, IDesktopViewModel
     {
+        private static readonly uint ThumbnailHeight = 276;
+
         private readonly RelayCommand _editCommand;
         private readonly RelayCommand _connectCommand;
         private readonly RelayCommand _deleteCommand;
+        private readonly Guid _desktopId;
         private readonly DesktopModel _desktop;
         private readonly ApplicationDataModel _dataModel;
-        private readonly Guid _desktopId;
+        private readonly IThumbnailEncoder _thumbnailEncoder;
         private bool _isSelected;
         private bool _selectionEnabled;
-        private BitmapImage _thumbnailImage;
         private IExecutionDeferrer _executionDeferrer;
-        private bool _thumbnailUpdateNeeded;
         private bool _hasThumbnailImage;
 
-        public DesktopViewModel(DesktopModel desktop, Guid desktopId, ApplicationDataModel dataModel, IExecutionDeferrer executionDeferrer)
+        public static IDesktopViewModel Create(IModelContainer<RemoteConnectionModel> desktopContainer, ApplicationDataModel dataModel, IExecutionDeferrer executionDeferrer)
         {
-            Contract.Assert(null != desktop);
-            Contract.Assert(!desktopId.Equals(Guid.Empty));
+            return new DesktopViewModel(desktopContainer, dataModel, executionDeferrer);
+        }
+
+        private DesktopViewModel(IModelContainer<RemoteConnectionModel> desktopContainer, ApplicationDataModel dataModel, IExecutionDeferrer executionDeferrer)
+        {
+            Contract.Assert(null != desktopContainer);
+            Contract.Assert(null != desktopContainer);
+            Contract.Assert(!Guid.Empty.Equals(desktopContainer.Id));
 
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
-            _thumbnailUpdateNeeded = true;
+            _thumbnailEncoder = ThumbnailEncoder.Create(ThumbnailHeight);
             _executionDeferrer = executionDeferrer;
 
-            _desktop = desktop;
-            _desktopId = desktopId;
-
-            /// DesktopVieModel does not require Presenting/Dismissing, 
+            _desktop = (DesktopModel)desktopContainer.Model;
+            _desktopId = desktopContainer.Id;
+            //
+            // DesktopVieModel does not require Presenting/Dismissing, 
             //          but stil needs DataModel and NavigationService
             //          NavigationService may be initialized later while presenting the parent view
+            //
             _dataModel = dataModel;
-            this.Thumbnail.PropertyChanged += Thumbnail_PropertyChanged;
-            this.UpdateThumbnailImage(this.Thumbnail.EncodedImageBytes);
+            //
+            //
+            //
+            _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailUpdated;
         }
 
         public void Presented()
         {
-            if (_thumbnailUpdateNeeded)
-            {
-                UpdateThumbnailImage(this.Thumbnail.EncodedImageBytes);
-            }
         }
 
         public INavigationService NavigationService { private get; set; }
@@ -118,18 +120,6 @@
                 {
                     SetProperty(ref _isSelected, value);
                 }
-            }
-        }
-
-        public BitmapImage ThumbnailImage
-        {
-            get
-            {
-                return _thumbnailImage;
-            }
-            private set
-            {
-                SetProperty(ref _thumbnailImage, value);
             }
         }
 
@@ -204,7 +194,7 @@
             {
                 Desktop = this.Desktop,
                 Credentials = credentials,
-                Thumbnail = this.Thumbnail
+                Thumbnail = _thumbnailEncoder
             };
 
             NavigationService.NavigateToView("SessionView", connectionInformation);            
@@ -215,36 +205,17 @@
             NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(TemporaryModelContainer<DesktopModel>.WrapModel(_desktopId, _desktop)));            
         }
 
-        private void Thumbnail_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnThumbnailUpdated(object sender, ThumbnailUpdatedEventArgs e)
         {
-            if (this.Thumbnail != null && "EncodedImageBytes".Equals(e.PropertyName))
+            _executionDeferrer.TryDeferToUI(() =>
             {
-                UpdateThumbnailImage(this.Thumbnail.EncodedImageBytes);
-            }
-        }
+                this.Thumbnail.EncodedImageBytes = e.EncodedImageBytes;
 
-        private void UpdateThumbnailImage(byte[] imageBytes)
-        {
-            if (imageBytes != null)
-            {
-                _thumbnailUpdateNeeded = !_executionDeferrer.TryDeferToUI(
-                    async () =>
-                    {
-                        BitmapImage newImage = new BitmapImage();
-                        using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
-                        {
-                            await stream.WriteAsync(imageBytes.AsBuffer());
-                            stream.Seek(0);
-                            await newImage.SetSourceAsync(stream);
-                        }
-                        this.ThumbnailImage = newImage;
-
-                        this.HasThumbnailImage = _dataModel.Settings.UseThumbnails 
-                                                    && this.ThumbnailImage != null 
-                                                    && this.ThumbnailImage.PixelHeight > 0 
-                                                    && this.ThumbnailImage.PixelHeight > 0;
-                    });
-            }
+                this.HasThumbnailImage = _dataModel.Settings.UseThumbnails
+                                            && null != this.Thumbnail.Image
+                                            && this.Thumbnail.Image.PixelHeight > 0 
+                                            && this.Thumbnail.Image.PixelHeight > 0;
+            });
         }
     }
 }

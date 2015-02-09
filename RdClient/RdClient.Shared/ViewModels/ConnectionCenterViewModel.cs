@@ -131,15 +131,13 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        private DesktopViewModel CreateDesktopViewModel(IModelContainer<RemoteConnectionModel> container)
+        private IDesktopViewModel CreateDesktopViewModel(IModelContainer<RemoteConnectionModel> container)
         {
             Contract.Assert(container.Model is DesktopModel, "Data model for a desktop tile is not DesktopModel");
 
-            DesktopViewModel dvm = new DesktopViewModel((DesktopModel)container.Model, container.Id, this.ApplicationDataModel, this)
-            {
-                SelectionEnabled = this.DesktopsSelectable
-            };
+            IDesktopViewModel dvm = DesktopViewModel.Create(container, this.ApplicationDataModel, this);
 
+            dvm.SelectionEnabled = this.DesktopsSelectable;
             dvm.PropertyChanged += DesktopSelection_PropertyChanged;
 
             return dvm;

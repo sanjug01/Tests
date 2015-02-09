@@ -129,7 +129,6 @@
     <Compile Include="Mock\PointerManipulator.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
     <Compile Include="Mock\Thumbnail.cs" />
-    <Compile Include="Mock\DataStorage.cs" />
     <Compile Include="Mock\LocalizedString.cs" />
     <Compile Include="Mock\NavigationService.cs" />
     <Compile Include="Mock\PhysicalScreenSize.cs" />
@@ -149,13 +148,9 @@
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\ApplicationDataModelTests.cs" />
     <Compile Include="Model\DesktopModelTests.cs" />
-    <Compile Include="Model\ModelCollectionTests.cs" />
     <Compile Include="Input\Mouse\PointerModeTests.cs" />
-    <Compile Include="Model\RdDataModelTests.cs" />
     <Compile Include="Model\SessionModelTests.cs" />
     <Compile Include="Model\SnapshotterTests.cs" />
-    <Compile Include="Model\ThumbnailTests.cs" />
-    <Compile Include="Model\TrustedCertificateTests.cs" />
     <Compile Include="Model\WorkspaceModelTests.cs" />
     <Compile Include="Navigation\Extensions\ApplicationBarExtensionTests.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtensionTests.cs" />

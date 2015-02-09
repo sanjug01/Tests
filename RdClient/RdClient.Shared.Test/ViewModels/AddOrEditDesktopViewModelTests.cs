@@ -212,9 +212,13 @@
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                Credentials credentials = new Credentials() { Username = "foo", Password = "bar" };
+                CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
 
-                DesktopModel desktop = new DesktopModel() { HostName = "foo", CredentialsId = credentials.Id };
+                DesktopModel desktop = new DesktopModel()
+                {
+                    HostName = "foo",
+                    CredentialsId = _dataModel.LocalWorkspace.Credentials.AddNewModel(credentials)
+                };
                 _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
 
                 EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);

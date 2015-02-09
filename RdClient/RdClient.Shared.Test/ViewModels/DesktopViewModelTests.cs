@@ -18,7 +18,7 @@ namespace RdClient.Shared.Test.ViewModels
         private Mock.NavigationService _navService;
         private DesktopModel _desktop;
         private CredentialsModel _cred;
-        private DesktopViewModel _vm;
+        private IDesktopViewModel _vm;
 
         [TestInitialize]
         public void TestSetup()
@@ -32,11 +32,11 @@ namespace RdClient.Shared.Test.ViewModels
             _navService = new Mock.NavigationService();
             _cred = _testData.NewValidCredential().Model;
             _desktop = _testData.NewValidDesktop(_dataModel.LocalWorkspace.Credentials.AddNewModel(_cred));
-            _vm = new DesktopViewModel(_desktop, _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop),
-                _dataModel, null)
-                {
-                    NavigationService = _navService
-                };
+
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
+
+            _vm = DesktopViewModel.Create(_dataModel.LocalWorkspace.Connections.Models[0], _dataModel, null);
+            ((DesktopViewModel)_vm).NavigationService = _navService;
         }
 
         [TestCleanup]

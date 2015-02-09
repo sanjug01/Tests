@@ -9,12 +9,12 @@ namespace RdClient.Shared.Models
         public readonly TimeSpan firstSnapshotTime = new TimeSpan(0, 0, 2);
         public readonly TimeSpan snapshotPeriod = new TimeSpan(0, 0, 15);
         private IRdpConnection _connection;
-        private IThumbnail _thumbnail;
+        private IThumbnailEncoder _thumbnail;
         private ITimer _timer;
         private GeneralSettings _settings;
         private bool _isConnectionAvailable;
 
-        public Snapshotter(IRdpConnection connection, IThumbnail thumbnail, ITimerFactory timerFactory, GeneralSettings settings)
+        public Snapshotter(IRdpConnection connection, IThumbnailEncoder thumbnail, ITimerFactory timerFactory, GeneralSettings settings)
         {
             _connection = connection;
             _thumbnail = thumbnail;
@@ -63,9 +63,17 @@ namespace RdClient.Shared.Models
             if (_settings.UseThumbnails && _isConnectionAvailable)
             {
                 IRdpScreenSnapshot snapshot = _connection.GetSnapshot();
-                //null snapshot means GetSnapshot failed, so skip updating thumbnail.
+                //
+                // null snapshot means GetSnapshot failed, so skip updating thumbnail.
+                //
                 if (snapshot != null)
                 {
+                    //
+                    // Send received snapshot data to the thumbnail encoder; the encoder will resample the image,
+                    // compress it for serialization and emit an event with the compressed bytes.
+                    // DesktopViewModel will receive the event and update its Thumbnail property on the UI thread, which will
+                    // trigger an update of the screenshot image.
+                    //
                     _thumbnail.Update(snapshot);
                 }
             }

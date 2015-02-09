@@ -5,6 +5,6 @@ namespace RdClient.Shared.Models
     {
         public DesktopModel Desktop { get; set; }
         public CredentialsModel Credentials { get; set; }
-        public IThumbnail Thumbnail { get; set; }
+        public IThumbnailEncoder Thumbnail { get; set; }
     }
 }

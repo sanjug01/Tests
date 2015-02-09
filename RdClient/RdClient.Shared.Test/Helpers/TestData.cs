@@ -18,17 +18,6 @@ namespace RdClient.Shared.Test.Helpers
             }
         }
 
-        public List<ModelBase> NewListOfModelBase()
-        {            
-            int count = RandomSource.Next(3, 10);
-            List<ModelBase> result = new List<ModelBase>(count);
-            for (int i = 0; i < count; i++)
-            {
-                result.Add(new ModelBase());
-            }
-            return result;
-        }
-
         public string NewRandomString()
         {
             return "rand" + RandomSource.Next();

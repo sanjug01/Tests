@@ -6,17 +6,18 @@ namespace RdClient.Shared.Models
 {
     public class ThumbnailUpdatedEventArgs : EventArgs
     {
-        public byte[] NewThumbnailBytes { get; private set; }
+        public byte[] EncodedImageBytes { get; private set; }
+
         public ThumbnailUpdatedEventArgs(byte[] thumbnailBytes)
         {
-            this.NewThumbnailBytes = thumbnailBytes;
+            this.EncodedImageBytes = thumbnailBytes;
         }
     }
 
-    public interface IThumbnail
+    public interface IThumbnailEncoder
     {
         void Update(IRdpScreenSnapshot snapshot);
 
-        byte[] EncodedImageBytes { get; }
+        event EventHandler<ThumbnailUpdatedEventArgs> ThumbnailUpdated;
     }
 }

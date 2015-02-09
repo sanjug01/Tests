@@ -1,69 +1,62 @@
 ﻿namespace RdClient.Shared.Models
 {
-    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
-    using System.Runtime.Serialization;
-    using System.Threading.Tasks;
-    using Windows.Graphics.Imaging;
-    using Windows.Storage.Streams;
-    using System;
-    using Windows.Foundation;
     using System.Runtime.InteropServices.WindowsRuntime;
+    using System.Runtime.Serialization;
+    using Windows.Storage.Streams;
+    using Windows.UI.Xaml.Media.Imaging;
+    using System;
 
     [DataContract(IsReference=true)]
-    public sealed class ThumbnailModel : SerializableModel, IThumbnail
+    public sealed class ThumbnailModel : SerializableModel
     {
-        private static readonly uint ThumbnailHeight = 276;
+        private BitmapImage _image;
 
-        [DataMember(Name = "EncodedImageBytes")]
+        [DataMember(Name = "EncodedImageBytes", EmitDefaultValue = false, IsRequired = false)]
         private byte[] _encodedImageBytes;
 
         public ThumbnailModel()
         {
         }
 
-        void IThumbnail.Update(IRdpScreenSnapshot snapshot)
+        public BitmapImage Image
         {
-            this.EncodedImageBytes = GetSnapshotBytes(snapshot);
+            get
+            {
+                if (null == _image)
+                    _image = DecodeImage(_encodedImageBytes);
+                return _image;
+            }
         }
 
         public byte[] EncodedImageBytes
         {
             get { return _encodedImageBytes; }
-            set { this.SetProperty<byte[]>(ref _encodedImageBytes, value); }
-        }
-
-        private BitmapEncoder CreateBitmapEncoderWithStream(IRandomAccessStream stream)
-        {
-            return BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream).AsTask<BitmapEncoder>().Result;
-        }
-
-        private byte[] GetSnapshotBytes(IRdpScreenSnapshot snapshot)
-        {
-            byte[] bytes = null;
-
-            using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
+            set
             {
-                BitmapEncoder encoder = CreateBitmapEncoderWithStream(stream);
+                if(this.SetProperty(ref _encodedImageBytes, value))
+                {
+                    _image = null;
+                    EmitPropertyChanged("Image");
+                }
+            }
+        }
 
-                encoder.SetPixelData(snapshot.PixelFormat, BitmapAlphaMode.Ignore, snapshot.Width, snapshot.Height, 96.0, 96.0, snapshot.RawImage);
-                encoder.BitmapTransform.ScaledHeight = ThumbnailHeight;
-                encoder.BitmapTransform.ScaledWidth = Convert.ToUInt32(snapshot.Width * ThumbnailHeight / (double)snapshot.Height);
-                encoder.BitmapTransform.InterpolationMode = BitmapInterpolationMode.Fant;
+        private static BitmapImage DecodeImage(byte[] imageBytes)
+        {
+            BitmapImage image = new BitmapImage();
 
-                encoder.FlushAsync().AsTask().Wait();
-
-                uint length = (uint)bytes.Length;
-
-                bytes = new byte[length];
-
-                stream.GetInputStreamAt(0)
-                    .ReadAsync(bytes.AsBuffer(), length, InputStreamOptions.None)
-                    .AsTask<IBuffer, uint>()
-                    .Wait();
+            if (null != imageBytes)
+            {
+                using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
+                {
+                    stream.WriteAsync(imageBytes.AsBuffer()).AsTask<uint, uint>().Wait();
+                    stream.Seek(0);
+                    image.SetSourceAsync(stream).AsTask().Wait();
+                }
             }
 
-            return bytes;
+            return image;
         }
     }
 }

@@ -101,7 +101,7 @@ namespace RdClient.Shared.Models
 
             DesktopModel desktop = connectionInformation.Desktop;
             CredentialsModel credentials = connectionInformation.Credentials;
-            IThumbnail thumbnail = connectionInformation.Thumbnail;
+            IThumbnailEncoder thumbnail = connectionInformation.Thumbnail;
 
             if (thumbnail != null)
             {

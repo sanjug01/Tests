@@ -18,7 +18,6 @@
         private DeferredCommand _applicationDataSaver;
 
         private readonly int SaveDataDelayMilliseconds = 100;
-        private readonly DataModelFactory _dataModelFactory = new DataModelFactory();
         private readonly NavigationServiceFactory _navigationServiceFactory = new NavigationServiceFactory();
 
         public IViewPresenter ViewPresenter { private get; set; }
@@ -36,7 +35,6 @@
             ITimerFactory timerFactory = new WinrtThreadPoolTimerFactory();
             IDeferredExecution deferredExecution = new CoreDispatcherDeferredExecution() { Priority = CoreDispatcherPriority.Normal };
 
-            RdDataModel dataModel = this.CreateDataModel();
             ApplicationDataModel appDataModel = new ApplicationDataModel()
             {
                 RootFolder = new ApplicationDataLocalStorageFolder() { FolderName = "RemoteDesktopData" },
@@ -49,7 +47,7 @@
             _navigationService.PushingFirstModalView += (s, e) => this.ViewPresenter.PresentingFirstModalView();
             _navigationService.DismissingLastModalView += (s, e) => this.ViewPresenter.DismissedLastModalView();
 
-            _navigationService.Extensions.Add(this.CreateDataModelExtension(dataModel, appDataModel));
+            _navigationService.Extensions.Add(this.CreateDataModelExtension(appDataModel));
             _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));
             _navigationService.Extensions.Add(this.CreateApplicationBarExtension(this.AppBarViewModel));
             _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory));
@@ -59,19 +57,14 @@
             _navigationService.NavigateToView(this.LandingPage, null);
         }
 
-        public RdDataModel CreateDataModel()
-        {
-            return _dataModelFactory.CreateDataModel(this.LifeTimeManager);
-        }
-
         public INavigationService CreateNavigationService()
         {
             return _navigationServiceFactory.CreateNavigationService();
         }
 
-        public INavigationExtension CreateDataModelExtension(RdDataModel dataModel, ApplicationDataModel appDataModel)
+        public INavigationExtension CreateDataModelExtension(ApplicationDataModel appDataModel)
         {
-            return _navigationServiceFactory.CreateDataModelExtension(dataModel, appDataModel);
+            return _navigationServiceFactory.CreateDataModelExtension(appDataModel);
         }
 
         public INavigationExtension CreateDeferredExecutionExtension(IDeferredExecution deferredExecution)

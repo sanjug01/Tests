@@ -124,8 +124,6 @@
     <Compile Include="LifeTimeManager\LifeTimeManagerTests.cs" />
     <Compile Include="Mock\RootFrameManager.cs" />
     <Compile Include="Mock\SuspensionArgs.cs" />
-    <Compile Include="Model\DataStorageTests.cs" />
-    <Compile Include="Model\IDataStorageTests.cs" />
     <Compile Include="Model\WorkspaceModelSerializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

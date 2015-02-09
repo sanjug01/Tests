@@ -8,15 +8,13 @@
     {
         public ApplicationDataModel AppDataModel { private get; set; }
 
-        public RdDataModel DataModel { private get; set; }
-
         public DataModelExtension()
         {
         }
 
         void INavigationExtension.Presenting(IViewModel viewModel)
         {
-            Contract.Assert(null != this.DataModel);
+            Contract.Assert(null != this.AppDataModel);
 
             viewModel.CastAndCall<IDataModelSite>(vmd =>
             {

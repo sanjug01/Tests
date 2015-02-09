@@ -27,13 +27,13 @@ using System.Runtime.Serialization;
             }
         }
 
-        protected virtual void OnThumbnailChanged(IThumbnail sender, PropertyChangedEventArgs e)
+        protected virtual void OnThumbnailChanged(IThumbnailEncoder sender, PropertyChangedEventArgs e)
         {
         }
 
         private void OnThumbnailChanged(object sender, PropertyChangedEventArgs e)
         {
-            this.OnThumbnailChanged((IThumbnail)sender, e);
+            this.OnThumbnailChanged((IThumbnailEncoder)sender, e);
         }
     }
 }

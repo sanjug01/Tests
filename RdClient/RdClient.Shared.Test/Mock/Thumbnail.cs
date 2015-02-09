@@ -5,13 +5,19 @@ using System.Threading.Tasks;
 
 namespace RdClient.Shared.Test.Mock
 {
-    public class Thumbnail : MockBase, IThumbnail
+    public class Thumbnail : MockBase, IThumbnailEncoder
     {
         public byte[] EncodedImageBytes { get; set; }
 
-        public void Update(IRdpScreenSnapshot snapshot)
+        void IThumbnailEncoder.Update(IRdpScreenSnapshot snapshot)
         {
-            Invoke(new object[]{snapshot});
+            throw new System.NotImplementedException();
+        }
+
+        event System.EventHandler<ThumbnailUpdatedEventArgs> IThumbnailEncoder.ThumbnailUpdated
+        {
+            add { throw new System.NotImplementedException(); }
+            remove { throw new System.NotImplementedException(); }
         }
     }
 }

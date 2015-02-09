@@ -10,6 +10,7 @@ namespace RdClient.DesignTime
     {
         private CredentialsModel _cred = new CredentialsModel() { Domain = "adomain", Password = "1234AbCd", Username = "exampleUser" };
         private DesktopModel _desktop = new DesktopModel() { HostName = "ExampleHostname" };
+        private ThumbnailModel _thumbnail = new ThumbnailModel();
         private PropertyChangedEventHandler _propertyChanged;
 
         public FakeDesktopViewModel()
@@ -26,6 +27,11 @@ namespace RdClient.DesignTime
         public CredentialsModel Credentials
         {
             get { return _cred; }
+        }
+
+        public ThumbnailModel Thumbnail
+        {
+            get { return _thumbnail; }
         }
 
         public bool IsSelected { get; set; }
