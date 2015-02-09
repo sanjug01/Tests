@@ -102,6 +102,8 @@ namespace RdClient.Shared.ViewModels
         private double _translateXTo;
         private double _translateYFrom;
         private double _translateYTo;
+        private bool _isZoomInEnabled;
+
 
         public double ScaleCenterX
         {
@@ -168,6 +170,12 @@ namespace RdClient.Shared.ViewModels
         private readonly ICommand _panCommand;
         public ICommand PanCommand { get { return _panCommand; } }
 
+        public bool IsZoomInEnabled
+        {
+            get { return _isZoomInEnabled; }
+            private set { this.SetProperty(ref _isZoomInEnabled, value); }
+        }
+
         public ZoomPanViewModel()
         {
             _toggleZoomCommand = new RelayCommand(new Action<object>(ToggleMagnification));
@@ -182,6 +190,7 @@ namespace RdClient.Shared.ViewModels
             ScaleYFrom = 1.0;
             ScaleXTo = 1.0;
             ScaleYTo = 1.0;
+            IsZoomInEnabled = true;
 
             TranslateXFrom = 0.0;
             TranslateYFrom = 0.0;
@@ -230,12 +239,7 @@ namespace RdClient.Shared.ViewModels
             this.TranslateXFrom = this.TranslateXTo;
             this.TranslateYFrom = this.TranslateYTo;
 
-            // trick to do partial zooms
-            targetScaleFactor = this.ScaleXTo + 0.5;
-            if (targetScaleFactor > MAX_ZOOM_FACTOR)
-            {
-                targetScaleFactor = MAX_ZOOM_FACTOR;
-            }
+            this.IsZoomInEnabled = false;
 
             this.ScaleXFrom = this.ScaleXTo;
             this.ScaleXTo = targetScaleFactor;
@@ -255,12 +259,7 @@ namespace RdClient.Shared.ViewModels
             this.TranslateXFrom = this.TranslateXTo;
             this.TranslateYFrom = this.TranslateYTo;
 
-            // trick to do partial zooms
-            targetScaleFactor = this.ScaleXTo - 0.5;
-            if (targetScaleFactor < MIN_ZOOM_FACTOR)
-            {
-                targetScaleFactor = MIN_ZOOM_FACTOR;
-            }
+            this.IsZoomInEnabled = true;
 
             this.ScaleXFrom = this.ScaleXTo;
             this.ScaleXTo = targetScaleFactor;

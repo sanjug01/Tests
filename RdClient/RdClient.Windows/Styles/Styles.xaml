@@ -34,6 +34,8 @@
     <x:String x:Key="RightIcon">&#xE111;</x:String>
     <x:String x:Key="MoreDetailsIcon">&#xE099;</x:String>
     <x:String x:Key="LessDetailsIcon">&#xE098;</x:String>
+    <x:String x:Key="KeyboardIcon">&#xE765;</x:String>
+    <x:String x:Key="DisconnectIcon">&#xE711;</x:String>
 
 
     <SolidColorBrush x:Key="InvisibleButtonPointerOverBackgroundBrush" Color="#22FFFFFF" />
@@ -100,7 +102,7 @@
     <x:Double x:Key="AppHeaderHeight">30</x:Double>
     <x:Double x:Key="ConnectionCenterTitleBarHeight">38</x:Double>
     <GridLength x:Key="ListHeaderHeight">72</GridLength>
-        
+
     <Style x:Key="ConnectionCenterBarButtonStyle" TargetType="Button">
         <Setter Property="Width" Value="68" />
         <Setter Property="Height" Value="38" />
@@ -114,8 +116,57 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
     </Style>
+
     <Style x:Key="ConnectionCenterBarNarrowButtonStyle" TargetType="Button" BasedOn="{StaticResource ConnectionCenterBarButtonStyle}">
+        <Setter Property="Width" Value="48" />    
+    </Style>
+
+    <!-- 
+    ======================================================================================
+    Connection Bar styles 
+    ======================================================================================
+    -->
+    <Style x:Key="ConnectionBarTitleButtonStyle" TargetType="Button">
+        <Setter Property="Height" Value="60" />
+        <Setter Property="Background" Value="{StaticResource ConnectionCenterBarBackgroundBrush}" />
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="-2,0,-2,0"/>
+        <Setter Property="Opacity" Value="0.6"/>
+    </Style>
+
+    <Style x:Key="ConnectionBarButtonStyle" TargetType="Button">
         <Setter Property="Width" Value="48" />
+        <Setter Property="Height" Value="60" />
+        <Setter Property="Background" Value="{StaticResource ConnectionCenterBarBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />        
+        <Setter Property="Margin" Value="-2,0,-2,0"/>
+        <Setter Property="Opacity" Value="0.6"/>
+    </Style>    
+    
+    <Style x:Key="ConnectionBarToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="Width" Value="48" />
+        <Setter Property="Height" Value="60" />
+        <Setter Property="Background" Value="{StaticResource ConnectionCenterBarBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+        <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="-2,0,-2,0" />
+        <Setter Property="Opacity" Value="0.6"/>
     </Style>
 
     <!-- 
