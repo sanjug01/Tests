@@ -87,8 +87,10 @@
                     catch(Exception ex)
                     {
                         //
-                        // TODO: perhaps, remove credentials ID from the desktop
+                        // This may happen if the saved data was edited by hand; otherwise, the application data model
+                        // clears references to removed objects.
                         //
+                        _desktop.CredentialsId = Guid.Empty;
                         Debug.WriteLine("Exception {0} when looking up the credentials for desktop {1}", ex, _desktopId);
                     }
                 }
@@ -207,6 +209,9 @@
 
         private void OnThumbnailUpdated(object sender, ThumbnailUpdatedEventArgs e)
         {
+            //
+            // Called on a timer worker thread that has received a snapshot from the server.
+            //
             _executionDeferrer.TryDeferToUI(() =>
             {
                 this.Thumbnail.EncodedImageBytes = e.EncodedImageBytes;
