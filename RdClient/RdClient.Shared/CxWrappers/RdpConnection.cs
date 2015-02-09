@@ -227,9 +227,17 @@ namespace RdClient.Shared.CxWrappers
 
             int width, height;
             byte[] bytes;
-            int xRes = _rdpConnectionCx.GetSnapshot(out width, out height, out bytes);
-            RdTrace.IfFailXResultThrow(xRes, "Failed to get session snapshot");
-            return new RdpScreenSnapshot(width, height, bytes);
+            int xRes = _rdpConnectionCx.GetSnapshot(out width, out height, out bytes);            
+            if (xRes == 0)
+            {                
+                return new RdpScreenSnapshot(width, height, bytes);                
+            }
+            else
+            {
+                //snapshot can fail in some scenarios and is not a critical error, so we don't throw.
+                RdTrace.TraceWrn("GetSnapshot failed with xRes = " + xRes);
+                return null; 
+            }            
         }
 
         public void SendMouseEvent(MouseEventType type, float xPos, float yPos)

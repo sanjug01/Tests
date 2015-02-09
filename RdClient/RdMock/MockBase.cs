@@ -50,62 +50,140 @@ using System.Text;
 
 namespace RdMock
 {
-    [Serializable]
-    public class MockException : Exception
+    public class MockInvokedCall
     {
-        public MockException(string message)
-            : base(message)
+        public string FunctionName { get; private set; }
+        public ParameterInfo[] ParameterInfo { get; private set; }
+        public object[] ParameterValues { get; private set; }
+
+        public MockInvokedCall(MethodBase method, object[] parameterValues)
         {
+            this.FunctionName = method.Name;
+            this.ParameterInfo = method.GetParameters();
+            this.ParameterValues = parameterValues;
         }
     }
 
-    public struct MockCall
+    public interface IMockCall
     {
-        public string functionName;
-        public IList<object> parameters;
-        public Action<object[]> mockAction;
+        string FunctionName { get; }
+        object VerifyInvokedCall(MockInvokedCall actualCall);
     }
 
-    public struct MockReturn
+    public class MockExpectedCall : IMockCall
     {
-        public string functionName;
-        public object value;
+        private IList<object> _parameters;
+        private object _returnValue;
+
+        public MockExpectedCall(string functionName, IList<object> parameters, object returnValue)
+        {
+            this.FunctionName = functionName;
+            _parameters = parameters;
+            _returnValue = returnValue;
+        }
+
+        public string FunctionName { get; private set; }
+
+        public object VerifyInvokedCall(MockInvokedCall actualCall)
+        {
+            IList<object> expectedParameters = _parameters;
+            ParameterInfo[] actualParameters = actualCall.ParameterInfo;
+            object[] actualParameterValues = actualCall.ParameterValues;
+
+            if (expectedParameters.Count != actualParameters.Length)
+            {
+                throw new Exception(string.Format("Mock call to {0}() failed. Expected {1} parameters but invoked with {2}.",
+                                                    this.FunctionName, expectedParameters.Count, actualParameters.Length));
+            }
+
+            for (int i = 0; i < actualParameters.Length; i++)
+            {
+                if (expectedParameters[i] == null)
+                {
+                    continue;
+                }
+
+                Type expectedType = expectedParameters[i].GetType();
+                Type actualType = actualParameters[i].ParameterType;
+                if (actualType.IsAssignableFrom(expectedType) == false)
+                {
+                    throw new Exception(string.Format("Mock call to {0}() failed. Parameter {1} is of type {2} but expected type is {3}",
+                                                        this.FunctionName, i, actualType.Name, expectedType.Name));
+                }
+
+                object expectedValue = expectedParameters[i];
+                object actualValue = actualParameterValues[i];
+                if (actualValue.Equals(expectedValue) == false)
+                {
+                    throw new Exception(string.Format("Mock call to {0}() failed. Wrong value for parameter {1}. Expected value = {2}, Actual value = {3}",
+                                                        this.FunctionName, i, expectedValue, actualValue));
+                }
+            }
+
+            return _returnValue;
+        }
+    }
+
+    public class MockCallback : IMockCall
+    {
+        private Func<object[], object> _mockCallback;
+       
+        public MockCallback(string functionName, Func<object[], object> mockCallback)
+        {
+            this.FunctionName = functionName;
+            _mockCallback = mockCallback;
+        }
+
+        public string FunctionName { get; private set; }
+
+        public object VerifyInvokedCall(MockInvokedCall actualCall)
+        {
+            if (_mockCallback != null)
+            {
+                return _mockCallback(actualCall.ParameterValues);
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly",
         Justification = "Intended for test")]
     public class MockBase : IDisposable
     {
-        private IList<MockCall> _calls = new List<MockCall>();
-        private IList<MockReturn> _returns = new List<MockReturn>();
+        private Queue<IMockCall> _expectedCalls = new Queue<IMockCall>();
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations",
             Justification = "Intended for test"), 
         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly",
             Justification = "Intended for test")]
-
         public void Dispose()
         {
-            if (_calls.Count > 0)
+            if (_expectedCalls.Count > 0)
             {
                 StringBuilder msg = new StringBuilder();
-                msg.AppendFormat("{0} expected {1} more calls before exiting scope. Missed calls = ", this.GetType(), _calls.Count);
-                foreach (MockCall call in _calls)
+                msg.AppendFormat("Some expected calls to a mock object did not occur. {0} expected {1} more calls before exiting scope. Missed calls = ", this.GetType(), _expectedCalls.Count);
+                foreach (IMockCall call in _expectedCalls)
                 {
-                    msg.AppendFormat("{0}() ", call.functionName);
+                    msg.AppendFormat("{0}(...) ", call.FunctionName);
                 }
-                throw new MockException(msg.ToString());
+                throw new Exception(msg.ToString());
             }
         }
 
-        public MockBase Expect(string functionName_, IList<object> parameters_, object value_, Action<object[]> mockAction_ = null)
+        public MockBase Expect(string functionName, IList<object> parameters, object value)
         {
-            MockCall call = new MockCall() { functionName = functionName_, parameters = parameters_, mockAction = mockAction_ };
-            MockReturn retval = new MockReturn() { functionName = functionName_, value = value_ };
+            MockExpectedCall call = new MockExpectedCall(functionName, parameters, value);
+            _expectedCalls.Enqueue(call);
+            return this;
+        }
 
-            _calls.Add(call);
-            _returns.Add(retval);
-
+        public MockBase Expect(string functionName, Func<object[], object> mockCallback)
+        {
+            MockCallback call = new MockCallback(functionName, mockCallback);
+            _expectedCalls.Enqueue(call);
             return this;
         }
 
@@ -113,72 +191,27 @@ namespace RdMock
         {
             StackTrace stackTrace = new StackTrace();
             StackFrame[] stackFrames = stackTrace.GetFrames();
-            MethodBase method;
-            int i;
+            MockInvokedCall actualCall;
+            IMockCall expectedCall;
 
-            if(stackFrames.Count() < 2)
+            if (stackFrames.Count() < 2)
             {
-                throw new MockException("Unexpected invocation context");
+                throw new Exception("Mock call failed. Invoke() called from an unexpected invocation context");
             }
+            actualCall = new MockInvokedCall(stackFrames[1].GetMethod(), actualParameterValues);
 
-            method = stackFrames[1].GetMethod();
-
-            string methodName = method.Name;
-
-            if(_calls.Count < 1 ||_calls[0].functionName.Equals(methodName) == false)
+            if (_expectedCalls.Count < 1)
             {
-                throw new MockException("Unexpected invocation of " + methodName);
+                throw new Exception("Mock call failed. Unexpected invocation of " + actualCall.FunctionName + "() when no calls were expected.");
             }
+            expectedCall = _expectedCalls.Dequeue();
 
-            MockCall call = _calls[0];
-            _calls.RemoveAt(0);
-
-            IList<object> expectedParameters = call.parameters;
-            ParameterInfo[] actualParameters = method.GetParameters();
-
-            if (expectedParameters.Count != actualParameters.Count())
+            if (!expectedCall.FunctionName.Equals(actualCall.FunctionName))
             {
-                throw new MockException("expected " + expectedParameters.Count + " parameters but invoked with " + actualParameters.Count() + " parameters.");
+                throw new Exception(string.Format("Mock call failed. Unexpected invocation of {0}() when expecting a call to {1}()",
+                                                    actualCall.FunctionName, expectedCall.FunctionName));                    
             }
-
-            for (i = 0; i < actualParameters.Count(); i++)
-            {
-                if(expectedParameters[i] == null)
-                {
-                    continue;
-                }
-
-                Type expectedType = expectedParameters[i].GetType();
-                Type actualType = actualParameters[i].ParameterType;
-
-                if (actualType.IsAssignableFrom(expectedType) == false)
-                {
-                    throw new MockException("Parameter " + i + " is of type " + actualType.Name + " but expected type is " + expectedType.Name);
-                }
-
-                object expectedValue = expectedParameters[i];
-                object actualValue = actualParameterValues[i];
-
-                if (actualValue.Equals(expectedValue) == false)
-                {
-                    throw new MockException("Expected value: " + expectedValue + " Actual value: " + actualValue);
-                }
-            }
-
-            if( _returns.Count < 1 || _returns[0].functionName.Equals(methodName) == false)
-            {
-                throw new MockException("Initialized expectation but missing return value?!");
-            }
-
-            if (call.mockAction != null)
-            {
-                call.mockAction(actualParameterValues);
-            }
-
-            object retval = _returns[0].value;
-            _returns.RemoveAt(0);
-
-            return retval;
+            return expectedCall.VerifyInvokedCall(actualCall);            
         }
     }
 }
