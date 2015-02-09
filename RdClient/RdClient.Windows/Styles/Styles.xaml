@@ -117,6 +117,10 @@
         <Setter Property="Padding" Value="0" />
     </Style>
 
+    <Style x:Key="ConnectionCenterBarNarrowButtonStyle" TargetType="Button" BasedOn="{StaticResource ConnectionCenterBarButtonStyle}">
+        <Setter Property="Width" Value="48" />    
+    </Style>
+
     <!-- 
     ======================================================================================
     Connection Bar styles 
