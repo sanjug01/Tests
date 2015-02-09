@@ -205,8 +205,11 @@ namespace RdMock
                 throw new Exception("Mock call failed. Unexpected invocation of " + actualCall.FunctionName + "() when no calls were expected.");
             }
             expectedCall = _expectedCalls.Dequeue();
-
-            if (!expectedCall.FunctionName.Equals(actualCall.FunctionName))
+            //
+            // Split the calling method name because for explicit interface implementations the namespace and class
+            // are included in the calling function name.
+            //
+            if (!expectedCall.FunctionName.Equals(actualCall.FunctionName.Split('.').Last()))
             {
                 throw new Exception(string.Format("Mock call failed. Unexpected invocation of {0}() when expecting a call to {1}()",
                                                     actualCall.FunctionName, expectedCall.FunctionName));                    

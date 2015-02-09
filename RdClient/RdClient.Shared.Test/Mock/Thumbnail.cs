@@ -11,7 +11,7 @@ namespace RdClient.Shared.Test.Mock
 
         void IThumbnailEncoder.Update(IRdpScreenSnapshot snapshot)
         {
-            throw new System.NotImplementedException();
+            Invoke(new object[] { snapshot });
         }
 
         event System.EventHandler<ThumbnailUpdatedEventArgs> IThumbnailEncoder.ThumbnailUpdated
