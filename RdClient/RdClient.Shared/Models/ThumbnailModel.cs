@@ -1,11 +1,11 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.Data;
+    using System;
     using System.Runtime.InteropServices.WindowsRuntime;
     using System.Runtime.Serialization;
     using Windows.Storage.Streams;
     using Windows.UI.Xaml.Media.Imaging;
-    using System;
 
     [DataContract(IsReference=true)]
     public sealed class ThumbnailModel : SerializableModel
