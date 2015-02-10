@@ -1,0 +1,60 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.ConnectionBarControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:RdClient.Controls"    
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:c="using:RdClient.Converters"            
+    mc:Ignorable="d"
+    d:DesignHeight="40"
+    d:DesignWidth="280">
+
+    <UserControl.Resources>
+        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />        
+        <vm:ZoomInTransform x:Key="ZoomIn"/>
+        <vm:ZoomOutTransform x:Key="ZoomOut"/>
+    </UserControl.Resources>    
+    
+    <Grid Width="Auto" Height="Auto" 
+              Background="Transparent"
+              Opacity="0.6"
+              VerticalAlignment="Top" HorizontalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal"
+                Grid.Row="0" Grid.Column="0"  Margin="0">
+            <Button x:Uid="SessionView-ConnectionBar-ZoomInButton"
+                    Visibility="{Binding Path=ZoomPanViewModel.IsZoomInEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Style="{StaticResource ConnectionBarButtonStyle}"                
+                    Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
+                    CommandParameter="{StaticResource ZoomIn}"
+                    Content="{StaticResource ZoomInIcon}"  
+                    />
+            <Button x:Uid="SessionView-ConnectionBar-ZoomOutButton"
+                    Visibility="{Binding Path=ZoomPanViewModel.IsZoomInEnabled, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                    Style="{StaticResource ConnectionBarButtonStyle}"                
+                    Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
+                    CommandParameter="{StaticResource ZoomOut}"
+                    Content="{StaticResource ZoomOutIcon}"
+                    />
+            <Button x:Uid="SessionView-ConnectionBar-Title"                
+                    Style="{StaticResource ConnectionBarTitleButtonStyle}"
+                    Content="{Binding HostName}" 
+                    Command="{Binding ConnectionBarCommand}"
+                    />
+            <ToggleButton x:Uid="SessionView-ConnectionBar-Keyboard"
+                    Style="{StaticResource ConnectionBarToggleButtonStyle}"
+                    Content="{StaticResource KeyboardIcon}"                
+                    IsChecked="{Binding IsKeyboardEnabled, Mode=TwoWay}"
+                    />            
+        </StackPanel>
+    </Grid>
+
+</UserControl>

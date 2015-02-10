@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Media.Imaging;
 namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.Input.Mouse;
+    using RdClient.Shared.Input.ZoomPan;
     using System.Windows.Input;
     using Windows.Foundation;
     using Windows.UI.Xaml;
@@ -147,7 +148,7 @@ namespace RdClient.Shared.ViewModels
 
         private void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs args)
         {
-            _multiTouchEnabled = args.MultiTouchEnabled;
+            _multiTouchEnabled = args.MultiTouchEnabled;            
         }
 
         private void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
