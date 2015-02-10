@@ -4,17 +4,20 @@ using RdClient.Shared.Navigation;
 using RdClient.Shared.Navigation.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics.Contracts;
-using System.Linq;
 
 namespace RdClient.Shared.ViewModels
 {
     public class ConnectionCenterViewModel : DeferringViewModelBase, IConnectionCenterViewModel, IApplicationBarItemsSource
     {
-        //private ObservableCollection<IDesktopViewModel> _desktopViewModels;
+        //
+        // Sorted collection of desktop models; sorting order is defined by the Order property of this object.
+        //
         private IOrderedObservableCollection<IModelContainer<RemoteConnectionModel>> _orderedConnections;
+        //
+        // Desktop view models created for elements of _orderedConnections.Models.
+        //
         private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
         private int _selectedCount;
         private bool _desktopsSelectable;
@@ -112,14 +115,26 @@ namespace RdClient.Shared.ViewModels
         {
             if (null == _desktopViewModels)
             {
-                _orderedConnections = OrderedObservableCollection<IModelContainer<RemoteConnectionModel>>
-                                            .Create(this.ApplicationDataModel.LocalWorkspace.Connections.Models);
+                //
+                // 1. Include only containers with DesktopModel model objects.
+                //
+                ReadOnlyObservableCollection<IModelContainer<RemoteConnectionModel>> onlyDesktops =
+                    FilteringObservableCollection<IModelContainer<RemoteConnectionModel>>.Create(
+                        this.ApplicationDataModel.LocalWorkspace.Connections.Models,
+                        container => container.Model is DesktopModel);
+                //
+                // 2. Sort the desktop models by name.
+                //
+                _orderedConnections = OrderedObservableCollection<IModelContainer<RemoteConnectionModel>>.Create(onlyDesktops);
                 _orderedConnections.Order = new DesktopModelAlphabeticalComparer();
+                //
+                // 3. Transform containers with desktop models into desktop view models.
+                //
                 this.DesktopViewModels = TransformingObservableCollection<IModelContainer<RemoteConnectionModel>, IDesktopViewModel>
                                             .Create(_orderedConnections.Models, this.CreateDesktopViewModel, this.RemovedDesktopViewModel);
 
                 INotifyPropertyChanged npc = this.DesktopViewModels;
-                npc.PropertyChanged += DesktopViewModels_PropertyChanged;
+                npc.PropertyChanged += OnDesktopViewModelPropertyChanged;
             }
             //
             // update NavigationService for all DesktopViewModels
@@ -153,7 +168,7 @@ namespace RdClient.Shared.ViewModels
             NavigationService.PushModalView("AddOrEditDesktopView", new AddDesktopViewModelArgs());
         }
 
-        private void DesktopViewModels_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnDesktopViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals("Count"))
             {

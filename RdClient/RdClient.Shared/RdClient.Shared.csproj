@@ -96,6 +96,7 @@
     <Compile Include="CxWrappers\RdTrace.cs" />
     <Compile Include="CxWrappers\TouchEventType.cs" />
     <Compile Include="Data\CertificateTrust.cs" />
+    <Compile Include="Data\FilteringObservableCollection.cs" />
     <Compile Include="Data\IModelCollection.cs" />
     <Compile Include="Data\IModelContainer.cs" />
     <Compile Include="Data\IModelSerializer.cs" />
