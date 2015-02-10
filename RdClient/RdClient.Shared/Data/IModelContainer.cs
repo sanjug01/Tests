@@ -23,10 +23,9 @@
         Modified
     }
 
-    public interface IModelContainer<TModel> : INotifyPropertyChanged where TModel : class, INotifyPropertyChanged
+    public interface IModelContainer<TModel> : IPersistentStatus where TModel : class, IPersistentStatus
     {
         Guid Id { get; }
         TModel Model { get; }
-        PersistentStatus Status { get; set; }
     }
 }

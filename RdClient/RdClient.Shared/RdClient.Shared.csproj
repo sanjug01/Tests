@@ -102,6 +102,7 @@
     <Compile Include="Data\IModelSerializer.cs" />
     <Compile Include="Data\IOrderedObservableCollection.cs" />
     <Compile Include="Data\IPersistentObject.cs" />
+    <Compile Include="Data\IPersistentStatus.cs" />
     <Compile Include="Data\IStorageFolder.cs" />
     <Compile Include="Data\ModelContainer.cs" />
     <Compile Include="Data\OrderedObservableCollection.cs" />

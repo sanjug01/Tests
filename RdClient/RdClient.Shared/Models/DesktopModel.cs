@@ -85,7 +85,10 @@
 
         protected override void OnThumbnailChanged(IThumbnailEncoder sender, PropertyChangedEventArgs e)
         {
-            EmitPropertyChanged("Thumbnail");
+            //
+            // Mark the object as Modified so it will be saved by the application data model.
+            //
+            SetModified();
         }
     }
 }

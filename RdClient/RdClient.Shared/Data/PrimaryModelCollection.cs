@@ -10,7 +10,7 @@
     using System.IO;
     using System.Windows.Input;
 
-    public sealed class PrimaryModelCollection<TModel> : IModelCollection<TModel> where TModel : class, INotifyPropertyChanged
+    public sealed class PrimaryModelCollection<TModel> : IModelCollection<TModel> where TModel : class, IPersistentStatus
     {
         private static readonly string ModelFileExtension = "model";
 
@@ -171,7 +171,7 @@
                         if (null != stream)
                         {
                             _modelSerializer.WriteModel(modelContainer.Model, stream);
-                            modelContainer.Status = PersistentStatus.Clean;
+                            modelContainer.SetClean();
                             _modifiedModelIds.Remove(modelContainer.Id);
                             ++changeCount;
                         }

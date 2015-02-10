@@ -164,6 +164,12 @@
 
             collection.Save.Execute(null);
 
+            foreach(IModelContainer<TestModel> container in collection.Models)
+            {
+                Assert.AreEqual(PersistentStatus.Clean, container.Status);
+                Assert.AreEqual(PersistentStatus.Clean, container.Model.Status);
+            }
+
             foreach(string fileName in _emptyFolder.GetFiles())
             {
                 ++filesNumber;

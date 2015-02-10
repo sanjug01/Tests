@@ -32,9 +32,10 @@
             model.CredentialsId = id;
 
             Assert.AreEqual(id, model.CredentialsId);
-            Assert.AreEqual(2, changes.Count);
+            Assert.AreEqual(3, changes.Count);
             Assert.AreEqual("CredentialsId", changes[0].PropertyName);
-            Assert.AreEqual("HasCredentials", changes[1].PropertyName);
+            Assert.AreEqual("Status", changes[1].PropertyName);
+            Assert.AreEqual("HasCredentials", changes[2].PropertyName);
         }
 
         [TestMethod]
@@ -47,8 +48,9 @@
             model.HostName = "NewHostName";
 
             Assert.AreEqual("NewHostName", model.HostName);
-            Assert.AreEqual(1, changes.Count);
+            Assert.AreEqual(2, changes.Count);
             Assert.AreEqual("HostName", changes[0].PropertyName);
+            Assert.AreEqual("Status", changes[1].PropertyName);
         }
     }
 }

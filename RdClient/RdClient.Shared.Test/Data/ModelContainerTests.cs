@@ -62,6 +62,22 @@
         }
 
         [TestMethod]
+        public void ModelContainerForExistingModel_ChangeModelSetContainerClean_BothAreClean()
+        {
+            IList<PropertyChangedEventArgs> reportedChanges = new List<PropertyChangedEventArgs>();
+            TestModel model = new TestModel(10);
+            Guid id = Guid.NewGuid();
+            IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForExistingModel(id, model);
+            container.PropertyChanged += (sender, e) => reportedChanges.Add(e);
+
+            model.Property += 1;
+            container.SetClean();
+
+            Assert.AreEqual(PersistentStatus.Clean, container.Status);
+            Assert.AreEqual(PersistentStatus.Clean, container.Model.Status);
+        }
+
+        [TestMethod]
         public void ModelContainerForNewModel_StatusToClean_StatusSet()
         {
             IList<PropertyChangedEventArgs> reportedChanges = new List<PropertyChangedEventArgs>();
@@ -69,34 +85,15 @@
             IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForNewModel(model);
             container.PropertyChanged += (sender, e) => reportedChanges.Add(e);
 
-            container.Status = PersistentStatus.Clean;
+            model.Property += 1;
+            container.SetClean();
 
             Assert.AreEqual(PersistentStatus.Clean, container.Status);
+            Assert.AreEqual(PersistentStatus.Clean, container.Model.Status);
             //
             // Verify that a change from any state to Clean is not reported.
             //
             Assert.AreEqual(0, reportedChanges.Count);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ModelContainerForNewModel_StatusToModified_ExceptionThrown()
-        {
-            TestModel model = new TestModel(10);
-            IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForNewModel(model);
-
-            container.Status = PersistentStatus.Modified;
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void ModelContainerForExistingModel_StatusToModified_ExceptionThrown()
-        {
-            TestModel model = new TestModel(10);
-            Guid id = Guid.NewGuid();
-            IModelContainer<TestModel> container = ModelContainer<TestModel>.CreateForExistingModel(id, model);
-
-            container.Status = PersistentStatus.Modified;
         }
     }
 }

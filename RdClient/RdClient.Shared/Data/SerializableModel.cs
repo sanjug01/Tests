@@ -21,9 +21,10 @@
     [KnownType(typeof(TrustedCertificate))]
     [KnownType(typeof(CertificateTrust))]
     [KnownType(typeof(GeneralSettings))]
-    public abstract class SerializableModel : INotifyPropertyChanged
+    public abstract class SerializableModel : IPersistentStatus
     {
         private PropertyChangedEventHandler _propertyChanged;
+        private PersistentStatus _persistentStatus;
 
         protected SerializableModel()
         {
@@ -57,6 +58,7 @@
             {
                 property = newValue;
                 EmitPropertyChanged(propertyName);
+                SetModified();
             }
 
             return valueChanged;
@@ -72,10 +74,29 @@
                 handler(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        protected void SetModified()
+        {
+            if( _persistentStatus == PersistentStatus.Clean )
+            {
+                _persistentStatus = PersistentStatus.Modified;
+                EmitPropertyChanged("Status");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged
         {
             add { _propertyChanged += value; }
             remove { _propertyChanged -= value; }
+        }
+
+        public PersistentStatus Status
+        {
+            get { return _persistentStatus; }
+        }
+
+        void IPersistentStatus.SetClean()
+        {
+            _persistentStatus = PersistentStatus.Clean;
         }
     }
 }

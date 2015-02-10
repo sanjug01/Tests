@@ -9,7 +9,7 @@
     /// A model container that temporarily wraps a model object and gives it any ID.
     /// </summary>
     /// <typeparam name="TModel"></typeparam>
-    public sealed class TemporaryModelContainer<TModel> : MutableObject, IModelContainer<TModel> where TModel : class, INotifyPropertyChanged
+    public sealed class TemporaryModelContainer<TModel> : MutableObject, IModelContainer<TModel> where TModel : class, IPersistentStatus
     {
         private readonly Guid _id;
         private readonly TModel _model;
@@ -22,14 +22,14 @@
         /// <param name="id">Identifier of the wrapped model in the new container.</param>
         /// <param name="model">Model object to wrap in the container. Canot be null.</param>
         /// <returns>IModelContainer that wraps the object case to TModel with the specified ID.</returns>
-        public static IModelContainer<TModel> WrapModel<TBaseModel>(Guid id, TBaseModel model) where TBaseModel : class, INotifyPropertyChanged
+        public static IModelContainer<TModel> WrapModel<TBaseModel>(Guid id, TBaseModel model) where TBaseModel : class, IPersistentStatus
         {
             Contract.Assert(null != model, "Model object must be non-null");
             Contract.Assert(model is TModel);
             return new TemporaryModelContainer<TModel>(id, model as TModel);
         }
 
-        public static IModelContainer<TModel> WrapModel<TBaseModel>(IModelContainer<TBaseModel> container) where TBaseModel : class, INotifyPropertyChanged
+        public static IModelContainer<TModel> WrapModel<TBaseModel>(IModelContainer<TBaseModel> container) where TBaseModel : class, IPersistentStatus
         {
             Contract.Assert(null != container);
             return WrapModel<TBaseModel>(container.Id, container.Model);
@@ -61,16 +61,23 @@
             get { return _model; }
         }
 
-        PersistentStatus IModelContainer<TModel>.Status
+        public PersistentStatus Status
         {
             get
             {
                 return _status;
             }
-            set
+
+            private set
             {
                 this.SetProperty(ref _status, value);
             }
+        }
+
+        void IPersistentStatus.SetClean()
+        {
+            _model.SetClean();
+            _status = PersistentStatus.Clean;
         }
 
         private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -78,7 +85,7 @@
             //
             // Mark the model "Modified"
             //
-            ((IModelContainer<TModel>)this).Status = PersistentStatus.Modified;
+            this.Status = PersistentStatus.Modified;
         }
     }
 }

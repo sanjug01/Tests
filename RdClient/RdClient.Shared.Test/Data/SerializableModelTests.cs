@@ -42,12 +42,14 @@
             TestModel model = new TestModel() { Number = 1, Name = "Name" };
             model.PropertyChanged += (sender, e) => reported.Add(e);
 
+            ((IPersistentStatus)model).SetClean();
             model.Name += "Plop";
             model.Number += 1;
 
-            Assert.AreEqual(2, reported.Count);
+            Assert.AreEqual(3, reported.Count);
             Assert.AreEqual("Name", reported[0].PropertyName);
-            Assert.AreEqual("Number", reported[1].PropertyName);
+            Assert.AreEqual("Status", reported[1].PropertyName);
+            Assert.AreEqual("Number", reported[2].PropertyName);
         }
 
         [TestMethod]
@@ -58,12 +60,14 @@
             PropertyChangedEventHandler handler = (sender, e) => reported.Add(e);
             model.PropertyChanged += handler;
 
+            ((IPersistentStatus)model).SetClean();
             model.Name += "Plop";
             model.PropertyChanged -= handler;
             model.Number += 1;
 
-            Assert.AreEqual(1, reported.Count);
+            Assert.AreEqual(2, reported.Count);
             Assert.AreEqual("Name", reported[0].PropertyName);
+            Assert.AreEqual("Status", reported[1].PropertyName);
         }
     }
 }

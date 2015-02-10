@@ -260,6 +260,7 @@
         private void HandleBadCredentials(IRdpConnection rdpConnection, RdpDisconnectReason reason)
         {
             CredentialPromptMode mode;
+
             if (reason.Code == RdpDisconnectCode.PreAuthLogonFailed)
             {
                 mode = CredentialPromptMode.InvalidCredentials;

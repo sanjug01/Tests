@@ -7,7 +7,7 @@
 
     public sealed class ModelContainer<TModel> :
         MutableObject,
-        IModelContainer<TModel> where TModel : class, INotifyPropertyChanged
+        IModelContainer<TModel> where TModel : class, IPersistentStatus
     {
         private readonly Guid _id;
         private readonly TModel _model;
@@ -31,23 +31,16 @@
         {
             get { return _status; }
 
-            set
+            private set
             {
-                if (value != _status)
-                {
-                    switch (_status)
-                    {
-                        case PersistentStatus.Clean:
-                            throw new InvalidOperationException("Cannot change status from Clean");
-
-                        default:
-                            if (PersistentStatus.Clean != value)
-                                throw new ArgumentException("Cannot change status to anything but Clean");
-                            break;
-                    }
-                    _status = value;
-                }
+                this.SetProperty(ref _status, value);
             }
+        }
+
+        void IPersistentStatus.SetClean()
+        {
+            _model.SetClean();
+            _status = PersistentStatus.Clean;
         }
 
         public static IModelContainer<TModel> CreateForNewModel(TModel model)
@@ -76,10 +69,9 @@
 
         private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (PersistentStatus.Clean == _status)
+            if (e.PropertyName.Equals("Status") && PersistentStatus.Clean == _status)
             {
-                _status = PersistentStatus.Modified;
-                EmitPropertyChanged("Status");
+                this.Status = PersistentStatus.Modified;
             }
         }
     }

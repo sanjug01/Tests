@@ -5,7 +5,7 @@
     using System.ComponentModel;
     using System.Windows.Input;
 
-    public interface IModelCollection<TModel> : IPersistentObject where TModel : class, INotifyPropertyChanged
+    public interface IModelCollection<TModel> : IPersistentObject where TModel : class, IPersistentStatus
     {
         ReadOnlyObservableCollection<IModelContainer<TModel>> Models { get; }
         Guid AddNewModel(TModel newModel);
