@@ -69,6 +69,9 @@
         public ICommand CancelReconnectCommand { get { return _cancelReconnectCommand; } }
 
         public ZoomPanViewModel ZoomPanViewModel { get; set; }
+
+        public PanKnobViewModel PanKnobViewModel { get; set; }
+
         public IKeyboardCapture KeyboardCapture
         {
             get { return _keyboardCapture; }
