@@ -51,7 +51,11 @@
             //
             _dataModel = dataModel;
             //
-            //
+            // Register for notifications from the thumbnail encoder. The encoder is passed to the session model
+            // that hooks it up with a snapshotter that periodically takes screenshots of the remote session and
+            // pushes them to the encoder. The encoder resamples screenshots and compresses them for serialization.
+            // The view model sends the compressed thimbnails to the thumbnail model that sets its Image property
+            // to the thumbnail image.
             //
             _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailUpdated;
         }
@@ -214,6 +218,9 @@
             //
             _executionDeferrer.TryDeferToUI(() =>
             {
+                //
+                // Setting the encoded bytes also updates the Image property that is bound to an image on a desktop tile.
+                //
                 this.Thumbnail.EncodedImageBytes = e.EncodedImageBytes;
 
                 this.HasThumbnailImage = _dataModel.Settings.UseThumbnails
