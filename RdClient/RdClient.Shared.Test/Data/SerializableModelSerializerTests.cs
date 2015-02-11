@@ -12,7 +12,7 @@
         public void SerializableModelSerializer_SerializeLoadCredentialsModel_Loads()
         {
             IModelSerializer serializer = new SerializableModelSerializer();
-            CredentialsModel model = new CredentialsModel() { Username = "User", Password = "Password", Domain = "Domain" };
+            CredentialsModel model = new CredentialsModel() { Username = "User", Password = "Password" };
             MemoryStream stream = new MemoryStream();
 
             serializer.WriteModel(model, stream);
@@ -22,7 +22,6 @@
             Assert.AreNotSame(model, loadedModel);
             Assert.AreEqual(model.Username, loadedModel.Username);
             Assert.AreEqual(model.Password, loadedModel.Password);
-            Assert.AreEqual(model.Domain, loadedModel.Domain);
         }
     }
 }

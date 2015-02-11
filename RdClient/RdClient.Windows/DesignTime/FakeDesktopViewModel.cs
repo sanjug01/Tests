@@ -8,7 +8,7 @@ namespace RdClient.DesignTime
 {
     public sealed class FakeDesktopViewModel : IDesktopViewModel
     {
-        private CredentialsModel _cred = new CredentialsModel() { Domain = "adomain", Password = "1234AbCd", Username = "exampleUser" };
+        private CredentialsModel _cred = new CredentialsModel() { Password = "1234AbCd", Username = "exampleUser" };
         private DesktopModel _desktop = new DesktopModel() { HostName = "ExampleHostname" };
         private ThumbnailModel _thumbnail = new ThumbnailModel();
         private PropertyChangedEventHandler _propertyChanged;

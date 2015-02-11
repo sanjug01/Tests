@@ -8,8 +8,10 @@
     [DataContract(IsReference = true)]
     public class CredentialsModel : SerializableModel
     {
+        [DataMember(Name = "Username")]
         private string _username;
-        private string _domain;
+
+        [DataMember(Name = "Password", IsRequired = false, EmitDefaultValue = false)]
         private string _password;
 
         public CredentialsModel()
@@ -21,25 +23,15 @@
             Contract.Assert(null != otherModel);
 
             _username = otherModel._username;
-            _domain = otherModel.Domain;
             _password = otherModel.Password;
         }
 
-        [DataMember]
         public string Username
         {
             get { return _username; }
             set { SetProperty(ref _username, value); }
         }
 
-        [DataMember]
-        public string Domain
-        {
-            get { return _domain; }
-            set { SetProperty(ref _domain, value); }
-        }
-
-        [DataMember]
         public string Password
         {
             get { return _password; }

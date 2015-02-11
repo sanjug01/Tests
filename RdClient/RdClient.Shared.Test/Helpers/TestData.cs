@@ -51,7 +51,6 @@ namespace RdClient.Shared.Test.Helpers
         {
             return TemporaryModelContainer<CredentialsModel>.WrapModel(Guid.NewGuid(), new CredentialsModel()
             {
-                Domain = NewRandomString(),
                 Username = NewRandomString(),
                 Password = NewRandomString()
             });

@@ -85,7 +85,7 @@
             IPersistentObject po = workspace;
 
             Assert.IsFalse(po.Save.CanExecute(null));
-            workspace.Credentials.AddNewModel(new CredentialsModel() { Username = "User", Password = "Password", Domain = "Domain" });
+            workspace.Credentials.AddNewModel(new CredentialsModel() { Username = "User", Password = "Password" });
             Assert.IsTrue(po.Save.CanExecute(null));
             po.Save.Execute(null);
             Assert.IsFalse(po.Save.CanExecute(null));

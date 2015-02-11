@@ -52,7 +52,7 @@ namespace RdClient.Windows.Test.Model
             WorkspaceModel<LocalWorkspaceModel> savedWorkspace = new WorkspaceModel<LocalWorkspaceModel>(_root, serializer);
             IPersistentObject po = savedWorkspace;
 
-            savedWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username="user", Password="password", Domain="domain" });
+            savedWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username="user", Password="password" });
             Assert.IsTrue(po.Save.CanExecute(null));
             po.Save.Execute(null);
 
@@ -69,7 +69,6 @@ namespace RdClient.Windows.Test.Model
             Assert.AreEqual(savedWorkspace.Credentials.Models[0].Id, loadedWorkspace.Credentials.Models[0].Id);
             Assert.AreEqual(savedWorkspace.Credentials.Models[0].Model.Username, loadedWorkspace.Credentials.Models[0].Model.Username);
             Assert.AreEqual(savedWorkspace.Credentials.Models[0].Model.Password, loadedWorkspace.Credentials.Models[0].Model.Password);
-            Assert.AreEqual(savedWorkspace.Credentials.Models[0].Model.Domain, loadedWorkspace.Credentials.Models[0].Model.Domain);
             Assert.IsFalse(po.Save.CanExecute(null));
         }
 
@@ -81,7 +80,7 @@ namespace RdClient.Windows.Test.Model
             WorkspaceModel<OnPremiseWorkspaceModel> savedWorkspace = new WorkspaceModel<OnPremiseWorkspaceModel>(_root, serializer);
             IPersistentObject po = savedWorkspace;
 
-            savedWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "user", Password = "password", Domain = "domain" });
+            savedWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "user", Password = "password" });
             Assert.IsTrue(po.Save.CanExecute(null));
             po.Save.Execute(null);
 
@@ -98,7 +97,6 @@ namespace RdClient.Windows.Test.Model
             Assert.AreEqual(savedWorkspace.Credentials.Models[0].Id, loadedWorkspace.Credentials.Models[0].Id);
             Assert.AreEqual(savedWorkspace.Credentials.Models[0].Model.Username, loadedWorkspace.Credentials.Models[0].Model.Username);
             Assert.AreEqual(savedWorkspace.Credentials.Models[0].Model.Password, loadedWorkspace.Credentials.Models[0].Model.Password);
-            Assert.AreEqual(savedWorkspace.Credentials.Models[0].Model.Domain, loadedWorkspace.Credentials.Models[0].Model.Domain);
             Assert.IsFalse(poLoaded.Save.CanExecute(null));
         }
 
@@ -110,7 +108,7 @@ namespace RdClient.Windows.Test.Model
             WorkspaceModel<CloudWorkspaceModel> savedWorkspace = new WorkspaceModel<CloudWorkspaceModel>(_root, serializer);
             IPersistentObject po = savedWorkspace;
 
-            savedWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "user", Password = "password", Domain = "domain" });
+            savedWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "user", Password = "password" });
             Assert.IsTrue(po.Save.CanExecute(null));
             po.Save.Execute(null);
 
@@ -127,7 +125,6 @@ namespace RdClient.Windows.Test.Model
             Assert.AreEqual(savedWorkspace.Credentials.Models[0].Id, loadedWorkspace.Credentials.Models[0].Id);
             Assert.AreEqual(savedWorkspace.Credentials.Models[0].Model.Username, loadedWorkspace.Credentials.Models[0].Model.Username);
             Assert.AreEqual(savedWorkspace.Credentials.Models[0].Model.Password, loadedWorkspace.Credentials.Models[0].Model.Password);
-            Assert.AreEqual(savedWorkspace.Credentials.Models[0].Model.Domain, loadedWorkspace.Credentials.Models[0].Model.Domain);
             Assert.IsFalse(poLoaded.Save.CanExecute(null));
         }
     }

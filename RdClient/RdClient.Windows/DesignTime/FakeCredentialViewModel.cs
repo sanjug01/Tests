@@ -8,7 +8,7 @@ namespace RdClient.DesignTime
 {
     public class FakeCredentialViewModel : ICredentialViewModel
     {
-        private CredentialsModel _cred = new CredentialsModel() { Domain = "contoso.com", Password = "1234AbCd", Username = "sampleUser" };
+        private CredentialsModel _cred = new CredentialsModel() { Password = "1234AbCd", Username = "sampleUser" };
 
         public CredentialsModel Credentials
         {

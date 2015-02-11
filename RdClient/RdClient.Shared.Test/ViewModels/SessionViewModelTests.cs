@@ -70,7 +70,7 @@ namespace RdClient.Shared.Test.ViewModels
             _testConnectionInfo = new ConnectionInformation()
             {
                 Desktop = new DesktopModel() { HostName = "narf" },
-                Credentials = new CredentialsModel() { Username = "don pedro", Domain = "Spain", Password = "Chorizo" }
+                Credentials = new CredentialsModel() { Username = "don pedro", Password = "Chorizo" }
             };
             _eventSource = new RdpEventSource();
             _nav = new Mock.NavigationService();

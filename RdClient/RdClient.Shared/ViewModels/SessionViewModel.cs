@@ -291,7 +291,6 @@
                     if (result.Save)//if user chose to save credentials then persist them
                     {
                         _connectionInformation.Credentials.Username = cred.Username;
-                        _connectionInformation.Credentials.Domain = cred.Domain;
                         _connectionInformation.Credentials.Password = cred.Password;
 
                         //
