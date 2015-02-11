@@ -2,6 +2,7 @@
 {
     using RdClient.LifeTimeManagement;
     using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.LifeTimeManagement;
     using System.Diagnostics.Contracts;
     using Windows.ApplicationModel;
@@ -14,6 +15,7 @@
 
         public App()
         {
+            Contract.ContractFailed += this.OnCodeContractFailed;
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
 
@@ -55,6 +57,25 @@
                 }
 
                 return _lifeTimeManager;
+            }
+        }
+
+        private void OnCodeContractFailed(object sender, ContractFailedEventArgs e)
+        {
+            switch(e.FailureKind)
+            {
+                case ContractFailureKind.Assert:
+                    e.SetHandled();
+#if DEBUG
+                    //
+                    // Throw an exception with information about the assertion.
+                    //
+                    throw new ContractAssertionException(e);
+#else
+                    //
+                    // TODO: log the assertion for telemetry and perhaps trigger a runtime error.
+                    //
+#endif
             }
         }
     }
