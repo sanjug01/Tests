@@ -7,24 +7,30 @@ namespace RdClient.DesignTime
 {
     public class FakeSettingsViewModel : ISettingsViewModel
     {
-        private readonly ObservableCollection<ICredentialViewModel> _credVMs;
+        private readonly ObservableCollection<ICredentialViewModel> _source;
+        private readonly ReadOnlyObservableCollection<ICredentialViewModel> _credVMs;
 
         public FakeSettingsViewModel()
         {
             this.ShowGeneralSettings = true;
             this.GeneralSettings = new GeneralSettings();
             this.GeneralSettings.UseThumbnails = true;
-            _credVMs = new ObservableCollection<ICredentialViewModel>();
-            _credVMs.Add(new FakeCredentialViewModel());
-            _credVMs.Add(new FakeCredentialViewModel());
-            _credVMs.Add(new FakeCredentialViewModel());
-            _credVMs.Add(new FakeCredentialViewModel());
-            _credVMs.Add(new FakeCredentialViewModel());
-            _credVMs.Add(new FakeCredentialViewModel());
-            _credVMs.Add(new FakeCredentialViewModel());
-            _credVMs.Add(new FakeCredentialViewModel());
-            _credVMs.Add(new FakeCredentialViewModel());
-            _credVMs.Add(new FakeCredentialViewModel());
+
+            _source = new ObservableCollection<ICredentialViewModel>()
+            {
+                new FakeCredentialViewModel(),
+                new FakeCredentialViewModel(),
+                new FakeCredentialViewModel(),
+                new FakeCredentialViewModel(),
+                new FakeCredentialViewModel(),
+                new FakeCredentialViewModel(),
+                new FakeCredentialViewModel(),
+                new FakeCredentialViewModel(),
+                new FakeCredentialViewModel(),
+                new FakeCredentialViewModel(),
+            };
+
+            _credVMs = new ReadOnlyObservableCollection<ICredentialViewModel>(_source);
         }
 
         public ICommand GoBackCommand {get; set;}
@@ -48,7 +54,7 @@ namespace RdClient.DesignTime
             get { return this.CredentialsViewModels.Count > 0; }
         }
 
-        public ObservableCollection<ICredentialViewModel> CredentialsViewModels
+        public ReadOnlyObservableCollection<ICredentialViewModel> CredentialsViewModels
         {
             get { return _credVMs; }
         }

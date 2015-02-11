@@ -18,6 +18,12 @@
             _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         }
 
+        public ModalPresentationCompletion(EventHandler<PresentationCompletionEventArgs> handler)
+        {
+            _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+            this.Completed += handler;
+        }
+
         public event EventHandler<PresentationCompletionEventArgs> Completed
         {
             add

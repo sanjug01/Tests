@@ -85,5 +85,23 @@
 
             Assert.AreEqual(-1, list.IndexOfFirstGreaterOrEqual(1, _comparer));
         }
+
+        [TestMethod]
+        public void EmptyIfNull_NonNullString_OriginalString()
+        {
+            string value = "String";
+
+            Assert.AreSame(value, value.EmptyIfNull());
+        }
+
+        [TestMethod]
+        public void EmptyIfNull_NullString_EmptyString()
+        {
+            string value = null;
+            string translated = value.EmptyIfNull();
+
+            Assert.IsNotNull(translated);
+            Assert.AreEqual(string.Empty, translated);
+        }
     }
 }

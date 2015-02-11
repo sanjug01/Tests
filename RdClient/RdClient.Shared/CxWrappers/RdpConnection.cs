@@ -3,6 +3,7 @@ using RdClient.Shared.Models;
 using System.Diagnostics.Contracts;
 using Windows.Foundation;
 using Windows.Security.Cryptography.Certificates;
+using RdClient.Shared.Helpers;
 
 namespace RdClient.Shared.CxWrappers
 {
@@ -92,7 +93,11 @@ namespace RdClient.Shared.CxWrappers
         public void SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)
         {
             _instrument.Instrument("SetCredentials");
-            int xRes = _rdpConnectionCx.SetUserCredentials(credentials.Username, credentials.Domain, credentials.Password, fUsingSavedCreds);
+            int xRes = _rdpConnectionCx.SetUserCredentials(
+                credentials.Username,
+                credentials.Domain.EmptyIfNull(),
+                credentials.Password,
+                fUsingSavedCreds);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set user credentials.");
         }
         

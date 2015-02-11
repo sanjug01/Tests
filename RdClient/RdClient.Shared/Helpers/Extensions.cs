@@ -41,5 +41,10 @@
 
             return index;
         }
+
+        public static string EmptyIfNull(this string value)
+        {
+            return value ?? string.Empty;
+        }
     }
 }

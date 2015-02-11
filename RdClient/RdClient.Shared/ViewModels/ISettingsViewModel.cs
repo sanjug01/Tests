@@ -13,6 +13,6 @@ namespace RdClient.Shared.ViewModels
         bool ShowUserSettings { get; set; }
         bool HasCredentials { get; }
         GeneralSettings GeneralSettings { get; }
-        ObservableCollection<ICredentialViewModel> CredentialsViewModels { get; } 
+        ReadOnlyObservableCollection<ICredentialViewModel> CredentialsViewModels { get; } 
     }
 }
