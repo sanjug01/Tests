@@ -139,5 +139,13 @@ namespace RdClient.Controls
         {
             Window.Current.CoreWindow.PointerCursor = _exitCursor;
         }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if(Window.Current.CoreWindow.PointerCursor == null)
+            {
+                Window.Current.CoreWindow.PointerCursor = _exitCursor;
+            }
+        }
     }
 }
