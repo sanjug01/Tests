@@ -219,6 +219,7 @@
     <Compile Include="ViewModels\ICredentialViewModel.cs" />
     <Compile Include="ViewModels\IDesktopViewModel.cs" />
     <Compile Include="Navigation\NavigationExtensions.cs" />
+    <Compile Include="ViewModels\IEditCredentialsTask.cs" />
     <Compile Include="ViewModels\IEditCredentialsViewModel.cs" />
     <Compile Include="ViewModels\ISessionViewModel.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
