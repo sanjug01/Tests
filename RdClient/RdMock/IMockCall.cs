@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace RdMock
 {
     public class MockException : Exception

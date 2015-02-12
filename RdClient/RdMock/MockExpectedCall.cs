@@ -41,11 +41,6 @@ namespace RdMock
                 Type expectedType = expectedParameters[i].GetType();
                 Type actualType = actualParameters[i].ParameterType;
 
-                if (Assignable.IsAssignable(actualType, expectedType) != actualType.IsAssignableFrom(expectedType))
-                {
-
-                }
-
                 if(Assignable.IsAssignable(actualType, expectedType) == false)
                 //if (actualType.IsAssignableFrom(expectedType) == false)
                 {
