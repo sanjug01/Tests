@@ -41,8 +41,7 @@ namespace RdMock
                 Type expectedType = expectedParameters[i].GetType();
                 Type actualType = actualParameters[i].ParameterType;
 
-                if(Assignable.IsAssignable(actualType, expectedType) == false)
-                //if (actualType.IsAssignableFrom(expectedType) == false)
+                if(actualType.GetTypeInfo().IsAssignableFrom(expectedType.GetTypeInfo()) == false)
                 {
                     throw new MockException(string.Format("Mock call to {0}() failed. Parameter {1} is of type {2} but expected type is {3}",
                                                         this.FunctionName, i, actualType.Name, expectedType.Name));

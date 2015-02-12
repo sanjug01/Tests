@@ -60,7 +60,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assignable.cs" />
     <Compile Include="IMockCall.cs" />
     <Compile Include="MockBase.cs" />
     <Compile Include="MockCallback.cs" />
