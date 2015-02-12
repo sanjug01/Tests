@@ -73,7 +73,7 @@ namespace RdMock.Test
         }       
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
+        [ExpectedException(typeof(MockException))]
         public void MockRemainingExpectations()
         {
             using (TestMock tm = new TestMock())
@@ -83,7 +83,7 @@ namespace RdMock.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
+        [ExpectedException(typeof(MockException))]
         public void MockUnexpectedInvocation()
         {
             using (TestMock tm = new TestMock())
@@ -93,7 +93,7 @@ namespace RdMock.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
+        [ExpectedException(typeof(MockException))]
         public void MockParameterCountNotMatching()
         {
             using (TestMock tm = new TestMock())
@@ -104,7 +104,7 @@ namespace RdMock.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
+        [ExpectedException(typeof(MockException))]
         public void MockParameterTypeNotMatching()
         {
             using (TestMock tm = new TestMock())
@@ -125,7 +125,7 @@ namespace RdMock.Test
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
+        [ExpectedException(typeof(MockException))]
         public void MockParameterValueNotMatching()
         {
             using (TestMock tm = new TestMock())

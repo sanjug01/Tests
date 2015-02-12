@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 // The MockBase class is a basic mocking framework which reduces the amount of typing required to implement mock classes.
@@ -50,105 +50,6 @@ using System.Text;
 
 namespace RdMock
 {
-    public class MockInvokedCall
-    {
-        public string FunctionName { get; private set; }
-        public ParameterInfo[] ParameterInfo { get; private set; }
-        public object[] ParameterValues { get; private set; }
-
-        public MockInvokedCall(MethodBase method, object[] parameterValues)
-        {
-            this.FunctionName = method.Name;
-            this.ParameterInfo = method.GetParameters();
-            this.ParameterValues = parameterValues;
-        }
-    }
-
-    public interface IMockCall
-    {
-        string FunctionName { get; }
-        object VerifyInvokedCall(MockInvokedCall actualCall);
-    }
-
-    public class MockExpectedCall : IMockCall
-    {
-        private IList<object> _parameters;
-        private object _returnValue;
-
-        public MockExpectedCall(string functionName, IList<object> parameters, object returnValue)
-        {
-            this.FunctionName = functionName;
-            _parameters = parameters;
-            _returnValue = returnValue;
-        }
-
-        public string FunctionName { get; private set; }
-
-        public object VerifyInvokedCall(MockInvokedCall actualCall)
-        {
-            IList<object> expectedParameters = _parameters;
-            ParameterInfo[] actualParameters = actualCall.ParameterInfo;
-            object[] actualParameterValues = actualCall.ParameterValues;
-
-            if (expectedParameters.Count != actualParameters.Length)
-            {
-                throw new Exception(string.Format("Mock call to {0}() failed. Expected {1} parameters but invoked with {2}.",
-                                                    this.FunctionName, expectedParameters.Count, actualParameters.Length));
-            }
-
-            for (int i = 0; i < actualParameters.Length; i++)
-            {
-                if (expectedParameters[i] == null)
-                {
-                    continue;
-                }
-
-                Type expectedType = expectedParameters[i].GetType();
-                Type actualType = actualParameters[i].ParameterType;
-                if (actualType.IsAssignableFrom(expectedType) == false)
-                {
-                    throw new Exception(string.Format("Mock call to {0}() failed. Parameter {1} is of type {2} but expected type is {3}",
-                                                        this.FunctionName, i, actualType.Name, expectedType.Name));
-                }
-
-                object expectedValue = expectedParameters[i];
-                object actualValue = actualParameterValues[i];
-                if (actualValue.Equals(expectedValue) == false)
-                {
-                    throw new Exception(string.Format("Mock call to {0}() failed. Wrong value for parameter {1}. Expected value = {2}, Actual value = {3}",
-                                                        this.FunctionName, i, expectedValue, actualValue));
-                }
-            }
-
-            return _returnValue;
-        }
-    }
-
-    public class MockCallback : IMockCall
-    {
-        private Func<object[], object> _mockCallback;
-       
-        public MockCallback(string functionName, Func<object[], object> mockCallback)
-        {
-            this.FunctionName = functionName;
-            _mockCallback = mockCallback;
-        }
-
-        public string FunctionName { get; private set; }
-
-        public object VerifyInvokedCall(MockInvokedCall actualCall)
-        {
-            if (_mockCallback != null)
-            {
-                return _mockCallback(actualCall.ParameterValues);
-            }
-            else
-            {
-                return null;
-            }
-        }
-    }
-
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly",
         Justification = "Intended for test")]
     public class MockBase : IDisposable
@@ -169,7 +70,7 @@ namespace RdMock
                 {
                     msg.AppendFormat("{0}(...) ", call.FunctionName);
                 }
-                throw new Exception(msg.ToString());
+                throw new MockException(msg.ToString());
             }
         }
 
@@ -187,22 +88,51 @@ namespace RdMock
             return this;
         }
 
-        public object Invoke(object[] actualParameterValues)
+        private MethodInfo GetMethodInfo(string methodName)
         {
-            StackTrace stackTrace = new StackTrace();
-            StackFrame[] stackFrames = stackTrace.GetFrames();
+            Type type = this.GetType();
+            TypeInfo typeInfo = type.GetTypeInfo();
+
+            IList<Type> types = new List<Type>();
+
+            types.Add(type);
+            foreach(Type t in typeInfo.ImplementedInterfaces)
+            {
+                types.Add(t);
+            }
+
+            foreach(Type t in types)
+            {
+                foreach(MethodInfo m in t.GetTypeInfo().DeclaredMethods)
+                {
+                    if(m.Name.Split('.').Last() == methodName)
+                    {
+                        return m;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public object Invoke(object[] actualParameterValues, [CallerMemberName] string callerMemberName = "")
+        {
             MockInvokedCall actualCall;
             IMockCall expectedCall;
 
-            if (stackFrames.Count() < 2)
+            MethodInfo method = GetMethodInfo(callerMemberName);
+
+            actualCall = new MockInvokedCall(method, actualParameterValues);
+
+            if(actualCall == null)
             {
-                throw new Exception("Mock call failed. Invoke() called from an unexpected invocation context");
+                throw new MockException(string.Format("Mock call failed. Trying to call {0}() which is not declared in the current mock.",
+                                                    callerMemberName));
             }
-            actualCall = new MockInvokedCall(stackFrames[1].GetMethod(), actualParameterValues);
 
             if (_expectedCalls.Count < 1)
             {
-                throw new Exception("Mock call failed. Unexpected invocation of " + actualCall.FunctionName + "() when no calls were expected.");
+                throw new MockException("Mock call failed. Unexpected invocation of " + actualCall.FunctionName + "() when no calls were expected.");
             }
             expectedCall = _expectedCalls.Dequeue();
             //
@@ -211,7 +141,7 @@ namespace RdMock
             //
             if (!expectedCall.FunctionName.Equals(actualCall.FunctionName.Split('.').Last()))
             {
-                throw new Exception(string.Format("Mock call failed. Unexpected invocation of {0}() when expecting a call to {1}()",
+                throw new MockException(string.Format("Mock call failed. Unexpected invocation of {0}() when expecting a call to {1}()",
                                                     actualCall.FunctionName, expectedCall.FunctionName));                    
             }
             return expectedCall.VerifyInvokedCall(actualCall);            
