@@ -19,21 +19,29 @@
         private readonly Guid _desktopId;
         private readonly DesktopModel _desktop;
         private readonly ApplicationDataModel _dataModel;
+        private readonly INavigationService _navigationService;
         private readonly IThumbnailEncoder _thumbnailEncoder;
         private bool _isSelected;
         private bool _selectionEnabled;
         private IExecutionDeferrer _executionDeferrer;
         private bool _hasThumbnailImage;
 
-        public static IDesktopViewModel Create(IModelContainer<RemoteConnectionModel> desktopContainer, ApplicationDataModel dataModel, IExecutionDeferrer executionDeferrer)
+        public static IDesktopViewModel Create(IModelContainer<RemoteConnectionModel> desktopContainer,
+            ApplicationDataModel dataModel,
+            IExecutionDeferrer executionDeferrer,
+            INavigationService navigationService)
         {
-            return new DesktopViewModel(desktopContainer, dataModel, executionDeferrer);
+            return new DesktopViewModel(desktopContainer, dataModel, executionDeferrer, navigationService);
         }
 
-        private DesktopViewModel(IModelContainer<RemoteConnectionModel> desktopContainer, ApplicationDataModel dataModel, IExecutionDeferrer executionDeferrer)
+        private DesktopViewModel(IModelContainer<RemoteConnectionModel> desktopContainer,
+            ApplicationDataModel dataModel,
+            IExecutionDeferrer executionDeferrer,
+            INavigationService navigationService)
         {
             Contract.Assert(null != desktopContainer);
             Contract.Assert(null != desktopContainer);
+            Contract.Assert(null != navigationService);
             Contract.Assert(!Guid.Empty.Equals(desktopContainer.Id));
 
             _editCommand = new RelayCommand(EditCommandExecute);
@@ -41,6 +49,7 @@
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
             _thumbnailEncoder = ThumbnailEncoder.Create(ThumbnailHeight);
             _executionDeferrer = executionDeferrer;
+            _navigationService = navigationService;
 
             _desktop = (DesktopModel)desktopContainer.Model;
             _desktopId = desktopContainer.Id;
@@ -59,12 +68,6 @@
             //
             _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailUpdated;
         }
-
-        public void Presented()
-        {
-        }
-
-        public INavigationService NavigationService { private get; set; }
 
         public Guid DesktopId
         {
@@ -160,7 +163,7 @@
 
         private void EditCommandExecute(object o)
         {
-            NavigationService.PushModalView("AddOrEditDesktopView", new EditDesktopViewModelArgs(this.Desktop));
+            _navigationService.PushModalView("AddOrEditDesktopView", new EditDesktopViewModelArgs(this.Desktop));
         }
 
         private void ConnectCommandExecute(object o)
@@ -185,7 +188,7 @@
                     }
                 };
 
-                NavigationService.PushModalView("AddUserView", args, addUserCompleted);
+                _navigationService.PushModalView("AddUserView", args, addUserCompleted);
             }            
         }
 
@@ -203,12 +206,12 @@
                 Thumbnail = _thumbnailEncoder
             };
 
-            NavigationService.NavigateToView("SessionView", connectionInformation);            
+            _navigationService.NavigateToView("SessionView", connectionInformation);            
         }
 
         private void DeleteCommandExecute(object o)
         {
-            NavigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(TemporaryModelContainer<DesktopModel>.WrapModel(_desktopId, _desktop)));            
+            _navigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(TemporaryModelContainer<DesktopModel>.WrapModel(_desktopId, _desktop)));            
         }
 
         private void OnThumbnailUpdated(object sender, ThumbnailUpdatedEventArgs e)

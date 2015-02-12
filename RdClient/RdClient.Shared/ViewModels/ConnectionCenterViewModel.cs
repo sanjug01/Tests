@@ -136,21 +136,13 @@ namespace RdClient.Shared.ViewModels
                 INotifyPropertyChanged npc = this.DesktopViewModels;
                 npc.PropertyChanged += OnDesktopViewModelPropertyChanged;
             }
-            //
-            // update NavigationService for all DesktopViewModels
-            //
-            foreach (DesktopViewModel vm in _desktopViewModels)
-            {
-                vm.NavigationService = this.NavigationService;
-                vm.Presented();
-            }
         }
 
         private IDesktopViewModel CreateDesktopViewModel(IModelContainer<RemoteConnectionModel> container)
         {
             Contract.Assert(container.Model is DesktopModel, "Data model for a desktop tile is not DesktopModel");
 
-            IDesktopViewModel dvm = DesktopViewModel.Create(container, this.ApplicationDataModel, this);
+            IDesktopViewModel dvm = DesktopViewModel.Create(container, this.ApplicationDataModel, this, this.NavigationService);
 
             dvm.SelectionEnabled = this.DesktopsSelectable;
             dvm.PropertyChanged += DesktopSelection_PropertyChanged;
