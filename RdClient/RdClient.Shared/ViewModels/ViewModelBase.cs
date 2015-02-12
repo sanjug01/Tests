@@ -3,6 +3,7 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
+    using RdClient.Shared.Telemetry;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
 
@@ -10,17 +11,32 @@
     /// Implementation of <see cref="INotifyPropertyChanged"/> to simplify ViewModels.
     /// </summary>
 
-    public abstract class ViewModelBase : Helpers.MutableObject, IViewModel, IDataModelSite
+    public abstract class ViewModelBase : Helpers.MutableObject, IViewModel, IDataModelSite, IApplicationTelemetrySite
     {
         private INavigationService _navigationService;
         private IModalPresentationContext _presentationContext;
         private ApplicationDataModel _appDataModel;
+        private IApplicationTelemetry _applicationTelemetry;
+        private ITelemetryActivity _telemetryActivity;
 
         protected INavigationService NavigationService
         {
             get { return _navigationService; }
             private set { SetProperty<INavigationService>(ref _navigationService, value); }
         }
+
+        protected ApplicationDataModel ApplicationDataModel
+        {
+            get { return _appDataModel; }
+            set { SetProperty(ref _appDataModel, value); }
+        }
+
+        protected IApplicationTelemetry ApplicationTelemetry
+        {
+            get { return _applicationTelemetry; }
+            set { SetProperty(ref _applicationTelemetry, value); }
+        }
+
 
         void IDataModelSite.SetDataModel(ApplicationDataModel dataModel)
         {
@@ -30,10 +46,9 @@
             }
         }
 
-        protected ApplicationDataModel ApplicationDataModel
+        void IApplicationTelemetrySite.SetApplicationTelemetry(IApplicationTelemetry applicationTelemetry)
         {
-            get { return _appDataModel; }
-            set { SetProperty(ref _appDataModel, value); }
+            this.ApplicationTelemetry = applicationTelemetry;
         }
 
         /// <summary>
@@ -79,6 +94,8 @@
             Contract.Requires(navigationService != null);
             Contract.Ensures(null != _navigationService);
 
+            _telemetryActivity = _applicationTelemetry.PresentView(GetType().Name);
+            Contract.Assert(null != _telemetryActivity, "IViewModel.Presenting|null telemetry activity returned");
             this.NavigationService = navigationService;
             _presentationContext = presentationContext;
             this.OnPresenting(activationParameter);
@@ -86,7 +103,9 @@
 
         void IViewModel.Dismissing()
         {
-            SetProperty<INavigationService>(ref _navigationService, null);
+            _telemetryActivity.Complete();
+            _telemetryActivity = null;
+            SetProperty<INavigationService>(ref _navigationService, null, "NavigationService");
             this.OnDismissed();
         }
     }

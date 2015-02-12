@@ -8,6 +8,7 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
+    using RdClient.Shared.Telemetry;
     using RdClient.Shared.ViewModels;
     using System.Diagnostics.Contracts;
     using Windows.UI.Core;
@@ -24,6 +25,7 @@
         public IApplicationBarViewModel AppBarViewModel { private get; set; }
         public string LandingPage { private get; set; }
         public ILifeTimeManager LifeTimeManager { private get; set; }
+        public IApplicationTelemetry ApplicationTelemetry { private get; set; }
 
         public void Initialiaze()
         {
@@ -51,6 +53,7 @@
             _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));
             _navigationService.Extensions.Add(this.CreateApplicationBarExtension(this.AppBarViewModel));
             _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory));
+            _navigationService.Extensions.Add(new ApplicationTelemetryExtension(this.ApplicationTelemetry));
 
             _applicationDataSaver = new DeferredCommand(appDataModel.Save, deferredExecution, timerFactory, SaveDataDelayMilliseconds);
 
