@@ -214,10 +214,12 @@
     <Compile Include="ValidationRules\CharacterOccurenceValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameValidationRule.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
+    <Compile Include="ViewModels\EditCredentialsViewModel.cs" />
     <Compile Include="ViewModels\IConnectionCenterViewModel.cs" />
     <Compile Include="ViewModels\ICredentialViewModel.cs" />
     <Compile Include="ViewModels\IDesktopViewModel.cs" />
     <Compile Include="Navigation\NavigationExtensions.cs" />
+    <Compile Include="ViewModels\IEditCredentialsViewModel.cs" />
     <Compile Include="ViewModels\ISessionViewModel.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="Navigation\Extensions\IDataModelSite.cs" />
