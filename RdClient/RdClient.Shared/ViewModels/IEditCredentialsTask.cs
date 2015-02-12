@@ -1,4 +1,5 @@
-﻿namespace RdClient.Shared.ViewModels
+﻿using RdClient.Shared.Models;
+namespace RdClient.Shared.ViewModels
 {
     /// <summary>
     /// Interface of a task that the EditCredentialsView must perform.
@@ -7,7 +8,7 @@
     /// </summary>
     public interface IEditCredentialsTask
     {
-        void Completed(object result);
-        void Cancelled();
+        void PopulateViewModel(IEditCredentialsViewModel viewModel);
+        void ValidateViewModel(IEditCredentialsViewModel viewModel);
     }
 }

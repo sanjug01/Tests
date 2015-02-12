@@ -31,19 +31,19 @@
         public string ResourceName
         {
             get { return _resourceName; }
-            private set { this.SetProperty(ref _resourceName, value); }
+            set { this.SetProperty(ref _resourceName, value); }
         }
 
         public string Prompt
         {
             get { return _prompt; }
-            private set { this.SetProperty(ref _prompt, value); }
+            set { this.SetProperty(ref _prompt, value); }
         }
 
         public string DismissLabel
         {
             get { return _dismissLabel; }
-            private set { this.SetProperty(ref _dismissLabel, value); }
+            set { this.SetProperty(ref _dismissLabel, value); }
         }
 
         public bool SaveCredentials
@@ -55,13 +55,13 @@
         public bool CanSaveCredentials
         {
             get { return _canSaveCredentials; }
-            private set { this.SetProperty(ref _canSaveCredentials, value); }
+            set { this.SetProperty(ref _canSaveCredentials, value); }
         }
 
         public bool CanRevealPassword
         {
             get { return _canRevealPassword; }
-            private set { this.SetProperty(ref _canRevealPassword, value); }
+            set { this.SetProperty(ref _canRevealPassword, value); }
         }
 
         public string UserName

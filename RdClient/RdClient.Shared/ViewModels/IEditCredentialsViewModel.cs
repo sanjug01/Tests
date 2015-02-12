@@ -7,15 +7,15 @@
     {
         ICommand Cancel { get; }
         ICommand Dismiss { get; }
-        string DismissLabel { get; }
+        string DismissLabel { get; set; }
 
-        bool CanRevealPassword { get; }
+        bool CanRevealPassword { get; set; }
 
-        bool CanSaveCredentials { get; }
+        bool CanSaveCredentials { get; set; }
 
-        string Prompt { get; }
+        string Prompt { get; set; }
 
-        string ResourceName { get; }
+        string ResourceName { get; set; }
 
         bool SaveCredentials { get; set; }
 

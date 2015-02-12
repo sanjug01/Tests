@@ -16,13 +16,7 @@
             Contract.Requires(null != task);
 
             navigationService.PushModalView("EditCredentialsView", task,
-                new ModalPresentationCompletion((sender, e) =>
-                {
-                    if (null != e.Result)
-                        task.Completed(e.Result);
-                    else
-                        task.Cancelled();
-                }));
+                new ModalPresentationCompletion((sender, e) => { }));
         }
     }
 
@@ -55,19 +49,19 @@
         public string ResourceName
         {
             get { return _resourceName; }
-            private set { this.SetProperty(ref _resourceName, value); }
+            set { this.SetProperty(ref _resourceName, value); }
         }
 
         public string Prompt
         {
             get { return _prompt; }
-            private set { this.SetProperty(ref _prompt, value); }
+            set { this.SetProperty(ref _prompt, value); }
         }
 
         public string DismissLabel
         {
             get { return _dismissLabel; }
-            private set { this.SetProperty(ref _dismissLabel, value); }
+            set { this.SetProperty(ref _dismissLabel, value); }
         }
 
         public bool SaveCredentials
@@ -79,13 +73,13 @@
         public bool CanSaveCredentials
         {
             get { return _canSaveCredentials; }
-            private set { this.SetProperty(ref _canSaveCredentials, value); }
+            set { this.SetProperty(ref _canSaveCredentials, value); }
         }
 
         public bool CanRevealPassword
         {
             get { return _canRevealPassword; }
-            private set { this.SetProperty(ref _canRevealPassword, value); }
+            set { this.SetProperty(ref _canRevealPassword, value); }
         }
 
         public string UserName
@@ -95,9 +89,7 @@
             {
                 if(this.SetProperty(ref _userName, value))
                 {
-                    //
-                    // TODO: Perform validation;
-                    //
+                    _task.ValidateViewModel(this);
                 }
             }
         }
@@ -109,9 +101,7 @@
             {
                 if (this.SetProperty(ref _password, value))
                 {
-                    //
-                    // TODO: Perform validation;
-                    //
+                    _task.ValidateViewModel(this);
                 }
             }
         }
@@ -129,6 +119,8 @@
             Contract.Ensures(null != _task);
             _task = activationParameter as IEditCredentialsTask;
             Contract.Assert(null != _task, string.Format("EditCredentialsViewModel|presented with an invalid parameter|{0}", activationParameter));
+
+            _task.PopulateViewModel(this);
         }
 
         protected override void OnDismissed()
@@ -145,6 +137,7 @@
 
         private void DismissView(object parameter)
         {
+            Contract.Assert(null != _task, "EditCredentialsViewModel.DismissView|dismissed without task");
             this.DismissModal(null);
         }
 
