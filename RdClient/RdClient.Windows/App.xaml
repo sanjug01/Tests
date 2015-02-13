@@ -7,7 +7,6 @@
     xmlns:model="using:RdClient.Shared.Models"
     xmlns:winmodel="using:RdClient.Models"
     xmlns:lifetime="using:RdClient.LifeTimeManagement"
-    xmlns:telemetry="using:RdClient.Telemetry"
     RequestedTheme="Light">
 
     <Application.Resources>
@@ -24,8 +23,6 @@
                     <lifetime:RootFrameManager/>
                 </lifetime:LifeTimeManager.RootFrameManager>
             </lifetime:LifeTimeManager>
-
-            <telemetry:ApplicationInsightsTelemetry x:Key="ApplicationTelemetry" />
 
         </ResourceDictionary>
     </Application.Resources>

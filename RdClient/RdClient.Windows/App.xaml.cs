@@ -1,6 +1,4 @@
-﻿using Microsoft.ApplicationInsights;
-
-namespace RdClient
+﻿namespace RdClient
 {
     using RdClient.LifeTimeManagement;
     using RdClient.Shared.CxWrappers;

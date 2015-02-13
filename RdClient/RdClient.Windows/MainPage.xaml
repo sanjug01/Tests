@@ -23,7 +23,6 @@
     <Page.Resources>
         <fac:AppInitializer x:Key="AppInitializer"
                             LifeTimeManager="{StaticResource LifeTimeManager}"
-                            ApplicationTelemetry="{StaticResource ApplicationTelemetry}"
                             LandingPage="ConnectionCenterView"/>
         
         <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
