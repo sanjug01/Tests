@@ -10,5 +10,6 @@ namespace RdClient.Shared.ViewModels
         ICommand DeleteCommand { get; }
         ICommand EditCommand { get; }
         void Presented(INavigationService navService, ApplicationDataModel dataModel);
+        void Dismissed();
     }
 }

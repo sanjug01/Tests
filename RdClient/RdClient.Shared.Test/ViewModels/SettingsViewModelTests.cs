@@ -148,8 +148,14 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 newDataModel.LocalWorkspace.Credentials.AddNewModel(cred.Model);
             }
-
+            //
+            // Dismiss, change the data model, and present again - the data model is changed by a navigation extention,
+            // that sets it before the view model is presented.
+            //
+            ((IViewModel)_vm).Dismissing();
             ((IDataModelSite)_vm).SetDataModel(newDataModel);
+            ((IViewModel)_vm).Presenting(_navService, null, null);
+
             Assert.AreEqual(creds.Count, _vm.CredentialsViewModels.Count);
             foreach (IModelContainer<CredentialsModel> cred in creds)
             {

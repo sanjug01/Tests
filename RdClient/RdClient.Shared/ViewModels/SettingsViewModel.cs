@@ -2,9 +2,7 @@
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
@@ -24,7 +22,6 @@ namespace RdClient.Shared.ViewModels
         {
             _goBackCommand = new RelayCommand(o => this.GoBackCommandExecute());
             _addUserCommand = new RelayCommand(o => this.AddUserCommandExecute());
-            this.PropertyChanged += SettingsViewModel_PropertyChanged;
         }
 
         public ICommand GoBackCommand
@@ -80,31 +77,54 @@ namespace RdClient.Shared.ViewModels
             this.ShowUserSettings = false;
             this.GeneralSettings = this.ApplicationDataModel.Settings;
 
+            //
+            // Set up a transforming observable collection of credentials view models sourced at the local workspace's credentials
+            // and creating view models for credentials models.
+            //
+            this.CredentialsViewModels = TransformingObservableCollection<IModelContainer<CredentialsModel>, ICredentialViewModel>
+                .Create(this.ApplicationDataModel.LocalWorkspace.Credentials.Models,
+                this.CreateCredentialsViewModel,
+                this.ReleaseCredentialsViewModel);
+
+            this.CredentialsViewModels.CastAndCall<INotifyPropertyChanged>(npc =>
+                npc.PropertyChanged += this.OnCredentialsViewModelsPropertyChanged);
+            this.HasCredentials = this.CredentialsViewModels.Count > 0;
+
             foreach (ICredentialViewModel vm in this.CredentialsViewModels)
             {
                 vm.Presented(this.NavigationService, this.ApplicationDataModel);
             }
         }
 
-        private void SettingsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        protected override void OnDismissed()
         {
-            if (e.PropertyName == "ApplicationDataModel")
+            //
+            // If the "UseThumbnails" setting is off, delete all cached thumbnails.
+            //
+            if (!_generalSettings.UseThumbnails)
             {
-                //
-                // Set up a transforming observable collection of credentials view models sourced at the local workspace's credentials
-                // and creating view models for credentials models.
-                //
-                this.CredentialsViewModels = TransformingObservableCollection<IModelContainer<CredentialsModel>, ICredentialViewModel>
-                    .Create(this.ApplicationDataModel.LocalWorkspace.Credentials.Models, this.CreateCredentialsViewModel);
-                this.CredentialsViewModels.CastAndCall<INotifyPropertyChanged>(npc =>
-                    npc.PropertyChanged += this.OnCredentialsViewModelsPropertyChanged);
-                this.HasCredentials = this.CredentialsViewModels.Count > 0;
+                foreach (IModelContainer<RemoteConnectionModel> c in this.ApplicationDataModel.LocalWorkspace.Connections.Models)
+                {
+                    c.Model.Thumbnail.EncodedImageBytes = null;
+                }
             }
+
+            this.CredentialsViewModels.CastAndCall<INotifyPropertyChanged>(npc =>
+                npc.PropertyChanged -= this.OnCredentialsViewModelsPropertyChanged);
+            this.CredentialsViewModels = null;
+            this.HasCredentials = false;
+
+            base.OnDismissed();
         }
 
         private ICredentialViewModel CreateCredentialsViewModel(IModelContainer<CredentialsModel> container)
         {
             return new CredentialViewModel(container);
+        }
+
+        private void ReleaseCredentialsViewModel(ICredentialViewModel vm)
+        {
+            vm.Dismissed();
         }
 
         private void OnCredentialsViewModelsPropertyChanged(object sender, PropertyChangedEventArgs e)

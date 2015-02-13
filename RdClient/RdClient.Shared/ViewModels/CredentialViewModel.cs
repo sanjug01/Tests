@@ -6,19 +6,19 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class CredentialViewModel: MutableObject, ICredentialViewModel
+    public sealed class CredentialViewModel: MutableObject, ICredentialViewModel
     {
-        private IModelContainer<CredentialsModel> _credentials;
+        private readonly RelayCommand _editCommand;
+        private readonly RelayCommand _deleteCommand;
+        private readonly IModelContainer<CredentialsModel> _credentials;
         private INavigationService _nav;
         private ApplicationDataModel _dataModel;
-        private RelayCommand _editCommand;
-        private RelayCommand _deleteCommand;
 
         public CredentialViewModel(IModelContainer<CredentialsModel> credentials)
         {
-            _credentials = credentials;
             _editCommand = new RelayCommand((o) => this.EditCommandExecute());
             _deleteCommand = new RelayCommand((o) => this.DeleteCommandExecute());
+            _credentials = credentials;
         }
 
         public CredentialsModel Credentials
@@ -40,6 +40,12 @@ namespace RdClient.Shared.ViewModels
         {
             _nav = navService;
             _dataModel = dataModel;
+        }
+
+        public void Dismissed()
+        {
+            _nav = null;
+            _dataModel = null;
         }
 
         private void EditCommandExecute()

@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace RdClient.DesignTime
 {
-    public class FakeCredentialViewModel : ICredentialViewModel
+    public sealed class FakeCredentialViewModel : ICredentialViewModel
     {
         private CredentialsModel _cred = new CredentialsModel() { Password = "1234AbCd", Username = "sampleUser" };
 
@@ -22,6 +22,10 @@ namespace RdClient.DesignTime
         public void Presented(INavigationService navService, ApplicationDataModel dataModel)
         {
             throw new NotImplementedException();
+        }
+
+        void ICredentialViewModel.Dismissed()
+        {
         }
     }
 }
