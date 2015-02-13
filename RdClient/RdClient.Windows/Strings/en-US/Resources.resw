@@ -549,9 +549,6 @@
   <data name="MainPage-ShowApplicationBarLabel.Text" xml:space="preserve">
     <value>show application bar</value>
   </data>
-  <data name="SessionView-DisconnectButton.Content" xml:space="preserve">
-    <value>Disconnect</value>
-  </data>
   <data name="AddOrEditDesktop-PcName-Error.Text" xml:space="preserve">
     <value>(*)</value>
   </data>
@@ -609,5 +606,11 @@
   <data name="Session_Reconnect_Title.Text" xml:space="preserve">
     <value>Reconnecting</value>
     <comment>Reconnecting dialog title</comment>
+  </data>
+  <data name="SessionView-HomeButton.Label" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="SessionView-MouseMode.Label" xml:space="preserve">
+    <value>Mouse-Mode</value>
   </data>
 </root>
