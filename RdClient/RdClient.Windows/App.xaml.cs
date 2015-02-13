@@ -76,6 +76,7 @@
                     // TODO: log the assertion for telemetry and perhaps trigger a runtime error.
                     //
 #endif
+                    break;
             }
         }
     }
