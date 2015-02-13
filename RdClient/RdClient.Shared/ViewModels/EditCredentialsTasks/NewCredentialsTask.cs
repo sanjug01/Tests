@@ -15,7 +15,7 @@
     /// </summary>
     public sealed class NewCredentialsTask : IEditCredentialsTask
     {
-        private readonly IValidationRule _hostNameRule;
+        private readonly IValidationRule _userNameRule;
         private readonly ApplicationDataModel _dataModel;
         private readonly Action<Guid> _credentialsAdded;
         private readonly string _resourceName;
@@ -34,7 +34,7 @@
             Contract.Requires(null != _credentialsAdded);
             Contract.Ensures(null != _credentials);
 
-            _hostNameRule = new HostNameValidationRule();
+            _userNameRule = new UsernameValidationRule();
             _resourceName = resourceName;
             _dataModel = dataModel;
             _credentialsAdded = credentialsAdded;
@@ -70,7 +70,7 @@
                 //
                 valid = false;
             }
-            else if(!_hostNameRule.Validate(userName, CultureInfo.CurrentCulture))
+            else if(!_userNameRule.Validate(userName, CultureInfo.CurrentCulture))
             {
                 //
                 // TODO: update the view model to show the "invalid user name" error
