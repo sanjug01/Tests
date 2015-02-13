@@ -133,11 +133,13 @@ namespace RdClient.Controls
         {
             _exitCursor = Window.Current.CoreWindow.PointerCursor;
             Window.Current.CoreWindow.PointerCursor = null;
+            this.MouseShapeElement.Visibility = Visibility.Visible;
         }
 
         protected override void OnPointerExited(PointerRoutedEventArgs args)
         {
             Window.Current.CoreWindow.PointerCursor = _exitCursor;
+            this.MouseShapeElement.Visibility = Visibility.Collapsed;
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
