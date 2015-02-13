@@ -63,7 +63,7 @@
                 vm.DeferAction(() => { });
                 Assert.Fail("Unexpected success");
             }
-            catch (DeferredExecutionExeption)
+            catch (DeferredExecutionException)
             {
                 // Success
             }
@@ -106,7 +106,7 @@
                     tvm.DeferAction(() => { });
                     Assert.Fail("Unexpected success");
                 }
-                catch(DeferredExecutionExeption)
+                catch(DeferredExecutionException)
                 {
                     // Success
                 }

@@ -2,9 +2,9 @@
 {
     using System;
 
-    public class DeferredExecutionExeption : Exception
+    public class DeferredExecutionException : Exception
     {
-        public DeferredExecutionExeption(string message, Exception innerException = null)
+        public DeferredExecutionException(string message, Exception innerException = null)
             : base(message, innerException)
         {
         }

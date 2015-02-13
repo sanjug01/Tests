@@ -192,7 +192,7 @@
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
     <Compile Include="Navigation\Contracts\IPresentationCompletionContract.cs" />
     <Compile Include="Navigation\Extensions\ApplicationBarExtension.cs" />
-    <Compile Include="Navigation\Extensions\DeferredExecutionExeption.cs" />
+    <Compile Include="Navigation\Extensions\DeferredExecutionException.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtension.cs" />
     <Compile Include="Navigation\Extensions\IApplicationBarSiteControl.cs" />
     <Compile Include="Navigation\Extensions\IDeferredExecutionSite.cs" />

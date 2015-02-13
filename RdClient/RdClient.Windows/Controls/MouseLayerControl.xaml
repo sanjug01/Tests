@@ -10,7 +10,8 @@
     d:DesignWidth="400"
     VerticalContentAlignment="Stretch"
     HorizontalContentAlignment="Stretch"
-    ManipulationMode="All">
+    ManipulationMode="All"
+    Unloaded="UserControl_Unloaded">
 
     <Canvas VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Transparent">
         <Image x:Name="MouseShapeElement" CacheMode="BitmapCache">
