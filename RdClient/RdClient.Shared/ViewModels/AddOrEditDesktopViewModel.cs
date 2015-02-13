@@ -105,29 +105,44 @@ namespace RdClient.Shared.ViewModels
 
             set
             {
-                SetProperty(ref _selectedUserOptionsIndex, value);
-
-                if(value >= 0)
+                if (SetProperty(ref _selectedUserOptionsIndex, value))
                 {
-                    switch(this.UserOptions[value].UserComboBoxType)
-                    {
-                        case UserComboBoxType.AddNew:
-                            //
-                            // Push the EditCredentialsView with a task to create new credentials
-                            // and save it in the data model.
-                            //
-                            NewCredentialsTask.Present(this.NavigationService, this.ApplicationDataModel,
-                                this.Desktop.HostName,
-                                credentialsId =>
-                                {
-                                    this.Desktop.CredentialsId = credentialsId;
-                                    this.Update();
-                                });
-                            break;
 
-                        case UserComboBoxType.AskEveryTime:
-                            this.Desktop.CredentialsId = Guid.Empty;
-                            break;
+                    if (value >= 0)
+                    {
+                        switch (this.UserOptions[value].UserComboBoxType)
+                        {
+                            case UserComboBoxType.AddNew:
+                                //
+                                // Push the EditCredentialsView with a task to create new credentials
+                                // and save it in the data model.
+                                //
+                                NewCredentialsTask.Present(this.NavigationService, this.ApplicationDataModel,
+                                    //
+                                    // Resource name in this case is the host name of the desktop object
+                                    //
+                                    this.Desktop.HostName,
+                                    //
+                                    // The editor has saved new credentials and reported their ID;
+                                    // Update the desktop object and reload the list od credentials.
+                                    //
+                                    credentialsId =>
+                                    {
+                                        this.Desktop.CredentialsId = credentialsId;
+                                        this.Update();
+                                    },
+                                    //
+                                    // The editor has been cancelled; reload the list of credentials and restore the
+                                    // selected item representing the current choice in the desktop object; if this is not done,
+                                    // the selection in the list will stay at the "Add new" item.
+                                    //
+                                    () => this.Update());
+                                break;
+
+                            case UserComboBoxType.AskEveryTime:
+                                this.Desktop.CredentialsId = Guid.Empty;
+                                break;
+                        }
                     }
                 }
             }

@@ -208,7 +208,27 @@
         }
 
         [TestMethod]
-        public void EditDesktop_ShouldSelectCorrectDefault()
+        public void EditDesktop_ShouldSelectAskAlways()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
+
+                DesktopModel desktop = new DesktopModel()
+                {
+                    HostName = "foo"
+                };
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+
+                Assert.AreEqual(0, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
+            }
+        }
+
+        [TestMethod]
+        public void EditDesktop_ShouldSelectCorrectCredentials()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
@@ -224,7 +244,9 @@
                 EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
                 ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
-                Assert.AreEqual(0, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
+                Assert.AreEqual(2, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
+                Assert.AreSame(credentials, _addOrEditDesktopViewModel.UserOptions[_addOrEditDesktopViewModel.SelectedUserOptionsIndex].Credentials.Model);
+                Assert.AreEqual(desktop.CredentialsId, _addOrEditDesktopViewModel.UserOptions[_addOrEditDesktopViewModel.SelectedUserOptionsIndex].Credentials.Id);
             }
         }
 

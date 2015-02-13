@@ -18,17 +18,21 @@
         private readonly IValidationRule _userNameRule;
         private readonly ApplicationDataModel _dataModel;
         private readonly Action<Guid> _credentialsAdded;
+        private readonly Action _viewCancelled;
         private readonly string _resourceName;
         private readonly CredentialsModel _credentials;
 
         public static void Present(INavigationService navigationService, ApplicationDataModel dataModel,
             string resourceName,
-            Action<Guid> credentialsAdded)
+            Action<Guid> credentialsAdded,
+            Action viewCancelled = null)
         {
-            navigationService.PushModalView("EditCredentialsView", new NewCredentialsTask(resourceName, dataModel, credentialsAdded));
+            navigationService.PushModalView("EditCredentialsView", new NewCredentialsTask(resourceName, dataModel, credentialsAdded, viewCancelled));
         }
 
-        private NewCredentialsTask(string resourceName, ApplicationDataModel dataModel, Action<Guid> credentialsAdded)
+        private NewCredentialsTask(string resourceName, ApplicationDataModel dataModel,
+            Action<Guid> credentialsAdded,
+            Action viewCancelled)
         {
             Contract.Requires(null != dataModel);
             Contract.Requires(null != _credentialsAdded);
@@ -38,6 +42,7 @@
             _resourceName = resourceName;
             _dataModel = dataModel;
             _credentialsAdded = credentialsAdded;
+            _viewCancelled = viewCancelled;
             _credentials = new CredentialsModel();
         }
 
@@ -113,6 +118,8 @@
 
         void IEditCredentialsTask.Cancelled(IEditCredentialsViewModel viewModel)
         {
+            if (null != _viewCancelled)
+                _viewCancelled();
         }
 
         private static string TrimViewModelString(string str)
