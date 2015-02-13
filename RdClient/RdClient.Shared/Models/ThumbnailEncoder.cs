@@ -24,7 +24,13 @@
 
         void IThumbnailEncoder.Update(CxWrappers.IRdpScreenSnapshot snapshot)
         {
-            throw new NotImplementedException();
+            ThumbnailUpdatedEventArgs e = new ThumbnailUpdatedEventArgs(GetSnapshotBytes(snapshot));
+
+            using(LockUpgradeableRead())
+            {
+                if (null != _thumbnailUpdated)
+                    _thumbnailUpdated(this, e);
+            }
         }
 
         event EventHandler<ThumbnailUpdatedEventArgs> IThumbnailEncoder.ThumbnailUpdated
