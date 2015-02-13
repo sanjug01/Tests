@@ -14,6 +14,7 @@ namespace RdClient.Shared.Test.ViewModels
         private TestData _testData;
         private ApplicationDataModel _dataModel;
         private Mock.NavigationService _navService;
+        private IModelContainer<CredentialsModel> _container;
         private CredentialsModel _cred;
         private CredentialViewModel _vm;
 
@@ -27,8 +28,9 @@ namespace RdClient.Shared.Test.ViewModels
                 ModelSerializer = new SerializableModelSerializer()
             };
             _navService = new Mock.NavigationService();
-            _vm = new CredentialViewModel(_testData.NewValidCredential());
-            _cred = _vm.Credentials;
+            _container = _testData.NewValidCredential();
+            _vm = new CredentialViewModel(_container);
+            _cred = _container.Model;
             _vm.Presented(_navService, _dataModel);
         }
 
@@ -55,7 +57,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestDeleteCommandShowsDeleteUserView()
         {
-            _navService.Expect("PushModalView", new List<object>() { "DeleteUserView", _cred, null }, 0);
+            _navService.Expect("PushModalView", new List<object>() { "DeleteUserView", _container, null }, 0);
             _vm.DeleteCommand.Execute(null);
         }
     }

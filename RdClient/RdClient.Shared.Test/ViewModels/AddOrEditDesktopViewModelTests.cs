@@ -258,7 +258,7 @@
                 EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
                 ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
 
-                navigation.Expect("PushModalView", new List<object> { "AddUserView", null, null }, null);
+                navigation.Expect("PushModalView", new List<object> { "EditCredentialsView", null, null }, null);
 
                 _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 1;
             }
