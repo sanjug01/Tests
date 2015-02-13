@@ -22,14 +22,19 @@
         {
             if (!TryDeferToUI(action))
             {
-                throw new DeferredExecutionExeption("Cannot defer execution from an inactive view model");
+                throw new DeferredExecutionException("Cannot defer execution from an inactive view model");
             }
         }
 
         public bool TryDeferToUI(Action action)
         {
             bool succeeded = false;
-            using (ReadWriteMonitor.Read(_monitor))
+            //
+            // Enter the upgradeable read lock because the dispatcher may execute the action delegate
+            // immediately, and the delegate may dismiss the view model, in which case SetDeferredExecution
+            // will be called and try enter the write lock.
+            //
+            using (ReadWriteMonitor.UpgradeableRead(_monitor))
             {
                 if (null != _dispatcher)
                 {
