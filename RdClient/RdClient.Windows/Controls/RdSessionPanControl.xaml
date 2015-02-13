@@ -12,14 +12,11 @@
     
         <!-- Pan and Zoom Control -->
         <Grid Name="PanControl" 
-              Width="60" Height="60" Visibility="Visible" Opacity="10"
+              Width="60" Height="60" 
+              Opacity="10"
               VerticalAlignment="Center" HorizontalAlignment="Center"
               ManipulationMode="TranslateX,TranslateY,TranslateInertia"
-              IsHitTestVisible="True"
-              >
-              <!--
-                IsHitTestVisible="{Binding HitTestableElement, ElementName=SessionPanControl, Converter={StaticResource HitTestableIfSelectedConverter}, ConverterParameter=PanKnob}"
-                -->
+              IsHitTestVisible="True">
 
             <Grid.Resources>
                 <Storyboard x:Name="ShowPanControlStoryboard">
@@ -90,11 +87,7 @@
                      StrokeThickness="0" 
                      Fill="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}" 
                      Height="15" Width="15"
-                     Visibility="Visible"
-                     >
-                <!--
-                Visibility="{Binding ScaleFactor, ElementName=SessionPanControl, Converter={StaticResource VisibleIfZoomedConverter}}"
-                -->
+                     Visibility="Visible">
                 <Polygon.RenderTransform>
                     <TransformGroup>
                         <RotateTransform Angle="0" CenterX="7.5" CenterY="7.5"/>
@@ -126,9 +119,6 @@
                      Fill="{Binding PanControlForegroundBrush, ElementName=SessionPanControl}" 
                      Height="15" Width="15"
                      Visibility="Visible">
-                <!--
-                <Visibility="{Binding ScaleFactor, ElementName=SessionPanControl, Converter={StaticResource VisibleIfZoomedConverter}}">
-                -->
                 <Polygon.RenderTransform>
                     <TransformGroup>
                         <RotateTransform Angle="180" CenterX="7.5" CenterY="7.5"/>

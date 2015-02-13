@@ -161,6 +161,7 @@
     <Compile Include="Input\Mouse\TouchModeFactory.cs" />
     <Compile Include="Input\ZoomPan\IPanTransform.cs" />
     <Compile Include="Input\ZoomPan\IZoomPanManipulator.cs" />
+    <Compile Include="Input\ZoomPan\IPanKnobTransform.cs" />
     <Compile Include="Input\ZoomPan\IZoomPanTransform.cs" />
     <Compile Include="Input\ZoomPan\IZoomTransform.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />

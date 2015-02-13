@@ -10,11 +10,56 @@ using System.Windows.Input;
 namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.Input.ZoomPan;
+    using RdClient.Shared.Input.Mouse;
+
+    public class PanKnobTransform : IPanKnobTransform, IPointerManipulator
+    {
+        public PanKnobTransformType TransformType { get; private set; }
+
+        public PanKnobTransform(PanKnobTransformType type)
+        {
+            TransformType = type;
+        }
+    }
+
+    public class PanKnobMoveTransform : IPanKnobTransform
+    {
+        public PanKnobMoveTransform(double deltaX, double deltaY)
+        {
+            TransformType = PanKnobTransformType.MoveKnob;
+            DeltaX = deltaX;
+            DeltaY = deltaX;
+        }
+        public PanKnobTransformType TransformType { get; private set; }
+        public double DeltaX { get; private set; }
+        public double DeltaY { get; private set; }
+    }
+
+    public class PanKnobPointerEventDispatcher : IPointerEventConsumer
+    {
+
+        public event EventHandler<PointerEvent> ConsumedEvent;
+
+        public ConsumptionMode ConsumptionMode
+        {
+            set { throw new NotImplementedException(); }
+        }
+
+        public void ConsumeEvent(PointerEvent pointerEvent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+    }
 
 
     public sealed class PanKnobViewModel : MutableObject
     {
-        private IZoomPanTransform _zoomPanTransform;
+        private IPanKnobTransform _panKnobTransform;
 
         private double _translateXFrom;
         private double _translateXTo;
@@ -41,19 +86,33 @@ namespace RdClient.Shared.ViewModels
             get { return _translateYTo; }
             set { this.SetProperty(ref _translateYTo, value); }
         }
-        public IZoomPanTransform ZoomPanTransform
+        public IPanKnobTransform PanKnobTransform
         {
-            get { return _zoomPanTransform; }
-            private set { this.SetProperty<IZoomPanTransform>(ref _zoomPanTransform, value); }
+            get { return _panKnobTransform; }
+            private set { this.SetProperty<IPanKnobTransform>(ref _panKnobTransform, value); }
         }
 
-        private readonly ICommand _panCommand;
-        public ICommand PanCommand { get { return _panCommand; } }
+        private readonly ICommand _moveKnobCommand;
+        public ICommand MoveKnobCommand { get { return _moveKnobCommand; } }
+
+        // handles press&hold, double press&hold and hold release to manage knob state
+        private IPointerEventConsumer _pointerEventConsumer;
+        public IPointerEventConsumer PointerEventConsumer
+        {
+            get { return _pointerEventConsumer; }
+            set { SetProperty(ref _pointerEventConsumer, value); }
+        }
 
         public PanKnobViewModel()
         {
-            _panCommand = new RelayCommand(new Action<object>(PanTranslate));
+            this.PointerEventConsumer = new PanKnobPointerEventDispatcher();
+            this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
+            this.PointerEventConsumer.ConsumedEvent += (s, o) =>
+            {
+                // TODO
+            };
 
+            _moveKnobCommand = new RelayCommand(new Action<object>(MovePanKnob));
 
             TranslateXFrom = 0.0;
             TranslateYFrom = 0.0;
@@ -61,50 +120,20 @@ namespace RdClient.Shared.ViewModels
             TranslateYTo = 0.0;
         }
 
-        private void PanTranslate(object o)
+        private void MovePanKnob(object o)
         {
-            IPanTransform panTransform = (o as IPanTransform);
+            PanKnobMoveTransform panTransform = (o as PanKnobMoveTransform);
             if (null != panTransform)
             {
-                this.ApplyPanTransform(panTransform.X, panTransform.Y);
-                this.ZoomPanTransform = new PanTransform(panTransform.X, panTransform.Y);
+                this.ApplyMoveTransform(panTransform.DeltaX, panTransform.DeltaY);
+                this.PanKnobTransform = new PanKnobMoveTransform(panTransform.DeltaX, panTransform.DeltaY);
             }
         }
 
-
-
-        private void ApplyPanTransform(double x, double y)
+        private void ApplyMoveTransform(double x, double y)
         {
             double panXTo = this.TranslateXTo + x;
             double panYTo = this.TranslateYTo + y;
-
-            // reset the zoom transformation
-
-            ////Point maxTranslationOffset;
-            ////Point minTranslationOffset;
-
-            ////maxTranslationOffset.X = WindowRect.Left - TransformRect.Left;
-            ////maxTranslationOffset.Y = WindowRect.Top - TransformRect.Top;
-            ////minTranslationOffset.X = WindowRect.Right - TransformRect.Right;
-            ////minTranslationOffset.Y = WindowRect.Bottom - TransformRect.Bottom;
-
-            ////if (panXTo < minTranslationOffset.X)
-            ////{
-            ////    panXTo = minTranslationOffset.X;
-            ////}
-            ////else if (panXTo > maxTranslationOffset.X)
-            ////{
-            ////    panXTo = maxTranslationOffset.X;
-            ////}
-
-            ////if (panYTo < minTranslationOffset.Y)
-            ////{
-            ////    panYTo = minTranslationOffset.Y;
-            ////}
-            ////else if (panYTo > maxTranslationOffset.Y)
-            ////{
-            ////    panYTo = maxTranslationOffset.Y;
-            ////}
 
             this.TranslateXFrom = this.TranslateXTo;
             this.TranslateYFrom = this.TranslateYTo;

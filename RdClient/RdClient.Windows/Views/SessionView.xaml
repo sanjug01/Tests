@@ -51,10 +51,7 @@
             TransformRect="{Binding ZoomPanViewModel.TransformRect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             ConnectCommand="{Binding ConnectCommand}"
             ViewSize="{Binding MouseViewModel.ViewSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-        <controls:RdSessionPanControl x:Name="SessionPanControl" 
-                                      Visibility="{Binding Path=ZoomPanViewModel.IsZoomInEnabled, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-        
+       
         <controls:MouseLayerControl x:Name="MouseLayer" 
                                     Background="Red"
                                     VerticalContentAlignment="Stretch"
@@ -63,6 +60,16 @@
                                     MouseShape="{Binding MouseViewModel.MouseShape}"
                                     HotSpot="{Binding MouseViewModel.HotSpot}"
                                     MousePosition="{Binding MouseViewModel.MousePosition}"/>
+
+        <controls:RdSessionPanControl x:Name="SessionPanControl" 
+                                      Visibility="{Binding ZoomPanViewModel.IsZoomInEnabled, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                                      PanKnobTransform="{Binding PanKnobViewModel.PanKnobTransform, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                                              
+                                      />
+                            <!-- 
+                                      PointerEventConsumer="{Binding PanKnobViewModel.PointerEventConsumer}"
+
+                            -->
+                                      
 
         <controls:SessionReconnectControl x:Name="SessionReconnectLayer" 
                                           VerticalAlignment="Center"
