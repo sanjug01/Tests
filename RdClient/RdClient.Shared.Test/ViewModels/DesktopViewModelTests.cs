@@ -35,8 +35,7 @@ namespace RdClient.Shared.Test.ViewModels
 
             _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            _vm = DesktopViewModel.Create(_dataModel.LocalWorkspace.Connections.Models[0], _dataModel, null);
-            ((DesktopViewModel)_vm).NavigationService = _navService;
+            _vm = DesktopViewModel.Create(_dataModel.LocalWorkspace.Connections.Models[0], _dataModel, null, _navService);
         }
 
         [TestCleanup]

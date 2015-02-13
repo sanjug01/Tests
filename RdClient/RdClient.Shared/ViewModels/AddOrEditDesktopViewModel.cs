@@ -2,6 +2,8 @@
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.ValidationRules;
+using RdClient.Shared.ViewModels.EditCredentialsTasks;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
 using System.Windows.Input;
@@ -82,7 +84,7 @@ namespace RdClient.Shared.ViewModels
             IsHostValid = true;
 
             this.UserOptions = new ObservableCollection<UserComboBoxElement>();
-            this.SelectedUserOptionsIndex = 0;
+            //this.SelectedUserOptionsIndex = 0;
             this.IsExpandedView = false;
         }
 
@@ -103,27 +105,30 @@ namespace RdClient.Shared.ViewModels
 
             set
             {
-                SetProperty(ref _selectedUserOptionsIndex, value, "SelectedUserOptionsIndex");
+                SetProperty(ref _selectedUserOptionsIndex, value);
 
-                int idx = value;
-
-                if(this.UserOptions.Count > 0 && this.UserOptions[idx].UserComboBoxType == UserComboBoxType.AddNew)
+                if(value >= 0)
                 {
-                    AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
-                    ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion();
-
-                    addUserCompleted.Completed += (sender, e) =>
+                    switch(this.UserOptions[value].UserComboBoxType)
                     {
-                        CredentialPromptResult result = e.Result as CredentialPromptResult;
+                        case UserComboBoxType.AddNew:
+                            //
+                            // Push the EditCredentialsView with a task to create new credentials
+                            // and save it in the data model.
+                            //
+                            NewCredentialsTask.Present(this.NavigationService, this.ApplicationDataModel,
+                                this.Desktop.HostName,
+                                credentialsId =>
+                                {
+                                    this.Desktop.CredentialsId = credentialsId;
+                                    this.Update();
+                                });
+                            break;
 
-                        if (result != null && !result.UserCancelled)
-                        {
-                            this.Desktop.CredentialsId = this.ApplicationDataModel.LocalWorkspace.Credentials.AddNewModel(result.Credentials);
-                        }
-                        Update();
-                    };
-
-                    NavigationService.PushModalView("AddUserView", args, addUserCompleted);
+                        case UserComboBoxType.AskEveryTime:
+                            this.Desktop.CredentialsId = Guid.Empty;
+                            break;
+                    }
                 }
             }
         }

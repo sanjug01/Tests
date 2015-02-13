@@ -60,7 +60,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IMockCall.cs" />
     <Compile Include="MockBase.cs" />
+    <Compile Include="MockCallback.cs" />
+    <Compile Include="MockExpectedCall.cs" />
+    <Compile Include="MockInvokedCall.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

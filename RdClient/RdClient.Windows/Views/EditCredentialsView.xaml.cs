@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RdClient.Shared.Navigation;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,11 +18,28 @@ using Windows.UI.Xaml.Navigation;
 
 namespace RdClient.Views
 {
-    public sealed partial class EditCredentialsView : UserControl
+    public sealed partial class EditCredentialsView : UserControl, IPresentableView
     {
         public EditCredentialsView()
         {
             this.InitializeComponent();
+        }
+
+        IViewModel IPresentableView.ViewModel
+        {
+            get { return this.DataContext as IViewModel; }
+        }
+
+        void IPresentableView.Activating(object activationParameter)
+        {
+        }
+
+        void IPresentableView.Presenting(INavigationService navigationService, object activationParameter)
+        {
+        }
+
+        void IPresentableView.Dismissing()
+        {
         }
     }
 }

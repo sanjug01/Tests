@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Helpers;
+﻿using RdClient.Shared.Data;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using System.Windows.Input;
@@ -7,13 +8,13 @@ namespace RdClient.Shared.ViewModels
 {
     public class CredentialViewModel: MutableObject, ICredentialViewModel
     {
-        private CredentialsModel _credentials;
+        private IModelContainer<CredentialsModel> _credentials;
         private INavigationService _nav;
         private ApplicationDataModel _dataModel;
         private RelayCommand _editCommand;
         private RelayCommand _deleteCommand;
 
-        public CredentialViewModel(CredentialsModel credentials)
+        public CredentialViewModel(IModelContainer<CredentialsModel> credentials)
         {
             _credentials = credentials;
             _editCommand = new RelayCommand((o) => this.EditCommandExecute());
@@ -22,8 +23,7 @@ namespace RdClient.Shared.ViewModels
 
         public CredentialsModel Credentials
         {
-            get { return _credentials; }
-            private set { SetProperty(ref _credentials, value); }
+            get { return _credentials.Model; }
         }
 
         public ICommand EditCommand
@@ -51,7 +51,7 @@ namespace RdClient.Shared.ViewModels
 
         private void DeleteCommandExecute()
         {
-            _nav.PushModalView("DeleteUserView", this.Credentials);
+            _nav.PushModalView("DeleteUserView", _credentials);
         }
     }
 }
