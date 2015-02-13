@@ -27,8 +27,8 @@ namespace RdClient.Shared.Test.ViewModels
                 ModelSerializer = new SerializableModelSerializer()
             };
             _navService = new Mock.NavigationService();
-            _cred = _testData.NewValidCredential().Model;
-            _vm = new CredentialViewModel(_cred);
+            _vm = new CredentialViewModel(_testData.NewValidCredential());
+            _cred = _vm.Credentials;
             _vm.Presented(_navService, _dataModel);
         }
 

@@ -104,7 +104,7 @@ namespace RdClient.Shared.ViewModels
 
         private ICredentialViewModel CreateCredentialsViewModel(IModelContainer<CredentialsModel> container)
         {
-            return new CredentialViewModel(container.Model);
+            return new CredentialViewModel(container);
         }
 
         private void OnCredentialsViewModelsPropertyChanged(object sender, PropertyChangedEventArgs e)

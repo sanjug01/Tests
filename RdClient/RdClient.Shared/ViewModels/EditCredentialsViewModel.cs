@@ -89,7 +89,7 @@
             {
                 if(this.SetProperty(ref _userName, value))
                 {
-                    _task.ValidateViewModel(this);
+                    this.CanDismiss = _task.Validate(this);
                 }
             }
         }
@@ -101,7 +101,13 @@
             {
                 if (this.SetProperty(ref _password, value))
                 {
-                    _task.ValidateViewModel(this);
+                    this.CanDismiss = _task.Validate(this);
+                    //
+                    // Enable the "reveal password" button if the password box is cleared completely,
+                    // after which any password will have to be entered by user.
+                    //
+                    if (string.IsNullOrEmpty(value))
+                        this.CanRevealPassword = true;
                 }
             }
         }
@@ -120,7 +126,10 @@
             _task = activationParameter as IEditCredentialsTask;
             Contract.Assert(null != _task, string.Format("EditCredentialsViewModel|presented with an invalid parameter|{0}", activationParameter));
 
-            _task.PopulateViewModel(this);
+            _task.Populate(this);
+            this.CanDismiss = _task.Validate(this);
+
+            this.CanRevealPassword = string.IsNullOrEmpty(_password);
         }
 
         protected override void OnDismissed()
@@ -132,12 +141,15 @@
 
         private void CancelView(object parameter)
         {
+            Contract.Assert(null != _task, "EditCredentialsViewModel.CancelView|cancelled without task");
+            _task.Cancelled(this);
             this.DismissModal(null);
         }
 
         private void DismissView(object parameter)
         {
             Contract.Assert(null != _task, "EditCredentialsViewModel.DismissView|dismissed without task");
+            _task.Dismissed(this);
             this.DismissModal(null);
         }
 
