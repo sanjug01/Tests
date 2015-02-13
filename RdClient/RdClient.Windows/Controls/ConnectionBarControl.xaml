@@ -46,7 +46,7 @@
                     />
             <Button x:Uid="SessionView-ConnectionBar-Title"                
                     Style="{StaticResource ConnectionBarTitleButtonStyle}"
-                    Content="{Binding HostName}" 
+                    Content="…" FontWeight="Bold"
                     Command="{Binding ConnectionBarCommand}"
                     />
             <ToggleButton x:Uid="SessionView-ConnectionBar-Keyboard"
