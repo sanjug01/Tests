@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RdClient.Shared.Models;
-using System.Windows.Input;
-using System.ComponentModel;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Models;
+    using System.ComponentModel;
+    using System.Windows.Input;
+    using Windows.UI.Xaml.Media.Imaging;
+
     public interface IDesktopViewModel : INotifyPropertyChanged
     {
         DesktopModel Desktop { get; }
 
         CredentialsModel Credentials { get; }
 
-        ThumbnailModel Thumbnail { get; }
+        BitmapImage Thumbnail { get; }
 
         bool IsSelected { get; set; }
 
@@ -26,5 +22,7 @@ namespace RdClient.Shared.ViewModels
         ICommand ConnectCommand { get; }
 
         ICommand DeleteCommand { get; }
+
+        void Dismissed();
     }
 }

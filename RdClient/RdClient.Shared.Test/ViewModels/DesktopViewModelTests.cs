@@ -6,7 +6,6 @@ using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -78,13 +77,6 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(_vm.IsSelected);
             _vm.IsSelected = false;
             Assert.IsFalse(_vm.IsSelected);
-        }
-
-        [TestMethod]
-        public void TestThumbnailCreatedCorrectly()
-        {
-            Assert.IsNotNull(_vm.Thumbnail);
-            Assert.AreSame(_vm.Thumbnail, _desktop.Thumbnail);
         }
 
         [TestMethod]

@@ -1,8 +1,8 @@
 ﻿using RdClient.Shared.Models;
 using RdClient.Shared.ViewModels;
-using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.DesignTime
 {
@@ -10,7 +10,6 @@ namespace RdClient.DesignTime
     {
         private CredentialsModel _cred = new CredentialsModel() { Password = "1234AbCd", Username = "exampleUser" };
         private DesktopModel _desktop = new DesktopModel() { HostName = "ExampleHostname" };
-        private ThumbnailModel _thumbnail = new ThumbnailModel();
         private PropertyChangedEventHandler _propertyChanged;
 
         public FakeDesktopViewModel()
@@ -29,9 +28,9 @@ namespace RdClient.DesignTime
             get { return _cred; }
         }
 
-        public ThumbnailModel Thumbnail
+        public BitmapImage Thumbnail
         {
-            get { return _thumbnail; }
+            get { return null; }
         }
 
         public bool IsSelected { get; set; }
@@ -52,6 +51,10 @@ namespace RdClient.DesignTime
         }
 
         public bool SelectionEnabled { get; set; }
+
+        void IDesktopViewModel.Dismissed()
+        {
+        }
 
         event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
         {

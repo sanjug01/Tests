@@ -53,8 +53,7 @@
             DesktopModel desktop = new DesktopModel() { HostName = "narf" };
             CredentialsModel credentials = new CredentialsModel() { Username = "narf", Password = "poit" };
 
-            _thumbnail = new Mock.Thumbnail();
-            ConnectionInformation _connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials, Thumbnail = _thumbnail };
+            ConnectionInformation _connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
             _sm = new SessionModel(_connectionFactory, _dispatcher);
 
