@@ -30,8 +30,10 @@ namespace RdClient.Controls
         }
 
         public static readonly DependencyProperty PointerEventConsumerProperty = DependencyProperty.Register(
-            "PointerEventConsumer", typeof(IPointerEventConsumer),
-            typeof(MouseLayerControl), new PropertyMetadata(true, PointerEventConsumerPropertyChanged));
+            "PointerEventConsumer", 
+            typeof(object),
+            typeof(RdSessionPanControl), 
+            new PropertyMetadata(null, PointerEventConsumerPropertyChanged));
         public IPointerEventConsumer PointerEventConsumer
         {
             private get { return (IPointerEventConsumer)GetValue(PointerEventConsumerProperty); }
@@ -155,7 +157,7 @@ namespace RdClient.Controls
 
         protected override void OnPointerReleased(PointerRoutedEventArgs args)
         {
-            //PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
 
             //// reset colors
             PanControlForegroundBrush = (SolidColorBrush)Application.Current.Resources["rdWhiteBrush"];
@@ -164,7 +166,8 @@ namespace RdClient.Controls
 
         protected override void OnPointerPressed(PointerRoutedEventArgs args)
         {
-            //PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Down));
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Down));
+            
             //// reverse colors 
             PanControlForegroundBrush = (SolidColorBrush)Application.Current.Resources["rdBlackBrush"];
             PanControlBackgroundBrush = (SolidColorBrush)Application.Current.Resources["rdWhiteBrush"];

@@ -64,12 +64,9 @@
         <controls:RdSessionPanControl x:Name="SessionPanControl" 
                                       Visibility="{Binding ZoomPanViewModel.IsZoomInEnabled, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
                                       PanKnobTransform="{Binding PanKnobViewModel.PanKnobTransform, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                                              
-                                      />
-                            <!-- 
                                       PointerEventConsumer="{Binding PanKnobViewModel.PointerEventConsumer}"
-
-                            -->
-                                      
+                                      />
+                                     
 
         <controls:SessionReconnectControl x:Name="SessionReconnectLayer" 
                                           VerticalAlignment="Center"

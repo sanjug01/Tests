@@ -12,7 +12,14 @@ namespace RdClient.Shared.ViewModels
     using RdClient.Shared.Input.ZoomPan;
     using RdClient.Shared.Input.Mouse;
 
-    public class PanKnobTransform : IPanKnobTransform, IPointerManipulator
+    public enum PanKnobState
+    {
+        Disabled,
+        Enabled,
+        Moving 
+    }
+
+    public class PanKnobTransform : IPanKnobTransform // , IPointerManipulator
     {
         public PanKnobTransformType TransformType { get; private set; }
 
@@ -40,31 +47,38 @@ namespace RdClient.Shared.ViewModels
 
         public event EventHandler<PointerEvent> ConsumedEvent;
 
+        private ConsumptionMode _consumptionMode;
         public ConsumptionMode ConsumptionMode
         {
-            set { throw new NotImplementedException(); }
+            set { _consumptionMode = value; }
         }
 
         public void ConsumeEvent(PointerEvent pointerEvent)
         {
-            throw new NotImplementedException();
+            if (ConsumedEvent != null)
+            {
+                ConsumedEvent(this, pointerEvent);
+            }
         }
 
         public void Reset()
         {
-            throw new NotImplementedException();
         }
     }
 
 
     public sealed class PanKnobViewModel : MutableObject
     {
+        private const ulong MAX_DOUBLE_TAP_US = 300000; // microseconds
+
         private IPanKnobTransform _panKnobTransform;
+        private PanKnobState _state;
 
         private double _translateXFrom;
         private double _translateXTo;
         private double _translateYFrom;
         private double _translateYTo;
+        private ulong _lastTouchTimeStamp;
 
         public double TranslateXFrom
         {
@@ -92,6 +106,12 @@ namespace RdClient.Shared.ViewModels
             private set { this.SetProperty<IPanKnobTransform>(ref _panKnobTransform, value); }
         }
 
+        public PanKnobState State
+        {
+            get { return _state; }
+            private set { this.SetProperty(ref _state, value); }
+        }
+
         private readonly ICommand _moveKnobCommand;
         public ICommand MoveKnobCommand { get { return _moveKnobCommand; } }
 
@@ -107,10 +127,7 @@ namespace RdClient.Shared.ViewModels
         {
             this.PointerEventConsumer = new PanKnobPointerEventDispatcher();
             this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
-            this.PointerEventConsumer.ConsumedEvent += (s, o) =>
-            {
-                // TODO
-            };
+            this.PointerEventConsumer.ConsumedEvent += HandlePointerEvent;
 
             _moveKnobCommand = new RelayCommand(new Action<object>(MovePanKnob));
 
@@ -118,6 +135,55 @@ namespace RdClient.Shared.ViewModels
             TranslateYFrom = 0.0;
             TranslateXTo = 0.0;
             TranslateYTo = 0.0;
+
+            _lastTouchTimeStamp = 0;
+            this.State = PanKnobState.Disabled;
+        }
+
+        void HandlePointerEvent(object sender, PointerEvent e)
+        {
+
+
+            if (TouchEventType.Down == e.ActionType)
+            {
+                // click or double click
+                bool doubleTapped = false;
+                if (_lastTouchTimeStamp != 0 && (e.TimeStamp - _lastTouchTimeStamp < MAX_DOUBLE_TAP_US))
+                {
+                    //
+                    // This is a double tap guesture so enable moving the pan control
+                    //
+                    doubleTapped = true;
+                    _lastTouchTimeStamp = 0;
+                }
+                else
+                {
+                    _lastTouchTimeStamp = e.TimeStamp;
+                }
+
+                if(doubleTapped)
+                {
+                    this.State = PanKnobState.Moving;
+                }
+                else
+                {
+                    this.State = PanKnobState.Enabled;
+                }
+            }
+            else if(TouchEventType.Up == e.ActionType)
+            {
+                // release
+                this.State = PanKnobState.Disabled;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
+            
+
+            // move
+
         }
 
         private void MovePanKnob(object o)
