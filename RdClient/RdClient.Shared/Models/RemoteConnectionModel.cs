@@ -26,6 +26,9 @@
         {
             _thumbnailEncoder = ThumbnailEncoder.Create(ThumbnailHeight);
             _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailEncoded;
+            if (null != _thumbnail)
+                _thumbnail.PropertyChanged += this.OnThumbnailPropertyChanged;
+
         }
 
         public ThumbnailModel Thumbnail
@@ -44,6 +47,11 @@
         public IThumbnailEncoder Encoder
         {
             get { return _thumbnailEncoder; }
+        }
+
+        protected override void Cleaned()
+        {
+            ((IPersistentStatus)_thumbnail).SetClean();
         }
 
         private void OnThumbnailPropertyChanged(object sender, PropertyChangedEventArgs e)

@@ -55,7 +55,6 @@ namespace RdClient.Shared.Test.Model
             _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
             Assert.AreEqual(1, _mockTimer.CallsToStart);
             Assert.IsTrue(_mockTimer.Running);
-            Assert.AreEqual(_snapshotter.firstSnapshotTime, _mockTimer.Period);
             Assert.IsFalse(_mockTimer.Recurring);
         }
 
@@ -70,7 +69,6 @@ namespace RdClient.Shared.Test.Model
             _mockTimer.Callback();            
             Assert.AreEqual(2, _mockTimer.CallsToStart);
             Assert.IsTrue(_mockTimer.Running);
-            Assert.AreEqual(_snapshotter.snapshotPeriod, _mockTimer.Period);
             Assert.AreEqual(true, _mockTimer.Recurring);
         }
 

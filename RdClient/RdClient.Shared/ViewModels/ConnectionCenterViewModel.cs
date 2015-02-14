@@ -142,7 +142,7 @@ namespace RdClient.Shared.ViewModels
         {
             Contract.Assert(container.Model is DesktopModel, "Data model for a desktop tile is not DesktopModel");
 
-            IDesktopViewModel dvm = DesktopViewModel.Create(container, this.ApplicationDataModel, this, this.NavigationService);
+            IDesktopViewModel dvm = DesktopViewModel.Create(container, this.ApplicationDataModel, this.Dispatcher, this.NavigationService);
 
             dvm.SelectionEnabled = this.DesktopsSelectable;
             dvm.PropertyChanged += DesktopSelection_PropertyChanged;

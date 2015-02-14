@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
@@ -21,20 +22,20 @@
         private readonly INavigationService _navigationService;
         private bool _isSelected;
         private bool _selectionEnabled;
-        private IExecutionDeferrer _executionDeferrer;
+        private IDeferredExecution _dispatcher;
         private BitmapImage _thumbnail;
 
         public static IDesktopViewModel Create(IModelContainer<RemoteConnectionModel> desktopContainer,
             ApplicationDataModel dataModel,
-            IExecutionDeferrer executionDeferrer,
+            IDeferredExecution dispatcher,
             INavigationService navigationService)
         {
-            return new DesktopViewModel(desktopContainer, dataModel, executionDeferrer, navigationService);
+            return new DesktopViewModel(desktopContainer, dataModel, dispatcher, navigationService);
         }
 
         private DesktopViewModel(IModelContainer<RemoteConnectionModel> desktopContainer,
             ApplicationDataModel dataModel,
-            IExecutionDeferrer executionDeferrer,
+            IDeferredExecution dispatcher,
             INavigationService navigationService)
         {
             Contract.Assert(null != desktopContainer);
@@ -45,7 +46,7 @@
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
-            _executionDeferrer = executionDeferrer;
+            _dispatcher = dispatcher;
             _navigationService = navigationService;
 
             _desktop = (DesktopModel)desktopContainer.Model;
@@ -64,6 +65,7 @@
             // to the thumbnail image.
             //
             _desktop.Thumbnail.ImageUpdated += this.OnAsyncThumbnailUpdated;
+            _thumbnail = _desktop.Thumbnail.Image;
         }
 
         public Guid DesktopId
@@ -220,7 +222,7 @@
 
         private void OnAsyncThumbnailUpdated(object sender, EventArgs e)
         {
-            this._executionDeferrer.TryDeferToUI(() =>
+            _dispatcher.Defer(() =>
             {
                 //
                 // Pull an image from the thumbnail model and put it in the Thumbnail property

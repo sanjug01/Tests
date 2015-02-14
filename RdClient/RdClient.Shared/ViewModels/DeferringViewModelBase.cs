@@ -3,6 +3,7 @@
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Navigation.Extensions;
     using System;
+    using System.Diagnostics.Contracts;
     using System.Threading;
 
     /// <summary>
@@ -49,6 +50,15 @@
         {
             base.DisposeManagedState();
             _monitor.Dispose();
+        }
+
+        protected IDeferredExecution Dispatcher
+        {
+            get
+            {
+                Contract.Assert(null != _dispatcher);
+                return _dispatcher;
+            }
         }
 
         void IDeferredExecutionSite.SetDeferredExecution(IDeferredExecution defEx)
