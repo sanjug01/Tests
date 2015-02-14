@@ -1,17 +1,31 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.Data;
-using System.ComponentModel;
-using System.Runtime.Serialization;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
+    using System.Runtime.Serialization;
 
     [DataContract(IsReference=true)]
     public abstract class RemoteConnectionModel : SerializableModel
     {
+        private static readonly uint ThumbnailHeight = 276;
+
         [DataMember(Name = "Thumbnail", IsRequired = false, EmitDefaultValue = false)]
         private ThumbnailModel _thumbnail;
 
+        private IThumbnailEncoder _thumbnailEncoder;
+
         protected RemoteConnectionModel()
         {
+            _thumbnailEncoder = ThumbnailEncoder.Create(ThumbnailHeight);
+            _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailEncoded;
+        }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            _thumbnailEncoder = ThumbnailEncoder.Create(ThumbnailHeight);
+            _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailEncoded;
         }
 
         public ThumbnailModel Thumbnail
@@ -21,19 +35,26 @@ using System.Runtime.Serialization;
                 if (null == _thumbnail)
                 {
                     _thumbnail = new ThumbnailModel();
-                    _thumbnail.PropertyChanged += this.OnThumbnailChanged;
+                    _thumbnail.PropertyChanged += this.OnThumbnailPropertyChanged;
                 }
                 return _thumbnail;
             }
         }
 
-        protected virtual void OnThumbnailChanged(IThumbnailEncoder sender, PropertyChangedEventArgs e)
+        public IThumbnailEncoder Encoder
         {
+            get { return _thumbnailEncoder; }
         }
 
-        private void OnThumbnailChanged(object sender, PropertyChangedEventArgs e)
+        private void OnThumbnailPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            this.OnThumbnailChanged((IThumbnailEncoder)sender, e);
+            SetModified();
+        }
+
+        private void OnThumbnailEncoded(object sender, ThumbnailUpdatedEventArgs e)
+        {
+            Contract.Assert(null != _thumbnail);
+            _thumbnail.UpdateEncodedBytes(e.EncodedImageBytes);
         }
     }
 }

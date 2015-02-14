@@ -44,7 +44,7 @@
                 <RowDefinition Height="42" />
             </Grid.RowDefinitions>
             <Image Source="ms-appx:///Assets/desktop_placeholder.png" Visibility="{Binding HasThumbnailImage, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Stretch="None"  HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <Image Grid.RowSpan="2" Source="{Binding Thumbnail.Image}" Visibility="{Binding HasThumbnailImage, Converter={StaticResource BooleanToVisibilityConverter}}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Image Grid.RowSpan="2" Source="{Binding Thumbnail}" Visibility="{Binding HasThumbnailImage, Converter={StaticResource BooleanToVisibilityConverter}}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <Grid Grid.Row="1" Background="{StaticResource ConnectionCenterHostnameBackgroundColor}">
                 <TextBlock Text="{Binding Desktop.HostName}" Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0"/>
             </Grid>

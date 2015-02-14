@@ -153,6 +153,7 @@ namespace RdClient.Shared.ViewModels
         private void RemovedDesktopViewModel(IDesktopViewModel desktopViewModel)
         {
             desktopViewModel.PropertyChanged -= this.DesktopSelection_PropertyChanged;
+            desktopViewModel.Dismissed();
         }
 
         private void AddDesktopExecute(object o)

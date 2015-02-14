@@ -14,7 +14,6 @@ namespace RdClient.Shared.Test.Model
         Mock.RdpConnectionFactory _connectionFactory;
         Mock.TimerFactory _timerFactory;
         Mock.Timer _timer;
-        Mock.Thumbnail _thumbnail;
         bool _connectionMatches;
 
         [TestInitialize]
@@ -29,8 +28,7 @@ namespace RdClient.Shared.Test.Model
             DesktopModel desktop = new DesktopModel() { HostName = "narf" };
             CredentialsModel credentials = new CredentialsModel() { Username = "narf", Password = "poit" };
 
-            _thumbnail = new Mock.Thumbnail();
-            ConnectionInformation _connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials, Thumbnail = _thumbnail };
+            ConnectionInformation _connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials };
 
             _sm = new SessionModel(_connectionFactory);
 

@@ -105,7 +105,7 @@ namespace RdClient.Shared.ViewModels
             {
                 foreach (IModelContainer<RemoteConnectionModel> c in this.ApplicationDataModel.LocalWorkspace.Connections.Models)
                 {
-                    c.Model.Thumbnail.EncodedImageBytes = null;
+                    c.Model.Thumbnail.Clear();
                 }
             }
 

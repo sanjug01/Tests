@@ -8,11 +8,10 @@
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using Windows.UI.Xaml.Media.Imaging;
 
     public class DesktopViewModel : Helpers.MutableObject, IDesktopViewModel
     {
-        private static readonly uint ThumbnailHeight = 276;
-
         private readonly RelayCommand _editCommand;
         private readonly RelayCommand _connectCommand;
         private readonly RelayCommand _deleteCommand;
@@ -20,11 +19,10 @@
         private readonly DesktopModel _desktop;
         private readonly ApplicationDataModel _dataModel;
         private readonly INavigationService _navigationService;
-        private readonly IThumbnailEncoder _thumbnailEncoder;
         private bool _isSelected;
         private bool _selectionEnabled;
         private IExecutionDeferrer _executionDeferrer;
-        private bool _hasThumbnailImage;
+        private BitmapImage _thumbnail;
 
         public static IDesktopViewModel Create(IModelContainer<RemoteConnectionModel> desktopContainer,
             ApplicationDataModel dataModel,
@@ -47,7 +45,6 @@
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
-            _thumbnailEncoder = ThumbnailEncoder.Create(ThumbnailHeight);
             _executionDeferrer = executionDeferrer;
             _navigationService = navigationService;
 
@@ -66,7 +63,7 @@
             // The view model sends the compressed thimbnails to the thumbnail model that sets its Image property
             // to the thumbnail image.
             //
-            _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailUpdated;
+            _desktop.Thumbnail.ImageUpdated += this.OnAsyncThumbnailUpdated;
         }
 
         public Guid DesktopId
@@ -134,15 +131,18 @@
 
         public bool HasThumbnailImage
         {
-            get { return _hasThumbnailImage; }
-            private set { SetProperty(ref _hasThumbnailImage, value); }
+            get { return null != _thumbnail; }
         }
 
-        public ThumbnailModel Thumbnail
+        public BitmapImage Thumbnail
         {
-            get 
+            get { return _thumbnail; }
+            set
             {
-                return _desktop.Thumbnail;
+                if(this.SetProperty(ref _thumbnail, value))
+                {
+                    EmitPropertyChanged("HasThumbnailImage");
+                }
             }
         }
 
@@ -159,6 +159,11 @@
         public ICommand DeleteCommand
         {
             get { return _deleteCommand; }
+        }
+
+        void IDesktopViewModel.Dismissed()
+        {
+            _desktop.Thumbnail.ImageUpdated -= this.OnAsyncThumbnailUpdated;
         }
 
         private void EditCommandExecute(object o)
@@ -202,8 +207,7 @@
             ConnectionInformation connectionInformation = new ConnectionInformation()
             {
                 Desktop = this.Desktop,
-                Credentials = credentials,
-                Thumbnail = _thumbnailEncoder
+                Credentials = credentials
             };
 
             _navigationService.NavigateToView("SessionView", connectionInformation);            
@@ -214,22 +218,15 @@
             _navigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(TemporaryModelContainer<DesktopModel>.WrapModel(_desktopId, _desktop)));            
         }
 
-        private void OnThumbnailUpdated(object sender, ThumbnailUpdatedEventArgs e)
+        private void OnAsyncThumbnailUpdated(object sender, EventArgs e)
         {
-            //
-            // Called on a timer worker thread that has received a snapshot from the server.
-            //
-            _executionDeferrer.TryDeferToUI(() =>
+            this._executionDeferrer.TryDeferToUI(() =>
             {
                 //
-                // Setting the encoded bytes also updates the Image property that is bound to an image on a desktop tile.
+                // Pull an image from the thumbnail model and put it in the Thumbnail property
+                // to update the view.
                 //
-                this.Thumbnail.EncodedImageBytes = e.EncodedImageBytes;
-
-                this.HasThumbnailImage = _dataModel.Settings.UseThumbnails
-                                            && null != this.Thumbnail.Image
-                                            && this.Thumbnail.Image.PixelHeight > 0 
-                                            && this.Thumbnail.Image.PixelHeight > 0;
+                this.Thumbnail = _desktop.Thumbnail.Image;
             });
         }
     }

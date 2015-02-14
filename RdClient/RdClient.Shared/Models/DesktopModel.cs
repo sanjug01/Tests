@@ -21,7 +21,7 @@
         [DataMember(Name = "FriendlyName", EmitDefaultValue = false, IsRequired = false)]
         private string _friendlyName;
 
-        [DataMember(Name="CredentialsId")]
+        [DataMember(Name = "CredentialsId", EmitDefaultValue = false)]
         private Guid _credentialsId;
 
         [DataMember(Name = "AdminSession", EmitDefaultValue = false)]
@@ -81,14 +81,6 @@
         public DesktopModel()
         {
             _credentialsId = Guid.Empty;
-        }
-
-        protected override void OnThumbnailChanged(IThumbnailEncoder sender, PropertyChangedEventArgs e)
-        {
-            //
-            // Mark the object as Modified so it will be saved by the application data model.
-            //
-            SetModified();
         }
     }
 }
