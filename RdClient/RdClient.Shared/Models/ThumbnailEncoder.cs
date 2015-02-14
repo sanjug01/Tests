@@ -59,7 +59,7 @@
 
                 encoder.FlushAsync().AsTask().Wait();
 
-                uint length = (uint)bytes.Length;
+                uint length = (uint)stream.Size;
 
                 bytes = new byte[length];
 

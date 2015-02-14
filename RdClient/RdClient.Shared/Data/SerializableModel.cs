@@ -97,6 +97,11 @@
         void IPersistentStatus.SetClean()
         {
             _persistentStatus = PersistentStatus.Clean;
+            Cleaned();
+        }
+
+        protected virtual void Cleaned()
+        {
         }
     }
 }

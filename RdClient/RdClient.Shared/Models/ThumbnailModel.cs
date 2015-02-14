@@ -33,6 +33,8 @@
         private void OnDeserialized(StreamingContext context)
         {
             _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+            if (null != _encodedImageBytes)
+                _image = DecodeImage(_encodedImageBytes);
         }
 
         public event EventHandler ImageUpdated
@@ -103,7 +105,7 @@
                 {
                     stream.WriteAsync(imageBytes.AsBuffer()).AsTask<uint, uint>().Wait();
                     stream.Seek(0);
-                    image.SetSourceAsync(stream).AsTask().Wait();
+                    image.SetSourceAsync(stream).AsTask();
                 }
             }
 
