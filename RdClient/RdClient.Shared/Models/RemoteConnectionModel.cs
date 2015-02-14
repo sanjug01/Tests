@@ -51,7 +51,8 @@
 
         protected override void Cleaned()
         {
-            ((IPersistentStatus)_thumbnail).SetClean();
+            if(null != _thumbnail)
+                ((IPersistentStatus)_thumbnail).SetClean();
         }
 
         private void OnThumbnailPropertyChanged(object sender, PropertyChangedEventArgs e)

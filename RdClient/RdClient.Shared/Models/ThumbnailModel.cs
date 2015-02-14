@@ -72,11 +72,21 @@
 
         public void Clear()
         {
-            if (null != _encodedImageBytes)
+            SetModified();
+
+            using (ReadWriteMonitor.Write(_monitor))
             {
-                _image = null;
-                _encodedImageBytes = null;
-                SetModified();
+                if (null != _encodedImageBytes)
+                {
+                    _image = null;
+                    _encodedImageBytes = null;
+                    //
+                    // The emitted event must be consumed by UI components and handling must be dispatched
+                    // to the UI thread.
+                    //
+                    if (null != _imageUpdated)
+                        _imageUpdated(this, EventArgs.Empty);
+                }
             }
         }
 
@@ -97,10 +107,11 @@
 
         private static BitmapImage DecodeImage(byte[] imageBytes)
         {
-            BitmapImage image = new BitmapImage();
+            BitmapImage image = null;
 
             if (null != imageBytes)
             {
+                image = new BitmapImage();
                 using (IRandomAccessStream stream = new InMemoryRandomAccessStream())
                 {
                     stream.WriteAsync(imageBytes.AsBuffer()).AsTask<uint, uint>().Wait();

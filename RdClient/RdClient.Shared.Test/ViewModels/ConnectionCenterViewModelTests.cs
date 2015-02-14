@@ -10,6 +10,7 @@ using RdClient.Shared.Navigation.Extensions;
 using RdClient.Shared.Data;
 using System.Collections;
 using RdClient.Shared.Test.Data;
+using RdClient.Shared.Helpers;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -20,6 +21,14 @@ namespace RdClient.Shared.Test.ViewModels
         private ApplicationDataModel _dataModel;
         private Mock.NavigationService _navService;
         private ConnectionCenterViewModel _vm;
+
+        private sealed class Dispatcher : IDeferredExecution
+        {
+            void IDeferredExecution.Defer(Action action)
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         [TestInitialize]
         public void TestSetup()
@@ -43,6 +52,7 @@ namespace RdClient.Shared.Test.ViewModels
                 _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
             }
             _vm = new ConnectionCenterViewModel();
+            _vm.CastAndCall<IDeferredExecutionSite>(site => site.SetDeferredExecution(new Dispatcher()));
             ((IDataModelSite)_vm).SetDataModel(_dataModel);
             ((IViewModel)_vm).Presenting(_navService, null, null);            
         }
