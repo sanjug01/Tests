@@ -12,13 +12,6 @@ namespace RdClient.Shared.ViewModels
     using RdClient.Shared.Input.ZoomPan;
     using RdClient.Shared.Input.Mouse;
 
-    public enum PanKnobState
-    {
-        Disabled,
-        Enabled,
-        Moving 
-    }
-
     public class PanKnobTransform : IPanKnobTransform // , IPointerManipulator
     {
         public PanKnobTransformType TransformType { get; private set; }

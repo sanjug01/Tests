@@ -55,6 +55,7 @@
     <Compile Include="Converters\BarItemsAlignmentFilteringConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\CredentialPromptModeToLocalizedMessageConverter.cs" />
+    <Compile Include="Converters\PanKnobStateToBackGroundBrushConverter.cs" />
     <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverter.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverter.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverter.cs" />
@@ -67,6 +68,10 @@
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverter.cs" />
     <Compile Include="Converters\ByteArrayToStringConverter.cs" />
+    <Compile Include="Converters\PanKnobStateToForegroundBrushConverter.cs" />
+    <Compile Include="Converters\ZoomPanStateToPanKnobVisibilityConverter.cs" />
+    <Compile Include="Converters\ZoomPanStateToZoomInVisibilityConverter.cs" />
+    <Compile Include="Converters\ZoomPanStateToZoomOutVisibilityConverter.cs" />
     <Compile Include="Converters\StringLengthToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
     <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverter.cs" />
@@ -163,6 +168,8 @@
     <Compile Include="Input\ZoomPan\IZoomPanManipulator.cs" />
     <Compile Include="Input\ZoomPan\IPanKnobTransform.cs" />
     <Compile Include="Input\ZoomPan\IZoomPanTransform.cs" />
+    <Compile Include="Input\ZoomPan\PanKnobState.cs" />
+    <Compile Include="Input\ZoomPan\ZoomPanState.cs" />
     <Compile Include="Input\ZoomPan\IZoomTransform.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
