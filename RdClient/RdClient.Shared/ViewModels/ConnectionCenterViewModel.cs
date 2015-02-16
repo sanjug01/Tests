@@ -1,15 +1,18 @@
-﻿using RdClient.Shared.Data;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using RdClient.Shared.Navigation.Extensions;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics.Contracts;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
-    public class ConnectionCenterViewModel : DeferringViewModelBase, IConnectionCenterViewModel, IApplicationBarItemsSource
+    using RdClient.Shared.Data;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
+
+    public class ConnectionCenterViewModel : DeferringViewModelBase,
+        IConnectionCenterViewModel,
+        IApplicationBarItemsSource,
+        ISessionFactorySite
     {
         //
         // Sorted collection of desktop models; sorting order is defined by the Order property of this object.
@@ -21,13 +24,22 @@ namespace RdClient.Shared.ViewModels
         private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
         private int _selectedCount;
         private bool _desktopsSelectable;
-
-        // app bar items
+        //
+        // App bar items
+        //
         private readonly BarItemModel _editItem;
         private readonly BarItemModel _deleteItem;
         private const string EditItemStringId = "Common_Edit_String";
         private const string DeleteItemStringId = "Common_Delete_String";
-
+        //
+        // Session factory object set by the navigation service extension through
+        // the ISessionFactorySite interface.
+        //
+        private ISessionFactory _sessionFactory;
+        //
+        // Alphabetical comparer of desktop model host names; the class is used to automatically
+        // sort the observable collection of local desktops.
+        //
         private class DesktopModelAlphabeticalComparer : IComparer<IModelContainer<RemoteConnectionModel>>
         {
             int IComparer<IModelContainer<RemoteConnectionModel>>.Compare(IModelContainer<RemoteConnectionModel> x, IModelContainer<RemoteConnectionModel> y)
@@ -38,10 +50,33 @@ namespace RdClient.Shared.ViewModels
 
                 if(null != dmX && null != dmY)
                 {
-                    comparison = string.CompareOrdinal(dmX.HostName, dmY.HostName);
+                    comparison = CompareStrings(dmX.HostName, dmY.HostName);
+
+                    if (0 == comparison)
+                        comparison = CompareStrings(dmX.FriendlyName, dmY.FriendlyName);
                 }
 
                 return comparison;
+            }
+
+            private static int CompareStrings(string x, string y)
+            {
+                int result = 0;
+
+                if(null != x && null != y)
+                {
+                    result = string.CompareOrdinal(x, y);
+                }
+                else if(null != x)
+                {
+                    result = 1;
+                }
+                else if(null != y)
+                {
+                    result = -1;
+                }
+
+                return result;
             }
         }
 
@@ -109,6 +144,11 @@ namespace RdClient.Shared.ViewModels
                 _editItem,
                 _deleteItem
             };
+        }
+
+        void ISessionFactorySite.SetSessionFactory(ISessionFactory sessionFactory)
+        {
+            _sessionFactory = sessionFactory;
         }
 
         protected override void OnPresenting(object activationParameter)

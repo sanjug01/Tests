@@ -40,7 +40,7 @@
         void IPersistentStatus.SetClean()
         {
             _model.SetClean();
-            _status = PersistentStatus.Clean;
+            this.Status = PersistentStatus.Clean;
         }
 
         public static IModelContainer<TModel> CreateForNewModel(TModel model)

@@ -77,7 +77,7 @@
         void IPersistentStatus.SetClean()
         {
             _model.SetClean();
-            _status = PersistentStatus.Clean;
+            this.Status = PersistentStatus.Clean;
         }
 
         private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)

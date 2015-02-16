@@ -90,10 +90,8 @@
 
             Assert.AreEqual(PersistentStatus.Clean, container.Status);
             Assert.AreEqual(PersistentStatus.Clean, container.Model.Status);
-            //
-            // Verify that a change from any state to Clean is not reported.
-            //
-            Assert.AreEqual(0, reportedChanges.Count);
+            Assert.AreEqual(1, reportedChanges.Count);
+            Assert.AreEqual("Status", reportedChanges[0].PropertyName);
         }
     }
 }
