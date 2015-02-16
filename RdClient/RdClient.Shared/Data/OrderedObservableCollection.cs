@@ -55,6 +55,16 @@
             sourceCollection.CollectionChanged += this.OnSourceCollectionChanged;
         }
 
+        private void SetUpModelObserver(TModel model)
+        {
+            model.PropertyChanged += this.OnModelPropertyChanged;
+        }
+
+        private void TearDownModelObserver(TModel model)
+        {
+            model.PropertyChanged -= this.OnModelPropertyChanged;
+        }
+
         private void OnSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (null != _order)
@@ -65,7 +75,7 @@
                         foreach (TModel model in e.NewItems)
                         {
                             InsertModelIntoOrderedCollection(model);
-                            model.PropertyChanged += this.OnModelPropertyChanged;
+                            SetUpModelObserver(model);
                         }
                         break;
 
@@ -85,7 +95,7 @@
                                 {
                                     if(object.ReferenceEquals(model, _orderedCollection[modelIndex]))
                                     {
-                                        _orderedCollection[modelIndex].PropertyChanged -= this.OnModelPropertyChanged;
+                                        TearDownModelObserver(_orderedCollection[modelIndex]);
                                         _orderedCollection.RemoveAt(modelIndex);
                                         break;
                                     }
@@ -163,7 +173,7 @@
             if (null == _order)
             {
                 foreach (TModel model in _orderedCollection)
-                    model.PropertyChanged -= this.OnModelPropertyChanged;
+                    TearDownModelObserver(model);
                 _orderedCollection.Clear();
             }
             else
@@ -173,13 +183,13 @@
                 models.Sort(_order);
 
                 foreach (TModel model in _orderedCollection)
-                    model.PropertyChanged -= this.OnModelPropertyChanged;
+                    TearDownModelObserver(model);
                 _orderedCollection.Clear();
 
                 foreach (TModel model in models)
                 {
                     _orderedCollection.Add(model);
-                    model.PropertyChanged += this.OnModelPropertyChanged;
+                    SetUpModelObserver(model);
                 }
             }
         }

@@ -41,6 +41,9 @@
                 ModelSerializer = new SerializableModelSerializer()
             };
 
+            ISessionFactory sessionFactory = new SessionFactory();
+            sessionFactory.DeferedExecution = deferredExecution;
+
             _navigationService = this.CreateNavigationService();
 
             _navigationService.Presenter = this.ViewPresenter;
@@ -51,6 +54,7 @@
             _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));
             _navigationService.Extensions.Add(this.CreateApplicationBarExtension(this.AppBarViewModel));
             _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory));
+            _navigationService.Extensions.Add(new SessionFactoryExtension() { SessionFactory = sessionFactory });
 
             _applicationDataSaver = new DeferredCommand(appDataModel.Save, deferredExecution, timerFactory, SaveDataDelayMilliseconds);
 

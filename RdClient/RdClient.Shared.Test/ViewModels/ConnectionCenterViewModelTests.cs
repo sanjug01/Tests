@@ -223,6 +223,140 @@ namespace RdClient.Shared.Test.ViewModels
             _vm.GoToSettingsCommand.Execute(null);
         }
 
+        [TestMethod]
+        public void ConnectionCenterViewModel_DifferentHostNames_SortedAlphabetically()
+        {
+            DesktopModel dm1 = new DesktopModel() { HostName = "alpha" };
+            DesktopModel dm2 = new DesktopModel() { HostName = "bravo" };
+            IList<Guid> ids = new List<Guid>();
+
+            foreach (IModelContainer<RemoteConnectionModel> c in _dataModel.LocalWorkspace.Connections.Models)
+                ids.Add(c.Id);
+            foreach (Guid id in ids)
+                _dataModel.LocalWorkspace.Connections.RemoveModel(id);
+
+            _dataModel.LocalWorkspace.Connections.AddNewModel(dm1);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(dm2);
+
+            Assert.AreEqual(2, _vm.DesktopViewModels.Count);
+            Assert.AreSame(dm1, _vm.DesktopViewModels[0].Desktop);
+            Assert.AreSame(dm2, _vm.DesktopViewModels[1].Desktop);
+        }
+
+        [TestMethod]
+        public void ConnectionCenterViewModel_SameHostNamesDifferentFriendlyNames_SortedAlphabetically()
+        {
+            DesktopModel dm1 = new DesktopModel() { HostName = "alpha", FriendlyName = "zod" };
+            DesktopModel dm2 = new DesktopModel() { HostName = "alpha", FriendlyName = "bod" };
+            IList<Guid> ids = new List<Guid>();
+
+            foreach (IModelContainer<RemoteConnectionModel> c in _dataModel.LocalWorkspace.Connections.Models)
+                ids.Add(c.Id);
+            foreach (Guid id in ids)
+                _dataModel.LocalWorkspace.Connections.RemoveModel(id);
+
+            _dataModel.LocalWorkspace.Connections.AddNewModel(dm1);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(dm2);
+
+            Assert.AreEqual(2, _vm.DesktopViewModels.Count);
+            Assert.AreSame(dm2, _vm.DesktopViewModels[0].Desktop);
+            Assert.AreSame(dm1, _vm.DesktopViewModels[1].Desktop);
+        }
+
+        [TestMethod]
+        public void ConnectionCenterViewModel_SameHostNamesNoFriendlyName1_SortedAlphabetically()
+        {
+            DesktopModel dm1 = new DesktopModel() { HostName = "alpha" };
+            DesktopModel dm2 = new DesktopModel() { HostName = "alpha", FriendlyName = "bod" };
+            IList<Guid> ids = new List<Guid>();
+
+            foreach (IModelContainer<RemoteConnectionModel> c in _dataModel.LocalWorkspace.Connections.Models)
+                ids.Add(c.Id);
+            foreach (Guid id in ids)
+                _dataModel.LocalWorkspace.Connections.RemoveModel(id);
+
+            _dataModel.LocalWorkspace.Connections.AddNewModel(dm1);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(dm2);
+
+            Assert.AreEqual(2, _vm.DesktopViewModels.Count);
+            Assert.AreSame(dm1, _vm.DesktopViewModels[0].Desktop);
+            Assert.AreSame(dm2, _vm.DesktopViewModels[1].Desktop);
+        }
+
+        [TestMethod]
+        public void ConnectionCenterViewModel_SameHostNamesNoFriendlyName2_SortedAlphabetically()
+        {
+            DesktopModel dm1 = new DesktopModel() { HostName = "alpha", FriendlyName = "zod" };
+            DesktopModel dm2 = new DesktopModel() { HostName = "alpha" };
+            IList<Guid> ids = new List<Guid>();
+
+            foreach (IModelContainer<RemoteConnectionModel> c in _dataModel.LocalWorkspace.Connections.Models)
+                ids.Add(c.Id);
+            foreach (Guid id in ids)
+                _dataModel.LocalWorkspace.Connections.RemoveModel(id);
+
+            _dataModel.LocalWorkspace.Connections.AddNewModel(dm1);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(dm2);
+
+            Assert.AreEqual(2, _vm.DesktopViewModels.Count);
+            Assert.AreSame(dm2, _vm.DesktopViewModels[0].Desktop);
+            Assert.AreSame(dm1, _vm.DesktopViewModels[1].Desktop);
+        }
+
+        [TestMethod]
+        public void ConnectionCenterViewModel_ChangeHostName_ResortedAlphabetically()
+        {
+            DesktopModel dm1 = new DesktopModel() { HostName = "alpha", FriendlyName = "zod" };
+            DesktopModel dm2 = new DesktopModel() { HostName = "bravo", FriendlyName = "bod" };
+            IList<Guid> ids = new List<Guid>();
+
+            foreach (IModelContainer<RemoteConnectionModel> c in _dataModel.LocalWorkspace.Connections.Models)
+                ids.Add(c.Id);
+            foreach (Guid id in ids)
+                _dataModel.LocalWorkspace.Connections.RemoveModel(id);
+
+            _dataModel.LocalWorkspace.Connections.AddNewModel(dm1);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(dm2);
+            dm1.HostName = "delta";
+            //
+            // Save the data model to apply all pending changes and trigger re-sorting
+            // of all ordered observable collections.
+            //
+            _dataModel.Save.Execute(null);
+
+            Assert.AreEqual(2, _vm.DesktopViewModels.Count);
+            Assert.AreSame(dm2, _vm.DesktopViewModels[0].Desktop);
+            Assert.AreSame(dm1, _vm.DesktopViewModels[1].Desktop);
+        }
+
+        [TestMethod]
+        public void ConnectionCenterViewModel_ChangeFriendlyName_ResortedAlphabetically()
+        {
+            DesktopModel dm1 = new DesktopModel() { HostName = "alpha", FriendlyName = "zod" };
+            DesktopModel dm2 = new DesktopModel() { HostName = "alpha", FriendlyName = "bod" };
+            IList<Guid> ids = new List<Guid>();
+
+            foreach (IModelContainer<RemoteConnectionModel> c in _dataModel.LocalWorkspace.Connections.Models)
+                ids.Add(c.Id);
+            foreach (Guid id in ids)
+                _dataModel.LocalWorkspace.Connections.RemoveModel(id);
+
+            _dataModel.LocalWorkspace.Connections.AddNewModel(dm1);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(dm2);
+            dm2.FriendlyName = "zug";
+            //
+            // Save the data model to apply all pending changes and trigger re-sorting
+            // of all ordered observable collections (sorting is triggered by the change
+            // of the "Status" property of IModelContainer  to Clean in the original collection of
+            // remote connections in the data model.
+            //
+            _dataModel.Save.Execute(null);
+
+            Assert.AreEqual(2, _vm.DesktopViewModels.Count);
+            Assert.AreSame(dm1, _vm.DesktopViewModels[0].Desktop);
+            Assert.AreSame(dm2, _vm.DesktopViewModels[1].Desktop);
+        }
+
         private void AssertDesktopViewModelSelectionEnabledMatchesDesktopsSelectable()
         {
             foreach (DesktopViewModel dvm in _vm.DesktopViewModels)
