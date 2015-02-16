@@ -1,11 +1,10 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.CxWrappers.Utils;
+using RdClient.Shared.Data;
 using RdClient.Shared.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using System.Linq;
 
 namespace RdClient.Shared.Models
 {
@@ -51,43 +50,58 @@ namespace RdClient.Shared.Models
     public class SessionModel : ISessionModel
     {
         public static readonly int MaxReconnectAttempts = 20;
+
+        private readonly IRdpConnectionFactory _connectionFactory;
+        private readonly IDeferredExecution _deferredExecution;
+        private readonly ICertificateTrust _certificateTrust;
+
         public event EventHandler<ConnectionCreatedArgs> ConnectionCreated;
         public event EventHandler<ConnectionAutoReconnectingArgs> ConnectionAutoReconnecting;
         public event EventHandler<ConnectionAutoReconnectCompleteArgs> ConnectionAutoReconnectComplete;
 
-        private readonly IRdpConnectionFactory _connectionFactory;
         private IRdpConnection _rdpConnection;
-        private List<IRdpCertificate> _acceptedCertificates;
+
+        public SessionModel(IRdpConnectionFactory connectionFactory, IDeferredExecution deferredExecution)
+        {
+            Contract.Requires(connectionFactory != null);
+            Contract.Assert(null != deferredExecution);
+
+            _connectionFactory = connectionFactory;
+            _deferredExecution = deferredExecution;
+            _certificateTrust = new CertificateTrust();
+        }
         
         private void EmitConnectionCreated(ConnectionCreatedArgs args)
         {
-            if (ConnectionCreated != null)
+            _deferredExecution.Defer(() =>
             {
-                ConnectionCreated(this, args);
-            }
+                if (ConnectionCreated != null)
+                {
+                    ConnectionCreated(this, args);
+                }
+            });
         }
 
         private void EmitConnectionAutoReconnecting(ConnectionAutoReconnectingArgs args)
         {
-            if (ConnectionAutoReconnecting != null)
+            _deferredExecution.Defer(() =>
             {
-                ConnectionAutoReconnecting(this, args);
-            }
+                if (ConnectionAutoReconnecting != null)
+                {
+                    ConnectionAutoReconnecting(this, args);
+                }
+            });
         }
 
         private void EmitConnectionAutoReconnectComplete(ConnectionAutoReconnectCompleteArgs args)
         {
-            if (ConnectionAutoReconnectComplete != null)
+            _deferredExecution.Defer(() =>
             {
-                ConnectionAutoReconnectComplete(this, args);
-            }
-        }
-
-        public SessionModel(IRdpConnectionFactory connectionFactory)
-        {
-            Contract.Requires(connectionFactory != null);
-            _connectionFactory = connectionFactory;
-            _acceptedCertificates = new List<IRdpCertificate>();
+                if (ConnectionAutoReconnectComplete != null)
+                {
+                    ConnectionAutoReconnectComplete(this, args);
+                }
+            });
         }
 
         public void Connect(ConnectionInformation connectionInformation, ITimerFactory timerFactory, GeneralSettings settings)
@@ -129,7 +143,7 @@ namespace RdClient.Shared.Models
         void ISessionModel.AcceptCertificate(IRdpCertificate certificate)
         {
             Contract.Assert(null != certificate);
-            _acceptedCertificates.Add(certificate);            
+            _certificateTrust.TrustCertificate(certificate);
         }
 
         /// <summary>
@@ -140,15 +154,7 @@ namespace RdClient.Shared.Models
         bool ISessionModel.IsCertificateAccepted(IRdpCertificate certificate)
         {
             Contract.Assert(null != certificate);
-            foreach(IRdpCertificate accepterCertificate in _acceptedCertificates)
-            {
-                // compare serial numbers
-                if (certificate.SerialNumber.SequenceEqual<byte>(accepterCertificate.SerialNumber))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return _certificateTrust.IsCertificateTrusted(certificate);
         }
 
         void HandleClientAutoReconnectComplete(object sender, ClientAutoReconnectCompleteArgs e)

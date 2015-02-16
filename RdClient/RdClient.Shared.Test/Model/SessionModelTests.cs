@@ -1,13 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RdClient.Shared.CxWrappers;
-using RdClient.Shared.CxWrappers.Errors;
-using RdClient.Shared.Models;
-using System.Collections.Generic;
-
-namespace RdClient.Shared.Test.Model
+﻿namespace RdClient.Shared.Test.Model
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.CxWrappers.Errors;
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Models;
+    using System;
+    using System.Collections.Generic;
+
     [TestClass]
-    public class SessionModelTests
+    public sealed class SessionModelTests
     {
         SessionModel _sm;
         Mock.RdpConnection _connection;
@@ -15,7 +17,28 @@ namespace RdClient.Shared.Test.Model
         Mock.TimerFactory _timerFactory;
         Mock.Timer _timer;
         Mock.Thumbnail _thumbnail;
+        Dispatcher _dispatcher;
         bool _connectionMatches;
+
+        private sealed class Dispatcher : IDeferredExecution
+        {
+            public IList<Action> DeferredActions = new List<Action>();
+
+            public void Dispatch()
+            {
+                foreach(Action action in this.DeferredActions)
+                {
+                    action();
+                }
+                this.DeferredActions.Clear();
+            }
+
+            void IDeferredExecution.Defer(Action action)
+            {
+                Assert.IsNotNull(action);
+                this.DeferredActions.Add(action);
+            }
+        }
 
         [TestInitialize]
         public void TestSetup()
@@ -23,6 +46,7 @@ namespace RdClient.Shared.Test.Model
             _connection = new Mock.RdpConnection(null);
             _connectionFactory = new Mock.RdpConnectionFactory();
             _timerFactory = new Mock.TimerFactory();
+            _dispatcher = new Dispatcher();
             _timer = new Mock.Timer();
             _connectionMatches = false;
 
@@ -32,7 +56,7 @@ namespace RdClient.Shared.Test.Model
             _thumbnail = new Mock.Thumbnail();
             ConnectionInformation _connectionInformation = new ConnectionInformation() { Desktop = desktop, Credentials = credentials, Thumbnail = _thumbnail };
 
-            _sm = new SessionModel(_connectionFactory);
+            _sm = new SessionModel(_connectionFactory, _dispatcher);
 
             _connectionFactory.Expect("CreateInstance", new List<object>(), _connection);
             _timerFactory.Expect("CreateTimer", new List<object>(), _timer);
@@ -52,18 +76,22 @@ namespace RdClient.Shared.Test.Model
             _timerFactory.Dispose();
             _connectionFactory.Dispose();
             _connection.Dispose();
+            Assert.AreEqual(0, _dispatcher.DeferredActions.Count);
+            _dispatcher = null;
         }
 
         [TestMethod]
         public void ConnectionCreatedArgs_Constructor()
         {
             ConnectionCreatedArgs cca = new ConnectionCreatedArgs(_connection);
+            _dispatcher.Dispatch();
             Assert.AreSame(_connection, cca.RdpConnection);
         }
 
         [TestMethod]
         public void SessionModel_ShouldConnect()
         {
+            _dispatcher.Dispatch();
             Assert.IsTrue(_connectionMatches);            
         }
 
@@ -71,6 +99,7 @@ namespace RdClient.Shared.Test.Model
         public void SessionModel_ShouldDisconnect()
         {
             _connection.Expect("Disconnect", new List<object>() { }, 0);
+            _dispatcher.Dispatch();
             _sm.Disconnect();            
         }
     }
