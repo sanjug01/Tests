@@ -20,9 +20,9 @@ namespace RdClient.Shared.CxWrappers
             get {return _serverCertificateError.errorCode; }
         }
 
-        public CertificateErrors ErrorFlags 
+        public CertificateError ErrorFlags 
         { 
-            get { return (CertificateErrors) _serverCertificateError.errorFlags; } 
+            get { return (CertificateError) _serverCertificateError.errorFlags; } 
         }
 
         public ServerCertificateErrorSource ErrorSource 

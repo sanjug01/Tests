@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Converters;
+using RdClient.Shared.Converters;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
 using System;
@@ -13,34 +14,36 @@ namespace RdClient.Shared.Test.Converters
         private RdpCertificateToErrorListConverter _converter;
         private IStringTable _stringTable;
         private Mock.RdpCertificate _cert;
-        private IList<CertificateErrors> _handledErrors;
+        private IList<CertificateError> _handledErrors;
 
         [TestInitialize]
         public void TestSetup()
         {            
             _stringTable = new Mock.LocalizedString();
             _converter = new RdpCertificateToErrorListConverter();
-            _converter.LocalizedString = _stringTable;
+            TypeToLocalizedStringConverter ttlsc = new TypeToLocalizedStringConverter();
+            ttlsc.LocalizedString = _stringTable;
+            _converter.TypeToLocalizedStringConverter = ttlsc;
             _cert = new Mock.RdpCertificate();
             _cert.Error = new Mock.RdpCertificateError();
-            _handledErrors = new List<CertificateErrors>()
+            _handledErrors = new List<CertificateError>()
             {
-                CertificateErrors.Expired,
-                CertificateErrors.NameMismatch,
-                CertificateErrors.UntrustedRoot,
-                CertificateErrors.Revoked,
-                CertificateErrors.RevocationUnknown,
-                CertificateErrors.MismatchedCert,
-                CertificateErrors.WrongEKU,
-                CertificateErrors.Critical
+                CertificateError.Expired,
+                CertificateError.NameMismatch,
+                CertificateError.UntrustedRoot,
+                CertificateError.Revoked,
+                CertificateError.RevocationUnknown,
+                CertificateError.MismatchedCert,
+                CertificateError.WrongEKU,
+                CertificateError.Critical
             };
         }
 
         [TestMethod]
         public void ConvertCertWithAllHandledErrorsReturnsCorrectNumberOfErrorStrings()
         {
-            CertificateErrors allErrors = _handledErrors[0];
-            foreach (CertificateErrors certErrorFlag in _handledErrors)
+            CertificateError allErrors = _handledErrors[0];
+            foreach (CertificateError certErrorFlag in _handledErrors)
             {
                 allErrors |= certErrorFlag;
             }
@@ -75,7 +78,7 @@ namespace RdClient.Shared.Test.Converters
         [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertThrowsIfLocalizedStringPropertyIsNull()
         {
-            _converter.LocalizedString = null;
+            _converter.TypeToLocalizedStringConverter = null;
             _converter.Convert(_cert, null, null, null);
         }
     }

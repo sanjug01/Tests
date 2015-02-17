@@ -14,7 +14,7 @@ namespace RdClient.Shared.Test.Mock
         /// <param name="errorCode">initial errorCode value</param>
         /// <param name="errorFlags">initial errorFlags value</param>
         /// <param name="errorSource">initial errorSource value</param>
-        public RdpCertificateError(int errorCode = 1, CertificateErrors errorFlags = CertificateErrors.UntrustedRoot, ServerCertificateErrorSource errorSource = ServerCertificateErrorSource.None) 
+        public RdpCertificateError(int errorCode = 1, CertificateError errorFlags = CertificateError.UntrustedRoot, ServerCertificateErrorSource errorSource = ServerCertificateErrorSource.None) 
         {
             ErrorCode = errorCode;
             ErrorFlags = errorFlags;
@@ -22,7 +22,7 @@ namespace RdClient.Shared.Test.Mock
         }
 
         public int ErrorCode { get; set; }
-        public CertificateErrors ErrorFlags { get; set; }
+        public CertificateError ErrorFlags { get; set; }
         public ServerCertificateErrorSource ErrorSource { get; set; }
     }
 

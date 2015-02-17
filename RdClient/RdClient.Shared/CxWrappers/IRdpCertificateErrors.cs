@@ -11,7 +11,7 @@ namespace RdClient.Shared.CxWrappers
     }
 
     [Flags]
-    public enum CertificateErrors
+    public enum CertificateError
     {
         Expired = 1,
         NameMismatch = 2,
@@ -28,7 +28,7 @@ namespace RdClient.Shared.CxWrappers
     {
         int ErrorCode { get; }
 
-        CertificateErrors ErrorFlags { get; }
+        CertificateError ErrorFlags { get; }
 
         ServerCertificateErrorSource ErrorSource { get; }
 

@@ -19,11 +19,7 @@
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
         <c:ByteArrayToStringConverter x:Key="ByteArrayToStringConverter" />
-        <c:RdpCertificateToErrorListConverter x:Key="RdpCertificateToErrorListConverter">
-            <c:RdpCertificateToErrorListConverter.LocalizedString>
-                <helpers:LocalizedString/>
-            </c:RdpCertificateToErrorListConverter.LocalizedString>
-        </c:RdpCertificateToErrorListConverter>
+        <c:RdpCertificateToErrorListConverter x:Key="RdpCertificateToErrorListConverter" TypeToLocalizedStringConverter="{StaticResource TypeToLocalizedStringConverter}" />
     </Page.Resources>
 
 
