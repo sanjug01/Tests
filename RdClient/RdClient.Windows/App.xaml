@@ -5,6 +5,8 @@
     xmlns:local="using:RdClient"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:model="using:RdClient.Shared.Models"
+    xmlns:conv="using:RdClient.Shared.Converters"
+    xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:winmodel="using:RdClient.Models"
     xmlns:lifetime="using:RdClient.LifeTimeManagement"
     RequestedTheme="Light">
@@ -24,6 +26,11 @@
                 </lifetime:LifeTimeManager.RootFrameManager>
             </lifetime:LifeTimeManager>
 
+            <conv:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter" >
+                <conv:TypeToLocalizedStringConverter.LocalizedString>
+                    <helpers:LocalizedString />
+                </conv:TypeToLocalizedStringConverter.LocalizedString>
+            </conv:TypeToLocalizedStringConverter>
         </ResourceDictionary>
     </Application.Resources>
 

@@ -78,7 +78,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Converters\CredentialPromptModeToLocalizedMessageConverterTests.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\ZoomPanStateConvertersTests.cs" />
     <Compile Include="Converters\PanKnobStateConvertersTests.cs" />

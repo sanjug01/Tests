@@ -587,11 +587,11 @@
     <value>Delete user:</value>
     <comment>Title displayed at the top of the delete user confirmation. </comment>
   </data>
-  <data name="CredentialPrompt_Message_FreshCredsNeeded_String" xml:space="preserve">
+  <data name="CredentialPromptMode_FreshCredentialsNeeded_String" xml:space="preserve">
     <value>The remote PC does not accept saved credentials. Enter your credentials and try again.</value>
     <comment>Text in the credential prompt dialog shown when a connection attempt failed because the credentials were invalid.</comment>
   </data>
-  <data name="CredentialPrompt_Message_InvalidCredentials_String" xml:space="preserve">
+  <data name="CredentialPromptMode_InvalidCredentials_String" xml:space="preserve">
     <value>The credentials that were used to connect to the remote PC didn't work. Enter different credentials and try again.</value>
     <comment>Text in the credential prompt dialog when fresh credentials are required.</comment>
   </data>
