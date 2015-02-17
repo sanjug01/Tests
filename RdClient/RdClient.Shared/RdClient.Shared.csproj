@@ -80,6 +80,7 @@
     <Compile Include="CxWrappers\Errors\LogonError.cs" />
     <Compile Include="CxWrappers\Errors\NetBIOSResolveError.cs" />
     <Compile Include="CxWrappers\Errors\RadcError.cs" />
+    <Compile Include="CxWrappers\Errors\RdpCertificateError.cs" />
     <Compile Include="CxWrappers\Errors\RdpDisconnectReason.cs" />
     <Compile Include="CxWrappers\Errors\IRdpError.cs" />
     <Compile Include="CxWrappers\Errors\XPlatError.cs" />

@@ -16,11 +16,7 @@
 
     <Page.Resources>
         <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-        <cv:RdpErrorToLocalizedStringConverter x:Key="RdpErrorToLocalizedStringConverter">
-            <cv:RdpErrorToLocalizedStringConverter.LocalizedString>
-                <helpers:LocalizedString/>
-            </cv:RdpErrorToLocalizedStringConverter.LocalizedString>
-        </cv:RdpErrorToLocalizedStringConverter>
+        <cv:RdpErrorToLocalizedStringConverter x:Key="RdpErrorToLocalizedStringConverter" TypeToLocalizedStringConverter="{StaticResource TypeToLocalizedStringConverter}" />
     </Page.Resources>
     
     <Grid>

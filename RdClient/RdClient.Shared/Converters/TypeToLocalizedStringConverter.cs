@@ -10,14 +10,19 @@ namespace RdClient.Shared.Converters
 {
     public class TypeToLocalizedStringConverter : IValueConverter
     {
-        public IStringTable LocalizedString { private get; set; }
+        public IStringTable LocalizedString { get; set; }
 
-        public object Convert(object value, Type targetType, object parameter, string language)
+        public string GetKey(object value)
         {
             string typeName = value.GetType().FullName.Split('.').Last();
             string key = typeName + "_" + value.ToString() + "_String";
 
-            return this.LocalizedString.GetLocalizedString(key);
+            return key;
+        }
+
+        public object Convert(object value, Type targetType, object parameter, string language)
+        {
+            return this.LocalizedString.GetLocalizedString(GetKey(value));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

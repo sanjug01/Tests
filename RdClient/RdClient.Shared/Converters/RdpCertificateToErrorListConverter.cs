@@ -29,7 +29,7 @@ namespace RdClient.Converters
                 {
                     if(CertificateErrorHelper.ErrorContainsFlag(cert.Error.ErrorFlags, err))
                     {
-                        errorList.Add(this.TypeToLocalizedStringConverter.Convert(err, typeof(string), null, null) as string);
+                        errorList.Add(this.TypeToLocalizedStringConverter.Convert(err, typeof(string), parameter, language) as string);
                     }
                 }
 

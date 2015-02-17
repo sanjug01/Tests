@@ -26,22 +26,12 @@
             switch (this.RadcErrorType)
             {
                 case (RadcStatus.Success):
-                    status = "Success";
-                    break;
                 case (RadcStatus.PartialFailure):
-                    status = "PartialFailure";
-                    break;
                 case (RadcStatus.CompleteFailure):
-                    status = "CompleteFailure";
-                    break;
                 case (RadcStatus.CompleteFailureOnFirstSignIn):
-                    status = "CompleteFailureOnFirstSignIn";
-                    break;
                 case (RadcStatus.NetworkFailure):
-                    status = "NetworkFailure";
-                    break;
                 case (RadcStatus.Unknown):
-                    status = "Unknown";
+                    status = this.RadcErrorType.ToString();
                     break;
                 default:
                     status = "undefined error?!";
@@ -49,11 +39,6 @@
             }
 
             return "RadcError: " + status;
-        }
-
-        public string Category
-        {
-            get { return "RadcError"; }
         }
     }
 }
