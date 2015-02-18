@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
+using System.Reflection;
 
 namespace RdClient.Shared.Converters
 {
@@ -15,7 +16,14 @@ namespace RdClient.Shared.Converters
         public string GetKey(object value)
         {
             string typeName = value.GetType().FullName.Split('.').Last();
-            string key = typeName + "_" + value.ToString() + "_String";
+            string key = typeName;
+
+            if (value.GetType().GetTypeInfo().IsEnum)
+            {
+                key += "_" + value.ToString();
+            }
+
+            key += "_String";
 
             return key;
         }

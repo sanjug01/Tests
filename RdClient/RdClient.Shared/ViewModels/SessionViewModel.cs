@@ -58,8 +58,6 @@
 
         public ISessionModel SessionModel { get; set; }
 
-        public DisconnectString DisconnectString { get; set; }
-
         public MouseViewModel MouseViewModel { get; set; }
 
         public ICommand DisconnectCommand { get { return _disconnectCommand; } }

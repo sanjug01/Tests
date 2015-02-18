@@ -17,9 +17,9 @@ namespace RdClient.Shared.Converters.ErrorLocalizers
 
             string localizedValue;
 
-            localizedValue = this.TypeToLocalizedStringConverter.Convert(reason, typeof(string), null, null) as string;
+            localizedValue = this.TypeToLocalizedStringConverter.Convert(reason.Code, typeof(string), null, null) as string;
 
-            if(localizedValue == this.TypeToLocalizedStringConverter.GetKey(reason))
+            if(localizedValue == this.TypeToLocalizedStringConverter.GetKey(reason.Code))
             {
                 localizedValue = this.TypeToLocalizedStringConverter.Convert(RdpDisconnectCode.UnknownError, typeof(string), null, null) as string;
             }

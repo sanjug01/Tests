@@ -123,7 +123,6 @@
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
     <Compile Include="Helpers\DataStorageExtensions.cs" />
     <Compile Include="Helpers\DeferredCommand.cs" />
-    <Compile Include="Helpers\DisconnectString.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\GroupCommand.cs" />

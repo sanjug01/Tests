@@ -83,6 +83,7 @@
     <Compile Include="Converters\DesktopsListToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\ZoomPanStateConvertersTests.cs" />
     <Compile Include="Converters\PanKnobStateConvertersTests.cs" />
+    <Compile Include="Converters\ErrorLocalizers\RdpDisconnectReasonLocalizerTests.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverterTests.cs" />
     <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverterTests.cs" />
