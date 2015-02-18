@@ -1,6 +1,7 @@
 ﻿using RdClient.Shared.Navigation;
 using RdMock;
 using System;
+using System.Windows.Input;
 
 namespace RdClient.Shared.Test.Mock
 {
@@ -44,6 +45,12 @@ namespace RdClient.Shared.Test.Mock
         {
             get;
             set;
+        }
+
+
+        public ICommand BackCommand
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Windows.Input;
 
 namespace RdClient.Shared.Navigation
 {
@@ -224,6 +225,12 @@ namespace RdClient.Shared.Navigation
             });
 
             view.Dismissing();
+        }
+
+
+        public ICommand BackCommand
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using RdClient.Shared.ViewModels;
 using System;
+using System.Windows.Input;
+
 namespace RdClient.Shared.Navigation
 {
     /// <summary>
@@ -14,6 +16,7 @@ namespace RdClient.Shared.Navigation
         IViewPresenter Presenter { set; }
         IPresentableViewFactory ViewFactory { set; }
         NavigationExtensionList Extensions { get; }
+        ICommand BackCommand { get; }        
             
         /// <summary>
         /// Navigate to a view. If the view is not currently shown on the UI, the presenter is asked to present it.
