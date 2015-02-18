@@ -4,6 +4,7 @@
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.ViewModels;
+    using System;
     using System.Collections.Generic;
 
     [TestClass]
@@ -847,6 +848,42 @@
                 Assert.AreSame(completions[0].Result, modalResult);
                 Assert.AreSame(modalView, completions[0].View);
             }
+        }
+
+        [TestMethod]
+        public void BackCommandCallsCurrentViewBackCommandIfCurrentViewImplementsINavigationCommands()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void BackCommandDoesNothingIfBackAlreadyHandled()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void BackCommandMarksHandledAsTrueIfCurrentViewImplementsINavigationCommands()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void BackCommandDismissesTopMostModalView()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void BackCommandMarksHandledAsTrueIfTopMostModalViewIsDismissed()
+        {
+            throw new NotImplementedException();
+        }
+
+        [TestMethod]
+        public void BackCommandMarksHandledAsFalseForNonModalViewsNotImplementingINavigationCommands()
+        {
+            throw new NotImplementedException();
         }
     }
 }
