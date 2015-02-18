@@ -17,6 +17,11 @@
                 get { return null; }
                 set { }
             }
+
+            IRemoteSession ISessionFactory.CreateSession(RemoteSessionSetup sessionSetup)
+            {
+                throw new System.NotImplementedException();
+            }
         }
 
         private sealed class TestViewModel : MutableObject, IViewModel, ISessionFactorySite

@@ -2,7 +2,6 @@
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RdClient.Shared.CxWrappers;
-    using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using System;
@@ -16,7 +15,6 @@
         Mock.RdpConnectionFactory _connectionFactory;
         Mock.TimerFactory _timerFactory;
         Mock.Timer _timer;
-        Mock.Thumbnail _thumbnail;
         Dispatcher _dispatcher;
         bool _connectionMatches;
 

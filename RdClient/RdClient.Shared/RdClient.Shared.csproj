@@ -176,6 +176,10 @@
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Input\Mouse\PointerEventDispatcher.cs" />
     <Compile Include="Data\ICertificateTrust.cs" />
+    <Compile Include="Models\IRemoteSession.cs" />
+    <Compile Include="Models\IRemoteSessionControl.cs" />
+    <Compile Include="Models\IRemoteSessionView.cs" />
+    <Compile Include="Models\IRenderingPanel.cs" />
     <Compile Include="Models\ISessionFactory.cs" />
     <Compile Include="Models\LocalWorkspaceModel.cs" />
     <Compile Include="Models\OnPremiseWorkspaceModel.cs" />
@@ -184,6 +188,9 @@
     <Compile Include="Models\RemoteApplicationModel.cs" />
     <Compile Include="Data\SerializableCompositionModel.cs" />
     <Compile Include="Models\RemoteConnectionModel.cs" />
+    <Compile Include="Models\RemoteSession.cs" />
+    <Compile Include="Models\RemoteSessionControl.cs" />
+    <Compile Include="Models\RemoteSessionSetup.cs" />
     <Compile Include="Models\SessionFactory.cs" />
     <Compile Include="Models\ThumbnailEncoder.cs" />
     <Compile Include="Models\ThumbnailModel.cs" />
