@@ -1,7 +1,6 @@
 ﻿using RdClient.Shared.Converters;
 using RdClient.Shared.Converters.ErrorLocalizers;
 using RdClient.Shared.CxWrappers.Errors;
-using RdClient.Shared.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
