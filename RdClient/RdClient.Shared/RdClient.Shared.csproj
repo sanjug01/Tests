@@ -179,6 +179,7 @@
     <Compile Include="Models\IRemoteSession.cs" />
     <Compile Include="Models\IRemoteSessionControl.cs" />
     <Compile Include="Models\IRemoteSessionView.cs" />
+    <Compile Include="Models\IRemoteSessionViewSite.cs" />
     <Compile Include="Models\IRenderingPanel.cs" />
     <Compile Include="Models\ISessionFactory.cs" />
     <Compile Include="Models\LocalWorkspaceModel.cs" />
@@ -253,6 +254,7 @@
     <Compile Include="Navigation\IViewModel.cs" />
     <Compile Include="ViewModels\ILayoutAwareViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
     <Compile Include="ViewModels\ZoomPanViewModel.cs" />
     <Compile Include="ViewModels\MouseViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />

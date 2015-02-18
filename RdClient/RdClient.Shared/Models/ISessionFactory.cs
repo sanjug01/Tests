@@ -1,6 +1,7 @@
-﻿using RdClient.Shared.Helpers;
-namespace RdClient.Shared.Models
+﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.Helpers;
+
     /// <summary>
     /// Factory object that creates sessions.
     /// </summary>

@@ -26,6 +26,11 @@ namespace RdClient.Factories
             viewFactory.AddViewClass("SettingsView", typeof(Views.SettingsView));
             viewFactory.AddViewClass("DeleteUserView", typeof(Views.DeleteUserView));
             viewFactory.AddViewClass("EditCredentialsView", typeof(Views.EditCredentialsView));
+            //
+            // Remote session view must be a singleton, because it creates the swap chain panel passed
+            // to the RDP CX component. The component is designed to use a single swap chain panel.
+            //
+            viewFactory.AddViewClass("RemoteSesionView", typeof(Views.RemoteSessionView), true);
 
             DispatchedNavigationService navigationService = new DispatchedNavigationService();
             navigationService.ViewFactory = viewFactory;

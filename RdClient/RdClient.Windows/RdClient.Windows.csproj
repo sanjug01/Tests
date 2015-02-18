@@ -151,6 +151,10 @@
     <Compile Include="Controls\RdSessionPanControl.xaml.cs">
       <DependentUpon>RdSessionPanControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RemoteSessionPanel.xaml.cs">
+      <DependentUpon>RemoteSessionPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RenderingPanel.cs" />
     <Compile Include="Controls\SessionReconnectControl.xaml.cs">
       <DependentUpon>SessionReconnectControl.xaml</DependentUpon>
     </Compile>
@@ -177,6 +181,9 @@
     </Compile>
     <Compile Include="Views\EditCredentialsView.xaml.cs">
       <DependentUpon>EditCredentialsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RemoteSessionView.xaml.cs">
+      <DependentUpon>RemoteSessionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SessionView.xaml.cs">
       <DependentUpon>SessionView.xaml</DependentUpon>
@@ -336,6 +343,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\RemoteSessionPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\SessionReconnectControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -365,6 +376,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\EditCredentialsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RemoteSessionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

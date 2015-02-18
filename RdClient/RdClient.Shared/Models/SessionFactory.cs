@@ -16,7 +16,8 @@
         IRemoteSession ISessionFactory.CreateSession(RemoteSessionSetup sessionSetup)
         {
             Contract.Assert(null != _deferredExecution, "SessionFactory.CreateSession|Cannot create session without a deferred execution object");
-            throw new NotImplementedException();
+            Contract.Ensures(null != Contract.Result<IRemoteSession>());
+            return new RemoteSession(sessionSetup);
         }
     }
 }

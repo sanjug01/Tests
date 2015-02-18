@@ -78,6 +78,7 @@
 
         private IRdpConnection CreateConnection(IRenderingPanel renderingPanel)
         {
+            Contract.Requires(null != renderingPanel);
             //
             // TODO: because of the limitations of the CX component, the connection factory
             //       must be a singleton; the rendering panel also must be a singleton, along
