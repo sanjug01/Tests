@@ -957,10 +957,12 @@
                 nav.PushModalView("view", null);
 
                 //navigate back without vm handling it and verify view is dismissed
-                vm.Expect("NavigatingBack", new List<object>() { backArgs }, 0);
+                vm.Expect("NavigatingBack", new List<object>() { backArgs }, 0);                
+                presenter.Expect("DismissModalView", new List<object>() { view }, 0);
                 view.Expect("Dismissing", null);
                 vm.Expect("Dismissing", null);
                 nav.BackCommand.Execute(backArgs);
+                Assert.IsTrue(backArgs.Handled);
             }
         }
 
