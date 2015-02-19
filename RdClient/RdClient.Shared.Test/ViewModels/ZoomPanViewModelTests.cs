@@ -428,16 +428,16 @@ namespace RdClient.Shared.Test.ViewModels
             // initial
             Assert.IsTrue(1.0 == _svm.ScaleXTo);
             Assert.IsTrue(1.0 == _svm.ScaleYTo);
-            Assert.IsTrue(_svm.IsZoomInEnabled);
+            Assert.AreEqual(ZoomPanState.TouchMode_MinScale, _svm.State);
 
             _svm.ToggleZoomCommand.Execute(_zoomInTransform);
             Assert.IsTrue(1.0 < _svm.ScaleXTo);
 
-            Assert.IsFalse(_svm.IsZoomInEnabled);
+            Assert.AreEqual(ZoomPanState.TouchMode_MaxScale, _svm.State);
 
             // zoomOut reverts
             _svm.ToggleZoomCommand.Execute(_zoomOutTransform);
-            Assert.IsTrue(_svm.IsZoomInEnabled);
+            Assert.AreEqual(ZoomPanState.TouchMode_MinScale, _svm.State);
         }
     }
 }

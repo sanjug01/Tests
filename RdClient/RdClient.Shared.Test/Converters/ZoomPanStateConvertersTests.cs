@@ -5,6 +5,7 @@ using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using System;
 using System.Collections.Generic;
+using Windows.UI.Xaml;
 
 namespace RdClient.Shared.Test.Converters
 {
@@ -89,6 +90,41 @@ namespace RdClient.Shared.Test.Converters
         public void InverseConvertToPanKnobThrows()
         {
             _converterPanKnob.ConvertBack(null, null, null, null);
-        }        
+        }
+
+        [TestMethod]
+        public void ConvertValidZoomPanState()
+        {
+            ZoomPanState state = ZoomPanState.TouchMode_MinScale;
+            Visibility visibilityZoomIn;
+            Visibility visibilityZoomOut;
+            Visibility visibilityPanKnob;
+
+            visibilityZoomIn = (Visibility)_converterZoomIn.Convert(state, typeof(Visibility), null, "");
+            visibilityZoomOut = (Visibility)_converterZoomOut.Convert(state, typeof(Visibility), null, "");
+            visibilityPanKnob = (Visibility)_converterPanKnob.Convert(state, typeof(Visibility), null, "");
+
+            Assert.AreEqual(Visibility.Visible, visibilityZoomIn);
+            Assert.AreEqual(Visibility.Collapsed, visibilityZoomOut);
+            Assert.AreEqual(Visibility.Collapsed, visibilityPanKnob);
+
+            state = ZoomPanState.TouchMode_MaxScale;
+            visibilityZoomIn = (Visibility)_converterZoomIn.Convert(state, typeof(Visibility), null, "");
+            visibilityZoomOut = (Visibility)_converterZoomOut.Convert(state, typeof(Visibility), null, "");
+            visibilityPanKnob = (Visibility)_converterPanKnob.Convert(state, typeof(Visibility), null, "");
+
+            Assert.AreEqual(Visibility.Collapsed, visibilityZoomIn);
+            Assert.AreEqual(Visibility.Visible, visibilityZoomOut);
+            Assert.AreEqual(Visibility.Visible, visibilityPanKnob);
+
+            state = ZoomPanState.PointerMode_DefaultScale;
+            visibilityZoomIn = (Visibility)_converterZoomIn.Convert(state, typeof(Visibility), null, "");
+            visibilityZoomOut = (Visibility)_converterZoomOut.Convert(state, typeof(Visibility), null, "");
+            visibilityPanKnob = (Visibility)_converterPanKnob.Convert(state, typeof(Visibility), null, "");
+
+            Assert.AreEqual(Visibility.Collapsed, visibilityZoomIn);
+            Assert.AreEqual(Visibility.Collapsed, visibilityZoomOut);
+            Assert.AreEqual(Visibility.Collapsed, visibilityPanKnob);
+        }
     }
 }

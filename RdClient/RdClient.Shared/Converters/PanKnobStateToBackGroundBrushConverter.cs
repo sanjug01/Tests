@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Media;
 namespace RdClient.Converters
 {
     using RdClient.Shared.Input.ZoomPan;
-    public class PanKnobStateToBackGroundBrushConverter : IValueConverter
+    public class PanKnobStateToBackgroundBrushConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -25,10 +25,10 @@ namespace RdClient.Converters
             {
                 case PanKnobState.Disabled:
                     // black
-                    return new SolidColorBrush(Color.FromArgb(127, 255, 255, 255));
+                    return new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));                    
                 case PanKnobState.Enabled:
                     // white
-                    return new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+                    return new SolidColorBrush(Color.FromArgb(127, 255, 255, 255));
                 case PanKnobState.Moving:
                     // red
                     return new SolidColorBrush(Color.FromArgb(127, 255, 0, 0));

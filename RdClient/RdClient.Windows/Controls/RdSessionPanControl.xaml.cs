@@ -75,70 +75,26 @@ namespace RdClient.Controls
                         panel.HidePanControl();
                         break;
                     case PanKnobTransformType.MoveKnob:
+                        panel.MovePanControl();
                         break;
                 }
-
             }
-        }
-
-        public static DependencyProperty PanControlForegroundBrushProperty = DependencyProperty.Register(
-            "PanControlForegroundBrush", typeof(SolidColorBrush),
-            typeof(RdSessionPanControl), 
-            new PropertyMetadata((SolidColorBrush)Application.Current.Resources["rdBlackBrush"])
-            );
-
-        public SolidColorBrush PanControlForegroundBrush
-        {
-            get { return (SolidColorBrush)GetValue(PanControlForegroundBrushProperty); }
-            set { SetValue(PanControlForegroundBrushProperty, value); }
-        }
-
-        public static DependencyProperty PanControlBackgroundBrushProperty = DependencyProperty.Register(
-            "PanControlBackgroundBrush", typeof(SolidColorBrush),
-            typeof(RdSessionPanControl), 
-            new PropertyMetadata((SolidColorBrush)Application.Current.Resources["rdWhiteBrush"])
-            );
-
-        public SolidColorBrush PanControlBackgroundBrush
-        {
-            get { return (SolidColorBrush)GetValue(PanControlBackgroundBrushProperty); }
-            set { SetValue(PanControlBackgroundBrushProperty, value); }
-        }
-
-        public static DependencyProperty PanControlOrbOpacityProperty = DependencyProperty.Register(
-            "PanControlOrbOpacity", typeof(double),
-            typeof(RdSessionPanControl), 
-            new PropertyMetadata(0.35)
-            );
-
-        public double PanControlOrbOpacity
-        {
-            get { return (double)GetValue(PanControlOrbOpacityProperty); }
-            set { SetValue(PanControlOrbOpacityProperty, value); }
         }
 
         public RdSessionPanControl()
         {
             this.InitializeComponent();
             this.SizeChanged += (sender, args) => { this.ViewSize = (args as SizeChangedEventArgs).NewSize; };
-
-            PanControlForegroundBrush = (SolidColorBrush)Application.Current.Resources["rdWhiteBrush"];
-            PanControlBackgroundBrush = (SolidColorBrush)Application.Current.Resources["rdBlackBrush"];
-            PanControlOrbOpacity = 1.0;
-
-            // PanControl.PointerPressed += PanControl_PointerPressed;
         }
 
         public void ShowPanControl()
         {
-            PanControl.Visibility = Visibility.Visible;
-            ShowPanControlAnimation.From = PanControl.Opacity;
+            // PanControl.Visibility = Visibility.Visible;
             ShowPanControlStoryboard.Begin();
         }
 
         public void HidePanControl()
         {
-            HidePanControlAnimation.From = PanControl.Opacity;
             HidePanControlStoryboard.Begin();
         }
 
@@ -159,21 +115,21 @@ namespace RdClient.Controls
         {
             PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
 
-            //// reset colors
-            PanControlForegroundBrush = (SolidColorBrush)Application.Current.Resources["rdWhiteBrush"];
-            PanControlBackgroundBrush = (SolidColorBrush)Application.Current.Resources["rdBlackBrush"];            
         }
 
         protected override void OnPointerPressed(PointerRoutedEventArgs args)
         {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Down));
-            
-            //// reverse colors 
-            PanControlForegroundBrush = (SolidColorBrush)Application.Current.Resources["rdBlackBrush"];
-            PanControlBackgroundBrush = (SolidColorBrush)Application.Current.Resources["rdWhiteBrush"];
-            PanControlOrb.Opacity = 1.0;
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Down));           
+        }
 
-            // TODO : manage PanControl
+        protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
+        {
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
+        }
+
+        protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs args)
+        {
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationDeltaArgsConverter(args));
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)

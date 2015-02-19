@@ -102,8 +102,7 @@ namespace RdClient.Shared.ViewModels
         private double _translateXTo;
         private double _translateYFrom;
         private double _translateYTo;
-        private bool _isZoomInEnabled;
-
+        private ZoomPanState _zoomPanState;
 
         public double ScaleCenterX
         {
@@ -164,16 +163,24 @@ namespace RdClient.Shared.ViewModels
             private set { this.SetProperty<IZoomPanTransform>(ref _zoomPanTransform, value); }
         }
 
+        public void HandlePanChange(object sender, Input.ZoomPan.PanEventArgs e)
+        {
+            if (null != e)
+            {
+                this.ApplyPanTransform(e.DeltaX, e.DeltaY);
+                this.ZoomPanTransform = new PanTransform(e.DeltaX, e.DeltaX);
+            }
+        }
 
         private readonly ICommand _toggleZoomCommand;
         public ICommand ToggleZoomCommand { get { return _toggleZoomCommand; } }
         private readonly ICommand _panCommand;
         public ICommand PanCommand { get { return _panCommand; } }
 
-        public bool IsZoomInEnabled
+        public ZoomPanState State
         {
-            get { return _isZoomInEnabled; }
-            private set { this.SetProperty(ref _isZoomInEnabled, value); }
+            get { return _zoomPanState; }
+            private set { this.SetProperty(ref _zoomPanState, value); }
         }
 
         public ZoomPanViewModel()
@@ -190,12 +197,13 @@ namespace RdClient.Shared.ViewModels
             ScaleYFrom = 1.0;
             ScaleXTo = 1.0;
             ScaleYTo = 1.0;
-            IsZoomInEnabled = true;
 
             TranslateXFrom = 0.0;
             TranslateYFrom = 0.0;
             TranslateXTo = 0.0;
             TranslateYTo = 0.0;
+
+            this.State = ZoomPanState.TouchMode_MinScale;
         }
 
         private void ToggleMagnification(object o)
@@ -206,10 +214,12 @@ namespace RdClient.Shared.ViewModels
                 if(TransformType.ZoomIn == zoomTransform.TransformType)
                 {
                     this.ApplyZoomIn();
+                    this.State = ZoomPanState.TouchMode_MaxScale;
                 }
                 else if(TransformType.ZoomOut == zoomTransform.TransformType)
                 {
                     this.ApplyZoomOut();
+                    this.State = ZoomPanState.TouchMode_MinScale;
                 }
                 else if (TransformType.ZoomCustom == zoomTransform.TransformType)
                 {
@@ -239,8 +249,6 @@ namespace RdClient.Shared.ViewModels
             this.TranslateXFrom = this.TranslateXTo;
             this.TranslateYFrom = this.TranslateYTo;
 
-            this.IsZoomInEnabled = false;
-
             this.ScaleXFrom = this.ScaleXTo;
             this.ScaleXTo = targetScaleFactor;
 
@@ -258,8 +266,6 @@ namespace RdClient.Shared.ViewModels
             // reset the pan transformation
             this.TranslateXFrom = this.TranslateXTo;
             this.TranslateYFrom = this.TranslateYTo;
-
-            this.IsZoomInEnabled = true;
 
             this.ScaleXFrom = this.ScaleXTo;
             this.ScaleXTo = targetScaleFactor;
@@ -310,6 +316,16 @@ namespace RdClient.Shared.ViewModels
             // manage the center
             this.ScaleCenterX = centerX;
             this.ScaleCenterY = centerY;
+
+            if(MIN_ZOOM_FACTOR == targetScaleX && MIN_ZOOM_FACTOR == targetScaleY)
+            {
+                this.State = ZoomPanState.PointerMode_DefaultScale;
+            }
+            else
+            {
+                this.State = ZoomPanState.PointerMode_Zooming;
+            }
+            
         }
 
         private void ApplyPanTransform(double x, double y)

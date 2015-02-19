@@ -13,13 +13,13 @@ namespace RdClient.Shared.Test.Converters
     [TestClass]
     public class PanKnobStateConvertersTests
     {
-        private PanKnobStateToBackGroundBrushConverter _converterBackground;
+        private PanKnobStateToBackgroundBrushConverter _converterBackground;
         private PanKnobStateToForegroundBrushConverter _converterForeground;
 
         [TestInitialize]
         public void TestSetup()
         {            
-            _converterBackground = new PanKnobStateToBackGroundBrushConverter();
+            _converterBackground = new PanKnobStateToBackgroundBrushConverter();
             _converterForeground = new PanKnobStateToForegroundBrushConverter();
         }
 

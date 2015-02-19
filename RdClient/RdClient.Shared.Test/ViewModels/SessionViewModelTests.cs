@@ -81,7 +81,9 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 KeyboardCapture = new DummyKeyboardCapture(),
                 SessionModel = _sessionModel,
-                MouseViewModel = _mouseViewModel
+                MouseViewModel = _mouseViewModel,
+                ZoomPanViewModel = new ZoomPanViewModel(),
+                PanKnobViewModel = new PanKnobViewModel()
             };
             ((IDataModelSite)_vm).SetDataModel(_dataModel);
             ((IDeferredExecutionSite)_vm).SetDeferredExecution(_testDispatcher);

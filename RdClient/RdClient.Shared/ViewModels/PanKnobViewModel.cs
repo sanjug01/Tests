@@ -66,12 +66,31 @@ namespace RdClient.Shared.ViewModels
 
         private IPanKnobTransform _panKnobTransform;
         private PanKnobState _state;
+        private bool _isPanning;
 
         private double _translateXFrom;
         private double _translateXTo;
         private double _translateYFrom;
         private double _translateYTo;
         private ulong _lastTouchTimeStamp;
+
+        private double _panControlOpacity;
+        private double _panOrbOpacity;
+
+
+        public event EventHandler<PanEventArgs> PanChange;
+
+        public double PanControlOpacity
+        {
+            get { return _panControlOpacity; }
+            set { this.SetProperty(ref _panControlOpacity, value); }
+        }
+
+        public double PanOrbOpacity
+        {
+            get { return _panOrbOpacity; }
+            set { this.SetProperty(ref _panOrbOpacity, value); }
+        }
 
         public double TranslateXFrom
         {
@@ -105,8 +124,18 @@ namespace RdClient.Shared.ViewModels
             private set { this.SetProperty(ref _state, value); }
         }
 
-        private readonly ICommand _moveKnobCommand;
-        public ICommand MoveKnobCommand { get { return _moveKnobCommand; } }
+        public bool IsPanning
+        {
+            get { return _isPanning; }
+            private set { this.SetProperty(ref _isPanning, value); }
+        }
+
+        private readonly ICommand _showKnobCommand;
+        public ICommand ShowKnobCommand { get { return _showKnobCommand; } }
+
+        private readonly ICommand _hideKnobCommand;
+        public ICommand HideKnobCommand { get { return _hideKnobCommand; } }
+
 
         // handles press&hold, double press&hold and hold release to manage knob state
         private IPointerEventConsumer _pointerEventConsumer;
@@ -122,7 +151,8 @@ namespace RdClient.Shared.ViewModels
             this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
             this.PointerEventConsumer.ConsumedEvent += HandlePointerEvent;
 
-            _moveKnobCommand = new RelayCommand(new Action<object>(MovePanKnob));
+            _showKnobCommand = new RelayCommand((o) => { this.PanKnobTransform = new PanKnobTransform(PanKnobTransformType.ShowKnob); });
+            _hideKnobCommand = new RelayCommand((o) => { this.PanKnobTransform = new PanKnobTransform(PanKnobTransformType.HideKnob); });
 
             TranslateXFrom = 0.0;
             TranslateYFrom = 0.0;
@@ -131,12 +161,13 @@ namespace RdClient.Shared.ViewModels
 
             _lastTouchTimeStamp = 0;
             this.State = PanKnobState.Disabled;
+            this.IsPanning = false;
+            this.PanControlOpacity = 1.0;
+            this.PanOrbOpacity = 1.0;
         }
 
         void HandlePointerEvent(object sender, PointerEvent e)
         {
-
-
             if (TouchEventType.Down == e.ActionType)
             {
                 // click or double click
@@ -162,30 +193,27 @@ namespace RdClient.Shared.ViewModels
                 {
                     this.State = PanKnobState.Enabled;
                 }
+
+                this.PanOrbOpacity = 1.0;
+                this.IsPanning = true;
             }
             else if(TouchEventType.Up == e.ActionType)
             {
                 // release
                 this.State = PanKnobState.Disabled;
+                this.IsPanning = false;
             }
             else
             {
-                throw new NotImplementedException();
-            }
-
-            
-
-            // move
-
-        }
-
-        private void MovePanKnob(object o)
-        {
-            PanKnobMoveTransform panTransform = (o as PanKnobMoveTransform);
-            if (null != panTransform)
-            {
-                this.ApplyMoveTransform(panTransform.DeltaX, panTransform.DeltaY);
-                this.PanKnobTransform = new PanKnobMoveTransform(panTransform.DeltaX, panTransform.DeltaY);
+                // move or pan
+                if(PanKnobState.Enabled == this.State)
+                {
+                    this.ApplyPan(e.Delta.X, e.Delta.Y);
+                }
+                else if (PanKnobState.Moving == this.State)
+                {
+                    this.ApplyMoveTransform(e.Delta.X, e.Delta.Y);
+                }
             }
         }
 
@@ -198,6 +226,13 @@ namespace RdClient.Shared.ViewModels
             this.TranslateYFrom = this.TranslateYTo;
             this.TranslateXTo = panXTo;
             this.TranslateYTo = panYTo;
+            this.PanKnobTransform = new PanKnobMoveTransform(x, y);
         }
+
+        private void ApplyPan(double x, double y)
+        {
+            PanChange.Invoke(this, new PanEventArgs(x, y));
+        }
+
     }
 }
