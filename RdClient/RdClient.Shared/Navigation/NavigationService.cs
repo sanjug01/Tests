@@ -161,11 +161,11 @@ namespace RdClient.Shared.Navigation
             IBackCommandArgs args = param as IBackCommandArgs ?? new BackCommandArgs();
             if (args.Handled == false)
             {
-                if (_modalStack.Count == 0)
+                if (_modalStack.Count <= 0) //No modal views
                 {
                     _currentView.ViewModel.NavigatingBack(args);
                 }
-                else
+                else //Modal view currently being shown
                 {
                     IPresentableView topModalView = _modalStack[_modalStack.Count - 1].View;
                     topModalView.ViewModel.NavigatingBack(args);

@@ -850,7 +850,8 @@
             }
         }
 
-        public void BackCommandCalledWithAlreadyHandledArgsDoesNothing()
+        [TestMethod]
+        public void BackCommandCalledWithAlreadyHandledDoesNotCallViewModel()
         {
             using (Mock.PresentableView view = new Mock.PresentableView())
             using (Mock.ViewModel vm = new Mock.ViewModel())
@@ -862,19 +863,47 @@
                 IBackCommandArgs backArgs = new BackCommandArgs();
                 backArgs.Handled = true;
 
+                //setup nav so that view is presented
                 factory.Expect("CreateView", o => { return view; });
                 presenter.Expect("PresentView", null);
                 view.Expect("Presenting", null);
                 vm.Expect("Presenting", null);
                 navigationService.NavigateToView("view", null);
 
+                //calling back command when Handled is already true should do nothing
                 navigationService.BackCommand.Execute(backArgs);
                 Assert.IsTrue(backArgs.Handled);
             }
         }
 
         [TestMethod]
-        public void BackCommandCalledWithNullArgsPassesValidArgsToVm()
+        public void BackCommandCalledWithAlreadyHandledDoesNotCallViewModelOrDismissView()
+        {
+            using (Mock.PresentableView view = new Mock.PresentableView())
+            using (Mock.ViewModel vm = new Mock.ViewModel())
+            using (Mock.ViewFactory factory = new Mock.ViewFactory())
+            using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
+            {
+                view.ViewModel = vm;
+                INavigationService nav = new NavigationService() { Presenter = presenter, ViewFactory = factory };
+                IBackCommandArgs backArgs = new BackCommandArgs();
+                backArgs.Handled = true;
+
+                //setup nav so that view is top modal view
+                factory.Expect("CreateView", o => { return view; });
+                presenter.Expect("PushModalView", null);
+                view.Expect("Presenting", null);
+                vm.Expect("Presenting", null);
+                nav.PushModalView("view", null);
+
+                //calling back command when Handled is already true should do nothing
+                nav.BackCommand.Execute(backArgs);
+                Assert.IsTrue(backArgs.Handled);
+            }
+        }        
+
+        [TestMethod]
+        public void BackCommandCalledWithNullArgsPassesValidArgsToViewModel()
         {
             using (Mock.PresentableView view = new Mock.PresentableView())
             using (Mock.ViewModel vm = new Mock.ViewModel())
@@ -916,6 +945,7 @@
                 view.ViewModel = vm;
                 INavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 IBackCommandArgs backArgs = new BackCommandArgs();
+                bool vmCalled = false;
 
                 factory.Expect("CreateView", o => { return view; });
                 presenter.Expect("PresentView", null);
@@ -926,14 +956,43 @@
                 vm.Expect("NavigatingBack",
                     p =>
                     {
+                        vmCalled = true;
                         IBackCommandArgs args = p[0] as IBackCommandArgs;
                         Assert.AreEqual(backArgs, args);
                         args.Handled = true;
                         return null;
                     });
                 Assert.IsFalse(backArgs.Handled);
+                Assert.IsFalse(vmCalled);
                 navigationService.BackCommand.Execute(backArgs);
+                Assert.IsTrue(vmCalled);
                 Assert.IsTrue(backArgs.Handled);
+            }
+        }
+
+        [TestMethod]
+        public void BackCommandSetsHandledToFalseIfNonModalViewModelDoesNotHandleBackNavigation()
+        {
+            using (Mock.PresentableView view = new Mock.PresentableView())
+            using (Mock.ViewModel vm = new Mock.ViewModel())
+            using (Mock.ViewFactory factory = new Mock.ViewFactory())
+            using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
+            {
+                view.ViewModel = vm;
+                INavigationService nav = new NavigationService() { Presenter = presenter, ViewFactory = factory };
+                IBackCommandArgs backArgs = new BackCommandArgs();
+
+                //setup nav so that view is currently presented view
+                factory.Expect("CreateView", o => { return view; });
+                presenter.Expect("PresentView", null);
+                view.Expect("Presenting", null);
+                vm.Expect("Presenting", null);
+                nav.NavigateToView("view", null);
+
+                //navigate back and verify it isn't handled
+                vm.Expect("NavigatingBack", new List<object>() { backArgs }, 0);
+                nav.BackCommand.Execute(backArgs);
+                Assert.IsFalse(backArgs.Handled);
             }
         }
 
@@ -967,7 +1026,7 @@
         }
 
         [TestMethod]
-        public void BackCommandSetsHandledToFalseIfNonModalViewModelDoesNotHandleBackNavigation()
+        public void BackCommandDoesNotDismissModalViewIfItDoesHandleBackNavigation()
         {
             using (Mock.PresentableView view = new Mock.PresentableView())
             using (Mock.ViewModel vm = new Mock.ViewModel())
@@ -977,18 +1036,30 @@
                 view.ViewModel = vm;
                 INavigationService nav = new NavigationService() { Presenter = presenter, ViewFactory = factory };
                 IBackCommandArgs backArgs = new BackCommandArgs();
+                bool vmCalled = false;
 
-                //setup nav so that view is currently presented view
+                //setup nav so that view is top modal view
                 factory.Expect("CreateView", o => { return view; });
-                presenter.Expect("PresentView", null);
+                presenter.Expect("PushModalView", null);
                 view.Expect("Presenting", null);
                 vm.Expect("Presenting", null);
-                nav.NavigateToView("view", null);
+                nav.PushModalView("view", null);
 
-                //navigate back and verify it isn't handled
-                vm.Expect("NavigatingBack", new List<object>() { backArgs }, 0);
-                nav.BackCommand.Execute(backArgs);
+                //navigate back have vm handle it and verify view is not dismissed
+                vm.Expect("NavigatingBack", 
+                    p =>
+                    {
+                        vmCalled = true;
+                        IBackCommandArgs args = p[0] as IBackCommandArgs;
+                        Assert.AreEqual(backArgs, args);
+                        args.Handled = true;
+                        return null;
+                    });
+                Assert.IsFalse(vmCalled);
                 Assert.IsFalse(backArgs.Handled);
+                nav.BackCommand.Execute(backArgs);
+                Assert.IsTrue(vmCalled);
+                Assert.IsTrue(backArgs.Handled);
             }
         }
     }
