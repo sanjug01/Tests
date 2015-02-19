@@ -67,7 +67,24 @@
             //
             _renderingPanel = _sessionView.ActivateNewRenderingPanel();
             _sessionView = sessionView;
-            _connection = _connectionSource.CreateConnection(_renderingPanel);
+
+            if (null == _connection)
+            {
+                //
+                // Ask the connection source to create a new session.
+                // The connection source comes all the way from XAML of the main page.
+                //
+                _connection = _connectionSource.CreateConnection(_renderingPanel);
+                //
+                // TODO: activate the connection.
+                //
+            }
+            else
+            {
+                //
+                // TODO: re-activate the connection.
+                //
+            }
 
             return new RemoteSessionControl(_connection);
         }
