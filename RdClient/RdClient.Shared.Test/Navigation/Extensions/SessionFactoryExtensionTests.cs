@@ -12,12 +12,6 @@
     {
         private sealed class TestSessionFactory : ISessionFactory
         {
-            IDeferredExecution ISessionFactory.DeferedExecution
-            {
-                get { return null; }
-                set { }
-            }
-
             IRemoteSession ISessionFactory.CreateSession(RemoteSessionSetup sessionSetup)
             {
                 throw new System.NotImplementedException();

@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.Data;
+    using System;
 
     /// <summary>
     /// Interface of a remote session object that represents a session before the UI objects.
@@ -11,6 +12,11 @@
         /// Certificate trust specific to this session.
         /// </summary>
         ICertificateTrust CertificateTrust { get; }
+
+        /// <summary>
+        /// Event that the session object emits when it needs user to enter credentials.
+        /// </summary>
+        event EventHandler<CredentialsNeededEventArgs> CredentialsNeeded;
 
         /// <summary>
         /// Activate the remote session and attach a session view to it. The session becomes an exclusive

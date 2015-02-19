@@ -172,10 +172,12 @@
     <Compile Include="Models\ApplicationDataModel.cs" />
     <Compile Include="Models\CloudWorkspaceModel.cs" />
     <Compile Include="Models\CredentialsModel.cs" />
+    <Compile Include="Models\CredentialsNeededEventArgs.cs" />
     <Compile Include="Models\DesktopModel.cs" />
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Input\Mouse\PointerEventDispatcher.cs" />
     <Compile Include="Data\ICertificateTrust.cs" />
+    <Compile Include="Models\IRdpConnectionSource.cs" />
     <Compile Include="Models\IRemoteSession.cs" />
     <Compile Include="Models\IRemoteSessionControl.cs" />
     <Compile Include="Models\IRemoteSessionView.cs" />

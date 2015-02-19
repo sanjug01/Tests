@@ -2,31 +2,58 @@
 {
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.ViewModels;
     using System;
     using System.Diagnostics.Contracts;
 
-    public sealed class RemoteSession : IRemoteSession
+    public sealed class RemoteSession : MutableObject, IRemoteSession
     {
         private readonly RemoteSessionSetup _sessionSetup;
+        private readonly IDeferredExecution _deferredExecution;
+        private readonly IRdpConnectionSource _connectionSource;
         private readonly ICertificateTrust _certificateTrust;
+
+        private EventHandler<CredentialsNeededEventArgs> _credentialsNeeded;
 
         private IRemoteSessionView _sessionView;
         private IRenderingPanel _renderingPanel;
         private IRdpConnection _connection;
 
-        public RemoteSession(RemoteSessionSetup sessionSetup)
+        public RemoteSession(RemoteSessionSetup sessionSetup, IDeferredExecution deferredExecution, IRdpConnectionSource connectionSource)
         {
             Contract.Requires(null != sessionSetup);
+            Contract.Requires(null != deferredExecution);
+            Contract.Requires(null != connectionSource);
             Contract.Ensures(null != _sessionSetup);
+            Contract.Ensures(null != _deferredExecution);
+            Contract.Ensures(null != _connectionSource);
             Contract.Ensures(null != _certificateTrust);
 
             _sessionSetup = sessionSetup;
+            _deferredExecution = deferredExecution;
+            _connectionSource = connectionSource;
             _certificateTrust = new CertificateTrust();
         }
 
         ICertificateTrust IRemoteSession.CertificateTrust
         {
             get { return _certificateTrust; }
+        }
+
+        event EventHandler<CredentialsNeededEventArgs> IRemoteSession.CredentialsNeeded
+        {
+            add
+            {
+                using(LockWrite())
+                    _credentialsNeeded += value;
+            }
+
+            remove
+            {
+                using (LockWrite())
+                    _credentialsNeeded -= value;
+            }
         }
 
         IRemoteSessionControl IRemoteSession.Activate(IRemoteSessionView sessionView)
@@ -40,7 +67,7 @@
             //
             _renderingPanel = _sessionView.ActivateNewRenderingPanel();
             _sessionView = sessionView;
-            _connection = CreateConnection(_renderingPanel);
+            _connection = _connectionSource.CreateConnection(_renderingPanel);
 
             return new RemoteSessionControl(_connection);
         }
@@ -89,6 +116,23 @@
             //       and to create an RDP session.
             //
             throw new NotImplementedException();
+        }
+
+        private void DeferEmitCredentialsNeeded(IEditCredentialsTask task)
+        {
+            //
+            // Simply defer emitting the event to the dispatcher.
+            //
+            _deferredExecution.Defer(() => EmitCredentialsNeeded(task));
+        }
+
+        private void EmitCredentialsNeeded(IEditCredentialsTask task)
+        {
+            using (LockUpgradeableRead())
+            {
+                if (null != _credentialsNeeded)
+                    _credentialsNeeded(this, new CredentialsNeededEventArgs(task));
+            }
         }
     }
 }
