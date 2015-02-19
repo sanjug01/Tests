@@ -32,7 +32,9 @@
 
             _connection = connection;
             _originalCredentials = credentials;
-            _credentials = new CredentialsModel(_originalCredentials);
+
+            if (null != _originalCredentials)
+                _credentials = new CredentialsModel(_originalCredentials);
         }
     }
 }

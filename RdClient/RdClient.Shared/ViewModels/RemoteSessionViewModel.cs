@@ -6,9 +6,12 @@
     public sealed class RemoteSessionViewModel : ViewModelBase, IRemoteSessionViewSite
     {
         private IRemoteSessionView _sessionView;
+        private IRemoteSession _activeSession;
 
         protected override void OnPresenting(object activationParameter)
         {
+            Contract.Assert(null == _activeSession);
+
             base.OnPresenting(activationParameter);
 
             Contract.Assert(null != activationParameter, "Cannot navigate to remote session without activation parameter");
@@ -20,9 +23,11 @@
             //
             IRemoteSession newSession = (IRemoteSession)activationParameter;
 
+            _activeSession = newSession;
+
             if (null != _sessionView)
             {
-                newSession.Activate(_sessionView);
+                _activeSession.Activate(_sessionView);
             }
         }
 
@@ -33,7 +38,14 @@
 
         void IRemoteSessionViewSite.SetRemoteSessionView(IRemoteSessionView sessionView)
         {
+            Contract.Assert((null == sessionView && null != _sessionView) || (null != sessionView && null == _sessionView));
+
             _sessionView = sessionView;
+
+            if(null != _sessionView && null != _activeSession)
+            {
+                _activeSession.Activate(_sessionView);
+            }
         }
     }
 }

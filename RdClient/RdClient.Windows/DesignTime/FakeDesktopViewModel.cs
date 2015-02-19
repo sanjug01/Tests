@@ -52,7 +52,11 @@ namespace RdClient.DesignTime
 
         public bool SelectionEnabled { get; set; }
 
-        void IDesktopViewModel.Dismissed()
+        void IRemoteConnectionViewModel.Presenting(ISessionFactory sessionFactory)
+        {
+        }
+
+        void IRemoteConnectionViewModel.Dismissed()
         {
         }
 

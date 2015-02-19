@@ -65,8 +65,8 @@
             //
             // Obtain a rendering panel from the session view and set up an RDP connection using the panel.
             //
-            _renderingPanel = _sessionView.ActivateNewRenderingPanel();
             _sessionView = sessionView;
+            _renderingPanel = _sessionView.ActivateNewRenderingPanel();
 
             if (null == _connection)
             {
