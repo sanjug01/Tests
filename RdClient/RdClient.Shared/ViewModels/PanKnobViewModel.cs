@@ -186,41 +186,42 @@ namespace RdClient.Shared.ViewModels
                 this.PanOrbOpacity = 1.0;
                 this.IsPanning = true;
             }
-            else if(TouchEventType.Up == e.ActionType && e.Inertia)
+            else if(TouchEventType.Up == e.ActionType)
             {
                 // release
+                if(e.Inertia)
+                {
+                    this.ApplyTransform(e.Delta.X, e.Delta.Y);
+                }
                 this.State = PanKnobState.Disabled;
                 this.IsPanning = false;
             }
             else
             {
                 // move or pan
-                if(PanKnobState.Enabled == this.State)
-                {
-                    this.ApplyPan(e.Delta.X, e.Delta.Y);
-                }
-                else if (PanKnobState.Moving == this.State)
-                {
-                    this.ApplyMoveTransform(e.Delta.X, e.Delta.Y);
-                }
+                this.ApplyTransform(e.Delta.X, e.Delta.Y);
             }
         }
 
-        private void ApplyMoveTransform(double x, double y)
+        private void ApplyTransform(double x, double y)
         {
-            double panXTo = this.TranslateXTo + x;
-            double panYTo = this.TranslateYTo + y;
+            if (PanKnobState.Enabled == this.State)
+            {
+                // pan
+                PanChange.Invoke(this, new PanEventArgs(x, y));
+            }
+            else
+            {
+                // move
+                double panXTo = this.TranslateXTo + x;
+                double panYTo = this.TranslateYTo + y;
 
-            this.TranslateXFrom = this.TranslateXTo;
-            this.TranslateYFrom = this.TranslateYTo;
-            this.TranslateXTo = panXTo;
-            this.TranslateYTo = panYTo;
-            this.PanKnobTransform = new PanKnobMoveTransform(x, y);
-        }
-
-        private void ApplyPan(double x, double y)
-        {
-            PanChange.Invoke(this, new PanEventArgs(x, y));
+                this.TranslateXFrom = this.TranslateXTo;
+                this.TranslateYFrom = this.TranslateYTo;
+                this.TranslateXTo = panXTo;
+                this.TranslateYTo = panYTo;
+                this.PanKnobTransform = new PanKnobMoveTransform(x, y);
+            }
         }
 
     }
