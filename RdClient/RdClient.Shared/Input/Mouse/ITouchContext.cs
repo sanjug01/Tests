@@ -11,9 +11,14 @@ namespace RdClient.Shared.Input.Mouse
         void MouseRightClick(PointerEvent pointerEvent);
         void UpdateCursorPosition(PointerEvent pointerEvent);
 
+        void BeginGesture(PointerEvent pointerEvent);
+        void EndGesture(PointerEvent pointerEvent);
+        void ApplyGesture(PointerEvent pointerEvent);
+
         bool MoveThresholdExceeded(PointerEvent pointerEvent);
         int NumberOfContacts(PointerEvent pointerEvent);
-        
+
+       
         IPointerManipulator PointerManipulator { get; }
     }
 }

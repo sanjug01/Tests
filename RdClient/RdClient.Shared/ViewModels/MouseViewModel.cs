@@ -2,6 +2,7 @@
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Navigation.Extensions;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
@@ -132,15 +133,18 @@ namespace RdClient.Shared.ViewModels
                 if(_multiTouchEnabled)
                 {
                     this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.MultiTouch;
+                    Debug.WriteLine(ConsumptionMode.MultiTouch);
                 }
                 else
                 {
                     this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.DirectTouch;
+                    Debug.WriteLine(ConsumptionMode.DirectTouch);
                 }
             }
             else 
             {
                 this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
+                Debug.WriteLine(ConsumptionMode.Pointer);
             }
 
             this.ElephantEarsViewModel.ElephantEarsVisible= Visibility.Collapsed;

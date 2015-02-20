@@ -137,10 +137,46 @@ namespace RdClient.Shared.Input.Mouse
             (o) => { });
         }
 
+        private static void AddPinchAndZoomTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
+        {
+            // recognize double finger gestures
+            stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDown,
+            (o) =>
+            {
+                return
+                    o.Context.NumberOfContacts(o.Input) == 2 &&
+                    o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == true;
+            },
+            (o) => { o.Context.BeginGesture(o.Input); });
+
+            stateMachine.AddTransition(PointerState.RightDown, PointerState.PinchZoom,
+            (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
+            (o) => { o.Context.ApplyGesture(o.Input); });
+
+            stateMachine.AddTransition(PointerState.PinchZoom, PointerState.PinchZoom,
+            (o) =>
+            {
+                return
+                   o.Context.NumberOfContacts(o.Input) > 1 &&
+                   o.Context.MoveThresholdExceeded(o.Input);
+            },
+            (o) => { o.Context.ApplyGesture(o.Input); });
+
+            stateMachine.AddTransition(PointerState.PinchZoom, PointerState.LeftDown,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
+            (o) => { o.Context.EndGesture(o.Input); });
+
+            stateMachine.AddTransition(PointerState.PinchZoom, PointerState.Idle,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
+            (o) => { o.Context.EndGesture(o.Input); });
+        }
+
+
         public static IPointerEventConsumer CreatePointerMode(ITimer timer, IPointerManipulator manipulator)
         {
             IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>>();
 
+            AddPinchAndZoomTransitions(ref stateMachine);
             AddDirectModeTransitions(ref stateMachine);
             AddMoveTransitions(ref stateMachine);
 
