@@ -112,11 +112,16 @@
                     }
                     else
                     {
+                        Contract.Assert(null != _sessionSetup.Credentials);
+                        InternalStartSession(_sessionSetup.Connection, _sessionSetup.Credentials, true);
                     }
                 }
                 else
                 {
-
+                    //
+                    // Can only connect to desktops
+                    //
+                    throw new NotImplementedException();
                 }
             }
             else
@@ -160,21 +165,6 @@
             _sessionView = null;
         }
 
-        private IRdpConnection CreateConnection(IRenderingPanel renderingPanel)
-        {
-            Contract.Requires(null != renderingPanel);
-            //
-            // TODO: because of the limitations of the CX component, the connection factory
-            //       must be a singleton; the rendering panel also must be a singleton, along
-            //       with the session view/session view model.
-            //       The singleton session view provides the singleton swap chain panel (rendering panel).
-            //       The singleton is established in XAML of the session view. The singleton then is used
-            //       (through different interfaces) to produce the rendering panel passed to this method,
-            //       and to create an RDP session.
-            //
-            throw new NotImplementedException();
-        }
-
         private void DeferEmitCredentialsNeeded(IEditCredentialsTask task)
         {
             //
@@ -211,7 +201,39 @@
             task.Cancelled -= this.SessionCredentialsCancelled;
             task.Submitted -= this.SessionCredentialsSubmitted;
 
-            //e.Credentials
+            if (e.UserWantsToSavePassword)
+            {
+                Guid credentialsId = e.CredentialsId;
+                //
+                // Save credentials;
+                //
+                if(credentialsId.Equals(Guid.Empty))
+                {
+                    //
+                    // Returned credentials must be inserted in the data model;
+                    //
+                    credentialsId = _sessionSetup.DataModel.LocalWorkspace.Credentials.AddNewModel(e.Credentials);
+                }
+                else
+                {
+                    //
+                    // Original credentials may simply be updated;
+                    //
+                }
+
+                _sessionSetup.SetCredentials(e.Credentials);
+
+                if (_sessionSetup.Connection is DesktopModel)
+                {
+                    ((DesktopModel)_sessionSetup.Connection).CredentialsId = credentialsId;
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            InternalStartSession(_sessionSetup.Connection, e.Credentials, e.IsPasswordChanged);
         }
 
         private void SessionCredentialsCancelled(object sender, EventArgs e)
@@ -225,6 +247,13 @@
             // Emit the Cancelled event so the session view model can navigate to the home page
             //
             EmitCancelled();
+        }
+
+        private void InternalStartSession(RemoteConnectionModel connection, CredentialsModel credentials, bool savedPassword)
+        {
+            //
+            //
+            //
         }
     }
 }

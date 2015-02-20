@@ -6,7 +6,7 @@
     {
         private readonly ApplicationDataModel _dataModel;
         private readonly RemoteConnectionModel _connection;
-        private readonly CredentialsModel _credentials;
+        private CredentialsModel _credentials;
         private bool _savedCredentials;
 
         public ApplicationDataModel DataModel
@@ -28,6 +28,19 @@
         {
             get { return _savedCredentials; }
             set { _savedCredentials = value; }
+        }
+
+        public void SetCredentials(CredentialsModel credentials)
+        {
+            if (null == _credentials)
+            {
+                _credentials = credentials;
+            }
+            else
+            {
+                _credentials.Username = credentials.Username;
+                _credentials.Password = credentials.Password;
+            }
         }
 
         public RemoteSessionSetup(ApplicationDataModel dataModel, RemoteConnectionModel connection, CredentialsModel credentials, bool savedCredentials)

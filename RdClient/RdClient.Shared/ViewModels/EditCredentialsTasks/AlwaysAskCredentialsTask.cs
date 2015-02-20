@@ -19,6 +19,7 @@
         private readonly CredentialsModel _credentials;
         private readonly ApplicationDataModel _dataModel;
 
+        private bool _ignoreModelUpdates;
         private bool _passwordChanged;
         private Guid _credentialsId;
         private string _lastKnownUserName;
@@ -38,6 +39,7 @@
             _connectionName = connectionName;
             _credentials = credentials;
             _dataModel = dataModel;
+            _ignoreModelUpdates = false;
         }
 
         void IEditCredentialsTask.Populate(IEditCredentialsViewModel viewModel)
@@ -57,20 +59,34 @@
         {
             bool valid = IsUserNameValid(viewModel.UserName);
 
-            if (!string.Equals(viewModel.UserName, _lastKnownUserName, StringComparison.OrdinalIgnoreCase))
+            if (!_ignoreModelUpdates)
             {
-                //
-                // User name changed
-                //
-                _lastKnownUserName = viewModel.UserName;
-            }
-            else if( !string.Equals(viewModel.Password, _lastKnownPassword) )
-            {
-                //
-                // Password changed
-                //
-                _lastKnownPassword = viewModel.Password;
-                _passwordChanged = true;
+                if (!string.Equals(viewModel.UserName, _lastKnownUserName, StringComparison.OrdinalIgnoreCase))
+                {
+                    //
+                    // User name changed
+                    //
+                    IModelContainer<CredentialsModel> existingCredentials;
+
+                    _lastKnownUserName = viewModel.UserName;
+
+                    if (LookUpCredentialsId(viewModel.UserName, out existingCredentials))
+                    {
+                        _ignoreModelUpdates = true;
+                        viewModel.Password = existingCredentials.Model.Password;
+                        _lastKnownPassword = viewModel.Password;
+                        _passwordChanged = false;
+                        _ignoreModelUpdates = false;
+                    }
+                }
+                else if (!string.Equals(viewModel.Password, _lastKnownPassword))
+                {
+                    //
+                    // Password changed
+                    //
+                    _lastKnownPassword = viewModel.Password;
+                    _passwordChanged = true;
+                }
             }
 
             return valid;
@@ -78,15 +94,25 @@
 
         bool IEditCredentialsTask.Dismissing(IEditCredentialsViewModel viewModel, Action dismiss)
         {
-            if(LookUpCredentialsId(viewModel.UserName, out _credentialsId)
-            && viewModel.SaveCredentials
-            && (AreTrimmedStringsDifferent(viewModel.UserName, _credentials.Username) || _passwordChanged))
+            IModelContainer<CredentialsModel> existingCredentials;
+
+            if (LookUpCredentialsId(viewModel.UserName, out existingCredentials))
             {
-                //
-                // TODO: user wants to save the password, credentials object is in the data model, and
-                //       either the password or user name was changed, ask user if she wants to override
-                //       the password.
-                //
+                _credentialsId = existingCredentials.Id;
+
+                if (viewModel.SaveCredentials
+                && (AreTrimmedStringsDifferent(viewModel.UserName, _credentials.Username) || _passwordChanged))
+                {
+                    //
+                    // TODO: user wants to save the password, credentials object is in the data model, and
+                    //       either the password or user name was changed, ask user if she wants to override
+                    //       the password.
+                    //
+                }
+            }
+            else
+            {
+                _credentialsId = Guid.Empty;
             }
 
             return true;
@@ -101,6 +127,7 @@
             {
                 this.Submitted(this, new SessionCredentialsEventArgs(_credentials,
                     _credentialsId,
+                    _passwordChanged,
                     viewModel.SaveCredentials));
             }
         }
@@ -111,18 +138,18 @@
                 this.Cancelled(this, EventArgs.Empty);
         }
 
-        private bool LookUpCredentialsId(string userName, out Guid credentialsId)
+        private bool LookUpCredentialsId(string userName, out IModelContainer<CredentialsModel> credentials)
         {
             bool found = false;
 
             userName = userName.EmptyIfNull().Trim();
-            credentialsId = Guid.Empty;
+            credentials = null;
 
             foreach(IModelContainer<CredentialsModel> container in _dataModel.LocalWorkspace.Credentials.Models)
             {
                 if(userName.Equals(container.Model.Username.EmptyIfNull().Trim(), StringComparison.OrdinalIgnoreCase))
                 {
-                    credentialsId = container.Id;
+                    credentials = container;
                     found = true;
                 }
             }

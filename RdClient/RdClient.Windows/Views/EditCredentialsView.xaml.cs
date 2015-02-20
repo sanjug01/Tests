@@ -2,6 +2,7 @@
 
 namespace RdClient.Views
 {
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Navigation;
     using Windows.System;
     using Windows.UI.Core;
@@ -55,21 +56,12 @@ namespace RdClient.Views
             switch(e.VirtualKey)
             {
                 case VirtualKey.Escape:
-                    InvokeButton(this.Cancel, e);
+                    this.Cancel.Invoke(e);
                     break;
 
                 case VirtualKey.Enter:
-                    InvokeButton(this.Submit, e);
+                    this.Submit.Invoke(e);
                     break;
-            }
-        }
-
-        private void InvokeButton(Button button, AcceleratorKeyEventArgs e)
-        {
-            if (button.IsEnabled && null != button.Command && button.Command.CanExecute(button.CommandParameter))
-            {
-                e.Handled = true;
-                button.Command.Execute(this.Cancel.CommandParameter);
             }
         }
     }
