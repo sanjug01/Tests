@@ -1,29 +1,62 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Converters;
-using System;
+using Windows.UI.Xaml;
 
-namespace RdClient.Shared.Test.Converters
+namespace RdClient.Shared.Test
 {
     [TestClass]
     public class ByteArrayToStringConverterTests
     {
         [TestMethod]
-        public void ByteArrayToStringConverterTests_Convert()
+        public void ByteArrayToString_ForwardEmptyArray()
         {
-            ByteArrayToStringConverter batsc = new ByteArrayToStringConverter();
-            byte[] array = { 0, 1, 2, 3 };
-            string converted = batsc.Convert(array, typeof(string), null, null) as string;
+            ByteArrayToStringConverter converter = new ByteArrayToStringConverter();
+            byte[] value = new byte[0];
+            string outString;
 
-            Assert.AreEqual("00-01-02-03", converted);
+            outString = (string)converter.Convert(value, typeof(string), null, "");
+            Assert.AreEqual(string.Empty, outString);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void ByteArrayToStringConverterTests_ConvertBack()
+        public void ByteArrayToString_ForwardNullArray()
         {
-            ByteArrayToStringConverter batsc = new ByteArrayToStringConverter();
-            batsc.ConvertBack(null, null, null, null);
+            ByteArrayToStringConverter converter = new ByteArrayToStringConverter();
+            byte[] value = new byte[0];
+            string outString;
+
+            outString = (string)converter.Convert(value, typeof(string), null, "");
+            Assert.AreEqual(string.Empty, outString);
         }
 
+
+        [TestMethod]
+        public void ByteArrayToString_ForwardNonEmpty()
+        {
+            ByteArrayToStringConverter converter = new ByteArrayToStringConverter();
+            byte[] value = new byte[0];
+            string outString;
+
+            outString = (string)converter.Convert(value, typeof(string), null, "");
+            Assert.AreEqual(string.Empty, outString);
+        }
+
+        [TestMethod]
+        public void ByteArrayToString_BackNotImplemented()
+        {
+            ByteArrayToStringConverter converter = new ByteArrayToStringConverter();
+            byte[] value ;
+            string outString = "AbC";
+
+            try 
+            {
+                value = (byte[]) converter.ConvertBack(outString, typeof(string), null, "");
+                Assert.Fail();
+            }
+            catch(System.NotImplementedException notImplementedExc)
+            {
+                Assert.IsNotNull(notImplementedExc);
+            }
+        }
     }
 }

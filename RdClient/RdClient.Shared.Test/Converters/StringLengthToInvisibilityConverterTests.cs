@@ -1,39 +1,82 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Converters;
-using System;
 using Windows.UI.Xaml;
 
-namespace RdClient.Shared.Test.Converters
+namespace RdClient.Shared.Test
 {
     [TestClass]
     public class StringLengthToInvisibilityConverterTests
     {
         [TestMethod]
-        public void StringLengthToInvisibilityConverter_ConvertCollapsed()
+        public void ForwardEmptyString()
         {
-            string str = "hello world";
-            StringLengthToInvisibilityConverter sltic = new StringLengthToInvisibilityConverter();
-            Visibility visibility = (Visibility) sltic.Convert(str, typeof(Visibility), null, null);
+            StringLengthToInvisibilityConverter converter = new StringLengthToInvisibilityConverter();
+            string value = "";
+            Visibility visibility;
 
-            Assert.AreEqual(Visibility.Collapsed, visibility);
-        }
-
-        [TestMethod]
-        public void StringLengthToInvisibilityConverter_ConvertVisible()
-        {
-            string str = null;
-            StringLengthToInvisibilityConverter sltic = new StringLengthToInvisibilityConverter();
-            Visibility visibility = (Visibility)sltic.Convert(str, typeof(Visibility), null, null);
-
+            visibility = (Visibility)converter.Convert(value, typeof(Visibility), null, "");
             Assert.AreEqual(Visibility.Visible, visibility);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void StringLengthToInvisibilityConverter_ConvertBack()
+        public void ForwardNullString()
         {
-            StringLengthToInvisibilityConverter sltic = new StringLengthToInvisibilityConverter();
-            sltic.ConvertBack(null, null, null, null);
+            StringLengthToInvisibilityConverter converter = new StringLengthToInvisibilityConverter();
+            string value = null;
+            Visibility visibility;
+
+            visibility = (Visibility)converter.Convert(value, typeof(Visibility), null, "");
+            Assert.AreEqual(Visibility.Visible, visibility);
+        }
+
+
+        [TestMethod]
+        public void ForwardNonEmpty()
+        {
+            StringLengthToInvisibilityConverter converter = new StringLengthToInvisibilityConverter();
+            string value = "12Ab";
+            Visibility visibility;
+
+            visibility = (Visibility)converter.Convert(value, typeof(Visibility), null, "");
+            Assert.AreEqual(Visibility.Collapsed, visibility);
+        }
+
+        [TestMethod]
+        public void BackVisible_VerifyNotImplemented()
+        {
+            StringLengthToInvisibilityConverter converter = new StringLengthToInvisibilityConverter();
+            string value;
+            Visibility visibility = Visibility.Visible;
+
+            try 
+            { 
+                value = (string)converter.ConvertBack(visibility, typeof(string), null, "");
+                Assert.Fail();
+            }
+            catch(System.NotImplementedException notImplementedExc)
+            {
+                Assert.IsNotNull(notImplementedExc);
+            }
+        }
+
+        [TestMethod]
+        public void BackCollapsed_VerifyNotImplemented()
+        {
+            StringLengthToInvisibilityConverter converter = new StringLengthToInvisibilityConverter();
+            string value;
+            Visibility visibility = Visibility.Collapsed;
+
+            try
+            {
+                value = (string)converter.ConvertBack(visibility, typeof(string), null, "");
+                Assert.Fail();
+            }
+            catch (System.NotImplementedException notImplementedExc)
+            {
+                Assert.IsNotNull(notImplementedExc);
+            }
+
+
         }
     }
 }

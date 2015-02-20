@@ -2,49 +2,53 @@
 using RdClient.Converters;
 using Windows.UI.Xaml;
 
-namespace RdClient.Shared.Test.Converters
+namespace RdClient.Shared.Test
 {
     [TestClass]
     public class BooleanToVisibilityConverterTests
     {
         [TestMethod]
-        public void BooleanToVisibilityConverter_ConvertTrue()
+        public void BooleanToVisibilityConvertForwardTrue()
         {
             BooleanToVisibilityConverter btvc = new BooleanToVisibilityConverter();
-            bool flag = true;
-            Visibility visibility = (Visibility) btvc.Convert(flag, typeof(Visibility), null, null);
+            bool value = true;
+            Visibility visibility;
 
+            visibility = (Visibility)btvc.Convert(value, typeof(Visibility), null, "");
             Assert.AreEqual(Visibility.Visible, visibility);
         }
 
         [TestMethod]
-        public void BooleanToVisibilityConverter_ConvertFalse()
+        public void BooleanToVisibilityConvertForwardFalse()
         {
             BooleanToVisibilityConverter btvc = new BooleanToVisibilityConverter();
-            bool flag = false;
-            Visibility visibility = (Visibility)btvc.Convert(flag, typeof(Visibility), null, null);
+            bool value = false;
+            Visibility visibility;
 
+            visibility = (Visibility)btvc.Convert(value, typeof(Visibility), null, "");
             Assert.AreEqual(Visibility.Collapsed, visibility);
         }
 
         [TestMethod]
-        public void BooleanToVisibilityConverter_ConvertBackTrue()
+        public void BooleanToVisibilityConvertBackVisible()
         {
             BooleanToVisibilityConverter btvc = new BooleanToVisibilityConverter();
+            bool value;
             Visibility visibility = Visibility.Visible;
-            bool flag = (bool)btvc.ConvertBack(visibility, typeof(bool), null, null);
 
-            Assert.IsTrue(flag);
+            value = (bool)btvc.ConvertBack(visibility, typeof(bool), null, "");
+            Assert.AreEqual(true, value);
         }
 
         [TestMethod]
-        public void BooleanToVisibilityConverter_ConvertBackFalse()
+        public void BooleanToVisibilityConvertBackCollapsed()
         {
             BooleanToVisibilityConverter btvc = new BooleanToVisibilityConverter();
+            bool value;
             Visibility visibility = Visibility.Collapsed;
-            bool flag = (bool)btvc.ConvertBack(visibility, typeof(bool), null, null);
 
-            Assert.IsFalse(flag);
+            value = (bool)btvc.ConvertBack(visibility, typeof(bool), null, "");
+            Assert.AreEqual(false, value);
         }
     }
 }

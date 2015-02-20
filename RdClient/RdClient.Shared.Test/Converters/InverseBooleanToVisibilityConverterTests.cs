@@ -2,49 +2,53 @@
 using RdClient.Converters;
 using Windows.UI.Xaml;
 
-namespace RdClient.Shared.Test.Converters
+namespace RdClient.Shared.Test
 {
     [TestClass]
     public class InverseBooleanToVisibilityConverterTests
     {
         [TestMethod]
-        public void InverseBooleanToVisibilityConverterTests_ConvertTrue()
+        public void ForwardTrue()
         {
-            InverseBooleanToVisibilityConverter ibtvc = new InverseBooleanToVisibilityConverter();
-            bool flag = true;
-            Visibility visibility = (Visibility) ibtvc.Convert(flag, typeof(Visibility), null, null);
+            InverseBooleanToVisibilityConverter btvc = new InverseBooleanToVisibilityConverter();
+            bool value = true;
+            Visibility visibility;
 
+            visibility = (Visibility)btvc.Convert(value, typeof(Visibility), null, "");
             Assert.AreEqual(Visibility.Collapsed, visibility);
         }
 
         [TestMethod]
-        public void InverseBooleanToVisibilityConverterTests_ConvertFalse()
+        public void ForwardFalse()
         {
-            InverseBooleanToVisibilityConverter ibtvc = new InverseBooleanToVisibilityConverter();
-            bool flag = false;
-            Visibility visibility = (Visibility)ibtvc.Convert(flag, typeof(Visibility), null, null);
+            InverseBooleanToVisibilityConverter btvc = new InverseBooleanToVisibilityConverter();
+            bool value = false;
+            Visibility visibility;
 
+            visibility = (Visibility)btvc.Convert(value, typeof(Visibility), null, "");
             Assert.AreEqual(Visibility.Visible, visibility);
         }
 
         [TestMethod]
-        public void InverseBooleanToVisibilityConverterTests_ConvertBackCollapsed()
+        public void BackVisible()
         {
-            InverseBooleanToVisibilityConverter ibtvc = new InverseBooleanToVisibilityConverter();
-            Visibility visibility = Visibility.Collapsed;
-            bool flag = (bool)ibtvc.ConvertBack(visibility, typeof(Visibility), null, null);
+            InverseBooleanToVisibilityConverter btvc = new InverseBooleanToVisibilityConverter();
+            bool value;
+            Visibility visibility = Visibility.Visible;
 
-            Assert.IsTrue(flag);
+            value = (bool)btvc.ConvertBack(visibility, typeof(bool), null, "");
+            Assert.AreEqual(false, value);
         }
 
         [TestMethod]
-        public void InverseBooleanToVisibilityConverterTests_ConvertBackVisible()
+        public void BackCollapsed()
         {
-            InverseBooleanToVisibilityConverter ibtvc = new InverseBooleanToVisibilityConverter();
-            Visibility visibility = Visibility.Visible;
-            bool flag = (bool)ibtvc.ConvertBack(visibility, typeof(Visibility), null, null);
+            InverseBooleanToVisibilityConverter btvc = new InverseBooleanToVisibilityConverter();
+            bool value;
+            Visibility visibility = Visibility.Collapsed;
 
-            Assert.IsFalse(flag);
+            value = (bool)btvc.ConvertBack(visibility, typeof(bool), null, "");
+            Assert.AreEqual(true, value);
         }
     }
 }
