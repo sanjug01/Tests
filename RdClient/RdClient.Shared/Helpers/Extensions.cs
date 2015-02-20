@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
+    using Windows.UI.Core;
+    using Windows.UI.Xaml.Controls;
 
     static public class Extensions
     {
@@ -45,6 +47,17 @@
         public static string EmptyIfNull(this string value)
         {
             return value ?? string.Empty;
+        }
+
+        public static void Invoke(this Button button, AcceleratorKeyEventArgs e = null)
+        {
+            Contract.Assert(null != button);
+
+            if (button.IsEnabled && null != button.Command && button.Command.CanExecute(button.CommandParameter))
+            {
+                e.Handled = true;
+                button.Command.Execute(button.CommandParameter);
+            }
         }
     }
 }

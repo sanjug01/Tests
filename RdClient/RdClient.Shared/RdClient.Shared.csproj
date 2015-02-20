@@ -172,10 +172,17 @@
     <Compile Include="Models\ApplicationDataModel.cs" />
     <Compile Include="Models\CloudWorkspaceModel.cs" />
     <Compile Include="Models\CredentialsModel.cs" />
+    <Compile Include="Models\CredentialsNeededEventArgs.cs" />
     <Compile Include="Models\DesktopModel.cs" />
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Input\Mouse\PointerEventDispatcher.cs" />
     <Compile Include="Data\ICertificateTrust.cs" />
+    <Compile Include="Models\IRdpConnectionSource.cs" />
+    <Compile Include="Models\IRemoteSession.cs" />
+    <Compile Include="Models\IRemoteSessionControl.cs" />
+    <Compile Include="Models\IRemoteSessionView.cs" />
+    <Compile Include="Models\IRemoteSessionViewSite.cs" />
+    <Compile Include="Models\IRenderingPanel.cs" />
     <Compile Include="Models\ISessionFactory.cs" />
     <Compile Include="Models\LocalWorkspaceModel.cs" />
     <Compile Include="Models\OnPremiseWorkspaceModel.cs" />
@@ -184,6 +191,9 @@
     <Compile Include="Models\RemoteApplicationModel.cs" />
     <Compile Include="Data\SerializableCompositionModel.cs" />
     <Compile Include="Models\RemoteConnectionModel.cs" />
+    <Compile Include="Models\RemoteSession.cs" />
+    <Compile Include="Models\RemoteSessionControl.cs" />
+    <Compile Include="Models\RemoteSessionSetup.cs" />
     <Compile Include="Models\SessionFactory.cs" />
     <Compile Include="Models\ThumbnailEncoder.cs" />
     <Compile Include="Models\ThumbnailModel.cs" />
@@ -218,7 +228,9 @@
     <Compile Include="ValidationRules\CharacterOccurenceValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameValidationRule.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
+    <Compile Include="ViewModels\EditCredentialsTasks\AlwaysAskCredentialsTask.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\NewCredentialsTask.cs" />
+    <Compile Include="ViewModels\EditCredentialsTasks\SessionCredentialsEventArgs.cs" />
     <Compile Include="ViewModels\EditCredentialsViewModel.cs" />
     <Compile Include="ViewModels\IConnectionCenterViewModel.cs" />
     <Compile Include="ViewModels\ICredentialViewModel.cs" />
@@ -226,6 +238,7 @@
     <Compile Include="Navigation\NavigationExtensions.cs" />
     <Compile Include="ViewModels\IEditCredentialsTask.cs" />
     <Compile Include="ViewModels\IEditCredentialsViewModel.cs" />
+    <Compile Include="ViewModels\IRemoteConnectionViewModel.cs" />
     <Compile Include="ViewModels\ISessionViewModel.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="Navigation\Extensions\IDataModelSite.cs" />
@@ -246,6 +259,7 @@
     <Compile Include="Navigation\IViewModel.cs" />
     <Compile Include="ViewModels\ILayoutAwareViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
     <Compile Include="ViewModels\ZoomPanViewModel.cs" />
     <Compile Include="ViewModels\MouseViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />

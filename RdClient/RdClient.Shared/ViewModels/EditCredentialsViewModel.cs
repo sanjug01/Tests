@@ -25,6 +25,7 @@
         private readonly RelayCommand _cancel;
         private readonly RelayCommand _dismiss;
 
+        private bool _dismissed;
         private string _resourceName;
         private string _prompt;
         private string _dismissLabel;
@@ -114,6 +115,7 @@
 
         public EditCredentialsViewModel()
         {
+            _dismissed = false;
             _cancel = new RelayCommand(this.CancelView);
             _dismiss = new RelayCommand(this.DismissView, p => this.CanDismiss);
         }
@@ -149,8 +151,12 @@
         private void DismissView(object parameter)
         {
             Contract.Assert(null != _task, "EditCredentialsViewModel.DismissView|dismissed without task");
-            _task.Dismissed(this);
-            this.DismissModal(null);
+            if (_task.Dismissing(this, this.DismissAction))
+            {
+                _dismissed = true;
+                _task.Dismissed(this);
+                this.DismissModal(null);
+            }
         }
 
         private bool CanDismiss
@@ -162,6 +168,16 @@
                 {
                     _dismiss.EmitCanExecuteChanged();
                 }
+            }
+        }
+
+        private void DismissAction()
+        {
+            if (!_dismissed)
+            {
+                _dismissed = true;
+                _task.Dismissed(this);
+                this.DismissModal(null);
             }
         }
     }

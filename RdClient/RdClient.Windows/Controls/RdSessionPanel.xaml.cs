@@ -3,17 +3,15 @@
 namespace RdClient.Controls
 {
     using RdClient.CxWrappers.Utils;
-    using RdClient.Shared.Models;
+    using RdClient.Helpers;
     using RdClient.Shared.Input.ZoomPan;
+    using RdClient.Shared.Models;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
     using Windows.Foundation;
+    using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
-    using Windows.UI.Xaml.Media;
-    using Windows.UI.Xaml.Media.Animation;
-    using Windows.UI.Core;
-    using Windows.UI.Xaml.Input;
 
     public sealed partial class RdSessionPanel : UserControl
     {
@@ -106,8 +104,10 @@ namespace RdClient.Controls
             // bind the window rect and transform rect
             this.WindowRect = CoreWindow.GetForCurrentThread().Bounds;
             this.TransformRect = ScpScaleTransform.TransformBounds(this.WindowRect);
-
-            this.ConnectCommand.Execute(new SessionModel(factory));
+            //
+            // TODO: properly inject the deferred execution object.
+            //
+            this.ConnectCommand.Execute(new SessionModel(factory, new CoreDispatcherDeferredExecution()));
         }
 
         private static void OnConnectCommandPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)

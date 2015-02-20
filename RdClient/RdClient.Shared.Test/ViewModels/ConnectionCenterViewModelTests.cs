@@ -19,12 +19,21 @@ namespace RdClient.Shared.Test.ViewModels
     {
         private TestData _testData;
         private ApplicationDataModel _dataModel;
+        private SessionFactory _sessionFactory;
         private Mock.NavigationService _navService;
         private ConnectionCenterViewModel _vm;
 
         private sealed class Dispatcher : IDeferredExecution
         {
             void IDeferredExecution.Defer(Action action)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private sealed class SessionFactory : ISessionFactory
+        {
+            IRemoteSession ISessionFactory.CreateSession(RemoteSessionSetup sessionSetup)
             {
                 throw new NotImplementedException();
             }
@@ -40,6 +49,7 @@ namespace RdClient.Shared.Test.ViewModels
                 RootFolder = new MemoryStorageFolder(),
                 ModelSerializer = new SerializableModelSerializer()
             };
+            _sessionFactory = new SessionFactory();
             IList<IModelContainer<CredentialsModel>> creds = _testData.NewSmallListOfCredentials();
 
             foreach (IModelContainer<CredentialsModel> cred in creds)
@@ -54,6 +64,7 @@ namespace RdClient.Shared.Test.ViewModels
             _vm = new ConnectionCenterViewModel();
             _vm.CastAndCall<IDeferredExecutionSite>(site => site.SetDeferredExecution(new Dispatcher()));
             ((IDataModelSite)_vm).SetDataModel(_dataModel);
+            ((ISessionFactorySite)_vm).SetSessionFactory(_sessionFactory);
             ((IViewModel)_vm).Presenting(_navService, null, null);            
         }
 
@@ -62,6 +73,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _navService.Dispose();
             _dataModel = null;
+            _sessionFactory = null;
         }
 
         [TestMethod]
