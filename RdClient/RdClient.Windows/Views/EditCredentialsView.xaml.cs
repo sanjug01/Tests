@@ -1,23 +1,13 @@
-﻿using RdClient.Shared.Navigation;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
-
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
+﻿// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace RdClient.Views
 {
+    using RdClient.Shared.Navigation;
+    using Windows.System;
+    using Windows.UI.Core;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+
     public sealed partial class EditCredentialsView : UserControl, IPresentableView
     {
         public EditCredentialsView()
@@ -36,10 +26,51 @@ namespace RdClient.Views
 
         void IPresentableView.Presenting(INavigationService navigationService, object activationParameter)
         {
+            Dispatcher.AcceleratorKeyActivated += this.OnAcceleratorKeyActivated;
         }
 
         void IPresentableView.Dismissing()
         {
+            Dispatcher.AcceleratorKeyActivated -= this.OnAcceleratorKeyActivated;
+        }
+
+        private void OnIsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            //
+            // Navigation service disables modal views before cross-fade animating them.
+            // Because of that, all controls are disabled when the new view is shown, and focus cannot be set
+            // to a disabled control. Waiting until the view becomes enabled and setting focus then helps.
+            //
+            if ((bool)e.NewValue)
+            {
+                if (string.IsNullOrWhiteSpace(this.UserName.Text))
+                    this.UserName.Focus(FocusState.Programmatic);
+                else
+                    this.Password.Focus(FocusState.Programmatic);
+            }
+        }
+
+        private void OnAcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs e)
+        {
+            switch(e.VirtualKey)
+            {
+                case VirtualKey.Escape:
+                    InvokeButton(this.Cancel, e);
+                    break;
+
+                case VirtualKey.Enter:
+                    InvokeButton(this.Submit, e);
+                    break;
+            }
+        }
+
+        private void InvokeButton(Button button, AcceleratorKeyEventArgs e)
+        {
+            if (button.IsEnabled && null != button.Command && button.Command.CanExecute(button.CommandParameter))
+            {
+                e.Handled = true;
+                button.Command.Execute(this.Cancel.CommandParameter);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.Models;
+    using System;
     using System.Diagnostics.Contracts;
 
     public sealed class RemoteSessionViewModel : ViewModelBase, IRemoteSessionViewSite
@@ -24,6 +25,8 @@
             IRemoteSession newSession = (IRemoteSession)activationParameter;
 
             _activeSession = newSession;
+            _activeSession.CredentialsNeeded += this.OnCredentialsNeeded;
+            _activeSession.Cancelled += this.OnSessionCancelled;
 
             if (null != _sessionView)
             {
@@ -33,6 +36,11 @@
 
         protected override void OnDismissed()
         {
+            _activeSession.CredentialsNeeded -= this.OnCredentialsNeeded;
+            _activeSession.Cancelled -= this.OnSessionCancelled;
+            _activeSession = null;
+            _sessionView = null;
+
             base.OnDismissed();
         }
 
@@ -46,6 +54,16 @@
             {
                 _activeSession.Activate(_sessionView);
             }
+        }
+
+        private void OnCredentialsNeeded(object sender, CredentialsNeededEventArgs e)
+        {
+            this.NavigationService.PushModalView("EditCredentialsView", e.Task);
+        }
+
+        private void OnSessionCancelled(object sender, EventArgs e)
+        {
+            this.NavigationService.NavigateToView("ConnectionCenterView", null);
         }
     }
 }

@@ -4,6 +4,7 @@
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.ViewModels;
+    using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
     using System.Diagnostics.Contracts;
 
@@ -15,6 +16,7 @@
         private readonly ICertificateTrust _certificateTrust;
 
         private EventHandler<CredentialsNeededEventArgs> _credentialsNeeded;
+        private EventHandler _cancelled;
 
         private IRemoteSessionView _sessionView;
         private IRenderingPanel _renderingPanel;
@@ -56,6 +58,21 @@
             }
         }
 
+        event EventHandler IRemoteSession.Cancelled
+        {
+            add
+            {
+                using (LockWrite())
+                    _cancelled += value;
+            }
+
+            remove
+            {
+                using (LockWrite())
+                    _cancelled -= value;
+            }
+        }
+
         IRemoteSessionControl IRemoteSession.Activate(IRemoteSessionView sessionView)
         {
             Contract.Assert(null == _sessionView);
@@ -74,10 +91,33 @@
                 // Ask the connection source to create a new session.
                 // The connection source comes all the way from XAML of the main page.
                 //
-                _connection = _connectionSource.CreateConnection(_renderingPanel);
-                //
-                // TODO: activate the connection.
-                //
+                //_connection = _connectionSource.CreateConnection(_renderingPanel);
+
+                if(_sessionSetup.Connection is DesktopModel)
+                {
+                    DesktopModel dtm = (DesktopModel)_sessionSetup.Connection;
+                    //
+                    // If the desktop is configured to always ask credentials, emit the CredentialsNeeded event with a task
+                    // that handles entry of new credentials.
+                    //
+                    if (Guid.Empty.Equals(dtm.CredentialsId))
+                    {
+                        //
+                        // Request on the calling thread, that is the UI thread;
+                        //
+                        AlwaysAskCredentialsTask task = new AlwaysAskCredentialsTask(dtm.HostName, new CredentialsModel(), _sessionSetup.DataModel);
+                        task.Submitted += this.SessionCredentialsSubmitted;
+                        task.Cancelled += this.SessionCredentialsCancelled;
+                        EmitCredentialsNeeded(task);
+                    }
+                    else
+                    {
+                    }
+                }
+                else
+                {
+
+                }
             }
             else
             {
@@ -145,11 +185,46 @@
 
         private void EmitCredentialsNeeded(IEditCredentialsTask task)
         {
+            Contract.Requires(null != task);
+
             using (LockUpgradeableRead())
             {
                 if (null != _credentialsNeeded)
                     _credentialsNeeded(this, new CredentialsNeededEventArgs(task));
             }
+        }
+
+        private void EmitCancelled()
+        {
+            using(LockUpgradeableRead())
+            {
+                if (null != _cancelled)
+                    _cancelled(this, EventArgs.Empty);
+            }
+        }
+
+        private void SessionCredentialsSubmitted(object sender, SessionCredentialsEventArgs e)
+        {
+            Contract.Assert(sender is AlwaysAskCredentialsTask);
+
+            AlwaysAskCredentialsTask task = (AlwaysAskCredentialsTask)sender;
+            task.Cancelled -= this.SessionCredentialsCancelled;
+            task.Submitted -= this.SessionCredentialsSubmitted;
+
+            //e.Credentials
+        }
+
+        private void SessionCredentialsCancelled(object sender, EventArgs e)
+        {
+            Contract.Assert(sender is AlwaysAskCredentialsTask);
+
+            AlwaysAskCredentialsTask task = (AlwaysAskCredentialsTask)sender;
+            task.Cancelled -= this.SessionCredentialsCancelled;
+            task.Submitted -= this.SessionCredentialsSubmitted;
+            //
+            // Emit the Cancelled event so the session view model can navigate to the home page
+            //
+            EmitCancelled();
         }
     }
 }

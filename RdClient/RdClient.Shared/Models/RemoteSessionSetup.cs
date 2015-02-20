@@ -4,10 +4,15 @@
 
     public sealed class RemoteSessionSetup
     {
+        private readonly ApplicationDataModel _dataModel;
         private readonly RemoteConnectionModel _connection;
-        private readonly CredentialsModel _originalCredentials;
-        private CredentialsModel _credentials;
+        private readonly CredentialsModel _credentials;
         private bool _savedCredentials;
+
+        public ApplicationDataModel DataModel
+        {
+            get { return _dataModel; }
+        }
 
         public RemoteConnectionModel Connection
         {
@@ -25,16 +30,14 @@
             set { _savedCredentials = value; }
         }
 
-        public RemoteSessionSetup(RemoteConnectionModel connection, CredentialsModel credentials, bool savedCredentials)
+        public RemoteSessionSetup(ApplicationDataModel dataModel, RemoteConnectionModel connection, CredentialsModel credentials, bool savedCredentials)
         {
+            Contract.Requires(null != dataModel);
             Contract.Requires(null != connection);
-            Contract.Requires(null != credentials);
 
+            _dataModel = dataModel;
             _connection = connection;
-            _originalCredentials = credentials;
-
-            if (null != _originalCredentials)
-                _credentials = new CredentialsModel(_originalCredentials);
+            _credentials = credentials;
         }
     }
 }

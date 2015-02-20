@@ -228,7 +228,9 @@
     <Compile Include="ValidationRules\CharacterOccurenceValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameValidationRule.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
+    <Compile Include="ViewModels\EditCredentialsTasks\AlwaysAskCredentialsTask.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\NewCredentialsTask.cs" />
+    <Compile Include="ViewModels\EditCredentialsTasks\SessionCredentialsEventArgs.cs" />
     <Compile Include="ViewModels\EditCredentialsViewModel.cs" />
     <Compile Include="ViewModels\IConnectionCenterViewModel.cs" />
     <Compile Include="ViewModels\ICredentialViewModel.cs" />

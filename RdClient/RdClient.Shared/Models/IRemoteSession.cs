@@ -14,9 +14,14 @@
         ICertificateTrust CertificateTrust { get; }
 
         /// <summary>
-        /// Event that the session object emits when it needs user to enter credentials.
+        /// Session emits the event when it needs user to enter credentials.
         /// </summary>
         event EventHandler<CredentialsNeededEventArgs> CredentialsNeeded;
+
+        /// <summary>
+        /// Session emits the event when it's got cancelled without ever being activated.
+        /// </summary>
+        event EventHandler Cancelled;
 
         /// <summary>
         /// Activate the remote session and attach a session view to it. The session becomes an exclusive

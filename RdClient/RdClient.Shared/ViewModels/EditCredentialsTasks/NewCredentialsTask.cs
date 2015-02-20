@@ -103,6 +103,11 @@
             return valid;
         }
 
+        bool IEditCredentialsTask.Dismissing(IEditCredentialsViewModel viewModel, Action dismiss)
+        {
+            return true;
+        }
+
         void IEditCredentialsTask.Dismissed(IEditCredentialsViewModel viewModel)
         {
             //
