@@ -13,7 +13,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{StaticResource ConnectionCenterMargin}" />
             <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>        
+        </Grid.ColumnDefinitions>
+        <Button x:Name="BackButton" x:FieldModifier="public" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource BackButtonStyle}" Command="{Binding GoBackCommand}" />
         <TextBlock Grid.Column="1" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center" x:Uid="ConnectionCenter_TitleHeader" Text="Remote Desktop (d)" />
     </Grid>
 </UserControl>

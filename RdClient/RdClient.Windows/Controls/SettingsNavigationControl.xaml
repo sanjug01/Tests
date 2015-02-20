@@ -22,7 +22,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource SettingsBackButtonStyle}" Command="{Binding GoBackCommand}" />
         <TextBlock Grid.Row="1" Style="{ThemeResource SubheaderTextBlockStyle}" Padding="{StaticResource SettingsMarginPadding}" x:Uid="Settings_NavBar_Title" Text="Settings (d)" />
         <StackPanel Grid.Row="2">
             <ListBox SelectedIndex="0" BorderThickness="0">

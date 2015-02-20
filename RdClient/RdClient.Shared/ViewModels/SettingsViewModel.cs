@@ -117,6 +117,12 @@ namespace RdClient.Shared.ViewModels
             base.OnDismissed();
         }
 
+        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
+        {
+            this.GoBackCommand.Execute(null);
+            backArgs.Handled = true;
+        }
+
         private ICredentialViewModel CreateCredentialsViewModel(IModelContainer<CredentialsModel> container)
         {
             return new CredentialViewModel(container);

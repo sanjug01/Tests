@@ -31,16 +31,12 @@
     <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <controls:AppHeaderControl />
-        </Grid>
-        <Grid Grid.Row="1">
             <controls:ConnectionCenterTitleBar />            
         </Grid>        
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="1">
             <controls:DesktopsListControl Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <controls:ItsLonelyHereControl Visibility="{Binding HasDesktops, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
         </Grid>       
