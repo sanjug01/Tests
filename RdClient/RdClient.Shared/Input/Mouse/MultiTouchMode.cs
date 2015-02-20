@@ -23,19 +23,26 @@ namespace RdClient.Shared.Input.Mouse
 
         private void InvokeManipulator(PointerEvent pointerEvent)
         {
+            // the time-stamp delta is relative to the first touch ever
             ulong delta = pointerEvent.TimeStamp - _masterTouch.TimeStamp;
 
+            // don't send duplicate position updates
             if (pointerEvent.ActionType == TouchEventType.Update && _lastTouch != null && _lastTouch.Position == pointerEvent.Position)
             {
                 return;
             }
 
+            // if the position to the up event is not the same as the last recorded position, 
+            // update the position before sending the up event
             if (pointerEvent.ActionType == TouchEventType.Up && _lastTouch != null && _lastTouch.Position != pointerEvent.Position)
             {
                 _manipulator.SendTouchAction(TouchEventType.Update, pointerEvent.PointerId, pointerEvent.Position, delta);
             }
 
+            // touch events have a location indicator hint which needs the correct position
             _manipulator.MousePosition = pointerEvent.Position;
+
+
             _manipulator.SendTouchAction(pointerEvent.ActionType, pointerEvent.PointerId, pointerEvent.Position, delta);
         }
 
@@ -61,7 +68,7 @@ namespace RdClient.Shared.Input.Mouse
 
         public void Reset()
         {
-            // don't reset the master touch because it may crash the stack
+            // don't reset the master touch because it may crash the protocol stack o_O
             _lastTouch = null;
         }
     }

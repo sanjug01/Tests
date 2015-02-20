@@ -138,6 +138,7 @@
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\PointerManipulator.cs" />
+    <Compile Include="Mock\PointerManipulatorRecorder.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
     <Compile Include="Mock\Thumbnail.cs" />
     <Compile Include="Mock\LocalizedString.cs" />
