@@ -1,5 +1,4 @@
-﻿using RdClient.Shared.ViewModels;
-using System;
+﻿using System;
 using System.Windows.Input;
 
 namespace RdClient.Shared.Navigation

@@ -1,7 +1,5 @@
 ﻿namespace RdClient.Shared.Navigation
 {
-    using System;
-
     public interface IViewModel
     {
         /// <summary>
