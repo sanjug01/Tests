@@ -63,7 +63,11 @@ using Windows.UI.Xaml.Controls;
             _navigationService.NavigateToView(this.LandingPage, null);
 
             //This will be replaced with a hookup to the back button pressed API once we move to Windows 10
-            this.BackButton.Command = _navigationService.BackCommand;
+            Button backButton = this.BackButton;
+            if (backButton != null)
+            {
+                backButton.Command = _navigationService.BackCommand;
+            }
         }
 
         public INavigationService CreateNavigationService()

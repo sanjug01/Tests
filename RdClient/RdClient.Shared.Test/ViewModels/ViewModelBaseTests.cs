@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using RdClient.Shared.Navigation;
 using RdClient.Shared.ViewModels;
 
 namespace Test.RdClient.Shared.Test
@@ -47,6 +48,23 @@ namespace Test.RdClient.Shared.Test
 
             dvm.SomeProperty = false;
             Assert.AreEqual(null, changedProperty);
+        }
+
+        [TestMethod]
+        public void OnNavigatingBackDoesNotSetHandled()
+        {
+            DummyViewModel dvm = new DummyViewModel();
+            IBackCommandArgs backAgs = new BackCommandArgs();
+            IViewModel dvmAsViewModel = dvm as IViewModel;            
+            Assert.IsNotNull(dvmAsViewModel, "test precondition failed");
+            Assert.IsFalse(backAgs.Handled, "test precondition failed");
+            
+            dvmAsViewModel.NavigatingBack(backAgs);
+            Assert.IsFalse(backAgs.Handled);
+
+            backAgs.Handled = true;
+            dvmAsViewModel.NavigatingBack(backAgs);
+            Assert.IsTrue(backAgs.Handled);
         }
     }
 }

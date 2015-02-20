@@ -114,7 +114,17 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _sessionModel.Expect("Disconnect", new List<object>() { }, 0);            
             _vm.DisconnectCommand.Execute(null);            
-            }
+        }
+
+        [TestMethod]
+        public void SessionViewModel_ShouldHandleBackNavigationByDisconnecting()
+        {
+            _sessionModel.Expect("Disconnect", new List<object>() { }, 0);       
+            IBackCommandArgs backArgs = new BackCommandArgs();
+            Assert.IsFalse(backArgs.Handled);
+            (_vm as IViewModel).NavigatingBack(backArgs);
+            Assert.IsTrue(backArgs.Handled);
+        }
 
         [TestMethod]
         public void SessionViewModel_ShouldCallHandleDisconnect_ShouldNavigateToHome()
@@ -128,11 +138,11 @@ namespace RdClient.Shared.Test.ViewModels
             ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
             _sessionModel.EmitConnectionCreated(connectionCreatedArgs);
 
-                RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0);
-                ClientDisconnectedArgs clientDisconnectedArgs = new ClientDisconnectedArgs(reason);
+            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0);
+            ClientDisconnectedArgs clientDisconnectedArgs = new ClientDisconnectedArgs(reason);
 
-            _eventSource.EmitClientDisconnected(_rdpConnection, clientDisconnectedArgs);            
-            }
+            _eventSource.EmitClientDisconnected(_rdpConnection, clientDisconnectedArgs);
+        }
 
         [TestMethod]
         public void SessionViewModel_ShouldCallHandleDisconnect_ShouldDisplayError()
@@ -147,11 +157,11 @@ namespace RdClient.Shared.Test.ViewModels
             ConnectionCreatedArgs connectionCreatedArgs = new ConnectionCreatedArgs(_rdpConnection);
             _sessionModel.EmitConnectionCreated(connectionCreatedArgs);
 
-                RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.ServerDeniedConnection, 0, 0);
-                ClientDisconnectedArgs clientDisconnectedArgs = new ClientDisconnectedArgs(reason);
+            RdpDisconnectReason reason = new RdpDisconnectReason(RdpDisconnectCode.ServerDeniedConnection, 0, 0);
+            ClientDisconnectedArgs clientDisconnectedArgs = new ClientDisconnectedArgs(reason);
 
             _eventSource.EmitClientDisconnected(_rdpConnection, clientDisconnectedArgs);
-            }
+        }
 
         [TestMethod]
         public void SessionViewModel_HandleAsyncDisconnect_ConnectionShouldHandleDisconnect()
