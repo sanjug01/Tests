@@ -137,19 +137,12 @@ namespace RdClient.Shared.Input.Mouse
             (o) => { });
         }
 
-        private static void AddPinchAndZoomTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
-        {
-            // TODO
-        }
-
-
         public static IPointerEventConsumer CreatePointerMode(ITimer timer, IPointerManipulator manipulator)
         {
             IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>>();
 
             AddDirectModeTransitions(ref stateMachine);
             AddMoveTransitions(ref stateMachine);
-            AddPinchAndZoomTransitions(ref stateMachine);
 
             stateMachine.SetStart(PointerState.Idle);
 

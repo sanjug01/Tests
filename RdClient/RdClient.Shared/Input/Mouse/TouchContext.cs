@@ -25,8 +25,7 @@ namespace RdClient.Shared.Input.Mouse
         Inertia,
         LeftDrag,
         RightDrag,
-        Scroll,
-        PinchZoom
+        Scroll
     }
     public class StateEvent<TInput, TContext>
     {
