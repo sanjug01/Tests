@@ -148,8 +148,10 @@
     <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\ApplicationDataModelTests.cs" />
+    <Compile Include="Model\CredentialsModelTests.cs" />
     <Compile Include="Model\DesktopModelTests.cs" />
     <Compile Include="Input\Mouse\PointerModeTests.cs" />
+    <Compile Include="Model\SessionCredentialsTests.cs" />
     <Compile Include="Model\SessionModelTests.cs" />
     <Compile Include="Model\SnapshotterTests.cs" />
     <Compile Include="Model\WorkspaceModelTests.cs" />

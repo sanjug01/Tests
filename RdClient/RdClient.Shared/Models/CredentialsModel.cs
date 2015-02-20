@@ -26,6 +26,13 @@
             _password = otherModel.Password;
         }
 
+        public void CopyTo(CredentialsModel otherModel)
+        {
+            Contract.Requires(null != otherModel);
+            otherModel.Username = _username;
+            otherModel.Password = _password;
+        }
+
         public string Username
         {
             get { return _username; }

@@ -194,6 +194,7 @@
     <Compile Include="Models\RemoteSession.cs" />
     <Compile Include="Models\RemoteSessionControl.cs" />
     <Compile Include="Models\RemoteSessionSetup.cs" />
+    <Compile Include="Models\SessionCredentials.cs" />
     <Compile Include="Models\SessionFactory.cs" />
     <Compile Include="Models\ThumbnailEncoder.cs" />
     <Compile Include="Models\ThumbnailModel.cs" />
