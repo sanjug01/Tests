@@ -124,6 +124,7 @@ namespace RdClient.Controls
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
         {
+            args.TranslationBehavior.DesiredDeceleration = 0.002;
             PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
         }
 

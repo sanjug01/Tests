@@ -171,33 +171,22 @@ namespace RdClient.Shared.ViewModels
             if (TouchEventType.Down == e.ActionType)
             {
                 // click or double click
-                bool doubleTapped = false;
                 if (_lastTouchTimeStamp != 0 && (e.TimeStamp - _lastTouchTimeStamp < MAX_DOUBLE_TAP_US))
                 {
-                    //
                     // This is a double tap guesture so enable moving the pan control
-                    //
-                    doubleTapped = true;
                     _lastTouchTimeStamp = 0;
-                }
-                else
-                {
-                    _lastTouchTimeStamp = e.TimeStamp;
-                }
-
-                if(doubleTapped)
-                {
                     this.State = PanKnobState.Moving;
                 }
                 else
                 {
+                    _lastTouchTimeStamp = e.TimeStamp;
                     this.State = PanKnobState.Enabled;
                 }
 
                 this.PanOrbOpacity = 1.0;
                 this.IsPanning = true;
             }
-            else if(TouchEventType.Up == e.ActionType)
+            else if(TouchEventType.Up == e.ActionType && e.Inertia)
             {
                 // release
                 this.State = PanKnobState.Disabled;
