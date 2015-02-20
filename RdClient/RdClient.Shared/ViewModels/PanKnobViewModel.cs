@@ -12,7 +12,7 @@ namespace RdClient.Shared.ViewModels
     using RdClient.Shared.Input.ZoomPan;
     using RdClient.Shared.Input.Mouse;
 
-    public class PanKnobTransform : IPanKnobTransform // , IPointerManipulator
+    public class PanKnobTransform : IPanKnobTransform 
     {
         public PanKnobTransformType TransformType { get; private set; }
 
