@@ -195,6 +195,9 @@
 
         private void SessionCredentialsSubmitted(object sender, SessionCredentialsEventArgs e)
         {
+            //
+            // Called by the AlwaysAskCredentialsTask when credentials have been entered and submitted;
+            //
             Contract.Assert(sender is AlwaysAskCredentialsTask);
 
             AlwaysAskCredentialsTask task = (AlwaysAskCredentialsTask)sender;
