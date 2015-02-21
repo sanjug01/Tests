@@ -8,7 +8,7 @@ namespace RdClient.Shared.Helpers
 {
     public static class GlobalConstants
     {
-        public static const ulong MaxDoubleTapUS = 300000; // microseconds      
-        public static const double DesiredDeceleration = 0.002;
+        public static readonly ulong MaxDoubleTapUS = 300000; // microseconds      
+        public static readonly double DesiredDeceleration = 0.002;
     }
 }

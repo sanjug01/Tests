@@ -125,6 +125,7 @@
     <Compile Include="Helpers\DeferredCommand.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />
     <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\GlobalConstants.cs" />
     <Compile Include="Helpers\GroupCommand.cs" />
     <Compile Include="Helpers\IDeferredExecution.cs" />
     <Compile Include="Helpers\ILocalizedString.cs" />

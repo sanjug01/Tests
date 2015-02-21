@@ -210,7 +210,7 @@ namespace RdClient.Shared.ViewModels
                 // pan
                 PanChange.Invoke(this, new PanEventArgs(x, y));
             }
-            else
+            if (PanKnobState.Moving == this.State)
             {
                 // move
                 double panXTo = this.TranslateXTo + x;
