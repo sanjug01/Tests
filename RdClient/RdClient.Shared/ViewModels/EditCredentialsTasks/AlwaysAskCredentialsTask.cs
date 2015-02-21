@@ -22,8 +22,6 @@
         private bool _ignoreModelUpdates;
         private bool _passwordChanged;
         private Guid _credentialsId;
-        private string _lastKnownUserName;
-        private string _lastKnownPassword;
 
         public event EventHandler<SessionCredentialsEventArgs> Submitted;
         public event EventHandler Cancelled;
@@ -50,41 +48,41 @@
             viewModel.DismissLabel = "d:Connect";
             viewModel.ResourceName = _connectionName;
             viewModel.Prompt = "d:Remote connection is set to always ask for credentials";
-
-            _lastKnownUserName = _credentials.Username;
-            _lastKnownPassword = _credentials.Password;
         }
 
         bool IEditCredentialsTask.Validate(IEditCredentialsViewModel viewModel)
         {
-            bool valid = IsUserNameValid(viewModel.UserName);
+            return IsUserNameValid(viewModel.UserName);
+        }
 
-            if (!_ignoreModelUpdates)
+        bool IEditCredentialsTask.ValidateChangedProperty(IEditCredentialsViewModel viewModel, string propertyName)
+        {
+            bool valid = true;
+
+            if(propertyName.Equals(EditCredentialsViewModel.UserNamePropertyName))
             {
-                if (!string.Equals(viewModel.UserName, _lastKnownUserName, StringComparison.OrdinalIgnoreCase))
-                {
-                    //
-                    // User name changed
-                    //
-                    IModelContainer<CredentialsModel> existingCredentials;
+                valid = IsUserNameValid(viewModel.UserName);
 
-                    _lastKnownUserName = viewModel.UserName;
+                if(valid)
+                {
+                    IModelContainer<CredentialsModel> existingCredentials;
 
                     if (LookUpCredentialsId(viewModel.UserName, out existingCredentials))
                     {
                         _ignoreModelUpdates = true;
                         viewModel.Password = existingCredentials.Model.Password;
-                        _lastKnownPassword = viewModel.Password;
                         _passwordChanged = false;
                         _ignoreModelUpdates = false;
                     }
                 }
-                else if (!string.Equals(viewModel.Password, _lastKnownPassword))
+            }
+            else if (propertyName.Equals(EditCredentialsViewModel.PasswordPropertyName))
+            {
+                if(!_ignoreModelUpdates)
                 {
                     //
                     // Password changed
                     //
-                    _lastKnownPassword = viewModel.Password;
                     _passwordChanged = true;
                 }
             }

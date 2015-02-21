@@ -103,6 +103,14 @@
             return valid;
         }
 
+        bool IEditCredentialsTask.ValidateChangedProperty(IEditCredentialsViewModel viewModel, string propertyName)
+        {
+            //
+            // Validate will be called if this method returns true.
+            //
+            return true;
+        }
+
         bool IEditCredentialsTask.Dismissing(IEditCredentialsViewModel viewModel, Action dismiss)
         {
             return true;

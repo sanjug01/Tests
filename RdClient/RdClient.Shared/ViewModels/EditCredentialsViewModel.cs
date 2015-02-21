@@ -37,6 +37,10 @@
         private bool _canDismiss;
         private IEditCredentialsTask _task;
 
+        public static readonly string
+            UserNamePropertyName = "UserName",
+            PasswordPropertyName = "Password";
+
         public ICommand Cancel
         {
             get { return _cancel; }
@@ -90,7 +94,12 @@
             {
                 if(this.SetProperty(ref _userName, value))
                 {
-                    this.CanDismiss = _task.Validate(this);
+                    bool canDismiss = _task.ValidateChangedProperty(this, UserNamePropertyName);
+
+                    if (canDismiss)
+                        canDismiss = _task.Validate(this);
+
+                    this.CanDismiss = canDismiss;
                 }
             }
         }
@@ -102,7 +111,12 @@
             {
                 if (this.SetProperty(ref _password, value))
                 {
-                    this.CanDismiss = _task.Validate(this);
+                    bool canDismiss = _task.ValidateChangedProperty(this, PasswordPropertyName);
+
+                    if (canDismiss)
+                        canDismiss = _task.Validate(this);
+
+                    this.CanDismiss = canDismiss;
                     //
                     // Enable the "reveal password" button if the password box is cleared completely,
                     // after which any password will have to be entered by user.

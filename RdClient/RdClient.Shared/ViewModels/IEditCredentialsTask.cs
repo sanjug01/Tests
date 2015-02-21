@@ -14,6 +14,15 @@ namespace RdClient.Shared.ViewModels
         /// <param name="viewModel">View model that backs the view that is being presented.</param>
         void Populate(IEditCredentialsViewModel viewModel);
         /// <summary>
+        /// Perform validation of a change of a single property.
+        /// </summary>
+        /// <param name="viewModel">View model representing the credentials editor view.</param>
+        /// <param name="propertyName">Name of the changed property of the IEditCredentialsViewModel object.</param>
+        /// <returns>True if the new state of the credentials editor is valid.</returns>
+        /// <remarks>If method returns true, Validate is also called to perform possibly redundant
+        /// but more holistic validation.</remarks>
+        bool ValidateChangedProperty(IEditCredentialsViewModel viewModel, string propertyName);
+        /// <summary>
         /// Perform validation of data entered in the view.
         /// </summary>
         /// <param name="viewModel">View model representing the credentials editor view.</param>
