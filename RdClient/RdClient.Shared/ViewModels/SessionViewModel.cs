@@ -145,6 +145,12 @@
             base.OnDismissed();
         }
 
+        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
+        {
+            this.DisconnectCommand.Execute(null);
+            backArgs.Handled = true;
+        }
+
         private void StartKeyboardCapture()
         {
             if (!_capturingKeyboard && _keyboardCapture != null)

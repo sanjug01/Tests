@@ -1,5 +1,4 @@
-﻿using System;
-namespace RdClient.Shared.Navigation
+﻿namespace RdClient.Shared.Navigation
 {
     public interface IViewModel
     {
@@ -14,5 +13,7 @@ namespace RdClient.Shared.Navigation
         void Presenting(INavigationService navigationService, object activationParameter, IModalPresentationContext presentationContext);
 
         void Dismissing();
+
+        void NavigatingBack(IBackCommandArgs backArgs);
     }
 }

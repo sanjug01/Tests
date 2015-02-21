@@ -198,6 +198,7 @@
     <Compile Include="Models\ThumbnailModel.cs" />
     <Compile Include="Models\Snapshotter.cs" />
     <Compile Include="Models\WorkspaceModel.cs" />
+    <Compile Include="Navigation\BackCommandArgs.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarItemsSourceContract.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarSiteContract.cs" />
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="Navigation\Extensions\ITimerFactorySite.cs" />
     <Compile Include="Navigation\Extensions\SessionFactoryExtension.cs" />
     <Compile Include="Navigation\Extensions\TimerFactoryExtension.cs" />
+    <Compile Include="Navigation\IBackCommandArgs.cs" />
     <Compile Include="Navigation\IPresentationCompletion.cs" />
     <Compile Include="Navigation\IModalPresentationContext.cs" />
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />

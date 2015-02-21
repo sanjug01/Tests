@@ -74,6 +74,15 @@
         {
         }
 
+        /// <summary>
+        /// Overridable called when this is the currently displayed view model and a command to navigate back has been received.
+        /// </summary>
+        /// <param name="backArgs">This parameter's "Handled" property can be set to true if choosing to handle the back navigation within the ViewModel.</param>
+        /// <remarks>Default implementation does nothing.</remarks>
+        protected virtual void OnNavigatingBack(IBackCommandArgs backArgs)
+        {
+        }
+
         void IViewModel.Presenting(INavigationService navigationService, object activationParameter, IModalPresentationContext presentationContext)
         {
             Contract.Requires(navigationService != null);
@@ -88,6 +97,11 @@
         {
             SetProperty<INavigationService>(ref _navigationService, null);
             this.OnDismissed();
+        }
+
+        void IViewModel.NavigatingBack(IBackCommandArgs backArgs)
+        {
+            this.OnNavigatingBack(backArgs);
         }
     }
 

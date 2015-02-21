@@ -84,8 +84,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    <SolidColorBrush x:Key="AppHeaderBackgroundBrush" Color="#1F1F1F" />
 
     <!-- 
     ======================================================================================
@@ -98,8 +96,7 @@
     <SolidColorBrush x:Key="ConnectionCenterScrollViewBackgroundBrush" Color="#000000" />
     <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="#FFFFFF"/>
-    <GridLength x:Key="ConnectionCenterMargin">68</GridLength>
-    <x:Double x:Key="AppHeaderHeight">30</x:Double>
+    <GridLength x:Key="ConnectionCenterMargin">68</GridLength>   
     <x:Double x:Key="ConnectionCenterTitleBarHeight">38</x:Double>
     <GridLength x:Key="ListHeaderHeight">72</GridLength>
 
@@ -119,6 +116,25 @@
 
     <Style x:Key="ConnectionCenterBarNarrowButtonStyle" TargetType="Button" BasedOn="{StaticResource ConnectionCenterBarButtonStyle}">
         <Setter Property="Width" Value="48" />    
+    </Style>
+
+    <!-- 
+    ======================================================================================
+    AppHeader styles
+    ======================================================================================
+    -->
+    <SolidColorBrush x:Key="AppHeaderBackgroundBrush" Color="#1F1F1F" />
+    <x:Double x:Key="AppHeaderHeight">30</x:Double>
+    <SolidColorBrush x:Key="BackButtonBackgroundBrush" Color="#008FF1" />
+
+    <Style x:Key="BackButtonStyle" TargetType="Button" BasedOn="{StaticResource ConnectionCenterBarButtonStyle}">
+        <Setter Property="Height" Value="{StaticResource AppHeaderHeight}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="{StaticResource BackButtonBackgroundBrush}" />
+        <Setter Property="Foreground" Value="#FFFFFF" />
+        <Setter Property="Content" Value="{StaticResource BackIcon}" />
+        <Setter Property="Padding" Value="0" />
     </Style>
 
     <!-- 
@@ -176,8 +192,7 @@
     -->
     <SolidColorBrush x:Key="SettingsNavBarBackgroundBrush" Color="#1A1A1A" />
     <SolidColorBrush x:Key="SettingsSelectedItemBackgroundBrush" Color="#454545" />
-    <SolidColorBrush x:Key="SettingsBackgroundBrush" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="BackButtonBackgroundBrush" Color="#008FF1" />
+    <SolidColorBrush x:Key="SettingsBackgroundBrush" Color="#FFFFFF" />    
     <GridLength x:Key="SettingsTopPadding">120</GridLength>
     <GridLength x:Key="SettingsMargin">72</GridLength>
     <Thickness x:Key="SettingsMarginPadding">72,0</Thickness>
@@ -268,13 +283,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
-
-    <Style x:Key="SettingsBackButtonStyle" TargetType="Button" BasedOn="{StaticResource ConnectionCenterBarButtonStyle}">
-        <Setter Property="Background" Value="{StaticResource BackButtonBackgroundBrush}" />
-        <Setter Property="Foreground" Value="#FFFFFF" />
-        <Setter Property="Content" Value="{StaticResource BackIcon}" />
-        <Setter Property="Padding" Value="0" />
     </Style>
 
     <SolidColorBrush x:Key="SettingsAddUserButtonBackgroundBrush" Color="#B2B2B2" />
