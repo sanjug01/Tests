@@ -86,6 +86,7 @@
     <Compile Include="Converters\RdpCertificateToErrorListConverterTests.cs" />
     <Compile Include="Converters\ResourceIdToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverterTests.cs" />
+    <Compile Include="CxWrappers\RadcClientTests.cs" />
     <Compile Include="CxWrappers\RdpEventArgsTests.cs" />
     <Compile Include="CxWrappers\RdpEventSourceTests.cs" />
     <Compile Include="CxWrappers\RdpScreenSnapshotTests.cs" />
