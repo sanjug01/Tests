@@ -20,6 +20,9 @@
             <vm:SessionViewModel.ZoomPanViewModel>
                 <vm:ZoomPanViewModel/>
             </vm:SessionViewModel.ZoomPanViewModel>
+            <vm:SessionViewModel.PanKnobViewModel>
+                <vm:PanKnobViewModel/>
+            </vm:SessionViewModel.PanKnobViewModel>            
             <vm:SessionViewModel.KeyboardCapture>
                 <input:CoreWindowKeyboardCapture/>
             </vm:SessionViewModel.KeyboardCapture>
@@ -28,6 +31,8 @@
     
     <UserControl.Resources>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <c:ZoomPanStateToPanKnobVisibilityConverter x:Key="ZoomPanStateToPanKnobVisibilityConverter" />
         <vm:PanLeftTransform x:Key="PanLeft"/>
         <vm:PanRightTransform x:Key="PanRight"/>
         <vm:PanUpTransform x:Key="PanUp"/>
@@ -47,9 +52,7 @@
             TransformRect="{Binding ZoomPanViewModel.TransformRect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             ConnectCommand="{Binding ConnectCommand}"
             ViewSize="{Binding MouseViewModel.ViewSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
-        <!-- controls:RdSessionPanControl x:Name="SessionPanControl" -->
-        
+       
         <controls:MouseLayerControl x:Name="MouseLayer" 
                                     Background="Red"
                                     VerticalContentAlignment="Stretch"
@@ -58,6 +61,13 @@
                                     MouseShape="{Binding MouseViewModel.MouseShape}"
                                     HotSpot="{Binding MouseViewModel.HotSpot}"
                                     MousePosition="{Binding MouseViewModel.MousePosition}"/>
+
+        <controls:RdSessionPanControl x:Name="SessionPanControl" 
+                                      Visibility="{Binding ZoomPanViewModel.State, Converter={StaticResource ZoomPanStateToPanKnobVisibilityConverter}}"
+                                      PanKnobTransform="{Binding PanKnobViewModel.PanKnobTransform, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                                              
+                                      PointerEventConsumer="{Binding PanKnobViewModel.PointerEventConsumer}"
+                                      />
+                                     
 
         <controls:SessionReconnectControl x:Name="SessionReconnectLayer" 
                                           VerticalAlignment="Center"
@@ -83,7 +93,8 @@
             <TextBlock Text="The keyboard will show here soon." 
                          HorizontalAlignment="Center"/>
         </StackPanel>
-        
+
+
         <StackPanel VerticalAlignment="Bottom"
                     HorizontalAlignment="Right" 
                     Orientation="Horizontal">
@@ -91,6 +102,7 @@
             <TextBox Text="Disconnected. Attempting to reconnect (d)....." 
                      x:Uid="SessionView-ReconnectingMessage"                   
                      Visibility="{Binding Path=IsReconnecting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <!-- 
             <Button
                 x:Uid="SessionView-PanLeft"
                 Command="{Binding ZoomPanViewModel.PanCommand}" 
@@ -115,6 +127,7 @@
                 CommandParameter="{StaticResource PanDown}"
                 Style="{StaticResource ConnectionCenterBarButtonStyle}"                
                 Content="{StaticResource DownIcon}"/>            
+            -->
         </StackPanel>
     </Grid>
 </UserControl>

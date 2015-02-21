@@ -12,8 +12,8 @@
     d:DesignWidth="280">
 
     <UserControl.Resources>
-        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />        
+        <c:ZoomPanStateToZoomInVisibilityConverter x:Key="ZoomPanStateToZoomInVisibilityConverter"/>
+        <c:ZoomPanStateToZoomOutVisibilityConverter x:Key="ZoomPanStateToZoomOutVisibilityConverter"/>        
         <vm:ZoomInTransform x:Key="ZoomIn"/>
         <vm:ZoomOutTransform x:Key="ZoomOut"/>
     </UserControl.Resources>    
@@ -31,14 +31,14 @@
         <StackPanel Orientation="Horizontal"
                 Grid.Row="0" Grid.Column="0"  Margin="0">
             <Button x:Uid="SessionView-ConnectionBar-ZoomInButton"
-                    Visibility="{Binding Path=ZoomPanViewModel.IsZoomInEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=ZoomPanViewModel.State, Converter={StaticResource ZoomPanStateToZoomInVisibilityConverter}}"
                     Style="{StaticResource ConnectionBarButtonStyle}"                
                     Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
                     CommandParameter="{StaticResource ZoomIn}"
                     Content="{StaticResource ZoomInIcon}"  
                     />
             <Button x:Uid="SessionView-ConnectionBar-ZoomOutButton"
-                    Visibility="{Binding Path=ZoomPanViewModel.IsZoomInEnabled, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                    Visibility="{Binding Path=ZoomPanViewModel.State, Converter={StaticResource ZoomPanStateToZoomOutVisibilityConverter}}"
                     Style="{StaticResource ConnectionBarButtonStyle}"                
                     Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
                     CommandParameter="{StaticResource ZoomOut}"
