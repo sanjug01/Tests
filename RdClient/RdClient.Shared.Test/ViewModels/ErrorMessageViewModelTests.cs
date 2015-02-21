@@ -128,5 +128,25 @@
                 Assert.AreEqual(3, propertyChangedCount); // one for OkVisible, one for CancelVisible, one for setting the message
             }
         }
+
+        [TestMethod]
+        public void BackNavigationHandledByDismissingAndCancelling()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                bool cancelCalled = false;
+                RdpError error = new RdpError();
+                ErrorMessageArgs dma = new ErrorMessageArgs(error, null, () => { cancelCalled = true; });
+                ErrorMessageViewModel dmvm = new ErrorMessageViewModel();
+                IBackCommandArgs backArgs = new BackCommandArgs();                
+                ((IViewModel)dmvm).Presenting(navigation, dma, null);
+
+                navigation.Expect("DismissModalView", null);
+                Assert.IsFalse(backArgs.Handled, "test precondition failed");
+                (dmvm as IViewModel).NavigatingBack(backArgs);
+                Assert.IsTrue(cancelCalled);
+                Assert.IsTrue(backArgs.Handled);
+            } 
+        }
     }
 }

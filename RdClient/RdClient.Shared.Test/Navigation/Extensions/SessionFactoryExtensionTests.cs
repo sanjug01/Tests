@@ -5,7 +5,9 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
+    using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     [TestClass]
     public sealed class SessionFactoryExtensionTests
@@ -29,14 +31,22 @@
                 private set { this.SetProperty(ref _sessionFactory, value); }
             }
 
+            [DebuggerNonUserCode] // exclude from code coverage
             void IViewModel.Presenting(INavigationService navigationService, object activationParameter, IModalPresentationContext presentationContext)
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
+            [DebuggerNonUserCode] // exclude from code coverage
             void IViewModel.Dismissing()
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
+            }
+
+            [DebuggerNonUserCode] // exclude from code coverage
+            public void NavigatingBack(IBackCommandArgs backArgs)
+            {
+                throw new NotImplementedException();
             }
 
             void ISessionFactorySite.SetSessionFactory(ISessionFactory sessionFactory)

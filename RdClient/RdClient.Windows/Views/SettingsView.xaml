@@ -24,39 +24,30 @@
     </Page.DataContext>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <controls:AppHeaderControl />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="384" />
+            <ColumnDefinition Width="2.5*" />
+        </Grid.ColumnDefinitions>            
+        <Grid Grid.Column="0">
+            <controls:SettingsNavigationControl />
         </Grid>
-        <Grid Grid.Row="1">
+    <ScrollViewer Grid.Column="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
+        <Grid Background="{StaticResource SettingsBackgroundBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{StaticResource SettingsTopPadding}" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="{StaticResource SettingsMargin}" />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="384" />
-                <ColumnDefinition Width="2.5*" />
-            </Grid.ColumnDefinitions>            
-            <Grid Grid.Column="0">
-                <controls:SettingsNavigationControl />
+                <ColumnDefinition Width="{StaticResource SettingsMargin}" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <controls:GeneralSettingsControl Visibility="{Binding Path=ShowGeneralSettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <controls:UserSettingsControl Visibility="{Binding Path=ShowUserSettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <controls:GatewaySettingsControl Visibility="{Binding Path=ShowGatewaySettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>
-            <ScrollViewer Grid.Column="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
-                <Grid Background="{StaticResource SettingsBackgroundBrush}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="{StaticResource SettingsTopPadding}" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="{StaticResource SettingsMargin}" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{StaticResource SettingsMargin}" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Row="1" Grid.Column="1">
-                        <controls:GeneralSettingsControl Visibility="{Binding Path=ShowGeneralSettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        <controls:UserSettingsControl Visibility="{Binding Path=ShowUserSettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        <controls:GatewaySettingsControl Visibility="{Binding Path=ShowGatewaySettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    </Grid>
-                </Grid>
-            </ScrollViewer>
         </Grid>
+    </ScrollViewer>
     </Grid>
 </Page>

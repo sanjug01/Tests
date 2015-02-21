@@ -13,6 +13,11 @@ namespace RdClient.Shared.Test.Mock
         public void Dismissing()
         {
             Invoke(new object[] { });
+        }    
+
+        public void NavigatingBack(IBackCommandArgs backArgs)
+        {
+            Invoke(new object[] { backArgs });
         }
     }
 }

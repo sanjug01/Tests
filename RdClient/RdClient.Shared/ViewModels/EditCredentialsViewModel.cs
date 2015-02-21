@@ -139,6 +139,12 @@
             _task = null;
         }
 
+        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
+        {
+            this.Cancel.Execute(null);
+            backArgs.Handled = true;
+        }
+
         private void CancelView(object parameter)
         {
             Contract.Assert(null != _task, "EditCredentialsViewModel.CancelView|cancelled without task");
