@@ -1,7 +1,6 @@
 ﻿namespace RdClient.Shared.Test.CxWrappers
 {
-    using System;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.CxWrappers;
 
     [TestClass]
