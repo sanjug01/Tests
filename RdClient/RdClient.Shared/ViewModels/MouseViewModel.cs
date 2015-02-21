@@ -110,6 +110,9 @@ namespace RdClient.Shared.ViewModels
 
         public IExecutionDeferrer DeferredExecution { private get; set; }
 
+        public event EventHandler<PanEventArgs> PanChange;
+        public event EventHandler<ZoomEventArgs> ScaleChange;
+
         public MouseViewModel()
         {
             this.PointerEventConsumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
@@ -252,6 +255,16 @@ namespace RdClient.Shared.ViewModels
             {
                 _rdpConnection.SendMouseEvent(type, x, y);
             }
+        }
+
+        public void SendPinchAndZoom(double centerX, double centerY, double fromLength, double toLength)
+        {
+            ScaleChange.Invoke(this, new ZoomEventArgs(centerX, centerY, fromLength, toLength));
+        }
+
+        public void SendPanAction(double deltaX, double deltaY)
+        {
+            PanChange.Invoke(this, new PanEventArgs(deltaX, deltaY));
         }
     }
 }

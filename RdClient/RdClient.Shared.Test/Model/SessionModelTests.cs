@@ -16,7 +16,6 @@
         Mock.RdpConnectionFactory _connectionFactory;
         Mock.TimerFactory _timerFactory;
         Mock.Timer _timer;
-        Mock.Thumbnail _thumbnail;
         Dispatcher _dispatcher;
         bool _connectionMatches;
 

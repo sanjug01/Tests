@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.CxWrappers;
+﻿using RdMock;
+using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Input.Mouse;
 using RdMock;
 using System;
@@ -25,6 +26,16 @@ namespace RdClient.Shared.Test.Mock
         public void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime)
         {
             Invoke(new object[] { type, contactId, position, frameTime });
+        }
+
+        public void SendPinchAndZoom(double centerX, double centerY, double fromLength, double toLength)
+        {
+            Invoke(new object[] { centerX, centerY, fromLength, toLength });
+        }
+
+        public void SendPanAction(double deltaX, double deltaY)
+        {
+            Invoke(new object[] { deltaX, deltaY });
         }
     }
 }

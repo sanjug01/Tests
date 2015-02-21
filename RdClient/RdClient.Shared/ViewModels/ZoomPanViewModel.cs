@@ -163,12 +163,22 @@ namespace RdClient.Shared.ViewModels
             private set { this.SetProperty<IZoomPanTransform>(ref _zoomPanTransform, value); }
         }
 
-        public void HandlePanChange(object sender, Input.ZoomPan.PanEventArgs e)
+        public void HandlePanChange(object sender, PanEventArgs e)
         {
             if (null != e)
             {
                 this.ApplyPanTransform(e.DeltaX, e.DeltaY);
                 this.ZoomPanTransform = new PanTransform(e.DeltaX, e.DeltaX);
+            }
+        }
+
+        public void HandleScaleChange(object sender, ZoomEventArgs e)
+        {
+            if (null != e)
+            {
+                // TODO
+                //this.ApplyPanTransform(e.DeltaX, e.DeltaY);
+                //this.ZoomPanTransform = new PanTransform(e.DeltaX, e.DeltaX);
             }
         }
 

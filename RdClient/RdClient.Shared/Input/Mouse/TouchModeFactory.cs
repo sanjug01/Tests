@@ -30,6 +30,14 @@ namespace RdClient.Shared.Input.Mouse
             },
             (o) => { o.Context.DoubleClickTimer.Stop(); });
 
+            //stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDown,
+            //(o) =>
+            //{
+            //    return
+            //        o.Context.NumberOfContacts(o.Input) == 2 &&
+            //        o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == true;
+            //},
+            //(o) => { });
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDown,
             (o) =>
             {
@@ -37,7 +45,8 @@ namespace RdClient.Shared.Input.Mouse
                     o.Context.NumberOfContacts(o.Input) == 2 &&
                     o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == true;
             },
-            (o) => { });
+            (o) => { o.Context.BeginGesture(o.Input); });
+
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDoubleDown,
             (o) =>
             {
@@ -60,22 +69,26 @@ namespace RdClient.Shared.Input.Mouse
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
             (o) => { o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.RightClick, o.Input); });
-            stateMachine.AddTransition(PointerState.RightDown, PointerState.Scroll,
-            (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
-            (o) => { o.Context.MouseScroll(o.Input); });
+            
+            
+            // scroll gesture
+            //stateMachine.AddTransition(PointerState.RightDown, PointerState.Scroll,
+            //(o) => { return o.Context.MoveThresholdExceeded(o.Input); },
+            //(o) => { o.Context.MouseScroll(o.Input); });
+            //stateMachine.AddTransition(PointerState.Scroll, PointerState.Scroll,
+            //(o) => { return 
+            //            o.Context.NumberOfContacts(o.Input) > 1 &&
+            //            o.Context.MoveThresholdExceeded(o.Input); 
+            //},
+            //(o) => { o.Context.MouseScroll(o.Input); });
+            //stateMachine.AddTransition(PointerState.Scroll, PointerState.LeftDown,
+            //(o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
+            //(o) => { });
+            //stateMachine.AddTransition(PointerState.Scroll, PointerState.Idle,
+            //(o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
+            //(o) => { });
+            AddPinchAndZoomTransitions(ref stateMachine);
 
-            stateMachine.AddTransition(PointerState.Scroll, PointerState.Scroll,
-            (o) => { return 
-                        o.Context.NumberOfContacts(o.Input) > 1 &&
-                        o.Context.MoveThresholdExceeded(o.Input); 
-            },
-            (o) => { o.Context.MouseScroll(o.Input); });
-            stateMachine.AddTransition(PointerState.Scroll, PointerState.LeftDown,
-            (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
-            (o) => { });
-            stateMachine.AddTransition(PointerState.Scroll, PointerState.Idle,
-            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { });
 
             stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
@@ -149,11 +162,11 @@ namespace RdClient.Shared.Input.Mouse
             },
             (o) => { o.Context.BeginGesture(o.Input); });
 
-            stateMachine.AddTransition(PointerState.RightDown, PointerState.PinchZoom,
+            stateMachine.AddTransition(PointerState.RightDown, PointerState.Gesture,
             (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
             (o) => { o.Context.ApplyGesture(o.Input); });
 
-            stateMachine.AddTransition(PointerState.PinchZoom, PointerState.PinchZoom,
+            stateMachine.AddTransition(PointerState.Gesture, PointerState.Gesture,
             (o) =>
             {
                 return
@@ -162,11 +175,11 @@ namespace RdClient.Shared.Input.Mouse
             },
             (o) => { o.Context.ApplyGesture(o.Input); });
 
-            stateMachine.AddTransition(PointerState.PinchZoom, PointerState.LeftDown,
+            stateMachine.AddTransition(PointerState.Gesture, PointerState.LeftDown,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
             (o) => { o.Context.EndGesture(o.Input); });
 
-            stateMachine.AddTransition(PointerState.PinchZoom, PointerState.Idle,
+            stateMachine.AddTransition(PointerState.Gesture, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
             (o) => { o.Context.EndGesture(o.Input); });
         }
@@ -176,7 +189,6 @@ namespace RdClient.Shared.Input.Mouse
         {
             IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>>();
 
-            AddPinchAndZoomTransitions(ref stateMachine);
             AddDirectModeTransitions(ref stateMachine);
             AddMoveTransitions(ref stateMachine);
 

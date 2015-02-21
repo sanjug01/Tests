@@ -26,8 +26,9 @@ namespace RdClient.Shared.Input.Mouse
         LeftDrag,
         RightDrag,
         Scroll,
-        PinchZoom
+        Gesture // two fingers gesture
     }
+
     public class StateEvent<TInput, TContext>
     {
         public TInput Input { get; set; }
@@ -37,7 +38,7 @@ namespace RdClient.Shared.Input.Mouse
     public class TouchContext : IPointerEventConsumer, ITouchContext
     {
         private readonly double PanDeltaThreshold = 2.0; // min for panning
-        private readonly double ZoomDeltaThreshold = 5.0; // min for zooming
+        private readonly double ZoomDeltaThreshold = 3.0; // min for zooming
         private readonly double MoveThreshold = 0.01; 
         private readonly double OrientationDeltaThreshold = 0.01;
         private readonly int ScrollFactor = 5; 
@@ -49,6 +50,7 @@ namespace RdClient.Shared.Input.Mouse
 
         private uint _mainPointerId;
         private uint _secondaryPointerId;
+        public GestureType ActiveGesture { get; private set; }
         public DoubleClickTimer DoubleClickTimer { get; private set; }
 
         private IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> _stateMachine;
@@ -64,6 +66,7 @@ namespace RdClient.Shared.Input.Mouse
             DoubleClickTimer.AddAction(DoubleClickTimer.ClickTimerType.LeftClick, MouseLeftClick);
             DoubleClickTimer.AddAction(DoubleClickTimer.ClickTimerType.RightClick, MouseRightClick);
 
+            ActiveGesture = GestureType.Idle;
             _stateMachine = stateMachine;
         }
 
@@ -87,8 +90,7 @@ namespace RdClient.Shared.Input.Mouse
         {
             bool result = false;
 
-            if (  (pointerEvent.PointerId == _mainPointerId || pointerEvent.PointerId == _secondaryPointerId)
-                && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
+            if (this.IsPointerTracked(pointerEvent))
             {
                 PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
                 result = Math.Abs(lastPointerEvent.Position.X - pointerEvent.Position.X) > MoveThreshold || Math.Abs(lastPointerEvent.Position.Y - pointerEvent.Position.Y) > MoveThreshold;
@@ -101,7 +103,7 @@ namespace RdClient.Shared.Input.Mouse
         {
             DragOrientation orientation = Mouse.DragOrientation.Unknown;
 
-            if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
+            if (this.IsPointerTracked(pointerEvent))
             {
                 PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
                 double deltaX = Math.Abs(lastPointerEvent.Position.X - pointerEvent.Position.X);
@@ -123,7 +125,7 @@ namespace RdClient.Shared.Input.Mouse
 
         public virtual void MouseScroll(PointerEvent pointerEvent)
         {
-            if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
+            if (this.IsPointerTracked(pointerEvent))
             {
                 DragOrientation orientation = this.DragOrientation(pointerEvent);
 
@@ -150,8 +152,9 @@ namespace RdClient.Shared.Input.Mouse
         /// <param name="pointerEvent">last pointer event - right finger down</param>
         public virtual void BeginGesture(PointerEvent pointerEvent)
         {
-            // TODO: should track positions from both fingers
+            // should track positions from both fingers            
             _secondaryPointerId = pointerEvent.PointerId;
+            ActiveGesture = GestureType.Unknown; // gesture not yet detected
         }
 
         /// <summary>
@@ -160,31 +163,63 @@ namespace RdClient.Shared.Input.Mouse
         /// <param name="pointerEvent">last pointer event - right/left finger up</param>
         public virtual void EndGesture(PointerEvent pointerEvent)
         {
-            // TODO: should stop tracking positions from both fingers
+            // should stop tracking positions from both fingers
             _secondaryPointerId = 0;
+            ActiveGesture = GestureType.Idle; // no active gesture
         }
 
 
         public virtual void ApplyGesture(PointerEvent pointerEvent)
         {
+            if(0 == _secondaryPointerId)
+            {
+                return;
+            }
+
             PointerEvent lastPrimaryPointerEvent = null; ;
             PointerEvent secondaryPointerEvent = null;
             PointerEvent lastSecondaryPointerEvent = null;
 
+            uint firstPointerId;
+            uint secondPointerId;
+            if (pointerEvent.PointerId == _mainPointerId)
+            {
+                firstPointerId = _mainPointerId;
+                secondPointerId = _secondaryPointerId;
+            }
+            else if (pointerEvent.PointerId == _secondaryPointerId)
+            {
+                firstPointerId = _secondaryPointerId;
+                secondPointerId = _mainPointerId;
+            }
+            else
+            {
+                return;
+            }
+
             try
             {
-                if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
+                if (_trackedPointerEvents.ContainsKey(firstPointerId))
                 {
-                    lastPrimaryPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
-                    secondaryPointerEvent = _trackedPointerEvents[_secondaryPointerId];
-                    lastSecondaryPointerEvent = _trackedPrevPointerEvents[_secondaryPointerId];
+                    lastPrimaryPointerEvent = _trackedPointerEvents[firstPointerId];
                 }
-                else if (pointerEvent.PointerId == _secondaryPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
+                else
                 {
-                    lastPrimaryPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
-                    secondaryPointerEvent = _trackedPointerEvents[_mainPointerId];
-                    lastSecondaryPointerEvent = _trackedPrevPointerEvents[_mainPointerId];
+                    // first button triggered only one event so far
+                    lastPrimaryPointerEvent = pointerEvent;
                 }
+
+                secondaryPointerEvent = _trackedPointerEvents[secondPointerId];
+                if (_trackedPrevPointerEvents.ContainsKey(secondPointerId))
+                {
+                    lastSecondaryPointerEvent = _trackedPrevPointerEvents[secondPointerId];
+                }
+                else
+                {
+                    // second button triggered only one event so far
+                    lastSecondaryPointerEvent = secondaryPointerEvent;
+                }
+                
             }
             catch (KeyNotFoundException)
             {
@@ -194,54 +229,28 @@ namespace RdClient.Shared.Input.Mouse
 
             double deltaX = lastPrimaryPointerEvent.Position.X - pointerEvent.Position.X;
             double deltaY = lastPrimaryPointerEvent.Position.Y - pointerEvent.Position.Y;
-
             double delta2X = lastSecondaryPointerEvent.Position.X - secondaryPointerEvent.Position.X;
             double delta2Y = lastSecondaryPointerEvent.Position.Y - secondaryPointerEvent.Position.Y;
 
-            // Pitagora
-            double currentDistance =
-                Math.Sqrt(Math.Pow(secondaryPointerEvent.Position.X - pointerEvent.Position.X, 2)
-                         + Math.Pow(secondaryPointerEvent.Position.Y - pointerEvent.Position.Y, 2)
-                         );
-            double prevDistance =
-                Math.Sqrt(Math.Pow(lastSecondaryPointerEvent.Position.X - lastPrimaryPointerEvent.Position.X, 2)
-                         + Math.Pow(lastSecondaryPointerEvent.Position.Y - lastPrimaryPointerEvent.Position.Y, 2)
-                         );
+            Debug.WriteLine("Gesture deltas L:(" + deltaX + "," + deltaY + ") --- R:(" + delta2X + "," + delta2Y + ")");
 
-            Debug.WriteLine("Panning/Zooming deltas L:(" + deltaX + "," + deltaY + ") --- R:(" + delta2X + "," + delta2Y + ")");
-            Debug.WriteLine("Panning/Zooming sizes " + prevDistance + " --> " + currentDistance + ")");
-
-
-            if (Math.Abs(deltaX - delta2X) < PanDeltaThreshold && Math.Abs(deltaY - delta2Y) < PanDeltaThreshold)
-            {
-                // same deltas (less delta error) means double finger panning
-                Debug.WriteLine("Panning....");
-
+            // same deltas (less delta error) means double finger panning or scrolling, depending on context
+            if (this.ApplyPanOrScroll(pointerEvent, deltaX, deltaY, delta2X, delta2Y))
+            {                
+                Debug.WriteLine("Scrolling or Panning.... completed");
             }
-            else if (Math.Abs(deltaX - delta2X) > ZoomDeltaThreshold || Math.Abs(deltaY - delta2Y) > ZoomDeltaThreshold)
-            {              
-                bool isZoomGesture = (Math.Abs(currentDistance - prevDistance) > ZoomDeltaThreshold);
-             
-                // opposite deltas means Pinch&Zoom
-                if (Math.Abs(deltaX - delta2X) > ZoomDeltaThreshold && (deltaX * delta2X) > 0)
-                {
-                    isZoomGesture = false;
-                }
-
-                if (Math.Abs(deltaY - delta2Y) > ZoomDeltaThreshold && (deltaY * delta2Y) > 0)
-                {
-                    isZoomGesture = false;
-                }
-
-                if (isZoomGesture)
-                {
-                    // todo should calculate zoom factor
-                    Debug.WriteLine("Zooming ....");
-                }
-                else
-                {
-                    Debug.WriteLine("Not Zooming ....");
-                }
+            else if (this.ApplyPinchAndZoom(
+                        pointerEvent, secondaryPointerEvent, 
+                        lastPrimaryPointerEvent, lastSecondaryPointerEvent,
+                        deltaX, deltaY, delta2X, delta2Y) )
+            {
+                Debug.WriteLine("Zooming .... completed");
+            }
+            else
+            {
+                // the gesture might be incomplete, pending update from the other pointer
+                // should preserve cuurent ActiveGEsture in case it is incomplete
+                Debug.WriteLine("Unknown or incomplete gesture ....");
             }
             
         }
@@ -269,7 +278,7 @@ namespace RdClient.Shared.Input.Mouse
             double deltaX = 0.0;
             double deltaY = 0.0;
 
-            if (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
+            if (this.IsPointerPrimaryTracked(pointerEvent))
             {
                 PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
                 deltaX = (pointerEvent.Position.X - lastPointerEvent.Position.X) * this.PointerManipulator.MouseAcceleration;
@@ -318,11 +327,135 @@ namespace RdClient.Shared.Input.Mouse
             _stateMachine.SetStart(PointerState.Idle);
             DoubleClickTimer.Stop();
             _trackedPointerEvents.Clear();
+            _trackedPrevPointerEvents.Clear();
         }
 
         public ConsumptionMode ConsumptionMode
         {
             set { }
+        }
+
+        /// <summary>
+        /// detects if pointerId for the current event is tracked as primary.
+        /// </summary>
+        /// <param name="pointerEvent">the current poiter event</param>
+        /// <returns>true, if tracked as primary pointer</returns>
+        private bool IsPointerPrimaryTracked(PointerEvent pointerEvent)
+        {
+            return (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId));
+        }
+
+        /// <summary>
+        /// detects if pointerId for the current event is tracked either as primary or secondary.
+        /// </summary>
+        /// <param name="pointerEvent">the current poiter event</param>
+        /// <returns>true, if tracked as primary pointer</returns>
+        private bool IsPointerTracked(PointerEvent pointerEvent)
+        {
+            return ( ( pointerEvent.PointerId == _mainPointerId || pointerEvent.PointerId == _secondaryPointerId)
+                && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId));
+        }
+
+        private bool ApplyPanOrScroll(PointerEvent pointerEvent, double deltaX, double deltaY, double delta2X, double delta2Y)
+        {
+            // same deltas (less delta error) means double finger panning or scrolling, depending on context
+            if (Math.Abs(deltaX - delta2X) < PanDeltaThreshold && Math.Abs(deltaY - delta2Y) < PanDeltaThreshold)
+            {
+                Debug.WriteLine("Scrolling or Panning....");
+
+                if (GestureType.Zooming == ActiveGesture)
+                {
+                    // moving from pinch&Zoom is panning instead of scrolling
+                    PointerManipulator.SendPanAction(deltaX, deltaY);
+                    ActiveGesture = GestureType.Scrolling;
+                }
+                else
+                {
+                    this.MouseScroll(pointerEvent);
+                    ActiveGesture = GestureType.Scrolling;
+                }
+
+                return true;
+            }
+            return false;
+        }
+
+        private bool ApplyPinchAndZoom(
+            PointerEvent pointerEvent,
+            PointerEvent secondaryPointerEvent,
+            PointerEvent lastPrimaryPointerEvent,
+            PointerEvent lastSecondaryPointerEvent, 
+            double deltaX, double deltaY, double delta2X, double delta2Y)
+        {
+            if (Math.Abs(deltaX - delta2X) > ZoomDeltaThreshold || Math.Abs(deltaY - delta2Y) > ZoomDeltaThreshold)
+            {
+                // Pitagora
+                double currentDistance =
+                    Math.Sqrt(Math.Pow(secondaryPointerEvent.Position.X - pointerEvent.Position.X, 2)
+                             + Math.Pow(secondaryPointerEvent.Position.Y - pointerEvent.Position.Y, 2)
+                             );
+                double prevDistance =
+                    Math.Sqrt(Math.Pow(lastSecondaryPointerEvent.Position.X - lastPrimaryPointerEvent.Position.X, 2)
+                             + Math.Pow(lastSecondaryPointerEvent.Position.Y - lastPrimaryPointerEvent.Position.Y, 2)
+                             );
+                Debug.WriteLine("Gesture(zoom) sizes " + prevDistance + " --> " + currentDistance + ")");
+
+                bool isZoomGesture = (Math.Abs(currentDistance - prevDistance) > ZoomDeltaThreshold);
+             
+                // opposite deltas means Pinch&Zoom
+                if (isZoomGesture && Math.Abs(deltaX - delta2X) > ZoomDeltaThreshold)
+                {
+                    // detected movement on x axis
+                    if( (deltaX * delta2X) >= 0 )
+                    {
+                        // not opposite
+                        isZoomGesture = false;
+                    }
+                    else if( Math.Abs(deltaX) < ZoomDeltaThreshold || Math.Abs(delta2X) < ZoomDeltaThreshold)
+                    {
+                        // one of the pointers didn't move
+                        isZoomGesture = false;
+                    }               
+                }
+
+                if (isZoomGesture && Math.Abs(deltaY - delta2Y) > ZoomDeltaThreshold)
+                {
+                    // detected movement on y axis
+                    if ((deltaY * delta2Y) >= 0)
+                    {
+                        // not opposite
+                        isZoomGesture = false;
+                    }
+                    else if (Math.Abs(deltaY) < ZoomDeltaThreshold || Math.Abs(delta2Y) < ZoomDeltaThreshold)
+                    {
+                        // one of the pointers didn't move
+                        isZoomGesture = false;
+                    }     
+                }
+
+                if (isZoomGesture)
+                {
+                    // should calculate zoom factor, zoom center
+                    Debug.WriteLine("Zooming ....");
+
+                    // center = median of L/R position (current)
+                    double centerX = (secondaryPointerEvent.Position.X + pointerEvent.Position.X) * 0.5;
+                    double centerY = (secondaryPointerEvent.Position.Y + pointerEvent.Position.Y) * 0.5;
+                    double fromLength = prevDistance;
+                    double toLength = currentDistance;
+
+                    PointerManipulator.SendPinchAndZoom(centerX, centerY, fromLength, toLength);
+                    ActiveGesture = GestureType.Zooming;
+                }
+                else
+                {
+                    // unsupported gestures - for example rotation
+                    // or incomplete - pending another update for the other pointer
+                    // should preserve current ActiveGesture in case it is incomplete
+                    Debug.WriteLine("Zooming not confirmed....");
+                }
+            }
+            return false;
         }
     }
 }

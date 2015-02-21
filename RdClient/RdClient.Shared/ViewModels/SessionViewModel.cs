@@ -195,6 +195,8 @@
                 this.MouseViewModel.DeferredExecution = this;
                 this.MouseViewModel.ElephantEarsViewModel = this;
                 this.PanKnobViewModel.PanChange += this.ZoomPanViewModel.HandlePanChange;
+                this.MouseViewModel.PanChange += this.ZoomPanViewModel.HandlePanChange;
+                this.MouseViewModel.ScaleChange += this.ZoomPanViewModel.HandleScaleChange;
             };
 
             SessionModel.ConnectionAutoReconnecting += SessionModel_ConnectionAutoReconnecting;
