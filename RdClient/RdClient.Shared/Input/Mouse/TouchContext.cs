@@ -171,26 +171,16 @@ namespace RdClient.Shared.Input.Mouse
                 return;
             }
 
-            PointerEvent lastPrimaryPointerEvent = null; ;
-            PointerEvent secondaryPointerEvent = null;
-            PointerEvent lastSecondaryPointerEvent = null;
-
-            uint firstPointerId;
-            uint secondPointerId;
-            if (pointerEvent.PointerId == _mainPointerId)
-            {
-                firstPointerId = _mainPointerId;
-                secondPointerId = _secondaryPointerId;
-            }
-            else if (pointerEvent.PointerId == _secondaryPointerId)
-            {
-                firstPointerId = _secondaryPointerId;
-                secondPointerId = _mainPointerId;
-            }
-            else
+            uint firstPointerId = pointerEvent.PointerId;
+            if(_mainPointerId != firstPointerId && _secondaryPointerId != firstPointerId)
             {
                 return;
             }
+            uint secondPointerId = (_mainPointerId == pointerEvent.PointerId) ? _secondaryPointerId : _mainPointerId;
+
+            PointerEvent lastPrimaryPointerEvent = null; ;
+            PointerEvent secondaryPointerEvent = null;
+            PointerEvent lastSecondaryPointerEvent = null;
 
             try
             {
@@ -359,11 +349,12 @@ namespace RdClient.Shared.Input.Mouse
             {
                 Debug.WriteLine("Scrolling or Panning....");
 
-                if (GestureType.Zooming == ActiveGesture)
+                if (GestureType.Zooming == ActiveGesture
+                    || GestureType.Panning == ActiveGesture)
                 {
                     // moving from pinch&Zoom is panning instead of scrolling
                     PointerManipulator.SendPanAction(deltaX, deltaY);
-                    ActiveGesture = GestureType.Scrolling;
+                    ActiveGesture = GestureType.Panning;
                 }
                 else
                 {
