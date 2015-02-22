@@ -13,7 +13,7 @@
     /// Edit credentials task launched to add new credentials to the data model.
     /// Validation only checks that the user name is non-empty, valid and unique.
     /// </summary>
-    public sealed class NewCredentialsTask : IEditCredentialsTask
+    public sealed class NewCredentialsTask : EditCredentialsTaskBase
     {
         private readonly IValidationRule _userNameRule;
         private readonly ApplicationDataModel _dataModel;
@@ -46,7 +46,7 @@
             _credentials = new CredentialsModel();
         }
 
-        void IEditCredentialsTask.Populate(IEditCredentialsViewModel viewModel)
+        protected override void OnPresenting(IEditCredentialsViewModel viewModel)
         {
             //
             // Copy model data to the view model even though the model has only default values
@@ -62,7 +62,7 @@
             viewModel.DismissLabel = "d:Add Credentials";
         }
 
-        bool IEditCredentialsTask.Validate(IEditCredentialsViewModel viewModel)
+        protected override bool Validate(IEditCredentialsViewModel viewModel)
         {
             bool valid = true;
 
@@ -103,20 +103,7 @@
             return valid;
         }
 
-        bool IEditCredentialsTask.ValidateChangedProperty(IEditCredentialsViewModel viewModel, string propertyName)
-        {
-            //
-            // Validate will be called if this method returns true.
-            //
-            return true;
-        }
-
-        bool IEditCredentialsTask.Dismissing(IEditCredentialsViewModel viewModel, Action dismiss)
-        {
-            return true;
-        }
-
-        void IEditCredentialsTask.Dismissed(IEditCredentialsViewModel viewModel)
+        protected override void OnDismissed(IEditCredentialsViewModel viewModel)
         {
             //
             // Copy view model values to the model and save the model in the data model.
@@ -129,7 +116,7 @@
             _credentialsAdded(_dataModel.LocalWorkspace.Credentials.AddNewModel(_credentials));
         }
 
-        void IEditCredentialsTask.Cancelled(IEditCredentialsViewModel viewModel)
+        protected override void OnCancelled(IEditCredentialsViewModel viewModel)
         {
             if (null != _viewCancelled)
                 _viewCancelled();

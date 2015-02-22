@@ -230,6 +230,7 @@
     <Compile Include="ValidationRules\UsernameValidationRule.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\AlwaysAskCredentialsTask.cs" />
+    <Compile Include="ViewModels\EditCredentialsTasks\EditCredentialsTaskBase.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\NewCredentialsTask.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\SessionCredentialsEventArgs.cs" />
     <Compile Include="ViewModels\EditCredentialsViewModel.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="ViewModels\IDesktopViewModel.cs" />
     <Compile Include="Navigation\NavigationExtensions.cs" />
     <Compile Include="ViewModels\IEditCredentialsTask.cs" />
+    <Compile Include="ViewModels\IEditCredentialsViewControl.cs" />
     <Compile Include="ViewModels\IEditCredentialsViewModel.cs" />
     <Compile Include="ViewModels\IRemoteConnectionViewModel.cs" />
     <Compile Include="ViewModels\ISessionViewModel.cs" />

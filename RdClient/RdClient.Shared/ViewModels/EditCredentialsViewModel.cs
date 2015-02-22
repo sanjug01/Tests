@@ -20,12 +20,11 @@
         }
     }
 
-    public sealed class EditCredentialsViewModel : ViewModelBase, IEditCredentialsViewModel
+    public sealed class EditCredentialsViewModel : ViewModelBase, IEditCredentialsViewModel, IEditCredentialsViewControl
     {
         private readonly RelayCommand _cancel;
         private readonly RelayCommand _dismiss;
 
-        private bool _dismissed;
         private string _resourceName;
         private string _prompt;
         private string _dismissLabel;
@@ -36,6 +35,7 @@
         private string _password;
         private bool _canDismiss;
         private IEditCredentialsTask _task;
+        private object _taskToken;
 
         public static readonly string
             UserNamePropertyName = "UserName",
@@ -94,10 +94,10 @@
             {
                 if(this.SetProperty(ref _userName, value))
                 {
-                    bool canDismiss = _task.ValidateChangedProperty(this, UserNamePropertyName);
+                    bool canDismiss = _task.ValidateChangedProperty(_taskToken, UserNamePropertyName);
 
                     if (canDismiss)
-                        canDismiss = _task.Validate(this);
+                        canDismiss = _task.Validate(_taskToken);
 
                     this.CanDismiss = canDismiss;
                 }
@@ -111,10 +111,10 @@
             {
                 if (this.SetProperty(ref _password, value))
                 {
-                    bool canDismiss = _task.ValidateChangedProperty(this, PasswordPropertyName);
+                    bool canDismiss = _task.ValidateChangedProperty(_taskToken, PasswordPropertyName);
 
                     if (canDismiss)
-                        canDismiss = _task.Validate(this);
+                        canDismiss = _task.Validate(_taskToken);
 
                     this.CanDismiss = canDismiss;
                     //
@@ -127,9 +127,20 @@
             }
         }
 
+        void IEditCredentialsViewControl.Dismiss()
+        {
+            Contract.Ensures(null == _task);
+            Contract.Ensures(null == _taskToken);
+
+            if (null != _task)
+            {
+                _task.Dismissed(_taskToken);
+                this.DismissModal(null);
+            }
+        }
+
         public EditCredentialsViewModel()
         {
-            _dismissed = false;
             _cancel = new RelayCommand(this.CancelView);
             _dismiss = new RelayCommand(this.DismissView, p => this.CanDismiss);
         }
@@ -142,35 +153,31 @@
             _task = activationParameter as IEditCredentialsTask;
             Contract.Assert(null != _task, string.Format("EditCredentialsViewModel|presented with an invalid parameter|{0}", activationParameter));
 
-            _task.Populate(this);
-            this.CanDismiss = _task.Validate(this);
+            _taskToken = _task.Presenting(this, this);
+            _task.Populate(_taskToken);
+            this.CanDismiss = _task.Validate(_taskToken);
 
             this.CanRevealPassword = string.IsNullOrEmpty(_password);
         }
 
         protected override void OnDismissed()
         {
-            Contract.Assert(null != _task, "EditCredentialsViewModel|dismissed without presenting");
-            Contract.Ensures(null == _task);
+            Contract.Assert(null != _task);
             _task = null;
+            _taskToken = null;
         }
 
         private void CancelView(object parameter)
         {
             Contract.Assert(null != _task, "EditCredentialsViewModel.CancelView|cancelled without task");
-            _task.Cancelled(this);
+            _task.Cancelled(_taskToken);
             this.DismissModal(null);
         }
 
         private void DismissView(object parameter)
         {
             Contract.Assert(null != _task, "EditCredentialsViewModel.DismissView|dismissed without task");
-            if (_task.Dismissing(this, this.DismissAction))
-            {
-                _dismissed = true;
-                _task.Dismissed(this);
-                this.DismissModal(null);
-            }
+            _task.Dismissing(_taskToken);
         }
 
         private bool CanDismiss
@@ -182,16 +189,6 @@
                 {
                     _dismiss.EmitCanExecuteChanged();
                 }
-            }
-        }
-
-        private void DismissAction()
-        {
-            if (!_dismissed)
-            {
-                _dismissed = true;
-                _task.Dismissed(this);
-                this.DismissModal(null);
             }
         }
     }

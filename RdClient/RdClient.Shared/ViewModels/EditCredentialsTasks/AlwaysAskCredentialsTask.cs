@@ -12,7 +12,7 @@
     /// saves any changes made by user in the same object and returns an ID of the user name
     /// if it was found in the data model.
     /// </summary>
-    public sealed class AlwaysAskCredentialsTask : IEditCredentialsTask
+    public sealed class AlwaysAskCredentialsTask : EditCredentialsTaskBase
     {
         private readonly IValidationRule _userNameRule;
         private readonly string _connectionName;
@@ -40,7 +40,7 @@
             _ignoreModelUpdates = false;
         }
 
-        void IEditCredentialsTask.Populate(IEditCredentialsViewModel viewModel)
+        protected override void OnPresenting(IEditCredentialsViewModel viewModel)
         {
             viewModel.UserName = _credentials.Username;
             viewModel.Password = _credentials.Password;
@@ -50,12 +50,12 @@
             viewModel.Prompt = "d:Remote connection is set to always ask for credentials";
         }
 
-        bool IEditCredentialsTask.Validate(IEditCredentialsViewModel viewModel)
+        protected override bool Validate(IEditCredentialsViewModel viewModel)
         {
             return IsUserNameValid(viewModel.UserName);
         }
 
-        bool IEditCredentialsTask.ValidateChangedProperty(IEditCredentialsViewModel viewModel, string propertyName)
+        protected override bool ValidateChangedProperty(IEditCredentialsViewModel viewModel, string propertyName)
         {
             bool valid = true;
 
@@ -90,7 +90,7 @@
             return valid;
         }
 
-        bool IEditCredentialsTask.Dismissing(IEditCredentialsViewModel viewModel, Action dismiss)
+        protected override void OnDismissing(IEditCredentialsViewModel viewModel, IEditCredentialsViewControl viewConctol)
         {
             IModelContainer<CredentialsModel> existingCredentials;
 
@@ -113,10 +113,10 @@
                 _credentialsId = Guid.Empty;
             }
 
-            return true;
+            viewConctol.Dismiss();
         }
 
-        void IEditCredentialsTask.Dismissed(IEditCredentialsViewModel viewModel)
+        protected override void OnDismissed(IEditCredentialsViewModel viewModel)
         {
             _credentials.Username = viewModel.UserName.EmptyIfNull().Trim();
             _credentials.Password = viewModel.Password;
@@ -130,7 +130,7 @@
             }
         }
 
-        void IEditCredentialsTask.Cancelled(IEditCredentialsViewModel viewModel)
+        protected override void OnCancelled(IEditCredentialsViewModel viewModel)
         {
             if(null != this.Cancelled)
                 this.Cancelled(this, EventArgs.Empty);
