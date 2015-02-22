@@ -8,8 +8,9 @@
     using RdClient.Shared.Test.Data;
     using RdClient.Shared.ViewModels;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
-using System;
+    using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
 
     [TestClass]
     public sealed class EditCredentialsViewModelTests
@@ -19,6 +20,7 @@ using System;
         private ApplicationDataModel _dataModel;
         private INavigationService _nav;
         private EditCredentialsViewModel _vm;
+        private TestTask _task;
 
         private sealed class TestEditCredentialsView : IPresentableView
         {
@@ -109,6 +111,34 @@ using System;
             }
         }
 
+        private sealed class DismissingEventArgs : ViewModelEventArgs
+        {
+            private readonly IEditCredentialsViewControl _viewControl;
+            private bool _handled;
+
+            public DismissingEventArgs(IEditCredentialsViewModel viewModel, IEditCredentialsViewControl viewControl)
+                : base(viewModel)
+            {
+                _viewControl = viewControl;
+            }
+
+            public void Dismiss()
+            {
+                _handled = true;
+                _viewControl.Dismiss();
+            }
+
+            public void DoNotDismiss()
+            {
+                _handled = true;
+            }
+
+            public bool IsHandled
+            {
+                get { return _handled; }
+            }
+        }
+
         private class ValidateEventArgs : ViewModelEventArgs
         {
             public ValidateEventArgs(IEditCredentialsViewModel viewModel, bool valid) : base(viewModel)
@@ -137,6 +167,7 @@ using System;
             public event EventHandler<ViewModelEventArgs> Cancelled;
             public event EventHandler<ValidateEventArgs> ValidateEvent;
             public event EventHandler<ValidatePropertyEventArgs> ValidatePropertyEvent;
+            public event EventHandler<DismissingEventArgs> Dismissing;
 
             protected override void OnPresenting(IEditCredentialsViewModel viewModel)
             {
@@ -166,7 +197,13 @@ using System;
 
             protected override void OnDismissing(IEditCredentialsViewModel viewModel, IEditCredentialsViewControl viewControl)
             {
-                base.OnDismissing(viewModel, viewControl);
+                DismissingEventArgs e = new DismissingEventArgs(viewModel, viewControl);
+
+                if (null != this.Dismissing)
+                    this.Dismissing(this, e);
+
+                if(!e.IsHandled)
+                    base.OnDismissing(viewModel, viewControl);
             }
 
             protected override void OnDismissed(IEditCredentialsViewModel viewModel)
@@ -195,37 +232,185 @@ using System;
             _nav.ViewFactory = new TestViewFactory(_vm);
             _nav.Presenter = new TestViewPresenter();
             _nav.Extensions.Add(new DataModelExtension() { AppDataModel = _dataModel });
+            _task = new TestTask();
         }
 
         [TestCleanup]
         public void TearDownTest()
         {
+            _task = null;
             _nav = null;
             _vm = null;
             _dataModel = null;
         }
 
         [TestMethod]
+        public void EditCredentialsViewModel_ChangeUserName_ChangeReported()
+        {
+            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
+
+            _nav.PushModalView(ViewName, _task);
+            _vm.PropertyChanged += (sender, e) => changes.Add(e);
+            _vm.UserName = "user";
+            _vm.UserName += "name";
+
+            Assert.AreEqual("username", _vm.UserName);
+            Assert.AreEqual(2, changes.Count);
+            Assert.AreEqual(EditCredentialsViewModel.UserNamePropertyName, changes[0].PropertyName);
+            Assert.AreEqual(EditCredentialsViewModel.UserNamePropertyName, changes[1].PropertyName);
+        }
+
+        [TestMethod]
+        public void EditCredentialsViewModel_ChangePassword_ChangeReported()
+        {
+            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
+
+            _nav.PushModalView(ViewName, _task);
+            _vm.PropertyChanged += (sender, e) => changes.Add(e);
+            _vm.Password = "pass";
+            _vm.Password += "word";
+
+            Assert.AreEqual("password", _vm.Password);
+            Assert.AreEqual(2, changes.Count);
+            Assert.AreEqual(EditCredentialsViewModel.PasswordPropertyName, changes[0].PropertyName);
+            Assert.AreEqual(EditCredentialsViewModel.PasswordPropertyName, changes[1].PropertyName);
+        }
+
+        [TestMethod]
+        public void EditCredentialsViewModel_ChangeResourceName_ChangeReported()
+        {
+            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
+
+            _nav.PushModalView(ViewName, _task);
+            _vm.PropertyChanged += (sender, e) => changes.Add(e);
+            _vm.ResourceName = "resource";
+            _vm.ResourceName += "name";
+
+            Assert.AreEqual("resourcename", _vm.ResourceName);
+            Assert.AreEqual(2, changes.Count);
+            Assert.AreEqual("ResourceName", changes[0].PropertyName);
+            Assert.AreEqual("ResourceName", changes[1].PropertyName);
+        }
+
+        [TestMethod]
+        public void EditCredentialsViewModel_ChangePrompt_ChangeReported()
+        {
+            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
+
+            _nav.PushModalView(ViewName, _task);
+            _vm.PropertyChanged += (sender, e) => changes.Add(e);
+            _vm.Prompt = "pro";
+            _vm.Prompt += "mpt";
+
+            Assert.AreEqual("prompt", _vm.Prompt);
+            Assert.AreEqual(2, changes.Count);
+            Assert.AreEqual("Prompt", changes[0].PropertyName);
+            Assert.AreEqual("Prompt", changes[1].PropertyName);
+        }
+
+        [TestMethod]
+        public void EditCredentialsViewModel_ChangeDismissLabel_ChangeReported()
+        {
+            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
+
+            _nav.PushModalView(ViewName, _task);
+            _vm.PropertyChanged += (sender, e) => changes.Add(e);
+            _vm.DismissLabel = "dismiss";
+            _vm.DismissLabel += "label";
+
+            Assert.AreEqual("dismisslabel", _vm.DismissLabel);
+            Assert.AreEqual(2, changes.Count);
+            Assert.AreEqual("DismissLabel", changes[0].PropertyName);
+            Assert.AreEqual("DismissLabel", changes[1].PropertyName);
+        }
+
+        [TestMethod]
+        public void EditCredentialsViewModel_ChangeSaveCredentials_ChangeReported()
+        {
+            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
+
+            _nav.PushModalView(ViewName, _task);
+            _vm.PropertyChanged += (sender, e) => changes.Add(e);
+            _vm.SaveCredentials = !_vm.SaveCredentials;
+            _vm.SaveCredentials = !_vm.SaveCredentials;
+
+            Assert.AreEqual(2, changes.Count);
+            Assert.AreEqual("SaveCredentials", changes[0].PropertyName);
+            Assert.AreEqual("SaveCredentials", changes[1].PropertyName);
+        }
+
+        [TestMethod]
+        public void EditCredentialsViewModel_ChangeCanSaveCredentials_ChangeReported()
+        {
+            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
+
+            _nav.PushModalView(ViewName, _task);
+            _vm.PropertyChanged += (sender, e) => changes.Add(e);
+            _vm.CanSaveCredentials = !_vm.CanSaveCredentials;
+            _vm.CanSaveCredentials = !_vm.CanSaveCredentials;
+
+            Assert.AreEqual(2, changes.Count);
+            Assert.AreEqual("CanSaveCredentials", changes[0].PropertyName);
+            Assert.AreEqual("CanSaveCredentials", changes[1].PropertyName);
+        }
+
+        [TestMethod]
+        public void EditCredentialsViewModel_ChangeCanRevealPassword_ChangeReported()
+        {
+            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
+
+            _nav.PushModalView(ViewName, _task);
+            _vm.PropertyChanged += (sender, e) => changes.Add(e);
+            _vm.CanRevealPassword = !_vm.CanRevealPassword;
+            _vm.CanRevealPassword = !_vm.CanRevealPassword;
+
+            Assert.AreEqual(2, changes.Count);
+            Assert.AreEqual("CanRevealPassword", changes[0].PropertyName);
+            Assert.AreEqual("CanRevealPassword", changes[1].PropertyName);
+        }
+
+        [TestMethod]
+        public void EditCredentialsViewModel_ClearPassword_CanRevealPassword()
+        {
+            _nav.PushModalView(ViewName, _task);
+            _vm.Password = "password";
+            _vm.CanRevealPassword = false;
+            _vm.Password = string.Empty;
+
+            Assert.IsTrue(_vm.CanRevealPassword);
+        }
+
+        [TestMethod]
+        public void EditCredentialsViewModel_NullClearPassword_CanRevealPassword()
+        {
+            _nav.PushModalView(ViewName, _task);
+            _vm.Password = "password";
+            _vm.CanRevealPassword = false;
+            _vm.Password = null;
+
+            Assert.IsTrue(_vm.CanRevealPassword);
+        }
+
+        [TestMethod]
         public void PushCredentialsEditor_TaskPresentedOnce()
         {
             IList<ViewModelEventArgs> presenting = new List<ViewModelEventArgs>();
-            TestTask task = new TestTask();
             int validateCount = 0;
 
-            task.Presenting += (sender, e) =>
+            _task.Presenting += (sender, e) =>
             {
-                Assert.AreSame(task, sender);
+                Assert.AreSame(_task, sender);
                 presenting.Add(e);
             };
-            task.Dismissed += (sender, e) => Assert.Fail();
-            task.Cancelled += (sender, e) => Assert.Fail();
-            task.ValidateEvent += (sender, e) =>
+            _task.Dismissed += (sender, e) => Assert.Fail();
+            _task.Cancelled += (sender, e) => Assert.Fail();
+            _task.ValidateEvent += (sender, e) =>
             {
                 Assert.IsTrue(e.Valid);
                 ++validateCount;
             };
 
-            _nav.PushModalView(ViewName, task);
+            _nav.PushModalView(ViewName, _task);
 
             Assert.AreEqual(1, presenting.Count);
             Assert.AreSame(_vm, presenting[0].ViewModel);
@@ -238,18 +423,17 @@ using System;
         public void PushCredentialsEditor_FailValidation_CannotDismiss()
         {
             IList<ViewModelEventArgs> presenting = new List<ViewModelEventArgs>();
-            TestTask task = new TestTask();
 
-            task.Presenting += (sender, e) =>
+            _task.Presenting += (sender, e) =>
             {
-                Assert.AreSame(task, sender);
+                Assert.AreSame(_task, sender);
                 presenting.Add(e);
             };
-            task.Dismissed += (sender, e) => Assert.Fail();
-            task.Cancelled += (sender, e) => Assert.Fail();
-            task.ValidateEvent += (sender, e) => e.Valid = false;
+            _task.Dismissed += (sender, e) => Assert.Fail();
+            _task.Cancelled += (sender, e) => Assert.Fail();
+            _task.ValidateEvent += (sender, e) => e.Valid = false;
 
-            _nav.PushModalView(ViewName, task);
+            _nav.PushModalView(ViewName, _task);
 
             Assert.IsFalse(_vm.Dismiss.CanExecute(null));
             Assert.IsTrue(_vm.Cancel.CanExecute(null));
@@ -258,21 +442,18 @@ using System;
         [TestMethod]
         public void CredentialsEditor_ChangeUserName_ValidatesProperty()
         {
-            IList<ViewModelEventArgs> presenting = new List<ViewModelEventArgs>();
-            TestTask task = new TestTask();
             int validatePropertyCount = 0, validateCount = 0;
 
-            _nav.PushModalView(ViewName, task);
+            _nav.PushModalView(ViewName, _task);
 
-            task.ValidatePropertyEvent += (sender, e) =>
+            _task.ValidatePropertyEvent += (sender, e) =>
             {
                 Assert.AreEqual(EditCredentialsViewModel.UserNamePropertyName, e.PropertyName);
                 Assert.IsTrue(e.Valid);
-                //e.Valid = false;
                 ++validatePropertyCount;
             };
 
-            task.ValidateEvent += (sender, e) =>
+            _task.ValidateEvent += (sender, e) =>
             {
                 Assert.AreEqual(1, validatePropertyCount);
                 Assert.IsTrue(e.Valid);
@@ -288,13 +469,10 @@ using System;
         [TestMethod]
         public void CredentialsEditor_FailUserNameValidation_CannotDismiss()
         {
-            IList<ViewModelEventArgs> presenting = new List<ViewModelEventArgs>();
-            TestTask task = new TestTask();
+            _nav.PushModalView(ViewName, _task);
 
-            _nav.PushModalView(ViewName, task);
-
-            task.ValidatePropertyEvent += (sender, e) => e.Valid = false;
-            task.ValidateEvent += (sender, e) => Assert.Fail();
+            _task.ValidatePropertyEvent += (sender, e) => e.Valid = false;
+            _task.ValidateEvent += (sender, e) => Assert.Fail();
 
             Assert.IsTrue(_vm.Dismiss.CanExecute(null));
             _vm.UserName = "pedro";
@@ -305,12 +483,9 @@ using System;
         [TestMethod]
         public void CredentialsEditor_ChangeUserNameFailViewValidation_CannotDismiss()
         {
-            IList<ViewModelEventArgs> presenting = new List<ViewModelEventArgs>();
-            TestTask task = new TestTask();
+            _nav.PushModalView(ViewName, _task);
 
-            _nav.PushModalView(ViewName, task);
-
-            task.ValidateEvent += (sender, e) => e.Valid = false;
+            _task.ValidateEvent += (sender, e) => e.Valid = false;
 
             Assert.IsTrue(_vm.Dismiss.CanExecute(null));
             _vm.UserName = "pedro";
@@ -321,13 +496,10 @@ using System;
         [TestMethod]
         public void CredentialsEditor_FailPasswordValidation_CannotDismiss()
         {
-            IList<ViewModelEventArgs> presenting = new List<ViewModelEventArgs>();
-            TestTask task = new TestTask();
+            _nav.PushModalView(ViewName, _task);
 
-            _nav.PushModalView(ViewName, task);
-
-            task.ValidatePropertyEvent += (sender, e) => e.Valid = false;
-            task.ValidateEvent += (sender, e) => Assert.Fail();
+            _task.ValidatePropertyEvent += (sender, e) => e.Valid = false;
+            _task.ValidateEvent += (sender, e) => Assert.Fail();
 
             Assert.IsTrue(_vm.Dismiss.CanExecute(null));
             _vm.Password = "password";
@@ -338,17 +510,125 @@ using System;
         [TestMethod]
         public void CredentialsEditor_ChangePasswordFailViewValidation_CannotDismiss()
         {
-            IList<ViewModelEventArgs> presenting = new List<ViewModelEventArgs>();
-            TestTask task = new TestTask();
+            _nav.PushModalView(ViewName, _task);
 
-            _nav.PushModalView(ViewName, task);
-
-            task.ValidateEvent += (sender, e) => e.Valid = false;
+            _task.ValidateEvent += (sender, e) => e.Valid = false;
 
             Assert.IsTrue(_vm.Dismiss.CanExecute(null));
             _vm.Password = "password";
 
             Assert.IsFalse(_vm.Dismiss.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void CredentialsEditor_Dismiss_OnDismissingCalled()
+        {
+            int dismissingCount = 0;
+
+            _nav.PushModalView(ViewName, _task);
+
+            _task.Dismissing += (sender, e) =>
+            {
+                Assert.AreSame(_vm, e.ViewModel);
+                e.DoNotDismiss();
+                ++dismissingCount;
+            };
+            _task.Dismissed += (sender, e) => Assert.Fail();
+
+            _vm.UserName = "user";
+            _vm.Password = "password";
+
+            Assert.IsTrue(_vm.Dismiss.CanExecute(null));
+            _vm.Dismiss.Execute(null);
+
+            Assert.AreEqual(1, dismissingCount);
+
+        }
+
+        [TestMethod]
+        public void CredentialsEditor_DismissDismiss_Dismissed()
+        {
+            int dismissingCount = 0, dismissedCount = 0;
+
+            _nav.PushModalView(ViewName, _task);
+
+            _task.Dismissing += (sender, e) =>
+            {
+                Assert.AreSame(_vm, e.ViewModel);
+                e.Dismiss();
+                ++dismissingCount;
+            };
+            _task.Dismissed += (sender, e) =>
+            {
+                Assert.AreSame(_vm, e.ViewModel);
+                ++dismissedCount;
+            };
+
+            _vm.UserName = "user";
+            _vm.Password = "password";
+
+            Assert.IsTrue(_vm.Dismiss.CanExecute(null));
+            _vm.Dismiss.Execute(null);
+
+            Assert.AreEqual(1, dismissingCount);
+            Assert.AreEqual(1, dismissedCount);
+
+        }
+
+        [TestMethod]
+        public void CredentialsEditor_DismissDoDefault_Dismissed()
+        {
+            int dismissingCount = 0, dismissedCount = 0;
+
+            _nav.PushModalView(ViewName, _task);
+
+            _task.Dismissing += (sender, e) =>
+            {
+                Assert.AreSame(_vm, e.ViewModel);
+                ++dismissingCount;
+            };
+            _task.Dismissed += (sender, e) =>
+            {
+                Assert.AreSame(_vm, e.ViewModel);
+                ++dismissedCount;
+            };
+
+            _vm.UserName = "user";
+            _vm.Password = "password";
+
+            Assert.IsTrue(_vm.Dismiss.CanExecute(null));
+            _vm.Dismiss.Execute(null);
+
+            Assert.AreEqual(1, dismissingCount);
+            Assert.AreEqual(1, dismissedCount);
+
+        }
+
+        [TestMethod]
+        public void CredentialsEditor_Cancel_Cancelled()
+        {
+            int cancelledCount = 0, dismissedViews = 0;
+
+            _nav.PushModalView(ViewName, _task);
+            _nav.DismissingLastModalView += (sender, e) => ++dismissedViews;
+
+            _task.Dismissing += (sender, e) => Assert.Fail();
+            _task.Dismissed += (sender, e) => Assert.Fail();
+            _task.Cancelled += (sender, e) =>
+            {
+                Assert.AreSame(_vm, e.ViewModel);
+                ++cancelledCount;
+            };
+
+            _vm.UserName = "user";
+            _vm.Password = "password";
+
+            Assert.IsTrue(_vm.Cancel.CanExecute(null));
+            _vm.Cancel.Execute(null);
+
+            Assert.AreEqual(1, cancelledCount);
+            Assert.AreEqual(1, dismissedViews);
+
         }
     }
 }
