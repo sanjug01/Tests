@@ -171,6 +171,7 @@
 
             protected override void OnPresenting(IEditCredentialsViewModel viewModel)
             {
+                base.OnPresenting(viewModel);
                 if (null != this.Presenting)
                     this.Presenting(this, new ViewModelEventArgs(viewModel));
             }
@@ -208,12 +209,14 @@
 
             protected override void OnDismissed(IEditCredentialsViewModel viewModel)
             {
+                base.OnDismissed(viewModel);
                 if (null != this.Dismissed)
                     this.Dismissed(this, new ViewModelEventArgs(viewModel));
             }
 
             protected override void OnCancelled(IEditCredentialsViewModel viewModel)
             {
+                base.OnCancelled(viewModel);
                 if (null != this.Cancelled)
                     this.Cancelled(this, new ViewModelEventArgs(viewModel));
             }
