@@ -10,5 +10,11 @@ namespace RdClient.Shared.Helpers
     {
         public static readonly ulong MaxDoubleTapUS = 300000; // microseconds      
         public static readonly double DesiredDeceleration = 0.002;
+
+        public static readonly double TouchPanDeltaThreshold = 2.0; // min for panning
+        public static readonly double TouchZoomDeltaThreshold = 3.0; // min for zooming
+        public static readonly double TouchMoveThreshold = 0.01;
+        public static readonly double TouchOrientationDeltaThreshold = 0.01;
+        public static readonly int TouchScrollFactor = 5; 
     }
 }

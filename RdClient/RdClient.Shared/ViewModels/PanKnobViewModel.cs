@@ -62,8 +62,6 @@ namespace RdClient.Shared.ViewModels
 
     public sealed class PanKnobViewModel : MutableObject
     {
-        private const ulong MAX_DOUBLE_TAP_US = 300000; // microseconds
-
         private IPanKnobTransform _panKnobTransform;
         private PanKnobState _state;
         private bool _isPanning;
@@ -171,7 +169,7 @@ namespace RdClient.Shared.ViewModels
             if (TouchEventType.Down == e.ActionType)
             {
                 // click or double click
-                if (_lastTouchTimeStamp != 0 && (e.TimeStamp - _lastTouchTimeStamp < MAX_DOUBLE_TAP_US))
+                if (_lastTouchTimeStamp != 0 && (e.TimeStamp - _lastTouchTimeStamp < GlobalConstants.MaxDoubleTapUS))
                 {
                     // This is a double tap guesture so enable moving the pan control
                     _lastTouchTimeStamp = 0;

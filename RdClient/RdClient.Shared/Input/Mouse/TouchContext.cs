@@ -37,12 +37,6 @@ namespace RdClient.Shared.Input.Mouse
 
     public class TouchContext : IPointerEventConsumer, ITouchContext
     {
-        private readonly double PanDeltaThreshold = 2.0; // min for panning
-        private readonly double ZoomDeltaThreshold = 3.0; // min for zooming
-        private readonly double MoveThreshold = 0.01; 
-        private readonly double OrientationDeltaThreshold = 0.01;
-        private readonly int ScrollFactor = 5; 
-
         public event System.EventHandler<PointerEvent> ConsumedEvent;
 
         private Dictionary<uint, PointerEvent> _trackedPointerEvents = new Dictionary<uint, PointerEvent>();
@@ -93,7 +87,8 @@ namespace RdClient.Shared.Input.Mouse
             if (this.IsPointerTracked(pointerEvent))
             {
                 PointerEvent lastPointerEvent = _trackedPointerEvents[pointerEvent.PointerId];
-                result = Math.Abs(lastPointerEvent.Position.X - pointerEvent.Position.X) > MoveThreshold || Math.Abs(lastPointerEvent.Position.Y - pointerEvent.Position.Y) > MoveThreshold;
+                result = Math.Abs(lastPointerEvent.Position.X - pointerEvent.Position.X) > GlobalConstants.TouchMoveThreshold
+                    || Math.Abs(lastPointerEvent.Position.Y - pointerEvent.Position.Y) > GlobalConstants.TouchMoveThreshold;
             }
 
             return result;
@@ -110,11 +105,11 @@ namespace RdClient.Shared.Input.Mouse
                 double deltaY = Math.Abs(lastPointerEvent.Position.Y - pointerEvent.Position.Y);
                 double delta = Math.Pow(deltaX, 2) - Math.Pow(deltaY * deltaY, 2);
 
-                if (delta > OrientationDeltaThreshold)
+                if (delta > GlobalConstants.TouchOrientationDeltaThreshold)
                 {
                     orientation = Mouse.DragOrientation.Horizontal;
                 }
-                else if (delta < - OrientationDeltaThreshold)
+                else if (delta < -GlobalConstants.TouchOrientationDeltaThreshold)
                 {
                     orientation = Mouse.DragOrientation.Vertical;
                 }
@@ -135,12 +130,12 @@ namespace RdClient.Shared.Input.Mouse
                 if(orientation == Mouse.DragOrientation.Vertical)
                 {
                     delta = - (lastPointerEvent.Position.Y - pointerEvent.Position.Y);
-                    PointerManipulator.SendMouseWheel((int)delta * ScrollFactor, false);
+                    PointerManipulator.SendMouseWheel((int)delta * GlobalConstants.TouchScrollFactor, false);
                 }
                 else if(orientation == Mouse.DragOrientation.Horizontal)
                 {
                     delta = - (lastPointerEvent.Position.X - pointerEvent.Position.X);
-                    PointerManipulator.SendMouseWheel((int)delta * ScrollFactor, true);
+                    PointerManipulator.SendMouseWheel((int)delta * GlobalConstants.TouchScrollFactor, true);
                 }
             }
         }
@@ -359,7 +354,8 @@ namespace RdClient.Shared.Input.Mouse
         private bool ApplyPanOrScroll(PointerEvent pointerEvent, double deltaX, double deltaY, double delta2X, double delta2Y)
         {
             // same deltas (less delta error) means double finger panning or scrolling, depending on context
-            if (Math.Abs(deltaX - delta2X) < PanDeltaThreshold && Math.Abs(deltaY - delta2Y) < PanDeltaThreshold)
+            if (Math.Abs(deltaX - delta2X) < GlobalConstants.TouchPanDeltaThreshold
+                && Math.Abs(deltaY - delta2Y) < GlobalConstants.TouchPanDeltaThreshold)
             {
                 Debug.WriteLine("Scrolling or Panning....");
 
@@ -387,7 +383,8 @@ namespace RdClient.Shared.Input.Mouse
             PointerEvent lastSecondaryPointerEvent, 
             double deltaX, double deltaY, double delta2X, double delta2Y)
         {
-            if (Math.Abs(deltaX - delta2X) > ZoomDeltaThreshold || Math.Abs(deltaY - delta2Y) > ZoomDeltaThreshold)
+            if (Math.Abs(deltaX - delta2X) > GlobalConstants.TouchZoomDeltaThreshold
+                || Math.Abs(deltaY - delta2Y) > GlobalConstants.TouchZoomDeltaThreshold)
             {
                 // Pitagora
                 double currentDistance =
@@ -400,10 +397,10 @@ namespace RdClient.Shared.Input.Mouse
                              );
                 Debug.WriteLine("Gesture(zoom) sizes " + prevDistance + " --> " + currentDistance + ")");
 
-                bool isZoomGesture = (Math.Abs(currentDistance - prevDistance) > ZoomDeltaThreshold);
+                bool isZoomGesture = (Math.Abs(currentDistance - prevDistance) > GlobalConstants.TouchZoomDeltaThreshold);
              
                 // opposite deltas means Pinch&Zoom
-                if (isZoomGesture && Math.Abs(deltaX - delta2X) > ZoomDeltaThreshold)
+                if (isZoomGesture && Math.Abs(deltaX - delta2X) > GlobalConstants.TouchZoomDeltaThreshold)
                 {
                     // detected movement on x axis
                     if( (deltaX * delta2X) >= 0 )
@@ -411,14 +408,15 @@ namespace RdClient.Shared.Input.Mouse
                         // not opposite
                         isZoomGesture = false;
                     }
-                    else if( Math.Abs(deltaX) < ZoomDeltaThreshold || Math.Abs(delta2X) < ZoomDeltaThreshold)
+                    else if (Math.Abs(deltaX) < GlobalConstants.TouchZoomDeltaThreshold
+                        || Math.Abs(delta2X) < GlobalConstants.TouchZoomDeltaThreshold)
                     {
                         // one of the pointers didn't move
                         isZoomGesture = false;
                     }               
                 }
 
-                if (isZoomGesture && Math.Abs(deltaY - delta2Y) > ZoomDeltaThreshold)
+                if (isZoomGesture && Math.Abs(deltaY - delta2Y) > GlobalConstants.TouchZoomDeltaThreshold)
                 {
                     // detected movement on y axis
                     if ((deltaY * delta2Y) >= 0)
@@ -426,7 +424,7 @@ namespace RdClient.Shared.Input.Mouse
                         // not opposite
                         isZoomGesture = false;
                     }
-                    else if (Math.Abs(deltaY) < ZoomDeltaThreshold || Math.Abs(delta2Y) < ZoomDeltaThreshold)
+                    else if (Math.Abs(deltaY) < GlobalConstants.TouchZoomDeltaThreshold || Math.Abs(delta2Y) < GlobalConstants.TouchZoomDeltaThreshold)
                     {
                         // one of the pointers didn't move
                         isZoomGesture = false;
