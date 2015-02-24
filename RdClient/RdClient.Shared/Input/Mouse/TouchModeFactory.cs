@@ -30,14 +30,7 @@ namespace RdClient.Shared.Input.Mouse
             },
             (o) => { o.Context.DoubleClickTimer.Stop(); });
 
-            //stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDown,
-            //(o) =>
-            //{
-            //    return
-            //        o.Context.NumberOfContacts(o.Input) == 2 &&
-            //        o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == true;
-            //},
-            //(o) => { });
+            // beginning of a 2+ touch gesture
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDown,
             (o) =>
             {
@@ -47,6 +40,7 @@ namespace RdClient.Shared.Input.Mouse
             },
             (o) => { o.Context.BeginGesture(o.Input); });
 
+            // right double right has priority over 2 fingers gestures
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDoubleDown,
             (o) =>
             {
@@ -71,23 +65,8 @@ namespace RdClient.Shared.Input.Mouse
             (o) => { o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.RightClick, o.Input); });
             
             
-            // scroll gesture
-            //stateMachine.AddTransition(PointerState.RightDown, PointerState.Scroll,
-            //(o) => { return o.Context.MoveThresholdExceeded(o.Input); },
-            //(o) => { o.Context.MouseScroll(o.Input); });
-            //stateMachine.AddTransition(PointerState.Scroll, PointerState.Scroll,
-            //(o) => { return 
-            //            o.Context.NumberOfContacts(o.Input) > 1 &&
-            //            o.Context.MoveThresholdExceeded(o.Input); 
-            //},
-            //(o) => { o.Context.MouseScroll(o.Input); });
-            //stateMachine.AddTransition(PointerState.Scroll, PointerState.LeftDown,
-            //(o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
-            //(o) => { });
-            //stateMachine.AddTransition(PointerState.Scroll, PointerState.Idle,
-            //(o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            //(o) => { });
-            AddPinchAndZoomTransitions(ref stateMachine);
+            // 2 fingers gestures: scroll, zoom&pinch or panning
+            AddGesturesTransitions(ref stateMachine);
 
 
             stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.Idle,
@@ -150,7 +129,7 @@ namespace RdClient.Shared.Input.Mouse
             (o) => { });
         }
 
-        private static void AddPinchAndZoomTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
+        private static void AddGesturesTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
         {
             // recognize double finger gestures
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDown,

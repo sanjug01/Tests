@@ -158,7 +158,7 @@ namespace RdClient.Shared.ViewModels
             TranslateYTo = 0.0;
 
             _lastTouchTimeStamp = 0;
-            this.State = PanKnobState.Disabled;
+            this.State = PanKnobState.Inactive;
             this.IsPanning = false;
             this.PanControlOpacity = 1.0;
             this.PanOrbOpacity = 1.0;
@@ -178,7 +178,7 @@ namespace RdClient.Shared.ViewModels
                 else
                 {
                     _lastTouchTimeStamp = e.TimeStamp;
-                    this.State = PanKnobState.Enabled;
+                    this.State = PanKnobState.Active;
                 }
 
                 this.PanOrbOpacity = 1.0;
@@ -191,7 +191,7 @@ namespace RdClient.Shared.ViewModels
                 {
                     this.ApplyTransform(e.Delta.X, e.Delta.Y);
                 }
-                this.State = PanKnobState.Disabled;
+                this.State = PanKnobState.Inactive;
                 this.IsPanning = false;
             }
             else
@@ -203,7 +203,7 @@ namespace RdClient.Shared.ViewModels
 
         private void ApplyTransform(double x, double y)
         {
-            if (PanKnobState.Enabled == this.State)
+            if (PanKnobState.Active == this.State)
             {
                 // pan
                 PanChange.Invoke(this, new PanEventArgs(x, y));
