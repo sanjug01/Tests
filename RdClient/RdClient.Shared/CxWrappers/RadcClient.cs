@@ -13,7 +13,7 @@ namespace RdClient.Shared.CxWrappers
         public RadcClient()
         {
             int xRes = RdClientCx.RadcClient.GetInstance(out _client);
-            RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
+            RdTrace.IfFailXResultThrow(xRes, "RdClientCx.RadcClient.GetInstance() failed");
 
             //Add handlers
             _client.OnAzureSignOutCompleted += _client_OnAzureSignOutCompleted;

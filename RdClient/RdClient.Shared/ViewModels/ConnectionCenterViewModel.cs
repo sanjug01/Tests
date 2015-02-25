@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
@@ -83,6 +84,7 @@
         public ConnectionCenterViewModel()
         {
             this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);
+            this.AddWorkspaceCommand = new RelayCommand(AddWorkspaceExecute);
             this.EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => (1 == this.SelectedCount) );
             this.DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
             this.ToggleDesktopSelectionCommand = new RelayCommand(this.ToggleDesktopSelectionCommandExecute);
@@ -109,6 +111,7 @@
         public RelayCommand DeleteDesktopCommand { get; private set; }
         public RelayCommand ToggleDesktopSelectionCommand { get; private set; }
         public RelayCommand GoToSettingsCommand { get; private set; }
+        public RelayCommand AddWorkspaceCommand { get; private set; }
 
         public bool HasDesktops
         {
@@ -278,6 +281,11 @@
         private void GoToSettingsCommandExecute(object o)
         {
             this.NavigationService.NavigateToView("SettingsView", null);
+        }
+
+        private void AddWorkspaceExecute(object obj)
+        {
+            RadcClient client = new RadcClient();
         }
     }
 }
