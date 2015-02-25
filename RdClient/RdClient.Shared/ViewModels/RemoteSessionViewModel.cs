@@ -58,7 +58,7 @@
 
         private void OnCredentialsNeeded(object sender, CredentialsNeededEventArgs e)
         {
-            this.NavigationService.PushModalView("EditCredentialsView", e.Task);
+            this.NavigationService.PushModalView("InSessionEditCredentialsView", e.Task);
         }
 
         private void OnSessionCancelled(object sender, EventArgs e)
