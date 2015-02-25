@@ -113,7 +113,7 @@
                 _credentialsId = Guid.Empty;
             }
 
-            viewConctol.Dismiss();
+            viewConctol.Submit();
         }
 
         protected override void OnDismissed(IEditCredentialsViewModel viewModel)

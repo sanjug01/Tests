@@ -125,12 +125,18 @@
             public void Dismiss()
             {
                 _handled = true;
-                _viewControl.Dismiss();
+                _viewControl.Submit();
             }
 
             public void DoNotDismiss()
             {
                 _handled = true;
+            }
+
+            public void AskConfirmation(EditCredentialsConfirmation message)
+            {
+                _handled = true;
+                _viewControl.AskConfirmation(message);
             }
 
             public bool IsHandled
@@ -631,7 +637,72 @@
 
             Assert.AreEqual(1, cancelledCount);
             Assert.AreEqual(1, dismissedViews);
+        }
 
+        [TestMethod]
+        public void CredentialsEditor_AskConfirmation_ConfirmationShown()
+        {
+            List<string> changedProperties = new List<string>();
+            _task.Dismissing += (sender, e) => e.AskConfirmation(EditCredentialsConfirmation.OverridePassword);
+            _task.ValidateEvent += (sender, e) => e.Valid = true;
+            _task.Dismissed += (sender, e) => Assert.Fail();
+            _task.Cancelled += (sender, e) => Assert.Fail();
+            _vm.PropertyChanged += (sender, e) => changedProperties.Add(e.PropertyName);
+
+            Assert.IsFalse(_vm.IsConfirmationVisible);
+            Assert.AreEqual(EditCredentialsConfirmation.NoMessage, _vm.ConfirmationMessage);
+            _nav.PushModalView(ViewName, _task);
+            _vm.Dismiss.Execute(null);
+
+            CollectionAssert.Contains(changedProperties, "IsConfirmationVisible");
+            CollectionAssert.Contains(changedProperties, "ConfirmationMessage");
+            Assert.IsTrue(_vm.IsConfirmationVisible);
+            Assert.AreEqual(EditCredentialsConfirmation.OverridePassword, _vm.ConfirmationMessage);
+        }
+
+        [TestMethod]
+        public void CredentialsEditor_AskConfirmationConfirm_Submitted()
+        {
+            int dismissedCount = 0;
+
+            _task.Dismissing += (sender, e) =>
+            {
+                e.AskConfirmation(EditCredentialsConfirmation.OverridePassword);
+            };
+            _task.ValidateEvent += (sender, e) => e.Valid = true;
+            _task.Dismissed += (sender, e) => ++dismissedCount;
+            _task.Cancelled += (sender, e) => Assert.Fail();
+
+            Assert.IsFalse(_vm.IsConfirmationVisible);
+            Assert.AreEqual(EditCredentialsConfirmation.NoMessage, _vm.ConfirmationMessage);
+            _nav.PushModalView(ViewName, _task);
+            _vm.Dismiss.Execute(null);
+            Assert.IsTrue(_vm.Confirm.CanExecute(null));
+            _vm.Confirm.Execute(null);
+
+            Assert.IsFalse(_vm.IsConfirmationVisible);
+            Assert.AreEqual(1, dismissedCount);
+        }
+
+        [TestMethod]
+        public void CredentialsEditor_AskConfirmationCancel_NotSubmitted()
+        {
+            _task.Dismissing += (sender, e) =>
+            {
+                e.AskConfirmation(EditCredentialsConfirmation.OverridePassword);
+            };
+            _task.ValidateEvent += (sender, e) => e.Valid = true;
+            _task.Dismissed += (sender, e) => Assert.Fail();
+            _task.Cancelled += (sender, e) => Assert.Fail();
+
+            Assert.IsFalse(_vm.IsConfirmationVisible);
+            Assert.AreEqual(EditCredentialsConfirmation.NoMessage, _vm.ConfirmationMessage);
+            _nav.PushModalView(ViewName, _task);
+            _vm.Dismiss.Execute(null);
+            Assert.IsTrue(_vm.Confirm.CanExecute(null));
+            _vm.CancelConfirmation.Execute(null);
+
+            Assert.IsFalse(_vm.IsConfirmationVisible);
         }
     }
 }

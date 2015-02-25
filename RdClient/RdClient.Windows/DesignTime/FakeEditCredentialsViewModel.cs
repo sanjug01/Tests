@@ -2,11 +2,15 @@
 {
     using RdClient.Shared.ViewModels;
     using System.Windows.Input;
+    using RdClient.Shared.Navigation;
+    using System;
 
     sealed class FakeEditCredentialsViewModel : ViewModelBase, IEditCredentialsViewModel
     {
         private readonly RelayCommand _cancel;
         private readonly RelayCommand _dismiss;
+        private readonly RelayCommand _confirm;
+        private readonly RelayCommand _cancelConfirmation;
 
         private string _resourceName;
         private string _prompt;
@@ -17,6 +21,7 @@
         private string _userName;
         private string _password;
         private bool _canDismiss;
+        private EditCredentialsConfirmation _confirmationMessage;
 
         public ICommand Cancel
         {
@@ -26,6 +31,16 @@
         public ICommand Dismiss
         {
             get { return _dismiss; }
+        }
+
+        public ICommand Confirm
+        {
+            get { return _confirm; }
+        }
+
+        public ICommand CancelConfirmation
+        {
+            get { return _cancelConfirmation; }
         }
 
         public string ResourceName
@@ -92,10 +107,23 @@
             }
         }
 
+        public bool IsConfirmationVisible
+        {
+            get { return true; }
+        }
+
+        public EditCredentialsConfirmation ConfirmationMessage
+        {
+            get { return _confirmationMessage; }
+            set { this.SetProperty(ref _confirmationMessage, value); }
+        }
+
         public FakeEditCredentialsViewModel()
         {
             _cancel = new RelayCommand(this.CancelView);
             _dismiss = new RelayCommand(this.DismissView, p => this.CanDismiss);
+            _confirm = new RelayCommand(this.InternalConfirm);
+            _cancelConfirmation = new RelayCommand(this.InternalCancelConformation);
             _canDismiss = true;
             _canRevealPassword = true;
             _canSaveCredentials = true;
@@ -132,6 +160,16 @@
                     _dismiss.EmitCanExecuteChanged();
                 }
             }
+        }
+
+        private void InternalConfirm(object parameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void InternalCancelConformation(object parameter)
+        {
+            throw new NotImplementedException();
         }
     }
 }

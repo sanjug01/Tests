@@ -7,6 +7,9 @@
     {
         ICommand Cancel { get; }
         ICommand Dismiss { get; }
+        ICommand Confirm { get; }
+        ICommand CancelConfirmation { get; }
+
         string DismissLabel { get; set; }
 
         bool CanRevealPassword { get; set; }
@@ -22,5 +25,9 @@
         string UserName { get; set; }
 
         string Password { get; set; }
+
+        bool IsConfirmationVisible { get; }
+
+        EditCredentialsConfirmation ConfirmationMessage { get; }
     }
 }

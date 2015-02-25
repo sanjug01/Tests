@@ -79,7 +79,7 @@
 
         protected virtual void OnDismissing(IEditCredentialsViewModel viewModel, IEditCredentialsViewControl viewControl)
         {
-            viewControl.Dismiss();
+            viewControl.Submit();
         }
 
         protected virtual void OnDismissed(IEditCredentialsViewModel viewModel)
