@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Windows.UI.Xaml.Data;
 
 namespace RdClient.Shared.Converters
@@ -13,16 +14,18 @@ namespace RdClient.Shared.Converters
         public string GetKey(object value)
         {
             string typeName = value.GetType().FullName.Split('.').Last();
-            string key = typeName;
+            StringBuilder key = new StringBuilder();
+            key.Append(typeName);
 
             if (value.GetType().GetTypeInfo().IsEnum)
             {
-                key += "_" + value.ToString();
+                key.Append("_");
+                key.Append(value.ToString());
             }
 
-            key += "_String";
+            key.Append("_String");
 
-            return key;
+            return key.ToString();
         }
 
         public object Convert(object value, Type targetType, object parameter, string language)
