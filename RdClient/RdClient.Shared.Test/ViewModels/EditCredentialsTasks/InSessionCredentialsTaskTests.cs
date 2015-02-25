@@ -9,6 +9,7 @@
     using RdClient.Shared.ViewModels;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
+    using System.Collections.Generic;
     using System.Windows.Input;
 
     [TestClass]
@@ -117,6 +118,149 @@
             Assert.IsTrue(_vm.CanSaveCredentials);
             Assert.IsTrue(_vm.Cancel.CanExecute(null));
             Assert.IsTrue(_vm.Dismiss.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void InSessionEditCredentialsTask_TypeExistingUser_PasswordCopied()
+        {
+            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username="peter", Password="rabbit" });
+
+            SessionCredentials sc = new SessionCredentials();
+            sc.Credentials.Username = "don";
+            sc.Credentials.Password = "pedro";
+            InSessionCredentialsTask task = new InSessionCredentialsTask(sc, _dataModel);
+            _nav.PushModalView(ViewName, task);
+            _vm.UserName = "peter";
+
+            Assert.AreEqual("rabbit", _vm.Password);
+        }
+
+        [TestMethod]
+        public void InSessionEditCredentialsTask_PresentNewTypeSubmit_TypedValues()
+        {
+            SessionCredentials sc = new SessionCredentials();
+            InSessionCredentialsTask task = new InSessionCredentialsTask(sc, _dataModel);
+            _nav.PushModalView(ViewName, task);
+            _vm.UserName = "don";
+            _vm.Password = "pedro";
+            _vm.Dismiss.Execute(null);
+
+            Assert.AreEqual("don", sc.Credentials.Username);
+            Assert.AreEqual("pedro", sc.Credentials.Password);
+            Assert.IsTrue(sc.IsNewPassword);
+        }
+
+        [TestMethod]
+        public void InSessionEditCredentialsTask_TypeExistingUserSubmit_Submitted()
+        {
+            IList<InSessionCredentialsTask.SubmittedEventArgs> submitted = new List<InSessionCredentialsTask.SubmittedEventArgs>();
+            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
+
+            SessionCredentials sc = new SessionCredentials();
+            sc.Credentials.Username = "don";
+            sc.Credentials.Password = "pedro";
+            InSessionCredentialsTask task = new InSessionCredentialsTask(sc, _dataModel);
+            _nav.PushModalView(ViewName, task);
+            _vm.UserName = "peter";
+            task.Submitted += (sender, e) => submitted.Add(e);
+            task.Cancelled += (sender, e) => Assert.Fail();
+            _vm.Dismiss.Execute(null);
+
+            Assert.AreEqual(1, submitted.Count);
+            Assert.IsFalse(submitted[0].SaveCredentials);
+            Assert.IsFalse(sc.IsNewPassword);
+            Assert.AreEqual("peter", sc.Credentials.Username);
+            Assert.AreEqual("rabbit", sc.Credentials.Password);
+        }
+
+        [TestMethod]
+        public void InSessionEditCredentialsTask_TypeExistingUserCheckSaveSubmit_Submitted()
+        {
+            IList<InSessionCredentialsTask.SubmittedEventArgs> submitted = new List<InSessionCredentialsTask.SubmittedEventArgs>();
+            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
+
+            SessionCredentials sc = new SessionCredentials();
+            sc.Credentials.Username = "don";
+            sc.Credentials.Password = "pedro";
+            InSessionCredentialsTask task = new InSessionCredentialsTask(sc, _dataModel);
+            _nav.PushModalView(ViewName, task);
+            _vm.UserName = "peter";
+            _vm.SaveCredentials = true;
+            task.Submitted += (sender, e) => submitted.Add(e);
+            task.Cancelled += (sender, e) => Assert.Fail();
+            _vm.Dismiss.Execute(null);
+
+            Assert.IsFalse(_vm.IsConfirmationVisible);
+            Assert.AreEqual(1, submitted.Count);
+            Assert.IsTrue(submitted[0].SaveCredentials);
+            Assert.AreEqual("peter", sc.Credentials.Username);
+            Assert.AreEqual("rabbit", sc.Credentials.Password);
+        }
+
+        [TestMethod]
+        public void InSessionEditCredentialsTask_TypeExistingUserChangePasswordSubmit_Confirm()
+        {
+            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
+
+            SessionCredentials sc = new SessionCredentials();
+            sc.Credentials.Username = "don";
+            sc.Credentials.Password = "pedro";
+            InSessionCredentialsTask task = new InSessionCredentialsTask(sc, _dataModel);
+            _nav.PushModalView(ViewName, task);
+            _vm.UserName = "peter";
+            _vm.Password = "joppa";
+            _vm.SaveCredentials = true;
+            task.Submitted += (sender, e) => Assert.Fail();
+            task.Cancelled += (sender, e) => Assert.Fail();
+            _vm.Dismiss.Execute(null);
+
+            Assert.IsTrue(_vm.IsConfirmationVisible);
+        }
+
+        [TestMethod]
+        public void InSessionEditCredentialsTask_TypeExistingUserChangePasswordConfirm_Submitted()
+        {
+            IList<InSessionCredentialsTask.SubmittedEventArgs> submitted = new List<InSessionCredentialsTask.SubmittedEventArgs>();
+            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
+
+            SessionCredentials sc = new SessionCredentials();
+            sc.Credentials.Username = "don";
+            sc.Credentials.Password = "pedro";
+            InSessionCredentialsTask task = new InSessionCredentialsTask(sc, _dataModel);
+            _nav.PushModalView(ViewName, task);
+            _vm.UserName = "peter";
+            _vm.Password = "joppa";
+            _vm.SaveCredentials = true;
+            task.Submitted += (sender, e) => submitted.Add(e);
+            task.Cancelled += (sender, e) => Assert.Fail();
+            _vm.Dismiss.Execute(null);
+            _vm.Confirm.Execute(null);
+
+            Assert.AreEqual(1, submitted.Count);
+            Assert.IsTrue(submitted[0].SaveCredentials);
+            Assert.AreEqual("peter", sc.Credentials.Username);
+            Assert.AreEqual("joppa", sc.Credentials.Password);
+            Assert.IsTrue(sc.IsNewPassword);
+        }
+
+        [TestMethod]
+        public void InSessionEditCredentialsTask_TypeCancel_NotChanged()
+        {
+            int cancelledCount = 0;
+            SessionCredentials sc = new SessionCredentials();
+            sc.Credentials.Username = "don";
+            sc.Credentials.Password = "pedro";
+            InSessionCredentialsTask task = new InSessionCredentialsTask(sc, _dataModel);
+            task.Cancelled += (sender, e) => ++cancelledCount;
+            _nav.PushModalView(ViewName, task);
+            _vm.UserName = "doctor";
+            _vm.Password = "hyder";
+            _vm.Cancel.Execute(null);
+
+            Assert.AreEqual(1, cancelledCount);
+            Assert.AreEqual("don", sc.Credentials.Username);
+            Assert.AreEqual("pedro", sc.Credentials.Password);
+            Assert.IsTrue(sc.IsNewPassword);
         }
     }
 }
