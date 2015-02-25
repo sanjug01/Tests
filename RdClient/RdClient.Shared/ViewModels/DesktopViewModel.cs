@@ -188,7 +188,7 @@
 
         private void ConnectCommandExecute(object o)
         {
-            RemoteSessionSetup sessionSetup = new RemoteSessionSetup(_dataModel, this.Desktop, this.Credentials, false);
+            RemoteSessionSetup sessionSetup = new RemoteSessionSetup(_dataModel, this.Desktop);
             IRemoteSession session = _sessionFactory.CreateSession(sessionSetup);
 
             _navigationService.NavigateToView("RemoteSessionView", session);

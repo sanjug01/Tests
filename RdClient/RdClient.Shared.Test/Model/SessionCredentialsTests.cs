@@ -35,7 +35,7 @@
             SessionCredentials sc = new SessionCredentials();
 
             Assert.IsNotNull(sc.Credentials);
-            Assert.IsTrue(sc.IsModified);
+            Assert.IsTrue(sc.IsNewPassword);
         }
 
         [TestMethod]
@@ -45,7 +45,7 @@
             SessionCredentials sc = new SessionCredentials(container);
 
             Assert.IsNotNull(sc.Credentials);
-            Assert.IsFalse(sc.IsModified);
+            Assert.IsFalse(sc.IsNewPassword);
             Assert.AreEqual(sc.Credentials.Username, container.Model.Username);
             Assert.AreEqual(sc.Credentials.Password, container.Model.Password);
         }
@@ -60,7 +60,7 @@
             sc.ApplySavedCredentials(container);
 
             Assert.IsNotNull(sc.Credentials);
-            Assert.IsFalse(sc.IsModified);
+            Assert.IsFalse(sc.IsNewPassword);
             Assert.AreEqual(sc.Credentials.Username, container.Model.Username);
             Assert.AreEqual(sc.Credentials.Password, container.Model.Password);
         }
@@ -73,7 +73,7 @@
 
             sc.Credentials.Password = "newpassword";
 
-            Assert.IsTrue(sc.IsModified);
+            Assert.IsTrue(sc.IsNewPassword);
         }
 
         [TestMethod]
@@ -84,7 +84,7 @@
 
             sc.Credentials.Username = "newuser";
 
-            Assert.IsTrue(sc.IsModified);
+            Assert.IsTrue(sc.IsNewPassword);
         }
 
         [TestMethod]
@@ -98,7 +98,7 @@
             sc.ApplySavedCredentials(container);
 
             Assert.IsNotNull(sc.Credentials);
-            Assert.IsFalse(sc.IsModified);
+            Assert.IsFalse(sc.IsNewPassword);
             Assert.AreEqual(sc.Credentials.Username, container.Model.Username);
             Assert.AreEqual(sc.Credentials.Password, container.Model.Password);
         }

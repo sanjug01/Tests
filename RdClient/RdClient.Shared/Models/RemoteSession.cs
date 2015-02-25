@@ -11,6 +11,7 @@
     public sealed class RemoteSession : MutableObject, IRemoteSession
     {
         private readonly RemoteSessionSetup _sessionSetup;
+        private readonly SessionCredentials _sessionCredentials;
         private readonly IDeferredExecution _deferredExecution;
         private readonly IRdpConnectionSource _connectionSource;
         private readonly ICertificateTrust _certificateTrust;
@@ -33,6 +34,7 @@
             Contract.Ensures(null != _certificateTrust);
 
             _sessionSetup = sessionSetup;
+            _sessionCredentials = new SessionCredentials();
             _deferredExecution = deferredExecution;
             _connectionSource = connectionSource;
             _certificateTrust = new CertificateTrust();
@@ -105,15 +107,14 @@
                         //
                         // Request on the calling thread, that is the UI thread;
                         //
-                        AlwaysAskCredentialsTask task = new AlwaysAskCredentialsTask(dtm.HostName, new CredentialsModel(), _sessionSetup.DataModel);
-                        task.Submitted += this.SessionCredentialsSubmitted;
-                        task.Cancelled += this.SessionCredentialsCancelled;
+                        InSessionCredentialsTask task = new InSessionCredentialsTask(_sessionSetup.SessionCredentials, _sessionSetup.DataModel);
+                        task.Submitted += this.MissingCredentialsSubmitted;
+                        task.Cancelled += this.MissingCredentialsCancelled;
                         EmitCredentialsNeeded(task);
                     }
                     else
                     {
-                        Contract.Assert(null != _sessionSetup.Credentials);
-                        InternalStartSession(_sessionSetup.Connection, _sessionSetup.Credentials, true);
+                        InternalStartSession(_sessionSetup);
                     }
                 }
                 else
@@ -193,66 +194,32 @@
             }
         }
 
-        private void SessionCredentialsSubmitted(object sender, SessionCredentialsEventArgs e)
+        private void MissingCredentialsSubmitted(object sender, InSessionCredentialsTask.SubmittedEventArgs e)
         {
-            //
-            // Called by the AlwaysAskCredentialsTask when credentials have been entered and submitted;
-            //
-            Contract.Assert(sender is AlwaysAskCredentialsTask);
+            InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
+            task.Submitted -= this.MissingCredentialsSubmitted;
+            task.Cancelled -= this.MissingCredentialsCancelled;
 
-            AlwaysAskCredentialsTask task = (AlwaysAskCredentialsTask)sender;
-            task.Cancelled -= this.SessionCredentialsCancelled;
-            task.Submitted -= this.SessionCredentialsSubmitted;
-
-            if (e.UserWantsToSavePassword)
+            if(e.SaveCredentials)
             {
-                Guid credentialsId = e.CredentialsId;
-                //
-                // Save credentials;
-                //
-                if(credentialsId.Equals(Guid.Empty))
-                {
-                    //
-                    // Returned credentials must be inserted in the data model;
-                    //
-                    credentialsId = _sessionSetup.DataModel.LocalWorkspace.Credentials.AddNewModel(e.Credentials);
-                }
-                else
-                {
-                    //
-                    // Original credentials may simply be updated;
-                    //
-                }
-
-                _sessionSetup.SetCredentials(e.Credentials);
-
-                if (_sessionSetup.Connection is DesktopModel)
-                {
-                    ((DesktopModel)_sessionSetup.Connection).CredentialsId = credentialsId;
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+                _sessionSetup.SaveCredentials();
             }
 
-            InternalStartSession(_sessionSetup.Connection, e.Credentials, e.IsPasswordChanged);
+            InternalStartSession(_sessionSetup);
         }
 
-        private void SessionCredentialsCancelled(object sender, EventArgs e)
+        private void MissingCredentialsCancelled(object sender, EventArgs e)
         {
-            Contract.Assert(sender is AlwaysAskCredentialsTask);
-
-            AlwaysAskCredentialsTask task = (AlwaysAskCredentialsTask)sender;
-            task.Cancelled -= this.SessionCredentialsCancelled;
-            task.Submitted -= this.SessionCredentialsSubmitted;
+            InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
+            task.Submitted -= this.MissingCredentialsSubmitted;
+            task.Cancelled -= this.MissingCredentialsCancelled;
             //
             // Emit the Cancelled event so the session view model can navigate to the home page
             //
             EmitCancelled();
         }
 
-        private void InternalStartSession(RemoteConnectionModel connection, CredentialsModel credentials, bool savedPassword)
+        private void InternalStartSession(RemoteSessionSetup sessionSetup)
         {
             //
             //

@@ -1,13 +1,14 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.Data;
+    using System;
     using System.Diagnostics.Contracts;
 
     public sealed class RemoteSessionSetup
     {
         private readonly ApplicationDataModel _dataModel;
         private readonly RemoteConnectionModel _connection;
-        private CredentialsModel _credentials;
-        private bool _savedCredentials;
+        private readonly SessionCredentials _sessionCredentials;
 
         public ApplicationDataModel DataModel
         {
@@ -19,38 +20,58 @@
             get { return _connection; }
         }
 
-        public CredentialsModel Credentials
+        public SessionCredentials SessionCredentials
         {
-            get { return _credentials; }
+            get { return _sessionCredentials; }
         }
 
-        public bool SavedCredentials
+        public void SaveCredentials()
         {
-            get { return _savedCredentials; }
-            set { _savedCredentials = value; }
-        }
-
-        public void SetCredentials(CredentialsModel credentials)
-        {
-            if (null == _credentials)
+            if(_connection is DesktopModel)
             {
-                _credentials = credentials;
+                DesktopModel dtm = (DesktopModel)_connection;
+                dtm.CredentialsId = _sessionCredentials.Save(_dataModel);
             }
             else
             {
-                _credentials.Username = credentials.Username;
-                _credentials.Password = credentials.Password;
+                throw new NotImplementedException();
             }
         }
 
-        public RemoteSessionSetup(ApplicationDataModel dataModel, RemoteConnectionModel connection, CredentialsModel credentials, bool savedCredentials)
+        public RemoteSessionSetup(ApplicationDataModel dataModel, RemoteConnectionModel connection)
         {
             Contract.Requires(null != dataModel);
             Contract.Requires(null != connection);
+            Contract.Ensures(null != _sessionCredentials);
 
             _dataModel = dataModel;
             _connection = connection;
-            _credentials = credentials;
+
+            if(_connection is DesktopModel)
+            {
+                DesktopModel dtm = (DesktopModel)_connection;
+
+                if (dtm.HasCredentials)
+                {
+                    foreach(IModelContainer<CredentialsModel> c in _dataModel.LocalWorkspace.Credentials.Models)
+                    {
+                        if (dtm.CredentialsId.Equals(c.Id))
+                        {
+                            _sessionCredentials = new SessionCredentials(c);
+                            break;
+                        }
+                    }
+                    Contract.Assert(null != _sessionCredentials);
+                }
+                else
+                {
+                    _sessionCredentials = new SessionCredentials();
+                }
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
