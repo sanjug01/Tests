@@ -16,6 +16,10 @@
                     x:Uid="Menu-AddDesktop"                 
                     Text="Add desktop(d)" 
                     Command="{Binding AddDesktopCommand}"/>
+                <MenuFlyoutItem
+                    x:Uid="Menu-AddWorkspace"
+                    Text="Add workspace(d)"
+                    Command="{Binding AddWorkspaceCommand}"/>
             </MenuFlyout>
         </ResourceDictionary>
     </UserControl.Resources>

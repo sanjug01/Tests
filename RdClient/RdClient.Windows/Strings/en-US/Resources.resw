@@ -613,4 +613,8 @@
   <data name="SessionView-MouseMode.Label" xml:space="preserve">
     <value>Mouse-Mode</value>
   </data>
+  <data name="Menu-AddWorkspace.Text" xml:space="preserve">
+    <value>Add Workspace</value>
+    <comment>Option to add an on premise workspace</comment>
+  </data>
 </root>

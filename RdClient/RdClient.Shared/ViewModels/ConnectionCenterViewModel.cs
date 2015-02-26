@@ -87,6 +87,7 @@
             this.DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
             this.ToggleDesktopSelectionCommand = new RelayCommand(this.ToggleDesktopSelectionCommandExecute);
             this.GoToSettingsCommand = new RelayCommand(this.GoToSettingsCommandExecute);
+            this.AddWorkspaceCommand = new RelayCommand(this.AddWorkspaceExecute);
 
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, EditItemStringId, BarItemModel.ItemAlignment.Right);
             _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, DeleteItemStringId, BarItemModel.ItemAlignment.Right);
@@ -109,6 +110,7 @@
         public RelayCommand DeleteDesktopCommand { get; private set; }
         public RelayCommand ToggleDesktopSelectionCommand { get; private set; }
         public RelayCommand GoToSettingsCommand { get; private set; }
+        public RelayCommand AddWorkspaceCommand { get; private set; }
 
         public bool HasDesktops
         {
@@ -278,6 +280,11 @@
         private void GoToSettingsCommandExecute(object o)
         {
             this.NavigationService.NavigateToView("SettingsView", null);
+        }
+
+        private void AddWorkspaceExecute(object obj)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
