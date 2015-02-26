@@ -26,6 +26,7 @@ namespace RdClient.Factories
             viewFactory.AddViewClass("SettingsView", typeof(Views.SettingsView));
             viewFactory.AddViewClass("DeleteUserView", typeof(Views.DeleteUserView));
             viewFactory.AddViewClass("EditCredentialsView", typeof(Views.EditCredentialsView));
+            viewFactory.AddViewClass("AddOrEditWorkspaceView", typeof(Views.AddOrEditWorkspaceView));
 
             DispatchedNavigationService navigationService = new DispatchedNavigationService();
             navigationService.ViewFactory = viewFactory;

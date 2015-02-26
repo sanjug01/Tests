@@ -284,7 +284,7 @@
 
         private void AddWorkspaceExecute(object obj)
         {
-            throw new System.NotImplementedException();
+            NavigationService.PushModalView("AddOrEditWorkspaceView", null);
         }
     }
 }
