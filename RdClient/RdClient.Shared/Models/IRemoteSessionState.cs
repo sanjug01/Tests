@@ -6,7 +6,8 @@ namespace RdClient.Shared.Models
     {
         Idle,
         Connecting,
-        Connected
+        Connected,
+        Closed
     }
 
     /// <summary>

@@ -2,7 +2,10 @@
 
 namespace RdClient.Views
 {
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Navigation;
+    using Windows.System;
+    using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
@@ -24,10 +27,12 @@ namespace RdClient.Views
 
         void IPresentableView.Presenting(INavigationService navigationService, object activationParameter)
         {
+            Dispatcher.AcceleratorKeyActivated += this.OnAcceleratorKeyActivated;
         }
 
         void IPresentableView.Dismissing()
         {
+            Dispatcher.AcceleratorKeyActivated -= this.OnAcceleratorKeyActivated;
         }
 
         private void OnIsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -43,6 +48,20 @@ namespace RdClient.Views
                     this.UserName.Focus(FocusState.Programmatic);
                 else
                     this.Password.Focus(FocusState.Programmatic);
+            }
+        }
+
+        private void OnAcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs e)
+        {
+            switch (e.VirtualKey)
+            {
+                case VirtualKey.Escape:
+                    this.Cancel.Invoke(e);
+                    break;
+
+                case VirtualKey.Enter:
+                    this.Submit.Invoke(e);
+                    break;
             }
         }
     }

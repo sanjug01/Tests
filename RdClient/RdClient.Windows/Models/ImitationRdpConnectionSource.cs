@@ -15,7 +15,7 @@
             return new Connection(renderingPanel);
         }
 
-        private sealed class Events : MutableObject, IRdpEvents
+        private sealed class Events : MutableObject, IRdpEvents, IRdpEventSource
         {
             private EventHandler<ClientConnectedArgs> _clientConnected;
             private EventHandler<ClientAsyncDisconnectArgs> _clientAsyncDisconnect;
@@ -34,163 +34,8 @@
             private EventHandler<RemoteAppWindowDeletedArgs> _remoteAppWindowDeleted;
             private EventHandler<RemoteAppWindowTitleUpdatedArgs> _remoteAppWindowTitleUpdated;
             private EventHandler<RemoteAppWindowIconUpdatedArgs> _remoteAppWindowIconUpdated;
-
             //
-            //
-            public void EmitClientConnected( ClientConnectedArgs clientConnected)
-            {
-                using(LockUpgradeableRead())
-                {
-                    if (null != _clientConnected)
-                        _clientConnected(this, clientConnected);
-                }
-            }
-
-            public void EmitClientAsyncDisconnect(ClientAsyncDisconnectArgs clientAsyncDisconnect)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _clientAsyncDisconnect)
-                        _clientAsyncDisconnect(this, clientAsyncDisconnect);
-                }
-            }
-
-            public void EmitClientDisconnected(ClientDisconnectedArgs clientDisconnected)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _clientDisconnected)
-                        _clientDisconnected(this, clientDisconnected);
-                }
-            }
-
-            public void EmitUserCredentialsRequest(UserCredentialsRequestArgs userCredentialsRequest)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _userCredentialsRequest)
-                        _userCredentialsRequest(this, userCredentialsRequest);
-                }
-            }
-            
-            public void EmitMouseCursorShapeChanged(MouseCursorShapeChangedArgs mouseCursorShapeChanged)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _mouseCursorShapeChanged)
-                        _mouseCursorShapeChanged(this, mouseCursorShapeChanged);
-                }
-            }
-            
-            public void EmitMouseCursorPositionChanged(MouseCursorPositionChangedArgs mouseCursorPositionChanged)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _mouseCursorPositionChanged)
-                        _mouseCursorPositionChanged(this, mouseCursorPositionChanged);
-                }
-            }
-            
-            public void EmitMultiTouchEnabledChanged(MultiTouchEnabledChangedArgs multiTouchEnabledChanged)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _multiTouchEnabledChanged)
-                        _multiTouchEnabledChanged(this, multiTouchEnabledChanged);
-                }
-            }
-            
-            public void EmitConnectionHealthStateChanged(ConnectionHealthStateChangedArgs connectionHealthStateChanged)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _connectionHealthStateChanged)
-                        _connectionHealthStateChanged(this, connectionHealthStateChanged);
-                }
-            }
-            
-            public void EmitClientAutoReconnecting(ClientAutoReconnectingArgs clientAutoReconnecting)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _clientAutoReconnecting)
-                        _clientAutoReconnecting(this, clientAutoReconnecting);
-                }
-            }
-            
-            public void EmitClientAutoReconnectComplete(ClientAutoReconnectCompleteArgs clientAutoReconnectComplete)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _clientAutoReconnectComplete)
-                        _clientAutoReconnectComplete(this, clientAutoReconnectComplete);
-                }
-            }
-            
-            public void EmitLoginCompleted(LoginCompletedArgs loginCompleted)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _loginCompleted)
-                        _loginCompleted(this, loginCompleted);
-                }
-            }
-            
-            public void EmitStatusInfoReceived(StatusInfoReceivedArgs statusInfoReceived)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _statusInfoReceived)
-                        _statusInfoReceived(this, statusInfoReceived);
-                }
-            }
-            
-            public void EmitFirstGraphicsUpdate(FirstGraphicsUpdateArgs firstGraphicsUpdate)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _firstGraphicsUpdate)
-                        _firstGraphicsUpdate(this, firstGraphicsUpdate);
-                }
-            }
-            
-            public void EmitRemoteAppWindowCreated(RemoteAppWindowCreatedArgs remoteAppWindowCreated)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _remoteAppWindowCreated)
-                        _remoteAppWindowCreated(this, remoteAppWindowCreated);
-                }
-            }
-            
-            public void EmitRemoteAppWindowDeleted(RemoteAppWindowDeletedArgs remoteAppWindowDeleted)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _remoteAppWindowDeleted)
-                        _remoteAppWindowDeleted(this, remoteAppWindowDeleted);
-                }
-            }
-            
-            public void EmitRemoteAppWindowTitleUpdated(RemoteAppWindowTitleUpdatedArgs remoteAppWindowTitleUpdated)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _remoteAppWindowTitleUpdated)
-                        _remoteAppWindowTitleUpdated(this, remoteAppWindowTitleUpdated);
-                }
-            }
-            
-            public void EmitRemoteAppWindowIconUpdated(RemoteAppWindowIconUpdatedArgs remoteAppWindowIconUpdated)
-            {
-                using (LockUpgradeableRead())
-                {
-                    if (null != _remoteAppWindowIconUpdated)
-                        _remoteAppWindowIconUpdated(this, remoteAppWindowIconUpdated);
-                }
-            }
-            //
-            //
+            // IRdpEvents
             //
             event EventHandler<ClientConnectedArgs> IRdpEvents.ClientConnected
             {
@@ -293,6 +138,161 @@
                 add { using (LockWrite()) _remoteAppWindowIconUpdated += value; }
                 remove { using (LockWrite()) _remoteAppWindowIconUpdated -= value; }
             }
+            //
+            // IRdpEventSource
+            //
+            public void EmitClientConnected(IRdpConnection sender, ClientConnectedArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _clientConnected)
+                        _clientConnected(sender, args);
+                }
+            }
+
+            public void EmitClientAsyncDisconnect(IRdpConnection sender, ClientAsyncDisconnectArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _clientAsyncDisconnect)
+                        _clientAsyncDisconnect(sender, args);
+                }
+            }
+
+            public void EmitClientDisconnected(IRdpConnection sender, ClientDisconnectedArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _clientDisconnected)
+                        _clientDisconnected(sender, args);
+                }
+            }
+
+            public void EmitUserCredentialsRequest(IRdpConnection sender, UserCredentialsRequestArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _userCredentialsRequest)
+                        _userCredentialsRequest(sender, args);
+                }
+            }
+
+            public void EmitMouseCursorShapeChanged(IRdpConnection sender, MouseCursorShapeChangedArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _mouseCursorShapeChanged)
+                        _mouseCursorShapeChanged(sender, args);
+                }
+            }
+
+            public void EmitMouseCursorPositionChanged(IRdpConnection sender, MouseCursorPositionChangedArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _mouseCursorPositionChanged)
+                        _mouseCursorPositionChanged(sender, args);
+                }
+            }
+
+            public void EmitMultiTouchEnabledChanged(IRdpConnection sender, MultiTouchEnabledChangedArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _multiTouchEnabledChanged)
+                        _multiTouchEnabledChanged(sender, args);
+                }
+            }
+
+            public void EmitConnectionHealthStateChanged(IRdpConnection sender, ConnectionHealthStateChangedArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _connectionHealthStateChanged)
+                        _connectionHealthStateChanged(sender, args);
+                }
+            }
+
+            public void EmitClientAutoReconnecting(IRdpConnection sender, ClientAutoReconnectingArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _clientAutoReconnecting)
+                        _clientAutoReconnecting(sender, args);
+                }
+            }
+
+            public void EmitClientAutoReconnectComplete(IRdpConnection sender, ClientAutoReconnectCompleteArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _clientAutoReconnectComplete)
+                        _clientAutoReconnectComplete(sender, args);
+                }
+            }
+
+            public void EmitLoginCompleted(IRdpConnection sender, LoginCompletedArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _loginCompleted)
+                        _loginCompleted(sender, args);
+                }
+            }
+
+            public void EmitStatusInfoReceived(IRdpConnection sender, StatusInfoReceivedArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _statusInfoReceived)
+                        _statusInfoReceived(sender, args);
+                }
+            }
+
+            public void EmitFirstGraphicsUpdate(IRdpConnection sender, FirstGraphicsUpdateArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _firstGraphicsUpdate)
+                        _firstGraphicsUpdate(sender, args);
+                }
+            }
+
+            public void EmitRemoteAppWindowCreated(IRdpConnection sender, RemoteAppWindowCreatedArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _remoteAppWindowCreated)
+                        _remoteAppWindowCreated(sender, args);
+                }
+            }
+
+            public void EmitRemoteAppWindowDeleted(IRdpConnection sender, RemoteAppWindowDeletedArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _remoteAppWindowDeleted)
+                        _remoteAppWindowDeleted(sender, args);
+                }
+            }
+
+            public void EmitRemoteAppWindowTitleUpdated(IRdpConnection sender, RemoteAppWindowTitleUpdatedArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _remoteAppWindowTitleUpdated)
+                        _remoteAppWindowTitleUpdated(sender, args);
+                }
+            }
+
+            public void EmitRemoteAppWindowIconUpdated(IRdpConnection sender, RemoteAppWindowIconUpdatedArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _remoteAppWindowIconUpdated)
+                        _remoteAppWindowIconUpdated(sender, args);
+                }
+            }
         }
 
         private sealed class Connection : MutableObject, IRdpConnection
@@ -320,9 +320,18 @@
                 Task.Factory.StartNew(async delegate
                 {
                     await Task.Delay(250);
-                    //_events.EmitClientConnected(new ClientConnectedArgs());
-                    _events.EmitClientAsyncDisconnect(new ClientAsyncDisconnectArgs(
-                        new RdpDisconnectReason(RdpDisconnectCode.PasswordMustChange, 0, 0)));
+
+                    if (fUsingSavedCreds)
+                    {
+                        _events.EmitClientAsyncDisconnect(this,
+                            new ClientAsyncDisconnectArgs(
+                                new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0)));
+                    }
+                    else
+                    {
+                        _events.EmitClientDisconnected(this, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.CertExpired, 0, 0)));
+                        //_events.EmitClientConnected(this, new ClientConnectedArgs());
+                    }
                 }, TaskCreationOptions.LongRunning);
             }
 
@@ -331,8 +340,9 @@
                 Task.Factory.StartNew(async delegate
                 {
                     await Task.Delay(100);
-                    _events.EmitClientAsyncDisconnect(new ClientAsyncDisconnectArgs(
-                        new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0)));
+                    _events.EmitClientAsyncDisconnect(this,
+                        new ClientAsyncDisconnectArgs(
+                            new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0)));
                 }, TaskCreationOptions.LongRunning);
             }
 

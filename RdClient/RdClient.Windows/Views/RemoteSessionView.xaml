@@ -7,15 +7,40 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Controls"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:conv="using:RdClient.Converters"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="800">
     
     <UserControl.DataContext>
         <vm:RemoteSessionViewModel/>
     </UserControl.DataContext>
-    
+
+    <UserControl.Resources>
+        <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+
     <Grid>
-        <c:RemoteSessionPanel RemoteSessionViewSite="{Binding}"/>
+        <c:RemoteSessionPanel
+            RemoteSessionViewSite="{Binding}"
+            Visibility="{Binding IsConnected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        <!-- Failure message -->
+        <Grid Visibility="{Binding IsFailureMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+              VerticalAlignment="Center"
+              Height="Auto"
+              Background="Cornsilk">
+            <StackPanel Orientation="Vertical" Margin="12,24">
+                <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"
+                           Margin="0, 0, 0, 12"
+                           Text="Connection has failed (d)"/>
+                <TextBlock HorizontalAlignment="Center" FontSize="20"
+                           Margin="0, 0, 0, 12"
+                           Text="{Binding FailureCode}"/>
+                <Button HorizontalAlignment="Center" Command="{Binding DismissFailureMessage}">
+                    <TextBlock Text="Close (d)"/>
+                </Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

@@ -28,6 +28,17 @@
         event EventHandler Cancelled;
 
         /// <summary>
+        /// Session has failed permanently.
+        /// </summary>
+        event EventHandler<SessionFailureEventArgs> Failed;
+
+        /// <summary>
+        /// Session has been permanently closed and cannot be re-connected.
+        /// The session UI may be dismissed.
+        /// </summary>
+        event EventHandler Closed;
+
+        /// <summary>
         /// Activate the remote session and attach a session view to it. The session becomes an exclusive
         /// owner of the view and may obtain a rendering panel from it.
         /// </summary>

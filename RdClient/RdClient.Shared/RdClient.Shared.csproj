@@ -198,6 +198,7 @@
     <Compile Include="Models\RemoteSessionState.cs" />
     <Compile Include="Models\SessionCredentials.cs" />
     <Compile Include="Models\SessionFactory.cs" />
+    <Compile Include="Models\SessionFailureEventArgs.cs" />
     <Compile Include="Models\ThumbnailEncoder.cs" />
     <Compile Include="Models\ThumbnailModel.cs" />
     <Compile Include="Models\Snapshotter.cs" />
