@@ -26,13 +26,20 @@
 
     <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Button Grid.Column="1" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource AddIcon}" Flyout="{StaticResource AddConnectionMenuFlyout}" />
-        <Button Grid.Column="2" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource MultiSelectIcon}" Command="{Binding ToggleDesktopSelectionCommand}" />        
-        <Button Grid.Column="3" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource SettingsIcon}" Command="{Binding GoToSettingsCommand}" />        
+        <Grid Grid.Column="0">
+            <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}">
+                <ListBoxItem>Desktops(d)</ListBoxItem>
+                <ListBoxItem>Apps(d)</ListBoxItem>
+            </ListBox>
+        </Grid>
+        <Button Grid.Column="2" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource AddIcon}" Flyout="{StaticResource AddConnectionMenuFlyout}" />
+        <Button Grid.Column="3" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource MultiSelectIcon}" Command="{Binding ToggleDesktopSelectionCommand}" />        
+        <Button Grid.Column="4" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource SettingsIcon}" Command="{Binding GoToSettingsCommand}" />        
     </Grid>
 </UserControl>
