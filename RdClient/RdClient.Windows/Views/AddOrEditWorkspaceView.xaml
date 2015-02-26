@@ -22,13 +22,14 @@
 
         <Border 
             Background="{StaticResource rdWhiteBrush}" 
+            RequestedTheme="Light"
             Width="480" 
             HorizontalAlignment="Center" 
             VerticalAlignment="Top" 
             BorderThickness="4"
             Margin="0,128,8,0"
             >
-            
+            <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="AddOrEditWorkspaceView.xaml" />
         </Border>
     </Grid>
 </Page>
