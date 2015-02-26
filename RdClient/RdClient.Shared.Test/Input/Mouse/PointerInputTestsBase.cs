@@ -37,11 +37,6 @@ namespace RdClient.Shared.Test.Input.Mouse
         private PointerEventDispatcher _consumer;
         private Mock.PointerManipulatorRecorder _manipulator;
 
-        public Mock.PointerManipulator PointerManipulator
-        {
-            get { return _manipulator; }
-        }
-
         protected ConsumptionMode ConsumptionMode
         { 
             get { return _consumer.ConsumptionMode; }

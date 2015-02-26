@@ -64,5 +64,15 @@ namespace RdClient.Shared.Test.Mock
         {
             _touchEventLog.Add(new TestMultiTouchEvent() { ActionType = type, ContactId = contactId, Position = position, FrameTime = frameTime });
         }
+
+        public void SendPinchAndZoom(double centerX, double centerY, double fromLength, double toLength)
+        {
+
+        }
+
+        public void SendPanAction(double deltaX, double deltaY)
+        {
+
+        }
     }
 }

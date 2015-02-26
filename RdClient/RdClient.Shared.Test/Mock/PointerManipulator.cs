@@ -1,5 +1,4 @@
-﻿using RdMock;
-using RdClient.Shared.CxWrappers;
+﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Input.Mouse;
 using RdMock;
 using System;
