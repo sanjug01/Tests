@@ -8,9 +8,7 @@
     using RdClient.Shared.Test.Data;
     using RdClient.Shared.ViewModels;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
-    using System;
     using System.Collections.Generic;
-    using System.Windows.Input;
 
     [TestClass]
     public sealed class InSessionCredentialsTaskTests

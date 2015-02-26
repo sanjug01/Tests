@@ -11,7 +11,7 @@
     public sealed class RemoteSession : MutableObject, IRemoteSession
     {
         private readonly RemoteSessionSetup _sessionSetup;
-        private readonly SessionCredentials _sessionCredentials;
+        private readonly RemoteSessionState _state;
         private readonly IDeferredExecution _deferredExecution;
         private readonly IRdpConnectionSource _connectionSource;
         private readonly ICertificateTrust _certificateTrust;
@@ -23,6 +23,8 @@
         private IRenderingPanel _renderingPanel;
         private IRdpConnection _connection;
 
+        private InSessionCredentialsTask _credentialsTask;
+
         public RemoteSession(RemoteSessionSetup sessionSetup, IDeferredExecution deferredExecution, IRdpConnectionSource connectionSource)
         {
             Contract.Requires(null != sessionSetup);
@@ -32,17 +34,31 @@
             Contract.Ensures(null != _deferredExecution);
             Contract.Ensures(null != _connectionSource);
             Contract.Ensures(null != _certificateTrust);
+            Contract.Ensures(null != _state);
 
             _sessionSetup = sessionSetup;
-            _sessionCredentials = new SessionCredentials();
             _deferredExecution = deferredExecution;
             _connectionSource = connectionSource;
+            _state = new RemoteSessionState(deferredExecution);
             _certificateTrust = new CertificateTrust();
+        }
+
+        IRemoteSessionState IRemoteSession.State
+        {
+            get
+            {
+                Contract.Ensures(null != Contract.Result<IRemoteSessionState>());
+                return _state;
+            }
         }
 
         ICertificateTrust IRemoteSession.CertificateTrust
         {
-            get { return _certificateTrust; }
+            get
+            {
+                Contract.Ensures(null != Contract.Result<ICertificateTrust>());
+                return _certificateTrust;
+            }
         }
 
         event EventHandler<CredentialsNeededEventArgs> IRemoteSession.CredentialsNeeded
@@ -222,8 +238,77 @@
         private void InternalStartSession(RemoteSessionSetup sessionSetup)
         {
             //
+            // Ask the connection source to create a new session.
+            // The connection source comes all the way from XAML of the main page.
             //
+            _connection = _connectionSource.CreateConnection(_renderingPanel);
+
+            _connection.Events.ClientConnected += this.OnClientConnected;
+            _connection.Events.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+            _connection.Events.ClientDisconnected += this.OnClientDisconnected;
+
+            _state.SetState(SessionState.Connecting);
+            _connection.Connect(_sessionSetup.SessionCredentials.Credentials,
+                _sessionSetup.SessionCredentials.IsNewPassword);
+        }
+
+        private void OnClientConnected(object sender, ClientConnectedArgs e)
+        {
+            _state.SetState(SessionState.Connected);
+        }
+
+        private void OnClientAsyncDisconnect(object sender, ClientAsyncDisconnectArgs e)
+        {
+            _state.SetState(SessionState.Idle);
+
+            switch (e.DisconnectReason.Code)
+            {
+                case CxWrappers.Errors.RdpDisconnectCode.PasswordMustChange:
+                    RequestNewPassword();
+                    break;
+            }
+        }
+
+        private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
+        {
+            _state.SetState(SessionState.Idle);
+        }
+
+        private void RequestNewPassword()
+        {
+            Contract.Assert(null == _credentialsTask);
             //
+            // Emit an event with a credentials editor task.
+            //
+            _credentialsTask = new InSessionCredentialsTask(_sessionSetup.SessionCredentials, _sessionSetup.DataModel);
+            _credentialsTask.Submitted += this.NewPasswordSubmitted;
+            _credentialsTask.Cancelled += this.NewPasswordCancelled;
+            DeferEmitCredentialsNeeded(_credentialsTask);
+        }
+
+        private void NewPasswordSubmitted(object sender, InSessionCredentialsTask.SubmittedEventArgs e)
+        {
+            _credentialsTask.Submitted -= this.NewPasswordSubmitted;
+            _credentialsTask.Cancelled -= this.NewPasswordCancelled;
+            _credentialsTask = null;
+
+            if (e.SaveCredentials)
+                _sessionSetup.SaveCredentials();
+            //
+            // Go ahead and try to re-connect with new credentials.
+            //
+            _connection.Connect(_sessionSetup.SessionCredentials.Credentials, _sessionSetup.SessionCredentials.IsNewPassword);
+        }
+
+        private void NewPasswordCancelled(object sender, EventArgs e)
+        {
+            _credentialsTask.Submitted -= this.NewPasswordSubmitted;
+            _credentialsTask.Cancelled -= this.NewPasswordCancelled;
+            _credentialsTask = null;
+            //
+            // User has cancelled the credentials dialog, tell the subscribers about the cancellation.
+            //
+            EmitCancelled();
         }
     }
 }

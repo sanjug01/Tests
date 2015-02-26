@@ -27,7 +27,8 @@
             LifeTimeManager="{StaticResource LifeTimeManager}"
             LandingPage="ConnectionCenterView">
             <fac:AppInitializer.ConnectionSource>
-                <models:SingleSwapChainPanelRdpConnectionSource/>
+                <!-- <models:SingleSwapChainPanelRdpConnectionSource/> -->
+                <models:ImitationRdpConnectionSource/>
             </fac:AppInitializer.ConnectionSource>
         </fac:AppInitializer>
 

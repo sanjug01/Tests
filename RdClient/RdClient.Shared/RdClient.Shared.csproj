@@ -180,6 +180,7 @@
     <Compile Include="Models\IRdpConnectionSource.cs" />
     <Compile Include="Models\IRemoteSession.cs" />
     <Compile Include="Models\IRemoteSessionControl.cs" />
+    <Compile Include="Models\IRemoteSessionState.cs" />
     <Compile Include="Models\IRemoteSessionView.cs" />
     <Compile Include="Models\IRemoteSessionViewSite.cs" />
     <Compile Include="Models\IRenderingPanel.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="Models\RemoteSession.cs" />
     <Compile Include="Models\RemoteSessionControl.cs" />
     <Compile Include="Models\RemoteSessionSetup.cs" />
+    <Compile Include="Models\RemoteSessionState.cs" />
     <Compile Include="Models\SessionCredentials.cs" />
     <Compile Include="Models\SessionFactory.cs" />
     <Compile Include="Models\ThumbnailEncoder.cs" />
