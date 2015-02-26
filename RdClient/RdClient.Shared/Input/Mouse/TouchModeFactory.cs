@@ -66,7 +66,82 @@ namespace RdClient.Shared.Input.Mouse
             
             
             // 2 fingers gestures: scroll, zoom&pinch or panning
-            AddGesturesTransitions(ref stateMachine);
+            // recognize double finger gestures
+            stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDown,
+            (o) =>
+            {
+                return
+                    o.Context.NumberOfContacts(o.Input) == 2 &&
+                    o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == true;
+            },
+            (o) => { o.Context.BeginGesture(o.Input); });
+
+            // scrolling
+            stateMachine.AddTransition(PointerState.RightDown, PointerState.Scroll,
+            (o) => { return o.Context.IsScrolling(o.Input); },
+            (o) => { o.Context.MouseScroll(o.Input); });
+
+            stateMachine.AddTransition(PointerState.Scroll, PointerState.Scroll,
+            (o) =>
+            {
+                return
+                   o.Context.NumberOfContacts(o.Input) == 2 &&
+                   o.Context.IsScrolling(o.Input);
+            },
+            (o) => { o.Context.MouseScroll(o.Input); });
+
+            stateMachine.AddTransition(PointerState.Scroll, PointerState.LeftDown,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
+            (o) => { o.Context.CompleteGesture(o.Input); });
+
+            stateMachine.AddTransition(PointerState.Scroll, PointerState.Idle,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
+            (o) => { o.Context.CompleteGesture(o.Input); });
+
+            // zooming
+            stateMachine.AddTransition(PointerState.RightDown, PointerState.Zoom,
+            (o) => { return o.Context.IsZooming(o.Input); },
+            (o) => { o.Context.ApplyZoom(o.Input); });
+
+            stateMachine.AddTransition(PointerState.Zoom, PointerState.Zoom,
+            (o) =>
+            {
+                return
+                   o.Context.NumberOfContacts(o.Input) == 2 &&
+                   o.Context.IsZooming(o.Input);
+            },
+            (o) => { o.Context.ApplyZoom(o.Input); });
+
+            stateMachine.AddTransition(PointerState.Zoom, PointerState.LeftDown,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
+            (o) => { o.Context.CompleteGesture(o.Input); });
+
+            stateMachine.AddTransition(PointerState.Zoom, PointerState.Idle,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
+            (o) => { o.Context.CompleteGesture(o.Input); });
+
+
+            // panning
+            stateMachine.AddTransition(PointerState.Zoom, PointerState.Pan,
+            (o) => { return o.Context.IsPanning(o.Input); },
+            (o) => { o.Context.ApplyPan(o.Input); });
+
+            stateMachine.AddTransition(PointerState.Pan, PointerState.Pan,
+            (o) =>
+            {
+                return
+                   o.Context.NumberOfContacts(o.Input) == 2 &&
+                   o.Context.IsZooming(o.Input);
+            },
+            (o) => { o.Context.ApplyPan(o.Input); });
+
+            stateMachine.AddTransition(PointerState.Pan, PointerState.LeftDown,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
+            (o) => { o.Context.CompleteGesture(o.Input); });
+
+            stateMachine.AddTransition(PointerState.Pan, PointerState.Idle,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
+            (o) => { o.Context.CompleteGesture(o.Input); });
 
 
             stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.Idle,
@@ -128,41 +203,6 @@ namespace RdClient.Shared.Input.Mouse
             (o) => { return o.Input.Inertia == false; },
             (o) => { });
         }
-
-        private static void AddGesturesTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
-        {
-            // recognize double finger gestures
-            stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDown,
-            (o) =>
-            {
-                return
-                    o.Context.NumberOfContacts(o.Input) == 2 &&
-                    o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == true;
-            },
-            (o) => { o.Context.BeginGesture(o.Input); });
-
-            stateMachine.AddTransition(PointerState.RightDown, PointerState.Gesture,
-            (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
-            (o) => { o.Context.ApplyGesture(o.Input); });
-
-            stateMachine.AddTransition(PointerState.Gesture, PointerState.Gesture,
-            (o) =>
-            {
-                return
-                   o.Context.NumberOfContacts(o.Input) > 1 &&
-                   o.Context.MoveThresholdExceeded(o.Input);
-            },
-            (o) => { o.Context.ApplyGesture(o.Input); });
-
-            stateMachine.AddTransition(PointerState.Gesture, PointerState.LeftDown,
-            (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
-            (o) => { o.Context.EndGesture(o.Input); });
-
-            stateMachine.AddTransition(PointerState.Gesture, PointerState.Idle,
-            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { o.Context.EndGesture(o.Input); });
-        }
-
 
         public static IPointerEventConsumer CreatePointerMode(ITimer timer, IPointerManipulator manipulator)
         {

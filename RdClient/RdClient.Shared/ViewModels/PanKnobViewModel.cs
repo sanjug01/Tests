@@ -206,7 +206,10 @@ namespace RdClient.Shared.ViewModels
             if (PanKnobState.Active == this.State)
             {
                 // pan
-                PanChange.Invoke(this, new PanEventArgs(x, y));
+                if (null != PanChange)
+                {
+                    PanChange(this, new PanEventArgs(x, y));
+                }
             }
             if (PanKnobState.Moving == this.State)
             {

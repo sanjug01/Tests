@@ -176,9 +176,11 @@ namespace RdClient.Shared.ViewModels
         {
             if (null != e)
             {
-                // TODO
-                //this.ApplyPanTransform(e.DeltaX, e.DeltaY);
-                //this.ZoomPanTransform = new PanTransform(e.DeltaX, e.DeltaX);
+                if(e.FromLength > 0 && e.ToLength > 0)
+                {
+                    double targetScale = e.FromLength / e.ToLength;
+                    this.ApplyZoomTransform(e.CenterX, e.CenterY, targetScale, targetScale);
+                }
             }
         }
 

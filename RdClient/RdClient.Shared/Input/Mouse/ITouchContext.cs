@@ -22,12 +22,15 @@ namespace RdClient.Shared.Input.Mouse
         void UpdateCursorPosition(PointerEvent pointerEvent);
 
         void BeginGesture(PointerEvent pointerEvent);
-        void EndGesture(PointerEvent pointerEvent);
-        void ApplyGesture(PointerEvent pointerEvent);
-        GestureType ActiveGesture { get; }
+        void CompleteGesture(PointerEvent pointerEvent);
+        void ApplyZoom(PointerEvent pointerEvent);
+        void ApplyPan(PointerEvent pointerEvent);
 
         bool MoveThresholdExceeded(PointerEvent pointerEvent);
         int NumberOfContacts(PointerEvent pointerEvent);
+        bool IsScrolling(PointerEvent pointerEvent);
+        bool IsZooming(PointerEvent pointerEvent);
+        bool IsPanning(PointerEvent pointerEvent);
 
        
         IPointerManipulator PointerManipulator { get; }
