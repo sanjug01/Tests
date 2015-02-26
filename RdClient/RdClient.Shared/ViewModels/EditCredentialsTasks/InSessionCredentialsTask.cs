@@ -111,6 +111,15 @@
                         viewModel.Password = _savedCredentials.Model.Password;
                         _passwordChanged = false;
                     }
+                    else if(!_passwordChanged)
+                    {
+                        //
+                        // Clear the password from another saved credentials so user cannot try the saved password
+                        // with any user name for that it was not saved.
+                        //
+                        viewModel.Password = null;
+                        _passwordChanged = true;
+                    }
 
                     valid = IsNewUserNameValid(viewModel);
                 }

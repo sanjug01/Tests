@@ -288,6 +288,9 @@
 
         private void NewPasswordSubmitted(object sender, InSessionCredentialsTask.SubmittedEventArgs e)
         {
+            //
+            // Called by _credentialsTask on the UI thread when user has submitted the in-session credentials dialog.
+            //
             _credentialsTask.Submitted -= this.NewPasswordSubmitted;
             _credentialsTask.Cancelled -= this.NewPasswordCancelled;
             _credentialsTask = null;
@@ -297,11 +300,15 @@
             //
             // Go ahead and try to re-connect with new credentials.
             //
+            _state.SetState(SessionState.Connecting);
             _connection.Connect(_sessionSetup.SessionCredentials.Credentials, _sessionSetup.SessionCredentials.IsNewPassword);
         }
 
         private void NewPasswordCancelled(object sender, EventArgs e)
         {
+            //
+            // Called by _credentialsTask on the UI thread when user has cancelled the in-session credentials dialog.
+            //
             _credentialsTask.Submitted -= this.NewPasswordSubmitted;
             _credentialsTask.Cancelled -= this.NewPasswordCancelled;
             _credentialsTask = null;

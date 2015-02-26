@@ -134,6 +134,22 @@
         }
 
         [TestMethod]
+        public void InSessionEditCredentialsTask_TypeExistingUserChangeUser_PasswordCleared()
+        {
+            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
+
+            SessionCredentials sc = new SessionCredentials();
+            sc.Credentials.Username = "don";
+            sc.Credentials.Password = "pedro";
+            InSessionCredentialsTask task = new InSessionCredentialsTask(sc, _dataModel);
+            _nav.PushModalView(ViewName, task);
+            _vm.UserName = "peter";
+            _vm.UserName += "2";
+
+            Assert.IsTrue(string.IsNullOrEmpty(_vm.Password));
+        }
+
+        [TestMethod]
         public void InSessionEditCredentialsTask_PresentNewTypeSubmit_TypedValues()
         {
             SessionCredentials sc = new SessionCredentials();
