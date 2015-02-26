@@ -29,7 +29,10 @@ namespace RdClient.Shared.CxWrappers
             _client.OnShowAzureSignOutDialog += _client_OnShowAzureSignOutDialog;
             _client.OnShowDemoConsentPage += _client_OnShowDemoConsentPage;
 
-            _client.SubscribeToOnPremFeed(@"https://ts-wlbs-a.ntdev.corp.microsoft.com/RDWeb/feed/webfeed.aspx", @"ntdev\texas", ".Gold-finger007");
+            xRes = _client.SubscribeToOnPremFeed(@"https://ts-wlbs-a.ntdev.corp.microsoft.com/RDWeb/feed/webfeed.aspx", @"ntdev\texas", ".Gold-finger007");
+            RdTrace.IfFailXResultThrow(xRes, "RdClientCx.RadcClient.SubscribeToOnPremFeed() failed");
+
+            xRes = _client.RefreshFeedResources(RdClientCx.RefreshFeedReason.ManualRefresh);
         }
 
         void _client_OnShowDemoConsentPage(RdClientCx.OnShowDemoConsentPageCompletedHandler spShowDemoConsentPageCompletedHandler, bool fFirstTimeSignIn)
