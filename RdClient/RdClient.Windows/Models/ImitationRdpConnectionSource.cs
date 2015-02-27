@@ -332,6 +332,11 @@
                     {
                         //_events.EmitClientDisconnected(this, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.CertExpired, 0, 0)));
                         _events.EmitClientConnected(this, new ClientConnectedArgs());
+
+                        await Task.Delay(500);
+
+                        _events.EmitClientDisconnected(this, new ClientDisconnectedArgs(
+                            new RdpDisconnectReason(RdpDisconnectCode.ConnectionBroken, 0, 0)));
                     }
                 }, TaskCreationOptions.LongRunning);
             }

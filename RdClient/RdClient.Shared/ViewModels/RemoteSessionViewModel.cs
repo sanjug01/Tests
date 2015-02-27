@@ -172,7 +172,7 @@
         {
             Contract.Assert(SessionState.Failed == _activeSession.State.State);
 
-            _failureMessageVisible = false;
+            this.IsFailureMessageVisible = false;
             this.NavigationService.NavigateToView("ConnectionCenterView", null);
         }
 
