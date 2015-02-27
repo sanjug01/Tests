@@ -238,6 +238,7 @@
     <Compile Include="Navigation\NavigationExtensions.cs" />
     <Compile Include="ViewModels\IEditCredentialsTask.cs" />
     <Compile Include="ViewModels\IEditCredentialsViewModel.cs" />
+    <Compile Include="ViewModels\IRemoteApplicationViewModel.cs" />
     <Compile Include="ViewModels\ISessionViewModel.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="Navigation\Extensions\IDataModelSite.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="ViewModels\IWorkspaceViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\PanKnobViewModel.cs" />
+    <Compile Include="ViewModels\RemoteApplicationViewModel.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Compile Include="ViewModels\ZoomPanViewModel.cs" />
     <Compile Include="ViewModels\MouseViewModel.cs" />

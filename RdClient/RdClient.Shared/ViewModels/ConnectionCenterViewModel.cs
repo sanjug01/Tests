@@ -105,23 +105,13 @@
         public ReadOnlyObservableCollection<IDesktopViewModel> DesktopViewModels
         {
             get { return _desktopViewModels; }
-
-            private set 
-            {                
-                SetProperty(ref _desktopViewModels, value);
-            }
+            private set { SetProperty(ref _desktopViewModels, value); }
         }
 
         public ReadOnlyObservableCollection<IWorkspaceViewModel> WorkspaceViewModels
         {
-            get
-            {
-                return _workspaceViewModels;
-            }
-            private set
-            {
-                SetProperty(ref _workspaceViewModels, value);
-            }
+            get { return _workspaceViewModels; }
+            private set { SetProperty(ref _workspaceViewModels, value); }
         }
 
         public RelayCommand AddDesktopCommand { get; private set; }
@@ -257,7 +247,13 @@
             }
             if (null == _workspaceViewModels)
             {
-                this.HasApps = true;
+                ObservableCollection<IWorkspaceViewModel> _workspaceViewModelsSource;
+                _workspaceViewModelsSource = new ObservableCollection<IWorkspaceViewModel>();
+                _workspaceViewModels = new ReadOnlyObservableCollection<IWorkspaceViewModel>(_workspaceViewModelsSource);
+                _workspaceViewModelsSource.Add(new WorkspaceViewModel());
+                _workspaceViewModelsSource.Add(new WorkspaceViewModel());
+                _workspaceViewModelsSource.Add(new WorkspaceViewModel());
+                this.HasApps = this.WorkspaceViewModels.Count > 0;
             }
         }
 

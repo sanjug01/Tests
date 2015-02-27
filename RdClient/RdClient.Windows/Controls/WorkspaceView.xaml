@@ -5,11 +5,39 @@
     xmlns:local="using:RdClient.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
-    
-    <Grid>
-        <TextBlock Text="WorkspaceView.xaml" Style="{StaticResource HeaderTextBlockStyle}" />
+    d:DesignHeight="700"
+    d:DesignWidth="1024"
+    RequestedTheme="Dark">
+
+    <d:UserControl.DataContext>
+        <vm:WorkspaceViewModel />
+    </d:UserControl.DataContext>
+
+    <Grid Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <TextBlock Text="Workspace name" Style="{StaticResource HeaderTextBlockStyle}" />
+        </Grid>
+        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <ItemsControl ItemsSource="{Binding RemoteApplicationViewModels}" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,10,10">
+                            <local:RemoteApplicationThumbnailView />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
     </Grid>
 </UserControl>
