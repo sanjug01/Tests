@@ -1,13 +1,12 @@
-﻿using RdClient.Shared.Navigation;
-using RdClient.Shared.Helpers;
-using System;
-using System.Diagnostics.Contracts;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
-
-namespace RdClient.Views
+﻿namespace RdClient.Views
 {
+    using RdClient.Shared.Navigation;
+    using System;
+    using System.Diagnostics.Contracts;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Media.Animation;
+
     //
     // Interface of a pending animation that may be committed immediately.
     //
@@ -214,6 +213,5 @@ namespace RdClient.Views
             view.IsHitTestVisible = true;
             view.Content.CastAndCall<IPresentationAnimation>(a => a.AnimatedIn());
         }
-
     }
 }

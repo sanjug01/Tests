@@ -1,13 +1,12 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
-using RdClient.Shared.Helpers;
-using RdClient.Shared.Navigation;
-
-namespace RdClient.Views
+﻿namespace RdClient.Views
 {
+    using RdClient.Shared.Navigation;
+    using System;
+    using System.Diagnostics.Contracts;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Media.Animation;
+
     public sealed partial class TransitionAnimationContainer : UserControl
     {
         private Storyboard _storyboard;
