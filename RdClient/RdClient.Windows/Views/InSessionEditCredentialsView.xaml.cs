@@ -9,7 +9,7 @@ namespace RdClient.Views
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
-    public sealed partial class InSessionEditCredentialsView : UserControl, IPresentableView
+    public sealed partial class InSessionEditCredentialsView : UserControl, IPresentableView, IPresentationAnimation
     {
         public InSessionEditCredentialsView()
         {
@@ -35,20 +35,24 @@ namespace RdClient.Views
             Dispatcher.AcceleratorKeyActivated -= this.OnAcceleratorKeyActivated;
         }
 
-        private void OnIsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        void IPresentationAnimation.AnimatingIn()
         {
-            //
-            // Navigation service disables modal views before cross-fade animating them.
-            // Because of that, all controls are disabled when the new view is shown, and focus cannot be set
-            // to a disabled control. Waiting until the view becomes enabled and setting focus then helps.
-            //
-            if ((bool)e.NewValue)
-            {
-                if (string.IsNullOrWhiteSpace(this.UserName.Text))
-                    this.UserName.Focus(FocusState.Programmatic);
-                else
-                    this.Password.Focus(FocusState.Programmatic);
-            }
+        }
+
+        void IPresentationAnimation.AnimatingOut()
+        {
+        }
+
+        void IPresentationAnimation.AnimatedIn()
+        {
+            if (string.IsNullOrWhiteSpace(this.UserName.Text))
+                this.UserName.Focus(FocusState.Programmatic);
+            else
+                this.Password.Focus(FocusState.Programmatic);
+        }
+
+        void IPresentationAnimation.AnimatedOut()
+        {
         }
 
         private void OnAcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs e)

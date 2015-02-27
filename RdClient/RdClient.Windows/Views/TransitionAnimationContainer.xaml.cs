@@ -3,6 +3,8 @@ using System.Diagnostics.Contracts;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
+using RdClient.Shared.Helpers;
+using RdClient.Shared.Navigation;
 
 namespace RdClient.Views
 {
@@ -46,7 +48,9 @@ namespace RdClient.Views
                 _newContent.Visibility = Visibility.Visible;
                 this.ContentGrid.Children.Add(_newContent);
 
-                this.RootContainer.IsEnabled = false;
+                _currentContent.CastAndCall<IPresentationAnimation>(a => a.AnimatingOut());
+                _newContent.CastAndCall<IPresentationAnimation>(a => a.AnimatingIn());
+                this.RootContainer.IsHitTestVisible = false;
                 _storyboard.Begin();
             }
             else
@@ -56,8 +60,10 @@ namespace RdClient.Views
                 //
                 content.Visibility = Visibility.Visible;
                 content.Opacity = 1.0;
+                content.CastAndCall<IPresentationAnimation>(a => a.AnimatingIn());
                 this.ContentGrid.Children.Add(content);
                 _currentContent = content;
+                content.CastAndCall<IPresentationAnimation>(a => a.AnimatedIn());
             }
         }
 
@@ -72,8 +78,10 @@ namespace RdClient.Views
                 this.ContentGrid.Children.Remove(_currentContent);
                 _currentContent = _newContent;
                 _currentContent.Opacity = 1.0;
+                this.RootContainer.IsHitTestVisible = true;
+                _newContent.CastAndCall<IPresentationAnimation>(a => a.AnimatedOut());
+                _currentContent.CastAndCall<IPresentationAnimation>(a => a.AnimatedIn());
                 _newContent = null;
-                this.RootContainer.IsEnabled = true;
             }
         }
 
