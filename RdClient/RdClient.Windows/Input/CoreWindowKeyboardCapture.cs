@@ -78,9 +78,8 @@
             {
                 _keystroke -= value;
 
-                if(null == _keystroke)
+                if(null == _keystroke && null != _coreWindow)
                 {
-                    Contract.Assert(null != _coreWindow);
                     this.Dispatcher.AcceleratorKeyActivated -= this.OnAcceleratorKeyActivated;
                     _coreWindow.Activated -= this.OnWindowActivated;
                     _coreWindow.Closed -= this.OnWindowClosed;

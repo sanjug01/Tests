@@ -5,6 +5,7 @@
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using System;
+    using System.Diagnostics;
     using System.Threading.Tasks;
     using Windows.Foundation;
 
@@ -329,8 +330,8 @@
                     }
                     else
                     {
-                        _events.EmitClientDisconnected(this, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.CertExpired, 0, 0)));
-                        //_events.EmitClientConnected(this, new ClientConnectedArgs());
+                        //_events.EmitClientDisconnected(this, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.CertExpired, 0, 0)));
+                        _events.EmitClientConnected(this, new ClientConnectedArgs());
                     }
                 }, TaskCreationOptions.LongRunning);
             }
@@ -387,6 +388,8 @@
 
             void IRdpConnection.SendKeyEvent(int keyValue, bool scanCode, bool extended, bool keyUp)
             {
+                Debug.WriteLine("SendKeyEvent|value={0}, scan code={1}, extended={2}, key up={3}",
+                    keyValue, scanCode, extended, keyUp);
             }
 
             void IRdpConnection.SendTouchEvent(TouchEventType type, uint contactId, Point position, ulong frameTime)

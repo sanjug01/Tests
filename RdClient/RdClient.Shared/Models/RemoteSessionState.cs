@@ -16,7 +16,7 @@
 
         public void SetState(SessionState newState)
         {
-            _deferredExecution.Defer(() => this.SetProperty(ref _state, newState));
+            _deferredExecution.Defer(() => this.SetProperty(ref _state, newState, "State"));
         }
 
         public void SetDisconnectCode(RdpDisconnectCode code)

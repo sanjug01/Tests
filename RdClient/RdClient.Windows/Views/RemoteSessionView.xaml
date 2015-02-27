@@ -8,12 +8,17 @@
     xmlns:c="using:RdClient.Controls"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:conv="using:RdClient.Converters"
+    xmlns:input="using:RdClient.Input"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="800">
     
     <UserControl.DataContext>
-        <vm:RemoteSessionViewModel/>
+        <vm:RemoteSessionViewModel>
+            <vm:RemoteSessionViewModel.KeyboardCapture>
+                <input:CoreWindowKeyboardCapture/>
+            </vm:RemoteSessionViewModel.KeyboardCapture>
+        </vm:RemoteSessionViewModel>
     </UserControl.DataContext>
 
     <UserControl.Resources>

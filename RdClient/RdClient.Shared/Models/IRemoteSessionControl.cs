@@ -5,8 +5,6 @@
     /// </summary>
     public interface IRemoteSessionControl
     {
-        //
-        // TBD: all session input facilities
-        //
+        void SendKeystroke(int keyCode, bool isScanCode, bool isExtendedKey, bool isKeyReleased);
     }
 }

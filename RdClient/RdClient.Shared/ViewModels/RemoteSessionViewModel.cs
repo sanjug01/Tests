@@ -1,16 +1,20 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.CxWrappers.Errors;
-using RdClient.Shared.Models;
-using System;
-using System.ComponentModel;
-using System.Diagnostics.Contracts;
-using System.Windows.Input;
+    using RdClient.Shared.Input.Keyboard;
+    using RdClient.Shared.Models;
+    using System;
+    using System.ComponentModel;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
 
     public sealed class RemoteSessionViewModel : ViewModelBase, IRemoteSessionViewSite
     {
         private IRemoteSessionView _sessionView;
         private IRemoteSession _activeSession;
+        private IRemoteSessionControl _activeSessionControl;
+        private IKeyboardCapture _keyboardCapture;
+        private SessionState _sessionState;
 
         private bool _failureMessageVisible;
         private RdpDisconnectCode _failureCode;
@@ -40,6 +44,11 @@ using System.Windows.Input;
         {
             get { return _dismissFailureMessage; }
         }
+        public IKeyboardCapture KeyboardCapture
+        {
+            get { return _keyboardCapture; }
+            set { this.SetProperty<IKeyboardCapture>(ref _keyboardCapture, value); }
+        }
 
         public RemoteSessionViewModel()
         {
@@ -49,6 +58,7 @@ using System.Windows.Input;
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Assert(null == _activeSession);
+            Contract.Assert(null != _keyboardCapture);
 
             base.OnPresenting(activationParameter);
 
@@ -62,15 +72,18 @@ using System.Windows.Input;
             IRemoteSession newSession = (IRemoteSession)activationParameter;
 
             _activeSession = newSession;
+            _sessionState = _activeSession.State.State;
+
             _activeSession.CredentialsNeeded += this.OnCredentialsNeeded;
             _activeSession.Cancelled += this.OnSessionCancelled;
             _activeSession.Closed += this.OnSessionClosed;
             _activeSession.Failed += this.OnSessionFailed;
             _activeSession.State.PropertyChanged += this.OnSessionStatePropertyChanged;
 
-            if (null != _sessionView && SessionState.Idle == _activeSession.State.State)
+            if (null != _sessionView && SessionState.Idle == _sessionState)
             {
-                _activeSession.Activate(_sessionView);
+                Contract.Assert(null == _activeSessionControl);
+                _activeSessionControl = _activeSession.Activate(_sessionView);
             }
         }
 
@@ -82,6 +95,7 @@ using System.Windows.Input;
             _activeSession.Failed -= this.OnSessionFailed;
             _activeSession.State.PropertyChanged -= this.OnSessionStatePropertyChanged;
             _sessionView.RecycleRenderingPanel(_activeSession.Deactivate());
+            _activeSessionControl = null;
             _activeSession = null;
             _sessionView = null;
 
@@ -96,7 +110,8 @@ using System.Windows.Input;
 
             if (null != _sessionView && null != _activeSession && SessionState.Idle == _activeSession.State.State)
             {
-                _activeSession.Activate(_sessionView);
+                Contract.Assert(null == _activeSessionControl);
+                _activeSessionControl = _activeSession.Activate(_sessionView);
             }
         }
 
@@ -132,6 +147,24 @@ using System.Windows.Input;
                 // Session state has changed
                 //
                 EmitPropertyChanged("IsConnected");
+
+                switch(_activeSession.State.State)
+                {
+                    case SessionState.Connected:
+                        _keyboardCapture.Keystroke += this.OnKeystroke;
+                        _keyboardCapture.Start();
+                        break;
+
+                    default:
+                        if (SessionState.Connected == _sessionState)
+                        {
+                            _keyboardCapture.Stop();
+                            _keyboardCapture.Keystroke -= this.OnKeystroke;
+                        }
+                        break;
+                }
+
+                _sessionState = _activeSession.State.State;
             }
         }
 
@@ -141,6 +174,12 @@ using System.Windows.Input;
 
             _failureMessageVisible = false;
             this.NavigationService.NavigateToView("ConnectionCenterView", null);
+        }
+
+        private void OnKeystroke(object sender, KeystrokeEventArgs e)
+        {
+            Contract.Assert(null != _activeSessionControl);
+            _activeSessionControl.SendKeystroke(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
         }
     }
 }
