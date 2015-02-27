@@ -26,22 +26,12 @@
             switch(this.AdalStatusType)
             {
                 case (AdalStatus.Failed):
-                    status = "Failed";
-                    break;
                 case (AdalStatus.Succeeded):
-                    status = "Succeeded";
-                    break;
                 case (AdalStatus.Canceled):
-                    status = "Canceled";
-                    break;
                 case (AdalStatus.UserMismatch):
-                    status = "UserMismatch";
-                    break;
                 case (AdalStatus.Denied):
-                    status = "Denied";
-                    break;
                 case (AdalStatus.Unknown):
-                    status = "Denied";
+                    status = this.AdalStatusType.ToString();
                     break;
                 default:
                     status = "undefined error?!";
@@ -49,11 +39,6 @@
             }
 
             return "AdalError: " + status;
-        }
-
-        public string Category
-        {
-            get { return "AdalError"; }
         }
     }
 }

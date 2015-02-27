@@ -9,43 +9,43 @@
     public sealed class CertificateErrorHelperTests
     {
 
-        private CertificateErrors[] _allFlags;
-        private CertificateErrors[] _someFlags;
-        private CertificateErrors[] _someOtherFlags;
+        private CertificateError[] _allFlags;
+        private CertificateError[] _someFlags;
+        private CertificateError[] _someOtherFlags;
 
 
         [TestInitialize]
         public void TestSetUp()
         {
-            _allFlags = new CertificateErrors[] { 
-                CertificateErrors.Expired, 
-                CertificateErrors.NameMismatch,
-                CertificateErrors.UntrustedRoot,
-                CertificateErrors.Revoked,
-                CertificateErrors.RevocationUnknown,
-                CertificateErrors.CertOrChainInvalid,
-                CertificateErrors.MismatchedCert,
-                CertificateErrors.WrongEKU,
-                CertificateErrors.Critical };
+            _allFlags = new CertificateError[] { 
+                CertificateError.Expired, 
+                CertificateError.NameMismatch,
+                CertificateError.UntrustedRoot,
+                CertificateError.Revoked,
+                CertificateError.RevocationUnknown,
+                CertificateError.CertOrChainInvalid,
+                CertificateError.MismatchedCert,
+                CertificateError.WrongEKU,
+                CertificateError.Critical };
 
             // exclusive flags, avoid Critical
-            _someFlags = new CertificateErrors[] { 
-                CertificateErrors.Expired, 
-                CertificateErrors.NameMismatch,
-                CertificateErrors.MismatchedCert,
-                CertificateErrors.WrongEKU };
+            _someFlags = new CertificateError[] { 
+                CertificateError.Expired, 
+                CertificateError.NameMismatch,
+                CertificateError.MismatchedCert,
+                CertificateError.WrongEKU };
 
-            _someOtherFlags = new CertificateErrors[] { 
-                CertificateErrors.UntrustedRoot,
-                CertificateErrors.Revoked,
-                CertificateErrors.RevocationUnknown,
-                CertificateErrors.CertOrChainInvalid };
+            _someOtherFlags = new CertificateError[] { 
+                CertificateError.UntrustedRoot,
+                CertificateError.Revoked,
+                CertificateError.RevocationUnknown,
+                CertificateError.CertOrChainInvalid };
         }
 
         [TestMethod]
         public void CertificateErrorHelper_VerifySimpleErrors()
         {
-            foreach(CertificateErrors error in _allFlags)
+            foreach(CertificateError error in _allFlags)
             {
                 Assert.IsTrue(CertificateErrorHelper.ErrorContainsFlag(error, error));
             }
@@ -55,11 +55,11 @@
         public void CertificateErrorHelper_VerifyDoubleErrors()
         {
             
-            foreach (CertificateErrors error1 in _someFlags)
+            foreach (CertificateError error1 in _someFlags)
             {
-                foreach (CertificateErrors error2 in _someOtherFlags)
+                foreach (CertificateError error2 in _someOtherFlags)
                 {
-                    CertificateErrors testError = error1 | error2;
+                    CertificateError testError = error1 | error2;
                     Assert.IsTrue(CertificateErrorHelper.ErrorContainsFlag(testError, error1));
                     Assert.IsTrue(CertificateErrorHelper.ErrorContainsFlag(testError, error2));
 
@@ -74,20 +74,20 @@
         [TestMethod]
         public void CertificateErrorHelper_VerifyMultipleErrors()
         {
-            CertificateErrors testError = 0;
-            foreach (CertificateErrors error1 in _someFlags)
+            CertificateError testError = 0;
+            foreach (CertificateError error1 in _someFlags)
             {
                 testError = testError | error1;
             }
 
             // verify flags exist
-            foreach (CertificateErrors error1 in _someFlags)
+            foreach (CertificateError error1 in _someFlags)
             {
                 Assert.IsTrue(CertificateErrorHelper.ErrorContainsFlag(testError, error1));
             }
 
             // verify flags don't exist
-            foreach (CertificateErrors error2 in _someOtherFlags)
+            foreach (CertificateError error2 in _someOtherFlags)
             {
                 Assert.IsFalse(CertificateErrorHelper.ErrorContainsFlag(testError, error2));
             }            
@@ -98,14 +98,14 @@
         public void CertificateErrorHelper_ErrorNotHitIsNotFatal()
         {
             Mock.RdpCertificateError certError = new Mock.RdpCertificateError();
-            CertificateErrors testError = 0;
-            foreach (CertificateErrors error1 in _someFlags)
+            CertificateError testError = 0;
+            foreach (CertificateError error1 in _someFlags)
             {
                 testError = testError | error1;
             }
             certError.ErrorFlags = testError;
 
-            foreach (CertificateErrors error2 in _someOtherFlags)
+            foreach (CertificateError error2 in _someOtherFlags)
             {
                 Assert.IsFalse(CertificateErrorHelper.WasCertErrorHitAndFatal(certError, error2));
             }            
@@ -115,23 +115,23 @@
         public void CertificateErrorHelper_ErrorHitAndFatal()
         {
             Mock.RdpCertificateError certError = new Mock.RdpCertificateError();
-            CertificateErrors testError = 0;
-            foreach (CertificateErrors error1 in _someFlags)
+            CertificateError testError = 0;
+            foreach (CertificateError error1 in _someFlags)
             {
                 testError = testError | error1;
             }
-            testError = testError | CertificateErrors.Critical;
+            testError = testError | CertificateError.Critical;
             certError.ErrorFlags = testError;
 
-            foreach (CertificateErrors error2 in _someFlags)
+            foreach (CertificateError error2 in _someFlags)
             {
                 Assert.IsTrue(CertificateErrorHelper.WasCertErrorHitAndFatal(certError, error2));
             }
 
             // Revoked and MismatchedCert are always fatal
-            certError.ErrorFlags = CertificateErrors.Revoked | CertificateErrors.MismatchedCert;
-            Assert.IsTrue(CertificateErrorHelper.WasCertErrorHitAndFatal(certError, CertificateErrors.Revoked));
-            Assert.IsTrue(CertificateErrorHelper.WasCertErrorHitAndFatal(certError, CertificateErrors.MismatchedCert));
+            certError.ErrorFlags = CertificateError.Revoked | CertificateError.MismatchedCert;
+            Assert.IsTrue(CertificateErrorHelper.WasCertErrorHitAndFatal(certError, CertificateError.Revoked));
+            Assert.IsTrue(CertificateErrorHelper.WasCertErrorHitAndFatal(certError, CertificateError.MismatchedCert));
         }
 
         [TestMethod]
@@ -142,11 +142,11 @@
             certError.ErrorFlags = 0;
             Assert.IsFalse(CertificateErrorHelper.IsFatalCertificateError(certError));
 
-            certError.ErrorFlags = CertificateErrors.Expired | CertificateErrors.NameMismatch | CertificateErrors.UntrustedRoot;
+            certError.ErrorFlags = CertificateError.Expired | CertificateError.NameMismatch | CertificateError.UntrustedRoot;
             Assert.IsFalse(CertificateErrorHelper.IsFatalCertificateError(certError));
 
             // If a certificate's revocation status cannot be determined, don't treat revocation as fatal
-            certError.ErrorFlags = CertificateErrors.RevocationUnknown | CertificateErrors.Revoked;
+            certError.ErrorFlags = CertificateError.RevocationUnknown | CertificateError.Revoked;
             Assert.IsFalse(CertificateErrorHelper.IsFatalCertificateError(certError));
         }
 
@@ -155,14 +155,14 @@
         {
             Mock.RdpCertificateError certError = new Mock.RdpCertificateError();
 
-            certError.ErrorFlags = CertificateErrors.Critical | CertificateErrors.Expired;
+            certError.ErrorFlags = CertificateError.Critical | CertificateError.Expired;
             Assert.IsTrue(CertificateErrorHelper.IsFatalCertificateError(certError));
 
-            certError.ErrorFlags = CertificateErrors.Critical | CertificateErrors.UntrustedRoot;
+            certError.ErrorFlags = CertificateError.Critical | CertificateError.UntrustedRoot;
             Assert.IsTrue(CertificateErrorHelper.IsFatalCertificateError(certError));
 
             // If a certificate's revocation status CAN be determined, revocation IS fatal
-            certError.ErrorFlags = CertificateErrors.Revoked;
+            certError.ErrorFlags = CertificateError.Revoked;
             Assert.IsTrue(CertificateErrorHelper.IsFatalCertificateError(certError));
         }
 
@@ -172,7 +172,7 @@
             Mock.RdpCertificateError certError = new Mock.RdpCertificateError();
 
             // Wrong EKU errors are only fatal if they come from CredSSP
-            certError.ErrorFlags = CertificateErrors.WrongEKU;
+            certError.ErrorFlags = CertificateError.WrongEKU;
 
             certError.ErrorSource = ServerCertificateErrorSource.None;
             Assert.IsFalse(CertificateErrorHelper.IsFatalCertificateError(certError));

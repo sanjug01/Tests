@@ -35,7 +35,7 @@ namespace RdClient.Shared.Test.Input.Mouse
     {
         protected TestTimer _timer;
         private PointerEventDispatcher _consumer;
-        private Mock.PointerManipulator _manipulator;
+        private Mock.PointerManipulatorRecorder _manipulator;
 
         protected ConsumptionMode ConsumptionMode
         { 
@@ -47,7 +47,7 @@ namespace RdClient.Shared.Test.Input.Mouse
         public void PointerModel_TestInitialize()
         {
             _timer = new TestTimer();
-            _manipulator = new Mock.PointerManipulator();
+            _manipulator = new Mock.PointerManipulatorRecorder();
             _consumer = new PointerEventDispatcher(_timer, _manipulator);
         }
 

@@ -111,10 +111,5 @@
         {
             return "XResult error: " + this.XResult32Type + " category: " + this.XResultCategory;
         }
-
-        public string Category
-        {
-            get { return "XPlatError"; }
-        }
     }
 }

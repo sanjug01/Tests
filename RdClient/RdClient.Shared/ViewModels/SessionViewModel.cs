@@ -58,8 +58,6 @@
 
         public ISessionModel SessionModel { get; set; }
 
-        public DisconnectString DisconnectString { get; set; }
-
         public MouseViewModel MouseViewModel { get; set; }
 
         public ICommand DisconnectCommand { get { return _disconnectCommand; } }
@@ -69,6 +67,9 @@
         public ICommand CancelReconnectCommand { get { return _cancelReconnectCommand; } }
 
         public ZoomPanViewModel ZoomPanViewModel { get; set; }
+
+        public PanKnobViewModel PanKnobViewModel { get; set; }
+
         public IKeyboardCapture KeyboardCapture
         {
             get { return _keyboardCapture; }
@@ -142,6 +143,12 @@
             base.OnDismissed();
         }
 
+        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
+        {
+            this.DisconnectCommand.Execute(null);
+            backArgs.Handled = true;
+        }
+
         private void StartKeyboardCapture()
         {
             if (!_capturingKeyboard && _keyboardCapture != null)
@@ -187,6 +194,9 @@
                 this.MouseViewModel.RdpConnection = args.RdpConnection;
                 this.MouseViewModel.DeferredExecution = this;
                 this.MouseViewModel.ElephantEarsViewModel = this;
+                this.PanKnobViewModel.PanChange += this.ZoomPanViewModel.HandlePanChange;
+                this.MouseViewModel.PanChange += this.ZoomPanViewModel.HandlePanChange;
+                this.MouseViewModel.ScaleChange += this.ZoomPanViewModel.HandleScaleChange;
             };
 
             SessionModel.ConnectionAutoReconnecting += SessionModel_ConnectionAutoReconnecting;

@@ -30,7 +30,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" x:Uid="DeleteUserView-Title" Style="{ThemeResource TitleTextBlockStyle}" Text="Delete user(d):"/>
-                    <TextBlock Grid.Column="2" Style="{ThemeResource TitleTextBlockStyle}" Text="{Binding Credential.Username}"/>
+                    <TextBlock Grid.Column="2" Style="{ThemeResource TitleTextBlockStyle}" Text="{Binding Credentials.Username}"/>
                 </Grid>
                 <Grid Grid.Row="2">
                     <TextBlock HorizontalAlignment="Center" x:Uid="DeleteUserView-Message" Style="{ThemeResource BodyTextBlockStyle}">

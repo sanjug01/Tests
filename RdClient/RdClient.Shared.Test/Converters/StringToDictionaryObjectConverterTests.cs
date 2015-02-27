@@ -1,6 +1,6 @@
-﻿namespace RdClient.Windows.Test.Converters
+﻿namespace RdClient.Shared.Test.Converters
 {
-    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RdClient.Converters;
     using System;
     using System.Collections.Generic;

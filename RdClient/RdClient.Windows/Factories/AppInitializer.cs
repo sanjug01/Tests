@@ -11,6 +11,7 @@
     using RdClient.Shared.ViewModels;
     using System.Diagnostics.Contracts;
     using Windows.UI.Core;
+    using Windows.UI.Xaml.Controls;
 
     public class AppInitializer
     {
@@ -25,6 +26,7 @@
         public string LandingPage { private get; set; }
         public ILifeTimeManager LifeTimeManager { private get; set; }
         public IRdpConnectionSource ConnectionSource { private get; set; }
+        public Button BackButton { private get; set; }
 
         public void Initialiaze()
         {
@@ -60,6 +62,13 @@
             _applicationDataSaver = new DeferredCommand(appDataModel.Save, deferredExecution, timerFactory, SaveDataDelayMilliseconds);
 
             _navigationService.NavigateToView(this.LandingPage, null);
+
+            //This will be replaced with a hookup to the back button pressed API once we move to Windows 10
+            Button backButton = this.BackButton;
+            if (backButton != null)
+            {
+                backButton.Command = _navigationService.BackCommand;
+            }
         }
 
         public INavigationService CreateNavigationService()

@@ -12,9 +12,9 @@ namespace RdClient.Shared.Test.ViewModels
     public class ZoomPanelViewModelTests
     {
 
-        Rect _windowRect = new Rect(0, 0, 1920, 1080);
-        Rect _transformRectNoZoom = new Rect(0, 0, 1920, 1080);
-        Rect _transformRectWithZoom = new Rect(-480, -270, 2880, 1620);
+        Rect _windowRect = new Rect(0, 0, 1280, 800);
+        Rect _transformRectNoZoom = new Rect(0, 0, 1280, 800);
+        Rect _transformRectWithZoom = new Rect(-960, -600, 3200, 2000);
 
         // default transform parameters
         PanLeftTransform _panLeftTransform = new PanLeftTransform();
@@ -258,7 +258,6 @@ namespace RdClient.Shared.Test.ViewModels
         public void ZoomPanViewModel_NoZoom_ShouldNotApplyPan()
         {
             _svm.WindowRect = _windowRect;
-            _svm.TransformRect = _transformRectNoZoom;
 
             _svm.PanCommand.Execute(_panLeftTransform);
             Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
@@ -290,7 +289,6 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(1.0 < _svm.ScaleYTo);
 
             _svm.WindowRect = _windowRect;
-            _svm.TransformRect = _transformRectWithZoom;
 
             _svm.PanCommand.Execute(_panLeftTransform);
             Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
@@ -325,7 +323,6 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(1.0 < _svm.ScaleYTo);
 
             _svm.WindowRect = _windowRect;
-            _svm.TransformRect = _transformRectWithZoom;
 
             PanTransform maxUpTransform = new PanTransform(0.0, maxUp + delta);
             _svm.PanCommand.Execute(maxUpTransform);
@@ -352,7 +349,6 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(1.0 < _svm.ScaleYTo);
 
             _svm.WindowRect = _windowRect;
-            _svm.TransformRect = _transformRectWithZoom;
 
             PanTransform maxUpTransform = new PanTransform(0.0, minDown - delta);
             _svm.PanCommand.Execute(maxUpTransform);
@@ -379,7 +375,6 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(1.0 < _svm.ScaleYTo);
 
             _svm.WindowRect = _windowRect;
-            _svm.TransformRect = _transformRectWithZoom;
 
             PanTransform maxRightTransform = new PanTransform(maxRight + delta, 0.0);
             _svm.PanCommand.Execute(maxRightTransform);
@@ -406,7 +401,6 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(1.0 < _svm.ScaleYTo);
 
             _svm.WindowRect = _windowRect;
-            _svm.TransformRect = _transformRectWithZoom;
 
             PanTransform maxLeftTransform = new PanTransform(minLeft - delta, 0.0);
             _svm.PanCommand.Execute(maxLeftTransform);
@@ -428,16 +422,16 @@ namespace RdClient.Shared.Test.ViewModels
             // initial
             Assert.IsTrue(1.0 == _svm.ScaleXTo);
             Assert.IsTrue(1.0 == _svm.ScaleYTo);
-            Assert.IsTrue(_svm.IsZoomInEnabled);
+            Assert.AreEqual(ZoomPanState.TouchMode_MinScale, _svm.State);
 
             _svm.ToggleZoomCommand.Execute(_zoomInTransform);
             Assert.IsTrue(1.0 < _svm.ScaleXTo);
 
-            Assert.IsFalse(_svm.IsZoomInEnabled);
+            Assert.AreEqual(ZoomPanState.TouchMode_MaxScale, _svm.State);
 
             // zoomOut reverts
             _svm.ToggleZoomCommand.Execute(_zoomOutTransform);
-            Assert.IsTrue(_svm.IsZoomInEnabled);
+            Assert.AreEqual(ZoomPanState.TouchMode_MinScale, _svm.State);
         }
     }
 }

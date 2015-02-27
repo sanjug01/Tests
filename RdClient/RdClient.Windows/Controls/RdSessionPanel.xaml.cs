@@ -47,19 +47,6 @@ namespace RdClient.Controls
             set { SetValue(WindowRectProperty, value); }
         }
 
-        static readonly DependencyProperty TransformRectProperty = DependencyProperty.Register(
-            "TransformRect",
-            typeof(Rect),
-            typeof(RdSessionPanel),
-            new PropertyMetadata(true)
-            );
-
-        public Rect TransformRect
-        {
-            get { return (Rect)GetValue(TransformRectProperty); }
-            set { SetValue(TransformRectProperty, value); }
-        }
-
         static readonly DependencyProperty ZoomPanTransformProperty = DependencyProperty.Register(
            "ZoomPanTransform",
             typeof(object),
@@ -92,7 +79,6 @@ namespace RdClient.Controls
         void SwapChainPanelStoryboard_Completed(object sender, object e)
         {
             this.WindowRect = CoreWindow.GetForCurrentThread().Bounds;
-            this.TransformRect = ScpScaleTransform.TransformBounds(this.WindowRect);
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -103,7 +89,7 @@ namespace RdClient.Controls
 
             // bind the window rect and transform rect
             this.WindowRect = CoreWindow.GetForCurrentThread().Bounds;
-            this.TransformRect = ScpScaleTransform.TransformBounds(this.WindowRect);
+
             //
             // TODO: properly inject the deferred execution object.
             //

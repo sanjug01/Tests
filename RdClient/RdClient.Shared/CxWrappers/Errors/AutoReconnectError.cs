@@ -14,10 +14,5 @@
         {
             return "AutoReconnectError: " + this.Error;
         }
-
-        public string Category
-        {
-            get { return "AutoReconnectError"; }
-        }
     }
 }

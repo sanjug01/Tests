@@ -85,6 +85,12 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
+        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
+        {
+            this.CancelCommand.Execute(null);
+            backArgs.Handled = true;
+        }
+
         private void Ok(object o)
         {
             NavigationService.DismissModalView(DialogView);            

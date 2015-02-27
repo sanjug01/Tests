@@ -2,6 +2,7 @@
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Navigation.Extensions;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
@@ -109,6 +110,9 @@ namespace RdClient.Shared.ViewModels
 
         public IExecutionDeferrer DeferredExecution { private get; set; }
 
+        public event EventHandler<PanEventArgs> PanChange;
+        public event EventHandler<ZoomEventArgs> ScaleChange;
+
         public MouseViewModel()
         {
             this.PointerEventConsumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
@@ -132,15 +136,18 @@ namespace RdClient.Shared.ViewModels
                 if(_multiTouchEnabled)
                 {
                     this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.MultiTouch;
+                    Debug.WriteLine(ConsumptionMode.MultiTouch);
                 }
                 else
                 {
                     this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.DirectTouch;
+                    Debug.WriteLine(ConsumptionMode.DirectTouch);
                 }
             }
             else 
             {
                 this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
+                Debug.WriteLine(ConsumptionMode.Pointer);
             }
 
             this.ElephantEarsViewModel.ElephantEarsVisible= Visibility.Collapsed;
@@ -208,7 +215,6 @@ namespace RdClient.Shared.ViewModels
 
         private void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args)
         {
-            
         }
 
         public void SendMouseAction(MouseEventType eventType)
@@ -216,6 +222,7 @@ namespace RdClient.Shared.ViewModels
             if (_rdpConnection != null)
             {
                 _rdpConnection.SendMouseEvent(eventType, (float)this.MousePosition.X, (float)this.MousePosition.Y);
+                this.TranslateMousePositionToPanTransform();
             }
         }
 
@@ -249,5 +256,51 @@ namespace RdClient.Shared.ViewModels
                 _rdpConnection.SendMouseEvent(type, x, y);
             }
         }
+
+        public void SendPinchAndZoom(double centerX, double centerY, double fromLength, double toLength)
+        {
+            if (null != ScaleChange)
+            {
+                ScaleChange(this, new ZoomEventArgs(centerX, centerY, fromLength, toLength));
+            }
+        }
+
+        public void SendPanAction(double deltaX, double deltaY)
+        {
+            if (null != PanChange)
+            {
+                PanChange(this, new PanEventArgs(deltaX, deltaY));
+            }
+        }
+
+        private void TranslateMousePositionToPanTransform()
+        {
+                // verify panning
+                double panX = 0.0;
+                double panY = 0.0;
+                if (this.MousePosition.X < GlobalConstants.PointerPanBorderOffsetX)
+                {
+                    panX = GlobalConstants.PointerPanBorderOffsetX - this.MousePosition.X;
+                }
+                else if (this.MousePosition.X > ViewSize.Width - GlobalConstants.PointerPanBorderOffsetX)
+                {
+                    panX = ViewSize.Width - GlobalConstants.PointerPanBorderOffsetX - this.MousePosition.X;
+                }
+
+                if (this.MousePosition.Y < GlobalConstants.PointerPanBorderOffsetY)
+                {
+                    panY = GlobalConstants.PointerPanBorderOffsetY - this.MousePosition.Y;
+                }
+                else if (this.MousePosition.Y > ViewSize.Height - GlobalConstants.PointerPanBorderOffsetY)
+                {
+                    panY = ViewSize.Height - GlobalConstants.PointerPanBorderOffsetY - this.MousePosition.Y;
+                }
+
+                if (GlobalConstants.TouchMoveThreshold < Math.Abs(panX) || GlobalConstants.TouchMoveThreshold < Math.Abs(panY))
+                {
+                    SendPanAction(panX, panY);
+                }
+        }
     }
 }
+

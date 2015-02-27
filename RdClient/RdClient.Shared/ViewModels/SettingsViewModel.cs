@@ -85,15 +85,8 @@ namespace RdClient.Shared.ViewModels
                 .Create(this.ApplicationDataModel.LocalWorkspace.Credentials.Models,
                 this.CreateCredentialsViewModel,
                 this.ReleaseCredentialsViewModel);
-
-            this.CredentialsViewModels.CastAndCall<INotifyPropertyChanged>(npc =>
-                npc.PropertyChanged += this.OnCredentialsViewModelsPropertyChanged);
+            this.CredentialsViewModels.CastAndCall<INotifyPropertyChanged>(npc => npc.PropertyChanged += this.OnCredentialsViewModelsPropertyChanged);
             this.HasCredentials = this.CredentialsViewModels.Count > 0;
-
-            foreach (ICredentialViewModel vm in this.CredentialsViewModels)
-            {
-                vm.Presented(this.NavigationService, this.ApplicationDataModel);
-            }
         }
 
         protected override void OnDismissed()
@@ -117,9 +110,17 @@ namespace RdClient.Shared.ViewModels
             base.OnDismissed();
         }
 
+        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
+        {
+            this.GoBackCommand.Execute(null);
+            backArgs.Handled = true;
+        }
+
         private ICredentialViewModel CreateCredentialsViewModel(IModelContainer<CredentialsModel> container)
         {
-            return new CredentialViewModel(container);
+            ICredentialViewModel vm = new CredentialViewModel(container);
+            vm.Presented(this.NavigationService, this.ApplicationDataModel);
+            return vm;
         }
 
         private void ReleaseCredentialsViewModel(ICredentialViewModel vm)

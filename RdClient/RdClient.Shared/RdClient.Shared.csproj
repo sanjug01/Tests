@@ -54,7 +54,8 @@
   <ItemGroup>
     <Compile Include="Converters\BarItemsAlignmentFilteringConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\CredentialPromptModeToLocalizedMessageConverter.cs" />
+    <Compile Include="Converters\PanKnobStateToBackGroundBrushConverter.cs" />
+    <Compile Include="Converters\TypeToLocalizedStringConverter.cs" />
     <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverter.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverter.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverter.cs" />
@@ -67,6 +68,10 @@
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverter.cs" />
     <Compile Include="Converters\ByteArrayToStringConverter.cs" />
+    <Compile Include="Converters\PanKnobStateToForegroundBrushConverter.cs" />
+    <Compile Include="Converters\ZoomPanStateToPanKnobVisibilityConverter.cs" />
+    <Compile Include="Converters\ZoomPanStateToZoomInVisibilityConverter.cs" />
+    <Compile Include="Converters\ZoomPanStateToZoomOutVisibilityConverter.cs" />
     <Compile Include="Converters\StringLengthToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
     <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverter.cs" />
@@ -75,6 +80,7 @@
     <Compile Include="CxWrappers\Errors\LogonError.cs" />
     <Compile Include="CxWrappers\Errors\NetBIOSResolveError.cs" />
     <Compile Include="CxWrappers\Errors\RadcError.cs" />
+    <Compile Include="CxWrappers\Errors\RdpCertificateError.cs" />
     <Compile Include="CxWrappers\Errors\RdpDisconnectReason.cs" />
     <Compile Include="CxWrappers\Errors\IRdpError.cs" />
     <Compile Include="CxWrappers\Errors\XPlatError.cs" />
@@ -117,9 +123,9 @@
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
     <Compile Include="Helpers\DataStorageExtensions.cs" />
     <Compile Include="Helpers\DeferredCommand.cs" />
-    <Compile Include="Helpers\DisconnectString.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />
     <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\GlobalConstants.cs" />
     <Compile Include="Helpers\GroupCommand.cs" />
     <Compile Include="Helpers\IDeferredExecution.cs" />
     <Compile Include="Helpers\ILocalizedString.cs" />
@@ -129,6 +135,7 @@
     <Compile Include="Helpers\ITimer.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Input\Mouse\MultiTouchMode.cs" />
+    <Compile Include="Input\Mouse\PointerEventTrace.cs" />
     <Compile Include="Input\Mouse\PointerEvent.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
     <Compile Include="Helpers\ReadWriteMonitor.cs" />
@@ -159,9 +166,14 @@
     <Compile Include="Input\Mouse\MouseMode.cs" />
     <Compile Include="Input\Mouse\TouchContext.cs" />
     <Compile Include="Input\Mouse\TouchModeFactory.cs" />
+    <Compile Include="Input\ZoomPan\ZoomEventArgs.cs" />
+    <Compile Include="Input\ZoomPan\PanEventArgs.cs" />
     <Compile Include="Input\ZoomPan\IPanTransform.cs" />
     <Compile Include="Input\ZoomPan\IZoomPanManipulator.cs" />
+    <Compile Include="Input\ZoomPan\IPanKnobTransform.cs" />
     <Compile Include="Input\ZoomPan\IZoomPanTransform.cs" />
+    <Compile Include="Input\ZoomPan\PanKnobState.cs" />
+    <Compile Include="Input\ZoomPan\ZoomPanState.cs" />
     <Compile Include="Input\ZoomPan\IZoomTransform.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
@@ -203,6 +215,7 @@
     <Compile Include="Models\ThumbnailModel.cs" />
     <Compile Include="Models\Snapshotter.cs" />
     <Compile Include="Models\WorkspaceModel.cs" />
+    <Compile Include="Navigation\BackCommandArgs.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarItemsSourceContract.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarSiteContract.cs" />
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
@@ -218,6 +231,7 @@
     <Compile Include="Navigation\Extensions\SessionFactoryExtension.cs" />
     <Compile Include="Navigation\Extensions\TimerFactoryExtension.cs" />
     <Compile Include="Navigation\IPresentationAnimation.cs" />
+    <Compile Include="Navigation\IBackCommandArgs.cs" />
     <Compile Include="Navigation\IPresentationCompletion.cs" />
     <Compile Include="Navigation\IModalPresentationContext.cs" />
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
@@ -266,6 +280,7 @@
     <Compile Include="ViewModels\ILayoutAwareViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
+    <Compile Include="ViewModels\PanKnobViewModel.cs" />
     <Compile Include="ViewModels\ZoomPanViewModel.cs" />
     <Compile Include="ViewModels\MouseViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />

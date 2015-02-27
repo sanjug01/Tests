@@ -33,13 +33,19 @@
             [DebuggerNonUserCode] // exclude from code coverage
             public void Presenting(INavigationService navigationService, object activationParameter, IModalPresentationContext presentationResult)
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             [DebuggerNonUserCode] // exclude from code coverage
             public void Dismissing()
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
+            }
+
+            [DebuggerNonUserCode] // exclude from code coverage
+            public void NavigatingBack(IBackCommandArgs backArgs)
+            {
+                throw new NotImplementedException();
             }
 
             [DebuggerNonUserCode] // exclude from code coverage

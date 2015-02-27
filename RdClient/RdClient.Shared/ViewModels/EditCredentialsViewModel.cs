@@ -201,6 +201,12 @@
             _taskToken = null;
         }
 
+        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
+        {
+            this.Cancel.Execute(null);
+            backArgs.Handled = true;
+        }
+
         private void InternalCancel(object parameter)
         {
             Contract.Assert(null != _task, "EditCredentialsViewModel.CancelView|cancelled without task");
@@ -230,7 +236,7 @@
         {
             this.IsConfirmationVisible = false;
             this.CastAndCall<IEditCredentialsViewControl>(ctl => ctl.Submit());
-        }
+            }
 
         private void InternalCancelConformation(object parameter)
         {

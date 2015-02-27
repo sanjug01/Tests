@@ -49,6 +49,16 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
+        public void TestHandlesBackNavigationByNavigatingToConnectionCenter()
+        {
+            _navService.Expect("NavigateToView", new List<object>() { "ConnectionCenterView", null }, 0);
+            IBackCommandArgs backArgs = new BackCommandArgs();
+            Assert.IsFalse(backArgs.Handled);
+            (_vm as IViewModel).NavigatingBack(backArgs);
+            Assert.IsTrue(backArgs.Handled);
+        }
+
+        [TestMethod]
         public void TestSettingsLoadedFromDataModel()
         {
             Assert.AreEqual(_vm.GeneralSettings, _dataModel.Settings);
