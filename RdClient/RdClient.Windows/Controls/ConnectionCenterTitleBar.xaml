@@ -43,10 +43,12 @@
         <Grid Grid.Column="0">
             <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}" SelectedIndex="0">
                 <ListBoxItem 
+                    x:Uid="ConnectionCenter_DesktopLabel"
                     IsSelected="{Binding Path=ShowDesktops, Mode=TwoWay}"
                     Visibility="{Binding Path=HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Content="Desktops(d)"/>
                 <ListBoxItem
+                    x:Uid="ConnectionCenter_AppLabel"
                     IsSelected="{Binding Path=ShowApps, Mode=TwoWay}"
                     Visibility="{Binding Path=HasApps, Converter={StaticResource BooleanToVisibilityConverter}}"
                     Content="Apps(d)" />
