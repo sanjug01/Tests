@@ -128,8 +128,8 @@
             {
                 if (SetProperty(ref _hasDesktops, value))
                 {
-                     this.ShowDesktops = value;
-                    this.ShowApps = !value && this.HasApps;
+                    this.ShowDesktops = value;
+                    this.ShowApps = !value;
                 }
             }
         }
@@ -145,7 +145,7 @@
                 if (SetProperty(ref _hasApps, value))
                 {
                     this.ShowApps = value;
-                    this.ShowDesktops = !value && this.HasDesktops;
+                    this.ShowDesktops = !value;
                 }
             }
         }
@@ -158,12 +158,10 @@
             }
             set 
             {
-                bool newValue = this.HasDesktops;
-                if (this.HasDesktops && this.HasApps)
+                if ((value == this.HasDesktops) || (!value && this.HasApps))
                 {
-                    newValue = value;
+                    SetProperty(ref _showDesktops, value);
                 }
-                SetProperty(ref _showDesktops, newValue);
             }
         }
 
@@ -175,12 +173,10 @@
             }
             set
             {
-                bool newValue = this.HasApps;
-                if (this.HasDesktops && this.HasApps)
+                if ((value == this.HasApps) || (!value && this.HasDesktops))
                 {
-                    newValue = value;
+                    SetProperty(ref _showApps, value);
                 }
-                SetProperty(ref _showApps, newValue);
             }
         }
 
