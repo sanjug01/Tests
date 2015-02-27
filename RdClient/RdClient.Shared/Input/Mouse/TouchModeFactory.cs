@@ -78,8 +78,17 @@ namespace RdClient.Shared.Input.Mouse
 
             // scrolling
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Scroll,
-            (o) => { return o.Context.IsScrolling(o.Input); },
+            (o) => 
+            { 
+                return 
+                    o.Context.NumberOfContacts(o.Input) == 2 &&
+                    o.Context.IsScrolling(o.Input); 
+            },
             (o) => { o.Context.MouseScroll(o.Input); });
+
+            stateMachine.AddTransition(PointerState.Scroll, PointerState.Zoom,
+            (o) => { return o.Context.IsZooming(o.Input); },
+            (o) => { o.Context.ApplyZoom(o.Input); });
 
             stateMachine.AddTransition(PointerState.Scroll, PointerState.Scroll,
             (o) =>
@@ -100,7 +109,12 @@ namespace RdClient.Shared.Input.Mouse
 
             // zooming
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Zoom,
-            (o) => { return o.Context.IsZooming(o.Input); },
+            (o) => 
+            {
+                return
+                   o.Context.NumberOfContacts(o.Input) == 2 &&
+                    o.Context.IsZooming(o.Input); 
+            },
             (o) => { o.Context.ApplyZoom(o.Input); });
 
             stateMachine.AddTransition(PointerState.Zoom, PointerState.Zoom,
@@ -123,7 +137,12 @@ namespace RdClient.Shared.Input.Mouse
 
             // panning
             stateMachine.AddTransition(PointerState.Zoom, PointerState.Pan,
-            (o) => { return o.Context.IsPanning(o.Input); },
+            (o) => 
+            {
+                return
+                   o.Context.NumberOfContacts(o.Input) == 2 &&
+                   o.Context.IsPanning(o.Input); 
+            },
             (o) => { o.Context.ApplyPan(o.Input); });
 
             stateMachine.AddTransition(PointerState.Pan, PointerState.Pan,

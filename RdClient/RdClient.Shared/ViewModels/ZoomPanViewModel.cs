@@ -155,7 +155,6 @@ namespace RdClient.Shared.ViewModels
             set { this.SetProperty(ref _translateYTo, value); }
         }
         public Rect WindowRect { get; set; }
-        public Rect TransformRect { get; set; }
 
         public IZoomPanTransform ZoomPanTransform
         {
@@ -178,8 +177,10 @@ namespace RdClient.Shared.ViewModels
             {
                 if(e.FromLength > 0 && e.ToLength > 0)
                 {
-                    double targetScale = e.FromLength / e.ToLength;
-                    this.ApplyZoomTransform(e.CenterX, e.CenterY, targetScale, targetScale);
+                    double targetXScale = this.ScaleXTo * e.ToLength / e.FromLength;
+                    double targetYScale = this.ScaleYTo * e.ToLength / e.FromLength;
+                    this.ApplyZoomTransform(e.CenterX, e.CenterY, targetXScale, targetYScale);
+                    this.ZoomPanTransform = new CustomZoomTransform(e.CenterX, e.CenterY, targetXScale, targetYScale);
                 }
             }
         }
@@ -201,7 +202,6 @@ namespace RdClient.Shared.ViewModels
             _panCommand = new RelayCommand(new Action<object>(PanTranslate));
 
             WindowRect = new Rect(0, 0, 0, 0);
-            TransformRect = new Rect(0, 0, 0, 0);
             ScaleCenterX = 0.0;
             ScaleCenterX = 0.0;
 
@@ -249,7 +249,7 @@ namespace RdClient.Shared.ViewModels
             if (null != panTransform)
             {
                 this.ApplyPanTransform(panTransform.X, panTransform.Y);
-                this.ZoomPanTransform = new PanTransform(panTransform.X, panTransform.Y);
+                this.ZoomPanTransform = new PanTransform(this.TranslateXTo, this.TranslateYTo);
             }
         }
 
@@ -319,6 +319,15 @@ namespace RdClient.Shared.ViewModels
             this.TranslateXFrom = this.TranslateXTo;
             this.TranslateYFrom = this.TranslateYTo;
 
+            if (this.ScaleXTo > this.ScaleXFrom || this.ScaleYTo > this.ScaleYFrom)
+            {
+                // shrinking may required pan adjustment
+                double panXTo = this.TranslateXTo;
+                double panYTo = this.TranslateYTo;
+                this.ApplyPanAdjusments(ref panXTo, ref panYTo, targetScaleX, targetScaleY);
+                this.TranslateXTo = panXTo;
+                this.TranslateYTo = panYTo;
+            }
 
             this.ScaleXFrom = this.ScaleXTo;
             this.ScaleXTo = targetScaleX;
@@ -336,8 +345,7 @@ namespace RdClient.Shared.ViewModels
             else
             {
                 this.State = ZoomPanState.PointerMode_Zooming;
-            }
-            
+            }            
         }
 
         private void ApplyPanTransform(double x, double y)
@@ -349,13 +357,30 @@ namespace RdClient.Shared.ViewModels
             this.ScaleXFrom = this.ScaleXTo;
             this.ScaleYFrom = this.ScaleYTo;
 
+            this.ApplyPanAdjusments(ref panXTo, ref panYTo, this.ScaleXTo, this.ScaleYTo);
+
+            this.TranslateXFrom = this.TranslateXTo;
+            this.TranslateYFrom = this.TranslateYTo;
+            this.TranslateXTo = panXTo;
+            this.TranslateYTo = panYTo;
+        }
+
+        private void ApplyPanAdjusments(ref double panXTo, ref double panYTo, double targetScaleX, double targetScaleY)
+        {
+            // CalculateTransformRect
+            double transformWidth = targetScaleX * WindowRect.Width;
+            double transformHeight = targetScaleY * WindowRect.Height;
+            double transformLeft = WindowRect.Left - (transformWidth - WindowRect.Width) * 0.5;
+            double transformTop = WindowRect.Top - (transformHeight - WindowRect.Height) * 0.5;
+
             Point maxTranslationOffset;
             Point minTranslationOffset;
 
-            maxTranslationOffset.X = WindowRect.Left - TransformRect.Left;
-            maxTranslationOffset.Y = WindowRect.Top - TransformRect.Top;
-            minTranslationOffset.X = WindowRect.Right - TransformRect.Right;
-            minTranslationOffset.Y = WindowRect.Bottom - TransformRect.Bottom;
+            Rect transformRect = new Rect(transformLeft, transformTop, transformWidth, transformHeight);
+            maxTranslationOffset.X = WindowRect.Left - transformRect.Left;
+            maxTranslationOffset.Y = WindowRect.Top - transformRect.Top;
+            minTranslationOffset.X = WindowRect.Right - transformRect.Right;
+            minTranslationOffset.Y = WindowRect.Bottom - transformRect.Bottom;
 
             if (panXTo < minTranslationOffset.X)
             {
@@ -374,11 +399,6 @@ namespace RdClient.Shared.ViewModels
             {
                 panYTo = maxTranslationOffset.Y;
             }
-
-            this.TranslateXFrom = this.TranslateXTo;
-            this.TranslateYFrom = this.TranslateYTo;
-            this.TranslateXTo = panXTo;
-            this.TranslateYTo = panYTo;
         }
     }
 }
