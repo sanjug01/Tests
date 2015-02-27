@@ -10,6 +10,5 @@ namespace RdClient.Shared.ViewModels
         bool HasApps { get; }
         bool ShowDesktops { get; set; }
         bool ShowApps { get; set; }
-        bool ShowWelcome { get; }
     }
 }

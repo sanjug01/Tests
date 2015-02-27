@@ -38,7 +38,8 @@
         </Grid>        
         <Grid Grid.Row="1">
             <controls:ItsLonelyHereControl Visibility="{Binding Path=ShowWelcome, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>            
+            <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>       
     </Grid>
     

@@ -41,7 +41,7 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
-            <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}" SelectedIndex="0">
+            <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}">
                 <ListBoxItem 
                     x:Uid="ConnectionCenter_DesktopLabel"
                     IsSelected="{Binding Path=ShowDesktops, Mode=TwoWay}"

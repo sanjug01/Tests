@@ -53,18 +53,13 @@ namespace RdClient.DesignTime
         public bool ShowDesktops
         {
             get { return true; }
-            set { throw new NotImplementedException(); }
+            set { }
         }
 
         public bool ShowApps
         {
             get { return false; }
-            set { throw new NotImplementedException(); }
-        }
-
-        public bool ShowWelcome
-        {
-            get { return false; }
+            set { }
         }
     }
 }

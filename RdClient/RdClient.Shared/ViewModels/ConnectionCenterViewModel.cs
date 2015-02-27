@@ -27,7 +27,6 @@
         private bool _desktopsSelectable;
         private bool _showDesktops;
         private bool _showApps;
-        private bool _showWelcome;
         private bool _hasDesktops;
         private bool _hasApps;
 
@@ -129,14 +128,8 @@
             {
                 if (SetProperty(ref _hasDesktops, value))
                 {
-                    if (value == false)
-                    {
-                        this.ShowDesktops = false;
-                    }
-                    else if (this.ShowApps == false)
-                    {
-                        this.ShowDesktops = true;
-                    }
+                     this.ShowDesktops = value;
+                    this.ShowApps = !value && this.HasApps;
                 }
             }
         }
@@ -151,14 +144,8 @@
             {
                 if (SetProperty(ref _hasApps, value))
                 {
-                    if (value == false)
-                    {
-                        this.ShowApps = false;
-                    }
-                    else if (this.ShowDesktops == false)
-                    {
-                        this.ShowApps = true;
-                    }
+                    this.ShowApps = value;
+                    this.ShowDesktops = !value && this.HasDesktops;
                 }
             }
         }
@@ -171,11 +158,12 @@
             }
             set 
             {
-                if (this.HasDesktops || value == false)
+                bool newValue = this.HasDesktops;
+                if (this.HasDesktops && this.HasApps)
                 {
-                    SetProperty(ref _showDesktops, value);
-                    this.ShowWelcome = !(this.ShowDesktops || this.ShowApps);                    
+                    newValue = value;
                 }
+                SetProperty(ref _showDesktops, newValue);
             }
         }
 
@@ -187,23 +175,12 @@
             }
             set
             {
-                if (this.HasApps || value == false)
+                bool newValue = this.HasApps;
+                if (this.HasDesktops && this.HasApps)
                 {
-                    SetProperty(ref _showApps, value);                    
-                    this.ShowWelcome = !(this.ShowDesktops || this.ShowApps);                    
+                    newValue = value;
                 }
-            }
-        }
-
-        public bool ShowWelcome
-        {
-            get 
-            { 
-                return _showWelcome; 
-            }
-            private set
-            {
-                SetProperty(ref _showWelcome, value);
+                SetProperty(ref _showApps, newValue);
             }
         }
 
@@ -268,7 +245,7 @@
                 INotifyPropertyChanged npc = this.DesktopViewModels;
                 npc.PropertyChanged += OnDesktopViewModelPropertyChanged;
                 this.HasDesktops = this.DesktopViewModels.Count > 0;
-                this.ShowWelcome = !(this.ShowDesktops || this.ShowApps);
+                this.HasApps = true;
             }
         }
 
