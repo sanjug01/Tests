@@ -150,7 +150,8 @@
                             //
                             // Request on the calling thread, that is the UI thread;
                             //
-                            InSessionCredentialsTask task = new InSessionCredentialsTask(_sessionSetup.SessionCredentials, _sessionSetup.DataModel);
+                            InSessionCredentialsTask task = new InSessionCredentialsTask(_sessionSetup.SessionCredentials,
+                                _sessionSetup.DataModel, "d:Connection is set up to always ask credentials");
                             task.Submitted += this.MissingCredentialsSubmitted;
                             task.Cancelled += this.MissingCredentialsCancelled;
                             EmitCredentialsNeeded(task);
@@ -356,7 +357,8 @@
             //
             // Emit an event with a credentials editor task.
             //
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sessionSetup.SessionCredentials, _sessionSetup.DataModel);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(_sessionSetup.SessionCredentials, _sessionSetup.DataModel,
+                "d:Invalid user name or password");
             task.Submitted += this.NewPasswordSubmitted;
             task.Cancelled += this.NewPasswordCancelled;
             DeferEmitCredentialsNeeded(task);
@@ -367,7 +369,8 @@
             //
             // Emit an event with a credentials editor task.
             //
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sessionSetup.SessionCredentials, _sessionSetup.DataModel);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(_sessionSetup.SessionCredentials, _sessionSetup.DataModel,
+                "d:Server has requested a new password to be typed in");
             task.Submitted += this.NewPasswordSubmitted;
             task.Cancelled += this.NewPasswordCancelled;
             DeferEmitCredentialsNeeded(task);

@@ -11,6 +11,7 @@
     {
         private readonly SessionCredentials _sessionCredentials;
         private readonly ApplicationDataModel _dataModel;
+        private readonly string _prompt;
         private readonly IValidationRule _userNameRule;
         private IModelContainer<CredentialsModel> _savedCredentials;
         private bool _passwordChanged;
@@ -30,7 +31,7 @@
             }
         }
 
-        public InSessionCredentialsTask(SessionCredentials sessionCredentials, ApplicationDataModel dataModel)
+        public InSessionCredentialsTask(SessionCredentials sessionCredentials, ApplicationDataModel dataModel, string prompt)
         {
             Contract.Assert(null != sessionCredentials);
             Contract.Ensures(null != _sessionCredentials);
@@ -39,6 +40,7 @@
 
             _sessionCredentials = sessionCredentials;
             _dataModel = dataModel;
+            _prompt = prompt;
             _userNameRule = new UsernameValidationRule();
             _savedCredentials = FindSavedCredentials(sessionCredentials.Credentials.Username);
             _passwordChanged = false;
@@ -53,6 +55,7 @@
             viewModel.Password = _sessionCredentials.Credentials.Password;
             viewModel.CanSaveCredentials = true;
             viewModel.DismissLabel = "d:Connect";
+            viewModel.Prompt = _prompt;
         }
 
         protected override void OnDismissing(IEditCredentialsViewModel viewModel, IEditCredentialsViewControl viewControl)
