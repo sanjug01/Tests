@@ -17,31 +17,35 @@
     </d:UserControl.DataContext>
 
     <Grid Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource ListHeaderHeight}" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{StaticResource ConnectionCenterMargin}" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>        
-        <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
-            <StackPanel Orientation="Vertical">
-                <ItemsControl ItemsSource="{Binding DesktopViewModels}" >                            
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapGrid Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Margin="0,0,10,10">
-                                <views:DesktopThumbnailView />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
+        <ScrollViewer Grid.Row="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="{StaticResource ListHeaderHeight}" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{StaticResource ConnectionCenterMargin}" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>        
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <StackPanel Orientation="Vertical">
+                        <ItemsControl ItemsSource="{Binding DesktopViewModels}" >                            
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapGrid Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,0,10,10">
+                                        <views:DesktopThumbnailView />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Grid>
+            </Grid>
         </ScrollViewer>
     </Grid>
 </UserControl>

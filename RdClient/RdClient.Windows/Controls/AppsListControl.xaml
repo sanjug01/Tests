@@ -18,27 +18,29 @@
     </d:UserControl.DataContext>
 
     <Grid Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource ListHeaderHeight}" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{StaticResource ConnectionCenterMargin}" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="1" Text="AppsListControl.xaml" Style="{StaticResource BodyTextBlockStyle}" />
-        <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
-            <StackPanel Orientation="Vertical">
-                <ItemsControl ItemsSource="{Binding WorkspaceViewModels}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Margin="0,0,10,10">
-                                <controls:WorkspaceView />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>                
-            </StackPanel>
-        </ScrollViewer>        
+        <ScrollViewer Grid.Row="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="{StaticResource ListHeaderHeight}" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{StaticResource ConnectionCenterMargin}" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1" Text="AppsListControl.xaml" Style="{StaticResource BodyTextBlockStyle}" />
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+                    <ItemsControl ItemsSource="{Binding WorkspaceViewModels}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,0,10,10">
+                                    <controls:WorkspaceView />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>
