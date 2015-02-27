@@ -8,6 +8,7 @@
         private readonly IDeferredExecution _deferredExecution;
         private SessionState _state;
         private RdpDisconnectCode _disconnectCode;
+        private int _reconnectAttempt;
 
         public RemoteSessionState(IDeferredExecution deferredExecution)
         {
@@ -21,7 +22,12 @@
 
         public void SetDisconnectCode(RdpDisconnectCode code)
         {
-            _deferredExecution.Defer(() => this.SetProperty(ref _disconnectCode, code));
+            _deferredExecution.Defer(() => this.SetProperty(ref _disconnectCode, code, "DisconnectCode"));
+        }
+
+        public void SetReconnectAttempt(int reconnectAttempt)
+        {
+            _deferredExecution.Defer(() => this.SetProperty(ref _reconnectAttempt, reconnectAttempt, "ReconnectAttempt"));
         }
 
         SessionState IRemoteSessionState.State
@@ -32,6 +38,11 @@
         RdpDisconnectCode IRemoteSessionState.DisconnectCode
         {
             get { return _disconnectCode; }
+        }
+
+        int IRemoteSessionState.ReconnectAttempt
+        {
+            get { return _reconnectAttempt; }
         }
     }
 }

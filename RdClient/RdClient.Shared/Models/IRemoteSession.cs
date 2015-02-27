@@ -23,14 +23,14 @@
         event EventHandler<CredentialsNeededEventArgs> CredentialsNeeded;
 
         /// <summary>
-        /// Session emits the event when it's got cancelled without ever being activated.
-        /// </summary>
-        event EventHandler Cancelled;
-
-        /// <summary>
         /// Session has failed permanently.
         /// </summary>
         event EventHandler<SessionFailureEventArgs> Failed;
+
+        /// <summary>
+        /// Connection has been interrupted and the session is trying to re-establish it.
+        /// </summary>
+        event EventHandler<SessionInterruptedEventArgs> Interrupted;
 
         /// <summary>
         /// Session has been permanently closed and cannot be re-connected.

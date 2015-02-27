@@ -19,6 +19,10 @@ namespace RdClient.Shared.Models
         /// </summary>
         Connected,
         /// <summary>
+        /// Connection has been interrupted and the session is trying to re-connect.
+        /// </summary>
+        Interrupted,
+        /// <summary>
         /// The session has failed irecoverably.
         /// </summary>
         Failed,
@@ -35,5 +39,6 @@ namespace RdClient.Shared.Models
     {
         SessionState State { get; }
         RdpDisconnectCode DisconnectCode { get; }
+        int ReconnectAttempt { get; }
     }
 }

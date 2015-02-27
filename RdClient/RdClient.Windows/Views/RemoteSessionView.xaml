@@ -36,10 +36,10 @@
               Height="Auto"
               Background="Cornsilk">
             <StackPanel Orientation="Vertical" Margin="12,24">
-                <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"
+                <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="Purple"
                            Margin="0, 0, 0, 12"
                            Text="Connection has failed (d)"/>
-                <TextBlock HorizontalAlignment="Center" FontSize="20"
+                <TextBlock HorizontalAlignment="Center" FontSize="20" Foreground="Purple"
                            Margin="0, 0, 0, 12"
                            Text="{Binding FailureCode}"/>
                 <Button HorizontalAlignment="Center" Command="{Binding DismissFailureMessage}">

@@ -189,6 +189,7 @@
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Input\Mouse\PointerEventDispatcher.cs" />
     <Compile Include="Data\ICertificateTrust.cs" />
+    <Compile Include="Models\InterruptedSessionContinuation.cs" />
     <Compile Include="Models\IRdpConnectionSource.cs" />
     <Compile Include="Models\IRemoteSession.cs" />
     <Compile Include="Models\IRemoteSessionControl.cs" />
@@ -211,6 +212,7 @@
     <Compile Include="Models\SessionCredentials.cs" />
     <Compile Include="Models\SessionFactory.cs" />
     <Compile Include="Models\SessionFailureEventArgs.cs" />
+    <Compile Include="Models\SessionInterruptedEventArgs.cs" />
     <Compile Include="Models\ThumbnailEncoder.cs" />
     <Compile Include="Models\ThumbnailModel.cs" />
     <Compile Include="Models\Snapshotter.cs" />

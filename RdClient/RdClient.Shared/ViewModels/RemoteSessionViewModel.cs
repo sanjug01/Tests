@@ -75,7 +75,6 @@
             _sessionState = _activeSession.State.State;
 
             _activeSession.CredentialsNeeded += this.OnCredentialsNeeded;
-            _activeSession.Cancelled += this.OnSessionCancelled;
             _activeSession.Closed += this.OnSessionClosed;
             _activeSession.Failed += this.OnSessionFailed;
             _activeSession.State.PropertyChanged += this.OnSessionStatePropertyChanged;
@@ -90,7 +89,6 @@
         protected override void OnDismissed()
         {
             _activeSession.CredentialsNeeded -= this.OnCredentialsNeeded;
-            _activeSession.Cancelled -= this.OnSessionCancelled;
             _activeSession.Closed -= this.OnSessionClosed;
             _activeSession.Failed -= this.OnSessionFailed;
             _activeSession.State.PropertyChanged -= this.OnSessionStatePropertyChanged;
@@ -118,11 +116,6 @@
         private void OnCredentialsNeeded(object sender, CredentialsNeededEventArgs e)
         {
             this.NavigationService.PushModalView("InSessionEditCredentialsView", e.Task);
-        }
-
-        private void OnSessionCancelled(object sender, EventArgs e)
-        {
-            this.NavigationService.NavigateToView("ConnectionCenterView", null);
         }
 
         private void OnSessionFailed(object sender, SessionFailureEventArgs e)
