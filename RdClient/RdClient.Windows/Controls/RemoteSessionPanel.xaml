@@ -12,7 +12,7 @@
     Loaded="OnLoaded"
     Unloaded="OnUnloaded">
 
-    <Grid>
+    <Grid Background="Gray">
         <c:RenderingPanel x:Name="RenderingPanel"/>
     </Grid>
 </UserControl>

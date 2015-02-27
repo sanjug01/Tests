@@ -146,13 +146,12 @@
                 //
                 // Session state has changed
                 //
-                EmitPropertyChanged("IsConnected");
-
                 switch(_activeSession.State.State)
                 {
                     case SessionState.Connected:
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
+                        EmitPropertyChanged("IsConnected");
                         break;
 
                     default:
@@ -160,6 +159,7 @@
                         {
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
+                            EmitPropertyChanged("IsConnected");
                         }
                         break;
                 }

@@ -25,7 +25,7 @@
         <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="Green">
         <c:RemoteSessionPanel
             RemoteSessionViewSite="{Binding}"
             Visibility="{Binding IsConnected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
