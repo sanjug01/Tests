@@ -23,6 +23,7 @@
         // Desktop view models created for elements of _orderedConnections.Models.
         //
         private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
+        private ReadOnlyObservableCollection<IWorkspaceViewModel> _workspaceViewModels;
         private int _selectedCount;
         private bool _desktopsSelectable;
         private bool _showDesktops;
@@ -108,6 +109,18 @@
             private set 
             {                
                 SetProperty(ref _desktopViewModels, value);
+            }
+        }
+
+        public ReadOnlyObservableCollection<IWorkspaceViewModel> WorkspaceViewModels
+        {
+            get
+            {
+                return _workspaceViewModels;
+            }
+            private set
+            {
+                SetProperty(ref _workspaceViewModels, value);
             }
         }
 
@@ -241,6 +254,9 @@
                 INotifyPropertyChanged npc = this.DesktopViewModels;
                 npc.PropertyChanged += OnDesktopViewModelPropertyChanged;
                 this.HasDesktops = this.DesktopViewModels.Count > 0;
+            }
+            if (null == _workspaceViewModels)
+            {
                 this.HasApps = true;
             }
         }

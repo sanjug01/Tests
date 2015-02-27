@@ -14,6 +14,9 @@ namespace RdClient.DesignTime
         private readonly ObservableCollection<IDesktopViewModel> _desktopViewModelsSource;
         private readonly ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
 
+        private readonly ObservableCollection<IWorkspaceViewModel> _workspaceViewModelsSource;
+        private readonly ReadOnlyObservableCollection<IWorkspaceViewModel> _workspaceViewModels;
+
         public FakeConnectionCenterViewModel()
         {
             _desktopViewModelsSource = new ObservableCollection<IDesktopViewModel>();
@@ -27,6 +30,12 @@ namespace RdClient.DesignTime
             _desktopViewModelsSource.Add(new FakeDesktopViewModel());
             _desktopViewModelsSource.Add(new FakeDesktopViewModel());
             _desktopViewModelsSource.Add(new FakeDesktopViewModel());
+
+            _workspaceViewModelsSource = new ObservableCollection<IWorkspaceViewModel>();
+            _workspaceViewModels = new ReadOnlyObservableCollection<IWorkspaceViewModel>(_workspaceViewModelsSource);
+            _workspaceViewModelsSource.Add(new WorkspaceViewModel());
+            _workspaceViewModelsSource.Add(new WorkspaceViewModel());
+            _workspaceViewModelsSource.Add(new WorkspaceViewModel());
         }
 
         public RelayCommand AddDesktopCommand
@@ -37,6 +46,11 @@ namespace RdClient.DesignTime
         public ReadOnlyObservableCollection<IDesktopViewModel> DesktopViewModels
         {
             get { return _desktopViewModels; }
+        }
+
+        public ReadOnlyObservableCollection<IWorkspaceViewModel> WorkspaceViewModels
+        {
+            get { return _workspaceViewModels; }
         }
 
         public bool HasDesktops
@@ -52,13 +66,13 @@ namespace RdClient.DesignTime
 
         public bool ShowDesktops
         {
-            get { return true; }
+            get { return false; }
             set { }
         }
 
         public bool ShowApps
         {
-            get { return false; }
+            get { return true; }
             set { }
         }
     }

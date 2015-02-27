@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:RdClient.Controls"
     xmlns:views="using:RdClient.Views"
+    xmlns:controls="using:RdClient.Controls"
     xmlns:design="using:RdClient.DesignTime"
     mc:Ignorable="d"
     d:DesignHeight="700"
@@ -25,6 +26,19 @@
             <ColumnDefinition Width="{StaticResource ConnectionCenterMargin}" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="AppsListControl.xaml" Style="{StaticResource HeaderTextBlockStyle}" />
+        <TextBlock Grid.Column="1" Text="AppsListControl.xaml" Style="{StaticResource BodyTextBlockStyle}" />
+        <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
+            <StackPanel Orientation="Vertical">
+                <ItemsControl ItemsSource="{Binding WorkspaceViewModels}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,10,10">
+                                <controls:WorkspaceView />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>                
+            </StackPanel>
+        </ScrollViewer>        
     </Grid>
 </UserControl>

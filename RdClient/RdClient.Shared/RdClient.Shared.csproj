@@ -257,8 +257,10 @@
     <Compile Include="ViewModels\ErrorMessageViewModel.cs" />
     <Compile Include="Navigation\IViewModel.cs" />
     <Compile Include="ViewModels\ILayoutAwareViewModel.cs" />
+    <Compile Include="ViewModels\IWorkspaceViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\PanKnobViewModel.cs" />
+    <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Compile Include="ViewModels\ZoomPanViewModel.cs" />
     <Compile Include="ViewModels\MouseViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />

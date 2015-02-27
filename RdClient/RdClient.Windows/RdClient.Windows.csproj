@@ -172,6 +172,9 @@
     <Compile Include="Controls\UserSettingsControl.xaml.cs">
       <DependentUpon>UserSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\WorkspaceView.xaml.cs">
+      <DependentUpon>WorkspaceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Data\ApplicationDataLocalStorageFolder.cs" />
     <Compile Include="DesignTime\FakeEditCredentialsViewModel.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
@@ -367,6 +370,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\UserSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WorkspaceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
