@@ -13,23 +13,57 @@
     </Page.DataContext>
 
     <Grid>
-        <Border 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch" 
-            Opacity="0.8" 
-            Background="#dd000000"
-        />
-
-        <Border 
-            Background="{StaticResource rdWhiteBrush}" 
-            RequestedTheme="Light"
-            Width="480" 
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Top" 
-            BorderThickness="4"
-            Margin="0,128,8,0"
-            >
-            <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="AddOrEditWorkspaceView.xaml" />
+        <Border Style="{StaticResource ModalBackground}" />
+        <Border Style="{StaticResource DialogBorder}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="16"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="Auto"/>                    
+                </Grid.RowDefinitions>        
+                <Grid Grid.Row="0">
+                    <TextBlock Grid.Column="0" Style="{ThemeResource TitleTextBlockStyle}" Text="Add Remote Resources"/>
+                </Grid>
+                <StackPanel Grid.Row="2">
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="Feed URL (d)"/>
+                    <TextBox Background="Transparent" Margin="0,8" Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel Grid.Row="4">
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
+                    <ComboBox Margin="0,8">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="Add user" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>                    
+                </StackPanel>
+                <Grid Grid.Row="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="46" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="1"
+                        Style="{StaticResource DialogCancelButtonStyle}"
+                        Command="{Binding Path=CancelCommand}"
+                        x:Uid="Common_Button_Cancel"
+                        Content="Cancel(d)"
+                        />
+                    <Button Grid.Column="3"
+                        Style="{StaticResource DialogAcceptButtonStyle}"
+                        Command="{Binding Path=OkCommand}"
+                        x:Uid="Common_Button_Ok"
+                        Content="Ok(d)"
+                        />
+                </Grid>
+            </Grid>
         </Border>
     </Grid>
 </Page>

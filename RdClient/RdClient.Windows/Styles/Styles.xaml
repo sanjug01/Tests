@@ -591,6 +591,7 @@
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Margin" Value="186" />
         <Setter Property="Padding" Value="43,15,43,35" />
+        <Setter Property="RequestedTheme" Value="Light" />
     </Style>
     <!-- 
     ======================================================================================
