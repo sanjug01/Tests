@@ -68,7 +68,7 @@ using System.Windows.Input;
             _activeSession.Failed += this.OnSessionFailed;
             _activeSession.State.PropertyChanged += this.OnSessionStatePropertyChanged;
 
-            if (null != _sessionView)
+            if (null != _sessionView && SessionState.Idle == _activeSession.State.State)
             {
                 _activeSession.Activate(_sessionView);
             }
@@ -81,9 +81,7 @@ using System.Windows.Input;
             _activeSession.Closed -= this.OnSessionClosed;
             _activeSession.Failed -= this.OnSessionFailed;
             _activeSession.State.PropertyChanged -= this.OnSessionStatePropertyChanged;
-            //
-            // TODO: detach the rendering panel from _activeSession
-            //
+            _sessionView.RecycleRenderingPanel(_activeSession.Deactivate());
             _activeSession = null;
             _sessionView = null;
 
@@ -96,7 +94,7 @@ using System.Windows.Input;
 
             _sessionView = sessionView;
 
-            if(null != _sessionView && null != _activeSession)
+            if (null != _sessionView && null != _activeSession && SessionState.Idle == _activeSession.State.State)
             {
                 _activeSession.Activate(_sessionView);
             }
@@ -139,7 +137,7 @@ using System.Windows.Input;
 
         private void InternalDismissFailureMessage(object parameter)
         {
-            Contract.Assert(SessionState.Closed == _activeSession.State.State);
+            Contract.Assert(SessionState.Failed == _activeSession.State.State);
 
             _failureMessageVisible = false;
             this.NavigationService.NavigateToView("ConnectionCenterView", null);

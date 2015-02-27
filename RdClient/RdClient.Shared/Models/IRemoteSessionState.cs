@@ -1,12 +1,30 @@
-﻿using System.ComponentModel;
+﻿using RdClient.Shared.CxWrappers.Errors;
+using System.ComponentModel;
 namespace RdClient.Shared.Models
 {
     [DefaultValue(Idle)]
     public enum SessionState
     {
+        /// <summary>
+        /// The session is idle - it is either waiting for some information from user
+        /// before connecting, or hasn't been activated yet.
+        /// </summary>
         Idle,
+        /// <summary>
+        /// The session is connecting.
+        /// </summary>
         Connecting,
+        /// <summary>
+        /// The session is connected.
+        /// </summary>
         Connected,
+        /// <summary>
+        /// The session has failed irecoverably.
+        /// </summary>
+        Failed,
+        /// <summary>
+        /// The session was closed by user.
+        /// </summary>
         Closed
     }
 
@@ -16,5 +34,6 @@ namespace RdClient.Shared.Models
     public interface IRemoteSessionState : INotifyPropertyChanged
     {
         SessionState State { get; }
+        RdpDisconnectCode DisconnectCode { get; }
     }
 }

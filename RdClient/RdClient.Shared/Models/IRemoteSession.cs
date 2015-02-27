@@ -48,6 +48,14 @@
         IRemoteSessionControl Activate(IRemoteSessionView sessionView);
 
         /// <summary>
+        /// Deactivate the session and detach its rendering panel.
+        /// Deactivation means that the app navigates out of the view that renders the session,
+        /// the session doesn't need to disconnect, just stop rendering.
+        /// </summary>
+        /// <returns></returns>
+        IRenderingPanel Deactivate();
+
+        /// <summary>
         /// Suspend the session. Once suspended, the session must release and recycle al its rendering panels.
         /// </summary>
         void Suspend();

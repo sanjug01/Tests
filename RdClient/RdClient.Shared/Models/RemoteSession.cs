@@ -179,6 +179,14 @@
             return new RemoteSessionControl(_connection);
         }
 
+        IRenderingPanel IRemoteSession.Deactivate()
+        {
+            Contract.Assert(null != _renderingPanel);
+            IRenderingPanel renderingPanel = _renderingPanel;
+            _renderingPanel = null;
+            return renderingPanel;
+        }
+
         void IRemoteSession.Suspend()
         {
             Contract.Assert(null != _renderingPanel);
@@ -202,12 +210,6 @@
             // TODO: Wait for the connection to disconnect and recycle the rendering panel after that.
             //
             _connection.Disconnect();
-            //
-            // Recycle the rendering panel;
-            //
-            _sessionView.RecycleRenderingPanel(_renderingPanel);
-            _renderingPanel = null;
-            _sessionView = null;
         }
 
         private void DeferEmitCredentialsNeeded(IEditCredentialsTask task)
@@ -333,15 +335,17 @@
                 _connection = null;
             }
 
-            _state.SetState(SessionState.Closed);
+            _state.SetDisconnectCode(e.DisconnectReason.Code);
 
             switch(e.DisconnectReason.Code)
             {
                 case RdpDisconnectCode.UserInitiated:
+                    _state.SetState(SessionState.Closed);
                     DeferEmitClosed();
                     break;
 
                 default:
+                    _state.SetState(SessionState.Failed);
                     DeferEmitFailed(e.DisconnectReason.Code);
                     break;
             }
