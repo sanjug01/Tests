@@ -4,6 +4,7 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -24,6 +25,12 @@
         private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
         private int _selectedCount;
         private bool _desktopsSelectable;
+        private bool _showDesktops;
+        private bool _showApps;
+        private bool _showWelcome;
+        private bool _hasDesktops;
+        private bool _hasApps;
+
         //
         // App bar items
         //
@@ -114,7 +121,90 @@
 
         public bool HasDesktops
         {
-            get { return this.DesktopViewModels.Count > 0; }
+            get 
+            { 
+                return _hasDesktops; 
+            }
+            private set 
+            {
+                if (SetProperty(ref _hasDesktops, value))
+                {
+                    if (value == false)
+                    {
+                        this.ShowDesktops = false;
+                    }
+                    else if (this.ShowApps == false)
+                    {
+                        this.ShowDesktops = true;
+                    }
+                }
+            }
+        }
+
+        public bool HasApps
+        {
+            get
+            {
+                return _hasApps;
+            }
+            private set
+            {
+                if (SetProperty(ref _hasApps, value))
+                {
+                    if (value == false)
+                    {
+                        this.ShowApps = false;
+                    }
+                    else if (this.ShowDesktops == false)
+                    {
+                        this.ShowApps = true;
+                    }
+                }
+            }
+        }
+
+        public bool ShowDesktops
+        {
+            get 
+            { 
+                return _showDesktops; 
+            }
+            set 
+            {
+                if (this.HasDesktops || value == false)
+                {
+                    SetProperty(ref _showDesktops, value);
+                    this.ShowWelcome = !(this.ShowDesktops || this.ShowApps);                    
+                }
+            }
+        }
+
+        public bool ShowApps
+        {
+            get
+            {
+                return _showApps;
+            }
+            set
+            {
+                if (this.HasApps || value == false)
+                {
+                    SetProperty(ref _showApps, value);                    
+                    this.ShowWelcome = !(this.ShowDesktops || this.ShowApps);                    
+                }
+            }
+        }
+
+        public bool ShowWelcome
+        {
+            get 
+            { 
+                return _showWelcome; 
+            }
+            private set
+            {
+                SetProperty(ref _showWelcome, value);
+            }
         }
 
         public int SelectedCount
@@ -177,6 +267,8 @@
 
                 INotifyPropertyChanged npc = this.DesktopViewModels;
                 npc.PropertyChanged += OnDesktopViewModelPropertyChanged;
+                this.HasDesktops = this.DesktopViewModels.Count > 0;
+                this.ShowWelcome = !(this.ShowDesktops || this.ShowApps);
             }
         }
 
@@ -207,7 +299,7 @@
         {
             if (e.PropertyName.Equals("Count"))
             {
-                this.EmitPropertyChanged("HasDesktops");
+                this.HasDesktops = this.DesktopViewModels.Count > 0;
                 this.UpdateSelection();
             }
         }

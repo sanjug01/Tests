@@ -24,8 +24,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{StaticResource ConnectionCenterMargin}" />
             <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" x:Uid="ConnectionCenter_DesktopLabel" Text="Desktops (d)" />
+        </Grid.ColumnDefinitions>        
         <ScrollViewer Grid.Row="1" Grid.Column="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical">
                 <ItemsControl ItemsSource="{Binding DesktopViewModels}" >                            

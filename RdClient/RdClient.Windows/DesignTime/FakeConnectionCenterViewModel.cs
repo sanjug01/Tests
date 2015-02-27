@@ -43,5 +43,28 @@ namespace RdClient.DesignTime
         {
             get { return true; }
         }
+
+
+        public bool HasApps
+        {
+            get { return true; }
+        }
+
+        public bool ShowDesktops
+        {
+            get { return true; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public bool ShowApps
+        {
+            get { return false; }
+            set { throw new NotImplementedException(); }
+        }
+
+        public bool ShowWelcome
+        {
+            get { return false; }
+        }
     }
 }

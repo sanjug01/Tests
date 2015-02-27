@@ -5,9 +5,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:RdClient.Controls"    
+    xmlns:design="using:RdClient.DesignTime" 
+    xmlns:converters="using:RdClient.Converters"
     mc:Ignorable="d"
     d:DesignHeight="{StaticResource ConnectionCenterTitleBarHeight}"
     d:DesignWidth="1024">
+
+    <d:UserControl.DataContext>
+        <design:FakeConnectionCenterViewModel />
+    </d:UserControl.DataContext>
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -21,6 +27,8 @@
                     Text="Add workspace(d)"
                     Command="{Binding AddWorkspaceCommand}"/>
             </MenuFlyout>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />            
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -33,9 +41,15 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
-            <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}">
-                <ListBoxItem>Desktops(d)</ListBoxItem>
-                <ListBoxItem>Apps(d)</ListBoxItem>
+            <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}" SelectedIndex="0">
+                <ListBoxItem 
+                    IsSelected="{Binding Path=ShowDesktops, Mode=TwoWay}"
+                    Visibility="{Binding Path=HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Content="Desktops(d)"/>
+                <ListBoxItem
+                    IsSelected="{Binding Path=ShowApps, Mode=TwoWay}"
+                    Visibility="{Binding Path=HasApps, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Content="Apps(d)" />
             </ListBox>
         </Grid>
         <Button Grid.Column="2" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource AddIcon}" Flyout="{StaticResource AddConnectionMenuFlyout}" />

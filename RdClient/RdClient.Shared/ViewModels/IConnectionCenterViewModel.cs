@@ -7,5 +7,9 @@ namespace RdClient.Shared.ViewModels
         RelayCommand AddDesktopCommand { get; }
         ReadOnlyObservableCollection<IDesktopViewModel> DesktopViewModels { get; }
         bool HasDesktops { get; }
+        bool HasApps { get; }
+        bool ShowDesktops { get; set; }
+        bool ShowApps { get; set; }
+        bool ShowWelcome { get; }
     }
 }
