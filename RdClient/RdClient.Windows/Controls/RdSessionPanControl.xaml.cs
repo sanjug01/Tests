@@ -4,7 +4,7 @@ namespace RdClient.Controls
     using RdClient.CxWrappers.Utils;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Converters;
-    using RdClient.Shared.Models;
+    using RdClient.Shared.Helpers;    
     using RdClient.Shared.Input.Mouse;
     using RdClient.Shared.Input.ZoomPan;
     using System.Diagnostics.Contracts;
@@ -124,7 +124,7 @@ namespace RdClient.Controls
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
         {
-            args.TranslationBehavior.DesiredDeceleration = 0.002;
+            args.TranslationBehavior.DesiredDeceleration = GlobalConstants.DesiredDeceleration;
             PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
         }
 

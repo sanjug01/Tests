@@ -5,8 +5,8 @@ namespace RdClient.Shared.Input.ZoomPan
 {
     public enum PanKnobState
     {
-        Disabled,
-        Enabled,
+        Inactive,
+        Active,
         Moving
     }
 }

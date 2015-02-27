@@ -95,5 +95,11 @@ namespace RdClient.Shared.ViewModels
             this.Host = args.Host;
             this.IsExpandedView = false;
         }
+
+        protected override void OnNavigatingBack(Navigation.IBackCommandArgs backArgs)
+        {
+            this.CancelCommand.Execute(null);
+            backArgs.Handled = true;
+        }
     }
 }
