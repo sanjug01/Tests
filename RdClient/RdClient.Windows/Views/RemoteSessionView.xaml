@@ -47,5 +47,21 @@
                 </Button>
             </StackPanel>
         </Grid>
+        
+        <!-- Session interruption (auto-reconnect) message -->
+        <Grid VerticalAlignment="Center"
+              Height="Auto"
+              Background="Cornsilk"
+              Visibility="{Binding IsInterrupted, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Orientation="Vertical" Margin="12,24">
+                <TextBlock FontSize="16" HorizontalAlignment="Center" Foreground="Red"
+                    Text="Connection has been interrupted. Reconnecting… (d)"/>
+                <TextBlock FontSize="16" HorizontalAlignment="Center" Foreground="Red"
+                           Text="{Binding ReconnectAttempt}"/>
+                <Button Command="{Binding CancelAutoReconnect}" HorizontalAlignment="Center">
+                    <TextBlock Text="Cancel"/>
+                </Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

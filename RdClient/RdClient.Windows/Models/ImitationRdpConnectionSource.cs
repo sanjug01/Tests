@@ -301,6 +301,8 @@
             private readonly IRenderingPanel _renderingPanel;
             private readonly Events _events;
 
+            private bool _continueReconnecting;
+
             public Connection(IRenderingPanel renderingPanel)
             {
                 _renderingPanel = renderingPanel;
@@ -318,34 +320,18 @@
 
             void IRdpConnection.Connect(CredentialsModel credentials, bool fUsingSavedCreds)
             {
-                Task.Factory.StartNew(async delegate
-                {
-                    await Task.Delay(250);
-
-                    if (fUsingSavedCreds)
-                    {
-                        _events.EmitClientAsyncDisconnect(this,
-                            new ClientAsyncDisconnectArgs(
-                                new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0)));
-                    }
-                    else
-                    {
-                        //_events.EmitClientDisconnected(this, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.CertExpired, 0, 0)));
-                        _events.EmitClientConnected(this, new ClientConnectedArgs());
-
-                        await Task.Delay(500);
-
-                        _events.EmitClientDisconnected(this, new ClientDisconnectedArgs(
-                            new RdpDisconnectReason(RdpDisconnectCode.ConnectionBroken, 0, 0)));
-                    }
-                }, TaskCreationOptions.LongRunning);
+                Task.Factory.StartNew(async delegate { await InterruptedConnection(credentials, fUsingSavedCreds); }, TaskCreationOptions.LongRunning);
             }
 
             void IRdpConnection.Disconnect()
             {
                 Task.Factory.StartNew(async delegate
                 {
-                    await Task.Delay(100);
+                    using (LockWrite())
+                        _continueReconnecting = false;
+
+                    await Task.Delay(300);
+
                     _events.EmitClientAsyncDisconnect(this,
                         new ClientAsyncDisconnectArgs(
                             new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0)));
@@ -374,7 +360,7 @@
 
             void IRdpConnection.HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
             {
-                throw new NotImplementedException();
+                //throw new NotImplementedException();
             }
 
             IRdpScreenSnapshot IRdpConnection.GetSnapshot()
@@ -404,6 +390,73 @@
             void IRdpConnection.SetLeftHandedMouseMode(bool value)
             {
                 throw new NotImplementedException();
+            }
+
+            private async Task FailingConnection(CredentialsModel credentials, bool fUsingSavedCreds)
+            {
+                await Task.Delay(250);
+
+                if (fUsingSavedCreds)
+                {
+                    _events.EmitClientAsyncDisconnect(this,
+                        new ClientAsyncDisconnectArgs(
+                            new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0)));
+                }
+                else
+                {
+                    //_events.EmitClientDisconnected(this, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.CertExpired, 0, 0)));
+                    _events.EmitClientConnected(this, new ClientConnectedArgs());
+
+                    await Task.Delay(500);
+
+                    _events.EmitClientDisconnected(this, new ClientDisconnectedArgs(
+                        new RdpDisconnectReason(RdpDisconnectCode.ConnectionBroken, 0, 0)));
+                }
+            }
+
+            private async Task InterruptedConnection(CredentialsModel credentials, bool fUsingSavedCreds)
+            {
+                await Task.Delay(250);
+
+                _events.EmitClientConnected(this, new ClientConnectedArgs());
+
+                await Task.Delay(500);
+
+                int attempt = 0;
+                bool continueReconnecting = false;
+
+                using (LockWrite())
+                    _continueReconnecting = false;
+
+                do
+                {
+                    ClientAutoReconnectingArgs e = new ClientAutoReconnectingArgs(new AutoReconnectError(100), attempt,
+                        continueAsking =>
+                        {
+                            using (LockWrite())
+                                _continueReconnecting = continueAsking;
+                        });
+                    _events.EmitClientAutoReconnecting(this, e);
+
+                    using (LockRead())
+                        continueReconnecting = _continueReconnecting;
+
+                    if (continueReconnecting)
+                    {
+                        await Task.Delay(250);
+                        ++attempt;
+                    }
+
+                } while (attempt < 30 && continueReconnecting);
+
+                if (attempt < 30)
+                {
+                    _events.EmitClientDisconnected(this, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.ConnectionBroken, 0, 0)));
+                }
+                else
+                {
+                    _events.EmitClientAutoReconnectComplete(this, new ClientAutoReconnectCompleteArgs());
+                }
             }
         }
     }
