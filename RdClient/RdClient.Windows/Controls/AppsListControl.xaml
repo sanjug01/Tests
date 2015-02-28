@@ -27,8 +27,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{StaticResource ConnectionCenterMargin}" />
                     <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="1" Text="AppsListControl.xaml" Style="{StaticResource BodyTextBlockStyle}" />
+                </Grid.ColumnDefinitions>                
                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
                     <ItemsControl ItemsSource="{Binding WorkspaceViewModels}">
                         <ItemsControl.ItemTemplate>

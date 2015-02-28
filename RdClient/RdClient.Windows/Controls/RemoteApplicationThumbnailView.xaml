@@ -6,10 +6,22 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
-    
-    <Grid>
-        <TextBlock Text="RemoteApplicationThumbnailView.xaml" Style="{StaticResource BodyTextBlockStyle}" />
+    d:DesignHeight="128"
+    d:DesignWidth="156">
+
+    <Grid Width="156" Height="128" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">       
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="8" />
+        </Grid.RowDefinitions>    
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="1" Grid.Row="0" Width="96" Height="96" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Orange" />
+        <Image Grid.Column="1" Grid.Row="0" Source="ms-appx:///Assets/desktop_placeholder.png" Width="96" Height="96" Stretch="Fill"  HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <TextBlock Grid.Column="1" Grid.Row="1" Text="Not Internet Explorer 9" Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
     </Grid>
 </UserControl>
