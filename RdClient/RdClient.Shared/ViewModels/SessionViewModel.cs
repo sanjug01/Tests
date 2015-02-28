@@ -362,6 +362,7 @@
                             switch (acceptCertificateResult.Result)
                             {
                                 case CertificateValidationResult.CertificateTrustLevel.Denied:
+                                    _userCancelled = true;
                                     reconnect = false;
                                     break;
                                 case CertificateValidationResult.CertificateTrustLevel.AcceptedOnce:
