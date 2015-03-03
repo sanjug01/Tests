@@ -197,6 +197,7 @@
                 this.PanKnobViewModel.PanChange += this.ZoomPanViewModel.HandlePanChange;
                 this.MouseViewModel.PanChange += this.ZoomPanViewModel.HandlePanChange;
                 this.MouseViewModel.ScaleChange += this.ZoomPanViewModel.HandleScaleChange;
+                this.MouseViewModel.InputModeChange += this.ZoomPanViewModel.HandleInputModeChange;
             };
 
             SessionModel.ConnectionAutoReconnecting += SessionModel_ConnectionAutoReconnecting;

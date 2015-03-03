@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Input.Mouse;
 using RdClient.Shared.Input.ZoomPan;
 using RdClient.Shared.ViewModels;
 using System.Collections.Generic;
@@ -415,13 +416,26 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(_svm.TranslateXTo == _svm.TranslateXFrom);
             Assert.AreEqual(_svm.TranslateYTo, _svm.TranslateYFrom);
         }
-        
+
         [TestMethod]
-        public void ZoomPanViewModel_PointerModeToggleZoom_CannotZoomMore()
+        public void ZoomPanViewModel_PointerModeIsDefault()
+        {
+            // initial
+            Assert.IsTrue(1.0 == _svm.ScaleXTo);
+            Assert.IsTrue(1.0 == _svm.ScaleYTo);
+
+            Assert.AreEqual(ZoomPanState.PointerMode_DefaultScale, _svm.State);
+        }        
+
+        [TestMethod]
+        public void ZoomPanViewModel_TouchModeToggleZoom_CannotZoomMore()
         {           
             // initial
             Assert.IsTrue(1.0 == _svm.ScaleXTo);
             Assert.IsTrue(1.0 == _svm.ScaleYTo);
+
+            // switch to touch mode first
+            _svm.HandleInputModeChange(null, new InputModeChangedEventArgs(ConsumptionMode.MultiTouch));
             Assert.AreEqual(ZoomPanState.TouchMode_MinScale, _svm.State);
 
             _svm.ToggleZoomCommand.Execute(_zoomInTransform);

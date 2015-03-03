@@ -112,6 +112,7 @@ namespace RdClient.Shared.ViewModels
 
         public event EventHandler<PanEventArgs> PanChange;
         public event EventHandler<ZoomEventArgs> ScaleChange;
+        public event EventHandler<InputModeChangedEventArgs> InputModeChange;
 
         public MouseViewModel()
         {
@@ -148,6 +149,14 @@ namespace RdClient.Shared.ViewModels
             {
                 this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
                 Debug.WriteLine(ConsumptionMode.Pointer);
+            }
+
+            EventHandler<InputModeChangedEventArgs> handler = InputModeChange;
+            if (null != handler)
+            {
+                // the only subscriber is the ZoomPanViewModel which is notified on the same UI thread.
+                // therefore, no read/write monitor protection is required in this case.
+                InputModeChange(this, new InputModeChangedEventArgs(this.PointerEventConsumer.ConsumptionMode));
             }
 
             this.ElephantEarsViewModel.ElephantEarsVisible= Visibility.Collapsed;
@@ -230,7 +239,16 @@ namespace RdClient.Shared.ViewModels
         {
             if(_rdpConnection != null)
             {
-                _rdpConnection.SendTouchEvent(type, contactId, position, frameTime);
+                try
+                {
+                    _rdpConnection.SendTouchEvent(type, contactId, position, frameTime);
+                }
+                catch(RdTraceException)
+                {
+                    // TODO: frequent crash : Bug 1604052:Crash when using simulator touch mode + RDC touch mode
+                    // sink RDTRace exception - needs fix in RDPConnection
+                    Debug.WriteLine("Touch failed!");
+                }
             }
         }
 

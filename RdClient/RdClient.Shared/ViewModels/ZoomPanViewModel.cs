@@ -9,6 +9,7 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Input.Mouse;
     using RdClient.Shared.Input.ZoomPan;
     using Windows.Foundation;
 
@@ -185,6 +186,39 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
+        public void HandleInputModeChange(object sender, InputModeChangedEventArgs e)
+        {
+            switch(e.Mode)
+            {
+                case ConsumptionMode.DirectTouch:
+                case ConsumptionMode.MultiTouch:
+                    if (ZoomPanState.TouchMode_MinScale != this.State && ZoomPanState.TouchMode_MaxScale != this.State)
+                    {
+                        // reset to default scale, and switch to touch mode
+                        if(MIN_ZOOM_FACTOR != this.ScaleXTo || MIN_ZOOM_FACTOR != this.ScaleYTo)
+                        {
+                            this.ApplyZoomOut();
+                            this.ZoomPanTransform = new ZoomOutTransform();
+                        }
+                        this.State = ZoomPanState.TouchMode_MinScale;
+                    }
+
+                    break;
+                case ConsumptionMode.Pointer:
+                    if (ZoomPanState.TouchMode_MinScale == this.State || ZoomPanState.TouchMode_MaxScale == this.State)
+                    {
+                        // reset to default scale, and switch to pointer mode
+                        if (MIN_ZOOM_FACTOR != this.ScaleXTo || MIN_ZOOM_FACTOR != this.ScaleYTo)
+                        {
+                            this.ApplyZoomOut();
+                            this.ZoomPanTransform = new ZoomOutTransform();
+                        }
+                        this.State = ZoomPanState.PointerMode_DefaultScale;
+                    }
+                    break;
+            }
+        }
+
         private readonly ICommand _toggleZoomCommand;
         public ICommand ToggleZoomCommand { get { return _toggleZoomCommand; } }
         private readonly ICommand _panCommand;
@@ -215,7 +249,7 @@ namespace RdClient.Shared.ViewModels
             TranslateXTo = 0.0;
             TranslateYTo = 0.0;
 
-            this.State = ZoomPanState.TouchMode_MinScale;
+            this.State = ZoomPanState.PointerMode_DefaultScale;
         }
 
         private void ToggleMagnification(object o)
