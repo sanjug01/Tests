@@ -151,8 +151,11 @@ namespace RdClient.Shared.ViewModels
                 Debug.WriteLine(ConsumptionMode.Pointer);
             }
 
-            if (null != InputModeChange)
+            EventHandler<InputModeChangedEventArgs> handler = InputModeChange;
+            if (null != handler)
             {
+                // the only subscriber is the ZoomPanViewModel which is notified on the same UI thread.
+                // therefore, no read/write monitor protection is required in this case.
                 InputModeChange(this, new InputModeChangedEventArgs(this.PointerEventConsumer.ConsumptionMode));
             }
 
