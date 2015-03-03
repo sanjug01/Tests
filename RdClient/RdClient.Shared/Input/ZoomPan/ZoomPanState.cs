@@ -8,8 +8,6 @@ namespace RdClient.Shared.Input.ZoomPan
     {
         TouchMode_MinScale,
         TouchMode_MaxScale, 
-        TouchMode_PanKnobPanning, 
-        TouchMode_PanKnobMoving,
         PointerMode_DefaultScale, 
         PointerMode_Zooming, 
         PointerMode_Zoomed, 
