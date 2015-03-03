@@ -18,9 +18,9 @@
                 using (LockWrite())
                 {
                     _session = session;
-                    _connection.Events.ClientAutoReconnecting += this.OnClientAutoReconnecting;
-                    _connection.Events.ClientAutoReconnectComplete += this.OnClientAutoReconnectComplete;
-                    _connection.Events.ClientDisconnected += this.OnClientDisconnected;
+                    _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
+                    _session._syncEvents.ClientAutoReconnectComplete += this.OnClientAutoReconnectComplete;
+                    _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                     //
                     // TODO:    route the deferral that may be obtained from the "Interrupted" event
                     //          to this object, so if will update _canConnect and close the connection
@@ -36,10 +36,10 @@
 
                 using (LockWrite())
                 {
+                    _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
+                    _session._syncEvents.ClientAutoReconnectComplete -= this.OnClientAutoReconnectComplete;
+                    _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                     _session = null;
-                    _connection.Events.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
-                    _connection.Events.ClientAutoReconnectComplete -= this.OnClientAutoReconnectComplete;
-                    _connection.Events.ClientDisconnected -= this.OnClientDisconnected;
                 }
             }
 

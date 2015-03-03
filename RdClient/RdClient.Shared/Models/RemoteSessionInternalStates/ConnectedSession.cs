@@ -19,8 +19,8 @@
                     _session = session;
                     _session._state.SetReconnectAttempt(0);
                     _session._state.SetReconnectAttempt(0);
-                    _connection.Events.ClientAutoReconnecting += this.OnClientAutoReconnecting;
-                    _connection.Events.ClientDisconnected += this.OnClientDisconnected;
+                    _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
+                    _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                 }
             }
 
@@ -34,9 +34,9 @@
 
                 using (LockWrite())
                 {
+                    _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
+                    _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                     _session = null;
-                    _connection.Events.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
-                    _connection.Events.ClientDisconnected -= this.OnClientDisconnected;
                 }
             }
 

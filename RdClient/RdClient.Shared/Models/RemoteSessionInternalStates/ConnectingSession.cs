@@ -31,9 +31,9 @@
                 Contract.Assert(null == _session);
 
                 _session = session;
-                _connection.Events.ClientConnected += this.OnClientConnected;
-                _connection.Events.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
-                _connection.Events.ClientDisconnected += this.OnClientDisconnected;
+                _session._syncEvents.ClientConnected += this.OnClientConnected;
+                _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                 _connection.Connect(_session._sessionSetup.SessionCredentials.Credentials,
                     !_session._sessionSetup.SessionCredentials.IsNewPassword);
             }
@@ -48,9 +48,9 @@
                 Contract.Assert(null != _session);
                 Contract.Assert(object.ReferenceEquals(_session, session));
 
-                _connection.Events.ClientConnected -= this.OnClientConnected;
-                _connection.Events.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
-                _connection.Events.ClientDisconnected -= this.OnClientDisconnected;
+                _session._syncEvents.ClientConnected -= this.OnClientConnected;
+                _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
+                _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                 _session = null;
             }
 
@@ -107,9 +107,9 @@
                 using (LockWrite())
                 {
                     _canReconnect = false;
-                    _connection.Events.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
-                    _connection.Events.ClientAutoReconnectComplete -= this.OnClientAutoReconnectComplete;
-                    _connection.Events.ClientDisconnected -= this.OnClientDisconnected;
+                    _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
+                    _session._syncEvents.ClientAutoReconnectComplete -= this.OnClientAutoReconnectComplete;
+                    _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                     _connection = null;
                 }
 

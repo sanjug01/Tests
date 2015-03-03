@@ -26,6 +26,7 @@
         private IRemoteSessionView _sessionView;
         private IRenderingPanel _renderingPanel;
         private IRdpConnection _connection;
+        private IRdpEvents _syncEvents;
         //
         // Internal state of the session directly reported by the RDP connection component.
         // Access to this state must be protected with a lock.
@@ -345,6 +346,7 @@
             using (ReadWriteMonitor.Write(_sessionMonitor))
             {
                 _connection = _connectionSource.CreateConnection(_renderingPanel);
+                _syncEvents = RdpEventsSyncProxy.Create(_connection.Events, _sessionMonitor);
                 InternalSetState(new ConnectingSession(_connection, _sessionMonitor));
             }
         }
