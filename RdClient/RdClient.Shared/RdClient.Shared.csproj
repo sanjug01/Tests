@@ -210,6 +210,7 @@
     <Compile Include="Models\RemoteSessionControl.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\ConnectedSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\ConnectingSession.cs" />
+    <Compile Include="Models\RemoteSessionInternalStates\FailedSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\InactiveSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\NewSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\ReconnectingSession.cs" />

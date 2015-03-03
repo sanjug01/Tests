@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using System;
+    using System.Diagnostics.Contracts;
 
     /// <summary>
     /// Arguments of the IRemoteSession.Interrupted event emitted when the connection has been interrupted
@@ -10,12 +11,15 @@
     /// </summary>
     public sealed class SessionInterruptedEventArgs : EventArgs
     {
-        private readonly IRemoteSession _session;
+        private readonly Action _cancelDelegate;
         private bool _continuationObtained;
 
-        public SessionInterruptedEventArgs(IRemoteSession session)
+        public SessionInterruptedEventArgs(Action cancelDelegate)
         {
-            _session = session;
+            Contract.Assert(null != cancelDelegate);
+            Contract.Ensures(null != _cancelDelegate);
+
+            _cancelDelegate = cancelDelegate;
             _continuationObtained = false;
         }
 
@@ -31,7 +35,7 @@
 
             _continuationObtained = true;
 
-            return new InterruptedSessionContinuation(_session);
+            return new InterruptedSessionContinuation(_cancelDelegate);
         }
     }
 }

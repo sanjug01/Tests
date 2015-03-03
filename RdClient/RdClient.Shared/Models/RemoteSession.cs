@@ -289,20 +289,22 @@
             _deferredExecution.Defer(() => EmitFailed(disconnectCode));
         }
 
-        private void EmitInterrupted()
+        private void EmitInterrupted(Action cancelDelegate)
         {
+            Contract.Assert(null != cancelDelegate);
+
             EventHandler<SessionInterruptedEventArgs> interrupted;
 
             using (LockUpgradeableRead())
                 interrupted = _interrupted;
 
             if (null != interrupted)
-                interrupted(this, new SessionInterruptedEventArgs(this));
+                interrupted(this, new SessionInterruptedEventArgs(cancelDelegate));
         }
 
-        private void DeferEmitInterrupted()
+        private void DeferEmitInterrupted(Action cancelDelegate)
         {
-            _deferredExecution.Defer(() => EmitInterrupted());
+            _deferredExecution.Defer(() => EmitInterrupted(cancelDelegate));
         }
 
         private void EmitClosed()

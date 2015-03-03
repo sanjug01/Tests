@@ -21,12 +21,7 @@
                     _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
                     _session._syncEvents.ClientAutoReconnectComplete += this.OnClientAutoReconnectComplete;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
-                    //
-                    // TODO:    route the deferral that may be obtained from the "Interrupted" event
-                    //          to this object, so if will update _canConnect and close the connection
-                    //          if the user so wishes.
-                    //
-                    _session.DeferEmitInterrupted();
+                    _session.DeferEmitInterrupted(this.Cancel);
                 }
             }
 
@@ -65,13 +60,19 @@
                 // The event is always delivered on a worker thread, and the caller expects that
                 // the ContinueDelegate will be called by the event handler before it returns.
                 // Dumb design.
-                // We let the auto-reconnect to proceed but emit an event on the UI thread that informs user
-                // that the session is reconnecting and why.
+                // Unless we know that the user has cancelled reconnect on the UI thread (Cancel got called
+                // and set _cancelled to true), we let the auto-reconnect to proceed but update the reconnect
+                // attempt number in the session state.
                 //
                 using (LockRead())
+                {
                     e.ContinueDelegate(!_cancelled);
-
-                _session._state.SetReconnectAttempt(e.AttemptCount);
+                    //
+                    // Update the attempt number; the update is dispatched to the UI thread.
+                    //
+                    if(!_cancelled)
+                        _session._state.SetReconnectAttempt(e.AttemptCount);
+                }
             }
 
             private void OnClientAutoReconnectComplete(object sender, ClientAutoReconnectCompleteArgs e)
@@ -82,8 +83,18 @@
             private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
             {
                 //
-                // TODO: set the session state to "disconnected"
+                // Set the session state to Failed
                 //
+                _session.InternalSetState(new FailedSession(e.DisconnectReason, this));
+            }
+
+            private void Cancel()
+            {
+                using (LockWrite())
+                {
+                    _cancelled = true;
+                    _connection.Disconnect();
+                }
             }
         }
     }
