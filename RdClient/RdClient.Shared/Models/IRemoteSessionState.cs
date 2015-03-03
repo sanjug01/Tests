@@ -1,7 +1,8 @@
-﻿using RdClient.Shared.CxWrappers.Errors;
-using System.ComponentModel;
-namespace RdClient.Shared.Models
+﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.CxWrappers.Errors;
+    using System.ComponentModel;
+
     [DefaultValue(Idle)]
     public enum SessionState
     {

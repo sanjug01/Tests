@@ -207,6 +207,12 @@
     <Compile Include="Models\RemoteConnectionModel.cs" />
     <Compile Include="Models\RemoteSession.cs" />
     <Compile Include="Models\RemoteSessionControl.cs" />
+    <Compile Include="Models\RemoteSessionInternalStates\ConnectedSession.cs" />
+    <Compile Include="Models\RemoteSessionInternalStates\ConnectingSession.cs" />
+    <Compile Include="Models\RemoteSessionInternalStates\InactiveSession.cs" />
+    <Compile Include="Models\RemoteSessionInternalStates\NewSession.cs" />
+    <Compile Include="Models\RemoteSessionInternalStates\ReconnectingSession.cs" />
+    <Compile Include="Models\RemoteSessionInternalStates\ValidateCertificate.cs" />
     <Compile Include="Models\RemoteSessionSetup.cs" />
     <Compile Include="Models\RemoteSessionState.cs" />
     <Compile Include="Models\SessionCredentials.cs" />

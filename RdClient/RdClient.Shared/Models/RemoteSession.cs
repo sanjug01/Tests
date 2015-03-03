@@ -8,14 +8,16 @@
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
     using System.Diagnostics.Contracts;
+    using System.Threading;
 
-    public sealed class RemoteSession : MutableObject, IRemoteSession
+    public sealed partial class RemoteSession : MutableObject, IRemoteSession
     {
         private readonly RemoteSessionSetup _sessionSetup;
         private readonly RemoteSessionState _state;
         private readonly IDeferredExecution _deferredExecution;
         private readonly IRdpConnectionSource _connectionSource;
         private readonly ICertificateTrust _certificateTrust;
+        private readonly ReaderWriterLockSlim _sessionMonitor;
 
         private EventHandler<CredentialsNeededEventArgs> _credentialsNeeded;
         private EventHandler<SessionFailureEventArgs> _failed;
@@ -29,12 +31,60 @@
         // Internal state of the session directly reported by the RDP connection component.
         // Access to this state must be protected with a lock.
         //
-        private SessionState _internalSessionState;
-        //
-        // Value passed to the auto-reconnect continuation delegate. The value is set to true when the connection
-        // is established and to false when it has been or is being disconnected.
-        //
-        private bool _canReconnect;
+        private InternalState _internalState;
+
+        private abstract class InternalState : DisposableObject
+        {
+            private readonly SessionState _sessionState;
+            private readonly ReaderWriterLockSlim _monitor;
+
+            public SessionState State { get { return _sessionState; } }
+
+            /// <summary>
+            /// Activate the session state - emit all events to synchronize the UI with the session.
+            /// </summary>
+            /// <param name="session">Session for that the state is restoring</param>
+            public abstract void Activate(RemoteSession session);
+
+            public virtual void Terminate(RemoteSession session)
+            {
+            }
+
+            public virtual void Deactivate(RemoteSession session)
+            {
+            }
+
+            public virtual void Complete(RemoteSession session)
+            {
+            }
+
+            protected InternalState(SessionState sessionState, ReaderWriterLockSlim monitor)
+            {
+                _sessionState = sessionState;
+                _monitor = monitor;
+            }
+
+            protected InternalState(SessionState sessionState, InternalState state)
+            {
+                _sessionState = sessionState;
+                _monitor = state._monitor;
+            }
+
+            protected IDisposable LockRead()
+            {
+                return ReadWriteMonitor.Read(_monitor);
+            }
+
+            protected IDisposable LockUpgradeableRead()
+            {
+                return ReadWriteMonitor.UpgradeableRead(_monitor);
+            }
+
+            protected IDisposable LockWrite()
+            {
+                return ReadWriteMonitor.Write(_monitor);
+            }
+        }
 
         public RemoteSession(RemoteSessionSetup sessionSetup, IDeferredExecution deferredExecution, IRdpConnectionSource connectionSource)
         {
@@ -52,7 +102,17 @@
             _connectionSource = connectionSource;
             _state = new RemoteSessionState(deferredExecution);
             _certificateTrust = new CertificateTrust();
-            _internalSessionState = SessionState.Idle;
+            _sessionMonitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+            //
+            // _internalState must never be null, so the initial state is assigned to a state object
+            // that does not do anything.
+            //
+            _internalState = new InactiveSession(_sessionMonitor);
+        }
+
+        protected override void DisposeManagedState()
+        {
+            _sessionMonitor.Dispose();
         }
 
         IRemoteSessionState IRemoteSession.State
@@ -145,45 +205,18 @@
             _sessionView = sessionView;
             _renderingPanel = _sessionView.ActivateNewRenderingPanel();
 
-            using(LockUpgradeableRead())
+            using(ReadWriteMonitor.UpgradeableRead(_sessionMonitor))
             {
                 if (null == _connection)
                 {
-                    if(_sessionSetup.Connection is DesktopModel)
-                    {
-                        DesktopModel dtm = (DesktopModel)_sessionSetup.Connection;
-                        //
-                        // If the desktop is configured to always ask credentials, emit the CredentialsNeeded event with a task
-                        // that handles entry of new credentials.
-                        //
-                        if (Guid.Empty.Equals(dtm.CredentialsId))
-                        {
-                            //
-                            // Request on the calling thread, that is the UI thread;
-                            //
-                            InSessionCredentialsTask task = new InSessionCredentialsTask(_sessionSetup.SessionCredentials,
-                                _sessionSetup.DataModel, "d:Connection is set up to always ask credentials");
-                            task.Submitted += this.MissingCredentialsSubmitted;
-                            task.Cancelled += this.MissingCredentialsCancelled;
-                            EmitCredentialsNeeded(task);
-                        }
-                        else
-                        {
-                            InternalStartSession(_sessionSetup);
-                        }
-                    }
-                    else
-                    {
-                        //
-                        // Can only connect to desktops
-                        //
-                        throw new NotImplementedException();
-                    }
+                    InternalSetState(new NewSession(_sessionSetup, _sessionMonitor));
                 }
                 else
                 {
                     //
-                    // TODO: re-activate the connection.
+                    // Re-activate the connection.
+                    // When the session's internal state changes, the session creates an object that encapsulates the state;
+                    // the object stores all information needed to report the state to event subscribers (view models/UI) upon re-activation.
                     //
                 }
             }
@@ -194,8 +227,12 @@
         IRenderingPanel IRemoteSession.Deactivate()
         {
             Contract.Assert(null != _renderingPanel);
+
             IRenderingPanel renderingPanel = _renderingPanel;
             _renderingPanel = null;
+
+            _internalState.Deactivate(this);
+
             return renderingPanel;
         }
 
@@ -209,20 +246,9 @@
 
         void IRemoteSession.Disconnect()
         {
-            using (LockRead())
+            using (LockWrite())
             {
-                //
-                // If the session is in one of the active states, tear down the RDP connection.
-                //
-                switch(_internalSessionState)
-                {
-                    case SessionState.Connecting:
-                    case SessionState.Connected:
-                    case SessionState.Interrupted:
-                        _canReconnect = false;
-                        _connection.Disconnect();
-                        break;
-                }
+                _internalState.Terminate(this);
             }
         }
 
@@ -238,20 +264,24 @@
         {
             Contract.Requires(null != task);
 
+            EventHandler<CredentialsNeededEventArgs> credentialsNeeded;
+
             using (LockUpgradeableRead())
-            {
-                if (null != _credentialsNeeded)
-                    _credentialsNeeded(this, new CredentialsNeededEventArgs(task));
-            }
+                credentialsNeeded = _credentialsNeeded;
+
+            if (null != credentialsNeeded)
+                credentialsNeeded(this, new CredentialsNeededEventArgs(task));
         }
 
         private void EmitFailed(RdpDisconnectCode disconnectCode)
         {
-            using(LockUpgradeableRead())
-            {
-                if (null != _failed)
-                    _failed(this, new SessionFailureEventArgs(disconnectCode));
-            }
+            EventHandler<SessionFailureEventArgs> failed;
+
+            using (LockUpgradeableRead())
+                failed = _failed;
+
+            if (null != failed)
+                failed(this, new SessionFailureEventArgs(disconnectCode));
         }
 
         private void DeferEmitFailed(RdpDisconnectCode disconnectCode)
@@ -261,11 +291,13 @@
 
         private void EmitInterrupted()
         {
+            EventHandler<SessionInterruptedEventArgs> interrupted;
+
             using (LockUpgradeableRead())
-            {
-                if (null != _interrupted)
-                    _interrupted(this, new SessionInterruptedEventArgs(this));
-            }
+                interrupted = _interrupted;
+
+            if (null != interrupted)
+                interrupted(this, new SessionInterruptedEventArgs(this));
         }
 
         private void DeferEmitInterrupted()
@@ -275,11 +307,13 @@
 
         private void EmitClosed()
         {
+            EventHandler closed;
+
             using(LockUpgradeableRead())
-            {
-                if (null != _closed)
-                    _closed(this, EventArgs.Empty);
-            }
+                closed = _closed;
+
+            if (null != closed)
+                closed(this, EventArgs.Empty);
         }
 
         private void DeferEmitClosed()
@@ -287,12 +321,20 @@
             _deferredExecution.Defer(() => EmitClosed());
         }
 
-        private void InternalSetState(SessionState newState)
+        private void InternalSetState(InternalState newState)
         {
-            using (LockWrite())
-                _internalSessionState = newState;
-
-            _state.SetState(newState);
+            Contract.Assert(null != newState);
+            //
+            // Lock the session monitor so the RDP connection cannot emit any events while the session
+            // is transitioning between the states.
+            //
+            using (ReadWriteMonitor.Write(_sessionMonitor))
+            {
+                _internalState.Complete(this);
+                _internalState = newState;
+                _state.SetState(newState.State);
+                _internalState.Activate(this);
+            }
         }
 
         private void InternalStartSession(RemoteSessionSetup sessionSetup)
@@ -301,195 +343,11 @@
             // Ask the connection source to create a new session.
             // The connection source comes all the way from XAML of the main page.
             //
-            using (LockWrite())
+            using (ReadWriteMonitor.Write(_sessionMonitor))
             {
                 _connection = _connectionSource.CreateConnection(_renderingPanel);
-
-                _connection.Events.ClientConnected += this.OnClientConnected;
-                _connection.Events.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
-                _connection.Events.ClientDisconnected += this.OnClientDisconnected;
-
-                InternalSetState(SessionState.Connecting);
-
-                _connection.Connect(_sessionSetup.SessionCredentials.Credentials,
-                    !_sessionSetup.SessionCredentials.IsNewPassword);
+                InternalSetState(new ConnectingSession(_connection, _sessionMonitor));
             }
-        }
-
-        private void OnClientConnected(object sender, ClientConnectedArgs e)
-        {
-            using (LockWrite())
-            {
-                _canReconnect = true;
-                _connection.Events.ClientAutoReconnecting += this.OnClientAutoReconnecting;
-                _connection.Events.ClientAutoReconnectComplete += this.OnClientAutoReconnectComplete;
-            }
-
-            InternalSetState(SessionState.Connected);
-        }
-
-        private void OnClientAsyncDisconnect(object sender, ClientAsyncDisconnectArgs e)
-        {
-            Contract.Assert(sender is IRdpConnection);
-
-            IRdpConnection connection = (IRdpConnection)sender;
-            Contract.Assert(object.ReferenceEquals(connection, _connection));
-
-            InternalSetState(SessionState.Idle);
-
-            switch (e.DisconnectReason.Code)
-            {
-                case RdpDisconnectCode.CertValidationFailed:
-                    break;
-
-                case RdpDisconnectCode.PreAuthLogonFailed:
-                    RequestValidCredentials();
-                    break;
-
-                case RdpDisconnectCode.FreshCredsRequired:
-                    RequestNewPassword();
-                    break;
-
-                default:
-                    connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
-                    break;
-            }
-        }
-
-        private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
-        {
-            Contract.Assert(sender is IRdpConnection);
-            Contract.Assert(object.ReferenceEquals(sender, _connection));
-            Contract.Ensures(null == _connection);
-
-            using (LockWrite())
-            {
-                _canReconnect = false;
-                _connection.Events.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
-                _connection.Events.ClientAutoReconnectComplete -= this.OnClientAutoReconnectComplete;
-                _connection.Events.ClientDisconnected -= this.OnClientDisconnected;
-                _connection.Events.ClientConnected -= this.OnClientConnected;
-                _connection.Events.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
-                _connection = null;
-            }
-
-            _state.SetDisconnectCode(e.DisconnectReason.Code);
-
-            switch(e.DisconnectReason.Code)
-            {
-                case RdpDisconnectCode.UserInitiated:
-                    InternalSetState(SessionState.Closed);
-                    DeferEmitClosed();
-                    break;
-
-                default:
-                    InternalSetState(SessionState.Failed);
-                    DeferEmitFailed(e.DisconnectReason.Code);
-                    break;
-            }
-        }
-
-        private void OnClientAutoReconnecting(object sender, ClientAutoReconnectingArgs e)
-        {
-            //
-            // The event is always delivered on a worker thread, and the caller expects that
-            // the ContinueDelegate will be called by the event handler before it returns.
-            // Dumb design.
-            // We let the auto-reconnect to proceed but emit an event on the UI thread that informs user
-            // that the session is reconnecting and why.
-            //
-            using(LockRead())
-                e.ContinueDelegate(_canReconnect);
-
-            _state.SetReconnectAttempt(e.AttemptCount);
-
-            if (0 == e.AttemptCount)
-            {
-                InternalSetState(SessionState.Interrupted);
-                DeferEmitInterrupted();
-            }
-        }
-
-        private void OnClientAutoReconnectComplete(object sender, ClientAutoReconnectCompleteArgs e)
-        {
-            InternalSetState(SessionState.Connected);
-            _state.SetReconnectAttempt(0);
-        }
-
-        private void RequestValidCredentials()
-        {
-            //
-            // Emit an event with a credentials editor task.
-            //
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sessionSetup.SessionCredentials, _sessionSetup.DataModel,
-                "d:Invalid user name or password");
-            task.Submitted += this.NewPasswordSubmitted;
-            task.Cancelled += this.NewPasswordCancelled;
-            DeferEmitCredentialsNeeded(task);
-        }
-
-        private void RequestNewPassword()
-        {
-            //
-            // Emit an event with a credentials editor task.
-            //
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sessionSetup.SessionCredentials, _sessionSetup.DataModel,
-                "d:Server has requested a new password to be typed in");
-            task.Submitted += this.NewPasswordSubmitted;
-            task.Cancelled += this.NewPasswordCancelled;
-            DeferEmitCredentialsNeeded(task);
-        }
-
-        private void MissingCredentialsSubmitted(object sender, InSessionCredentialsTask.SubmittedEventArgs e)
-        {
-            InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
-            task.Submitted -= this.MissingCredentialsSubmitted;
-            task.Cancelled -= this.MissingCredentialsCancelled;
-
-            if (e.SaveCredentials)
-            {
-                _sessionSetup.SaveCredentials();
-            }
-
-            InternalStartSession(_sessionSetup);
-        }
-
-        private void MissingCredentialsCancelled(object sender, EventArgs e)
-        {
-            InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
-            task.Submitted -= this.MissingCredentialsSubmitted;
-            task.Cancelled -= this.MissingCredentialsCancelled;
-            //
-            // Emit the Cancelled event so the session view model can navigate to the home page
-            //
-            EmitClosed();
-        }
-
-        private void NewPasswordSubmitted(object sender, InSessionCredentialsTask.SubmittedEventArgs e)
-        {
-            InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
-            task.Submitted -= this.NewPasswordSubmitted;
-            task.Cancelled -= this.NewPasswordCancelled;
-
-            if (e.SaveCredentials)
-                _sessionSetup.SaveCredentials();
-            //
-            // Go ahead and try to re-connect with new credentials.
-            //
-            InternalSetState(SessionState.Connecting);
-            _connection.Connect(_sessionSetup.SessionCredentials.Credentials,
-                !_sessionSetup.SessionCredentials.IsNewPassword);
-        }
-
-        private void NewPasswordCancelled(object sender, EventArgs e)
-        {
-            InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
-            task.Submitted -= this.NewPasswordSubmitted;
-            task.Cancelled -= this.NewPasswordCancelled;
-            //
-            // User has cancelled the credentials dialog, tell the subscribers about the cancellation.
-            //
-            EmitClosed();
         }
     }
 }

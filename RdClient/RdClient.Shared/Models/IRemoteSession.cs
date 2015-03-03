@@ -45,6 +45,7 @@
         /// <param name="sessionView">Session view for which the session is activated.</param>
         /// <returns>Control object that may be used by the caller to send input to the remote session. The session
         /// may change the state of the returned control object. All changes are reported on the UI thread.</returns>
+        /// <remarks>Upon activation the session may emit events alerting the UI about required intervention from a user.</remarks>
         IRemoteSessionControl Activate(IRemoteSessionView sessionView);
 
         /// <summary>

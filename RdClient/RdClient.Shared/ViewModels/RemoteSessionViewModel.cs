@@ -21,6 +21,7 @@
 
         private bool _failureMessageVisible;
         private RdpDisconnectCode _failureCode;
+
         private bool _interrupted;
         private InterruptedSessionContinuation _interruptedContinuation;
         private int _reconnectAttempt;
