@@ -5,7 +5,6 @@
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.ViewModels;
-    using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
     using System.Diagnostics.Contracts;
     using System.Threading;
