@@ -77,7 +77,7 @@ namespace RdClient.Shared.ViewModels
         private double _panControlOpacity;
         private double _panOrbOpacity;
 
-        private bool _isInertiaNotProcessed;
+        private bool _isInertiaProcessingNeeded;
         private bool _isInertiaEnabled;
 
         private Size _viewSize = new Size(0.0, 0.0);
@@ -173,7 +173,7 @@ namespace RdClient.Shared.ViewModels
             this.IsPanning = false;
             this.PanControlOpacity = 1.0;
             this.PanOrbOpacity = 1.0;
-            _isInertiaNotProcessed = false;
+            _isInertiaProcessingNeeded = false;
             _isInertiaEnabled = false;
         }
 
@@ -202,13 +202,13 @@ namespace RdClient.Shared.ViewModels
 
                 this.PanOrbOpacity = 1.0;
                 this.IsPanning = true;
-                _isInertiaNotProcessed = false;
+                _isInertiaProcessingNeeded = false;
             }
             else if(TouchEventType.Up == e.ActionType)
             {
                 if (_isInertiaEnabled)
                 {
-                    _isInertiaNotProcessed = true;
+                    _isInertiaProcessingNeeded = true;
                 }
                 else
                 {
@@ -216,7 +216,7 @@ namespace RdClient.Shared.ViewModels
                 }
                 this.IsPanning = false;
             }
-            else if(_isInertiaNotProcessed && PanKnobState.Inactive != this.State)
+            else if(_isInertiaProcessingNeeded && PanKnobState.Inactive != this.State)
             {
                 if (e.Inertia)
                 {
@@ -225,7 +225,7 @@ namespace RdClient.Shared.ViewModels
                 else
                 {
                     // completed inertia, will need another OnManipulationInertiaStarting to process again.
-                    _isInertiaNotProcessed = false;
+                    _isInertiaProcessingNeeded = false;
                     _isInertiaEnabled = false;
                     this.State = PanKnobState.Inactive;
                 }
@@ -234,7 +234,7 @@ namespace RdClient.Shared.ViewModels
             {
                 // move or pan
                 this.ApplyTransform(e.Delta.X, e.Delta.Y);
-                _isInertiaNotProcessed = false;
+                _isInertiaProcessingNeeded = false;
             }
         }
 
@@ -253,28 +253,18 @@ namespace RdClient.Shared.ViewModels
                 // move,  within the margins
                 double panXTo = this.TranslateXTo + x;
                 double panYTo = this.TranslateYTo + y;
-                double borderLeft = -(this.ViewSize.Width - GlobalConstants.PanKnobWidth) / 2.0;
-                double borderRight = (this.ViewSize.Width - GlobalConstants.PanKnobWidth) / 2.0;
-                double borderUp = -(this.ViewSize.Height - GlobalConstants.PanKnobWidth) / 2.0;
-                double borderDown = (this.ViewSize.Height - GlobalConstants.PanKnobWidth) / 2.0;
 
-                if (panXTo < borderLeft)
-                {
-                    panXTo = borderLeft;
-                }
-                else if (panXTo > borderRight)
-                {
-                    panXTo = borderRight;
-                }
+                // border left/right
+                panXTo = Math.Min(
+                    Math.Max(panXTo, -(this.ViewSize.Width - GlobalConstants.PanKnobWidth) / 2.0), 
+                    (this.ViewSize.Width - GlobalConstants.PanKnobWidth) / 2.0
+                    );
 
-                if (panYTo < borderUp)
-                {
-                    panYTo = borderUp;
-                }
-                else if (panYTo > borderDown)
-                {
-                    panYTo = borderDown;
-                }
+                // border top/bottom
+                panYTo = Math.Min(
+                    Math.Max(panYTo, -(this.ViewSize.Height - GlobalConstants.PanKnobHeight) / 2.0),
+                    (this.ViewSize.Height - GlobalConstants.PanKnobHeight) / 2.0
+                    );
 
                 this.TranslateXFrom = this.TranslateXTo;
                 this.TranslateYFrom = this.TranslateYTo;
