@@ -35,6 +35,7 @@
             _client.OnShowAzureSignOutDialog += _client_OnShowAzureSignOutDialog;
             _client.OnShowDemoConsentPage += _client_OnShowDemoConsentPage;
 
+            //I get an exception when run on the UI thread. Running it as a task does not throw
             Task<int> subscribeTask = Task.Factory.StartNew<int>(() => { return _client.SubscribeToOnPremFeed(@"https://ts-wlbs-a.ntdev.corp.microsoft.com/RDWeb/feed/webfeed.aspx", @"ntdev\texas", ".Gold-finger007"); });
             RdTrace.IfFailXResultThrow(subscribeTask.Result, "RdClientCx.RadcClient.SubscribeToOnPremFeed() failed");
 
