@@ -8,7 +8,8 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:cv="using:RdClient.Converters"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    RequestedTheme="Light">
 
     <Page.DataContext>
         <vm:ErrorMessageViewModel/>
@@ -16,11 +17,7 @@
 
     <Page.Resources>
         <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-        <cv:RdpErrorToLocalizedStringConverter x:Key="RdpErrorToLocalizedStringConverter">
-            <cv:RdpErrorToLocalizedStringConverter.LocalizedString>
-                <helpers:LocalizedString/>
-            </cv:RdpErrorToLocalizedStringConverter.LocalizedString>
-        </cv:RdpErrorToLocalizedStringConverter>
+        <cv:RdpErrorToLocalizedStringConverter x:Key="RdpErrorToLocalizedStringConverter" TypeToLocalizedStringConverter="{StaticResource TypeToLocalizedStringConverter}" />
     </Page.Resources>
     
     <Grid>

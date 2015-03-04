@@ -76,10 +76,5 @@
         {
             return "Disconnect code: " + this.Code + ", legacy code: " + this.ULegacyCode + ", legacy extended code: " + this.ULegacyExtendedCode;
         }
-
-        public string Category
-        {
-            get { return "RdpDisconnectReason"; }
-        }
     }
 }

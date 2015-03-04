@@ -14,10 +14,5 @@
         {
             return "NetBIOSResolve Error: " + this.Error;
         }
-
-        public string Category
-        {
-            get { return "NetBIOSResolveError"; }
-        }
     }
 }

@@ -49,7 +49,6 @@
             x:Name="SessionPanel"
             ZoomPanTransform="{Binding ZoomPanViewModel.ZoomPanTransform, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             WindowRect="{Binding ZoomPanViewModel.WindowRect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            TransformRect="{Binding ZoomPanViewModel.TransformRect, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             ConnectCommand="{Binding ConnectCommand}"
             ViewSize="{Binding MouseViewModel.ViewSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
        
@@ -66,8 +65,7 @@
                                       Visibility="{Binding ZoomPanViewModel.State, Converter={StaticResource ZoomPanStateToPanKnobVisibilityConverter}}"
                                       PanKnobTransform="{Binding PanKnobViewModel.PanKnobTransform, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                                              
                                       PointerEventConsumer="{Binding PanKnobViewModel.PointerEventConsumer}"
-                                      />
-                                     
+                                      />                                     
 
         <controls:SessionReconnectControl x:Name="SessionReconnectLayer" 
                                           VerticalAlignment="Center"

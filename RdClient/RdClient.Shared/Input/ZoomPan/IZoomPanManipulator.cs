@@ -6,7 +6,6 @@ namespace RdClient.Shared.Input.ZoomPan
     public interface IZoomPanManipulator
     {
         Rect WindowRect { set; }
-        Rect TransformRect { set; }
 
         IZoomPanTransform ZoomPanTransform { get; }
         double ScaleCenterX { get; }

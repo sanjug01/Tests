@@ -117,179 +117,179 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Disconnect_ServerTool_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_ServerTool_String" xml:space="preserve">
     <value>Your admin might have ended your session. Try connecting again. If that doesn't work, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_IdleTimeout_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_IdleTimeout_String" xml:space="preserve">
     <value>Your session timed out due to inactivity. Try connecting again.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_LogonTimeout_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_LogonTimeout_String" xml:space="preserve">
     <value>Your session ended because you exceeded the time limit set for a session. This limit is set by the admin or by network policies. Try connecting again.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_ReplacedByOtherConnection_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_ReplacedByOtherConnection_String" xml:space="preserve">
     <value>Someone else connected to the remote PC. Try connecting again later.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_ServerOutOfMemory_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_ServerOutOfMemory_String" xml:space="preserve">
     <value>Your session ended because the remote PC was low on memory.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_ServerDeniedConnection_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_ServerDeniedConnection_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC. Make sure the PC is turned on and connected to the network, and that remote access is enabled. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_ServerInsufficientPrivileges_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_ServerInsufficientPrivileges_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC. You might not have permission to sign in remotely. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_NoLicenseServer_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_NoLicenseServer_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because no license servers were available to provide a license. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_NoLicenseAvailable_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_NoLicenseAvailable_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because there were no licenses available for this PC. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_GenericLicenseError_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_GenericLicenseError_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because of a licensing error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_InvalidLicense_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_InvalidLicense_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because the license for this device isn't valid. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_CantUpgradeLicense_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_CantUpgradeLicense_String" xml:space="preserve">
     <value>Your session ended because the license for your device couldn't be upgraded or renewed. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_NoRemoteConnectionLicense_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_NoRemoteConnectionLicense_String" xml:space="preserve">
     <value>Your session ended because the remote PC isn't licensed to accept remote connections. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_GenericSecurityError_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_GenericSecurityError_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because of a security error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_ServerNameLookupFailed_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_ServerNameLookupFailed_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because the PC can't be found. Make sure the PC name is correct, and then try connecting again. If that doesn't work, you can try using the remote PC's IP address.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_GenericNetworkError_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_GenericNetworkError_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC. This might be because of a network problem. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_UnknownError_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_UnknownError_String" xml:space="preserve">
     <value>Your session ended because of an error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_RemotingDisabled_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_RemotingDisabled_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC. Make sure the PC is turned on and connected to the network, and that remote access is enabled.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_EncryptionFailed_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_EncryptionFailed_String" xml:space="preserve">
     <value>Your session ended because of a data encryption error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_InitFipsFailed_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_InitFipsFailed_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because your device doesn't support the Remote Desktop FIPS encryption level. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_LoopbackUnsupported_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_LoopbackUnsupported_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because your device and the remote PC are the same.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_ConnectionTimeout_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_ConnectionTimeout_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because the session couldn't be established in time. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_ConnectionBroken_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_ConnectionBroken_String" xml:space="preserve">
     <value>The connection to the remote PC was lost. This might be because of a network connection problem. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_VersionMismatch_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_VersionMismatch_String" xml:space="preserve">
     <value>Your session ended because the local and server versions of the Remote Desktop protocol don't match. Update the Remote Desktop app, and then try connecting again.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_GenericProtocolError_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_GenericProtocolError_String" xml:space="preserve">
     <value>Your session ended because of a protocol error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_DecompressionFailed_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_DecompressionFailed_String" xml:space="preserve">
     <value>Your session ended because of an error while decompressing data from the remote PC. Try connecting again.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_GenericByServer_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_GenericByServer_String" xml:space="preserve">
     <value>The remote PC ended your session. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_CertMismatch_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_CertMismatch_String" xml:space="preserve">
     <value>Your session ended because an unexpected server authentication certificate was received from the remote PC. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_CertExpired_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_CertExpired_String" xml:space="preserve">
     <value>Your session ended because the server authentication certificate received from the remote PC has expired or is invalid. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_NoSuchUser_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_NoSuchUser_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because the user name doesn't exist. Make sure the user name is correct, and then try connecting again. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_AccountRestriction_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_AccountRestriction_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because a user account restriction is preventing you from signing in. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_AccountLockedOut_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_AccountLockedOut_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because the user account has been locked due to too many sign in or password change attempts. Wait a little while, and then try connecting again, or ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_AccountExpired_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_AccountExpired_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because the user account has expired. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_PasswordExpired_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_PasswordExpired_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because the password associated with the user account has expired. Change your password, or ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_InvalidLogonHours_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_InvalidLogonHours_String" xml:space="preserve">
     <value>Your session ended because the admin has restricted when you may sign in. Try connecting again later. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_PasswordMustChange_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_PasswordMustChange_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because you must change your password before signing in. Change your password, or ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_LogonTypeNotGranted_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_LogonTypeNotGranted_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because the admin has restricted the type of logon that you may use. Ask you admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_KrbUser2UserRequired_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_KrbUser2UserRequired_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because the Kerberos sub-protocol User2User is required. Ask you admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_HybridRequired_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_HybridRequired_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because it requires Network Level Authentication, which your device doesn't support. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_TimeSkew_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_TimeSkew_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because there's a date or time difference between your device and the remote PC. Make sure your clock is set to the correct time, and then try connecting again. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_SSLHandshakeFailed_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_SSLHandshakeFailed_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC. This might be due to an expired password. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_AccountDisabled_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_AccountDisabled_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because your account has been disabled. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_InvalidWorkStation_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_InvalidWorkStation_String" xml:space="preserve">
     <value>We couldn't connect to the remote PC because your admin has limited the devices you can use to sign in. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
-  <data name="Disconnect_ArcFailed_String" xml:space="preserve">
+  <data name="RdpDisconnectCode_ArcFailed_String" xml:space="preserve">
     <value>We couldn't automatically reconnect to the remote PC. Try connecting again.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
@@ -587,11 +587,11 @@
     <value>Delete user:</value>
     <comment>Title displayed at the top of the delete user confirmation. </comment>
   </data>
-  <data name="CredentialPrompt_Message_FreshCredsNeeded_String" xml:space="preserve">
+  <data name="CredentialPromptMode_FreshCredentialsNeeded_String" xml:space="preserve">
     <value>The remote PC does not accept saved credentials. Enter your credentials and try again.</value>
     <comment>Text in the credential prompt dialog shown when a connection attempt failed because the credentials were invalid.</comment>
   </data>
-  <data name="CredentialPrompt_Message_InvalidCredentials_String" xml:space="preserve">
+  <data name="CredentialPromptMode_InvalidCredentials_String" xml:space="preserve">
     <value>The credentials that were used to connect to the remote PC didn't work. Enter different credentials and try again.</value>
     <comment>Text in the credential prompt dialog when fresh credentials are required.</comment>
   </data>

@@ -23,10 +23,9 @@ namespace RdClient.Shared.ViewModels
 
         public IPresentableView PresentableView { private get; set; }
 
-        public IModelContainer<CredentialsModel> Credentials
+        public CredentialsModel Credentials
         {
-            get { return _cred; }
-            private set{ SetProperty(ref _cred, value); }
+            get { return _cred.Model; }
         }
 
         public ICommand DeleteCommand
@@ -43,7 +42,7 @@ namespace RdClient.Shared.ViewModels
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Assert(activationParameter is IModelContainer<CredentialsModel>);
-            this.Credentials = (IModelContainer<CredentialsModel>)activationParameter;
+            _cred = (IModelContainer<CredentialsModel>)activationParameter;
         }
 
         private void DeleteCommandExecute()
@@ -54,7 +53,7 @@ namespace RdClient.Shared.ViewModels
             // Remove the credentials from the data model.
             // The data model will remove references to the removed credentials from all desktops.
             //
-            this.ApplicationDataModel.LocalWorkspace.Credentials.RemoveModel(this.Credentials.Id);
+            this.ApplicationDataModel.LocalWorkspace.Credentials.RemoveModel(_cred.Id);
             
             NavigationService.DismissModalView(this.PresentableView);
         }

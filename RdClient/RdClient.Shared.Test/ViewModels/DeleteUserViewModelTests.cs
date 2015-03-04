@@ -68,7 +68,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void CredentialPropertyMatchesInputCred()
         {
-            Assert.AreEqual(_cred, _vm.Credentials);
+            Assert.AreEqual(_cred.Model, _vm.Credentials);
         }
 
         [TestMethod]

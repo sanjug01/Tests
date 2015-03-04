@@ -62,8 +62,6 @@ namespace RdClient.Shared.ViewModels
 
     public sealed class PanKnobViewModel : MutableObject
     {
-        private const ulong MAX_DOUBLE_TAP_US = 300000; // microseconds
-
         private IPanKnobTransform _panKnobTransform;
         private PanKnobState _state;
         private bool _isPanning;
@@ -160,7 +158,7 @@ namespace RdClient.Shared.ViewModels
             TranslateYTo = 0.0;
 
             _lastTouchTimeStamp = 0;
-            this.State = PanKnobState.Disabled;
+            this.State = PanKnobState.Inactive;
             this.IsPanning = false;
             this.PanControlOpacity = 1.0;
             this.PanOrbOpacity = 1.0;
@@ -171,7 +169,7 @@ namespace RdClient.Shared.ViewModels
             if (TouchEventType.Down == e.ActionType)
             {
                 // click or double click
-                if (_lastTouchTimeStamp != 0 && (e.TimeStamp - _lastTouchTimeStamp < MAX_DOUBLE_TAP_US))
+                if (_lastTouchTimeStamp != 0 && (e.TimeStamp - _lastTouchTimeStamp < GlobalConstants.MaxDoubleTapUS))
                 {
                     // This is a double tap guesture so enable moving the pan control
                     _lastTouchTimeStamp = 0;
@@ -180,7 +178,7 @@ namespace RdClient.Shared.ViewModels
                 else
                 {
                     _lastTouchTimeStamp = e.TimeStamp;
-                    this.State = PanKnobState.Enabled;
+                    this.State = PanKnobState.Active;
                 }
 
                 this.PanOrbOpacity = 1.0;
@@ -193,7 +191,7 @@ namespace RdClient.Shared.ViewModels
                 {
                     this.ApplyTransform(e.Delta.X, e.Delta.Y);
                 }
-                this.State = PanKnobState.Disabled;
+                this.State = PanKnobState.Inactive;
                 this.IsPanning = false;
             }
             else
@@ -205,12 +203,15 @@ namespace RdClient.Shared.ViewModels
 
         private void ApplyTransform(double x, double y)
         {
-            if (PanKnobState.Enabled == this.State)
+            if (PanKnobState.Active == this.State)
             {
                 // pan
-                PanChange.Invoke(this, new PanEventArgs(x, y));
+                if (null != PanChange)
+                {
+                    PanChange(this, new PanEventArgs(x, y));
+                }
             }
-            else
+            if (PanKnobState.Moving == this.State)
             {
                 // move
                 double panXTo = this.TranslateXTo + x;

@@ -54,8 +54,8 @@
   <ItemGroup>
     <Compile Include="Converters\BarItemsAlignmentFilteringConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\CredentialPromptModeToLocalizedMessageConverter.cs" />
     <Compile Include="Converters\PanKnobStateToBackGroundBrushConverter.cs" />
+    <Compile Include="Converters\TypeToLocalizedStringConverter.cs" />
     <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverter.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverter.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverter.cs" />
@@ -80,6 +80,7 @@
     <Compile Include="CxWrappers\Errors\LogonError.cs" />
     <Compile Include="CxWrappers\Errors\NetBIOSResolveError.cs" />
     <Compile Include="CxWrappers\Errors\RadcError.cs" />
+    <Compile Include="CxWrappers\Errors\RdpCertificateError.cs" />
     <Compile Include="CxWrappers\Errors\RdpDisconnectReason.cs" />
     <Compile Include="CxWrappers\Errors\IRdpError.cs" />
     <Compile Include="CxWrappers\Errors\XPlatError.cs" />
@@ -123,9 +124,9 @@
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
     <Compile Include="Helpers\DataStorageExtensions.cs" />
     <Compile Include="Helpers\DeferredCommand.cs" />
-    <Compile Include="Helpers\DisconnectString.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />
     <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\GlobalConstants.cs" />
     <Compile Include="Helpers\GroupCommand.cs" />
     <Compile Include="Helpers\IDeferredExecution.cs" />
     <Compile Include="Helpers\ILocalizedString.cs" />
@@ -135,6 +136,8 @@
     <Compile Include="Helpers\ITimer.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Input\Mouse\MultiTouchMode.cs" />
+    <Compile Include="Input\Mouse\InputModeChangedEventArgs.cs" />
+    <Compile Include="Input\Mouse\PointerEventTrace.cs" />
     <Compile Include="Input\Mouse\PointerEvent.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
     <Compile Include="Helpers\ReadWriteMonitor.cs" />
@@ -165,6 +168,7 @@
     <Compile Include="Input\Mouse\MouseMode.cs" />
     <Compile Include="Input\Mouse\TouchContext.cs" />
     <Compile Include="Input\Mouse\TouchModeFactory.cs" />
+    <Compile Include="Input\ZoomPan\ZoomEventArgs.cs" />
     <Compile Include="Input\ZoomPan\PanEventArgs.cs" />
     <Compile Include="Input\ZoomPan\IPanTransform.cs" />
     <Compile Include="Input\ZoomPan\IZoomPanManipulator.cs" />

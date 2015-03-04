@@ -8,7 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    RequestedTheme="Light">
     
     <Page.DataContext>
         <vm:AddUserViewModel />
@@ -18,13 +19,7 @@
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
-        <c:StringLengthToVisibilityConverter x:Key="StringLengthToVisibilityConverter" />
-        <c:CredentialPromptModeToLocalizedMessageConverter x:Key="CredentialPromptModeToLocalizedMessageConverter">
-            <c:CredentialPromptModeToLocalizedMessageConverter.LocalizedString>
-                <helpers:LocalizedString />
-            </c:CredentialPromptModeToLocalizedMessageConverter.LocalizedString>           
-        </c:CredentialPromptModeToLocalizedMessageConverter>
-        
+        <c:StringLengthToVisibilityConverter x:Key="StringLengthToVisibilityConverter" />        
     </Page.Resources>
 
     <Grid>
@@ -63,7 +58,7 @@
                                 Name="txtMessage"
                                 Foreground="{StaticResource rdBlackBrush}"
                                 Visibility="{Binding ElementName=txtMessage, Path=Text, Converter={StaticResource StringLengthToVisibilityConverter}}" 
-                                Text="{Binding Path=Mode, Converter={StaticResource CredentialPromptModeToLocalizedMessageConverter}}"/>
+                                Text="{Binding Path=Mode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
                 </Grid>
 
                 <Border Grid.Row="2" Height="1" Margin="0" />

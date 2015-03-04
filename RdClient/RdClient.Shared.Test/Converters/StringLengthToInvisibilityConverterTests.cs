@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Converters;
 using Windows.UI.Xaml;
 
-namespace RdClient.Windows.Test
+namespace RdClient.Shared.Test
 {
     [TestClass]
     public class StringLengthToInvisibilityConverterTests

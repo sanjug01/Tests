@@ -7,6 +7,7 @@ namespace RdClient.Controls
 {
     using RdClient.Shared.Converters;
     using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Mouse;
     using Windows.Foundation;
     using Windows.UI.Core;
@@ -79,7 +80,7 @@ namespace RdClient.Controls
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
         {
-            args.TranslationBehavior.DesiredDeceleration = 0.002;
+            args.TranslationBehavior.DesiredDeceleration = GlobalConstants.DesiredDeceleration;
 
             if(args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
             {

@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.CxWrappers.Utils;
+﻿using RdClient.Shared.CxWrappers.Errors;
+using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
 using System;
 using System.Diagnostics.Contracts;
@@ -6,30 +7,7 @@ using Windows.Security.Cryptography.Certificates;
 
 namespace RdClient.Shared.CxWrappers
 {
-    
-    public class RdpCertificateError : IRdpCertificateError
-    {
-        private RdClientCx.ServerCertificateError _serverCertificateError;
-        public RdpCertificateError(RdClientCx.ServerCertificateError serverCertificateError)
-        {
-            _serverCertificateError = serverCertificateError;
-        }
 
-        public int ErrorCode 
-        { 
-            get {return _serverCertificateError.errorCode; }
-        }
-
-        public CertificateErrors ErrorFlags 
-        { 
-            get { return (CertificateErrors) _serverCertificateError.errorFlags; } 
-        }
-
-        public ServerCertificateErrorSource ErrorSource 
-        { 
-            get { return (ServerCertificateErrorSource) _serverCertificateError.errorSource; } 
-        }
-    }
 
     /// <summary>
     /// wrapper class for both the server certificate with certificate error property

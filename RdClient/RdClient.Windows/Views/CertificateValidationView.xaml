@@ -8,7 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Converters"    
     xmlns:helpers="using:RdClient.Shared.Helpers"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    RequestedTheme="Light">
 
     <Page.DataContext>
         <vm:CertificateValidationViewModel/>
@@ -19,11 +20,7 @@
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
         <c:ByteArrayToStringConverter x:Key="ByteArrayToStringConverter" />
-        <c:RdpCertificateToErrorListConverter x:Key="RdpCertificateToErrorListConverter">
-            <c:RdpCertificateToErrorListConverter.LocalizedString>
-                <helpers:LocalizedString/>
-            </c:RdpCertificateToErrorListConverter.LocalizedString>
-        </c:RdpCertificateToErrorListConverter>
+        <c:RdpCertificateToErrorListConverter x:Key="RdpCertificateToErrorListConverter" TypeToLocalizedStringConverter="{StaticResource TypeToLocalizedStringConverter}" />
     </Page.Resources>
 
 

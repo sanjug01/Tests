@@ -58,8 +58,6 @@
 
         public ISessionModel SessionModel { get; set; }
 
-        public DisconnectString DisconnectString { get; set; }
-
         public MouseViewModel MouseViewModel { get; set; }
 
         public ICommand DisconnectCommand { get { return _disconnectCommand; } }
@@ -197,6 +195,9 @@
                 this.MouseViewModel.DeferredExecution = this;
                 this.MouseViewModel.ElephantEarsViewModel = this;
                 this.PanKnobViewModel.PanChange += this.ZoomPanViewModel.HandlePanChange;
+                this.MouseViewModel.PanChange += this.ZoomPanViewModel.HandlePanChange;
+                this.MouseViewModel.ScaleChange += this.ZoomPanViewModel.HandleScaleChange;
+                this.MouseViewModel.InputModeChange += this.ZoomPanViewModel.HandleInputModeChange;
             };
 
             SessionModel.ConnectionAutoReconnecting += SessionModel_ConnectionAutoReconnecting;
@@ -362,6 +363,7 @@
                             switch (acceptCertificateResult.Result)
                             {
                                 case CertificateValidationResult.CertificateTrustLevel.Denied:
+                                    _userCancelled = true;
                                     reconnect = false;
                                     break;
                                 case CertificateValidationResult.CertificateTrustLevel.AcceptedOnce:

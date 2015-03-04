@@ -1,6 +1,6 @@
-﻿using RdClient.Shared.Converters.ErrorLocalizers;
+﻿using RdClient.Shared.Converters;
+using RdClient.Shared.Converters.ErrorLocalizers;
 using RdClient.Shared.CxWrappers.Errors;
-using RdClient.Shared.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -10,14 +10,13 @@ namespace RdClient.Converters
 {
     public class RdpErrorToLocalizedStringConverter : IValueConverter
     {
-        private Dictionary<string, Type> _localizerMap = new Dictionary<string,Type>();
+        private Dictionary<Type, Type> _localizerMap = new Dictionary<Type, Type>();
 
-        private IStringTable _localizedString;
-        public IStringTable LocalizedString { set { _localizedString = value; } }
+        public TypeToLocalizedStringConverter TypeToLocalizedStringConverter { private get; set; }
 
         public RdpErrorToLocalizedStringConverter()
         {
-            _localizerMap["RdpDisconnectReason"] = typeof(RdpDisconnectReasonLocalizer);
+            _localizerMap[typeof(RdpDisconnectReason)] = typeof(RdpDisconnectReasonLocalizer);
         }
 
         public object Convert(object value, Type targetType, object parameter, string language)
@@ -27,10 +26,10 @@ namespace RdClient.Converters
 
             IRdpError error = (IRdpError)value;
 
-            if(_localizerMap.ContainsKey(error.Category))
+            if(_localizerMap.ContainsKey(error.GetType()))
             {
-                IErrorLocalizer localizer = Activator.CreateInstance(_localizerMap[error.Category]) as IErrorLocalizer;
-                localizer.LocalizedString = this._localizedString;
+                IErrorLocalizer localizer = Activator.CreateInstance(_localizerMap[error.GetType()]) as IErrorLocalizer;
+                localizer.TypeToLocalizedStringConverter = this.TypeToLocalizedStringConverter;
                 return localizer.LocalizeError(error);
             }
             else
