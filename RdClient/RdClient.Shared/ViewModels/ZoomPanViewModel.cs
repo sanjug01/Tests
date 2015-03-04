@@ -1,17 +1,17 @@
-﻿using RdClient.Shared.CxWrappers;
-using RdClient.Shared.Helpers;
-using RdClient.Shared.Navigation.Extensions;
-using System;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
-using System.Windows.Input;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Input.Mouse;
     using RdClient.Shared.Input.ZoomPan;
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Navigation.Extensions;    
+    using System;
+    using System.Diagnostics.Contracts;
+    using System.Runtime.InteropServices.WindowsRuntime;
+    using System.Windows.Input;
     using Windows.Foundation;
+    using Windows.UI.Xaml.Media;
+    using Windows.UI.Xaml.Media.Imaging;
 
     public class ZoomTransform : IZoomPanTransform
     {
@@ -87,7 +87,7 @@ namespace RdClient.Shared.ViewModels
     }
 
 
-    public sealed class ZoomPanViewModel : MutableObject, IZoomPanManipulator
+    public sealed class ZoomPanViewModel : MutableObject, IZoomPanManipulator, IZoomPanViewModel
     {
         private IZoomPanTransform _zoomPanTransform;
 
@@ -104,6 +104,10 @@ namespace RdClient.Shared.ViewModels
         private double _translateYFrom;
         private double _translateYTo;
         private ZoomPanState _zoomPanState;
+
+        private Point _viewPosition;
+        private Size _viewSize;
+        private Rect _windowRect;
 
         public double ScaleCenterX
         {
@@ -155,7 +159,22 @@ namespace RdClient.Shared.ViewModels
             get { return _translateYTo; }
             set { this.SetProperty(ref _translateYTo, value); }
         }
-        public Rect WindowRect { get; set; }
+        public Rect WindowRect 
+        {
+            get { return _windowRect; } 
+            set
+            {            
+                _windowRect = value;
+                UpdateViewRect(); 
+            }
+        }
+
+
+        public Point TranslatePosition(Point visiblePoint)
+        {
+            // TODO: complete before CR
+            return new Point(0, 0);
+        }
 
         public IZoomPanTransform ZoomPanTransform
         {
@@ -234,8 +253,7 @@ namespace RdClient.Shared.ViewModels
         {
             _toggleZoomCommand = new RelayCommand(new Action<object>(ToggleMagnification));
             _panCommand = new RelayCommand(new Action<object>(PanTranslate));
-
-            WindowRect = new Rect(0, 0, 0, 0);
+            
             ScaleCenterX = 0.0;
             ScaleCenterX = 0.0;
 
@@ -249,6 +267,7 @@ namespace RdClient.Shared.ViewModels
             TranslateXTo = 0.0;
             TranslateYTo = 0.0;
 
+            WindowRect = new Rect(0, 0, 0, 0);
             this.State = ZoomPanState.PointerMode_DefaultScale;
         }
 
@@ -303,6 +322,8 @@ namespace RdClient.Shared.ViewModels
 
             this.ScaleCenterX = (WindowRect.Right - WindowRect.Left) / 2;
             this.ScaleCenterY = (WindowRect.Bottom - WindowRect.Top) / 2;
+
+            UpdateViewRect();
         }
 
         private void ApplyZoomOut()
@@ -324,6 +345,8 @@ namespace RdClient.Shared.ViewModels
             //
             this.TranslateXTo = WindowRect.X;
             this.TranslateYTo = WindowRect.Y;
+
+            UpdateViewRect();
         }
 
         private void ApplyZoomTransform(double centerX, double centerY, double scaleX, double scaleY)
@@ -379,7 +402,9 @@ namespace RdClient.Shared.ViewModels
             else
             {
                 this.State = ZoomPanState.PointerMode_Zooming;
-            }            
+            }
+
+            UpdateViewRect();
         }
 
         private void ApplyPanTransform(double x, double y)
@@ -397,6 +422,8 @@ namespace RdClient.Shared.ViewModels
             this.TranslateYFrom = this.TranslateYTo;
             this.TranslateXTo = panXTo;
             this.TranslateYTo = panYTo;
+
+            UpdateViewRect();
         }
 
         private void ApplyPanAdjusments(ref double panXTo, ref double panYTo, double targetScaleX, double targetScaleY)
@@ -433,6 +460,35 @@ namespace RdClient.Shared.ViewModels
             {
                 panYTo = maxTranslationOffset.Y;
             }
+        }
+
+        private void UpdateViewRect()
+        {
+            Contract.Assert(0 != this.ScaleXTo, "Invalid scale factor!");
+            Contract.Requires(0 != this.ScaleYTo, "Invalid scale factor!");
+
+            if (MIN_ZOOM_FACTOR == this.ScaleXTo && MIN_ZOOM_FACTOR == this.ScaleYTo)
+            {
+                // same as window rect
+                _viewPosition.X = this.WindowRect.Left;
+                _viewPosition.Y = this.WindowRect.Top;
+                _viewSize.Width = this.WindowRect.Width;
+                _viewSize.Height = this.WindowRect.Height;
+            }
+            else
+            {
+                // apply current scale factor
+                _viewSize.Width = this.WindowRect.Width / this.ScaleXTo;
+                _viewSize.Height = this.WindowRect.Height / this.ScaleYTo;
+
+                _viewPosition.X = this.ScaleCenterX - _viewSize.Width / 2.0;
+                _viewPosition.Y = this.ScaleCenterY - _viewSize.Height / 2.0;
+            
+                // apply pan
+                _viewPosition.X -= this.TranslateXTo / this.ScaleXTo;
+                _viewPosition.Y -= this.TranslateYTo / this.ScaleYTo;
+            }
+
         }
     }
 }

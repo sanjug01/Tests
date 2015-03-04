@@ -88,6 +88,7 @@ namespace RdClient.Shared.ViewModels
         }
 
         public IElephantEarsViewModel ElephantEarsViewModel { private get; set; }
+        public IZoomPanViewModel ZoomPanViewModel { private get; set; }
 
         private IRdpConnection _rdpConnection;
         public IRdpConnection RdpConnection
