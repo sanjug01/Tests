@@ -284,8 +284,8 @@
         }
 
         private void AddWorkspaceExecute(object obj)
-        {
-            RadcClient client = new RadcClient();
+        {            
+            OnPremiseWorkspaceModel workspace = new OnPremiseWorkspaceModel();
         }
     }
 }

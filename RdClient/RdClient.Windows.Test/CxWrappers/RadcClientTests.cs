@@ -6,7 +6,7 @@
     [TestClass]
     public class RadcClientTests
     {
-        [TestMethod]
+        //[TestMethod]
         public void TestSubscribeToOnPremFeed()
         {
             RadcClient client = new RadcClient();
