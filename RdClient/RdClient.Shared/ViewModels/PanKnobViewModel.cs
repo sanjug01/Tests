@@ -173,14 +173,15 @@ namespace RdClient.Shared.ViewModels
             this.IsPanning = false;
             this.PanControlOpacity = 1.0;
             this.PanOrbOpacity = 1.0;
-            _isInertiaNotProcessed = true;
             _isInertiaNotProcessed = false;
+            _isInertiaEnabled = false;
         }
 
         void HandlePointerEvent(object sender, PointerEvent e)
         {
             if(e.Inertia)
             {
+                // inertia is enabled only after ManipulationInertiaStarting
                 _isInertiaEnabled = true;
             }
 
@@ -223,6 +224,7 @@ namespace RdClient.Shared.ViewModels
                 }
                 else
                 {
+                    // completed inertia, will need another OnManipulationInertiaStarting to process again.
                     _isInertiaNotProcessed = false;
                     _isInertiaEnabled = false;
                     this.State = PanKnobState.Inactive;
@@ -248,7 +250,7 @@ namespace RdClient.Shared.ViewModels
             }
             if (PanKnobState.Moving == this.State)
             {
-                // move
+                // move,  within the margins
                 double panXTo = this.TranslateXTo + x;
                 double panYTo = this.TranslateYTo + y;
                 double borderLeft = -(this.ViewSize.Width - GlobalConstants.PanKnobWidth) / 2.0;
