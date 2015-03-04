@@ -18,6 +18,9 @@ namespace RdClient.Shared.Helpers
         public static readonly int TouchScrollFactor = 5;
 
         public static readonly double PointerPanBorderOffsetX = 100.0;
-        public static readonly double PointerPanBorderOffsetY = 100.0; 
+        public static readonly double PointerPanBorderOffsetY = 100.0;
+
+        public static readonly double PanKnobWidth = 60.0;
+        public static readonly double PanKnobHeight = 60.0; 
     }
 }

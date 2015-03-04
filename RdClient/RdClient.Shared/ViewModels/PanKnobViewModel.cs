@@ -1,16 +1,18 @@
-﻿using RdClient.Shared.CxWrappers;
-using RdClient.Shared.Helpers;
-using RdClient.Shared.Navigation.Extensions;
-using System;
+﻿using System;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
+using Windows.Foundation;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
-using System.Windows.Input;
+
 
 namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.ZoomPan;
     using RdClient.Shared.Input.Mouse;
+    using RdClient.Shared.Navigation.Extensions;
 
     public class PanKnobTransform : IPanKnobTransform 
     {
@@ -75,6 +77,15 @@ namespace RdClient.Shared.ViewModels
         private double _panControlOpacity;
         private double _panOrbOpacity;
 
+        private bool _isInertiaNotProcessed;
+        private bool _isInertiaEnabled;
+
+        private Size _viewSize = new Size(0.0, 0.0);
+        public Size ViewSize
+        {
+            get { return _viewSize; }
+            set { SetProperty(ref _viewSize, value); }
+        }
 
         public event EventHandler<PanEventArgs> PanChange;
 
@@ -162,10 +173,17 @@ namespace RdClient.Shared.ViewModels
             this.IsPanning = false;
             this.PanControlOpacity = 1.0;
             this.PanOrbOpacity = 1.0;
+            _isInertiaNotProcessed = true;
+            _isInertiaNotProcessed = false;
         }
 
         void HandlePointerEvent(object sender, PointerEvent e)
         {
+            if(e.Inertia)
+            {
+                _isInertiaEnabled = true;
+            }
+
             if (TouchEventType.Down == e.ActionType)
             {
                 // click or double click
@@ -183,21 +201,38 @@ namespace RdClient.Shared.ViewModels
 
                 this.PanOrbOpacity = 1.0;
                 this.IsPanning = true;
+                _isInertiaNotProcessed = false;
             }
             else if(TouchEventType.Up == e.ActionType)
             {
-                // release
-                if(e.Inertia)
+                if (_isInertiaEnabled)
+                {
+                    _isInertiaNotProcessed = true;
+                }
+                else
+                {
+                    this.State = PanKnobState.Inactive;
+                }
+                this.IsPanning = false;
+            }
+            else if(_isInertiaNotProcessed && PanKnobState.Inactive != this.State)
+            {
+                if (e.Inertia)
                 {
                     this.ApplyTransform(e.Delta.X, e.Delta.Y);
                 }
-                this.State = PanKnobState.Inactive;
-                this.IsPanning = false;
-            }
+                else
+                {
+                    _isInertiaNotProcessed = false;
+                    _isInertiaEnabled = false;
+                    this.State = PanKnobState.Inactive;
+                }
+            } 
             else
             {
                 // move or pan
                 this.ApplyTransform(e.Delta.X, e.Delta.Y);
+                _isInertiaNotProcessed = false;
             }
         }
 
@@ -216,6 +251,28 @@ namespace RdClient.Shared.ViewModels
                 // move
                 double panXTo = this.TranslateXTo + x;
                 double panYTo = this.TranslateYTo + y;
+                double borderLeft = -(this.ViewSize.Width - GlobalConstants.PanKnobWidth) / 2.0;
+                double borderRight = (this.ViewSize.Width - GlobalConstants.PanKnobWidth) / 2.0;
+                double borderUp = -(this.ViewSize.Height - GlobalConstants.PanKnobWidth) / 2.0;
+                double borderDown = (this.ViewSize.Height - GlobalConstants.PanKnobWidth) / 2.0;
+
+                if (panXTo < borderLeft)
+                {
+                    panXTo = borderLeft;
+                }
+                else if (panXTo > borderRight)
+                {
+                    panXTo = borderRight;
+                }
+
+                if (panYTo < borderUp)
+                {
+                    panYTo = borderUp;
+                }
+                else if (panYTo > borderDown)
+                {
+                    panYTo = borderDown;
+                }
 
                 this.TranslateXFrom = this.TranslateXTo;
                 this.TranslateYFrom = this.TranslateYTo;

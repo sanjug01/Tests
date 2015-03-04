@@ -72,13 +72,11 @@ namespace RdClient.Controls
         public RdSessionPanel()
         {
             this.InitializeComponent();
-            this.SizeChanged += (sender, args) => { this.ViewSize = (args as SizeChangedEventArgs).NewSize; };
-            SwapChainPanelStoryboard.Completed += SwapChainPanelStoryboard_Completed;
-        }
-
-        void SwapChainPanelStoryboard_Completed(object sender, object e)
-        {
-            this.WindowRect = CoreWindow.GetForCurrentThread().Bounds;
+            this.SizeChanged += (sender, args) => 
+            { 
+                this.ViewSize = (args as SizeChangedEventArgs).NewSize;
+                this.WindowRect = new Rect(new Point(0, 0), this.ViewSize);
+            };
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -86,10 +84,6 @@ namespace RdClient.Controls
             Contract.Assert(null != this.ConnectCommand);
 
             RdpConnectionFactory factory = new RdpConnectionFactory() { SwapChainPanel = this.SwapChainPanel };
-
-            // bind the window rect and transform rect
-            this.WindowRect = CoreWindow.GetForCurrentThread().Bounds;
-
             //
             // TODO: properly inject the deferred execution object.
             //

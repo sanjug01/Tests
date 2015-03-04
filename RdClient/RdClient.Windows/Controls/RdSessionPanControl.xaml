@@ -26,7 +26,7 @@
 
     <!-- Pan and Zoom Control -->
         <Grid Name="PanControl" 
-              Width="60" Height="60" 
+              Width="60" Height="60"               
               Opacity="{Binding PanKnobViewModel.PanControlOpacity}"
               VerticalAlignment="Center" HorizontalAlignment="Center"
               ManipulationMode="TranslateX,TranslateY,TranslateInertia"

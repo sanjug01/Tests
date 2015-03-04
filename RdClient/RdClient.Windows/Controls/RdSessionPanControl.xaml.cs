@@ -133,6 +133,11 @@ namespace RdClient.Controls
             PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationDeltaArgsConverter(args));
         }
 
+        protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs args)
+        {
+            PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationCompletedArgsConverter(args));
+        }
+
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
         }

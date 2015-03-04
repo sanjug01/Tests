@@ -65,7 +65,7 @@
                                       Visibility="{Binding ZoomPanViewModel.State, Converter={StaticResource ZoomPanStateToPanKnobVisibilityConverter}}"
                                       PanKnobTransform="{Binding PanKnobViewModel.PanKnobTransform, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"                                              
                                       PointerEventConsumer="{Binding PanKnobViewModel.PointerEventConsumer}"
-                                      />                                     
+                                      ViewSize="{Binding PanKnobViewModel.ViewSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>                                                                     
 
         <controls:SessionReconnectControl x:Name="SessionReconnectLayer" 
                                           VerticalAlignment="Center"
