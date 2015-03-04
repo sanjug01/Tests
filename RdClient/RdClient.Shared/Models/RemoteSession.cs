@@ -19,6 +19,7 @@
         private readonly ReaderWriterLockSlim _sessionMonitor;
 
         private EventHandler<CredentialsNeededEventArgs> _credentialsNeeded;
+        private EventHandler<BadCertificateEventArgs> _badCertificate;
         private EventHandler<SessionFailureEventArgs> _failed;
         private EventHandler<SessionInterruptedEventArgs> _interrupted;
         private EventHandler _closed;
@@ -46,17 +47,11 @@
             /// <param name="session">Session for that the state is restoring</param>
             public abstract void Activate(RemoteSession session);
 
-            public virtual void Terminate(RemoteSession session)
-            {
-            }
+            public virtual void Terminate(RemoteSession session) { }
 
-            public virtual void Deactivate(RemoteSession session)
-            {
-            }
+            public virtual void Deactivate(RemoteSession session) { }
 
-            public virtual void Complete(RemoteSession session)
-            {
-            }
+            public virtual void Complete(RemoteSession session) { }
 
             protected InternalState(SessionState sessionState, ReaderWriterLockSlim monitor)
             {
@@ -145,6 +140,21 @@
             {
                 using (LockWrite())
                     _credentialsNeeded -= value;
+            }
+        }
+
+        event EventHandler<BadCertificateEventArgs> IRemoteSession.BadCertificate
+        {
+            add
+            {
+                using (LockWrite())
+                    _badCertificate += value;
+            }
+
+            remove
+            {
+                using (LockWrite())
+                    _badCertificate -= value;
             }
         }
 
@@ -321,6 +331,36 @@
         private void DeferEmitClosed()
         {
             _deferredExecution.Defer(() => EmitClosed());
+        }
+
+        private void EmitBadCertificate(BadCertificateEventArgs e)
+        {
+            Contract.Assert(null != e);
+            Contract.Assert(!e.ValidationObtained);
+
+            EventHandler<BadCertificateEventArgs> badCertificate;
+
+            using (LockUpgradeableRead())
+                badCertificate = _badCertificate;
+
+            if (null != badCertificate)
+            {
+                badCertificate(this, e);
+
+                if(!e.ValidationObtained)
+                {
+                    //
+                    // Kill the connection
+                    //
+                    Contract.Assert(null != _connection);
+                    _connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
+                }
+            }
+        }
+
+        private void DeferEmitBadCertificate(BadCertificateEventArgs e)
+        {
+            _deferredExecution.Defer(() => EmitBadCertificate(e));
         }
 
         private void InternalSetState(InternalState newState)

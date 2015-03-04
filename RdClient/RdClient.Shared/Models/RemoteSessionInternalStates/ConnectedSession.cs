@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.CxWrappers.Errors;
     using System.Diagnostics.Contracts;
 
     partial class RemoteSession
@@ -62,6 +63,20 @@
 
             private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
             {
+                InternalState newState;
+
+                switch(e.DisconnectReason.Code)
+                {
+                    case RdpDisconnectCode.UserInitiated:
+                        newState = new ClosedSession(this);
+                        break;
+
+                    default:
+                        newState = new FailedSession(e.DisconnectReason, this);
+                        break;
+                }
+
+                _session.InternalSetState(newState);
             }
         }
     }

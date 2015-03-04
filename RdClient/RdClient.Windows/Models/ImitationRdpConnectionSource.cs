@@ -320,7 +320,8 @@
 
             void IRdpConnection.Connect(CredentialsModel credentials, bool fUsingSavedCreds)
             {
-                Task.Factory.StartNew(async delegate { await InterruptedConnection(credentials, fUsingSavedCreds); }, TaskCreationOptions.LongRunning);
+                //Task.Factory.StartNew(async delegate { await InterruptedConnection(credentials, fUsingSavedCreds); }, TaskCreationOptions.LongRunning);
+                Task.Factory.StartNew(async delegate { await FreshPasswordConnection(credentials, fUsingSavedCreds); }, TaskCreationOptions.LongRunning);
             }
 
             void IRdpConnection.Disconnect()
@@ -390,6 +391,27 @@
             void IRdpConnection.SetLeftHandedMouseMode(bool value)
             {
                 throw new NotImplementedException();
+            }
+
+            private async Task FreshPasswordConnection(CredentialsModel credentials, bool fUsingSavedCreds)
+            {
+                await Task.Delay(250);
+
+                if (fUsingSavedCreds)
+                {
+                    _events.EmitClientAsyncDisconnect(this,
+                        new ClientAsyncDisconnectArgs(
+                            new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0)));
+                }
+                else
+                {
+                    _events.EmitClientConnected(this, new ClientConnectedArgs());
+
+                    await Task.Delay(500);
+
+                    _events.EmitClientDisconnected(this, new ClientDisconnectedArgs(
+                        new RdpDisconnectReason(RdpDisconnectCode.ConnectionBroken, 0, 0)));
+                }
             }
 
             private async Task FailingConnection(CredentialsModel credentials, bool fUsingSavedCreds)

@@ -22,6 +22,8 @@
         /// </summary>
         event EventHandler<CredentialsNeededEventArgs> CredentialsNeeded;
 
+        event EventHandler<BadCertificateEventArgs> BadCertificate;
+
         /// <summary>
         /// Session has failed permanently.
         /// </summary>

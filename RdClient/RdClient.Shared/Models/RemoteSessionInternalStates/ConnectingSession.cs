@@ -78,7 +78,7 @@
                         //
                         // Set the internal state to "certificate validation needed"
                         //
-                        _session.InternalSetState(new ValidateCertificate(this));
+                        ValidateCertificate(connection.GetServerCertificate(), e.DisconnectReason);
                         break;
 
                     case RdpDisconnectCode.PreAuthLogonFailed:
@@ -100,34 +100,41 @@
                 Contract.Assert(sender is IRdpConnection);
                 Contract.Assert(object.ReferenceEquals(sender, _connection));
                 Contract.Ensures(null == _connection);
-                //
-                // Set the internal session state to Failed
-                //
-#if false
-                using (LockWrite())
-                {
-                    _canReconnect = false;
-                    _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
-                    _session._syncEvents.ClientAutoReconnectComplete -= this.OnClientAutoReconnectComplete;
-                    _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
-                    _connection = null;
-                }
 
-                _state.SetDisconnectCode(e.DisconnectReason.Code);
-
-                switch (e.DisconnectReason.Code)
+                switch(e.DisconnectReason.Code)
                 {
                     case RdpDisconnectCode.UserInitiated:
-                        InternalSetState(SessionState.Closed);
-                        DeferEmitClosed();
+                        _session.InternalSetState(new ClosedSession(this));
                         break;
 
                     default:
-                        InternalSetState(SessionState.Failed);
-                        DeferEmitFailed(e.DisconnectReason.Code);
+                        _session.InternalSetState(new FailedSession(e.DisconnectReason, this));
                         break;
                 }
-#endif
+            }
+
+            private void ValidateCertificate(IRdpCertificate certificate, RdpDisconnectReason reason)
+            {
+                Contract.Assert(null != certificate);
+                Contract.Assert(null != _session);
+                Contract.Assert(null != _connection);
+
+                if (_session._certificateTrust.IsCertificateTrusted(certificate)
+                    || _session._sessionSetup.DataModel.CertificateTrust.IsCertificateTrusted(certificate))
+                {
+                    //
+                    // The certificate has been accepted already;
+                    //
+                    _connection.HandleAsyncDisconnectResult(reason, true);
+                }
+                else
+                {
+                    //
+                    // Set the state to ValidateCertificate, that will emit a BadCertificate event from the session
+                    // and handle the user's response to the event.
+                    //
+                    _session.InternalSetState(new ValidateCertificate(_connection, reason, this));
+                }
             }
 
             private void RequestValidCredentials()
@@ -173,8 +180,6 @@
                 // Go ahead and try to re-connect with new credentials.
                 //
                 _session.InternalSetState(new ConnectingSession(_connection, this));
-                _connection.Connect(_session._sessionSetup.SessionCredentials.Credentials,
-                    !_session._sessionSetup.SessionCredentials.IsNewPassword);
             }
 
             private void NewPasswordCancelled(object sender, EventArgs e)
@@ -186,7 +191,7 @@
                 //
                 // User has cancelled the credentials dialog, tell the subscribers about the cancellation.
                 //
-                _session.EmitClosed();
+                _session.InternalSetState(new ClosedSession(this));
             }
         }
     }

@@ -20,6 +20,9 @@
 
             public override void Activate(RemoteSession session)
             {
+                Contract.Assert(null == _session);
+
+                _session = session;
 
                 if (_sessionSetup.Connection is DesktopModel)
                 {
@@ -38,11 +41,11 @@
                         task.Submitted += this.MissingCredentialsSubmitted;
                         task.Cancelled += this.MissingCredentialsCancelled;
 
-                        session.EmitCredentialsNeeded(task);
+                        _session.EmitCredentialsNeeded(task);
                     }
                     else
                     {
-                        session.InternalStartSession(_sessionSetup);
+                        _session.InternalStartSession(_sessionSetup);
                     }
                 }
                 else
@@ -61,7 +64,8 @@
 
             public override void Complete(RemoteSession session)
             {
-                Contract.Assert(null == _session);
+                Contract.Assert(object.ReferenceEquals(_session, session));
+                _session = null;
             }
 
             private void MissingCredentialsSubmitted(object sender, InSessionCredentialsTask.SubmittedEventArgs e)
@@ -77,9 +81,7 @@
                     _sessionSetup.SaveCredentials();
                 }
 
-                RemoteSession s = _session;
-                _session = null;
-                s.InternalStartSession(_sessionSetup);
+                _session.InternalStartSession(_sessionSetup);
             }
 
             private void MissingCredentialsCancelled(object sender, EventArgs e)
@@ -92,9 +94,7 @@
                 //
                 // Emit the Cancelled event so the session view model can navigate to the home page
                 //
-                RemoteSession s = _session;
-                _session = null;
-                s.EmitClosed();
+                _session.InternalSetState(new ClosedSession(this));
                 //
                 // Do nothing to change the internal state of the session; this object will be retained
                 // by the session as its internal state and will be asked to re-activate the session.
