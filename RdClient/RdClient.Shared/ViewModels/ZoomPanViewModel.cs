@@ -129,6 +129,8 @@
             get { return _scaleXTo; }
             set { this.SetProperty(ref _scaleXTo, value); }
         }
+        private double ScaleX { get { return _scaleXTo; } }
+
         public double ScaleYFrom
         {
             get { return _scaleYFrom; }
@@ -139,6 +141,8 @@
             get { return _scaleYTo; }
             set { this.SetProperty(ref _scaleYTo, value); }
         }
+        private double ScaleY { get { return _scaleYTo; } }
+
         public double TranslateXFrom
         {
             get { return _translateXFrom; }
@@ -169,11 +173,15 @@
             }
         }
 
-
         public Point TranslatePosition(Point visiblePoint)
         {
-            // TODO: complete before CR
-            return new Point(0, 0);
+            Contract.Requires(0 != this.ScaleX, "Invalid scale factor!");
+            Contract.Requires(0 != this.ScaleY, "Invalid scale factor!");
+
+            return new Point(
+                _viewPosition.X + visiblePoint.X / this.ScaleX, 
+                _viewPosition.Y + visiblePoint.Y / this.ScaleY
+                );
         }
 
         public IZoomPanTransform ZoomPanTransform
@@ -464,8 +472,8 @@
 
         private void UpdateViewRect()
         {
-            Contract.Assert(0 != this.ScaleXTo, "Invalid scale factor!");
-            Contract.Requires(0 != this.ScaleYTo, "Invalid scale factor!");
+            Contract.Requires(0 != this.ScaleX, "Invalid scale factor!");
+            Contract.Requires(0 != this.ScaleY, "Invalid scale factor!");
 
             if (MIN_ZOOM_FACTOR == this.ScaleXTo && MIN_ZOOM_FACTOR == this.ScaleYTo)
             {
@@ -478,15 +486,15 @@
             else
             {
                 // apply current scale factor
-                _viewSize.Width = this.WindowRect.Width / this.ScaleXTo;
-                _viewSize.Height = this.WindowRect.Height / this.ScaleYTo;
+                _viewSize.Width = this.WindowRect.Width / this.ScaleX;
+                _viewSize.Height = this.WindowRect.Height / this.ScaleY;
 
                 _viewPosition.X = this.ScaleCenterX - _viewSize.Width / 2.0;
                 _viewPosition.Y = this.ScaleCenterY - _viewSize.Height / 2.0;
             
-                // apply pan
-                _viewPosition.X -= this.TranslateXTo / this.ScaleXTo;
-                _viewPosition.Y -= this.TranslateYTo / this.ScaleYTo;
+                // apply current pan
+                _viewPosition.X -= this.TranslateXTo / this.ScaleX;
+                _viewPosition.Y -= this.TranslateYTo / this.ScaleY;
             }
 
         }

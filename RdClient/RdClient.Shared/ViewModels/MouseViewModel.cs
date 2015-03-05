@@ -3,6 +3,7 @@ using RdClient.Shared.Helpers;
 using RdClient.Shared.Navigation.Extensions;
 using System;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
@@ -231,7 +232,9 @@ namespace RdClient.Shared.ViewModels
         {
             if (_rdpConnection != null)
             {
-                _rdpConnection.SendMouseEvent(eventType, (float)this.MousePosition.X, (float)this.MousePosition.Y);
+                Contract.Requires(null != ZoomPanViewModel, "ZoomPanViewModel not initialized!");
+                Point newPosition = this.ZoomPanViewModel.TranslatePosition(this.MousePosition);
+                _rdpConnection.SendMouseEvent(eventType, (float)newPosition.X, (float)newPosition.Y);
                 this.TranslateMousePositionToPanTransform();
             }
         }
@@ -240,9 +243,11 @@ namespace RdClient.Shared.ViewModels
         {
             if(_rdpConnection != null)
             {
+                Contract.Requires(null != ZoomPanViewModel, "ZoomPanViewModel not initialized!");
+                Point newPosition = this.ZoomPanViewModel.TranslatePosition(position);
                 try
                 {
-                    _rdpConnection.SendTouchEvent(type, contactId, position, frameTime);
+                    _rdpConnection.SendTouchEvent(type, contactId, newPosition, frameTime);
                 }
                 catch(RdTraceException)
                 {
@@ -292,6 +297,10 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
+        /// <summary>
+        /// Calculate the view area within the session area. 
+        /// View area changes any time there is a zoom/pan trasformation or if the window size changes.
+        /// </summary>
         private void TranslateMousePositionToPanTransform()
         {
                 // verify panning

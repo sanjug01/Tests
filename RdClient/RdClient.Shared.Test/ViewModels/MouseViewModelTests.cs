@@ -6,10 +6,17 @@ using Windows.Foundation;
 
 namespace RdClient.Shared.Test.ViewModels
 {
+    class TestZoomPanVieModel : IZoomPanViewModel
+    { 
+        Point IZoomPanViewModel.TranslatePosition(Point visiblePoint)
+        {
+            return visiblePoint;
+        }
+    }
+
     [TestClass]
     public class MouseViewModelTests
     {
-
         [TestMethod]
         public void MouseViewModel_MousePointerChangedShouldSendMouseEvent()
         {
@@ -21,6 +28,7 @@ namespace RdClient.Shared.Test.ViewModels
                 mvm.ViewSize = new Size(20.0, 20.0);
                 mvm.DeferredExecution = deferrer;
                 mvm.RdpConnection = connection;
+                mvm.ZoomPanViewModel = new TestZoomPanVieModel();
 
                 deferrer.Expect("DeferToUI", new List<object> { null }, null);
                 connection.Expect("SendMouseEvent", new List<object> { MouseEventType.Move, (float)10.0, (float)10.0 }, null);
