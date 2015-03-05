@@ -316,7 +316,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void ZoomPanViewModel_DoesNotApplyUpPanOutsideBoundaries()
         {
-            double maxUp = _windowRect.Top - _transformRectWithZoom.Top;
+            double maxDown = _windowRect.Top - _transformRectWithZoom.Top;
             double delta = 100.0;
             _svm.ToggleZoomCommand.Execute(_zoomInTransform);
 
@@ -325,12 +325,12 @@ namespace RdClient.Shared.Test.ViewModels
 
             _svm.WindowRect = _windowRect;
 
-            PanTransform maxUpTransform = new PanTransform(0.0, maxUp + delta);
+            PanTransform maxUpTransform = new PanTransform(0.0, maxDown + delta);
             _svm.PanCommand.Execute(maxUpTransform);
             Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
             Assert.AreEqual(_svm.TranslateXTo, _svm.TranslateXFrom);
             Assert.IsTrue(_svm.TranslateYTo > _svm.TranslateYFrom);
-            Assert.AreEqual(_svm.TranslateYTo, maxUp);
+            Assert.AreEqual(_svm.TranslateYTo, maxDown);
 
             // one more up does not change anything
             _svm.PanCommand.Execute(_panUpTransform);
@@ -342,7 +342,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void ZoomPanViewModel_DoesNotApplyDownPanOutsideBoundaries()
         {
-            double minDown = _windowRect.Bottom - _transformRectWithZoom.Bottom;
+            double minUp = _windowRect.Bottom - _transformRectWithZoom.Bottom;
             double delta = 100.0;
             _svm.ToggleZoomCommand.Execute(_zoomInTransform);
 
@@ -351,12 +351,12 @@ namespace RdClient.Shared.Test.ViewModels
 
             _svm.WindowRect = _windowRect;
 
-            PanTransform maxUpTransform = new PanTransform(0.0, minDown - delta);
+            PanTransform maxUpTransform = new PanTransform(0.0, minUp - delta);
             _svm.PanCommand.Execute(maxUpTransform);
             Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
             Assert.AreEqual(_svm.TranslateXTo, _svm.TranslateXFrom);
             Assert.IsTrue(_svm.TranslateYTo < _svm.TranslateYFrom);
-            Assert.AreEqual(_svm.TranslateYTo, minDown);
+            Assert.AreEqual(_svm.TranslateYTo, minUp);
 
             // one more down does not change anything
             _svm.PanCommand.Execute(_panDownTransform);
@@ -415,6 +415,46 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
             Assert.IsTrue(_svm.TranslateXTo == _svm.TranslateXFrom);
             Assert.AreEqual(_svm.TranslateYTo, _svm.TranslateYFrom);
+        }
+
+        [TestMethod]
+        public void ZoomPanViewModel_PanningWithLargeDeltas()
+        {
+            double minLeft = _windowRect.Right - _transformRectWithZoom.Right;
+            double maxRight = _windowRect.Left - _transformRectWithZoom.Left;
+            double maxDown = _windowRect.Top - _transformRectWithZoom.Top;
+            double minUp = _windowRect.Bottom - _transformRectWithZoom.Bottom;
+
+            _svm.ToggleZoomCommand.Execute(_zoomInTransform);
+
+            Assert.IsTrue(1.0 < _svm.ScaleXTo);
+            Assert.IsTrue(1.0 < _svm.ScaleYTo);
+
+            _svm.WindowRect = _windowRect;
+
+            PanTransform maxTransform = new PanTransform(double.MaxValue, double.MinValue);
+            _svm.PanCommand.Execute(maxTransform);
+            Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
+            Assert.AreEqual(_svm.TranslateXTo, maxRight);
+            Assert.AreEqual(_svm.TranslateYTo, minUp);
+
+            maxTransform = new PanTransform(double.MinValue, double.MaxValue);
+            _svm.PanCommand.Execute(maxTransform);
+            Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
+            Assert.AreEqual(_svm.TranslateXTo, minLeft);
+            Assert.AreEqual(_svm.TranslateYTo, maxDown);
+
+            maxTransform = new PanTransform(double.MaxValue, double.MaxValue);
+            _svm.PanCommand.Execute(maxTransform);
+            Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
+            Assert.AreEqual(_svm.TranslateXTo, maxRight);
+            Assert.AreEqual(_svm.TranslateYTo, maxDown);
+
+            maxTransform = new PanTransform(double.MinValue, double.MinValue);
+            _svm.PanCommand.Execute(maxTransform);
+            Assert.AreEqual(_svm.ScaleXTo, _svm.ScaleXFrom);
+            Assert.AreEqual(_svm.TranslateXTo, minLeft);
+            Assert.AreEqual(_svm.TranslateYTo, minUp);
         }
 
         [TestMethod]
