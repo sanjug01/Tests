@@ -9,52 +9,13 @@
     using System.Diagnostics.Contracts;
     using Windows.Foundation;
 
-    sealed class ImitationRdpConnectionSource : IRdpConnectionSource
+    abstract class ImitationRdpConnectionSource : IRdpConnectionSource
     {
-        private ISimulationLogicFactory _logicFactory;
-
-        public ISimulationLogicFactory LogicFactory
-        {
-            set
-            {
-                Contract.Assert(null == _logicFactory);
-                Contract.Assert(null != value);
-                _logicFactory = value;
-            }
-        }
-
-        public interface ISimulatedConnection
-        {
-            void EmitAsyncDisconnect(RdpDisconnectReason reason);
-            void EmitConnected();
-            void EmitDisconnected(RdpDisconnectReason reason);
-        }
-
-        /// <summary>
-        /// Interface implemented by test code and called by the imitation IRdpConnection
-        /// to carry the state and run the logic of the simulated connection.
-        /// </summary>
-        public interface ISimulationLogic
-        {
-            void Connect(CredentialsModel credentials, bool savedCredentials);
-
-            void SetCredentials(CredentialsModel credentials, bool savedCredentials);
-
-            void Disconnect();
-
-            void HandleAsyncDisconnect(RdpDisconnectReason reason, bool reconnect);
-        }
-
-        public interface ISimulationLogicFactory
-        {
-            ISimulationLogic Create(ISimulatedConnection connection);
-        }
+        protected abstract IRdpConnection CreateConnection(IRenderingPanel renderingPanel);
 
         IRdpConnection IRdpConnectionSource.CreateConnection(IRenderingPanel renderingPanel)
         {
-            Contract.Assert(null != _logicFactory);
-
-            return new Connection(renderingPanel, _logicFactory);
+            return this.CreateConnection(renderingPanel);
         }
 
         private sealed class Events : MutableObject, IRdpEvents, IRdpEventSource
@@ -337,23 +298,57 @@
             }
         }
 
-        private sealed class Connection : MutableObject, IRdpConnection, ISimulatedConnection
+        protected abstract class Connection : MutableObject, IRdpConnection
         {
             private readonly IRenderingPanel _renderingPanel;
             private readonly Events _events;
-            private readonly ISimulationLogic _logic;
 
             private RdpDisconnectReason _currentDisconnectReason;
 
-            public Connection(IRenderingPanel renderingPanel, ISimulationLogicFactory logicFactory)
+            protected void EmitAsyncDisconnect(RdpDisconnectReason reason)
+            {
+                Contract.Assert(null == _currentDisconnectReason);
+
+                _currentDisconnectReason = reason;
+                _events.EmitClientAsyncDisconnect(this, new ClientAsyncDisconnectArgs(reason));
+            }
+
+
+            protected void EmitConnected()
+            {
+                _events.EmitClientConnected(this, new ClientConnectedArgs());
+            }
+
+            protected void EmitDisconnected(RdpDisconnectReason reason)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected virtual void SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)
+            {
+                throw new NotImplementedException();
+            }
+            protected virtual void Connect(CredentialsModel credentials, bool fUsingSavedCreds)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected virtual void Disconnect()
+            {
+                throw new NotImplementedException();
+            }
+
+            protected virtual void HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected Connection(IRenderingPanel renderingPanel)
             {
                 Contract.Assert(null != renderingPanel);
-                Contract.Assert(null != logicFactory);
-                Contract.Ensures(null != _logic);
 
                 _renderingPanel = renderingPanel;
                 _events = new Events();
-                _logic = logicFactory.Create(this);
             }
 
             IRdpEvents IRdpConnection.Events
@@ -363,17 +358,17 @@
 
             void IRdpConnection.SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)
             {
-                _logic.SetCredentials(credentials, fUsingSavedCreds);
+                this.SetCredentials(credentials, fUsingSavedCreds);
             }
 
             void IRdpConnection.Connect(CredentialsModel credentials, bool fUsingSavedCreds)
             {
-                _logic.Connect(credentials, fUsingSavedCreds);
+                this.Connect(credentials, fUsingSavedCreds);
             }
 
             void IRdpConnection.Disconnect()
             {
-                _logic.Disconnect();
+                this.Disconnect();
             }
 
             void IRdpConnection.Suspend()
@@ -402,7 +397,7 @@
                 Contract.Assert(object.ReferenceEquals(disconnectReason, _currentDisconnectReason));
 
                 _currentDisconnectReason = null;
-                _logic.HandleAsyncDisconnect(disconnectReason, reconnectToServer);
+                this.HandleAsyncDisconnectResult(disconnectReason, reconnectToServer);
             }
 
             IRdpScreenSnapshot IRdpConnection.GetSnapshot()
@@ -430,90 +425,6 @@
             }
 
             void IRdpConnection.SetLeftHandedMouseMode(bool value)
-            {
-                throw new NotImplementedException();
-            }
-#if false
-            private async Task FreshPasswordConnection(CredentialsModel credentials, bool fUsingSavedCreds)
-            {
-                await Task.Delay(250);
-
-                if (fUsingSavedCreds)
-                {
-                    EmitClientAsyncDisconnect(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0));
-                }
-                else
-                {
-                    _events.EmitClientConnected(this, new ClientConnectedArgs());
-
-                    await Task.Delay(500);
-
-                    _events.EmitClientDisconnected(this, new ClientDisconnectedArgs(
-                        new RdpDisconnectReason(RdpDisconnectCode.ConnectionBroken, 0, 0)));
-                }
-            }
-
-            private async Task InterruptedConnection(CredentialsModel credentials, bool fUsingSavedCreds)
-            {
-                await Task.Delay(250);
-
-                _events.EmitClientConnected(this, new ClientConnectedArgs());
-
-                await Task.Delay(500);
-
-                int attempt = 0;
-                bool continueReconnecting = false;
-
-                using (LockWrite())
-                    _continueReconnecting = false;
-
-                do
-                {
-                    ClientAutoReconnectingArgs e = new ClientAutoReconnectingArgs(new AutoReconnectError(100), attempt,
-                        continueAsking =>
-                        {
-                            using (LockWrite())
-                                _continueReconnecting = continueAsking;
-                        });
-                    _events.EmitClientAutoReconnecting(this, e);
-
-                    using (LockRead())
-                        continueReconnecting = _continueReconnecting;
-
-                    if (continueReconnecting)
-                    {
-                        await Task.Delay(250);
-                        ++attempt;
-                    }
-
-                } while (attempt < 30 && continueReconnecting);
-
-                if (attempt < 30)
-                {
-                    _events.EmitClientDisconnected(this, new ClientDisconnectedArgs(new RdpDisconnectReason(RdpDisconnectCode.ConnectionBroken, 0, 0)));
-                }
-                else
-                {
-                    _events.EmitClientAutoReconnectComplete(this, new ClientAutoReconnectCompleteArgs());
-                }
-            }
-#endif
-
-            void ISimulatedConnection.EmitAsyncDisconnect(RdpDisconnectReason reason)
-            {
-                Contract.Assert(null == _currentDisconnectReason);
-
-                _currentDisconnectReason = reason;
-                _events.EmitClientAsyncDisconnect(this, new ClientAsyncDisconnectArgs(reason));
-            }
-
-
-            void ISimulatedConnection.EmitConnected()
-            {
-                _events.EmitClientConnected(this, new ClientConnectedArgs());
-            }
-
-            void ISimulatedConnection.EmitDisconnected(RdpDisconnectReason reason)
             {
                 throw new NotImplementedException();
             }

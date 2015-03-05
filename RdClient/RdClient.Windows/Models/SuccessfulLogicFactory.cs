@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Models
 {
+    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
@@ -8,24 +9,22 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    sealed class SuccessfulLogicFactory : ImitationRdpConnectionSource.ISimulationLogicFactory
+    sealed class SuccessfulLogicFactory : ImitationRdpConnectionSource
     {
-        ImitationRdpConnectionSource.ISimulationLogic ImitationRdpConnectionSource.ISimulationLogicFactory.Create(ImitationRdpConnectionSource.ISimulatedConnection connection)
+
+        protected override IRdpConnection CreateConnection(IRenderingPanel renderingPanel)
         {
-            return new Logic(connection);
+            throw new NotImplementedException();
         }
 
-        private sealed class Logic : DisposableObject, ImitationRdpConnectionSource.ISimulationLogic
+        private sealed class Logic : ImitationRdpConnectionSource.Connection
         {
-            private readonly ImitationRdpConnectionSource.ISimulatedConnection _connection;
             private readonly ReaderWriterLockSlim _monitor;
             private readonly ManualResetEventSlim _disconnect;
             private Task _task;
 
-            public Logic(ImitationRdpConnectionSource.ISimulatedConnection connection)
+            public Logic(IRenderingPanel renderingPanel) : base(renderingPanel)
             {
-                Contract.Assert(null != connection);
-                _connection = connection;
                 _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
                 _disconnect = new ManualResetEventSlim();
             }
@@ -35,7 +34,7 @@
                 _disconnect.Dispose();
             }
 
-            void ImitationRdpConnectionSource.ISimulationLogic.Connect(CredentialsModel credentials, bool savedCredentials)
+            protected override void Connect(CredentialsModel credentials, bool savedCredentials)
             {
                 Contract.Assert(null == _task);
 
@@ -44,9 +43,9 @@
                     _task = new Task(async delegate
                     {
                         await Task.Delay(250);
-                        _connection.EmitConnected();
+                        this.EmitConnected();
                         _disconnect.Wait();
-                        _connection.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
+                        this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
                         using (ReadWriteMonitor.Write(_monitor))
                             _task = null;
                     }, TaskCreationOptions.LongRunning);
@@ -54,12 +53,7 @@
                 }
             }
 
-            void ImitationRdpConnectionSource.ISimulationLogic.SetCredentials(CredentialsModel credentials, bool savedCredentials)
-            {
-                throw new NotImplementedException();
-            }
-
-            void ImitationRdpConnectionSource.ISimulationLogic.Disconnect()
+            protected override void Disconnect()
             {
                 Contract.Assert(null != _task);
 
@@ -68,11 +62,6 @@
                     await Task.Delay(100);
                     _disconnect.Set();
                 });
-            }
-
-            void ImitationRdpConnectionSource.ISimulationLogic.HandleAsyncDisconnect(Shared.CxWrappers.Errors.RdpDisconnectReason reason, bool reconnect)
-            {
-                throw new NotImplementedException();
             }
         }
     }

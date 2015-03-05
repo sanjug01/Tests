@@ -8,25 +8,22 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    sealed class RejectSavedPasswordLogicFactory : ImitationRdpConnectionSource.ISimulationLogicFactory
+    sealed class RejectSavedPasswordLogicFactory : ImitationRdpConnectionSource
     {
-        ImitationRdpConnectionSource.ISimulationLogic ImitationRdpConnectionSource.ISimulationLogicFactory.Create(ImitationRdpConnectionSource.ISimulatedConnection connection)
+        protected override Shared.CxWrappers.IRdpConnection CreateConnection(IRenderingPanel renderingPanel)
         {
-            return new Logic(connection);
+            return new Logic(renderingPanel);
         }
 
-        private sealed class Logic : DisposableObject, ImitationRdpConnectionSource.ISimulationLogic
+        private sealed class Logic : ImitationRdpConnectionSource.Connection
         {
-            private readonly ImitationRdpConnectionSource.ISimulatedConnection _connection;
             private readonly CancellationTokenSource _cts;
             private readonly ReaderWriterLockSlim _monitor;
             private Task _task;
             private bool _savedCredentials;
 
-            public Logic(ImitationRdpConnectionSource.ISimulatedConnection connection)
+            public Logic(IRenderingPanel renderingPanel) : base(renderingPanel)
             {
-                Contract.Assert(null != connection);
-                _connection = connection;
                 _cts = new CancellationTokenSource();
                 _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
             }
@@ -37,7 +34,7 @@
                 _cts.Dispose();
             }
 
-            void ImitationRdpConnectionSource.ISimulationLogic.Connect(CredentialsModel credentials, bool savedCredentials)
+            protected override void Connect(CredentialsModel credentials, bool savedCredentials)
             {
                 Contract.Assert(null == _task);
                 //
@@ -56,11 +53,11 @@
                             try
                             {
                                 await Task.Delay(300, _cts.Token);
-                                _connection.EmitAsyncDisconnect(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0));
+                                this.EmitAsyncDisconnect(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0));
                             }
                             catch(OperationCanceledException)
                             {
-                                _connection.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
+                                this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
                             }
                         });
                     }
@@ -71,14 +68,14 @@
                             try
                             {
                                 await Task.Delay(250, _cts.Token);
-                                _connection.EmitConnected();
+                                this.EmitConnected();
 
                                 _cts.Token.WaitHandle.WaitOne();
-                                _connection.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
+                                this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
                             }
                             catch(OperationCanceledException)
                             {
-                                _connection.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
+                                this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
                             }
 
                             using (ReadWriteMonitor.Write(_monitor))
@@ -90,7 +87,7 @@
                 }
             }
 
-            void ImitationRdpConnectionSource.ISimulationLogic.SetCredentials(CredentialsModel credentials, bool savedCredentials)
+            protected override void SetCredentials(CredentialsModel credentials, bool savedCredentials)
             {
                 //
                 // Simply remember if the last credentials were saved save the new credentials;
@@ -101,7 +98,7 @@
                 }
             }
 
-            void ImitationRdpConnectionSource.ISimulationLogic.Disconnect()
+            protected override void Disconnect()
             {
                 Contract.Assert(null != _task);
 
@@ -112,7 +109,7 @@
                 });
             }
 
-            void ImitationRdpConnectionSource.ISimulationLogic.HandleAsyncDisconnect(Shared.CxWrappers.Errors.RdpDisconnectReason reason, bool reconnect)
+            protected override void HandleAsyncDisconnectResult(RdpDisconnectReason reason, bool reconnect)
             {
                 if (RdpDisconnectCode.FreshCredsRequired == reason.Code)
                 {
@@ -133,11 +130,11 @@
                                 try
                                 {
                                     await Task.Delay(300, _cts.Token);
-                                    _connection.EmitAsyncDisconnect(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0));
+                                    this.EmitAsyncDisconnect(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0));
                                 }
                                 catch (OperationCanceledException)
                                 {
-                                    _connection.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
+                                    this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
                                 }
                             });
                         }
@@ -148,14 +145,14 @@
                                 try
                                 {
                                     await Task.Delay(250, _cts.Token);
-                                    _connection.EmitConnected();
+                                    this.EmitConnected();
 
                                     _cts.Token.WaitHandle.WaitOne();
-                                    _connection.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
+                                    this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
                                 }
                                 catch (OperationCanceledException)
                                 {
-                                    _connection.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
+                                    this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
                                 }
 
                                 using (ReadWriteMonitor.Write(_monitor))
