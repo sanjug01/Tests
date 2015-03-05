@@ -29,7 +29,7 @@
             LandingPage="ConnectionCenterView">
             <fac:AppInitializer.ConnectionSource>
                 <!-- <models:SingleSwapChainPanelRdpConnectionSource/> -->
-                <models:RejectSavedPasswordLogicFactory/>
+                <models:RejectSavedPasswordConnection/>
             </fac:AppInitializer.ConnectionSource>
         </fac:AppInitializer>
 

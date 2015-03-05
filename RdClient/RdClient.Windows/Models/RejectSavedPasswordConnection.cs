@@ -8,7 +8,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    sealed class RejectSavedPasswordLogicFactory : ImitationRdpConnectionSource
+    sealed class RejectSavedPasswordConnection : ImitationRdpConnectionSource
     {
         protected override Shared.CxWrappers.IRdpConnection CreateConnection(IRenderingPanel renderingPanel)
         {

@@ -9,7 +9,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    sealed class SuccessfulLogicFactory : ImitationRdpConnectionSource
+    sealed class SuccessfulConnectionSource : ImitationRdpConnectionSource
     {
 
         protected override IRdpConnection CreateConnection(IRenderingPanel renderingPanel)
