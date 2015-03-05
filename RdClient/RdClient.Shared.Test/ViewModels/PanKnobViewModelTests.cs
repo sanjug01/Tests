@@ -2,6 +2,7 @@
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Input.Mouse;
 using RdClient.Shared.Input.ZoomPan;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.ViewModels;
 using System.Collections.Generic;
 using Windows.Foundation;
@@ -47,6 +48,9 @@ namespace RdClient.Shared.Test.ViewModels
 
             Assert.AreEqual(0, _vvm.TranslateXTo);
             Assert.AreEqual(0, _vvm.TranslateYTo);
+
+            Assert.IsTrue(_vvm.PanControlOpacity > 0);
+            Assert.IsTrue(_vvm.PanOrbOpacity > 0);
         }
 
         [TestMethod]
@@ -65,6 +69,7 @@ namespace RdClient.Shared.Test.ViewModels
             _vvm.ShowKnobCommand.Execute(null);
 
             Assert.IsTrue(notificationTransform);
+            Assert.AreEqual(PanKnobTransformType.ShowKnob, _vvm.PanKnobTransform.TransformType);
         }
 
         [TestMethod]
@@ -83,6 +88,7 @@ namespace RdClient.Shared.Test.ViewModels
             _vvm.HideKnobCommand.Execute(null);
 
             Assert.IsTrue(notificationTransform);
+            Assert.AreEqual(PanKnobTransformType.HideKnob, _vvm.PanKnobTransform.TransformType);
         }
 
 
@@ -99,6 +105,19 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
+        public void PanKnobViewModel_SinglePressEnablesPanning()
+        {
+            // by default the panning layer is not enabled
+            Assert.IsFalse(_vvm.IsPanning);
+
+            ConsumeEvent(SingleTouchEvent());
+            Assert.IsTrue(_vvm.IsPanning);
+
+            ConsumeEvent(ReleaseTouchEvent());
+            Assert.IsFalse(_vvm.IsPanning);
+        }
+
+        [TestMethod]
         public void PanKnobViewModel_DoublePressChangeState()
         {
             Assert.AreEqual(PanKnobState.Inactive, _vvm.State);
@@ -108,6 +127,18 @@ namespace RdClient.Shared.Test.ViewModels
 
             ConsumeEvent(ReleaseTouchEvent());
             Assert.AreEqual(PanKnobState.Inactive, _vvm.State);
+        }
+
+        public void PanKnobViewModel_DoublePressEnablesPanning()
+        {
+            // by default the panning layer is not enabled
+            Assert.IsFalse(_vvm.IsPanning);
+
+            ConsumeEvents(DoubleTouchEvents());
+            Assert.IsTrue(_vvm.IsPanning);
+
+            ConsumeEvent(ReleaseTouchEvent());
+            Assert.IsFalse(_vvm.IsPanning);
         }
 
         [TestMethod]
@@ -143,12 +174,12 @@ namespace RdClient.Shared.Test.ViewModels
         public void PanKnobViewModel_PanningEmitsPanUpdate()
         {
             bool notificationPanUpdate = false;
-            int cnt = 0;
+            int cntNotifications = 0;
 
             _vvm.PanChange += ((sender, e) =>
             {
                 notificationPanUpdate = true;
-                cnt++;
+                cntNotifications++;
             });
 
             ConsumeEvent(SingleTouchEvent());
@@ -163,7 +194,7 @@ namespace RdClient.Shared.Test.ViewModels
             ConsumeEvents(moves);
 
             Assert.IsTrue(notificationPanUpdate);
-            Assert.AreEqual(moves.Length, cnt);
+            Assert.AreEqual(moves.Length, cntNotifications);
 
             ConsumeEvent(ReleaseTouchEvent());
             Assert.AreEqual(PanKnobState.Inactive, _vvm.State);
@@ -173,14 +204,14 @@ namespace RdClient.Shared.Test.ViewModels
         public void PanKnobViewModel_MovingUpdatesTransformProperty()
         {
             bool notificationTransform = false;
-            int cnt = 0;
+            int cntNotifications = 0;
 
             _vvm.PropertyChanged += ((sender, e) =>
             {
                 if ("PanKnobTransform".Equals(e.PropertyName))
                 {
                     notificationTransform = true;
-                    cnt++;
+                    cntNotifications++;
                 }
             });
 
@@ -196,7 +227,8 @@ namespace RdClient.Shared.Test.ViewModels
             ConsumeEvents(moves);
             
             Assert.IsTrue(notificationTransform);
-            Assert.AreEqual(moves.Length, cnt);
+            Assert.AreEqual(moves.Length, cntNotifications);
+            Assert.AreEqual(PanKnobTransformType.MoveKnob, _vvm.PanKnobTransform.TransformType);
 
             ConsumeEvent(ReleaseTouchEvent());
             Assert.AreEqual(PanKnobState.Inactive, _vvm.State);
@@ -232,19 +264,152 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void PanKnobViewModel_PanningWithInertia()
         {
-            Assert.IsTrue(false, "Not implemented");
+            PointerEvent[] movesBefore = new PointerEvent[]{
+                InertiaMoveTouchEvent(12.5, 12.5),
+                InertiaMoveTouchEvent(-12.5, 12.5),
+            };
+
+            PointerEvent[] movesAfter = new PointerEvent[]{
+                InertiaMoveTouchEvent(-5.5, 5.5),
+                InertiaMoveTouchEvent(-11.0, 11.0),
+            };
+
+            bool notificationPanUpdate = false;
+            int cntNotifications = 0;
+            // one extra notification for begin inertia
+            int expNotifications = 1 + movesBefore.Length + movesAfter.Length;
+
+            _vvm.PanChange += ((sender, e) =>
+            {
+                notificationPanUpdate = true;
+                cntNotifications++;
+            });
+
+
+            ConsumeEvent(SingleTouchEvent());
+            Assert.AreEqual(PanKnobState.Active, _vvm.State);
+
+            ConsumeEvent(BeginInertiaTouchEvent());
+            Assert.AreEqual(PanKnobState.Active, _vvm.State);
+
+            ConsumeEvents(movesBefore);
+            Assert.AreEqual(PanKnobState.Active, _vvm.State);
+
+            // release with inertia will keep moving
+            ConsumeEvent(ReleaseTouchEvent());
+            Assert.AreEqual(PanKnobState.Active, _vvm.State);
+
+            ConsumeEvents(movesAfter);
+            Assert.AreEqual(PanKnobState.Active, _vvm.State);
+
+
+            ConsumeEvent(CompleteInertiaTouchEvent());
+            Assert.AreEqual(PanKnobState.Inactive, _vvm.State);
+
+            Assert.IsTrue(notificationPanUpdate);
+            Assert.AreEqual(expNotifications, cntNotifications);
         }
 
         [TestMethod]
         public void PanKnobViewModel_MovingWithInertia()
         {
-            Assert.IsTrue(false, "Not implemented");
+            PointerEvent[] movesBefore = new PointerEvent[]{
+                InertiaMoveTouchEvent(12.5, 12.5),
+                InertiaMoveTouchEvent(-12.5, 12.5),
+            };
+
+            PointerEvent[] movesAfter = new PointerEvent[]{
+                InertiaMoveTouchEvent(-5.5, 5.5),
+                InertiaMoveTouchEvent(-11.0, 11.0),
+            };
+
+            bool notificationTransform = false;
+            int cntNotifications = 0;
+            // one extra notification for begin inertia
+            int expNotifications = 1 + movesBefore.Length + movesAfter.Length;
+
+            _vvm.PropertyChanged += ((sender, e) =>
+            {
+                if ("PanKnobTransform".Equals(e.PropertyName))
+                {
+                    notificationTransform = true;
+                    cntNotifications++;
+                }
+            });
+
+            ConsumeEvents(DoubleTouchEvents());
+            Assert.AreEqual(PanKnobState.Moving, _vvm.State);
+
+            ConsumeEvent(BeginInertiaTouchEvent());
+            Assert.AreEqual(PanKnobState.Moving, _vvm.State);
+
+            ConsumeEvents(movesBefore);
+            Assert.AreEqual(PanKnobState.Moving, _vvm.State);
+
+            // release with inertia will keep moving
+            ConsumeEvent(ReleaseTouchEvent());
+            Assert.AreEqual(PanKnobState.Moving, _vvm.State);
+
+            ConsumeEvents(movesAfter);
+            Assert.AreEqual(PanKnobState.Moving, _vvm.State);
+
+
+            ConsumeEvent(CompleteInertiaTouchEvent());
+            Assert.AreEqual(PanKnobState.Inactive, _vvm.State);
+
+            Assert.IsTrue(notificationTransform);
+            Assert.AreEqual(expNotifications, cntNotifications);
         }
 
         [TestMethod]
         public void PanKnobViewModel_CannotMoveOutsideBorder()
         {
-            Assert.IsTrue(false, "Not implemented");
+            double borderLeft = -(_windowRect.Width - GlobalConstants.PanKnobWidth) / 2.0;
+            double borderRight = -(_windowRect.Width - GlobalConstants.PanKnobWidth) / 2.0;
+            double borderTop = -(_windowRect.Height - GlobalConstants.PanKnobHeight) / 2.0;
+            double borderBottom = -(_windowRect.Height - GlobalConstants.PanKnobHeight) / 2.0;
+
+            double deltaX, deltaY;
+
+            ConsumeEvents(DoubleTouchEvents());
+            Assert.AreEqual(PanKnobState.Moving, _vvm.State);
+
+            // left overflow
+            deltaX = 2 * borderLeft;
+            deltaY = 0;
+            ConsumeEvent(MoveTouchEvent(deltaX, deltaY));
+            Assert.IsTrue(_vvm.TranslateXTo == borderLeft);
+
+            // right overflow
+            deltaX = -borderLeft + 2 * borderRight;
+            deltaY = 0;
+            ConsumeEvent(MoveTouchEvent(deltaX, deltaY));
+            Assert.IsTrue(_vvm.TranslateXTo == borderRight);
+
+            // revert
+            ConsumeEvent(MoveTouchEvent(-borderRight, deltaY));
+
+            // top overflow
+            deltaX = 0;
+            deltaY = 2 * borderTop;
+            ConsumeEvent(MoveTouchEvent(deltaX, deltaY));
+            Assert.IsTrue(_vvm.TranslateYTo == borderTop);
+
+            // bottom overflow
+            deltaX = 0;
+            deltaY = -borderTop + 2 * borderBottom;
+            ConsumeEvent(MoveTouchEvent(deltaX, deltaY));
+            Assert.IsTrue(_vvm.TranslateYTo == borderBottom);
+
+            // revert
+            ConsumeEvent(MoveTouchEvent(deltaX, -borderBottom));
+
+            // double overflow
+            deltaX = 2 * borderRight;
+            deltaY = 2 * borderBottom;
+            ConsumeEvent(MoveTouchEvent(deltaX, deltaY));
+            Assert.IsTrue(_vvm.TranslateXTo == borderRight);
+            Assert.IsTrue(_vvm.TranslateYTo == borderBottom);
         }
 
 
@@ -303,13 +468,20 @@ namespace RdClient.Shared.Test.ViewModels
         PointerEvent BeginInertiaTouchEvent()
         {
             return
-                new PointerEvent(new Point(0.0, 0.0), true, new Point(0.0, 0.0), true, false, _pointerType, _pointerId, 250, TouchEventType.Up);
+                new PointerEvent(new Point(0.0, 0.0), true, new Point(0.0, 0.0), false, false, _pointerType, _pointerId, 0, TouchEventType.Unknown);
+        }
+
+        PointerEvent InertiaMoveTouchEvent(double deltaX, double deltaY)
+        {
+            // delta matters, position does not matter
+            return
+                new PointerEvent(new Point(10.0, 20.0), true, new Point(deltaX, deltaY), false, false, _pointerType, _pointerId, 0, TouchEventType.Unknown);
         }
 
         PointerEvent CompleteInertiaTouchEvent()
         {
             return
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, _pointerType, _pointerId, 250, TouchEventType.Up);
+                new PointerEvent(new Point(0.0, 0.0), false, new Point(0, 0), false, false, _pointerType, _pointerId, 0, TouchEventType.Unknown);
         }
     }
 }
