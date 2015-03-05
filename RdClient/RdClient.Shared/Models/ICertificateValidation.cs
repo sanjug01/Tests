@@ -6,7 +6,7 @@
     {
         IRdpCertificate Certificate { get; }
 
-        void Accept(bool acceptAlways);
+        void Accept();
 
         void Reject();
     }

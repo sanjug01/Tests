@@ -321,7 +321,7 @@
 
             protected void EmitDisconnected(RdpDisconnectReason reason)
             {
-                throw new NotImplementedException();
+                _events.EmitClientDisconnected(this, new ClientDisconnectedArgs(reason));
             }
 
             protected virtual void SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)

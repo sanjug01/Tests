@@ -1,8 +1,11 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
+    using RdClient.Shared.Data;
     using RdClient.Shared.Input.Keyboard;
     using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
@@ -103,6 +106,7 @@
             _activeSession.Closed += this.OnSessionClosed;
             _activeSession.Failed += this.OnSessionFailed;
             _activeSession.Interrupted += this.OnSessionInterrupted;
+            _activeSession.BadCertificate += this.OnBadCertificate;
             _activeSession.State.PropertyChanged += this.OnSessionStatePropertyChanged;
 
             if (null != _sessionView && SessionState.Idle == _sessionState)
@@ -121,6 +125,7 @@
             _activeSession.Closed -= this.OnSessionClosed;
             _activeSession.Failed -= this.OnSessionFailed;
             _activeSession.Interrupted -= this.OnSessionInterrupted;
+            _activeSession.BadCertificate -= this.OnBadCertificate;
             _activeSession.State.PropertyChanged -= this.OnSessionStatePropertyChanged;
             _sessionView.RecycleRenderingPanel(_activeSession.Deactivate());
             _activeSessionControl = null;
@@ -168,6 +173,71 @@
             this.ReconnectAttempt = _activeSession.State.ReconnectAttempt;
             this.IsInterrupted = true;
             EmitPropertyChanged("IsConnected");
+        }
+
+        private sealed class CertificateCompletion : IPresentationCompletion
+        {
+            private readonly ICertificateValidation _validation;
+            private readonly ICertificateTrust _permanentTrust, _sessionTrust;
+
+            public CertificateCompletion(ICertificateValidation validation, ICertificateTrust permanentTrust, ICertificateTrust sessionTrust)
+            {
+                Contract.Requires(null != validation);
+                Contract.Assert(null != permanentTrust);
+                Contract.Assert(null != sessionTrust);
+                Contract.Ensures(null != _validation);
+                Contract.Ensures(null != permanentTrust);
+                Contract.Ensures(null != sessionTrust);
+
+                _validation = validation;
+                _permanentTrust = permanentTrust;
+                _sessionTrust = sessionTrust;
+            }
+
+            void IPresentationCompletion.Completed(IPresentableView view, object result)
+            {
+                Contract.Assert(result is CertificateValidationResult);
+
+                CertificateValidationResult r = (CertificateValidationResult)result;
+
+                switch(r.Result)
+                {
+                    case CertificateValidationResult.CertificateTrustLevel.AcceptedAlways:
+                        _permanentTrust.TrustCertificate(_validation.Certificate);
+                        _validation.Accept();
+                        break;
+
+                    case CertificateValidationResult.CertificateTrustLevel.AcceptedOnce:
+                        _sessionTrust.TrustCertificate(_validation.Certificate);
+                        _validation.Accept();
+                        break;
+
+                    default:
+                        _validation.Reject();
+                        break;
+                }
+            }
+        }
+
+        private void OnBadCertificate(object sender, BadCertificateEventArgs e)
+        {
+            Contract.Assert(sender is IRemoteSession);
+
+            ICertificateValidation validation = e.ObtainValidation();
+            IRdpCertificate certificate = validation.Certificate;
+            IRemoteSession session = (IRemoteSession)sender;
+
+            if(session.CertificateTrust.IsCertificateTrusted(certificate) || this.ApplicationDataModel.CertificateTrust.IsCertificateTrusted(certificate))
+            {
+                validation.Accept();
+            }
+            else
+            {
+                CertificateCompletion completion = new CertificateCompletion(validation, this.ApplicationDataModel.CertificateTrust, session.CertificateTrust);
+                CertificateValidationViewModelArgs args = new CertificateValidationViewModelArgs("Don Pedro", validation.Certificate);
+
+                this.NavigationService.PushModalView("CertificateValidationView", args, completion);
+            }
         }
 
         private void OnSessionClosed(object sender, EventArgs e)

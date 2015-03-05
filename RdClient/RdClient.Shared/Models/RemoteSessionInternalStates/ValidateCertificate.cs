@@ -64,27 +64,10 @@
                 get { return _certificate; }
             }
 
-            void ICertificateValidation.Accept(bool acceptAlways)
+            void ICertificateValidation.Accept()
             {
-                Contract.Assert(null != _session);
-                //
-                // Mark the certificate as accepted in one of the certificate trust objects,
-                // and proceed with the connection.
-                //
-                ICertificateTrust trust;
-
-                if(acceptAlways)
-                {
-                    trust = _session._sessionSetup.DataModel.CertificateTrust;
-                }
-                else
-                {
-                    IRemoteSession s = _session;
-                    trust = s.CertificateTrust;
-                }
-
-                trust.TrustCertificate(_certificate);
-                _connection.HandleAsyncDisconnectResult(_reason, true);
+                using (LockUpgradeableRead())
+                    _connection.HandleAsyncDisconnectResult(_reason, true);
             }
 
             void ICertificateValidation.Reject()
