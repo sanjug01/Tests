@@ -25,6 +25,7 @@
         private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
         private int _selectedCount;
         private bool _desktopsSelectable;
+        private OnPremiseWorkspaceModel _onPrem;
         //
         // App bar items
         //
@@ -285,7 +286,8 @@
 
         private void AddWorkspaceExecute(object obj)
         {            
-            OnPremiseWorkspaceModel workspace = new OnPremiseWorkspaceModel();
+            _onPrem = new OnPremiseWorkspaceModel();
+            RdTrace.TraceDbg(string.Format("Subscribed to workspace. Got {0} resources", _onPrem.Resources.Count));
         }
     }
 }
