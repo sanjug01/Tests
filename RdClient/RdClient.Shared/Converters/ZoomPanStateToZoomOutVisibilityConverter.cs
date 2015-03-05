@@ -22,8 +22,6 @@ namespace RdClient.Converters
             switch (state)
             {
                 case ZoomPanState.TouchMode_MaxScale:
-                case ZoomPanState.TouchMode_PanKnobPanning:
-                case ZoomPanState.TouchMode_PanKnobMoving:
                     return Visibility.Visible;
             }
 
