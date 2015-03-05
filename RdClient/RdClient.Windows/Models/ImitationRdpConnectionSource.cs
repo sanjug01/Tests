@@ -343,6 +343,11 @@
                 throw new NotImplementedException();
             }
 
+            protected virtual IRdpCertificate GetServerCertificate()
+            {
+                throw new NotImplementedException();
+            }
+
             protected Connection(IRenderingPanel renderingPanel)
             {
                 Contract.Assert(null != renderingPanel);
@@ -407,7 +412,7 @@
 
             IRdpCertificate IRdpConnection.GetServerCertificate()
             {
-                throw new NotImplementedException();
+                return this.GetServerCertificate();
             }
 
             void IRdpConnection.SendMouseEvent(MouseEventType type, float xPos, float yPos)

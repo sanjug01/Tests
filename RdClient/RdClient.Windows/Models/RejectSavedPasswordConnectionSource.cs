@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Models
 {
+    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
@@ -8,9 +9,9 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    sealed class RejectSavedPasswordConnection : ImitationRdpConnectionSource
+    sealed class RejectSavedPasswordConnectionSource : ImitationRdpConnectionSource
     {
-        protected override Shared.CxWrappers.IRdpConnection CreateConnection(IRenderingPanel renderingPanel)
+        protected override IRdpConnection CreateConnection(IRenderingPanel renderingPanel)
         {
             return new Logic(renderingPanel);
         }
@@ -41,12 +42,11 @@
                 // If savedCredentials is true, emit an async disconnect failure;
                 // otherwise, connect successfully.
                 //
-
                 using (ReadWriteMonitor.Write(_monitor))
                 {
                     _savedCredentials = savedCredentials;
 
-                    if(savedCredentials)
+                    if (savedCredentials)
                     {
                         _task = new Task(async delegate
                         {
@@ -55,7 +55,7 @@
                                 await Task.Delay(300, _cts.Token);
                                 this.EmitAsyncDisconnect(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0));
                             }
-                            catch(OperationCanceledException)
+                            catch (OperationCanceledException)
                             {
                                 this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
                             }
@@ -73,7 +73,7 @@
                                 _cts.Token.WaitHandle.WaitOne();
                                 this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
                             }
-                            catch(OperationCanceledException)
+                            catch (OperationCanceledException)
                             {
                                 this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
                             }
@@ -84,17 +84,6 @@
                     }
 
                     _task.Start();
-                }
-            }
-
-            protected override void SetCredentials(CredentialsModel credentials, bool savedCredentials)
-            {
-                //
-                // Simply remember if the last credentials were saved save the new credentials;
-                //
-                using(ReadWriteMonitor.Write(_monitor))
-                {
-                    _savedCredentials = savedCredentials;
                 }
             }
 
@@ -123,38 +112,51 @@
 
                     using(ReadWriteMonitor.Write(_monitor))
                     {
-                        if(_savedCredentials)
+                        if (reconnect)
                         {
-                            _task = new Task(async delegate
+                            if (_savedCredentials)
                             {
-                                try
+                                _task = new Task(async delegate
                                 {
-                                    await Task.Delay(300, _cts.Token);
-                                    this.EmitAsyncDisconnect(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0));
-                                }
-                                catch (OperationCanceledException)
+                                    try
+                                    {
+                                        await Task.Delay(300, _cts.Token);
+                                        this.EmitAsyncDisconnect(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0));
+                                    }
+                                    catch (OperationCanceledException)
+                                    {
+                                        this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                _task = new Task(async delegate
                                 {
-                                    this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
-                                }
-                            });
+                                    try
+                                    {
+                                        await Task.Delay(250, _cts.Token);
+                                        this.EmitConnected();
+
+                                        _cts.Token.WaitHandle.WaitOne();
+                                        this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
+                                    }
+                                    catch (OperationCanceledException)
+                                    {
+                                        this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
+                                    }
+
+                                    using (ReadWriteMonitor.Write(_monitor))
+                                        _task = null;
+                                }, _cts.Token, TaskCreationOptions.LongRunning);
+                            }
                         }
                         else
                         {
                             _task = new Task(async delegate
                             {
-                                try
-                                {
-                                    await Task.Delay(250, _cts.Token);
-                                    this.EmitConnected();
-
-                                    _cts.Token.WaitHandle.WaitOne();
-                                    this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
-                                }
-                                catch (OperationCanceledException)
-                                {
-                                    this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
-                                }
-
+                                await Task.Delay(50, _cts.Token);
+                                this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0));
                                 using (ReadWriteMonitor.Write(_monitor))
                                     _task = null;
                             }, _cts.Token, TaskCreationOptions.LongRunning);
@@ -162,6 +164,10 @@
 
                         _task.Start();
                     }
+                }
+                else
+                {
+                    throw new InvalidOperationException(string.Format("Unexpected reason code {0}", reason.Code));
                 }
             }
         }

@@ -176,8 +176,9 @@
     <Compile Include="Data\ApplicationDataLocalStorageFolder.cs" />
     <Compile Include="DesignTime\FakeEditCredentialsViewModel.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
+    <Compile Include="Models\BadCertificateConnectionSource.cs" />
     <Compile Include="Models\ImitationRdpConnectionSource.cs" />
-    <Compile Include="Models\RejectSavedPasswordConnection.cs" />
+    <Compile Include="Models\RejectSavedPasswordConnectionSource.cs" />
     <Compile Include="Models\SingleSwapChainPanelRdpConnectionSource.cs" />
     <Compile Include="Models\SuccessfulConnectionSource.cs" />
     <Compile Include="Views\DeleteUserView.xaml.cs">
