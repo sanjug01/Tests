@@ -177,7 +177,9 @@
     <Compile Include="DesignTime\FakeEditCredentialsViewModel.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
     <Compile Include="Models\ImitationRdpConnectionSource.cs" />
+    <Compile Include="Models\RejectSavedPasswordLogicFactory.cs" />
     <Compile Include="Models\SingleSwapChainPanelRdpConnectionSource.cs" />
+    <Compile Include="Models\SuccessfulLogicFactory.cs" />
     <Compile Include="Views\DeleteUserView.xaml.cs">
       <DependentUpon>DeleteUserView.xaml</DependentUpon>
     </Compile>

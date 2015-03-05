@@ -13,17 +13,16 @@
         {
             private readonly IRdpConnection _connection;
             private RemoteSession _session;
+            private bool _cancelledCredentials;
 
             public ConnectingSession(IRdpConnection connection, ReaderWriterLockSlim monitor)
                 : base(SessionState.Connecting, monitor)
             {
-                _connection = connection;
-            }
+                Contract.Assert(null != connection);
+                Contract.Assert(null != monitor);
 
-            public ConnectingSession(IRdpConnection connection, InternalState otherState)
-                : base(SessionState.Connecting, otherState)
-            {
                 _connection = connection;
+                _cancelledCredentials = false;
             }
 
             public override void Activate(RemoteSession session)
@@ -82,11 +81,11 @@
                         break;
 
                     case RdpDisconnectCode.PreAuthLogonFailed:
-                        RequestValidCredentials();
+                        RequestValidCredentials(e.DisconnectReason);
                         break;
 
                     case RdpDisconnectCode.FreshCredsRequired:
-                        RequestNewPassword();
+                        RequestNewPassword(e.DisconnectReason);
                         break;
 
                     default:
@@ -101,15 +100,20 @@
                 Contract.Assert(object.ReferenceEquals(sender, _connection));
                 Contract.Ensures(null == _connection);
 
-                switch(e.DisconnectReason.Code)
+                if (RdpDisconnectCode.UserInitiated == e.DisconnectReason.Code || _cancelledCredentials)
                 {
-                    case RdpDisconnectCode.UserInitiated:
-                        _session.InternalSetState(new ClosedSession(this));
-                        break;
-
-                    default:
-                        _session.InternalSetState(new FailedSession(e.DisconnectReason, this));
-                        break;
+                    //
+                    // If user has disconnected (unlikely), or the credentials prompt was cancelled,
+                    // go to the Closed state, so the session view will navigate to the connection center page.
+                    //
+                    _session.InternalSetState(new ClosedSession(this));
+                }
+                else
+                {
+                    //
+                    // For all other failures go to the Failed state so the sessoin view will show the error UI.
+                    //
+                    _session.InternalSetState(new FailedSession(e.DisconnectReason, this));
                 }
             }
 
@@ -137,14 +141,15 @@
                 }
             }
 
-            private void RequestValidCredentials()
+            private void RequestValidCredentials(RdpDisconnectReason reason)
             {
                 //
                 // Emit an event with a credentials editor task.
                 //
                 InSessionCredentialsTask task = new InSessionCredentialsTask(_session._sessionSetup.SessionCredentials,
                     _session._sessionSetup.DataModel,
-                    "d:Invalid user name or password");
+                    "d:Invalid user name or password",
+                    reason);
 
                 task.Submitted += this.NewPasswordSubmitted;
                 task.Cancelled += this.NewPasswordCancelled;
@@ -152,14 +157,15 @@
                 _session.DeferEmitCredentialsNeeded(task);
             }
 
-            private void RequestNewPassword()
+            private void RequestNewPassword(RdpDisconnectReason reason)
             {
                 //
                 // Emit an event with a credentials editor task.
                 //
                 InSessionCredentialsTask task = new InSessionCredentialsTask(_session._sessionSetup.SessionCredentials,
                     _session._sessionSetup.DataModel,
-                    "d:Server has requested a new password to be typed in");
+                    "d:Server has requested a new password to be typed in",
+                    reason);
 
                 task.Submitted += this.NewPasswordSubmitted;
                 task.Cancelled += this.NewPasswordCancelled;
@@ -178,20 +184,32 @@
                     _session._sessionSetup.SaveCredentials();
                 //
                 // Go ahead and try to re-connect with new credentials.
+                // Stay in the same state, update the session credentials and call HandleAsyncDisconnectResult
+                // to re-connect.
                 //
-                _session.InternalSetState(new ConnectingSession(_connection, this));
+                using (LockWrite())
+                {
+                    _connection.SetCredentials(_session._sessionSetup.SessionCredentials.Credentials,
+                        !_session._sessionSetup.SessionCredentials.IsNewPassword);
+                    _connection.HandleAsyncDisconnectResult((RdpDisconnectReason)e.State, true);
+                }
             }
 
-            private void NewPasswordCancelled(object sender, EventArgs e)
+            private void NewPasswordCancelled(object sender, InSessionCredentialsTask.ResultEventArgs e)
             {
                 InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
 
                 task.Submitted -= this.NewPasswordSubmitted;
                 task.Cancelled -= this.NewPasswordCancelled;
                 //
-                // User has cancelled the credentials dialog, tell the subscribers about the cancellation.
+                // User has cancelled the credentials dialog.
+                // Stay in the state and wait for the connection to terminate.
                 //
-                _session.InternalSetState(new ClosedSession(this));
+                using(LockWrite())
+                {
+                    _cancelledCredentials = true;
+                    _connection.HandleAsyncDisconnectResult((RdpDisconnectReason)e.State, false);
+                }
             }
         }
     }

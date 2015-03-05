@@ -13,10 +13,23 @@
         private readonly ApplicationDataModel _dataModel;
         private readonly string _prompt;
         private readonly IValidationRule _userNameRule;
+        private readonly object _state;
         private IModelContainer<CredentialsModel> _savedCredentials;
         private bool _passwordChanged;
 
-        public class SubmittedEventArgs : EventArgs
+        public class ResultEventArgs : EventArgs
+        {
+            private readonly object _state;
+
+            public object State { get { return _state; } }
+
+            public ResultEventArgs(object state)
+            {
+                _state = state;
+            }
+        }
+
+        public sealed class SubmittedEventArgs : ResultEventArgs
         {
             private readonly bool _saveCredentials;
 
@@ -25,13 +38,16 @@
                 get { return _saveCredentials; }
             }
 
-            public SubmittedEventArgs(bool saveCredentials)
+            public SubmittedEventArgs(bool saveCredentials, object state) : base(state)
             {
                 _saveCredentials = saveCredentials;
             }
         }
 
-        public InSessionCredentialsTask(SessionCredentials sessionCredentials, ApplicationDataModel dataModel, string prompt)
+        public InSessionCredentialsTask(SessionCredentials sessionCredentials,
+            ApplicationDataModel dataModel,
+            string prompt,
+            object state)
         {
             Contract.Assert(null != sessionCredentials);
             Contract.Ensures(null != _sessionCredentials);
@@ -41,13 +57,14 @@
             _sessionCredentials = sessionCredentials;
             _dataModel = dataModel;
             _prompt = prompt;
+            _state = state;
             _userNameRule = new UsernameValidationRule();
             _savedCredentials = FindSavedCredentials(sessionCredentials.Credentials.Username);
             _passwordChanged = false;
         }
 
         public event EventHandler<SubmittedEventArgs> Submitted;
-        public event EventHandler Cancelled;
+        public event EventHandler<ResultEventArgs> Cancelled;
 
         protected override void OnPresenting(IEditCredentialsViewModel viewModel)
         {
@@ -89,14 +106,14 @@
             //
             if(null != this.Submitted)
             {
-                this.Submitted(this, new SubmittedEventArgs(viewModel.SaveCredentials));
+                this.Submitted(this, new SubmittedEventArgs(viewModel.SaveCredentials, _state));
             }
         }
 
         protected override void OnCancelled(IEditCredentialsViewModel viewModel)
         {
             if (null != this.Cancelled)
-                this.Cancelled(this, EventArgs.Empty);
+                this.Cancelled(this, new ResultEventArgs(_state));
         }
 
         protected override bool ValidateChangedProperty(IEditCredentialsViewModel viewModel, string propertyName)

@@ -29,7 +29,12 @@
             LandingPage="ConnectionCenterView">
             <fac:AppInitializer.ConnectionSource>
                 <!-- <models:SingleSwapChainPanelRdpConnectionSource/> -->
-                <models:ImitationRdpConnectionSource/>
+                <models:ImitationRdpConnectionSource>
+                    <models:ImitationRdpConnectionSource.LogicFactory>
+                        <!-- <models:SuccessfulLogicFactory/> -->
+                        <models:RejectSavedPasswordLogicFactory/>
+                    </models:ImitationRdpConnectionSource.LogicFactory>
+                </models:ImitationRdpConnectionSource>
             </fac:AppInitializer.ConnectionSource>
         </fac:AppInitializer>
 
