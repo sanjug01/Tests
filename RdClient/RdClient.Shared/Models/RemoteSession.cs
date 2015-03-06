@@ -110,6 +110,11 @@
             _sessionMonitor.Dispose();
         }
 
+        string IRemoteSession.HostName
+        {
+            get { return _sessionSetup.HostName; }
+        }
+
         IRemoteSessionState IRemoteSession.State
         {
             get

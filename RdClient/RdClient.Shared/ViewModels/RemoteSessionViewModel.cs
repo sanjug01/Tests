@@ -2,10 +2,8 @@
 {
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
-    using RdClient.Shared.Data;
     using RdClient.Shared.Input.Keyboard;
     using RdClient.Shared.Models;
-    using RdClient.Shared.Navigation;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
@@ -175,50 +173,6 @@
             EmitPropertyChanged("IsConnected");
         }
 
-        private sealed class CertificateCompletion : IPresentationCompletion
-        {
-            private readonly ICertificateValidation _validation;
-            private readonly ICertificateTrust _permanentTrust, _sessionTrust;
-
-            public CertificateCompletion(ICertificateValidation validation, ICertificateTrust permanentTrust, ICertificateTrust sessionTrust)
-            {
-                Contract.Requires(null != validation);
-                Contract.Assert(null != permanentTrust);
-                Contract.Assert(null != sessionTrust);
-                Contract.Ensures(null != _validation);
-                Contract.Ensures(null != permanentTrust);
-                Contract.Ensures(null != sessionTrust);
-
-                _validation = validation;
-                _permanentTrust = permanentTrust;
-                _sessionTrust = sessionTrust;
-            }
-
-            void IPresentationCompletion.Completed(IPresentableView view, object result)
-            {
-                Contract.Assert(result is CertificateValidationResult);
-
-                CertificateValidationResult r = (CertificateValidationResult)result;
-
-                switch(r.Result)
-                {
-                    case CertificateValidationResult.CertificateTrustLevel.AcceptedAlways:
-                        _permanentTrust.TrustCertificate(_validation.Certificate);
-                        _validation.Accept();
-                        break;
-
-                    case CertificateValidationResult.CertificateTrustLevel.AcceptedOnce:
-                        _sessionTrust.TrustCertificate(_validation.Certificate);
-                        _validation.Accept();
-                        break;
-
-                    default:
-                        _validation.Reject();
-                        break;
-                }
-            }
-        }
-
         private void OnBadCertificate(object sender, BadCertificateEventArgs e)
         {
             Contract.Assert(sender is IRemoteSession);
@@ -229,14 +183,20 @@
 
             if(session.CertificateTrust.IsCertificateTrusted(certificate) || this.ApplicationDataModel.CertificateTrust.IsCertificateTrusted(certificate))
             {
+                //
+                // The certificate is in one of the collections of trusted certificates, simply accept the certificate and let the session proceed.
+                //
                 validation.Accept();
             }
             else
             {
-                CertificateCompletion completion = new CertificateCompletion(validation, this.ApplicationDataModel.CertificateTrust, session.CertificateTrust);
-                CertificateValidationViewModelArgs args = new CertificateValidationViewModelArgs("Don Pedro", validation.Certificate);
-
-                this.NavigationService.PushModalView("CertificateValidationView", args, completion);
+                //
+                // Present the certificate validation modal dialog that will use the validation object to accept of reject the certificate;
+                // also, the completion object pased to the dialog will add the certificate to one of the certificate trust objects.
+                //
+                this.NavigationService.PushModalView("CertificateValidationView",
+                    new CertificateValidationViewModelArgs(session.HostName, validation.Certificate),
+                    new CertificateValidationCompletion(validation, this.ApplicationDataModel.CertificateTrust, session.CertificateTrust));
             }
         }
 

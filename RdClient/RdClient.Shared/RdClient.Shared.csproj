@@ -251,6 +251,7 @@
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
+    <Compile Include="ViewModels\CertificateValidationCompletion.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\CredentialViewModel.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModel.cs" />

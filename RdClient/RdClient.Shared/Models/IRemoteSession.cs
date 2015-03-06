@@ -9,6 +9,11 @@
     public interface IRemoteSession
     {
         /// <summary>
+        /// Host name or IP address of the remote system.
+        /// </summary>
+        string HostName { get; }
+
+        /// <summary>
         /// State of the session synchronized with the UI thread.
         /// </summary>
         IRemoteSessionState State { get; }

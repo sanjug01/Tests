@@ -25,6 +25,21 @@
             get { return _sessionCredentials; }
         }
 
+        public string HostName
+        {
+            get
+            {
+                string hostName;
+
+                if (_connection is DesktopModel)
+                    hostName = ((DesktopModel)_connection).HostName;
+                else
+                    throw new NotImplementedException();
+
+                return hostName;
+            }
+        }
+
         public void SaveCredentials()
         {
             if(_connection is DesktopModel)
