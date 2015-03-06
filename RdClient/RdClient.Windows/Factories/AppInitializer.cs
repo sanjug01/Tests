@@ -45,7 +45,7 @@
                 ModelSerializer = new SerializableModelSerializer()
             };
 
-            ISessionFactory sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution);
+            ISessionFactory sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution, timerFactory);
 
             _navigationService = this.CreateNavigationService();
 

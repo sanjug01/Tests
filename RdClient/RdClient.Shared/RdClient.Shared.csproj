@@ -54,6 +54,9 @@
   <ItemGroup>
     <Compile Include="Converters\BarItemsAlignmentFilteringConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\BytesToBitmapConverter.cs" />
+    <Compile Include="Converters\NotNullToVisibilityConverter.cs" />
+    <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\PanKnobStateToBackGroundBrushConverter.cs" />
     <Compile Include="Converters\TypeToLocalizedStringConverter.cs" />
     <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverter.cs" />
@@ -226,7 +229,6 @@
     <Compile Include="Models\SessionFailureEventArgs.cs" />
     <Compile Include="Models\SessionInterruptedEventArgs.cs" />
     <Compile Include="Models\ThumbnailEncoder.cs" />
-    <Compile Include="Models\ThumbnailModel.cs" />
     <Compile Include="Models\Snapshotter.cs" />
     <Compile Include="Models\WorkspaceModel.cs" />
     <Compile Include="Navigation\BackCommandArgs.cs" />

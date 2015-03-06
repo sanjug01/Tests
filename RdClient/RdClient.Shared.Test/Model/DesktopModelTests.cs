@@ -15,7 +15,6 @@
         {
             DesktopModel model = new DesktopModel();
 
-            Assert.IsNotNull(model.Thumbnail);
             Assert.IsNull(model.HostName);
             Assert.IsFalse(model.HasCredentials);
             Assert.AreEqual(Guid.Empty, model.CredentialsId);

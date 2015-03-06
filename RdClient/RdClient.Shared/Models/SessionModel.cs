@@ -115,7 +115,6 @@ namespace RdClient.Shared.Models
 
             DesktopModel desktop = connectionInformation.Desktop;
             CredentialsModel credentials = connectionInformation.Credentials;
-            Snapshotter snapshotter = new Snapshotter(_rdpConnection, connectionInformation.Desktop.Encoder, timerFactory, settings);
 
             RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
             _rdpConnection.SetLeftHandedMouseMode(desktop.IsSwapMouseButtons);

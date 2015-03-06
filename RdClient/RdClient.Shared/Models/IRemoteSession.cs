@@ -17,6 +17,7 @@
         /// State of the session synchronized with the UI thread.
         /// </summary>
         IRemoteSessionState State { get; }
+
         /// <summary>
         /// Certificate trust specific to this session.
         /// </summary>

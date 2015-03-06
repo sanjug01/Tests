@@ -17,6 +17,7 @@
         private readonly IRdpConnectionSource _connectionSource;
         private readonly ICertificateTrust _certificateTrust;
         private readonly ReaderWriterLockSlim _sessionMonitor;
+        private readonly ITimerFactory _timerFactory;
 
         private EventHandler<CredentialsNeededEventArgs> _credentialsNeeded;
         private EventHandler<BadCertificateEventArgs> _badCertificate;
@@ -81,16 +82,18 @@
             }
         }
 
-        public RemoteSession(RemoteSessionSetup sessionSetup, IDeferredExecution deferredExecution, IRdpConnectionSource connectionSource)
+        public RemoteSession(RemoteSessionSetup sessionSetup, IDeferredExecution deferredExecution, IRdpConnectionSource connectionSource, ITimerFactory timerFactory)
         {
             Contract.Requires(null != sessionSetup);
             Contract.Requires(null != deferredExecution);
             Contract.Requires(null != connectionSource);
+            Contract.Requires(null != timerFactory);
             Contract.Ensures(null != _sessionSetup);
             Contract.Ensures(null != _deferredExecution);
             Contract.Ensures(null != _connectionSource);
             Contract.Ensures(null != _certificateTrust);
             Contract.Ensures(null != _state);
+            Contract.Ensures(null != timerFactory);
 
             _sessionSetup = sessionSetup;
             _deferredExecution = deferredExecution;
@@ -98,6 +101,7 @@
             _state = new RemoteSessionState(deferredExecution);
             _certificateTrust = new CertificateTrust();
             _sessionMonitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+            _timerFactory = timerFactory;
             //
             // _internalState must never be null, so the initial state is assigned to a state object
             // that does not do anything.
@@ -135,77 +139,32 @@
 
         event EventHandler<CredentialsNeededEventArgs> IRemoteSession.CredentialsNeeded
         {
-            add
-            {
-                using(LockWrite())
-                    _credentialsNeeded += value;
-            }
-
-            remove
-            {
-                using (LockWrite())
-                    _credentialsNeeded -= value;
-            }
+            add { using(LockWrite()) _credentialsNeeded += value; }
+            remove { using (LockWrite()) _credentialsNeeded -= value; }
         }
 
         event EventHandler<BadCertificateEventArgs> IRemoteSession.BadCertificate
         {
-            add
-            {
-                using (LockWrite())
-                    _badCertificate += value;
-            }
-
-            remove
-            {
-                using (LockWrite())
-                    _badCertificate -= value;
-            }
+            add { using (LockWrite()) _badCertificate += value; }
+            remove { using (LockWrite()) _badCertificate -= value; }
         }
 
         event EventHandler<SessionFailureEventArgs> IRemoteSession.Failed
         {
-            add
-            {
-                using (LockWrite())
-                    _failed += value;
-            }
-
-            remove
-            {
-                using (LockWrite())
-                    _failed -= value;
-            }
+            add { using (LockWrite()) _failed += value; }
+            remove { using (LockWrite()) _failed -= value; }
         }
 
         event EventHandler<SessionInterruptedEventArgs> IRemoteSession.Interrupted
         {
-            add
-            {
-                using (LockWrite())
-                    _interrupted += value;
-            }
-
-            remove
-            {
-                using (LockWrite())
-                    _interrupted -= value;
-            }
+            add { using (LockWrite()) _interrupted += value; }
+            remove { using (LockWrite()) _interrupted -= value; }
         }
 
         event EventHandler IRemoteSession.Closed
         {
-            add
-            {
-                using (LockWrite())
-                    _closed += value;
-            }
-
-            remove
-            {
-                using (LockWrite())
-                    _closed -= value;
-            }
+            add { using (LockWrite()) _closed += value; }
+            remove { using (LockWrite()) _closed -= value; }
         }
 
         IRemoteSessionControl IRemoteSession.Activate(IRemoteSessionView sessionView)
@@ -396,6 +355,17 @@
                 _syncEvents = RdpEventsSyncProxy.Create(_connection.Events, _sessionMonitor);
                 InternalSetState(new ConnectingSession(_connection, _sessionMonitor));
             }
+        }
+
+        private void InternalDeferUpdateSnapshot(byte[] encodedSnapshot)
+        {
+            _deferredExecution.Defer(() =>
+            {
+                //
+                // Update the data model object for that the session was created.
+                //
+                _sessionSetup.Connection.EncodedThumbnail = encodedSnapshot;
+            });
         }
     }
 }

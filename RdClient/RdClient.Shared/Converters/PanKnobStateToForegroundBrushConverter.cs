@@ -13,7 +13,7 @@ namespace RdClient.Converters
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            Contract.Requires(targetType.Equals(typeof(Brush)));
+            Contract.Assert(null == targetType || targetType.Equals(typeof(Brush)));
 
             if (!(value is PanKnobState))
             {

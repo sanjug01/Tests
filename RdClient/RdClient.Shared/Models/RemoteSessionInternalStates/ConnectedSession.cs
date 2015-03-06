@@ -2,13 +2,18 @@
 {
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
+    using System;
     using System.Diagnostics.Contracts;
 
     partial class RemoteSession
     {
         private sealed class ConnectedSession : InternalState
         {
+            private static readonly uint ThumbnailHeight = 276;
+
             private readonly IRdpConnection _connection;
+            private readonly IThumbnailEncoder _thumbnailEncoder;
+            private readonly Snapshotter _snapshotter;
             private RemoteSession _session;
 
             public override void Activate(RemoteSession session)
@@ -17,6 +22,7 @@
 
                 using (LockWrite())
                 {
+                    _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailUpdated;
                     _session = session;
                     _session._state.SetReconnectAttempt(0);
                     _session._state.SetReconnectAttempt(0);
@@ -35,6 +41,7 @@
 
                 using (LockWrite())
                 {
+                    _thumbnailEncoder.ThumbnailUpdated -= this.OnThumbnailUpdated;
                     _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
                     _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                     _session = null;
@@ -50,6 +57,8 @@
                 : base(SessionState.Connected, otherState)
             {
                 _connection = connection;
+                _thumbnailEncoder = ThumbnailEncoder.Create(ThumbnailHeight);
+                _snapshotter = new Snapshotter(_connection, _thumbnailEncoder, _session._timerFactory, _session._sessionSetup.DataModel.Settings);
             }
 
             private void OnClientAutoReconnecting(object sender, ClientAutoReconnectingArgs e)
@@ -77,6 +86,11 @@
                 }
 
                 _session.InternalSetState(newState);
+            }
+
+            private void OnThumbnailUpdated(object sender, ThumbnailUpdatedEventArgs e)
+            {
+                _session.InternalDeferUpdateSnapshot(e.EncodedImageBytes);
             }
         }
     }

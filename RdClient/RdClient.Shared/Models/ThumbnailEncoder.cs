@@ -22,7 +22,7 @@
             _thumbnailHeight = thumbnailHeight;
         }
 
-        void IThumbnailEncoder.Update(CxWrappers.IRdpScreenSnapshot snapshot)
+        void IThumbnailEncoder.Update(IRdpScreenSnapshot snapshot)
         {
             ThumbnailUpdatedEventArgs e = new ThumbnailUpdatedEventArgs(GetSnapshotBytes(snapshot));
 

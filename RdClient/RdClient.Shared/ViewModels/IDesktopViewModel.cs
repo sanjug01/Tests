@@ -8,7 +8,5 @@
         DesktopModel Desktop { get; }
 
         CredentialsModel Credentials { get; }
-
-        BitmapImage Thumbnail { get; }
     }
 }

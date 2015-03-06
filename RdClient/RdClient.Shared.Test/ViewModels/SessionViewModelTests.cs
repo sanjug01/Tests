@@ -490,40 +490,6 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void EnteredCredsSavedWhenUserChoosesTo()
-        {
-            IModelContainer<CredentialsModel>
-                credOld = _testData.NewValidCredential(),
-                credNew = _testData.NewValidCredential();
-            _testConnectionInfo.Desktop = _testData.NewValidDesktop(Guid.Empty);
-            _testConnectionInfo.Credentials = credOld.Model;
-            Guid originalCredId = credOld.Id;
-
-            CredentialPromptResult credentialPromptResult = CredentialPromptResult.CreateWithCredentials(credNew.Model, true);
-
-            SimulateConnect();            
-            _nav.Expect("PushModalView",
-                p =>
-                {
-                    Assert.AreEqual("AddUserView", p[0]);
-                    IPresentationCompletion completionContext = p[2] as IPresentationCompletion;
-                    //connection credentials should be set
-                    _rdpConnection.Expect("SetCredentials", new List<object> { _testConnectionInfo.Credentials, false }, null);
-                    //reconnect should be attempted
-                    _rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object> { null, true }, null);
-                    completionContext.Completed(null, credentialPromptResult);
-                    return null;                    
-                });            
-            SimulateAsyncDisconnect(RdpDisconnectCode.FreshCredsRequired);
-
-            //Assert.AreEqual(originalCredId, _testConnectionInfo.Credentials.Id, "connection credentials should not be overwritten");
-            Assert.AreEqual(credentialPromptResult.Credentials.Username, _testConnectionInfo.Credentials.Username, "connection username should be updated to match username entered at the credential prompt");
-            Assert.AreEqual(credentialPromptResult.Credentials.Password, _testConnectionInfo.Credentials.Password, "connection password should be updated to match password entered at the credential prompt");
-            Assert.AreEqual(credNew.Id, _testConnectionInfo.Desktop.CredentialsId, "desktop should be updated to use the saved credentials");            
-            //Assert.IsTrue(_dataModel.LocalWorkspace.Credentials.ContainsItemWithId(_testConnectionInfo.Credentials.Id), "credentials should be saved to data model");
-        }
-
-        [TestMethod]
         public void EnteredCredsNotSavedIfUserChoosesNotTo()
         {
             _testConnectionInfo.Desktop = _testData.NewValidDesktop(Guid.Empty);
@@ -550,34 +516,5 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.AreEqual(Guid.Empty, _testConnectionInfo.Desktop.CredentialsId, "desktop should not be updated to use the unsaved credentials");
             //Assert.IsFalse(_dataModel.LocalWorkspace.Credentials.ContainsItemWithId(_testConnectionInfo.Credentials.Id), "credentials should not be saved to data model");
         }
-
-        [TestMethod]
-        public void CancellingCredPromptResultsInDisconnectAndReturnToConnectionCenter()
-        {
-            CredentialPromptResult credentialPromptResult = CredentialPromptResult.CreateWithCredentials(_testData.NewValidCredential().Model, true);
-
-            SimulateConnect();
-            _nav.Expect("PushModalView",
-                p =>
-                {
-                    Assert.AreEqual("AddUserView", p[0]);
-                    IPresentationCompletion completionContext = p[2] as IPresentationCompletion;
-                    //reconnect should not be attempted
-                    _rdpConnection.Expect("HandleAsyncDisconnectResult", new List<object> { null, false }, null);
-                    completionContext.Completed(null, credentialPromptResult);
-                    return null;
-                });
-            SimulateAsyncDisconnect(RdpDisconnectCode.FreshCredsRequired);
-            
-            Assert.AreNotEqual(credentialPromptResult.Credentials, _testConnectionInfo.Credentials, "connection credentials should not be overwritten");
-            //Assert.AreNotEqual(credentialPromptResult.Credentials.Id, _testConnectionInfo.Desktop.CredentialsId, "desktop should not be updated to use the unsaved credentials");
-            //Assert.IsFalse(_dataModel.LocalWorkspace.Credentials.ContainsItemWithId(_testConnectionInfo.Credentials.Id), "credentials should not be saved to data model");
-            //Assert.IsFalse(_dataModel.LocalWorkspace.Credentials.ContainsItemWithId(credentialPromptResult.Credentials.Id), "credentials should not be saved to data model");
-
-            //should return to connection center on disconnect
-            _nav.Expect("NavigateToView", new List<object> { "ConnectionCenterView", null }, null);
-            SimulateDisconnect(RdpDisconnectCode.FreshCredsRequired);
-        }
-
     }
 }
