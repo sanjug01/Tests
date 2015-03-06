@@ -1,10 +1,9 @@
-﻿using RdClient.Shared.CxWrappers;
-using RdClient.Shared.Helpers;
-using System;
-using System.Threading;
-
-namespace RdClient.Shared.Models
+﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.Helpers;
+    using System;
+
     public class Snapshotter : MutableObject
     {
         private static readonly TimeSpan FirstSnapshotTime = new TimeSpan(0, 0, 2);
@@ -33,19 +32,19 @@ namespace RdClient.Shared.Models
 
         public void Activate()
         {
-            _events.FirstGraphicsUpdate += Events_FirstGraphicsUpdate;
-            _events.ConnectionHealthStateChanged += Events_ConnectionHealthStateChanged;
+            _events.FirstGraphicsUpdate += OnFirstGraphicsUpdate;
+            _events.ConnectionHealthStateChanged += OnConnectionHealthStateChanged;
         }
 
         public void Deactivate()
         {
             using(LockWrite())
                 _timer.Stop();
-            _events.FirstGraphicsUpdate -= Events_FirstGraphicsUpdate;
-            _events.ConnectionHealthStateChanged -= Events_ConnectionHealthStateChanged;
+            _events.FirstGraphicsUpdate -= OnFirstGraphicsUpdate;
+            _events.ConnectionHealthStateChanged -= OnConnectionHealthStateChanged;
         }
 
-        private void Events_ConnectionHealthStateChanged(object sender, ConnectionHealthStateChangedArgs e)
+        private void OnConnectionHealthStateChanged(object sender, ConnectionHealthStateChangedArgs e)
         {
             IRdpConnection rdpConnection = sender as IRdpConnection;
 
@@ -62,9 +61,9 @@ namespace RdClient.Shared.Models
             }
         }
 
-        private void Events_FirstGraphicsUpdate(object sender, FirstGraphicsUpdateArgs e)
+        private void OnFirstGraphicsUpdate(object sender, FirstGraphicsUpdateArgs e)
         {
-            _events.FirstGraphicsUpdate -= Events_FirstGraphicsUpdate; // only expecting this event once
+            _events.FirstGraphicsUpdate -= OnFirstGraphicsUpdate; // only expecting this event once
 
             using(LockWrite())
                 _timer.Start(this.TakeFirstSnapshot, FirstSnapshotTime, false);
