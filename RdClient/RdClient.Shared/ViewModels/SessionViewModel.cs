@@ -194,6 +194,7 @@
                 this.MouseViewModel.RdpConnection = args.RdpConnection;
                 this.MouseViewModel.DeferredExecution = this;
                 this.MouseViewModel.ElephantEarsViewModel = this;
+                this.MouseViewModel.ZoomPanViewModel = this.ZoomPanViewModel;
                 this.PanKnobViewModel.PanChange += this.ZoomPanViewModel.HandlePanChange;
                 this.MouseViewModel.PanChange += this.ZoomPanViewModel.HandlePanChange;
                 this.MouseViewModel.ScaleChange += this.ZoomPanViewModel.HandleScaleChange;

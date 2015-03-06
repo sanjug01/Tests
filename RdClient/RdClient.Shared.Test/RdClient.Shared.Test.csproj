@@ -136,6 +136,7 @@
     <Compile Include="Input\Mouse\MultiTouchTests.cs" />
     <Compile Include="Input\Mouse\PointerInputTestsBase.cs" />
     <Compile Include="Input\Mouse\ClickModeTests.cs" />
+    <Compile Include="Input\Mouse\PointerModeZoomTests.cs" />
     <Compile Include="Mock\BarItemsViewModel.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="ViewModels\EditCredentialsViewModelTests.cs" />
     <Compile Include="ViewModels\ErrorMessageViewModelTests.cs" />
     <Compile Include="ViewModels\MainPageViewModelTests.cs" />
+    <Compile Include="ViewModels\PanKnobViewModelTests.cs" />
     <Compile Include="ViewModels\ZoomPanViewModelTests.cs" />
     <Compile Include="ViewModels\MouseViewModelTests.cs" />
     <Compile Include="ViewModels\RelayCommandTests.cs" />

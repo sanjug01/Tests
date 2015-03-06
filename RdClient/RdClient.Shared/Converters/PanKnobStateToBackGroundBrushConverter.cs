@@ -24,14 +24,14 @@ namespace RdClient.Converters
             switch (state)
             {
                 case PanKnobState.Inactive:
-                    // black
-                    return new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));                    
+                    // gray/black
+                    return new SolidColorBrush(Color.FromArgb(127, 0, 0, 0));                    
                 case PanKnobState.Active:
-                    // white
-                    return new SolidColorBrush(Color.FromArgb(127, 255, 255, 255));
+                    // blue
+                    return new SolidColorBrush(Color.FromArgb(127, 0, 0, 255));
                 case PanKnobState.Moving:
-                    // red
-                    return new SolidColorBrush(Color.FromArgb(127, 255, 0, 0));
+                    // blue
+                    return new SolidColorBrush(Color.FromArgb(255, 0, 0, 255));
             }
 
             return null;
