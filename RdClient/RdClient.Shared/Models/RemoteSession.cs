@@ -66,17 +66,17 @@
                 _monitor = state._monitor;
             }
 
-            protected IDisposable LockRead()
+            public IDisposable LockRead()
             {
                 return ReadWriteMonitor.Read(_monitor);
             }
 
-            protected IDisposable LockUpgradeableRead()
+            public IDisposable LockUpgradeableRead()
             {
                 return ReadWriteMonitor.UpgradeableRead(_monitor);
             }
 
-            protected IDisposable LockWrite()
+            public IDisposable LockWrite()
             {
                 return ReadWriteMonitor.Write(_monitor);
             }

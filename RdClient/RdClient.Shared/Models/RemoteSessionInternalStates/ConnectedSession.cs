@@ -13,7 +13,7 @@
 
             private readonly IRdpConnection _connection;
             private readonly IThumbnailEncoder _thumbnailEncoder;
-            private readonly Snapshotter _snapshotter;
+            private Snapshotter _snapshotter;
             private RemoteSession _session;
 
             public override void Activate(RemoteSession session)
@@ -28,6 +28,13 @@
                     _session._state.SetReconnectAttempt(0);
                     _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+
+                    _snapshotter = new Snapshotter(_connection,
+                        _session._syncEvents,
+                        _thumbnailEncoder,
+                        _session._timerFactory,
+                        _session._sessionSetup.DataModel.Settings);
+                    _snapshotter.Activate();
                 }
             }
 
@@ -42,6 +49,14 @@
                 using (LockWrite())
                 {
                     _thumbnailEncoder.ThumbnailUpdated -= this.OnThumbnailUpdated;
+                    //
+                    // Deactivate the snapshotter so it unsubscribes from all connection events.
+                    //
+                    _snapshotter.Deactivate();
+                    _snapshotter = null;
+                    //
+                    // Stop tracking the session events;
+                    //
                     _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
                     _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                     _session = null;
@@ -58,7 +73,6 @@
             {
                 _connection = connection;
                 _thumbnailEncoder = ThumbnailEncoder.Create(ThumbnailHeight);
-                _snapshotter = new Snapshotter(_connection, _thumbnailEncoder, _session._timerFactory, _session._sessionSetup.DataModel.Settings);
             }
 
             private void OnClientAutoReconnecting(object sender, ClientAutoReconnectingArgs e)
