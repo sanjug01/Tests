@@ -106,6 +106,7 @@ namespace RdClient.Shared.Models
 
         public void Connect(ConnectionInformation connectionInformation, ITimerFactory timerFactory, GeneralSettings settings)
         {
+            _connectionFactory.ConnectionInformation = connectionInformation;
             _rdpConnection = _connectionFactory.CreateInstance();
             EmitConnectionCreated(new ConnectionCreatedArgs(_rdpConnection));
 
@@ -113,13 +114,23 @@ namespace RdClient.Shared.Models
             _rdpConnection.Events.ClientAutoReconnecting += HandleClientAutoReconnecting;
             _rdpConnection.Events.ClientAutoReconnectComplete += HandleClientAutoReconnectComplete;
 
-            DesktopModel desktop = connectionInformation.Desktop;
             CredentialsModel credentials = connectionInformation.Credentials;
-            Snapshotter snapshotter = new Snapshotter(_rdpConnection, connectionInformation.Desktop.Encoder, timerFactory, settings);
-
-            RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
-            _rdpConnection.SetLeftHandedMouseMode(desktop.IsSwapMouseButtons);
+            if (connectionInformation.App == null)
+            {
+                DesktopModel desktop = connectionInformation.Desktop;
+                Snapshotter snapshotter = new Snapshotter(_rdpConnection, connectionInformation.Desktop.Encoder, timerFactory, settings);
+                RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
+                _rdpConnection.SetLeftHandedMouseMode(desktop.IsSwapMouseButtons);
+                
+            }
+            else
+            {
+                _rdpConnection.SetLeftHandedMouseMode(false);
+                _rdpConnection.SetCredentials(credentials, false);
+            }
             _rdpConnection.Connect(credentials, false/* credentials.HaveBeenPersisted TODO: honor the status of the credentials */ );
+            
+            
         }
 
         public void Disconnect()

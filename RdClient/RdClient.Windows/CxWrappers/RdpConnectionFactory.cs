@@ -1,10 +1,14 @@
 ﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Models;
 using Windows.UI.Xaml.Controls;
+
 namespace RdClient.CxWrappers.Utils
 {
     public class RdpConnectionFactory : IRdpConnectionFactory
     {
         public SwapChainPanel SwapChainPanel { private get; set; }
+
+        public ConnectionInformation ConnectionInformation { private get; set; }
 
         public IRdpConnection CreateInstance()
         {
@@ -18,10 +22,18 @@ namespace RdClient.CxWrappers.Utils
 
             rdpConnectionStoreCx.SetSwapChainPanel(SwapChainPanel);
 
-            xRes = rdpConnectionStoreCx.CreateConnectionWithSettings("", out rdpConnectionCx);
+            RemoteApplicationModel app = this.ConnectionInformation.App;
+            if (app != null)
+            {
+                xRes = rdpConnectionStoreCx.LaunchRemoteApp(app.RdpFile, out rdpConnectionCx);
+            }
+            else
+            {
+                xRes = rdpConnectionStoreCx.CreateConnectionWithSettings("", out rdpConnectionCx);
+            }
             RdTrace.IfFailXResultThrow(xRes, "Failed to create a desktop connection with the given settings.");
-
             return new RdpConnection(rdpConnectionCx, rdpConnectionStoreCx, new RdpEventSource());
         }
+
     }
 }

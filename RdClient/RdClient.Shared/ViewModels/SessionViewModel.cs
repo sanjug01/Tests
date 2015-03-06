@@ -350,9 +350,14 @@
                 }
                 else
                 {
+                    string hostName = "OnPremApp";
+                    if (_connectionInformation.Desktop != null)
+                    {
+                        hostName = _connectionInformation.Desktop.HostName;
+                    }
                     // present CertificateValidation dialog and reconnect only if certificate is accepted
                     CertificateValidationViewModelArgs certArgs = new CertificateValidationViewModelArgs(
-                        _connectionInformation.Desktop.HostName,
+                        hostName,
                         serverCertificate);
                     ModalPresentationCompletion certValidationCompletion = new ModalPresentationCompletion();
 

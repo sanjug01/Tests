@@ -9,6 +9,7 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
+    using System.Linq;
 
     public class ConnectionCenterViewModel : DeferringViewModelBase,
         IConnectionCenterViewModel,
@@ -288,6 +289,14 @@
         {            
             _onPrem = new OnPremiseWorkspaceModel();
             RdTrace.TraceDbg(string.Format("Subscribed to workspace. Got {0} resources", _onPrem.Resources.Count));
+
+            ConnectionInformation connectionInformation = new ConnectionInformation()
+            {
+                App = _onPrem.Resources.First(),
+                Credentials = _onPrem.Credentials
+            };
+
+            this.NavigationService.NavigateToView("SessionView", connectionInformation);
         }
     }
 }

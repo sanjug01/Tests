@@ -9,5 +9,7 @@ namespace RdClient.Shared.Test.Mock
         {
             return (IRdpConnection) Invoke(new object[] { });
         }
+
+        public Models.ConnectionInformation ConnectionInformation { get; set; }            
     }
 }
