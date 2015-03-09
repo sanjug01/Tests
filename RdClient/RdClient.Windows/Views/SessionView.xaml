@@ -72,7 +72,11 @@
                                           HorizontalAlignment="Center"
                                           Visibility="{Binding Path=IsReconnecting, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         
-        <controls:ConnectionBarControl/>
+        <controls:ConnectionBarControl
+            ZoomPanState="{Binding ZoomPanViewModel.State}"
+            ToggleZoom="{Binding ZoomPanViewModel.ToggleZoomCommand}"
+            MainAction="{Binding ConnectionBarCommand}"
+            IsKeyboardVisible="{Binding IsKeyboardEnabled, Mode=TwoWay}"/>
 
         <controls:ElephantEarsControl             
             ElephantEarsVisible="{Binding ElephantEarsVisible}"/>
@@ -83,8 +87,7 @@
                     Width="480"
                     Background="{StaticResource rdDarkGrayBrush}"
                     Opacity="0.5"
-                    Visibility="{Binding IsKeyboardEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    >
+                    Visibility="{Binding IsKeyboardEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
             <TextBlock Text="QWERTY" 
                        FontSize="24"
                        HorizontalAlignment="Center"/>

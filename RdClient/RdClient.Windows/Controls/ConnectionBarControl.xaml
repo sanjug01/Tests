@@ -31,28 +31,26 @@
         <StackPanel Orientation="Horizontal"
                 Grid.Row="0" Grid.Column="0"  Margin="0">
             <Button x:Uid="SessionView-ConnectionBar-ZoomInButton"
-                    Visibility="{Binding Path=ZoomPanViewModel.State, Converter={StaticResource ZoomPanStateToZoomInVisibilityConverter}}"
+                    x:Name="ZoomInButton"
                     Style="{StaticResource ConnectionBarButtonStyle}"                
-                    Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
                     CommandParameter="{StaticResource ZoomIn}"
                     Content="{StaticResource ZoomInIcon}"  
                     />
             <Button x:Uid="SessionView-ConnectionBar-ZoomOutButton"
-                    Visibility="{Binding Path=ZoomPanViewModel.State, Converter={StaticResource ZoomPanStateToZoomOutVisibilityConverter}}"
+                    x:Name="ZoomOutButton"
                     Style="{StaticResource ConnectionBarButtonStyle}"                
-                    Command="{Binding ZoomPanViewModel.ToggleZoomCommand}" 
                     CommandParameter="{StaticResource ZoomOut}"
                     Content="{StaticResource ZoomOutIcon}"
                     />
-            <Button x:Uid="SessionView-ConnectionBar-Title"                
+            <Button x:Uid="SessionView-ConnectionBar-Title"
+                    x:Name="MainActionButton"
                     Style="{StaticResource ConnectionBarTitleButtonStyle}"
                     Content="…" FontWeight="Bold"
-                    Command="{Binding ConnectionBarCommand}"
                     />
             <ToggleButton x:Uid="SessionView-ConnectionBar-Keyboard"
+                          x:Name="KeyboardButton"
                     Style="{StaticResource ConnectionBarToggleButtonStyle}"
-                    Content="{StaticResource KeyboardIcon}"                
-                    IsChecked="{Binding IsKeyboardEnabled, Mode=TwoWay}"
+                    Content="{StaticResource KeyboardIcon}"
                     />            
         </StackPanel>
     </Grid>

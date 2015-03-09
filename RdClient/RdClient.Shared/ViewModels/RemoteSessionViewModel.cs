@@ -13,6 +13,7 @@
     {
         private readonly RelayCommand _dismissFailureMessage;
         private readonly RelayCommand _cancelAutoReconnect;
+        private readonly RelayCommand _showSideBars;
 
         private IRemoteSessionView _sessionView;
         private IRemoteSession _activeSession;
@@ -75,10 +76,16 @@
             set { this.SetProperty<IKeyboardCapture>(ref _keyboardCapture, value); }
         }
 
+        public ICommand ShowSideBars
+        {
+            get { return _showSideBars; }
+        }
+
         public RemoteSessionViewModel()
         {
             _dismissFailureMessage = new RelayCommand(this.InternalDismissFailureMessage);
             _cancelAutoReconnect = new RelayCommand(this.InternalCancelAutoReconnect, this.InternalCanAutoReconnect);
+            _showSideBars = new RelayCommand(this.InternalConnectionBarAction);
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -272,6 +279,10 @@
         {
             Contract.Assert(null != _activeSessionControl);
             _activeSessionControl.SendKeystroke(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
+        }
+
+        private void InternalConnectionBarAction(object parameter)
+        {
         }
     }
 }

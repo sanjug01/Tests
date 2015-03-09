@@ -63,5 +63,10 @@
                 </Button>
             </StackPanel>
         </Grid>
+        
+        <!-- Connection Bar -->
+        <c:ConnectionBarControl
+            MainAction="{Binding ShowSideBars}"/>
+
     </Grid>
 </UserControl>
