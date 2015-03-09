@@ -42,6 +42,11 @@
                 Contract.Assert(null != _session);
             }
 
+            public override void Terminate(RemoteSession session)
+            {
+                _connection.Disconnect();
+            }
+
             public override void Complete(RemoteSession session)
             {
                 Contract.Assert(null != _session);

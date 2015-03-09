@@ -20,6 +20,7 @@
                     _session = session;
                     _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
                     _session._syncEvents.ClientAutoReconnectComplete += this.OnClientAutoReconnectComplete;
+                    _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                     _session.DeferEmitInterrupted(this.Cancel);
                 }
@@ -33,6 +34,7 @@
                 {
                     _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
                     _session._syncEvents.ClientAutoReconnectComplete -= this.OnClientAutoReconnectComplete;
+                    _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                     _session = null;
                 }
@@ -40,11 +42,8 @@
 
             public override void Terminate(RemoteSession session)
             {
-                using(LockWrite())
-                {
-                    _cancelled = true;
-                    _connection.Disconnect();
-                }
+                _cancelled = true;
+                _connection.Disconnect();
             }
 
             public ReconnectingSession(IRdpConnection connection, InternalState otherState)
@@ -78,6 +77,11 @@
             private void OnClientAutoReconnectComplete(object sender, ClientAutoReconnectCompleteArgs e)
             {
                 _session.InternalSetState(new ConnectedSession(_connection, this));
+            }
+
+            private void OnClientAsyncDisconnect(object sender, ClientAsyncDisconnectArgs e)
+            {
+                _connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
             }
 
             private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
