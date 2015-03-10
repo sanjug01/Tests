@@ -82,5 +82,10 @@
         {
             _credentialsId = Guid.Empty;
         }
+
+        public override void SetUpConnection(CxWrappers.IRdpProperties connectionProperties)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

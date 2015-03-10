@@ -298,7 +298,7 @@
             }
         }
 
-        protected abstract class Connection : MutableObject, IRdpConnection
+        protected abstract class Connection : MutableObject, IRdpConnection, IRdpProperties
         {
             private readonly IRenderingPanel _renderingPanel;
             private readonly Events _events;
@@ -430,6 +430,36 @@
             }
 
             void IRdpConnection.SetLeftHandedMouseMode(bool value)
+            {
+                throw new NotImplementedException();
+            }
+
+            int IRdpProperties.GetIntProperty(string propertyName)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpProperties.SetIntProperty(string propertyName, int value)
+            {
+                throw new NotImplementedException();
+            }
+
+            string IRdpProperties.GetStringPropery(string propertyName)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpProperties.SetStringProperty(string propertyName, string value)
+            {
+                throw new NotImplementedException();
+            }
+
+            bool IRdpProperties.GetBoolProperty(string propertyName)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpProperties.SetBoolProperty(string propertyName, bool value)
             {
                 throw new NotImplementedException();
             }

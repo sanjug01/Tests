@@ -8,5 +8,10 @@
         public RemoteApplicationModel()
         {
         }
+
+        public override void SetUpConnection(CxWrappers.IRdpProperties connectionProperties)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

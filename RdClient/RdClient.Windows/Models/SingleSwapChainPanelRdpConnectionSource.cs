@@ -18,24 +18,40 @@
         private IRdpConnectionFactory _factory;
         private IRenderingPanel _renderingPanel;
 
-        IRdpConnection IRdpConnectionSource.CreateConnection(RemoteConnectionModel connection, IRenderingPanel renderingPanel)
+        IRdpConnection IRdpConnectionSource.CreateConnection(RemoteConnectionModel model, IRenderingPanel renderingPanel)
         {
+            Contract.Assert(null != model);
             Contract.Assert(null != renderingPanel);
             Contract.Assert(renderingPanel is SwapChainPanel);
             Contract.Ensures(null != Contract.Result<IRdpConnection>());
 
             if(null == _factory)
             {
+                //
+                // Create the connection factory singleton and assign it the swap chain panel.
+                //
                 _renderingPanel = renderingPanel;
                 _factory = new RdpConnectionFactory() { SwapChainPanel = (SwapChainPanel)renderingPanel };
             }
             else
             {
+                //
+                // Verify that the same swap chain panel is reused for all RDP connections.
+                //
                 if (!object.ReferenceEquals(_renderingPanel, renderingPanel))
                     throw new ArgumentException("Unexpected rendering panel", "renderingPanel");
             }
+            //
+            // Create and set up the RDP connection.
+            //
+            IRdpConnection rdpc = _factory.CreateInstance();
+            IRdpProperties prop = rdpc as IRdpProperties;
 
-            return _factory.CreateInstance();
+            Contract.Assert(null != prop);
+
+            model.SetUpConnection(prop);
+
+            return rdpc;
         }
     }
 }
