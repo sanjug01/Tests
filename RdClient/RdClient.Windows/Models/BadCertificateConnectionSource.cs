@@ -164,13 +164,16 @@
 
             protected override void Disconnect()
             {
-                Contract.Assert(null != _task);
-
-                Task.Run(async delegate
+                using(LockWrite())
                 {
-                    await Task.Delay(100);
-                    _cts.Cancel();
-                });
+                    Contract.Assert(null != _task);
+
+                    Task.Run(async delegate
+                    {
+                        await Task.Delay(100);
+                        _cts.Cancel();
+                    });
+                }
             }
 
             protected override void HandleAsyncDisconnectResult(RdpDisconnectReason reason, bool reconnect)
@@ -193,6 +196,9 @@
                             {
                                 await Task.Delay(150, _cts.Token);
                                 this.EmitConnected();
+                                _cts.Token.WaitHandle.WaitOne();
+                                await Task.Delay(100);
+                                this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
                                 using (ReadWriteMonitor.Write(_monitor))
                                     _task = null;
                             }, _cts.Token, TaskCreationOptions.LongRunning);

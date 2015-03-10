@@ -14,12 +14,14 @@
         private readonly RelayCommand _dismissFailureMessage;
         private readonly RelayCommand _cancelAutoReconnect;
         private readonly RelayCommand _showSideBars;
+        private readonly RelayCommand _navigateHome;
 
         private IRemoteSessionView _sessionView;
         private IRemoteSession _activeSession;
         private IRemoteSessionControl _activeSessionControl;
         private IKeyboardCapture _keyboardCapture;
         private SessionState _sessionState;
+        private bool _isRightSideBarVisible;
 
         private bool _failureMessageVisible;
         private RdpDisconnectCode _failureCode;
@@ -81,11 +83,24 @@
             get { return _showSideBars; }
         }
 
+        public bool IsRightSideBarVisible
+        {
+            get { return _isRightSideBarVisible; }
+            set { this.SetProperty(ref _isRightSideBarVisible, value); }
+        }
+
+        public ICommand NavigateHome
+        {
+            get { return _navigateHome; }
+        }
+
         public RemoteSessionViewModel()
         {
             _dismissFailureMessage = new RelayCommand(this.InternalDismissFailureMessage);
             _cancelAutoReconnect = new RelayCommand(this.InternalCancelAutoReconnect, this.InternalCanAutoReconnect);
-            _showSideBars = new RelayCommand(this.InternalConnectionBarAction);
+            _showSideBars = new RelayCommand(this.InternalShowRightSideBar);
+            _navigateHome = new RelayCommand(this.InternalNavigateHome);
+            _isRightSideBarVisible = false;
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -281,8 +296,14 @@
             _activeSessionControl.SendKeystroke(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
         }
 
-        private void InternalConnectionBarAction(object parameter)
+        private void InternalShowRightSideBar(object parameter)
         {
+            this.IsRightSideBarVisible = !this.IsRightSideBarVisible;
+        }
+
+        private void InternalNavigateHome(object parameter)
+        {
+            _activeSession.Disconnect();
         }
     }
 }
