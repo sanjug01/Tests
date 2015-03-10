@@ -67,6 +67,7 @@
         
         <!-- Connection Bar -->
         <c:ConnectionBarControl
+            Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
             MainAction="{Binding ShowSideBars}"/>
         
         <!-- Right side bar -->

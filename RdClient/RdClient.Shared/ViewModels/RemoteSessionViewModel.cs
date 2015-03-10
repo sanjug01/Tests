@@ -21,6 +21,7 @@
         private IRemoteSessionControl _activeSessionControl;
         private IKeyboardCapture _keyboardCapture;
         private SessionState _sessionState;
+        private bool _isConnectionBarVisible;
         private bool _isRightSideBarVisible;
 
         private bool _failureMessageVisible;
@@ -76,6 +77,12 @@
         {
             get { return _keyboardCapture; }
             set { this.SetProperty<IKeyboardCapture>(ref _keyboardCapture, value); }
+        }
+
+        public bool IsConnectionBarVisible
+        {
+            get { return _isConnectionBarVisible; }
+            private set { this.SetProperty(ref _isConnectionBarVisible, value); }
         }
 
         public ICommand ShowSideBars
@@ -247,6 +254,7 @@
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
                         EmitPropertyChanged("IsConnected");
+                        this.IsConnectionBarVisible = true;
                         break;
 
                     default:
@@ -255,6 +263,11 @@
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
                             EmitPropertyChanged("IsConnected");
+                            //
+                            // The connection bar and side bars are not available in any non-connected state.
+                            //
+                            this.IsConnectionBarVisible = false;
+                            this.IsRightSideBarVisible = false;
                         }
                         break;
                 }
@@ -303,6 +316,7 @@
 
         private void InternalNavigateHome(object parameter)
         {
+            this.IsRightSideBarVisible = false;
             _activeSession.Disconnect();
         }
     }
