@@ -4,17 +4,35 @@
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
-    using System;
     using System.Diagnostics.Contracts;
     using System.Threading;
     using System.Threading.Tasks;
 
     sealed class SuccessfulConnectionSource : ImitationRdpConnectionSource
     {
-
-        protected override IRdpConnection CreateConnection(RemoteConnectionModel connection, IRenderingPanel renderingPanel)
+        protected override IRdpConnectionFactory CreateConnectionFactory(IRenderingPanel renderingPanel)
         {
-            throw new NotImplementedException();
+            return new Factory(renderingPanel);
+        }
+
+        private sealed class Factory : IRdpConnectionFactory
+        {
+            private readonly IRenderingPanel _renderingPanel;
+
+            public Factory(IRenderingPanel renderingPanel)
+            {
+                _renderingPanel = renderingPanel;
+            }
+
+            IRdpConnection IRdpConnectionFactory.CreateDesktop()
+            {
+                return new Logic(_renderingPanel);
+            }
+
+            IRdpConnection IRdpConnectionFactory.CreateApplication(string rdpFile)
+            {
+                return new Logic(_renderingPanel);
+            }
         }
 
         private sealed class Logic : ImitationRdpConnectionSource.Connection

@@ -23,10 +23,11 @@
         }
 
         /// <summary>
-        /// Set up the newly created IRdpConnection object.
+        /// Create an RDP connection object specific to the connection model.
         /// </summary>
-        /// <param name="connection">New, unused RDP connection object created just before the call
-        /// of SetUpConnection.</param>
-        public abstract void SetUpConnection(IRdpProperties connectionProperties);
+        /// <param name="connectionFactory">RDP connection factory one of whose methods the method must call
+        /// to properly create and initialize a new RDP connection.</param>
+        /// <returns></returns>
+        public abstract IRdpConnection CreateConnection(IRdpConnectionFactory connectionFactory, IRenderingPanel renderingPanel);
     }
 }

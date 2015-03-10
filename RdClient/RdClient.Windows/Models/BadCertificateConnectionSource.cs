@@ -11,9 +11,29 @@
 
     sealed class BadCertificateConnectionSource : ImitationRdpConnectionSource
     {
-        protected override IRdpConnection CreateConnection(RemoteConnectionModel connection, IRenderingPanel renderingPanel)
+        protected override IRdpConnectionFactory CreateConnectionFactory(IRenderingPanel renderingPanel)
         {
-            return new Logic(renderingPanel);
+            return new Factory(renderingPanel);
+        }
+
+        private sealed class Factory : IRdpConnectionFactory
+        {
+            private readonly IRenderingPanel _renderingPanel;
+
+            public Factory(IRenderingPanel renderingPanel)
+            {
+                _renderingPanel = renderingPanel;
+            }
+
+            IRdpConnection IRdpConnectionFactory.CreateDesktop()
+            {
+                return new Logic(_renderingPanel);
+            }
+
+            IRdpConnection IRdpConnectionFactory.CreateApplication(string rdpFile)
+            {
+                return new Logic(_renderingPanel);
+            }
         }
 
         private sealed class Certificate : IRdpCertificate

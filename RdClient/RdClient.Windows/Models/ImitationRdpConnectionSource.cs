@@ -11,11 +11,19 @@
 
     abstract class ImitationRdpConnectionSource : IRdpConnectionSource
     {
-        protected abstract IRdpConnection CreateConnection(RemoteConnectionModel connection, IRenderingPanel renderingPanel);
-
-        IRdpConnection IRdpConnectionSource.CreateConnection(RemoteConnectionModel connection, IRenderingPanel renderingPanel)
+        protected ImitationRdpConnectionSource()
         {
-            return this.CreateConnection(connection, renderingPanel);
+        }
+
+        protected abstract IRdpConnectionFactory CreateConnectionFactory(IRenderingPanel renderingPanel);
+
+        IRdpConnection IRdpConnectionSource.CreateConnection(RemoteConnectionModel model, IRenderingPanel renderingPanel)
+        {
+            //
+            // Create a temporary connection factory only to give it to the model object that creates
+            // actual RDP connections.
+            //
+            return model.CreateConnection(CreateConnectionFactory(renderingPanel), renderingPanel);
         }
 
         private sealed class Events : MutableObject, IRdpEvents, IRdpEventSource

@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.CxWrappers;
     using System.Runtime.Serialization;
 
     [DataContract(IsReference = true)]
@@ -9,7 +10,7 @@
         {
         }
 
-        public override void SetUpConnection(CxWrappers.IRdpProperties connectionProperties)
+        public override IRdpConnection CreateConnection(IRdpConnectionFactory connectionFactory, IRenderingPanel renderingPanel)
         {
             throw new System.NotImplementedException();
         }

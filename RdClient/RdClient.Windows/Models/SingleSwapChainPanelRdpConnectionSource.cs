@@ -44,14 +44,7 @@
             //
             // Create and set up the RDP connection.
             //
-            IRdpConnection rdpc = _factory.CreateInstance();
-            IRdpProperties prop = rdpc as IRdpProperties;
-
-            Contract.Assert(null != prop);
-
-            model.SetUpConnection(prop);
-
-            return rdpc;
+            return model.CreateConnection(_factory, _renderingPanel);
         }
     }
 }
