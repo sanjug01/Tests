@@ -93,6 +93,8 @@
 
         private const double MAX_ZOOM_FACTOR = 2.5;
         private const double MIN_ZOOM_FACTOR = 1.0;
+        private const double ZOOM_INCREMENT = 0.125;
+
         private double _scaleCenterX;
         private double _scaleCenterY;
         private double _scaleXFrom;
@@ -105,8 +107,9 @@
         private double _translateYTo;
         private ZoomPanState _zoomPanState;
 
-        private Point _viewPosition;
-        private Size _viewSize;
+        //private Point _viewPosition;
+        //private Size _viewSize;
+        private Rect _viewRect;
         private Rect _windowRect;
 
         public double ScaleCenterX
@@ -169,6 +172,8 @@
             set
             {            
                 _windowRect = value;
+                this.ScaleCenterX = (value.Right - value.Left) / 2.0;
+                this.ScaleCenterY = (value.Bottom - value.Top) / 2.0; 
                 UpdateViewRect(); 
             }
         }
@@ -179,8 +184,8 @@
             Contract.Requires(0 != this.ScaleY, "Invalid scale factor!");
 
             return new Point(
-                _viewPosition.X + visiblePoint.X / this.ScaleX, 
-                _viewPosition.Y + visiblePoint.Y / this.ScaleY
+                _viewRect.X + visiblePoint.X / this.ScaleX,
+                _viewRect.Y + visiblePoint.Y / this.ScaleY
                 );
         }
 
@@ -192,7 +197,7 @@
 
         public void HandlePanChange(object sender, PanEventArgs e)
         {
-            if (null != e)
+            if (null != e && IsZoomed())
             {
                 this.ApplyPanTransform(e.DeltaX, e.DeltaY);
                 this.ZoomPanTransform = new PanTransform(e.DeltaX, e.DeltaX);
@@ -205,10 +210,30 @@
             {
                 if(e.FromLength > 0 && e.ToLength > 0)
                 {
-                    double targetXScale = this.ScaleXTo * e.ToLength / e.FromLength;
-                    double targetYScale = this.ScaleYTo * e.ToLength / e.FromLength;
-                    this.ApplyZoomTransform(e.CenterX, e.CenterY, targetXScale, targetYScale);
-                    this.ZoomPanTransform = new CustomZoomTransform(e.CenterX, e.CenterY, targetXScale, targetYScale);
+                    double targetXScale = this.ScaleX;
+                    double targetYScale = this.ScaleY;
+                    bool updateRequired = false;
+
+                    if(e.ToLength > e.FromLength + GlobalConstants.TouchZoomDeltaThreshold)
+                    {
+                        // enlarging
+                        updateRequired = (targetXScale < MAX_ZOOM_FACTOR || targetYScale < MAX_ZOOM_FACTOR);
+                        targetXScale += ZOOM_INCREMENT;
+                        targetYScale += ZOOM_INCREMENT;                        
+                    }
+                    else if (e.ToLength < e.FromLength - GlobalConstants.TouchZoomDeltaThreshold)
+                    {
+                        // shrinking
+                        updateRequired = (targetXScale > MIN_ZOOM_FACTOR || targetYScale > MIN_ZOOM_FACTOR);
+                        targetXScale -= ZOOM_INCREMENT;
+                        targetYScale -= ZOOM_INCREMENT;
+                    }
+
+                    if (updateRequired)
+                    {
+                        this.ApplyZoomTransform(e.CenterX, e.CenterY, targetXScale, targetYScale);
+                        this.ZoomPanTransform = new CustomZoomTransform(e.CenterX, e.CenterY, targetXScale, targetYScale);
+                    }
                 }
             }
         }
@@ -222,7 +247,7 @@
                     if (ZoomPanState.TouchMode_MinScale != this.State && ZoomPanState.TouchMode_MaxScale != this.State)
                     {
                         // reset to default scale, and switch to touch mode
-                        if(MIN_ZOOM_FACTOR != this.ScaleXTo || MIN_ZOOM_FACTOR != this.ScaleYTo)
+                        if(IsZoomed())
                         {
                             this.ApplyZoomOut();
                             this.ZoomPanTransform = new ZoomOutTransform();
@@ -235,7 +260,7 @@
                     if (ZoomPanState.TouchMode_MinScale == this.State || ZoomPanState.TouchMode_MaxScale == this.State)
                     {
                         // reset to default scale, and switch to pointer mode
-                        if (MIN_ZOOM_FACTOR != this.ScaleXTo || MIN_ZOOM_FACTOR != this.ScaleYTo)
+                        if (IsZoomed())
                         {
                             this.ApplyZoomOut();
                             this.ZoomPanTransform = new ZoomOutTransform();
@@ -307,7 +332,9 @@
         private void PanTranslate(object o)
         {
             IPanTransform panTransform = (o as IPanTransform);
-            if (null != panTransform)
+            if (null != panTransform 
+                // && IsZoomed()
+                )
             {
                 this.ApplyPanTransform(panTransform.X, panTransform.Y);
                 this.ZoomPanTransform = new PanTransform(this.TranslateXTo, this.TranslateYTo);
@@ -348,6 +375,9 @@
             this.ScaleYFrom = this.ScaleYTo;
             this.ScaleYTo = targetScaleFactor;
 
+            this.ScaleCenterX = (WindowRect.Right - WindowRect.Left) / 2;
+            this.ScaleCenterY = (WindowRect.Bottom - WindowRect.Top) / 2;
+
             //
             // Translate (through animation) the swap chain panel to fit the screen
             //
@@ -361,49 +391,26 @@
         {
             double targetScaleX = scaleX;
             double targetScaleY = scaleY;
-            
-            if (targetScaleX < MIN_ZOOM_FACTOR)
-            {
-                targetScaleX = MIN_ZOOM_FACTOR;
-            }
-            else if (targetScaleX > MAX_ZOOM_FACTOR)
-            {
-                targetScaleX = MAX_ZOOM_FACTOR;
-            }
 
-            if (targetScaleY < MIN_ZOOM_FACTOR)
-            {
-                targetScaleY = MIN_ZOOM_FACTOR;
-            }
-            else if (targetScaleY > MAX_ZOOM_FACTOR)
-            {
-                targetScaleY = MAX_ZOOM_FACTOR;
-            }
+            // overwrite center
+            centerX = (WindowRect.Right - WindowRect.Left) / 2.0;
+            centerY = (WindowRect.Bottom - WindowRect.Top) / 2.0;
+
+            targetScaleX = Math.Min( Math.Max(targetScaleX, MIN_ZOOM_FACTOR), MAX_ZOOM_FACTOR );
+            targetScaleY = Math.Min(Math.Max(targetScaleY, MIN_ZOOM_FACTOR), MAX_ZOOM_FACTOR);
 
             // reset the pan transformation
-            this.TranslateXFrom = this.TranslateXTo;
-            this.TranslateYFrom = this.TranslateYTo;
-
-            if (this.ScaleXTo > this.ScaleXFrom || this.ScaleYTo > this.ScaleYFrom)
-            {
-                // shrinking may required pan adjustment
-                double panXTo = this.TranslateXTo;
-                double panYTo = this.TranslateYTo;
-                this.ApplyPanAdjusments(ref panXTo, ref panYTo, targetScaleX, targetScaleY);
-                this.TranslateXTo = panXTo;
-                this.TranslateYTo = panYTo;
-            }
+            double translateX = this.TranslateXTo + centerX - (WindowRect.Right - WindowRect.Left) / 2;
+            double translateY = this.TranslateYTo + centerY - (WindowRect.Bottom - WindowRect.Top) / 2;
+            this.TranslateXFrom = this.TranslateXTo = translateX;
+            this.TranslateYFrom = this.TranslateYTo = translateY;
 
             this.ScaleXFrom = this.ScaleXTo;
             this.ScaleXTo = targetScaleX;
             this.ScaleYFrom = this.ScaleYTo;
             this.ScaleYTo = targetScaleY;
 
-            // manage the center
-            this.ScaleCenterX = centerX;
-            this.ScaleCenterY = centerY;
-
-            if(MIN_ZOOM_FACTOR == targetScaleX && MIN_ZOOM_FACTOR == targetScaleY)
+            if (!IsZoomed())
             {
                 this.State = ZoomPanState.PointerMode_DefaultScale;
             }
@@ -412,40 +419,83 @@
                 this.State = ZoomPanState.PointerMode_Zooming;
             }
 
+            //if (this.ScaleXTo < this.ScaleXFrom || this.ScaleYTo < this.ScaleYFrom)
+            {
+                // shrinking may required pan adjustment
+                double panXTo = this.TranslateXTo;
+                double panYTo = this.TranslateYTo;
+                this.ApplyPanAdjusments(ref panXTo, ref panYTo, targetScaleX, targetScaleY, ref centerX, ref centerY);
+                this.TranslateXTo = panXTo;
+                this.TranslateYTo = panYTo;
+            }
+            // manage the center
+            this.ScaleCenterX = centerX;
+            this.ScaleCenterY = centerY;
+
             UpdateViewRect();
         }
 
         private void ApplyPanTransform(double x, double y)
         {
+            this.TranslateXFrom = this.TranslateXTo;
+            this.TranslateYFrom = this.TranslateYTo;
+
             double panXTo = this.TranslateXTo + x;
             double panYTo = this.TranslateYTo + y;
-
+            
             // reset the zoom transformation
             this.ScaleXFrom = this.ScaleXTo;
             this.ScaleYFrom = this.ScaleYTo;
+            double scaleCenterX = this.ScaleCenterX;
+            double scaleCenterY = this.ScaleCenterY;
+            this.ApplyPanAdjusments(ref panXTo, ref panYTo, this.ScaleXTo, this.ScaleYTo, ref scaleCenterX, ref scaleCenterY);
 
-            this.ApplyPanAdjusments(ref panXTo, ref panYTo, this.ScaleXTo, this.ScaleYTo);
-
-            this.TranslateXFrom = this.TranslateXTo;
-            this.TranslateYFrom = this.TranslateYTo;
             this.TranslateXTo = panXTo;
             this.TranslateYTo = panYTo;
 
             UpdateViewRect();
         }
 
-        private void ApplyPanAdjusments(ref double panXTo, ref double panYTo, double targetScaleX, double targetScaleY)
+        private void ApplyPanAdjusments(ref double panXTo, ref double panYTo, double targetScaleX, double targetScaleY, ref double centerX, ref double centerY)
         {
             // CalculateTransformRect
             double transformWidth = targetScaleX * WindowRect.Width;
             double transformHeight = targetScaleY * WindowRect.Height;
-            double transformLeft = WindowRect.Left - (transformWidth - WindowRect.Width) * 0.5;
-            double transformTop = WindowRect.Top - (transformHeight - WindowRect.Height) * 0.5;
+
+            Rect transformRect = new Rect(
+                centerX - transformWidth/2.0, 
+                centerY - transformHeight/2.0,
+                transformWidth,
+                transformHeight);
+
+            //////double transformLeft = WindowRect.Left - (transformWidth - WindowRect.Width) * 0.5;
+            //////double transformTop = WindowRect.Top - (transformHeight - WindowRect.Height) * 0.5;
+
+            ////if (transformRect.Left > WindowRect.Left)
+            ////{
+            ////    centerX -= (transformRect.Left - WindowRect.Left) / 2.0;
+            ////    transformRect.X = WindowRect.Left;
+            ////}
+            ////else if (transformRect.Right < WindowRect.Right)
+            ////{
+            ////    centerX += (WindowRect.Right - transformRect.Right) / 2.0;
+            ////    transformRect.X = WindowRect.Right - WindowRect.Width;
+            ////}
+
+            ////if (transformRect.Top > WindowRect.Top)
+            ////{
+            ////    centerY -= (transformRect.Top - WindowRect.Top) / 2.0;
+            ////    transformRect.Y = WindowRect.Top;
+            ////}
+            ////else if (transformRect.Bottom < WindowRect.Bottom)
+            ////{
+            ////    centerY += (WindowRect.Bottom - transformRect.Bottom) / 2.0;
+            ////    transformRect.Y = WindowRect.Bottom - WindowRect.Height;
+            ////}
 
             Point maxTranslationOffset;
             Point minTranslationOffset;
 
-            Rect transformRect = new Rect(transformLeft, transformTop, transformWidth, transformHeight);
             maxTranslationOffset.X = WindowRect.Left - transformRect.Left;
             maxTranslationOffset.Y = WindowRect.Top - transformRect.Top;
             minTranslationOffset.X = WindowRect.Right - transformRect.Right;
@@ -475,28 +525,32 @@
             Contract.Requires(0 != this.ScaleX, "Invalid scale factor!");
             Contract.Requires(0 != this.ScaleY, "Invalid scale factor!");
 
-            if (MIN_ZOOM_FACTOR == this.ScaleXTo && MIN_ZOOM_FACTOR == this.ScaleYTo)
+            if (!IsZoomed())
             {
                 // same as window rect
-                _viewPosition.X = this.WindowRect.Left;
-                _viewPosition.Y = this.WindowRect.Top;
-                _viewSize.Width = this.WindowRect.Width;
-                _viewSize.Height = this.WindowRect.Height;
+                _viewRect.X = this.WindowRect.Left;
+                _viewRect.Y = this.WindowRect.Top;
+                _viewRect.Width = this.WindowRect.Width;
+                _viewRect.Height = this.WindowRect.Height;
             }
             else
             {
                 // apply current scale factor
-                _viewSize.Width = this.WindowRect.Width / this.ScaleX;
-                _viewSize.Height = this.WindowRect.Height / this.ScaleY;
+                _viewRect.Width = this.WindowRect.Width / this.ScaleX;
+                _viewRect.Height = this.WindowRect.Height / this.ScaleY;
 
-                _viewPosition.X = this.ScaleCenterX - _viewSize.Width / 2.0;
-                _viewPosition.Y = this.ScaleCenterY - _viewSize.Height / 2.0;
+                _viewRect.X = (this.WindowRect.Width - _viewRect.Width) / 2.0;
+                _viewRect.Y = (this.WindowRect.Height - _viewRect.Height) / 2.0;
             
                 // apply current pan
-                _viewPosition.X -= this.TranslateXTo / this.ScaleX;
-                _viewPosition.Y -= this.TranslateYTo / this.ScaleY;
+                _viewRect.X -= this.TranslateXTo / this.ScaleX;
+                _viewRect.Y -= this.TranslateYTo / this.ScaleY;
             }
+        }
 
+        private bool IsZoomed()
+        {
+            return (MIN_ZOOM_FACTOR != this.ScaleXTo || MIN_ZOOM_FACTOR != this.ScaleYTo);
         }
     }
 }
