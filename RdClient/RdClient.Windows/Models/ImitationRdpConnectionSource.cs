@@ -401,7 +401,6 @@
 
             void IRdpConnection.Cleanup()
             {
-                throw new NotImplementedException();
             }
 
             void IRdpConnection.HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)

@@ -111,7 +111,7 @@
                     // If user has disconnected (unlikely), or the credentials prompt was cancelled,
                     // go to the Closed state, so the session view will navigate to the connection center page.
                     //
-                    _session.InternalSetState(new ClosedSession(this));
+                    _session.InternalSetState(new ClosedSession(_connection, this));
                 }
                 else
                 {

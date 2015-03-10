@@ -92,9 +92,10 @@
                 task.Submitted -= this.MissingCredentialsSubmitted;
                 task.Cancelled -= this.MissingCredentialsCancelled;
                 //
-                // Emit the Cancelled event so the session view model can navigate to the home page
+                // Switch to the Cancelled state; the new state will emit Closed state through the sessuion and switch
+                // to the Idle state (InactiveSession).
                 //
-                _session.InternalSetState(new ClosedSession(this));
+                _session.InternalSetState(new CancelledSession(this));
                 //
                 // Do nothing to change the internal state of the session; this object will be retained
                 // by the session as its internal state and will be asked to re-activate the session.

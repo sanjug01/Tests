@@ -91,7 +91,7 @@
                 switch(e.DisconnectReason.Code)
                 {
                     case RdpDisconnectCode.UserInitiated:
-                        newState = new ClosedSession(this);
+                        newState = new ClosedSession(_connection, this);
                         break;
 
                     default:
