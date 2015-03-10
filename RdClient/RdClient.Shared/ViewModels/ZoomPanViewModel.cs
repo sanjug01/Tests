@@ -107,8 +107,6 @@
         private double _translateYTo;
         private ZoomPanState _zoomPanState;
 
-        //private Point _viewPosition;
-        //private Size _viewSize;
         private Rect _viewRect;
         private Rect _windowRect;
 
@@ -332,9 +330,7 @@
         private void PanTranslate(object o)
         {
             IPanTransform panTransform = (o as IPanTransform);
-            if (null != panTransform 
-                // && IsZoomed()
-                )
+            if (null != panTransform && IsZoomed())
             {
                 this.ApplyPanTransform(panTransform.X, panTransform.Y);
                 this.ZoomPanTransform = new PanTransform(this.TranslateXTo, this.TranslateYTo);
@@ -468,9 +464,7 @@
                 transformWidth,
                 transformHeight);
 
-            //////double transformLeft = WindowRect.Left - (transformWidth - WindowRect.Width) * 0.5;
-            //////double transformTop = WindowRect.Top - (transformHeight - WindowRect.Height) * 0.5;
-
+            // TODO: adjust center if needed - see Bug 1973598
             ////if (transformRect.Left > WindowRect.Left)
             ////{
             ////    centerX -= (transformRect.Left - WindowRect.Left) / 2.0;
