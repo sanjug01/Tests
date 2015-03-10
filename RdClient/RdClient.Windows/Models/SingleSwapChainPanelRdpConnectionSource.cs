@@ -18,7 +18,7 @@
         private IRdpConnectionFactory _factory;
         private IRenderingPanel _renderingPanel;
 
-        IRdpConnection IRdpConnectionSource.CreateConnection(IRenderingPanel renderingPanel)
+        IRdpConnection IRdpConnectionSource.CreateConnection(RemoteConnectionModel connection, IRenderingPanel renderingPanel)
         {
             Contract.Assert(null != renderingPanel);
             Contract.Assert(renderingPanel is SwapChainPanel);

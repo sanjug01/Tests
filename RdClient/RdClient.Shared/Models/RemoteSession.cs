@@ -351,7 +351,7 @@
             //
             using (ReadWriteMonitor.Write(_sessionMonitor))
             {
-                _connection = _connectionSource.CreateConnection(_renderingPanel);
+                _connection = _connectionSource.CreateConnection(sessionSetup.Connection, _renderingPanel);
                 _syncEvents = RdpEventsSyncProxy.Create(_connection.Events, _sessionMonitor);
                 InternalSetState(new ConnectingSession(_connection, _sessionMonitor));
             }

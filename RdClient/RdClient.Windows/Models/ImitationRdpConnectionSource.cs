@@ -11,11 +11,11 @@
 
     abstract class ImitationRdpConnectionSource : IRdpConnectionSource
     {
-        protected abstract IRdpConnection CreateConnection(IRenderingPanel renderingPanel);
+        protected abstract IRdpConnection CreateConnection(RemoteConnectionModel connection, IRenderingPanel renderingPanel);
 
-        IRdpConnection IRdpConnectionSource.CreateConnection(IRenderingPanel renderingPanel)
+        IRdpConnection IRdpConnectionSource.CreateConnection(RemoteConnectionModel connection, IRenderingPanel renderingPanel)
         {
-            return this.CreateConnection(renderingPanel);
+            return this.CreateConnection(connection, renderingPanel);
         }
 
         private sealed class Events : MutableObject, IRdpEvents, IRdpEventSource

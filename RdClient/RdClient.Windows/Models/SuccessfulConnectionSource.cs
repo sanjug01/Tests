@@ -12,7 +12,7 @@
     sealed class SuccessfulConnectionSource : ImitationRdpConnectionSource
     {
 
-        protected override IRdpConnection CreateConnection(IRenderingPanel renderingPanel)
+        protected override IRdpConnection CreateConnection(RemoteConnectionModel connection, IRenderingPanel renderingPanel)
         {
             throw new NotImplementedException();
         }

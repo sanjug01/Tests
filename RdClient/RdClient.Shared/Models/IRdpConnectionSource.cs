@@ -11,6 +11,6 @@
     /// to inject the instance into view models.</remarks>
     public interface IRdpConnectionSource
     {
-        IRdpConnection CreateConnection(IRenderingPanel renderingPanel);
+        IRdpConnection CreateConnection(RemoteConnectionModel connection, IRenderingPanel renderingPanel);
     }
 }
