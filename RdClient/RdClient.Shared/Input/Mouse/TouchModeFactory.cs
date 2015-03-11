@@ -127,7 +127,6 @@ namespace RdClient.Shared.Input.Mouse
             {
                 return
                    o.Context.NumberOfContacts(o.Input) == 2;
-                   // && o.Context.IsZooming(o.Input);
             },
             (o) => { o.Context.ApplyZoom(o.Input); });
 
@@ -140,7 +139,8 @@ namespace RdClient.Shared.Input.Mouse
             (o) => { o.Context.CompleteGesture(o.Input); });
 
 
-            ////// panning
+            // TODO: enable 2 fingers panning on remove pan logic entirely - Bug 1861012
+            ////// panning. 
             ////stateMachine.AddTransition(PointerState.Zoom, PointerState.Pan,
             ////(o) => 
             ////{

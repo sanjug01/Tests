@@ -184,28 +184,26 @@ namespace RdClient.Shared.Input.Mouse
 
             bool result = false;
 
+            if (this.IsPointerDoubleTracked(pointerEvent))
             {
-                if (this.IsPointerDoubleTracked(pointerEvent))
+                uint firstPointerId = pointerEvent.PointerId;
+                uint secondPointerId = (_mainPointerId == pointerEvent.PointerId) ? _secondaryPointerId : _mainPointerId;
+
+                PointerEventTrace eventTrace = _trackedPointerEvents[pointerEvent.PointerId];
+
+                PointerEventTrace firstEventTrace = new PointerEventTrace(pointerEvent, eventTrace.LastEvent);
+                PointerEventTrace secondEventTrace = _trackedPointerEvents[secondPointerId];
+
+                if (firstEventTrace.IsUpdated && secondEventTrace.IsUpdated)
                 {
-                    uint firstPointerId = pointerEvent.PointerId;
-                    uint secondPointerId = (_mainPointerId == pointerEvent.PointerId) ? _secondaryPointerId : _mainPointerId;
-
-                    PointerEventTrace eventTrace = _trackedPointerEvents[pointerEvent.PointerId];
-
-                    PointerEventTrace firstEventTrace = new PointerEventTrace(pointerEvent, eventTrace.LastEvent);
-                    PointerEventTrace secondEventTrace = _trackedPointerEvents[secondPointerId];
-
-                    if (firstEventTrace.IsUpdated && secondEventTrace.IsUpdated)
+                    // same deltas (less delta error) means double finger panning or scrolling, depending on context
+                    if (Math.Abs(firstEventTrace.DeltaX - secondEventTrace.DeltaX) < GlobalConstants.TouchPanDeltaThreshold
+                        && Math.Abs(firstEventTrace.DeltaY - secondEventTrace.DeltaY) < GlobalConstants.TouchPanDeltaThreshold)
                     {
-                        // same deltas (less delta error) means double finger panning or scrolling, depending on context
-                        if (Math.Abs(firstEventTrace.DeltaX - secondEventTrace.DeltaX) < GlobalConstants.TouchPanDeltaThreshold
-                            && Math.Abs(firstEventTrace.DeltaY - secondEventTrace.DeltaY) < GlobalConstants.TouchPanDeltaThreshold)
-                        {
-                            result = true;
-                        }
+                        result = true;
                     }
                 }
-            }
+            }            
 
             return result;
         }
@@ -228,55 +226,53 @@ namespace RdClient.Shared.Input.Mouse
 
             bool isZoomGesture = false;
 
-            { 
-                if (this.IsPointerDoubleTracked(pointerEvent))
+            if (this.IsPointerDoubleTracked(pointerEvent))
+            {
+                uint firstPointerId = pointerEvent.PointerId;
+                uint secondPointerId = (_mainPointerId == pointerEvent.PointerId) ? _secondaryPointerId : _mainPointerId;
+
+                PointerEventTrace eventTrace = _trackedPointerEvents[pointerEvent.PointerId];
+
+                PointerEventTrace firstEventTrace = new PointerEventTrace(pointerEvent, eventTrace.LastEvent);
+                PointerEventTrace secondEventTrace = _trackedPointerEvents[secondPointerId];
+
+                if (firstEventTrace.IsUpdated && secondEventTrace.IsUpdated)
                 {
-                    uint firstPointerId = pointerEvent.PointerId;
-                    uint secondPointerId = (_mainPointerId == pointerEvent.PointerId) ? _secondaryPointerId : _mainPointerId;
+                    isZoomGesture = (Math.Abs(firstEventTrace.DeltaX - secondEventTrace.DeltaX) > GlobalConstants.TouchZoomDeltaThreshold)
+                                  || (Math.Abs(firstEventTrace.DeltaY - secondEventTrace.DeltaY) > GlobalConstants.TouchZoomDeltaThreshold);
 
-                    PointerEventTrace eventTrace = _trackedPointerEvents[pointerEvent.PointerId];
-
-                    PointerEventTrace firstEventTrace = new PointerEventTrace(pointerEvent, eventTrace.LastEvent);
-                    PointerEventTrace secondEventTrace = _trackedPointerEvents[secondPointerId];
-
-                    if (firstEventTrace.IsUpdated && secondEventTrace.IsUpdated)
+                    // opposite deltas means Pinch&Zoom
+                    if (isZoomGesture && Math.Abs(firstEventTrace.DeltaX - secondEventTrace.DeltaX) > GlobalConstants.TouchZoomDeltaThreshold)
                     {
-                        isZoomGesture = (Math.Abs(firstEventTrace.DeltaX - secondEventTrace.DeltaX) > GlobalConstants.TouchZoomDeltaThreshold)
-                                      || (Math.Abs(firstEventTrace.DeltaY - secondEventTrace.DeltaY) > GlobalConstants.TouchZoomDeltaThreshold);
-
-                        // opposite deltas means Pinch&Zoom
-                        if (isZoomGesture && Math.Abs(firstEventTrace.DeltaX - secondEventTrace.DeltaX) > GlobalConstants.TouchZoomDeltaThreshold)
+                        // detected movement on x axis
+                        if ((firstEventTrace.DeltaX * secondEventTrace.DeltaX) >= 0)
                         {
-                            // detected movement on x axis
-                            if ((firstEventTrace.DeltaX * secondEventTrace.DeltaX) >= 0)
-                            {
-                                // not opposite
-                                isZoomGesture = false;
-                            }
-                            else if (Math.Abs(firstEventTrace.DeltaX) < GlobalConstants.TouchZoomDeltaThreshold || Math.Abs(secondEventTrace.DeltaX) < GlobalConstants.TouchZoomDeltaThreshold)
-                            {
-                                // one of the pointers didn't move
-                                isZoomGesture = false;
-                            }
+                            // not opposite
+                            isZoomGesture = false;
                         }
-
-                        if (isZoomGesture && Math.Abs(firstEventTrace.DeltaY - secondEventTrace.DeltaY) > GlobalConstants.TouchZoomDeltaThreshold)
+                        else if (Math.Abs(firstEventTrace.DeltaX) < GlobalConstants.TouchZoomDeltaThreshold || Math.Abs(secondEventTrace.DeltaX) < GlobalConstants.TouchZoomDeltaThreshold)
                         {
-                            // detected movement on y axis
-                            if ((firstEventTrace.DeltaY * secondEventTrace.DeltaY) >= 0)
-                            {
-                                // not opposite
-                                isZoomGesture = false;
-                            }
-                            else if (Math.Abs(firstEventTrace.DeltaY) < GlobalConstants.TouchZoomDeltaThreshold || Math.Abs(secondEventTrace.DeltaY) < GlobalConstants.TouchZoomDeltaThreshold)
-                            {
-                                // one of the pointers didn't move
-                                isZoomGesture = false;
-                            }
+                            // one of the pointers didn't move
+                            isZoomGesture = false;
+                        }
+                    }
+
+                    if (isZoomGesture && Math.Abs(firstEventTrace.DeltaY - secondEventTrace.DeltaY) > GlobalConstants.TouchZoomDeltaThreshold)
+                    {
+                        // detected movement on y axis
+                        if ((firstEventTrace.DeltaY * secondEventTrace.DeltaY) >= 0)
+                        {
+                            // not opposite
+                            isZoomGesture = false;
+                        }
+                        else if (Math.Abs(firstEventTrace.DeltaY) < GlobalConstants.TouchZoomDeltaThreshold || Math.Abs(secondEventTrace.DeltaY) < GlobalConstants.TouchZoomDeltaThreshold)
+                        {
+                            // one of the pointers didn't move
+                            isZoomGesture = false;
                         }
                     }
                 }
-            }
+            }            
 
             return isZoomGesture;
         }
