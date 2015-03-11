@@ -13,6 +13,7 @@
     using RdClient.Shared.ViewModels;
     using System;
     using System.Collections.Generic;
+    using Windows.Foundation;
 
     [TestClass]
     public sealed class RemoteSessionViewModelTests
@@ -23,6 +24,7 @@
         private TestDeferredExecution _defex;
         private TestTimerFactory _timerFactory;
         private TestConnectionSource _connectionSource;
+        private TestViewFactory _viewFactory;
 
         private sealed class TestKeyboardCapture : IKeyboardCapture
         {
@@ -50,14 +52,25 @@
             void IViewPresenter.DismissedLastModalView() { }
         }
 
-        private sealed class TestView : IPresentableView
+        private sealed class TestView : MutableObject, IPresentableView, IRemoteSessionView
         {
             private readonly IViewModel _vm;
+            private readonly IRenderingPanel _renderingPanel;
+
+            private sealed class TestRenderingPanel : IRenderingPanel
+            {
+            }
 
             public TestView(IViewModel vm)
             {
                 Assert.IsNotNull(vm);
                 _vm = vm;
+                _renderingPanel = new TestRenderingPanel();
+            }
+
+            public IRenderingPanel RenderingPanel
+            {
+                get { return _renderingPanel; }
             }
 
             IViewModel IPresentableView.ViewModel
@@ -68,11 +81,42 @@
             void IPresentableView.Activating(object activationParameter) { }
             void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
             void IPresentableView.Dismissing() { }
+
+            Size IRemoteSessionView.Size
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            event EventHandler IRemoteSessionView.Closed
+            {
+                add { throw new NotImplementedException(); }
+                remove { throw new NotImplementedException(); }
+            }
+
+            IRenderingPanel IRemoteSessionView.ActivateNewRenderingPanel()
+            {
+                return _renderingPanel;
+            }
+
+            void IRemoteSessionView.RecycleRenderingPanel(IRenderingPanel renderingPanel)
+            {
+            }
         }
 
         private sealed class TestViewFactory : IPresentableViewFactory
         {
             private readonly IViewModel _vm;
+            private TestView _view;
+
+            public TestView View
+            {
+                get
+                {
+                    if (null == _view)
+                        _view = new TestView(_vm);
+                    return _view;
+                }
+            }
 
             public TestViewFactory(IViewModel vm)
             {
@@ -81,26 +125,32 @@
 
             IPresentableView IPresentableViewFactory.CreateView(string name, object activationParameter)
             {
-                return new TestView(_vm);
+                return this.View;
             }
 
             void IPresentableViewFactory.AddViewClass(string name, System.Type viewClass, bool isSingleton) { }
         }
 
-        private sealed class TestDeferredExecution : IDeferredExecution
+        private sealed class TestDeferredExecution : MutableObject, IDeferredExecution
         {
             private readonly IList<Action> _actions = new List<Action>();
 
             public void ExecuteAll()
             {
-                foreach (Action a in _actions)
-                    a();
-                _actions.Clear();
+                using (LockUpgradeableRead())
+                {
+                    foreach (Action a in _actions)
+                        a();
+
+                    using (LockWrite())
+                        _actions.Clear();
+                }
             }
 
             void IDeferredExecution.Defer(Action action)
             {
-                throw new NotImplementedException();
+                using(LockWrite())
+                    _actions.Add(action);
             }
         }
 
@@ -125,9 +175,28 @@
             }
         }
 
+        private interface IConnectionActivity
+        {
+            event EventHandler Connect;
+        }
+
         private sealed class TestConnectionSource : IRdpConnectionSource
         {
             private readonly IRdpConnectionFactory _factory;
+
+            public sealed class ConnectionEventArgs : EventArgs
+            {
+                private readonly IRdpConnection _connection;
+
+                public IRdpConnection Connection { get { return _connection; } }
+
+                public ConnectionEventArgs(IRdpConnection connection)
+                {
+                    _connection = connection;
+                }
+            }
+
+            public event EventHandler<ConnectionEventArgs> ConnectionCreated;
 
             private sealed class Factory : IRdpConnectionFactory
             {
@@ -142,12 +211,18 @@
                 }
             }
 
-            private sealed class Connection : IRdpConnection, IRdpProperties
+            private sealed class Connection : IRdpConnection, IRdpProperties, IConnectionActivity
             {
+                private readonly RdpEventSource _events;
+
+                public Connection()
+                {
+                    _events = new RdpEventSource();
+                }
 
                 IRdpEvents IRdpConnection.Events
                 {
-                    get { throw new NotImplementedException(); }
+                    get { return _events; }
                 }
 
                 void IRdpConnection.SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)
@@ -157,7 +232,8 @@
 
                 void IRdpConnection.Connect(CredentialsModel credentials, bool fUsingSavedCreds)
                 {
-                    throw new NotImplementedException();
+                    if (null != this.Connect)
+                        this.Connect(this, EventArgs.Empty);
                 }
 
                 void IRdpConnection.Disconnect()
@@ -249,6 +325,10 @@
                 {
                     throw new NotImplementedException();
                 }
+                //
+                // IConnectionActivity
+                //
+                public event EventHandler Connect;
             }
 
             public TestConnectionSource()
@@ -258,7 +338,12 @@
 
             IRdpConnection IRdpConnectionSource.CreateConnection(RemoteConnectionModel model, IRenderingPanel renderingPanel)
             {
-                throw new NotImplementedException();
+                IRdpConnection connection = model.CreateConnection(_factory, renderingPanel);
+
+                if (null != this.ConnectionCreated)
+                    this.ConnectionCreated(this, new ConnectionEventArgs(connection));
+
+                return connection;
             }
         }
 
@@ -281,13 +366,14 @@
 
             _timerFactory = new TestTimerFactory();
             _connectionSource = new TestConnectionSource();
+            _viewFactory = new TestViewFactory(_vm);
 
             _defex = new TestDeferredExecution();
 
             _nav = new NavigationService()
             {
                 Presenter = new TestViewPresenter(),
-                ViewFactory = new TestViewFactory(_vm),
+                ViewFactory = _viewFactory,
                 Extensions =
                 {
                     new DataModelExtension() { AppDataModel = _dataModel }
@@ -300,6 +386,11 @@
         {
             _nav = null;
             _vm = null;
+            _viewFactory = null;
+            _defex = null;
+            _dataModel = null;
+            _timerFactory = null;
+            _connectionSource = null;
         }
 
         [TestMethod]
@@ -307,14 +398,34 @@
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
             IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRdpConnection connection = null;
+            int connectCount = 0;
+
+            _connectionSource.ConnectionCreated += (sender, e) =>
+            {
+                connection = e.Connection;
+                Assert.IsNotNull(connection.Events);
+                IConnectionActivity activity = (IConnectionActivity)connection;
+                //
+                // Subscribe for connection activity events;
+                //
+                activity.Connect += (s, a) =>
+                {
+                    ++connectCount;
+                };
+            };
 
             _nav.NavigateToView("RemoteSessionView", session);
+            ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
+            _defex.ExecuteAll();
 
             Assert.IsFalse(_vm.IsConnected);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsFalse(_vm.IsFailureMessageVisible);
             Assert.IsFalse(_vm.IsRightSideBarVisible);
             Assert.IsFalse(_vm.IsInterrupted);
+            Assert.IsNotNull(connection);
+            Assert.AreEqual(1, connectCount);
         }
     }
 }
