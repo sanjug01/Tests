@@ -1,17 +1,27 @@
+<<<<<<< HEAD
+﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Models;
+using Windows.UI.Xaml.Controls;
+
+namespace RdClient.CxWrappers.Utils
+=======
 ﻿namespace RdClient.CxWrappers.Utils
+>>>>>>> pakarpen-session
 {
     using RdClient.Shared.CxWrappers;
-using RdClient.Shared.Models;
     using Windows.UI.Xaml.Controls;
-
 
     public sealed class RdpConnectionFactory : IRdpConnectionFactory
     {
         public SwapChainPanel SwapChainPanel { private get; set; }
 
+<<<<<<< HEAD
         public ConnectionInformation ConnectionInformation { private get; set; }
 
+        public IRdpConnection CreateInstance()
+=======
         IRdpConnection IRdpConnectionFactory.CreateDesktop()
+>>>>>>> pakarpen-session
         {
             int xRes;
 
@@ -23,27 +33,26 @@ using RdClient.Shared.Models;
 
             rdpConnectionStoreCx.SetSwapChainPanel(SwapChainPanel);
 
-            xRes = rdpConnectionStoreCx.CreateConnectionWithSettings("", out rdpConnectionCx);
+            RemoteApplicationModel app = this.ConnectionInformation.App;
+            if (app != null)
+            {
+                xRes = rdpConnectionStoreCx.LaunchRemoteApp(app.RdpFile, out rdpConnectionCx);
+            }
+            else
+            {
+                xRes = rdpConnectionStoreCx.CreateConnectionWithSettings("", out rdpConnectionCx);
+            }
             RdTrace.IfFailXResultThrow(xRes, "Failed to create a desktop connection with the given settings.");
             return new RdpConnection(rdpConnectionCx, rdpConnectionStoreCx, new RdpEventSource());
         }
 
+<<<<<<< HEAD
+=======
 
         IRdpConnection IRdpConnectionFactory.CreateApplication(string rdpFile)
         {
-            int xRes;
-
-            RdClientCx.RdpConnection rdpConnectionCx;
-            RdClientCx.RdpConnectionStore rdpConnectionStoreCx;
-
-            xRes = RdClientCx.RdpConnectionStore.GetConnectionStore(out rdpConnectionStoreCx);
-            RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
-
-            rdpConnectionStoreCx.SetSwapChainPanel(SwapChainPanel);
-
-            xRes = rdpConnectionStoreCx.LaunchRemoteApp(rdpFile, out rdpConnectionCx);
-            RdTrace.IfFailXResultThrow(xRes, "Failed to create a remote app connection with the given settings.");
-            return new RdpConnection(rdpConnectionCx, rdpConnectionStoreCx, new RdpEventSource());
+            throw new System.NotImplementedException();
         }
+>>>>>>> pakarpen-session
     }
 }

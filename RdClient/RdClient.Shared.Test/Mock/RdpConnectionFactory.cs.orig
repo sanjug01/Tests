@@ -10,9 +10,13 @@ namespace RdClient.Shared.Test.Mock
             return (IRdpConnection) Invoke(new object[] { });
         }
 
-        public IRdpConnection CreateApplication(string rdpFile)
+<<<<<<< HEAD
+        public Models.ConnectionInformation ConnectionInformation { get; set; }            
+=======
+        IRdpConnection IRdpConnectionFactory.CreateApplication(string rdpFile)
         {
             return (IRdpConnection)Invoke(new object[] { rdpFile });
-        }        
+        }
+>>>>>>> pakarpen-session
     }
 }

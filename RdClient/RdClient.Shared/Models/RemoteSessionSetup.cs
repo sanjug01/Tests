@@ -34,7 +34,8 @@
                 if (_connection is DesktopModel)
                     hostName = ((DesktopModel)_connection).HostName;
                 else
-                    throw new NotImplementedException();
+                    hostName = "RemoteApplication FAKE";
+
 
                 return hostName;
             }
@@ -82,6 +83,12 @@
                 {
                     _sessionCredentials = new SessionCredentials();
                 }
+            }
+            else if(_connection is RemoteApplicationModel)
+            {
+                CredentialsModel creds = new CredentialsModel() { Username = @"rdvteam\tstestuser1", Password = @"1234AbCd" };
+                IModelContainer<CredentialsModel> credContainer = TemporaryModelContainer<CredentialsModel>.WrapModel(Guid.Empty, creds);
+                _sessionCredentials = new SessionCredentials(credContainer);
             }
             else
             {

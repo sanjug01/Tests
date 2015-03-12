@@ -57,7 +57,8 @@
 
         public override IRdpConnection CreateConnection(IRdpConnectionFactory connectionFactory, IRenderingPanel renderingPanel)
         {
-            throw new System.NotImplementedException();
+            IRdpConnection connection = connectionFactory.CreateApplication(this.RdpFile);                     
+            return connection;
         }
     }
 }

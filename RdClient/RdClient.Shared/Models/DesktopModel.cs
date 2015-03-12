@@ -94,6 +94,7 @@
             //
             // TODO: populate the new connection with the desktop's properties
             //
+            properties.SetStringProperty
 
             return connection;
         }

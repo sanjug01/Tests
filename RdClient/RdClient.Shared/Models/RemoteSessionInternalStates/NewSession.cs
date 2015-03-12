@@ -50,10 +50,7 @@
                 }
                 else
                 {
-                    //
-                    // Can only connect to desktops
-                    //
-                    throw new NotImplementedException();
+                    _session.InternalStartSession(_sessionSetup);
                 }
             }
 

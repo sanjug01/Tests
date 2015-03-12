@@ -312,13 +312,10 @@
             _onPrem = new OnPremiseWorkspaceModel();
             RdTrace.TraceDbg(string.Format("Subscribed to workspace. Got {0} resources", _onPrem.Resources.Count));
 
-            ConnectionInformation connectionInformation = new ConnectionInformation()
-            {
-                App = _onPrem.Resources.First(),
-                Credentials = _onPrem.Credentials
-            };
+            RemoteSessionSetup sessionSetup = new RemoteSessionSetup(this.ApplicationDataModel, _onPrem.Resources.First());
+            IRemoteSession session = _sessionFactory.CreateSession(sessionSetup);
 
-            this.NavigationService.NavigateToView("SessionView", connectionInformation);
+            this.NavigationService.NavigateToView("RemoteSessionView", session);
         }
     }
 }
