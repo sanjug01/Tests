@@ -79,6 +79,21 @@
 
             private sealed class TestRenderingPanel : IRenderingPanel
             {
+                private EventHandler _ready;
+
+                event EventHandler IRenderingPanel.Ready
+                {
+                    add
+                    {
+                        _ready += value;
+                        value(this, EventArgs.Empty);
+                    }
+
+                    remove
+                    {
+                        _ready -= value;
+                    }
+                }
             }
 
             public TestView(IViewModel vm)

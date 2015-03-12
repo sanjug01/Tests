@@ -35,7 +35,7 @@
         {
             get
             {
-                return null != _activeSession && SessionState.Connected == _activeSession.State.State;
+                return null != _activeSession && (SessionState.Connected == _activeSession.State.State || SessionState.Connecting == _activeSession.State.State);
             }
         }
 
@@ -243,6 +243,14 @@
                 //
                 switch(_activeSession.State.State)
                 {
+                    case SessionState.Connecting:
+                        _interruptedContinuation = null;
+                        this.IsInterrupted = false;
+                        _cancelAutoReconnect.EmitCanExecuteChanged();
+                        EmitPropertyChanged("IsConnected");
+                        this.IsConnectionBarVisible = false;
+                        break;
+
                     case SessionState.Connected:
                         //
                         // If the session has been interrupted but reconnected automatically, clear the IsInterrupted flag
