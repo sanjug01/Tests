@@ -2,7 +2,6 @@
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using RdClient.Shared.CxWrappers;
-    using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using System;
@@ -56,8 +55,7 @@
 
             _sm = new SessionModel(_connectionFactory, _dispatcher);
 
-            _connectionFactory.Expect("CreateInstance", new List<object>(), _connection);
-            _timerFactory.Expect("CreateTimer", new List<object>(), _timer);
+            _connectionFactory.Expect("CreateDesktop", new List<object>(), _connection);
             _connection.Expect("SetStringProperty", new List<object>() { "Full Address", desktop.HostName }, 0);
             _connection.Expect("SetBoolProperty", new List<object>() { "Administrative Session", desktop.IsAdminSession }, 0);
             _connection.Expect("SetIntProperty", new List<object>() { "AudioMode", (int) desktop.AudioMode }, 0);

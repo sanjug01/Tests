@@ -3,7 +3,6 @@
 namespace RdClient.Views
 {
     using RdClient.Shared.Navigation;
-    using System;
     using System.Diagnostics.Contracts;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;

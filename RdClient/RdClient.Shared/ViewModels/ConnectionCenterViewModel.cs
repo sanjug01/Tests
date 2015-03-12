@@ -158,6 +158,8 @@
 
         protected override void OnPresenting(object activationParameter)
         {
+            Contract.Assert(null != _sessionFactory);
+
             if (null == _desktopViewModels)
             {
                 //
@@ -181,16 +183,36 @@
                 INotifyPropertyChanged npc = this.DesktopViewModels;
                 npc.PropertyChanged += OnDesktopViewModelPropertyChanged;
             }
+            else
+            {
+                //
+                // Attach the session factory to all desktop view models
+                //
+                foreach (IRemoteConnectionViewModel dvm in this.DesktopViewModels)
+                {
+                    dvm.Presenting(_sessionFactory);
+                }
+            }
+        }
+
+        protected override void OnDismissed()
+        {
+            foreach(IRemoteConnectionViewModel dvm in this.DesktopViewModels)
+            {
+                dvm.Dismissed();
+            }
         }
 
         private IDesktopViewModel CreateDesktopViewModel(IModelContainer<RemoteConnectionModel> container)
         {
             Contract.Assert(container.Model is DesktopModel, "Data model for a desktop tile is not DesktopModel");
+            Contract.Assert(null != _sessionFactory);
 
             IDesktopViewModel dvm = DesktopViewModel.Create(container, this.ApplicationDataModel, this.Dispatcher, this.NavigationService);
 
             dvm.SelectionEnabled = this.DesktopsSelectable;
             dvm.PropertyChanged += DesktopSelection_PropertyChanged;
+            dvm.Presenting(_sessionFactory);
 
             return dvm;
         }

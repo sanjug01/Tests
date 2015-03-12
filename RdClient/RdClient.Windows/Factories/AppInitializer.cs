@@ -25,6 +25,7 @@
         public IApplicationBarViewModel AppBarViewModel { private get; set; }
         public string LandingPage { private get; set; }
         public ILifeTimeManager LifeTimeManager { private get; set; }
+        public IRdpConnectionSource ConnectionSource { private get; set; }
         public Button BackButton { private get; set; }
 
         public void Initialiaze()
@@ -33,6 +34,7 @@
             Contract.Assert(this.AppBarViewModel != null);
             Contract.Assert(!string.IsNullOrEmpty(this.LandingPage));
             Contract.Assert(null != this.LifeTimeManager);
+            Contract.Assert(null != this.ConnectionSource);
 
             ITimerFactory timerFactory = new WinrtThreadPoolTimerFactory();
             IDeferredExecution deferredExecution = new CoreDispatcherDeferredExecution() { Priority = CoreDispatcherPriority.Normal };
@@ -43,8 +45,7 @@
                 ModelSerializer = new SerializableModelSerializer()
             };
 
-            ISessionFactory sessionFactory = new SessionFactory();
-            sessionFactory.DeferedExecution = deferredExecution;
+            ISessionFactory sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution, timerFactory);
 
             _navigationService = this.CreateNavigationService();
 

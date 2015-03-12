@@ -1,16 +1,17 @@
-﻿using RdClient.Shared.CxWrappers;
-using RdClient.Shared.Models;
-using Windows.UI.Xaml.Controls;
-
-namespace RdClient.CxWrappers.Utils
+﻿namespace RdClient.CxWrappers.Utils
 {
-    public class RdpConnectionFactory : IRdpConnectionFactory
+    using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Models;
+    using Windows.UI.Xaml.Controls;
+
+
+    public sealed class RdpConnectionFactory : IRdpConnectionFactory
     {
         public SwapChainPanel SwapChainPanel { private get; set; }
 
         public ConnectionInformation ConnectionInformation { private get; set; }
 
-        public IRdpConnection CreateInstance()
+        IRdpConnection IRdpConnectionFactory.CreateDesktop()
         {
             int xRes;
 
@@ -35,5 +36,10 @@ namespace RdClient.CxWrappers.Utils
             return new RdpConnection(rdpConnectionCx, rdpConnectionStoreCx, new RdpEventSource());
         }
 
+
+        IRdpConnection IRdpConnectionFactory.CreateApplication(string rdpFile)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

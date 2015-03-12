@@ -2,14 +2,15 @@
     x:Class="RdClient.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:RdClient"
     xmlns:views="using:RdClient.Views"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:models="using:RdClient.Models"
     xmlns:conv="using:RdClient.Converters"
     xmlns:helpers="using:RdClient.Helpers"
     xmlns:sh="using:RdClient.Shared.Helpers"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:nav="using:RdClient.Shared.Navigation"
     xmlns:navext="using:RdClient.Shared.Navigation.Extensions"
     xmlns:design="using:RdClient.DesignTime"
@@ -22,10 +23,16 @@
     </Page.DataContext>
     
     <Page.Resources>
-        <fac:AppInitializer x:Key="AppInitializer"
-                            LifeTimeManager="{StaticResource LifeTimeManager}"
-                            LandingPage="ConnectionCenterView"/>
-        
+        <fac:AppInitializer
+            x:Key="AppInitializer"
+            LifeTimeManager="{StaticResource LifeTimeManager}"
+            LandingPage="ConnectionCenterView">
+            <fac:AppInitializer.ConnectionSource>
+                <!-- <models:SingleSwapChainPanelRdpConnectionSource/> -->
+                <models:BadCertificateConnectionSource/>
+            </fac:AppInitializer.ConnectionSource>
+        </fac:AppInitializer>
+
         <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
         <conv:SegoeGlyphToSymbolIconConverter x:Key="segoeToSymbolIcon"/>
         <conv:BarItemsAlignmentFilteringConverter x:Key="leftAlignedFilter" Alignment="Left" />

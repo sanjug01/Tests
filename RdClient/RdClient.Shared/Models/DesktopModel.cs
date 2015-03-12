@@ -1,7 +1,9 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.CxWrappers;
     using System;
     using System.ComponentModel;
+    using System.Diagnostics.Contracts;
     using System.Runtime.Serialization;
 
     [DefaultValue(Local)]
@@ -81,6 +83,19 @@
         public DesktopModel()
         {
             _credentialsId = Guid.Empty;
+        }
+
+        public override IRdpConnection CreateConnection(IRdpConnectionFactory connectionFactory, IRenderingPanel renderingPanel)
+        {
+            IRdpConnection connection = connectionFactory.CreateDesktop();
+            IRdpProperties properties = connection as IRdpProperties;
+
+            Contract.Assert(null != properties);
+            //
+            // TODO: populate the new connection with the desktop's properties
+            //
+
+            return connection;
         }
     }
 }

@@ -8,6 +8,7 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:local="using:RdClient.Views"
     xmlns:c="using:RdClient.Converters"
+    xmlns:sc="using:RdClient.Shared.Converters"
     xmlns:design="using:RdClient.DesignTime"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d"
@@ -22,6 +23,9 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <sc:NotNullToVisibilityConverter x:Key="NotNullToVisibleConverter" />
+            <sc:NullToVisibilityConverter x:Key="NullToVisibleConverter" />
+            <sc:BytesToBitmapConverter x:Key="BytesToBitmapConverter" />
             <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
             <MenuFlyout x:Name="ModifyConnectionMenuFlyout"
                         Placement="Right">
@@ -43,8 +47,20 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="42" />
             </Grid.RowDefinitions>
-            <Image Source="ms-appx:///Assets/desktop_placeholder.png" Visibility="{Binding HasThumbnailImage, Converter={StaticResource InverseBooleanToVisibilityConverter}}" Stretch="None"  HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <Image Grid.RowSpan="2" Source="{Binding Thumbnail}" Visibility="{Binding HasThumbnailImage, Converter={StaticResource BooleanToVisibilityConverter}}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            
+            <Image Source="ms-appx:///Assets/desktop_placeholder.png"
+                   Visibility="{Binding Desktop.EncodedThumbnail, Converter={StaticResource NullToVisibleConverter}}"
+                   Stretch="None"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+            
+            <Image Grid.RowSpan="2"
+                   Source="{Binding Desktop.EncodedThumbnail, Converter={StaticResource BytesToBitmapConverter}}"
+                   Visibility="{Binding Desktop.EncodedThumbnail, Converter={StaticResource NotNullToVisibleConverter}}"
+                   Stretch="UniformToFill"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+            
             <Grid Grid.Row="1" Background="{StaticResource ConnectionCenterHostnameBackgroundColor}">
                 <TextBlock Text="{Binding Desktop.HostName}" Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0"/>
             </Grid>

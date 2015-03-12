@@ -31,7 +31,7 @@ namespace RdClient.Shared.Test.Model
             _mockTimer = new Mock.Timer();
             _mockTimerFactory = new Mock.TimerFactory();
             _mockTimerFactory.Expect("CreateTimer", new List<object>() { }, _mockTimer);
-            _snapshotter = new Snapshotter(_mockConnection, _mockThumb, _mockTimerFactory, _settings);
+            _snapshotter = new Snapshotter(_mockConnection, _mockConnection.Events, _mockThumb, _mockTimerFactory, _settings);
         }
 
         [TestCleanup]
@@ -52,6 +52,7 @@ namespace RdClient.Shared.Test.Model
         [TestMethod]
         public void TestTimerStartedCorrectlyOnFirstGraphicsUpdate()
         {
+            _snapshotter.Activate();
             _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
             Assert.AreEqual(1, _mockTimer.CallsToStart);
             Assert.IsTrue(_mockTimer.Running);
@@ -61,6 +62,7 @@ namespace RdClient.Shared.Test.Model
         [TestMethod]
         public void TestRepeatingTimerCreatedCorrectlyAfterFirstSnapshot()
         {
+            _snapshotter.Activate();
             Mock.RdpScreenSnapshot snapshot = new Mock.RdpScreenSnapshot();
             _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
             _mockConnection.Expect("GetSnapshot", new List<object>() { }, snapshot);
@@ -75,6 +77,7 @@ namespace RdClient.Shared.Test.Model
         [TestMethod]
         public void TestSnapshotTakenWhenTimerCallbacksExecuted()
         {
+            _snapshotter.Activate();
             Mock.RdpScreenSnapshot snapshot = new Mock.RdpScreenSnapshot();
             //first snapshot
             _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());       
@@ -91,6 +94,7 @@ namespace RdClient.Shared.Test.Model
         [TestMethod]
         public void TestSnapshotsNotTakenWhenUseThumbnailsSettingIsFalse()
         {
+            _snapshotter.Activate();
             _settings.UseThumbnails = false;
             //initial snapshot timer set on first graphics update
             _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
@@ -103,6 +107,7 @@ namespace RdClient.Shared.Test.Model
         public void TestThumbnailNotUpdatedWhenRdpConnectionReturnsNullSnapshot()
         {
             //first snapshot
+            _snapshotter.Activate();
             _eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
             _mockConnection.Expect("GetSnapshot", new List<object>() { }, null);
             _mockTimer.Callback();

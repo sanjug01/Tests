@@ -107,7 +107,7 @@ namespace RdClient.Shared.Models
         public void Connect(ConnectionInformation connectionInformation, ITimerFactory timerFactory, GeneralSettings settings)
         {
             _connectionFactory.ConnectionInformation = connectionInformation;
-            _rdpConnection = _connectionFactory.CreateInstance();
+            _rdpConnection = _connectionFactory.CreateDesktop();
             EmitConnectionCreated(new ConnectionCreatedArgs(_rdpConnection));
 
             _rdpConnection.Events.ConnectionHealthStateChanged += HandleConnectionHealthStateChanged;
@@ -118,7 +118,6 @@ namespace RdClient.Shared.Models
             if (connectionInformation.App == null)
             {
                 DesktopModel desktop = connectionInformation.Desktop;
-                Snapshotter snapshotter = new Snapshotter(_rdpConnection, connectionInformation.Desktop.Encoder, timerFactory, settings);
                 RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
                 _rdpConnection.SetLeftHandedMouseMode(desktop.IsSwapMouseButtons);
                 

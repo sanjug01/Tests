@@ -2,7 +2,6 @@
 using RdClient.Shared.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using Windows.Foundation;
 
@@ -161,8 +160,18 @@ namespace RdClient.Shared.Input.Mouse
         /// <param name="pointerEvent">last pointer event - right/left finger up</param>
         public virtual void CompleteGesture(PointerEvent pointerEvent)
         {
+            Contract.Assert(pointerEvent.PointerId == _mainPointerId || pointerEvent.PointerId == _secondaryPointerId, "CompleteGesture!, unexpected pointer id");
+
             // should stop tracking positions from both fingers
-            _secondaryPointerId = _mainPointerId;
+            if (pointerEvent.PointerId != _mainPointerId)
+            {
+                _secondaryPointerId = _mainPointerId;
+            }
+            else
+            {
+                _mainPointerId = _secondaryPointerId;
+            }
+
             _activeGesture = GestureType.Idle; // no active gesture
         }
 
@@ -170,10 +179,11 @@ namespace RdClient.Shared.Input.Mouse
         // 2 fingers scrolling (or panning, if supported)
         public virtual bool IsScrolling(PointerEvent pointerEvent)
         {
-            Contract.Equals(2, this.NumberOfContacts(pointerEvent));
+            Contract.Assert(2 == this.NumberOfContacts(pointerEvent), "IsScrolling requires 2 contacts!");
             Contract.Requires(_secondaryPointerId != _mainPointerId);
 
             bool result = false;
+
             if (this.IsPointerDoubleTracked(pointerEvent))
             {
                 uint firstPointerId = pointerEvent.PointerId;
@@ -193,7 +203,7 @@ namespace RdClient.Shared.Input.Mouse
                         result = true;
                     }
                 }
-            }
+            }            
 
             return result;
         }
@@ -211,10 +221,11 @@ namespace RdClient.Shared.Input.Mouse
 
         public virtual bool IsZooming(PointerEvent pointerEvent)
         {
-            Contract.Equals(2, this.NumberOfContacts(pointerEvent));
-            Contract.Requires(_secondaryPointerId != _mainPointerId);
+            Contract.Assert(2 == this.NumberOfContacts(pointerEvent), "IsZooming requires 2 contacts!");
+            Contract.Requires(_secondaryPointerId != _mainPointerId, "IsZooming: At least 2 pointer ids required!");
 
             bool isZoomGesture = false;
+
             if (this.IsPointerDoubleTracked(pointerEvent))
             {
                 uint firstPointerId = pointerEvent.PointerId;
@@ -261,7 +272,8 @@ namespace RdClient.Shared.Input.Mouse
                         }
                     }
                 }
-            }
+            }            
+
             return isZoomGesture;
         }
 
@@ -290,11 +302,16 @@ namespace RdClient.Shared.Input.Mouse
                                  + Math.Pow(secondEventTrace.PreviousEvent.Position.Y - firstEventTrace.PreviousEvent.Position.Y, 2)
                                  );
 
-                    double centerX = (secondEventTrace.LastEvent.Position.X + firstEventTrace.LastEvent.Position.X) * 0.5;
-                    double centerY = (secondEventTrace.LastEvent.Position.Y + firstEventTrace.LastEvent.Position.Y) * 0.5;
-                    PointerManipulator.SendPinchAndZoom(centerX, centerY, prevDistance, currentDistance);
+                    if (Math.Abs(currentDistance - prevDistance) > GlobalConstants.TouchZoomDeltaThreshold)
+                    {
+                        double centerX = (secondEventTrace.PreviousEvent.Position.X + firstEventTrace.PreviousEvent.Position.X) * 0.5;
+                        double centerY = (secondEventTrace.PreviousEvent.Position.Y + firstEventTrace.PreviousEvent.Position.Y) * 0.5;
 
-                    _activeGesture = GestureType.Zooming;
+                        PointerManipulator.SendPinchAndZoom(centerX, centerY, prevDistance, currentDistance);
+
+
+                        _activeGesture = GestureType.Zooming;
+                    }
                 }
             }
         }
@@ -371,6 +388,10 @@ namespace RdClient.Shared.Input.Mouse
             else if (pointerEvent.LeftButton == false && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId))
             {
                 _trackedPointerEvents.Remove(pointerEvent.PointerId);
+                if(_mainPointerId == pointerEvent.PointerId && _trackedPointerEvents.Count > 0)
+                {
+                    _trackedPointerEvents.Clear();
+                }
             }
 
             if(ConsumedEvent != null)

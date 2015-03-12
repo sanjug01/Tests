@@ -86,10 +86,6 @@ namespace RdClient.Shared.Input.Mouse
             },
             (o) => { o.Context.MouseScroll(o.Input); });
 
-            stateMachine.AddTransition(PointerState.Scroll, PointerState.Zoom,
-            (o) => { return o.Context.IsZooming(o.Input); },
-            (o) => { o.Context.ApplyZoom(o.Input); });
-
             stateMachine.AddTransition(PointerState.Scroll, PointerState.Scroll,
             (o) =>
             {
@@ -98,6 +94,15 @@ namespace RdClient.Shared.Input.Mouse
                    o.Context.IsScrolling(o.Input);
             },
             (o) => { o.Context.MouseScroll(o.Input); });
+
+            stateMachine.AddTransition(PointerState.Scroll, PointerState.Zoom,
+            (o) =>
+            {
+                return
+                    o.Context.NumberOfContacts(o.Input) == 2 &&
+                    o.Context.IsZooming(o.Input);
+            },
+            (o) => { o.Context.ApplyZoom(o.Input); });
 
             stateMachine.AddTransition(PointerState.Scroll, PointerState.LeftDown,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
@@ -121,8 +126,7 @@ namespace RdClient.Shared.Input.Mouse
             (o) =>
             {
                 return
-                   o.Context.NumberOfContacts(o.Input) == 2 &&
-                   o.Context.IsZooming(o.Input);
+                   o.Context.NumberOfContacts(o.Input) == 2;
             },
             (o) => { o.Context.ApplyZoom(o.Input); });
 
@@ -135,32 +139,33 @@ namespace RdClient.Shared.Input.Mouse
             (o) => { o.Context.CompleteGesture(o.Input); });
 
 
-            // panning
-            stateMachine.AddTransition(PointerState.Zoom, PointerState.Pan,
-            (o) => 
-            {
-                return
-                   o.Context.NumberOfContacts(o.Input) == 2 &&
-                   o.Context.IsPanning(o.Input); 
-            },
-            (o) => { o.Context.ApplyPan(o.Input); });
+            // TODO: enable 2 fingers panning on remove pan logic entirely - Bug 1861012
+            ////// panning. 
+            ////stateMachine.AddTransition(PointerState.Zoom, PointerState.Pan,
+            ////(o) => 
+            ////{
+            ////    return
+            ////       o.Context.NumberOfContacts(o.Input) == 2 &&
+            ////       o.Context.IsPanning(o.Input); 
+            ////},
+            ////(o) => { o.Context.ApplyPan(o.Input); });
 
-            stateMachine.AddTransition(PointerState.Pan, PointerState.Pan,
-            (o) =>
-            {
-                return
-                   o.Context.NumberOfContacts(o.Input) == 2 &&
-                   o.Context.IsZooming(o.Input);
-            },
-            (o) => { o.Context.ApplyPan(o.Input); });
+            ////stateMachine.AddTransition(PointerState.Pan, PointerState.Pan,
+            ////(o) =>
+            ////{
+            ////    return
+            ////       o.Context.NumberOfContacts(o.Input) == 2 &&
+            ////       o.Context.IsZooming(o.Input);
+            ////},
+            ////(o) => { o.Context.ApplyPan(o.Input); });
 
-            stateMachine.AddTransition(PointerState.Pan, PointerState.LeftDown,
-            (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
-            (o) => { o.Context.CompleteGesture(o.Input); });
+            ////stateMachine.AddTransition(PointerState.Pan, PointerState.LeftDown,
+            ////(o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
+            ////(o) => { o.Context.CompleteGesture(o.Input); });
 
-            stateMachine.AddTransition(PointerState.Pan, PointerState.Idle,
-            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { o.Context.CompleteGesture(o.Input); });
+            ////stateMachine.AddTransition(PointerState.Pan, PointerState.Idle,
+            ////(o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
+            ////(o) => { o.Context.CompleteGesture(o.Input); });
 
 
             stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.Idle,

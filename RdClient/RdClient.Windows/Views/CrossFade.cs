@@ -1,11 +1,12 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
-
-namespace RdClient.Views
+﻿namespace RdClient.Views
 {
+    using RdClient.Shared.Navigation;
+    using System;
+    using System.Diagnostics.Contracts;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Media.Animation;
+
     //
     // Interface of a pending animation that may be committed immediately.
     //
@@ -106,9 +107,10 @@ namespace RdClient.Views
             Contract.Requires(null != container);
             Contract.Requires(null != view);
 
+            view.Content.CastAndCall<IPresentationAnimation>(a => a.AnimatingOut());
             view.Visibility = Visibility.Visible;
             view.Opacity = 1.0;
-            view.IsEnabled = false;
+            view.IsHitTestVisible = false;
 
             Duration duration = new Duration(TimeSpan.FromSeconds(0.2));
             Timeline tl = new DoubleAnimation() { Duration = duration, From = 1.0, To = 0.0, BeginTime = TimeSpan.FromSeconds(0.0) };
@@ -123,6 +125,7 @@ namespace RdClient.Views
             Contract.Requires(null != view);
 
             container.Children.Remove(view);
+            view.Content.CastAndCall<IPresentationAnimation>(a => a.AnimatedOut());
             view.Content = null;
             //
             // If the stack is not empty, enable the top content control on the stack which had been disabled
@@ -133,7 +136,9 @@ namespace RdClient.Views
             if (topChildIndex >= 0)
             {
                 ContentControl cc = (ContentControl)container.Children[topChildIndex];
-                cc.IsEnabled = true;
+                cc.Content.CastAndCall<IPresentationAnimation>(a => a.AnimatingIn());
+                cc.IsHitTestVisible = true;
+                cc.Content.CastAndCall<IPresentationAnimation>(a => a.AnimatedIn());
             }
         }
 
@@ -167,11 +172,30 @@ namespace RdClient.Views
             Contract.Requires(null != container);
             Contract.Requires(null != view);
 
+            IPresentationAnimation previousTop = null;
+
+            view.Content.CastAndCall<IPresentationAnimation>(a => a.AnimatingIn());
             view.Visibility = Visibility.Visible;
             view.Opacity = 0.0;
-            view.IsEnabled = false;
+            view.IsHitTestVisible = false;
+
+            if(container.Children.Count > 0)
+            {
+                ContentControl cc = container.Children[container.Children.Count - 1] as ContentControl;
+
+                if (null != cc)
+                {
+                    previousTop = cc.Content as IPresentationAnimation;
+
+                    if(null != previousTop)
+                        previousTop.AnimatingOut();
+                }
+            }
 
             container.Children.Add(view);
+
+            if (null != previousTop)
+                previousTop.AnimatedOut();
 
             Duration duration = new Duration(TimeSpan.FromSeconds(0.2));
             Timeline tl = new DoubleAnimation() { Duration = duration, From = 0.0, To = 1.0, BeginTime = TimeSpan.FromSeconds(0.0) };
@@ -186,8 +210,8 @@ namespace RdClient.Views
             Contract.Requires(null != view);
 
             view.Opacity = 1.0;
-            view.IsEnabled = true;
+            view.IsHitTestVisible = true;
+            view.Content.CastAndCall<IPresentationAnimation>(a => a.AnimatedIn());
         }
-
     }
 }

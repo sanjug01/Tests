@@ -64,9 +64,24 @@ namespace RdClient.Controls
         {
             Contract.Assert(sender != null);
             Contract.Assert(e != null);
-            RdSessionPanel panel = sender as RdSessionPanel;
-            
-            panel.SwapChainPanelStoryboard.Begin();
+            RdSessionPanel panel = (RdSessionPanel)sender;
+
+
+            panel.OnZoomPanTransformChanged(e);
+        }
+
+
+        private bool _isAnimationOn = false;
+        private void OnZoomPanTransformChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (_isAnimationOn)
+            {
+                this.SwapChainPanelStoryboard.SkipToFill();
+                this.SwapChainPanelStoryboard.Stop();
+            }
+
+            this.SwapChainPanelStoryboard.Begin();
+            _isAnimationOn = true;
         }
 
         public RdSessionPanel()
@@ -77,6 +92,13 @@ namespace RdClient.Controls
                 this.ViewSize = (args as SizeChangedEventArgs).NewSize;
                 this.WindowRect = new Rect(new Point(0, 0), this.ViewSize);
             };
+
+            SwapChainPanelStoryboard.Completed += SwapChainPanelStoryboard_Completed;
+        }
+
+        void SwapChainPanelStoryboard_Completed(object sender, object e)
+        {
+            _isAnimationOn = false;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)

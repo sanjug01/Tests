@@ -20,10 +20,10 @@
         private readonly DesktopModel _desktop;
         private readonly ApplicationDataModel _dataModel;
         private readonly INavigationService _navigationService;
+        private ISessionFactory _sessionFactory;
         private bool _isSelected;
         private bool _selectionEnabled;
         private IDeferredExecution _dispatcher;
-        private BitmapImage _thumbnail;
 
         public static IDesktopViewModel Create(IModelContainer<RemoteConnectionModel> desktopContainer,
             ApplicationDataModel dataModel,
@@ -57,15 +57,6 @@
             //          NavigationService may be initialized later while presenting the parent view
             //
             _dataModel = dataModel;
-            //
-            // Register for notifications from the thumbnail encoder. The encoder is passed to the session model
-            // that hooks it up with a snapshotter that periodically takes screenshots of the remote session and
-            // pushes them to the encoder. The encoder resamples screenshots and compresses them for serialization.
-            // The view model sends the compressed thimbnails to the thumbnail model that sets its Image property
-            // to the thumbnail image.
-            //
-            _desktop.Thumbnail.ImageUpdated += this.OnAsyncThumbnailUpdated;
-            _thumbnail = _desktop.Thumbnail.Image;
         }
 
         public Guid DesktopId
@@ -131,23 +122,6 @@
             }
         }
 
-        public bool HasThumbnailImage
-        {
-            get { return null != _thumbnail; }
-        }
-
-        public BitmapImage Thumbnail
-        {
-            get { return _thumbnail; }
-            set
-            {
-                if(this.SetProperty(ref _thumbnail, value))
-                {
-                    EmitPropertyChanged("HasThumbnailImage");
-                }
-            }
-        }
-
         public ICommand EditCommand
         {
             get { return _editCommand; }
@@ -163,9 +137,20 @@
             get { return _deleteCommand; }
         }
 
-        void IDesktopViewModel.Dismissed()
+        void IRemoteConnectionViewModel.Presenting(ISessionFactory sessionFactory)
         {
-            _desktop.Thumbnail.ImageUpdated -= this.OnAsyncThumbnailUpdated;
+            Contract.Assert(null != sessionFactory);
+            Contract.Ensures(null != _sessionFactory);
+
+            _sessionFactory = sessionFactory;
+        }
+
+        void IRemoteConnectionViewModel.Dismissed()
+        {
+            Contract.Assert(null != _sessionFactory);
+            Contract.Ensures(null == _sessionFactory);
+
+            _sessionFactory = null;
         }
 
         private void EditCommandExecute(object o)
@@ -175,6 +160,11 @@
 
         private void ConnectCommandExecute(object o)
         {
+            RemoteSessionSetup sessionSetup = new RemoteSessionSetup(_dataModel, this.Desktop);
+            IRemoteSession session = _sessionFactory.CreateSession(sessionSetup);
+
+            _navigationService.NavigateToView("RemoteSessionView", session);
+#if false
             if (this.Credentials != null)
             {
                 InternalConnect(this.Credentials, false);
@@ -197,6 +187,7 @@
 
                 _navigationService.PushModalView("AddUserView", args, addUserCompleted);
             }            
+#endif
         }
 
         private void InternalConnect(CredentialsModel credentials, bool storeCredentials)
@@ -218,18 +209,6 @@
         private void DeleteCommandExecute(object o)
         {
             _navigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(TemporaryModelContainer<DesktopModel>.WrapModel(_desktopId, _desktop)));            
-        }
-
-        private void OnAsyncThumbnailUpdated(object sender, EventArgs e)
-        {
-            _dispatcher.Defer(() =>
-            {
-                //
-                // Pull an image from the thumbnail model and put it in the Thumbnail property
-                // to update the view.
-                //
-                this.Thumbnail = _desktop.Thumbnail.Image;
-            });
         }
     }
 }

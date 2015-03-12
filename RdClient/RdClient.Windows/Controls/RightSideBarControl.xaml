@@ -1,0 +1,41 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.RightSideBarControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    
+    <Grid>
+
+        <!-- Right hand side bar -->
+        <Grid x:Name="RightSideBar" Width="Auto" HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="Black" Opacity="0.6" Visibility="Collapsed">
+            <Grid.Resources>
+                <Storyboard x:Name="ShowRightSideBarStoryboard">
+                    <DoubleAnimation x:Name="ShowRightSideBarAnimation"
+                                     Storyboard.TargetName="RightSideBarTransform"
+                                     Storyboard.TargetProperty="X"
+                                     Duration="0:0:0.1"/>
+                </Storyboard>
+                <Storyboard x:Name="HideRightSideBarStoryboard">
+                    <DoubleAnimation x:Name="HideRightSideBarAnimation"
+                                     Storyboard.TargetName="RightSideBarTransform"
+                                     Storyboard.TargetProperty="X"
+                                     Duration="0:0:0.1"/>
+                </Storyboard>
+            </Grid.Resources>
+
+            <Grid.RenderTransform>
+                <TranslateTransform x:Name="RightSideBarTransform" X="0"/>
+            </Grid.RenderTransform>
+
+            <StackPanel Orientation="Vertical" Margin="12,20">
+                <AppBarButton x:Name="NavigateHomeButton" Icon="Home" x:Uid="SessionView-HomeButton" Label="Home (d)" />
+                <AppBarToggleButton Icon="TouchPointer" x:Uid="SessionView-MouseMode" Label="Mouse-Mode (d)" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -79,10 +79,37 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.AreEqual(TransformType.ZoomOut, _svm.ZoomPanTransform.TransformType);
         }
 
+
+        public void ZoomPanViewModel_DefaultScale_ShouldNotUpdateTransformPropertyOnPan()
+        {
+            bool notificationFired = false;
+
+            _svm.PropertyChanged += ((sender, e) =>
+            {
+                if ("ZoomPanTransform".Equals(e.PropertyName))
+                {
+                    notificationFired = true;
+                }
+            });
+
+            _svm.PanCommand.Execute(_panLeftTransform);
+            Assert.IsFalse(notificationFired);
+
+            _svm.PanCommand.Execute(_panRightTransform);
+            Assert.IsFalse(notificationFired);
+
+            _svm.PanCommand.Execute(_panUpTransform);
+            Assert.IsFalse(notificationFired);
+
+            _svm.PanCommand.Execute(_panDownTransform);
+            Assert.IsFalse(notificationFired);
+        }
+
         [TestMethod]
         public void ZoomPanViewModel_PanLeft_ShouldUpdateTransformProperty()
         {
             bool notificationFired = false;
+            _svm.ToggleZoomCommand.Execute(_zoomInTransform);
 
             _svm.PropertyChanged += ((sender, e) =>
             {
@@ -102,6 +129,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void ZoomPanViewModel_PanRight_ShouldUpdateTransformProperty()
         {
             bool notificationFired = false;
+            _svm.ToggleZoomCommand.Execute(_zoomInTransform);
 
             _svm.PropertyChanged += ((sender, e) =>
             {
@@ -121,6 +149,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void ZoomPanViewModel_PanUp_ShouldUpdateTransformProperty()
         {
             bool notificationFired = false;
+            _svm.ToggleZoomCommand.Execute(_zoomInTransform);
 
             _svm.PropertyChanged += ((sender, e) =>
             {
@@ -140,6 +169,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void ZoomPanViewModel_PanDown_ShouldUpdateTransformProperty()
         {
             bool notificationFired = false;
+            _svm.ToggleZoomCommand.Execute(_zoomInTransform);
 
             _svm.PropertyChanged += ((sender, e) =>
             {
@@ -221,18 +251,15 @@ namespace RdClient.Shared.Test.ViewModels
 
             CustomZoomTransform zoomTransform = new CustomZoomTransform(centerX, centerY, customScaleX, customScaleY);
             _svm.ToggleZoomCommand.Execute(zoomTransform);
-            Assert.AreEqual(centerX, _svm.ScaleCenterX);
-            Assert.AreEqual(centerY, _svm.ScaleCenterY);
             Assert.AreEqual(customScaleX, _svm.ScaleXTo);
             Assert.AreEqual(customScaleY, _svm.ScaleYTo);
 
             // test boundaries
+            // TODO: should verify center updates - see Bug 1973598
             centerX += 25.0;
             centerY -= 25.0;
             zoomTransform = new CustomZoomTransform(centerX, centerY, customScaleX, maxScale + 0.5);
             _svm.ToggleZoomCommand.Execute(zoomTransform);
-            Assert.AreEqual(centerX, _svm.ScaleCenterX);
-            Assert.AreEqual(centerY, _svm.ScaleCenterY);
             Assert.AreEqual(customScaleX, _svm.ScaleXTo);
             Assert.AreEqual(maxScale, _svm.ScaleYTo);
 
@@ -240,17 +267,13 @@ namespace RdClient.Shared.Test.ViewModels
             centerY -= 25.0;
             zoomTransform = new CustomZoomTransform(centerX, centerY, minScale - 0.5, customScaleY);
             _svm.ToggleZoomCommand.Execute(zoomTransform);
-            Assert.AreEqual(centerX, _svm.ScaleCenterX);
-            Assert.AreEqual(centerY, _svm.ScaleCenterY);
             Assert.AreEqual(minScale, _svm.ScaleXTo);
             Assert.AreEqual(customScaleY, _svm.ScaleYTo);
 
             centerX += 25.0;
             centerY -= 25.0;
             zoomTransform = new CustomZoomTransform(centerX, centerY, maxScale + 0.5, minScale - 0.5);
-            _svm.ToggleZoomCommand.Execute(zoomTransform);
-            Assert.AreEqual(centerX, _svm.ScaleCenterX);
-            Assert.AreEqual(centerY, _svm.ScaleCenterY);
+            _svm.ToggleZoomCommand.Execute(zoomTransform);            
             Assert.AreEqual(maxScale, _svm.ScaleXTo);
             Assert.AreEqual(minScale, _svm.ScaleYTo);
         }
@@ -607,28 +630,31 @@ namespace RdClient.Shared.Test.ViewModels
             double customScaleX = 2.0;
             double testDist = 150.00;
 
+            // aplies an zoom increment, not the exact customZoom
             _svm.HandleScaleChange(this, new ZoomEventArgs(centerX, centerY, testDist, testDist * customScaleX));
-            Assert.AreEqual(centerX, _svm.ScaleCenterX);
-            Assert.AreEqual(centerY, _svm.ScaleCenterY);
-            Assert.AreEqual(customScaleX, _svm.ScaleXTo);
-            Assert.AreEqual(customScaleX, _svm.ScaleYTo);
+            Assert.IsTrue(minScale <_svm.ScaleXTo);
+            Assert.IsTrue(minScale < _svm.ScaleYTo);
 
-            // test boundaries
+            // TODO: should verify center updates - see Bug 1973598
             centerX += 25.0;
             centerY -= 25.0;
-            _svm.HandleScaleChange(this, new ZoomEventArgs(centerX, centerY, testDist, testDist * (maxScale + 0.5)));
-            Assert.AreEqual(centerX, _svm.ScaleCenterX);
-            Assert.AreEqual(centerY, _svm.ScaleCenterY);
-            Assert.AreEqual(maxScale, _svm.ScaleXTo);
-            Assert.AreEqual(maxScale, _svm.ScaleYTo);
 
-            centerX += 25.0;
-            centerY -= 25.0;
-            _svm.HandleScaleChange(this, new ZoomEventArgs(centerX, centerY, testDist, testDist * (minScale - 0.5) / maxScale ));
-            Assert.AreEqual(centerX, _svm.ScaleCenterX);
-            Assert.AreEqual(centerY, _svm.ScaleCenterY);
+            // test zoom out boundaries
+            // apply decrement
+            _svm.HandleScaleChange(this, new ZoomEventArgs(centerX, centerY, testDist, testDist / 2.0 ));
+            _svm.HandleScaleChange(this, new ZoomEventArgs(centerX, centerY, testDist, testDist / 2.0 ));
             Assert.AreEqual(minScale, _svm.ScaleXTo);
             Assert.AreEqual(minScale, _svm.ScaleYTo);
+
+            // test zoom in boundaries
+            _svm.ToggleZoomCommand.Execute(_zoomInTransform);
+            centerX += 25.0;
+            centerY -= 25.0;
+
+            // apply increment
+            _svm.HandleScaleChange(this, new ZoomEventArgs(centerX, centerY, testDist, testDist * 2.0));
+            Assert.AreEqual(maxScale, _svm.ScaleXTo);
+            Assert.AreEqual(maxScale, _svm.ScaleYTo);
         }
 
 

@@ -8,8 +8,8 @@ namespace RdClient.Shared.Input.Mouse
     /// </summary>
     public class PointerEventTrace
     {
-        public PointerEvent LastEvent;
-        public PointerEvent PreviousEvent;
+        public PointerEvent LastEvent { private set; get; }
+        public PointerEvent PreviousEvent { private set; get; } 
 
         public void SetLastEvent(PointerEvent pointerEvent)
         {

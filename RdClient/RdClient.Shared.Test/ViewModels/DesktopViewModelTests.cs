@@ -17,7 +17,84 @@ namespace RdClient.Shared.Test.ViewModels
         private Mock.NavigationService _navService;
         private DesktopModel _desktop;
         private CredentialsModel _cred;
+        private ISessionFactory _sessionFactory;
         private IDesktopViewModel _vm;
+
+        private sealed class TestSessionFactory : ISessionFactory
+        {
+            IRemoteSession ISessionFactory.CreateSession(RemoteSessionSetup sessionSetup)
+            {
+                return new Session();
+            }
+
+            private sealed class Session : IRemoteSession
+            {
+                string IRemoteSession.HostName
+                {
+                    get { throw new NotImplementedException(); }
+                }
+
+                IRemoteSessionState IRemoteSession.State
+                {
+                    get { throw new NotImplementedException(); }
+                }
+
+                ICertificateTrust IRemoteSession.CertificateTrust
+                {
+                    get { throw new NotImplementedException(); }
+                }
+
+                event EventHandler<CredentialsNeededEventArgs> IRemoteSession.CredentialsNeeded
+                {
+                    add { throw new NotImplementedException(); }
+                    remove { throw new NotImplementedException(); }
+                }
+
+                event EventHandler<BadCertificateEventArgs> IRemoteSession.BadCertificate
+                {
+                    add { throw new NotImplementedException(); }
+                    remove { throw new NotImplementedException(); }
+                }
+
+                event EventHandler<SessionFailureEventArgs> IRemoteSession.Failed
+                {
+                    add { throw new NotImplementedException(); }
+                    remove { throw new NotImplementedException(); }
+                }
+
+                event EventHandler<SessionInterruptedEventArgs> IRemoteSession.Interrupted
+                {
+                    add { throw new NotImplementedException(); }
+                    remove { throw new NotImplementedException(); }
+                }
+
+                event EventHandler IRemoteSession.Closed
+                {
+                    add { throw new NotImplementedException(); }
+                    remove { throw new NotImplementedException(); }
+                }
+
+                IRemoteSessionControl IRemoteSession.Activate(IRemoteSessionView sessionView)
+                {
+                    throw new NotImplementedException();
+                }
+
+                IRenderingPanel IRemoteSession.Deactivate()
+                {
+                    throw new NotImplementedException();
+                }
+
+                void IRemoteSession.Suspend()
+                {
+                    throw new NotImplementedException();
+                }
+
+                void IRemoteSession.Disconnect()
+                {
+                    throw new NotImplementedException();
+                }
+            }
+        }
 
         [TestInitialize]
         public void TestSetup()
@@ -35,6 +112,7 @@ namespace RdClient.Shared.Test.ViewModels
             _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
             _vm = DesktopViewModel.Create(_dataModel.LocalWorkspace.Connections.Models[0], _dataModel, null, _navService);
+            _sessionFactory = new TestSessionFactory();
         }
 
         [TestCleanup]
@@ -42,6 +120,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _navService.Dispose();
             _dataModel = null;
+            _sessionFactory = null;
         }
 
         [TestMethod]
@@ -90,15 +169,17 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestConnectCommandExecuteNavigatesToSessionViewIfCredentialsExist()
         {
-            _navService.Expect("NavigateToView", new List<object> { "SessionView", null }, 0);
+            _vm.Presenting(_sessionFactory);
+            _navService.Expect("NavigateToView", new List<object> { "RemoteSessionView", null }, 0);
             _vm.ConnectCommand.Execute(null);
         }
 
         [TestMethod]
         public void TestConnectCommandExecuteShowsAddUserViewIfNoCredentials()
         {
+            _vm.Presenting(_sessionFactory);
             _vm.Desktop.CredentialsId = Guid.Empty;
-            _navService.Expect("PushModalView", new List<object> { "AddUserView", null, null }, 0);
+            _navService.Expect("NavigateToView", new List<object> { "RemoteSessionView", null }, 0);
             _vm.ConnectCommand.Execute(null);
         }
 

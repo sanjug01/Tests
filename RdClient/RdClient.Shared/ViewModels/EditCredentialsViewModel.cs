@@ -20,10 +20,12 @@
         }
     }
 
-    public sealed class EditCredentialsViewModel : ViewModelBase, IEditCredentialsViewModel
+    public sealed class EditCredentialsViewModel : ViewModelBase, IEditCredentialsViewModel, IEditCredentialsViewControl
     {
         private readonly RelayCommand _cancel;
         private readonly RelayCommand _dismiss;
+        private readonly RelayCommand _confirm;
+        private readonly RelayCommand _cancelConfirmation;
 
         private string _resourceName;
         private string _prompt;
@@ -34,7 +36,14 @@
         private string _userName;
         private string _password;
         private bool _canDismiss;
+        private bool _confirmationVisible;
+        private EditCredentialsConfirmation _confirmationMessage;
         private IEditCredentialsTask _task;
+        private object _taskToken;
+
+        public static readonly string
+            UserNamePropertyName = "UserName",
+            PasswordPropertyName = "Password";
 
         public ICommand Cancel
         {
@@ -44,6 +53,16 @@
         public ICommand Dismiss
         {
             get { return _dismiss; }
+        }
+
+        public ICommand Confirm
+        {
+            get { return _confirm; }
+        }
+
+        public ICommand CancelConfirmation
+        {
+            get { return _cancelConfirmation; }
         }
 
         public string ResourceName
@@ -89,7 +108,12 @@
             {
                 if(this.SetProperty(ref _userName, value))
                 {
-                    this.CanDismiss = _task.Validate(this);
+                    bool canDismiss = _task.ValidateChangedProperty(_taskToken, UserNamePropertyName);
+
+                    if (canDismiss)
+                        canDismiss = _task.Validate(_taskToken);
+
+                    this.InternalCanDismiss = canDismiss;
                 }
             }
         }
@@ -101,7 +125,12 @@
             {
                 if (this.SetProperty(ref _password, value))
                 {
-                    this.CanDismiss = _task.Validate(this);
+                    bool canDismiss = _task.ValidateChangedProperty(_taskToken, PasswordPropertyName);
+
+                    if (canDismiss)
+                        canDismiss = _task.Validate(_taskToken);
+
+                    this.InternalCanDismiss = canDismiss;
                     //
                     // Enable the "reveal password" button if the password box is cleared completely,
                     // after which any password will have to be entered by user.
@@ -112,10 +141,42 @@
             }
         }
 
+        public bool IsConfirmationVisible
+        {
+            get { return _confirmationVisible; }
+            private set { this.SetProperty(ref _confirmationVisible, value); }
+        }
+
+        public EditCredentialsConfirmation ConfirmationMessage
+        {
+            get { return _confirmationMessage; }
+            private set { this.SetProperty(ref _confirmationMessage, value); }
+        }
+
+        void IEditCredentialsViewControl.Submit()
+        {
+            Contract.Ensures(null == _task);
+            Contract.Ensures(null == _taskToken);
+
+            if (null != _task)
+            {
+                _task.Dismissed(_taskToken);
+                this.DismissModal(null);
+            }
+        }
+
+        void IEditCredentialsViewControl.AskConfirmation(EditCredentialsConfirmation message)
+        {
+            this.ConfirmationMessage = message;
+            this.IsConfirmationVisible = true;
+        }
+
         public EditCredentialsViewModel()
         {
-            _cancel = new RelayCommand(this.CancelView);
-            _dismiss = new RelayCommand(this.DismissView, p => this.CanDismiss);
+            _cancel = new RelayCommand(this.InternalCancel);
+            _dismiss = new RelayCommand(this.InternalDismiss, p => this.InternalCanDismiss);
+            _confirm = new RelayCommand(this.InternalConfirm);
+            _cancelConfirmation = new RelayCommand(this.InternalCancelConformation);
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -126,17 +187,18 @@
             _task = activationParameter as IEditCredentialsTask;
             Contract.Assert(null != _task, string.Format("EditCredentialsViewModel|presented with an invalid parameter|{0}", activationParameter));
 
-            _task.Populate(this);
-            this.CanDismiss = _task.Validate(this);
+            _taskToken = _task.Presenting(this, this);
+            _task.Populate(_taskToken);
+            this.InternalCanDismiss = _task.Validate(_taskToken);
 
             this.CanRevealPassword = string.IsNullOrEmpty(_password);
         }
 
         protected override void OnDismissed()
         {
-            Contract.Assert(null != _task, "EditCredentialsViewModel|dismissed without presenting");
-            Contract.Ensures(null == _task);
+            Contract.Assert(null != _task);
             _task = null;
+            _taskToken = null;
         }
 
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
@@ -145,21 +207,20 @@
             backArgs.Handled = true;
         }
 
-        private void CancelView(object parameter)
+        private void InternalCancel(object parameter)
         {
             Contract.Assert(null != _task, "EditCredentialsViewModel.CancelView|cancelled without task");
-            _task.Cancelled(this);
+            _task.Cancelled(_taskToken);
             this.DismissModal(null);
         }
 
-        private void DismissView(object parameter)
+        private void InternalDismiss(object parameter)
         {
             Contract.Assert(null != _task, "EditCredentialsViewModel.DismissView|dismissed without task");
-            _task.Dismissed(this);
-            this.DismissModal(null);
+            _task.Dismissing(_taskToken);
         }
 
-        private bool CanDismiss
+        private bool InternalCanDismiss
         {
             get { return _canDismiss; }
             set
@@ -169,6 +230,17 @@
                     _dismiss.EmitCanExecuteChanged();
                 }
             }
+        }
+
+        private void InternalConfirm(object parameter)
+        {
+            this.IsConfirmationVisible = false;
+            this.CastAndCall<IEditCredentialsViewControl>(ctl => ctl.Submit());
+            }
+
+        private void InternalCancelConformation(object parameter)
+        {
+            this.IsConfirmationVisible = false;
         }
     }
 }

@@ -1,0 +1,79 @@
+﻿<UserControl
+    x:Class="RdClient.Views.RemoteSessionView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:c="using:RdClient.Controls"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:conv="using:RdClient.Converters"
+    xmlns:input="using:RdClient.Input"
+    mc:Ignorable="d"
+    RequestedTheme="Dark"
+    d:DesignHeight="300"
+    d:DesignWidth="800">
+    
+    <UserControl.DataContext>
+        <vm:RemoteSessionViewModel>
+            <vm:RemoteSessionViewModel.KeyboardCapture>
+                <input:CoreWindowKeyboardCapture/>
+            </vm:RemoteSessionViewModel.KeyboardCapture>
+        </vm:RemoteSessionViewModel>
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+
+    <Grid Background="Green">
+        <c:RemoteSessionPanel
+            RemoteSessionViewSite="{Binding}"
+            Visibility="{Binding IsConnected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        <!-- Failure message -->
+        <Grid Visibility="{Binding IsFailureMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+              VerticalAlignment="Center"
+              Height="Auto"
+              Background="Cornsilk">
+            <StackPanel Orientation="Vertical" Margin="12,24">
+                <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="Purple"
+                           Margin="0, 0, 0, 12"
+                           Text="Connection has failed (d)"/>
+                <TextBlock HorizontalAlignment="Center" FontSize="20" Foreground="Purple"
+                           Margin="0, 0, 0, 12"
+                           Text="{Binding FailureCode}"/>
+                <Button HorizontalAlignment="Center" Command="{Binding DismissFailureMessage}">
+                    <TextBlock Text="Close (d)"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+        
+        <!-- Session interruption (auto-reconnect) message -->
+        <Grid VerticalAlignment="Center"
+              Height="Auto"
+              Background="Cornsilk"
+              Visibility="{Binding IsInterrupted, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel Orientation="Vertical" Margin="12,24">
+                <TextBlock FontSize="16" HorizontalAlignment="Center" Foreground="Red"
+                    Text="Connection has been interrupted. Reconnecting… (d)"/>
+                <TextBlock FontSize="16" HorizontalAlignment="Center" Foreground="Red"
+                           Text="{Binding ReconnectAttempt}"/>
+                <Button Command="{Binding CancelAutoReconnect}" HorizontalAlignment="Center">
+                    <TextBlock Text="Cancel"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+        
+        <!-- Connection Bar -->
+        <c:ConnectionBarControl
+            Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+            MainAction="{Binding ShowSideBars}"/>
+        
+        <!-- Right side bar -->
+        <c:RightSideBarControl
+            BarVisibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+            NavigateHome="{Binding NavigateHome}"/>
+
+    </Grid>
+</UserControl>

@@ -3,13 +3,15 @@ using RdMock;
 
 namespace RdClient.Shared.Test.Mock
 {
-    public class RdpConnectionFactory : MockBase, IRdpConnectionFactory
+    public sealed class RdpConnectionFactory : MockBase, IRdpConnectionFactory
     {
-        public IRdpConnection CreateInstance()
+        public IRdpConnection CreateDesktop()
         {
             return (IRdpConnection) Invoke(new object[] { });
         }
 
-        public Models.ConnectionInformation ConnectionInformation { get; set; }            
+        {
+            return (IRdpConnection)Invoke(new object[] { rdpFile });
+        }
     }
 }
