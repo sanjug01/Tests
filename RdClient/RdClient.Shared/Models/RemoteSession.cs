@@ -179,7 +179,7 @@
             _sessionView = sessionView;
             _renderingPanel = _sessionView.ActivateNewRenderingPanel();
 
-            using(ReadWriteMonitor.UpgradeableRead(_sessionMonitor))
+            using (ReadWriteMonitor.UpgradeableRead(_sessionMonitor))
             {
                 if (null == _connection)
                 {
@@ -353,7 +353,7 @@
             {
                 _connection = _connectionSource.CreateConnection(sessionSetup.Connection, _renderingPanel);
                 _syncEvents = RdpEventsSyncProxy.Create(_connection.Events, _sessionMonitor);
-                InternalSetState(new ConnectingSession(_connection, _sessionMonitor));
+                InternalSetState(new ConnectingSession(_connection, _renderingPanel, _sessionMonitor));
             }
         }
 

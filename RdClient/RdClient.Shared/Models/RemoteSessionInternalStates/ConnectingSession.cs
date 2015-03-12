@@ -12,16 +12,18 @@
         private sealed class ConnectingSession : InternalState
         {
             private readonly IRdpConnection _connection;
+            private readonly IRenderingPanel _renderingPanel;
             private RemoteSession _session;
             private bool _cancelledCredentials;
 
-            public ConnectingSession(IRdpConnection connection, ReaderWriterLockSlim monitor)
+            public ConnectingSession(IRdpConnection connection, IRenderingPanel renderingPanel, ReaderWriterLockSlim monitor)
                 : base(SessionState.Connecting, monitor)
             {
                 Contract.Assert(null != connection);
                 Contract.Assert(null != monitor);
 
                 _connection = connection;
+                _renderingPanel = renderingPanel;
                 _cancelledCredentials = false;
             }
 
@@ -30,11 +32,7 @@
                 Contract.Assert(null == _session);
 
                 _session = session;
-                _session._syncEvents.ClientConnected += this.OnClientConnected;
-                _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
-                _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
-                _connection.Connect(_session._sessionSetup.SessionCredentials.Credentials,
-                    !_session._sessionSetup.SessionCredentials.IsNewPassword);
+                _renderingPanel.Ready += this.OnRenderingPanelReady;
             }
 
             public override void Deactivate(RemoteSession session)
@@ -52,10 +50,20 @@
                 Contract.Assert(null != _session);
                 Contract.Assert(object.ReferenceEquals(_session, session));
 
+                _renderingPanel.Ready -= this.OnRenderingPanelReady;
                 _session._syncEvents.ClientConnected -= this.OnClientConnected;
                 _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
                 _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                 _session = null;
+            }
+
+            private void OnRenderingPanelReady(object sender, EventArgs e)
+            {
+                _session._syncEvents.ClientConnected += this.OnClientConnected;
+                _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+                _connection.Connect(_session._sessionSetup.SessionCredentials.Credentials,
+                    !_session._sessionSetup.SessionCredentials.IsNewPassword);
             }
 
             private void OnClientConnected(object sender, ClientConnectedArgs e)
