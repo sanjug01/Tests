@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.CxWrappers.Utils;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
@@ -94,7 +95,7 @@
             //
             // TODO: populate the new connection with the desktop's properties
             //
-            properties.SetStringProperty
+            RdpPropertyApplier.ApplyDesktop(properties, this);
 
             return connection;
         }
