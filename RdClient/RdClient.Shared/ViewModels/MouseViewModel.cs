@@ -35,6 +35,7 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
+        private Point _previousMousePosition = new Point(0.0, 0.0);
         private Point _mousePosition = new Point(0.0, 0.0);
         public Point MousePosition
         {
@@ -48,6 +49,7 @@ namespace RdClient.Shared.ViewModels
                         Math.Max(0.0, Math.Min(value.Y, this.ViewSize.Height))
                     );
 
+                    _previousMousePosition = _mousePosition;
                     SetProperty(ref _mousePosition, p);
                 });
             }
@@ -129,7 +131,9 @@ namespace RdClient.Shared.ViewModels
                 }
             };
             this.ToggleInputModeCommand = new RelayCommand(OnToggleInputModeCommand);
-            _multiTouchEnabled = true;
+
+            // multi touch is not enabled until we get OnMultiTouchEnabledChanged notification
+            _multiTouchEnabled = false;
         }
 
         private void OnToggleInputModeCommand(object args)
@@ -235,9 +239,12 @@ namespace RdClient.Shared.ViewModels
                 Contract.Requires(null != ZoomPanViewModel, "ZoomPanViewModel not initialized!");
                 Point newPosition = this.ZoomPanViewModel.TranslatePosition(this.MousePosition);
                 _rdpConnection.SendMouseEvent(eventType, (float)newPosition.X, (float)newPosition.Y);
-                this.TranslateMousePositionToPanTransform();
+
+                // mouse move also detect if panning is required
+                this.TranslateMouseMoveToPanTransform(this.MousePosition, _previousMousePosition);
             }
         }
+
 
         public void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime)
         {
@@ -301,33 +308,37 @@ namespace RdClient.Shared.ViewModels
         /// Calculate the view area within the session area. 
         /// View area changes any time there is a zoom/pan trasformation or if the window size changes.
         /// </summary>
-        private void TranslateMousePositionToPanTransform()
+        private void TranslateMouseMoveToPanTransform(Point newPosition, Point prevPosition)
         {
-                // verify panning
-                double panX = 0.0;
-                double panY = 0.0;
-                if (this.MousePosition.X < GlobalConstants.PointerPanBorderOffsetX)
-                {
-                    panX = GlobalConstants.PointerPanBorderOffsetX - this.MousePosition.X;
-                }
-                else if (this.MousePosition.X > ViewSize.Width - GlobalConstants.PointerPanBorderOffsetX)
-                {
-                    panX = ViewSize.Width - GlobalConstants.PointerPanBorderOffsetX - this.MousePosition.X;
-                }
 
-                if (this.MousePosition.Y < GlobalConstants.PointerPanBorderOffsetY)
-                {
-                    panY = GlobalConstants.PointerPanBorderOffsetY - this.MousePosition.Y;
-                }
-                else if (this.MousePosition.Y > ViewSize.Height - GlobalConstants.PointerPanBorderOffsetY)
-                {
-                    panY = ViewSize.Height - GlobalConstants.PointerPanBorderOffsetY - this.MousePosition.Y;
-                }
+            // verify panning
+            double panX = 0.0;
+            double panY = 0.0;
+            double deltaX = newPosition.X - prevPosition.X;
+            double deltaY = newPosition.Y - prevPosition.Y;
 
-                if (GlobalConstants.TouchMoveThreshold < Math.Abs(panX) || GlobalConstants.TouchMoveThreshold < Math.Abs(panY))
-                {
-                    SendPanAction(panX, panY);
-                }
+            if (this.MousePosition.X < GlobalConstants.PointerPanBorderOffsetX && deltaX < -GlobalConstants.TouchMoveThreshold)
+            {
+                panX = GlobalConstants.PointerPanBorderOffsetX - this.MousePosition.X;
+            }
+            else if (this.MousePosition.X > ViewSize.Width - GlobalConstants.PointerPanBorderOffsetX && deltaX > GlobalConstants.TouchMoveThreshold)
+            {
+                panX = ViewSize.Width - GlobalConstants.PointerPanBorderOffsetX - this.MousePosition.X;
+            }
+
+            if (this.MousePosition.Y < GlobalConstants.PointerPanBorderOffsetY && deltaY < -GlobalConstants.TouchMoveThreshold)
+            {
+                panY = GlobalConstants.PointerPanBorderOffsetY - this.MousePosition.Y;
+            }
+            else if (this.MousePosition.Y > ViewSize.Height - GlobalConstants.PointerPanBorderOffsetY && deltaY > -GlobalConstants.TouchMoveThreshold)
+            {
+                panY = ViewSize.Height - GlobalConstants.PointerPanBorderOffsetY - this.MousePosition.Y;
+            }
+
+            if (GlobalConstants.TouchPanMoveThreshold < Math.Abs(panX) || GlobalConstants.TouchPanMoveThreshold < Math.Abs(panY))
+            {
+                SendPanAction(panX, panY);
+            }
         }
     }
 }
