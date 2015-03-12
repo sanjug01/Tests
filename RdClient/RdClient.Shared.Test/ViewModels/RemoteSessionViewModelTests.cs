@@ -13,6 +13,7 @@
     using RdClient.Shared.ViewModels;
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Windows.Foundation;
 
     [TestClass]
@@ -50,6 +51,25 @@
             void IViewPresenter.DismissModalView(IPresentableView view) { }
             void IViewPresenter.PresentingFirstModalView() { }
             void IViewPresenter.DismissedLastModalView() { }
+        }
+
+        private sealed class TestHelperView : IPresentableView
+        {
+            private readonly IViewModel _vm;
+
+            public TestHelperView(IViewModel vm)
+            {
+                _vm = vm;
+            }
+
+            IViewModel IPresentableView.ViewModel
+            {
+                get { return _vm; }
+            }
+
+            void IPresentableView.Activating(object activationParameter) { }
+            void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
+            void IPresentableView.Dismissing() { }
         }
 
         private sealed class TestView : MutableObject, IPresentableView, IRemoteSessionView
@@ -125,7 +145,26 @@
 
             IPresentableView IPresentableViewFactory.CreateView(string name, object activationParameter)
             {
-                return this.View;
+                IPresentableView view = null;
+
+                if (name.Equals("RemoteSessionView", StringComparison.Ordinal))
+                {
+                    view = this.View;
+                }
+                else if (name.Equals("InSessionEditCredentialsView", StringComparison.Ordinal))
+                {
+                    return new TestHelperView(new EditCredentialsViewModel());
+                }
+                else if (name.Equals("ConnectionCenterView", StringComparison.Ordinal))
+                {
+                    return new TestHelperView(new ConnectionCenterViewModel());
+                }
+                else
+                {
+                    Assert.Fail(string.Format("Unexpected view name \"{0}\"", name));
+                }
+
+                return view;
             }
 
             void IPresentableViewFactory.AddViewClass(string name, System.Type viewClass, bool isSingleton) { }
@@ -160,12 +199,10 @@
             {
                 void ITimer.Start(Action callback, TimeSpan period, bool recurring)
                 {
-                    throw new NotImplementedException();
                 }
 
                 void ITimer.Stop()
                 {
-                    throw new NotImplementedException();
                 }
             }
 
@@ -178,6 +215,22 @@
         private interface IConnectionActivity
         {
             event EventHandler Connect;
+            event EventHandler Disconnect;
+            event EventHandler Cleanup;
+
+            Task AsyncConnect();
+
+            Task AsyncRequestFreshPassword();
+
+            Task AsyncDisconnect(RdpDisconnectReason reason);
+        }
+
+        private sealed class TestSessionFactory : ISessionFactory
+        {
+            IRemoteSession ISessionFactory.CreateSession(RemoteSessionSetup sessionSetup)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private sealed class TestConnectionSource : IRdpConnectionSource
@@ -238,7 +291,8 @@
 
                 void IRdpConnection.Disconnect()
                 {
-                    throw new NotImplementedException();
+                    if (null != this.Disconnect)
+                        this.Disconnect(this, EventArgs.Empty);
                 }
 
                 void IRdpConnection.Suspend()
@@ -258,7 +312,8 @@
 
                 void IRdpConnection.Cleanup()
                 {
-                    throw new NotImplementedException();
+                    if (null != this.Cleanup)
+                        this.Cleanup(this, EventArgs.Empty);
                 }
 
                 void IRdpConnection.HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)
@@ -329,6 +384,43 @@
                 // IConnectionActivity
                 //
                 public event EventHandler Connect;
+                public event EventHandler Disconnect;
+                public event EventHandler Cleanup;
+
+                Task IConnectionActivity.AsyncConnect()
+                {
+                    Task t = new Task(() =>
+                    {
+                        Task.Delay(1).Wait();
+                        _events.EmitClientConnected(this, new ClientConnectedArgs());
+                    }, TaskCreationOptions.LongRunning);
+                    t.Start();
+                    return t;
+                }
+
+                Task IConnectionActivity.AsyncRequestFreshPassword()
+                {
+                    Task t = new Task(() =>
+                    {
+                        Task.Delay(1).Wait();
+                        _events.EmitClientAsyncDisconnect(this, new ClientAsyncDisconnectArgs(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0)));
+                    }, TaskCreationOptions.LongRunning);
+                    t.Start();
+
+                    return t;
+                }
+
+                Task IConnectionActivity.AsyncDisconnect(RdpDisconnectReason reason)
+                {
+                    Task t = new Task(() =>
+                    {
+                        Task.Delay(1).Wait();
+                        _events.EmitClientDisconnected(this, new ClientDisconnectedArgs(reason));
+                    }, TaskCreationOptions.LongRunning);
+                    t.Start();
+
+                    return t;
+                }
             }
 
             public TestConnectionSource()
@@ -376,7 +468,9 @@
                 ViewFactory = _viewFactory,
                 Extensions =
                 {
-                    new DataModelExtension() { AppDataModel = _dataModel }
+                    new DataModelExtension() { AppDataModel = _dataModel },
+                    new DeferredExecutionExtension(){ DeferredExecution = _defex },
+                    new SessionFactoryExtension(){ SessionFactory = new TestSessionFactory() }
                 }
             };
         }
@@ -426,6 +520,180 @@
             Assert.IsFalse(_vm.IsInterrupted);
             Assert.IsNotNull(connection);
             Assert.AreEqual(1, connectCount);
+        }
+
+        [TestMethod]
+        public void RemoteSessionViewModel_EmitConnected_ConnectedState()
+        {
+            RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRdpConnection connection = null;
+            Task connectTask = null;
+
+            _connectionSource.ConnectionCreated += (sender, e) =>
+            {
+                connection = e.Connection;
+                Assert.IsNotNull(connection.Events);
+                IConnectionActivity activity = (IConnectionActivity)connection;
+                //
+                // Subscribe for connection activity events;
+                //
+                activity.Connect += (s, a) =>
+                {
+                    Assert.AreSame(s, activity);
+                    connectTask = activity.AsyncConnect();
+                };
+            };
+
+            _nav.NavigateToView("RemoteSessionView", session);
+            ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
+            Assert.IsNotNull(connectTask);
+            connectTask.Wait();
+            connectTask.Dispose();
+            _defex.ExecuteAll();
+
+            Assert.IsTrue(_vm.IsConnected);
+            Assert.IsTrue(_vm.IsConnectionBarVisible);
+            Assert.IsFalse(_vm.IsFailureMessageVisible);
+            Assert.IsFalse(_vm.IsRightSideBarVisible);
+            Assert.IsFalse(_vm.IsInterrupted);
+        }
+
+        [TestMethod]
+        public void RemoteSessionViewModel_ConnectDisconnect_Disconnected()
+        {
+            RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRdpConnection connection = null;
+            Task task = null;
+            int cleanupCount = 0;
+
+            _connectionSource.ConnectionCreated += (sender, e) =>
+            {
+                connection = e.Connection;
+                Assert.IsNotNull(connection.Events);
+                IConnectionActivity activity = (IConnectionActivity)connection;
+                //
+                // Subscribe for connection activity events;
+                //
+                activity.Connect += (s, a) =>
+                {
+                    Assert.AreSame(s, activity);
+                    task = activity.AsyncConnect();
+                };
+
+                activity.Disconnect += (s, a) =>
+                {
+                    Assert.AreSame(s, activity);
+                    task = activity.AsyncDisconnect(new RdpDisconnectReason(RdpDisconnectCode.UserInitiated, 0, 0));
+                };
+
+                activity.Cleanup += (s, a) =>
+                {
+                    ++cleanupCount;
+                };
+            };
+
+            _nav.NavigateToView("RemoteSessionView", session);
+            ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
+            task.Wait();
+            task.Dispose();
+            task = null;
+            _defex.ExecuteAll();
+            _vm.ShowSideBars.Execute(null);
+            _vm.NavigateHome.Execute(null);
+
+            Assert.IsNotNull(task);
+            task.Wait();
+            task.Dispose();
+            task = null;
+            _defex.ExecuteAll();
+
+            Assert.IsFalse(_vm.IsConnected);
+            Assert.IsFalse(_vm.IsConnectionBarVisible);
+            Assert.IsFalse(_vm.IsFailureMessageVisible);
+            Assert.AreEqual(1, cleanupCount);
+        }
+
+        [TestMethod]
+        public void RemoteSessionViewModel_ConnectShowSideBars_SideBarsShown()
+        {
+            RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRdpConnection connection = null;
+            Task connectTask = null;
+
+            _connectionSource.ConnectionCreated += (sender, e) =>
+            {
+                connection = e.Connection;
+                Assert.IsNotNull(connection.Events);
+                IConnectionActivity activity = (IConnectionActivity)connection;
+                //
+                // Subscribe for connection activity events;
+                //
+                activity.Connect += (s, a) =>
+                {
+                    Assert.AreSame(s, activity);
+                    connectTask = activity.AsyncConnect();
+                };
+            };
+
+            _nav.NavigateToView("RemoteSessionView", session);
+            ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
+            Assert.IsNotNull(connectTask);
+            connectTask.Wait();
+            connectTask.Dispose();
+            _defex.ExecuteAll();
+            Assert.IsTrue(_vm.ShowSideBars.CanExecute(null));
+            _vm.ShowSideBars.Execute(null);
+
+            Assert.IsTrue(_vm.IsRightSideBarVisible);
+            Assert.IsTrue(_vm.NavigateHome.CanExecute(true));
+        }
+
+        [TestMethod]
+        public void RemoteSessionViewModel_RequestFreshPassword_PasswordRequested()
+        {
+            RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRdpConnection connection = null;
+            Task connectTask = null;
+            int credentialsRequestCount = 0;
+
+            _connectionSource.ConnectionCreated += (sender, e) =>
+            {
+                connection = e.Connection;
+                Assert.IsNotNull(connection.Events);
+                IConnectionActivity activity = (IConnectionActivity)connection;
+                //
+                // Subscribe for connection activity events;
+                //
+                activity.Connect += (s, a) =>
+                {
+                    Assert.AreSame(s, activity);
+                    connectTask = activity.AsyncRequestFreshPassword();
+                };
+            };
+
+            session.CredentialsNeeded += (sender, e) =>
+            {
+                credentialsRequestCount++;
+            };
+
+            _nav.NavigateToView("RemoteSessionView", session);
+            ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
+            Assert.IsNotNull(connectTask);
+            connectTask.Wait();
+            connectTask.Dispose();
+            Assert.AreEqual(0, credentialsRequestCount);
+            _defex.ExecuteAll();
+
+            Assert.AreEqual(1, credentialsRequestCount);
+            Assert.IsFalse(_vm.IsConnected);
+            Assert.IsFalse(_vm.IsConnectionBarVisible);
+            Assert.IsFalse(_vm.IsFailureMessageVisible);
+            Assert.IsFalse(_vm.IsRightSideBarVisible);
+            Assert.IsFalse(_vm.IsInterrupted);
         }
     }
 }

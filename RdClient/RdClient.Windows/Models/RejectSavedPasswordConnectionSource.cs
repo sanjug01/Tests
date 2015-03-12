@@ -68,11 +68,11 @@
 
                     if (savedCredentials)
                     {
-                        _task = new Task(async delegate
+                        _task = new Task(() =>
                         {
                             try
                             {
-                                await Task.Delay(300, _cts.Token);
+                                Task.Delay(300, _cts.Token).Wait();
                                 this.EmitAsyncDisconnect(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0));
                             }
                             catch (OperationCanceledException)
@@ -83,11 +83,11 @@
                     }
                     else
                     {
-                        _task = new Task(async delegate
+                        _task = new Task(() =>
                         {
                             try
                             {
-                                await Task.Delay(250, _cts.Token);
+                                Task.Delay(250, _cts.Token).Wait();
                                 this.EmitConnected();
 
                                 _cts.Token.WaitHandle.WaitOne();
@@ -111,9 +111,9 @@
             {
                 Contract.Assert(null != _task);
 
-                Task.Run(async delegate
+                Task.Run(() =>
                 {
-                    await Task.Delay(100);
+                    Task.Delay(100).Wait();
                     _cts.Cancel();
                 });
             }
@@ -136,11 +136,11 @@
                         {
                             if (_savedCredentials)
                             {
-                                _task = new Task(async delegate
+                                _task = new Task(() =>
                                 {
                                     try
                                     {
-                                        await Task.Delay(300, _cts.Token);
+                                        Task.Delay(300, _cts.Token).Wait();
                                         this.EmitAsyncDisconnect(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0));
                                     }
                                     catch (OperationCanceledException)
@@ -151,11 +151,11 @@
                             }
                             else
                             {
-                                _task = new Task(async delegate
+                                _task = new Task(() =>
                                 {
                                     try
                                     {
-                                        await Task.Delay(250, _cts.Token);
+                                        Task.Delay(250, _cts.Token).Wait();
                                         this.EmitConnected();
 
                                         _cts.Token.WaitHandle.WaitOne();
@@ -173,9 +173,9 @@
                         }
                         else
                         {
-                            _task = new Task(async delegate
+                            _task = new Task(() =>
                             {
-                                await Task.Delay(50, _cts.Token);
+                                Task.Delay(50, _cts.Token).Wait();
                                 this.EmitDisconnected(new RdpDisconnectReason(RdpDisconnectCode.FreshCredsRequired, 0, 0));
                                 using (ReadWriteMonitor.Write(_monitor))
                                     _task = null;

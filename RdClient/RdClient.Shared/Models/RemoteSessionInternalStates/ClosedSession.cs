@@ -12,7 +12,7 @@
             public override void Activate(RemoteSession session)
             {
                 _connection.Cleanup();
-                session.EmitClosed();
+                session.DeferEmitClosed();
                 session.InternalSetState(new InactiveSession(this));
             }
 
