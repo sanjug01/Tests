@@ -16,7 +16,7 @@
 
         void IRemoteSessionControl.SendKeystroke(int keyCode, bool isScanCode, bool isExtendedKey, bool isKeyReleased)
         {
-            _connection.SendKeyEvent(keyCode, isScanCode, isExtendedKey, isKeyReleased);
+            //_connection.SendKeyEvent(keyCode, isScanCode, isExtendedKey, isKeyReleased);
         }
     }
 }

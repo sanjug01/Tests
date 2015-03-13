@@ -12,18 +12,17 @@
     {
         private sealed class ConnectingSession : InternalState
         {
-            private readonly IRdpConnection _connection;
             private readonly IRenderingPanel _renderingPanel;
             private RemoteSession _session;
+            private IRdpConnection _connection;
             private bool _cancelledCredentials;
 
-            public ConnectingSession(IRdpConnection connection, IRenderingPanel renderingPanel, ReaderWriterLockSlim monitor)
+            public ConnectingSession(IRenderingPanel renderingPanel, ReaderWriterLockSlim monitor)
                 : base(SessionState.Connecting, monitor)
             {
-                Contract.Assert(null != connection);
+                Contract.Assert(null != renderingPanel);
                 Contract.Assert(null != monitor);
 
-                _connection = connection;
                 _renderingPanel = renderingPanel;
                 _cancelledCredentials = false;
             }
@@ -43,7 +42,8 @@
 
             public override void Terminate(RemoteSession session)
             {
-                _connection.Disconnect();
+                if(null != _connection)
+                    _connection.Disconnect();
             }
 
             public override void Complete(RemoteSession session)
@@ -52,15 +52,22 @@
                 Contract.Assert(object.ReferenceEquals(_session, session));
 
                 _renderingPanel.Ready -= this.OnRenderingPanelReady;
-                _session._syncEvents.ClientConnected -= this.OnClientConnected;
-                _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
-                _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
-                _session._syncEvents.StatusInfoReceived -= this.OnStatusInfoReceived;
+                if (null != _connection)
+                {
+                    _session._syncEvents.ClientConnected -= this.OnClientConnected;
+                    _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
+                    _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
+                    _session._syncEvents.StatusInfoReceived -= this.OnStatusInfoReceived;
+                }
                 _session = null;
             }
 
             private void OnRenderingPanelReady(object sender, EventArgs e)
             {
+                _connection = _session.InternalCreateConnection(_renderingPanel);
+                Contract.Assert(null != _connection);
+                Contract.Assert(null != _session._syncEvents);
+
                 _session._syncEvents.ClientConnected += this.OnClientConnected;
                 _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                 _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;

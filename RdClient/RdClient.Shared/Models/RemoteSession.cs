@@ -226,6 +226,18 @@
             }
         }
 
+        private IRdpConnection InternalCreateConnection(IRenderingPanel renderingPanel)
+        {
+            Contract.Assert(null == _connection);
+            Contract.Assert(null == _syncEvents);
+            Contract.Assert(object.ReferenceEquals(_renderingPanel, renderingPanel));
+
+            _connection = _connectionSource.CreateConnection(_sessionSetup.Connection, _renderingPanel);
+            _syncEvents = RdpEventsSyncProxy.Create(_connection.Events, _sessionMonitor);
+
+            return _connection;
+        }
+
         private void DeferEmitCredentialsNeeded(IEditCredentialsTask task)
         {
             //
@@ -351,9 +363,7 @@
             //
             using (ReadWriteMonitor.Write(_sessionMonitor))
             {
-                _connection = _connectionSource.CreateConnection(sessionSetup.Connection, _renderingPanel);
-                _syncEvents = RdpEventsSyncProxy.Create(_connection.Events, _sessionMonitor);
-                InternalSetState(new ConnectingSession(_connection, _renderingPanel, _sessionMonitor));
+                InternalSetState(new ConnectingSession(_renderingPanel, _sessionMonitor));
             }
         }
 
