@@ -35,6 +35,10 @@
         //
         private InternalState _internalState;
 
+        /// <summary>
+        /// Base class for the current internal state of the session. State classes are nested in RemoteSession because nested
+        /// classes have access to the private parts of their hosting class; which makes things much easier, but more dangerous of course.
+        /// </summary>
         private abstract class InternalState : DisposableObject
         {
             private readonly SessionState _sessionState;
@@ -79,6 +83,32 @@
             public IDisposable LockWrite()
             {
                 return ReadWriteMonitor.Write(_monitor);
+            }
+        }
+
+        private sealed class SessionControl : DisposableObject, IRemoteSessionControl
+        {
+            private readonly RemoteSession _session;
+            private readonly ReaderWriterLockSlim _monitor;
+
+            public SessionControl(RemoteSession session, ReaderWriterLockSlim monitor)
+            {
+                Contract.Assert(null != session);
+                Contract.Assert(null != monitor);
+                Contract.Ensures(null != _session);
+                Contract.Ensures(null != _monitor);
+
+                _session = session;
+                _monitor = monitor;
+            }
+
+            void IRemoteSessionControl.SendKeystroke(int keyCode, bool isScanCode, bool isExtendedKey, bool isKeyReleased)
+            {
+                using (ReadWriteMonitor.Read(_monitor))
+                {
+                    if(null != _session._connection)
+                        _session._connection.SendKeyEvent(keyCode, isScanCode, isExtendedKey, isKeyReleased);
+                }
             }
         }
 
@@ -195,7 +225,7 @@
                 }
             }
 
-            return new RemoteSessionControl(_connection);
+            return new SessionControl(this, _sessionMonitor);
         }
 
         IRenderingPanel IRemoteSession.Deactivate()
@@ -224,6 +254,18 @@
             {
                 _internalState.Terminate(this);
             }
+        }
+
+        private IRdpConnection InternalCreateConnection(IRenderingPanel renderingPanel)
+        {
+            Contract.Assert(null == _connection);
+            Contract.Assert(null == _syncEvents);
+            Contract.Assert(object.ReferenceEquals(_renderingPanel, renderingPanel));
+
+            _connection = _connectionSource.CreateConnection(_sessionSetup.Connection, _renderingPanel);
+            _syncEvents = RdpEventsSyncProxy.Create(_connection.Events, _sessionMonitor);
+
+            return _connection;
         }
 
         private void DeferEmitCredentialsNeeded(IEditCredentialsTask task)
@@ -351,9 +393,7 @@
             //
             using (ReadWriteMonitor.Write(_sessionMonitor))
             {
-                _connection = _connectionSource.CreateConnection(sessionSetup.Connection, _renderingPanel);
-                _syncEvents = RdpEventsSyncProxy.Create(_connection.Events, _sessionMonitor);
-                InternalSetState(new ConnectingSession(_connection, _renderingPanel, _sessionMonitor));
+                InternalSetState(new ConnectingSession(_renderingPanel, _sessionMonitor));
             }
         }
 

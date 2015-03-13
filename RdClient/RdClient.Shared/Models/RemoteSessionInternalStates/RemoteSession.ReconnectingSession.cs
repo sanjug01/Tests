@@ -89,7 +89,7 @@
                 //
                 // Set the session state to Failed
                 //
-                _session.InternalSetState(new FailedSession(e.DisconnectReason, this));
+                _session.InternalSetState(new FailedSession(_connection, e.DisconnectReason, this));
             }
 
             private void Cancel()

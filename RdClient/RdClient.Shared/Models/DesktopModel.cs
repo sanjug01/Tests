@@ -92,11 +92,7 @@
             IRdpProperties properties = connection as IRdpProperties;
 
             Contract.Assert(null != properties);
-            //
-            // TODO: populate the new connection with the desktop's properties
-            //
             RdpPropertyApplier.ApplyDesktop(properties, this);
-
             return connection;
         }
     }

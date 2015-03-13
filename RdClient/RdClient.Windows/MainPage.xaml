@@ -28,8 +28,8 @@
             LifeTimeManager="{StaticResource LifeTimeManager}"
             LandingPage="ConnectionCenterView">
             <fac:AppInitializer.ConnectionSource>
-                <!-- <models:BadCertificateConnectionSource/> -->
                 <models:SingleSwapChainPanelRdpConnectionSource/>
+                <!-- <models:BadCertificateConnectionSource/> -->
             </fac:AppInitializer.ConnectionSource>
         </fac:AppInitializer>
 

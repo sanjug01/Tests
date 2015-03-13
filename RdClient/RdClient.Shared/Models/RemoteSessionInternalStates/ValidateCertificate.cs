@@ -91,7 +91,7 @@
             {
                 Contract.Assert(null != _session);
 
-                _session.InternalSetState(new FailedSession(e.DisconnectReason, this));
+                _session.InternalSetState(new FailedSession(_connection, e.DisconnectReason, this));
             }
         }
     }

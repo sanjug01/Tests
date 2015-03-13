@@ -4,6 +4,7 @@
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Threading;
 
@@ -11,18 +12,17 @@
     {
         private sealed class ConnectingSession : InternalState
         {
-            private readonly IRdpConnection _connection;
             private readonly IRenderingPanel _renderingPanel;
             private RemoteSession _session;
+            private IRdpConnection _connection;
             private bool _cancelledCredentials;
 
-            public ConnectingSession(IRdpConnection connection, IRenderingPanel renderingPanel, ReaderWriterLockSlim monitor)
+            public ConnectingSession(IRenderingPanel renderingPanel, ReaderWriterLockSlim monitor)
                 : base(SessionState.Connecting, monitor)
             {
-                Contract.Assert(null != connection);
+                Contract.Assert(null != renderingPanel);
                 Contract.Assert(null != monitor);
 
-                _connection = connection;
                 _renderingPanel = renderingPanel;
                 _cancelledCredentials = false;
             }
@@ -42,7 +42,8 @@
 
             public override void Terminate(RemoteSession session)
             {
-                _connection.Disconnect();
+                if(null != _connection)
+                    _connection.Disconnect();
             }
 
             public override void Complete(RemoteSession session)
@@ -51,17 +52,27 @@
                 Contract.Assert(object.ReferenceEquals(_session, session));
 
                 _renderingPanel.Ready -= this.OnRenderingPanelReady;
-                _session._syncEvents.ClientConnected -= this.OnClientConnected;
-                _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
-                _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
+                if (null != _connection)
+                {
+                    _session._syncEvents.ClientConnected -= this.OnClientConnected;
+                    _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
+                    _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
+                    _session._syncEvents.StatusInfoReceived -= this.OnStatusInfoReceived;
+                }
                 _session = null;
             }
 
             private void OnRenderingPanelReady(object sender, EventArgs e)
             {
+                _connection = _session.InternalCreateConnection(_renderingPanel);
+                Contract.Assert(null != _connection);
+                Contract.Assert(null != _session._syncEvents);
+
                 _session._syncEvents.ClientConnected += this.OnClientConnected;
                 _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                 _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+                _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
+
                 _connection.Connect(_session._sessionSetup.SessionCredentials.Credentials,
                     !_session._sessionSetup.SessionCredentials.IsNewPassword);
             }
@@ -126,8 +137,13 @@
                     //
                     // For all other failures go to the Failed state so the sessoin view will show the error UI.
                     //
-                    _session.InternalSetState(new FailedSession(e.DisconnectReason, this));
+                    _session.InternalSetState(new FailedSession(_connection, e.DisconnectReason, this));
                 }
+            }
+
+            private void OnStatusInfoReceived(object sender, StatusInfoReceivedArgs e)
+            {
+                Debug.WriteLine("StatusInfoReceived|StatusCode={0}", e.StatusCode);
             }
 
             private void ValidateCertificate(IRdpCertificate certificate, RdpDisconnectReason reason)
