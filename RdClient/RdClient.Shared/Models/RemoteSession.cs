@@ -94,7 +94,9 @@
             public SessionControl(RemoteSession session, ReaderWriterLockSlim monitor)
             {
                 Contract.Assert(null != session);
-                Contract.Assert(null != _monitor);
+                Contract.Assert(null != monitor);
+                Contract.Ensures(null != _session);
+                Contract.Ensures(null != _monitor);
 
                 _session = session;
                 _monitor = monitor;
