@@ -213,8 +213,7 @@
     <Compile Include="Data\SerializableCompositionModel.cs" />
     <Compile Include="Models\RemoteConnectionModel.cs" />
     <Compile Include="Models\RemoteSession.cs" />
-    <Compile Include="Models\RemoteSessionControl.cs" />
-    <Compile Include="Models\RemoteSessionInternalStates\CancelledSession.cs" />
+    <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.CancelledSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\ClosedSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\ConnectedSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\ConnectingSession.cs" />

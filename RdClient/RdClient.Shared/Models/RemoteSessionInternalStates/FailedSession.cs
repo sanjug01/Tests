@@ -1,10 +1,13 @@
-﻿using RdClient.Shared.CxWrappers.Errors;
-namespace RdClient.Shared.Models
+﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.CxWrappers.Errors;
+
     partial class RemoteSession
     {
         private sealed class FailedSession : InternalState
         {
+            private readonly IRdpConnection _connection;
             private readonly RdpDisconnectReason _reason;
 
             public override void Activate(RemoteSession session)
@@ -12,14 +15,14 @@ namespace RdClient.Shared.Models
                 //
                 // Set the session state to Failed
                 //
-                //session._state.SetDisconnectCode(_reason.Code);
-                //session._state.SetState(SessionState.Failed);
+                _connection.Cleanup();
                 session.DeferEmitFailed(_reason.Code);
             }
 
-            public FailedSession(RdpDisconnectReason reason, InternalState otherState)
+            public FailedSession(IRdpConnection connection, RdpDisconnectReason reason, InternalState otherState)
                 : base(SessionState.Failed, otherState)
             {
+                _connection = connection;
                 _reason = reason;
             }
         }

@@ -3,6 +3,7 @@
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
 
     partial class RemoteSession
@@ -25,9 +26,11 @@
                     _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailUpdated;
                     _session = session;
                     _session._state.SetReconnectAttempt(0);
+                    _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
 
+#if false
                     _session._syncEvents.UserCredentialsRequest += (s, a) => { };
                     _session._syncEvents.MouseCursorShapeChanged += (s, a) => { };
                     _session._syncEvents.MouseCursorPositionChanged += (s, a) => { };
@@ -41,6 +44,7 @@
                     _session._syncEvents.RemoteAppWindowDeleted += (s, a) => { };
                     _session._syncEvents.RemoteAppWindowTitleUpdated += (s, a) => { };
                     _session._syncEvents.RemoteAppWindowIconUpdated += (s, a) => { };
+#endif
 
                     _snapshotter = new Snapshotter(_connection,
                         _session._syncEvents,
@@ -61,16 +65,20 @@
 
                 using (LockWrite())
                 {
-                    _thumbnailEncoder.ThumbnailUpdated -= this.OnThumbnailUpdated;
-                    //
-                    // Deactivate the snapshotter so it unsubscribes from all connection events.
-                    //
-                    _snapshotter.Deactivate();
-                    _snapshotter = null;
+                    if (null != _snapshotter)
+                    {
+                        _thumbnailEncoder.ThumbnailUpdated -= this.OnThumbnailUpdated;
+                        //
+                        // Deactivate the snapshotter so it unsubscribes from all connection events.
+                        //
+                        _snapshotter.Deactivate();
+                        _snapshotter = null;
+                    }
                     //
                     // Stop tracking the session events;
                     //
                     _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
+                    _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                     _session = null;
                 }
@@ -78,6 +86,16 @@
 
             public override void Terminate(RemoteSession session)
             {
+                using (LockWrite())
+                {
+                    _thumbnailEncoder.ThumbnailUpdated -= this.OnThumbnailUpdated;
+                    //
+                    // Deactivate the snapshotter so it unsubscribes from all connection events.
+                    //
+                    _snapshotter.Deactivate();
+                    _snapshotter = null;
+                }
+
                 _connection.Disconnect();
             }
 
@@ -88,13 +106,31 @@
                 _thumbnailEncoder = ThumbnailEncoder.Create(ThumbnailHeight);
             }
 
+            private void OnClientAsyncDisconnect(object sender, ClientAsyncDisconnectArgs e)
+            {
+                Contract.Assert(object.ReferenceEquals(_connection, sender));
+                switch(e.DisconnectReason.Code)
+                {
+                    case RdpDisconnectCode.UserInitiated:
+                        //
+                        // Do not reconnect, let the connection to terminate and call OnClientDisconnected
+                        //
+                        _connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
+                        break;
+
+                    default:
+                        //
+                        // Try to reconnect, go through the reconnect UI.
+                        //
+                        _connection.HandleAsyncDisconnectResult(e.DisconnectReason, true);
+                        break;
+                }
+            }
+
             private void OnClientAutoReconnecting(object sender, ClientAutoReconnectingArgs e)
             {
-                using (LockUpgradeableRead())
-                {
-                    e.ContinueDelegate(true);
-                    _session.InternalSetState(new ReconnectingSession(_connection, this));
-                }
+                e.ContinueDelegate(true);
+                _session.InternalSetState(new ReconnectingSession(_connection, this));
             }
 
             private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
@@ -108,7 +144,7 @@
                         break;
 
                     default:
-                        newState = new FailedSession(e.DisconnectReason, this);
+                        newState = new FailedSession(_connection, e.DisconnectReason, this);
                         break;
                 }
 

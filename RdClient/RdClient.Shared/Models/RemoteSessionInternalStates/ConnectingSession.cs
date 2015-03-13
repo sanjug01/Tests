@@ -137,7 +137,7 @@
                     //
                     // For all other failures go to the Failed state so the sessoin view will show the error UI.
                     //
-                    _session.InternalSetState(new FailedSession(e.DisconnectReason, this));
+                    _session.InternalSetState(new FailedSession(_connection, e.DisconnectReason, this));
                 }
             }
 
