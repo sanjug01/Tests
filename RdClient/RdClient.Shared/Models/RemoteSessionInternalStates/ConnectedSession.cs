@@ -25,9 +25,22 @@
                     _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailUpdated;
                     _session = session;
                     _session._state.SetReconnectAttempt(0);
-                    _session._state.SetReconnectAttempt(0);
                     _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+
+                    _session._syncEvents.UserCredentialsRequest += (s, a) => { };
+                    _session._syncEvents.MouseCursorShapeChanged += (s, a) => { };
+                    _session._syncEvents.MouseCursorPositionChanged += (s, a) => { };
+                    _session._syncEvents.MultiTouchEnabledChanged += (s, a) => { };
+                    _session._syncEvents.ConnectionHealthStateChanged += (s, a) => { };
+                    _session._syncEvents.ClientAutoReconnectComplete += (s, a) => { };
+                    _session._syncEvents.LoginCompleted += (s, a) => { };
+                    _session._syncEvents.StatusInfoReceived += (s, a) => { };
+                    _session._syncEvents.FirstGraphicsUpdate += (s, a) => { };
+                    _session._syncEvents.RemoteAppWindowCreated += (s, a) => { };
+                    _session._syncEvents.RemoteAppWindowDeleted += (s, a) => { };
+                    _session._syncEvents.RemoteAppWindowTitleUpdated += (s, a) => { };
+                    _session._syncEvents.RemoteAppWindowIconUpdated += (s, a) => { };
 
                     _snapshotter = new Snapshotter(_connection,
                         _session._syncEvents,

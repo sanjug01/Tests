@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.CxWrappers.Utils;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
@@ -91,10 +92,8 @@
             IRdpProperties properties = connection as IRdpProperties;
 
             Contract.Assert(null != properties);
-            //
-            // TODO: populate the new connection with the desktop's properties
-            //
-
+            RdpPropertyApplier.ApplyDesktop(properties, this);
+            connection.SetLeftHandedMouseMode(false);
             return connection;
         }
     }

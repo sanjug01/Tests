@@ -4,6 +4,7 @@
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Threading;
 
@@ -54,6 +55,7 @@
                 _session._syncEvents.ClientConnected -= this.OnClientConnected;
                 _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
                 _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
+                _session._syncEvents.StatusInfoReceived -= this.OnStatusInfoReceived;
                 _session = null;
             }
 
@@ -62,6 +64,8 @@
                 _session._syncEvents.ClientConnected += this.OnClientConnected;
                 _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                 _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+                _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
+
                 _connection.Connect(_session._sessionSetup.SessionCredentials.Credentials,
                     !_session._sessionSetup.SessionCredentials.IsNewPassword);
             }
@@ -128,6 +132,11 @@
                     //
                     _session.InternalSetState(new FailedSession(e.DisconnectReason, this));
                 }
+            }
+
+            private void OnStatusInfoReceived(object sender, StatusInfoReceivedArgs e)
+            {
+                Debug.WriteLine("StatusInfoReceived|StatusCode={0}", e.StatusCode);
             }
 
             private void ValidateCertificate(IRdpCertificate certificate, RdpDisconnectReason reason)
