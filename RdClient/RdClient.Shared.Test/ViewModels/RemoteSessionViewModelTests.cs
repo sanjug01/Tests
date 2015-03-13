@@ -363,7 +363,6 @@
 
                 void IRdpConnection.SetLeftHandedMouseMode(bool value)
                 {
-                    throw new NotImplementedException();
                 }
 
                 int IRdpProperties.GetIntProperty(string propertyName)
@@ -373,7 +372,6 @@
 
                 void IRdpProperties.SetIntProperty(string propertyName, int value)
                 {
-                    throw new NotImplementedException();
                 }
 
                 string IRdpProperties.GetStringPropery(string propertyName)
@@ -383,7 +381,6 @@
 
                 void IRdpProperties.SetStringProperty(string propertyName, string value)
                 {
-                    throw new NotImplementedException();
                 }
 
                 bool IRdpProperties.GetBoolProperty(string propertyName)
@@ -393,7 +390,6 @@
 
                 void IRdpProperties.SetBoolProperty(string propertyName, bool value)
                 {
-                    throw new NotImplementedException();
                 }
                 //
                 // IConnectionActivity
