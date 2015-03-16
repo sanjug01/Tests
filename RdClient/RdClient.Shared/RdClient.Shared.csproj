@@ -87,6 +87,7 @@
     <Compile Include="CxWrappers\Errors\RdpDisconnectReason.cs" />
     <Compile Include="CxWrappers\Errors\IRdpError.cs" />
     <Compile Include="CxWrappers\Errors\XPlatError.cs" />
+    <Compile Include="CxWrappers\IRadcClient.cs" />
     <Compile Include="CxWrappers\IRdpCertificate.cs" />
     <Compile Include="CxWrappers\IRdpCertificateErrors.cs" />
     <Compile Include="CxWrappers\IRdpConnection.cs" />
