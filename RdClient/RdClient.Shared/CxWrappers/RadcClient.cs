@@ -62,14 +62,6 @@
         public void SetBackgroundRefreshInterval(uint minutes)
         {
             Func<int> radcCall = () => { return _client.SetBackgroundRefreshIntervalMinute(minutes); };
-            Action<XPlatError.XResult32> completionHandler = 
-                result =>
-                {
-                    if (result != XPlatError.XResult32.Succeeded)
-                    {
-                        RdTrace.TraceDbg("Unexpected failure in RadcClient.SetBackgroundRefreshInterval() " + result.ToString());
-                    }
-                };
             CallCxRadcClient(radcCall, null);
         }
 
