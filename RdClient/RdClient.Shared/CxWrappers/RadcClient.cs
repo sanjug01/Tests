@@ -32,70 +32,57 @@
 
         public IRadcEvents Events
         {
-            get 
-            { 
-                return _deferredExecution as IRadcEvents; 
-            }
+            get { return _deferredExecution as IRadcEvents; }
         }
 
         public void StartSubscribeToOnPremFeed(string url, Models.CredentialsModel cred, Action<XPlatError.XResult32> completionHandler = null)
         {
-            _deferredExecution.Defer(() =>
-                {
-                    int xres = _client.SubscribeToOnPremFeed(url, cred.Username, cred.Password);
-                    Errors.XPlatError.XResult32 error = RdpTypeConverter.ConvertFromCx(xres);
-                    if (completionHandler != null)
-                    {
-                        completionHandler(error);
-                    }
-                });
+            Func<int> radcCall = () => { return _client.SubscribeToOnPremFeed(url, cred.Username, cred.Password); };
+            CallCxRadcClient(radcCall, completionHandler);
         }
 
         public void StartRemoveFeed(string url, Action<XPlatError.XResult32> completionHandler = null)
         {
-            _deferredExecution.Defer(() =>
-            {
-                int xres = _client.RemoveFeed(url);
-                Errors.XPlatError.XResult32 error = RdpTypeConverter.ConvertFromCx(xres);
-                if (completionHandler != null)
-                {
-                    completionHandler(error);
-                }
-            });
+            Func<int> radcCall = () => { return _client.RemoveFeed(url); };
+            CallCxRadcClient(radcCall, completionHandler);
         }
 
         public void StartGetCachedFeeds(Action<XPlatError.XResult32> completionHandler = null)
         {
-            _deferredExecution.Defer(() =>
-            {
-                int xres = _client.GetCachedFeedResources();
-                Errors.XPlatError.XResult32 error = RdpTypeConverter.ConvertFromCx(xres);
-                if (completionHandler != null)
-                {
-                    completionHandler(error);
-                }
-            });
+            Func<int> radcCall = () => { return _client.GetCachedFeedResources(); };
+            CallCxRadcClient(radcCall, completionHandler);
         }
 
         public void StartRefreshFeeds(RadcRefreshReason reason, Action<XPlatError.XResult32> completionHandler = null)
         {
-            _deferredExecution.Defer(() =>
-            {
-                int xres = _client.RefreshFeedResources(RdpTypeConverter.ConvertToCx(reason));
-                Errors.XPlatError.XResult32 error = RdpTypeConverter.ConvertFromCx(xres);
-                if (completionHandler != null)
-                {
-                    completionHandler(error);
-                }
-            });
+            Func<int> radcCall = () => { return _client.RefreshFeedResources(RdpTypeConverter.ConvertToCx(reason)); };
+            CallCxRadcClient(radcCall, completionHandler);
         }
 
         public void SetBackgroundRefreshInterval(uint minutes)
         {
+            Func<int> radcCall = () => { return _client.SetBackgroundRefreshIntervalMinute(minutes); };
+            Action<XPlatError.XResult32> completionHandler = 
+                result =>
+                {
+                    if (result != XPlatError.XResult32.Succeeded)
+                    {
+                        RdTrace.TraceDbg("Unexpected failure in RadcClient.SetBackgroundRefreshInterval() " + result.ToString());
+                    }
+                };
+            CallCxRadcClient(radcCall, null);
+        }
+
+        private void CallCxRadcClient(Func<int> radcCall, Action<XPlatError.XResult32> completionHandler)
+        {
             _deferredExecution.Defer(() =>
             {
-                int xres = _client.SetBackgroundRefreshIntervalMinute(minutes);
-                RdTrace.IfFailXResultThrow(xres, "Unexpected failure in RadcClient.SetBackgroundRefreshInterval()");
+                int xres = radcCall();
+                XPlatError.XResult32 result = RdpTypeConverter.ConvertFromCx(xres);
+                if (completionHandler != null)
+                {
+                    completionHandler(result);
+                }
             });
         }
 
