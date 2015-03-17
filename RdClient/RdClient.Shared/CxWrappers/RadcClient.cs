@@ -99,6 +99,41 @@
             });
         }
 
+        private void _client_OnResourceAdded(string strWorksapceLocalId, string strWorkspaceFriendlyName, string strFeedURL, string strResourceId, string strResourceFriendlyName, string strRdpFile, RdClientCx.ResourceType resouceType, byte[] spIcon, uint iconWidth)
+        {
+            var args = new RadcResourceAddedArgs();
+            _eventProxy.EmitResourceAdded(this, args);
+        }
+
+        private void _client_OnRemoveWorkspace(string strFeedURL)
+        {
+            var args = new RadcWorkspaceRemovedArgs();
+            _eventProxy.EmitWorkspaceRemoved(this, args);
+        }
+
+        private void _client_OnRadcFeedOperationInProgress(RdClientCx.RadcFeedOperation feedOperation)
+        {
+            var args = new RadcOperationInProgressArgs();
+            _eventProxy.EmitOperationInProgress(this, args);
+        }
+
+        private void _client_OnRadcFeedOperationCompleted(RdClientCx.RadcErrorCode errorCode)
+        {
+            var args = new RadcOperationCompletedArgs();
+            _eventProxy.EmitOperationCompleted(this, args);
+        }
+
+        private void _client_OnEndResourcesAdded(string strFeedURL)
+        {
+            var args = new RadcAddResourcesFinishedArgs();
+            _eventProxy.EmitAddResourcesFinished(this, args);
+        }
+
+        private void _client_OnBeginResourcesAdded(string strFeedURL)
+        {
+            var args = new RadcAddResourcesStartedArgs();
+            _eventProxy.EmitAddResourcesStarted(this, args);
+        }
 
         private void _client_OnShowDemoConsentPage(RdClientCx.OnShowDemoConsentPageCompletedHandler spShowDemoConsentPageCompletedHandler, bool fFirstTimeSignIn)
         {
@@ -115,42 +150,12 @@
             throw new NotImplementedException();
         }
 
-        private void _client_OnResourceAdded(string strWorksapceLocalId, string strWorkspaceFriendlyName, string strFeedURL, string strResourceId, string strResourceFriendlyName, string strRdpFile, RdClientCx.ResourceType resouceType, byte[] spIcon, uint iconWidth)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void _client_OnRemoveWorkspace(string strFeedURL)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void _client_OnRadcFeedOperationInProgress(RdClientCx.RadcFeedOperation feedOperation)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void _client_OnRadcFeedOperationCompleted(RdClientCx.RadcErrorCode errorCode)
-        {
-            throw new NotImplementedException();
-        }
-
         private void _client_OnHideEditAppInvitesUI()
         {
             throw new NotImplementedException();
         }
 
         private void _client_OnEditAppInvites(RdClientCx.OnShowAppInvitesCompletedHandler spOnShowAppInvitesCompletedHandler, RdClientCx.ConsentStatusInfo[] spConsentStatusInfoList)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void _client_OnEndResourcesAdded(string strFeedURL)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void _client_OnBeginResourcesAdded(string strFeedURL)
         {
             throw new NotImplementedException();
         }

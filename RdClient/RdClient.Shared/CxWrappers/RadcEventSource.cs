@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RdClient.Shared.CxWrappers
+﻿namespace RdClient.Shared.CxWrappers
 {
+    using System;
+
     class RadcEventSource : IRadcEvents, IRadcEventSource
     {
         public event EventHandler<RadcOperationInProgressArgs> OperationInProgress;
@@ -22,52 +18,37 @@ namespace RdClient.Shared.CxWrappers
 
         public void EmitOperationInProgress(IRadcClient sender, RadcOperationInProgressArgs args)
         {
-            var handler = this.OperationInProgress;
-            if (handler != null)
-            {
-                handler(sender, args);
-            }
+            EmitEvent(sender, this.OperationInProgress, args);
         }
 
         public void EmitOperationCompleted(IRadcClient sender, RadcOperationCompletedArgs args)
         {
-            var handler = this.OperationCompleted;
-            if (handler != null)
-            {
-                handler(sender, args);
-            }
+
+            EmitEvent(sender, this.OperationCompleted, args);
         }
 
         public void EmitWorkspaceRemoved(IRadcClient sender, RadcWorkspaceRemovedArgs args)
         {
-            var handler = this.WorkspaceRemoved;
-            if (handler != null)
-            {
-                handler(sender, args);
-            }
+            EmitEvent(sender, this.WorkspaceRemoved, args);
         }
 
         public void EmitAddResourcesStarted(IRadcClient sender, RadcAddResourcesStartedArgs args)
         {
-            var handler = this.AddResourcesStarted;
-            if (handler != null)
-            {
-                handler(sender, args);
-            }
+            EmitEvent(sender, this.AddResourcesStarted, args);
         }
 
         public void EmitResourceAdded(IRadcClient sender, RadcResourceAddedArgs args)
         {
-            var handler = this.ResourceAdded;
-            if (handler != null)
-            {
-                handler(sender, args);
-            }
+            EmitEvent(sender, this.ResourceAdded, args);
         }
 
         public void EmitAddResourcesFinished(IRadcClient sender, RadcAddResourcesFinishedArgs args)
         {
-            var handler = this.AddResourcesFinished;
+            EmitEvent(sender, this.AddResourcesFinished, args);
+        }
+
+        private void EmitEvent<T>(object sender, EventHandler<T> handler, T args) where T : EventArgs
+        {
             if (handler != null)
             {
                 handler(sender, args);
