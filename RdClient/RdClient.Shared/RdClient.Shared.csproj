@@ -97,6 +97,7 @@
     <Compile Include="CxWrappers\IRdpProperties.cs" />
     <Compile Include="CxWrappers\MouseEventTypes.cs" />
     <Compile Include="CxWrappers\RadcClient.cs" />
+    <Compile Include="CxWrappers\RadcEventSource.cs" />
     <Compile Include="CxWrappers\RdInstrumenter.cs" />
     <Compile Include="CxWrappers\RdpCertificate.cs" />
     <Compile Include="CxWrappers\IRdpScreenSnapshot.cs" />

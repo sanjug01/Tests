@@ -14,6 +14,8 @@
 
     public interface IRadcClient
     {
+        IRadcEvents Events { get; }
+
         void StartSubscribeToOnPremFeed(string url, CredentialsModel cred, Action<XPlatError> completionHandler = null);
         void StartRemoveFeed(string url, Action<XPlatError> completionHandler = null);
         void StartGetCachedFeeds(Action<XPlatError> completionHandler = null);
