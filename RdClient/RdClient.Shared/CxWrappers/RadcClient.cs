@@ -28,11 +28,13 @@
             _client.OnShowDemoConsentPage += _client_OnShowDemoConsentPage;
             _eventProxy = eventProxy;
             _deferredExecution = deferredExecution;
+            _eventProxy = eventProxy;
+            _deferredExecution = deferredExecution;
         }
 
         public IRadcEvents Events
         {
-            get { return _deferredExecution as IRadcEvents; }
+            get { return _eventProxy as IRadcEvents; }
         }
 
         public void StartSubscribeToOnPremFeed(string url, Models.CredentialsModel cred, Action<XPlatError.XResult32> completionHandler = null)
@@ -78,39 +80,39 @@
             });
         }
 
-        private void _client_OnResourceAdded(string strWorksapceLocalId, string strWorkspaceFriendlyName, string strFeedURL, string strResourceId, string strResourceFriendlyName, string strRdpFile, RdClientCx.ResourceType resouceType, byte[] spIcon, uint iconWidth)
+        private void _client_OnResourceAdded(string workspaceId, string workspaceFriendlyName, string feedUrl, string resourceId, string friendlyName, string rdpFile, RdClientCx.ResourceType resourceType, byte[] iconBytes, uint iconWidth)
         {
-            var args = new RadcResourceAddedArgs();
+            var args = new RadcResourceAddedArgs(workspaceId, workspaceFriendlyName, feedUrl, resourceId, friendlyName, rdpFile, RdpTypeConverter.ConvertFromCx(resourceType), iconBytes, iconWidth);
             _eventProxy.EmitResourceAdded(this, args);
         }
 
-        private void _client_OnRemoveWorkspace(string strFeedURL)
+        private void _client_OnRemoveWorkspace(string feedUrl)
         {
-            var args = new RadcWorkspaceRemovedArgs();
+            var args = new RadcWorkspaceRemovedArgs(feedUrl);
             _eventProxy.EmitWorkspaceRemoved(this, args);
         }
 
         private void _client_OnRadcFeedOperationInProgress(RdClientCx.RadcFeedOperation feedOperation)
         {
-            var args = new RadcOperationInProgressArgs();
+            var args = new RadcOperationInProgressArgs(RdpTypeConverter.ConvertFromCx(feedOperation));
             _eventProxy.EmitOperationInProgress(this, args);
         }
 
         private void _client_OnRadcFeedOperationCompleted(RdClientCx.RadcErrorCode errorCode)
         {
-            var args = new RadcOperationCompletedArgs();
+            var args = new RadcOperationCompletedArgs(RdpTypeConverter.ConvertFromCx(errorCode));
             _eventProxy.EmitOperationCompleted(this, args);
         }
 
-        private void _client_OnEndResourcesAdded(string strFeedURL)
+        private void _client_OnEndResourcesAdded(string feedUrl)
         {
-            var args = new RadcAddResourcesFinishedArgs();
+            var args = new RadcAddResourcesFinishedArgs(feedUrl);
             _eventProxy.EmitAddResourcesFinished(this, args);
         }
 
-        private void _client_OnBeginResourcesAdded(string strFeedURL)
+        private void _client_OnBeginResourcesAdded(string feedUrl)
         {
-            var args = new RadcAddResourcesStartedArgs();
+            var args = new RadcAddResourcesStartedArgs(feedUrl);
             _eventProxy.EmitAddResourcesStarted(this, args);
         }
 

@@ -309,12 +309,15 @@
 
         private void AddWorkspaceExecute(object obj)
         {            
-            _onPrem = new OnPremiseWorkspaceModel();
+            _onPrem = new OnPremiseWorkspaceModel(@"https://es-vm2k12r2.rdvteam.stbtest.microsoft.com/rdweb/feed/webfeed.aspx");
             RdTrace.TraceDbg(string.Format("Subscribed to workspace. Got {0} resources", _onPrem.Resources.Count));
+            ConnectToWorkspace();
+        }
 
+        private void ConnectToWorkspace()
+        {
             RemoteSessionSetup sessionSetup = new RemoteSessionSetup(this.ApplicationDataModel, _onPrem.Resources.First());
             IRemoteSession session = _sessionFactory.CreateSession(sessionSetup);
-
             this.NavigationService.NavigateToView("RemoteSessionView", session);
         }
     }

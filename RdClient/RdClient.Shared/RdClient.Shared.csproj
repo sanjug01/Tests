@@ -98,6 +98,7 @@
     <Compile Include="CxWrappers\MouseEventTypes.cs" />
     <Compile Include="CxWrappers\RadcClient.cs" />
     <Compile Include="CxWrappers\RadcEventSource.cs" />
+    <Compile Include="CxWrappers\RadcFeedOperation.cs" />
     <Compile Include="CxWrappers\RdInstrumenter.cs" />
     <Compile Include="CxWrappers\RdpCertificate.cs" />
     <Compile Include="CxWrappers\IRdpScreenSnapshot.cs" />
@@ -107,6 +108,7 @@
     <Compile Include="CxWrappers\RdpScreenSnapshot.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
+    <Compile Include="CxWrappers\RemoteResourceType.cs" />
     <Compile Include="CxWrappers\TouchEventType.cs" />
     <Compile Include="Data\CertificateTrust.cs" />
     <Compile Include="Data\FilteringObservableCollection.cs" />

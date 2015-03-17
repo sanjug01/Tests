@@ -48,14 +48,8 @@ namespace RdClient.Shared.CxWrappers
         public static XPlatError.XResult32 ConvertFromCx(int error)
         {
             XPlatError.XResult32 xresult;
-            if (Enum.IsDefined(typeof(XPlatError.XResult32), error))
-            {
-                xresult = (XPlatError.XResult32) error;
-            }
-            else
-            {
-                xresult = XPlatError.XResult32.Unknown;
-            }
+            XPlatError.XResult32? defaultValue = XPlatError.XResult32.Unknown;
+            ConvertEnum(error, out xresult, defaultValue);
             return xresult;
         }
 
@@ -85,6 +79,7 @@ namespace RdClient.Shared.CxWrappers
         public static AdalError.AdalStatus ConvertFromCx(RdClientCx.GetAdalAccessTokenStatus getAdalAccessTokenStatus)
         {
             AdalError.AdalStatus adalStatus;
+
 
             switch (getAdalAccessTokenStatus)
             {
@@ -141,7 +136,7 @@ namespace RdClient.Shared.CxWrappers
             return disconnectReason;
         }
 
-        internal static RdClientCx.RefreshFeedReason ConvertToCx(RadcRefreshReason reason)
+        public static RdClientCx.RefreshFeedReason ConvertToCx(RadcRefreshReason reason)
         {
             RdClientCx.RefreshFeedReason cxReason;
             switch(reason)
@@ -163,5 +158,38 @@ namespace RdClient.Shared.CxWrappers
             }
             return cxReason;
         }
+
+        public static RadcFeedOperation ConvertFromCx(RdClientCx.RadcFeedOperation cxOperation)
+        {
+            RadcFeedOperation operation;
+            ConvertEnum(cxOperation, out operation);
+            return operation;
+        }
+
+        public static RemoteResourceType ConvertFromCx(RdClientCx.ResourceType cxResourceType)
+        {
+            RemoteResourceType resourceType;
+            ConvertEnum(cxResourceType, out resourceType);
+            return resourceType;
+        }
+
+        private static void ConvertEnum<A,B>(A input, out B outputEnum, B? defaultValue = new Nullable<B>()) 
+            where B : struct
+        {
+            object inputValue = Convert.ChangeType(input, typeof(int));
+            if (Enum.IsDefined(typeof(B), inputValue))
+            {
+                outputEnum = (B)inputValue;
+            }
+            else if (defaultValue.HasValue)
+            {
+                outputEnum = defaultValue.Value;
+            }
+            else
+            {
+                throw new NotImplementedException("Unhandled enum value");
+            }
+        }
+
     }
 }

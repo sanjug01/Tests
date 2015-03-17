@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Data;
     using System;
     using System.Collections.Generic;
@@ -11,10 +12,42 @@
     [DataContract(IsReference = true)]
     public sealed class OnPremiseWorkspaceModel : SerializableModel
     {
-        private RdClientCx.RadcClient _client;
-        private Task _worker;
+        private RadcClient _client;
         private CredentialsModel _creds;
+        private string _feedUrl;
         private HashSet<RemoteApplicationModel> _resources;
+
+        public OnPremiseWorkspaceModel(string feedUrl)
+        {            
+            _resources = new HashSet<RemoteApplicationModel>();
+            _client = new RadcClient(new RadcEventSource(), new Helpers.TaskExecutor());
+            _client.Events.OperationInProgress += OperationInProgress;
+            _client.Events.OperationCompleted += OperationCompleted;
+            _client.Events.AddResourcesStarted += AddResourcesStarted;
+            _client.Events.AddResourcesFinished += AddResourcesFinished;
+            _client.Events.ResourceAdded += ResourceAdded;
+            _client.Events.WorkspaceRemoved += WorkspaceRemoved;            
+            _feedUrl = feedUrl;
+            _creds = new CredentialsModel() { Username = @"rdvteam\tstestuser1", Password = @"1234AbCd" };
+            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            _client.StartRefreshFeeds(
+                RadcRefreshReason.ManualRefresh,
+                refResult =>
+                {
+                    if (refResult == XPlatError.XResult32.Succeeded)
+                    {
+                        tcs.SetResult(true);
+                    }
+                    else
+                    {
+                        _client.StartSubscribeToOnPremFeed(_feedUrl, _creds, subResult =>
+                            {
+                                tcs.SetResult(true);
+                            });
+                    }
+                });
+            tcs.Task.Wait();
+        }
 
         public HashSet<RemoteApplicationModel> Resources
         {
@@ -24,105 +57,50 @@
         public CredentialsModel Credentials
         {
             get { return _creds; }
+            set { SetProperty(ref _creds, value); }
         }
 
-        public OnPremiseWorkspaceModel()
-        {            
-            _resources = new HashSet<RemoteApplicationModel>();
-
-            _worker = Task.Factory.StartNew(() =>
-                {
-                    int xRes = RdClientCx.RadcClient.GetInstance(out _client);
-                    RdTrace.IfFailXResultThrow(xRes, "RdClientCx.RadcClient.GetInstance() failed");
-
-                    //Add handlers
-                    _client.OnAzureSignOutCompleted += _client_OnAzureSignOutCompleted;
-                    _client.OnBeginResourcesAdded += _client_OnBeginResourcesAdded;
-                    _client.OnEditAppInvites += _client_OnEditAppInvites;
-                    _client.OnEndResourcesAdded += _client_OnEndResourcesAdded;
-                    _client.OnHideEditAppInvitesUI += _client_OnHideEditAppInvitesUI;
-                    _client.OnRadcFeedOperationCompleted += _client_OnRadcFeedOperationCompleted;
-                    _client.OnRadcFeedOperationInProgress += _client_OnRadcFeedOperationInProgress;
-                    _client.OnRemoveWorkspace += _client_OnRemoveWorkspace;
-                    _client.OnResourceAdded += _client_OnResourceAdded;
-                    _client.OnShowAppInvites += _client_OnShowAppInvites;
-                    _client.OnShowAzureSignOutDialog += _client_OnShowAzureSignOutDialog;
-                    _client.OnShowDemoConsentPage += _client_OnShowDemoConsentPage;
-
-                    string feedUrl = @"https://es-vm2k12r2.rdvteam.stbtest.microsoft.com/rdweb/feed/webfeed.aspx";
-                    _creds = new CredentialsModel() { Username = @"rdvteam\tstestuser1", Password = @"1234AbCd" };
-                   
-                    xRes = _client.RemoveFeed(feedUrl);
-                    xRes = _client.SubscribeToOnPremFeed(feedUrl, _creds.Username, _creds.Password);                    
-                    //xRes = _client.RefreshFeedResources(RdClientCx.RefreshFeedReason.ManualRefresh);
-                    //xRes = _client.GetCachedFeedResources();
-                });
-            _worker.Wait();
-        }
-
-        void _client_OnShowDemoConsentPage(RdClientCx.OnShowDemoConsentPageCompletedHandler spShowDemoConsentPageCompletedHandler, bool fFirstTimeSignIn)
+        public string FeedUrl
         {
-            throw new NotImplementedException();
+            get { return _feedUrl; }
         }
 
-        void _client_OnShowAzureSignOutDialog()
+        private void ResourceAdded(object sender, RadcResourceAddedArgs args)
         {
-            throw new NotImplementedException();
-        }
-
-        void _client_OnShowAppInvites(RdClientCx.OnShowAppInvitesCompletedHandler spOnShowAppInvitesCompletedHandler, RdClientCx.ConsentStatusInfo[] spConsentStatusInfoList, bool fFirstTimeSignIn)
-        {
-            throw new NotImplementedException();
-        }
-
-        void _client_OnResourceAdded(string strWorksapceLocalId, string strWorkspaceFriendlyName, string strFeedURL, string strResourceId, string strResourceFriendlyName, string strRdpFile, RdClientCx.ResourceType resouceType, byte[] spIcon, uint iconWidth)
-        {
-            Debug.WriteLine("RADC: OnResourceAdded {0}", strResourceFriendlyName);
-            if (resouceType == RdClientCx.ResourceType.OnPremPublishedApp)
+            Debug.WriteLine("RADC: OnResourceAdded {0}", args.FriendlyName);
+            if (args.ResourceType == RemoteResourceType.OnPremPublishedApp)
             {
-                _resources.Add(new RemoteApplicationModel(strResourceId, strResourceFriendlyName, strRdpFile, spIcon, iconWidth));
+                _resources.Add(new RemoteApplicationModel(args.ResourceId, args.FriendlyName, args.RdpFile, args.IconBytes, args.IconWidth));
             }
         }
 
-        void _client_OnRemoveWorkspace(string strFeedURL)
+        private void WorkspaceRemoved(object sender, RadcWorkspaceRemovedArgs args)
         {
-            Debug.WriteLine("RADC: OnRemoveWorkspace URL={0}", strFeedURL);
-            _resources.Clear();
+            Debug.WriteLine("RADC: OnRemoveWorkspace URL={0}", args.FeedUrl);
+            if (_feedUrl.Equals(args.FeedUrl))
+            {
+                _resources.Clear();
+            }
         }
 
-        void _client_OnRadcFeedOperationInProgress(RdClientCx.RadcFeedOperation feedOperation)
+        private void OperationInProgress(object sender, RadcOperationInProgressArgs args)
         {
-            Debug.WriteLine("RADC: OnRadcFeedOperationInProgress {0}", feedOperation.ToString());
+            Debug.WriteLine("RADC: OnRadcFeedOperationInProgress {0}", args.OperationType.ToString());
         }
 
-        void _client_OnRadcFeedOperationCompleted(RdClientCx.RadcErrorCode errorCode)
+        private void OperationCompleted(object sender, RadcOperationCompletedArgs args)
         {
-            Debug.WriteLine("RADC: OnRadcFeedOperationCompleted {0}", errorCode.ToString());
+            Debug.WriteLine("RADC: OnRadcFeedOperationCompleted {0}", args.Result.ToString());
         }
 
-        void _client_OnHideEditAppInvitesUI()
+        private void AddResourcesFinished(object sender, RadcAddResourcesFinishedArgs args)
         {
-            throw new NotImplementedException();
+            Debug.WriteLine("RADC: OnEndResourcesAdded URL={0}", args.FeedUrl);
         }
 
-        void _client_OnEditAppInvites(RdClientCx.OnShowAppInvitesCompletedHandler spOnShowAppInvitesCompletedHandler, RdClientCx.ConsentStatusInfo[] spConsentStatusInfoList)
+        private void AddResourcesStarted(object sender, RadcAddResourcesStartedArgs args)
         {
-            throw new NotImplementedException();
-        }
-
-        void _client_OnEndResourcesAdded(string strFeedURL)
-        {
-            Debug.WriteLine("RADC: OnEndResourcesAdded URL={0}", strFeedURL);
-        }
-
-        void _client_OnBeginResourcesAdded(string strFeedURL)
-        {
-            Debug.WriteLine("RADC: OnBeginResourcesAdded URL={0}", strFeedURL);
-        }
-
-        void _client_OnAzureSignOutCompleted()
-        {
-            throw new NotImplementedException();
+            Debug.WriteLine("RADC: OnBeginResourcesAdded URL={0}", args.FeedUrl);
         }
     }
 }
