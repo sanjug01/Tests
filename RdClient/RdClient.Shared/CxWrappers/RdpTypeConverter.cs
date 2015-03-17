@@ -140,5 +140,28 @@ namespace RdClient.Shared.CxWrappers
 
             return disconnectReason;
         }
+
+        internal static RdClientCx.RefreshFeedReason ConvertToCx(RadcRefreshReason reason)
+        {
+            RdClientCx.RefreshFeedReason cxReason;
+            switch(reason)
+            {
+                case RadcRefreshReason.AddRemoteAppAccount:
+                    cxReason = RdClientCx.RefreshFeedReason.AddRemoteAppAccount;
+                    break;
+                case RadcRefreshReason.BackgroundRefresh:
+                    cxReason = RdClientCx.RefreshFeedReason.BackgroundRefresh;
+                    break;
+                case RadcRefreshReason.EditFeeds:
+                    cxReason = RdClientCx.RefreshFeedReason.EditFeeds;
+                    break;
+                case RadcRefreshReason.ManualRefresh:
+                    cxReason = RdClientCx.RefreshFeedReason.ManualRefresh;
+                    break;
+                default:
+                    throw new NotImplementedException("Unhandled enum value");
+            }
+            return cxReason;
+        }
     }
 }

@@ -16,10 +16,10 @@
     {
         IRadcEvents Events { get; }
 
-        void StartSubscribeToOnPremFeed(string url, CredentialsModel cred, Action<XPlatError> completionHandler = null);
-        void StartRemoveFeed(string url, Action<XPlatError> completionHandler = null);
-        void StartGetCachedFeeds(Action<XPlatError> completionHandler = null);
-        void StartRefreshFeeds(RadcRefreshReason reason, Action<XPlatError> completionHandler = null);
+        void StartSubscribeToOnPremFeed(string url, CredentialsModel cred, Action<XPlatError.XResult32> completionHandler = null);
+        void StartRemoveFeed(string url, Action<XPlatError.XResult32> completionHandler = null);
+        void StartGetCachedFeeds(Action<XPlatError.XResult32> completionHandler = null);
+        void StartRefreshFeeds(RadcRefreshReason reason, Action<XPlatError.XResult32> completionHandler = null);
         void SetBackgroundRefreshInterval(uint minutes);
     }
 }
