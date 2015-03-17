@@ -29,7 +29,7 @@
     <Grid Background="Green">
         <c:RemoteSessionPanel
             RemoteSessionViewSite="{Binding}"
-            Visibility="{Binding IsConnected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            Visibility="{Binding IsRenderingPanelActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
         <!-- Failure message -->
         <Grid Visibility="{Binding IsFailureMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"

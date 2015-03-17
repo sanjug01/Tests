@@ -31,11 +31,12 @@
         private InterruptedSessionContinuation _interruptedContinuation;
         private int _reconnectAttempt;
 
-        public bool IsConnected
+        public bool IsRenderingPanelActive
         {
             get
             {
-                return null != _activeSession && (SessionState.Connected == _activeSession.State.State || SessionState.Connecting == _activeSession.State.State);
+                return null != _activeSession
+                    && (SessionState.Connected == _activeSession.State.State || SessionState.Connecting == _activeSession.State.State);
             }
         }
 
@@ -142,6 +143,7 @@
                 _activeSessionControl = _activeSession.Activate(_sessionView);
             }
 
+            EmitPropertyChanged("IsRenderingPanelActive");
             this.IsInterrupted = SessionState.Interrupted == _activeSession.State.State;
             this.IsFailureMessageVisible = SessionState.Failed == _activeSession.State.State;
         }
@@ -160,6 +162,7 @@
             _sessionView = null;
             _failureMessageVisible = false;
             _interrupted = false;
+            _interruptedContinuation = null;
 
             base.OnDismissed();
         }
@@ -199,7 +202,7 @@
             _cancelAutoReconnect.EmitCanExecuteChanged();
             this.ReconnectAttempt = _activeSession.State.ReconnectAttempt;
             this.IsInterrupted = true;
-            EmitPropertyChanged("IsConnected");
+            EmitPropertyChanged("IsRenderingPanelActive");
         }
 
         private void OnBadCertificate(object sender, BadCertificateEventArgs e)
@@ -247,7 +250,7 @@
                         _interruptedContinuation = null;
                         this.IsInterrupted = false;
                         _cancelAutoReconnect.EmitCanExecuteChanged();
-                        EmitPropertyChanged("IsConnected");
+                        EmitPropertyChanged("IsRenderingPanelActive");
                         this.IsConnectionBarVisible = false;
                         break;
 
@@ -261,7 +264,7 @@
                         _cancelAutoReconnect.EmitCanExecuteChanged();
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
-                        EmitPropertyChanged("IsConnected");
+                        EmitPropertyChanged("IsRenderingPanelActive");
                         this.IsConnectionBarVisible = true;
                         break;
 
@@ -270,7 +273,7 @@
                         {
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
-                            EmitPropertyChanged("IsConnected");
+                            EmitPropertyChanged("IsRenderingPanelActive");
                             //
                             // The connection bar and side bars are not available in any non-connected state.
                             //
