@@ -1,18 +1,16 @@
 ﻿namespace RdClient.Shared.CxWrappers
 {
     using RdClient.Shared.CxWrappers.Errors;
+    using RdClient.Shared.Helpers;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public class RadcClient : IRadcClient
     {
         private RdClientCx.RadcClient _client;
         private IRadcEventSource _eventProxy;
+        private IDeferredExecution _deferredExecution;
 
-        public RadcClient()
+        public RadcClient(IRadcEventSource eventProxy, IDeferredExecution deferredExecution)
         {
             int xRes = RdClientCx.RadcClient.GetInstance(out _client);
             RdTrace.IfFailXResultThrow(xRes, "RdClientCx.RadcClient.GetInstance() failed");
@@ -28,11 +26,13 @@
             _client.OnShowAppInvites += _client_OnShowAppInvites;
             _client.OnShowAzureSignOutDialog += _client_OnShowAzureSignOutDialog;
             _client.OnShowDemoConsentPage += _client_OnShowDemoConsentPage;
+            _eventProxy = eventProxy;
+            _deferredExecution = deferredExecution;
         }
 
         public void StartSubscribeToOnPremFeed(string url, Models.CredentialsModel cred, Action<XPlatError.XResult32> completionHandler = null)
         {
-            Task.Run(() =>
+            _deferredExecution.Defer(() =>
                 {
                     int xres = _client.SubscribeToOnPremFeed(url, cred.Username, cred.Password);
                     Errors.XPlatError.XResult32 error = RdpTypeConverter.ConvertFromCx(xres);
@@ -45,7 +45,7 @@
 
         public void StartRemoveFeed(string url, Action<XPlatError.XResult32> completionHandler = null)
         {
-            Task.Run(() =>
+            _deferredExecution.Defer(() =>
             {
                 int xres = _client.RemoveFeed(url);
                 Errors.XPlatError.XResult32 error = RdpTypeConverter.ConvertFromCx(xres);
@@ -58,7 +58,7 @@
 
         public void StartGetCachedFeeds(Action<XPlatError.XResult32> completionHandler = null)
         {
-            Task.Run(() =>
+            _deferredExecution.Defer(() =>
             {
                 int xres = _client.GetCachedFeedResources();
                 Errors.XPlatError.XResult32 error = RdpTypeConverter.ConvertFromCx(xres);
@@ -71,7 +71,7 @@
 
         public void StartRefreshFeeds(RadcRefreshReason reason, Action<XPlatError.XResult32> completionHandler = null)
         {
-            Task.Run(() =>
+            _deferredExecution.Defer(() =>
             {
                 int xres = _client.RefreshFeedResources(RdpTypeConverter.ConvertToCx(reason));
                 Errors.XPlatError.XResult32 error = RdpTypeConverter.ConvertFromCx(xres);
@@ -84,7 +84,7 @@
 
         public void SetBackgroundRefreshInterval(uint minutes)
         {
-            Task.Run(() =>
+            _deferredExecution.Defer(() =>
             {
                 int xres = _client.SetBackgroundRefreshIntervalMinute(minutes);
                 RdTrace.IfFailXResultThrow(xres, "Unexpected failure in RadcClient.SetBackgroundRefreshInterval()");
