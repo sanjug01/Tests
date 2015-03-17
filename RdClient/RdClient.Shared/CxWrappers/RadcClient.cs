@@ -30,6 +30,14 @@
             _deferredExecution = deferredExecution;
         }
 
+        public IRadcEvents Events
+        {
+            get 
+            { 
+                return _deferredExecution as IRadcEvents; 
+            }
+        }
+
         public void StartSubscribeToOnPremFeed(string url, Models.CredentialsModel cred, Action<XPlatError.XResult32> completionHandler = null)
         {
             _deferredExecution.Defer(() =>
