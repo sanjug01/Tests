@@ -1,13 +1,9 @@
-﻿using RdClient.Shared.CxWrappers.Errors;
-using RdClient.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RdClient.Shared.CxWrappers
+﻿namespace RdClient.Shared.CxWrappers
 {
+    using RdClient.Shared.CxWrappers.Errors;
+    using RdClient.Shared.Models;
+    using System;
+
     public enum RadcRefreshReason
     {
         AddRemoteAppAccount = 0,
