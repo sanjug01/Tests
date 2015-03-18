@@ -5,6 +5,8 @@
     /// </summary>
     public interface IRemoteSessionControl
     {
+        IRenderingPanel RenderingPanel { get; }
+
         void SendKeystroke(int keyCode, bool isScanCode, bool isExtendedKey, bool isKeyReleased);
     }
 }

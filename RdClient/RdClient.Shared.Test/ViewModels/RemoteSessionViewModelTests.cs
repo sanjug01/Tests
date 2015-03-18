@@ -94,6 +94,13 @@
                         _ready -= value;
                     }
                 }
+
+
+                event EventHandler<Shared.Input.Mouse.PointerEventArgs> IRenderingPanel.PointerChanged
+                {
+                    add { throw new NotImplementedException(); }
+                    remove { throw new NotImplementedException(); }
+                }
             }
 
             public TestView(IViewModel vm)

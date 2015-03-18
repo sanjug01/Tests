@@ -3,6 +3,7 @@
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Input.Keyboard;
+    using RdClient.Shared.Input.Mouse;
     using RdClient.Shared.Models;
     using System;
     using System.ComponentModel;
@@ -264,6 +265,7 @@
                         _cancelAutoReconnect.EmitCanExecuteChanged();
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
+                        _activeSessionControl.RenderingPanel.PointerChanged += this.OnPointerChanged;
                         EmitPropertyChanged("IsRenderingPanelActive");
                         this.IsConnectionBarVisible = true;
                         break;
@@ -273,6 +275,7 @@
                         {
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
+                            _activeSessionControl.RenderingPanel.PointerChanged -= this.OnPointerChanged;
                             EmitPropertyChanged("IsRenderingPanelActive");
                             //
                             // The connection bar and side bars are not available in any non-connected state.
@@ -318,6 +321,13 @@
         {
             Contract.Assert(null != _activeSessionControl);
             _activeSessionControl.SendKeystroke(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
+        }
+
+        private void OnPointerChanged(object sender, PointerEventArgs e)
+        {
+            //
+            // Called on the worker thread!
+            //
         }
 
         private void InternalShowRightSideBar(object parameter)

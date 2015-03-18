@@ -102,6 +102,15 @@
                 _monitor = monitor;
             }
 
+            IRenderingPanel IRemoteSessionControl.RenderingPanel
+            {
+                get
+                {
+                    Contract.Assert(null != _session._renderingPanel);
+                    return _session._renderingPanel;
+                }
+            }
+
             void IRemoteSessionControl.SendKeystroke(int keyCode, bool isScanCode, bool isExtendedKey, bool isKeyReleased)
             {
                 using (ReadWriteMonitor.Read(_monitor))

@@ -83,5 +83,21 @@ namespace RdClient.Shared.Converters
 
             return pe;
         }
+
+        public static PointerEvent PointerArgsConverter(Windows.UI.Core.PointerEventArgs args, TouchEventType actionType)
+        {
+            PointerPoint ppoint = args.CurrentPoint;
+            Point position = new Point(ppoint.Position.X, ppoint.Position.Y);
+            PointerEvent pe = new PointerEvent(
+                position, false, new Point(0.0, 0.0),
+                ppoint.Properties.IsLeftButtonPressed, ppoint.Properties.IsRightButtonPressed,
+                PointerTypeConverter(ppoint.PointerDevice.PointerDeviceType), ppoint.PointerId,
+                args.CurrentPoint.Timestamp,
+                actionType,
+                ppoint.Properties.MouseWheelDelta,
+                ppoint.Properties.IsHorizontalMouseWheel);
+
+            return pe;
+        }
     }
 }

@@ -10,7 +10,7 @@
         private string _friendlyName;
         private string _rdpFile;
         private byte[] _iconBytes;
-        private bool _hasIcon;
+        //private bool _hasIcon;
 
         public RemoteApplicationModel(string strResourceId, string strResourceFriendlyName, string strRdpFile, byte[] spIcon, uint iconWidth)
         {

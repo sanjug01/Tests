@@ -141,6 +141,7 @@
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Input\Mouse\MultiTouchMode.cs" />
     <Compile Include="Input\Mouse\InputModeChangedEventArgs.cs" />
+    <Compile Include="Input\Mouse\PointerEventArgs.cs" />
     <Compile Include="Input\Mouse\PointerEventTrace.cs" />
     <Compile Include="Input\Mouse\PointerEvent.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
