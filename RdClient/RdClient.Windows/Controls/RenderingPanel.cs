@@ -84,14 +84,14 @@
             }
         }
 
-        public MouseCursorShape MouseCursorShape
+        public void ChangeMouseCursorShape(MouseCursorShape shape)
         {
-            set { throw new NotImplementedException(); }
+            throw new NotImplementedException();
         }
 
-        public Point MouseCursorPosition
+        public void MoveMouseCursor(Point point)
         {
-            set { throw new NotImplementedException(); }
+            throw new NotImplementedException();
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)

@@ -111,13 +111,33 @@
                 }
             }
 
+            private void TryRDPAction(Action action)
+            {
+                using(ReadWriteMonitor.Read(_monitor))
+                {
+                    if (null != _session._connection)
+                        action();
+                }
+            }
+
             void IRemoteSessionControl.SendKeystroke(int keyCode, bool isScanCode, bool isExtendedKey, bool isKeyReleased)
             {
-                using (ReadWriteMonitor.Read(_monitor))
-                {
-                    if(null != _session._connection)
-                        _session._connection.SendKeyEvent(keyCode, isScanCode, isExtendedKey, isKeyReleased);
-                }
+                TryRDPAction(() => _session._connection.SendKeyEvent(keyCode, isScanCode, isExtendedKey, isKeyReleased));
+            }
+
+            public void SendMouseAction(MouseEventType eventType)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void SendTouchAction(TouchEventType type, uint contactId, Windows.Foundation.Point position, ulong frameTime)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void SendMouseWheel(int delta, bool isHorizontal)
+            {
+                throw new NotImplementedException();
             }
         }
 

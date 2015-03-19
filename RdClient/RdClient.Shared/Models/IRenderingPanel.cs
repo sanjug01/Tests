@@ -18,7 +18,7 @@
         /// and stops the capture when the last handler has been removed.</remarks>
         event EventHandler<PointerEventArgs> PointerChanged;
 
-        MouseCursorShape MouseCursorShape { set; }
-        Point MouseCursorPosition { set; }
+        void ChangeMouseCursorShape(MouseCursorShape shape);
+        void MoveMouseCursor(Point point);
     }
 }

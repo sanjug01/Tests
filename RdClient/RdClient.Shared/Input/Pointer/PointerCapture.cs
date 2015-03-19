@@ -23,27 +23,36 @@ namespace RdClient.Input
             ExecutionDeferrer.DeferToUI(() => {
                 ImageSource image = MouseCursorShape.ByteArrayToBitmap(args.Buffer, args.Width, args.Height);
                 MouseCursorShape cursor = new MouseCursorShape(new Point(args.XHotspot, args.YHotspot), image);
-                this.RenderingPanel.MouseCursorShape = cursor;
+                this.RenderingPanel.ChangeMouseCursorShape(cursor);
             });
         }
 
         public double MouseAcceleration { get { return (double)1.4; } }
 
-        public Point MousePosition { get; set; }
+        private Point _mousePosition;
+        public Point MousePosition 
+        {
+            get { return _mousePosition; }
+            set 
+            {
+                _mousePosition = value;
+                ExecutionDeferrer.DeferToUI(() => this.RenderingPanel.MoveMouseCursor(_mousePosition) );
+            }
+        }
 
         public void SendMouseAction(MouseEventType eventType)
         {
-            // this.RemoteSessionControl.SendMouseAction
+            this.RemoteSessionControl.SendMouseAction(eventType);
         }
 
         public void SendMouseWheel(int delta, bool isHorizontal)
         {
-            // this.RemoteSessionControl.SendMouseWheel
+            this.RemoteSessionControl.SendMouseWheel(delta, isHorizontal);
         }
 
         public void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime)
         {
-            // this.RemoteSessionControl.SendTouchAction
+            this.RemoteSessionControl.SendTouchAction(type, contactId, position, frameTime);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Input;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Input.Keyboard;

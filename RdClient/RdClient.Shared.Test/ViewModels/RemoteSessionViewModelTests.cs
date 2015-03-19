@@ -102,15 +102,14 @@
                     remove { throw new NotImplementedException(); }
                 }
 
-
-                public Shared.Input.Pointer.MouseCursorShape MouseCursorShape
+                public void ChangeMouseCursorShape(Shared.Input.Pointer.MouseCursorShape shape)
                 {
-                    set { throw new NotImplementedException(); }
+                    throw new NotImplementedException();
                 }
 
-                public Point MouseCursorPosition
+                public void MoveMouseCursor(Point point)
                 {
-                    set { throw new NotImplementedException(); }
+                    throw new NotImplementedException();
                 }
             }
 
