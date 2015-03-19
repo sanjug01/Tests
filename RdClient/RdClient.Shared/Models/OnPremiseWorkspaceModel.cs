@@ -31,14 +31,14 @@
         private List<RemoteConnectionModel> _tempResources;
         private RadcClient _client;
 
-        public OnPremiseWorkspaceModel()
+        public OnPremiseWorkspaceModel(RadcClient radcClient)
         {
             _state = WorkspaceState.Unsubscribed;
             _credId = Guid.Empty;
             _feedUrl = "";
             _friendlyName = "";
             _resources = new List<RemoteConnectionModel>();
-            _client = new RadcClient(new RadcEventSource(), new Helpers.TaskExecutor());
+            _client = radcClient;
             _client.Events.OperationInProgress += OperationInProgress;
             _client.Events.OperationCompleted += OperationCompleted;
             _client.Events.AddResourcesStarted += AddResourcesStarted;

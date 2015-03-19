@@ -308,8 +308,9 @@
         }
 
         private void AddWorkspaceExecute(object obj)
-        {            
-            _onPrem = new OnPremiseWorkspaceModel();
+        {
+            RadcClient radcClient = new RadcClient(new RadcEventSource(), new Helpers.TaskExecutor());
+            _onPrem = new OnPremiseWorkspaceModel(radcClient);
             _onPrem.PropertyChanged += _onPrem_PropertyChanged;
             _onPrem.FeedUrl = @"https://es-vm2k12r2.rdvteam.stbtest.microsoft.com/rdweb/feed/webfeed.aspx";
             _onPrem.Refresh();
