@@ -84,6 +84,11 @@
             }
         }
 
+        IViewport IRenderingPanel.Viewport
+        {
+            get { throw new NotImplementedException(); }
+        }
+
         public void ChangeMouseCursorShape(MouseCursorShape shape)
         {
             throw new NotImplementedException();

@@ -211,6 +211,7 @@
     <Compile Include="Models\IRemoteSessionViewSite.cs" />
     <Compile Include="Models\IRenderingPanel.cs" />
     <Compile Include="Models\ISessionFactory.cs" />
+    <Compile Include="Models\IViewport.cs" />
     <Compile Include="Models\LocalWorkspaceModel.cs" />
     <Compile Include="Models\OnPremiseWorkspaceModel.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
