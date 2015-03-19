@@ -1,6 +1,6 @@
 ﻿using RdClient.Shared.CxWrappers;
 
-namespace RdClient.Shared.Input.Mouse
+namespace RdClient.Shared.Input.Pointer
 {
     public class MultiTouchMode : IPointerEventConsumer
     {

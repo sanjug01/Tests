@@ -1,5 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
-using RdClient.Shared.Input.Mouse;
+using RdClient.Shared.Input.Pointer;
 using System.Collections.Generic;
 using Windows.Foundation;
 

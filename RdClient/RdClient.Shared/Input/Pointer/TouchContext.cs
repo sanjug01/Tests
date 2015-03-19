@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Windows.Foundation;
 
-namespace RdClient.Shared.Input.Mouse
+namespace RdClient.Shared.Input.Pointer
 {
     public enum DragOrientation
     {
@@ -96,7 +96,7 @@ namespace RdClient.Shared.Input.Mouse
 
         private DragOrientation DragOrientation(PointerEvent pointerEvent)
         {
-            DragOrientation orientation = Mouse.DragOrientation.Unknown;
+            DragOrientation orientation = Pointer.DragOrientation.Unknown;
 
             if (this.IsPointerDoubleTracked(pointerEvent))
             {
@@ -107,11 +107,11 @@ namespace RdClient.Shared.Input.Mouse
 
                 if (delta > GlobalConstants.TouchOrientationDeltaThreshold)
                 {
-                    orientation = Mouse.DragOrientation.Horizontal;
+                    orientation = Pointer.DragOrientation.Horizontal;
                 }
                 else if (delta < -GlobalConstants.TouchOrientationDeltaThreshold)
                 {
-                    orientation = Mouse.DragOrientation.Vertical;
+                    orientation = Pointer.DragOrientation.Vertical;
                 }
             }
 
@@ -127,12 +127,12 @@ namespace RdClient.Shared.Input.Mouse
                 PointerEventTrace eventTrace = _trackedPointerEvents[pointerEvent.PointerId];
                 double delta = 0.0;
 
-                if(orientation == Mouse.DragOrientation.Vertical)
+                if(orientation == Pointer.DragOrientation.Vertical)
                 {
                     delta = eventTrace.DeltaYTo(pointerEvent);
                     PointerManipulator.SendMouseWheel((int)delta * GlobalConstants.TouchScrollFactor, false);
                 }
-                else if(orientation == Mouse.DragOrientation.Horizontal)
+                else if(orientation == Pointer.DragOrientation.Horizontal)
                 {
                     delta = eventTrace.DeltaXTo(pointerEvent);
                     PointerManipulator.SendMouseWheel((int)delta * GlobalConstants.TouchScrollFactor, true);
@@ -307,7 +307,7 @@ namespace RdClient.Shared.Input.Mouse
                         double centerX = (secondEventTrace.PreviousEvent.Position.X + firstEventTrace.PreviousEvent.Position.X) * 0.5;
                         double centerY = (secondEventTrace.PreviousEvent.Position.Y + firstEventTrace.PreviousEvent.Position.Y) * 0.5;
 
-                        PointerManipulator.SendPinchAndZoom(centerX, centerY, prevDistance, currentDistance);
+                        //PointerManipulator.SendPinchAndZoom(centerX, centerY, prevDistance, currentDistance);
 
 
                         _activeGesture = GestureType.Zooming;
@@ -321,7 +321,7 @@ namespace RdClient.Shared.Input.Mouse
             if (this.IsPointerDoubleTracked(pointerEvent))
             {
                 PointerEventTrace eventTrace = _trackedPointerEvents[pointerEvent.PointerId];
-                PointerManipulator.SendPanAction(eventTrace.DeltaX, eventTrace.DeltaY);
+                //PointerManipulator.SendPanAction(eventTrace.DeltaX, eventTrace.DeltaY);
                 _activeGesture = GestureType.Panning;
             }
         }

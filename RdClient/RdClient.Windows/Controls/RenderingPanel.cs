@@ -2,12 +2,13 @@
 {
     using RdClient.Shared.Converters;
     using RdClient.Shared.Helpers;
-    using RdClient.Shared.Input.Mouse;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
     using System;
     using System.Diagnostics.Contracts;
     using System.Threading;
     using System.Threading.Tasks;
+    using Windows.Foundation;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
@@ -81,6 +82,16 @@
                     }
                 }
             }
+        }
+
+        public MouseCursorShape MouseCursorShape
+        {
+            set { throw new NotImplementedException(); }
+        }
+
+        public Point MouseCursorPosition
+        {
+            set { throw new NotImplementedException(); }
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)

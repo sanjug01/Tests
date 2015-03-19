@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.Input.Mouse;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Input.ZoomPan;
     using System.Windows.Input;
     using Windows.Foundation;

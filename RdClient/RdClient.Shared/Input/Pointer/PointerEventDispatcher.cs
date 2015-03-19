@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace RdClient.Shared.Input.Mouse
+namespace RdClient.Shared.Input.Pointer
 {
     public class PointerEventDispatcher : IPointerEventConsumer
     {

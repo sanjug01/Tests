@@ -96,10 +96,21 @@
                 }
 
 
-                event EventHandler<Shared.Input.Mouse.PointerEventArgs> IRenderingPanel.PointerChanged
+                event EventHandler<Shared.Input.Pointer.PointerEventArgs> IRenderingPanel.PointerChanged
                 {
                     add { throw new NotImplementedException(); }
                     remove { throw new NotImplementedException(); }
+                }
+
+
+                public Shared.Input.Pointer.MouseCursorShape MouseCursorShape
+                {
+                    set { throw new NotImplementedException(); }
+                }
+
+                public Point MouseCursorPosition
+                {
+                    set { throw new NotImplementedException(); }
                 }
             }
 

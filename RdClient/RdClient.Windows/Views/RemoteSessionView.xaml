@@ -19,6 +19,9 @@
             <vm:RemoteSessionViewModel.KeyboardCapture>
                 <input:CoreWindowKeyboardCapture/>
             </vm:RemoteSessionViewModel.KeyboardCapture>
+            <vm:RemoteSessionViewModel.PointerCapture>
+                <input:PointerCapture />
+            </vm:RemoteSessionViewModel.PointerCapture>
         </vm:RemoteSessionViewModel>
     </UserControl.DataContext>
 

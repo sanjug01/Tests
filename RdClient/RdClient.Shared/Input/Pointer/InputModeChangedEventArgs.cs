@@ -1,4 +1,4 @@
-﻿namespace RdClient.Shared.Input.Mouse
+﻿namespace RdClient.Shared.Input.Pointer
 {
     using System;
 

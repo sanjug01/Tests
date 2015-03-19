@@ -1,6 +1,6 @@
 ﻿using RdClient.Shared.Helpers;
 using Windows.Foundation;
-namespace RdClient.Shared.Input.Mouse
+namespace RdClient.Shared.Input.Pointer
 {
 
     public enum GestureType
