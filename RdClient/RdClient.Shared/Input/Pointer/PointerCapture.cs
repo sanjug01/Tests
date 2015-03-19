@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation.Extensions;
@@ -9,21 +10,37 @@ namespace RdClient.Input
 {
     public class PointerCapture : IPointerCapture, IPointerManipulator
     {
-        public IExecutionDeferrer ExecutionDeferrer { private get; set; }        
-        public IRemoteSessionControl RemoteSessionControl { private get; set; }
-        public IRenderingPanel RenderingPanel { private get; set; }
+        private IExecutionDeferrer _deferrer;
+        private IRemoteSessionControl _control;
+        private IRenderingPanel _panel;
+        private IPointerEventConsumer _consumer;
+
+        public ConsumptionMode ConsumptionMode
+        {
+            set { _consumer.ConsumptionMode = value; }
+        }
+
+        public PointerCapture(IExecutionDeferrer deferrer, IRemoteSessionControl control, IRenderingPanel panel)
+        {
+            _deferrer = deferrer;
+            _control = control;
+            _panel = panel;
+            _consumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
+            this.ConsumptionMode = ConsumptionMode.Pointer;
+        }
 
         public void OnPointerChanged(object sender, PointerEventArgs args)
         {
-            // consume the pointer event
+            _consumer.ConsumeEvent(args.PointerEvent);
         }
 
         public void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
         {
-            ExecutionDeferrer.DeferToUI(() => {
+            _deferrer.DeferToUI(() =>
+            {
                 ImageSource image = MouseCursorShape.ByteArrayToBitmap(args.Buffer, args.Width, args.Height);
                 MouseCursorShape cursor = new MouseCursorShape(new Point(args.XHotspot, args.YHotspot), image);
-                this.RenderingPanel.ChangeMouseCursorShape(cursor);
+                this._panel.ChangeMouseCursorShape(cursor);
             });
         }
 
@@ -36,23 +53,23 @@ namespace RdClient.Input
             set 
             {
                 _mousePosition = value;
-                ExecutionDeferrer.DeferToUI(() => this.RenderingPanel.MoveMouseCursor(_mousePosition) );
+                _deferrer.DeferToUI(() => this._panel.MoveMouseCursor(_mousePosition));
             }
         }
 
         public void SendMouseAction(MouseEventType eventType)
         {
-            this.RemoteSessionControl.SendMouseAction(eventType);
+            this._control.SendMouseAction(new MouseAction(eventType, MousePosition));
         }
 
         public void SendMouseWheel(int delta, bool isHorizontal)
         {
-            this.RemoteSessionControl.SendMouseWheel(delta, isHorizontal);
+            this._control.SendMouseWheel(delta, isHorizontal);
         }
 
         public void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime)
         {
-            this.RemoteSessionControl.SendTouchAction(type, contactId, position, frameTime);
+            this._control.SendTouchAction(type, contactId, position, frameTime);
         }
     }
 }

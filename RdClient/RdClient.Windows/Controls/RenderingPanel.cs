@@ -139,6 +139,8 @@
                 inputSource.PointerWheelChanged -= this.OnPointerWheelChanged;
 
             }, _cts.Token, TaskCreationOptions.LongRunning);
+
+            _pointerCaptureTask.Start();
         }
 
         private void StopPointerCapture()

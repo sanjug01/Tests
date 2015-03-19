@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Input.Pointer;
 using Windows.Foundation;
 namespace RdClient.Shared.Models
 {
@@ -10,7 +11,7 @@ namespace RdClient.Shared.Models
         IRenderingPanel RenderingPanel { get; }
 
         void SendKeystroke(int keyCode, bool isScanCode, bool isExtendedKey, bool isKeyReleased);
-        void SendMouseAction(MouseEventType eventType);
+        void SendMouseAction(MouseAction action);
         void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime);
         void SendMouseWheel(int delta, bool isHorizontal);
     }
