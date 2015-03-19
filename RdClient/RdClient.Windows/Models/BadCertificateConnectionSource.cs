@@ -25,7 +25,7 @@
                 _renderingPanel = renderingPanel;
             }
 
-            IRdpConnection IRdpConnectionFactory.CreateDesktop()
+            IRdpConnection IRdpConnectionFactory.CreateDesktop(string rdpFile)
             {
                 return new Logic(_renderingPanel);
             }

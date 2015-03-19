@@ -106,7 +106,7 @@ namespace RdClient.Shared.Models
 
         public void Connect(ConnectionInformation connectionInformation, ITimerFactory timerFactory, GeneralSettings settings)
         {
-            _rdpConnection = _connectionFactory.CreateDesktop();
+            _rdpConnection = _connectionFactory.CreateDesktop("");
             EmitConnectionCreated(new ConnectionCreatedArgs(_rdpConnection));
 
             _rdpConnection.Events.ConnectionHealthStateChanged += HandleConnectionHealthStateChanged;

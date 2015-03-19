@@ -6,8 +6,9 @@ namespace RdClient.Shared.CxWrappers
         /// <summary>
         /// Create an RDP connection instance representing a remote desktop.
         /// </summary>
+        /// <param name="rdpFile">Contents of an RDP file used to initialize the connection. </param>/// 
         /// <returns>New idle RDP connection object.</returns>
-        IRdpConnection CreateDesktop();
+        IRdpConnection CreateDesktop(string rdpFile);
 
         /// <summary>
         /// Create an RDP connection representing a remote application.

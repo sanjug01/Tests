@@ -309,14 +309,26 @@
 
         private void AddWorkspaceExecute(object obj)
         {            
-            _onPrem = new OnPremiseWorkspaceModel(@"https://es-vm2k12r2.rdvteam.stbtest.microsoft.com/rdweb/feed/webfeed.aspx");
-            RdTrace.TraceDbg(string.Format("Subscribed to workspace. Got {0} resources", _onPrem.Resources.Count));
-            ConnectToWorkspace();
+            _onPrem = new OnPremiseWorkspaceModel();
+            _onPrem.PropertyChanged += _onPrem_PropertyChanged;
+            _onPrem.FeedUrl = @"https://es-vm2k12r2.rdvteam.stbtest.microsoft.com/rdweb/feed/webfeed.aspx";
+            _onPrem.Refresh();
+        }
+
+        void _onPrem_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("State"))
+            {
+                if (_onPrem.State == WorkspaceState.Ok)
+                {
+                    ConnectToWorkspace();
+                }
+            }
         }
 
         private void ConnectToWorkspace()
         {
-            RemoteSessionSetup sessionSetup = new RemoteSessionSetup(this.ApplicationDataModel, _onPrem.Resources.First());
+            RemoteSessionSetup sessionSetup = new RemoteSessionSetup(this.ApplicationDataModel, _onPrem.Resources[4]);
             IRemoteSession session = _sessionFactory.CreateSession(sessionSetup);
             this.NavigationService.NavigateToView("RemoteSessionView", session);
         }

@@ -268,7 +268,7 @@
 
             private sealed class Factory : IRdpConnectionFactory
             {
-                IRdpConnection IRdpConnectionFactory.CreateDesktop()
+                IRdpConnection IRdpConnectionFactory.CreateDesktop(string rdpFile)
                 {
                     return new Connection();
                 }
