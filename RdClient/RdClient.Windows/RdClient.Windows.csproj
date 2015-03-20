@@ -155,6 +155,7 @@
       <DependentUpon>RemoteSessionPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RenderingPanel.cs" />
+    <Compile Include="Controls\RenderingPanelViewport.cs" />
     <Compile Include="Controls\RightSideBarControl.xaml.cs">
       <DependentUpon>RightSideBarControl.xaml</DependentUpon>
     </Compile>

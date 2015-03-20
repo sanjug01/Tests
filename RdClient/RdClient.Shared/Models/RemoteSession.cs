@@ -4,10 +4,12 @@
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.ViewModels;
     using System;
     using System.Diagnostics.Contracts;
     using System.Threading;
+    using Windows.Foundation;
 
     public sealed partial class RemoteSession : MutableObject, IRemoteSession
     {
@@ -111,7 +113,7 @@
                 }
             }
 
-            private void TryRDPAction(Action action)
+            private void PerformRDPAction(Action action)
             {
                 using(ReadWriteMonitor.Read(_monitor))
                 {
@@ -122,22 +124,37 @@
 
             void IRemoteSessionControl.SendKeystroke(int keyCode, bool isScanCode, bool isExtendedKey, bool isKeyReleased)
             {
-                TryRDPAction(() => _session._connection.SendKeyEvent(keyCode, isScanCode, isExtendedKey, isKeyReleased));
+                PerformRDPAction(() => _session._connection.SendKeyEvent(keyCode, isScanCode, isExtendedKey, isKeyReleased));
             }
 
-            public void SendMouseAction(MouseEventType eventType)
+            public void SendMouseAction(MouseAction action)
             {
-                throw new NotImplementedException();
+                PerformRDPAction(() => _session._connection.SendMouseEvent(action.MouseEventType, (float)action.Point.X, (float)action.Point.Y) );
             }
 
-            public void SendTouchAction(TouchEventType type, uint contactId, Windows.Foundation.Point position, ulong frameTime)
+            public void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime)
             {
-                throw new NotImplementedException();
+                PerformRDPAction(() => _session._connection.SendTouchEvent(type, contactId, position, frameTime) );
             }
 
             public void SendMouseWheel(int delta, bool isHorizontal)
             {
-                throw new NotImplementedException();
+                float x = 0.0f;
+                float y = 0.0f;
+                MouseEventType type;
+
+                if (isHorizontal)
+                {
+                    x = delta;
+                    type = MouseEventType.MouseHWheel;
+                }
+                else
+                {
+                    y = delta;
+                    type = MouseEventType.MouseWheel;
+                }
+
+                PerformRDPAction(() => _session._connection.SendMouseEvent(type, x, y) );
             }
         }
 

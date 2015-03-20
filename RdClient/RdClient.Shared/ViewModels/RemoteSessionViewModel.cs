@@ -273,9 +273,7 @@
                         _cancelAutoReconnect.EmitCanExecuteChanged();
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
-                        this.PointerCapture.ExecutionDeferrer = this;
-                        this.PointerCapture.RenderingPanel = _activeSessionControl.RenderingPanel;
-                        this.PointerCapture.RemoteSessionControl = _activeSessionControl;
+                        this.PointerCapture = new PointerCapture(this, _activeSessionControl, _activeSessionControl.RenderingPanel);
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
                         EmitPropertyChanged("IsRenderingPanelActive");
                         this.IsConnectionBarVisible = true;
@@ -286,9 +284,6 @@
                         {
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
-                            this.PointerCapture.ExecutionDeferrer = null;
-                            this.PointerCapture.RenderingPanel = null;
-                            this.PointerCapture.RemoteSessionControl = null;
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
                             EmitPropertyChanged("IsRenderingPanelActive");
                             //

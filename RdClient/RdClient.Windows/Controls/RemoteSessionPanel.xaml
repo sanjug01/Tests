@@ -13,6 +13,14 @@
     Unloaded="OnUnloaded">
 
     <Grid Background="Gray">
-        <c:RenderingPanel x:Name="RenderingPanel"/>
+        <c:RenderingPanel x:Name="RenderingPanel">
+            <SwapChainPanel.RenderTransform>
+                <TransformGroup>
+                    <CompositeTransform x:Name="Transformation"
+                                        ScaleX="1.0" ScaleY="1.0"
+                                        TranslateX="0.0" TranslateY="0.0"/>
+                </TransformGroup>
+            </SwapChainPanel.RenderTransform>
+        </c:RenderingPanel>
     </Grid>
 </UserControl>

@@ -18,6 +18,7 @@
     public sealed class RenderingPanel : SwapChainPanel, IRenderingPanel, IDisposable
     {
         private readonly ReaderWriterLockSlim _monitor;
+        private IViewport _viewport;
         private EventHandler _ready;
         private EventHandler<PointerEventArgs> _pointerChanged;
         private CancellationTokenSource _cts;
@@ -32,6 +33,14 @@
         ~RenderingPanel()
         {
             Dispose(false);
+        }
+
+        public void SetViewport(IViewport viewport)
+        {
+            Contract.Assert(null != viewport);
+            Contract.Assert(null == _viewport);
+
+            _viewport = viewport;
         }
 
         public void Dispose()
@@ -86,7 +95,12 @@
 
         IViewport IRenderingPanel.Viewport
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                Contract.Assert(null != _viewport);
+                Contract.Ensures(null != Contract.Result<IViewport>());
+                return _viewport;
+            }
         }
 
         public void ChangeMouseCursorShape(MouseCursorShape shape)
@@ -144,6 +158,7 @@
                 inputSource.PointerWheelChanged -= this.OnPointerWheelChanged;
 
             }, _cts.Token, TaskCreationOptions.LongRunning);
+
             _pointerCaptureTask.Start();
         }
 
