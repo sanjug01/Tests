@@ -274,6 +274,7 @@
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
                         this.PointerCapture = new PointerCapture(this, _activeSessionControl, _activeSessionControl.RenderingPanel);
+                        _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
                         EmitPropertyChanged("IsRenderingPanelActive");
                         this.IsConnectionBarVisible = true;

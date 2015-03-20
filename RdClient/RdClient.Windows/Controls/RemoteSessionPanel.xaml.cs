@@ -1,7 +1,8 @@
-﻿// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
-
-namespace RdClient.Controls
+﻿namespace RdClient.Controls
 {
+    using RdClient.Shared.Converters;
+    using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using System;
@@ -9,8 +10,11 @@ namespace RdClient.Controls
     using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;
     using Windows.Foundation;
+    using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Input;
+    using Windows.UI.Xaml.Media.Imaging;
 
     /// <summary>
     /// A panel shown in the remote session view (RemoteSessionView) that renders contents of the remote session
@@ -27,12 +31,14 @@ namespace RdClient.Controls
         private PropertyChangedEventHandler _propertyChanged;
         private bool _viewLoaded;
         private Size _renderingPanelSize;
+        private CoreCursor _exitCursor;
 
         public RemoteSessionPanel()
         {
             this.InitializeComponent();
 
             this.RenderingPanel.SizeChanged += this.OnRenderingPanelSizeChanged;
+
             _viewLoaded = false;
             _renderingPanelSize = Size.Empty;
         }
@@ -61,6 +67,10 @@ namespace RdClient.Controls
         {
             Contract.Assert(_viewLoaded);
             Contract.Ensures(null != Contract.Result<IRenderingPanel>());
+
+            this.RenderingPanel.MouseCursor = this.MouseCursor;
+            this.RenderingPanel.MouseTransform = this.MouseTransform;
+
             return this.RenderingPanel;
         }
 
@@ -135,6 +145,70 @@ namespace RdClient.Controls
             // Set the Size property, which will emit an INotifyPropertyChanged event to the view model.
             //
             this.Size = e.NewSize;
+        }
+        protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
+        {
+            args.TranslationBehavior.DesiredDeceleration = GlobalConstants.DesiredDeceleration;
+
+            if (args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
+            {
+                this.RenderingPanel.EmitPointerEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
+            }
+        }
+
+        protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs args)
+        {
+            if (args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
+            {
+                this.RenderingPanel.EmitPointerEvent(PointerEventConverter.ManipulationDeltaArgsConverter(args));
+            }
+        }
+
+        protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs args)
+        {
+            if (args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
+            {
+                this.RenderingPanel.EmitPointerEvent(PointerEventConverter.ManipulationCompletedArgsConverter(args));
+            }
+        }
+
+        protected override void OnPointerCanceled(PointerRoutedEventArgs args)
+        {
+            this.RenderingPanel.EmitPointerEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
+        }
+
+        protected override void OnPointerReleased(PointerRoutedEventArgs args)
+        {
+            this.RenderingPanel.EmitPointerEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
+        }
+
+        protected override void OnPointerPressed(PointerRoutedEventArgs args)
+        {
+            this.RenderingPanel.EmitPointerEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Down));
+        }
+
+        protected override void OnPointerWheelChanged(PointerRoutedEventArgs args)
+        {
+            this.RenderingPanel.EmitPointerEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Update));
+        }
+
+
+        protected override void OnPointerMoved(PointerRoutedEventArgs args)
+        {
+            this.RenderingPanel.EmitPointerEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Update));
+        }
+
+        protected override void OnPointerEntered(PointerRoutedEventArgs args)
+        {
+            _exitCursor = Window.Current.CoreWindow.PointerCursor;
+            Window.Current.CoreWindow.PointerCursor = null;
+            this.MouseCursor.Visibility = Visibility.Visible;
+        }
+
+        protected override void OnPointerExited(PointerRoutedEventArgs args)
+        {
+            Window.Current.CoreWindow.PointerCursor = _exitCursor;
+            this.MouseCursor.Visibility = Visibility.Collapsed;
         }
     }
 }

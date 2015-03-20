@@ -11,6 +11,8 @@
     using Windows.Foundation;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Media;
+    using Windows.UI.Xaml.Media.Imaging;
 
     /// <summary>
     /// Wrapper of SwapChainPanel that adds the IRenderingPanel interface.
@@ -19,9 +21,12 @@
     {
         private readonly ReaderWriterLockSlim _monitor;
         private EventHandler _ready;
-        private EventHandler<PointerEventArgs> _pointerChanged;
-        private CancellationTokenSource _cts;
-        private Task _pointerCaptureTask;
+        private EventHandler<RdClient.Shared.Input.Pointer.PointerEventArgs> _pointerChanged;   
+
+        public Image MouseCursor { private get; set; }
+        private Point _hotspot = new Point(0,0);
+
+        public TranslateTransform MouseTransform { private get; set; }
 
         public RenderingPanel()
         {
@@ -58,13 +63,7 @@
             {
                 using (ReadWriteMonitor.UpgradeableRead(_monitor))
                 {
-                    bool needToStart = null == _pointerChanged;
                     _pointerChanged += value;
-
-                    if(needToStart)
-                    {
-                        StartPointerCapture();
-                    }
                 }
             }
 
@@ -72,26 +71,21 @@
             {
                 using (ReadWriteMonitor.UpgradeableRead(_monitor))
                 {
-                    bool hadHandlers = null != _pointerChanged;
-
                     _pointerChanged -= value;
-
-                    if(hadHandlers && null == _pointerChanged)
-                    {
-                        StopPointerCapture();
-                    }
                 }
             }
         }
 
         public void ChangeMouseCursorShape(MouseCursorShape shape)
         {
-            throw new NotImplementedException();
+            this.MouseCursor.Source = shape.ImageSource;
+            _hotspot = shape.Hotspot;
         }
 
         public void MoveMouseCursor(Point point)
         {
-            throw new NotImplementedException();
+            this.MouseTransform.X = point.X - _hotspot.X;
+            this.MouseTransform.Y = point.Y - _hotspot.Y;
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
@@ -103,59 +97,7 @@
             }
         }
 
-        private void StartPointerCapture()
-        {
-            Contract.Assert(null == _pointerCaptureTask);
-            Contract.Assert(null == _cts);
-
-            _cts = new CancellationTokenSource();
-
-            _pointerCaptureTask = new Task(()=>
-            {
-                Windows.UI.Core.CoreIndependentInputSource inputSource = this.CreateCoreIndependentInputSource(
-                    Windows.UI.Core.CoreInputDeviceTypes.Mouse
-                    | Windows.UI.Core.CoreInputDeviceTypes.Pen
-                    | Windows.UI.Core.CoreInputDeviceTypes.Touch);
-
-                _cts.Token.Register(() => inputSource.Dispatcher.StopProcessEvents());
-
-                inputSource.PointerMoved += this.OnPointerMoved;
-                inputSource.PointerPressed += this.OnPointerPressed;
-                inputSource.PointerReleased += this.OnPointerReleased;
-                inputSource.PointerEntered += this.OnPointerEntered;
-                inputSource.PointerExited += this.OnPointerExited;
-                inputSource.PointerWheelChanged += this.OnPointerWheelChanged;
-
-                if (!_cts.Token.IsCancellationRequested)
-                {
-                    inputSource.Dispatcher.ProcessEvents(Windows.UI.Core.CoreProcessEventsOption.ProcessUntilQuit);
-                }
-
-                inputSource.PointerMoved -= this.OnPointerMoved;
-                inputSource.PointerPressed -= this.OnPointerPressed;
-                inputSource.PointerReleased -= this.OnPointerReleased;
-                inputSource.PointerEntered -= this.OnPointerEntered;
-                inputSource.PointerExited -= this.OnPointerExited;
-                inputSource.PointerWheelChanged -= this.OnPointerWheelChanged;
-
-            }, _cts.Token, TaskCreationOptions.LongRunning);
-
-            _pointerCaptureTask.Start();
-        }
-
-        private void StopPointerCapture()
-        {
-            Contract.Assert(null != _cts);
-            Contract.Assert(null != _pointerCaptureTask);
-
-            _cts.Cancel();
-            _pointerCaptureTask.Wait();
-            _pointerCaptureTask = null;
-            _cts.Dispose();
-            _cts = null;
-        }
-
-        private void EmitPointerEvent(PointerEvent e)
+        public void EmitPointerEvent(PointerEvent e)
         {
             using(ReadWriteMonitor.UpgradeableRead(_monitor))
             {
@@ -164,44 +106,11 @@
             }
         }
 
-        private void OnPointerMoved(object sender, Windows.UI.Core.PointerEventArgs e)
-        {
-            EmitPointerEvent(PointerEventConverter.PointerArgsConverter(e, Shared.CxWrappers.TouchEventType.Update));
-        }
-
-        private void OnPointerPressed(object sender, Windows.UI.Core.PointerEventArgs e)
-        {
-            EmitPointerEvent(PointerEventConverter.PointerArgsConverter(e, Shared.CxWrappers.TouchEventType.Down));
-        }
-
-        private void OnPointerReleased(object sender, Windows.UI.Core.PointerEventArgs e)
-        {
-            EmitPointerEvent(PointerEventConverter.PointerArgsConverter(e, Shared.CxWrappers.TouchEventType.Up));
-        }
-
-        private void OnPointerEntered(object sender, Windows.UI.Core.PointerEventArgs e)
-        {
-            // ??? EmitPointerEvent(PointerEventConverter.PointerArgsConverter(e, Shared.CxWrappers.TouchEventType.Update));
-        }
-
-        private void OnPointerExited(object sender, Windows.UI.Core.PointerEventArgs e)
-        {
-            // ??? EmitPointerEvent(PointerEventConverter.PointerArgsConverter(e, Shared.CxWrappers.TouchEventType.Update));
-        }
-
-        private void OnPointerWheelChanged(object sender, Windows.UI.Core.PointerEventArgs e)
-        {
-            EmitPointerEvent(PointerEventConverter.PointerArgsConverter(e, Shared.CxWrappers.TouchEventType.Update));
-        }
-
         private void Dispose(bool disposing)
         {
             if (disposing)
             {
                 _monitor.Dispose();
-
-                if (null != _cts)
-                    _cts.Dispose();
             }
         }
     }

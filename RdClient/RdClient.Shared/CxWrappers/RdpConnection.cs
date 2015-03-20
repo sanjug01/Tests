@@ -361,7 +361,8 @@ namespace RdClient.Shared.CxWrappers
         {
             _instrument.Instrument("OnMouseCursorShapeChanged");
 
-            _eventProxy.EmitMouseCursorShapeChanged(this, new MouseCursorShapeChangedArgs(buffer, width, height, xHotspot, yHotspot));            
+            if(null != buffer)
+                _eventProxy.EmitMouseCursorShapeChanged(this, new MouseCursorShapeChangedArgs(buffer, width, height, xHotspot, yHotspot));            
         }
 
         void OnMouseCursorPositionChanged(RdClientCx.RdpConnection sender, int xPos, int yPos)

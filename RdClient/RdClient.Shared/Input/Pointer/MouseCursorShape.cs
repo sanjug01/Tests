@@ -13,6 +13,8 @@ namespace RdClient.Shared.Input.Pointer
 
         private readonly ImageSource _cursorImage;
 
+        public ImageSource ImageSource { get { return _cursorImage; } }
+
         public static ImageSource ByteArrayToBitmap(byte[] buffer, int width, int height)
         {
             Contract.Assert(null != buffer);

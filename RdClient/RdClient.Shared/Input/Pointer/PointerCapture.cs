@@ -3,6 +3,7 @@ using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation.Extensions;
+using System.Diagnostics.Contracts;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media;
 
@@ -34,8 +35,15 @@ namespace RdClient.Input
             _consumer.ConsumeEvent(args.PointerEvent);
         }
 
+        public void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
         {
+            Contract.Requires(null != args.Buffer);
+
             _deferrer.DeferToUI(() =>
             {
                 ImageSource image = MouseCursorShape.ByteArrayToBitmap(args.Buffer, args.Width, args.Height);
