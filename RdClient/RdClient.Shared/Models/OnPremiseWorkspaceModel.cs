@@ -7,7 +7,6 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Runtime.Serialization;
-    using System.Threading.Tasks;
 
     public enum WorkspaceState
     {
@@ -24,16 +23,20 @@
     public sealed class OnPremiseWorkspaceModel : SerializableModel
     {
         private WorkspaceState _state;
+        private XPlatError.XResult32 _error;
         private Guid _credId;
         private string _feedUrl;
         private string _friendlyName;
         private List<RemoteConnectionModel> _resources;
         private List<RemoteConnectionModel> _tempResources;
         private RadcClient _client;
+        private ApplicationDataModel _dataModel;
 
-        public OnPremiseWorkspaceModel(RadcClient radcClient)
+        public OnPremiseWorkspaceModel(RadcClient radcClient, ApplicationDataModel dataModel)
         {
+            _dataModel = dataModel;
             _state = WorkspaceState.Unsubscribed;
+            _error = XPlatError.XResult32.Succeeded;
             _credId = Guid.Empty;
             _feedUrl = "";
             _friendlyName = "";
@@ -47,10 +50,21 @@
             _client.Events.WorkspaceRemoved += WorkspaceRemoved;
         }
 
+        private CredentialsModel Credential
+        {
+            get { return _dataModel.LocalWorkspace.Credentials.GetModel(this.CredentialsId); }
+        }
+
         public WorkspaceState State
         {
             get { return _state; }
             private set { SetProperty(ref _state, value); }
+        }
+
+        public XPlatError.XResult32 Error
+        {
+            get { return _error; }
+            private set { SetProperty(ref _error, value); }
         }
 
         public List<RemoteConnectionModel> Resources
@@ -84,17 +98,7 @@
                 throw new InvalidOperationException("Can only refresh when workspace is subscribed and has no operations pending");
             }
             this.State = WorkspaceState.Refreshing;
-            _client.StartRefreshFeeds(RadcRefreshReason.ManualRefresh, result =>
-            {
-                if (result == XPlatError.XResult32.Succeeded)
-                {
-                    this.State = WorkspaceState.Ok;
-                }
-                else
-                {
-                    this.State = WorkspaceState.Error;
-                }
-            });
+            _client.StartRefreshFeeds(RadcRefreshReason.ManualRefresh, result => HandleOperationCompleted(result, WorkspaceState.Ok));
         }
 
         public void Subscribe()
@@ -104,17 +108,7 @@
                 throw new InvalidOperationException("Can only subscribe when workspace has no operations pending");
             }
             this.State = WorkspaceState.Subscribing;
-            _client.StartSubscribeToOnPremFeed(this.FeedUrl, new CredentialsModel() { Username = @"rdvteam\tstestuser1", Password = @"1234AbCd" }, result =>
-            {
-                if (result == XPlatError.XResult32.Succeeded)
-                {
-                    this.State = WorkspaceState.Ok;
-                }
-                else
-                {
-                    this.State = WorkspaceState.Error;
-                }
-            });         
+            _client.StartSubscribeToOnPremFeed(this.FeedUrl, this.Credential, result => HandleOperationCompleted(result, WorkspaceState.Ok));
         }
 
         public void UnSubscribe()
@@ -124,19 +118,14 @@
                 throw new InvalidOperationException("Can only subscribe when workspace has no operations pending");
             }
             this.State = WorkspaceState.Subscribing;
-            _client.StartRemoveFeed(this.FeedUrl, result =>
-            {
-                if (result == XPlatError.XResult32.Succeeded)
-                {
-                    this.State = WorkspaceState.Unsubscribed;
-                }
-                else
-                {
-                    this.State = WorkspaceState.Error;
-                }
-            });   
+            _client.StartRemoveFeed(this.FeedUrl, result => HandleOperationCompleted(result, WorkspaceState.Unsubscribed));
         }
 
+        private void HandleOperationCompleted(XPlatError.XResult32 result, WorkspaceState successState)
+        {
+            this.Error = result;
+            this.State = (result == XPlatError.XResult32.Succeeded) ? successState : WorkspaceState.Error;
+        }
 
         private void ResourceAdded(object sender, RadcResourceAddedArgs args)
         {
@@ -179,7 +168,8 @@
         {
             if (args.OperationType == RadcFeedOperation.InitiateCancellation)
             {
-
+                this.Error = XPlatError.XResult32.Cancelled;
+                this.State = WorkspaceState.Error;              
             }
             Debug.WriteLine("RADC: OnRadcFeedOperationInProgress {0}", args.OperationType.ToString());
         }
