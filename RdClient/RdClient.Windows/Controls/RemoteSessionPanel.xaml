@@ -14,13 +14,12 @@
 
     <Grid Background="Green">
         <c:RenderingPanel x:Name="RenderingPanel" IsHitTestVisible="False"/>
-            <Image x:Name="MouseCursor" CacheMode="BitmapCache" Stretch="None" Width="Auto" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left">
-                <Image.RenderTransform>
-                    <TransformGroup>
-                        <TranslateTransform x:Name="MouseTransform"/>
-                    </TransformGroup>
-                </Image.RenderTransform>
-            </Image>
-
+        <Image x:Name="MouseCursor" CacheMode="BitmapCache" Stretch="None" Width="Auto" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <TranslateTransform x:Name="MouseTransform"/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
     </Grid>
 </UserControl>
