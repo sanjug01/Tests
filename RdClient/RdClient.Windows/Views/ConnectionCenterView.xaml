@@ -35,11 +35,12 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <controls:ConnectionCenterTitleBar />            
-        </Grid>        
+        </Grid>
         <Grid Grid.Row="1">
-            <controls:DesktopsListControl Visibility="{Binding HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <controls:ItsLonelyHereControl Visibility="{Binding HasDesktops, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-        </Grid>       
+            <controls:ItsLonelyHereControl />
+            <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        </Grid>
     </Grid>
     
 </Page>

@@ -77,6 +77,13 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
+        public void TestAddWorkspaceCommandExecute()
+        {
+            _navService.Expect("PushModalView", new List<object> { "AddOrEditWorkspaceView", null, null }, 0);
+            _vm.AddWorkspaceCommand.Execute(null);
+        }
+
+        [TestMethod]
         public void TestAddDesktopCommandExecute()
         {
             _navService.Expect("PushModalView", new List<object> { "AddOrEditDesktopView", null, null }, 0);

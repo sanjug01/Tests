@@ -10,7 +10,6 @@
     xmlns:c="using:RdClient.Converters"    
     xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
-    Loaded="Page_Loaded"
     RequestedTheme="Light">
     
     <Page.DataContext>
