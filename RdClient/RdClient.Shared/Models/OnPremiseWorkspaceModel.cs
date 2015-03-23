@@ -32,6 +32,11 @@
         private RadcClient _client;
         private ApplicationDataModel _dataModel;
 
+        public OnPremiseWorkspaceModel()
+        {
+            throw new NotImplementedException();
+        }
+
         public OnPremiseWorkspaceModel(RadcClient radcClient, ApplicationDataModel dataModel)
         {
             _dataModel = dataModel;
@@ -50,7 +55,7 @@
             _client.Events.WorkspaceRemoved += WorkspaceRemoved;
         }
 
-        private CredentialsModel Credential
+        public CredentialsModel Credential
         {
             get { return _dataModel.LocalWorkspace.Credentials.GetModel(this.CredentialsId); }
         }
@@ -75,8 +80,30 @@
 
         public Guid CredentialsId
         {
-            get { return _credId; }
-            set { SetProperty(ref _credId, value); }
+            get 
+            { 
+                return _credId; 
+            }
+            set 
+            { 
+                SetProperty(ref _credId, value);
+                if (this.Resources != null)
+                {
+                    foreach (RemoteConnectionModel connection in this.Resources)
+                    {
+                        DesktopModel desktop = connection as DesktopModel;
+                        RemoteApplicationModel app = connection as RemoteApplicationModel;
+                        if (desktop != null)
+                        {
+                            desktop.CredentialsId = value;
+                        }
+                        else if (app != null)
+                        {
+                            app.CredentialId = value;
+                        }
+                    }
+                }
+            }
         }
 
         public string FeedUrl
@@ -138,7 +165,7 @@
                 }                
                 if (args.ResourceType == RemoteResourceType.OnPremPublishedApp)
                 {
-                    _tempResources.Add(new RemoteApplicationModel(args.ResourceId, args.FriendlyName, args.RdpFile, args.IconBytes, args.IconWidth));
+                    _tempResources.Add(new RemoteApplicationModel(args.ResourceId, args.FriendlyName, args.RdpFile, args.IconBytes, args.IconWidth, this.CredentialsId));
                 }
                 else if (args.ResourceType == RemoteResourceType.OnPremPublishedDesktop)
                 {

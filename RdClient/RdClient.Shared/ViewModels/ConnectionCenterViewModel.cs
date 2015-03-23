@@ -331,7 +331,7 @@
 
         private void ConnectToWorkspace()
         {
-            RemoteSessionSetup sessionSetup = new RemoteSessionSetup(this.ApplicationDataModel, _onPrem.Resources[4]);
+            RemoteSessionSetup sessionSetup = new RemoteSessionSetup(this.ApplicationDataModel, _onPrem.Resources[3]);
             IRemoteSession session = _sessionFactory.CreateSession(sessionSetup);
             this.NavigationService.NavigateToView("RemoteSessionView", session);
         }

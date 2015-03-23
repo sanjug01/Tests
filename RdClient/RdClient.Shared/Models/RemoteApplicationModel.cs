@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.CxWrappers;
+    using System;
     using System.Runtime.Serialization;
 
     [DataContract(IsReference = true)]
@@ -11,13 +12,21 @@
         private string _rdpFile;
         private byte[] _iconBytes;
         private bool _hasIcon;
+        private Guid _credId;
 
-        public RemoteApplicationModel(string strResourceId, string strResourceFriendlyName, string strRdpFile, byte[] spIcon, uint iconWidth)
+        public RemoteApplicationModel(string strResourceId, string strResourceFriendlyName, string strRdpFile, byte[] spIcon, uint iconWidth, Guid credId)
         {
             this.ResourceId = strResourceId;
             this.FriendlyName = strResourceFriendlyName;
             this.RdpFile = strRdpFile;
             this.IconBytes = spIcon;
+            this.CredentialId = credId;
+        }
+
+        public Guid CredentialId
+        {
+            get { return _credId; }
+            set { SetProperty(ref _credId, value); }
         }
 
         public string ResourceId 
@@ -40,8 +49,21 @@
 
         public byte[] IconBytes
         {
-            get { return _iconBytes; }
-            private set { SetProperty(ref _iconBytes, value); }
+            get 
+            { 
+                return _iconBytes; 
+            }
+            private set 
+            { 
+                SetProperty(ref _iconBytes, value);
+                this.HasIcon = value != null;
+            }
+        }
+
+        public bool HasIcon
+        {
+            get { return _hasIcon; }
+            private set { SetProperty(ref _hasIcon, value); }
         }
 
         public override bool Equals(object obj)

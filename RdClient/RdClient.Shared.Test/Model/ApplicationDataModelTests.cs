@@ -186,7 +186,7 @@
                 {
                     desktop.CredentialsId = credentialsId;
                     Assert.AreEqual(credentialsId, desktop.CredentialsId);
-                    adm.LocalWorkspace.Connections.AddNewModel(new RemoteApplicationModel("", "", "", null, 32));
+                    adm.LocalWorkspace.Connections.AddNewModel(new RemoteApplicationModel("", "", "", null, 32, Guid.Empty));
                 }
                 adm.LocalWorkspace.Connections.AddNewModel(desktop);
             }
