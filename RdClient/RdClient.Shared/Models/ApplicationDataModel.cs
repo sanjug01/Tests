@@ -4,6 +4,7 @@
     using RdClient.Shared.Helpers;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
@@ -17,7 +18,8 @@
         private IModelSerializer _modelSerializer;
         private CertificateTrust _certificateTrust;
         private GeneralSettings _settings;
-        private WorkspaceModel<LocalWorkspaceModel> _localWorkspace;
+        private WorkspaceModel<LocalWorkspaceModel> _localWorkspace;       
+        private ObservableCollection<OnPremiseWorkspaceModel> _onPremWorkspaces;
 
         public ICommand Save
         {
@@ -56,6 +58,12 @@
             }
         }
 
+        public ObservableCollection<OnPremiseWorkspaceModel> OnPremWorkspaces 
+        { 
+            get { return _onPremWorkspaces; }
+            private set { this.SetProperty(ref _onPremWorkspaces, value); }
+        }
+
         public WorkspaceModel<LocalWorkspaceModel> LocalWorkspace
         {
             get { return _localWorkspace; }
@@ -80,6 +88,7 @@
         public ApplicationDataModel()
         {
             _save = new GroupCommand();
+            _onPremWorkspaces = new ObservableCollection<OnPremiseWorkspaceModel>();
         }
 
         private void ComposeDataModel()
@@ -134,6 +143,19 @@
                             });
                         }
                     }
+                    //
+                    // Remove references to deleted credentials from all workspaces
+                    //
+                    foreach (IModelContainer<CredentialsModel> credentialsContainer in e.OldItems)
+                    {
+                        foreach (OnPremiseWorkspaceModel workspace in _onPremWorkspaces)
+                        {
+                            if (credentialsContainer.Id.Equals(workspace.CredentialsId))
+                            {
+                                workspace.CredentialsId = Guid.Empty;
+                            }
+                        }
+                    }
                     break;
 
                 case NotifyCollectionChangedAction.Reset:
@@ -156,6 +178,23 @@
                                 }
                             }
                         });
+                    }
+                    //
+                    // For each desktop check if the credential reference is valid, and if it is not, remove it.
+                    //
+                    foreach (OnPremiseWorkspaceModel workspace in _onPremWorkspaces)
+                    {
+                        if (!Guid.Empty.Equals(workspace.CredentialsId))
+                        {
+                            try
+                            {
+                                _localWorkspace.Credentials.GetModel(workspace.CredentialsId);
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                workspace.CredentialsId = Guid.Empty;
+                            }
+                        }
                     }
                     break;
             }

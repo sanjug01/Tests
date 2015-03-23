@@ -144,7 +144,7 @@
             {
                 throw new InvalidOperationException("Can only subscribe when workspace has no operations pending");
             }
-            this.State = WorkspaceState.Subscribing;
+            this.State = WorkspaceState.Unsubscribing;
             _client.StartRemoveFeed(this.FeedUrl, result => HandleOperationCompleted(result, WorkspaceState.Unsubscribed));
         }
 
@@ -188,6 +188,13 @@
             {
                 this.Resources.Clear();
                 this.State = WorkspaceState.Unsubscribed;
+                _dataModel.OnPremWorkspaces.Remove(this);
+                _client.Events.OperationInProgress -= OperationInProgress;
+                _client.Events.OperationCompleted -= OperationCompleted;
+                _client.Events.AddResourcesStarted -= AddResourcesStarted;
+                _client.Events.AddResourcesFinished -= AddResourcesFinished;
+                _client.Events.ResourceAdded -= ResourceAdded;
+                _client.Events.WorkspaceRemoved -= WorkspaceRemoved;
             }
         }
 
@@ -210,7 +217,15 @@
         {
             if (this.FeedUrl.Equals(args.FeedUrl))
             {
-                this.Resources = _tempResources;
+                if (this.Error == XPlatError.XResult32.Succeeded)
+                {
+                    this.State = WorkspaceState.Ok;
+                    this.Resources = _tempResources;
+                }
+                else
+                {
+                    this.State = WorkspaceState.Error;
+                }
             }
         }
 
@@ -218,6 +233,7 @@
         {
             if (this.FeedUrl.Equals(args.FeedUrl))
             {
+                this.State = WorkspaceState.AddingResources;
                 _tempResources = new List<RemoteConnectionModel>();
             }
         }

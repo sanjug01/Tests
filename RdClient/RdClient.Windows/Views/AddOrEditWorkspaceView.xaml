@@ -30,7 +30,7 @@
                 </Grid>
                 <StackPanel Grid.Row="2">
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="Feed URL (d)"/>
-                    <TextBox Background="Transparent" Margin="0,8" Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Background="Transparent" Margin="0,8" Text="{Binding Path=FeedUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel Grid.Row="4">
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
@@ -58,7 +58,7 @@
                         />
                     <Button Grid.Column="3"
                         Style="{StaticResource DialogAcceptButtonStyle}"
-                        Command="{Binding Path=OkCommand}"
+                        Command="{Binding Path=SaveCommand}"
                         x:Uid="Common_Button_Ok"
                         Content="Ok(d)"
                         />

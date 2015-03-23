@@ -258,9 +258,8 @@
                 {
                     dvm.Presenting(_sessionFactory);
                 }
-            }
-                this.HasDesktops = this.DesktopViewModels.Count > 0;
-            }
+            }                        
+            
             if (null == _workspaceViewModels)
             {
                 ObservableCollection<IWorkspaceViewModel> _workspaceViewModelsSource;
@@ -268,9 +267,11 @@
                 _workspaceViewModels = new ReadOnlyObservableCollection<IWorkspaceViewModel>(_workspaceViewModelsSource);
                 _workspaceViewModelsSource.Add(new WorkspaceViewModel());
                 _workspaceViewModelsSource.Add(new WorkspaceViewModel());
-                _workspaceViewModelsSource.Add(new WorkspaceViewModel());
-                this.HasApps = this.WorkspaceViewModels.Count > 0;
+                _workspaceViewModelsSource.Add(new WorkspaceViewModel());                
             }
+
+            this.HasDesktops = this.DesktopViewModels.Count > 0;
+            this.HasApps = this.WorkspaceViewModels.Count > 0;
         }
 
         protected override void OnDismissed()
