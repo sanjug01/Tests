@@ -41,8 +41,8 @@ namespace RdClient.Shared.Input.Pointer
 
         public PointerEventDispatcher(ITimer timer, IPointerManipulator manipulator)
         {
-            _pointerMode = TouchModeFactory.CreatePointerMode(timer, manipulator);
-            _directMode = TouchModeFactory.CreateDirectMode(timer, manipulator);
+            //_pointerMode = TouchModeFactory.CreatePointerMode(timer, manipulator);
+            //_directMode = TouchModeFactory.CreateDirectMode(timer, manipulator);
             _multiTouchMode = new MultiTouchMode(manipulator);
 
             _pointerConsumers[PointerType.Mouse] = new MouseMode(manipulator);

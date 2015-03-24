@@ -1,15 +1,9 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
-using RdClient.Shared.Input.Pointer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace RdClient.Shared.Input.Mouse
+namespace RdClient.Shared.Input.Pointer.PointerMode
 {
-    public class TouchModeFactory
+    public class PointerModeFactory
     {
         private static void AddDirectModeTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
         {
@@ -61,14 +55,16 @@ namespace RdClient.Shared.Input.Mouse
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
             (o) => { o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.RightClick, o.Input); });
+
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Scroll,
             (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
             (o) => { o.Context.MouseScroll(o.Input); });
-
             stateMachine.AddTransition(PointerState.Scroll, PointerState.Scroll,
-            (o) => { return 
-                        o.Context.NumberOfContacts(o.Input) > 1 &&
-                        o.Context.MoveThresholdExceeded(o.Input); 
+            (o) =>
+            {
+                return
+                   o.Context.NumberOfContacts(o.Input) > 1 &&
+                   o.Context.MoveThresholdExceeded(o.Input);
             },
             (o) => { o.Context.MouseScroll(o.Input); });
             stateMachine.AddTransition(PointerState.Scroll, PointerState.LeftDown,
@@ -110,17 +106,19 @@ namespace RdClient.Shared.Input.Mouse
         }
 
         private static void AddMoveTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
-        { 
+        {
             stateMachine.AddTransition(PointerState.Idle, PointerState.Inertia,
             (o) => { return o.Input.Inertia == true; },
             (o) => { o.Context.MouseMove(o.Input); });
 
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.Move,
-            (o) => { 
-                return o.Context.MoveThresholdExceeded(o.Input); 
+            (o) =>
+            {
+                return o.Context.MoveThresholdExceeded(o.Input);
             },
-            (o) => { 
-                o.Context.MouseMove(o.Input); 
+            (o) =>
+            {
+                o.Context.MouseMove(o.Input);
             });
 
             stateMachine.AddTransition(PointerState.Move, PointerState.Move,
