@@ -47,6 +47,21 @@
             set { this.SetProperty(ref _size, value); }
         }
 
+        Point IViewport.Offset
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        double IViewport.ZoomFactor
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        void IViewport.Set(double zoomFactor, Point offset, bool animated)
+        {
+            throw new NotImplementedException();
+        }
+
         void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor, double durationMilliseconds)
         {
             //
