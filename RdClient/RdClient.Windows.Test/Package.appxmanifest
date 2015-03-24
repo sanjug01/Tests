@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="e0f60c64-19d7-4dec-b858-2718dffe8ddb" Publisher="CN=ditodoro" Version="1.1.0.0" />
+  <Identity Name="e0f60c64-19d7-4dec-b858-2718dffe8ddb" Publisher="CN=ditodoro" Version="1.2.0.0" />
   <Properties>
     <DisplayName>RdClient.Windows.Test</DisplayName>
     <PublisherDisplayName>ditodoro</PublisherDisplayName>

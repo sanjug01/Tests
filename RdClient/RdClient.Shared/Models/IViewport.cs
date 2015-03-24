@@ -31,7 +31,7 @@
         /// <param name="offset">Desired offset.</param>
         /// <remarks>The viewport may adjust the desired zoom factor and offset values based on its internal logic.
         /// The adjusted values will be reported through the Offset and ZoomFactor properties.</remarks>
-        void Set(double zoomFactor, Point offset, bool animated);
+        void Set(double zoomFactor, Size offset, bool animated);
 
         /// <summary>
         /// Pan the view port and zoom the rendering panel.

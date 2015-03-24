@@ -20,6 +20,8 @@
         private readonly CompositeTransform _transformation;
 
         private Size _size;
+        private Point _offset;
+        private double _zoomFactor;
         private Storyboard _activeStoryboard;
 
         public RenderingPanelViewport(RemoteSessionPanel sessionPanel, SwapChainPanel renderingPanel,
@@ -30,6 +32,8 @@
 
             _sessionPanel = sessionPanel;
             _size = new Size(_sessionPanel.ActualWidth, _sessionPanel.ActualHeight);
+            _offset = new Point();
+            _zoomFactor = 1.0;
             _sessionPanel.SizeChanged += this.OnSizeChanged;
             _renderingPanel = renderingPanel;
             _storyboard = new Storyboard();
@@ -42,11 +46,6 @@
             get { return _size; }
         }
 
-        private Size Size
-        {
-            set { this.SetProperty(ref _size, value); }
-        }
-
         Point IViewport.Offset
         {
             get { throw new NotImplementedException(); }
@@ -57,9 +56,41 @@
             get { throw new NotImplementedException(); }
         }
 
-        void IViewport.Set(double zoomFactor, Point offset, bool animated)
+        void IViewport.Set(double zoomFactor, Size offset, bool animated)
         {
-            throw new NotImplementedException();
+            zoomFactor = AdjustZoomFactor(zoomFactor);
+
+            CompositeTransform newTransform = new CompositeTransform()
+            {
+                ScaleX = zoomFactor,
+                ScaleY = zoomFactor,
+            };
+
+            Point newSize = newTransform.TransformPoint(new Point(_size.Width, _size.Height));
+
+            if (offset.Width + _size.Width > newSize.X)
+                offset.Width = Math.Floor(newSize.X - _size.Width);
+            else
+                offset.Width = Math.Floor(offset.Width);
+
+            if (offset.Height + _size.Height > newSize.Y)
+                offset.Height = Math.Floor(newSize.Y - _size.Height);
+            else
+                offset.Height = Math.Floor(offset.Height);
+
+            if(animated)
+            {
+                Animate(zoomFactor, offset.Width, offset.Height, 0.1);
+            }
+            else
+            {
+                _transformation.ScaleX = zoomFactor;
+                _transformation.ScaleY = zoomFactor;
+                _transformation.TranslateX = -offset.Width;
+                _transformation.TranslateY = -offset.Height;
+                this.ZoomFactor = zoomFactor;
+                this.Offset = new Point(offset.Width, offset.Height);
+            }
         }
 
         void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor, double durationMilliseconds)
@@ -75,12 +106,7 @@
             //
             // Calculate the new scale and adjust it to the range 1.0-4.0.
             //
-            double newScale = _transformation.ScaleX * scaleFactor;
-
-            if (newScale > 4.0)
-                newScale = 4.0;
-            else if (newScale < 1.0)
-                newScale = 1.0;
+            double newScale = AdjustZoomFactor(_transformation.ScaleX * scaleFactor);
             //
             // Get the position of the anchor point (that is is viewport coordinates) in the rendering panel.
             //
@@ -135,42 +161,81 @@
                 _transformation.ScaleY = newTransform.ScaleY;
                 _transformation.TranslateX = newTransform.TranslateX;
                 _transformation.TranslateY = newTransform.TranslateY;
+
+                this.ZoomFactor = _transformation.ScaleX;
+                this.Offset = new Point(_transformation.TranslateX, _transformation.TranslateY);
             }
             else
             {
-                DoubleAnimation
-                    animationTranslateX = new DoubleAnimation() { From = _transformation.TranslateX, To = newTransform.TranslateX },
-                    animationTranslateY = new DoubleAnimation() { From = _transformation.TranslateY, To = newTransform.TranslateY },
-                    animationScaleX = new DoubleAnimation() { From = _transformation.ScaleX, To = newTransform.ScaleX },
-                    animationScaleY = new DoubleAnimation() { From = _transformation.ScaleY, To = newTransform.ScaleY };
-
-                _storyboard.Children.Add(animationTranslateX);
-                _storyboard.Children.Add(animationTranslateY);
-                _storyboard.Children.Add(animationScaleX);
-                _storyboard.Children.Add(animationScaleY);
-                _storyboard.Duration = new Duration(TimeSpan.FromMilliseconds(durationMilliseconds));
-
-                Storyboard.SetTarget(animationTranslateX, _transformation);
-                Storyboard.SetTargetProperty(animationTranslateX, "TranslateX");
-                Storyboard.SetTarget(animationTranslateY, _transformation);
-                Storyboard.SetTargetProperty(animationTranslateY, "TranslateY");
-
-                Storyboard.SetTarget(animationScaleX, _transformation);
-                Storyboard.SetTargetProperty(animationScaleX, "ScaleX");
-                Storyboard.SetTarget(animationScaleY, _transformation);
-                Storyboard.SetTargetProperty(animationScaleY, "ScaleY");
-
-                Contract.Assert(null == _activeStoryboard);
-                _activeStoryboard = _storyboard;
-                _activeStoryboard.Begin();
+                Animate(newTransform.ScaleX, -newTransform.TranslateX, -newTransform.TranslateY, durationMilliseconds);
             }
+        }
+
+        private static double AdjustZoomFactor(double desiredZoomFactor)
+        {
+            if (desiredZoomFactor > 4.0)
+                desiredZoomFactor = 4.0;
+            else if (desiredZoomFactor < 1.0)
+                desiredZoomFactor = 1.0;
+
+            return desiredZoomFactor;
+        }
+
+        private void Animate(double zoomFactor, double offsetX, double offsetY, double duration)
+        {
+            DoubleAnimation
+                animationTranslateX = new DoubleAnimation() { From = _transformation.TranslateX, To = -offsetX },
+                animationTranslateY = new DoubleAnimation() { From = _transformation.TranslateY, To = -offsetY },
+                animationScaleX = new DoubleAnimation() { From = _transformation.ScaleX, To = zoomFactor },
+                animationScaleY = new DoubleAnimation() { From = _transformation.ScaleY, To = zoomFactor };
+
+            _storyboard.Children.Add(animationTranslateX);
+            _storyboard.Children.Add(animationTranslateY);
+            _storyboard.Children.Add(animationScaleX);
+            _storyboard.Children.Add(animationScaleY);
+            _storyboard.Duration = new Duration(TimeSpan.FromMilliseconds(duration));
+
+            Storyboard.SetTarget(animationTranslateX, _transformation);
+            Storyboard.SetTargetProperty(animationTranslateX, "TranslateX");
+            Storyboard.SetTarget(animationTranslateY, _transformation);
+            Storyboard.SetTargetProperty(animationTranslateY, "TranslateY");
+
+            Storyboard.SetTarget(animationScaleX, _transformation);
+            Storyboard.SetTargetProperty(animationScaleX, "ScaleX");
+            Storyboard.SetTarget(animationScaleY, _transformation);
+            Storyboard.SetTargetProperty(animationScaleY, "ScaleY");
+
+            Contract.Assert(null == _activeStoryboard);
+            _activeStoryboard = _storyboard;
+            _activeStoryboard.Begin();
+        }
+
+        private Size Size
+        {
+            set { this.SetProperty(ref _size, value); }
+        }
+
+        private Point Offset
+        {
+            set { this.SetProperty(ref _offset, value); }
+        }
+
+        private double ZoomFactor
+        {
+            set { this.SetProperty(ref _zoomFactor, value); }
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             //
-            // TODO: adjust the viewport position to its new size;
+            // Adjust the viewport position to its new size;
             //
+            if(null != _activeStoryboard)
+            {
+                ConcludeAnimation(_activeStoryboard);
+                _activeStoryboard = null;
+            }
+
             this.Size = e.NewSize;
         }
 
@@ -201,6 +266,11 @@
             _transformation.ScaleX = animatedScale;
             _transformation.TranslateX = animatedTranslateX;
             _transformation.TranslateY = animatedTranslateY;
+            //
+            // Report the new zoom factor and offset by setting the properties of the IViewport object.
+            //
+            this.ZoomFactor = _transformation.ScaleX;
+            this.Offset = new Point(_transformation.TranslateX, _transformation.TranslateY);
         }
     }
 }
