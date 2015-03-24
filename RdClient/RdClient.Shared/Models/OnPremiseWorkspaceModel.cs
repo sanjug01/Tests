@@ -118,40 +118,50 @@
             private set { SetProperty(ref _friendlyName, value); }
         }
 
-        public void Refresh()
+        public void GetCachedResources(Action<XPlatError.XResult32> completionCallback = null)
+        {
+            this.State = WorkspaceState.Refreshing;
+            _client.StartGetCachedFeeds(result => HandleOperationCompleted(result, WorkspaceState.Ok, completionCallback));
+        }
+
+        public void Refresh(Action<XPlatError.XResult32> completionCallback = null)
         {
             if (this.State != WorkspaceState.Ok && this.State != WorkspaceState.Unsubscribed && this.State != WorkspaceState.Error)
             {
                 throw new InvalidOperationException("Can only refresh when workspace is subscribed and has no operations pending");
             }
             this.State = WorkspaceState.Refreshing;
-            _client.StartRefreshFeeds(RadcRefreshReason.ManualRefresh, result => HandleOperationCompleted(result, WorkspaceState.Ok));
+            _client.StartRefreshFeeds(RadcRefreshReason.ManualRefresh, result => HandleOperationCompleted(result, WorkspaceState.Ok, completionCallback));
         }
 
-        public void Subscribe()
+        public void Subscribe(Action<XPlatError.XResult32> completionCallback = null)
         {
             if (this.State != WorkspaceState.Ok && this.State != WorkspaceState.Unsubscribed && this.State != WorkspaceState.Error)
             {
                 throw new InvalidOperationException("Can only subscribe when workspace has no operations pending");
             }
             this.State = WorkspaceState.Subscribing;
-            _client.StartSubscribeToOnPremFeed(this.FeedUrl, this.Credential, result => HandleOperationCompleted(result, WorkspaceState.Ok));
+            _client.StartSubscribeToOnPremFeed(this.FeedUrl, this.Credential, result => HandleOperationCompleted(result, WorkspaceState.Ok, completionCallback));
         }
 
-        public void UnSubscribe()
+        public void UnSubscribe(Action<XPlatError.XResult32> completionCallback = null)
         {
-            if (this.State != WorkspaceState.Ok || this.State != WorkspaceState.Error)
+            if (this.State != WorkspaceState.Ok && this.State != WorkspaceState.Error)
             {
                 throw new InvalidOperationException("Can only subscribe when workspace has no operations pending");
             }
             this.State = WorkspaceState.Unsubscribing;
-            _client.StartRemoveFeed(this.FeedUrl, result => HandleOperationCompleted(result, WorkspaceState.Unsubscribed));
+            _client.StartRemoveFeed(this.FeedUrl, result => HandleOperationCompleted(result, WorkspaceState.Unsubscribed, completionCallback));
         }
 
-        private void HandleOperationCompleted(XPlatError.XResult32 result, WorkspaceState successState)
+        private void HandleOperationCompleted(XPlatError.XResult32 result, WorkspaceState successState, Action<XPlatError.XResult32> completionCallback)
         {
             this.Error = result;
             this.State = (result == XPlatError.XResult32.Succeeded) ? successState : WorkspaceState.Error;
+            if (completionCallback != null)
+            {
+                completionCallback(result);
+            }
         }
 
         private void ResourceAdded(object sender, RadcResourceAddedArgs args)
