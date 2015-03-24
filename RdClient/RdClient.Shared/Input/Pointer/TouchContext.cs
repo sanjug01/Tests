@@ -103,7 +103,7 @@ namespace RdClient.Shared.Input.Pointer
                 PointerEventTrace eventTrace = _trackedPointerEvents[pointerEvent.PointerId];
                 double deltaX = Math.Abs(eventTrace.DeltaXTo(pointerEvent));
                 double deltaY = Math.Abs(eventTrace.DeltaYTo(pointerEvent));
-                double delta = Math.Pow(deltaX, 2) - Math.Pow(deltaY * deltaY, 2);
+                double delta = Math.Pow(deltaX, 2) - Math.Pow(deltaY, 2);
 
                 if (delta > GlobalConstants.TouchOrientationDeltaThreshold)
                 {

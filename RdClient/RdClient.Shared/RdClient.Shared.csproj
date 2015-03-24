@@ -176,10 +176,12 @@
     <Compile Include="Input\Pointer\IPointerManipulator.cs" />
     <Compile Include="Input\Pointer\ITouchContext.cs" />
     <Compile Include="Input\Pointer\MouseMode.cs" />
-    <Compile Include="Input\Pointer\PointerMode\IPointerModeContext.cs" />
-    <Compile Include="Input\Pointer\PointerMode\IPointerModeControl.cs" />
-    <Compile Include="Input\Pointer\PointerMode\PointerModeConsumer.cs" />
-    <Compile Include="Input\Pointer\PointerMode\PointerModeContext.cs" />
+    <Compile Include="Input\Pointer\PointerMode\DirectModeControl.cs" />
+    <Compile Include="Input\Pointer\PointerMode\IPointerContext.cs" />
+    <Compile Include="Input\Pointer\PointerMode\IPointerControl.cs" />
+    <Compile Include="Input\Pointer\PointerMode\PointerConsumer.cs" />
+    <Compile Include="Input\Pointer\PointerMode\PointerContext.cs" />
+    <Compile Include="Input\Pointer\PointerMode\PointerModeControl.cs" />
     <Compile Include="Input\Pointer\PointerMode\PointerModeFactory.cs" />
     <Compile Include="Input\Pointer\TouchContext.cs" />
     <Compile Include="Input\Pointer\TouchModeFactory.cs" />

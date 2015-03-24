@@ -5,7 +5,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 {
     public class PointerModeFactory
     {
-        private static void AddDirectModeTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
+        private static void AddDirectModeTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>> stateMachine)
         {
             stateMachine.AddTransition(PointerState.Idle, PointerState.LeftDown,
             (o) =>
@@ -13,7 +13,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
                 return
                     o.Input.Inertia == false &&
                     o.Context.NumberOfContacts(o.Input) == 1 &&
-                    o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.LeftClick) == true;
+                    o.Context.Timer.IsExpired(DoubleClickTimer.ClickTimerType.LeftClick) == true;
             },
             (o) => { });
             stateMachine.AddTransition(PointerState.Idle, PointerState.LeftDoubleDown,
@@ -21,16 +21,16 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             {
                 return
                     o.Context.NumberOfContacts(o.Input) == 1 &&
-                    o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.LeftClick) == false;
+                    o.Context.Timer.IsExpired(DoubleClickTimer.ClickTimerType.LeftClick) == false;
             },
-            (o) => { o.Context.DoubleClickTimer.Stop(); });
+            (o) => { o.Context.Timer.Stop(); });
 
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDown,
             (o) =>
             {
                 return
                     o.Context.NumberOfContacts(o.Input) == 2 &&
-                    o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == true;
+                    o.Context.Timer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == true;
             },
             (o) => { });
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDoubleDown,
@@ -38,27 +38,27 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             {
                 return
                     o.Context.NumberOfContacts(o.Input) == 2 &&
-                    o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == false;
+                    o.Context.Timer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == false;
             },
-            (o) => { o.Context.DoubleClickTimer.Stop(); });
+            (o) => { o.Context.Timer.Stop(); });
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
             (o) =>
             {
-                if (o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick))
-                    o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.LeftClick, o.Input);
+                if (o.Context.Timer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick))
+                    o.Context.Timer.Reset(DoubleClickTimer.ClickTimerType.LeftClick, o.Input);
             });
 
             stateMachine.AddTransition(PointerState.RightDown, PointerState.LeftDown,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
-            (o) => { o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.RightClick, o.Input); });
+            (o) => { o.Context.Timer.Reset(DoubleClickTimer.ClickTimerType.RightClick, o.Input); });
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.RightClick, o.Input); });
+            (o) => { o.Context.Timer.Reset(DoubleClickTimer.ClickTimerType.RightClick, o.Input); });
 
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Scroll,
             (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
-            (o) => { o.Context.MouseScroll(o.Input); });
+            (o) => { o.Context.Control.MouseScroll(o.Input); });
             stateMachine.AddTransition(PointerState.Scroll, PointerState.Scroll,
             (o) =>
             {
@@ -66,7 +66,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
                    o.Context.NumberOfContacts(o.Input) > 1 &&
                    o.Context.MoveThresholdExceeded(o.Input);
             },
-            (o) => { o.Context.MouseScroll(o.Input); });
+            (o) => { o.Context.Control.MouseScroll(o.Input); });
             stateMachine.AddTransition(PointerState.Scroll, PointerState.LeftDown,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
             (o) => { });
@@ -76,11 +76,11 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
             stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { o.Context.MouseLeftClick(o.Input); o.Context.MouseLeftClick(o.Input); });
+            (o) => { o.Context.Control.MouseLeftClick(o.Input); o.Context.Control.MouseLeftClick(o.Input); });
 
             stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.LeftDrag,
             (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
-            (o) => { o.Context.UpdateCursorPosition(o.Input); o.Context.PointerManipulator.SendMouseAction(MouseEventType.LeftPress); });
+            (o) => { o.Context.Control.UpdateCursorPosition(o.Input); o.Context.Control.Manipulator.SendMouseAction(MouseEventType.LeftPress); });
 
             stateMachine.AddTransition(PointerState.RightDoubleDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
@@ -88,28 +88,28 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
             stateMachine.AddTransition(PointerState.RightDoubleDown, PointerState.RightDrag,
             (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
-            (o) => { o.Context.UpdateCursorPosition(o.Input); o.Context.PointerManipulator.SendMouseAction(MouseEventType.RightPress); });
+            (o) => { o.Context.Control.UpdateCursorPosition(o.Input); o.Context.Control.Manipulator.SendMouseAction(MouseEventType.RightPress); });
 
             stateMachine.AddTransition(PointerState.LeftDrag, PointerState.LeftDrag,
             (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
-            (o) => { o.Context.MouseMove(o.Input); });
+            (o) => { o.Context.Control.MouseMove(o.Input); });
             stateMachine.AddTransition(PointerState.LeftDrag, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { o.Context.PointerManipulator.SendMouseAction(MouseEventType.LeftRelease); });
+            (o) => { o.Context.Control.Manipulator.SendMouseAction(MouseEventType.LeftRelease); });
 
             stateMachine.AddTransition(PointerState.RightDrag, PointerState.RightDrag,
             (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
-            (o) => { o.Context.MouseMove(o.Input); });
+            (o) => { o.Context.Control.MouseMove(o.Input); });
             stateMachine.AddTransition(PointerState.RightDrag, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { o.Context.PointerManipulator.SendMouseAction(MouseEventType.RightRelease); });
+            (o) => { o.Context.Control.Manipulator.SendMouseAction(MouseEventType.RightRelease); });
         }
 
-        private static void AddMoveTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
+        private static void AddMoveTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>> stateMachine)
         {
             stateMachine.AddTransition(PointerState.Idle, PointerState.Inertia,
             (o) => { return o.Input.Inertia == true; },
-            (o) => { o.Context.MouseMove(o.Input); });
+            (o) => { o.Context.Control.MouseMove(o.Input); });
 
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.Move,
             (o) =>
@@ -118,19 +118,19 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             },
             (o) =>
             {
-                o.Context.MouseMove(o.Input);
+                o.Context.Control.MouseMove(o.Input);
             });
 
             stateMachine.AddTransition(PointerState.Move, PointerState.Move,
             (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
-            (o) => { o.Context.MouseMove(o.Input); });
+            (o) => { o.Context.Control.MouseMove(o.Input); });
             stateMachine.AddTransition(PointerState.Move, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
             (o) => { });
 
             stateMachine.AddTransition(PointerState.Inertia, PointerState.Inertia,
             (o) => { return o.Input.Inertia == true; },
-            (o) => { o.Context.MouseMove(o.Input); });
+            (o) => { o.Context.Control.MouseMove(o.Input); });
             stateMachine.AddTransition(PointerState.Inertia, PointerState.Idle,
             (o) => { return o.Input.Inertia == false; },
             (o) => { });
@@ -138,25 +138,33 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
         public static IPointerEventConsumer CreatePointerMode(ITimer timer, IPointerManipulator manipulator)
         {
-            IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>>();
+            IStateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>>();
 
             AddDirectModeTransitions(ref stateMachine);
             AddMoveTransitions(ref stateMachine);
 
             stateMachine.SetStart(PointerState.Idle);
 
-            return new TouchContext(timer, manipulator, stateMachine);
+            PointerContext context = new PointerContext(timer);
+            PointerModeControl control = new PointerModeControl(context, manipulator);
+            context.Control = control;
+
+            return new PointerConsumer(context, stateMachine);
         }
 
         public static IPointerEventConsumer CreateDirectMode(ITimer timer, IPointerManipulator manipulator)
         {
-            IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>>();
+            IStateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>>();
 
             AddDirectModeTransitions(ref stateMachine);
 
             stateMachine.SetStart(PointerState.Idle);
 
-            return new DirectTouchContext(timer, manipulator, stateMachine);
+            PointerContext context = new PointerContext(timer);
+            DirectModeControl control = new DirectModeControl(context, manipulator);
+            context.Control = control;
+
+            return new PointerConsumer(context, stateMachine);
         }
     }
 }
