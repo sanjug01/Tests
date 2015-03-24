@@ -137,18 +137,16 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             double dY;
             double delta;
 
-            if(false == _pointerTraces.ContainsKey(pointerEvent.PointerId))
+
+            if(pointerEvent.Inertia)
             {
-                if(pointerEvent.Inertia)
-                {
-                    dX = pointerEvent.Delta.X;
-                    dY = pointerEvent.Delta.Y;
-                    delta = Math.Sqrt(dX * dX + dY * dY);
-                }
-                else
-                {
-                    return false;
-                }
+                dX = pointerEvent.Delta.X;
+                dY = pointerEvent.Delta.Y;
+                delta = Math.Sqrt(dX * dX + dY * dY);
+            }
+            else if(_pointerSequence[0] != pointerEvent.PointerId)
+            {
+                return false;
             }
             else
             {

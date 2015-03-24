@@ -145,7 +145,7 @@ namespace RdClient.Shared.Test.Input.Mouse
                 // release
                 new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Touch, 3, 0, TouchEventType.Up),
                 new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Touch, 4, 0, TouchEventType.Up)
-        });
+            });
 
             MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 
                 new Mock.TestMousePointerEvent() { Type = MouseEventType.RightPress, Position = new Point(1.0, 1.0) },
