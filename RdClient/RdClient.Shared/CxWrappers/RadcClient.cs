@@ -9,6 +9,7 @@
         private RdClientCx.RadcClient _client;
         private IRadcEventSource _eventProxy;
         private IDeferredExecution _deferredExecution;
+        private bool _operationInProgress;
 
         public RadcClient(IRadcEventSource eventProxy, IDeferredExecution deferredExecution)
         {
@@ -30,6 +31,7 @@
             _deferredExecution = deferredExecution;
             _eventProxy = eventProxy;
             _deferredExecution = deferredExecution;
+            _operationInProgress = false;
         }
 
         public IRadcEvents Events
@@ -71,49 +73,89 @@
         {
             _deferredExecution.Defer(() =>
             {
-                int xres = radcCall();
-                XPlatError.XResult32 result = RdpTypeConverter.ConvertFromCx(xres);
-                if (completionHandler != null)
+                XPlatError.XResult32 result = XPlatError.XResult32.Failed;
+                try
                 {
-                    completionHandler(result);
+                    _operationInProgress = true;
+                    int xres = radcCall();
+                    result = RdpTypeConverter.ConvertFromCx(xres);
+                }
+                catch (Exception e)
+                {
+                    //log exception and let completionHandler handle the failure
+                    RdTrace.TraceDbg("Call to Cx.RadcClient threw exception" + e.Message);
+                }
+                finally
+                {
+                    _operationInProgress = false;
+                    if (completionHandler != null)
+                    {
+                        completionHandler(result);
+                    }
                 }
             });
         }
 
+        private void HandleCxRadcEvent(Action action)
+        {
+            if (_operationInProgress)
+            {
+                action();
+            }
+        }
+
         private void _client_OnResourceAdded(string workspaceId, string workspaceFriendlyName, string feedUrl, string resourceId, string friendlyName, string rdpFile, RdClientCx.ResourceType resourceType, byte[] iconBytes, uint iconWidth)
         {
-            var args = new RadcResourceAddedArgs(workspaceId, workspaceFriendlyName, feedUrl, resourceId, friendlyName, rdpFile, RdpTypeConverter.ConvertFromCx(resourceType), iconBytes, iconWidth);
-            _eventProxy.EmitResourceAdded(this, args);
+            HandleCxRadcEvent(() =>
+            {
+                var args = new RadcResourceAddedArgs(workspaceId, workspaceFriendlyName, feedUrl, resourceId, friendlyName, rdpFile, RdpTypeConverter.ConvertFromCx(resourceType), iconBytes, iconWidth);
+                _eventProxy.EmitResourceAdded(this, args);
+            });
         }
 
         private void _client_OnRemoveWorkspace(string feedUrl)
         {
-            var args = new RadcWorkspaceRemovedArgs(feedUrl);
-            _eventProxy.EmitWorkspaceRemoved(this, args);
+            HandleCxRadcEvent(() =>
+            {
+                var args = new RadcWorkspaceRemovedArgs(feedUrl);
+                _eventProxy.EmitWorkspaceRemoved(this, args);
+            });
         }
 
         private void _client_OnRadcFeedOperationInProgress(RdClientCx.RadcFeedOperation feedOperation)
         {
-            var args = new RadcOperationInProgressArgs(RdpTypeConverter.ConvertFromCx(feedOperation));
-            _eventProxy.EmitOperationInProgress(this, args);
+            HandleCxRadcEvent(() =>
+            {
+                var args = new RadcOperationInProgressArgs(RdpTypeConverter.ConvertFromCx(feedOperation));
+                _eventProxy.EmitOperationInProgress(this, args);
+            });
         }
 
         private void _client_OnRadcFeedOperationCompleted(RdClientCx.RadcErrorCode errorCode)
         {
-            var args = new RadcOperationCompletedArgs(RdpTypeConverter.ConvertFromCx(errorCode));
-            _eventProxy.EmitOperationCompleted(this, args);
+            HandleCxRadcEvent(() =>
+            {
+                var args = new RadcOperationCompletedArgs(RdpTypeConverter.ConvertFromCx(errorCode));
+                _eventProxy.EmitOperationCompleted(this, args);
+            });
         }
 
         private void _client_OnEndResourcesAdded(string feedUrl)
         {
-            var args = new RadcAddResourcesFinishedArgs(feedUrl);
-            _eventProxy.EmitAddResourcesFinished(this, args);
+            HandleCxRadcEvent(() =>
+            {
+                var args = new RadcAddResourcesFinishedArgs(feedUrl);
+                _eventProxy.EmitAddResourcesFinished(this, args);
+            });
         }
 
         private void _client_OnBeginResourcesAdded(string feedUrl)
         {
-            var args = new RadcAddResourcesStartedArgs(feedUrl);
-            _eventProxy.EmitAddResourcesStarted(this, args);
+            HandleCxRadcEvent(() =>
+            {
+                var args = new RadcAddResourcesStartedArgs(feedUrl);
+                _eventProxy.EmitAddResourcesStarted(this, args);
+            });
         }
 
         private void _client_OnShowDemoConsentPage(RdClientCx.OnShowDemoConsentPageCompletedHandler spShowDemoConsentPageCompletedHandler, bool fFirstTimeSignIn)
