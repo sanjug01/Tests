@@ -9,6 +9,7 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
+    ManipulationMode="All"
     Loaded="OnLoaded"
     Unloaded="OnUnloaded">
 

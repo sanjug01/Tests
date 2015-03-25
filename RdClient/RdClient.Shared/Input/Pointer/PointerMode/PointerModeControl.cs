@@ -55,7 +55,14 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
         public virtual void UpdateCursorPosition(PointerEvent pointerEvent)
         {
-            _manipulator.MousePosition = new Point(_manipulator.MousePosition.X + _context.LastMoveVector.X, _manipulator.MousePosition.Y + _context.LastMoveVector.Y);
+            if(pointerEvent.Inertia)
+            {
+                _manipulator.MousePosition = new Point(_manipulator.MousePosition.X + pointerEvent.Delta.X, _manipulator.MousePosition.Y + pointerEvent.Delta.Y);            
+            }
+            else 
+            {
+                _manipulator.MousePosition = new Point(_manipulator.MousePosition.X + _context.LastMoveVector.X, _manipulator.MousePosition.Y + _context.LastMoveVector.Y);            
+            }
         }
     }
 }

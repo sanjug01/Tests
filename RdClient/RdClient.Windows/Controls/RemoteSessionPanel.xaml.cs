@@ -7,6 +7,7 @@
     using RdClient.Shared.Navigation;
     using System;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;
     using Windows.Foundation;
@@ -200,15 +201,15 @@
 
         protected override void OnPointerEntered(PointerRoutedEventArgs args)
         {
-            _exitCursor = Window.Current.CoreWindow.PointerCursor;
-            Window.Current.CoreWindow.PointerCursor = null;
-            this.MouseCursor.Visibility = Visibility.Visible;
+            //_exitCursor = Window.Current.CoreWindow.PointerCursor;
+            //Window.Current.CoreWindow.PointerCursor = null;
+            //this.MouseCursor.Visibility = Visibility.Visible;
         }
 
         protected override void OnPointerExited(PointerRoutedEventArgs args)
         {
-            Window.Current.CoreWindow.PointerCursor = _exitCursor;
-            this.MouseCursor.Visibility = Visibility.Collapsed;
+            //Window.Current.CoreWindow.PointerCursor = _exitCursor;
+            //this.MouseCursor.Visibility = Visibility.Collapsed;
         }
     }
 }

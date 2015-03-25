@@ -2,6 +2,7 @@
 using RdClient.Shared.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Windows.Foundation;
 
@@ -67,7 +68,11 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             if(pointerEvent.ActionType == TouchEventType.Down || pointerEvent.ActionType == TouchEventType.Update)
             {
                 _pointerTraces[pointerEvent.PointerId].Add(pointerEvent);
-                _pointerSequence.Add(pointerEvent.PointerId);
+
+                if(pointerEvent.ActionType == TouchEventType.Down)
+                {
+                    _pointerSequence.Add(pointerEvent.PointerId);
+                }
             }
 
             if((pointerEvent.ActionType == TouchEventType.Up || pointerEvent.ActionType == TouchEventType.Unknown) && _pointerTraces.ContainsKey(pointerEvent.PointerId))
@@ -138,13 +143,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             double delta;
 
 
-            if(pointerEvent.Inertia)
-            {
-                dX = pointerEvent.Delta.X;
-                dY = pointerEvent.Delta.Y;
-                delta = Math.Sqrt(dX * dX + dY * dY);
-            }
-            else if(_pointerSequence[0] != pointerEvent.PointerId)
+            if(_pointerSequence[0] != pointerEvent.PointerId)
             {
                 return false;
             }
@@ -157,7 +156,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
                 delta = Math.Sqrt(dX * dX + dY * dY) * GlobalConstants.MouseAcceleration;
             }
 
-            if(delta > GlobalConstants.TouchMoveThreshold || pointerEvent.Inertia)
+            if(delta > GlobalConstants.TouchMoveThreshold)
             {
                 LastMoveVector = new Point(dX, dY);
                 LastMoveDistance = delta;

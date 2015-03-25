@@ -27,6 +27,18 @@ namespace RdClient.Shared.Test.Input.Mouse
         }
 
         [TestMethod]
+        public void PointerModel_ShouldNotMove()
+        {
+            ConsumeEventsHelper(new PointerEvent[] { 
+                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3, 0, TouchEventType.Down),
+                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4, 0, TouchEventType.Update),
+            });
+
+            MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 
+            });
+        }
+
+        [TestMethod]
         public void PointerModel_ShouldMoveOnce()
         {
             ConsumeEventsHelper(new PointerEvent[] { 
