@@ -13,9 +13,17 @@
     Loaded="OnLoaded"
     Unloaded="OnUnloaded">
 
-    <Grid Background="Green">
-        <c:RenderingPanel x:Name="RenderingPanel" IsHitTestVisible="False"/>
-        <Image x:Name="MouseCursor" CacheMode="BitmapCache" Stretch="None" Width="Auto" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left">
+    <Grid Background="Gray">
+        <c:RenderingPanel x:Name="RenderingPanel">
+            <SwapChainPanel.RenderTransform>
+                <TransformGroup>
+                    <CompositeTransform x:Name="Transformation"
+                                        ScaleX="1.0" ScaleY="1.0"
+                                        TranslateX="0.0" TranslateY="0.0"/>
+                </TransformGroup>
+            </SwapChainPanel.RenderTransform>
+        </c:RenderingPanel>
+		<Image x:Name="MouseCursor" CacheMode="BitmapCache" Stretch="None" Width="Auto" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left">
             <Image.RenderTransform>
                 <TransformGroup>
                     <TranslateTransform x:Name="MouseTransform"/>

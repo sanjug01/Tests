@@ -102,12 +102,18 @@
                     remove { throw new NotImplementedException(); }
                 }
 
-                public void ChangeMouseCursorShape(Shared.Input.Pointer.MouseCursorShape shape)
+
+                IViewport IRenderingPanel.Viewport
+                {
+                    get { throw new NotImplementedException(); }
+                }
+
+                void IRenderingPanel.ChangeMouseCursorShape(Shared.Input.Pointer.MouseCursorShape shape)
                 {
                     throw new NotImplementedException();
                 }
 
-                public void MoveMouseCursor(Point point)
+                void IRenderingPanel.MoveMouseCursor(Point point)
                 {
                     throw new NotImplementedException();
                 }

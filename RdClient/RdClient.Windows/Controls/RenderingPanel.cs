@@ -20,6 +20,7 @@
     public sealed class RenderingPanel : SwapChainPanel, IRenderingPanel, IDisposable
     {
         private readonly ReaderWriterLockSlim _monitor;
+        private IViewport _viewport;
         private EventHandler _ready;
         private EventHandler<RdClient.Shared.Input.Pointer.PointerEventArgs> _pointerChanged;   
 
@@ -37,6 +38,14 @@
         ~RenderingPanel()
         {
             Dispose(false);
+        }
+
+        public void SetViewport(IViewport viewport)
+        {
+            Contract.Assert(null != viewport);
+            Contract.Assert(null == _viewport);
+
+            _viewport = viewport;
         }
 
         public void Dispose()
@@ -73,6 +82,16 @@
                 {
                     _pointerChanged -= value;
                 }
+            }
+        }
+
+        IViewport IRenderingPanel.Viewport
+        {
+            get
+            {
+                Contract.Assert(null != _viewport);
+                Contract.Ensures(null != Contract.Result<IViewport>());
+                return _viewport;
             }
         }
 

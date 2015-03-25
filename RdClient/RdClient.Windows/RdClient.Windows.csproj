@@ -16,6 +16,7 @@
     <SynthesizeLinkMetadata>true</SynthesizeLinkMetadata>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>RdClient.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <TargetFrameworkVersion />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -155,6 +156,7 @@
       <DependentUpon>RemoteSessionPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RenderingPanel.cs" />
+    <Compile Include="Controls\RenderingPanelViewport.cs" />
     <Compile Include="Controls\RightSideBarControl.xaml.cs">
       <DependentUpon>RightSideBarControl.xaml</DependentUpon>
     </Compile>

@@ -18,6 +18,13 @@
         /// and stops the capture when the last handler has been removed.</remarks>
         event EventHandler<PointerEventArgs> PointerChanged;
 
+        /// <summary>
+        /// Object that manages the viewport in which a part of the rendering panel is shown.
+        /// </summary>
+        /// <remarks>Technically, the viewport is the grid that hosts the rendering panel (swap chain panel);
+        /// the rendering panel may be scaled up so the viewport will become smaller than the panel.</remarks>
+        IViewport Viewport { get; }
+
         void ChangeMouseCursorShape(MouseCursorShape shape);
         void MoveMouseCursor(Point point);
     }
