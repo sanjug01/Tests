@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Helpers
 {
+    using RdClient.Shared.Navigation.Extensions;
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -8,12 +9,32 @@
 
     public abstract class MutableObject : DisposableObject, INotifyPropertyChanged
     {
+        private IExecutionDeferrer _executionDeferrer;
         private readonly ReaderWriterLockSlim _monitor;
         private PropertyChangedEventHandler _propertyChanged;
 
         protected MutableObject()
         {
             _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add
+            {
+                using (LockWrite()) _propertyChanged += value;
+            }
+
+            remove
+            {
+                using (LockWrite()) _propertyChanged -= value;
+            }
+        }
+
+        public IExecutionDeferrer ExecutionDeferrer
+        {
+            protected get { return _executionDeferrer; }
+            set { _executionDeferrer = value; }
         }
 
         protected IDisposable LockRead()
@@ -44,7 +65,16 @@
 
         protected void EmitPropertyChanged(string propertyName)
         {
-            EmitPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            Action emitPropertyChangedAction = () => EmitPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            IExecutionDeferrer deferrer = this.ExecutionDeferrer;
+            if (deferrer != null)
+            {
+                deferrer.TryDeferToUI(emitPropertyChangedAction);
+            }
+            else
+            {
+                emitPropertyChangedAction();
+            }
         }
 
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
@@ -60,19 +90,6 @@
                 storage = value;
                 this.EmitPropertyChanged(propertyName);
                 return true;
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged
-        {
-            add
-            {
-                using (LockWrite()) _propertyChanged += value;
-            }
-
-            remove
-            {
-                using (LockWrite()) _propertyChanged -= value;
             }
         }
     }

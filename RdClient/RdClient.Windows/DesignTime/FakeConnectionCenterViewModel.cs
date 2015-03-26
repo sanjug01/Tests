@@ -33,9 +33,9 @@ namespace RdClient.DesignTime
 
             _workspaceViewModelsSource = new ObservableCollection<IWorkspaceViewModel>();
             _workspaceViewModels = new ReadOnlyObservableCollection<IWorkspaceViewModel>(_workspaceViewModelsSource);
-            _workspaceViewModelsSource.Add(new WorkspaceViewModel());
-            _workspaceViewModelsSource.Add(new WorkspaceViewModel());
-            _workspaceViewModelsSource.Add(new WorkspaceViewModel());
+            _workspaceViewModelsSource.Add(new FakeWorkspaceViewModel());
+            _workspaceViewModelsSource.Add(new FakeWorkspaceViewModel());
+            _workspaceViewModelsSource.Add(new FakeWorkspaceViewModel());
         }
 
         public RelayCommand AddDesktopCommand

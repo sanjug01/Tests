@@ -13,25 +13,26 @@
 
         public RadcClient(IRadcEventSource eventProxy, IDeferredExecution deferredExecution)
         {
-            int xRes = RdClientCx.RadcClient.GetInstance(out _client);
-            RdTrace.IfFailXResultThrow(xRes, "RdClientCx.RadcClient.GetInstance() failed");
-            _client.OnAzureSignOutCompleted += _client_OnAzureSignOutCompleted;
-            _client.OnBeginResourcesAdded += _client_OnBeginResourcesAdded;
-            _client.OnEditAppInvites += _client_OnEditAppInvites;
-            _client.OnEndResourcesAdded += _client_OnEndResourcesAdded;
-            _client.OnHideEditAppInvitesUI += _client_OnHideEditAppInvitesUI;
-            _client.OnRadcFeedOperationCompleted += _client_OnRadcFeedOperationCompleted;
-            _client.OnRadcFeedOperationInProgress += _client_OnRadcFeedOperationInProgress;
-            _client.OnRemoveWorkspace += _client_OnRemoveWorkspace;
-            _client.OnResourceAdded += _client_OnResourceAdded;
-            _client.OnShowAppInvites += _client_OnShowAppInvites;
-            _client.OnShowAzureSignOutDialog += _client_OnShowAzureSignOutDialog;
-            _client.OnShowDemoConsentPage += _client_OnShowDemoConsentPage;
-            _eventProxy = eventProxy;
-            _deferredExecution = deferredExecution;
             _eventProxy = eventProxy;
             _deferredExecution = deferredExecution;
             _operationInProgress = false;
+            Func<int> radcCall = () => { return RdClientCx.RadcClient.GetInstance(out _client); };
+            Action<XPlatError.XResult32> completionHandler = (result) =>
+            {
+                _client.OnAzureSignOutCompleted += _client_OnAzureSignOutCompleted;
+                _client.OnBeginResourcesAdded += _client_OnBeginResourcesAdded;
+                _client.OnEditAppInvites += _client_OnEditAppInvites;
+                _client.OnEndResourcesAdded += _client_OnEndResourcesAdded;
+                _client.OnHideEditAppInvitesUI += _client_OnHideEditAppInvitesUI;
+                _client.OnRadcFeedOperationCompleted += _client_OnRadcFeedOperationCompleted;
+                _client.OnRadcFeedOperationInProgress += _client_OnRadcFeedOperationInProgress;
+                _client.OnRemoveWorkspace += _client_OnRemoveWorkspace;
+                _client.OnResourceAdded += _client_OnResourceAdded;
+                _client.OnShowAppInvites += _client_OnShowAppInvites;
+                _client.OnShowAzureSignOutDialog += _client_OnShowAzureSignOutDialog;
+                _client.OnShowDemoConsentPage += _client_OnShowDemoConsentPage;
+            };
+            CallCxRadcClient(radcCall, completionHandler);
         }
 
         public IRadcEvents Events

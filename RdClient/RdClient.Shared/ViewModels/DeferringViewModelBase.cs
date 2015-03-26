@@ -17,6 +17,7 @@
         protected DeferringViewModelBase()
         {
             _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+            this.ExecutionDeferrer = this;
         }
 
         public void DeferToUI(Action action)
@@ -50,15 +51,6 @@
         {
             base.DisposeManagedState();
             _monitor.Dispose();
-        }
-
-        protected IDeferredExecution Dispatcher
-        {
-            get
-            {
-                Contract.Assert(null != _dispatcher);
-                return _dispatcher;
-            }
         }
 
         void IDeferredExecutionSite.SetDeferredExecution(IDeferredExecution defEx)

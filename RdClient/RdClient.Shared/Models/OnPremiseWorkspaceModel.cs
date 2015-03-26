@@ -5,6 +5,7 @@
     using RdClient.Shared.Data;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Runtime.Serialization;
 
@@ -27,8 +28,8 @@
         private Guid _credId;
         private string _feedUrl;
         private string _friendlyName;
-        private List<RemoteConnectionModel> _resources;
-        private List<RemoteConnectionModel> _tempResources;
+        private readonly ObservableCollection<RemoteResourceModel> _resources;
+        private List<RemoteResourceModel> _tempResources;
         private RadcClient _client;
         private ApplicationDataModel _dataModel;
 
@@ -45,7 +46,7 @@
             _credId = Guid.Empty;
             _feedUrl = "";
             _friendlyName = "";
-            _resources = new List<RemoteConnectionModel>();
+            _resources = new ObservableCollection<RemoteResourceModel>();
             _client = radcClient;
             _client.Events.OperationInProgress += OperationInProgress;
             _client.Events.OperationCompleted += OperationCompleted;
@@ -72,10 +73,9 @@
             private set { SetProperty(ref _error, value); }
         }
 
-        public List<RemoteConnectionModel> Resources
+        public ObservableCollection<RemoteResourceModel> Resources
         {
             get { return _resources; }
-            private set { SetProperty(ref _resources, value); }
         }
 
         public Guid CredentialsId
@@ -89,18 +89,9 @@
                 SetProperty(ref _credId, value);
                 if (this.Resources != null)
                 {
-                    foreach (RemoteConnectionModel connection in this.Resources)
+                    foreach (RemoteResourceModel resource in this.Resources)
                     {
-                        DesktopModel desktop = connection as DesktopModel;
-                        RemoteApplicationModel app = connection as RemoteApplicationModel;
-                        if (desktop != null)
-                        {
-                            desktop.CredentialsId = value;
-                        }
-                        else if (app != null)
-                        {
-                            app.CredentialId = value;
-                        }
+                        resource.CredentialId = value;
                     }
                 }
             }
@@ -169,20 +160,9 @@
             Debug.WriteLine("RADC: OnResourceAdded {0}. Feed = {1}", args.FriendlyName, args.FeedUrl);
             if (args.FeedUrl.Equals(this.FeedUrl))
             {
-                if (!String.IsNullOrWhiteSpace(args.WorkspaceFriendlyName))
+                if (args.ResourceType == RemoteResourceType.OnPremPublishedApp || args.ResourceType == RemoteResourceType.OnPremPublishedDesktop)
                 {
-                    this.FriendlyName = args.WorkspaceFriendlyName;
-                }                
-                if (args.ResourceType == RemoteResourceType.OnPremPublishedApp)
-                {
-                    _tempResources.Add(new RemoteApplicationModel(args.ResourceId, args.FriendlyName, args.RdpFile, args.IconBytes, args.IconWidth, this.CredentialsId));
-                }
-                else if (args.ResourceType == RemoteResourceType.OnPremPublishedDesktop)
-                {
-                    DesktopModel desktop = new DesktopModel();
-                    desktop.RdpFile = args.RdpFile;
-                    desktop.CredentialsId = this.CredentialsId;
-                    _tempResources.Add(desktop);
+                    _tempResources.Add(new RemoteResourceModel(args.ResourceId, args.ResourceType, args.FriendlyName, args.RdpFile, args.IconBytes, args.IconWidth, this.CredentialsId));
                 }
                 else
                 {
@@ -198,7 +178,6 @@
             {
                 this.Resources.Clear();
                 this.State = WorkspaceState.Unsubscribed;
-                _dataModel.OnPremWorkspaces.Remove(this);
                 _client.Events.OperationInProgress -= OperationInProgress;
                 _client.Events.OperationCompleted -= OperationCompleted;
                 _client.Events.AddResourcesStarted -= AddResourcesStarted;
@@ -230,7 +209,11 @@
                 if (this.Error == XPlatError.XResult32.Succeeded)
                 {
                     this.State = WorkspaceState.Ok;
-                    this.Resources = _tempResources;
+                    this.Resources.Clear();
+                    foreach (RemoteResourceModel resource in _tempResources)
+                    {
+                        this.Resources.Add(resource);
+                    }
                 }
                 else
                 {
@@ -244,7 +227,7 @@
             if (this.FeedUrl.Equals(args.FeedUrl))
             {
                 this.State = WorkspaceState.AddingResources;
-                _tempResources = new List<RemoteConnectionModel>();
+                _tempResources = new List<RemoteResourceModel>();
             }
         }
     }

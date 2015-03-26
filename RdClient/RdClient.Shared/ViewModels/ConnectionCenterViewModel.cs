@@ -24,14 +24,14 @@
         //
         // Desktop view models created for elements of _orderedConnections.Models.
         //
-        private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
-        private ReadOnlyObservableCollection<IWorkspaceViewModel> _workspaceViewModels;
+        private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;        
         private int _selectedCount;
         private bool _desktopsSelectable;
         private bool _showDesktops;
         private bool _showApps;
         private bool _hasDesktops;
         private bool _hasApps;
+        private ReadOnlyObservableCollection<IWorkspaceViewModel> _workspaceViewModels;
 
         //
         // App bar items
@@ -91,13 +91,12 @@
 
         public ConnectionCenterViewModel()
         {
-            this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);
-            this.AddWorkspaceCommand = new RelayCommand(AddWorkspaceExecute);
+            this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);            
             this.EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => (1 == this.SelectedCount) );
             this.DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
             this.ToggleDesktopSelectionCommand = new RelayCommand(this.ToggleDesktopSelectionCommandExecute);
             this.GoToSettingsCommand = new RelayCommand(this.GoToSettingsCommandExecute);
-            this.AddWorkspaceCommand = new RelayCommand(this.AddWorkspaceExecute);
+            this.AddWorkspaceCommand = new RelayCommand(o => AddWorkspaceExecute());
 
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, EditItemStringId, BarItemModel.ItemAlignment.Right);
             _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, DeleteItemStringId, BarItemModel.ItemAlignment.Right);
@@ -262,16 +261,30 @@
             
             if (null == _workspaceViewModels)
             {
-                ObservableCollection<IWorkspaceViewModel> _workspaceViewModelsSource;
-                _workspaceViewModelsSource = new ObservableCollection<IWorkspaceViewModel>();
-                _workspaceViewModels = new ReadOnlyObservableCollection<IWorkspaceViewModel>(_workspaceViewModelsSource);
-                _workspaceViewModelsSource.Add(new WorkspaceViewModel());
-                _workspaceViewModelsSource.Add(new WorkspaceViewModel());
-                _workspaceViewModelsSource.Add(new WorkspaceViewModel());                
+                //
+                // 3. Transform containers with desktop models into desktop view models.
+                //
+                this.WorkspaceViewModels = TransformingObservableCollection<IModelContainer<OnPremiseWorkspaceModel>, IWorkspaceViewModel>
+                                            .Create(this.ApplicationDataModel.OnPremWorkspaces.Models, this.CreateWorkspaceViewModel);
+
+                INotifyPropertyChanged npc = this.WorkspaceViewModels;
+                npc.PropertyChanged += OnWorkspaceViewModelsPropertyChanged;
             }
+            else
+            {
+
+            }  
 
             this.HasDesktops = this.DesktopViewModels.Count > 0;
             this.HasApps = this.WorkspaceViewModels.Count > 0;
+        }
+
+        private void OnWorkspaceViewModelsPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("Count"))
+            {
+                this.HasApps = this.WorkspaceViewModels.Count > 0;
+            }            
         }
 
         protected override void OnDismissed()
@@ -287,7 +300,7 @@
             Contract.Assert(container.Model is DesktopModel, "Data model for a desktop tile is not DesktopModel");
             Contract.Assert(null != _sessionFactory);
 
-            IDesktopViewModel dvm = DesktopViewModel.Create(container, this.ApplicationDataModel, this.Dispatcher, this.NavigationService);
+            IDesktopViewModel dvm = DesktopViewModel.Create(container, this.ApplicationDataModel, this.NavigationService);
 
             dvm.SelectionEnabled = this.DesktopsSelectable;
             dvm.PropertyChanged += DesktopSelection_PropertyChanged;
@@ -386,9 +399,14 @@
             this.NavigationService.NavigateToView("SettingsView", null);
         }
 
-        private void AddWorkspaceExecute(object obj)
+        private void AddWorkspaceExecute()
         {
             NavigationService.PushModalView("AddOrEditWorkspaceView", null);
+        }
+
+        private IWorkspaceViewModel CreateWorkspaceViewModel(IModelContainer<OnPremiseWorkspaceModel> workspace)
+        {
+            return new WorkspaceViewModel(workspace, this.ApplicationDataModel, this, this.NavigationService, _sessionFactory);
         }
     }
 }

@@ -35,8 +35,7 @@
                 if (_connection is DesktopModel)
                     hostName = ((DesktopModel)_connection).HostName;
                 else
-                    hostName = ((RemoteApplicationModel)_connection).FriendlyName;
-
+                    hostName = ((RemoteResourceModel)_connection).FriendlyName;
 
                 return hostName;
             }
@@ -76,10 +75,10 @@
                     _sessionCredentials = new SessionCredentials();
                 }
             }
-            else if(_connection is RemoteApplicationModel)
+            else if(_connection is RemoteResourceModel)
             {
-                RemoteApplicationModel remoteApp = _connection as RemoteApplicationModel;
-                _sessionCredentials = new SessionCredentials(_dataModel.LocalWorkspace.Credentials.Models.First(c => remoteApp.CredentialId == c.Id));
+                RemoteResourceModel remoteResource = _connection as RemoteResourceModel;
+                _sessionCredentials = new SessionCredentials(_dataModel.LocalWorkspace.Credentials.Models.First(c => remoteResource.CredentialId == c.Id));
             }
             else
             {

@@ -18,8 +18,8 @@
         private IModelSerializer _modelSerializer;
         private CertificateTrust _certificateTrust;
         private GeneralSettings _settings;
-        private WorkspaceModel<LocalWorkspaceModel> _localWorkspace;       
-        private ObservableCollection<OnPremiseWorkspaceModel> _onPremWorkspaces;
+        private WorkspaceModel<LocalWorkspaceModel> _localWorkspace;
+        private IModelCollection<OnPremiseWorkspaceModel> _onPremWorkspaces;
 
         public ICommand Save
         {
@@ -58,7 +58,7 @@
             }
         }
 
-        public ObservableCollection<OnPremiseWorkspaceModel> OnPremWorkspaces 
+        public IModelCollection<OnPremiseWorkspaceModel> OnPremWorkspaces 
         { 
             get { return _onPremWorkspaces; }
             private set { this.SetProperty(ref _onPremWorkspaces, value); }
@@ -87,8 +87,7 @@
 
         public ApplicationDataModel()
         {
-            _save = new GroupCommand();
-            _onPremWorkspaces = new ObservableCollection<OnPremiseWorkspaceModel>();
+            _save = new GroupCommand();            
         }
 
         private void ComposeDataModel()
@@ -113,6 +112,9 @@
 
                 _settings = GeneralSettings.Load(_rootFolder, "GeneralSettings.model", _modelSerializer);
                 SubscribeForPersistentStateUpdates(_settings);
+
+                this.OnPremWorkspaces = PrimaryModelCollection<OnPremiseWorkspaceModel>.Load(_rootFolder.CreateFolder("OnPremWorkspaces"), _modelSerializer);
+                //SubscribeForPersistentStateUpdates(this.OnPremWorkspaces);
 
                 INotifyCollectionChanged ncc = this.LocalWorkspace.Credentials.Models;
                 ncc.CollectionChanged += this.OnCredentialsCollectionChanged;
@@ -148,11 +150,11 @@
                     //
                     foreach (IModelContainer<CredentialsModel> credentialsContainer in e.OldItems)
                     {
-                        foreach (OnPremiseWorkspaceModel workspace in _onPremWorkspaces)
+                        foreach (IModelContainer<OnPremiseWorkspaceModel> workspace in _onPremWorkspaces.Models)
                         {
-                            if (credentialsContainer.Id.Equals(workspace.CredentialsId))
+                            if (credentialsContainer.Id.Equals(workspace.Model.CredentialsId))
                             {
-                                workspace.CredentialsId = Guid.Empty;
+                                workspace.Model.CredentialsId = Guid.Empty;
                             }
                         }
                     }
@@ -182,17 +184,17 @@
                     //
                     // For each desktop check if the credential reference is valid, and if it is not, remove it.
                     //
-                    foreach (OnPremiseWorkspaceModel workspace in _onPremWorkspaces)
+                    foreach (IModelContainer<OnPremiseWorkspaceModel> workspace in _onPremWorkspaces.Models)
                     {
-                        if (!Guid.Empty.Equals(workspace.CredentialsId))
+                        if (!Guid.Empty.Equals(workspace.Model.CredentialsId))
                         {
                             try
                             {
-                                _localWorkspace.Credentials.GetModel(workspace.CredentialsId);
+                                _localWorkspace.Credentials.GetModel(workspace.Model.CredentialsId);
                             }
                             catch (KeyNotFoundException)
                             {
-                                workspace.CredentialsId = Guid.Empty;
+                                workspace.Model.CredentialsId = Guid.Empty;
                             }
                         }
                     }

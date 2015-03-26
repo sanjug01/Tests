@@ -114,18 +114,8 @@ namespace RdClient.Shared.Models
             _rdpConnection.Events.ClientAutoReconnectComplete += HandleClientAutoReconnectComplete;
 
             CredentialsModel credentials = connectionInformation.Credentials;
-            if (connectionInformation.App == null)
-            {
-                DesktopModel desktop = connectionInformation.Desktop;
-                RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
-                _rdpConnection.SetLeftHandedMouseMode(desktop.IsSwapMouseButtons);
-                
-            }
-            else
-            {
-                _rdpConnection.SetLeftHandedMouseMode(false);
-                _rdpConnection.SetCredentials(credentials, false);
-            }
+            _rdpConnection.SetLeftHandedMouseMode(false);
+            _rdpConnection.SetCredentials(credentials, false);            
             _rdpConnection.Connect(credentials, false/* credentials.HaveBeenPersisted TODO: honor the status of the credentials */ );
             
             

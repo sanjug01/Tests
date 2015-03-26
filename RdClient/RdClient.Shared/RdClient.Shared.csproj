@@ -216,7 +216,7 @@
     <Compile Include="Models\OnPremiseWorkspaceModel.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
     <Compile Include="Models\IThumbnailEncoder.cs" />
-    <Compile Include="Models\RemoteApplicationModel.cs" />
+    <Compile Include="Models\RemoteResourceModel.cs" />
     <Compile Include="Data\SerializableCompositionModel.cs" />
     <Compile Include="Models\RemoteConnectionModel.cs" />
     <Compile Include="Models\RemoteSession.cs" />
@@ -284,7 +284,7 @@
     <Compile Include="ViewModels\IEditCredentialsViewControl.cs" />
     <Compile Include="ViewModels\IEditCredentialsViewModel.cs" />
     <Compile Include="ViewModels\IRemoteConnectionViewModel.cs" />
-    <Compile Include="ViewModels\IRemoteApplicationViewModel.cs" />
+    <Compile Include="ViewModels\IRemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\ISessionViewModel.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="Navigation\Extensions\IDataModelSite.cs" />
@@ -308,7 +308,7 @@
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
     <Compile Include="ViewModels\PanKnobViewModel.cs" />
-    <Compile Include="ViewModels\RemoteApplicationViewModel.cs" />
+    <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\UserComboBoxElement.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Compile Include="ViewModels\ZoomPanViewModel.cs" />

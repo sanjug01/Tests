@@ -23,19 +23,16 @@
         private ISessionFactory _sessionFactory;
         private bool _isSelected;
         private bool _selectionEnabled;
-        private IDeferredExecution _dispatcher;
 
         public static IDesktopViewModel Create(IModelContainer<RemoteConnectionModel> desktopContainer,
             ApplicationDataModel dataModel,
-            IDeferredExecution dispatcher,
             INavigationService navigationService)
         {
-            return new DesktopViewModel(desktopContainer, dataModel, dispatcher, navigationService);
+            return new DesktopViewModel(desktopContainer, dataModel, navigationService);
         }
 
         private DesktopViewModel(IModelContainer<RemoteConnectionModel> desktopContainer,
             ApplicationDataModel dataModel,
-            IDeferredExecution dispatcher,
             INavigationService navigationService)
         {
             Contract.Assert(null != desktopContainer);
@@ -46,7 +43,6 @@
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
-            _dispatcher = dispatcher;
             _navigationService = navigationService;
 
             _desktop = (DesktopModel)desktopContainer.Model;

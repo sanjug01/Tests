@@ -187,6 +187,8 @@
     </Compile>
     <Compile Include="Data\ApplicationDataLocalStorageFolder.cs" />
     <Compile Include="DesignTime\FakeEditCredentialsViewModel.cs" />
+    <Compile Include="DesignTime\FakeRemoteResourceViewModel.cs" />
+    <Compile Include="DesignTime\FakeWorkspaceViewModel.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
     <Compile Include="Models\BadCertificateConnectionSource.cs" />
     <Compile Include="Models\ImitationRdpConnectionSource.cs" />

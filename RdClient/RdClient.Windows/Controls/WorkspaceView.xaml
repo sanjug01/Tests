@@ -6,13 +6,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:design="using:RdClient.DesignTime"
     mc:Ignorable="d"
     d:DesignHeight="400"
     d:DesignWidth="1024"
     RequestedTheme="Dark">
 
     <d:UserControl.DataContext>
-        <vm:WorkspaceViewModel />
+        <design:FakeWorkspaceViewModel />
     </d:UserControl.DataContext>
 
     <Grid Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
@@ -22,10 +23,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <TextBlock Text="Workspace name" Style="{StaticResource SubheaderTextBlockStyle}"/>
+            <TextBlock Text="{Binding Name}" Style="{StaticResource SubheaderTextBlockStyle}"/>
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Vertical">
-            <ItemsControl ItemsSource="{Binding RemoteApplicationViewModels}" >
+            <ItemsControl ItemsSource="{Binding RemoteResourceViewModels}" >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapGrid Orientation="Horizontal" />
