@@ -12,13 +12,12 @@ namespace RdClient.DesignTime
     public class FakeWorkspaceViewModel : IWorkspaceViewModel
     {
         private string _name;
-        private ReadOnlyObservableCollection<IRemoteResourceViewModel> _remoteResourceViewModels;
+        private List<IRemoteResourceViewModel> _remoteResourceViewModels;
 
         public FakeWorkspaceViewModel()
         {
             _name = "This is a fake workspace";
-            ObservableCollection<IRemoteResourceViewModel> remoteResourceViewModelsSource = new ObservableCollection<IRemoteResourceViewModel>();
-            _remoteResourceViewModels = new ReadOnlyObservableCollection<IRemoteResourceViewModel>(remoteResourceViewModelsSource);
+            List<IRemoteResourceViewModel> remoteResourceViewModelsSource = new List<IRemoteResourceViewModel>();            
             remoteResourceViewModelsSource.Add(new FakeRemoteResourceViewModel());
             remoteResourceViewModelsSource.Add(new FakeRemoteResourceViewModel());
             remoteResourceViewModelsSource.Add(new FakeRemoteResourceViewModel());
@@ -28,6 +27,7 @@ namespace RdClient.DesignTime
             remoteResourceViewModelsSource.Add(new FakeRemoteResourceViewModel());
             remoteResourceViewModelsSource.Add(new FakeRemoteResourceViewModel());
             remoteResourceViewModelsSource.Add(new FakeRemoteResourceViewModel());
+            _remoteResourceViewModels = remoteResourceViewModelsSource;
         }
 
         public string Name
@@ -50,7 +50,7 @@ namespace RdClient.DesignTime
             get { return null; }
         }
 
-        public ReadOnlyObservableCollection<IRemoteResourceViewModel> RemoteResourceViewModels
+        public List<IRemoteResourceViewModel> RemoteResourceViewModels
         {
             get { return _remoteResourceViewModels; }
         }

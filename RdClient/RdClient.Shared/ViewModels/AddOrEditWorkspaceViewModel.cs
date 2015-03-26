@@ -128,15 +128,21 @@
                 this.FeedUrl = workspace.State.ToString() + "...";
                 if (workspace.State == WorkspaceState.Ok)
                 {
-                    this.ApplicationDataModel.OnPremWorkspaces.AddNewModel(workspace);
-                    NavigationService.DismissModalView(PresentableView);
-                    (sender as OnPremiseWorkspaceModel).PropertyChanged -= workspace_PropertyChanged;
+                    this.TryDeferToUI(() =>
+                    {
+                        this.ApplicationDataModel.OnPremWorkspaces.AddNewModel(workspace);
+                        NavigationService.DismissModalView(PresentableView);
+                        (sender as OnPremiseWorkspaceModel).PropertyChanged -= workspace_PropertyChanged;
+                    });
                 }
                 else if (workspace.State == WorkspaceState.Error)
                 {
-                    this.FeedUrl = "Error: " + workspace.Error.ToString();
-                    workspace.PropertyChanged -= workspace_PropertyChanged;
-                    workspace.UnSubscribe();
+                    this.TryDeferToUI(() =>
+                    {
+                        this.FeedUrl = "Error: " + workspace.Error.ToString();
+                        workspace.PropertyChanged -= workspace_PropertyChanged;
+                        workspace.UnSubscribe();
+                    });
                 }
             }
         }

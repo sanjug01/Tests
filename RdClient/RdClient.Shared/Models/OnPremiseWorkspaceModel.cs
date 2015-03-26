@@ -7,6 +7,7 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
+    using System.Linq;
     using System.Runtime.Serialization;
 
     public enum WorkspaceState
@@ -28,7 +29,7 @@
         private Guid _credId;
         private string _feedUrl;
         private string _friendlyName;
-        private readonly ObservableCollection<RemoteResourceModel> _resources;
+        private List<RemoteResourceModel> _resources;
         private List<RemoteResourceModel> _tempResources;
         private RadcClient _client;
         private ApplicationDataModel _dataModel;
@@ -46,7 +47,7 @@
             _credId = Guid.Empty;
             _feedUrl = "";
             _friendlyName = "";
-            _resources = new ObservableCollection<RemoteResourceModel>();
+            _resources = null;
             _client = radcClient;
             _client.Events.OperationInProgress += OperationInProgress;
             _client.Events.OperationCompleted += OperationCompleted;
@@ -73,9 +74,10 @@
             private set { SetProperty(ref _error, value); }
         }
 
-        public ObservableCollection<RemoteResourceModel> Resources
+        public List<RemoteResourceModel> Resources
         {
             get { return _resources; }
+            private set { SetProperty(ref _resources, value); }
         }
 
         public Guid CredentialsId
@@ -87,13 +89,10 @@
             set 
             { 
                 SetProperty(ref _credId, value);
-                if (this.Resources != null)
+                foreach (RemoteResourceModel resource in this.Resources ?? Enumerable.Empty<RemoteResourceModel>())
                 {
-                    foreach (RemoteResourceModel resource in this.Resources)
-                    {
-                        resource.CredentialId = value;
-                    }
-                }
+                    resource.CredentialId = value;
+                }                
             }
         }
 
@@ -182,7 +181,7 @@
             Debug.WriteLine("RADC: OnRemoveWorkspace URL={0}", args.FeedUrl);
             if (_feedUrl.Equals(args.FeedUrl))
             {
-                this.Resources.Clear();
+                this.Resources = new List<RemoteResourceModel>();
                 this.State = WorkspaceState.Unsubscribed;
                 _client.Events.OperationInProgress -= OperationInProgress;
                 _client.Events.OperationCompleted -= OperationCompleted;
@@ -215,11 +214,7 @@
                 if (this.Error == XPlatError.XResult32.Succeeded)
                 {
                     this.State = WorkspaceState.Ok;
-                    this.Resources.Clear();
-                    foreach (RemoteResourceModel resource in _tempResources)
-                    {
-                        this.Resources.Add(resource);
-                    }
+                    this.Resources = _tempResources;
                 }
                 else
                 {
