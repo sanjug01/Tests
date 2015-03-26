@@ -3,6 +3,7 @@
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Helpers;
     using System;
+    using System.Threading.Tasks;
 
     public class RadcClient : IRadcClient
     {
@@ -17,8 +18,16 @@
             _eventProxy = eventProxy;
             _deferredExecution = deferredExecution;
             _operationInProgress = false;
+            //RdClientCx.RadcClient must be created on a non-UI thread
             Func<int> radcCall = () => { return RdClientCx.RadcClient.GetInstance(out _client); };
+            TaskCompletionSource<XPlatError.XResult32> createRadcTask = new TaskCompletionSource<XPlatError.XResult32>();
             Action<XPlatError.XResult32> completionHandler = (result) =>
+            {
+                createRadcTask.SetResult(result);
+            };
+            CallCxRadcClient(radcCall, completionHandler);
+            XPlatError.XResult32 createRadcResult = createRadcTask.Task.Result;//Wait for RadcClient to be created (or fail)
+            if (createRadcResult == XPlatError.XResult32.Succeeded)
             {
                 _client.OnAzureSignOutCompleted += _client_OnAzureSignOutCompleted;
                 _client.OnBeginResourcesAdded += _client_OnBeginResourcesAdded;
@@ -32,8 +41,11 @@
                 _client.OnShowAppInvites += _client_OnShowAppInvites;
                 _client.OnShowAzureSignOutDialog += _client_OnShowAzureSignOutDialog;
                 _client.OnShowDemoConsentPage += _client_OnShowDemoConsentPage;
-            };
-            CallCxRadcClient(radcCall, completionHandler);
+            }
+            else
+            {
+                throw new RdClientException("RdClientCx.RadcClient.GetInstance failed with error " + createRadcResult.ToString());
+            }
         }
 
         public string FeedUrl

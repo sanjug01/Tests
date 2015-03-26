@@ -109,7 +109,7 @@
         private void SaveCommandExecute(object o)
         {
             RadcClient radcClient = new RadcClient(new RadcEventSource(), new Helpers.TaskExecutor());
-            OnPremiseWorkspaceModel workspace = new OnPremiseWorkspaceModel(radcClient, this.ApplicationDataModel);
+            OnPremiseWorkspaceModel workspace = new OnPremiseWorkspaceModel() { RadcClient = radcClient, DataModel = this.ApplicationDataModel };
             workspace.FeedUrl = this.FeedUrl;
             workspace.CredentialsId = this.SelectedCredentialOption.Credentials.Id;
             workspace.PropertyChanged += workspace_PropertyChanged;
@@ -142,6 +142,11 @@
                         this.FeedUrl = "Error: " + workspace.Error.ToString();
                         workspace.PropertyChanged -= workspace_PropertyChanged;
                         workspace.UnSubscribe();
+                        IEnumerable<IModelContainer<OnPremiseWorkspaceModel>> matchingWorkspaces = this.ApplicationDataModel.OnPremWorkspaces.Models.Where(w => string.Compare(w.Model.FeedUrl, workspace.FeedUrl) == 0).ToArray();
+                        foreach (var matchingWorkspace in matchingWorkspaces)
+                        {
+                            this.ApplicationDataModel.OnPremWorkspaces.RemoveModel(matchingWorkspace.Id);
+                        }
                     });
                 }
             }
