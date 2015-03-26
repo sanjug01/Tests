@@ -69,10 +69,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
             if(pointerEvent.ActionType == TouchEventType.Down || pointerEvent.ActionType == TouchEventType.Update)
             {
-                if(_pointerTraces[pointerEvent.PointerId].Count < 1 || Distance(pointerEvent.Position, _pointerTraces[pointerEvent.PointerId].Last().Position) > GlobalConstants.TouchZoomDeltaThreshold)
-                {
-                    _pointerTraces[pointerEvent.PointerId].Add(pointerEvent);
-                }
+                _pointerTraces[pointerEvent.PointerId].Add(pointerEvent);
 
                 if(pointerEvent.ActionType == TouchEventType.Down)
                 {
@@ -112,17 +109,17 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
             spreadDelta = newDelta - oldDelta;
 
-            Debug.WriteLine("SpreadDelta {0}", spreadDelta);
-
             if(Math.Abs(spreadDelta) > GlobalConstants.TouchZoomDeltaThreshold)
             {
+                Debug.WriteLine(spreadDelta);
+
                 LastSpreadDelta = spreadDelta;
                 Point oldCenter = new Point((oldRight.X - oldLeft.X) / 2, (oldRight.Y - oldLeft.Y) / 2);
                 Point newCenter = new Point((newRight.X - newLeft.X) / 2, (newRight.Y - newLeft.Y) / 2);
 
                 LastPanDelta = new Point(newCenter.X - oldCenter.X, newCenter.Y - oldCenter.Y);
 
-                LastSpreadCenter = oldCenter;
+                LastSpreadCenter = newCenter;
 
                 return true;
             }
@@ -163,13 +160,14 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
                 dX = current.X - last.X;
                 dY = current.Y - last.Y;
                 delta = Math.Sqrt(dX * dX + dY * dY) * GlobalConstants.MouseAcceleration;
-                Debug.WriteLine("MoveDelta {0}", delta);
-
             }
 
-            if(delta > GlobalConstants.TouchMoveThreshold)
+            if (delta > threshold)
             {
+                LastSpreadCenter = new Point(0, 0);
+                LastSpreadDelta = 0;
                 LastMoveVector = new Point(dX, dY);
+                LastPanDelta = LastMoveVector;
                 LastMoveDistance = delta;
                 if(dX * dX > dY * dY)
                 {

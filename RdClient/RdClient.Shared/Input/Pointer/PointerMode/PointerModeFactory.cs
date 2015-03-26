@@ -67,7 +67,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
             (o) => { } );
             stateMachine.AddTransition(PointerState.ZoomAndPan, PointerState.ZoomAndPan,
-            (o) => { return o.Context.SpreadThresholdExceeded(o.Input) || o.Context.MoveThresholdExceeded(o.Input); },
+            (o) => { return o.Context.SpreadThresholdExceeded(o.Input) || o.Context.MoveThresholdExceeded(o.Input, GlobalConstants.TouchZoomDeltaThreshold); },
             (o) => { o.Context.Control.ZoomAndPan(o.Input); });
 
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Scroll,
