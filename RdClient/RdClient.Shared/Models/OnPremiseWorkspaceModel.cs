@@ -100,7 +100,13 @@
         public string FeedUrl
         {
             get { return _feedUrl; }
-            set { SetProperty(ref _feedUrl, value); }
+            set 
+            { 
+                if (SetProperty(ref _feedUrl, value))
+                {
+                    _client.FeedUrl = value;
+                }
+            }
         }
 
         public string FriendlyName

@@ -10,6 +10,7 @@
         private IRadcEventSource _eventProxy;
         private IDeferredExecution _deferredExecution;
         private bool _operationInProgress;
+        private string _feedUrl;
 
         public RadcClient(IRadcEventSource eventProxy, IDeferredExecution deferredExecution)
         {
@@ -33,6 +34,12 @@
                 _client.OnShowDemoConsentPage += _client_OnShowDemoConsentPage;
             };
             CallCxRadcClient(radcCall, completionHandler);
+        }
+
+        public string FeedUrl
+        {
+            get { return _feedUrl; }
+            set { _feedUrl = value; }
         }
 
         public IRadcEvents Events
@@ -97,9 +104,10 @@
             });
         }
 
-        private void HandleCxRadcEvent(Action action)
+        //Only forward this event if an action on this RadcClient instance triggered it, or is for this feedURL (RadcClient only allows a single workspace per feedURL, so we can treat it as an ID)
+        private void HandleCxRadcEvent(Action action, string feedUrl = null)
         {
-            if (_operationInProgress)
+            if (_operationInProgress || string.Compare(feedUrl, this.FeedUrl, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 action();
             }
@@ -111,7 +119,7 @@
             {
                 var args = new RadcResourceAddedArgs(workspaceId, workspaceFriendlyName, feedUrl, resourceId, friendlyName, rdpFile, RdpTypeConverter.ConvertFromCx(resourceType), iconBytes, iconWidth);
                 _eventProxy.EmitResourceAdded(this, args);
-            });
+            }, feedUrl);
         }
 
         private void _client_OnRemoveWorkspace(string feedUrl)
@@ -120,7 +128,7 @@
             {
                 var args = new RadcWorkspaceRemovedArgs(feedUrl);
                 _eventProxy.EmitWorkspaceRemoved(this, args);
-            });
+            }, feedUrl);
         }
 
         private void _client_OnRadcFeedOperationInProgress(RdClientCx.RadcFeedOperation feedOperation)
@@ -147,7 +155,7 @@
             {
                 var args = new RadcAddResourcesFinishedArgs(feedUrl);
                 _eventProxy.EmitAddResourcesFinished(this, args);
-            });
+            }, feedUrl);
         }
 
         private void _client_OnBeginResourcesAdded(string feedUrl)
@@ -156,7 +164,7 @@
             {
                 var args = new RadcAddResourcesStartedArgs(feedUrl);
                 _eventProxy.EmitAddResourcesStarted(this, args);
-            });
+            }, feedUrl);
         }
 
         private void _client_OnShowDemoConsentPage(RdClientCx.OnShowDemoConsentPageCompletedHandler spShowDemoConsentPageCompletedHandler, bool fFirstTimeSignIn)
