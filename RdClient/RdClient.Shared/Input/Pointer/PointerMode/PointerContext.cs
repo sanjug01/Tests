@@ -114,8 +114,8 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
                 Debug.WriteLine(spreadDelta);
 
                 LastSpreadDelta = spreadDelta;
-                Point oldCenter = new Point((oldRight.X - oldLeft.X) / 2, (oldRight.Y - oldLeft.Y) / 2);
-                Point newCenter = new Point((newRight.X - newLeft.X) / 2, (newRight.Y - newLeft.Y) / 2);
+                Point oldCenter = new Point((oldRight.X + oldLeft.X) / 2, (oldRight.Y + oldLeft.Y) / 2);
+                Point newCenter = new Point((newRight.X + newLeft.X) / 2, (newRight.Y + newLeft.Y) / 2);
 
                 LastPanDelta = new Point(newCenter.X - oldCenter.X, newCenter.Y - oldCenter.Y);
 

@@ -78,11 +78,11 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
             if(scale > 0)
             {
-                scale = 1 + scale / 10;
+                scale = 1 + scale / 8;
             }
             else
             {
-                scale = 1 - Math.Abs(scale / 10);
+                scale = 1 - Math.Abs(scale / 8);
             }
 
             _panel.Viewport.PanAndZoom(_context.LastSpreadCenter, _context.LastPanDelta.X * 5, _context.LastPanDelta.Y * 5, scale, 0.0);
