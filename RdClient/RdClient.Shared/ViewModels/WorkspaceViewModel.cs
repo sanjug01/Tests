@@ -106,7 +106,7 @@
 
         private IRemoteResourceViewModel CreateRemoteResourceViewModel(RemoteResourceModel remoteResource)
         {
-            return new RemoteResourceViewModel(remoteResource, _dispatcher, _navigationService, _sessionFactory);
+            return new RemoteResourceViewModel(remoteResource, _dataModel, _dispatcher, _navigationService, _sessionFactory);
         }
     }
 }

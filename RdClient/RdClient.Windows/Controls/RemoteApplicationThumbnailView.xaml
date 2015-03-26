@@ -14,19 +14,21 @@
     <d:UserControl.DataContext>
         <design:FakeRemoteResourceViewModel />
     </d:UserControl.DataContext>
-
-    <Grid Width="156" Height="128" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">       
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="8" />
-        </Grid.RowDefinitions>    
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Image Grid.Column="1" Grid.Row="0" Source="{Binding Icon}" Width="64" Height="64" Stretch="Fill"  HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Name}" Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
+    <Grid Width="156" Height="128" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
+        <Grid >       
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="8" />
+            </Grid.RowDefinitions>    
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="1" Grid.Row="0" Source="{Binding Icon}" Width="64" Height="64" Stretch="Fill"  HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Name}" Style="{StaticResource CaptionTextBlockStyle}" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
+        </Grid>
+        <Button Style="{StaticResource InvisibleButtonStyle}" Command="{Binding ConnectCommand}" />
     </Grid>
 </UserControl>

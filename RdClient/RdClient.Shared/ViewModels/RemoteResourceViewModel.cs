@@ -19,20 +19,31 @@ namespace RdClient.Shared.ViewModels
         private BitmapImage _icon;
         private INavigationService _navigationService;
         private ISessionFactory _sessionFactory;
+        private ApplicationDataModel _dataModel;
 
         public RemoteResourceViewModel(
             RemoteResourceModel remoteResource,
+            ApplicationDataModel dataModel,
             IExecutionDeferrer dispatcher,
             INavigationService navigationService,
             ISessionFactory sessionFactory)
         {
             base.ExecutionDeferrer = dispatcher;
+            _dataModel = dataModel;
             _remoteResource = remoteResource;
             _navigationService = navigationService;
             _sessionFactory = sessionFactory;
             _remoteResource.PropertyChanged += RemoteResourcePropertyChanged;
+            _connectCommand = new RelayCommand(o => ConnectCommandExecute());
             SetName();
             SetIcon();
+        }
+
+        private void ConnectCommandExecute()
+        {
+            RemoteSessionSetup sessionSetup = new RemoteSessionSetup(_dataModel, _remoteResource);
+            IRemoteSession session = _sessionFactory.CreateSession(sessionSetup);
+            _navigationService.NavigateToView("RemoteSessionView", session);            
         }
 
         public string Name
@@ -43,7 +54,7 @@ namespace RdClient.Shared.ViewModels
 
         public ICommand ConnectCommand
         {
-            get { throw new System.NotImplementedException(); }
+            get { return _connectCommand; }
         }
 
         public BitmapImage Icon
