@@ -10,5 +10,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
         void MouseScroll(PointerEvent pointerEvent);
         void MouseRightClick(PointerEvent pointerEvent);
         void UpdateCursorPosition(PointerEvent pointerEvent);
+
+        void ZoomAndPan(PointerEvent pointerEvent);
     }
 }

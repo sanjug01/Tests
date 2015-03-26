@@ -1,5 +1,6 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
+using RdClient.Shared.Models; 
 
 namespace RdClient.Shared.Input.Pointer.PointerMode
 {
@@ -56,9 +57,28 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
             (o) => { o.Context.Timer.Reset(DoubleClickTimer.ClickTimerType.RightClick, o.Input); });
 
+            stateMachine.AddTransition(PointerState.RightDown, PointerState.ZoomAndPan,
+            (o) => { return o.Context.SpreadThresholdExceeded(o.Input); },
+            (o) => { o.Context.Control.ZoomAndPan(o.Input); });
+            stateMachine.AddTransition(PointerState.ZoomAndPan, PointerState.LeftDown,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
+            (o) => { });    
+            stateMachine.AddTransition(PointerState.ZoomAndPan, PointerState.Idle,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
+            (o) => { } );
+            stateMachine.AddTransition(PointerState.ZoomAndPan, PointerState.ZoomAndPan,
+            (o) => { return o.Context.SpreadThresholdExceeded(o.Input) || o.Context.MoveThresholdExceeded(o.Input); },
+            (o) => { o.Context.Control.ZoomAndPan(o.Input); });
+
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Scroll,
-            (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
+            (o) => { return o.Context.MoveThresholdExceeded(o.Input, GlobalConstants.TouchZoomDeltaThreshold); },
             (o) => { o.Context.Control.MouseScroll(o.Input); });
+            stateMachine.AddTransition(PointerState.Scroll, PointerState.LeftDown,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
+            (o) => { });
+            stateMachine.AddTransition(PointerState.Scroll, PointerState.Idle,
+            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
+            (o) => { });
             stateMachine.AddTransition(PointerState.Scroll, PointerState.Scroll,
             (o) =>
             {
@@ -67,12 +87,6 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
                    o.Context.MoveThresholdExceeded(o.Input);
             },
             (o) => { o.Context.Control.MouseScroll(o.Input); });
-            stateMachine.AddTransition(PointerState.Scroll, PointerState.LeftDown,
-            (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
-            (o) => { });
-            stateMachine.AddTransition(PointerState.Scroll, PointerState.Idle,
-            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { });
 
             stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
@@ -136,7 +150,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             (o) => { });
         }
 
-        public static IPointerEventConsumer CreatePointerMode(ITimer timer, IPointerManipulator manipulator)
+        public static IPointerEventConsumer CreatePointerMode(ITimer timer, IPointerManipulator manipulator, IRenderingPanel panel)
         {
             IStateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>>();
 
@@ -146,13 +160,13 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             stateMachine.SetStart(PointerState.Idle);
 
             PointerContext context = new PointerContext(timer);
-            PointerModeControl control = new PointerModeControl(context, manipulator);
+            PointerModeControl control = new PointerModeControl(context, manipulator, panel);
             context.Control = control;
 
             return new PointerConsumer(context, stateMachine);
         }
 
-        public static IPointerEventConsumer CreateDirectMode(ITimer timer, IPointerManipulator manipulator)
+        public static IPointerEventConsumer CreateDirectMode(ITimer timer, IPointerManipulator manipulator, IRenderingPanel panel)
         {
             IStateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>>();
 
@@ -161,7 +175,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             stateMachine.SetStart(PointerState.Idle);
 
             PointerContext context = new PointerContext(timer);
-            DirectModeControl control = new DirectModeControl(context, manipulator);
+            DirectModeControl control = new DirectModeControl(context, manipulator, panel);
             context.Control = control;
 
             return new PointerConsumer(context, stateMachine);

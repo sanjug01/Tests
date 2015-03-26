@@ -8,21 +8,21 @@ namespace RdClient.Shared.Helpers
 {
     public static class GlobalConstants
     {
-        public static readonly ulong MaxDoubleTapUS = 300000; // microseconds      
-        public static readonly double DesiredDeceleration = 0.002;
-        public static readonly double MouseAcceleration = 1.4;
+        public const ulong MaxDoubleTapUS = 300000; // microseconds      
+        public const double DesiredDeceleration = 0.002;
+        public const double MouseAcceleration = 1.4;
 
-        public static readonly double TouchPanDeltaThreshold = 2.0; // min for panning
-        public static readonly double TouchZoomDeltaThreshold = 3.0; // min for zooming
-        public static readonly double TouchMoveThreshold = 0.01;
-        public static readonly double TouchPanMoveThreshold = 50;
-        public static readonly double TouchOrientationDeltaThreshold = 0.01;
-        public static readonly int TouchScrollFactor = 5;
+        public const double TouchPanDeltaThreshold = 2.0; // min for panning
+        public const double TouchZoomDeltaThreshold = 3; // min for zooming
+        public const double TouchMoveThreshold = 0.01;
+        public const double TouchPanMoveThreshold = 50;
+        public const double TouchOrientationDeltaThreshold = 0.01;
+        public const int TouchScrollFactor = 5;
 
-        public static readonly double PointerPanBorderOffsetX = 200.0;
-        public static readonly double PointerPanBorderOffsetY = 200.0;
+        public const double PointerPanBorderOffsetX = 200.0;
+        public const double PointerPanBorderOffsetY = 200.0;
 
-        public static readonly double PanKnobWidth = 60.0;
-        public static readonly double PanKnobHeight = 60.0; 
+        public const double PanKnobWidth = 60.0;
+        public const double PanKnobHeight = 60.0; 
     }
 }

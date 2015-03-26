@@ -3,6 +3,7 @@ using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Input.Pointer.PointerMode;
+using System.Collections.Generic;
 using Windows.Foundation;
 
 
@@ -23,6 +24,34 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
 
             Assert.IsTrue(pmc.MoveThresholdExceeded(pe2));
             Assert.AreEqual(10 * GlobalConstants.MouseAcceleration, pmc.LastMoveDistance);
+        }
+
+        [TestMethod]
+        public void PointerMode_MoveThresholdExceeded_DoubleTwoFingertap()
+        {
+            Mock.Timer timer = new Mock.Timer();
+            PointerContext pmc = new PointerContext(timer);
+            List<PointerEvent> pevents = new List<PointerEvent>() {
+                new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down),
+                new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Down),
+
+                new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Up),
+                new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Up),
+
+                new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 3, 0, TouchEventType.Down),
+                new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 4, 0, TouchEventType.Down),
+
+                new PointerEvent(new Point(0, 5), false, new Point(0, 0), false, false, PointerType.Touch, 3, 0, TouchEventType.Update),
+                
+            };
+            PointerEvent pe = new PointerEvent(new Point(0, 15), false, new Point(0, 0), false, false, PointerType.Touch, 4, 0, TouchEventType.Update);
+
+            foreach(PointerEvent pevent in pevents)
+            {
+                pmc.TrackEvent(pevent);
+            }
+
+            pmc.MoveThresholdExceeded(pe);
         }
 
         [TestMethod]
@@ -126,6 +155,7 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
             Assert.IsTrue(pmc.SpreadThresholdExceeded(pe3));
             Assert.AreEqual(6, pmc.LastSpreadDelta);
             Assert.AreEqual(new Point(0, 8), pmc.LastSpreadCenter);
+            Assert.AreEqual(new Point(0, 3), pmc.LastPanDelta);
         }
 
         [TestMethod]

@@ -55,6 +55,8 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
         public PointerMoveOrientation LastMoveOrientation { get; private set; }
 
         public double LastSpreadDelta { get; private set; }
+        public Point LastPanDelta { get; private set; }
+
         public Point LastSpreadCenter { get; private set; }
 
         public void TrackEvent(PointerEvent pointerEvent)
@@ -67,7 +69,10 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
             if(pointerEvent.ActionType == TouchEventType.Down || pointerEvent.ActionType == TouchEventType.Update)
             {
-                _pointerTraces[pointerEvent.PointerId].Add(pointerEvent);
+                if(_pointerTraces[pointerEvent.PointerId].Count < 1 || Distance(pointerEvent.Position, _pointerTraces[pointerEvent.PointerId].Last().Position) > GlobalConstants.TouchZoomDeltaThreshold)
+                {
+                    _pointerTraces[pointerEvent.PointerId].Add(pointerEvent);
+                }
 
                 if(pointerEvent.ActionType == TouchEventType.Down)
                 {
@@ -84,42 +89,40 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
         public bool SpreadThresholdExceeded(PointerEvent pointerEvent)
         {
-            if(_pointerSequence.Count < 2)
+            if(_pointerSequence.Count < 2 || (_pointerSequence[0] != pointerEvent.PointerId && _pointerSequence[1] != pointerEvent.PointerId))
             {
                 return false;
             }
 
-            if(_pointerSequence[0] != pointerEvent.PointerId && _pointerSequence[1] != pointerEvent.PointerId)
-            {
-                return false;
-            }
+            double spreadDelta;
 
-            Point oldLeft = _pointerTraces[_pointerSequence[0]].Last().Position;
-            Point oldRight = _pointerTraces[_pointerSequence[1]].Last().Position;
+            ListTrace<PointerEvent> leftTrace = _pointerTraces[_pointerSequence[0]];
+            ListTrace<PointerEvent> rightTrace = _pointerTraces[_pointerSequence[1]];
+
+            int leftCount = leftTrace.Count;
+            int rightCount = rightTrace.Count;
+
+            Point oldLeft = leftTrace[leftCount - 1].Position;
+            Point oldRight = rightTrace[rightCount - 1].Position;
             double oldDelta = Distance(oldLeft, oldRight);
 
-            Point newLeft;
-            Point newRight;
-
-            if(_pointerSequence[0] == pointerEvent.PointerId)
-            {
-                newLeft = pointerEvent.Position;
-                newRight = _pointerTraces[_pointerSequence[1]].Last().Position;
-            }
-            else
-            {
-                newLeft = _pointerTraces[_pointerSequence[0]].Last().Position;
-                newRight = pointerEvent.Position;
-            }
-
+            Point newLeft = (_pointerSequence[0] == pointerEvent.PointerId) ? pointerEvent.Position : leftTrace[leftCount - 1].Position;
+            Point newRight = (_pointerSequence[1] == pointerEvent.PointerId) ? pointerEvent.Position : rightTrace[rightCount - 1].Position;
             double newDelta = Distance(newLeft, newRight);
 
-            double spreadDelta = Math.Abs(newDelta - oldDelta);
+            spreadDelta = newDelta - oldDelta;
 
-            if(spreadDelta > GlobalConstants.TouchZoomDeltaThreshold)
+            Debug.WriteLine("SpreadDelta {0}", spreadDelta);
+
+            if(Math.Abs(spreadDelta) > GlobalConstants.TouchZoomDeltaThreshold)
             {
                 LastSpreadDelta = spreadDelta;
-                LastSpreadCenter = new Point((newRight.X - newLeft.X) / 2, (newRight.Y - newLeft.Y) / 2);
+                Point oldCenter = new Point((oldRight.X - oldLeft.X) / 2, (oldRight.Y - oldLeft.Y) / 2);
+                Point newCenter = new Point((newRight.X - newLeft.X) / 2, (newRight.Y - newLeft.Y) / 2);
+
+                LastPanDelta = new Point(newCenter.X - oldCenter.X, newCenter.Y - oldCenter.Y);
+
+                LastSpreadCenter = oldCenter;
 
                 return true;
             }
@@ -136,14 +139,20 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             return Math.Sqrt(dX * dX + dY * dY);
         }
 
-        public bool MoveThresholdExceeded(PointerEvent pointerEvent)
+        public bool MoveThresholdExceeded(PointerEvent pointerEvent, double threshold = GlobalConstants.TouchMoveThreshold)
         {
             double dX;
             double dY;
             double delta;
 
-
-            if(_pointerSequence[0] != pointerEvent.PointerId)
+            // if the finger is not being tracked, the move threshold is not exceeded
+            if(_pointerTraces.ContainsKey(pointerEvent.PointerId) == false ||
+                _pointerSequence.Count == 0)
+            {
+                return false;
+            }
+            // we only check the move threshold of the first finger which was put down
+            else if(_pointerSequence[0] != pointerEvent.PointerId)
             {
                 return false;
             }
@@ -154,6 +163,8 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
                 dX = current.X - last.X;
                 dY = current.Y - last.Y;
                 delta = Math.Sqrt(dX * dX + dY * dY) * GlobalConstants.MouseAcceleration;
+                Debug.WriteLine("MoveDelta {0}", delta);
+
             }
 
             if(delta > GlobalConstants.TouchMoveThreshold)
@@ -176,6 +187,15 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
                 return false;
             }
         }
+
+        public int FirstContactHistoryCount()
+        {
+            if (_pointerSequence.Count == 0)
+                return 0;
+            else
+                return _pointerTraces[_pointerSequence[0]].Count;
+        }
+
 
         public int NumberOfContacts(PointerEvent pointerEvent)
         {
@@ -200,5 +220,6 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
                 return _pointerTraces.Keys.Count + 1;
             }
         }
+
     }
 }

@@ -145,6 +145,7 @@
     <Compile Include="Mock\PointerManipulator.cs" />
     <Compile Include="Mock\PointerManipulatorRecorder.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
+    <Compile Include="Mock\RenderingPanel.cs" />
     <Compile Include="Mock\Thumbnail.cs" />
     <Compile Include="Mock\LocalizedString.cs" />
     <Compile Include="Mock\NavigationService.cs" />

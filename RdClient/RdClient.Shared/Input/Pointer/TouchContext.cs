@@ -26,8 +26,7 @@ namespace RdClient.Shared.Input.Pointer
         LeftDrag,
         RightDrag,
         Scroll,
-        Zoom,
-        Pan
+        ZoomAndPan
     }
 
     public class StateEvent<TInput, TContext>

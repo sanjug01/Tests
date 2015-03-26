@@ -1,10 +1,11 @@
 ﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Models;
 
 namespace RdClient.Shared.Input.Pointer.PointerMode
 {
     public class DirectModeControl : PointerModeControl
     {
-        public DirectModeControl(IPointerContext context, IPointerManipulator manipulator) : base(context, manipulator)
+        public DirectModeControl(IPointerContext context, IPointerManipulator manipulator, IRenderingPanel panel) : base(context, manipulator, panel)
         {
 
         }

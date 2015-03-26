@@ -17,6 +17,11 @@ namespace RdClient.Shared.Helpers
             _list = new List<T>();
         }
 
+        public T this[int index] 
+        {
+            get { return _list[index]; }
+        }
+
         public void Add(T item)
         {
             _list.Add(item);

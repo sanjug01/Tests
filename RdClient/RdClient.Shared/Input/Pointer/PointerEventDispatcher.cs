@@ -1,5 +1,6 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Pointer.PointerMode;
+using RdClient.Shared.Models;
 using System.Collections.Generic;
 
 
@@ -40,10 +41,10 @@ namespace RdClient.Shared.Input.Pointer
             } 
         }
 
-        public PointerEventDispatcher(ITimer timer, IPointerManipulator manipulator)
+        public PointerEventDispatcher(ITimer timer, IPointerManipulator manipulator, IRenderingPanel panel)
         {
-            _pointerMode = PointerModeFactory.CreatePointerMode(timer, manipulator);
-            _directMode = PointerModeFactory.CreateDirectMode(timer, manipulator);
+            _pointerMode = PointerModeFactory.CreatePointerMode(timer, manipulator, panel);
+            _directMode = PointerModeFactory.CreateDirectMode(timer, manipulator, panel);
             _multiTouchMode = new MultiTouchMode(manipulator);
 
             _pointerConsumers[PointerType.Mouse] = new MouseMode(manipulator);

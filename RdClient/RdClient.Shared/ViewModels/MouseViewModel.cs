@@ -120,7 +120,7 @@ namespace RdClient.Shared.ViewModels
 
         public MouseViewModel()
         {
-            this.PointerEventConsumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
+            //this.PointerEventConsumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
             this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
             this.PointerEventConsumer.ConsumedEvent += (s, o) => 
             {

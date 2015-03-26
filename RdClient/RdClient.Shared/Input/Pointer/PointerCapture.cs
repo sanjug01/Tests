@@ -3,6 +3,7 @@ using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation.Extensions;
+using System;
 using System.Diagnostics.Contracts;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media;
@@ -26,7 +27,7 @@ namespace RdClient.Input
             _deferrer = deferrer;
             _control = control;
             _panel = panel;
-            _consumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
+            _consumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this, panel);
             this.ConsumptionMode = ConsumptionMode.Pointer;
         }
 
@@ -60,7 +61,9 @@ namespace RdClient.Input
             get { return _mousePosition; }
             set 
             {
-                _mousePosition = value;
+                _mousePosition.X = Math.Max(0.0, Math.Min(value.X, _panel.Viewport.Size.Width));
+                _mousePosition.Y = Math.Max(0.0, Math.Min(value.Y, _panel.Viewport.Size.Height));
+
                 _deferrer.DeferToUI(() => this._panel.MoveMouseCursor(_mousePosition));
             }
         }

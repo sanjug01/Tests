@@ -5,6 +5,7 @@
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Threading;
     using System.Threading.Tasks;
@@ -12,6 +13,7 @@
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Media;
+    using Windows.UI.Xaml.Media.Animation;
     using Windows.UI.Xaml.Media.Imaging;
 
     /// <summary>
@@ -27,11 +29,19 @@
         public Image MouseCursor { private get; set; }
         private Point _hotspot = new Point(0,0);
 
-        public TranslateTransform MouseTransform { private get; set; }
+        private TranslateTransform _mouseTransform;
+        public TranslateTransform MouseTransform {
+            get { return _mouseTransform; }
+            set
+            {
+                _mouseTransform = value;
+            }
+        }
 
         public RenderingPanel()
         {
             _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+
             this.SizeChanged += this.OnSizeChanged;
         }
 
@@ -100,6 +110,7 @@
             this.MouseCursor.Source = shape.ImageSource;
             _hotspot = shape.Hotspot;
         }
+
 
         public void MoveMouseCursor(Point point)
         {

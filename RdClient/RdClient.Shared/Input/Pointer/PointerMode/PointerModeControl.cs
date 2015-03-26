@@ -1,22 +1,28 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
+using RdClient.Shared.Models;
+using System;
+using System.Diagnostics;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Pointer.PointerMode
 {
     public class PointerModeControl : IPointerControl
     {
-        private IPointerContext _context;
-        private IPointerManipulator _manipulator;
+        private readonly IPointerContext _context;
+        private readonly IPointerManipulator _manipulator;
+        private readonly IRenderingPanel _panel;
+
         public IPointerManipulator Manipulator
         {
             get { return _manipulator; }
         }
 
-        public PointerModeControl(IPointerContext context, IPointerManipulator manipulator)
+        public PointerModeControl(IPointerContext context, IPointerManipulator manipulator, IRenderingPanel panel)
         {
             _context = context;
             _manipulator = manipulator;
+            _panel = panel;
         }
 
         public virtual void MouseLeftClick(PointerEvent pointerEvent)
@@ -63,6 +69,23 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             {
                 _manipulator.MousePosition = new Point(_manipulator.MousePosition.X + _context.LastMoveVector.X, _manipulator.MousePosition.Y + _context.LastMoveVector.Y);            
             }
+        }
+
+        public void ZoomAndPan(PointerEvent pointerEvent)
+        {
+            double diagonal = Math.Sqrt(Math.Pow(_panel.Viewport.Size.Width, 2) + Math.Pow(_panel.Viewport.Size.Height, 2));
+            double scale = (100.0 * _context.LastSpreadDelta) / diagonal;
+
+            if(scale > 0)
+            {
+                scale = 1 + scale / 10;
+            }
+            else
+            {
+                scale = 1 - Math.Abs(scale / 10);
+            }
+
+            _panel.Viewport.PanAndZoom(_context.LastSpreadCenter, _context.LastPanDelta.X * 5, _context.LastPanDelta.Y * 5, scale, 0.0);
         }
     }
 }
