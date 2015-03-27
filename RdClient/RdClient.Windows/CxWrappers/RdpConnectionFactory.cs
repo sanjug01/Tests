@@ -46,10 +46,8 @@
             RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
 
             rdpConnectionStoreCx.SetSwapChainPanel(SwapChainPanel);
-
-            //TODO : Go back to LaunchRemoteApp when we work out what is causing failure on second connection attempt
-            //xRes = rdpConnectionStoreCx.LaunchRemoteApp(rdpFile, out rdpConnectionCx);
-            xRes = rdpConnectionStoreCx.CreateConnectionWithSettings(rdpFile, out rdpConnectionCx);
+            
+            xRes = rdpConnectionStoreCx.LaunchRemoteApp(rdpFile, out rdpConnectionCx);            
             RdTrace.IfFailXResultThrow(xRes, "Failed to create a remote app connection with the given settings.");            
 
             return new RdpConnection(rdpConnectionCx, rdpConnectionStoreCx, new RdpEventSource());
