@@ -106,7 +106,7 @@ namespace RdClient.Shared.Models
 
         public void Connect(ConnectionInformation connectionInformation, ITimerFactory timerFactory, GeneralSettings settings)
         {
-            _rdpConnection = _connectionFactory.CreateDesktop();
+            _rdpConnection = _connectionFactory.CreateDesktop("");
             EmitConnectionCreated(new ConnectionCreatedArgs(_rdpConnection));
 
             _rdpConnection.Events.ConnectionHealthStateChanged += HandleConnectionHealthStateChanged;
@@ -114,18 +114,8 @@ namespace RdClient.Shared.Models
             _rdpConnection.Events.ClientAutoReconnectComplete += HandleClientAutoReconnectComplete;
 
             CredentialsModel credentials = connectionInformation.Credentials;
-            if (connectionInformation.App == null)
-            {
-                DesktopModel desktop = connectionInformation.Desktop;
-                RdpPropertyApplier.ApplyDesktop(_rdpConnection as IRdpProperties, desktop);
-                _rdpConnection.SetLeftHandedMouseMode(desktop.IsSwapMouseButtons);
-                
-            }
-            else
-            {
-                _rdpConnection.SetLeftHandedMouseMode(false);
-                _rdpConnection.SetCredentials(credentials, false);
-            }
+            _rdpConnection.SetLeftHandedMouseMode(false);
+            _rdpConnection.SetCredentials(credentials, false);            
             _rdpConnection.Connect(credentials, false/* credentials.HaveBeenPersisted TODO: honor the status of the credentials */ );
             
             

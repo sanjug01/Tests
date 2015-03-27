@@ -343,7 +343,7 @@
   <data name="ConnectionCenter_DayZeroTitle.Text" xml:space="preserve">
     <value>It's lonely here :(</value>
   </data>
-  <data name="ConnectionCenter_DesktopLabel.Text" xml:space="preserve">
+  <data name="ConnectionCenter_DesktopLabel.Content" xml:space="preserve">
     <value>Desktops</value>
     <comment>The text that is the header for the desktops section</comment>
   </data>
@@ -612,5 +612,13 @@
   </data>
   <data name="SessionView-MouseMode.Label" xml:space="preserve">
     <value>Mouse-Mode</value>
+  </data>
+  <data name="Menu-AddWorkspace.Text" xml:space="preserve">
+    <value>Add Workspace</value>
+    <comment>Option to add an on premise workspace</comment>
+  </data>
+  <data name="ConnectionCenter_AppLabel.Content" xml:space="preserve">
+    <value>Apps</value>
+    <comment>The text that is the header for the apps section</comment>
   </data>
 </root>

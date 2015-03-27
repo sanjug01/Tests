@@ -4,7 +4,7 @@
     {
         public enum XResult32
         {
-            Succeeded,
+            Succeeded = 0,
             OutOfMemory,
             NoInterface,
             NoObject,
@@ -87,8 +87,10 @@
             WorkspaceResourceNotFound,
             UserMismatch,
             AccessDenied,
-            Failed,
-            Unknown
+            UrlNotFound,
+            GatewayCertInvalid,
+            Unknown,
+            Failed = -1          
         };
 
         private readonly XResult32 _xresult;

@@ -16,7 +16,6 @@
     [KnownType(typeof(CloudWorkspaceModel))]
     [KnownType(typeof(RemoteConnectionModel))]
     [KnownType(typeof(DesktopModel))]
-    [KnownType(typeof(RemoteApplicationModel))]
     [KnownType(typeof(TrustedCertificate))]
     [KnownType(typeof(CertificateTrust))]
     [KnownType(typeof(GeneralSettings))]

@@ -48,33 +48,6 @@ namespace RdClient.Shared.CxWrappers
             _rdpConnectionCx.OnRemoteAppWindowIconUpdated += OnRemoteAppWindowIconUpdatedHandler;
         }
 
-        public RdpConnection(RemoteApplicationModel remoteApp, RdClientCx.RdpConnectionStore rdpConnectionStoreCx, RdpEventSource eventProxy)
-        {
-            rdpConnectionStoreCx.LaunchRemoteApp(remoteApp.RdpFile, out _rdpConnectionCx);
-            _rdpConnectionStoreCx = rdpConnectionStoreCx;
-            _eventProxy = eventProxy;
-
-            _rdpConnectionCx.OnClientConnected += OnClientConnectedHandler;
-            _rdpConnectionCx.OnClientAsyncDisconnect += OnClientAsyncDisconnectHandler;
-            _rdpConnectionCx.OnClientDisconnected += OnClientDisconnectedHandler;
-            _rdpConnectionCx.OnUserCredentialsRequest += OnUserCredentialsRequestHandler;
-            _rdpConnectionCx.OnMouseCursorShapeChanged += OnMouseCursorShapeChanged;
-            _rdpConnectionCx.OnMouseCursorPositionChanged += OnMouseCursorPositionChanged;
-            _rdpConnectionCx.OnMultiTouchEnabledChanged += OnMultiTouchEnabledChanged;
-
-            _rdpConnectionCx.OnConnectionHealthStateChanged += OnConnectionHealthStateChangedHandler;
-            _rdpConnectionCx.OnClientAutoReconnecting += OnClientAutoReconnectingHandler;
-            _rdpConnectionCx.OnClientAutoReconnectComplete += OnClientAutoReconnectCompleteHandler;
-            _rdpConnectionCx.OnLoginCompleted += OnLoginCompletedHandler;
-            _rdpConnectionCx.OnStatusInfoReceived += OnStatusInfoReceivedHandler;
-            _rdpConnectionCx.OnFirstGraphicsUpdateReceived += OnFirstGraphicsUpdateHandler;
-            _rdpConnectionCx.OnRemoteAppWindowCreated += OnRemoteAppWindowCreatedHandler;
-            _rdpConnectionCx.OnRemoteAppWindowDeleted += OnRemoteAppWindowDeletedHandler;
-            _rdpConnectionCx.OnRemoteAppWindowTitleUpdated += OnRemoteAppWindowTitleUpdatedHandler;
-            _rdpConnectionCx.OnRemoteAppWindowIconUpdated += OnRemoteAppWindowIconUpdatedHandler;
-        }
-
-
         // TODO
         // TODO
         // TODO

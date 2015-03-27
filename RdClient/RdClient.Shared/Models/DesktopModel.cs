@@ -88,11 +88,10 @@
 
         public override IRdpConnection CreateConnection(IRdpConnectionFactory connectionFactory, IRenderingPanel renderingPanel)
         {
-            IRdpConnection connection = connectionFactory.CreateDesktop();
+            IRdpConnection connection = connectionFactory.CreateDesktop("");
             IRdpProperties properties = connection as IRdpProperties;
-
             Contract.Assert(null != properties);
-            RdpPropertyApplier.ApplyDesktop(properties, this);
+            RdpPropertyApplier.ApplyDesktop(properties, this);            
             return connection;
         }
     }

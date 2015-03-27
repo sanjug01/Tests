@@ -4,10 +4,12 @@
     using RdClient.Shared.Helpers;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
     using RdClient.Shared.Navigation;
+    using RdClient.Shared.CxWrappers;
 
     public sealed class ApplicationDataModel : MutableObject, IPersistentObject
     {
@@ -18,6 +20,7 @@
         private CertificateTrust _certificateTrust;
         private GeneralSettings _settings;
         private WorkspaceModel<LocalWorkspaceModel> _localWorkspace;
+        private IModelCollection<OnPremiseWorkspaceModel> _onPremWorkspaces;
 
         public ICommand Save
         {
@@ -56,6 +59,12 @@
             }
         }
 
+        public IModelCollection<OnPremiseWorkspaceModel> OnPremWorkspaces 
+        { 
+            get { return _onPremWorkspaces; }
+            private set { this.SetProperty(ref _onPremWorkspaces, value); }
+        }
+
         public WorkspaceModel<LocalWorkspaceModel> LocalWorkspace
         {
             get { return _localWorkspace; }
@@ -79,7 +88,7 @@
 
         public ApplicationDataModel()
         {
-            _save = new GroupCommand();
+            _save = new GroupCommand();            
         }
 
         private void ComposeDataModel()
@@ -105,6 +114,10 @@
                 _settings = GeneralSettings.Load(_rootFolder, "GeneralSettings.model", _modelSerializer);
                 SubscribeForPersistentStateUpdates(_settings);
 
+                //load workspaces from disk
+                this.OnPremWorkspaces = PrimaryModelCollection<OnPremiseWorkspaceModel>.Load(_rootFolder.CreateFolder("OnPremWorkspaces"), _modelSerializer);
+                SubscribeForPersistentStateUpdates(this.OnPremWorkspaces);                
+
                 INotifyCollectionChanged ncc = this.LocalWorkspace.Credentials.Models;
                 ncc.CollectionChanged += this.OnCredentialsCollectionChanged;
             }
@@ -120,11 +133,11 @@
             switch(e.Action)
             {
                 case NotifyCollectionChangedAction.Remove:
-                    //
-                    // Remove references to deleted credentials from all local desktops
-                    //
                     foreach(IModelContainer<CredentialsModel> credentialsContainer in e.OldItems)
                     {
+                        //
+                        // Remove references to deleted credentials from all local desktops
+                        //
                         foreach(IModelContainer<RemoteConnectionModel> connectionContainer in _localWorkspace.Connections.Models)
                         {
                             connectionContainer.Model.CastAndCall<DesktopModel>(desktop=>
@@ -132,6 +145,16 @@
                                 if (credentialsContainer.Id.Equals(desktop.CredentialsId))
                                     desktop.CredentialsId = Guid.Empty;
                             });
+                        }
+                        //
+                        // Remove references to deleted credentials from all workspaces
+                        //
+                        foreach (IModelContainer<OnPremiseWorkspaceModel> workspace in _onPremWorkspaces.Models)
+                        {
+                            if (credentialsContainer.Id.Equals(workspace.Model.CredentialsId))
+                            {
+                                workspace.Model.CredentialsId = Guid.Empty;
+                            }
                         }
                     }
                     break;
@@ -156,6 +179,23 @@
                                 }
                             }
                         });
+                    }
+                    //
+                    // For each desktop check if the credential reference is valid, and if it is not, remove it.
+                    //
+                    foreach (IModelContainer<OnPremiseWorkspaceModel> workspace in _onPremWorkspaces.Models)
+                    {
+                        if (!Guid.Empty.Equals(workspace.Model.CredentialsId))
+                        {
+                            try
+                            {
+                                _localWorkspace.Credentials.GetModel(workspace.Model.CredentialsId);
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                workspace.Model.CredentialsId = Guid.Empty;
+                            }
+                        }
                     }
                     break;
             }

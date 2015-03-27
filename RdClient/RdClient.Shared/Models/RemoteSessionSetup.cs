@@ -3,6 +3,7 @@
     using RdClient.Shared.Data;
     using System;
     using System.Diagnostics.Contracts;
+    using System.Linq;
 
     public sealed class RemoteSessionSetup
     {
@@ -34,8 +35,7 @@
                 if (_connection is DesktopModel)
                     hostName = ((DesktopModel)_connection).HostName;
                 else
-                    hostName = "RemoteApplication FAKE";
-
+                    hostName = ((RemoteResourceModel)_connection).FriendlyName;
 
                 return hostName;
             }
@@ -66,29 +66,19 @@
             if(_connection is DesktopModel)
             {
                 DesktopModel dtm = (DesktopModel)_connection;
-
                 if (dtm.HasCredentials)
                 {
-                    foreach(IModelContainer<CredentialsModel> c in _dataModel.LocalWorkspace.Credentials.Models)
-                    {
-                        if (dtm.CredentialsId.Equals(c.Id))
-                        {
-                            _sessionCredentials = new SessionCredentials(c);
-                            break;
-                        }
-                    }
-                    Contract.Assert(null != _sessionCredentials);
+                    _sessionCredentials = new SessionCredentials(_dataModel.LocalWorkspace.Credentials.Models.First(c => dtm.CredentialsId == c.Id));
                 }
                 else
                 {
                     _sessionCredentials = new SessionCredentials();
                 }
             }
-            else if(_connection is RemoteApplicationModel)
+            else if(_connection is RemoteResourceModel)
             {
-                CredentialsModel creds = new CredentialsModel() { Username = @"rdvteam\tstestuser1", Password = @"1234AbCd" };
-                IModelContainer<CredentialsModel> credContainer = TemporaryModelContainer<CredentialsModel>.WrapModel(Guid.Empty, creds);
-                _sessionCredentials = new SessionCredentials(credContainer);
+                RemoteResourceModel remoteResource = _connection as RemoteResourceModel;
+                _sessionCredentials = new SessionCredentials(_dataModel.LocalWorkspace.Credentials.Models.First(c => remoteResource.CredentialId == c.Id));
             }
             else
             {

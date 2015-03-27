@@ -27,7 +27,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             void IDeferredExecution.Defer(Action action)
             {
-                throw new NotImplementedException();
+                action();
             }
         }
 
@@ -74,6 +74,13 @@ namespace RdClient.Shared.Test.ViewModels
             _navService.Dispose();
             _dataModel = null;
             _sessionFactory = null;
+        }
+
+        [TestMethod]
+        public void TestAddWorkspaceCommandExecute()
+        {
+            _navService.Expect("PushModalView", new List<object> { "AddOrEditWorkspaceView", null, null }, 0);
+            _vm.AddWorkspaceCommand.Execute(null);
         }
 
         [TestMethod]

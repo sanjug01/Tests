@@ -119,6 +119,9 @@
     <Compile Include="Controls\AppHeaderControl.xaml.cs">
       <DependentUpon>AppHeaderControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AppsListControl.xaml.cs">
+      <DependentUpon>AppsListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ConnectionBarControl.xaml.cs">
       <DependentUpon>ConnectionBarControl.xaml</DependentUpon>
     </Compile>
@@ -160,6 +163,9 @@
     <Compile Include="Controls\RightSideBarControl.xaml.cs">
       <DependentUpon>RightSideBarControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RemoteApplicationThumbnailView.xaml.cs">
+      <DependentUpon>RemoteApplicationThumbnailView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SessionReconnectControl.xaml.cs">
       <DependentUpon>SessionReconnectControl.xaml</DependentUpon>
     </Compile>
@@ -178,14 +184,22 @@
     <Compile Include="Controls\UserSettingsControl.xaml.cs">
       <DependentUpon>UserSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\WorkspaceView.xaml.cs">
+      <DependentUpon>WorkspaceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Data\ApplicationDataLocalStorageFolder.cs" />
     <Compile Include="DesignTime\FakeEditCredentialsViewModel.cs" />
+    <Compile Include="DesignTime\FakeRemoteResourceViewModel.cs" />
+    <Compile Include="DesignTime\FakeWorkspaceViewModel.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
     <Compile Include="Models\BadCertificateConnectionSource.cs" />
     <Compile Include="Models\ImitationRdpConnectionSource.cs" />
     <Compile Include="Models\RejectSavedPasswordConnectionSource.cs" />
     <Compile Include="Models\SingleSwapChainPanelRdpConnectionSource.cs" />
     <Compile Include="Models\SuccessfulConnectionSource.cs" />
+    <Compile Include="Views\AddOrEditWorkspaceView.xaml.cs">
+      <DependentUpon>AddOrEditWorkspaceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DeleteUserView.xaml.cs">
       <DependentUpon>DeleteUserView.xaml</DependentUpon>
     </Compile>
@@ -312,6 +326,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\AppsListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ConnectionBarControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -364,6 +382,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\RemoteApplicationThumbnailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\SessionReconnectControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -385,6 +407,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\UserSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WorkspaceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddOrEditWorkspaceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

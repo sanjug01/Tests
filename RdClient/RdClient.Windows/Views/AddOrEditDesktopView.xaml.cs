@@ -32,9 +32,5 @@ namespace RdClient.Views
         public void Dismissing()
         {
         }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-        }
     }
 }

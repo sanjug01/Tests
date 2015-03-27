@@ -5,8 +5,6 @@ namespace RdClient.Shared.Models
     {
         public DesktopModel Desktop { get; set; }
 
-        public RemoteApplicationModel App { get; set; }
-
         public CredentialsModel Credentials { get; set; }
     }
 }

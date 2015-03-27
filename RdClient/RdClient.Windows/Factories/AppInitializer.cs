@@ -2,6 +2,7 @@
 {
     using RdClient.Data;
     using RdClient.Helpers;
+    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.LifeTimeManagement;
@@ -44,6 +45,15 @@
                 RootFolder = new ApplicationDataLocalStorageFolder() { FolderName = "RemoteDesktopData" },
                 ModelSerializer = new SerializableModelSerializer()
             };
+            //initialize the loaded workspaces
+            foreach (IModelContainer<OnPremiseWorkspaceModel> workspace in appDataModel.OnPremWorkspaces.Models)
+            {
+                workspace.Model.DataModel = appDataModel;
+                workspace.Model.RadcClient = new RadcClient(new RadcEventSource(), new TaskExecutor());
+            }
+            //All the resources for the workspaces are cached internally by RadcClient. Here we load them into our workspaces
+            RadcClient radcClient = new RadcClient(new RadcEventSource(), new TaskExecutor());
+            radcClient.StartGetCachedFeeds(); 
 
             ISessionFactory sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution, timerFactory);
 

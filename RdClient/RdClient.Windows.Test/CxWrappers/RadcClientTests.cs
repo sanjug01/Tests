@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.CxWrappers;
+    using System;
 
     [TestClass]
     public class RadcClientTests
@@ -9,7 +10,7 @@
         //[TestMethod]
         public void TestSubscribeToOnPremFeed()
         {
-            RadcClient client = new RadcClient();
+            throw new NotImplementedException();
         }
     }
 }

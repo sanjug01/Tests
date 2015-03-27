@@ -87,6 +87,8 @@
     <Compile Include="CxWrappers\Errors\RdpDisconnectReason.cs" />
     <Compile Include="CxWrappers\Errors\IRdpError.cs" />
     <Compile Include="CxWrappers\Errors\XPlatError.cs" />
+    <Compile Include="CxWrappers\IRadcClient.cs" />
+    <Compile Include="CxWrappers\IRadcEvents.cs" />
     <Compile Include="CxWrappers\IRdpCertificate.cs" />
     <Compile Include="CxWrappers\IRdpCertificateErrors.cs" />
     <Compile Include="CxWrappers\IRdpConnection.cs" />
@@ -95,6 +97,8 @@
     <Compile Include="CxWrappers\IRdpProperties.cs" />
     <Compile Include="CxWrappers\MouseEventTypes.cs" />
     <Compile Include="CxWrappers\RadcClient.cs" />
+    <Compile Include="CxWrappers\RadcEventSource.cs" />
+    <Compile Include="CxWrappers\RadcFeedOperation.cs" />
     <Compile Include="CxWrappers\RdInstrumenter.cs" />
     <Compile Include="CxWrappers\RdpCertificate.cs" />
     <Compile Include="CxWrappers\IRdpScreenSnapshot.cs" />
@@ -104,6 +108,7 @@
     <Compile Include="CxWrappers\RdpScreenSnapshot.cs" />
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
+    <Compile Include="CxWrappers\RemoteResourceType.cs" />
     <Compile Include="CxWrappers\TouchEventType.cs" />
     <Compile Include="Data\CertificateTrust.cs" />
     <Compile Include="Data\FilteringObservableCollection.cs" />
@@ -140,6 +145,7 @@
     <Compile Include="Helpers\ITimer.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
+    <Compile Include="Helpers\TaskExecutor.cs" />
     <Compile Include="Input\Pointer\IPointerCapture.cs" />
     <Compile Include="Input\Pointer\MouseAction.cs" />
     <Compile Include="Input\Pointer\MouseCursorShape.cs" />
@@ -224,7 +230,7 @@
     <Compile Include="Models\OnPremiseWorkspaceModel.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
     <Compile Include="Models\IThumbnailEncoder.cs" />
-    <Compile Include="Models\RemoteApplicationModel.cs" />
+    <Compile Include="Models\RemoteResourceModel.cs" />
     <Compile Include="Data\SerializableCompositionModel.cs" />
     <Compile Include="Models\RemoteConnectionModel.cs" />
     <Compile Include="Models\RemoteSession.cs" />
@@ -269,6 +275,7 @@
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
     <Compile Include="ViewModels\CertificateValidationCompletion.cs" />
+    <Compile Include="ViewModels\AddOrEditWorkspaceViewModel.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\CredentialViewModel.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModel.cs" />
@@ -291,6 +298,7 @@
     <Compile Include="ViewModels\IEditCredentialsViewControl.cs" />
     <Compile Include="ViewModels\IEditCredentialsViewModel.cs" />
     <Compile Include="ViewModels\IRemoteConnectionViewModel.cs" />
+    <Compile Include="ViewModels\IRemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\ISessionViewModel.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="Navigation\Extensions\IDataModelSite.cs" />
@@ -310,9 +318,13 @@
     <Compile Include="ViewModels\ErrorMessageViewModel.cs" />
     <Compile Include="Navigation\IViewModel.cs" />
     <Compile Include="ViewModels\ILayoutAwareViewModel.cs" />
+    <Compile Include="ViewModels\IWorkspaceViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
     <Compile Include="ViewModels\PanKnobViewModel.cs" />
+    <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
+    <Compile Include="ViewModels\UserComboBoxElement.cs" />
+    <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Compile Include="ViewModels\ZoomPanViewModel.cs" />
     <Compile Include="ViewModels\MouseViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />

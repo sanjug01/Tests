@@ -182,12 +182,6 @@
             for (int i = 0; i < 100; ++i )
             {
                 DesktopModel desktop = new DesktopModel();
-                if (0 == i % 2)
-                {
-                    desktop.CredentialsId = credentialsId;
-                    Assert.AreEqual(credentialsId, desktop.CredentialsId);
-                    adm.LocalWorkspace.Connections.AddNewModel(new RemoteApplicationModel("", "", "", null, 32));
-                }
                 adm.LocalWorkspace.Connections.AddNewModel(desktop);
             }
             po.Save.Execute(null);
