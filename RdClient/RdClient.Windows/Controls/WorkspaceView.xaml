@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:design="using:RdClient.DesignTime"
+    xmlns:converters="using:RdClient.Converters"
     mc:Ignorable="d"
     d:DesignHeight="400"
     d:DesignWidth="1024"
@@ -16,6 +17,27 @@
         <design:FakeWorkspaceViewModel />
     </d:UserControl.DataContext>
 
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <MenuFlyout x:Name="WorkspaceMenuFlyout">
+                <MenuFlyoutItem 
+                    x:Uid="Common_Flyout_EditItem"                 
+                    Text="Edit(d)" 
+                    Command="{Binding EditCommand}"/>
+                <MenuFlyoutItem 
+                    x:Uid="Common_Flyout_RefreshItem"                 
+                    Text="Refresh(d)" 
+                    Command="{Binding RefreshCommand}"/>
+                <MenuFlyoutItem 
+                    x:Uid="Common_Flyout_DeleteItem"                 
+                    Text="Delete(d)" 
+                    Command="{Binding DeleteCommand}"/>                
+            </MenuFlyout>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -23,7 +45,12 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <TextBlock Text="{Binding Name}" Style="{StaticResource SubheaderTextBlockStyle}"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding Name}" Style="{StaticResource SubheaderTextBlockStyle}" Margin="10"/>
+            <Button Style="{StaticResource InvisibleButtonStyle}" Flyout="{StaticResource WorkspaceMenuFlyout}" />
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Vertical">
             <ItemsControl ItemsSource="{Binding RemoteResourceViewModels}" >

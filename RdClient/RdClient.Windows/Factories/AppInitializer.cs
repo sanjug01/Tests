@@ -48,8 +48,8 @@
             //initialize the loaded workspaces
             foreach (IModelContainer<OnPremiseWorkspaceModel> workspace in appDataModel.OnPremWorkspaces.Models)
             {
-                workspace.Model.DataModel = appDataModel;
-                workspace.Model.RadcClient = new RadcClient(new RadcEventSource(), new TaskExecutor());
+                workspace.Model.Initialize(new RadcClient(new RadcEventSource(), new TaskExecutor()), appDataModel);
+                workspace.Model.TryAndResubscribe();
             }
             //All the resources for the workspaces are cached internally by RadcClient. Here we load them into our workspaces
             RadcClient radcClient = new RadcClient(new RadcEventSource(), new TaskExecutor());

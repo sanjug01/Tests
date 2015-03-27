@@ -11,6 +11,25 @@
     using RdClient.Shared.Data;
     using System.Linq;
 
+    public sealed class AddWorkspaceViewModelArgs
+    {
+        public AddWorkspaceViewModelArgs()
+        {
+        }
+    }
+
+    public sealed class EditWorkspaceViewModelArgs
+    {
+        private readonly OnPremiseWorkspaceModel _workspace;
+
+        public OnPremiseWorkspaceModel Workspace { get { return _workspace; } }
+
+        public EditWorkspaceViewModelArgs(OnPremiseWorkspaceModel workspace)
+        {
+            _workspace = workspace;
+        }
+    }
+
     public sealed class AddOrEditWorkspaceViewModel : DeferringViewModelBase
     {
         private readonly RelayCommand _saveCommand;
@@ -109,7 +128,8 @@
         private void SaveCommandExecute(object o)
         {
             RadcClient radcClient = new RadcClient(new RadcEventSource(), new Helpers.TaskExecutor());
-            OnPremiseWorkspaceModel workspace = new OnPremiseWorkspaceModel() { RadcClient = radcClient, DataModel = this.ApplicationDataModel };
+            OnPremiseWorkspaceModel workspace = new OnPremiseWorkspaceModel();
+            workspace.Initialize(radcClient, this.ApplicationDataModel);
             workspace.FeedUrl = this.FeedUrl;
             workspace.CredentialsId = this.SelectedCredentialOption.Credentials.Id;
             workspace.PropertyChanged += workspace_PropertyChanged;
@@ -123,32 +143,38 @@
         private void workspace_PropertyChanged(object sender, PropertyChangedEventArgs args)
         {
             OnPremiseWorkspaceModel workspace = sender as OnPremiseWorkspaceModel;
-            if (workspace != null && args.PropertyName.Equals("State"))
+            if (workspace != null)
             {
-                this.FeedUrl = workspace.State.ToString() + "...";
-                if (workspace.State == WorkspaceState.Ok)
+                if (args.PropertyName.Equals("State"))
                 {
-                    this.TryDeferToUI(() =>
+                    this.FeedUrl = workspace.State.ToString() + "...";
+                    if (workspace.State == WorkspaceState.Subscribed)
                     {
-                        this.ApplicationDataModel.OnPremWorkspaces.AddNewModel(workspace);
-                        NavigationService.DismissModalView(PresentableView);
-                        (sender as OnPremiseWorkspaceModel).PropertyChanged -= workspace_PropertyChanged;
-                    });
+                        this.TryDeferToUI(() =>
+                        {
+                            this.ApplicationDataModel.OnPremWorkspaces.AddNewModel(workspace);
+                            NavigationService.DismissModalView(PresentableView);
+                            (sender as OnPremiseWorkspaceModel).PropertyChanged -= workspace_PropertyChanged;
+                        });
+                    }
                 }
-                else if (workspace.State == WorkspaceState.Error)
+                else if (args.PropertyName.Equals("Error"))
                 {
                     this.TryDeferToUI(() =>
                     {
                         this.FeedUrl = "Error: " + workspace.Error.ToString();
-                        workspace.PropertyChanged -= workspace_PropertyChanged;
-                        workspace.UnSubscribe();
-                        IEnumerable<IModelContainer<OnPremiseWorkspaceModel>> matchingWorkspaces = this.ApplicationDataModel.OnPremWorkspaces.Models.Where(w => string.Compare(w.Model.FeedUrl, workspace.FeedUrl) == 0).ToArray();
-                        foreach (var matchingWorkspace in matchingWorkspaces)
+                        if (workspace.Error != XPlatError.XResult32.Succeeded)
                         {
-                            this.ApplicationDataModel.OnPremWorkspaces.RemoveModel(matchingWorkspace.Id);
+                            workspace.PropertyChanged -= workspace_PropertyChanged;
+                            workspace.UnSubscribe();
+                            IEnumerable<IModelContainer<OnPremiseWorkspaceModel>> matchingWorkspaces = this.ApplicationDataModel.OnPremWorkspaces.Models.Where(w => string.Compare(w.Model.FeedUrl, workspace.FeedUrl) == 0).ToArray();
+                            foreach (var matchingWorkspace in matchingWorkspaces)
+                            {
+                                this.ApplicationDataModel.OnPremWorkspaces.RemoveModel(matchingWorkspace.Id);
+                            }
                         }
                     });
-                }
+                }                
             }
         }
     }

@@ -621,4 +621,8 @@
     <value>Apps</value>
     <comment>The text that is the header for the apps section</comment>
   </data>
+  <data name="Common_Flyout_RefreshItem.Text" xml:space="preserve">
+    <value>Refresh</value>
+    <comment>Verb. Text in a button or pop out menu that is pressed to refresh an item.</comment>
+  </data>
 </root>

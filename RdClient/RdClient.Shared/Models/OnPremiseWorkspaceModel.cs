@@ -9,16 +9,16 @@
     using System.Diagnostics;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.Threading.Tasks;
 
     public enum WorkspaceState
     {
-        Ok,
+        Subscribed,
         Unsubscribed,
         Subscribing,
         AddingResources,
         Unsubscribing,
-        Refreshing,
-        Error        
+        Refreshing     
     }
 
     [DataContract(IsReference = true)]
@@ -28,9 +28,12 @@
         private Guid _credId;
         [DataMember(Name = "FeedUrl", EmitDefaultValue=false)]
         private string _feedUrl;
-        
+        [DataMember(Name = "State", EmitDefaultValue = false)]
         private WorkspaceState _state;
+        [DataMember(Name = "Error", EmitDefaultValue = false)]
         private XPlatError.XResult32 _error;
+
+        private bool _initialized;
         private string _friendlyName;
         private List<RemoteResourceModel> _resources;
         private List<RemoteResourceModel> _tempResources;
@@ -42,11 +45,43 @@
         {
             _state = WorkspaceState.Unsubscribed;
             _error = XPlatError.XResult32.Succeeded;
+            _initialized = false;
+        }
+
+        public void Initialize(RadcClient radcClient, ApplicationDataModel dataModel)
+        {
+            if (_initialized || radcClient == null || dataModel == null)
+            {
+                throw new InvalidOperationException("Should only initialize once, specifying a non-null radcClient and dataModel");
+            }
+            _dataModel = dataModel;
+            _client = radcClient;            
+            _client.FeedUrl = this.FeedUrl;
+            _client.Events.OperationInProgress += OperationInProgress;
+            _client.Events.OperationCompleted += OperationCompleted;
+            _client.Events.AddResourcesStarted += AddResourcesStarted;
+            _client.Events.AddResourcesFinished += AddResourcesFinished;
+            _client.Events.ResourceAdded += ResourceAdded;
+            _client.Events.WorkspaceRemoved += WorkspaceRemoved;
+
+        }
+
+        public void TryAndResubscribe()
+        {
+            if (this.State != WorkspaceState.Subscribed)
+            {
+                TaskCompletionSource<XPlatError.XResult32> taskSource = new TaskCompletionSource<XPlatError.XResult32>();
+                this.UnSubscribe(result => taskSource.SetResult(result));
+                taskSource.Task.Wait();
+                this.State = WorkspaceState.Unsubscribed;
+                taskSource = new TaskCompletionSource<XPlatError.XResult32>();
+                this.Subscribe(result => taskSource.SetResult(result));
+            }
         }
 
         public CredentialsModel Credential
         {
-            get { return this.DataModel.LocalWorkspace.Credentials.GetModel(this.CredentialsId); }
+            get { return _dataModel.LocalWorkspace.Credentials.GetModel(this.CredentialsId); }
         }
 
         public WorkspaceState State
@@ -101,87 +136,45 @@
             private set { SetProperty(ref _friendlyName, value); }
         }
 
-        //We need a no-param constructor for deserialization purposes, this provides a way of injecting the DataModel
-        public ApplicationDataModel DataModel
-        {
-            private get { return _dataModel; }
-            set 
-            {
-                if (_dataModel == null && value != null)
-                {
-                    SetProperty(ref _dataModel, value);
-                }
-                else
-                {
-                    throw new InvalidOperationException("Should only initialize datamodel once to non-null value");
-                }
-            }
-        }
-
-        //We need a no-param constructor for deserialization purposes, this provides a way of injecting the RadcClient
-        public RadcClient RadcClient
-        {
-            private get { return _client; }
-            set 
-            { 
-                if (_client == null && value != null)
-                {
-                    SetProperty(ref _client, value);
-                    _client.FeedUrl = this.FeedUrl;
-                    _client.Events.OperationInProgress += OperationInProgress;
-                    _client.Events.OperationCompleted += OperationCompleted;
-                    _client.Events.AddResourcesStarted += AddResourcesStarted;
-                    _client.Events.AddResourcesFinished += AddResourcesFinished;
-                    _client.Events.ResourceAdded += ResourceAdded;
-                    _client.Events.WorkspaceRemoved += WorkspaceRemoved;
-                }
-                else
-                {
-                    throw new InvalidOperationException("Should only initialize client once to non-null value");
-                }
-            }
-        }
-
         public void GetCachedResources(Action<XPlatError.XResult32> completionCallback = null)
         {
+            if (this.State != WorkspaceState.Subscribed)
+            {
+                throw new InvalidOperationException("Must subscribe before getting cached resources");
+            }
             this.State = WorkspaceState.Refreshing;
-            this.RadcClient.StartGetCachedFeeds(result => HandleOperationCompleted(result, WorkspaceState.Ok, completionCallback));
+            _client.StartGetCachedFeeds(result => HandleOperationCompleted(result, WorkspaceState.Subscribed, completionCallback));
         }
 
         public void Refresh(Action<XPlatError.XResult32> completionCallback = null)
         {
-            if (this.State != WorkspaceState.Ok && this.State != WorkspaceState.Unsubscribed && this.State != WorkspaceState.Error)
+            if (this.State == WorkspaceState.Unsubscribed)
             {
-                throw new InvalidOperationException("Can only refresh when workspace is subscribed and has no operations pending");
+                throw new InvalidOperationException("Must subscribe before refreshing");
             }
             this.State = WorkspaceState.Refreshing;
-            this.RadcClient.StartRefreshFeeds(RadcRefreshReason.ManualRefresh, result => HandleOperationCompleted(result, WorkspaceState.Ok, completionCallback));
+            _client.StartRefreshFeeds(RadcRefreshReason.ManualRefresh, result => HandleOperationCompleted(result, WorkspaceState.Subscribed, completionCallback));
         }
 
         public void Subscribe(Action<XPlatError.XResult32> completionCallback = null)
         {
-            if (this.State != WorkspaceState.Ok && this.State != WorkspaceState.Unsubscribed && this.State != WorkspaceState.Error)
-            {
-                throw new InvalidOperationException("Can only subscribe when workspace has no operations pending");
-            }
             this.State = WorkspaceState.Subscribing;
-            this.RadcClient.StartSubscribeToOnPremFeed(this.FeedUrl, this.Credential, result => HandleOperationCompleted(result, WorkspaceState.Ok, completionCallback));
+            _client.StartSubscribeToOnPremFeed(this.FeedUrl, this.Credential, result => HandleOperationCompleted(result, WorkspaceState.Subscribed, completionCallback));
         }
 
         public void UnSubscribe(Action<XPlatError.XResult32> completionCallback = null)
         {
-            if (this.State != WorkspaceState.Ok && this.State != WorkspaceState.Error)
-            {
-                throw new InvalidOperationException("Can only subscribe when workspace has no operations pending");
-            }
             this.State = WorkspaceState.Unsubscribing;
-            this.RadcClient.StartRemoveFeed(this.FeedUrl, result => HandleOperationCompleted(result, WorkspaceState.Unsubscribed, completionCallback));
+            _client.StartRemoveFeed(this.FeedUrl, result => HandleOperationCompleted(result, WorkspaceState.Unsubscribed, completionCallback));
         }
 
         private void HandleOperationCompleted(XPlatError.XResult32 result, WorkspaceState successState, Action<XPlatError.XResult32> completionCallback)
         {
             this.Error = result;
-            this.State = (result == XPlatError.XResult32.Succeeded) ? successState : WorkspaceState.Error;
+            if (result == XPlatError.XResult32.Succeeded)
+            {
+                this.State = successState;
+            }
             if (completionCallback != null)
             {
                 completionCallback(result);
@@ -191,45 +184,31 @@
         private void ResourceAdded(object sender, RadcResourceAddedArgs args)
         {
             Debug.WriteLine("RADC: OnResourceAdded {0}. Feed = {1}", args.FriendlyName, args.FeedUrl);
-            if (args.FeedUrl.Equals(this.FeedUrl))
+            this.FriendlyName = args.WorkspaceFriendlyName;
+            if (args.ResourceType == RemoteResourceType.OnPremPublishedApp || args.ResourceType == RemoteResourceType.OnPremPublishedDesktop)
             {
-                this.FriendlyName = args.WorkspaceFriendlyName;
-                if (args.ResourceType == RemoteResourceType.OnPremPublishedApp || args.ResourceType == RemoteResourceType.OnPremPublishedDesktop)
-                {
-                    _tempResources.Add(new RemoteResourceModel(args.ResourceId, args.ResourceType, args.FriendlyName, args.RdpFile, args.IconBytes, args.IconWidth, this.CredentialsId));
-                }
-                else
-                {
-                    throw new InvalidOperationException("Unexpected resource type of " + args.ResourceType.ToString() + " when trying to add a resource to an on prem workspace.");
-                }
+                _tempResources.Add(new RemoteResourceModel(args.ResourceId, args.ResourceType, args.FriendlyName, args.RdpFile, args.IconBytes, args.IconWidth, this.CredentialsId));
             }
+            else
+            {
+                throw new InvalidOperationException("Unexpected resource type of " + args.ResourceType.ToString() + " when trying to add a resource to an on prem workspace.");
+            }            
         }
 
         private void WorkspaceRemoved(object sender, RadcWorkspaceRemovedArgs args)
         {
-            Debug.WriteLine("RADC: OnRemoveWorkspace URL={0}", args.FeedUrl);
-            if (_feedUrl.Equals(args.FeedUrl))
-            {
-                this.Resources = new List<RemoteResourceModel>();
-                this.State = WorkspaceState.Unsubscribed;
-                RadcClient client = this.RadcClient;
-                client.Events.OperationInProgress -= OperationInProgress;
-                client.Events.OperationCompleted -= OperationCompleted;
-                client.Events.AddResourcesStarted -= AddResourcesStarted;
-                client.Events.AddResourcesFinished -= AddResourcesFinished;
-                client.Events.ResourceAdded -= ResourceAdded;
-                client.Events.WorkspaceRemoved -= WorkspaceRemoved;
-            }
+            Debug.WriteLine("RADC: OnRemoveWorkspace URL={0}", args.FeedUrl);            
+            this.Resources = new List<RemoteResourceModel>();
+            this.State = WorkspaceState.Unsubscribed;            
         }
 
         private void OperationInProgress(object sender, RadcOperationInProgressArgs args)
         {
+            Debug.WriteLine("RADC: OnRadcFeedOperationInProgress {0}", args.OperationType.ToString());
             if (args.OperationType == RadcFeedOperation.InitiateCancellation)
             {
-                this.Error = XPlatError.XResult32.Cancelled;
-                this.State = WorkspaceState.Error;              
-            }
-            Debug.WriteLine("RADC: OnRadcFeedOperationInProgress {0}", args.OperationType.ToString());
+                this.Error = XPlatError.XResult32.Cancelled;              
+            }            
         }
 
         private void OperationCompleted(object sender, RadcOperationCompletedArgs args)
@@ -239,27 +218,17 @@
 
         private void AddResourcesFinished(object sender, RadcAddResourcesFinishedArgs args)
         {
-            if (this.FeedUrl.Equals(args.FeedUrl))
+            if (this.Error == XPlatError.XResult32.Succeeded)
             {
-                if (this.Error == XPlatError.XResult32.Succeeded)
-                {
-                    this.State = WorkspaceState.Ok;
-                    this.Resources = _tempResources;
-                }
-                else
-                {
-                    this.State = WorkspaceState.Error;
-                }
-            }
+                this.State = WorkspaceState.Subscribed;
+                this.Resources = _tempResources;
+            }            
         }
 
         private void AddResourcesStarted(object sender, RadcAddResourcesStartedArgs args)
         {
-            if (this.FeedUrl.Equals(args.FeedUrl))
-            {
-                this.State = WorkspaceState.AddingResources;
-                _tempResources = new List<RemoteResourceModel>();
-            }
+            this.State = WorkspaceState.AddingResources;
+            _tempResources = new List<RemoteResourceModel>();            
         }
     }
 }

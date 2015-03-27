@@ -77,6 +77,7 @@
         private void DeleteCommandExecute()
         {
             _workspace.Model.UnSubscribe();
+            _dataModel.OnPremWorkspaces.RemoveModel(_workspace.Id);
         }
 
         private void RefreshCommandExecute()
