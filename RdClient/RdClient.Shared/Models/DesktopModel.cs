@@ -36,9 +36,6 @@
         [DataMember(Name = "AudioMode", EmitDefaultValue = false)]
         private AudioMode _audioMode;
 
-        [DataMember(Name = "RdpFile", EmitDefaultValue = false, IsRequired = false)]
-        private string _rdpFile;
-
         public string HostName
         {
             get { return _hostName; }
@@ -84,12 +81,6 @@
             set { this.SetProperty(ref _audioMode, value); }
         }
 
-        public string RdpFile
-        {
-            get { return _rdpFile; }
-            set { this.SetProperty(ref _rdpFile, value); }
-        }
-
         public DesktopModel()
         {
             _credentialsId = Guid.Empty;
@@ -97,13 +88,10 @@
 
         public override IRdpConnection CreateConnection(IRdpConnectionFactory connectionFactory, IRenderingPanel renderingPanel)
         {
-            IRdpConnection connection = connectionFactory.CreateDesktop(this.RdpFile);
-            if (String.IsNullOrWhiteSpace(this.RdpFile))
-            {
-                IRdpProperties properties = connection as IRdpProperties;
-                Contract.Assert(null != properties);
-                RdpPropertyApplier.ApplyDesktop(properties, this);
-            }
+            IRdpConnection connection = connectionFactory.CreateDesktop("");
+            IRdpProperties properties = connection as IRdpProperties;
+            Contract.Assert(null != properties);
+            RdpPropertyApplier.ApplyDesktop(properties, this);            
             return connection;
         }
     }

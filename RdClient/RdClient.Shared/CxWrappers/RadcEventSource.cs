@@ -2,7 +2,7 @@
 {
     using System;
 
-    class RadcEventSource : IRadcEvents, IRadcEventSource
+    public class RadcEventSource : IRadcEvents, IRadcEventSource
     {
         public event EventHandler<RadcOperationInProgressArgs> OperationInProgress;
 

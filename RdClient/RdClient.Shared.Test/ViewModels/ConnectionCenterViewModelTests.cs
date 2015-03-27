@@ -27,7 +27,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             void IDeferredExecution.Defer(Action action)
             {
-                throw new NotImplementedException();
+                action();
             }
         }
 

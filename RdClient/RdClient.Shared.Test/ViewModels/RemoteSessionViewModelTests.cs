@@ -13,6 +13,7 @@
     using RdClient.Shared.ViewModels;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Windows.Foundation;
 
@@ -216,7 +217,7 @@
             {
                 using (LockUpgradeableRead())
                 {
-                    foreach (Action a in _actions)
+                    foreach (Action a in _actions.ToArray())
                         a();
 
                     using (LockWrite())

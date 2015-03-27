@@ -3,7 +3,7 @@
     using System;
     using System.Threading.Tasks;
 
-    class TaskExecutor : IDeferredExecution
+    public class TaskExecutor : IDeferredExecution
     {
         public void Defer(Action action)
         {

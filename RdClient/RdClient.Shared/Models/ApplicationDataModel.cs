@@ -117,15 +117,6 @@
                 //load workspaces from disk
                 this.OnPremWorkspaces = PrimaryModelCollection<OnPremiseWorkspaceModel>.Load(_rootFolder.CreateFolder("OnPremWorkspaces"), _modelSerializer);
                 SubscribeForPersistentStateUpdates(this.OnPremWorkspaces);                
-                //initialize the loaded workspaces
-                foreach (IModelContainer<OnPremiseWorkspaceModel> workspace in this.OnPremWorkspaces.Models)
-                {
-                    workspace.Model.DataModel = this;
-                    workspace.Model.RadcClient = new RadcClient(new RadcEventSource(), new TaskExecutor());
-                }
-                //All the resources for the workspaces are cached internally by RadcClient. Here we load them into our workspaces
-                RadcClient radcClient = new RadcClient(new RadcEventSource(), new TaskExecutor());
-                 radcClient.StartGetCachedFeeds(); 
 
                 INotifyCollectionChanged ncc = this.LocalWorkspace.Credentials.Models;
                 ncc.CollectionChanged += this.OnCredentialsCollectionChanged;
