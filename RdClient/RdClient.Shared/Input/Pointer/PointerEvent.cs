@@ -1,7 +1,7 @@
 ﻿using RdClient.Shared.CxWrappers;
 using Windows.Foundation;
 
-namespace RdClient.Shared.Input.Mouse
+namespace RdClient.Shared.Input.Pointer
 {
     public enum PointerType
     {

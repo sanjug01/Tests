@@ -1,5 +1,6 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
+using RdClient.Shared.Input.Pointer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,6 @@ namespace RdClient.Shared.Input.Mouse
             },
             (o) => { o.Context.DoubleClickTimer.Stop(); });
 
-            // beginning of a 2+ touch gesture
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDown,
             (o) =>
             {
@@ -38,9 +38,7 @@ namespace RdClient.Shared.Input.Mouse
                     o.Context.NumberOfContacts(o.Input) == 2 &&
                     o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == true;
             },
-            (o) => { o.Context.BeginGesture(o.Input); });
-
-            // right double right has priority over 2 fingers gestures
+            (o) => { });
             stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDoubleDown,
             (o) =>
             {
@@ -63,110 +61,22 @@ namespace RdClient.Shared.Input.Mouse
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
             (o) => { o.Context.DoubleClickTimer.Reset(DoubleClickTimer.ClickTimerType.RightClick, o.Input); });
-            
-            
-            // 2 fingers gestures: scroll, zoom&pinch or panning
-            // recognize double finger gestures
-            stateMachine.AddTransition(PointerState.LeftDown, PointerState.RightDown,
-            (o) =>
-            {
-                return
-                    o.Context.NumberOfContacts(o.Input) == 2 &&
-                    o.Context.DoubleClickTimer.IsExpired(DoubleClickTimer.ClickTimerType.RightClick) == true;
-            },
-            (o) => { o.Context.BeginGesture(o.Input); });
-
-            // scrolling
             stateMachine.AddTransition(PointerState.RightDown, PointerState.Scroll,
-            (o) => 
-            { 
-                return 
-                    o.Context.NumberOfContacts(o.Input) == 2 &&
-                    o.Context.IsScrolling(o.Input); 
-            },
+            (o) => { return o.Context.MoveThresholdExceeded(o.Input); },
             (o) => { o.Context.MouseScroll(o.Input); });
 
             stateMachine.AddTransition(PointerState.Scroll, PointerState.Scroll,
-            (o) =>
-            {
-                return
-                   o.Context.NumberOfContacts(o.Input) == 2 &&
-                   o.Context.IsScrolling(o.Input);
+            (o) => { return 
+                        o.Context.NumberOfContacts(o.Input) > 1 &&
+                        o.Context.MoveThresholdExceeded(o.Input); 
             },
             (o) => { o.Context.MouseScroll(o.Input); });
-
-            stateMachine.AddTransition(PointerState.Scroll, PointerState.Zoom,
-            (o) =>
-            {
-                return
-                    o.Context.NumberOfContacts(o.Input) == 2 &&
-                    o.Context.IsZooming(o.Input);
-            },
-            (o) => { o.Context.ApplyZoom(o.Input); });
-
             stateMachine.AddTransition(PointerState.Scroll, PointerState.LeftDown,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
-            (o) => { o.Context.CompleteGesture(o.Input); });
-
+            (o) => { });
             stateMachine.AddTransition(PointerState.Scroll, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { o.Context.CompleteGesture(o.Input); });
-
-            // zooming
-            stateMachine.AddTransition(PointerState.RightDown, PointerState.Zoom,
-            (o) => 
-            {
-                return
-                   o.Context.NumberOfContacts(o.Input) == 2 &&
-                    o.Context.IsZooming(o.Input); 
-            },
-            (o) => { o.Context.ApplyZoom(o.Input); });
-
-            stateMachine.AddTransition(PointerState.Zoom, PointerState.Zoom,
-            (o) =>
-            {
-                return
-                   o.Context.NumberOfContacts(o.Input) == 2;
-            },
-            (o) => { o.Context.ApplyZoom(o.Input); });
-
-            stateMachine.AddTransition(PointerState.Zoom, PointerState.LeftDown,
-            (o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
-            (o) => { o.Context.CompleteGesture(o.Input); });
-
-            stateMachine.AddTransition(PointerState.Zoom, PointerState.Idle,
-            (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            (o) => { o.Context.CompleteGesture(o.Input); });
-
-
-            // TODO: enable 2 fingers panning on remove pan logic entirely - Bug 1861012
-            ////// panning. 
-            ////stateMachine.AddTransition(PointerState.Zoom, PointerState.Pan,
-            ////(o) => 
-            ////{
-            ////    return
-            ////       o.Context.NumberOfContacts(o.Input) == 2 &&
-            ////       o.Context.IsPanning(o.Input); 
-            ////},
-            ////(o) => { o.Context.ApplyPan(o.Input); });
-
-            ////stateMachine.AddTransition(PointerState.Pan, PointerState.Pan,
-            ////(o) =>
-            ////{
-            ////    return
-            ////       o.Context.NumberOfContacts(o.Input) == 2 &&
-            ////       o.Context.IsZooming(o.Input);
-            ////},
-            ////(o) => { o.Context.ApplyPan(o.Input); });
-
-            ////stateMachine.AddTransition(PointerState.Pan, PointerState.LeftDown,
-            ////(o) => { return o.Context.NumberOfContacts(o.Input) == 1; },
-            ////(o) => { o.Context.CompleteGesture(o.Input); });
-
-            ////stateMachine.AddTransition(PointerState.Pan, PointerState.Idle,
-            ////(o) => { return o.Context.NumberOfContacts(o.Input) == 0; },
-            ////(o) => { o.Context.CompleteGesture(o.Input); });
-
+            (o) => { });
 
             stateMachine.AddTransition(PointerState.LeftDoubleDown, PointerState.Idle,
             (o) => { return o.Context.NumberOfContacts(o.Input) == 0; },

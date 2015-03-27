@@ -9,10 +9,26 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
+    ManipulationMode="All"
     Loaded="OnLoaded"
     Unloaded="OnUnloaded">
 
     <Grid Background="Gray">
-        <c:RenderingPanel x:Name="RenderingPanel"/>
+        <c:RenderingPanel x:Name="RenderingPanel">
+            <SwapChainPanel.RenderTransform>
+                <TransformGroup>
+                    <CompositeTransform x:Name="Transformation"
+                                        ScaleX="1.0" ScaleY="1.0"
+                                        TranslateX="0.0" TranslateY="0.0"/>
+                </TransformGroup>
+            </SwapChainPanel.RenderTransform>
+            <Image x:Name="MouseCursor" CacheMode="BitmapCache" Stretch="None" Width="Auto" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <TranslateTransform x:Name="MouseTransform"/>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+        </c:RenderingPanel>
     </Grid>
 </UserControl>

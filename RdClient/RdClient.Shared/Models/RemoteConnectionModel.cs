@@ -16,6 +16,10 @@
         {
         }
 
+        /// <summary>
+        /// Encoded thumbnail image that can be converted to a XAML image source. The property is updated on the UI thread by sessions
+        /// created from the model object.
+        /// </summary>
         public byte[] EncodedThumbnail
         {
             get { return _encodedThumbnail; }
@@ -27,7 +31,7 @@
         /// </summary>
         /// <param name="connectionFactory">RDP connection factory one of whose methods the method must call
         /// to properly create and initialize a new RDP connection.</param>
-        /// <returns></returns>
+        /// <returns>An RDP connection attached to the rendering panel.</returns>
         public abstract IRdpConnection CreateConnection(IRdpConnectionFactory connectionFactory, IRenderingPanel renderingPanel);
     }
 }

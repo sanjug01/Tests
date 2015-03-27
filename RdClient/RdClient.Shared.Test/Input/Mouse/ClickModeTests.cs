@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
-using RdClient.Shared.Input.Mouse;
+using RdClient.Shared.Input.Pointer;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Test.Input.Mouse
@@ -15,8 +15,8 @@ namespace RdClient.Shared.Test.Input.Mouse
             this.ConsumptionMode = ConsumptionMode.DirectTouch;
 
             ConsumeEventsHelper(new PointerEvent[] { 
-                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Touch, 3),
+                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3, 0, TouchEventType.Down),
+                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Touch, 3, 0, TouchEventType.Up),
             });
 
             _timer.TriggerCallback();
@@ -34,10 +34,10 @@ namespace RdClient.Shared.Test.Input.Mouse
             this.ConsumptionMode = ConsumptionMode.DirectTouch;
 
             ConsumeEventsHelper(new PointerEvent[] { 
-                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(12.0, 12.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(12.0, 12.0), false, new Point(0.0, 0.0), false, false, PointerType.Touch, 3),
+                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3, 0, TouchEventType.Down),
+                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Touch, 3, 0, TouchEventType.Up),
+                new PointerEvent(new Point(12.0, 12.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3, 0, TouchEventType.Down),
+                new PointerEvent(new Point(12.0, 12.0), false, new Point(0.0, 0.0), false, false, PointerType.Touch, 3, 0, TouchEventType.Up),
             });
 
             MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 

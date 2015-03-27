@@ -11,7 +11,7 @@ namespace RdClient.Shared.ViewModels
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.ZoomPan;
-    using RdClient.Shared.Input.Mouse;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Navigation.Extensions;
 
     public class PanKnobTransform : IPanKnobTransform 

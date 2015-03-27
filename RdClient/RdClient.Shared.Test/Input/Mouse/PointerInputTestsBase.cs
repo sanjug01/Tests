@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
-using RdClient.Shared.Input.Mouse;
+using RdClient.Shared.Input.Pointer;
 using System.Collections.Generic;
 using Windows.Foundation;
 
@@ -36,6 +36,7 @@ namespace RdClient.Shared.Test.Input.Mouse
         protected TestTimer _timer;
         private PointerEventDispatcher _consumer;
         private Mock.PointerManipulatorRecorder _manipulator;
+        private Mock.RenderingPanel _panel;
 
         protected ConsumptionMode ConsumptionMode
         { 
@@ -48,7 +49,8 @@ namespace RdClient.Shared.Test.Input.Mouse
         {
             _timer = new TestTimer();
             _manipulator = new Mock.PointerManipulatorRecorder();
-            _consumer = new PointerEventDispatcher(_timer, _manipulator);
+            _panel = new Mock.RenderingPanel();
+            _consumer = new PointerEventDispatcher(_timer, _manipulator, _panel);
         }
 
         protected void ConsumeEventsHelper(PointerEvent[] events)

@@ -1,7 +1,7 @@
 ﻿using RdClient.Shared.Helpers;
 using System;
 
-namespace RdClient.Shared.Input.Mouse
+namespace RdClient.Shared.Input.Pointer
 {
     public enum ConsumptionMode
     {

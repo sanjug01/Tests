@@ -93,6 +93,9 @@ namespace RdClient.Shared.Test.ViewModels
                 {
                     throw new NotImplementedException();
                 }
+
+
+                public event EventHandler<Shared.CxWrappers.MouseCursorShapeChangedArgs> MouseCursorShapeChanged;
             }
         }
 

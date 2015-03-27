@@ -3,7 +3,7 @@ using RdClient.Shared.Helpers;
 using System;
 using Windows.Foundation;
 
-namespace RdClient.Shared.Input.Mouse
+namespace RdClient.Shared.Input.Pointer
 {
     public class MouseMode : IPointerEventConsumer
     {

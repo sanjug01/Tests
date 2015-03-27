@@ -5,7 +5,7 @@ namespace RdClient.Controls
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Converters;
     using RdClient.Shared.Helpers;    
-    using RdClient.Shared.Input.Mouse;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Input.ZoomPan;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;

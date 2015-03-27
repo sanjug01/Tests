@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Windows.Foundation;
 
-namespace RdClient.Shared.Input.Mouse
+namespace RdClient.Shared.Input.Pointer
 {
     public class DoubleClickTimer
     {

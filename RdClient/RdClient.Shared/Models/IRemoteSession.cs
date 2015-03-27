@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
     using System;
 
@@ -29,6 +30,8 @@
         event EventHandler<CredentialsNeededEventArgs> CredentialsNeeded;
 
         event EventHandler<BadCertificateEventArgs> BadCertificate;
+
+        event EventHandler<MouseCursorShapeChangedArgs> MouseCursorShapeChanged;
 
         /// <summary>
         /// Session has failed permanently.

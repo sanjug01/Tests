@@ -4,10 +4,12 @@
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.ViewModels;
     using System;
     using System.Diagnostics.Contracts;
     using System.Threading;
+    using Windows.Foundation;
 
     public sealed partial class RemoteSession : MutableObject, IRemoteSession
     {
@@ -21,6 +23,7 @@
 
         private EventHandler<CredentialsNeededEventArgs> _credentialsNeeded;
         private EventHandler<BadCertificateEventArgs> _badCertificate;
+        private EventHandler<MouseCursorShapeChangedArgs> _mouseCursorShapeChanged;
         private EventHandler<SessionFailureEventArgs> _failed;
         private EventHandler<SessionInterruptedEventArgs> _interrupted;
         private EventHandler _closed;
@@ -102,13 +105,57 @@
                 _monitor = monitor;
             }
 
+            IRenderingPanel IRemoteSessionControl.RenderingPanel
+            {
+                get
+                {
+                    Contract.Assert(null != _session._renderingPanel);
+                    return _session._renderingPanel;
+                }
+            }
+
+            private void PerformRDPAction(Action action)
+            {
+                using(ReadWriteMonitor.Read(_monitor))
+                {
+                    if (null != _session._connection)
+                        action();
+                }
+            }
+
             void IRemoteSessionControl.SendKeystroke(int keyCode, bool isScanCode, bool isExtendedKey, bool isKeyReleased)
             {
-                using (ReadWriteMonitor.Read(_monitor))
+                PerformRDPAction(() => _session._connection.SendKeyEvent(keyCode, isScanCode, isExtendedKey, isKeyReleased));
+            }
+
+            public void SendMouseAction(MouseAction action)
+            {
+                PerformRDPAction(() => _session._connection.SendMouseEvent(action.MouseEventType, (float)action.Point.X, (float)action.Point.Y) );
+            }
+
+            public void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime)
+            {
+                PerformRDPAction(() => _session._connection.SendTouchEvent(type, contactId, position, frameTime) );
+            }
+
+            public void SendMouseWheel(int delta, bool isHorizontal)
+            {
+                float x = 0.0f;
+                float y = 0.0f;
+                MouseEventType type;
+
+                if (isHorizontal)
                 {
-                    if(null != _session._connection)
-                        _session._connection.SendKeyEvent(keyCode, isScanCode, isExtendedKey, isKeyReleased);
+                    x = delta;
+                    type = MouseEventType.MouseHWheel;
                 }
+                else
+                {
+                    y = delta;
+                    type = MouseEventType.MouseWheel;
+                }
+
+                PerformRDPAction(() => _session._connection.SendMouseEvent(type, x, y) );
             }
         }
 
@@ -177,6 +224,12 @@
         {
             add { using (LockWrite()) _badCertificate += value; }
             remove { using (LockWrite()) _badCertificate -= value; }
+        }
+
+        event EventHandler<MouseCursorShapeChangedArgs> IRemoteSession.MouseCursorShapeChanged
+        {
+            add { using (LockWrite()) _mouseCursorShapeChanged += value; }
+            remove { using (LockWrite()) _mouseCursorShapeChanged -= value; }
         }
 
         event EventHandler<SessionFailureEventArgs> IRemoteSession.Failed
@@ -268,59 +321,62 @@
             return _connection;
         }
 
-        private void DeferEmitCredentialsNeeded(IEditCredentialsTask task)
+        private void EmitHelper<ArgsType>(ArgsType args, EventHandler<ArgsType> handler, Action action = null) where ArgsType : EventArgs
         {
-            //
-            // Simply defer emitting the event to the dispatcher.
-            //
-            _deferredExecution.Defer(() => EmitCredentialsNeeded(task));
+            Contract.Requires(null != args);
+
+            EventHandler<ArgsType> localHandler;
+
+            using (LockUpgradeableRead())
+                localHandler = handler;
+
+            if (null != localHandler)
+            {
+                localHandler(this, args);
+                if(null != action)
+                    action();
+            }
+        }
+
+        private void DeferEmitHelper<ArgsType>(ArgsType args, EventHandler<ArgsType> handler) where ArgsType : EventArgs
+        {
+            _deferredExecution.Defer(() => EmitHelper<ArgsType>(args, handler));
         }
 
         private void EmitCredentialsNeeded(IEditCredentialsTask task)
         {
             Contract.Requires(null != task);
 
-            EventHandler<CredentialsNeededEventArgs> credentialsNeeded;
-
-            using (LockUpgradeableRead())
-                credentialsNeeded = _credentialsNeeded;
-
-            if (null != credentialsNeeded)
-                credentialsNeeded(this, new CredentialsNeededEventArgs(task));
+            EmitHelper<CredentialsNeededEventArgs>(new CredentialsNeededEventArgs(task), _credentialsNeeded);
         }
 
+        private void DeferEmitCredentialsNeeded(IEditCredentialsTask task)
+        {
+            Contract.Requires(null != task);
+
+            DeferEmitHelper<CredentialsNeededEventArgs>(new CredentialsNeededEventArgs(task), _credentialsNeeded);
+        }        
+        
         private void EmitFailed(RdpDisconnectCode disconnectCode)
         {
-            EventHandler<SessionFailureEventArgs> failed;
-
-            using (LockUpgradeableRead())
-                failed = _failed;
-
-            if (null != failed)
-                failed(this, new SessionFailureEventArgs(disconnectCode));
+            EmitHelper<SessionFailureEventArgs>(new SessionFailureEventArgs(disconnectCode), _failed);
         }
 
         private void DeferEmitFailed(RdpDisconnectCode disconnectCode)
         {
-            _deferredExecution.Defer(() => EmitFailed(disconnectCode));
+            DeferEmitHelper<SessionFailureEventArgs>(new SessionFailureEventArgs(disconnectCode), _failed);
         }
 
         private void EmitInterrupted(Action cancelDelegate)
         {
             Contract.Assert(null != cancelDelegate);
 
-            EventHandler<SessionInterruptedEventArgs> interrupted;
-
-            using (LockUpgradeableRead())
-                interrupted = _interrupted;
-
-            if (null != interrupted)
-                interrupted(this, new SessionInterruptedEventArgs(cancelDelegate));
+            EmitHelper<SessionInterruptedEventArgs>(new SessionInterruptedEventArgs(cancelDelegate), _interrupted);
         }
 
         private void DeferEmitInterrupted(Action cancelDelegate)
         {
-            _deferredExecution.Defer(() => EmitInterrupted(cancelDelegate));
+            DeferEmitHelper<SessionInterruptedEventArgs>(new SessionInterruptedEventArgs(cancelDelegate), _interrupted);
         }
 
         private void EmitClosed()
@@ -344,29 +400,24 @@
             Contract.Assert(null != e);
             Contract.Assert(!e.ValidationObtained);
 
-            EventHandler<BadCertificateEventArgs> badCertificate;
-
-            using (LockUpgradeableRead())
-                badCertificate = _badCertificate;
-
-            if (null != badCertificate)
+            EmitHelper<BadCertificateEventArgs>(e, _badCertificate, () => 
             {
-                badCertificate(this, e);
-
-                if(!e.ValidationObtained)
+                if (!e.ValidationObtained)
                 {
                     //
                     // Kill the connection
                     //
                     Contract.Assert(null != _connection);
                     _connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
-                }
-            }
+                }            
+            });
         }
 
-        private void DeferEmitBadCertificate(BadCertificateEventArgs e)
+        private void EmitMouseCursorShapeChanged(MouseCursorShapeChangedArgs args)
         {
-            _deferredExecution.Defer(() => EmitBadCertificate(e));
+            Contract.Assert(null != args);
+
+            EmitHelper<MouseCursorShapeChangedArgs>(args, _mouseCursorShapeChanged);
         }
 
         private void InternalSetState(InternalState newState)

@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.Input.Mouse;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Input.ZoomPan;
     using System.Windows.Input;
     using Windows.Foundation;
@@ -120,7 +120,7 @@ namespace RdClient.Shared.ViewModels
 
         public MouseViewModel()
         {
-            this.PointerEventConsumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
+            //this.PointerEventConsumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this);
             this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
             this.PointerEventConsumer.ConsumedEvent += (s, o) => 
             {

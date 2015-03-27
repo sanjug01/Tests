@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RdClient.Shared.CxWrappers;
-using RdClient.Shared.Input.Mouse;
+using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Input.ZoomPan;
 using RdClient.Shared.ViewModels;
 using System.Collections.Generic;

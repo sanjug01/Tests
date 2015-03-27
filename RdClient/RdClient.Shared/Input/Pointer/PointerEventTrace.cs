@@ -1,7 +1,7 @@
 ﻿using RdClient.Shared.CxWrappers;
 using System.Diagnostics.Contracts;
 
-namespace RdClient.Shared.Input.Mouse
+namespace RdClient.Shared.Input.Pointer
 {
     /// <summary>
     /// traces the last 2 pointer events for a pointer

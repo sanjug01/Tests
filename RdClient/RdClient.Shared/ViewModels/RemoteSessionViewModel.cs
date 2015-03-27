@@ -1,15 +1,17 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Input;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Input.Keyboard;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
-    public sealed class RemoteSessionViewModel : ViewModelBase, IRemoteSessionViewSite
+    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite
     {
         private readonly RelayCommand _dismissFailureMessage;
         private readonly RelayCommand _cancelAutoReconnect;
@@ -20,6 +22,7 @@
         private IRemoteSession _activeSession;
         private IRemoteSessionControl _activeSessionControl;
         private IKeyboardCapture _keyboardCapture;
+        private IPointerCapture _pointerCapture;
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
         private bool _isRightSideBarVisible;
@@ -31,11 +34,12 @@
         private InterruptedSessionContinuation _interruptedContinuation;
         private int _reconnectAttempt;
 
-        public bool IsConnected
+        public bool IsRenderingPanelActive
         {
             get
             {
-                return null != _activeSession && (SessionState.Connected == _activeSession.State.State || SessionState.Connecting == _activeSession.State.State);
+                return null != _activeSession
+                    && (SessionState.Connected == _activeSession.State.State || SessionState.Connecting == _activeSession.State.State);
             }
         }
 
@@ -76,7 +80,13 @@
         public IKeyboardCapture KeyboardCapture
         {
             get { return _keyboardCapture; }
-            set { this.SetProperty<IKeyboardCapture>(ref _keyboardCapture, value); }
+            set { this.SetProperty(ref _keyboardCapture, value); }
+        }
+
+        public IPointerCapture PointerCapture
+        {
+            get { return _pointerCapture; }
+            set { this.SetProperty(ref _pointerCapture, value); }
         }
 
         public bool IsConnectionBarVisible
@@ -142,6 +152,7 @@
                 _activeSessionControl = _activeSession.Activate(_sessionView);
             }
 
+            EmitPropertyChanged("IsRenderingPanelActive");
             this.IsInterrupted = SessionState.Interrupted == _activeSession.State.State;
             this.IsFailureMessageVisible = SessionState.Failed == _activeSession.State.State;
         }
@@ -160,6 +171,7 @@
             _sessionView = null;
             _failureMessageVisible = false;
             _interrupted = false;
+            _interruptedContinuation = null;
 
             base.OnDismissed();
         }
@@ -199,7 +211,7 @@
             _cancelAutoReconnect.EmitCanExecuteChanged();
             this.ReconnectAttempt = _activeSession.State.ReconnectAttempt;
             this.IsInterrupted = true;
-            EmitPropertyChanged("IsConnected");
+            EmitPropertyChanged("IsRenderingPanelActive");
         }
 
         private void OnBadCertificate(object sender, BadCertificateEventArgs e)
@@ -247,7 +259,7 @@
                         _interruptedContinuation = null;
                         this.IsInterrupted = false;
                         _cancelAutoReconnect.EmitCanExecuteChanged();
-                        EmitPropertyChanged("IsConnected");
+                        EmitPropertyChanged("IsRenderingPanelActive");
                         this.IsConnectionBarVisible = false;
                         break;
 
@@ -261,7 +273,10 @@
                         _cancelAutoReconnect.EmitCanExecuteChanged();
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
-                        EmitPropertyChanged("IsConnected");
+                        this.PointerCapture = new PointerCapture(this, _activeSessionControl, _activeSessionControl.RenderingPanel);
+                        _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
+                        _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
+                        EmitPropertyChanged("IsRenderingPanelActive");
                         this.IsConnectionBarVisible = true;
                         break;
 
@@ -270,7 +285,8 @@
                         {
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
-                            EmitPropertyChanged("IsConnected");
+                            _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
+                            EmitPropertyChanged("IsRenderingPanelActive");
                             //
                             // The connection bar and side bars are not available in any non-connected state.
                             //
