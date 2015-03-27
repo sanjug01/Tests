@@ -47,8 +47,11 @@
 
             rdpConnectionStoreCx.SetSwapChainPanel(SwapChainPanel);
 
-            xRes = rdpConnectionStoreCx.LaunchRemoteApp(rdpFile, out rdpConnectionCx);
-            RdTrace.IfFailXResultThrow(xRes, "Failed to create a remote app connection with the given settings.");
+            //TODO : Go back to LaunchRemoteApp when we work out what is causing failure on second connection attempt
+            //xRes = rdpConnectionStoreCx.LaunchRemoteApp(rdpFile, out rdpConnectionCx);
+            xRes = rdpConnectionStoreCx.CreateConnectionWithSettings(rdpFile, out rdpConnectionCx);
+            RdTrace.IfFailXResultThrow(xRes, "Failed to create a remote app connection with the given settings.");            
+
             return new RdpConnection(rdpConnectionCx, rdpConnectionStoreCx, new RdpEventSource());
         }
     }
