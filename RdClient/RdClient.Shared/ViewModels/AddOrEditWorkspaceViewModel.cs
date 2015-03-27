@@ -12,6 +12,26 @@
     using System.Linq;
     using System.Diagnostics.Contracts;
     using System;
+    using RdClient.Shared.ValidationRules;
+
+    public class FeedUrlValidationRule : IValidationRule
+    {
+        private OnPremiseWorkspaceModel _workspace;
+        private IModelCollection<OnPremiseWorkspaceModel> _workspaceCollection;
+
+        public FeedUrlValidationRule(OnPremiseWorkspaceModel workspace, IModelCollection<OnPremiseWorkspaceModel> workspaceCollection)
+        {
+            _workspace = workspace;
+            _workspaceCollection = workspaceCollection;
+        }
+
+        public bool Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        {
+            string feedUrl = value as string ?? "";
+            bool alreadyAWorkspace = _workspaceCollection.Models.Any(w => w.Model != _workspace && string.Compare(w.Model.FeedUrl, feedUrl, StringComparison.OrdinalIgnoreCase) == 0);
+            return !alreadyAWorkspace && Uri.IsWellFormedUriString(feedUrl, UriKind.Absolute);
+        }
+    }
 
     public sealed class AddWorkspaceViewModelArgs
     {
@@ -32,20 +52,21 @@
 
     public sealed class AddOrEditWorkspaceViewModel : DeferringViewModelBase
     {
-        private readonly RelayCommand _saveCommand;
-        private readonly RelayCommand _cancelCommand;
+        private RelayCommand _saveCommand;
+        private RelayCommand _cancelCommand;
         private string _feedUrl;
         private ObservableCollection<UserComboBoxElement> _credOptions;
         private UserComboBoxElement _selectedCredOption;
         private OnPremiseWorkspaceModel _workspace;
         private bool _adding;
+        private FeedUrlValidationRule _feedValidationRule;
 
         public AddOrEditWorkspaceViewModel()
         {
-            _saveCommand = new RelayCommand(SaveCommandExecute);
-            _cancelCommand = new RelayCommand(CancelCommandExecute);
             _credOptions = new ObservableCollection<UserComboBoxElement>();
             _selectedCredOption = null;
+            _saveCommand = new RelayCommand(SaveCommandExecute);
+            _cancelCommand = new RelayCommand(CancelCommandExecute);
         }
 
         public IPresentableView PresentableView { private get; set; }
@@ -57,7 +78,16 @@
         public string FeedUrl 
         { 
             get { return _feedUrl; }
-            set { this.TryDeferToUI(() => SetProperty(ref _feedUrl, value)); }
+            set 
+            {
+                this.TryDeferToUI(() =>
+                {
+                    if (SetProperty(ref _feedUrl, value))
+                    {
+                        _saveCommand.EmitCanExecuteChanged();
+                    }
+                }); 
+            }
         }
 
         public ObservableCollection<UserComboBoxElement> CredentialOptions
@@ -75,7 +105,11 @@
                     if (value != null && value.UserComboBoxType == UserComboBoxType.AddNew)
                     {
                         LaunchAddUserView();
-                    }                    
+                    }
+                    else
+                    {
+                        _saveCommand.EmitCanExecuteChanged();
+                    }
                 }
             }
         }
@@ -113,7 +147,8 @@
             else
             {
                 throw new ArgumentException("provide an AddWorkspaceViewModelArgs or EditWorkspaceViewModelArgs");
-            }            
+            }
+            _feedValidationRule = new FeedUrlValidationRule(this.Workspace, this.ApplicationDataModel.OnPremWorkspaces);
         }
 
         private void LaunchAddUserView()
@@ -160,53 +195,27 @@
 
         private void SaveCommandExecute(object o)
         {
-            OnPremiseWorkspaceModel workspace = this.Workspace;
-            if (this.Adding)
+            if (this.SelectedCredentialOption != null
+                && this.SelectedCredentialOption.Credentials != null
+                && _feedValidationRule.Validate(this.FeedUrl, null))
             {
-                this.ApplicationDataModel.OnPremWorkspaces.AddNewModel(workspace);
+                OnPremiseWorkspaceModel workspace = this.Workspace;
+                if (this.Adding)
+                {
+                    this.ApplicationDataModel.OnPremWorkspaces.AddNewModel(workspace);
+                }
+                workspace.FeedUrl = this.FeedUrl;
+                workspace.CredentialsId = this.SelectedCredentialOption.Credentials.Id;
+                workspace.UnSubscribe(result =>
+                {
+                    workspace.Subscribe();
+                });
+                NavigationService.DismissModalView(PresentableView);
             }
-            workspace.FeedUrl = this.FeedUrl;
-            workspace.CredentialsId = this.SelectedCredentialOption.Credentials.Id;
-            workspace.UnSubscribe(result =>
-            {
-                workspace.PropertyChanged += workspace_PropertyChanged;
-                workspace.Subscribe();
-            });
         }
         private void CancelCommandExecute(object o)
         {
             NavigationService.DismissModalView(PresentableView);
-        }
-
-        private void workspace_PropertyChanged(object sender, PropertyChangedEventArgs args)
-        {
-            OnPremiseWorkspaceModel workspace = sender as OnPremiseWorkspaceModel;
-            if (workspace != null)
-            {
-                if (args.PropertyName.Equals("State"))
-                {
-                    this.FeedUrl = workspace.State.ToString() + "...";
-                    if (workspace.State == WorkspaceState.Subscribed)
-                    {
-                        this.TryDeferToUI(() =>
-                        {
-                            NavigationService.DismissModalView(PresentableView);
-                            (sender as OnPremiseWorkspaceModel).PropertyChanged -= workspace_PropertyChanged;
-                        });
-                    }
-                }
-                else if (args.PropertyName.Equals("Error"))
-                {
-                    this.TryDeferToUI(() =>
-                    {
-                        this.FeedUrl = "Error: " + workspace.Error.ToString();
-                        if (workspace.Error != XPlatError.XResult32.Succeeded)
-                        {
-                            workspace.PropertyChanged -= workspace_PropertyChanged;
-                        }
-                    });
-                }                
-            }
         }
     }
 }
