@@ -24,6 +24,8 @@
         private readonly INavigationService _navigationService;
         private readonly ISessionFactory _sessionFactory;
         private readonly ApplicationDataModel _dataModel;
+        private string _stateString;
+        private string _errorString;
 
         public WorkspaceViewModel(
             IModelContainer<OnPremiseWorkspaceModel> workspace,
@@ -44,6 +46,8 @@
             _dataModel = dataModel;
             _sessionFactory = sessionFactory;
             SetName();
+            SetState();
+            SetError();
             LoadResources();
         }
 
@@ -52,6 +56,24 @@
             get { return _name; }
             private set { _dispatcher.TryDeferToUI(() => SetProperty(ref _name, value)); }
         }
+        public string State
+        {
+            get { return _stateString; }
+            private set { _dispatcher.TryDeferToUI(() => SetProperty(ref _stateString, value)); }
+        }
+
+        public string Error
+        {
+            get { return _errorString; }
+            private set { _dispatcher.TryDeferToUI(() => SetProperty(ref _errorString, value)); }
+        }
+
+        public List<IRemoteResourceViewModel> RemoteResourceViewModels
+        {
+            get { return _remoteResourceViewModels; }
+            private set { _dispatcher.TryDeferToUI(() => SetProperty(ref _remoteResourceViewModels, value)); }
+        }
+
 
         public ICommand DeleteCommand
         {
@@ -68,12 +90,6 @@
             get { return _refreshCommand; }
         }
 
-        public List<IRemoteResourceViewModel> RemoteResourceViewModels
-        {
-            get { return _remoteResourceViewModels; }
-            set { SetProperty(ref _remoteResourceViewModels, value); }
-        }
-
         private void DeleteCommandExecute()
         {
             _workspace.Model.UnSubscribe();
@@ -87,7 +103,7 @@
 
         private void EditCommandExecute()
         {
-            _navigationService.PushModalView("AddOrEditWorkspaceView", null);
+            _navigationService.PushModalView("AddOrEditWorkspaceView", new EditWorkspaceViewModelArgs(_workspace.Model));
         }
 
         private void WorkspacePropertyChanged(object sender, PropertyChangedEventArgs args)
@@ -105,7 +121,23 @@
                 case "Resources":
                     LoadResources();
                     break;
+                case "State":
+                    SetState();
+                    break;
+                case "Error":
+                    SetError();
+                    break;
             }
+        }
+
+        private void SetError()
+        {
+            this.Error = _workspace.Model.Error.ToString();
+        }
+
+        private void SetState()
+        {
+            this.State = _workspace.Model.State.ToString();
         }
 
         private void LoadResources()

@@ -41,7 +41,7 @@
     <Grid Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="12" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
@@ -52,6 +52,10 @@
             <TextBlock Text="{Binding Name}" Style="{StaticResource SubheaderTextBlockStyle}" Margin="10"/>
             <Button Style="{StaticResource InvisibleButtonStyle}" Flyout="{StaticResource WorkspaceMenuFlyout}" />
         </Grid>
+        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <TextBlock Text="{Binding State}" Foreground="LimeGreen"/>
+            <TextBlock Text="{Binding Error}" Foreground="Red"/>
+        </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Vertical">
             <ItemsControl ItemsSource="{Binding RemoteResourceViewModels}" >
                 <ItemsControl.ItemsPanel>

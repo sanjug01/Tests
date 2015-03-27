@@ -11,12 +11,11 @@ namespace RdClient.DesignTime
 {
     public class FakeWorkspaceViewModel : IWorkspaceViewModel
     {
-        private string _name;
-        private List<IRemoteResourceViewModel> _remoteResourceViewModels;
-
         public FakeWorkspaceViewModel()
         {
-            _name = "This is a fake workspace";
+            this.Name = "This is a fake workspace";
+            this.State = "State.A_Ok";
+            this.Error = "Error.SuperCriticalFailure";
             List<IRemoteResourceViewModel> remoteResourceViewModelsSource = new List<IRemoteResourceViewModel>();            
             remoteResourceViewModelsSource.Add(new FakeRemoteResourceViewModel());
             remoteResourceViewModelsSource.Add(new FakeRemoteResourceViewModel());
@@ -27,13 +26,16 @@ namespace RdClient.DesignTime
             remoteResourceViewModelsSource.Add(new FakeRemoteResourceViewModel());
             remoteResourceViewModelsSource.Add(new FakeRemoteResourceViewModel());
             remoteResourceViewModelsSource.Add(new FakeRemoteResourceViewModel());
-            _remoteResourceViewModels = remoteResourceViewModelsSource;
+            this.RemoteResourceViewModels = remoteResourceViewModelsSource;
         }
 
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; set; }
+
+        public string State { get; set; }
+
+        public string Error { get; set; }
+
+        public List<IRemoteResourceViewModel> RemoteResourceViewModels { get; set; }
 
         public ICommand DeleteCommand
         {
@@ -48,11 +50,6 @@ namespace RdClient.DesignTime
         public ICommand RefreshCommand
         {
             get { return null; }
-        }
-
-        public List<IRemoteResourceViewModel> RemoteResourceViewModels
-        {
-            get { return _remoteResourceViewModels; }
         }
     }
 }

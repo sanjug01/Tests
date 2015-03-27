@@ -10,12 +10,12 @@
     using System.Collections.Generic;
     using RdClient.Shared.Data;
     using System.Linq;
+    using System.Diagnostics.Contracts;
+    using System;
 
     public sealed class AddWorkspaceViewModelArgs
     {
-        public AddWorkspaceViewModelArgs()
-        {
-        }
+        public AddWorkspaceViewModelArgs() {}
     }
 
     public sealed class EditWorkspaceViewModelArgs
@@ -37,6 +37,8 @@
         private string _feedUrl;
         private ObservableCollection<UserComboBoxElement> _credOptions;
         private UserComboBoxElement _selectedCredOption;
+        private OnPremiseWorkspaceModel _workspace;
+        private bool _adding;
 
         public AddOrEditWorkspaceViewModel()
         {
@@ -73,14 +75,45 @@
                     if (value != null && value.UserComboBoxType == UserComboBoxType.AddNew)
                     {
                         LaunchAddUserView();
-                    }
+                    }                    
                 }
             }
         }
 
+        public OnPremiseWorkspaceModel Workspace
+        {
+            get { return _workspace; }
+            set { SetProperty(ref _workspace, value); }
+        }
+
+        public bool Adding
+        {
+            get { return _adding; }
+            set { SetProperty(ref _adding, value); }
+        }
+
         protected override void OnPresenting(object activationParameter)
         {
+            AddWorkspaceViewModelArgs addArgs = activationParameter as AddWorkspaceViewModelArgs;
+            EditWorkspaceViewModelArgs editArgs = activationParameter as EditWorkspaceViewModelArgs;
             LoadComboBoxItems();
+            if (editArgs != null)
+            {
+                this.Workspace = editArgs.Workspace;
+                this.FeedUrl = this.Workspace.FeedUrl;
+                this.SelectedCredentialOption = GetComboBoxItem(this.Workspace.Credential);
+                this.Adding = false;
+            }
+            else if (addArgs != null)
+            {
+                this.Workspace = new OnPremiseWorkspaceModel();
+                this.Workspace.Initialize(new RadcClient(new RadcEventSource(), new Helpers.TaskExecutor()), this.ApplicationDataModel);
+                this.Adding = true;
+            }
+            else
+            {
+                throw new ArgumentException("provide an AddWorkspaceViewModelArgs or EditWorkspaceViewModelArgs");
+            }            
         }
 
         private void LaunchAddUserView()
@@ -127,13 +160,18 @@
 
         private void SaveCommandExecute(object o)
         {
-            RadcClient radcClient = new RadcClient(new RadcEventSource(), new Helpers.TaskExecutor());
-            OnPremiseWorkspaceModel workspace = new OnPremiseWorkspaceModel();
-            workspace.Initialize(radcClient, this.ApplicationDataModel);
+            OnPremiseWorkspaceModel workspace = this.Workspace;
+            if (this.Adding)
+            {
+                this.ApplicationDataModel.OnPremWorkspaces.AddNewModel(workspace);
+            }
             workspace.FeedUrl = this.FeedUrl;
             workspace.CredentialsId = this.SelectedCredentialOption.Credentials.Id;
-            workspace.PropertyChanged += workspace_PropertyChanged;
-            workspace.Subscribe();
+            workspace.UnSubscribe(result =>
+            {
+                workspace.PropertyChanged += workspace_PropertyChanged;
+                workspace.Subscribe();
+            });
         }
         private void CancelCommandExecute(object o)
         {
@@ -152,7 +190,6 @@
                     {
                         this.TryDeferToUI(() =>
                         {
-                            this.ApplicationDataModel.OnPremWorkspaces.AddNewModel(workspace);
                             NavigationService.DismissModalView(PresentableView);
                             (sender as OnPremiseWorkspaceModel).PropertyChanged -= workspace_PropertyChanged;
                         });
@@ -166,12 +203,6 @@
                         if (workspace.Error != XPlatError.XResult32.Succeeded)
                         {
                             workspace.PropertyChanged -= workspace_PropertyChanged;
-                            workspace.UnSubscribe();
-                            IEnumerable<IModelContainer<OnPremiseWorkspaceModel>> matchingWorkspaces = this.ApplicationDataModel.OnPremWorkspaces.Models.Where(w => string.Compare(w.Model.FeedUrl, workspace.FeedUrl) == 0).ToArray();
-                            foreach (var matchingWorkspace in matchingWorkspaces)
-                            {
-                                this.ApplicationDataModel.OnPremWorkspaces.RemoveModel(matchingWorkspace.Id);
-                            }
                         }
                     });
                 }                

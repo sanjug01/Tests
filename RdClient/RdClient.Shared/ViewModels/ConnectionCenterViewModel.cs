@@ -401,7 +401,7 @@
 
         private void AddWorkspaceExecute()
         {
-            NavigationService.PushModalView("AddOrEditWorkspaceView", null);
+            NavigationService.PushModalView("AddOrEditWorkspaceView", new AddWorkspaceViewModelArgs());
         }
 
         private IWorkspaceViewModel CreateWorkspaceViewModel(IModelContainer<OnPremiseWorkspaceModel> workspace)
