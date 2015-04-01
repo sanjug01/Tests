@@ -48,12 +48,12 @@
 
         Point IViewport.Offset
         {
-            get { throw new NotImplementedException(); }
+            get { return _offset; }
         }
 
         double IViewport.ZoomFactor
         {
-            get { throw new NotImplementedException(); }
+            get { return _zoomFactor; }
         }
 
         void IViewport.Set(double zoomFactor, Size offset, bool animated)
