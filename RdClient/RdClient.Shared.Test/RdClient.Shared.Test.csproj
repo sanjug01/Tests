@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\BarItemsAlignmentFilteringConverterTests.cs" />
+    <Compile Include="Converters\BooleanToPasswordRevealModeConverterTests.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverterTests.cs" />
     <Compile Include="Converters\ByteArrayToStringConverterTests.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverterTests.cs" />

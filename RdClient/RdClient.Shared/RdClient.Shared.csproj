@@ -54,6 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Converters\BarItemsAlignmentFilteringConverter.cs" />
+    <Compile Include="Converters\BooleanToPasswordRevealModeConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BytesToBitmapConverter.cs" />
     <Compile Include="Converters\NotNullToVisibilityConverter.cs" />
