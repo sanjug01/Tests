@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
 using System.Collections.Generic;

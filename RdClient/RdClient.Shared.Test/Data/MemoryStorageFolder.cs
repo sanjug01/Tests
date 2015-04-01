@@ -91,7 +91,7 @@
             if (_files.TryGetValue(name, out stream))
             {
                 _files.Remove(name);
-                stream.Close();
+                stream.Dispose();
             }
         }
 

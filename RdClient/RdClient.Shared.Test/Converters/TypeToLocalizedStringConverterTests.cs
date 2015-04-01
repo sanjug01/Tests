@@ -1,6 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Shared.Converters;
 using RdClient.Shared.Helpers;
+using RdClient.Shared.Test.UAP;
 using System;
 
 namespace RdClient.Shared.Test.Converters
@@ -46,11 +47,13 @@ namespace RdClient.Shared.Test.Converters
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
         public void TypeToLocalizedStringConverterTests_ConvertBack()
         {
-            TypeToLocalizedStringConverter ttlsc = new TypeToLocalizedStringConverter();
-            ttlsc.ConvertBack(null, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<NotImplementedException>(() =>
+            {
+                TypeToLocalizedStringConverter ttlsc = new TypeToLocalizedStringConverter();
+                ttlsc.ConvertBack(null, null, null, null);
+            }));
         }
     }
 }

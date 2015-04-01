@@ -1,7 +1,8 @@
 ﻿namespace RdClient.Shared.Test.Input.Keyboard
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Input.Keyboard;
+    using RdClient.Shared.Test.UAP;
     using System;
     using System.Collections.Generic;
     using Windows.System;
@@ -151,13 +152,15 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void KeyboardState_RegisterRegisterVirtualKey_ThrowsException()
         {
-            TestKey key = new TestKey();
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                TestKey key = new TestKey();
 
-            _iState.RegisterVirtualKey(VirtualKey.Enter, key);
-            _iState.RegisterVirtualKey(VirtualKey.Enter, key);
+                _iState.RegisterVirtualKey(VirtualKey.Enter, key);
+                _iState.RegisterVirtualKey(VirtualKey.Enter, key);
+            }));
         }
 
         [TestMethod]
@@ -193,16 +196,18 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void KeyboardState_RegisterDuplicatePhysicalKey_ThrowsException()
         {
-            TestKey
-                key1 = new TestKey(),
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                TestKey
+                    key1 = new TestKey(),
                 key2 = new TestKey();
-            CorePhysicalKeyStatus status = new CorePhysicalKeyStatus() { ScanCode = 50 };
+                CorePhysicalKeyStatus status = new CorePhysicalKeyStatus() { ScanCode = 50 };
 
-            _iState.RegisterPhysicalKey(status, key1);
-            _iState.RegisterPhysicalKey(status, key2);
+                _iState.RegisterPhysicalKey(status, key1);
+                _iState.RegisterPhysicalKey(status, key2);
+            }));
         }
 
         [TestMethod]

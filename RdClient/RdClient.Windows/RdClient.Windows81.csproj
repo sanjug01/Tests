@@ -1,0 +1,526 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A89F0E52-1E86-4D53-81F5-11237460A6E7}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RdClient</RootNamespace>
+    <AssemblyName>RdClient.Windows</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <SynthesizeLinkMetadata>true</SynthesizeLinkMetadata>
+    <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PackageCertificateKeyFile>RdClient.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <TargetFrameworkVersion />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\RdClient.Shared\RdClient.Shared.csproj">
+      <Project>{ff57219c-0e7b-4cd5-9e02-287cea2d0d83}</Project>
+      <Name>RdClient.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AppHeaderControl.xaml.cs">
+      <DependentUpon>AppHeaderControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AppsListControl.xaml.cs">
+      <DependentUpon>AppsListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConnectionBarControl.xaml.cs">
+      <DependentUpon>ConnectionBarControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConnectionCenterTitleBar.xaml.cs">
+      <DependentUpon>ConnectionCenterTitleBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CredentialControl.xaml.cs">
+      <DependentUpon>CredentialControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CredentialListControl.xaml.cs">
+      <DependentUpon>CredentialListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DesktopsListControl.xaml.cs">
+      <DependentUpon>DesktopsListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ElephantEarsControl.xaml.cs">
+      <DependentUpon>ElephantEarsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GatewaySettingsControl.xaml.cs">
+      <DependentUpon>GatewaySettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GeneralSettingsControl.xaml.cs">
+      <DependentUpon>GeneralSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ItsLonelyHereControl.xaml.cs">
+      <DependentUpon>ItsLonelyHereControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MouseLayerControl.xaml.cs">
+      <DependentUpon>MouseLayerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RdSessionPanControl.xaml.cs">
+      <DependentUpon>RdSessionPanControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RemoteSessionPanel.xaml.cs">
+      <DependentUpon>RemoteSessionPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RenderingPanel.cs" />
+    <Compile Include="Controls\RenderingPanelViewport.cs" />
+    <Compile Include="Controls\RightSideBarControl.xaml.cs">
+      <DependentUpon>RightSideBarControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RemoteApplicationThumbnailView.xaml.cs">
+      <DependentUpon>RemoteApplicationThumbnailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SessionReconnectControl.xaml.cs">
+      <DependentUpon>SessionReconnectControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SettingsAddUserControl.xaml.cs">
+      <DependentUpon>SettingsAddUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SettingsNavigationControl.xaml.cs">
+      <DependentUpon>SettingsNavigationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ExtendedCredentialControl.xaml.cs">
+      <DependentUpon>ExtendedCredentialControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DesktopExtraSettingsControl.xaml.cs">
+      <DependentUpon>DesktopExtraSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UserSettingsControl.xaml.cs">
+      <DependentUpon>UserSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WorkspaceView.xaml.cs">
+      <DependentUpon>WorkspaceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Data\ApplicationDataLocalStorageFolder.cs" />
+    <Compile Include="DesignTime\FakeEditCredentialsViewModel.cs" />
+    <Compile Include="DesignTime\FakeRemoteResourceViewModel.cs" />
+    <Compile Include="DesignTime\FakeWorkspaceViewModel.cs" />
+    <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
+    <Compile Include="Models\BadCertificateConnectionSource.cs" />
+    <Compile Include="Models\ImitationRdpConnectionSource.cs" />
+    <Compile Include="Models\RejectSavedPasswordConnectionSource.cs" />
+    <Compile Include="Models\SingleSwapChainPanelRdpConnectionSource.cs" />
+    <Compile Include="Models\SuccessfulConnectionSource.cs" />
+    <Compile Include="Views\AddOrEditWorkspaceView.xaml.cs">
+      <DependentUpon>AddOrEditWorkspaceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeleteUserView.xaml.cs">
+      <DependentUpon>DeleteUserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditCredentialsView.xaml.cs">
+      <DependentUpon>EditCredentialsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InSessionEditCredentialsView.xaml.cs">
+      <DependentUpon>InSessionEditCredentialsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RemoteSessionView.xaml.cs">
+      <DependentUpon>RemoteSessionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SessionView.xaml.cs">
+      <DependentUpon>SessionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DesignTime\FakeConnectionCenterViewModel.cs" />
+    <Compile Include="DesignTime\FakeCredentialViewModel.cs" />
+    <Compile Include="DesignTime\FakeSettingsViewModel.cs" />
+    <Compile Include="Factories\NavigationServiceFactory.cs" />
+    <Compile Include="Factories\AppInitializer.cs" />
+    <Compile Include="Helpers\CoreDispatcherDeferredExecution.cs" />
+    <Compile Include="DesignTime\FakeDesktopViewModel.cs" />
+    <Compile Include="Helpers\PhysicalScreenSize.cs" />
+    <Compile Include="Helpers\TypeNameDataTemplateSelector.cs" />
+    <Compile Include="LifeTimeManagement\ActivationArgs.cs" />
+    <Compile Include="LifeTimeManagement\LifeTimeManager.cs" />
+    <Compile Include="LifeTimeManagement\RootFrameManager.cs" />
+    <Compile Include="LifeTimeManagement\SuspensionArgs.cs" />
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Content Include="Assets\desktop_placeholder.png" />
+    <Content Include="Assets\SegMDL2.1.12.ttf" />
+    <None Include="Models\AppDataStorage.cs" />
+    <Compile Include="Navigation\DispatchedNavigationService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CxWrappers\RdpConnectionFactory.cs" />
+    <Compile Include="Views\AddUserView.xaml.cs">
+      <DependentUpon>AddUserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CertificateValidationView.xaml.cs">
+      <DependentUpon>CertificateValidationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConnectionCenterView.xaml.cs">
+      <DependentUpon>ConnectionCenterView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CrossFade.cs" />
+    <Compile Include="Views\DesktopThumbnailView.xaml.cs">
+      <DependentUpon>DesktopThumbnailView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeleteDesktopsView.xaml.cs">
+      <DependentUpon>DeleteDesktopsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ErrorMessageView.xaml.cs">
+      <DependentUpon>ErrorMessageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ModalStackContainer.xaml.cs">
+      <DependentUpon>ModalStackContainer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddOrEditDesktopView.xaml.cs">
+      <DependentUpon>AddOrEditDesktopView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RdSessionPanel.xaml.cs">
+      <DependentUpon>RdSessionPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TransitionAnimationContainer.xaml.cs">
+      <DependentUpon>TransitionAnimationContainer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ViewPresenter.xaml.cs">
+      <DependentUpon>ViewPresenter.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <None Include="RdClient.Windows_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\libeay32.dll">
+      <Link>libeay32.dll</Link>
+    </Content>
+    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\ssleay32.dll">
+      <Link>ssleay32.dll</Link>
+    </Content>
+    <Content Include="Assets\desktop_placeholder.scale-100.png" />
+    <Content Include="Assets\desktop_placeholder.scale-140.png" />
+    <Content Include="Assets\desktop_placeholder.scale-180.png" />
+    <Content Include="Assets\Logo.scale-100.png" />
+    <Content Include="Assets\SmallLogo.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\Square70x70Logo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="Strings\en-US\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Localize)' == 'true'">
+    <PRIResource Include="Strings\pt-BR\Resources.resw" />
+    <PRIResource Include="Strings\zh-CN\Resources.resw" />
+    <PRIResource Include="Strings\zh-TW\Resources.resw" />
+    <PRIResource Include="Strings\da-DK\Resources.resw" />
+    <PRIResource Include="Strings\nl-NL\Resources.resw" />
+    <PRIResource Include="Strings\en-GB\Resources.resw" />
+    <PRIResource Include="Strings\fi-FI\Resources.resw" />
+    <PRIResource Include="Strings\fr-FR\Resources.resw" />
+    <PRIResource Include="Strings\de-DE\Resources.resw" />
+    <PRIResource Include="Strings\it-IT\Resources.resw" />
+    <PRIResource Include="Strings\ja-JP\Resources.resw" />
+    <PRIResource Include="Strings\nb-NO\Resources.resw" />
+    <PRIResource Include="Strings\pl-PL\Resources.resw" />
+    <PRIResource Include="Strings\ru-RU\Resources.resw" />
+    <PRIResource Include="Strings\es-ES\Resources.resw" />
+    <PRIResource Include="Strings\sv-SE\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Controls\AppHeaderControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\AppsListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ConnectionBarControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\ConnectionCenterTitleBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CredentialControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CredentialListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DesktopsListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ElephantEarsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GatewaySettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GeneralSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ItsLonelyHereControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MouseLayerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RdSessionPanControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\RemoteSessionPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RightSideBarControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RemoteApplicationThumbnailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SessionReconnectControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\SettingsAddUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SettingsNavigationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ExtendedCredentialControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DesktopExtraSettingsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\UserSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WorkspaceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddOrEditWorkspaceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DeleteUserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditCredentialsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InSessionEditCredentialsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RemoteSessionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SessionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AddUserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CertificateValidationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConnectionCenterView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DesktopThumbnailView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DeleteDesktopsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ErrorMessageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ModalStackContainer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddOrEditDesktopView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RdSessionPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TransitionAnimationContainer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ViewPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
+      <HintPath>..\..\RdClientCx\ADAL\wpa81\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd</HintPath>
+    </Reference>
+    <Reference Include="RdClientCx">
+      <HintPath>..\..\RdClientCx\WinRTClientBin\Debug\Win32\RdClientCx.winmd</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
+    <SDKReference Include="Microsoft.VCLibs, Version=12.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows</Name>
+    </SDKReference>
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
+    <VisualStudioVersion>12.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

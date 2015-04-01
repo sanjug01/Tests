@@ -1,9 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Converters;
 using RdClient.Shared.Data;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Test.Helpers;
+using RdClient.Shared.Test.UAP;
 using RdClient.Shared.ViewModels;
 using System;
 
@@ -66,32 +67,40 @@ namespace RdClient.Shared.Test.Converters
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertNullThrows()
-        {            
-            _converter.Convert(null, null, null, null);
+        {
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                _converter.Convert(null, null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertWrongTypeThrows()
         {
-            _converter.Convert(new object(), null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                _converter.Convert(new object(), null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertThrowsIfLocalizedStringPropertyIsNull()
         {
-            _converter.LocalizedString = null;
-            _converter.Convert(_comboBoxElement, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            {
+                _converter.LocalizedString = null;
+                _converter.Convert(_comboBoxElement, null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertBackThrows()
         {
-            _converter.ConvertBack(_comboBoxElement, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            {
+                _converter.ConvertBack(_comboBoxElement, null, null, null);
+            }));
         }
     }
 }

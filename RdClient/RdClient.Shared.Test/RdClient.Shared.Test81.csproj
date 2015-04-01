@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9F4E7B07-FD91-4EE0-B177-F29A88B68F68}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RdClient.Shared.Test</RootNamespace>
+    <AssemblyName>RdClient.Shared.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Runtime.InteropServices.WindowsRuntime" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.WindowsRuntime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5.1\System.Runtime.WindowsRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.XML" />
+    <Reference Include="Windows" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="Converters\BarItemsAlignmentFilteringConverterTests.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverterTests.cs" />
+    <Compile Include="Converters\ByteArrayToStringConverterTests.cs" />
+    <Compile Include="Converters\DesktopsListToLocalizedStringConverterTests.cs" />
+    <Compile Include="Converters\NotNullToVisibilityConverterTests.cs" />
+    <Compile Include="Converters\NullToVisibilityConverterTests.cs" />
+    <Compile Include="Converters\ZoomPanStateConvertersTests.cs" />
+    <Compile Include="Converters\PanKnobStateConvertersTests.cs" />
+    <Compile Include="Converters\ErrorLocalizers\RdpDisconnectReasonLocalizerTests.cs" />
+    <Compile Include="Converters\InverseBooleanToVisibilityConverterTests.cs" />
+    <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverterTests.cs" />
+    <Compile Include="Converters\RdpCertificateToErrorListConverterTests.cs" />
+    <Compile Include="Converters\ResourceIdToLocalizedStringConverterTests.cs" />
+    <Compile Include="Converters\StringLengthToInvisibilityConverterTests.cs" />
+    <Compile Include="Converters\StringLengthToVisbilityConverter.cs" />
+    <Compile Include="Converters\StringToDictionaryObjectConverterTests.cs" />
+    <Compile Include="Converters\TypeToLocalizedStringConverterTests.cs" />
+    <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverterTests.cs" />
+    <Compile Include="CxWrappers\RdpEventArgsTests.cs" />
+    <Compile Include="CxWrappers\RdpEventSourceTests.cs" />
+    <Compile Include="CxWrappers\RdpScreenSnapshotTests.cs" />
+    <Compile Include="CxWrappers\RdpUtilsTests.cs" />
+    <Compile Include="Data\CertificateTrustTests.cs" />
+    <Compile Include="Data\FailingModelSerializer.cs" />
+    <Compile Include="Data\FilteringObservableCollectionTests.cs" />
+    <Compile Include="Data\MemoryStorageFolder.cs" />
+    <Compile Include="Data\ModelContainerTests.cs" />
+    <Compile Include="Data\OrderedObservableCollectionTests.cs" />
+    <Compile Include="Data\PrimaryModelCollectionTests.cs" />
+    <Compile Include="Data\SerializableModelSerializerTests.cs" />
+    <Compile Include="Data\SerializableModelTests.cs" />
+    <Compile Include="Data\TestModel.cs" />
+    <Compile Include="Data\TestModelSerializer.cs" />
+    <Compile Include="Data\TransformingObservableCollectionTests.cs" />
+    <Compile Include="Helpers\DeferredCommandTests.cs" />
+    <Compile Include="Helpers\ExtensionsTests.cs" />
+    <Compile Include="Helpers\GroupCommandTests.cs" />
+    <Compile Include="Helpers\ITimerTests.cs" />
+    <Compile Include="Helpers\CertificateErrorHelperTests.cs" />
+    <Compile Include="Helpers\MutableObjectTests.cs" />
+    <Compile Include="Helpers\ReadWriteMonitorTests.cs" />
+    <Compile Include="Helpers\StateMachineTests.cs" />
+    <Compile Include="Helpers\TestData.cs" />
+    <Compile Include="Helpers\TestListTrace.cs" />
+    <Compile Include="Helpers\WinrtThreadPoolTimerTests.cs" />
+    <Compile Include="Input\Keyboard\CharacterKeyTests.cs" />
+    <Compile Include="Input\Keyboard\ExtendedKeyTests.cs" />
+    <Compile Include="Input\Keyboard\KeyboardStateTests.cs" />
+    <Compile Include="Input\Keyboard\KeystrokeEventArgsTests.cs" />
+    <Compile Include="Input\Keyboard\PhysicalKeyDataContainerTests.cs" />
+    <Compile Include="Input\Keyboard\ScanCodeComparerTests.cs" />
+    <Compile Include="Input\Keyboard\SingleReleaseKeyTests.cs" />
+    <Compile Include="Input\Keyboard\TestSink.cs" />
+    <Compile Include="Input\Keyboard\VirtualKeyBaseTests.cs" />
+    <Compile Include="Input\Keyboard\VirtualKeyFactoryTests.cs" />
+    <Compile Include="Input\Mouse\MouseModeTests.cs" />
+    <Compile Include="Input\Mouse\MultiTouchTests.cs" />
+    <Compile Include="Input\Mouse\PointerInputTestsBase.cs" />
+    <Compile Include="Input\Mouse\ClickModeTests.cs" />
+    <Compile Include="Input\Mouse\PointerModeZoomTests.cs" />
+    <Compile Include="Input\Pointer\PointerMode\PointerModeTests.cs" />
+    <Compile Include="Mock\BarItemsViewModel.cs" />
+    <Compile Include="Mock\ExecutionDeferrer.cs" />
+    <Compile Include="Mock\ModalPresentationContext.cs" />
+    <Compile Include="Mock\PointerManipulator.cs" />
+    <Compile Include="Mock\PointerManipulatorRecorder.cs" />
+    <Compile Include="Mock\RdpScreenSnapshot.cs" />
+    <Compile Include="Mock\RenderingPanel.cs" />
+    <Compile Include="Mock\Thumbnail.cs" />
+    <Compile Include="Mock\LocalizedString.cs" />
+    <Compile Include="Mock\NavigationService.cs" />
+    <Compile Include="Mock\PhysicalScreenSize.cs" />
+    <Compile Include="Mock\PresentableView.cs" />
+    <Compile Include="Mock\PresentableViewConstructor.cs" />
+    <Compile Include="Mock\RdpCertificate.cs" />
+    <Compile Include="Mock\RdpConnection.cs" />
+    <Compile Include="Mock\RdpConnectionFactory.cs" />
+    <Compile Include="Mock\RdpEvents.cs" />
+    <Compile Include="Mock\RdpProperties.cs" />
+    <Compile Include="Mock\SessionModel.cs" />
+    <Compile Include="Mock\TestBarItemModel.cs" />
+    <Compile Include="Mock\Timer.cs" />
+    <Compile Include="Mock\TestRdpCertificate.cs" />
+    <Compile Include="Mock\ViewFactory.cs" />
+    <Compile Include="Mock\ViewModel.cs" />
+    <Compile Include="Mock\ViewPresenter.cs" />
+    <Compile Include="Model\ApplicationDataModelTests.cs" />
+    <Compile Include="Model\CredentialsModelTests.cs" />
+    <Compile Include="Model\DesktopModelTests.cs" />
+    <Compile Include="Input\Mouse\PointerModeTests.cs" />
+    <Compile Include="Model\SessionCredentialsTests.cs" />
+    <Compile Include="Model\SessionModelTests.cs" />
+    <Compile Include="Model\SnapshotterTests.cs" />
+    <Compile Include="Model\WorkspaceModelTests.cs" />
+    <Compile Include="Navigation\Extensions\ApplicationBarExtensionTests.cs" />
+    <Compile Include="Navigation\Extensions\DeferredExecutionExtensionTests.cs" />
+    <Compile Include="Navigation\Extensions\SessionFactoryExtensionTests.cs" />
+    <Compile Include="Navigation\Extensions\TimerFactoryExtensionTests.cs" />
+    <Compile Include="Navigation\ModalPresentationCompletionTests.cs" />
+    <Compile Include="Navigation\PresentationCompletionEventArgsTests.cs" />
+    <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
+    <Compile Include="ViewModels\AddUserViewModelTests.cs" />
+    <Compile Include="ViewModels\CertificateValidationCompletionTests.cs" />
+    <Compile Include="ViewModels\CertificateValidationViewModelTests.cs" />
+    <Compile Include="ViewModels\CredentialViewModelTests.cs" />
+    <Compile Include="ViewModels\DeleteDesktopsViewModelTests.cs" />
+    <Compile Include="ViewModels\BarButtonModelTests.cs" />
+    <Compile Include="ViewModels\BarItemModelTests.cs" />
+    <Compile Include="Navigation\NavigationServiceTests.cs" />
+    <Compile Include="Navigation\PresentableViewConstructorTests.cs" />
+    <Compile Include="Navigation\PresentableViewFactoryTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\DeferringViewModelBaseTests.cs" />
+    <Compile Include="ViewModels\DeleteUserViewModelTests.cs" />
+    <Compile Include="ViewModels\EditCredentialsTasks\InSessionCredentialsTaskTests.cs" />
+    <Compile Include="ViewModels\EditCredentialsViewModelTests.cs" />
+    <Compile Include="ViewModels\ErrorMessageViewModelTests.cs" />
+    <Compile Include="ViewModels\MainPageViewModelTests.cs" />
+    <Compile Include="ViewModels\PanKnobViewModelTests.cs" />
+    <Compile Include="ViewModels\RemoteSessionViewModelTests.cs" />
+    <Compile Include="ViewModels\ZoomPanViewModelTests.cs" />
+    <Compile Include="ViewModels\MouseViewModelTests.cs" />
+    <Compile Include="ViewModels\RelayCommandTests.cs" />
+    <Compile Include="ViewModels\AddOrEditDesktopViewModelTests.cs" />
+    <Compile Include="ViewModels\SegoeGlyphBarButtonModelTests.cs" />
+    <Compile Include="ViewModels\SessionViewModelTests.cs" />
+    <Compile Include="ViewModels\SettingsViewModelTests.cs" />
+    <Compile Include="ViewModels\DesktopViewModelTests.cs" />
+    <Compile Include="ViewModels\ConnectionCenterViewModelTests.cs" />
+    <Compile Include="ViewModels\ViewModelBaseTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RdClient.Shared\RdClient.Shared.csproj">
+      <Project>{ff57219c-0e7b-4cd5-9e02-287cea2d0d83}</Project>
+      <Name>RdClient.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RdMock\RdMock.csproj">
+      <Project>{a5cff967-fa97-4083-b627-ec1ad4d5e6be}</Project>
+      <Name>RdMock</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

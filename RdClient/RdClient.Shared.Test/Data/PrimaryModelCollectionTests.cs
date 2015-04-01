@@ -1,7 +1,8 @@
 ﻿namespace RdClient.Shared.Test.Data
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Data;
+    using RdClient.Shared.Test.UAP;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -64,14 +65,16 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(KeyNotFoundException))]
         public void PrimaryModelCollection_AddModelsGetModelWithBadId_Throws()
         {
-            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
-            TestModel model = new TestModel(1);
-            for (int i = 0; i < 100; ++i)
-                collection.AddNewModel(new TestModel(i));
-            TestModel foundModel = collection.GetModel(Guid.NewGuid());
+            Assert.IsTrue(ExceptionExpecter.ExpectException<KeyNotFoundException>(() =>
+            {
+                IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+                TestModel model = new TestModel(1);
+                for (int i = 0; i < 100; ++i)
+                    collection.AddNewModel(new TestModel(i));
+                TestModel foundModel = collection.GetModel(Guid.NewGuid());
+            }));
         }
 
         [TestMethod]
@@ -87,13 +90,15 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(KeyNotFoundException))]
         public void PrimaryModelCollection_RemoveNonexistingModel_ExceptionThrown()
         {
-            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
-            TestModel model = new TestModel(1);
-            collection.AddNewModel(model);
-            collection.RemoveModel(Guid.NewGuid());
+            Assert.IsTrue(ExceptionExpecter.ExpectException<KeyNotFoundException>(() =>
+            {
+                IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+                TestModel model = new TestModel(1);
+                collection.AddNewModel(model);
+                collection.RemoveModel(Guid.NewGuid());
+            }));
         }
 
         [TestMethod]

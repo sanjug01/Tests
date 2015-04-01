@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Shared.Data;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;

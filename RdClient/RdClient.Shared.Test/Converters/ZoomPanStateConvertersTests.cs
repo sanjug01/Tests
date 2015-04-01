@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Converters;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
@@ -10,6 +10,8 @@ using Windows.UI.Xaml;
 namespace RdClient.Shared.Test.Converters
 {
     using RdClient.Shared.Input.ZoomPan;
+    using RdClient.Shared.Test.UAP;
+
     [TestClass]
     public class ZoomPanStateConvertersTests
     {
@@ -26,70 +28,88 @@ namespace RdClient.Shared.Test.Converters
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertToZoomInNullThrows()
         {
-            _converterZoomIn.Convert(null, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                _converterZoomIn.Convert(null, null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertToZoomInInvalidTypeThrows()
         {
-            string someValue = "10";
-            _converterZoomIn.Convert(someValue, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                string someValue = "10";
+                _converterZoomIn.Convert(someValue, null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void InverseConvertToZoomInThrows()
         {
-            _converterZoomIn.ConvertBack(null, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                _converterZoomIn.ConvertBack(null, null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertToZoomOutNullThrows()
         {
-            _converterZoomOut.Convert(null, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                _converterZoomOut.Convert(null, null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertToZoomOutInvalidTypeThrows()
         {
-            string someValue = "10";
-            _converterZoomOut.Convert(someValue, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                string someValue = "10";
+                _converterZoomOut.Convert(someValue, null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void InverseConvertToZoomOutThrows()
         {
-            _converterZoomOut.ConvertBack(null, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            {
+                _converterZoomOut.ConvertBack(null, null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertToPanKnobNullThrows()
         {
-            _converterPanKnob.Convert(null, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            {
+                _converterPanKnob.Convert(null, null, null, null);
+            }));
         }
 
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertToPanKnobInvalidTypeThrows()
         {
-            string someValue = "10";
-            _converterPanKnob.Convert(someValue, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                string someValue = "10";
+                _converterPanKnob.Convert(someValue, null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void InverseConvertToPanKnobThrows()
         {
-            _converterPanKnob.ConvertBack(null, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                _converterPanKnob.ConvertBack(null, null, null, null);
+            }));
         }
 
         [TestMethod]

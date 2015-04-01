@@ -1,5 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Shared.Helpers;
+using RdClient.Shared.Test.UAP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,13 +75,15 @@ namespace RdClient.Shared.Test.Helpers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(KeyNotFoundException))]
         public void StateMachine_InvalidStateFails()
         {
-            object context = new object();
-            StateMachine<TestStates, int> sm = new StateMachine<TestStates, int>();
+            Assert.IsTrue(ExceptionExpecter.ExpectException<KeyNotFoundException>(() =>
+            {
+                object context = new object();
+                StateMachine<TestStates, int> sm = new StateMachine<TestStates, int>();
 
-            sm.Consume(23);
+                sm.Consume(23);
+            }));
         }
     }
 }

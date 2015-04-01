@@ -1,7 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Converters;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Test.Helpers;
+using RdClient.Shared.Test.UAP;
 using System;
 
 namespace RdClient.Shared.Test.Converters
@@ -31,33 +32,41 @@ namespace RdClient.Shared.Test.Converters
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertBackThrows()
         {
-            _converter.ConvertBack(_testData.NewRandomString(), typeof(string), null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            {
+                _converter.ConvertBack(_testData.NewRandomString(), typeof(string), null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertNullThrows()
         {
-            _converter.Convert(null, typeof(string), null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                _converter.Convert(null, typeof(string), null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertNonStringThrows()
         {
-            _converter.Convert(new object(), typeof(string), null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                _converter.Convert(new object(), typeof(string), null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertThrowsIfLocalizedStringPropertyIsNull()
         {
-            _converter.LocalizedString = null;
-            string inputString = _testData.NewRandomString();
-            _converter.Convert(inputString, typeof(string), null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            {
+                _converter.LocalizedString = null;
+                string inputString = _testData.NewRandomString();
+                _converter.Convert(inputString, typeof(string), null, null);
+            }));
         }
     }
 }

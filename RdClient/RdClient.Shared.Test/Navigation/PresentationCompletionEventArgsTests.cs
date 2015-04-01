@@ -1,6 +1,6 @@
 ﻿namespace RdClient.Shared.Test.Navigation
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Navigation;
 
     [TestClass]

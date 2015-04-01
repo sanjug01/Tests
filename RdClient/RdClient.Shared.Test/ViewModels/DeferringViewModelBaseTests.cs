@@ -1,6 +1,6 @@
 ﻿namespace RdClient.Shared.Test.ViewModels
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;

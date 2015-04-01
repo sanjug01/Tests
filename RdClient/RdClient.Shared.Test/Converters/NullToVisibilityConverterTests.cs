@@ -1,7 +1,8 @@
 ﻿namespace RdClient.Shared.Test.Converters
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Converters;
+    using RdClient.Shared.Test.UAP;
     using System;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Data;
@@ -53,12 +54,15 @@
             Assert.AreEqual(Visibility.Collapsed, converted);
         }
 
-        [TestMethod, ExpectedException(typeof(NotImplementedException))]
+        [TestMethod]
         public void NullToVisibilityConverter_Inverse_Throws()
         {
-            IValueConverter converter = new NullToVisibilityConverter();
+            Assert.IsTrue(ExceptionExpecter.ExpectException<NotImplementedException>(() =>
+            {
+                IValueConverter converter = new NullToVisibilityConverter();
 
-            object converted = converter.ConvertBack(Visibility.Visible, null, null, null);
+                object converted = converter.ConvertBack(Visibility.Visible, null, null, null);
+            }));
         }
     }
 }

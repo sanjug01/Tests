@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Shared.Data;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.Navigation.Extensions;
 using RdClient.Shared.Test.Data;
 using RdClient.Shared.Test.Helpers;
+using RdClient.Shared.Test.UAP;
 using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -86,13 +87,15 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        [ExpectedException(typeof(KeyNotFoundException))]
         public void DeleteCommandDeletesCredFromDataModel()
         {
-            Assert.AreSame(_cred.Model, _dataModel.LocalWorkspace.Credentials.GetModel(_cred.Id));
-            _navService.Expect("DismissModalView", new object[] { _view }, 0);
-            _vm.DeleteCommand.Execute(null);
-            CredentialsModel model = _dataModel.LocalWorkspace.Credentials.GetModel(_cred.Id);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<KeyNotFoundException>(() =>
+            {
+                Assert.AreSame(_cred.Model, _dataModel.LocalWorkspace.Credentials.GetModel(_cred.Id));
+                _navService.Expect("DismissModalView", new object[] { _view }, 0);
+                _vm.DeleteCommand.Execute(null);
+                CredentialsModel model = _dataModel.LocalWorkspace.Credentials.GetModel(_cred.Id);
+            }));
         }
 
         [TestMethod]

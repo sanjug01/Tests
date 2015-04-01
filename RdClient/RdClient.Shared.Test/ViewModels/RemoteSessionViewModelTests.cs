@@ -1,6 +1,6 @@
 ﻿namespace RdClient.Shared.Test.ViewModels
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Data;
@@ -584,7 +584,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             Assert.IsNotNull(connectTask);
             connectTask.Wait();
-            connectTask.Dispose();
+            //connectTask.Dispose();
             _defex.ExecuteAll();
 
             Assert.IsTrue(_vm.IsRenderingPanelActive);
@@ -632,7 +632,7 @@
             _nav.NavigateToView("RemoteSessionView", session);
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             task.Wait();
-            task.Dispose();
+            //task.Dispose();
             task = null;
             _defex.ExecuteAll();
             _vm.ShowSideBars.Execute(null);
@@ -640,7 +640,7 @@
 
             Assert.IsNotNull(task);
             task.Wait();
-            task.Dispose();
+            //task.Dispose();
             task = null;
             _defex.ExecuteAll();
 
@@ -677,7 +677,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             Assert.IsNotNull(connectTask);
             connectTask.Wait();
-            connectTask.Dispose();
+            //connectTask.Dispose();
             _defex.ExecuteAll();
             Assert.IsTrue(_vm.ShowSideBars.CanExecute(null));
             _vm.ShowSideBars.Execute(null);
@@ -719,7 +719,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             Assert.IsNotNull(connectTask);
             connectTask.Wait();
-            connectTask.Dispose();
+            //connectTask.Dispose();
             Assert.AreEqual(0, credentialsRequestCount);
             _defex.ExecuteAll();
 

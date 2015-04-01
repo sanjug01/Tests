@@ -1,5 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Converters;
+using RdClient.Shared.Test.UAP;
 using System;
 using Windows.UI.Xaml;
 
@@ -29,11 +30,13 @@ namespace RdClient.Shared.Test.Converters
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotImplementedException))]
         public void StringLengthToInvisibilityConverter_ConvertBack()
         {
-            StringLengthToVisibilityConverter sltic = new StringLengthToVisibilityConverter();
-            sltic.ConvertBack(null, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<NotImplementedException>(() =>
+            {
+                StringLengthToVisibilityConverter sltic = new StringLengthToVisibilityConverter();
+                sltic.ConvertBack(null, null, null, null);
+            }));
         }
     }
 }

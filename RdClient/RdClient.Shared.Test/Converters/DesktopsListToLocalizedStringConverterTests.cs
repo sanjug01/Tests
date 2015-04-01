@@ -1,8 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Converters;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using RdClient.Shared.Test.Helpers;
+using RdClient.Shared.Test.UAP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,22 +57,23 @@ namespace RdClient.Shared.Test.Converters
             string listIsEmptyString = _stringTable.GetLocalizedString(DesktopsListToLocalizedStringConverter.emptyDesktopListStringId);
             Assert.AreEqual(listIsEmptyString, _converter.Convert(new object(), null, null, null));
         }
-
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertThrowsIfLocalizedStringPropertyIsNull()
         {
-            _converter.LocalizedString = null;
-            _converter.Convert(_desktops, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() => {
+                _converter.LocalizedString = null;
+                _converter.Convert(_desktops, null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertBackThrows()
         {
-            _converter.ConvertBack(_testData.NewRandomString(), null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            {
+                _converter.ConvertBack(_testData.NewRandomString(), null, null, null);
+            }));
         }
-
 
     }
 }

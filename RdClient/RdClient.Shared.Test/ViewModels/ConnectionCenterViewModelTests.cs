@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using RdClient.Shared.Models;

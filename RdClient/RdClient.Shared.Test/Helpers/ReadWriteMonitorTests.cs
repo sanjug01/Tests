@@ -1,6 +1,6 @@
 ﻿namespace RdClient.Shared.Test.Helpers
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Helpers;
     using System;
     using System.Threading;

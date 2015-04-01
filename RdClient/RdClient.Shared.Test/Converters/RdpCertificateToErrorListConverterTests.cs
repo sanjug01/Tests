@@ -1,8 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Converters;
 using RdClient.Shared.Converters;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
+using RdClient.Shared.Test.UAP;
 using System;
 using System.Collections.Generic;
 
@@ -53,33 +54,41 @@ namespace RdClient.Shared.Test.Converters
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertBackThrows()
         {
-            _converter.ConvertBack(new List<string>(), null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            {
+                _converter.ConvertBack(new List<string>(), null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertNullThrows()
         {
-            _converter.Convert(null, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                _converter.Convert(null, null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertCertificateWithNullErrorPropertyThrows()
         {
-            _cert.Error = null;
-            _converter.Convert(_cert, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            {
+                _cert.Error = null;
+                _converter.Convert(_cert, null, null, null);
+            }));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ConvertThrowsIfLocalizedStringPropertyIsNull()
         {
-            _converter.TypeToLocalizedStringConverter = null;
-            _converter.Convert(_cert, null, null, null);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            {
+                _converter.TypeToLocalizedStringConverter = null;
+                _converter.Convert(_cert, null, null, null);
+            }));
         }
     }
 }

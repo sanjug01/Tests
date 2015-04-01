@@ -1,5 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Shared.Helpers;
+using RdClient.Shared.Test.UAP;
 using System;
 using System.Threading;
 
@@ -32,12 +33,15 @@ namespace RdClient.Shared.Test.Helpers
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void TestCallStartOnRunningTimerThrows()
         {
-            TimeSpan longTimespan = new TimeSpan(1, 0, 0, 0);
-            _timer.Start(() => Assert.Fail("Callback Shouldn't be called"), longTimespan, false);
-            _timer.Start(() => Assert.Fail("Callback Shouldn't be called"), longTimespan, false);
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            {
+
+                TimeSpan longTimespan = new TimeSpan(1, 0, 0, 0);
+                _timer.Start(() => Assert.Fail("Callback Shouldn't be called"), longTimespan, false);
+                _timer.Start(() => Assert.Fail("Callback Shouldn't be called"), longTimespan, false);
+            }));
         }
 
         [TestMethod]
@@ -46,7 +50,7 @@ namespace RdClient.Shared.Test.Helpers
             int timerCallbacks = 0;
             TimeSpan shortTimespan = TimeSpan.FromMilliseconds(1.0d);
             _timer.Start(() => System.Threading.Interlocked.Increment(ref timerCallbacks), shortTimespan, true);
-            Thread.Sleep(10);
+            UAPSleep.Sleep(10);
             _timer.Stop();
             Assert.IsTrue(timerCallbacks > 1);                        
         }
@@ -57,7 +61,7 @@ namespace RdClient.Shared.Test.Helpers
             int timerCallbacks = 0;
             TimeSpan shortTimespan = TimeSpan.FromMilliseconds(1.0d);
             _timer.Start(() => System.Threading.Interlocked.Increment(ref timerCallbacks), shortTimespan, false);
-            Thread.Sleep(10);
+            UAPSleep.Sleep(10);
             _timer.Stop();
             Assert.AreEqual(1, timerCallbacks);
         }

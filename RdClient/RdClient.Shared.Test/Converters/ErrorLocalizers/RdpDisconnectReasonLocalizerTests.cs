@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Shared.Converters;
 using RdClient.Shared.Converters.ErrorLocalizers;
 using RdClient.Shared.CxWrappers.Errors;
