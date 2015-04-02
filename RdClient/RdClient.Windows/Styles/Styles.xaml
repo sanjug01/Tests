@@ -539,6 +539,90 @@
         </Setter>
     </Style>
 
+    <!-- gateways list box is similar to credentials list box-->
+
+    <DataTemplate x:Key="GatewayDataTemplate">
+        <controls:GatewayControl />
+    </DataTemplate>
+
+    <DataTemplate x:Key="SelectedGatewayDataTemplate">
+        <controls:ExtendedGatewayControl />
+    </DataTemplate>
+    
+    <Style x:Key="SettingsGatewayListBoxItemStyle" TargetType="ListBoxItem">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="TabNavigation" Value="Local" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="LayoutRoot"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="0">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PressedHighlight"
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        To="0.2"
+                                                        Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PressedHighlight"
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        To="0.5"
+                                                        Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="SelectionStates">
+                                <VisualState x:Name="Unselected">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ItemHighlight"
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        To="0"
+                                                        Duration="0" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                    Storyboard.TargetProperty="ContentTemplate">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource GatewayDataTemplate}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Selected" />
+                                <VisualState x:Name="SelectedUnfocused" />
+                                <VisualState x:Name="SelectedDisabled" />
+                                <VisualState x:Name="SelectedPointerOver" />
+                                <VisualState x:Name="SelectedPressed" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid x:Name="InnerGrid"
+                            Background="Transparent">
+                            <ContentPresenter x:Name="ContentPresenter"
+                                            Content="{TemplateBinding Content}"
+                                            ContentTransitions="{TemplateBinding ContentTransitions}"
+                                            ContentTemplate="{StaticResource SelectedGatewayDataTemplate}"
+                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            Margin="{TemplateBinding Padding}" />
+                            <Rectangle x:Name="ItemHighlight" IsHitTestVisible="False"
+                                    Fill="{StaticResource CredentialSelectedColor}"
+                                    Opacity="1" />
+                            <Rectangle x:Name="PressedHighlight" IsHitTestVisible="False"
+                                    Fill="{StaticResource BackButtonBackgroundBrush}"
+                                    Opacity="0" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <!-- 
     ======================================================================================
     Dialog styles 

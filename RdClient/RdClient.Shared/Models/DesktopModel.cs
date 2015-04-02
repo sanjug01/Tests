@@ -27,6 +27,9 @@
         [DataMember(Name = "CredentialsId", EmitDefaultValue = false)]
         private Guid _credentialsId;
 
+        [DataMember(Name = "GatewayId", EmitDefaultValue = false)]
+        private Guid _gatewayId;
+
         [DataMember(Name = "AdminSession", EmitDefaultValue = false)]
         private bool _isAdminSession;
 
@@ -63,6 +66,21 @@
             get { return !Guid.Empty.Equals(_credentialsId); }
         }
 
+        public Guid GatewayId
+        {
+            get { return _gatewayId; }
+            set
+            {
+                if (this.SetProperty(ref _gatewayId, value))
+                    EmitPropertyChanged("HasGateway");
+            }
+        }
+
+        public bool HasGateway
+        {
+            get { return !Guid.Empty.Equals(_gatewayId); }
+        }
+
         public bool IsAdminSession
         {
             get { return _isAdminSession; }
@@ -84,6 +102,7 @@
         public DesktopModel()
         {
             _credentialsId = Guid.Empty;
+            _gatewayId = Guid.Empty;
         }
 
         public override IRdpConnection CreateConnection(IRdpConnectionFactory connectionFactory, IRenderingPanel renderingPanel)

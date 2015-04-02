@@ -11,6 +11,7 @@
     /// </summary>
     [DataContract(IsReference=true)]
     [KnownType(typeof(CredentialsModel))]
+    [KnownType(typeof(GatewayModel))]
     [KnownType(typeof(LocalWorkspaceModel))]
     [KnownType(typeof(OnPremiseWorkspaceModel))]
     [KnownType(typeof(CloudWorkspaceModel))]

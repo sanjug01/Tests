@@ -35,6 +35,39 @@ namespace RdClient.Shared.Test.Helpers
             return new DesktopModel() { HostName = NewRandomString(), CredentialsId = credId };
         }
 
+        public DesktopModel NewValidDesktopWithGateway(Guid gatewayId)
+        {
+            return new DesktopModel() { HostName = NewRandomString(), CredentialsId = Guid.Empty, GatewayId = gatewayId };
+        }
+
+        public IModelContainer<GatewayModel> NewValidGateway()
+        {
+            return TemporaryModelContainer<GatewayModel>.WrapModel(Guid.NewGuid(),
+                new GatewayModel()
+                {
+                    HostName = NewRandomString(),
+                    CredentialsId = Guid.Empty
+                });
+        }
+
+        public IList<IModelContainer<GatewayModel>> NewSmallListOfGateways()
+        {
+            int count = RandomSource.Next(3, 10);
+            IList<IModelContainer<GatewayModel>> gateways = new List<IModelContainer<GatewayModel>>(count);
+
+            for (int i = 0; i < count; i++)
+            {
+                gateways.Add(NewValidGateway());
+            }
+
+            return gateways;
+        }
+
+        public GatewayModel NewValidGatewayWithCredential(Guid credId)
+        {
+            return new GatewayModel() { HostName = NewRandomString(), CredentialsId = credId };
+        }
+
         public IList<DesktopModel> NewSmallListOfDesktops(IList<IModelContainer<CredentialsModel>> creds)
         {
             int count = RandomSource.Next(3, 10);
@@ -43,6 +76,18 @@ namespace RdClient.Shared.Test.Helpers
             {
                 Guid credId = creds[_rand.Next(0, creds.Count)].Id;
                 desktops.Add(NewValidDesktop(credId));
+            }
+            return desktops;
+        }
+
+        public IList<DesktopModel> NewSmallListOfDesktopsWithGateway(IList<IModelContainer<GatewayModel>> gateways)
+        {
+            int count = RandomSource.Next(3, 10);
+            IList<DesktopModel> desktops = new List<DesktopModel>(count);
+            for (int i = 0; i < count; i++)
+            {
+                Guid gatewayId = gateways[_rand.Next(0, gateways.Count)].Id;
+                desktops.Add(NewValidDesktopWithGateway(gatewayId));
             }
             return desktops;
         }

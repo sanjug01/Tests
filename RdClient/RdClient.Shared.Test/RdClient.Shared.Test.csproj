@@ -202,6 +202,7 @@
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\ApplicationDataModelTests.cs" />
     <Compile Include="Model\CredentialsModelTests.cs" />
+    <Compile Include="Model\GatewayModelTests.cs" />
     <Compile Include="Model\DesktopModelTests.cs" />
     <Compile Include="Input\Mouse\PointerModeTests.cs" />
     <Compile Include="Model\SessionCredentialsTests.cs" />
@@ -222,6 +223,7 @@
     <Compile Include="RdTest\ExceptionExpecter.cs" />
     <Compile Include="RdTest\UAPSleep.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
+    <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
     <Compile Include="ViewModels\AddUserViewModelTests.cs" />
     <Compile Include="ViewModels\CertificateValidationCompletionTests.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModelTests.cs" />
@@ -234,6 +236,7 @@
     <Compile Include="Navigation\PresentableViewFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\DeferringViewModelBaseTests.cs" />
+    <Compile Include="ViewModels\DeleteGatewayViewModelTests.cs" />
     <Compile Include="ViewModels\DeleteUserViewModelTests.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\InSessionCredentialsTaskTests.cs" />
     <Compile Include="ViewModels\EditCredentialsViewModelTests.cs" />

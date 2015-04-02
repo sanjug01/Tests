@@ -22,6 +22,7 @@
         private WorkspaceModel<LocalWorkspaceModel> _localWorkspace;
         private IModelCollection<OnPremiseWorkspaceModel> _onPremWorkspaces;
         private IModelCollection<CredentialsModel> _credentials;
+        private IModelCollection<GatewayModel> _gateways;
 
         public ICommand Save
         {
@@ -64,6 +65,12 @@
         { 
             get { return _onPremWorkspaces; }
             private set { this.SetProperty(ref _onPremWorkspaces, value); }
+        }
+
+        public IModelCollection<GatewayModel> Gateways
+        {
+            get { return _gateways; }
+            private set { this.SetProperty(ref _gateways, value); }
         }
 
         public WorkspaceModel<LocalWorkspaceModel> LocalWorkspace
@@ -128,8 +135,17 @@
                 this.OnPremWorkspaces = PrimaryModelCollection<OnPremiseWorkspaceModel>.Load(_rootFolder.CreateFolder("OnPremWorkspaces"), _modelSerializer);
                 SubscribeForPersistentStateUpdates(this.OnPremWorkspaces);
 
+                //load gateways from disk
+                this.Gateways = PrimaryModelCollection<GatewayModel>.Load(_rootFolder.CreateFolder("Gateways"), _modelSerializer);
+                SubscribeForPersistentStateUpdates(this.Gateways);
+
+                // manage changes for Credentials collection
                 INotifyCollectionChanged ncc = this.Credentials.Models;
                 ncc.CollectionChanged += this.OnCredentialsCollectionChanged;
+
+                // manage changes for Gateways collection
+                ncc = this.Gateways.Models;
+                ncc.CollectionChanged += this.OnGatewaysCollectionChanged;
             }
         }
 
@@ -164,6 +180,16 @@
                             if (credentialsContainer.Id.Equals(workspace.Model.CredentialsId))
                             {
                                 workspace.Model.CredentialsId = Guid.Empty;
+                            }
+                        }
+                        //
+                        // Remove references to deleted credentials from all gateways
+                        //
+                        foreach (IModelContainer<GatewayModel> gateway in _gateways.Models)
+                        {
+                            if (credentialsContainer.Id.Equals(gateway.Model.CredentialsId))
+                            {
+                                gateway.Model.CredentialsId = Guid.Empty;
                             }
                         }
                     }
@@ -207,8 +233,72 @@
                             }
                         }
                     }
+                    //
+                    // For each gateway check if the credential reference is valid, and if it is not, remove it.
+                    //
+                    foreach (IModelContainer<GatewayModel> gateway in _gateways.Models)
+                    {
+                        if (!Guid.Empty.Equals(gateway.Model.CredentialsId))
+                        {
+                            try
+                            {
+                                this.Credentials.GetModel(gateway.Model.CredentialsId);
+                            }
+                            catch (KeyNotFoundException)
+                            {
+                                gateway.Model.CredentialsId = Guid.Empty;
+                            }
+                        }
+                    }
                     break;
             }
         }
+
+        private void OnGatewaysCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (IModelContainer<GatewayModel> gatewayContainer in e.OldItems)
+                    {
+                        //
+                        // Remove references to deleted gateways from all local desktops
+                        //
+                        foreach (IModelContainer<RemoteConnectionModel> connectionContainer in _localWorkspace.Connections.Models)
+                        {
+                            connectionContainer.Model.CastAndCall<DesktopModel>(desktop =>
+                            {
+                                if (gatewayContainer.Id.Equals(desktop.GatewayId))
+                                    desktop.GatewayId = Guid.Empty;
+                            });
+                        }
+                    }
+                    break;
+
+                case NotifyCollectionChangedAction.Reset:
+                    //
+                    // For each desktop check if the gateway reference is valid, and if it is not, remove it.
+                    //
+                    foreach (IModelContainer<RemoteConnectionModel> connectionContainer in _localWorkspace.Connections.Models)
+                    {
+                        connectionContainer.Model.CastAndCall<DesktopModel>(desktop =>
+                        {
+                            if (!Guid.Empty.Equals(desktop.GatewayId))
+                            {
+                                try
+                                {
+                                    this.Credentials.GetModel(desktop.GatewayId);
+                                }
+                                catch (KeyNotFoundException)
+                                {
+                                    desktop.GatewayId = Guid.Empty;
+                                }
+                            }
+                        });
+                    }
+                    break;
+            }
+        }
+
     }
 }
