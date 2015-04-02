@@ -49,7 +49,7 @@ namespace RdClient.Shared.Test.Converters
         [TestMethod]
         public void InverseConvertToZoomInThrows()
         {
-            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
             {
                 _converterZoomIn.ConvertBack(null, null, null, null);
             }));
@@ -86,7 +86,7 @@ namespace RdClient.Shared.Test.Converters
         [TestMethod]
         public void ConvertToPanKnobNullThrows()
         {
-            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
             {
                 _converterPanKnob.Convert(null, null, null, null);
             }));
@@ -106,7 +106,7 @@ namespace RdClient.Shared.Test.Converters
         [TestMethod]
         public void InverseConvertToPanKnobThrows()
         {
-            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
             {
                 _converterPanKnob.ConvertBack(null, null, null, null);
             }));

@@ -60,40 +60,6 @@ namespace RdClient.Shared.Test.Model
         }
 
         [TestMethod]
-        public void TestRepeatingTimerCreatedCorrectlyAfterFirstSnapshot()
-        {
-            Assert.Fail("Disabled Test");
-            //_snapshotter.Activate();
-            //Mock.RdpScreenSnapshot snapshot = new Mock.RdpScreenSnapshot();
-            //_eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());
-            //_mockConnection.Expect("GetSnapshot", new List<object>() { }, snapshot);
-            //_mockThumb.Expect("Update", new List<object>() { snapshot }, 0);
-            //Assert.IsNotNull(_mockTimer.Callback);
-            //_mockTimer.Callback();            
-            //Assert.AreEqual(2, _mockTimer.CallsToStart);
-            //Assert.IsTrue(_mockTimer.Running);
-            //Assert.AreEqual(true, _mockTimer.Recurring);
-        }
-
-        [TestMethod]
-        public void TestSnapshotTakenWhenTimerCallbacksExecuted()
-        {
-            Assert.Fail("Disabled Test");
-            //_snapshotter.Activate();
-            //Mock.RdpScreenSnapshot snapshot = new Mock.RdpScreenSnapshot();
-            ////first snapshot
-            //_eventSource.EmitFirstGraphicsUpdate(_mockConnection, new FirstGraphicsUpdateArgs());       
-            //_mockConnection.Expect("GetSnapshot", new List<object>() { }, snapshot);
-            //_mockThumb.Expect("Update", new List<object>() { snapshot }, 0);
-            //_mockTimer.Callback();
-            ////repeating snapshot
-            //snapshot = new Mock.RdpScreenSnapshot();
-            //_mockConnection.Expect("GetSnapshot", new List<object>() { }, snapshot);
-            //_mockThumb.Expect("Update", new List<object>() { snapshot }, 0);
-            //_mockTimer.Callback();
-        }
-
-        [TestMethod]
         public void TestSnapshotsNotTakenWhenUseThumbnailsSettingIsFalse()
         {
             _snapshotter.Activate();

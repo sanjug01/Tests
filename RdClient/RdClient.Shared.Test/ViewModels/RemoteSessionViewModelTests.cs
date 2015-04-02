@@ -99,8 +99,8 @@
 
                 event EventHandler<Shared.Input.Pointer.PointerEventArgs> IRenderingPanel.PointerChanged
                 {
-                    add { throw new NotImplementedException(); }
-                    remove { throw new NotImplementedException(); }
+                    add { }
+                    remove { }
                 }
 
 
