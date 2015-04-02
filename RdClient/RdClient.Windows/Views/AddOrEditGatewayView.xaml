@@ -68,7 +68,6 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock x:Uid="AddOrEditGateway-ServerName-Error"
                                    Text="(*)(d)" Padding="0,0,8,0"
-                                   ToolTipService.ToolTip="Invalid characters in server name(d)"
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Foreground="{StaticResource rdErrorBrush}"
                                    Visibility="{Binding Path=IsHostValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
