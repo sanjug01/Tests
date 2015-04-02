@@ -21,6 +21,7 @@
         private GeneralSettings _settings;
         private WorkspaceModel<LocalWorkspaceModel> _localWorkspace;
         private IModelCollection<OnPremiseWorkspaceModel> _onPremWorkspaces;
+        private IModelCollection<CredentialsModel> _credentials;
 
         public ICommand Save
         {
@@ -91,6 +92,12 @@
             _save = new GroupCommand();            
         }
 
+        public IModelCollection<CredentialsModel> Credentials
+        {
+            get { return _credentials; }
+            private set { this.SetProperty(ref _credentials, value); }
+        }
+
         private void ComposeDataModel()
         {
             if (null != _rootFolder && null != _modelSerializer)
@@ -102,6 +109,9 @@
                 // Create all subcomponents of the data model. This is done only once, when both the root folder and model serializer
                 // have been set (in XAML).
                 //
+                this.Credentials = PrimaryModelCollection<CredentialsModel>.Load(_rootFolder.CreateFolder("credentials"), _modelSerializer);
+                SubscribeForPersistentStateUpdates(this.Credentials);
+
                 this.LocalWorkspace = new WorkspaceModel<LocalWorkspaceModel>(_rootFolder.CreateFolder("LocalWorkspace"), _modelSerializer);
                 SubscribeForPersistentStateUpdates(this.LocalWorkspace);
                 //
@@ -116,9 +126,9 @@
 
                 //load workspaces from disk
                 this.OnPremWorkspaces = PrimaryModelCollection<OnPremiseWorkspaceModel>.Load(_rootFolder.CreateFolder("OnPremWorkspaces"), _modelSerializer);
-                SubscribeForPersistentStateUpdates(this.OnPremWorkspaces);                
+                SubscribeForPersistentStateUpdates(this.OnPremWorkspaces);
 
-                INotifyCollectionChanged ncc = this.LocalWorkspace.Credentials.Models;
+                INotifyCollectionChanged ncc = this.Credentials.Models;
                 ncc.CollectionChanged += this.OnCredentialsCollectionChanged;
             }
         }
@@ -171,7 +181,7 @@
                             {
                                 try
                                 {
-                                    _localWorkspace.Credentials.GetModel(desktop.CredentialsId);
+                                    this.Credentials.GetModel(desktop.CredentialsId);
                                 }
                                 catch (KeyNotFoundException)
                                 {
@@ -189,7 +199,7 @@
                         {
                             try
                             {
-                                _localWorkspace.Credentials.GetModel(workspace.Model.CredentialsId);
+                                this.Credentials.GetModel(workspace.Model.CredentialsId);
                             }
                             catch (KeyNotFoundException)
                             {

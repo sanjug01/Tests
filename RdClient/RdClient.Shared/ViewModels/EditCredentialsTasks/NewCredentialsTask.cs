@@ -87,7 +87,7 @@
                 //
                 // Do not permit duplicate user name
                 //
-                foreach (IModelContainer<CredentialsModel> container in _dataModel.LocalWorkspace.Credentials.Models)
+                foreach (IModelContainer<CredentialsModel> container in _dataModel.Credentials.Models)
                 {
                     if(string.Equals(container.Model.Username, userName,StringComparison.OrdinalIgnoreCase))
                     {
@@ -113,7 +113,7 @@
             //
             // Add the model to the data model collection and call the delegate.
             //
-            _credentialsAdded(_dataModel.LocalWorkspace.Credentials.AddNewModel(_credentials));
+            _credentialsAdded(_dataModel.Credentials.AddNewModel(_credentials));
         }
 
         protected override void OnCancelled(IEditCredentialsViewModel viewModel)

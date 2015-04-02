@@ -27,6 +27,8 @@
             Assert.IsNotNull(adm.ModelSerializer);
             Assert.IsNotNull(adm.LocalWorkspace);
             Assert.IsNotNull(adm.CertificateTrust);
+            Assert.IsNotNull(adm.Credentials);
+            Assert.AreEqual(0, adm.Credentials.Models.Count);
             Assert.IsFalse(po.Save.CanExecute(null));
         }
 
@@ -55,7 +57,7 @@
             };
             IPersistentObject po = adm;
 
-            adm.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel());
+            adm.Credentials.AddNewModel(new CredentialsModel());
 
             Assert.IsTrue(po.Save.CanExecute(null));
         }
@@ -112,9 +114,9 @@
             };
             IPersistentObject po = adm;
 
-            adm.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel());
+            adm.Credentials.AddNewModel(new CredentialsModel());
             po.Save.Execute(null);
-            CredentialsModel cred = adm.LocalWorkspace.Credentials.Models[0].Model;
+            CredentialsModel cred = adm.Credentials.Models[0].Model;
             Assert.IsNotNull(cred);
             Assert.IsFalse(po.Save.CanExecute(null));
             po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
@@ -178,7 +180,7 @@
                 ModelSerializer = new SerializableModelSerializer()
             };
             IPersistentObject po = adm;
-            Guid credentialsId = adm.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel());
+            Guid credentialsId = adm.Credentials.AddNewModel(new CredentialsModel());
             for (int i = 0; i < 100; ++i )
             {
                 DesktopModel desktop = new DesktopModel();
@@ -186,7 +188,7 @@
             }
             po.Save.Execute(null);
 
-            adm.LocalWorkspace.Credentials.RemoveModel(credentialsId);
+            adm.Credentials.RemoveModel(credentialsId);
 
             int desktops = 0;
 

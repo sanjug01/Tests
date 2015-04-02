@@ -164,7 +164,7 @@
 
             if (result != null && !result.UserCancelled)
             {
-                this.ApplicationDataModel.LocalWorkspace.Credentials.AddNewModel(result.Credentials);
+                this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
                 LoadComboBoxItems();
                 this.SelectedCredentialOption = GetComboBoxItem(result.Credentials);
             }
@@ -186,7 +186,7 @@
         {
             List<UserComboBoxElement> comboBoxes = new List<UserComboBoxElement>();
             this.CredentialOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
-            foreach (IModelContainer<CredentialsModel> cred in this.ApplicationDataModel.LocalWorkspace.Credentials.Models)
+            foreach (IModelContainer<CredentialsModel> cred in this.ApplicationDataModel.Credentials.Models)
             {
                 this.CredentialOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, cred));
             }

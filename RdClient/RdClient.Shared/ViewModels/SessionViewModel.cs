@@ -311,9 +311,9 @@
 #if false
                         _connectionInformation.Desktop.CredentialsId = _connectionInformation.Credentials.Id;//update desktop to use these creds
 
-                        if (!DataModel.LocalWorkspace.Credentials.ContainsItemWithId(_connectionInformation.Credentials.Id))
+                        if (!DataModel.Credentials.ContainsItemWithId(_connectionInformation.Credentials.Id))
                         {
-                            DataModel.LocalWorkspace.Credentials.Add(_connectionInformation.Credentials);//add creds to data model if not already there
+                            DataModel.Credentials.Add(_connectionInformation.Credentials);//add creds to data model if not already there
                         }
 #endif
                     }

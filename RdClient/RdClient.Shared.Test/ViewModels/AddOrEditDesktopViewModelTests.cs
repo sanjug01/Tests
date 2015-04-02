@@ -187,7 +187,7 @@
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
-                Guid credId = _dataModel.LocalWorkspace.Credentials.AddNewModel(credentials);
+                Guid credId = _dataModel.Credentials.AddNewModel(credentials);
 
                 DesktopModel desktop = new DesktopModel() { HostName = "foo" };
                 _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);                
@@ -237,7 +237,7 @@
                 DesktopModel desktop = new DesktopModel()
                 {
                     HostName = "foo",
-                    CredentialsId = _dataModel.LocalWorkspace.Credentials.AddNewModel(credentials)
+                    CredentialsId = _dataModel.Credentials.AddNewModel(credentials)
                 };
                 _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
 
@@ -259,7 +259,7 @@
                 DesktopModel desktop = new DesktopModel() { HostName = "myPc" };
 
                 _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
-                desktop.CredentialsId = _dataModel.LocalWorkspace.Credentials.AddNewModel(credentials);
+                desktop.CredentialsId = _dataModel.Credentials.AddNewModel(credentials);
 
                 EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
                 ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);

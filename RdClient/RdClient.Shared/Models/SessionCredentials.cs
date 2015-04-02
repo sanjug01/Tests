@@ -61,7 +61,7 @@
             //
             //
             //
-            foreach(IModelContainer<CredentialsModel> c in dataModel.LocalWorkspace.Credentials.Models)
+            foreach(IModelContainer<CredentialsModel> c in dataModel.Credentials.Models)
             {
                 if(string.Equals(c.Model.Username, _credentials.Username, StringComparison.OrdinalIgnoreCase))
                 {
@@ -75,7 +75,7 @@
             if (Guid.Empty.Equals(credentialsId))
             {
                 CredentialsModel newCredentials = new CredentialsModel(_credentials);
-                credentialsId = dataModel.LocalWorkspace.Credentials.AddNewModel(newCredentials);
+                credentialsId = dataModel.Credentials.AddNewModel(newCredentials);
             }
 
             return credentialsId;

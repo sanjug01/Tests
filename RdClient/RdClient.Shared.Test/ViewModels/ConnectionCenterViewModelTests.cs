@@ -54,7 +54,7 @@ namespace RdClient.Shared.Test.ViewModels
 
             foreach (IModelContainer<CredentialsModel> cred in creds)
             {
-                _dataModel.LocalWorkspace.Credentials.AddNewModel(cred.Model);
+                _dataModel.Credentials.AddNewModel(cred.Model);
             }
 
             foreach(DesktopModel desktop in _testData.NewSmallListOfDesktops(creds))

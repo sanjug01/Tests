@@ -514,7 +514,7 @@ namespace RdClient.Shared.Test.ViewModels
 
             Assert.AreEqual(credentialPromptResult.Credentials, _testConnectionInfo.Credentials, "connection credentials should be overwritten");
             Assert.AreEqual(Guid.Empty, _testConnectionInfo.Desktop.CredentialsId, "desktop should not be updated to use the unsaved credentials");
-            //Assert.IsFalse(_dataModel.LocalWorkspace.Credentials.ContainsItemWithId(_testConnectionInfo.Credentials.Id), "credentials should not be saved to data model");
+            //Assert.IsFalse(_dataModel.Credentials.ContainsItemWithId(_testConnectionInfo.Credentials.Id), "credentials should not be saved to data model");
         }
     }
 }
