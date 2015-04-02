@@ -121,7 +121,7 @@
         [TestMethod]
         public void InSessionEditCredentialsTask_TypeExistingUser_PasswordCopied()
         {
-            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username="peter", Password="rabbit" });
+            _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username="peter", Password="rabbit" });
 
             SessionCredentials sc = new SessionCredentials();
             sc.Credentials.Username = "don";
@@ -136,7 +136,7 @@
         [TestMethod]
         public void InSessionEditCredentialsTask_TypeExistingUserChangeUser_PasswordCleared()
         {
-            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
+            _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
 
             SessionCredentials sc = new SessionCredentials();
             sc.Credentials.Username = "don";
@@ -188,7 +188,7 @@
         public void InSessionEditCredentialsTask_TypeExistingUserSubmit_Submitted()
         {
             IList<InSessionCredentialsTask.SubmittedEventArgs> submitted = new List<InSessionCredentialsTask.SubmittedEventArgs>();
-            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
+            _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
 
             SessionCredentials sc = new SessionCredentials();
             sc.Credentials.Username = "don";
@@ -211,7 +211,7 @@
         public void InSessionEditCredentialsTask_TypeExistingUserCheckSaveSubmit_Submitted()
         {
             IList<InSessionCredentialsTask.SubmittedEventArgs> submitted = new List<InSessionCredentialsTask.SubmittedEventArgs>();
-            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
+            _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
 
             SessionCredentials sc = new SessionCredentials();
             sc.Credentials.Username = "don";
@@ -234,7 +234,7 @@
         [TestMethod]
         public void InSessionEditCredentialsTask_TypeExistingUserChangePasswordSubmit_Confirm()
         {
-            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
+            _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
 
             SessionCredentials sc = new SessionCredentials();
             sc.Credentials.Username = "don";
@@ -255,7 +255,7 @@
         public void InSessionEditCredentialsTask_TypeExistingUserChangePasswordConfirm_Submitted()
         {
             IList<InSessionCredentialsTask.SubmittedEventArgs> submitted = new List<InSessionCredentialsTask.SubmittedEventArgs>();
-            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
+            _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "peter", Password = "rabbit" });
 
             SessionCredentials sc = new SessionCredentials();
             sc.Credentials.Username = "don";

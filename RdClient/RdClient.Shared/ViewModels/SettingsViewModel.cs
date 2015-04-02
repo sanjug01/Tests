@@ -82,7 +82,7 @@ namespace RdClient.Shared.ViewModels
             // and creating view models for credentials models.
             //
             this.CredentialsViewModels = TransformingObservableCollection<IModelContainer<CredentialsModel>, ICredentialViewModel>
-                .Create(this.ApplicationDataModel.LocalWorkspace.Credentials.Models,
+                .Create(this.ApplicationDataModel.Credentials.Models,
                 this.CreateCredentialsViewModel,
                 this.ReleaseCredentialsViewModel);
             this.CredentialsViewModels.CastAndCall<INotifyPropertyChanged>(npc => npc.PropertyChanged += this.OnCredentialsViewModelsPropertyChanged);
@@ -151,7 +151,7 @@ namespace RdClient.Shared.ViewModels
 
                 if (result != null && !result.UserCancelled)
                 {
-                    this.ApplicationDataModel.LocalWorkspace.Credentials.AddNewModel(result.Credentials);
+                    this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
                 }
             });
 

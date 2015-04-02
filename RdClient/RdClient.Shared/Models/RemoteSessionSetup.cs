@@ -68,7 +68,7 @@
                 DesktopModel dtm = (DesktopModel)_connection;
                 if (dtm.HasCredentials)
                 {
-                    _sessionCredentials = new SessionCredentials(_dataModel.LocalWorkspace.Credentials.Models.First(c => dtm.CredentialsId == c.Id));
+                    _sessionCredentials = new SessionCredentials(_dataModel.Credentials.Models.First(c => dtm.CredentialsId == c.Id));
                 }
                 else
                 {
@@ -78,7 +78,7 @@
             else if(_connection is RemoteResourceModel)
             {
                 RemoteResourceModel remoteResource = _connection as RemoteResourceModel;
-                _sessionCredentials = new SessionCredentials(_dataModel.LocalWorkspace.Credentials.Models.First(c => remoteResource.CredentialId == c.Id));
+                _sessionCredentials = new SessionCredentials(_dataModel.Credentials.Models.First(c => remoteResource.CredentialId == c.Id));
             }
             else
             {

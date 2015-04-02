@@ -488,7 +488,7 @@
                 ModelSerializer = new SerializableModelSerializer()
             };
 
-            Guid credId = _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "user", Password = "password" });
+            Guid credId = _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "user", Password = "password" });
             _dataModel.LocalWorkspace.Connections.AddNewModel(new DesktopModel() { CredentialsId = credId, HostName = "192.168.2.2", FriendlyName = "localhost" });
 
             _timerFactory = new TestTimerFactory();

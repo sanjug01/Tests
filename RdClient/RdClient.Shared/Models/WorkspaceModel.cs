@@ -15,7 +15,6 @@
         private readonly RelayCommand _saveWorkspaceData;
         private readonly TWorkspaceData _workspaceData;
         private readonly IModelCollection<RemoteConnectionModel> _connections;
-        private readonly IModelCollection<CredentialsModel> _credentials;
         private readonly GroupCommand _save;
         private PersistentStatus _modelDataStatus;
 
@@ -38,13 +37,11 @@
 
             _workspaceData.PropertyChanged += this.OnWorkspaceDataChanged;
 
-            _credentials = PrimaryModelCollection<CredentialsModel>.Load(folder.CreateFolder("credentials"), modelSerializer);
             _connections = PrimaryModelCollection<RemoteConnectionModel>.Load(folder.CreateFolder("connections"), modelSerializer);
             _saveWorkspaceData = new RelayCommand(this.SaveWorkspaceData, this.CanSaveWorkspaceData);
             _modelDataStatus = PersistentStatus.Clean;
 
             _save = new GroupCommand();
-            _save.Add(_credentials.Save);
             _save.Add(_connections.Save);
             _save.Add(_saveWorkspaceData);
         }
@@ -57,8 +54,6 @@
                 return _workspaceData;
             }
         }
-
-        public IModelCollection<CredentialsModel> Credentials { get { return _credentials; } }
 
         public IModelCollection<RemoteConnectionModel> Connections { get { return _connections; } }
 

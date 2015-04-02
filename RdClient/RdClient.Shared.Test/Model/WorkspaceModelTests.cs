@@ -69,8 +69,6 @@
 
             WorkspaceModel<LocalWorkspaceModel> workspace = new WorkspaceModel<LocalWorkspaceModel>(folder, serializer);
             Assert.IsNotNull(workspace.WorkspaceData);
-            Assert.IsNotNull(workspace.Credentials.Models);
-            Assert.AreEqual(0, workspace.Credentials.Models.Count);
             Assert.IsNotNull(workspace.Connections.Models);
             Assert.AreEqual(0, workspace.Connections.Models.Count);
         }
@@ -85,7 +83,7 @@
             IPersistentObject po = workspace;
 
             Assert.IsFalse(po.Save.CanExecute(null));
-            workspace.Credentials.AddNewModel(new CredentialsModel() { Username = "User", Password = "Password" });
+            workspace.Connections.AddNewModel(new DesktopModel());
             Assert.IsTrue(po.Save.CanExecute(null));
             po.Save.Execute(null);
             Assert.IsFalse(po.Save.CanExecute(null));
@@ -93,8 +91,7 @@
             List<string> folders = folder.GetFolders().ToList();
             List<string> files = folder.GetFiles().ToList();
 
-            Assert.AreEqual(2, folders.Count);
-            Assert.IsTrue(folders.Contains("credentials"));
+            Assert.AreEqual(1, folders.Count);
             Assert.IsTrue(folders.Contains("connections"));
             Assert.AreEqual(0, files.Count);
         }
@@ -131,25 +128,6 @@
             Assert.IsFalse(po.Save.CanExecute(null));
 
             workspace.Connections.AddNewModel(new DesktopModel());
-
-            Assert.IsTrue(po.Save.CanExecute(null));
-            Assert.AreEqual(1, changes.Count);
-            Assert.AreSame(po.Save, changes[0]);
-        }
-
-        [TestMethod]
-        public void WorkspaceModel_AddCredentials_CanSave()
-        {
-            IList<ICommand> changes = new List<ICommand>();
-            IStorageFolder folder = new MemoryStorageFolder();
-            IModelSerializer serializer = new SerializableModelSerializer();
-
-            WorkspaceModel<TestWorkspaceData> workspace = new WorkspaceModel<TestWorkspaceData>(folder, serializer);
-            IPersistentObject po = workspace;
-            po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
-            Assert.IsFalse(po.Save.CanExecute(null));
-
-            workspace.Credentials.AddNewModel(new CredentialsModel());
 
             Assert.IsTrue(po.Save.CanExecute(null));
             Assert.AreEqual(1, changes.Count);
@@ -194,27 +172,6 @@
             Assert.IsFalse(po.Save.CanExecute(null));
             Assert.AreEqual(2, changes.Count);
             foreach(ICommand c in changes)
-                Assert.AreSame(po.Save, c);
-        }
-
-        [TestMethod]
-        public void LocalWorkspaceModel_AddCredentialsSave_CannotSave()
-        {
-            IList<ICommand> changes = new List<ICommand>();
-            IStorageFolder folder = new MemoryStorageFolder();
-            IModelSerializer serializer = new SerializableModelSerializer();
-
-            WorkspaceModel<LocalWorkspaceModel> workspace = new WorkspaceModel<LocalWorkspaceModel>(folder, serializer);
-            IPersistentObject po = workspace;
-            po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
-            Assert.IsFalse(po.Save.CanExecute(null));
-
-            workspace.Credentials.AddNewModel(new CredentialsModel());
-            po.Save.Execute(null);
-
-            Assert.IsFalse(po.Save.CanExecute(null));
-            Assert.AreEqual(2, changes.Count);
-            foreach (ICommand c in changes)
                 Assert.AreSame(po.Save, c);
         }
     }
