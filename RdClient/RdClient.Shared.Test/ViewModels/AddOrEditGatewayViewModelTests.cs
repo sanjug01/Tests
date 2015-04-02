@@ -134,7 +134,7 @@
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
-                Guid credId = _dataModel.LocalWorkspace.Credentials.AddNewModel(credentials);
+                Guid credId = _dataModel.Credentials.AddNewModel(credentials);
 
                 GatewayModel gateway = new GatewayModel() { HostName = "foo" };
                 _dataModel.Gateways.AddNewModel(gateway); 
@@ -184,7 +184,7 @@
                 GatewayModel gateway = new GatewayModel()
                 {
                     HostName = "foo",
-                    CredentialsId = _dataModel.LocalWorkspace.Credentials.AddNewModel(credentials)
+                    CredentialsId = _dataModel.Credentials.AddNewModel(credentials)
                 };
                 _dataModel.Gateways.AddNewModel(gateway);
 
@@ -206,7 +206,7 @@
                 GatewayModel gateway = new GatewayModel() { HostName = "myPc" };
 
                 _dataModel.Gateways.AddNewModel(gateway);
-                gateway.CredentialsId = _dataModel.LocalWorkspace.Credentials.AddNewModel(credentials);
+                gateway.CredentialsId = _dataModel.Credentials.AddNewModel(credentials);
 
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);

@@ -193,7 +193,7 @@ namespace RdClient.Shared.ViewModels
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
 
-            foreach (IModelContainer<CredentialsModel> credentials in this.ApplicationDataModel.LocalWorkspace.Credentials.Models)
+            foreach (IModelContainer<CredentialsModel> credentials in this.ApplicationDataModel.Credentials.Models)
             {
                 this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credentials));
             }
