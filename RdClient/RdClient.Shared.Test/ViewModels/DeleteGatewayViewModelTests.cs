@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Shared.Data;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.Navigation.Extensions;
 using RdClient.Shared.Test.Data;
 using RdClient.Shared.Test.Helpers;
+using RdClient.Shared.Test.UAP;
 using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -89,13 +90,18 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        [ExpectedException(typeof(KeyNotFoundException))]
+        // UAP not supported   [ExpectedException(typeof(KeyNotFoundException))]
         public void GatewaysDelete_DeleteCommandDeletesGatewayFromDataModel()
         {
             Assert.AreSame(_gatewayContainer.Model, _dataModel.Gateways.GetModel(_gatewayContainer.Id));
             _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DeleteCommand.Execute(null);
-            GatewayModel model = _dataModel.Gateways.GetModel(_gatewayContainer.Id);
+
+            Assert.IsTrue( ExceptionExpecter.ExpectException<KeyNotFoundException>(() =>
+              {
+                  GatewayModel model = _dataModel.Gateways.GetModel(_gatewayContainer.Id);
+              } ));
+
         }
 
         [TestMethod]
