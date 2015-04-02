@@ -301,7 +301,6 @@
     <Compile Include="ViewModels\IEditCredentialsViewModel.cs" />
     <Compile Include="ViewModels\IRemoteConnectionViewModel.cs" />
     <Compile Include="ViewModels\IRemoteResourceViewModel.cs" />
-    <Compile Include="ViewModels\ISessionViewModel.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="Navigation\Extensions\IDataModelSite.cs" />
     <Compile Include="Navigation\ApplicationBarSite.cs" />
@@ -312,8 +311,6 @@
     <Compile Include="Navigation\Extensions\IApplicationBarSite.cs" />
     <Compile Include="ViewModels\ConnectionCenterViewModel.cs" />
     <Compile Include="ViewModels\IApplicationBarViewModel.cs" />
-    <Compile Include="Models\ISessionModel.cs" />
-    <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Navigation\IPresentableViewConstructor.cs" />
     <Compile Include="Navigation\PresentableViewConstructor.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModel.cs" />
@@ -327,12 +324,9 @@
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\UserComboBoxElement.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
-    <Compile Include="ViewModels\ZoomPanViewModel.cs" />
-    <Compile Include="ViewModels\MouseViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\SegoeGlyphBarButtonModel.cs" />
     <Compile Include="ViewModels\SeparatorBarItemModel.cs" />
-    <Compile Include="ViewModels\SessionViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Navigation\INavigationService.cs" />
@@ -343,6 +337,7 @@
     <Compile Include="Navigation\PresentableViewFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\DeferringViewModelBase.cs" />
+    <Compile Include="ViewModels\ZoomPanViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">

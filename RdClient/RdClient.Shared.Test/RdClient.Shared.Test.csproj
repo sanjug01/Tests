@@ -194,7 +194,6 @@
     <Compile Include="Mock\RdpConnectionFactory.cs" />
     <Compile Include="Mock\RdpEvents.cs" />
     <Compile Include="Mock\RdpProperties.cs" />
-    <Compile Include="Mock\SessionModel.cs" />
     <Compile Include="Mock\TestBarItemModel.cs" />
     <Compile Include="Mock\Timer.cs" />
     <Compile Include="Mock\TestRdpCertificate.cs" />
@@ -206,7 +205,6 @@
     <Compile Include="Model\DesktopModelTests.cs" />
     <Compile Include="Input\Mouse\PointerModeTests.cs" />
     <Compile Include="Model\SessionCredentialsTests.cs" />
-    <Compile Include="Model\SessionModelTests.cs" />
     <Compile Include="Model\SnapshotterTests.cs" />
     <Compile Include="Model\WorkspaceModelTests.cs" />
     <Compile Include="Navigation\Extensions\ApplicationBarExtensionTests.cs" />
@@ -243,12 +241,9 @@
     <Compile Include="ViewModels\MainPageViewModelTests.cs" />
     <Compile Include="ViewModels\PanKnobViewModelTests.cs" />
     <Compile Include="ViewModels\RemoteSessionViewModelTests.cs" />
-    <Compile Include="ViewModels\ZoomPanViewModelTests.cs" />
-    <Compile Include="ViewModels\MouseViewModelTests.cs" />
     <Compile Include="ViewModels\RelayCommandTests.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModelTests.cs" />
     <Compile Include="ViewModels\SegoeGlyphBarButtonModelTests.cs" />
-    <Compile Include="ViewModels\SessionViewModelTests.cs" />
     <Compile Include="ViewModels\SettingsViewModelTests.cs" />
     <Compile Include="ViewModels\DesktopViewModelTests.cs" />
     <Compile Include="ViewModels\ConnectionCenterViewModelTests.cs" />

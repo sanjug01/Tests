@@ -40,7 +40,7 @@ namespace RdClient.Shared.Test.Converters
             object result = _converter.Convert(_testAttempts, null, null, null);
 
             Assert.IsTrue(result is string);
-            Assert.IsTrue((result as string).Contains(SessionModel.MaxReconnectAttempts.ToString()));
+            Assert.IsTrue((result as string).Contains(_testAttempts.ToString()));
         }
 
         [TestMethod]

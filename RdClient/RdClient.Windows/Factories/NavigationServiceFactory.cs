@@ -17,7 +17,6 @@ namespace RdClient.Factories
             // Make the connection center a singleton
             //
             viewFactory.AddViewClass("ConnectionCenterView", typeof(Views.ConnectionCenterView), true);
-            viewFactory.AddViewClass("SessionView", typeof(Views.SessionView));
             viewFactory.AddViewClass("AddOrEditDesktopView", typeof(Views.AddOrEditDesktopView));
             viewFactory.AddViewClass("AddUserView", typeof(Views.AddUserView));
             viewFactory.AddViewClass("ErrorMessageView", typeof(Views.ErrorMessageView));

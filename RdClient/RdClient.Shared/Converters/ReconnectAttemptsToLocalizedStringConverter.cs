@@ -30,7 +30,7 @@ namespace RdClient.Converters
                 int countAttempts = (int) value;
                 string result = String.Format(
                     _localizedString.GetLocalizedString(reconnectAttemptsStringId),
-                    countAttempts, SessionModel.MaxReconnectAttempts 
+                    countAttempts, 20
                     );
                 return result;         
             }

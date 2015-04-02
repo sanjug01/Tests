@@ -134,9 +134,6 @@
     <Compile Include="Controls\DesktopsListControl.xaml.cs">
       <DependentUpon>DesktopsListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ElephantEarsControl.xaml.cs">
-      <DependentUpon>ElephantEarsControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\GatewaySettingsControl.xaml.cs">
       <DependentUpon>GatewaySettingsControl.xaml</DependentUpon>
     </Compile>
@@ -209,9 +206,6 @@
     <Compile Include="Views\RemoteSessionView.xaml.cs">
       <DependentUpon>RemoteSessionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SessionView.xaml.cs">
-      <DependentUpon>SessionView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="DesignTime\FakeConnectionCenterViewModel.cs" />
     <Compile Include="DesignTime\FakeCredentialViewModel.cs" />
     <Compile Include="DesignTime\FakeSettingsViewModel.cs" />
@@ -258,9 +252,6 @@
     </Compile>
     <Compile Include="Views\AddOrEditDesktopView.xaml.cs">
       <DependentUpon>AddOrEditDesktopView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\RdSessionPanel.xaml.cs">
-      <DependentUpon>RdSessionPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
@@ -347,10 +338,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ElephantEarsControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\GatewaySettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -431,10 +418,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SessionView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -472,10 +455,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddOrEditDesktopView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\RdSessionPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
