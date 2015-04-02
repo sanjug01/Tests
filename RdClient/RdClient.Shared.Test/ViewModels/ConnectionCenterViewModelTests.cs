@@ -22,6 +22,7 @@ namespace RdClient.Shared.Test.ViewModels
         private SessionFactory _sessionFactory;
         private Mock.NavigationService _navService;
         private ConnectionCenterViewModel _vm;
+        private IConnectionCenterViewModel _ivm;
 
         private sealed class Dispatcher : IDeferredExecution
         {
@@ -62,6 +63,7 @@ namespace RdClient.Shared.Test.ViewModels
                 _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
             }
             _vm = new ConnectionCenterViewModel();
+            _ivm = _vm;
             _vm.CastAndCall<IDeferredExecutionSite>(site => site.SetDeferredExecution(new Dispatcher()));
             ((IDataModelSite)_vm).SetDataModel(_dataModel);
             ((ISessionFactorySite)_vm).SetSessionFactory(_sessionFactory);
@@ -71,6 +73,8 @@ namespace RdClient.Shared.Test.ViewModels
         [TestCleanup]
         public void TestCleanup()
         {
+            _ivm = null;
+            _vm = null;
             _navService.Dispose();
             _dataModel = null;
             _sessionFactory = null;
@@ -100,7 +104,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestEditDesktopBringsUpEditViewIfDesktopSelected()
         {
             _vm.DesktopsSelectable = true;
-            _vm.DesktopViewModels[_testData.RandomSource.Next(_vm.DesktopViewModels.Count)].IsSelected = true;
+            _ivm.DesktopViewModels[_testData.RandomSource.Next(_ivm.DesktopViewModels.Count)].IsSelected = true;
             _navService.Expect("PushModalView", new List<object> { "AddOrEditDesktopView", null, null }, 0);
             _vm.EditDesktopCommand.Execute(null);
         }
@@ -109,7 +113,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestDeleteDesktopCommandBringsUpDeleteDesktopsViewIfDesktopSelected()
         {
             _vm.DesktopsSelectable = true;
-            _vm.DesktopViewModels[_testData.RandomSource.Next(_vm.DesktopViewModels.Count)].IsSelected = true;
+            _ivm.DesktopViewModels[_testData.RandomSource.Next(_ivm.DesktopViewModels.Count)].IsSelected = true;
             _navService.Expect("PushModalView", new List<object> { "DeleteDesktopsView", null, null }, 0);
             _vm.DeleteDesktopCommand.Execute(null);
         }
@@ -123,7 +127,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestHasDesktopsReturnsTrueIfThereAreDesktops()
         {
-            Assert.IsTrue(_vm.DesktopViewModels.Count > 0);
+            Assert.IsTrue(_ivm.DesktopViewModels.Count > 0);
             Assert.IsTrue(_vm.HasDesktops);
         }
 
@@ -147,12 +151,12 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestSelectedCountIncrementsAndDecrements()
         {
             _vm.DesktopsSelectable = true;
-            foreach(DesktopViewModel dvm in _vm.DesktopViewModels)
+            foreach(DesktopViewModel dvm in _ivm.DesktopViewModels)
             {
                 dvm.IsSelected = true;
             }
-            Assert.AreEqual(_vm.DesktopViewModels.Count, _vm.SelectedCount);
-            foreach (DesktopViewModel dvm in _vm.DesktopViewModels)
+            Assert.AreEqual(_ivm.DesktopViewModels.Count, _vm.SelectedCount);
+            foreach (DesktopViewModel dvm in _ivm.DesktopViewModels)
             {
                 dvm.IsSelected = false;
             }
@@ -221,7 +225,7 @@ namespace RdClient.Shared.Test.ViewModels
             _vm.DesktopsSelectable = true;
             DesktopModel newDesktop = _testData.NewValidDesktop(Guid.Empty);
             _dataModel.LocalWorkspace.Connections.AddNewModel(newDesktop);
-            IDesktopViewModel dvm = _vm.DesktopViewModels.Single(d => object.ReferenceEquals(newDesktop, d.Desktop));
+            IDesktopViewModel dvm = _ivm.DesktopViewModels.Single(d => object.ReferenceEquals(newDesktop, d.Desktop));
             Assert.IsTrue(dvm.SelectionEnabled);
         }
 
@@ -231,7 +235,7 @@ namespace RdClient.Shared.Test.ViewModels
             _vm.DesktopsSelectable = false;
             DesktopModel newDesktop = _testData.NewValidDesktop(Guid.Empty);
             _dataModel.LocalWorkspace.Connections.AddNewModel(newDesktop);
-            IDesktopViewModel dvm = _vm.DesktopViewModels.Single(d => object.ReferenceEquals(newDesktop, d.Desktop));
+            IDesktopViewModel dvm = _ivm.DesktopViewModels.Single(d => object.ReferenceEquals(newDesktop, d.Desktop));
             Assert.IsFalse(dvm.SelectionEnabled);
         }
 
@@ -257,9 +261,9 @@ namespace RdClient.Shared.Test.ViewModels
             _dataModel.LocalWorkspace.Connections.AddNewModel(dm1);
             _dataModel.LocalWorkspace.Connections.AddNewModel(dm2);
 
-            Assert.AreEqual(2, _vm.DesktopViewModels.Count);
-            Assert.AreSame(dm1, _vm.DesktopViewModels[0].Desktop);
-            Assert.AreSame(dm2, _vm.DesktopViewModels[1].Desktop);
+            Assert.AreEqual(2, _ivm.DesktopViewModels.Count);
+            Assert.AreSame(dm1, _ivm.DesktopViewModels[0].Desktop);
+            Assert.AreSame(dm2, _ivm.DesktopViewModels[1].Desktop);
         }
 
         [TestMethod]
@@ -277,9 +281,9 @@ namespace RdClient.Shared.Test.ViewModels
             _dataModel.LocalWorkspace.Connections.AddNewModel(dm1);
             _dataModel.LocalWorkspace.Connections.AddNewModel(dm2);
 
-            Assert.AreEqual(2, _vm.DesktopViewModels.Count);
-            Assert.AreSame(dm2, _vm.DesktopViewModels[0].Desktop);
-            Assert.AreSame(dm1, _vm.DesktopViewModels[1].Desktop);
+            Assert.AreEqual(2, _ivm.DesktopViewModels.Count);
+            Assert.AreSame(dm2, _ivm.DesktopViewModels[0].Desktop);
+            Assert.AreSame(dm1, _ivm.DesktopViewModels[1].Desktop);
         }
 
         [TestMethod]
@@ -297,9 +301,9 @@ namespace RdClient.Shared.Test.ViewModels
             _dataModel.LocalWorkspace.Connections.AddNewModel(dm1);
             _dataModel.LocalWorkspace.Connections.AddNewModel(dm2);
 
-            Assert.AreEqual(2, _vm.DesktopViewModels.Count);
-            Assert.AreSame(dm1, _vm.DesktopViewModels[0].Desktop);
-            Assert.AreSame(dm2, _vm.DesktopViewModels[1].Desktop);
+            Assert.AreEqual(2, _ivm.DesktopViewModels.Count);
+            Assert.AreSame(dm1, _ivm.DesktopViewModels[0].Desktop);
+            Assert.AreSame(dm2, _ivm.DesktopViewModels[1].Desktop);
         }
 
         [TestMethod]
@@ -317,9 +321,9 @@ namespace RdClient.Shared.Test.ViewModels
             _dataModel.LocalWorkspace.Connections.AddNewModel(dm1);
             _dataModel.LocalWorkspace.Connections.AddNewModel(dm2);
 
-            Assert.AreEqual(2, _vm.DesktopViewModels.Count);
-            Assert.AreSame(dm2, _vm.DesktopViewModels[0].Desktop);
-            Assert.AreSame(dm1, _vm.DesktopViewModels[1].Desktop);
+            Assert.AreEqual(2, _ivm.DesktopViewModels.Count);
+            Assert.AreSame(dm2, _ivm.DesktopViewModels[0].Desktop);
+            Assert.AreSame(dm1, _ivm.DesktopViewModels[1].Desktop);
         }
 
         [TestMethod]
@@ -343,9 +347,9 @@ namespace RdClient.Shared.Test.ViewModels
             //
             _dataModel.Save.Execute(null);
 
-            Assert.AreEqual(2, _vm.DesktopViewModels.Count);
-            Assert.AreSame(dm2, _vm.DesktopViewModels[0].Desktop);
-            Assert.AreSame(dm1, _vm.DesktopViewModels[1].Desktop);
+            Assert.AreEqual(2, _ivm.DesktopViewModels.Count);
+            Assert.AreSame(dm2, _ivm.DesktopViewModels[0].Desktop);
+            Assert.AreSame(dm1, _ivm.DesktopViewModels[1].Desktop);
         }
 
         [TestMethod]
@@ -371,14 +375,14 @@ namespace RdClient.Shared.Test.ViewModels
             //
             _dataModel.Save.Execute(null);
 
-            Assert.AreEqual(2, _vm.DesktopViewModels.Count);
-            Assert.AreSame(dm1, _vm.DesktopViewModels[0].Desktop);
-            Assert.AreSame(dm2, _vm.DesktopViewModels[1].Desktop);
+            Assert.AreEqual(2, _ivm.DesktopViewModels.Count);
+            Assert.AreSame(dm1, _ivm.DesktopViewModels[0].Desktop);
+            Assert.AreSame(dm2, _ivm.DesktopViewModels[1].Desktop);
         }
 
         private void AssertDesktopViewModelSelectionEnabledMatchesDesktopsSelectable()
         {
-            foreach (DesktopViewModel dvm in _vm.DesktopViewModels)
+            foreach (DesktopViewModel dvm in _ivm.DesktopViewModels)
             {
                 Assert.AreEqual(_vm.DesktopsSelectable, dvm.SelectionEnabled);
             }
@@ -387,13 +391,13 @@ namespace RdClient.Shared.Test.ViewModels
         private void AssertDesktopViewModelsMatchDesktops()
         {
             //checking there are the same number of DesktopViewModels as Desktops and that each Desktop is represented by a DesktopViewModel is sufficient
-            Assert.AreEqual(_dataModel.LocalWorkspace.Connections.Models.Count, _vm.DesktopViewModels.Count);
+            Assert.AreEqual(_dataModel.LocalWorkspace.Connections.Models.Count, _ivm.DesktopViewModels.Count);
 
             foreach (IModelContainer<RemoteConnectionModel> container in _dataModel.LocalWorkspace.Connections.Models)
             {
                 if (container.Model is DesktopModel)
                 {
-                    Assert.IsTrue(_vm.DesktopViewModels.Any((dvm) => dvm.Desktop.Equals((DesktopModel)container.Model)));
+                    Assert.IsTrue(_ivm.DesktopViewModels.Any((dvm) => dvm.Desktop.Equals((DesktopModel)container.Model)));
                 }
             }
         }
