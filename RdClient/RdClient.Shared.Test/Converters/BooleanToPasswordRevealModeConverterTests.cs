@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Converters;
+    using RdClient.Shared.Test.UAP;
     using System;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Data;
@@ -65,21 +66,8 @@
         {
             IValueConverter converter = new BooleanToPasswordRevealModeConverter();
 
-            try
-            {
-                Assert.AreEqual(PasswordRevealMode.Peek, converter.Convert(true, typeof(bool), null, null));
-                Assert.Fail("Expected exception");
-            }
-            catch(ArgumentException)
-            {
-                //
-                // correct behavior
-                //
-            }
-            catch
-            {
-                Assert.Fail("Unexpected exception");
-            }
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+                converter.Convert(true, typeof(bool), null, null)));
         }
 
         [TestMethod]
@@ -87,20 +75,8 @@
         {
             IValueConverter converter = new BooleanToPasswordRevealModeConverter();
 
-            try
-            {
-                converter.ConvertBack(PasswordRevealMode.Hidden, null, null, null);
-            }
-            catch(NotImplementedException)
-            {
-                //
-                // correct behavior
-                //
-            }
-            catch
-            {
-                Assert.Fail("Unexpected exception");
-            }
+            Assert.IsTrue(ExceptionExpecter.ExpectException<NotImplementedException>(() =>
+                converter.ConvertBack(PasswordRevealMode.Hidden, null, null, null)));
         }
     }
 }
