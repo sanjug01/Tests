@@ -135,6 +135,11 @@ namespace RdClient.Shared.ViewModels
             this.CredentialsViewModels = null;
             this.HasCredentials = false;
 
+            this.GatewaysViewModels.CastAndCall<INotifyPropertyChanged>(npc =>
+                npc.PropertyChanged -= this.OnGatewaysViewModelsPropertyChanged);
+            this.GatewaysViewModels = null;
+            this.HasGateways = false;
+
             base.OnDismissed();
         }
 

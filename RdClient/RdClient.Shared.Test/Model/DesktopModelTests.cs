@@ -51,5 +51,22 @@
             Assert.AreEqual("HostName", changes[0].PropertyName);
             Assert.AreEqual("Status", changes[1].PropertyName);
         }
+
+        [TestMethod]
+        public void DesktopModel_ChangeGatewayId_ChangeReported()
+        {
+            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
+            DesktopModel model = new DesktopModel();
+            Guid id = Guid.NewGuid();
+            model.PropertyChanged += (sender, e) => changes.Add(e);
+
+            model.GatewayId = id;
+
+            Assert.AreEqual(id, model.GatewayId);
+            Assert.AreEqual(3, changes.Count);
+            Assert.AreEqual("GatewayId", changes[0].PropertyName);
+            Assert.AreEqual("Status", changes[1].PropertyName);
+            Assert.AreEqual("HasGateway", changes[2].PropertyName);
+        }
     }
 }

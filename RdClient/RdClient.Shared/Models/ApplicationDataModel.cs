@@ -217,7 +217,7 @@
                         });
                     }
                     //
-                    // For each desktop check if the credential reference is valid, and if it is not, remove it.
+                    // For each workspace check if the credential reference is valid, and if it is not, remove it.
                     //
                     foreach (IModelContainer<OnPremiseWorkspaceModel> workspace in _onPremWorkspaces.Models)
                     {
