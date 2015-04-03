@@ -74,7 +74,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void HasCredentialsFalseWhenDataModelHasNoCredentials()
         {
-            Assert.AreEqual(0, _dataModel.LocalWorkspace.Credentials.Models.Count);
+            Assert.AreEqual(0, _dataModel.Credentials.Models.Count);
             Assert.IsFalse(_vm.HasCredentials);
         }
 
@@ -82,7 +82,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void AddCredentialToDataModelAddsMatchingCredentialViewModel()
         {
             CredentialsModel cred = _testData.NewValidCredential().Model;
-            _dataModel.LocalWorkspace.Credentials.AddNewModel(cred);
+            _dataModel.Credentials.AddNewModel(cred);
             Assert.AreEqual(cred, _vm.CredentialsViewModels[0].Credentials);
         }
 
@@ -90,18 +90,18 @@ namespace RdClient.Shared.Test.ViewModels
         public void HasCredentialsTrueAfterAddingCredentialToDataModel()
         {
             Assert.IsFalse(_vm.HasCredentials);
-            _dataModel.LocalWorkspace.Credentials.AddNewModel(_testData.NewValidCredential().Model);
+            _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);
             Assert.IsTrue(_vm.HasCredentials);
         }
 
         [TestMethod]
         public void HasCredentialsFalseAfterRemovingLastCredentialFromDataModel()
         {
-            _dataModel.LocalWorkspace.Credentials.AddNewModel(_testData.NewValidCredential().Model);
+            _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);
             Assert.IsTrue(_vm.HasCredentials);
-            foreach (IModelContainer<CredentialsModel> cred in _dataModel.LocalWorkspace.Credentials.Models.ToList())
+            foreach (IModelContainer<CredentialsModel> cred in _dataModel.Credentials.Models.ToList())
             {
-                _dataModel.LocalWorkspace.Credentials.RemoveModel(cred.Id);
+                _dataModel.Credentials.RemoveModel(cred.Id);
             }
             Assert.AreEqual(0, _vm.CredentialsViewModels.Count);
             Assert.IsFalse(_vm.HasCredentials);            
@@ -156,7 +156,7 @@ namespace RdClient.Shared.Test.ViewModels
 
             foreach (IModelContainer<CredentialsModel> cred in creds)
             {
-                newDataModel.LocalWorkspace.Credentials.AddNewModel(cred.Model);
+                newDataModel.Credentials.AddNewModel(cred.Model);
             }
             //
             // Dismiss, change the data model, and present again - the data model is changed by a navigation extention,

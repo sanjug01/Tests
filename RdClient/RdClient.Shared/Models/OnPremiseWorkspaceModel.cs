@@ -81,7 +81,7 @@
 
         public CredentialsModel Credential
         {
-            get { return _dataModel.LocalWorkspace.Credentials.GetModel(this.CredentialsId); }
+            get { return _dataModel.Credentials.GetModel(this.CredentialsId); }
         }
 
         public WorkspaceState State

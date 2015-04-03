@@ -75,7 +75,7 @@
                 {
                     try
                     {
-                        cred = _dataModel.LocalWorkspace.Credentials.GetModel(_desktop.CredentialsId);
+                        cred = _dataModel.Credentials.GetModel(_desktop.CredentialsId);
                     }
                     catch(Exception ex)
                     {
@@ -190,7 +190,7 @@
         {
             if(storeCredentials)
             {
-                this.Desktop.CredentialsId = this._dataModel.LocalWorkspace.Credentials.AddNewModel(credentials);
+                this.Desktop.CredentialsId = this._dataModel.Credentials.AddNewModel(credentials);
             }
 
             ConnectionInformation connectionInformation = new ConnectionInformation()

@@ -18,9 +18,9 @@
                 RootFolder = new MemoryStorageFolder(),
                 ModelSerializer = new SerializableModelSerializer()
             };
-            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "usr1", Password = "pwd1" });
-            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "usr2", Password = "pwd2" });
-            _dataModel.LocalWorkspace.Credentials.AddNewModel(new CredentialsModel() { Username = "usr3" });
+            _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "usr1", Password = "pwd1" });
+            _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "usr2", Password = "pwd2" });
+            _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "usr3" });
         }
 
         [TestCleanup]
@@ -41,7 +41,7 @@
         [TestMethod]
         public void NewSessionCredentials_InitConstructor_Unmodified()
         {
-            IModelContainer<CredentialsModel> container = _dataModel.LocalWorkspace.Credentials.Models[0];
+            IModelContainer<CredentialsModel> container = _dataModel.Credentials.Models[0];
             SessionCredentials sc = new SessionCredentials(container);
 
             Assert.IsNotNull(sc.Credentials);
@@ -53,10 +53,10 @@
         [TestMethod]
         public void SessionCredentials_ApplyAnotherModel_Unmodified()
         {
-            IModelContainer<CredentialsModel> container = _dataModel.LocalWorkspace.Credentials.Models[0];
+            IModelContainer<CredentialsModel> container = _dataModel.Credentials.Models[0];
             SessionCredentials sc = new SessionCredentials(container);
 
-            container = _dataModel.LocalWorkspace.Credentials.Models[1];
+            container = _dataModel.Credentials.Models[1];
             sc.ApplySavedCredentials(container);
 
             Assert.IsNotNull(sc.Credentials);
@@ -68,7 +68,7 @@
         [TestMethod]
         public void SessionCredentials_ChangePasword_Modified()
         {
-            IModelContainer<CredentialsModel> container = _dataModel.LocalWorkspace.Credentials.Models[0];
+            IModelContainer<CredentialsModel> container = _dataModel.Credentials.Models[0];
             SessionCredentials sc = new SessionCredentials(container);
 
             sc.Credentials.Password = "newpassword";
@@ -79,7 +79,7 @@
         [TestMethod]
         public void SessionCredentials_ChangeUserName_Modified()
         {
-            IModelContainer<CredentialsModel> container = _dataModel.LocalWorkspace.Credentials.Models[0];
+            IModelContainer<CredentialsModel> container = _dataModel.Credentials.Models[0];
             SessionCredentials sc = new SessionCredentials(container);
 
             sc.Credentials.Username = "newuser";
@@ -90,11 +90,11 @@
         [TestMethod]
         public void SessionCredentials_ChangePasswordApplyAnotherModel_Unmodified()
         {
-            IModelContainer<CredentialsModel> container = _dataModel.LocalWorkspace.Credentials.Models[0];
+            IModelContainer<CredentialsModel> container = _dataModel.Credentials.Models[0];
             SessionCredentials sc = new SessionCredentials(container);
 
             sc.Credentials.Password = "buzzword";
-            container = _dataModel.LocalWorkspace.Credentials.Models[1];
+            container = _dataModel.Credentials.Models[1];
             sc.ApplySavedCredentials(container);
 
             Assert.IsNotNull(sc.Credentials);

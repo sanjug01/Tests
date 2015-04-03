@@ -53,7 +53,7 @@ namespace RdClient.Shared.ViewModels
             // Remove the credentials from the data model.
             // The data model will remove references to the removed credentials from all desktops.
             //
-            this.ApplicationDataModel.LocalWorkspace.Credentials.RemoveModel(_cred.Id);
+            this.ApplicationDataModel.Credentials.RemoveModel(_cred.Id);
             
             NavigationService.DismissModalView(this.PresentableView);
         }

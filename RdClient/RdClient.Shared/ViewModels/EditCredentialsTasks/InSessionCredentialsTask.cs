@@ -186,7 +186,7 @@
         {
             IModelContainer<CredentialsModel> container = null;
 
-            foreach(IModelContainer<CredentialsModel> c in _dataModel.LocalWorkspace.Credentials.Models)
+            foreach(IModelContainer<CredentialsModel> c in _dataModel.Credentials.Models)
             {
                 if( string.Equals(c.Model.Username, userName, StringComparison.OrdinalIgnoreCase) )
                 {

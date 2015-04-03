@@ -110,7 +110,7 @@ namespace RdClient.Shared.Test.ViewModels
             };
             _navService = new Mock.NavigationService();
             _cred = _testData.NewValidCredential().Model;
-            _desktop = _testData.NewValidDesktop(_dataModel.LocalWorkspace.Credentials.AddNewModel(_cred));
+            _desktop = _testData.NewValidDesktop(_dataModel.Credentials.AddNewModel(_cred));
 
             _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 

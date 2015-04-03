@@ -40,14 +40,14 @@ namespace RdClient.Shared.Test.ViewModels
             //add some credentials to the datamodel
             foreach (IModelContainer<CredentialsModel> cred in _testData.NewSmallListOfCredentials())
             {
-                _dataModel.LocalWorkspace.Credentials.AddNewModel(cred.Model);
+                _dataModel.Credentials.AddNewModel(cred.Model);
             }            
 
             //add this credential to the datamodel
-            _cred = TemporaryModelContainer<CredentialsModel>.WrapModel(_dataModel.LocalWorkspace.Credentials.AddNewModel(_cred.Model), _cred.Model);
+            _cred = TemporaryModelContainer<CredentialsModel>.WrapModel(_dataModel.Credentials.AddNewModel(_cred.Model), _cred.Model);
 
             //add some desktops to the datamodel
-            foreach (DesktopModel desktop in _testData.NewSmallListOfDesktops(_dataModel.LocalWorkspace.Credentials.Models.ToList()))
+            foreach (DesktopModel desktop in _testData.NewSmallListOfDesktops(_dataModel.Credentials.Models.ToList()))
             {
                 _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
             }
@@ -91,10 +91,10 @@ namespace RdClient.Shared.Test.ViewModels
         {
             Assert.IsTrue(ExceptionExpecter.ExpectException<KeyNotFoundException>(() =>
             {
-                Assert.AreSame(_cred.Model, _dataModel.LocalWorkspace.Credentials.GetModel(_cred.Id));
+                Assert.AreSame(_cred.Model, _dataModel.Credentials.GetModel(_cred.Id));
                 _navService.Expect("DismissModalView", new object[] { _view }, 0);
                 _vm.DeleteCommand.Execute(null);
-                CredentialsModel model = _dataModel.LocalWorkspace.Credentials.GetModel(_cred.Id);
+                CredentialsModel model = _dataModel.Credentials.GetModel(_cred.Id);
             }));
         }
 
@@ -112,10 +112,10 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void DeleteCommandDeletesOnlyOneCredential()
         {
-            int credCount = _dataModel.LocalWorkspace.Credentials.Models.Count;
+            int credCount = _dataModel.Credentials.Models.Count;
             _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DeleteCommand.Execute(null);
-            Assert.AreEqual(credCount - 1, _dataModel.LocalWorkspace.Credentials.Models.Count);
+            Assert.AreEqual(credCount - 1, _dataModel.Credentials.Models.Count);
         }
 
         [TestMethod]
