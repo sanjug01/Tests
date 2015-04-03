@@ -105,7 +105,6 @@
             this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);            
             this.EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => (1 == this.SelectedCount) );
             this.DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
-            this.ToggleDesktopSelectionCommand = new RelayCommand(this.ToggleDesktopSelectionCommandExecute);
             this.AddWorkspaceCommand = new RelayCommand(o => AddWorkspaceExecute());
 
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, EditItemStringId, BarItemModel.ItemAlignment.Right);
@@ -115,9 +114,12 @@
             _toolbarItems = new ReadOnlyObservableCollection<BarItemModel>(_toolbarItemsSource);
             //
             // Add toolbar buttons
+            //
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.MultiSelection, new RelayCommand(this.ToggleDesktopSelectionCommandExecute), "Select"));
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
+            //
             //_toolbarItemsSource.Add(new SeparatorBarItemModel());
             //
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
 
             this.SelectedCount = 0;
         }
@@ -142,7 +144,6 @@
         public RelayCommand AddDesktopCommand { get; private set; }
         public RelayCommand EditDesktopCommand { get; private set; }
         public RelayCommand DeleteDesktopCommand { get; private set; }
-        public RelayCommand ToggleDesktopSelectionCommand { get; private set; }
         public RelayCommand AddWorkspaceCommand { get; private set; }
 
         public bool HasDesktops

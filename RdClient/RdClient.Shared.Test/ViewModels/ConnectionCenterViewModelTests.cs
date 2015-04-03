@@ -11,6 +11,7 @@ using RdClient.Shared.Data;
 using System.Collections;
 using RdClient.Shared.Test.Data;
 using RdClient.Shared.Helpers;
+using System.Windows.Input;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -204,9 +205,20 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestToggleDesktopSelectionCommandEnablesSelection()
         {
-            _vm.ToggleDesktopSelectionCommand.Execute(null);
+            ICommand buttonCommand = null;
+
+            foreach(BarItemModel model in _vm.ToolbarItems)
+            {
+                SegoeGlyphBarButtonModel button = model as SegoeGlyphBarButtonModel;
+
+                if (null != button && button.Glyph == SegoeGlyph.MultiSelection)
+                    buttonCommand = button.Command;
+            }
+
+            Assert.IsNotNull(buttonCommand);
+            buttonCommand.Execute(null);
             Assert.IsTrue(_vm.DesktopsSelectable);
-            _vm.ToggleDesktopSelectionCommand.Execute(null);
+            buttonCommand.Execute(null);
             Assert.IsFalse(_vm.DesktopsSelectable);
         }
 
@@ -242,8 +254,19 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestGoToSettingsCommandNavigatesToSettingsView()
         {
+            ICommand buttonCommand = null;
+
+            foreach (BarItemModel model in _vm.ToolbarItems)
+            {
+                SegoeGlyphBarButtonModel button = model as SegoeGlyphBarButtonModel;
+
+                if (null != button && button.Glyph == SegoeGlyph.Settings)
+                    buttonCommand = button.Command;
+            }
+
+            Assert.IsNotNull(buttonCommand);
             _navService.Expect("NavigateToView", new List<object>() { "SettingsView", null }, 0);
-            _vm.GoToSettingsCommand.Execute(null);
+            buttonCommand.Execute(null);
         }
 
         [TestMethod]

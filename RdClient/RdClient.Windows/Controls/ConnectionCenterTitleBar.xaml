@@ -7,6 +7,7 @@
     xmlns:local="using:RdClient.Controls"    
     xmlns:design="using:RdClient.DesignTime" 
     xmlns:converters="using:RdClient.Converters"
+    xmlns:sconverters="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Helpers"
     xmlns:shelpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
@@ -32,6 +33,7 @@
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
             <converters:SegoeGlyphToSymbolIconConverter x:Key="segoeToSymbolIcon"/>
+            <sconverters:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
             <converters:ResourceIdToLocalizedStringConverter x:Key="ResourceIdToLocalizedStringConverter">
                 <converters:ResourceIdToLocalizedStringConverter.LocalizedString>
                     <shelpers:LocalizedString/>
@@ -44,8 +46,6 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
@@ -64,10 +64,8 @@
             </ListBox>
         </Grid>
         <Button Grid.Column="2" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource AddIcon}" Flyout="{StaticResource AddConnectionMenuFlyout}" />
-        <Button Grid.Column="3" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource MultiSelectIcon}" Command="{Binding ToggleDesktopSelectionCommand}" />
 
-
-        <ItemsControl Grid.Column="5" ItemsSource="{Binding ToolbarItems}">
+        <ItemsControl Grid.Column="3" ItemsSource="{Binding ToolbarItems}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>
@@ -88,8 +86,11 @@
                             <Button
                                 Style="{StaticResource ConnectionCenterBarButtonStyle}"
                                 Command="{Binding Command}"
+                                Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
+
+                            <!--
                                 Content="{Binding Glyph, Converter={StaticResource segoeToSymbolIcon}}">
-                            </Button>
+                            -->
                         </DataTemplate>
 
                         <!-- SeparatorBarItemModel -->
