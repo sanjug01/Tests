@@ -11,17 +11,21 @@ namespace RdClient.Shared.ViewModels
     {
         private RelayCommand _goBackCommand;
         private RelayCommand _addUserCommand;
+        private RelayCommand _addGatewayCommand;
         private bool _showGeneralSettings;
         private bool _showGatewaySettings;
         private bool _showUserSettings;
         private GeneralSettings _generalSettings;
         private ReadOnlyObservableCollection<ICredentialViewModel> _credentialViewModels;
+        private ReadOnlyObservableCollection<IGatewayViewModel> _gatewayViewModels;
         private bool _hasCredentials;
+        private bool _hasGateways;
 
         public SettingsViewModel()
         {
             _goBackCommand = new RelayCommand(o => this.GoBackCommandExecute());
             _addUserCommand = new RelayCommand(o => this.AddUserCommandExecute());
+            _addGatewayCommand = new RelayCommand(o => this.AddGatewayCommandExecute());
         }
 
         public ICommand GoBackCommand
@@ -32,6 +36,11 @@ namespace RdClient.Shared.ViewModels
         public ICommand AddUserCommand
         {
             get { return _addUserCommand; }
+        }
+
+        public ICommand AddGatewayCommand
+        {
+            get { return _addGatewayCommand; }
         }
 
         public bool ShowGeneralSettings
@@ -64,10 +73,22 @@ namespace RdClient.Shared.ViewModels
             private set { SetProperty(ref _credentialViewModels, value); }
         }
 
+        public ReadOnlyObservableCollection<IGatewayViewModel> GatewaysViewModels
+        {
+            get { return _gatewayViewModels; }
+            private set { SetProperty(ref _gatewayViewModels, value); }
+        }
+
         public bool HasCredentials
         {
             get { return _hasCredentials; }
             private set { SetProperty(ref _hasCredentials, value); }
+        }
+
+        public bool HasGateways
+        {
+            get { return _hasGateways; }
+            private set { SetProperty(ref _hasGateways, value); }
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -87,6 +108,13 @@ namespace RdClient.Shared.ViewModels
                 this.ReleaseCredentialsViewModel);
             this.CredentialsViewModels.CastAndCall<INotifyPropertyChanged>(npc => npc.PropertyChanged += this.OnCredentialsViewModelsPropertyChanged);
             this.HasCredentials = this.CredentialsViewModels.Count > 0;
+
+            this.GatewaysViewModels = TransformingObservableCollection<IModelContainer<GatewayModel>, IGatewayViewModel>
+                .Create(this.ApplicationDataModel.Gateways.Models,
+                this.CreateGatewayViewModel,
+                this.ReleaseGatewayViewModel);
+            this.GatewaysViewModels.CastAndCall<INotifyPropertyChanged>(npc => npc.PropertyChanged += this.OnGatewaysViewModelsPropertyChanged);
+            this.HasGateways = this.GatewaysViewModels.Count > 0;
         }
 
         protected override void OnDismissed()
@@ -106,6 +134,11 @@ namespace RdClient.Shared.ViewModels
                 npc.PropertyChanged -= this.OnCredentialsViewModelsPropertyChanged);
             this.CredentialsViewModels = null;
             this.HasCredentials = false;
+
+            this.GatewaysViewModels.CastAndCall<INotifyPropertyChanged>(npc =>
+                npc.PropertyChanged -= this.OnGatewaysViewModelsPropertyChanged);
+            this.GatewaysViewModels = null;
+            this.HasGateways = false;
 
             base.OnDismissed();
         }
@@ -128,11 +161,31 @@ namespace RdClient.Shared.ViewModels
             vm.Dismissed();
         }
 
+        private IGatewayViewModel CreateGatewayViewModel(IModelContainer<GatewayModel> container)
+        {
+            IGatewayViewModel vm = new GatewayViewModel(container);
+            vm.Presented(this.NavigationService, this.ApplicationDataModel);
+            return vm;
+        }
+
+        private void ReleaseGatewayViewModel(IGatewayViewModel vm)
+        {
+            vm.Dismissed();
+        }
+
         private void OnCredentialsViewModelsPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if(e.PropertyName.Equals("Count"))
             {
                 this.HasCredentials = this.CredentialsViewModels.Count > 0;
+            }
+        }
+
+        private void OnGatewaysViewModelsPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("Count"))
+            {
+                this.HasGateways = this.GatewaysViewModels.Count > 0;
             }
         }
 
@@ -156,6 +209,12 @@ namespace RdClient.Shared.ViewModels
             });
 
             NavigationService.PushModalView("AddUserView", args, addUserCompleted);
+        }
+
+        private void AddGatewayCommandExecute()
+        {
+            AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
+            NavigationService.PushModalView("AddOrEditGatewayView", args);
         }
     }
 }

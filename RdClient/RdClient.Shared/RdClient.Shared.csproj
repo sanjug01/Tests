@@ -214,6 +214,7 @@
     <Compile Include="Models\CloudWorkspaceModel.cs" />
     <Compile Include="Models\CredentialsModel.cs" />
     <Compile Include="Models\CredentialsNeededEventArgs.cs" />
+    <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\DesktopModel.cs" />
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
@@ -277,11 +278,14 @@
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
+    <Compile Include="ViewModels\AddOrEditGatewayViewModel.cs" />
     <Compile Include="ViewModels\CertificateValidationCompletion.cs" />
     <Compile Include="ViewModels\AddOrEditWorkspaceViewModel.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModel.cs" />
+    <Compile Include="ViewModels\GatewayViewModel.cs" />
     <Compile Include="ViewModels\CredentialViewModel.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModel.cs" />
+    <Compile Include="ViewModels\DeleteGatewayViewModel.cs" />
     <Compile Include="ViewModels\DeleteUserViewModel.cs" />
     <Compile Include="ViewModels\DesktopViewModel.cs" />
     <Compile Include="Navigation\Extensions\DataModelExtension.cs" />
@@ -294,6 +298,7 @@
     <Compile Include="ViewModels\EditCredentialsTasks\NewCredentialsTask.cs" />
     <Compile Include="ViewModels\EditCredentialsViewModel.cs" />
     <Compile Include="ViewModels\IConnectionCenterViewModel.cs" />
+    <Compile Include="ViewModels\IGatewayViewModel.cs" />
     <Compile Include="ViewModels\ICredentialViewModel.cs" />
     <Compile Include="ViewModels\IDesktopViewModel.cs" />
     <Compile Include="Navigation\NavigationExtensions.cs" />

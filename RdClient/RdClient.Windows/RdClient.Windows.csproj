@@ -125,8 +125,17 @@
     <Compile Include="Controls\ConnectionCenterTitleBar.xaml.cs">
       <DependentUpon>ConnectionCenterTitleBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ExtendedGatewayControl.xaml.cs">
+      <DependentUpon>ExtendedGatewayControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GatewayControl.xaml.cs">
+      <DependentUpon>GatewayControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CredentialControl.xaml.cs">
       <DependentUpon>CredentialControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GatewayListControl.xaml.cs">
+      <DependentUpon>GatewayListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CredentialListControl.xaml.cs">
       <DependentUpon>CredentialListControl.xaml</DependentUpon>
@@ -163,6 +172,9 @@
     <Compile Include="Controls\SessionReconnectControl.xaml.cs">
       <DependentUpon>SessionReconnectControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SettingsAddGatewayControl.xaml.cs">
+      <DependentUpon>SettingsAddGatewayControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SettingsAddUserControl.xaml.cs">
       <DependentUpon>SettingsAddUserControl.xaml</DependentUpon>
     </Compile>
@@ -182,6 +194,7 @@
       <DependentUpon>WorkspaceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Data\ApplicationDataLocalStorageFolder.cs" />
+    <Compile Include="DesignTime\FakeGatewayViewModel.cs" />
     <Compile Include="DesignTime\FakeEditCredentialsViewModel.cs" />
     <Compile Include="DesignTime\FakeRemoteResourceViewModel.cs" />
     <Compile Include="DesignTime\FakeWorkspaceViewModel.cs" />
@@ -191,8 +204,14 @@
     <Compile Include="Models\RejectSavedPasswordConnectionSource.cs" />
     <Compile Include="Models\SingleSwapChainPanelRdpConnectionSource.cs" />
     <Compile Include="Models\SuccessfulConnectionSource.cs" />
+    <Compile Include="Views\AddOrEditGatewayView.xaml.cs">
+      <DependentUpon>AddOrEditGatewayView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AddOrEditWorkspaceView.xaml.cs">
       <DependentUpon>AddOrEditWorkspaceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DeleteGatewayView.xaml.cs">
+      <DependentUpon>DeleteGatewayView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DeleteUserView.xaml.cs">
       <DependentUpon>DeleteUserView.xaml</DependentUpon>
@@ -326,9 +345,21 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ExtendedGatewayControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\GatewayControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\CredentialControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GatewayListControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\CredentialListControl.xaml">
       <SubType>Designer</SubType>
@@ -374,6 +405,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\SettingsAddGatewayControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\SettingsAddUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -398,9 +433,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AddOrEditGatewayView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\AddOrEditWorkspaceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DeleteGatewayView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\DeleteUserView.xaml">
       <SubType>Designer</SubType>

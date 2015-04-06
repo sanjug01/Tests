@@ -203,5 +203,99 @@
 
             Assert.AreNotEqual(0, desktops);
         }
+
+        [TestMethod]
+        public void NewApplicationDataModel_AddGatewaySaveChangeGateway_CanBeSaved()
+        {
+            IList<ICommand> changes = new List<ICommand>();
+            ApplicationDataModel adm = new ApplicationDataModel()
+            {
+                ModelSerializer = new SerializableModelSerializer(),
+                RootFolder = new MemoryStorageFolder()
+            };
+            IPersistentObject po = adm;
+
+            adm.Gateways.AddNewModel(new GatewayModel());
+            po.Save.Execute(null);
+            GatewayModel gateway = adm.Gateways.Models[0].Model;
+            Assert.IsNotNull(gateway);
+            Assert.IsFalse(po.Save.CanExecute(null));
+            po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
+
+            gateway.HostName = "OtherGateway";
+
+            Assert.IsTrue(po.Save.CanExecute(null));
+            Assert.AreEqual(1, changes.Count);
+            Assert.AreSame(po.Save, changes[0]);
+        }
+
+        [TestMethod]
+        public void ApplicationDataModel_RemoveGateway_DesktopsUpdated()
+        {
+            ApplicationDataModel adm = new ApplicationDataModel()
+            {
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer()
+            };
+            IPersistentObject po = adm;
+            Guid gatewayId = adm.Gateways.AddNewModel(new GatewayModel());
+            for (int i = 0; i < 100; ++i)
+            {
+                DesktopModel desktop = new DesktopModel()
+                {
+                    GatewayId = (0 == i % 5) ? gatewayId : Guid.Empty
+                };
+                adm.LocalWorkspace.Connections.AddNewModel(desktop);
+            }
+            po.Save.Execute(null);
+
+            adm.Gateways.RemoveModel(gatewayId);
+
+            int desktops = 0;
+
+            foreach (IModelContainer<RemoteConnectionModel> container in adm.LocalWorkspace.Connections.Models)
+            {
+                if (container.Model is DesktopModel)
+                {
+                    Assert.AreEqual(Guid.Empty, ((DesktopModel)container.Model).GatewayId);
+                    ++desktops;
+                }
+            }
+
+            Assert.AreNotEqual(0, desktops);
+        }
+
+        [TestMethod]
+        public void ApplicationDataModel_RemoveCredentials_GatewaysUpdated()
+        {
+            ApplicationDataModel adm = new ApplicationDataModel()
+            {
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer()
+            };
+            IPersistentObject po = adm;
+            Guid credentialsId = adm.Credentials.AddNewModel(new CredentialsModel());
+            for (int i = 0; i < 100; ++i)
+            {
+                GatewayModel gateway = new GatewayModel()
+                {
+                    CredentialsId = (0 == i % 3) ? credentialsId : Guid.Empty
+                };
+                adm.Gateways.AddNewModel(gateway);
+            }
+            po.Save.Execute(null);
+
+            adm.Credentials.RemoveModel(credentialsId);
+
+            int gateways = 0;
+
+            foreach (IModelContainer<GatewayModel> container in adm.Gateways.Models)
+            {
+                Assert.AreEqual(Guid.Empty, ((GatewayModel)container.Model).CredentialsId);
+                ++gateways;
+            }
+
+            Assert.AreNotEqual(0, gateways);
+        }
     }
 }

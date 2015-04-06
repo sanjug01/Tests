@@ -9,6 +9,8 @@ namespace RdClient.DesignTime
     {
         private readonly ObservableCollection<ICredentialViewModel> _source;
         private readonly ReadOnlyObservableCollection<ICredentialViewModel> _credVMs;
+        private readonly ObservableCollection<IGatewayViewModel> _sourceGateways;
+        private readonly ReadOnlyObservableCollection<IGatewayViewModel> _gatewayVMs;
 
         public FakeSettingsViewModel()
         {
@@ -29,8 +31,16 @@ namespace RdClient.DesignTime
                 new FakeCredentialViewModel(),
                 new FakeCredentialViewModel(),
             };
-
             _credVMs = new ReadOnlyObservableCollection<ICredentialViewModel>(_source);
+
+            _sourceGateways = new ObservableCollection<IGatewayViewModel>()
+            {
+                new FakeGatewayViewModel(),
+                new FakeGatewayViewModel(),
+                new FakeGatewayViewModel(),
+                new FakeGatewayViewModel(),
+            };
+            _gatewayVMs = new ReadOnlyObservableCollection<IGatewayViewModel>(_sourceGateways);
         }
 
         public ICommand GoBackCommand {get; set;}
@@ -49,14 +59,29 @@ namespace RdClient.DesignTime
             get { return null; }
         }
 
+        public ICommand AddGatewayCommand
+        {
+            get { return null; }
+        }
+
         public bool HasCredentials
         {
             get { return this.CredentialsViewModels.Count > 0; }
         }
 
+        public bool HasGateways
+        {
+            get { return this.GatewaysViewModels.Count > 0; }
+        }
+
         public ReadOnlyObservableCollection<ICredentialViewModel> CredentialsViewModels
         {
             get { return _credVMs; }
+        }
+
+        public ReadOnlyObservableCollection<IGatewayViewModel> GatewaysViewModels
+        {
+            get { return _gatewayVMs; }
         }
     }
 }

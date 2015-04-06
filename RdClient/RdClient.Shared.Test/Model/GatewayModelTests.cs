@@ -8,12 +8,12 @@
     using System.ComponentModel;
 
     [TestClass]
-    public sealed class DesktopModelTests
+    public sealed class GatewayModelTests
     {
         [TestMethod]
-        public void NewDesktopModel_DefaultProperties()
+        public void GatewayModel_New_DefaultProperties()
         {
-            DesktopModel model = new DesktopModel();
+            GatewayModel model = new GatewayModel();
 
             Assert.IsNull(model.HostName);
             Assert.IsFalse(model.HasCredentials);
@@ -21,10 +21,10 @@
         }
 
         [TestMethod]
-        public void DesktopModel_ChangeCredentialsId_ChangeReported()
+        public void GatewayModel_ChangeCredentialsId_ChangeReported()
         {
             IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
-            DesktopModel model = new DesktopModel();
+            GatewayModel model = new GatewayModel();
             Guid id = Guid.NewGuid();
             model.PropertyChanged += (sender, e) => changes.Add(e);
             
@@ -38,10 +38,10 @@
         }
 
         [TestMethod]
-        public void DesktopModel_ChangeHostName_ChangeReported()
+        public void GatewayModel_ChangeHostName_ChangeReported()
         {
             IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
-            DesktopModel model = new DesktopModel();
+            GatewayModel model = new GatewayModel();
             model.PropertyChanged += (sender, e) => changes.Add(e);
 
             model.HostName = "NewHostName";
@@ -50,23 +50,6 @@
             Assert.AreEqual(2, changes.Count);
             Assert.AreEqual("HostName", changes[0].PropertyName);
             Assert.AreEqual("Status", changes[1].PropertyName);
-        }
-
-        [TestMethod]
-        public void DesktopModel_ChangeGatewayId_ChangeReported()
-        {
-            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
-            DesktopModel model = new DesktopModel();
-            Guid id = Guid.NewGuid();
-            model.PropertyChanged += (sender, e) => changes.Add(e);
-
-            model.GatewayId = id;
-
-            Assert.AreEqual(id, model.GatewayId);
-            Assert.AreEqual(3, changes.Count);
-            Assert.AreEqual("GatewayId", changes[0].PropertyName);
-            Assert.AreEqual("Status", changes[1].PropertyName);
-            Assert.AreEqual("HasGateway", changes[2].PropertyName);
         }
     }
 }
