@@ -24,14 +24,25 @@
         //
         // Desktop view models created for elements of _orderedConnections.Models.
         //
-        private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;        
+        private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
+        private ReadOnlyObservableCollection<IWorkspaceViewModel> _workspaceViewModels;
+        //
+        // Mutable collection of toolbar item models. When the view model needs to modify contents of the toolbar,
+        // it modifies this collection.
+        //
+        private readonly ObservableCollection<BarItemModel> _toolbarItemsSource;
+        //
+        // Read-only wrapper of the collection of toolbar item models returned by the ToolbarItems property
+        // of the IConnectionCenterViewModel interface. The property is used in XAML bindings.
+        //
+        private readonly ReadOnlyObservableCollection<BarItemModel> _toolbarItems;
+
         private int _selectedCount;
         private bool _desktopsSelectable;
         private bool _showDesktops;
         private bool _showApps;
         private bool _hasDesktops;
         private bool _hasApps;
-        private ReadOnlyObservableCollection<IWorkspaceViewModel> _workspaceViewModels;
 
         //
         // App bar items
@@ -94,12 +105,21 @@
             this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);            
             this.EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => (1 == this.SelectedCount) );
             this.DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
-            this.ToggleDesktopSelectionCommand = new RelayCommand(this.ToggleDesktopSelectionCommandExecute);
-            this.GoToSettingsCommand = new RelayCommand(this.GoToSettingsCommandExecute);
             this.AddWorkspaceCommand = new RelayCommand(o => AddWorkspaceExecute());
 
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, EditItemStringId, BarItemModel.ItemAlignment.Right);
             _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, DeleteItemStringId, BarItemModel.ItemAlignment.Right);
+
+            _toolbarItemsSource = new ObservableCollection<BarItemModel>();
+            _toolbarItems = new ReadOnlyObservableCollection<BarItemModel>(_toolbarItemsSource);
+            //
+            // Add toolbar buttons
+            //
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.MultiSelection, new RelayCommand(this.ToggleDesktopSelectionCommandExecute), "Select"));
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
+            //
+            //_toolbarItemsSource.Add(new SeparatorBarItemModel());
+            //
 
             this.SelectedCount = 0;
         }
@@ -116,11 +136,14 @@
             private set { SetProperty(ref _workspaceViewModels, value); }
         }
 
+        public ReadOnlyObservableCollection<BarItemModel> ToolbarItems
+        {
+            get { return _toolbarItems; }
+        }
+
         public RelayCommand AddDesktopCommand { get; private set; }
         public RelayCommand EditDesktopCommand { get; private set; }
         public RelayCommand DeleteDesktopCommand { get; private set; }
-        public RelayCommand ToggleDesktopSelectionCommand { get; private set; }
-        public RelayCommand GoToSettingsCommand { get; private set; }
         public RelayCommand AddWorkspaceCommand { get; private set; }
 
         public bool HasDesktops
@@ -200,7 +223,8 @@
             set
             {
                 SetProperty(ref _desktopsSelectable, value);
-                foreach (DesktopViewModel vm in this.DesktopViewModels)
+
+                foreach (DesktopViewModel vm in _desktopViewModels)
                 {
                     vm.SelectionEnabled = value;
                 }                
@@ -245,7 +269,7 @@
                 this.DesktopViewModels = TransformingObservableCollection<IModelContainer<RemoteConnectionModel>, IDesktopViewModel>
                                             .Create(_orderedConnections.Models, this.CreateDesktopViewModel, this.RemovedDesktopViewModel);
 
-                INotifyPropertyChanged npc = this.DesktopViewModels;
+                INotifyPropertyChanged npc = _desktopViewModels;
                 npc.PropertyChanged += OnDesktopViewModelPropertyChanged;
             }
             else
@@ -253,7 +277,7 @@
                 //
                 // Attach the session factory to all desktop view models
                 //
-                foreach (IRemoteConnectionViewModel dvm in this.DesktopViewModels)
+                foreach (IRemoteConnectionViewModel dvm in _desktopViewModels)
                 {
                     dvm.Presenting(_sessionFactory);
                 }
@@ -267,7 +291,7 @@
                 this.WorkspaceViewModels = TransformingObservableCollection<IModelContainer<OnPremiseWorkspaceModel>, IWorkspaceViewModel>
                                             .Create(this.ApplicationDataModel.OnPremWorkspaces.Models, this.CreateWorkspaceViewModel);
 
-                INotifyPropertyChanged npc = this.WorkspaceViewModels;
+                INotifyPropertyChanged npc = _workspaceViewModels;
                 npc.PropertyChanged += OnWorkspaceViewModelsPropertyChanged;
             }
             else
@@ -275,21 +299,21 @@
 
             }  
 
-            this.HasDesktops = this.DesktopViewModels.Count > 0;
-            this.HasApps = this.WorkspaceViewModels.Count > 0;
+            this.HasDesktops = _desktopViewModels.Count > 0;
+            this.HasApps = _workspaceViewModels.Count > 0;
         }
 
         private void OnWorkspaceViewModelsPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals("Count"))
             {
-                this.HasApps = this.WorkspaceViewModels.Count > 0;
+                this.HasApps = _workspaceViewModels.Count > 0;
             }            
         }
 
         protected override void OnDismissed()
         {
-            foreach(IRemoteConnectionViewModel dvm in this.DesktopViewModels)
+            foreach(IRemoteConnectionViewModel dvm in _desktopViewModels)
             {
                 dvm.Dismissed();
             }
@@ -324,7 +348,7 @@
         {
             if (e.PropertyName.Equals("Count"))
             {
-                this.HasDesktops = this.DesktopViewModels.Count > 0;
+                this.HasDesktops = _desktopViewModels.Count > 0;
                 this.UpdateSelection();
             }
         }
@@ -332,7 +356,7 @@
         private void UpdateSelection()
         {
             int newSelectedCount = 0;            
-            foreach (DesktopViewModel vm in this.DesktopViewModels)
+            foreach (DesktopViewModel vm in _desktopViewModels)
             {
                 if (vm.IsSelected)
                 {
@@ -355,7 +379,7 @@
         private void EditDesktopCommandExecute(object o)
         {
             // extract first selected desktops - should be a single one
-            foreach (DesktopViewModel vm in this.DesktopViewModels)
+            foreach (DesktopViewModel vm in _desktopViewModels)
             {
                 if (vm.IsSelected)
                 {
@@ -371,7 +395,7 @@
             // extract list of selected desktops
             IList<IModelContainer<DesktopModel>> selectedDesktops = null;
 
-            foreach (DesktopViewModel vm in this.DesktopViewModels)
+            foreach (DesktopViewModel vm in _desktopViewModels)
             {
                 if (vm.IsSelected)
                 {
