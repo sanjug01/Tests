@@ -11,20 +11,40 @@
     xmlns:sconverters="using:RdClient.Shared.Converters"
     mc:Ignorable="d"
     d:DesignHeight="{StaticResource ConnectionCenterTitleBarHeight}"
-    d:DesignWidth="600">
+    d:DesignWidth="400">
 
     <d:UserControl.DataContext>
         <design:FakeConnectionCenterViewModel />
     </d:UserControl.DataContext>
     
     <UserControl.Resources>
+        <MenuFlyout x:Name="AddConnectionMenuFlyout">
+            <MenuFlyoutItem 
+                    x:Uid="Menu-AddDesktop"                 
+                    Text="Add desktop(d)" 
+                    Command="{Binding AddDesktopCommand}"/>
+            <MenuFlyoutItem
+                    x:Uid="Menu-AddWorkspace"
+                    Text="Add workspace(d)"
+                    Command="{Binding AddWorkspaceCommand}"/>
+        </MenuFlyout>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <sconverters:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
     </UserControl.Resources>
 
     <Grid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
-        <ItemsControl ItemsSource="{Binding ToolbarItems}">
+        <Button Grid.Column="0"
+                Style="{StaticResource ConnectionCenterBarButtonStyle}"
+                Content="{StaticResource AddIcon}"
+                Flyout="{StaticResource AddConnectionMenuFlyout}" />
+
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding ToolbarItems}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>

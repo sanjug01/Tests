@@ -32,7 +32,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0">
+                <Grid Grid.Row="0" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -58,7 +58,9 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <controls:ConnectionCenterTitleBar Grid.Row="0" />
+                <Grid Grid.Row="0" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
+                    <controls:ConnectionCenterTitleBar />
+                </Grid>
 
                 <Grid Grid.Row="1">
                     <controls:ItsLonelyHereControl />
@@ -125,6 +127,9 @@
                     </Storyboard>
                 </VisualState>
 
+                <!--
+                Phone layout - at the moment it is identical to the narrow one.
+                -->
                 <VisualState x:Name="PhoneLayout">
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentContainer" Storyboard.TargetProperty="ContentTemplate">

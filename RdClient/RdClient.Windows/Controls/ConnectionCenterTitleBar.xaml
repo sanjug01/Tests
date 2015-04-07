@@ -7,64 +7,32 @@
     xmlns:local="using:RdClient.Controls"    
     xmlns:design="using:RdClient.DesignTime" 
     xmlns:converters="using:RdClient.Converters"
-    xmlns:sconverters="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Helpers"
     xmlns:shelpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
     d:DesignHeight="{StaticResource ConnectionCenterTitleBarHeight}"
-    d:DesignWidth="1024">
+    d:DesignWidth="600">
 
     <d:UserControl.DataContext>
         <design:FakeConnectionCenterViewModel />
     </d:UserControl.DataContext>
 
     <UserControl.Resources>
-        <ResourceDictionary>
-            <MenuFlyout x:Name="AddConnectionMenuFlyout">
-                <MenuFlyoutItem 
-                    x:Uid="Menu-AddDesktop"                 
-                    Text="Add desktop(d)" 
-                    Command="{Binding AddDesktopCommand}"/>
-                <MenuFlyoutItem
-                    x:Uid="Menu-AddWorkspace"
-                    Text="Add workspace(d)"
-                    Command="{Binding AddWorkspaceCommand}"/>                
-            </MenuFlyout>
-            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-            <converters:SegoeGlyphToSymbolIconConverter x:Key="segoeToSymbolIcon"/>
-            <sconverters:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
-            <converters:ResourceIdToLocalizedStringConverter x:Key="ResourceIdToLocalizedStringConverter">
-                <converters:ResourceIdToLocalizedStringConverter.LocalizedString>
-                    <shelpers:LocalizedString/>
-                </converters:ResourceIdToLocalizedStringConverter.LocalizedString>
-            </converters:ResourceIdToLocalizedStringConverter>
-        </ResourceDictionary>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
-    <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        
-        <Grid Grid.Column="0">
-            <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}" SelectedIndex="0">
-                <ListBoxItem 
-                    x:Uid="ConnectionCenter_DesktopLabel"
-                    IsSelected="{Binding Path=ShowDesktops, Mode=TwoWay}"
-                    Visibility="{Binding Path=HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Content="Desktops(d)"/>
-                <ListBoxItem
-                    x:Uid="ConnectionCenter_AppLabel"
-                    IsSelected="{Binding Path=ShowApps, Mode=TwoWay}"
-                    Visibility="{Binding Path=HasApps, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Content="Apps(d)" />
-            </ListBox>
-        </Grid>
-        
-        <Button Grid.Column="2" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource AddIcon}" Flyout="{StaticResource AddConnectionMenuFlyout}" />
+    <Grid>
+        <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}" SelectedIndex="0">
+            <ListBoxItem 
+                x:Uid="ConnectionCenter_DesktopLabel"
+                IsSelected="{Binding Path=ShowDesktops, Mode=TwoWay}"
+                Visibility="{Binding Path=HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Content="Desktops(d)"/>
+            <ListBoxItem
+                x:Uid="ConnectionCenter_AppLabel"
+                IsSelected="{Binding Path=ShowApps, Mode=TwoWay}"
+                Visibility="{Binding Path=HasApps, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Content="Apps(d)" />
+        </ListBox>
     </Grid>
 </UserControl>
