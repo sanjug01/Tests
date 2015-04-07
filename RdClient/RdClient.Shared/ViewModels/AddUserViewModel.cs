@@ -9,8 +9,9 @@
     using System.Windows.Input;
 
     public enum CredentialPromptMode
-    {
+    {        
         EnterCredentials,
+        EditCredentials,
         InvalidCredentials,
         FreshCredentialsNeeded
     }
