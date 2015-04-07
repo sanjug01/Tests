@@ -9,13 +9,16 @@ using System.Collections.ObjectModel;
 
 namespace RdClient.DesignTime
 {
-    public class FakeConnectionCenterViewModel : IConnectionCenterViewModel
+    public sealed class FakeConnectionCenterViewModel : IConnectionCenterViewModel
     {
         private readonly ObservableCollection<IDesktopViewModel> _desktopViewModelsSource;
         private readonly ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
 
         private readonly ObservableCollection<IWorkspaceViewModel> _workspaceViewModelsSource;
         private readonly ReadOnlyObservableCollection<IWorkspaceViewModel> _workspaceViewModels;
+
+        private readonly ObservableCollection<BarItemModel> _toolbarItemsSource;
+        private readonly ReadOnlyObservableCollection<BarItemModel> _toolbarItems;
 
         public FakeConnectionCenterViewModel()
         {
@@ -36,6 +39,13 @@ namespace RdClient.DesignTime
             _workspaceViewModelsSource.Add(new FakeWorkspaceViewModel());
             _workspaceViewModelsSource.Add(new FakeWorkspaceViewModel());
             _workspaceViewModelsSource.Add(new FakeWorkspaceViewModel());
+
+            _toolbarItemsSource = new ObservableCollection<BarItemModel>();
+            _toolbarItems = new ReadOnlyObservableCollection<BarItemModel>(_toolbarItemsSource);
+
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => { }), "Home"));
+            _toolbarItemsSource.Add(new SeparatorBarItemModel());
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => { }), "Home"));
         }
 
         public RelayCommand AddDesktopCommand
@@ -51,6 +61,11 @@ namespace RdClient.DesignTime
         public ReadOnlyObservableCollection<IWorkspaceViewModel> WorkspaceViewModels
         {
             get { return _workspaceViewModels; }
+        }
+
+        ReadOnlyObservableCollection<BarItemModel> IConnectionCenterViewModel.ToolbarItems
+        {
+            get { return _toolbarItems; }
         }
 
         public bool HasDesktops

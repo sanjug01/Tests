@@ -17,6 +17,7 @@
         People = 0xE125,
         Add = 0xE109,
         Edit = 0xE104,
+        MultiSelection= 0xE762
     }
 
     /// <summary>
