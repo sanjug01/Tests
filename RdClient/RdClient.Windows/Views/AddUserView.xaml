@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Converters"
+    xmlns:sc="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
     RequestedTheme="Light">
@@ -19,7 +20,12 @@
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
-        <c:StringLengthToVisibilityConverter x:Key="StringLengthToVisibilityConverter" />        
+        <c:StringLengthToVisibilityConverter x:Key="StringLengthToVisibilityConverter" />
+        <sc:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter" >
+            <sc:TypeToLocalizedStringConverter.LocalizedString>
+                <helpers:LocalizedString />
+            </sc:TypeToLocalizedStringConverter.LocalizedString>
+        </sc:TypeToLocalizedStringConverter>
     </Page.Resources>
 
     <Grid>
@@ -49,15 +55,14 @@
 
                 <Grid Grid.Row="0">
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
-                               Foreground="{StaticResource rdBlackBrush}" 
-                               x:Uid="AddUser-AddCaption" Text="Enter Credentials (d)"/>
+                               Foreground="{StaticResource rdBlackBrush}"                                
+                               Text="{Binding Path=Mode, FallbackValue='Enter Credentials (d)', Converter={StaticResource TypeToLocalizedStringConverter}, ConverterParameter=Title}"/>
                 </Grid>
 
                 <Grid Grid.Row="1">
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource BodyTextBlockStyle}" 
-                                Name="txtMessage"
                                 Foreground="{StaticResource rdBlackBrush}"
-                                Visibility="{Binding ElementName=txtMessage, Path=Text, Converter={StaticResource StringLengthToVisibilityConverter}}" 
+                                Visibility="{Binding Path=ShowMessage, Converter={StaticResource BooleanToVisibilityConverter}}" 
                                 Text="{Binding Path=Mode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
                 </Grid>
 

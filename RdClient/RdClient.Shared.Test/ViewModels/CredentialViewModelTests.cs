@@ -55,6 +55,20 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
+        public void TestEditCommandPassesCorrectArgs()
+        {
+            _navService.Expect("PushModalView", parameters =>
+            {
+                AddUserViewArgs args = parameters[1] as AddUserViewArgs;
+                Assert.AreEqual(_cred, args.Credentials);
+                Assert.IsFalse(args.ShowSave);
+                Assert.AreEqual(CredentialPromptMode.EditCredentials, args.Mode);
+                return null;
+            });
+            _vm.EditCommand.Execute(null);
+        }
+
+        [TestMethod]
         public void TestDeleteCommandShowsDeleteUserView()
         {
             _navService.Expect("PushModalView", new List<object>() { "DeleteUserView", _container, null }, 0);

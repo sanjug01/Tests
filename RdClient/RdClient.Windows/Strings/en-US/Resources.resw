@@ -589,11 +589,11 @@
   </data>
   <data name="CredentialPromptMode_FreshCredentialsNeeded_String" xml:space="preserve">
     <value>(r) The remote PC does not accept saved credentials. Enter your credentials and try again.</value>
-    <comment>Text in the credential prompt dialog shown when a connection attempt failed because the credentials were invalid.</comment>
+    <comment>Text shown in the credential prompt dialog when fresh credentials are required.</comment>
   </data>
   <data name="CredentialPromptMode_InvalidCredentials_String" xml:space="preserve">
     <value>(r) The credentials that were used to connect to the remote PC didn't work. Enter different credentials and try again.</value>
-    <comment>Text in the credential prompt dialog when fresh credentials are required.</comment>
+    <comment>Text shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
   </data>
   <data name="Session_Reconnect_Attempts_String" xml:space="preserve">
     <value>(r) Connection attempt: {0} of {1}</value>
@@ -624,5 +624,25 @@
   <data name="Common_Flyout_RefreshItem.Text" xml:space="preserve">
     <value>(r) Refresh</value>
     <comment>Verb. Text in a button or pop out menu that is pressed to refresh an item.</comment>
+  </data>
+  <data name="CredentialPromptMode_EditCredentials_String" xml:space="preserve">
+    <value>(r) Enter the new username and password</value>
+    <comment>Text in the credential prompt dialog shown under title when editing existing credentials</comment>
+  </data>
+  <data name="CredentialPromptMode_EditCredentials_Title_String" xml:space="preserve">
+    <value>(r) Edit Credentials</value>
+    <comment>Title shown in the credential prompt dialog when editing existing credentials</comment>
+  </data>
+  <data name="CredentialPromptMode_EnterCredentials_Title_String" xml:space="preserve">
+    <value>(r) Enter Credentials</value>
+    <comment>Title shown in the credential prompt dialog when adding new credentials</comment>
+  </data>
+  <data name="CredentialPromptMode_FreshCredentialsNeeded_Title_String" xml:space="preserve">
+    <value>(r) Enter Credentials</value>
+    <comment>Title shown on the credential prompt dialog when fresh credentials are required.</comment>
+  </data>
+  <data name="CredentialPromptMode_InvalidCredentials_Title_String" xml:space="preserve">
+    <value>(r) Enter Credentials</value>
+    <comment>Title shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
   </data>
 </root>
