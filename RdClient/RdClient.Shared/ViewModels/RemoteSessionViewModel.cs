@@ -179,7 +179,7 @@
 
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
         {
-            if (_sessionState == SessionState.Failed)
+            if (this.IsFailureMessageVisible)
             {
                 this.DismissFailureMessage.Execute(null);
             }
