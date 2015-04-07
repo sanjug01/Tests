@@ -13,6 +13,11 @@ namespace RdClient.Shared.Converters
 
         public string GetKey(object value)
         {
+            return GetKey(value, null);
+        }
+
+        public string GetKey(object value, string parameter)
+        {
             string typeName = value.GetType().FullName.Split('.').Last();
             StringBuilder key = new StringBuilder();
             key.Append(typeName);
@@ -23,6 +28,11 @@ namespace RdClient.Shared.Converters
                 key.Append(value.ToString());
             }
 
+            if (parameter != null)
+            {
+                key.Append("_").Append(parameter);
+            }
+
             key.Append("_String");
 
             return key.ToString();
@@ -30,7 +40,7 @@ namespace RdClient.Shared.Converters
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return this.LocalizedString.GetLocalizedString(GetKey(value));
+            return this.LocalizedString.GetLocalizedString(GetKey(value, parameter as string));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
