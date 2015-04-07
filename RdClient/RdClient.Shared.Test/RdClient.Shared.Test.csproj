@@ -122,6 +122,7 @@
     <Compile Include="Converters\EnumMemberToSymbolStringConverterTests.cs" />
     <Compile Include="Converters\NotNullToVisibilityConverterTests.cs" />
     <Compile Include="Converters\NullToVisibilityConverterTests.cs" />
+    <Compile Include="Converters\GatewayComboBoxElementToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\ZoomPanStateConvertersTests.cs" />
     <Compile Include="Converters\PanKnobStateConvertersTests.cs" />
     <Compile Include="Converters\ErrorLocalizers\RdpDisconnectReasonLocalizerTests.cs" />
