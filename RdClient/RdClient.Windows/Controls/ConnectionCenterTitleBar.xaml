@@ -49,6 +49,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
+        
         <Grid Grid.Column="0">
             <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}" SelectedIndex="0">
                 <ListBoxItem 
@@ -63,47 +64,7 @@
                     Content="Apps(d)" />
             </ListBox>
         </Grid>
+        
         <Button Grid.Column="2" Style="{StaticResource ConnectionCenterBarButtonStyle}" Content="{StaticResource AddIcon}" Flyout="{StaticResource AddConnectionMenuFlyout}" />
-
-        <ItemsControl Grid.Column="3" ItemsSource="{Binding ToolbarItems}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplateSelector>
-                <!--
-                helpers:TypeNameDataTemplateSelector lists item templates keyed with the name of a bar item model class.
-                x:Key of the <DataTemplate> elements may be one of the following:
-                    › SegoeGlyphBarButtonModel - Glyph property may be converted to an icon by conv:SegoeGlyphToSymbolIconConverter.
-                    › SeparatorBarItemModel - a vertical bar that may separate groups of buttons into logical groups
-                -->
-                <helpers:TypeNameDataTemplateSelector>
-                    <helpers:TypeNameDataTemplateSelector.Templates>
-
-                        <!-- SegoeGlyphBarButtonModel -->
-                        <DataTemplate x:Key="SegoeGlyphBarButtonModel">
-                            <Button
-                                Style="{StaticResource ConnectionCenterBarButtonStyle}"
-                                Command="{Binding Command}"
-                                Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
-
-                            <!--
-                                Content="{Binding Glyph, Converter={StaticResource segoeToSymbolIcon}}">
-                            -->
-                        </DataTemplate>
-
-                        <!-- SeparatorBarItemModel -->
-                        <DataTemplate x:Key="SeparatorBarItemModel">
-                            <Rectangle Width="2" VerticalAlignment="Stretch"
-                                               Fill="{ThemeResource AppBarSeparatorForegroundThemeBrush}"
-                                               Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                               Margin="0, 8, 0, 12"/>
-
-                        </DataTemplate>
-                    </helpers:TypeNameDataTemplateSelector.Templates>
-                </helpers:TypeNameDataTemplateSelector>
-            </ItemsControl.ItemTemplateSelector>
-        </ItemsControl>
     </Grid>
 </UserControl>

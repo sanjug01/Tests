@@ -22,25 +22,129 @@
     </Page.DataContext>
 
     <Page.Resources>
-        <ResourceDictionary>
-            <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        </ResourceDictionary>
+        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        
+        <DataTemplate x:Key="DefaultLayoutTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <controls:ConnectionCenterTitleBar Grid.Column="0" />
+                    <controls:DynamicToolbar Grid.Column="1" />
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <controls:ItsLonelyHereControl />
+                    <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="NarrowLayoutTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <controls:ConnectionCenterTitleBar Grid.Row="0" />
+
+                <Grid Grid.Row="1">
+                    <controls:ItsLonelyHereControl />
+                    <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                </Grid>
+
+                <Grid Grid.Row="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
+                    <controls:DynamicToolbar HorizontalAlignment="Center"/>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="PhoneLayoutTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <controls:ConnectionCenterTitleBar Grid.Row="0" />
+
+                <Grid Grid.Row="1">
+                    <controls:ItsLonelyHereControl />
+                    <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                </Grid>
+
+                <Grid Grid.Row="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
+                    <controls:DynamicToolbar HorizontalAlignment="Center"/>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+
     </Page.Resources>
 
     <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <controls:ConnectionCenterTitleBar />            
-        </Grid>
-        <Grid Grid.Row="1">
-            <controls:ItsLonelyHereControl />
-            <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        </Grid>
+        <!--
+        Visual state manager must be placed inside the root grid.
+        -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <!--
+                Normal visial state - the toolbar with buttons is at the top of the view,
+                to the right of the desktops/apps selector.
+                -->
+                <VisualState x:Name="DefaultLayout">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentContainer" Storyboard.TargetProperty="ContentTemplate">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource DefaultLayoutTemplate}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                
+                <!--
+                Narrow layout - the toolbar is at the bottom, the desktops/apps selector is at the top.
+                -->
+                <VisualState x:Name="NarrowLayout">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentContainer" Storyboard.TargetProperty="ContentTemplate">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource NarrowLayoutTemplate}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:Name="PhoneLayout">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentContainer" Storyboard.TargetProperty="ContentTemplate">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PhoneLayoutTemplate}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <!--
+        The default layout template is like the name suggests DefaultLayoutTemplate.
+        Code behind may change the template when the size of the view changes.
+        -->
+        <ContentControl
+            x:Name="ContentContainer"
+            VerticalContentAlignment="Stretch"
+            HorizontalContentAlignment="Stretch"
+            ContentTemplate="{StaticResource DefaultLayoutTemplate}"/>
     </Grid>
     
 </Page>

@@ -1,0 +1,69 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.DynamicToolbar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:design="using:RdClient.DesignTime" 
+    xmlns:helpers="using:RdClient.Helpers"
+    xmlns:converters="using:RdClient.Converters"
+    xmlns:sconverters="using:RdClient.Shared.Converters"
+    mc:Ignorable="d"
+    d:DesignHeight="{StaticResource ConnectionCenterTitleBarHeight}"
+    d:DesignWidth="600">
+
+    <d:UserControl.DataContext>
+        <design:FakeConnectionCenterViewModel />
+    </d:UserControl.DataContext>
+    
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <sconverters:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
+    </UserControl.Resources>
+
+    <Grid>
+
+        <ItemsControl ItemsSource="{Binding ToolbarItems}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            
+            <ItemsControl.ItemTemplateSelector>
+                <!--
+                helpers:TypeNameDataTemplateSelector lists item templates keyed with the name of a bar item model class.
+                x:Key of the <DataTemplate> elements may be one of the following:
+                    › SegoeGlyphBarButtonModel - Glyph property may be converted to an icon by conv:SegoeGlyphToSymbolIconConverter.
+                    › SeparatorBarItemModel - a vertical bar that may separate groups of buttons into logical groups
+                -->
+                <helpers:TypeNameDataTemplateSelector>
+                    <helpers:TypeNameDataTemplateSelector.Templates>
+
+                        <!-- SegoeGlyphBarButtonModel -->
+                        <DataTemplate x:Key="SegoeGlyphBarButtonModel">
+                            <Button
+                                Style="{StaticResource ConnectionCenterBarButtonStyle}"
+                                Command="{Binding Command}"
+                                Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
+
+                            <!--
+                                Content="{Binding Glyph, Converter={StaticResource segoeToSymbolIcon}}">
+                            -->
+                        </DataTemplate>
+
+                        <!-- SeparatorBarItemModel -->
+                        <DataTemplate x:Key="SeparatorBarItemModel">
+                            <Rectangle Width="2" VerticalAlignment="Stretch"
+                                               Fill="{ThemeResource AppBarSeparatorForegroundThemeBrush}"
+                                               Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                               Margin="0, 8, 0, 12"/>
+
+                        </DataTemplate>
+                    </helpers:TypeNameDataTemplateSelector.Templates>
+                </helpers:TypeNameDataTemplateSelector>
+            </ItemsControl.ItemTemplateSelector>
+        </ItemsControl>
+    </Grid>
+</UserControl>
