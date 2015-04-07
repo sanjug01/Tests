@@ -6,11 +6,11 @@
     using RdClient.Shared.Input.Keyboard;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
-    using RdClient.Shared.Navigation;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite
     {
