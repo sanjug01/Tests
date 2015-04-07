@@ -109,7 +109,7 @@
             {
                 if (SetProperty(ref _mode, value))
                 {
-                    SetShowMessage();
+                    this.ShowMessage = this.Mode != CredentialPromptMode.EnterCredentials;
                 }
             }
         }
@@ -162,11 +162,6 @@
             this.User = _args.Credentials.Username;
             this.Password = _args.Credentials.Password;
             this.Mode = _args.Mode;         
-        }
-
-        private void SetShowMessage()
-        {
-            this.ShowMessage = this.Mode != CredentialPromptMode.EnterCredentials;
         }
 
         private void OkCommandHandler(object o)

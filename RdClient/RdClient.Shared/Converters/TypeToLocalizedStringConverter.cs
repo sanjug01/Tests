@@ -11,12 +11,7 @@ namespace RdClient.Shared.Converters
     {
         public IStringTable LocalizedString { get; set; }
 
-        public string GetKey(object value)
-        {
-            return GetKey(value, null);
-        }
-
-        public string GetKey(object value, string parameter)
+        public string GetKey(object value, string parameter = null)
         {
             string typeName = value.GetType().FullName.Split('.').Last();
             StringBuilder key = new StringBuilder();

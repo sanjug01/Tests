@@ -674,23 +674,23 @@
     <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show Gateways Settings</comment>
   </data>
   <data name="CredentialPromptMode_EditCredentials_String" xml:space="preserve">
-    <value>Enter the new username and password</value>
+    <value>(r) Enter the new username and password</value>
     <comment>Text in the credential prompt dialog shown under title when editing existing credentials</comment>
   </data>
   <data name="CredentialPromptMode_EditCredentials_Title_String" xml:space="preserve">
-    <value>Edit Credentials</value>
+    <value>(r) Edit Credentials</value>
     <comment>Title shown in the credential prompt dialog when editing existing credentials</comment>
   </data>
   <data name="CredentialPromptMode_EnterCredentials_Title_String" xml:space="preserve">
-    <value>Enter Credentials</value>
+    <value>(r) Enter Credentials</value>
     <comment>Title shown in the credential prompt dialog when adding new credentials</comment>
   </data>
   <data name="CredentialPromptMode_FreshCredentialsNeeded_Title_String" xml:space="preserve">
-    <value>Enter Credentials</value>
+    <value>(r) Enter Credentials</value>
     <comment>Title shown on the credential prompt dialog when fresh credentials are required.</comment>
   </data>
   <data name="CredentialPromptMode_InvalidCredentials_Title_String" xml:space="preserve">
-    <value>Enter Credentials</value>
+    <value>(r) Enter Credentials</value>
     <comment>Title shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
   </data>
 </root>
