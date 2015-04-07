@@ -75,6 +75,7 @@
     <Compile Include="Converters\StringLengthToInvisibilityConverter.cs" />
     <Compile Include="Converters\ByteArrayToStringConverter.cs" />
     <Compile Include="Converters\PanKnobStateToForegroundBrushConverter.cs" />
+    <Compile Include="Converters\GatewayComboBoxElementToLocalizedStringConverter.cs" />
     <Compile Include="Converters\ZoomPanStateToPanKnobVisibilityConverter.cs" />
     <Compile Include="Converters\ZoomPanStateToZoomInVisibilityConverter.cs" />
     <Compile Include="Converters\ZoomPanStateToZoomOutVisibilityConverter.cs" />
@@ -328,6 +329,7 @@
     <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
     <Compile Include="ViewModels\PanKnobViewModel.cs" />
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
+    <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
     <Compile Include="ViewModels\UserComboBoxElement.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />

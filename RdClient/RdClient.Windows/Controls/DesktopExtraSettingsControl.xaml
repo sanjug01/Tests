@@ -7,6 +7,7 @@
     xmlns:local="using:RdClient.Controls"
     xmlns:design="using:RdClient.DesignTime"    
     xmlns:converters="using:RdClient.Converters"
+    xmlns:helpers="using:RdClient.Shared.Helpers"    
     mc:Ignorable="d"
     d:DesignHeight="768"
     d:DesignWidth="700"
@@ -14,7 +15,12 @@
 
     
     <UserControl.Resources>
-        <converters:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />        
+        <converters:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
+        <converters:GatewayComboBoxElementToLocalizedStringConverter x:Key="GatewayComboBoxElementToLocalizedStringConverter">
+            <converters:GatewayComboBoxElementToLocalizedStringConverter.LocalizedString>
+                <helpers:LocalizedString />
+            </converters:GatewayComboBoxElementToLocalizedStringConverter.LocalizedString>
+        </converters:GatewayComboBoxElementToLocalizedStringConverter>
     </UserControl.Resources>
 
     <StackPanel Background="WhiteSmoke">
@@ -33,13 +39,20 @@
                                      Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             </TextBox>
         </Grid>
-
-        <!-- 
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Gateway" Text="Gateway(d)"/>
-                        <ComboBox Margin="0,8"
-                                      ItemsSource="{Binding Path=GatewayOptions}"
-                                      SelectedIndex="{Binding Path=SelectedGatewayOptionsIndex, Mode=TwoWay}" />
-                        -->
+        
+        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                   x:Uid="AddOrEditDesktop-Gateway" 
+                   Text="Gateway(d)"/>
+        <ComboBox Margin="0,8" 
+                              x:Uid="AddOrEditDesktop-Gateways-ComboBox"
+                              ItemsSource="{Binding Path=GatewayOptions}"
+                              SelectedIndex="{Binding Path=SelectedGatewayOptionsIndex, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Converter={StaticResource GatewayComboBoxElementToLocalizedStringConverter}}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
 
         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Sound" Text="Sound(d)"/>
         <ComboBox Margin="0,8"                                 

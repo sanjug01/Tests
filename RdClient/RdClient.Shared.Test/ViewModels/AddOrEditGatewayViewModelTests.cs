@@ -120,7 +120,6 @@
 
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                navigation.Expect("DismissModalView", new List<object> { null }, null);
                 _addOrEditGatewayVM.SaveCommand.Execute(null);
 
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
@@ -143,8 +142,6 @@
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 _addOrEditGatewayVM.SelectedUserOptionsIndex = 2;
-
-                navigation.Expect("DismissModalView", new List<object> { null }, null);
                 _addOrEditGatewayVM.SaveCommand.Execute(null);
 
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
@@ -244,7 +241,6 @@
                 AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
 
                 _addOrEditGatewayVM.PresentableView = view;
-                navigation.Expect("DismissModalView", new List<object> { view }, 0);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
                 _addOrEditGatewayVM.Host = expectedGateway.HostName;
 
@@ -270,7 +266,6 @@
                     new AddGatewayViewModelArgs();
 
                 _addOrEditGatewayVM.PresentableView = view;
-                navigation.Expect("DismissModalView", new List<object> { view }, 0);
 
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
@@ -294,7 +289,6 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
 
                 _addOrEditGatewayVM.PresentableView = view;
-                navigation.Expect("DismissModalView", new List<object> { view }, 0);
 
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
@@ -318,7 +312,6 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
 
                 _addOrEditGatewayVM.PresentableView = view;
-                navigation.Expect("DismissModalView", new List<object> { view }, 0);
 
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
@@ -341,7 +334,6 @@
                 AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
 
                 _addOrEditGatewayVM.PresentableView = view;
-                navigation.Expect("DismissModalView", new List<object> { view }, 0);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
                 Assert.IsTrue(_addOrEditGatewayVM.IsHostValid);
 
@@ -378,7 +370,6 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
 
                 _addOrEditGatewayVM.PresentableView = view;
-                navigation.Expect("DismissModalView", new List<object> { view }, 0);
                 Assert.IsTrue(_addOrEditGatewayVM.IsHostValid);
 
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);

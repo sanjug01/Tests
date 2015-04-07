@@ -563,6 +563,14 @@
     <value>(r) Ask every time</value>
     <comment>Text shown on AddOrEditDesktop view if credentials are not stored for the desktop</comment>
   </data>
+  <data name="AddOrEditDesktop_GatewayOption_Add_String" xml:space="preserve">
+    <value>(r) Add new gateway</value>
+    <comment>Text shown on AddOrEditDesktop view if new gateway should be added and stored for the desktop</comment>
+  </data>
+  <data name="AddOrEditDesktop_GatewayOption_None_String" xml:space="preserve">
+    <value>(r) No gateway</value>
+    <comment>Text shown on AddOrEditDesktop view if no gateway is stored for the desktop</comment>
+  </data>
   <data name="Common_Delete_String" xml:space="preserve">
     <value>(r) Delete</value>
     <comment>Verb. Text on a button that is pressed to delete an item</comment>
