@@ -29,6 +29,35 @@ namespace RdClient.Shared.ViewModels
         }
     }
 
+    public sealed class GatewayPromptResult
+    {
+        public static GatewayPromptResult CreateWithGateway(Guid gatewayId)
+        {
+            return new GatewayPromptResult(gatewayId);
+        }
+
+        public static GatewayPromptResult CreateCancelled()
+        {
+            return new GatewayPromptResult();
+        }
+
+        private GatewayPromptResult()
+        {
+            this.UserCancelled = true;
+            this.GatewayId = Guid.Empty;
+        }
+
+        private GatewayPromptResult(Guid gatewayId)
+        {
+            this.GatewayId = gatewayId;
+            this.UserCancelled = false;
+        }
+
+        public Guid GatewayId { get; private set; }
+
+        public bool UserCancelled { get; private set; }
+    }
+
     public class AddOrEditGatewayViewModel : ViewModelBase
     {
         private string _host;
@@ -73,42 +102,9 @@ namespace RdClient.Shared.ViewModels
             {
                 if (SetProperty(ref _selectedUserOptionsIndex, value))
                 {
-
-                    if (value >= 0)
+                    if (value >= 0 && UserComboBoxType.AddNew == this.UserOptions[value].UserComboBoxType)
                     {
-                        switch (this.UserOptions[value].UserComboBoxType)
-                        {
-                            case UserComboBoxType.AddNew:
-                                //
-                                // Push the EditCredentialsView with a task to create new credentials
-                                // and save it in the data model.
-                                //
-                                NewCredentialsTask.Present(this.NavigationService, this.ApplicationDataModel,
-                                    //
-                                    // Resource name in this case is the host name of the gateway object
-                                    //
-                                    this.Gateway.HostName,
-                                    //
-                                    // The editor has saved new credentials and reported their ID;
-                                    // Update the gateway object and reload the list od credentials.
-                                    //
-                                    credentialsId =>
-                                    {
-                                        this.Gateway.CredentialsId = credentialsId;
-                                        this.Update();
-                                    },
-                                    //
-                                    // The editor has been cancelled; reload the list of credentials and restore the
-                                    // selected item representing the current choice in the gateway object; if this is not done,
-                                    // the selection in the list will stay at the "Add new" item.
-                                    //
-                                    () => this.Update());
-                                break;
-
-                            case UserComboBoxType.AskEveryTime:
-                                this.Gateway.CredentialsId = Guid.Empty;
-                                break;
-                        }
+                        this.LaunchAddUserView();
                     }
                 }
             }
@@ -147,27 +143,27 @@ namespace RdClient.Shared.ViewModels
             if (this.Validate())
             {
                 this.Gateway.HostName = this.Host;
-
                 this.Gateway.HostName = this.Host;
+                Guid gatewayId = Guid.Empty;
 
                 if (null != this.UserOptions[this.SelectedUserOptionsIndex].Credentials)
                 {
                     this.Gateway.CredentialsId = this.UserOptions[this.SelectedUserOptionsIndex].Credentials.Id;
                 }
 
-
                 if (this.IsAddingGateway)
                 {
-                    this.ApplicationDataModel.Gateways.AddNewModel(this.Gateway);
+                    // returning gatewayId only if it is a new gateway
+                    gatewayId = this.ApplicationDataModel.Gateways.AddNewModel(this.Gateway);
                 }
 
-                NavigationService.DismissModalView(PresentableView);
+                DismissModal(GatewayPromptResult.CreateWithGateway(gatewayId));
             }
         }
 
         private void CancelCommandExecute(object o)
         {
-            NavigationService.DismissModalView(PresentableView);
+            DismissModal(GatewayPromptResult.CreateCancelled());
         }
 
         /// <summary>
@@ -189,30 +185,8 @@ namespace RdClient.Shared.ViewModels
 
         private void Update()
         {
-            this.UserOptions.Clear();
-            this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
-            this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
-
-            foreach (IModelContainer<CredentialsModel> credentials in this.ApplicationDataModel.Credentials.Models)
-            {
-                this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credentials));
-            }
-
-            int idx = 0;
-            for (idx = 0; idx < this.UserOptions.Count; idx++)
-            {
-                if (this.Gateway.HasCredentials &&
-                    this.UserOptions[idx].UserComboBoxType == UserComboBoxType.Credentials &&
-                    this.UserOptions[idx].Credentials.Id == this.Gateway.CredentialsId)
-                    break;
-            }
-
-            if (idx == this.UserOptions.Count)
-            {
-                idx = 0;
-            }
-
-            this.SelectedUserOptionsIndex = idx;            
+            this.LoadUsers();
+            this.SelectUserId(this.Gateway.CredentialsId);           
         }
 
 
@@ -238,6 +212,57 @@ namespace RdClient.Shared.ViewModels
             }
 
             Update();
+        }
+
+        private void LoadUsers()
+        {
+            // load users list
+            this.UserOptions.Clear();
+            this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
+            this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
+
+            foreach (IModelContainer<CredentialsModel> credentials in this.ApplicationDataModel.Credentials.Models)
+            {
+                this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credentials));
+            }
+        }
+
+        /// <summary>
+        /// change user selection without saving to the desktop instance.
+        /// </summary>
+        /// <param name="userId"> user id for the selected user </param>
+        private void SelectUserId(Guid userId)
+        {
+            int idx = 0;
+            if (Guid.Empty != userId)
+            {
+                for (idx = 0; idx < this.UserOptions.Count; idx++)
+                {
+                    if (this.UserOptions[idx].UserComboBoxType == UserComboBoxType.Credentials &&
+                        this.UserOptions[idx].Credentials.Id == userId)
+                        break;
+                }
+
+                if (idx == this.UserOptions.Count)
+                {
+                    idx = 0;
+                }
+            }
+
+            this.SelectedUserOptionsIndex = idx;
+        }
+
+        private void LaunchAddUserView()
+        {
+            // Push the EditCredentialsView with a task to create new credentials and save it in the data model.
+            NewCredentialsTask.Present(this.NavigationService, this.ApplicationDataModel,
+                this.Gateway.HostName,      // Resource name 
+                credentialsId =>            // Saved credentials handler
+                {
+                    this.LoadUsers();
+                    this.SelectUserId(credentialsId);
+                },
+                () => this.Update());       // Cancel handler
         }
     }
 }

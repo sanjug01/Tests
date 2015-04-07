@@ -46,6 +46,7 @@ namespace RdClient.Shared.ViewModels
         private readonly RelayCommand _hideDetailsCommand;
         private DesktopModel _desktop;
         private int _selectedUserOptionsIndex;
+        private int _selectedGatewayOptionsIndex;
 
         public AddOrEditDesktopViewModel()
         {
@@ -61,6 +62,7 @@ namespace RdClient.Shared.ViewModels
             IsHostValid = true;
 
             this.UserOptions = new ObservableCollection<UserComboBoxElement>();
+            this.GatewayOptions = new ObservableCollection<GatewayComboBoxElement>();
             //this.SelectedUserOptionsIndex = 0;
             this.IsExpandedView = false;
         }
@@ -74,7 +76,9 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        public ObservableCollection<UserComboBoxElement> UserOptions { get; set; }
+        public ObservableCollection<UserComboBoxElement> UserOptions { get; private set; }
+
+        public ObservableCollection<GatewayComboBoxElement> GatewayOptions { get; private set; }
 
         public int SelectedUserOptionsIndex 
         { 
@@ -84,42 +88,25 @@ namespace RdClient.Shared.ViewModels
             {
                 if (SetProperty(ref _selectedUserOptionsIndex, value))
                 {
-
-                    if (value >= 0)
+                    if (value >= 0 && UserComboBoxType.AddNew == this.UserOptions[value].UserComboBoxType)
                     {
-                        switch (this.UserOptions[value].UserComboBoxType)
-                        {
-                            case UserComboBoxType.AddNew:
-                                //
-                                // Push the EditCredentialsView with a task to create new credentials
-                                // and save it in the data model.
-                                //
-                                NewCredentialsTask.Present(this.NavigationService, this.ApplicationDataModel,
-                                    //
-                                    // Resource name in this case is the host name of the desktop object
-                                    //
-                                    this.Desktop.HostName,
-                                    //
-                                    // The editor has saved new credentials and reported their ID;
-                                    // Update the desktop object and reload the list od credentials.
-                                    //
-                                    credentialsId =>
-                                    {
-                                        this.Desktop.CredentialsId = credentialsId;
-                                        this.Update();
-                                    },
-                                    //
-                                    // The editor has been cancelled; reload the list of credentials and restore the
-                                    // selected item representing the current choice in the desktop object; if this is not done,
-                                    // the selection in the list will stay at the "Add new" item.
-                                    //
-                                    () => this.Update());
-                                break;
+                        this.LaunchAddGatewayView();
+                    }
+                }
+            }
+        }
 
-                            case UserComboBoxType.AskEveryTime:
-                                this.Desktop.CredentialsId = Guid.Empty;
-                                break;
-                        }
+        public int SelectedGatewayOptionsIndex
+        {
+            get { return _selectedGatewayOptionsIndex; }
+
+            set
+            {
+                if (SetProperty(ref _selectedGatewayOptionsIndex, value))
+                {
+                    if (value >= 0 && GatewayComboBoxType.AddNew == this.GatewayOptions[value].GatewayComboBoxType)
+                    {
+                        this.LaunchAddGatewayView();
                     }
                 }
             }
@@ -203,6 +190,10 @@ namespace RdClient.Shared.ViewModels
                     this.Desktop.CredentialsId = this.UserOptions[this.SelectedUserOptionsIndex].Credentials.Id;
                 }
 
+                if (null != this.GatewayOptions[this.SelectedGatewayOptionsIndex].Gateway)
+                {
+                    this.Desktop.GatewayId = this.GatewayOptions[this.SelectedGatewayOptionsIndex].Gateway.Id;
+                }
 
                 if (this.IsAddingDesktop)
                 {
@@ -237,30 +228,13 @@ namespace RdClient.Shared.ViewModels
 
         private void Update()
         {
-            this.UserOptions.Clear();
-            this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
-            this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
+            // load users list
+            this.LoadUsers();
+            this.SelectUserId(this.Desktop.CredentialsId);
 
-            foreach (IModelContainer<CredentialsModel> credentials in this.ApplicationDataModel.Credentials.Models)
-            {
-                this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credentials));
-            }
-
-            int idx = 0;
-            for (idx = 0; idx < this.UserOptions.Count; idx++)
-            {
-                if (this.Desktop.HasCredentials &&
-                    this.UserOptions[idx].UserComboBoxType == UserComboBoxType.Credentials &&
-                    this.UserOptions[idx].Credentials.Id == this.Desktop.CredentialsId)
-                    break;
-            }
-
-            if (idx == this.UserOptions.Count)
-            {
-                idx = 0;
-            }
-
-            this.SelectedUserOptionsIndex = idx;            
+            // load gateways list
+            this.LoadGateways();
+            this.SelectGatewayId(this.Desktop.GatewayId);
         }
 
 
@@ -296,5 +270,128 @@ namespace RdClient.Shared.ViewModels
 
             Update();
         }
+
+        private void GatewayPromptResultHandler(object sender, PresentationCompletionEventArgs args)
+        {
+            GatewayPromptResult result = args.Result as GatewayPromptResult;
+
+            if (result != null && !result.UserCancelled)
+            {
+                this.LoadGateways();
+                this.SelectGatewayId(result.GatewayId);
+            }
+        }
+
+        private void LaunchAddGatewayView()
+        {
+            AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
+            ModalPresentationCompletion addGatewayCompleted = new ModalPresentationCompletion(GatewayPromptResultHandler);
+            NavigationService.PushModalView("AddOrEditGatewayView", args, addGatewayCompleted);
+        }
+
+        private void LaunchAddUserView()
+        {
+            //
+            // Push the EditCredentialsView with a task to create new credentials
+            // and save it in the data model.
+            //
+            NewCredentialsTask.Present(this.NavigationService, this.ApplicationDataModel,
+                //
+                // Resource name in this case is the host name of the desktop object
+                //
+                this.Desktop.HostName,
+                //
+                // The editor has saved new credentials and reported their ID;
+                // Update the desktop object and reload the list od credentials.
+                //
+                credentialsId =>
+                {
+                    this.LoadUsers();
+                    this.SelectUserId(credentialsId);
+                },
+                //
+                // The editor has been cancelled; reload the list of credentials and restore the
+                // selected item representing the current choice in the desktop object; if this is not done,
+                // the selection in the list will stay at the "Add new" item.
+                //
+                () => this.Update());
+        }
+
+        private void LoadUsers()
+        {
+            // load users list
+            this.UserOptions.Clear();
+            this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
+            this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
+
+            foreach (IModelContainer<CredentialsModel> credentials in this.ApplicationDataModel.Credentials.Models)
+            {
+                this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credentials));
+            }
+        }
+
+        private void LoadGateways()
+        {
+            // load gateways list
+            this.GatewayOptions.Clear();
+            this.GatewayOptions.Add(new GatewayComboBoxElement(GatewayComboBoxType.None));
+            this.GatewayOptions.Add(new GatewayComboBoxElement(GatewayComboBoxType.AddNew));
+
+            foreach (IModelContainer<GatewayModel> gateway in this.ApplicationDataModel.Gateways.Models)
+            {
+                this.GatewayOptions.Add(new GatewayComboBoxElement(GatewayComboBoxType.Gateway, gateway));
+            }
+        }
+
+        /// <summary>
+        /// change user selection without saving to the desktop instance.
+        /// </summary>
+        /// <param name="userId"> user id for the selected user </param>
+        private void SelectUserId(Guid userId)
+        {
+            int idx = 0;
+            if (Guid.Empty != userId)
+            {
+                for (idx = 0; idx < this.UserOptions.Count; idx++)
+                {
+                    if (this.UserOptions[idx].UserComboBoxType == UserComboBoxType.Credentials &&
+                        this.UserOptions[idx].Credentials.Id == userId)
+                        break;
+                }
+
+                if (idx == this.UserOptions.Count)
+                {
+                    idx = 0;
+                }
+            }
+
+            this.SelectedUserOptionsIndex = idx;
+        }
+
+        /// <summary>
+        /// change gateway selection without saving to the desktop instance.
+        /// </summary>
+        /// <param name="gatewayId"> gateway id for the selected gateway </param>
+        private void SelectGatewayId(Guid gatewayId)
+        {
+            int idx = 0;
+            if (Guid.Empty != gatewayId)
+            {
+                for (idx = 0; idx < this.GatewayOptions.Count; idx++)
+                {
+                    if (this.GatewayOptions[idx].GatewayComboBoxType == GatewayComboBoxType.Gateway &&
+                        this.GatewayOptions[idx].Gateway.Id == gatewayId)
+                        break;
+                }
+
+                if (idx == this.GatewayOptions.Count)
+                {
+                    idx = 0;
+                }
+            }
+
+            this.SelectedGatewayOptionsIndex = idx;
+        }
+
     }
 }
