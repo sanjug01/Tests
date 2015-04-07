@@ -50,7 +50,7 @@ namespace RdClient.Shared.Test.Helpers
             int timerCallbacks = 0;
             TimeSpan shortTimespan = TimeSpan.FromMilliseconds(1.0d);
             _timer.Start(() => System.Threading.Interlocked.Increment(ref timerCallbacks), shortTimespan, true);
-            UAPSleep.Sleep(10);
+            UAPSleep.Sleep(50);
             _timer.Stop();
             Assert.IsTrue(timerCallbacks > 1);                        
         }
@@ -61,7 +61,7 @@ namespace RdClient.Shared.Test.Helpers
             int timerCallbacks = 0;
             TimeSpan shortTimespan = TimeSpan.FromMilliseconds(1.0d);
             _timer.Start(() => System.Threading.Interlocked.Increment(ref timerCallbacks), shortTimespan, false);
-            UAPSleep.Sleep(10);
+            UAPSleep.Sleep(50);
             _timer.Stop();
             Assert.AreEqual(1, timerCallbacks);
         }

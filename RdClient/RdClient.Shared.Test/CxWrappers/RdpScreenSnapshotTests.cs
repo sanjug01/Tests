@@ -33,7 +33,7 @@ namespace RdClient.Shared.Test.CxWrappers
         [TestMethod]
         public void TestCreateWithTooSmallBufferFails()
         {
-            Assert.IsTrue(ExceptionExpecter.ExpectException<OverflowException>(() =>
+            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
             {
                 int validWidth = _testData.RandomSource.Next(1, 20);
                 int validHeight = _testData.RandomSource.Next(1, 20);
