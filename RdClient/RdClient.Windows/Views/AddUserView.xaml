@@ -55,16 +55,14 @@
 
                 <Grid Grid.Row="0">
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
-                               Foreground="{StaticResource rdBlackBrush}" 
-                               x:Uid="AddUser-AddCaption" 
-                               Text="{Binding Path=Mode, Converter={StaticResource TypeToLocalizedStringConverter}, ConverterParameter=Title}"/>
+                               Foreground="{StaticResource rdBlackBrush}"                                
+                               Text="{Binding Path=Mode, FallbackValue='Enter Credentials (d)', Converter={StaticResource TypeToLocalizedStringConverter}, ConverterParameter=Title}"/>
                 </Grid>
 
                 <Grid Grid.Row="1">
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource BodyTextBlockStyle}" 
-                                Name="txtMessage"
                                 Foreground="{StaticResource rdBlackBrush}"
-                                Visibility="{Binding ElementName=txtMessage, Path=Text, Converter={StaticResource StringLengthToVisibilityConverter}}" 
+                                Visibility="{Binding Path=ShowMessage, Converter={StaticResource BooleanToVisibilityConverter}}" 
                                 Text="{Binding Path=Mode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
                 </Grid>
 

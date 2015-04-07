@@ -677,10 +677,6 @@
     <value>Enter the new username and password</value>
     <comment>Text in the credential prompt dialog shown under title when editing existing credentials</comment>
   </data>
-  <data name="CredentialPromptMode_EnterCredentials_String" xml:space="preserve">
-    <value> </value>
-    <comment>Text in the credential prompt dialog shown under title when adding new credentials. No message is shown in this case so we use a single whitespace</comment>
-  </data>
   <data name="CredentialPromptMode_EditCredentials_Title_String" xml:space="preserve">
     <value>Edit Credentials</value>
     <comment>Title shown in the credential prompt dialog when editing existing credentials</comment>
