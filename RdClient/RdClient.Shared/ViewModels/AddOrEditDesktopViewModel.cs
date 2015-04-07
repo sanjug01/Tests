@@ -90,7 +90,7 @@ namespace RdClient.Shared.ViewModels
                 {
                     if (value >= 0 && UserComboBoxType.AddNew == this.UserOptions[value].UserComboBoxType)
                     {
-                        this.LaunchAddGatewayView();
+                        this.LaunchAddUserView();
                     }
                 }
             }

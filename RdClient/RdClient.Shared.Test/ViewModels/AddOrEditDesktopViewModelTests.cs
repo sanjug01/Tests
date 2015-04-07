@@ -546,5 +546,116 @@
                 Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
             }
         }
+
+        /* ****************************
+        * *****  Gateway tests  *******
+        ******************************* */
+        [TestMethod]
+        public void EditDesktop_ShouldSaveGateway()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                GatewayModel gateway = new GatewayModel() { HostName = "fooGateway" };
+                Guid gatewayId = _dataModel.Gateways.AddNewModel(gateway);
+
+                DesktopModel desktop = new DesktopModel() { HostName = "foo" };
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+
+                _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex = 2;
+
+                navigation.Expect("DismissModalView", new List<object> { null }, null);
+                _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+
+                Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
+                Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
+                Assert.AreSame(desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+                Assert.AreEqual(gatewayId, ((DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model).GatewayId);
+            }
+        }
+
+        [TestMethod]
+        public void EditDesktop_ShouldSelectNoGatewayByDefault()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                DesktopModel desktop = new DesktopModel()
+                {
+                    HostName = "foo"
+                };
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+
+                Assert.AreEqual(0, _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex);
+            }
+        }
+
+        [TestMethod]
+        public void EditDesktop_ShouldSelectCorrectGateway()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                GatewayModel gateway = new GatewayModel() { HostName = "fooGateway" };
+
+                DesktopModel desktop = new DesktopModel()
+                {
+                    HostName = "foo",
+                    GatewayId = _dataModel.Gateways.AddNewModel(gateway)
+                };
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+
+                Assert.AreEqual(2, _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex);
+                Assert.AreSame(gateway, _addOrEditDesktopViewModel.GatewayOptions[_addOrEditDesktopViewModel.SelectedGatewayOptionsIndex].Gateway.Model);
+                Assert.AreEqual(desktop.GatewayId, _addOrEditDesktopViewModel.GatewayOptions[_addOrEditDesktopViewModel.SelectedGatewayOptionsIndex].Gateway.Id);
+            }
+        }
+
+        [TestMethod]
+        public void EditDesktop_ShouldUpdateSelectedGatewayIndex()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                GatewayModel gateway = new GatewayModel() { HostName = "fooGateway" };
+                DesktopModel desktop = new DesktopModel() { HostName = "myPc" };
+
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+                desktop.GatewayId = _dataModel.Gateways.AddNewModel(gateway);
+
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+
+                Assert.AreEqual(2, _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex);
+            }
+        }
+
+        [TestMethod]
+        public void EditDesktop_ShouldOpenAddGatewayDialog()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                DesktopModel desktop = new DesktopModel() { HostName = "myPc" };
+
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+
+                navigation.Expect("PushModalView", new List<object> { "AddOrEditGatewayView", null, null }, null);
+
+                _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex = 1;
+            }
+        }
+
+
     }
+
+
+
 }
