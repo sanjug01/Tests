@@ -730,5 +730,14 @@
             Assert.IsFalse(_vm.IsRightSideBarVisible);
             Assert.IsFalse(_vm.IsInterrupted);
         }
+
+        [TestMethod]
+        public void NavigateBackSetsHandledToTrue()
+        {
+            IBackCommandArgs backArgs = new BackCommandArgs();
+            backArgs.Handled = false;            
+            (_vm as IViewModel).NavigatingBack(backArgs);
+            Assert.IsTrue(backArgs.Handled);            
+        }
     }
 }

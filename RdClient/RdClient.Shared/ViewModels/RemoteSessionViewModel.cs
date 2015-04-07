@@ -10,6 +10,7 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using RdClient.Shared.Navigation;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite
     {
@@ -174,6 +175,19 @@
             _interruptedContinuation = null;
 
             base.OnDismissed();
+        }
+
+        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
+        {
+            if (_sessionState == SessionState.Failed)
+            {
+                this.DismissFailureMessage.Execute(null);
+            }
+            else
+            {
+                this.NavigateHome.Execute(null);
+            }
+            backArgs.Handled = true;
         }
 
         void IRemoteSessionViewSite.SetRemoteSessionView(IRemoteSessionView sessionView)
