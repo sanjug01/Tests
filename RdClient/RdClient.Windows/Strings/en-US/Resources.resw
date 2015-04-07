@@ -118,559 +118,511 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="RdpDisconnectCode_ServerTool_String" xml:space="preserve">
-    <value>Your admin might have ended your session. Try connecting again. If that doesn't work, ask your admin or tech support for help.</value>
+    <value>(r) Your admin might have ended your session. Try connecting again. If that doesn't work, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_IdleTimeout_String" xml:space="preserve">
-    <value>Your session timed out due to inactivity. Try connecting again.</value>
+    <value>(r) Your session timed out due to inactivity. Try connecting again.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_LogonTimeout_String" xml:space="preserve">
-    <value>Your session ended because you exceeded the time limit set for a session. This limit is set by the admin or by network policies. Try connecting again.</value>
+    <value>(r) Your session ended because you exceeded the time limit set for a session. This limit is set by the admin or by network policies. Try connecting again.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_ReplacedByOtherConnection_String" xml:space="preserve">
-    <value>Someone else connected to the remote PC. Try connecting again later.</value>
+    <value>(r) Someone else connected to the remote PC. Try connecting again later.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_ServerOutOfMemory_String" xml:space="preserve">
-    <value>Your session ended because the remote PC was low on memory.</value>
+    <value>(r) Your session ended because the remote PC was low on memory.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_ServerDeniedConnection_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC. Make sure the PC is turned on and connected to the network, and that remote access is enabled. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC. Make sure the PC is turned on and connected to the network, and that remote access is enabled. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_ServerInsufficientPrivileges_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC. You might not have permission to sign in remotely. Ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC. You might not have permission to sign in remotely. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_NoLicenseServer_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because no license servers were available to provide a license. Ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because no license servers were available to provide a license. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_NoLicenseAvailable_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because there were no licenses available for this PC. Ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because there were no licenses available for this PC. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_GenericLicenseError_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because of a licensing error. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because of a licensing error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_InvalidLicense_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because the license for this device isn't valid. Ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because the license for this device isn't valid. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_CantUpgradeLicense_String" xml:space="preserve">
-    <value>Your session ended because the license for your device couldn't be upgraded or renewed. Ask your admin or tech support for help.</value>
+    <value>(r) Your session ended because the license for your device couldn't be upgraded or renewed. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_NoRemoteConnectionLicense_String" xml:space="preserve">
-    <value>Your session ended because the remote PC isn't licensed to accept remote connections. Ask your admin or tech support for help.</value>
+    <value>(r) Your session ended because the remote PC isn't licensed to accept remote connections. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_GenericSecurityError_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because of a security error. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because of a security error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_ServerNameLookupFailed_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because the PC can't be found. Make sure the PC name is correct, and then try connecting again. If that doesn't work, you can try using the remote PC's IP address.</value>
+    <value>(r) We couldn't connect to the remote PC because the PC can't be found. Make sure the PC name is correct, and then try connecting again. If that doesn't work, you can try using the remote PC's IP address.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_GenericNetworkError_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC. This might be because of a network problem. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC. This might be because of a network problem. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_UnknownError_String" xml:space="preserve">
-    <value>Your session ended because of an error. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) Your session ended because of an error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_RemotingDisabled_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC. Make sure the PC is turned on and connected to the network, and that remote access is enabled.</value>
+    <value>(r) We couldn't connect to the remote PC. Make sure the PC is turned on and connected to the network, and that remote access is enabled.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_EncryptionFailed_String" xml:space="preserve">
-    <value>Your session ended because of a data encryption error. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) Your session ended because of a data encryption error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_InitFipsFailed_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because your device doesn't support the Remote Desktop FIPS encryption level. Ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because your device doesn't support the Remote Desktop FIPS encryption level. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_LoopbackUnsupported_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because your device and the remote PC are the same.</value>
+    <value>(r) We couldn't connect to the remote PC because your device and the remote PC are the same.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_ConnectionTimeout_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because the session couldn't be established in time. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because the session couldn't be established in time. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_ConnectionBroken_String" xml:space="preserve">
-    <value>The connection to the remote PC was lost. This might be because of a network connection problem. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) The connection to the remote PC was lost. This might be because of a network connection problem. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_VersionMismatch_String" xml:space="preserve">
-    <value>Your session ended because the local and server versions of the Remote Desktop protocol don't match. Update the Remote Desktop app, and then try connecting again.</value>
+    <value>(r) Your session ended because the local and server versions of the Remote Desktop protocol don't match. Update the Remote Desktop app, and then try connecting again.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_GenericProtocolError_String" xml:space="preserve">
-    <value>Your session ended because of a protocol error. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) Your session ended because of a protocol error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_DecompressionFailed_String" xml:space="preserve">
-    <value>Your session ended because of an error while decompressing data from the remote PC. Try connecting again.</value>
+    <value>(r) Your session ended because of an error while decompressing data from the remote PC. Try connecting again.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_GenericByServer_String" xml:space="preserve">
-    <value>The remote PC ended your session. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) The remote PC ended your session. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_CertMismatch_String" xml:space="preserve">
-    <value>Your session ended because an unexpected server authentication certificate was received from the remote PC. Ask your admin or tech support for help.</value>
+    <value>(r) Your session ended because an unexpected server authentication certificate was received from the remote PC. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_CertExpired_String" xml:space="preserve">
-    <value>Your session ended because the server authentication certificate received from the remote PC has expired or is invalid. Ask your admin or tech support for help.</value>
+    <value>(r) Your session ended because the server authentication certificate received from the remote PC has expired or is invalid. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_NoSuchUser_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because the user name doesn't exist. Make sure the user name is correct, and then try connecting again. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because the user name doesn't exist. Make sure the user name is correct, and then try connecting again. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_AccountRestriction_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because a user account restriction is preventing you from signing in. Ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because a user account restriction is preventing you from signing in. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_AccountLockedOut_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because the user account has been locked due to too many sign in or password change attempts. Wait a little while, and then try connecting again, or ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because the user account has been locked due to too many sign in or password change attempts. Wait a little while, and then try connecting again, or ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_AccountExpired_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because the user account has expired. Ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because the user account has expired. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_PasswordExpired_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because the password associated with the user account has expired. Change your password, or ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because the password associated with the user account has expired. Change your password, or ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_InvalidLogonHours_String" xml:space="preserve">
-    <value>Your session ended because the admin has restricted when you may sign in. Try connecting again later. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) Your session ended because the admin has restricted when you may sign in. Try connecting again later. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_PasswordMustChange_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because you must change your password before signing in. Change your password, or ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because you must change your password before signing in. Change your password, or ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_LogonTypeNotGranted_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because the admin has restricted the type of logon that you may use. Ask you admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because the admin has restricted the type of logon that you may use. Ask you admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_KrbUser2UserRequired_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because the Kerberos sub-protocol User2User is required. Ask you admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because the Kerberos sub-protocol User2User is required. Ask you admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_HybridRequired_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because it requires Network Level Authentication, which your device doesn't support. Ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because it requires Network Level Authentication, which your device doesn't support. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_TimeSkew_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because there's a date or time difference between your device and the remote PC. Make sure your clock is set to the correct time, and then try connecting again. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because there's a date or time difference between your device and the remote PC. Make sure your clock is set to the correct time, and then try connecting again. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_SSLHandshakeFailed_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC. This might be due to an expired password. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC. This might be due to an expired password. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_AccountDisabled_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because your account has been disabled. Ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because your account has been disabled. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_InvalidWorkStation_String" xml:space="preserve">
-    <value>We couldn't connect to the remote PC because your admin has limited the devices you can use to sign in. Ask your admin or tech support for help.</value>
+    <value>(r) We couldn't connect to the remote PC because your admin has limited the devices you can use to sign in. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_ArcFailed_String" xml:space="preserve">
-    <value>We couldn't automatically reconnect to the remote PC. Try connecting again.</value>
+    <value>(r) We couldn't automatically reconnect to the remote PC. Try connecting again.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="Disconnect_ErrorCode_String" xml:space="preserve">
-    <value>Inquiring minds may find this error code helpful: ‪0x{0}‬ </value>
+    <value>(r) Inquiring minds may find this error code helpful: ‪0x{0}‬ </value>
     <comment>Disconnection error located in the disconnect error dialog. {Locked="‪0x{0}‬"}</comment>
   </data>
   <data name="Disconnect_ExtendedErrorCode_String" xml:space="preserve">
-    <value>Inquiring minds may find this error code helpful: ‪0x{0}‬ (extended)</value>
+    <value>(r) Inquiring minds may find this error code helpful: ‪0x{0}‬ (extended)</value>
     <comment>Disconnection error located in the disconnect error dialog. {Locked="‪0x{0}‬"}</comment>
   </data>
   <data name="CertificateError_Critical_String" xml:space="preserve">
-    <value>critical certificate error</value>
+    <value>(r) critical certificate error</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_Expired_String" xml:space="preserve">
-    <value>certificate is expired</value>
+    <value>(r) certificate is expired</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_MismatchedCert_String" xml:space="preserve">
-    <value>certificate mismatch</value>
+    <value>(r) certificate mismatch</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_NameMismatch_String" xml:space="preserve">
-    <value>certificate name mismatch</value>
+    <value>(r) certificate name mismatch</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_RevocationUnknown_String" xml:space="preserve">
-    <value>certificate revocation unknown</value>
+    <value>(r) certificate revocation unknown</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_Revoked_String" xml:space="preserve">
-    <value>revoked certificate</value>
+    <value>(r) revoked certificate</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_UnknownError_String" xml:space="preserve">
-    <value>unknown certificate error</value>
+    <value>(r) unknown certificate error</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_UntrustedRoot_String" xml:space="preserve">
-    <value>untrusted certificate</value>
+    <value>(r) untrusted certificate</value>
     <comment>Certificate error</comment>
   </data>
   <data name="CertificateError_WrongEKU_String" xml:space="preserve">
-    <value>certificate wrong EKU</value>
+    <value>(r) certificate wrong EKU</value>
     <comment>Certificate error</comment>
   </data>
   <data name="ConnectionCenter_DayZero.Text" xml:space="preserve">
-    <value>To get started, add the remote desktop that you want to connect to using this device. You can add remote resources to work with apps and desktops your administrator has set up for you.</value>
+    <value>(r) To get started, add the remote desktop that you want to connect to using this device. You can add remote resources to work with apps and desktops your administrator has set up for you.</value>
   </data>
   <data name="ConnectionCenter_DayZeroTitle.Text" xml:space="preserve">
-    <value>It's lonely here :(</value>
+    <value>(r) It's lonely here :(</value>
   </data>
   <data name="ConnectionCenter_DesktopLabel.Content" xml:space="preserve">
-    <value>Desktops</value>
+    <value>(r) Desktops</value>
     <comment>The text that is the header for the desktops section</comment>
   </data>
   <data name="ConnectionCenter_TitleHeader.Text" xml:space="preserve">
-    <value>Remote Desktop</value>
+    <value>(r) Remote Desktop</value>
     <comment>The text at the top of the screen on the connection center</comment>
   </data>
   <data name="Menu-AddDesktop.Text" xml:space="preserve">
-    <value>Add Desktop</value>
+    <value>(r) Add Desktop</value>
     <comment>Option to add PC or Server</comment>
   </data>
   <data name="Common_Flyout_DeleteItem.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>(r) Delete</value>
     <comment>Verb. Text in a button or pop out menu that is pressed to delete an item.</comment>
   </data>
   <data name="Common_Flyout_EditItem.Text" xml:space="preserve">
-    <value>Edit</value>
+    <value>(r) Edit</value>
     <comment>Verb. Text in a button or pop out menu that is pressed to edit an item.</comment>
   </data>
   <data name="Settings_Gateways_Title.Text" xml:space="preserve">
-    <value>Gateways</value>
+    <value>(r) Gateways</value>
     <comment>Noun. Title of the Gateways section in the global settings page</comment>
   </data>
   <data name="Settings_General_Title.Text" xml:space="preserve">
-    <value>General</value>
+    <value>(r) General</value>
     <comment>Noun. Title of the General settings section in the global settings page</comment>
   </data>
   <data name="Settings_NavBar_Title.Text" xml:space="preserve">
-    <value>Settings</value>
+    <value>(r) Settings</value>
     <comment>Noun. Main title of the global settings page</comment>
   </data>
   <data name="Settings_Users_AddUser_Detail.Text" xml:space="preserve">
-    <value>Add a user name</value>
+    <value>(r) Add a user name</value>
     <comment>Text in User settings page that describes what add user does in more detail</comment>
   </data>
   <data name="Settings_Users_AddUser_Title.Text" xml:space="preserve">
-    <value>Add new user</value>
+    <value>(r) Add new user</value>
     <comment>Title above add user button in the user settings section of the global settings page</comment>
   </data>
   <data name="Settings_Users_Title.Text" xml:space="preserve">
-    <value>User names</value>
+    <value>(r) User names</value>
     <comment>Title of the User settings section of the global settings page</comment>
   </data>
   <data name="Common_Button_DeleteItem.Content" xml:space="preserve">
-    <value>Delete</value>
+    <value>(r) Delete</value>
     <comment>Verb. Text in a button that is pressed to delete an item.</comment>
   </data>
   <data name="Common_Button_EditItem.Content" xml:space="preserve">
-    <value>Edit</value>
+    <value>(r) Edit</value>
     <comment>Verb. Text in a button that is pressed to edit an item.</comment>
   </data>
   <data name="Settings_General_ShowThumbnails.Text" xml:space="preserve">
-    <value>Show thumbnails for Desktops</value>
+    <value>(r) Show thumbnails for Desktops</value>
     <comment>Text next to the toggle switch that changes whether thumbnails are saved and displayed for desktop connections</comment>
   </data>
   <data name="Settings_NavBarItem_General.Content" xml:space="preserve">
-    <value>General</value>
+    <value>(r) General</value>
     <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show General Settings</comment>
   </data>
   <data name="Settings_NavBarItem_Users.Content" xml:space="preserve">
-    <value>User names</value>
+    <value>(r) User names</value>
     <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show User Settings</comment>
   </data>
   <data name="AddOrEditDesktop-AddCaption.Text" xml:space="preserve">
-    <value>Add PC or Server</value>
+    <value>(r) Add PC or Server</value>
   </data>
   <data name="AddOrEditDesktop-Credentials.Text" xml:space="preserve">
-    <value>User name</value>
+    <value>(r) User name</value>
   </data>
   <data name="AddOrEditDesktop-EditCaption.Text" xml:space="preserve">
-    <value>Edit PC or Server</value>
+    <value>(r) Edit PC or Server</value>
   </data>
   <data name="AddOrEditDesktop-PcName-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Invalid characters in host name</value>
+    <value>(r) Invalid characters in host name</value>
   </data>
   <data name="AddOrEditDesktop-PcName.Text" xml:space="preserve">
-    <value>PC Name</value>
+    <value>(r) PC Name</value>
   </data>
   <data name="AddOrEditDesktop-PcNameHint.Text" xml:space="preserve">
-    <value>Host name or IP address</value>
+    <value>(r) Host name or IP address</value>
   </data>
   <data name="AddOrEditDesktop-ConnectToAdminSession.Content" xml:space="preserve">
-    <value>Connect to admin session</value>
+    <value>(r) Connect to admin session</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
   <data name="AddOrEditDesktop-FriendlyName.Text" xml:space="preserve">
-    <value>Friendly name</value>
+    <value>(r) Friendly name</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
   <data name="AddOrEditDesktop-LessDetailsLabel.Text" xml:space="preserve">
-    <value>Less details</value>
+    <value>(r) Less details</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-MoreDetailsLabel.Text" xml:space="preserve">
-    <value>More details</value>
+    <value>(r) More details</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-PcFriendlyNameHint.Text" xml:space="preserve">
-    <value>Connection friendly name</value>
+    <value>(r) Connection friendly name</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
   <data name="AddOrEditDesktop-Sound.Text" xml:space="preserve">
-    <value>Sound</value>
+    <value>(r) Sound</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
   <data name="AddOrEditDesktop-Sound-DontPlaySounds.Content" xml:space="preserve">
-    <value>Don't play sounds</value>
+    <value>(r) Don't play sounds</value>
     <comment>Text shown on AddOrEditDesktop view - sound option combo</comment>
   </data>
   <data name="AddOrEditDesktop-Sound-PlayOnRemotePc.Content" xml:space="preserve">
-    <value>Play on remote PC</value>
+    <value>(r) Play on remote PC</value>
     <comment>Text shown on AddOrEditDesktop view - sound option combo</comment>
   </data>
   <data name="AddOrEditDesktop-Sound-PlayOnThisDevice.Content" xml:space="preserve">
-    <value>Play on this device</value>
+    <value>(r) Play on this device</value>
     <comment>Text shown on AddOrEditDesktop view - sound option combo</comment>
   </data>
   <data name="AddOrEditDesktop-SwapMouseButtons.Content" xml:space="preserve">
-    <value>Swap mouse buttons</value>
+    <value>(r) Swap mouse buttons</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
   <data name="AddUser-AddCaption.Text" xml:space="preserve">
-    <value>Enter Credentials</value>
+    <value>(r) Enter Credentials</value>
   </data>
   <data name="AddUser-Password.Text" xml:space="preserve">
-    <value>Password</value>
+    <value>(r) Password</value>
   </data>
   <data name="AddUser-PasswordHint.Text" xml:space="preserve">
-    <value>Password</value>
+    <value>(r) Password</value>
   </data>
   <data name="AddUser-StoreCredentials-Checkbox.Content" xml:space="preserve">
-    <value>Store Credentials</value>
+    <value>(r) Store Credentials</value>
   </data>
   <data name="AddUser-User.Text" xml:space="preserve">
-    <value>User</value>
+    <value>(r) User</value>
   </data>
   <data name="AddUser-UserHint.Text" xml:space="preserve">
-    <value>Username</value>
+    <value>(r) Username</value>
   </data>
   <data name="AddUser-Username-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Invalid characters in user name</value>
+    <value>(r) Invalid characters in user name</value>
   </data>
   <data name="CertificateValidation-AlwaysConnectButton.Content" xml:space="preserve">
-    <value>Always connect</value>
+    <value>(r) Always connect</value>
   </data>
   <data name="CertificateValidation-CancelButton.Content" xml:space="preserve">
-    <value>Don't connect</value>
+    <value>(r) Don't connect</value>
   </data>
   <data name="CertificateValidation-Caption.Text" xml:space="preserve">
-    <value>The certificate can't be verified</value>
+    <value>(r) The certificate can't be verified</value>
   </data>
   <data name="CertificateValidation-ConnectAnywayLabel.Text" xml:space="preserve">
-    <value>Do you want to connect anyway?</value>
+    <value>(r) Do you want to connect anyway?</value>
   </data>
   <data name="CertificateValidation-ConnectOnceButton.Content" xml:space="preserve">
-    <value>Connect once</value>
+    <value>(r) Connect once</value>
   </data>
   <data name="CertificateValidation-IssuerLabel.Text" xml:space="preserve">
-    <value>Certificate issuer</value>
+    <value>(r) Certificate issuer</value>
   </data>
   <data name="CertificateValidation-LessDetailsLabel.Text" xml:space="preserve">
-    <value>Less details</value>
+    <value>(r) Less details</value>
   </data>
   <data name="CertificateValidation-MoreDetailsLabel.Text" xml:space="preserve">
-    <value>More details</value>
+    <value>(r) More details</value>
   </data>
   <data name="CertificateValidation-PcNameLabel.Text" xml:space="preserve">
-    <value>Name in certificate from remote:pc</value>
+    <value>(r) Name in certificate from remote:pc</value>
   </data>
   <data name="CertificateValidation-ReasonsLabel.Text" xml:space="preserve">
-    <value>It may not be safe to connect to this PC because of the following reasons:</value>
+    <value>(r) It may not be safe to connect to this PC because of the following reasons:</value>
   </data>
   <data name="CertificateValidation-ThumbprintLabel.Text" xml:space="preserve">
-    <value>Certificate thumbprint</value>
+    <value>(r) Certificate thumbprint</value>
   </data>
   <data name="CertificateValidation-ValidAfterLabel.Text" xml:space="preserve">
-    <value>Certificate valid after</value>
+    <value>(r) Certificate valid after</value>
   </data>
   <data name="CertificateValidation-ValidBeforeLabel.Text" xml:space="preserve">
-    <value>Certificate valid before</value>
+    <value>(r) Certificate valid before</value>
   </data>
   <data name="Common_Button_Cancel.Content" xml:space="preserve">
-    <value>Cancel</value>
+    <value>(r) Cancel</value>
   </data>
   <data name="Common_Button_Ok.Content" xml:space="preserve">
-    <value>Ok</value>
+    <value>(r) Ok</value>
   </data>
   <data name="Common_Button_SaveItem.Content" xml:space="preserve">
-    <value>Save</value>
+    <value>(r) Save</value>
   </data>
   <data name="DeleteDesktopsView-Message-DeleteMultiple.Text" xml:space="preserve">
-    <value>Are you sure you want to delete these connections?</value>
+    <value>(r) Are you sure you want to delete these connections?</value>
   </data>
   <data name="DeleteDesktopsView-Message-DeleteSingle.Text" xml:space="preserve">
-    <value>Are you sure you want to delete this connection?</value>
+    <value>(r) Are you sure you want to delete this connection?</value>
   </data>
   <data name="DeleteDesktopsView-Title-DeleteMultiple.Text" xml:space="preserve">
-    <value>Delete connections</value>
+    <value>(r) Delete connections</value>
   </data>
   <data name="DeleteDesktopsView-Title-DeleteSingle.Text" xml:space="preserve">
-    <value>Delete connection</value>
+    <value>(r) Delete connection</value>
   </data>
   <data name="MainPage-ShowApplicationBarLabel.Text" xml:space="preserve">
-    <value>show application bar</value>
+    <value>(r) show application bar</value>
   </data>
   <data name="AddOrEditDesktop-PcName-Error.Text" xml:space="preserve">
-    <value>(*)</value>
+    <value>(r) (*)</value>
   </data>
   <data name="AddUser-Username-Error.Text" xml:space="preserve">
-    <value>(*)</value>
+    <value>(r) (*)</value>
   </data>
   <data name="AddOrEditDesktop_CredOption_Add_String" xml:space="preserve">
-    <value>Add new</value>
+    <value>(r) Add new</value>
     <comment>Text shown on AddOrEditDesktop view if new credentials should be added and stored for the desktop</comment>
   </data>
   <data name="AddOrEditDesktop_CredOption_Ask_String" xml:space="preserve">
-    <value>Ask every time</value>
+    <value>(r) Ask every time</value>
     <comment>Text shown on AddOrEditDesktop view if credentials are not stored for the desktop</comment>
   </data>
   <data name="Common_Delete_String" xml:space="preserve">
-    <value>Delete</value>
+    <value>(r) Delete</value>
     <comment>Verb. Text on a button that is pressed to delete an item</comment>
   </data>
   <data name="Common_Edit_String" xml:space="preserve">
-    <value>Edit</value>
+    <value>(r) Edit</value>
     <comment>Verb. Text on a button that is pressed to edit an item</comment>
   </data>
   <data name="Common_ListItemSeparator_String" xml:space="preserve">
-    <value>, </value>
+    <value> , </value>
     <comment>Text used to separate items in a list</comment>
   </data>
   <data name="DeleteDesktopsView-Message-NoDesktops" xml:space="preserve">
-    <value>No desktop selected</value>
+    <value>(r) No desktop selected</value>
     <comment>Message displayed by DeleteDesktopsView when there are no desktops selected for deletion</comment>
   </data>
   <data name="DeleteUserView-Message.Text" xml:space="preserve">
-    <value>Are you sure you want to delete this user?</value>
+    <value>(r) Are you sure you want to delete this user?</value>
     <comment>Text shown on delete user confirmation view</comment>
   </data>
   <data name="DeleteUserView-Title.Text" xml:space="preserve">
-    <value>Delete user:</value>
+    <value>(r) Delete user:</value>
     <comment>Title displayed at the top of the delete user confirmation. </comment>
   </data>
   <data name="CredentialPromptMode_FreshCredentialsNeeded_String" xml:space="preserve">
-    <value>The remote PC does not accept saved credentials. Enter your credentials and try again.</value>
+    <value>(r) The remote PC does not accept saved credentials. Enter your credentials and try again.</value>
     <comment>Text in the credential prompt dialog shown when a connection attempt failed because the credentials were invalid.</comment>
   </data>
   <data name="CredentialPromptMode_InvalidCredentials_String" xml:space="preserve">
-    <value>The credentials that were used to connect to the remote PC didn't work. Enter different credentials and try again.</value>
+    <value>(r) The credentials that were used to connect to the remote PC didn't work. Enter different credentials and try again.</value>
     <comment>Text in the credential prompt dialog when fresh credentials are required.</comment>
   </data>
   <data name="Session_Reconnect_Attempts_String" xml:space="preserve">
-    <value>Connection attempt: {0} of {1}</value>
+    <value>(r) Connection attempt: {0} of {1}</value>
     <comment>Label  to warn about the number of reconnect attempts for a lost connection</comment>
   </data>
   <data name="Session_Reconnect_Message.Text" xml:space="preserve">
-    <value>The connection has been lost. Attempting to reconnect to your session...</value>
+    <value>(r) The connection has been lost. Attempting to reconnect to your session...</value>
     <comment>Reconnecting dialog message</comment>
   </data>
   <data name="Session_Reconnect_Title.Text" xml:space="preserve">
-    <value>Reconnecting</value>
+    <value>(r) Reconnecting</value>
     <comment>Reconnecting dialog title</comment>
   </data>
   <data name="SessionView-HomeButton.Label" xml:space="preserve">
-    <value>Home</value>
+    <value>(r) Home</value>
   </data>
   <data name="SessionView-MouseMode.Label" xml:space="preserve">
-    <value>Mouse-Mode</value>
+    <value>(r) Mouse-Mode</value>
   </data>
   <data name="Menu-AddWorkspace.Text" xml:space="preserve">
-    <value>Add Workspace</value>
+    <value>(r) Add Workspace</value>
     <comment>Option to add an on premise workspace</comment>
   </data>
   <data name="ConnectionCenter_AppLabel.Content" xml:space="preserve">
-    <value>Apps</value>
+    <value>(r) Apps</value>
     <comment>The text that is the header for the apps section</comment>
   </data>
   <data name="Common_Flyout_RefreshItem.Text" xml:space="preserve">
-    <value>Refresh</value>
+    <value>(r) Refresh</value>
     <comment>Verb. Text in a button or pop out menu that is pressed to refresh an item.</comment>
-  </data>
-  <data name="AddOrEditGateway-AddCaption.Text" xml:space="preserve">
-    <value>Add Gateway</value>
-    <comment>Text shown on AddOrEditGateway dialog - Add title</comment>
-  </data>
-  <data name="AddOrEditGateway-Credentials" xml:space="preserve">
-    <value>User name</value>
-    <comment>Text shown on AddOrEditGateway dialog - Credential caption</comment>
-  </data>
-  <data name="AddOrEditGateway-EditCaption.Text" xml:space="preserve">
-    <value>Edit Gateway</value>
-    <comment>Text shown on AddOrEditGateway dialog - Edit Title</comment>
-  </data>
-  <data name="AddOrEditGateway-ServerName-Error.Text" xml:space="preserve">
-    <value>(*)</value>
-    <comment>Text shown on AddOrEditGateway dialog - error flag</comment>
-  </data>
-  <data name="AddOrEditGateway-ServerName-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Invalid characters in server name</value>
-    <comment>Text shown on AddOrEditGateway dialog - error hint</comment>
-  </data>
-  <data name="AddOrEditGateway-ServerName.Text" xml:space="preserve">
-    <value>Server Name</value>
-    <comment>Text shown on AddOrEditGateway dialog - Server name caption</comment>
-  </data>
-  <data name="AddOrEditGateway-ServerNameHint.Text" xml:space="preserve">
-    <value>Host name or IP address</value>
-    <comment>Text shown on AddOrEditGateway dialog - Server name hint</comment>
-  </data>
-  <data name="DeleteGatewayView-Message.Text" xml:space="preserve">
-    <value>Are you sure you want to delete this gateway?</value>
-    <comment>Message of the delete gateway dialog</comment>
-  </data>
-  <data name="DeleteGatewayView-Title.Text" xml:space="preserve">
-    <value>Delete gateway:</value>
-    <comment>Title of the delete gateway dialog</comment>
-  </data>
-  <data name="Settings_Gateways_AddGateway_Detail.Text" xml:space="preserve">
-    <value>Add a gateway</value>
-    <comment>Text in Gateway settings page that describes what add gateway does in more detail</comment>
-  </data>
-  <data name="Settings_Gateways_AddGateway_Title.Text" xml:space="preserve">
-    <value>Add new gateway</value>
-    <comment>Title above add gateway button in the gateway settings section of the global settings page</comment>
-  </data>
-  <data name="Settings_NavBarItem_Gateways.Content" xml:space="preserve">
-    <value>Gateways</value>
-    <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show Gateways Settings</comment>
   </data>
 </root>
