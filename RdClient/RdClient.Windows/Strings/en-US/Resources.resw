@@ -589,11 +589,11 @@
   </data>
   <data name="CredentialPromptMode_FreshCredentialsNeeded_String" xml:space="preserve">
     <value>The remote PC does not accept saved credentials. Enter your credentials and try again.</value>
-    <comment>Text in the credential prompt dialog shown when a connection attempt failed because the credentials were invalid.</comment>
+    <comment>Text shown in the credential prompt dialog when fresh credentials are required.</comment>
   </data>
   <data name="CredentialPromptMode_InvalidCredentials_String" xml:space="preserve">
     <value>The credentials that were used to connect to the remote PC didn't work. Enter different credentials and try again.</value>
-    <comment>Text in the credential prompt dialog when fresh credentials are required.</comment>
+    <comment>Text shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
   </data>
   <data name="Session_Reconnect_Attempts_String" xml:space="preserve">
     <value>Connection attempt: {0} of {1}</value>
@@ -687,9 +687,10 @@
   </data>
   <data name="CredentialPromptMode_FreshCredentialsNeeded_Title_String" xml:space="preserve">
     <value>Enter Credentials</value>
-    <comment>Title shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
+    <comment>Title shown on the credential prompt dialog when fresh credentials are required.</comment>
   </data>
   <data name="CredentialPromptMode_InvalidCredentials_Title_String" xml:space="preserve">
     <value>Enter Credentials</value>
+    <comment>Title shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
   </data>
 </root>
