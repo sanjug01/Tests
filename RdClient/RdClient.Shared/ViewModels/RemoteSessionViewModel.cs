@@ -6,6 +6,7 @@
     using RdClient.Shared.Input.Keyboard;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
@@ -174,6 +175,19 @@
             _interruptedContinuation = null;
 
             base.OnDismissed();
+        }
+
+        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
+        {
+            if (this.IsFailureMessageVisible)
+            {
+                this.DismissFailureMessage.Execute(null);
+            }
+            else
+            {
+                this.NavigateHome.Execute(null);
+            }
+            backArgs.Handled = true;
         }
 
         void IRemoteSessionViewSite.SetRemoteSessionView(IRemoteSessionView sessionView)
