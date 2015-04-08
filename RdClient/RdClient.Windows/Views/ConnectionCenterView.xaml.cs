@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Views
 {
     using RdClient.Shared.Navigation;
+    using Windows.Graphics.Display;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
@@ -33,12 +34,37 @@
             //
             // Analyze the layout and apply an appropriate visual state.
             //
+            DisplayInformation di = DisplayInformation.GetForCurrentView();
             Layout layout = Layout.DefaultLayout;
-            //
-            // If the view has become narrower than 640 pixels, switch to the narrow layout.
-            //
-            if (e.NewSize.Width < 640)
-                layout = Layout.NarrowLayout;
+
+            if(e.NewSize.Width < 640 * di.RawPixelsPerViewPixel)
+            {
+                //
+                // The view is too small, switch to the phone layout.
+                //
+                layout = Layout.PhoneLayout;
+            }
+            else if (e.NewSize.Width < e.NewSize.Height)
+            {
+                if (e.NewSize.Height / e.NewSize.Width >= 15.0/9.0)
+                {
+                    //
+                    // The view is much taller than it is wide; switch to the phone layout, unless
+                    // the view is wider than 1024 virtual pixels.
+                    //
+                    if (e.NewSize.Width < 1024 * di.RawPixelsPerViewPixel)
+                        layout = Layout.PhoneLayout;
+                    else
+                        layout = Layout.NarrowLayout;
+                }
+                else if (e.NewSize.Width < 1080 * di.RawPixelsPerViewPixel)
+                {
+                    //
+                    // If the view is narrower than 1080 virtual pixels, switch to the narrow layout.
+                    //
+                    layout = Layout.NarrowLayout;
+                }
+            }
 
             VisualStateManager.GoToState(this, layout.ToString(), true);
         }

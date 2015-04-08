@@ -91,7 +91,8 @@
                 </Grid>
 
                 <Grid Grid.Row="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
-                    <controls:DynamicToolbar HorizontalAlignment="Center"/>
+                    <!-- Align toolbar buttons to the right to make the layout different from the narrow one -->
+                    <controls:DynamicToolbar HorizontalAlignment="Right"/>
                 </Grid>
             </Grid>
         </DataTemplate>
