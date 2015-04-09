@@ -27,9 +27,14 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { credentials, fUsingSavedCreds });
         }
 
-        public void Connect(CredentialsModel credentials, bool fUsingSavedCreds)
+        public void SetGateway(GatewayModel gateway, CredentialsModel gatewayCredentials)
         {
-            Invoke(new object[] { credentials, fUsingSavedCreds });
+            Invoke(new object[] { gateway, gatewayCredentials });
+        }
+
+        public void Connect()
+        {
+            Invoke(new object[] { });
         }
 
         public void Cleanup()
