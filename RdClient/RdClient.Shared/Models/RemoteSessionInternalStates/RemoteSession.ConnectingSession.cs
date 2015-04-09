@@ -73,8 +73,11 @@
                 _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                 _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
 
-                _connection.Connect(_session._sessionSetup.SessionCredentials.Credentials,
+                _connection.SetCredentials(_session._sessionSetup.SessionCredentials.Credentials,
                     !_session._sessionSetup.SessionCredentials.IsNewPassword);
+                //TODO: pass gateway if necessary
+
+                _connection.Connect();
             }
 
             private void OnClientConnected(object sender, ClientConnectedArgs e)

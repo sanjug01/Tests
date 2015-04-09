@@ -8,7 +8,8 @@ namespace RdClient.Shared.CxWrappers
     {
         IRdpEvents Events { get; }
         void SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds);
-        void Connect(CredentialsModel credentials, bool fUsingSavedCreds);
+        void SetGateway(GatewayModel gateway, CredentialsModel credentials);
+        void Connect();
         void Disconnect();
         void Suspend();
         void Resume();

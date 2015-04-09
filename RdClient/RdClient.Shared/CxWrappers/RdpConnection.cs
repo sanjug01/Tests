@@ -99,11 +99,29 @@ namespace RdClient.Shared.CxWrappers
                 fUsingSavedCreds);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set user credentials.");
         }
-        
-        public void Connect(CredentialsModel credentials, bool fUsingSavedCreds)
+
+        public void SetGateway(GatewayModel gateway, CredentialsModel gatewayCredentials)
+        {
+            _instrument.Instrument("SetGateway");
+            int xRes = _rdpConnectionCx.SetGatewayHostName(gateway.HostName);
+            RdTrace.IfFailXResultThrow(xRes, "Failed to set connection's gateway.");
+
+            if (null != gatewayCredentials)
+            {
+                xRes = _rdpConnectionCx.SetGatewayCredentials(
+                    gatewayCredentials.Username,
+                    string.Empty, // Empty domain strings
+                    gatewayCredentials.Password);
+                RdTrace.IfFailXResultThrow(xRes, "Failed to set gateway credentials.");
+            }
+        }
+
+        /// <summary>
+        /// Connecting. SetCredentials and SetGateway(optional) need to be called prior to Connect
+        /// </summary>
+        public void Connect()
         {
             _instrument.Instrument("Connect");
-            this.SetCredentials(credentials, fUsingSavedCreds);
             int xRes = _rdpConnectionCx.Connect();
             RdTrace.IfFailXResultThrow(xRes, "Failed to connect.");
         }
