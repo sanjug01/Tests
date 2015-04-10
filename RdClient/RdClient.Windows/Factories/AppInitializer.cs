@@ -13,11 +13,13 @@
     using System.Diagnostics.Contracts;
     using Windows.UI.Core;
     using Windows.UI.Xaml.Controls;
+    using System;
 
     public class AppInitializer
     {
         private INavigationService _navigationService;
         private DeferredCommand _applicationDataSaver;
+        private BackButtonHandler _backButtonHandler;
 
         private readonly int SaveDataDelayMilliseconds = 100;
         private readonly NavigationServiceFactory _navigationServiceFactory = new NavigationServiceFactory();
@@ -27,9 +29,15 @@
         public string LandingPage { private get; set; }
         public ILifeTimeManager LifeTimeManager { private get; set; }
         public IRdpConnectionSource ConnectionSource { private get; set; }
+
+        internal void CreateBackButtonHandler(SystemNavigationManager systemNavigationManager)
+        {
+            _backButtonHandler = new BackButtonHandler(systemNavigationManager, _navigationService);
+        }
+
         public Button BackButton { private get; set; }
 
-        public void Initialiaze()
+        public void Initialize()
         {
             Contract.Assert(this.ViewPresenter != null);
             Contract.Assert(this.AppBarViewModel != null);

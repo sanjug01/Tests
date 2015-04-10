@@ -21,7 +21,7 @@
             initializer.AppBarViewModel = this.DataContext as IApplicationBarViewModel;
             initializer.ViewPresenter = this.ViewPresenter;
             initializer.BackButton = this.AppHeader.BackButton;
-            initializer.Initialiaze();
+            initializer.Initialize();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -29,6 +29,8 @@
             base.OnNavigatedTo(e);
             this.Loaded += OnPageLoaded;
             this.Unloaded += OnPageUnloaded;
+            AppInitializer initializer = (this.Resources["AppInitializer"] as AppInitializer);
+            initializer.CreateBackButtonHandler(SystemNavigationManager.GetForCurrentView());            
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
