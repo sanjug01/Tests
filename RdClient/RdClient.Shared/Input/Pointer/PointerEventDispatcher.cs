@@ -8,10 +8,10 @@ namespace RdClient.Shared.Input.Pointer
 {
     public class PointerEventDispatcher : IPointerEventConsumer
     {
-        public event System.EventHandler<PointerEvent> ConsumedEvent;
+        public event System.EventHandler<PointerEventOld> ConsumedEvent;
 
-        private Dictionary<PointerType, IPointerEventConsumer> _pointerConsumers = new Dictionary<PointerType,IPointerEventConsumer>();
-        private PointerType _lastPointerType = PointerType.Mouse;
+        private Dictionary<PointerTypeOld, IPointerEventConsumer> _pointerConsumers = new Dictionary<PointerTypeOld,IPointerEventConsumer>();
+        private PointerTypeOld _lastPointerType = PointerTypeOld.Mouse;
 
         private IPointerEventConsumer _pointerMode;
         private IPointerEventConsumer _directMode;
@@ -27,13 +27,13 @@ namespace RdClient.Shared.Input.Pointer
                 switch(_consumptionMode)
                 {
                     case ConsumptionMode.Pointer:
-                        _pointerConsumers[PointerType.Touch] = _pointerMode;
+                        _pointerConsumers[PointerTypeOld.Touch] = _pointerMode;
                         break;
                     case ConsumptionMode.DirectTouch:
-                        _pointerConsumers[PointerType.Touch] = _directMode;
+                        _pointerConsumers[PointerTypeOld.Touch] = _directMode;
                         break;
                     case ConsumptionMode.MultiTouch:
-                        _pointerConsumers[PointerType.Touch] = _multiTouchMode;
+                        _pointerConsumers[PointerTypeOld.Touch] = _multiTouchMode;
                         break;
                     default:
                         break;
@@ -47,12 +47,12 @@ namespace RdClient.Shared.Input.Pointer
             _directMode = PointerModeFactory.CreateDirectMode(timer, manipulator, panel);
             _multiTouchMode = new MultiTouchMode(manipulator);
 
-            _pointerConsumers[PointerType.Mouse] = new MouseMode(manipulator);
-            _pointerConsumers[PointerType.Pen] = new MouseMode(manipulator);
-            _pointerConsumers[PointerType.Touch] = _pointerMode;
+            _pointerConsumers[PointerTypeOld.Mouse] = new MouseMode(manipulator);
+            _pointerConsumers[PointerTypeOld.Pen] = new MouseMode(manipulator);
+            _pointerConsumers[PointerTypeOld.Touch] = _pointerMode;
         }
 
-        public void ConsumeEvent(PointerEvent pointerEvent)
+        public void ConsumeEvent(PointerEventOld pointerEvent)
         {
             if (_lastPointerType != pointerEvent.PointerType)
             {

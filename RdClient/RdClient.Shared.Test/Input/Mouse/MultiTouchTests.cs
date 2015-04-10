@@ -15,12 +15,12 @@ namespace RdClient.Shared.Test.Input.Mouse
             using(Mock.PointerManipulator manipulator = new Mock.PointerManipulator())
             {
                 MultiTouchMode mtm = new MultiTouchMode(manipulator);
-                PointerEvent pe1 = new PointerEvent(
+                PointerEventOld pe1 = new PointerEventOld(
                     new Point(10, 10), false, new Point(0, 0), false, false,
-                    PointerType.Touch, 23, 1234, TouchEventType.Update);
-                PointerEvent pe2 = new PointerEvent(
+                    PointerTypeOld.Touch, 23, 1234, TouchEventType.Update);
+                PointerEventOld pe2 = new PointerEventOld(
                     new Point(10, 10), false, new Point(0, 0), false, false,
-                    PointerType.Touch, 23, 1234, TouchEventType.Update);
+                    PointerTypeOld.Touch, 23, 1234, TouchEventType.Update);
 
                 manipulator.Expect("SendTouchAction", 
                     new List<object> { TouchEventType.Update, 23, new Point(10,10), new Point(0,0) }, null);

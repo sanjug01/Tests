@@ -15,7 +15,7 @@ namespace RdClient.Shared.Input.Pointer
 
         private ITimer _timer;
         private double _interval;
-        private Dictionary<ClickTimerType, Action<PointerEvent>> _actions;
+        private Dictionary<ClickTimerType, Action<PointerEventOld>> _actions;
         private ClickTimerType _timerType;
 
         private bool _expired;
@@ -35,18 +35,18 @@ namespace RdClient.Shared.Input.Pointer
 
         public DoubleClickTimer(ITimer timer, double interval)
         {
-            _actions = new Dictionary<ClickTimerType, Action<PointerEvent>>();
+            _actions = new Dictionary<ClickTimerType, Action<PointerEventOld>>();
             _timer = timer;
             _interval = interval;
             _expired = true;
         }
 
-        public void AddAction(ClickTimerType timerType, Action<PointerEvent> action)
+        public void AddAction(ClickTimerType timerType, Action<PointerEventOld> action)
         {
             _actions[timerType] = action;
         }
 
-        public void Reset(ClickTimerType timerType, PointerEvent pointerEvent)
+        public void Reset(ClickTimerType timerType, PointerEventOld pointerEvent)
         {
             _timerType = timerType;
             _expired = false;

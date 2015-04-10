@@ -12,30 +12,30 @@ namespace RdClient.Shared.Input.Pointer
     {        
         public DirectTouchContext(ITimer timer, 
                                  IPointerManipulator manipulator, 
-                                 IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine) : base(timer, manipulator, stateMachine)
+                                 IStateMachine<PointerState, StateEvent<PointerEventOld, ITouchContext>> stateMachine) : base(timer, manipulator, stateMachine)
         {
 
         }
-        public override void MouseLeftClick(PointerEvent pointerEvent)
+        public override void MouseLeftClick(PointerEventOld pointerEvent)
         {
             MouseMove(pointerEvent);
             PointerManipulator.SendMouseAction(MouseEventType.LeftPress);
             PointerManipulator.SendMouseAction(MouseEventType.LeftRelease);
         }
 
-        public override void MouseRightClick(PointerEvent pointerEvent)
+        public override void MouseRightClick(PointerEventOld pointerEvent)
         {
             MouseMove(pointerEvent);
             PointerManipulator.SendMouseAction(MouseEventType.RightPress);
             PointerManipulator.SendMouseAction(MouseEventType.RightRelease);
         }
 
-        public override void UpdateCursorPosition(PointerEvent pointerEvent)
+        public override void UpdateCursorPosition(PointerEventOld pointerEvent)
         {
             this.PointerManipulator.MousePosition = pointerEvent.Position;
         }
 
-        public override int NumberOfContacts(PointerEvent pointerEvent)
+        public override int NumberOfContacts(PointerEventOld pointerEvent)
         {
             return base.NumberOfContacts(pointerEvent);
         }

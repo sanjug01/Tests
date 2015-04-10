@@ -127,7 +127,7 @@
             }
         }
 
-        public void EmitPointerEvent(PointerEvent e)
+        public void EmitPointerEvent(PointerEventOld e)
         {
             using(ReadWriteMonitor.UpgradeableRead(_monitor))
             {

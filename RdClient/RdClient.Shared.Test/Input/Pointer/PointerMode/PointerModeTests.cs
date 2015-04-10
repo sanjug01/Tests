@@ -17,8 +17,8 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0,0), false, new Point(0,0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Update);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0,0), false, new Point(0,0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Update);
 
             pmc.TrackEvent(pe1);
 
@@ -31,22 +31,22 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            List<PointerEvent> pevents = new List<PointerEvent>() {
-                new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down),
-                new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Down),
+            List<PointerEventOld> pevents = new List<PointerEventOld>() {
+                new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down),
+                new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 2, 0, TouchEventType.Down),
 
-                new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Up),
-                new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Up),
+                new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Up),
+                new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 2, 0, TouchEventType.Up),
 
-                new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 3, 0, TouchEventType.Down),
-                new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 4, 0, TouchEventType.Down),
+                new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 3, 0, TouchEventType.Down),
+                new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 4, 0, TouchEventType.Down),
 
-                new PointerEvent(new Point(0, 5), false, new Point(0, 0), false, false, PointerType.Touch, 3, 0, TouchEventType.Update),
+                new PointerEventOld(new Point(0, 5), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 3, 0, TouchEventType.Update),
                 
             };
-            PointerEvent pe = new PointerEvent(new Point(0, 15), false, new Point(0, 0), false, false, PointerType.Touch, 4, 0, TouchEventType.Update);
+            PointerEventOld pe = new PointerEventOld(new Point(0, 15), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 4, 0, TouchEventType.Update);
 
-            foreach(PointerEvent pevent in pevents)
+            foreach(PointerEventOld pevent in pevents)
             {
                 pmc.TrackEvent(pevent);
             }
@@ -59,8 +59,8 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Update);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Update);
 
             pmc.TrackEvent(pe1);
 
@@ -72,8 +72,8 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Update);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 2, 0, TouchEventType.Update);
 
             pmc.TrackEvent(pe1);
 
@@ -85,10 +85,10 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Update);
-            PointerEvent pe3 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Up);
-            PointerEvent pe4 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Down);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Update);
+            PointerEventOld pe3 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Up);
+            PointerEventOld pe4 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 2, 0, TouchEventType.Down);
 
             pmc.TrackEvent(pe1);
             pmc.TrackEvent(pe2);
@@ -102,9 +102,9 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Update);
-            PointerEvent pe3 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Up);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Update);
+            PointerEventOld pe3 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Up);
 
             pmc.TrackEvent(pe1);
             pmc.TrackEvent(pe2);
@@ -117,9 +117,9 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Update);
-            PointerEvent pe3 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Up);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Update);
+            PointerEventOld pe3 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 2, 0, TouchEventType.Up);
 
             pmc.TrackEvent(pe1);
             pmc.TrackEvent(pe2);
@@ -132,8 +132,8 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Update);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Update);
 
             pmc.TrackEvent(pe1);
 
@@ -145,9 +145,9 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Down);
-            PointerEvent pe3 = new PointerEvent(new Point(0, 16), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Update);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 2, 0, TouchEventType.Down);
+            PointerEventOld pe3 = new PointerEventOld(new Point(0, 16), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 2, 0, TouchEventType.Update);
 
             pmc.TrackEvent(pe1);
             pmc.TrackEvent(pe2);
@@ -163,9 +163,9 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Down);
-            PointerEvent pe3 = new PointerEvent(new Point(0, 11), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Update);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 2, 0, TouchEventType.Down);
+            PointerEventOld pe3 = new PointerEventOld(new Point(0, 11), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 2, 0, TouchEventType.Update);
 
             pmc.TrackEvent(pe1);
             pmc.TrackEvent(pe2);
@@ -178,9 +178,9 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Down);
-            PointerEvent pe3 = new PointerEvent(new Point(0, 5), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Update);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 2, 0, TouchEventType.Down);
+            PointerEventOld pe3 = new PointerEventOld(new Point(0, 5), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Update);
 
             pmc.TrackEvent(pe1);
             pmc.TrackEvent(pe2);
@@ -193,10 +193,10 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Down);
-            PointerEvent pe3 = new PointerEvent(new Point(0, 10), false, new Point(0, 0), false, false, PointerType.Touch, 3, 0, TouchEventType.Down);
-            PointerEvent pe4 = new PointerEvent(new Point(0, 5), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Update);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 2, 0, TouchEventType.Down);
+            PointerEventOld pe3 = new PointerEventOld(new Point(0, 10), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 3, 0, TouchEventType.Down);
+            PointerEventOld pe4 = new PointerEventOld(new Point(0, 5), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Update);
 
             pmc.TrackEvent(pe1);
             pmc.TrackEvent(pe2);
@@ -210,8 +210,8 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 5), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Update);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 5), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Update);
 
             pmc.TrackEvent(pe1);
 
@@ -224,9 +224,9 @@ namespace RdClient.Shared.Test.Input.Pointer.PointerMode
         {
             Mock.Timer timer = new Mock.Timer();
             PointerContext pmc = new PointerContext(timer);
-            PointerEvent pe1 = new PointerEvent(new Point(0, 0), false, new Point(0, 0), false, false, PointerType.Touch, 1, 0, TouchEventType.Down);
-            PointerEvent pe2 = new PointerEvent(new Point(0, 5), false, new Point(0, 0), false, false, PointerType.Touch, 2, 0, TouchEventType.Down);
-            PointerEvent pe3 = new PointerEvent(new Point(0, 15), false, new Point(0, 0), false, false, PointerType.Touch, 3, 0, TouchEventType.Down);
+            PointerEventOld pe1 = new PointerEventOld(new Point(0, 0), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 1, 0, TouchEventType.Down);
+            PointerEventOld pe2 = new PointerEventOld(new Point(0, 5), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 2, 0, TouchEventType.Down);
+            PointerEventOld pe3 = new PointerEventOld(new Point(0, 15), false, new Point(0, 0), false, false, PointerTypeOld.Touch, 3, 0, TouchEventType.Down);
 
             pmc.TrackEvent(pe1);
             pmc.TrackEvent(pe2);

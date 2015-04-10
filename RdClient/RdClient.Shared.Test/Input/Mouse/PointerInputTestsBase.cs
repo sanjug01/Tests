@@ -53,9 +53,9 @@ namespace RdClient.Shared.Test.Input.Mouse
             _consumer = new PointerEventDispatcher(_timer, _manipulator, _panel);
         }
 
-        protected void ConsumeEventsHelper(PointerEvent[] events)
+        protected void ConsumeEventsHelper(PointerEventOld[] events)
         {
-            foreach (PointerEvent e in events)
+            foreach (PointerEventOld e in events)
             {
                 _consumer.ConsumeEvent(e);
             }

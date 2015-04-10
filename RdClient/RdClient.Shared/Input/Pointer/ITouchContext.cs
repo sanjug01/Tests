@@ -15,22 +15,22 @@ namespace RdClient.Shared.Input.Pointer
     public interface ITouchContext
     {
         DoubleClickTimer DoubleClickTimer { get; }
-        void MouseLeftClick(PointerEvent pointerEvent);
-        void MouseMove(PointerEvent pointerEvent);
-        void MouseScroll(PointerEvent pointerEvent);
-        void MouseRightClick(PointerEvent pointerEvent);
-        void UpdateCursorPosition(PointerEvent pointerEvent);
+        void MouseLeftClick(PointerEventOld pointerEvent);
+        void MouseMove(PointerEventOld pointerEvent);
+        void MouseScroll(PointerEventOld pointerEvent);
+        void MouseRightClick(PointerEventOld pointerEvent);
+        void UpdateCursorPosition(PointerEventOld pointerEvent);
 
-        void BeginGesture(PointerEvent pointerEvent);
-        void CompleteGesture(PointerEvent pointerEvent);
-        void ApplyZoom(PointerEvent pointerEvent);
-        void ApplyPan(PointerEvent pointerEvent);
+        void BeginGesture(PointerEventOld pointerEvent);
+        void CompleteGesture(PointerEventOld pointerEvent);
+        void ApplyZoom(PointerEventOld pointerEvent);
+        void ApplyPan(PointerEventOld pointerEvent);
 
-        bool MoveThresholdExceeded(PointerEvent pointerEvent);
-        int NumberOfContacts(PointerEvent pointerEvent);
-        bool IsScrolling(PointerEvent pointerEvent);
-        bool IsZooming(PointerEvent pointerEvent);
-        bool IsPanning(PointerEvent pointerEvent);
+        bool MoveThresholdExceeded(PointerEventOld pointerEvent);
+        int NumberOfContacts(PointerEventOld pointerEvent);
+        bool IsScrolling(PointerEventOld pointerEvent);
+        bool IsZooming(PointerEventOld pointerEvent);
+        bool IsPanning(PointerEventOld pointerEvent);
 
        
         IPointerManipulator PointerManipulator { get; }

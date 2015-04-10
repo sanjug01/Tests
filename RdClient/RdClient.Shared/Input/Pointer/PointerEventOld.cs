@@ -3,7 +3,7 @@ using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Pointer
 {
-    public enum PointerType
+    public enum PointerTypeOld
     {
         Unknown,
         Mouse,
@@ -11,27 +11,27 @@ namespace RdClient.Shared.Input.Pointer
         Touch
     }
 
-    public class PointerEvent
+    public class PointerEventOld
     {
         public Point Position { get; private set; }
         public bool Inertia { get; private set; }
         public Point Delta { get; private set; }
         public bool LeftButton { get; private set; }
         public bool RightButton { get; private set; }
-        public PointerType PointerType { get; set; }
+        public PointerTypeOld PointerType { get; set; }
         public uint PointerId { get; private set; }
         public ulong TimeStamp { get; private set; }
         public TouchEventType ActionType { get; private set; }
         public int MouseWheelDelta { get; private set; }
         public bool IsHorizontalMouseWheel { get; private set; }
 
-        public PointerEvent(
+        public PointerEventOld(
             Point position, 
             bool inertia, 
             Point delta, 
             bool leftButton, 
             bool rightButton, 
-            PointerType pointerType, 
+            PointerTypeOld pointerType, 
             uint pointerId, 
             ulong timeStamp = 0,
             TouchEventType actionType = TouchEventType.Unknown,

@@ -37,7 +37,7 @@ namespace RdClient.Shared.Input.Pointer
 
     public class TouchContext : IPointerEventConsumer, ITouchContext
     {
-        public event System.EventHandler<PointerEvent> ConsumedEvent;
+        public event System.EventHandler<PointerEventOld> ConsumedEvent;
 
         private Dictionary<uint, PointerEventTrace> _trackedPointerEvents = new Dictionary<uint, PointerEventTrace>();
 
@@ -46,12 +46,12 @@ namespace RdClient.Shared.Input.Pointer
         private GestureType _activeGesture;
         public DoubleClickTimer DoubleClickTimer { get; private set; }
 
-        private IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> _stateMachine;
+        private IStateMachine<PointerState, StateEvent<PointerEventOld, ITouchContext>> _stateMachine;
         public IPointerManipulator PointerManipulator { get; private set; }
 
         public TouchContext(ITimer timer, 
                             IPointerManipulator manipulator, 
-                            IStateMachine<PointerState, StateEvent<PointerEvent, ITouchContext>> stateMachine)
+                            IStateMachine<PointerState, StateEvent<PointerEventOld, ITouchContext>> stateMachine)
         {
             PointerManipulator = manipulator;
 
@@ -63,7 +63,7 @@ namespace RdClient.Shared.Input.Pointer
             _stateMachine = stateMachine;
         }
 
-        public virtual int NumberOfContacts(PointerEvent pointerEvent)
+        public virtual int NumberOfContacts(PointerEventOld pointerEvent)
         {
             int result = _trackedPointerEvents.Count;
 
@@ -79,7 +79,7 @@ namespace RdClient.Shared.Input.Pointer
             return result;
         }
 
-        public virtual bool MoveThresholdExceeded(PointerEvent pointerEvent)
+        public virtual bool MoveThresholdExceeded(PointerEventOld pointerEvent)
         {
             bool result = false;
 
@@ -93,7 +93,7 @@ namespace RdClient.Shared.Input.Pointer
             return result;
         }
 
-        private DragOrientation DragOrientation(PointerEvent pointerEvent)
+        private DragOrientation DragOrientation(PointerEventOld pointerEvent)
         {
             DragOrientation orientation = Pointer.DragOrientation.Unknown;
 
@@ -117,7 +117,7 @@ namespace RdClient.Shared.Input.Pointer
             return orientation;
         }
 
-        public virtual void MouseScroll(PointerEvent pointerEvent)
+        public virtual void MouseScroll(PointerEventOld pointerEvent)
         {
             if (this.IsPointerDoubleTracked(pointerEvent))
             {
@@ -146,7 +146,7 @@ namespace RdClient.Shared.Input.Pointer
         /// Begin 2 fingers gesture
         /// </summary>
         /// <param name="pointerEvent">last pointer event - right finger down</param>
-        public virtual void BeginGesture(PointerEvent pointerEvent)
+        public virtual void BeginGesture(PointerEventOld pointerEvent)
         {
             // should track positions from both fingers            
             _secondaryPointerId = pointerEvent.PointerId;
@@ -157,7 +157,7 @@ namespace RdClient.Shared.Input.Pointer
         /// Complete 2 fingers gesture
         /// </summary>
         /// <param name="pointerEvent">last pointer event - right/left finger up</param>
-        public virtual void CompleteGesture(PointerEvent pointerEvent)
+        public virtual void CompleteGesture(PointerEventOld pointerEvent)
         {
             Contract.Assert(pointerEvent.PointerId == _mainPointerId || pointerEvent.PointerId == _secondaryPointerId, "CompleteGesture!, unexpected pointer id");
 
@@ -176,7 +176,7 @@ namespace RdClient.Shared.Input.Pointer
 
 
         // 2 fingers scrolling (or panning, if supported)
-        public virtual bool IsScrolling(PointerEvent pointerEvent)
+        public virtual bool IsScrolling(PointerEventOld pointerEvent)
         {
             Contract.Assert(2 == this.NumberOfContacts(pointerEvent), "IsScrolling requires 2 contacts!");
             Contract.Requires(_secondaryPointerId != _mainPointerId);
@@ -207,7 +207,7 @@ namespace RdClient.Shared.Input.Pointer
             return result;
         }
 
-        public virtual bool IsPanning(PointerEvent pointerEvent)
+        public virtual bool IsPanning(PointerEventOld pointerEvent)
         {
             // panning is the same as scrolling but starts from zooming.
             if (GestureType.Scrolling != _activeGesture && GestureType.Scrolling != _activeGesture)
@@ -218,7 +218,7 @@ namespace RdClient.Shared.Input.Pointer
             return IsScrolling(pointerEvent);
         }
 
-        public virtual bool IsZooming(PointerEvent pointerEvent)
+        public virtual bool IsZooming(PointerEventOld pointerEvent)
         {
             Contract.Assert(2 == this.NumberOfContacts(pointerEvent), "IsZooming requires 2 contacts!");
             Contract.Requires(_secondaryPointerId != _mainPointerId, "IsZooming: At least 2 pointer ids required!");
@@ -277,7 +277,7 @@ namespace RdClient.Shared.Input.Pointer
         }
 
 
-        public virtual void ApplyZoom(PointerEvent pointerEvent)
+        public virtual void ApplyZoom(PointerEventOld pointerEvent)
         {
             if (this.IsPointerDoubleTracked(pointerEvent))
             {
@@ -315,7 +315,7 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        public virtual void ApplyPan(PointerEvent pointerEvent)
+        public virtual void ApplyPan(PointerEventOld pointerEvent)
         {
             if (this.IsPointerDoubleTracked(pointerEvent))
             {
@@ -325,25 +325,25 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        public virtual void MouseLeftClick(PointerEvent pointerEvent)
+        public virtual void MouseLeftClick(PointerEventOld pointerEvent)
         {
             PointerManipulator.SendMouseAction(MouseEventType.LeftPress);
             PointerManipulator.SendMouseAction(MouseEventType.LeftRelease);
         }
 
-        public virtual void MouseRightClick(PointerEvent pointerEvent)
+        public virtual void MouseRightClick(PointerEventOld pointerEvent)
         {
             PointerManipulator.SendMouseAction(MouseEventType.RightPress);
             PointerManipulator.SendMouseAction(MouseEventType.RightRelease);
         }
 
-        public virtual void MouseMove(PointerEvent pointerEvent)
+        public virtual void MouseMove(PointerEventOld pointerEvent)
         {
             UpdateCursorPosition(pointerEvent);
             PointerManipulator.SendMouseAction(MouseEventType.Move);
         }
 
-        public virtual void UpdateCursorPosition(PointerEvent pointerEvent)
+        public virtual void UpdateCursorPosition(PointerEventOld pointerEvent)
         {
             double deltaX = 0.0;
             double deltaY = 0.0;
@@ -363,9 +363,9 @@ namespace RdClient.Shared.Input.Pointer
             PointerManipulator.MousePosition = new Point(PointerManipulator.MousePosition.X + deltaX, PointerManipulator.MousePosition.Y + deltaY);
         }
 
-        public void ConsumeEvent(PointerEvent pointerEvent)
+        public void ConsumeEvent(PointerEventOld pointerEvent)
         {
-            _stateMachine.Consume(new StateEvent<PointerEvent, ITouchContext>() { Input = pointerEvent, Context = this });
+            _stateMachine.Consume(new StateEvent<PointerEventOld, ITouchContext>() { Input = pointerEvent, Context = this });
 
             if (pointerEvent.LeftButton)
             {
@@ -416,7 +416,7 @@ namespace RdClient.Shared.Input.Pointer
         /// </summary>
         /// <param name="pointerEvent">the current poiter event</param>
         /// <returns>true, if tracked as primary pointer</returns>
-        private bool IsPointerTracked(PointerEvent pointerEvent)
+        private bool IsPointerTracked(PointerEventOld pointerEvent)
         {
             return (pointerEvent.PointerId == _mainPointerId && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId));
         }
@@ -426,7 +426,7 @@ namespace RdClient.Shared.Input.Pointer
         /// </summary>
         /// <param name="pointerEvent">the current poiter event</param>
         /// <returns>true, if tracked as primary pointer</returns>
-        private bool IsPointerDoubleTracked(PointerEvent pointerEvent)
+        private bool IsPointerDoubleTracked(PointerEventOld pointerEvent)
         {
             return ( ( pointerEvent.PointerId == _mainPointerId || pointerEvent.PointerId == _secondaryPointerId)
                 && _trackedPointerEvents.ContainsKey(pointerEvent.PointerId));

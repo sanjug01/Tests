@@ -40,7 +40,7 @@ namespace RdClient.Shared.ViewModels
     public class PanKnobPointerEventDispatcher : IPointerEventConsumer
     {
 
-        public event EventHandler<PointerEvent> ConsumedEvent;
+        public event EventHandler<PointerEventOld> ConsumedEvent;
 
         private ConsumptionMode _consumptionMode;
         public ConsumptionMode ConsumptionMode
@@ -48,7 +48,7 @@ namespace RdClient.Shared.ViewModels
             set { _consumptionMode = value; }
         }
 
-        public void ConsumeEvent(PointerEvent pointerEvent)
+        public void ConsumeEvent(PointerEventOld pointerEvent)
         {
             if (ConsumedEvent != null)
             {
@@ -177,7 +177,7 @@ namespace RdClient.Shared.ViewModels
             _isInertiaEnabled = false;
         }
 
-        void HandlePointerEvent(object sender, PointerEvent e)
+        void HandlePointerEvent(object sender, PointerEventOld e)
         {
             if(e.Inertia)
             {

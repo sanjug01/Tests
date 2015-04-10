@@ -12,10 +12,10 @@ namespace RdClient.Shared.Test.Input.Mouse
         [TestMethod]
         public void PointerModel_Mouse_ShouldLeftDrag()
         {
-            ConsumeEventsHelper(new PointerEvent[] { 
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Mouse, 3),
-                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Mouse, 3),
-                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Mouse, 3)
+            ConsumeEventsHelper(new PointerEventOld[] { 
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Mouse, 3),
+                new PointerEventOld(new Point(10.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Mouse, 3),
+                new PointerEventOld(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerTypeOld.Mouse, 3)
             });
 
             MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 
@@ -28,10 +28,10 @@ namespace RdClient.Shared.Test.Input.Mouse
         [TestMethod]
         public void PointerModel_Mouse_ShouldRightDrag()
         {
-            ConsumeEventsHelper(new PointerEvent[] { 
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), false, true, PointerType.Mouse, 3),
-                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, true, PointerType.Mouse, 3),
-                new PointerEvent(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerType.Mouse, 3)
+            ConsumeEventsHelper(new PointerEventOld[] { 
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0.0, 0.0), false, true, PointerTypeOld.Mouse, 3),
+                new PointerEventOld(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, true, PointerTypeOld.Mouse, 3),
+                new PointerEventOld(new Point(10.0, 10.0), false, new Point(0.0, 0.0), false, false, PointerTypeOld.Mouse, 3)
             });
 
             MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 
@@ -44,8 +44,8 @@ namespace RdClient.Shared.Test.Input.Mouse
         [TestMethod]
         public void PointerModel_Mouse_ShouldScrollVertical()
         {
-            ConsumeEventsHelper(new PointerEvent[] { 
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), false, false, PointerType.Mouse, 3, 0, TouchEventType.Unknown, 30, false),
+            ConsumeEventsHelper(new PointerEventOld[] { 
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0.0, 0.0), false, false, PointerTypeOld.Mouse, 3, 0, TouchEventType.Unknown, 30, false),
             });
 
             MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 
@@ -56,8 +56,8 @@ namespace RdClient.Shared.Test.Input.Mouse
         [TestMethod]
         public void PointerModel_Mouse_ShouldScrollHorizontal()
         {
-            ConsumeEventsHelper(new PointerEvent[] { 
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), false, false, PointerType.Mouse, 3, 0, TouchEventType.Unknown, 30, true),
+            ConsumeEventsHelper(new PointerEventOld[] { 
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0.0, 0.0), false, false, PointerTypeOld.Mouse, 3, 0, TouchEventType.Unknown, 30, true),
             });
 
             MouseAssertionHelper(new Mock.TestMousePointerEvent[] { 

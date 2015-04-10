@@ -7,9 +7,9 @@ namespace RdClient.Shared.Input.Pointer
 {
     public class MouseMode : IPointerEventConsumer
     {
-        public event System.EventHandler<PointerEvent> ConsumedEvent;
+        public event System.EventHandler<PointerEventOld> ConsumedEvent;
 
-        private PointerEvent _trackedPointerEvent;
+        private PointerEventOld _trackedPointerEvent;
         private IPointerManipulator _pointerManipulator;
 
         public ConsumptionMode ConsumptionMode
@@ -46,7 +46,7 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        private void MouseRecognizer(PointerEvent pointerEvent)
+        private void MouseRecognizer(PointerEventOld pointerEvent)
         {
             float x = (float)pointerEvent.Position.X;
             float y = (float)pointerEvent.Position.Y;
@@ -79,7 +79,7 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        public void ConsumeEvent(PointerEvent pointerEvent)
+        public void ConsumeEvent(PointerEventOld pointerEvent)
         {
             MouseRecognizer(pointerEvent);
             _trackedPointerEvent = pointerEvent;

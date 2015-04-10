@@ -5,12 +5,12 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
     {
         IPointerManipulator Manipulator { get; }
 
-        void MouseLeftClick(PointerEvent pointerEvent);
-        void MouseMove(PointerEvent pointerEvent);
-        void MouseScroll(PointerEvent pointerEvent);
-        void MouseRightClick(PointerEvent pointerEvent);
-        void UpdateCursorPosition(PointerEvent pointerEvent);
+        void MouseLeftClick(PointerEventOld pointerEvent);
+        void MouseMove(PointerEventOld pointerEvent);
+        void MouseScroll(PointerEventOld pointerEvent);
+        void MouseRightClick(PointerEventOld pointerEvent);
+        void UpdateCursorPosition(PointerEventOld pointerEvent);
 
-        void ZoomAndPan(PointerEvent pointerEvent);
+        void ZoomAndPan(PointerEventOld pointerEvent);
     }
 }

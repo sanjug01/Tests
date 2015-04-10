@@ -6,7 +6,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 {
     public class PointerModeFactory
     {
-        private static void AddDirectModeTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>> stateMachine)
+        private static void AddDirectModeTransitions(ref IStateMachine<PointerState, StateEvent<PointerEventOld, IPointerContext>> stateMachine)
         {
             stateMachine.AddTransition(PointerState.Idle, PointerState.LeftDown,
             (o) =>
@@ -119,7 +119,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             (o) => { o.Context.Control.Manipulator.SendMouseAction(MouseEventType.RightRelease); });
         }
 
-        private static void AddMoveTransitions(ref IStateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>> stateMachine)
+        private static void AddMoveTransitions(ref IStateMachine<PointerState, StateEvent<PointerEventOld, IPointerContext>> stateMachine)
         {
             stateMachine.AddTransition(PointerState.Idle, PointerState.Inertia,
             (o) => { return o.Input.Inertia == true; },
@@ -152,7 +152,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
         public static IPointerEventConsumer CreatePointerMode(ITimer timer, IPointerManipulator manipulator, IRenderingPanel panel)
         {
-            IStateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>>();
+            IStateMachine<PointerState, StateEvent<PointerEventOld, IPointerContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEventOld, IPointerContext>>();
 
             AddDirectModeTransitions(ref stateMachine);
             AddMoveTransitions(ref stateMachine);
@@ -168,7 +168,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
         public static IPointerEventConsumer CreateDirectMode(ITimer timer, IPointerManipulator manipulator, IRenderingPanel panel)
         {
-            IStateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>>();
+            IStateMachine<PointerState, StateEvent<PointerEventOld, IPointerContext>> stateMachine = new StateMachine<PointerState, StateEvent<PointerEventOld, IPointerContext>>();
 
             AddDirectModeTransitions(ref stateMachine);
 

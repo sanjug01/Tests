@@ -10,32 +10,32 @@ namespace RdClient.Shared.Converters
 {
     public class PointerEventConverter
     {
-        public static PointerType PointerTypeConverter(PointerDeviceType type)
+        public static PointerTypeOld PointerTypeConverter(PointerDeviceType type)
         {
-            PointerType rtype = PointerType.Unknown;
+            PointerTypeOld rtype = PointerTypeOld.Unknown;
 
             switch(type)
             {
                 case PointerDeviceType.Mouse:
-                    rtype = PointerType.Mouse;
+                    rtype = PointerTypeOld.Mouse;
                     break;
                 case PointerDeviceType.Pen:
-                    rtype = PointerType.Pen;
+                    rtype = PointerTypeOld.Pen;
                     break;
                 case PointerDeviceType.Touch:
-                    rtype = PointerType.Touch;
+                    rtype = PointerTypeOld.Touch;
                     break;
                 default:
-                    rtype = PointerType.Unknown;
+                    rtype = PointerTypeOld.Unknown;
                     break;
             }
 
             return rtype;
         }
 
-        public static PointerEvent ManipulationStartedArgsConverter(ManipulationStartedRoutedEventArgs args)
+        public static PointerEventOld ManipulationStartedArgsConverter(ManipulationStartedRoutedEventArgs args)
         {
-            PointerEvent pe = new PointerEvent(
+            PointerEventOld pe = new PointerEventOld(
                 args.Position, 
                 false, 
                 args.Cumulative.Translation, 
@@ -47,32 +47,32 @@ namespace RdClient.Shared.Converters
             return pe;
         }
 
-        public static PointerEvent ManipulationInertiaStartingArgsConverter(ManipulationInertiaStartingRoutedEventArgs args)
+        public static PointerEventOld ManipulationInertiaStartingArgsConverter(ManipulationInertiaStartingRoutedEventArgs args)
         {
-            PointerEvent pe = new PointerEvent(new Point(0.0, 0.0), true, args.Delta.Translation, false, false, PointerTypeConverter(args.PointerDeviceType), 0);
+            PointerEventOld pe = new PointerEventOld(new Point(0.0, 0.0), true, args.Delta.Translation, false, false, PointerTypeConverter(args.PointerDeviceType), 0);
 
             return pe;
         }
 
-        public static PointerEvent ManipulationDeltaArgsConverter(ManipulationDeltaRoutedEventArgs args)
+        public static PointerEventOld ManipulationDeltaArgsConverter(ManipulationDeltaRoutedEventArgs args)
         {
-            PointerEvent pe = new PointerEvent(args.Position, args.IsInertial, args.Delta.Translation, false, false, PointerTypeConverter(args.PointerDeviceType), 0);
+            PointerEventOld pe = new PointerEventOld(args.Position, args.IsInertial, args.Delta.Translation, false, false, PointerTypeConverter(args.PointerDeviceType), 0);
 
             return pe;
         }
 
-        public static PointerEvent ManipulationCompletedArgsConverter(ManipulationCompletedRoutedEventArgs args)
+        public static PointerEventOld ManipulationCompletedArgsConverter(ManipulationCompletedRoutedEventArgs args)
         {
-            PointerEvent pe = new PointerEvent(args.Position, false, args.Cumulative.Translation, false, false, PointerTypeConverter(args.PointerDeviceType), 0);
+            PointerEventOld pe = new PointerEventOld(args.Position, false, args.Cumulative.Translation, false, false, PointerTypeConverter(args.PointerDeviceType), 0);
 
             return pe;
         }
 
-        public static PointerEvent PointerArgsConverter(UIElement receiver, PointerRoutedEventArgs args, TouchEventType actionType)
+        public static PointerEventOld PointerArgsConverter(UIElement receiver, PointerRoutedEventArgs args, TouchEventType actionType)
         {
             PointerPoint ppoint = args.GetCurrentPoint(receiver);
             Point position = new Point(ppoint.Position.X, ppoint.Position.Y);
-            PointerEvent pe = new PointerEvent(
+            PointerEventOld pe = new PointerEventOld(
                 position, false, new Point(0.0, 0.0),
                 ppoint.Properties.IsLeftButtonPressed, ppoint.Properties.IsRightButtonPressed,
                 PointerTypeConverter(ppoint.PointerDevice.PointerDeviceType), ppoint.PointerId,
@@ -84,11 +84,11 @@ namespace RdClient.Shared.Converters
             return pe;
         }
 
-        public static PointerEvent PointerArgsConverter(Windows.UI.Core.PointerEventArgs args, TouchEventType actionType)
+        public static PointerEventOld PointerArgsConverter(Windows.UI.Core.PointerEventArgs args, TouchEventType actionType)
         {
             PointerPoint ppoint = args.CurrentPoint;
             Point position = new Point(ppoint.Position.X, ppoint.Position.Y);
-            PointerEvent pe = new PointerEvent(
+            PointerEventOld pe = new PointerEventOld(
                 position, false, new Point(0.0, 0.0),
                 ppoint.Properties.IsLeftButtonPressed, ppoint.Properties.IsRightButtonPressed,
                 PointerTypeConverter(ppoint.PointerDevice.PointerDeviceType), ppoint.PointerId,

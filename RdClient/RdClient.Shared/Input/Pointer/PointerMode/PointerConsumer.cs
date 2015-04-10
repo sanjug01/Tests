@@ -6,10 +6,10 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
     public class PointerConsumer : IPointerEventConsumer
     {
         private IPointerContext _context;
-        private IStateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>> _stateMachine;
-        private StateEvent<PointerEvent, IPointerContext> _stateEvent;
+        private IStateMachine<PointerState, StateEvent<PointerEventOld, IPointerContext>> _stateMachine;
+        private StateEvent<PointerEventOld, IPointerContext> _stateEvent;
 
-        public event EventHandler<PointerEvent> ConsumedEvent;
+        public event EventHandler<PointerEventOld> ConsumedEvent;
 
         public ConsumptionMode ConsumptionMode
         {
@@ -18,14 +18,14 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
         public PointerConsumer(
             IPointerContext context,
-            IStateMachine<PointerState, StateEvent<PointerEvent, IPointerContext>> stateMachine)
+            IStateMachine<PointerState, StateEvent<PointerEventOld, IPointerContext>> stateMachine)
         {
             _context = context;
-            _stateEvent = new StateEvent<PointerEvent, IPointerContext>() { Input = null, Context = _context };
+            _stateEvent = new StateEvent<PointerEventOld, IPointerContext>() { Input = null, Context = _context };
             _stateMachine = stateMachine;
         }
 
-        public void ConsumeEvent(PointerEvent pointerEvent)
+        public void ConsumeEvent(PointerEventOld pointerEvent)
         {
             _stateEvent.Input = pointerEvent;
             _stateMachine.Consume(_stateEvent);

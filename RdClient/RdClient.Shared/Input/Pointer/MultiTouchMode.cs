@@ -4,7 +4,7 @@ namespace RdClient.Shared.Input.Pointer
 {
     public class MultiTouchMode : IPointerEventConsumer
     {
-        public event System.EventHandler<PointerEvent> ConsumedEvent;
+        public event System.EventHandler<PointerEventOld> ConsumedEvent;
 
         private ConsumptionMode _consumptionMode;
         public ConsumptionMode ConsumptionMode
@@ -12,8 +12,8 @@ namespace RdClient.Shared.Input.Pointer
             set { _consumptionMode = value; }
         }
 
-        private PointerEvent _masterTouch;
-        private PointerEvent _lastTouch;
+        private PointerEventOld _masterTouch;
+        private PointerEventOld _lastTouch;
         private IPointerManipulator _manipulator;
 
         public MultiTouchMode(IPointerManipulator manipulator)
@@ -21,7 +21,7 @@ namespace RdClient.Shared.Input.Pointer
             _manipulator = manipulator;
         }
 
-        private void InvokeManipulator(PointerEvent pointerEvent)
+        private void InvokeManipulator(PointerEventOld pointerEvent)
         {
             // the time-stamp delta is relative to the first touch ever
             ulong delta = pointerEvent.TimeStamp - _masterTouch.TimeStamp;
@@ -46,7 +46,7 @@ namespace RdClient.Shared.Input.Pointer
             _manipulator.SendTouchAction(pointerEvent.ActionType, pointerEvent.PointerId, pointerEvent.Position, delta);
         }
 
-        public void ConsumeEvent(PointerEvent pointerEvent)
+        public void ConsumeEvent(PointerEventOld pointerEvent)
         {
             if (_masterTouch == null && pointerEvent.ActionType == TouchEventType.Down)
             {

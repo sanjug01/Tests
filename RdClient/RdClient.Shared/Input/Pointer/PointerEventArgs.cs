@@ -4,11 +4,11 @@
 
     public sealed class PointerEventArgs : EventArgs
     {
-        private readonly PointerEvent _pointerEvent;
+        private readonly PointerEventOld _pointerEvent;
 
-        public PointerEvent PointerEvent { get { return _pointerEvent; } }
+        public PointerEventOld PointerEvent { get { return _pointerEvent; } }
 
-        public PointerEventArgs(PointerEvent pointerEvent)
+        public PointerEventArgs(PointerEventOld pointerEvent)
         {
             _pointerEvent = pointerEvent;
         }

@@ -8,10 +8,10 @@ namespace RdClient.Shared.Input.Pointer
     /// </summary>
     public class PointerEventTrace
     {
-        public PointerEvent LastEvent { private set; get; }
-        public PointerEvent PreviousEvent { private set; get; } 
+        public PointerEventOld LastEvent { private set; get; }
+        public PointerEventOld PreviousEvent { private set; get; } 
 
-        public void SetLastEvent(PointerEvent pointerEvent)
+        public void SetLastEvent(PointerEventOld pointerEvent)
         {
             PreviousEvent = LastEvent;
             LastEvent = pointerEvent;
@@ -52,7 +52,7 @@ namespace RdClient.Shared.Input.Pointer
         /// </summary>
         /// <param name="newEvent"> a newer event</param>
         /// <returns>delta X</returns>
-        public double DeltaXTo(PointerEvent newEvent)
+        public double DeltaXTo(PointerEventOld newEvent)
         {
             return newEvent.Position.X - LastEvent.Position.X;
         }
@@ -62,7 +62,7 @@ namespace RdClient.Shared.Input.Pointer
         /// </summary>
         /// <param name="newEvent"> a newer event</param>
         /// <returns>delta Y</returns>
-        public double DeltaYTo(PointerEvent newEvent)
+        public double DeltaYTo(PointerEventOld newEvent)
         {
             return newEvent.Position.Y - LastEvent.Position.Y;
         }
@@ -72,14 +72,14 @@ namespace RdClient.Shared.Input.Pointer
             get { return null != PreviousEvent; }
         }
 
-        public PointerEventTrace(PointerEvent pointerEvent)
+        public PointerEventTrace(PointerEventOld pointerEvent)
         {
             Contract.Requires(null != pointerEvent);
             this.LastEvent = pointerEvent;
             this.PreviousEvent = null;
         }
 
-        public PointerEventTrace(PointerEvent pointerEvent, PointerEvent previousPointerEvent)
+        public PointerEventTrace(PointerEventOld pointerEvent, PointerEventOld previousPointerEvent)
         {
             Contract.Requires(null != pointerEvent);
             this.LastEvent = pointerEvent;

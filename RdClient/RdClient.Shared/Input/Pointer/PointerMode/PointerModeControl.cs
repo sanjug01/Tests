@@ -25,19 +25,19 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             _panel = panel;
         }
 
-        public virtual void MouseLeftClick(PointerEvent pointerEvent)
+        public virtual void MouseLeftClick(PointerEventOld pointerEvent)
         {
             _manipulator.SendMouseAction(MouseEventType.LeftPress);
             _manipulator.SendMouseAction(MouseEventType.LeftRelease);
         }
 
-        public void MouseMove(PointerEvent pointerEvent)
+        public void MouseMove(PointerEventOld pointerEvent)
         {
             UpdateCursorPosition(pointerEvent);
             _manipulator.SendMouseAction(MouseEventType.Move);
         }
 
-        public void MouseScroll(PointerEvent pointerEvent)
+        public void MouseScroll(PointerEventOld pointerEvent)
         {
             double delta = 0.0;
 
@@ -53,13 +53,13 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             }            
         }
 
-        public virtual void MouseRightClick(PointerEvent pointerEvent)
+        public virtual void MouseRightClick(PointerEventOld pointerEvent)
         {
             _manipulator.SendMouseAction(MouseEventType.RightPress);
             _manipulator.SendMouseAction(MouseEventType.RightRelease);
         }
 
-        public virtual void UpdateCursorPosition(PointerEvent pointerEvent)
+        public virtual void UpdateCursorPosition(PointerEventOld pointerEvent)
         {
             if(pointerEvent.Inertia)
             {
@@ -71,7 +71,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             }
         }
 
-        public void ZoomAndPan(PointerEvent pointerEvent)
+        public void ZoomAndPan(PointerEventOld pointerEvent)
         {
             double diagonal = Math.Sqrt(Math.Pow(_panel.Viewport.Size.Width, 2) + Math.Pow(_panel.Viewport.Size.Height, 2));
             double scale = (100.0 * _context.LastSpreadDelta) / diagonal;

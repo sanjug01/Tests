@@ -25,9 +25,9 @@ namespace RdClient.Shared.Test.Input.Mouse
             _consumer = new PointerEventDispatcher(_timer, _manipulator, _panel);
         }
 
-        protected void ConsumeEvents(PointerEvent[] events)
+        protected void ConsumeEvents(PointerEventOld[] events)
         {
-            foreach (PointerEvent e in events)
+            foreach (PointerEventOld e in events)
             {
                 _consumer.ConsumeEvent(e);
             }
@@ -38,11 +38,11 @@ namespace RdClient.Shared.Test.Input.Mouse
         {
             _manipulator.Expect("SendPinchAndZoom", new List<object> { 0.0, 20.0, 40.0, 20.0 }, null);
 
-            ConsumeEvents(new PointerEvent[] { 
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(0, 40.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4),
-                new PointerEvent(new Point(0.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(0.0, 30.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4)
+            ConsumeEvents(new PointerEventOld[] { 
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 3),
+                new PointerEventOld(new Point(0, 40.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 4),
+                new PointerEventOld(new Point(0.0, 10.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 3),
+                new PointerEventOld(new Point(0.0, 30.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 4)
             });
         }
 
@@ -50,11 +50,11 @@ namespace RdClient.Shared.Test.Input.Mouse
         public void PointerModel_ShouldHZoomOut()
         {
             _manipulator.Expect("SendPinchAndZoom", new List<object> { 20.0, 0.0, 20.0, 40.0 }, null);
-            ConsumeEvents(new PointerEvent[] { 
-                new PointerEvent(new Point(10.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(30.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4),
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(40.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4)
+            ConsumeEvents(new PointerEventOld[] { 
+                new PointerEventOld(new Point(10.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 3),
+                new PointerEventOld(new Point(30.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 4),
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 3),
+                new PointerEventOld(new Point(40.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 4)
             });
         }
 
@@ -62,11 +62,11 @@ namespace RdClient.Shared.Test.Input.Mouse
         public void PointerModel_ShouldRandomZoomIn()
         {
             _manipulator.Expect("SendPinchAndZoom", new List<object> { 20.0, 40.0, null, null }, null);
-            ConsumeEvents(new PointerEvent[] { 
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(40.0, 80.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4),
-                new PointerEvent(new Point(10.0, 20.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(30.0, 60.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4)
+            ConsumeEvents(new PointerEventOld[] { 
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 3),
+                new PointerEventOld(new Point(40.0, 80.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 4),
+                new PointerEventOld(new Point(10.0, 20.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 3),
+                new PointerEventOld(new Point(30.0, 60.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 4)
             });
         }
 
@@ -74,11 +74,11 @@ namespace RdClient.Shared.Test.Input.Mouse
         public void PointerModel_ShouldRandomZoomOut()
         {
             _manipulator.Expect("SendPinchAndZoom", new List<object> { 20.0, 40.0, null, null }, null);
-            ConsumeEvents(new PointerEvent[] { 
-                new PointerEvent(new Point(10.0, 20.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(30.0, 60.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4),
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 3),
-                new PointerEvent(new Point(40.0, 80.0), false, new Point(0.0, 0.0), true, false, PointerType.Touch, 4)
+            ConsumeEvents(new PointerEventOld[] { 
+                new PointerEventOld(new Point(10.0, 20.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 3),
+                new PointerEventOld(new Point(30.0, 60.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 4),
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 3),
+                new PointerEventOld(new Point(40.0, 80.0), false, new Point(0.0, 0.0), true, false, PointerTypeOld.Touch, 4)
             });
         }
     }

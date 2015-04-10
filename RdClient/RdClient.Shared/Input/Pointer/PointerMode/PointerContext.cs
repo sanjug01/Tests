@@ -17,7 +17,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
     public class PointerContext : IPointerContext
     {
         private const int _traceSize = 3;
-        private Dictionary<uint, ListTrace<PointerEvent>> _pointerTraces = new Dictionary<uint, ListTrace<PointerEvent>>();
+        private Dictionary<uint, ListTrace<PointerEventOld>> _pointerTraces = new Dictionary<uint, ListTrace<PointerEventOld>>();
         private List<uint> _pointerSequence = new List<uint>();
         private DoubleClickTimer _doubleClickTimer;
 
@@ -59,12 +59,12 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
         public Point LastSpreadCenter { get; private set; }
 
-        public void TrackEvent(PointerEvent pointerEvent)
+        public void TrackEvent(PointerEventOld pointerEvent)
         {
             if(pointerEvent.ActionType == TouchEventType.Down ||
                 (pointerEvent.ActionType == TouchEventType.Update && false == _pointerTraces.ContainsKey(pointerEvent.PointerId)))
             {
-                _pointerTraces[pointerEvent.PointerId] = new ListTrace<PointerEvent>(PointerContext._traceSize);
+                _pointerTraces[pointerEvent.PointerId] = new ListTrace<PointerEventOld>(PointerContext._traceSize);
             }
 
             if(pointerEvent.ActionType == TouchEventType.Down || pointerEvent.ActionType == TouchEventType.Update)
@@ -84,7 +84,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             }
         }
 
-        public bool SpreadThresholdExceeded(PointerEvent pointerEvent)
+        public bool SpreadThresholdExceeded(PointerEventOld pointerEvent)
         {
             if(_pointerSequence.Count < 2 || (_pointerSequence[0] != pointerEvent.PointerId && _pointerSequence[1] != pointerEvent.PointerId))
             {
@@ -93,8 +93,8 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
             double spreadDelta;
 
-            ListTrace<PointerEvent> leftTrace = _pointerTraces[_pointerSequence[0]];
-            ListTrace<PointerEvent> rightTrace = _pointerTraces[_pointerSequence[1]];
+            ListTrace<PointerEventOld> leftTrace = _pointerTraces[_pointerSequence[0]];
+            ListTrace<PointerEventOld> rightTrace = _pointerTraces[_pointerSequence[1]];
 
             int leftCount = leftTrace.Count;
             int rightCount = rightTrace.Count;
@@ -136,7 +136,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             return Math.Sqrt(dX * dX + dY * dY);
         }
 
-        public bool MoveThresholdExceeded(PointerEvent pointerEvent, double threshold = GlobalConstants.TouchMoveThreshold)
+        public bool MoveThresholdExceeded(PointerEventOld pointerEvent, double threshold = GlobalConstants.TouchMoveThreshold)
         {
             double dX;
             double dY;
@@ -195,7 +195,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
         }
 
 
-        public int NumberOfContacts(PointerEvent pointerEvent)
+        public int NumberOfContacts(PointerEventOld pointerEvent)
         {
             if(pointerEvent.ActionType == TouchEventType.Up)
             {

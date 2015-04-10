@@ -17,7 +17,7 @@ namespace RdClient.Shared.Test.ViewModels
         Rect _windowRect = new Rect(0, 0, 1280, 800);
         PanKnobViewModel _vvm;
         uint _pointerId;
-        PointerType _pointerType;
+        PointerTypeOld _pointerType;
 
         [TestInitialize]
         public void SetUpTest()
@@ -25,7 +25,7 @@ namespace RdClient.Shared.Test.ViewModels
             _vvm = new PanKnobViewModel();
             _vvm.ViewSize = new Size(_windowRect.Width, _windowRect.Height);
             _pointerId = 3;
-            _pointerType = PointerType.Touch;
+            _pointerType = PointerTypeOld.Touch;
         }
 
         [TestCleanup]
@@ -156,7 +156,7 @@ namespace RdClient.Shared.Test.ViewModels
             ConsumeEvent(SingleTouchEvent());
             Assert.AreEqual(PanKnobState.Active, _vvm.State);
 
-            PointerEvent[] moves = new PointerEvent[]{
+            PointerEventOld[] moves = new PointerEventOld[]{
                 MoveTouchEvent(12.5, 12.5),
                 MoveTouchEvent(-12.5, 12.5),
                 MoveTouchEvent(12.5, -12.5),
@@ -185,7 +185,7 @@ namespace RdClient.Shared.Test.ViewModels
             ConsumeEvent(SingleTouchEvent());
             Assert.AreEqual(PanKnobState.Active, _vvm.State);
 
-            PointerEvent[] moves = new PointerEvent[]{
+            PointerEventOld[] moves = new PointerEventOld[]{
                 MoveTouchEvent(12.5, 12.5),
                 MoveTouchEvent(-12.5, 12.5),
                 MoveTouchEvent(12.5, -12.5),
@@ -218,7 +218,7 @@ namespace RdClient.Shared.Test.ViewModels
             ConsumeEvents(DoubleTouchEvents());
             Assert.AreEqual(PanKnobState.Moving, _vvm.State);
 
-            PointerEvent[] moves = new PointerEvent[]{
+            PointerEventOld[] moves = new PointerEventOld[]{
                 MoveTouchEvent(12.5, 12.5),
                 MoveTouchEvent(-12.5, 12.5),
                 MoveTouchEvent(12.5, -12.5),
@@ -247,7 +247,7 @@ namespace RdClient.Shared.Test.ViewModels
             ConsumeEvents(DoubleTouchEvents());
             Assert.AreEqual(PanKnobState.Moving, _vvm.State);
 
-            PointerEvent[] moves = new PointerEvent[]{
+            PointerEventOld[] moves = new PointerEventOld[]{
                 MoveTouchEvent(12.5, 12.5),
                 MoveTouchEvent(-12.5, 12.5),
                 MoveTouchEvent(12.5, -12.5),
@@ -264,12 +264,12 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void PanKnobViewModel_PanningWithInertia()
         {
-            PointerEvent[] movesBefore = new PointerEvent[]{
+            PointerEventOld[] movesBefore = new PointerEventOld[]{
                 InertiaMoveTouchEvent(12.5, 12.5),
                 InertiaMoveTouchEvent(-12.5, 12.5),
             };
 
-            PointerEvent[] movesAfter = new PointerEvent[]{
+            PointerEventOld[] movesAfter = new PointerEventOld[]{
                 InertiaMoveTouchEvent(-5.5, 5.5),
                 InertiaMoveTouchEvent(-11.0, 11.0),
             };
@@ -313,12 +313,12 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void PanKnobViewModel_MovingWithInertia()
         {
-            PointerEvent[] movesBefore = new PointerEvent[]{
+            PointerEventOld[] movesBefore = new PointerEventOld[]{
                 InertiaMoveTouchEvent(12.5, 12.5),
                 InertiaMoveTouchEvent(-12.5, 12.5),
             };
 
-            PointerEvent[] movesAfter = new PointerEvent[]{
+            PointerEventOld[] movesAfter = new PointerEventOld[]{
                 InertiaMoveTouchEvent(-5.5, 5.5),
                 InertiaMoveTouchEvent(-11.0, 11.0),
             };
@@ -421,9 +421,9 @@ namespace RdClient.Shared.Test.ViewModels
         /// Helper method to send multiple pointer events
         /// </summary>
         /// <param name="events">list of events</param>
-        protected void ConsumeEvents(PointerEvent[] events)
+        protected void ConsumeEvents(PointerEventOld[] events)
         {
-            foreach (PointerEvent e in events)
+            foreach (PointerEventOld e in events)
             {
                 _vvm.PointerEventConsumer.ConsumeEvent(e);
             }
@@ -433,55 +433,55 @@ namespace RdClient.Shared.Test.ViewModels
         /// Helper method to send single pointer event
         /// </summary>
         /// <param name="e">event</param>
-        protected void ConsumeEvent(PointerEvent e)
+        protected void ConsumeEvent(PointerEventOld e)
         {
             _vvm.PointerEventConsumer.ConsumeEvent(e);
         }
 
-        PointerEvent SingleTouchEvent()
+        PointerEventOld SingleTouchEvent()
         {
             return 
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, _pointerType, _pointerId, 100, TouchEventType.Down);
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, _pointerType, _pointerId, 100, TouchEventType.Down);
         }
 
-        PointerEvent[] DoubleTouchEvents()
+        PointerEventOld[] DoubleTouchEvents()
         {
-            return new PointerEvent[] {
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, _pointerType, _pointerId, 100, TouchEventType.Down),
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, _pointerType, _pointerId, 200, TouchEventType.Down)
+            return new PointerEventOld[] {
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, _pointerType, _pointerId, 100, TouchEventType.Down),
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0.0, 0.0), true, false, _pointerType, _pointerId, 200, TouchEventType.Down)
             };
         }
 
-        PointerEvent MoveTouchEvent(double deltaX, double deltaY)
+        PointerEventOld MoveTouchEvent(double deltaX, double deltaY)
         {
             // delta matters, position does not matter
             return
-                new PointerEvent(new Point(10.0, 20.0), false, new Point(deltaX, deltaY), false, false, _pointerType, _pointerId, 0, TouchEventType.Unknown);
+                new PointerEventOld(new Point(10.0, 20.0), false, new Point(deltaX, deltaY), false, false, _pointerType, _pointerId, 0, TouchEventType.Unknown);
         }
 
-        PointerEvent ReleaseTouchEvent()
+        PointerEventOld ReleaseTouchEvent()
         {
             return
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0.0, 0.0), false, false, _pointerType, _pointerId, 1000, TouchEventType.Up);
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0.0, 0.0), false, false, _pointerType, _pointerId, 1000, TouchEventType.Up);
         }
 
-        PointerEvent BeginInertiaTouchEvent()
+        PointerEventOld BeginInertiaTouchEvent()
         {
             return
-                new PointerEvent(new Point(0.0, 0.0), true, new Point(0.0, 0.0), false, false, _pointerType, _pointerId, 0, TouchEventType.Unknown);
+                new PointerEventOld(new Point(0.0, 0.0), true, new Point(0.0, 0.0), false, false, _pointerType, _pointerId, 0, TouchEventType.Unknown);
         }
 
-        PointerEvent InertiaMoveTouchEvent(double deltaX, double deltaY)
+        PointerEventOld InertiaMoveTouchEvent(double deltaX, double deltaY)
         {
             // delta matters, position does not matter
             return
-                new PointerEvent(new Point(10.0, 20.0), true, new Point(deltaX, deltaY), false, false, _pointerType, _pointerId, 0, TouchEventType.Unknown);
+                new PointerEventOld(new Point(10.0, 20.0), true, new Point(deltaX, deltaY), false, false, _pointerType, _pointerId, 0, TouchEventType.Unknown);
         }
 
-        PointerEvent CompleteInertiaTouchEvent()
+        PointerEventOld CompleteInertiaTouchEvent()
         {
             return
-                new PointerEvent(new Point(0.0, 0.0), false, new Point(0, 0), false, false, _pointerType, _pointerId, 0, TouchEventType.Unknown);
+                new PointerEventOld(new Point(0.0, 0.0), false, new Point(0, 0), false, false, _pointerType, _pointerId, 0, TouchEventType.Unknown);
         }
     }
 }

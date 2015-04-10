@@ -12,9 +12,9 @@ namespace RdClient.Shared.Input.Pointer
 
     public interface IPointerEventConsumer
     {
-        event EventHandler<PointerEvent> ConsumedEvent;
+        event EventHandler<PointerEventOld> ConsumedEvent;
         ConsumptionMode ConsumptionMode { set; }
-        void ConsumeEvent(PointerEvent pointerEvent);
+        void ConsumeEvent(PointerEventOld pointerEvent);
         void Reset();
     }
 }
