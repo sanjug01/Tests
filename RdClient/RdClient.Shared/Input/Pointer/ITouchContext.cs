@@ -14,7 +14,7 @@ namespace RdClient.Shared.Input.Pointer
 
     public interface ITouchContext
     {
-        DoubleClickTimer DoubleClickTimer { get; }
+        DoubleClickTimerOld DoubleClickTimer { get; }
         void MouseLeftClick(PointerEventOld pointerEvent);
         void MouseMove(PointerEventOld pointerEvent);
         void MouseScroll(PointerEventOld pointerEvent);

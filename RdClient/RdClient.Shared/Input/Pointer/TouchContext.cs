@@ -7,14 +7,14 @@ using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Pointer
 {
-    public enum DragOrientation
+    public enum DragOrientationOld
     {
         Horizontal,
         Vertical,
         Unknown
     }
 
-    public enum PointerState
+    public enum PointerStateOld
     {
         Idle,
         LeftDown,
@@ -44,20 +44,20 @@ namespace RdClient.Shared.Input.Pointer
         private uint _mainPointerId;
         private uint _secondaryPointerId;
         private GestureType _activeGesture;
-        public DoubleClickTimer DoubleClickTimer { get; private set; }
+        public DoubleClickTimerOld DoubleClickTimer { get; private set; }
 
-        private IStateMachine<PointerState, StateEvent<PointerEventOld, ITouchContext>> _stateMachine;
+        private IStateMachine<PointerStateOld, StateEvent<PointerEventOld, ITouchContext>> _stateMachine;
         public IPointerManipulator PointerManipulator { get; private set; }
 
         public TouchContext(ITimer timer, 
                             IPointerManipulator manipulator, 
-                            IStateMachine<PointerState, StateEvent<PointerEventOld, ITouchContext>> stateMachine)
+                            IStateMachine<PointerStateOld, StateEvent<PointerEventOld, ITouchContext>> stateMachine)
         {
             PointerManipulator = manipulator;
 
-            DoubleClickTimer = new DoubleClickTimer(timer, 300);
-            DoubleClickTimer.AddAction(DoubleClickTimer.ClickTimerType.LeftClick, MouseLeftClick);
-            DoubleClickTimer.AddAction(DoubleClickTimer.ClickTimerType.RightClick, MouseRightClick);
+            DoubleClickTimer = new DoubleClickTimerOld(timer, 300);
+            DoubleClickTimer.AddAction(DoubleClickTimerOld.ClickTimerType.LeftClick, MouseLeftClick);
+            DoubleClickTimer.AddAction(DoubleClickTimerOld.ClickTimerType.RightClick, MouseRightClick);
 
             _activeGesture = GestureType.Idle;
             _stateMachine = stateMachine;
@@ -401,7 +401,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public void Reset()
         {
-            _stateMachine.SetStart(PointerState.Idle);
+            _stateMachine.SetStart(PointerStateOld.Idle);
             DoubleClickTimer.Stop();
             _trackedPointerEvents.Clear();
         }

@@ -6,7 +6,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
     public interface IPointerContext
     {
         IPointerControl Control { get; }
-        DoubleClickTimer Timer { get; }
+        DoubleClickTimerOld Timer { get; }
 
         bool MoveThresholdExceeded(PointerEventOld pointerEvent, double threshold = GlobalConstants.TouchMoveThreshold);
         Point LastMoveVector { get; }

@@ -19,11 +19,11 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
         private const int _traceSize = 3;
         private Dictionary<uint, ListTrace<PointerEventOld>> _pointerTraces = new Dictionary<uint, ListTrace<PointerEventOld>>();
         private List<uint> _pointerSequence = new List<uint>();
-        private DoubleClickTimer _doubleClickTimer;
+        private DoubleClickTimerOld _doubleClickTimer;
 
         public PointerContext(ITimer timer)
         {
-            _doubleClickTimer = new DoubleClickTimer(timer, 300);
+            _doubleClickTimer = new DoubleClickTimerOld(timer, 300);
         }
 
         public void Reset()
@@ -40,12 +40,12 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             set 
             { 
                 _control = value;
-                _doubleClickTimer.AddAction(DoubleClickTimer.ClickTimerType.LeftClick, _control.MouseLeftClick);
-                _doubleClickTimer.AddAction(DoubleClickTimer.ClickTimerType.RightClick, _control.MouseRightClick);
+                _doubleClickTimer.AddAction(DoubleClickTimerOld.ClickTimerType.LeftClick, _control.MouseLeftClick);
+                _doubleClickTimer.AddAction(DoubleClickTimerOld.ClickTimerType.RightClick, _control.MouseRightClick);
             }
         }
 
-        public DoubleClickTimer Timer
+        public DoubleClickTimerOld Timer
         {
             get { return _doubleClickTimer; }
         }

@@ -12,7 +12,7 @@ namespace RdClient.Shared.Input.Pointer
     {        
         public DirectTouchContext(ITimer timer, 
                                  IPointerManipulator manipulator, 
-                                 IStateMachine<PointerState, StateEvent<PointerEventOld, ITouchContext>> stateMachine) : base(timer, manipulator, stateMachine)
+                                 IStateMachine<PointerStateOld, StateEvent<PointerEventOld, ITouchContext>> stateMachine) : base(timer, manipulator, stateMachine)
         {
 
         }

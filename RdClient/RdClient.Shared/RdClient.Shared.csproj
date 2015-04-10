@@ -151,6 +151,7 @@
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
+    <Compile Include="Input\Pointer\DoubleClickTimer.cs" />
     <Compile Include="Input\Pointer\IPointerCapture.cs" />
     <Compile Include="Input\Pointer\IPointerControl.cs" />
     <Compile Include="Input\Pointer\IPointerEvent.cs" />
@@ -187,11 +188,13 @@
     <Compile Include="Input\Keyboard\VirtualKeyBase.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactory.cs" />
     <Compile Include="Input\Pointer\DirectTouchContext.cs" />
-    <Compile Include="Input\Pointer\DoubleClickTimer.cs" />
+    <Compile Include="Input\Pointer\DoubleClickTimerOld.cs" />
     <Compile Include="Input\Pointer\IPointerEventConsumer.cs" />
     <Compile Include="Input\Pointer\IPointerManipulator.cs" />
     <Compile Include="Input\Pointer\ITouchContext.cs" />
     <Compile Include="Input\Pointer\MouseMode.cs" />
+    <Compile Include="Input\Pointer\PointerModeTransitionConditions.cs" />
+    <Compile Include="Input\Pointer\PointerModeTransitions.cs" />
     <Compile Include="Input\Pointer\PointerMode\DirectModeControl.cs" />
     <Compile Include="Input\Pointer\PointerMode\IPointerContext.cs" />
     <Compile Include="Input\Pointer\PointerMode\IPointerControl.cs" />
@@ -199,6 +202,7 @@
     <Compile Include="Input\Pointer\PointerMode\PointerContext.cs" />
     <Compile Include="Input\Pointer\PointerMode\PointerModeControl.cs" />
     <Compile Include="Input\Pointer\PointerMode\PointerModeFactory.cs" />
+    <Compile Include="Input\Pointer\PointerStateMachineEvent.cs" />
     <Compile Include="Input\Pointer\PointTracker.cs" />
     <Compile Include="Input\Pointer\TouchContext.cs" />
     <Compile Include="Input\Pointer\TouchModeFactory.cs" />

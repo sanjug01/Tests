@@ -6,7 +6,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
     public class PointerConsumer : IPointerEventConsumer
     {
         private IPointerContext _context;
-        private IStateMachine<PointerState, StateEvent<PointerEventOld, IPointerContext>> _stateMachine;
+        private IStateMachine<PointerStateOld, StateEvent<PointerEventOld, IPointerContext>> _stateMachine;
         private StateEvent<PointerEventOld, IPointerContext> _stateEvent;
 
         public event EventHandler<PointerEventOld> ConsumedEvent;
@@ -18,7 +18,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
 
         public PointerConsumer(
             IPointerContext context,
-            IStateMachine<PointerState, StateEvent<PointerEventOld, IPointerContext>> stateMachine)
+            IStateMachine<PointerStateOld, StateEvent<PointerEventOld, IPointerContext>> stateMachine)
         {
             _context = context;
             _stateEvent = new StateEvent<PointerEventOld, IPointerContext>() { Input = null, Context = _context };

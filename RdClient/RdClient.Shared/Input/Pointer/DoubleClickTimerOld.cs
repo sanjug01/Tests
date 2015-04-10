@@ -1,10 +1,11 @@
 ﻿using RdClient.Shared.Helpers;
 using System;
 using System.Collections.Generic;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Pointer
 {
-    public class DoubleClickTimer
+    public class DoubleClickTimerOld
     {
         public enum ClickTimerType
         {
@@ -14,7 +15,7 @@ namespace RdClient.Shared.Input.Pointer
 
         private ITimer _timer;
         private double _interval;
-        private Dictionary<ClickTimerType, Action<IPointerRoutedEventProperties>> _actions;
+        private Dictionary<ClickTimerType, Action<PointerEventOld>> _actions;
         private ClickTimerType _timerType;
 
         private bool _expired;
@@ -32,20 +33,20 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        public DoubleClickTimer(ITimer timer, double interval)
+        public DoubleClickTimerOld(ITimer timer, double interval)
         {
-            _actions = new Dictionary<ClickTimerType, Action<IPointerRoutedEventProperties>>();
+            _actions = new Dictionary<ClickTimerType, Action<PointerEventOld>>();
             _timer = timer;
             _interval = interval;
             _expired = true;
         }
 
-        public void AddAction(ClickTimerType timerType, Action<IPointerRoutedEventProperties> action)
+        public void AddAction(ClickTimerType timerType, Action<PointerEventOld> action)
         {
             _actions[timerType] = action;
         }
 
-        public void Reset(ClickTimerType timerType, IPointerRoutedEventProperties pointerEvent)
+        public void Reset(ClickTimerType timerType, PointerEventOld pointerEvent)
         {
             _timerType = timerType;
             _expired = false;
