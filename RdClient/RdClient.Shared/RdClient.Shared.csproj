@@ -152,6 +152,7 @@
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
     <Compile Include="Input\Pointer\DoubleClickTimer.cs" />
+    <Compile Include="Input\Pointer\DummyPointerControl.cs" />
     <Compile Include="Input\Pointer\IPointerCapture.cs" />
     <Compile Include="Input\Pointer\IPointerControl.cs" />
     <Compile Include="Input\Pointer\IPointerEvent.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Input\Pointer\PointerCapture.cs" />
     <Compile Include="Input\Pointer\PointerEvent.cs" />
     <Compile Include="Input\Pointer\PointerEventArgs.cs" />
+    <Compile Include="Input\Pointer\PointerEventConsumer.cs" />
     <Compile Include="Input\Pointer\PointerEventTrace.cs" />
     <Compile Include="Input\Pointer\PointerEventOld.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
