@@ -50,7 +50,7 @@ namespace RdClient.Shared.ViewModels
 
         private void EditCommandExecute()
         {
-            AddUserViewArgs addUserArgs = new AddUserViewArgs(this.Credentials, false);
+            AddUserViewArgs addUserArgs = new AddUserViewArgs(this.Credentials, false, CredentialPromptMode.EditCredentials);
 
             _nav.PushModalView("AddUserView", addUserArgs);        
         }

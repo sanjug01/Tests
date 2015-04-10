@@ -55,5 +55,35 @@ namespace RdClient.Shared.Test.Converters
                 ttlsc.ConvertBack(null, null, null, null);
             }));
         }
+
+        [TestMethod]
+        public void ValidStringParameterAppendedToKey()
+        {
+            TypeToLocalizedStringConverter ttlsc = new TypeToLocalizedStringConverter();
+            ttlsc.LocalizedString = new TestStringLocalizer();
+            TestEnum te = TestEnum.TestValue;
+            string parameter = "ParameterString";
+            Assert.AreEqual("TestEnum_TestValue_ParameterString_Stringloc", ttlsc.Convert(te, typeof(string), parameter, null));
+        }
+
+        [TestMethod]
+        public void NullStringParameterIgnored()
+        {
+            TypeToLocalizedStringConverter ttlsc = new TypeToLocalizedStringConverter();
+            ttlsc.LocalizedString = new TestStringLocalizer();
+            TestEnum te = TestEnum.TestValue;
+            string parameter = null;
+            Assert.AreEqual("TestEnum_TestValue_Stringloc", ttlsc.Convert(te, typeof(string), parameter, null));
+        }
+
+        [TestMethod]
+        public void NonStringParameterIgnored()
+        {
+            TypeToLocalizedStringConverter ttlsc = new TypeToLocalizedStringConverter();
+            ttlsc.LocalizedString = new TestStringLocalizer();
+            TestEnum te = TestEnum.TestValue;
+            object parameter = new Object();
+            Assert.AreEqual("TestEnum_TestValue_Stringloc", ttlsc.Convert(te, typeof(string), parameter, null));
+        }
     }
 }

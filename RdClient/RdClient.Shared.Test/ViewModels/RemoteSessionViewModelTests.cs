@@ -317,12 +317,20 @@
                     get { return _events; }
                 }
 
+                /// <summary>
+                /// Set credentials is called prior to Connect
+                /// </summary>
+                /// <param name="credentials">credentials</param>
+                /// <param name="fUsingSavedCreds">indicates if credentials are saved </param>
                 void IRdpConnection.SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)
+                {                
+                }
+                void IRdpConnection.SetGateway(GatewayModel gateway, CredentialsModel credentials)
                 {
                     throw new NotImplementedException();
                 }
 
-                void IRdpConnection.Connect(CredentialsModel credentials, bool fUsingSavedCreds)
+                void IRdpConnection.Connect()
                 {
                     if (null != this.Connect)
                         this.Connect(this, EventArgs.Empty);

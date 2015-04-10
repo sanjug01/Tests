@@ -9,8 +9,9 @@
     using System.Windows.Input;
 
     public enum CredentialPromptMode
-    {
+    {        
         EnterCredentials,
+        EditCredentials,
         InvalidCredentials,
         FreshCredentialsNeeded
     }
@@ -77,6 +78,7 @@
         private readonly RelayCommand _okCommand;
         private readonly RelayCommand _cancelCommand;
         private CredentialPromptMode _mode;
+        private bool _showMessage;
 
         public AddUserViewModel()
         {
@@ -103,7 +105,19 @@
         public CredentialPromptMode Mode
         {
             get { return _mode; }
-            set { SetProperty(ref _mode, value); }
+            set
+            {
+                if (SetProperty(ref _mode, value))
+                {
+                    this.ShowMessage = this.Mode != CredentialPromptMode.EnterCredentials;
+                }
+            }
+        }
+
+        public bool ShowMessage
+        {
+            get { return _showMessage; }
+            private set { SetProperty(ref _showMessage, value); }
         }
 
         public bool StoreCredentials
@@ -147,7 +161,7 @@
             this.ShowSave = _args.ShowSave;
             this.User = _args.Credentials.Username;
             this.Password = _args.Credentials.Password;
-            this.Mode = _args.Mode;
+            this.Mode = _args.Mode;         
         }
 
         private void OkCommandHandler(object o)

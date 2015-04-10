@@ -336,7 +336,12 @@
             {
                 throw new NotImplementedException();
             }
-            protected virtual void Connect(CredentialsModel credentials, bool fUsingSavedCreds)
+            protected virtual void SetGateway(GatewayModel gateway, CredentialsModel gatewayCredentials)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected virtual void Connect()
             {
                 throw new NotImplementedException();
             }
@@ -373,10 +378,14 @@
             {
                 this.SetCredentials(credentials, fUsingSavedCreds);
             }
-
-            void IRdpConnection.Connect(CredentialsModel credentials, bool fUsingSavedCreds)
+            void IRdpConnection.SetGateway(GatewayModel gateway, CredentialsModel gateayCredentials)
             {
-                this.Connect(credentials, fUsingSavedCreds);
+                this.SetGateway(gateway, gateayCredentials);
+            }
+
+            void IRdpConnection.Connect()
+            {
+                this.Connect();
             }
 
             void IRdpConnection.Disconnect()

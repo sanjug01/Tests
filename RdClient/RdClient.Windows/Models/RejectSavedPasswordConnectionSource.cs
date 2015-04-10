@@ -55,7 +55,12 @@
                 _cts.Dispose();
             }
 
-            protected override void Connect(CredentialsModel credentials, bool savedCredentials)
+            protected override void SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)
+            {
+                _savedCredentials = fUsingSavedCreds;
+            }
+
+            protected override void Connect()
             {
                 Contract.Assert(null == _task);
                 //
@@ -64,9 +69,9 @@
                 //
                 using (ReadWriteMonitor.Write(_monitor))
                 {
-                    _savedCredentials = savedCredentials;
-
-                    if (savedCredentials)
+                    
+                    // requires prior call to SetCredentials
+                    if (_savedCredentials)
                     {
                         _task = new Task(() =>
                         {

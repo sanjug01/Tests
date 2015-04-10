@@ -3,6 +3,7 @@ using RdClient.Shared.Models;
 using RdClient.Shared.Navigation;
 using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
+using System;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -137,9 +138,29 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.AreEqual(_args.ShowSave, _vm.ShowSave);            
         }
 
+        [TestMethod]
         public void AddUserViewModel_StoreCredentialsInitiallyFalse()
         {
             Assert.IsFalse(_vm.StoreCredentials);
+        }
+
+        [TestMethod]
+        public void AddUserViewModel_ShowMessageFalseIffInEnterCredentialsMode()
+        {
+            _vm.Mode = CredentialPromptMode.EnterCredentials;
+            Assert.IsFalse(_vm.ShowMessage);
+            foreach (CredentialPromptMode mode in Enum.GetValues(typeof(CredentialPromptMode)))
+            {
+                _vm.Mode = mode;
+                if (mode == CredentialPromptMode.EnterCredentials)
+                {
+                    Assert.IsFalse(_vm.ShowMessage);
+                }
+                else
+                {
+                    Assert.IsTrue(_vm.ShowMessage);
+                }
+            }
         }
     }
 }

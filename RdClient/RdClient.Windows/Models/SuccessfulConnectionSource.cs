@@ -52,7 +52,7 @@
                 _disconnect.Dispose();
             }
 
-            protected override void Connect(CredentialsModel credentials, bool savedCredentials)
+            protected override void Connect()
             {
                 Contract.Assert(null == _task);
 

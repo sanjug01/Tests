@@ -94,7 +94,7 @@
 
 
 
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
                     <ComboBox Margin="0,8" 
                               x:Uid="AddOrEditDesktop-Credentials-ComboBox"
                               ItemsSource="{Binding Path=UserOptions}"
