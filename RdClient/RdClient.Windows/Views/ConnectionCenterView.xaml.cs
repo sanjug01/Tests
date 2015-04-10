@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Views
 {
     using RdClient.Shared.Navigation;
+    using Windows.Foundation;
     using Windows.Graphics.Display;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
@@ -31,33 +32,36 @@
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //
-            // Analyze the layout and apply an appropriate visual state.
-            //
-            DisplayInformation di = DisplayInformation.GetForCurrentView();
+            Layout layout = GetNewLayout(e.NewSize, DisplayInformation.GetForCurrentView());
+
+            VisualStateManager.GoToState(this, layout.ToString(), true);
+        }
+
+        private Layout GetNewLayout(Size viewSize, DisplayInformation displayInformation)
+        {
             Layout layout = Layout.DefaultLayout;
 
-            if(e.NewSize.Width < 640 * di.RawPixelsPerViewPixel)
+            if (viewSize.Width < 640 * displayInformation.RawPixelsPerViewPixel)
             {
                 //
                 // The view is too small, switch to the phone layout.
                 //
                 layout = Layout.PhoneLayout;
             }
-            else if (e.NewSize.Width < e.NewSize.Height)
+            else if (viewSize.Width < viewSize.Height)
             {
-                if (e.NewSize.Height / e.NewSize.Width >= 15.0/9.0)
+                if (viewSize.Height / viewSize.Width >= 15.0 / 9.0)
                 {
                     //
                     // The view is much taller than it is wide; switch to the phone layout, unless
                     // the view is wider than 1024 virtual pixels.
                     //
-                    if (e.NewSize.Width < 1024 * di.RawPixelsPerViewPixel)
+                    if (viewSize.Width < 1024 * displayInformation.RawPixelsPerViewPixel)
                         layout = Layout.PhoneLayout;
                     else
                         layout = Layout.NarrowLayout;
                 }
-                else if (e.NewSize.Width < 1080 * di.RawPixelsPerViewPixel)
+                else if (viewSize.Width < 1080 * displayInformation.RawPixelsPerViewPixel)
                 {
                     //
                     // If the view is narrower than 1080 virtual pixels, switch to the narrow layout.
@@ -66,7 +70,7 @@
                 }
             }
 
-            VisualStateManager.GoToState(this, layout.ToString(), true);
+            return layout;
         }
     }
 }

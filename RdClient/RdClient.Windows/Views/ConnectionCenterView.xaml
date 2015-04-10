@@ -104,7 +104,7 @@
         Visual state manager must be placed inside the root grid.
         -->
         <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
+            <VisualStateGroup x:Name="VisualStates">
                 <!--
                 Normal visial state - the toolbar with buttons is at the top of the view,
                 to the right of the desktops/apps selector.

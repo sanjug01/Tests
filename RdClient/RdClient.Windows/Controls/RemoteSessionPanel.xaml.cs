@@ -32,7 +32,6 @@
         private PropertyChangedEventHandler _propertyChanged;
         private bool _viewLoaded;
         private Size _renderingPanelSize;
-        private CoreCursor _exitCursor;
 
         public RemoteSessionPanel()
         {
