@@ -198,8 +198,11 @@
     <Compile Include="Input\Pointer\PointerMode\PointerContext.cs" />
     <Compile Include="Input\Pointer\PointerMode\PointerModeControl.cs" />
     <Compile Include="Input\Pointer\PointerMode\PointerModeFactory.cs" />
+    <Compile Include="Input\Pointer\PointTracker.cs" />
     <Compile Include="Input\Pointer\TouchContext.cs" />
     <Compile Include="Input\Pointer\TouchModeFactory.cs" />
+    <Compile Include="Input\Pointer\ZoomScrollEvent.cs" />
+    <Compile Include="Input\Pointer\ZoomScrollRecognizer.cs" />
     <Compile Include="Input\ZoomPan\ZoomEventArgs.cs" />
     <Compile Include="Input\ZoomPan\PanEventArgs.cs" />
     <Compile Include="Input\ZoomPan\IPanTransform.cs" />
