@@ -1,4 +1,2 @@
 DIRS = \
     ARM{arm,noncrit} \
-    AMD64{amd64,noncrit} \
-    X86{x86,noncrit} \

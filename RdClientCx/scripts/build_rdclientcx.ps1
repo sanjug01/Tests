@@ -20,11 +20,13 @@ Function BcxPlatform($platform)
 }
 
 BcxPlatform "x86chk"
-BcxPlatform "x86fre"
-BcxPlatform "armchk"
-BcxPlatform "armfre"
-
 xcopy $SDXROOT\testsrc\termsrvtestdata\REDIST\WinRTClientBin\Debug ..\WinRTClientBin\Debug /i /s /y
+
+BcxPlatform "x86fre"
 xcopy $SDXROOT\testsrc\termsrvtestdata\REDIST\WinRTClientBin\Release ..\WinRTClientBin\Release /i /s /y
+
+BcxPlatform "armchk"
 xcopy $SDXROOT\termsrv\CloudDv\Externals\ADAL ..\ADAL /i /s /y
+
+BcxPlatform "armfre"
 xcopy $SDXROOT\termsrv\rdp\externals\openssl ..\openssl /i /s /y
