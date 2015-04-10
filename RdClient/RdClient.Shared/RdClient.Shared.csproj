@@ -148,9 +148,14 @@
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\ITimer.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
+    <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
     <Compile Include="Input\Pointer\IPointerCapture.cs" />
+    <Compile Include="Input\Pointer\IPointerControl.cs" />
+    <Compile Include="Input\Pointer\IPointerEvent.cs" />
+    <Compile Include="Input\Pointer\IPointTracker.cs" />
+    <Compile Include="Input\Pointer\IZoomScrollEvent.cs" />
     <Compile Include="Input\Pointer\MouseAction.cs" />
     <Compile Include="Input\Pointer\MouseCursorShape.cs" />
     <Compile Include="Input\Pointer\MultiTouchMode.cs" />
