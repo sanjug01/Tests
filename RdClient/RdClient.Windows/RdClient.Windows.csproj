@@ -158,6 +158,9 @@
     <Compile Include="Controls\MouseLayerControl.xaml.cs">
       <DependentUpon>MouseLayerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PointerPressDetector.xaml.cs">
+      <DependentUpon>PointerPressDetector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RdSessionPanControl.xaml.cs">
       <DependentUpon>RdSessionPanControl.xaml</DependentUpon>
     </Compile>
@@ -389,6 +392,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MouseLayerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PointerPressDetector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
