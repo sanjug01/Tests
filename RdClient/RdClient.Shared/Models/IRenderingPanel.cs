@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.Input;
     using RdClient.Shared.Input.Pointer;
     using System;
     using Windows.Foundation;
@@ -16,7 +17,8 @@
         /// </summary>
         /// <remarks>The rendering panel starts capturing input when the first event handler is registered,
         /// and stops the capture when the last handler has been removed.</remarks>
-        event EventHandler<PointerEventArgs> PointerChanged;
+        event EventHandler<PointerEventArgs> PointerChangedOld;
+        event EventHandler<IPointerEventBase> PointerChanged;
 
         /// <summary>
         /// Object that manages the viewport in which a part of the rendering panel is shown.

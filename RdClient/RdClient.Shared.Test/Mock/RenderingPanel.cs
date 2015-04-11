@@ -2,6 +2,7 @@
 using RdClient.Shared.Models;
 using RdMock;
 using System;
+using RdClient.Shared.Input;
 
 namespace RdClient.Shared.Test.Mock
 {
@@ -9,7 +10,8 @@ namespace RdClient.Shared.Test.Mock
     {
         public event EventHandler Ready;
 
-        public event EventHandler<PointerEventArgs> PointerChanged;
+        public event EventHandler<PointerEventArgs> PointerChangedOld;
+        public event EventHandler<IPointerEventBase> PointerChanged;
 
         public IViewport Viewport
         {
@@ -34,7 +36,7 @@ namespace RdClient.Shared.Test.Mock
 
         public void EmitPointerChanged(PointerEventArgs e)
         {
-            PointerChanged(this, e);
+            PointerChangedOld(this, e);
         }
     }
 }

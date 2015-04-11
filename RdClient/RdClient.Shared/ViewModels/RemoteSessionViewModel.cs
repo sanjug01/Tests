@@ -294,7 +294,7 @@
                         _keyboardCapture.Start();
                         this.PointerCapture = new PointerCapture(this, _activeSessionControl, _activeSessionControl.RenderingPanel);
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
-                        _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
+                        _activeSessionControl.RenderingPanel.PointerChangedOld += this.PointerCapture.OnPointerChanged;
                         EmitPropertyChanged("IsRenderingPanelActive");
                         this.IsConnectionBarVisible = true;
                         break;
@@ -304,7 +304,7 @@
                         {
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
-                            _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
+                            _activeSessionControl.RenderingPanel.PointerChangedOld -= this.PointerCapture.OnPointerChanged;
                             EmitPropertyChanged("IsRenderingPanelActive");
                             //
                             // The connection bar and side bars are not available in any non-connected state.
