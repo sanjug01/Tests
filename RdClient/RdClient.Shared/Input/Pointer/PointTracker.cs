@@ -28,6 +28,12 @@ namespace RdClient.Shared.Input
             _trackedPoints[id] = new Point() { X = point.X, Y = point.Y };
         }
 
+        public void Reset()
+        {
+            _trackedPoints.Clear();
+            _pointSequence.Clear();
+        }
+
         public void Untrack(UInt32 id)
         {
             if(_pointSequence.Contains(id))

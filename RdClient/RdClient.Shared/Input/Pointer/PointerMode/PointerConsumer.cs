@@ -3,7 +3,7 @@ using System;
 
 namespace RdClient.Shared.Input.Pointer.PointerMode
 {
-    public class PointerConsumer : IPointerEventConsumer
+    public class PointerConsumer : IPointerEventConsumerOld
     {
         private IPointerContext _context;
         private IStateMachine<PointerStateOld, StateEvent<PointerEventOld, IPointerContext>> _stateMachine;

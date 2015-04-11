@@ -22,16 +22,16 @@ namespace RdClient.Controls
         }
 
         public static readonly DependencyProperty PointerEventConsumerProperty = DependencyProperty.Register(
-            "PointerEventConsumer", typeof(IPointerEventConsumer),
+            "PointerEventConsumer", typeof(IPointerEventConsumerOld),
             typeof(MouseLayerControl), new PropertyMetadata(true, PointerEventConsumerPropertyChanged));
-        public IPointerEventConsumer PointerEventConsumer
+        public IPointerEventConsumerOld PointerEventConsumer
         {
-            private get { return (IPointerEventConsumer)GetValue(PointerEventConsumerProperty); }
+            private get { return (IPointerEventConsumerOld)GetValue(PointerEventConsumerProperty); }
             set { SetValue(PointerEventConsumerProperty, value); }
         }
         private static void PointerEventConsumerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            IPointerEventConsumer pec = e.NewValue as IPointerEventConsumer;
+            IPointerEventConsumerOld pec = e.NewValue as IPointerEventConsumerOld;
         }
 
         public static readonly DependencyProperty MouseShapeProperty = DependencyProperty.Register(

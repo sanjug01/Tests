@@ -10,11 +10,19 @@ namespace RdClient.Shared.Input.Pointer
         MultiTouch
     }
 
-    public interface IPointerEventConsumer
+    public interface IPointerEventConsumerOld
     {
         event EventHandler<PointerEventOld> ConsumedEvent;
         ConsumptionMode ConsumptionMode { set; }
         void ConsumeEvent(PointerEventOld pointerEvent);
+        void Reset();
+    }
+
+    public interface IPointerEventConsumer
+    {
+        event EventHandler<IPointerEventBase> ConsumedEvent;
+        ConsumptionMode ConsumptionMode { set; }
+        void ConsumeEvent(IPointerEventBase pointerEvent);
         void Reset();
     }
 }

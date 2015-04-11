@@ -37,7 +37,7 @@ namespace RdClient.Shared.ViewModels
         public double DeltaY { get; private set; }
     }
 
-    public class PanKnobPointerEventDispatcher : IPointerEventConsumer
+    public class PanKnobPointerEventDispatcher : IPointerEventConsumerOld
     {
 
         public event EventHandler<PointerEventOld> ConsumedEvent;
@@ -147,8 +147,8 @@ namespace RdClient.Shared.ViewModels
 
 
         // handles press&hold, double press&hold and hold release to manage knob state
-        private IPointerEventConsumer _pointerEventConsumer;
-        public IPointerEventConsumer PointerEventConsumer
+        private IPointerEventConsumerOld _pointerEventConsumer;
+        public IPointerEventConsumerOld PointerEventConsumer
         {
             get { return _pointerEventConsumer; }
             set { SetProperty(ref _pointerEventConsumer, value); }

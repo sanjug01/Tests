@@ -5,7 +5,7 @@ using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Pointer
 {
-    public class MouseMode : IPointerEventConsumer
+    public class MouseMode : IPointerEventConsumerOld
     {
         public event System.EventHandler<PointerEventOld> ConsumedEvent;
 

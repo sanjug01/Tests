@@ -15,7 +15,7 @@ namespace RdClient.Input
         private IExecutionDeferrer _deferrer;
         private IRemoteSessionControl _control;
         private IRenderingPanel _panel;
-        private IPointerEventConsumer _consumer;
+        private IPointerEventConsumerOld _consumer;
 
         public ConsumptionMode ConsumptionMode
         {

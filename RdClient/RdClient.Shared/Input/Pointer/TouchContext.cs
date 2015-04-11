@@ -35,7 +35,7 @@ namespace RdClient.Shared.Input.Pointer
         public TContext Context { get; set; }
     }
 
-    public class TouchContext : IPointerEventConsumer, ITouchContext
+    public class TouchContext : IPointerEventConsumerOld, ITouchContext
     {
         public event System.EventHandler<PointerEventOld> ConsumedEvent;
 

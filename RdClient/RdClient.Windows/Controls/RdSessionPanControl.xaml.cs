@@ -34,14 +34,14 @@ namespace RdClient.Controls
             typeof(object),
             typeof(RdSessionPanControl), 
             new PropertyMetadata(null, PointerEventConsumerPropertyChanged));
-        public IPointerEventConsumer PointerEventConsumer
+        public IPointerEventConsumerOld PointerEventConsumer
         {
-            private get { return (IPointerEventConsumer)GetValue(PointerEventConsumerProperty); }
+            private get { return (IPointerEventConsumerOld)GetValue(PointerEventConsumerProperty); }
             set { SetValue(PointerEventConsumerProperty, value); }
         }
         private static void PointerEventConsumerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            IPointerEventConsumer pec = e.NewValue as IPointerEventConsumer;
+            IPointerEventConsumerOld pec = e.NewValue as IPointerEventConsumerOld;
         }
 
         static readonly DependencyProperty PanKnobTransformProperty = DependencyProperty.Register(

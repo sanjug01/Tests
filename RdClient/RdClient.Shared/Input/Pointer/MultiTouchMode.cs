@@ -2,7 +2,7 @@
 
 namespace RdClient.Shared.Input.Pointer
 {
-    public class MultiTouchMode : IPointerEventConsumer
+    public class MultiTouchMode : IPointerEventConsumerOld
     {
         public event System.EventHandler<PointerEventOld> ConsumedEvent;
 

@@ -138,7 +138,7 @@ namespace RdClient.Shared.Input.Mouse
             (o) => { });
         }
 
-        public static IPointerEventConsumer CreatePointerMode(ITimer timer, IPointerManipulator manipulator)
+        public static IPointerEventConsumerOld CreatePointerMode(ITimer timer, IPointerManipulator manipulator)
         {
             IStateMachine<PointerStateOld, StateEvent<PointerEventOld, ITouchContext>> stateMachine = new StateMachine<PointerStateOld, StateEvent<PointerEventOld, ITouchContext>>();
 
@@ -150,7 +150,7 @@ namespace RdClient.Shared.Input.Mouse
             return new TouchContext(timer, manipulator, stateMachine);
         }
 
-        public static IPointerEventConsumer CreateDirectMode(ITimer timer, IPointerManipulator manipulator)
+        public static IPointerEventConsumerOld CreateDirectMode(ITimer timer, IPointerManipulator manipulator)
         {
             IStateMachine<PointerStateOld, StateEvent<PointerEventOld, ITouchContext>> stateMachine = new StateMachine<PointerStateOld, StateEvent<PointerEventOld, ITouchContext>>();
 

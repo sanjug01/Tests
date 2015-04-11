@@ -150,7 +150,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             (o) => { });
         }
 
-        public static IPointerEventConsumer CreatePointerMode(ITimer timer, IPointerManipulator manipulator, IRenderingPanel panel)
+        public static IPointerEventConsumerOld CreatePointerMode(ITimer timer, IPointerManipulator manipulator, IRenderingPanel panel)
         {
             IStateMachine<PointerStateOld, StateEvent<PointerEventOld, IPointerContext>> stateMachine = new StateMachine<PointerStateOld, StateEvent<PointerEventOld, IPointerContext>>();
 
@@ -166,7 +166,7 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             return new PointerConsumer(context, stateMachine);
         }
 
-        public static IPointerEventConsumer CreateDirectMode(ITimer timer, IPointerManipulator manipulator, IRenderingPanel panel)
+        public static IPointerEventConsumerOld CreateDirectMode(ITimer timer, IPointerManipulator manipulator, IRenderingPanel panel)
         {
             IStateMachine<PointerStateOld, StateEvent<PointerEventOld, IPointerContext>> stateMachine = new StateMachine<PointerStateOld, StateEvent<PointerEventOld, IPointerContext>>();
 

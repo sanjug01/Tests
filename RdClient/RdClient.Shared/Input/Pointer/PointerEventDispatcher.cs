@@ -6,16 +6,16 @@ using System.Collections.Generic;
 
 namespace RdClient.Shared.Input.Pointer
 {
-    public class PointerEventDispatcher : IPointerEventConsumer
+    public class PointerEventDispatcher : IPointerEventConsumerOld
     {
         public event System.EventHandler<PointerEventOld> ConsumedEvent;
 
-        private Dictionary<PointerTypeOld, IPointerEventConsumer> _pointerConsumers = new Dictionary<PointerTypeOld,IPointerEventConsumer>();
+        private Dictionary<PointerTypeOld, IPointerEventConsumerOld> _pointerConsumers = new Dictionary<PointerTypeOld,IPointerEventConsumerOld>();
         private PointerTypeOld _lastPointerType = PointerTypeOld.Mouse;
 
-        private IPointerEventConsumer _pointerMode;
-        private IPointerEventConsumer _directMode;
-        private IPointerEventConsumer _multiTouchMode;
+        private IPointerEventConsumerOld _pointerMode;
+        private IPointerEventConsumerOld _directMode;
+        private IPointerEventConsumerOld _multiTouchMode;
 
         private ConsumptionMode _consumptionMode = ConsumptionMode.Pointer;
         public ConsumptionMode ConsumptionMode {

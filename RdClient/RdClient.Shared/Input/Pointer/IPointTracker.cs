@@ -10,5 +10,6 @@ namespace RdClient.Shared.Input
         bool IsTracked(uint id);
         void Track(Point point, uint id);
         void Untrack(uint id);
+        void Reset();
     }
 }
