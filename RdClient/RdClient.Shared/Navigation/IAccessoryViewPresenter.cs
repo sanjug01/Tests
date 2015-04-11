@@ -6,7 +6,7 @@
     /// </summary>
     public interface IAccessoryViewPresenter
     {
-        void PushAccessoryView(IPresentableView view, object activationParameter, IPresentationCompletion presentationCompletion = null);
+        void PushAccessoryView(IPresentableView view, object activationParameter);
         void DismissAccessoryView(IPresentableView view);
     }
 }

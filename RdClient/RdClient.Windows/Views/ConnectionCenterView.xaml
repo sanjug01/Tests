@@ -46,6 +46,7 @@
                     <controls:ItsLonelyHereControl />
                     <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <controls:AccessoryViewPresenter AccessoryWidth="480" FullScreenWidth="640"/>
                 </Grid>
             </Grid>
         </DataTemplate>
@@ -66,6 +67,7 @@
                     <controls:ItsLonelyHereControl />
                     <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <controls:AccessoryViewPresenter />
                 </Grid>
 
                 <Grid Grid.Row="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
@@ -88,6 +90,7 @@
                     <controls:ItsLonelyHereControl />
                     <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <controls:AccessoryViewPresenter />
                 </Grid>
 
                 <Grid Grid.Row="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">

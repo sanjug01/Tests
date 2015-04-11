@@ -1,12 +1,13 @@
 ﻿namespace RdClient.Views
 {
+    using System;
     using RdClient.Shared.Navigation;
     using Windows.Foundation;
     using Windows.Graphics.Display;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
-    public sealed partial class ConnectionCenterView : Page, IPresentableView
+    public sealed partial class ConnectionCenterView : Page, IPresentableView, IAccessoryViewPresenter
     {
         //
         // The enum prevents typos in names of visual states. When a new visual state
@@ -23,6 +24,8 @@
         {
             this.InitializeComponent();
             this.SizeChanged += this.OnSizeChanged;
+            this.VisualStates.CurrentStateChanging += this.OnVisualStateChanging;
+            this.VisualStates.CurrentStateChanged += this.OnVisualStateChanged;
         }
 
         IViewModel IPresentableView.ViewModel { get { return this.DataContext as IViewModel; } }
@@ -30,11 +33,29 @@
         void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
         void IPresentableView.Dismissing() { }
 
+        void IAccessoryViewPresenter.PushAccessoryView(IPresentableView view, object activationParameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IAccessoryViewPresenter.DismissAccessoryView(IPresentableView view)
+        {
+            throw new NotImplementedException();
+        }
+
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             Layout layout = GetNewLayout(e.NewSize, DisplayInformation.GetForCurrentView());
 
             VisualStateManager.GoToState(this, layout.ToString(), true);
+        }
+
+        private void OnVisualStateChanging(object sender, VisualStateChangedEventArgs e)
+        {
+        }
+
+        private void OnVisualStateChanged(object sender, VisualStateChangedEventArgs e)
+        {
         }
 
         private Layout GetNewLayout(Size viewSize, DisplayInformation displayInformation)

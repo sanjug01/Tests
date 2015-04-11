@@ -113,6 +113,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AccessoryViewPresenter.xaml.cs">
+      <DependentUpon>AccessoryViewPresenter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\AppHeaderControl.xaml.cs">
       <DependentUpon>AppHeaderControl.xaml</DependentUpon>
     </Compile>
@@ -335,6 +338,10 @@
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\AccessoryViewPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\AppHeaderControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
