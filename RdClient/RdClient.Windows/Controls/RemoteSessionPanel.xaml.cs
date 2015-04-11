@@ -3,19 +3,17 @@
     using RdClient.Shared.Converters;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Input;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using System;
     using System.ComponentModel;
-    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;
     using Windows.Foundation;
-    using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
-    using Windows.UI.Xaml.Media.Imaging;
 
     /// <summary>
     /// A panel shown in the remote session view (RemoteSessionView) that renders contents of the remote session
@@ -32,6 +30,7 @@
         private PropertyChangedEventHandler _propertyChanged;
         private bool _viewLoaded;
         private Size _renderingPanelSize;
+        private ZoomScrollRecognizer _zoomScrollRecognizer;
 
         public RemoteSessionPanel()
         {
@@ -42,6 +41,8 @@
             _viewLoaded = false;
             _renderingPanelSize = Size.Empty;
             this.RenderingPanel.SetViewport(new RenderingPanelViewport(this, this.RenderingPanel, this.Transformation));
+
+
         }
 
         public object RemoteSessionViewSite
@@ -132,6 +133,16 @@
             // Set self as the remote session view in the view model.
             //
             this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => site.SetRemoteSessionView(this));
+
+            ITimer timer = null;
+            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = site.TimerFactory.CreateTimer());
+            _zoomScrollRecognizer = new ZoomScrollRecognizer(timer);
+            _zoomScrollRecognizer.ZoomScrollEvent += OnZoomScrollEvent;
+        }
+
+        private void OnZoomScrollEvent(object sender, ZoomScrollEventArgs e)
+        {
+            
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

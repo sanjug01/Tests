@@ -7,12 +7,14 @@
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using RdClient.Shared.Helpers;
 
-    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite
+    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite
     {
         private readonly RelayCommand _dismissFailureMessage;
         private readonly RelayCommand _cancelAutoReconnect;
@@ -34,6 +36,9 @@
         private bool _interrupted;
         private InterruptedSessionContinuation _interruptedContinuation;
         private int _reconnectAttempt;
+
+        private ITimerFactory _timerFactory;
+        public ITimerFactory TimerFactory { get { return _timerFactory; } }
 
         public bool IsRenderingPanelActive
         {
@@ -356,6 +361,11 @@
         {
             this.IsRightSideBarVisible = false;
             _activeSession.Disconnect();
+        }
+
+        public void SetTimerFactory(ITimerFactory timerFactory)
+        {
+            _timerFactory = timerFactory;
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿using System;
-using RdClient.Shared.Helpers;
-using RdClient.Shared.Input.Pointer;
+﻿using RdClient.Shared.Helpers;
+using System;
 
 namespace RdClient.Shared.Input.Pointer
 {
