@@ -158,29 +158,51 @@
             //
             this.Size = e.NewSize;
         }
-        protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
-        {
-            args.TranslationBehavior.DesiredDeceleration = GlobalConstants.DesiredDeceleration;
 
-            if (args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
+        protected override void OnManipulationStarting(ManipulationStartingRoutedEventArgs e)
+        {
+            IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarting, PointerEventType.ManipulationStartingRoutedEventArgs, e, this));
+            _zoomScrollRecognizer.Consume(w);            
+        }
+
+        protected override void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
+        {
+            IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarted, PointerEventType.ManipulationStartedRoutedEventArgs, e, this));
+            _zoomScrollRecognizer.Consume(w);
+        }
+
+        protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
+        {
+            e.TranslationBehavior.DesiredDeceleration = GlobalConstants.DesiredDeceleration;
+
+            IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationInertiaStarting, PointerEventType.ManipulationInertiaStartingRoutedEventArgs, e, this));
+            _zoomScrollRecognizer.Consume(w);
+
+            if (e.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
             {
-                this.RenderingPanel.EmitPointerEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
+                this.RenderingPanel.EmitPointerEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(e));
             }
         }
 
-        protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs args)
+        protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
-            if (args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
+            IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationDelta, PointerEventType.ManipulationDeltaRoutedEventArgs, e, this));
+            _zoomScrollRecognizer.Consume(w);
+
+            if (e.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
             {
-                this.RenderingPanel.EmitPointerEvent(PointerEventConverter.ManipulationDeltaArgsConverter(args));
+                this.RenderingPanel.EmitPointerEvent(PointerEventConverter.ManipulationDeltaArgsConverter(e));
             }
         }
 
-        protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs args)
+        protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs e)
         {
-            if (args.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
+            IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationCompleted, PointerEventType.ManipulationCompletedRoutedEventArgs, e, this));
+            _zoomScrollRecognizer.Consume(w);
+
+            if (e.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
             {
-                this.RenderingPanel.EmitPointerEvent(PointerEventConverter.ManipulationCompletedArgsConverter(args));
+                this.RenderingPanel.EmitPointerEvent(PointerEventConverter.ManipulationCompletedArgsConverter(e));
             }
         }
 
