@@ -104,7 +104,6 @@ namespace RdClient.Shared.Navigation
             _presenter.PushModalView(view);
         }
 
-
         public virtual void DismissModalView(IPresentableView modalView)
         {
             Contract.Requires(modalView != null);
@@ -152,6 +151,35 @@ namespace RdClient.Shared.Navigation
                     foreach (INavigationExtension extension in this.Extensions)
                         extension.Presenting(vm);
                 });
+            }
+        }
+
+        void INavigationService.PushAccessoryView(string viewName, object activationParameter)
+        {
+            IAccessoryViewPresenter accessoryPresenter = _currentView as IAccessoryViewPresenter;
+
+            if(null == accessoryPresenter)
+            {
+                this.PushModalView(viewName, activationParameter, null);
+            }
+            else
+            {
+                IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
+
+                accessoryPresenter.PushAccessoryView(view, activationParameter);
+            }
+        }
+        void INavigationService.DismissAccessoryView(IPresentableView accessoryView)
+        {
+            IAccessoryViewPresenter accessoryPresenter = _currentView as IAccessoryViewPresenter;
+
+            if (null == accessoryPresenter)
+            {
+                this.DismissModalView(accessoryView);
+            }
+            else
+            {
+                accessoryPresenter.DismissAccessoryView(accessoryView);
             }
         }
 

@@ -1061,5 +1061,72 @@
                 Assert.IsTrue(backArgs.Handled);
             }
         }
+
+        [TestMethod]
+        public void NoAccessoryPresenter_PushAccessoryView_PushedModalView()
+        {
+            using (Mock.PresentableView view1 = new Mock.PresentableView())
+            using (Mock.ViewFactory factory = new Mock.ViewFactory())
+            using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
+            {
+                INavigationService navigationService = new NavigationService() { Presenter = presenter, ViewFactory = factory };
+                bool callbackCalled = false;
+                object activationParameter = new object();
+
+                navigationService.PushingFirstModalView += (sender, args) => { callbackCalled = true; };
+
+                factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
+                view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+
+                navigationService.PushAccessoryView("foo", activationParameter);
+
+                Assert.IsTrue(callbackCalled);
+            }
+        }
+
+        [TestMethod]
+        public void NoAccessoryPresenter_DismissAccessoryView_DismissedModalView()
+        {
+            using (Mock.PresentableView view1 = new Mock.PresentableView())
+            using (Mock.ViewFactory factory = new Mock.ViewFactory())
+            using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
+            using (Mock.ViewModel viewModel = new Mock.ViewModel())
+            {
+                view1.ViewModel = viewModel;
+
+                INavigationService navigationService = new NavigationService()
+                {
+                    Presenter = presenter,
+                    ViewFactory = factory,
+                    Extensions = new NavigationExtensionList()
+                };
+
+                bool callbackCalled = false;
+                object activationParameter = new object();
+
+                navigationService.DismissingLastModalView += (sender, args) => { callbackCalled = true; };
+
+                factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
+                viewModel.Expect("Presenting", new List<object>() { navigationService, activationParameter, null }, 0);
+                view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+
+                navigationService.PushAccessoryView("foo", activationParameter);
+
+                viewModel.Expect("Dismissing", new List<object>() { }, 0);
+                view1.Expect("Dismissing", new List<object>() { }, 0);
+                presenter.Expect("DismissModalView", new List<object>() { view1 }, 0);
+
+                navigationService.DismissAccessoryView(view1);
+
+                Assert.IsTrue(callbackCalled);
+            }
+        }
+
+        [TestMethod]
+        public void HaveAccessoryPresenter_PushAccessoryView_PushedAccessoryView()
+        {
+        }
     }
 }
