@@ -31,7 +31,7 @@ namespace RdClient.Views
             this.TransitionAnimationContainer.ShowContent(view as UIElement);
         }
 
-        void IStackedViewPresenter.PushView(IPresentableView view)
+        void IStackedViewPresenter.PushView(IPresentableView view, bool animated)
         {
             Contract.Requires(view != null);
             Contract.Assert(view is UIElement);
@@ -39,16 +39,16 @@ namespace RdClient.Views
             if (0 == _modalStackDepth++)
                 OnPushedFirstModalView();
 
-            this.ModalStackContainer.Push(view as UIElement);
+            this.ModalStackContainer.Push(view as UIElement, animated);
         }
 
-        void IStackedViewPresenter.DismissView(IPresentableView view)
+        void IStackedViewPresenter.DismissView(IPresentableView view, bool animated)
         {
             Contract.Requires(view != null);
             Contract.Assert(view is UIElement);
             Contract.Assert(_modalStackDepth > 0);
 
-            this.ModalStackContainer.Pop(view as UIElement);
+            this.ModalStackContainer.Pop(view as UIElement, animated);
 
             if (0 == --_modalStackDepth)
                 OnDismissedLastModalView();

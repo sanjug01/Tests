@@ -12,11 +12,11 @@
         /// Pushes a view onto the stack of views.
         /// </summary>
         /// <param name="view">Presentable view to push noto the stack.</param>
-        void PushView(IPresentableView view);
+        void PushView(IPresentableView view, bool animated);
         /// <summary>
         /// Dismisses the presented view and all views above it on the stack,
         /// </summary>
         /// <param name="view">Presentable view to be dismissed and remove from the stack.</param>
-        void DismissView(IPresentableView view);
+        void DismissView(IPresentableView view, bool animated);
     }
 }

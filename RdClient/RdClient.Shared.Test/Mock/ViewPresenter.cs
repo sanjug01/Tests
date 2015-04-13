@@ -10,14 +10,14 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { view } );
         }
 
-        void IStackedViewPresenter.PushView(IPresentableView view)
+        void IStackedViewPresenter.PushView(IPresentableView view, bool animated)
         {
-            Invoke(new object[] { view });
+            Invoke(new object[] { view, animated });
         }
 
-        void IStackedViewPresenter.DismissView(IPresentableView view)
+        void IStackedViewPresenter.DismissView(IPresentableView view, bool animated)
         {
-            Invoke(new object[] { view });
+            Invoke(new object[] { view, animated });
         }
     }
 }

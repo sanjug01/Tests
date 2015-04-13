@@ -25,6 +25,7 @@
 
         private readonly IList<IPresentableView> _accessoryViews;
         private IStackedViewPresenter _accessoryPresenter;
+        private INavigationService _nav;
 
         public ConnectionCenterView()
         {
@@ -38,15 +39,15 @@
 
         IViewModel IPresentableView.ViewModel { get { return this.DataContext as IViewModel; } }
         void IPresentableView.Activating(object activationParameter) { }
-        void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
+        void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { _nav = navigationService; }
         void IPresentableView.Dismissing() { }
 
-        void IStackedViewPresenter.PushView(IPresentableView view)
+        void IStackedViewPresenter.PushView(IPresentableView view, bool animated)
         {
             Contract.Assert(null != view);
             Contract.Assert(null != _accessoryPresenter);
 
-            _accessoryPresenter.PushView(view);
+            _accessoryPresenter.PushView(view, animated);
             _accessoryViews.Add(view);
 
             if (1 == _accessoryViews.Count)
@@ -56,9 +57,9 @@
             }
         }
 
-        void IStackedViewPresenter.DismissView(IPresentableView view)
+        void IStackedViewPresenter.DismissView(IPresentableView view, bool animated)
         {
-            _accessoryPresenter.DismissView(view);
+            _accessoryPresenter.DismissView(view, animated);
             _accessoryViews.Remove(view);
 
             if (0 == _accessoryViews.Count)
@@ -91,10 +92,14 @@
                 //
                 foreach (IPresentableView view in _accessoryViews)
                 {
-                    _accessoryPresenter.DismissView(view);
-                    newPresenter.PushView(view);
+                    _accessoryPresenter.DismissView(view, false);
+                    newPresenter.PushView(view, false);
                 }
 
+                if (_accessoryViews.Count != 0)
+                    ((UIElement)newPresenter).Visibility = Visibility.Visible;
+                if (null != _accessoryPresenter)
+                    ((UIElement)_accessoryPresenter).Visibility = Visibility.Collapsed;
                 _accessoryPresenter = newPresenter;
             }
         }

@@ -119,7 +119,7 @@ namespace RdClient.Shared.Navigation
             _modalStack.Add(presentedView);
             CallPresenting(view, activationParameter, presentedView);
 
-            _modalPresenter.PushView(view);
+            _modalPresenter.PushView(view, true);
         }
 
         public virtual void DismissModalView(IPresentableView modalView)
@@ -169,7 +169,7 @@ namespace RdClient.Shared.Navigation
                 _accessoryStack.Add(presentedView);
                 CallPresenting(view, activationParameter, presentedView);
 
-                accessoryPresenter.PushView(view);
+                accessoryPresenter.PushView(view, true);
             }
         }
         void INavigationService.DismissAccessoryView(IPresentableView accessoryView)
@@ -218,7 +218,7 @@ namespace RdClient.Shared.Navigation
                     dismissed = true;
 
                 CallDismissing(psv.View);
-                presenter.DismissView(psv.View);
+                presenter.DismissView(psv.View, true);
                 psv.ReportCompletion();
                 viewStack.RemoveAt(index);
             } while (!dismissed);

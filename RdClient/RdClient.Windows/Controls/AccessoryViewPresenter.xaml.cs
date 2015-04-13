@@ -4,6 +4,7 @@ namespace RdClient.Controls
 {
     using RdClient.Shared.Navigation;
     using System;
+    using System.Diagnostics.Contracts;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
@@ -41,12 +42,15 @@ namespace RdClient.Controls
             set { SetValue(FullScreenWidthProperty, value); }
         }
 
-        void IStackedViewPresenter.PushView(IPresentableView view)
+        void IStackedViewPresenter.PushView(IPresentableView view, bool animated)
         {
+            Contract.Assert(view is UIElement);
+            this.AccessoriesContainer.Push((UIElement)view, animated);
         }
 
-        void IStackedViewPresenter.DismissView(IPresentableView view)
+        void IStackedViewPresenter.DismissView(IPresentableView view, bool animated)
         {
+            this.AccessoriesContainer.Pop((UIElement)view, animated);
         }
 
         private static void OnAccessoryWidthChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)

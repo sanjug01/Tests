@@ -15,7 +15,6 @@
         void Commit();
     }
 
-
     abstract class FadeBase : IPendingAnimation
     {
         private readonly Grid _container;

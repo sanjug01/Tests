@@ -334,8 +334,8 @@
         private sealed class TestViewPresenter : IViewPresenter, IStackedViewPresenter
         {
             void IViewPresenter.PresentView(IPresentableView view) { }
-            void IStackedViewPresenter.PushView(IPresentableView view) { }
-            void IStackedViewPresenter.DismissView(IPresentableView view) { }
+            void IStackedViewPresenter.PushView(IPresentableView view, bool animated) { }
+            void IStackedViewPresenter.DismissView(IPresentableView view, bool animated) { }
         }
     }
 }

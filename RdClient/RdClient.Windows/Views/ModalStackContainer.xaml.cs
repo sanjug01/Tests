@@ -23,7 +23,7 @@ namespace RdClient.Views
         /// Push a UI element to the top of the stack
         /// </summary>
         /// <param name="view">UI element (view) to be shown at the top of the stack</param>
-        public void Push(UIElement view)
+        public void Push(UIElement view, bool animated)
         {
             Contract.Requires(null != view);
             Contract.Ensures(null != _pendingAnimation);
@@ -38,7 +38,14 @@ namespace RdClient.Views
                 Content = view
             };
 
-            _pendingAnimation = FadeIn.Start(this.RootGrid, cc, this.OnPendingAnimationCompleted);
+            if (animated)
+            {
+                _pendingAnimation = FadeIn.Start(this.RootGrid, cc, this.OnPendingAnimationCompleted);
+            }
+            else
+            {
+                this.RootGrid.Children.Add(cc);
+            }
         }
 
         /// <summary>
@@ -46,7 +53,7 @@ namespace RdClient.Views
         /// is not at the top).
         /// </summary>
         /// <param name="view">UI element (view) to be removed from the stack</param>
-        public void Pop(UIElement view)
+        public void Pop(UIElement view, bool animated)
         {
             Contract.EnsuresOnThrow<Exception>(null == _pendingAnimation);
             Contract.EnsuresOnThrow<ArgumentException>(null == _pendingAnimation);
@@ -67,7 +74,15 @@ namespace RdClient.Views
                     throw new Exception("Control at the top of the stack is not a ContentControl");
                 Contract.Assert(object.ReferenceEquals(cc.Content, view));
 
-                _pendingAnimation = FadeOut.Start(this.RootGrid, cc, this.OnPendingAnimationCompleted);
+                if (animated)
+                {
+                    _pendingAnimation = FadeOut.Start(this.RootGrid, cc, this.OnPendingAnimationCompleted);
+                }
+                else
+                {
+                    this.RootGrid.Children.Remove(cc);
+                    cc.Content = null;
+                }
             }
         }
 
