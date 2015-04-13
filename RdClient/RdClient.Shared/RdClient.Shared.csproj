@@ -272,7 +272,6 @@
     <Compile Include="Navigation\Extensions\ITimerFactorySite.cs" />
     <Compile Include="Navigation\Extensions\SessionFactoryExtension.cs" />
     <Compile Include="Navigation\Extensions\TimerFactoryExtension.cs" />
-    <Compile Include="Navigation\IAccessoryViewPresenter.cs" />
     <Compile Include="Navigation\IPresentationAnimation.cs" />
     <Compile Include="Navigation\IBackCommandArgs.cs" />
     <Compile Include="Navigation\IPresentationCompletion.cs" />

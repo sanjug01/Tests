@@ -103,7 +103,9 @@ namespace RdClient.Shared.Navigation
 
             IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
 
-            if (object.ReferenceEquals(view, _currentView) || null != _modalStack.Find(pmv => pmv.HasView(view)))
+            if (object.ReferenceEquals(view, _currentView)
+                || null != _modalStack.Find(pmv1 => pmv1.HasView(view)
+                || null != _accessoryStack.Find(pmv2 => pmv2.HasView(view))))
             {
                 throw new NavigationServiceException("trying to modally display a view which is already shown.");
             }
@@ -125,12 +127,18 @@ namespace RdClient.Shared.Navigation
             DismissStackedView(_modalStack, modalView, _modalPresenter);
 
             if (0 == _modalStack.Count)
+            {
+                //
+                // TODO:    if there are views on the accessory stack, activate the top one,
+                //          but only if that is necessary (in most cases it it is not).
+                //
                 EmitDismissingLastModalView();
+            }
         }
 
         void INavigationService.PushAccessoryView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
-            IAccessoryViewPresenter accessoryPresenter = _currentView as IAccessoryViewPresenter;
+            IStackedViewPresenter accessoryPresenter = _currentView as IStackedViewPresenter;
 
             if(null == accessoryPresenter)
             {
@@ -145,7 +153,9 @@ namespace RdClient.Shared.Navigation
 
                 IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
 
-                if (object.ReferenceEquals(view, _currentView) || null != _accessoryStack.Find(pmv => pmv.HasView(view)))
+                if (object.ReferenceEquals(view, _currentView)
+                    || null != _modalStack.Find(pmv => pmv.HasView(view))
+                    || null != _accessoryStack.Find(pmv => pmv.HasView(view)))
                 {
                     throw new NavigationServiceException("Trying to present an already presented accessory view.");
                 }
@@ -164,7 +174,7 @@ namespace RdClient.Shared.Navigation
         }
         void INavigationService.DismissAccessoryView(IPresentableView accessoryView)
         {
-            IAccessoryViewPresenter accessoryPresenter = _currentView as IAccessoryViewPresenter;
+            IStackedViewPresenter accessoryPresenter = _currentView as IStackedViewPresenter;
 
             if (null == accessoryPresenter)
             {
@@ -218,6 +228,14 @@ namespace RdClient.Shared.Navigation
 
             if (0 == viewStack.Count)
             {
+                //
+                // The last view from the stack has been dismissed, the new active view is the currently
+                // presented main view.
+                //
+                // TODO:    it may be that there is another non-empty stack; the top view from that other
+                //          stack needs to be presented here.
+                //
+                //
                 Contract.Assert(0 == index);
                 newActiveView = _currentView;
             }

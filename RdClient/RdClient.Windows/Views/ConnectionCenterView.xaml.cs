@@ -6,8 +6,11 @@
     using Windows.Graphics.Display;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Media;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
 
-    public sealed partial class ConnectionCenterView : Page, IPresentableView, IAccessoryViewPresenter
+    public sealed partial class ConnectionCenterView : Page, IPresentableView, IStackedViewPresenter
     {
         //
         // The enum prevents typos in names of visual states. When a new visual state
@@ -20,9 +23,14 @@
             PhoneLayout
         }
 
+        private readonly IList<IPresentableView> _accessoryViews;
+        private IStackedViewPresenter _accessoryPresenter;
+
         public ConnectionCenterView()
         {
             this.InitializeComponent();
+            _accessoryViews = new List<IPresentableView>();
+            _accessoryPresenter = null;
             this.SizeChanged += this.OnSizeChanged;
             this.VisualStates.CurrentStateChanging += this.OnVisualStateChanging;
             this.VisualStates.CurrentStateChanged += this.OnVisualStateChanged;
@@ -35,12 +43,29 @@
 
         void IStackedViewPresenter.PushView(IPresentableView view)
         {
-            throw new NotImplementedException();
+            Contract.Assert(null != view);
+            Contract.Assert(null != _accessoryPresenter);
+
+            _accessoryPresenter.PushView(view);
+            _accessoryViews.Add(view);
+
+            if (1 == _accessoryViews.Count)
+            {
+                Contract.Assert(_accessoryPresenter is UIElement);
+                ((UIElement)_accessoryPresenter).Visibility = Visibility.Visible;
+            }
         }
 
         void IStackedViewPresenter.DismissView(IPresentableView view)
         {
-            throw new NotImplementedException();
+            _accessoryPresenter.DismissView(view);
+            _accessoryViews.Remove(view);
+
+            if (0 == _accessoryViews.Count)
+            {
+                Contract.Assert(_accessoryPresenter is UIElement);
+                ((UIElement)_accessoryPresenter).Visibility = Visibility.Collapsed;
+            }
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
@@ -56,6 +81,22 @@
 
         private void OnVisualStateChanged(object sender, VisualStateChangedEventArgs e)
         {
+            IStackedViewPresenter newPresenter = FindAccessoryPresenter(this);
+            Contract.Assert(null != newPresenter);
+
+            if(!object.ReferenceEquals(_accessoryPresenter, newPresenter))
+            {
+                //
+                // Remove all accessory views from the old presenter and push them onto the new one.
+                //
+                foreach (IPresentableView view in _accessoryViews)
+                {
+                    _accessoryPresenter.DismissView(view);
+                    newPresenter.PushView(view);
+                }
+
+                _accessoryPresenter = newPresenter;
+            }
         }
 
         private Layout GetNewLayout(Size viewSize, DisplayInformation displayInformation)
@@ -92,6 +133,24 @@
             }
 
             return layout;
+        }
+
+        private static IStackedViewPresenter FindAccessoryPresenter(DependencyObject root)
+        {
+            IStackedViewPresenter presenter = null;
+            int childrenCount = VisualTreeHelper.GetChildrenCount(root);
+
+            for(int i = 0; null == presenter && i < childrenCount; ++i)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(root, i);
+
+                presenter = child as IStackedViewPresenter;
+
+                if (null == presenter)
+                    presenter = FindAccessoryPresenter(child);
+            }
+
+            return presenter;
         }
     }
 }

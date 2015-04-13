@@ -7,7 +7,7 @@ namespace RdClient.Controls
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
-    public sealed partial class AccessoryViewPresenter : UserControl, IAccessoryViewPresenter
+    public sealed partial class AccessoryViewPresenter : UserControl, IStackedViewPresenter
     {
         public readonly DependencyProperty AccessoryWidthProperty = DependencyProperty.Register("AccessoryWidth",
             typeof(double), typeof(AccessoryViewPresenter),
