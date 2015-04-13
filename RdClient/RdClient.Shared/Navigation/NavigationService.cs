@@ -15,9 +15,11 @@ namespace RdClient.Shared.Navigation
 
     public class NavigationService : INavigationService
     {
-        private readonly List<PresentedModalView> _modalStack;
+        private readonly List<PresentedStackedView> _modalStack;
+        private readonly List<PresentedStackedView> _accessoryStack;
         private NavigationExtensionList _extensions;
         private IViewPresenter _presenter;
+        private IStackedViewPresenter _modalPresenter;
         private IPresentableViewFactory _viewFactory;
         private IPresentableView _currentView;
         private readonly ICommand _backCommand;
@@ -25,7 +27,10 @@ namespace RdClient.Shared.Navigation
         public NavigationService()
         {
             Contract.Ensures(null != _modalStack);
-            _modalStack = new List<PresentedModalView>();
+            Contract.Ensures(null != _accessoryStack);
+
+            _modalStack = new List<PresentedStackedView>();
+            _accessoryStack = new List<PresentedStackedView>();
             _backCommand = new RelayCommand(BackCommandExecute);
         }
 
@@ -43,7 +48,17 @@ namespace RdClient.Shared.Navigation
             set { _extensions = value; }
         }
 
-        public IViewPresenter Presenter { set { _presenter = value; } }
+        public IViewPresenter Presenter
+        {
+            set
+            {
+                _presenter = value;
+                _modalPresenter = _presenter as IStackedViewPresenter;
+
+                if (null != value)
+                    Contract.Assert(null != _modalPresenter);
+            }
+        }
 
         public IPresentableViewFactory ViewFactory { set { _viewFactory = value; } }
 
@@ -68,6 +83,7 @@ namespace RdClient.Shared.Navigation
 
             if (_currentView != null && !object.ReferenceEquals(_currentView, view))
             {
+                DismissAllAccessoryViews();
                 CallDismissing(_currentView);
             }
 
@@ -97,64 +113,22 @@ namespace RdClient.Shared.Navigation
                 EmitPushingFirstModalView();
             }
 
-            PresentedModalView presentedView = new PresentedModalView(this, view, presentationCompletion);
+            PresentedStackedView presentedView = new PresentedModalView(this, view, presentationCompletion);
             _modalStack.Add(presentedView);
             CallPresenting(view, activationParameter, presentedView);
 
-            _presenter.PushModalView(view);
+            _modalPresenter.PushView(view);
         }
 
         public virtual void DismissModalView(IPresentableView modalView)
         {
-            Contract.Requires(modalView != null);
+            DismissStackedView(_modalStack, modalView, _modalPresenter);
 
-            List<PresentedModalView> toDismiss = new List<PresentedModalView>();
-
-            int toDismissIndex = _modalStack.FindIndex(pmv => pmv.HasView(modalView));
-
-            if (toDismissIndex < 0)
-            {
-                throw new NavigationServiceException("trying to dismiss a modal view that is not presented");
-            }
-
-            toDismiss = _modalStack.GetRange(toDismissIndex, _modalStack.Count - toDismissIndex);
-            _modalStack.RemoveRange(toDismissIndex, _modalStack.Count - toDismissIndex);
-            toDismiss.Reverse();
-
-            foreach (PresentedModalView presentedView in toDismiss)
-            {
-                CallDismissing(presentedView.View);
-                _presenter.DismissModalView(presentedView.View);
-                presentedView.ReportCompletion();
-            }
-            //
-            // The view that has become the new active view - either the currently presented view,
-            // of the view at the top of the modal stack.
-            //
-            IPresentableView newActiveView = null;
-            int topModalViewIndex = _modalStack.Count - 1;
-
-            if (topModalViewIndex < 0)
-            {
+            if (0 == _modalStack.Count)
                 EmitDismissingLastModalView();
-                newActiveView = _currentView;
-            }
-            else
-            {
-                newActiveView = _modalStack[topModalViewIndex].View;
-            }
-
-            if( null != newActiveView )
-            {
-                newActiveView.ViewModel.CastAndCall<IViewModel>(vm =>
-                {
-                    foreach (INavigationExtension extension in this.Extensions)
-                        extension.Presenting(vm);
-                });
-            }
         }
 
-        void INavigationService.PushAccessoryView(string viewName, object activationParameter)
+        void INavigationService.PushAccessoryView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
             IAccessoryViewPresenter accessoryPresenter = _currentView as IAccessoryViewPresenter;
 
@@ -164,9 +138,28 @@ namespace RdClient.Shared.Navigation
             }
             else
             {
+                //
+                // Push the view onto the accessory stack and show in in the accessory presenter.
+                //
+                Contract.Requires(viewName != null);
+
                 IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
 
-                accessoryPresenter.PushAccessoryView(view, activationParameter);
+                if (object.ReferenceEquals(view, _currentView) || null != _accessoryStack.Find(pmv => pmv.HasView(view)))
+                {
+                    throw new NavigationServiceException("Trying to present an already presented accessory view.");
+                }
+
+                if (_modalStack.Count == 0)
+                {
+                    EmitPushingFirstModalView();
+                }
+
+                PresentedStackedView presentedView = new PresentedAccessoryView(this, view, presentationCompletion);
+                _accessoryStack.Add(presentedView);
+                CallPresenting(view, activationParameter, presentedView);
+
+                accessoryPresenter.PushView(view);
             }
         }
         void INavigationService.DismissAccessoryView(IPresentableView accessoryView)
@@ -179,7 +172,63 @@ namespace RdClient.Shared.Navigation
             }
             else
             {
-                accessoryPresenter.DismissAccessoryView(accessoryView);
+                DismissStackedView(_accessoryStack, accessoryView, accessoryPresenter);
+            }
+        }
+
+        private void DismissStackedView(IList<PresentedStackedView> viewStack, IPresentableView stackedView, IStackedViewPresenter presenter)
+        {
+            Contract.Assert(stackedView != null);
+            Contract.Assert(viewStack.Count > 0);
+
+            bool presented = false, dismissed = false;
+
+            foreach (PresentedStackedView psv in viewStack)
+                if (psv.HasView(stackedView))
+                    presented = true;
+
+            if(!presented)
+                throw new NavigationServiceException("Dismissing a stacked view that is not presented");
+
+            int index = viewStack.Count - 1;
+
+            do
+            {
+                PresentedStackedView psv = viewStack[index];
+
+                if(psv.HasView(stackedView))
+                {
+                    CallDismissing(psv.View);
+                    presenter.DismissView(psv.View);
+                    psv.ReportCompletion();
+                    viewStack.RemoveAt(index);
+                    dismissed = true;
+                }
+
+                --index;
+            } while (!dismissed);
+
+            Contract.Assert(dismissed);
+            IPresentableView newActiveView = null;
+
+            if (0 == viewStack.Count)
+            {
+                Contract.Assert(-1 == index);
+                newActiveView = _currentView;
+            }
+            else
+            {
+                Contract.Assert(index >= 0);
+                newActiveView = _accessoryStack[index].View;
+            }
+
+            if (null != newActiveView)
+            {
+                newActiveView.ViewModel.CastAndCall<IViewModel>(vm =>
+                {
+                    foreach (INavigationExtension extension in this.Extensions)
+                        extension.Presenting(vm);
+                });
             }
         }
 
@@ -229,6 +278,19 @@ namespace RdClient.Shared.Navigation
             view.Presenting(this, activationParameter);
         }
 
+        private void DismissAllAccessoryViews()
+        {
+            IStackedViewPresenter accessoryPresenter = _currentView as IStackedViewPresenter;
+
+            if(null != accessoryPresenter && _accessoryStack.Count > 0)
+            {
+                //
+                // Simply dismiss the accessory view at the bottom of the stack, which will
+                // automatically dismiss all views on the stack.
+                //
+                DismissStackedView(_accessoryStack, _accessoryStack[0].View, accessoryPresenter);
+            }
+        }
 
         private void CallDismissing(IPresentableView view)
         {
@@ -236,16 +298,17 @@ namespace RdClient.Shared.Navigation
             {
                 vm.Dismissing();
 
-                foreach (INavigationExtension extension in Extensions)
+                if(null != _extensions)
                 {
-                    extension.Dismissed(vm);
+                    foreach (INavigationExtension extension in _extensions)
+                        extension.Dismissed(vm);
                 }
             });
 
             view.Dismissing();
         }
 
-        private sealed class PresentedModalView : IStackedPresentationContext
+        private abstract class PresentedStackedView : IStackedPresentationContext
         {
             private readonly INavigationService _navigationService;
             private readonly IPresentableView _view;
@@ -254,7 +317,7 @@ namespace RdClient.Shared.Navigation
 
             public IPresentableView View { get { return _view; } }
 
-            public PresentedModalView(INavigationService navigationService, IPresentableView view, IPresentationCompletion completion)
+            protected PresentedStackedView(INavigationService navigationService, IPresentableView view, IPresentationCompletion completion)
             {
                 Contract.Requires(null != navigationService);
                 Contract.Requires(null != view);
@@ -276,10 +339,38 @@ namespace RdClient.Shared.Navigation
                     _completion.Completed(_view, _result);
             }
 
+            protected abstract void DismissView(IPresentableView view, INavigationService navigationService);
+
             void IStackedPresentationContext.Dismiss(object result)
             {
                 _result = result;
-                _navigationService.DismissModalView(_view);
+                this.DismissView(_view, _navigationService);
+            }
+        }
+
+        private sealed class PresentedModalView : PresentedStackedView
+        {
+            public PresentedModalView(INavigationService navigationService, IPresentableView view, IPresentationCompletion completion)
+                : base(navigationService, view, completion)
+            {
+            }
+
+            protected override void DismissView(IPresentableView view, INavigationService navigationService)
+            {
+                navigationService.DismissModalView(view);
+            }
+        }
+
+        private sealed class PresentedAccessoryView : PresentedStackedView
+        {
+            public PresentedAccessoryView(INavigationService navigationService, IPresentableView view, IPresentationCompletion completion)
+                : base(navigationService, view, completion)
+            {
+            }
+
+            protected override void DismissView(IPresentableView view, INavigationService navigationService)
+            {
+                navigationService.DismissAccessoryView(view);
             }
         }
     }

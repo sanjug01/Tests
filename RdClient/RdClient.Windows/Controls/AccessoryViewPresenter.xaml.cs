@@ -41,11 +41,11 @@ namespace RdClient.Controls
             set { SetValue(FullScreenWidthProperty, value); }
         }
 
-        void IAccessoryViewPresenter.PushAccessoryView(IPresentableView view, object activationParameter)
+        void IStackedViewPresenter.PushView(IPresentableView view)
         {
         }
 
-        void IAccessoryViewPresenter.DismissAccessoryView(IPresentableView view)
+        void IStackedViewPresenter.DismissView(IPresentableView view)
         {
         }
 

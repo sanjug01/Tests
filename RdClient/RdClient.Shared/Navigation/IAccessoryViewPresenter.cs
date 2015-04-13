@@ -4,9 +4,7 @@
     /// Presenter of accessory views - a simplified version of IViewPresenter that always presents
     /// views on a modal stack.
     /// </summary>
-    public interface IAccessoryViewPresenter
+    public interface IAccessoryViewPresenter : IStackedViewPresenter
     {
-        void PushAccessoryView(IPresentableView view, object activationParameter);
-        void DismissAccessoryView(IPresentableView view);
     }
 }

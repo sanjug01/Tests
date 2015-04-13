@@ -34,14 +34,12 @@
             void IPresentableView.Dismissing() { }
         }
 
-        private sealed class TestViewPresenter : IViewPresenter
+        private sealed class TestViewPresenter : IViewPresenter, IStackedViewPresenter
         {
 
             void IViewPresenter.PresentView(IPresentableView view) { }
-            void IViewPresenter.PushModalView(IPresentableView view) { }
-            void IViewPresenter.DismissModalView(IPresentableView view) { }
-            void IViewPresenter.PresentingFirstModalView() { }
-            void IViewPresenter.DismissedLastModalView() { }
+            void IStackedViewPresenter.PushView(IPresentableView view) { }
+            void IStackedViewPresenter.DismissView(IPresentableView view) { }
         }
 
         private sealed class TestViewFactory : IPresentableViewFactory

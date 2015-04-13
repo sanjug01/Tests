@@ -60,8 +60,6 @@
             _navigationService = this.CreateNavigationService();
 
             _navigationService.Presenter = this.ViewPresenter;
-            _navigationService.PushingFirstModalView += (s, e) => this.ViewPresenter.PresentingFirstModalView();
-            _navigationService.DismissingLastModalView += (s, e) => this.ViewPresenter.DismissedLastModalView();
 
             _navigationService.Extensions.Add(this.CreateDataModelExtension(appDataModel));
             _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));

@@ -48,7 +48,7 @@ namespace RdClient.Shared.Navigation
         /// on top of the modal stack.</remarks>
         /// <param name="viewName">Name of the view as registered in the view factory.</param>
         /// <param name="activationParameter">A user determined parameter passed to the view.</param>
-        void PushAccessoryView(string viewName, object activationParameter);
+        void PushAccessoryView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion = null);
         /// <summary>
         /// Dismiss an accessory view and any views on top of it on the accessory stack.
         /// If the view was presented modally, it is removed from the modal atack with all modal views

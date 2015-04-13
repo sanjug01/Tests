@@ -33,12 +33,12 @@
         void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
         void IPresentableView.Dismissing() { }
 
-        void IAccessoryViewPresenter.PushAccessoryView(IPresentableView view, object activationParameter)
+        void IStackedViewPresenter.PushView(IPresentableView view)
         {
             throw new NotImplementedException();
         }
 
-        void IAccessoryViewPresenter.DismissAccessoryView(IPresentableView view)
+        void IStackedViewPresenter.DismissView(IPresentableView view)
         {
             throw new NotImplementedException();
         }

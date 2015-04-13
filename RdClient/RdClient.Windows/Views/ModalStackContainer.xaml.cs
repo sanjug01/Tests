@@ -46,7 +46,7 @@ namespace RdClient.Views
         /// is not at the top).
         /// </summary>
         /// <param name="view">UI element (view) to be removed from the stack</param>
-        public void Pop()
+        public void Pop(UIElement view)
         {
             Contract.EnsuresOnThrow<Exception>(null == _pendingAnimation);
             Contract.EnsuresOnThrow<ArgumentException>(null == _pendingAnimation);
@@ -65,8 +65,7 @@ namespace RdClient.Views
 
                 if (null == cc)
                     throw new Exception("Control at the top of the stack is not a ContentControl");
-
-                cc.IsEnabled = false;
+                Contract.Assert(object.ReferenceEquals(cc.Content, view));
 
                 _pendingAnimation = FadeOut.Start(this.RootGrid, cc, this.OnPendingAnimationCompleted);
             }
