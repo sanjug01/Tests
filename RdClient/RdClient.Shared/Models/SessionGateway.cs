@@ -24,6 +24,7 @@
         // is loaded form the data model.
         //
         private bool _newPassword;
+        private bool _hasGateway;
 
         public CredentialsModel Credentials
         {
@@ -43,6 +44,11 @@
         public bool IsNewPassword
         {
             get { return _newPassword; }
+        }
+
+        public bool HasGateway
+        {
+            get { return _hasGateway; }
         }
 
         public void ApplySavedCredentials(IModelContainer<CredentialsModel> savedCredentials)
@@ -89,13 +95,10 @@
 
         public SessionGateway()
         {
-            _gateway = new GatewayModel();
-            _credentials = new CredentialsModel();
-            //
-            // There is no loaded model, so any password typed in will be modified.
-            //
-            _newPassword = true;
-            _credentials.PropertyChanged += this.OnCredentialsPropertyChanged;
+            _gateway = null;
+            _credentials = null;
+            _hasGateway = false;
+            _newPassword = false;
         }
 
         public SessionGateway(
@@ -103,15 +106,22 @@
             IModelContainer<CredentialsModel> savedCredentials
             )
         {
-            Contract.Assert(null != savedCredentials);
-
             _gateway = new GatewayModel();
-            _credentials = new CredentialsModel();
 
             savedGateway.Model.CopyTo(_gateway);
-            savedCredentials.Model.CopyTo(_credentials);
+            if (_gateway.HasCredentials)
+            {
+                _credentials = new CredentialsModel();
+                savedCredentials.Model.CopyTo(_credentials);
+                _credentials.PropertyChanged += this.OnCredentialsPropertyChanged;
+            }
+            else
+            {
+                _credentials = null;
+            }
+
             _newPassword = false;
-            _credentials.PropertyChanged += this.OnCredentialsPropertyChanged;
+            _hasGateway = true;
         }
 
         private void OnCredentialsPropertyChanged(object sender, PropertyChangedEventArgs e)

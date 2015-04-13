@@ -75,7 +75,14 @@
 
                 _connection.SetCredentials(_session._sessionSetup.SessionCredentials.Credentials,
                     !_session._sessionSetup.SessionCredentials.IsNewPassword);
-                //TODO: pass gateway if necessary
+
+                // pass gateway, if necessary
+                if (_session._sessionSetup.SessionGateway.HasGateway)
+                {
+                    _connection.SetGateway(
+                        _session._sessionSetup.SessionGateway.Gateway,
+                        _session._sessionSetup.SessionGateway.Credentials);
+                }
 
                 _connection.Connect();
             }
