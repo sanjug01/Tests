@@ -31,7 +31,7 @@
             }
 
             [DebuggerNonUserCode] // exclude from code coverage
-            public void Presenting(INavigationService navigationService, object activationParameter, IModalPresentationContext presentationResult)
+            public void Presenting(INavigationService navigationService, object activationParameter, IStackedPresentationContext presentationResult)
             {
                 throw new NotImplementedException();
             }

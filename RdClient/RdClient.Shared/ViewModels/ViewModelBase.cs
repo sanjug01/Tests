@@ -13,7 +13,7 @@
     public abstract class ViewModelBase : Helpers.MutableObject, IViewModel, IDataModelSite
     {
         private INavigationService _navigationService;
-        private IModalPresentationContext _presentationContext;
+        private IStackedPresentationContext _presentationContext;
         private ApplicationDataModel _appDataModel;
 
         protected INavigationService NavigationService
@@ -83,7 +83,7 @@
         {
         }
 
-        void IViewModel.Presenting(INavigationService navigationService, object activationParameter, IModalPresentationContext presentationContext)
+        void IViewModel.Presenting(INavigationService navigationService, object activationParameter, IStackedPresentationContext presentationContext)
         {
             Contract.Requires(navigationService != null);
             Contract.Ensures(null != _navigationService);

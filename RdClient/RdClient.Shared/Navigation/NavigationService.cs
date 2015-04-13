@@ -214,7 +214,7 @@ namespace RdClient.Shared.Navigation
             }
         }
 
-        private void CallPresenting(IPresentableView view, object activationParameter, IModalPresentationContext presentationResult)
+        private void CallPresenting(IPresentableView view, object activationParameter, IStackedPresentationContext presentationResult)
         {
             view.ViewModel.CastAndCall<IViewModel>( vm =>
             {
@@ -245,7 +245,7 @@ namespace RdClient.Shared.Navigation
             view.Dismissing();
         }
 
-        private sealed class PresentedModalView : IModalPresentationContext
+        private sealed class PresentedModalView : IStackedPresentationContext
         {
             private readonly INavigationService _navigationService;
             private readonly IPresentableView _view;
@@ -276,7 +276,7 @@ namespace RdClient.Shared.Navigation
                     _completion.Completed(_view, _result);
             }
 
-            void IModalPresentationContext.Dismiss(object result)
+            void IStackedPresentationContext.Dismiss(object result)
             {
                 _result = result;
                 _navigationService.DismissModalView(_view);
