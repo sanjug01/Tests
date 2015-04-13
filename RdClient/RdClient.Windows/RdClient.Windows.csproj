@@ -246,6 +246,9 @@
     </Compile>
     <Content Include="Assets\desktop_placeholder.png" />
     <Content Include="Assets\SegMDL2.1.12.ttf" />
+    <Content Include="libeay32.dll" />
+    <Content Include="rdpwinrttransportrpc.dll" />
+    <Content Include="ssleay32.dll" />
     <None Include="Models\AppDataStorage.cs" />
     <Compile Include="Navigation\DispatchedNavigationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -292,12 +295,6 @@
     <None Include="RdClient.Windows_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\libeay32.dll">
-      <Link>libeay32.dll</Link>
-    </Content>
-    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\ssleay32.dll">
-      <Link>ssleay32.dll</Link>
-    </Content>
     <Content Include="Assets\desktop_placeholder.scale-100.png" />
     <Content Include="Assets\desktop_placeholder.scale-140.png" />
     <Content Include="Assets\desktop_placeholder.scale-180.png" />
