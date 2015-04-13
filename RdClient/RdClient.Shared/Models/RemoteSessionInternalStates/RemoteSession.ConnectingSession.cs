@@ -122,6 +122,14 @@
                         RequestNewPassword(e.DisconnectReason);
                         break;
 
+                    case RdpDisconnectCode.ProxyNeedCredentials:
+                        // TODO: Gateway needs credential
+                        break;
+
+                    case RdpDisconnectCode.ProxyLogonFailed:
+                        // TODO: Gateway credentials failed - propmt for new credentials
+                        break;
+
                     default:
                         connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
                         break;
