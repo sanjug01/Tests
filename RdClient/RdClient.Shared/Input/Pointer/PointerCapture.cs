@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics.Contracts;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media;
+using RdClient.Shared.Input;
 
 namespace RdClient.Input
 {
@@ -15,25 +16,32 @@ namespace RdClient.Input
         private IExecutionDeferrer _deferrer;
         private IRemoteSessionControl _control;
         private IRenderingPanel _panel;
-        private IPointerEventConsumerOld _consumer;
+        private IPointerEventConsumerOld _consumerOld;
+        private IPointerEventConsumer _consumer;
 
         public ConsumptionMode ConsumptionMode
         {
-            set { _consumer.ConsumptionMode = value; }
+            set { _consumerOld.ConsumptionMode = value; }
         }
 
-        public PointerCapture(IExecutionDeferrer deferrer, IRemoteSessionControl control, IRenderingPanel panel)
+        public PointerCapture(IExecutionDeferrer deferrer, IRemoteSessionControl control, IRenderingPanel panel, ITimerFactory timerFactory)
         {
             _deferrer = deferrer;
             _control = control;
             _panel = panel;
-            _consumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this, panel);
+            _consumerOld = new PointerEventDispatcher(timerFactory.CreateTimer(), this, panel);
+            _consumer = new PointerModeConsumer(timerFactory.CreateTimer(), new DummyPointerControl());
             this.ConsumptionMode = ConsumptionMode.Pointer;
         }
 
-        public void OnPointerChanged(object sender, PointerEventArgs args)
+        public void OnPointerChangedOld(object sender, PointerEventArgs args)
         {
-            _consumer.ConsumeEvent(args.PointerEvent);
+            _consumerOld.ConsumeEvent(args.PointerEvent);
+        }
+
+        public void OnPointerChanged(object sender, IPointerEventBase e)
+        {
+            _consumer.ConsumeEvent(e);
         }
 
         public void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args)
@@ -82,5 +90,6 @@ namespace RdClient.Input
         {
             this._control.SendTouchAction(type, contactId, position, frameTime);
         }
+
     }
 }

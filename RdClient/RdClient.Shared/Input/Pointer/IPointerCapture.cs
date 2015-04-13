@@ -7,7 +7,8 @@ namespace RdClient.Shared.Input.Pointer
 {
     public interface IPointerCapture
     {
-        void OnPointerChanged(object sender, PointerEventArgs args);
+        void OnPointerChangedOld(object sender, PointerEventArgs args);
+        void OnPointerChanged(object sender, IPointerEventBase e);
         void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args);
         void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args);
 

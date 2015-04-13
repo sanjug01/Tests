@@ -7,17 +7,17 @@ namespace RdClient.Shared.Input.Pointer
     {
         public void HScroll(double delta)
         {
-            //Debug.WriteLine("HSCroll");
+            Debug.WriteLine("HSCroll");
         }
 
         public void LeftClick(IPointerRoutedEventProperties pointerEvent)
         {
-            //Debug.WriteLine("LeftClick");
+            Debug.WriteLine("LeftClick");
         }
 
         public void LeftDrag(PointerDragAction action, Point delta)
         {
-            //Debug.WriteLine("LeftDrag");
+            Debug.WriteLine("LeftDrag");
         }
 
         public void Move(Point delta)
@@ -27,22 +27,22 @@ namespace RdClient.Shared.Input.Pointer
 
         public void RightClick(IPointerRoutedEventProperties pointerEvent)
         {
-            //Debug.WriteLine("RightClick");
+            Debug.WriteLine("RightClick");
         }
 
         public void RightDrag(PointerDragAction action, Point delta)
         {
-            //Debug.WriteLine("RightDrag");
+            Debug.WriteLine("RightDrag");
         }
 
         public void Scroll(double delta)
         {
-            //Debug.WriteLine("Scroll");
+            Debug.WriteLine("Scroll");
         }
 
         public void ZoomPan(Point center, Point translation, double scale)
         {
-            //Debug.WriteLine("ZoomPan");
+            Debug.WriteLine("ZoomPan");
         }
     }
 }
