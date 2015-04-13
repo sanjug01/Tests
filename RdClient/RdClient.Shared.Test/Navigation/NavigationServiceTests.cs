@@ -195,7 +195,7 @@
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
                 view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("PushView", new List<object>() { view1 }, 0);
 
                 navigationService.PushModalView("foo", activationParameter);
 
@@ -219,13 +219,13 @@
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
                 view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("PushView", new List<object>() { view1 }, 0);
 
                 navigationService.PushModalView("foo", activationParameter);
 
                 factory.Expect("CreateView", new List<object>() { "bar", activationParameter }, view2);
                 view2.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view2 }, 0);
+                presenter.Expect("PushView", new List<object>() { view2 }, 0);
 
                 navigationService.PushModalView("bar", activationParameter);
 
@@ -249,18 +249,18 @@
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
                 view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("PushView", new List<object>() { view1 }, 0);
 
                 navigationService.PushModalView("foo", activationParameter);
 
                 factory.Expect("CreateView", new List<object>() { "bar", activationParameter }, view2);
                 view2.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view2 }, 0);
+                presenter.Expect("PushView", new List<object>() { view2 }, 0);
 
                 navigationService.PushModalView("bar", activationParameter);
 
                 view2.Expect("Dismissing", new List<object>() { }, 0);
-                presenter.Expect("DismissModalView", new List<object>() { view2 }, 0);
+                presenter.Expect("DismissView", new List<object>() { view2 }, 0);
                 navigationService.DismissModalView(view2);
 
                 Assert.IsTrue(callbackCalled);
@@ -287,13 +287,13 @@
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
                 viewModel.Expect("Presenting", new List<object>() { navigationService, activationParameter, null }, 0);
                 view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("PushView", new List<object>() { view1 }, 0);
 
                 navigationService.PushModalView("foo", activationParameter, null);
 
                 viewModel.Expect("Dismissing", new List<object>() { }, 0);
                 view1.Expect("Dismissing", new List<object>() {  }, 0);
-                presenter.Expect("DismissModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("DismissView", new List<object>() { view1 }, 0);
 
                 navigationService.DismissModalView(view1);
 
@@ -316,12 +316,12 @@
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
                 view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("PushView", new List<object>() { view1 }, 0);
 
                 navigationService.PushModalView("foo", activationParameter);
 
                 view1.Expect("Dismissing", new List<object>() { }, 0);
-                presenter.Expect("DismissModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("DismissView", new List<object>() { view1 }, 0);
 
                 navigationService.DismissModalView(view1);
 
@@ -341,12 +341,12 @@
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
                 view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("PushView", new List<object>() { view1 }, 0);
 
                 navigationService.PushModalView("foo", activationParameter);
 
                 view1.Expect("Dismissing", new List<object>() { }, 0);
-                presenter.Expect("DismissModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("DismissView", new List<object>() { view1 }, 0);
 
                 navigationService.DismissModalView(view1);
             }
@@ -369,28 +369,28 @@
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
                 view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("PushView", new List<object>() { view1 }, 0);
 
                 factory.Expect("CreateView", new List<object>() { "bar", activationParameter }, view2);
                 view2.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view2 }, 0);
+                presenter.Expect("PushView", new List<object>() { view2 }, 0);
 
                 factory.Expect("CreateView", new List<object>() { "narf", activationParameter }, view3);
                 view3.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view3 }, 0);
+                presenter.Expect("PushView", new List<object>() { view3 }, 0);
 
                 navigationService.PushModalView("foo", activationParameter);
                 navigationService.PushModalView("bar", activationParameter);
                 navigationService.PushModalView("narf", activationParameter);
 
                 view3.Expect("Dismissing", new List<object>() { }, 0);
-                presenter.Expect("DismissModalView", new List<object>() { view3 }, 0);
+                presenter.Expect("DismissView", new List<object>() { view3 }, 0);
                 
                 view2.Expect("Dismissing", new List<object>() { }, 0);
-                presenter.Expect("DismissModalView", new List<object>() { view2 }, 0);
+                presenter.Expect("DismissView", new List<object>() { view2 }, 0);
 
                 view1.Expect("Dismissing", new List<object>() { }, 0);
-                presenter.Expect("DismissModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("DismissView", new List<object>() { view1 }, 0);
 
                 navigationService.DismissModalView(view1);
 
@@ -411,12 +411,12 @@
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
                 view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("PushView", new List<object>() { view1 }, 0);
 
                 navigationService.PushModalView("foo", activationParameter);
 
                 view1.Expect("Dismissing", new List<object>() { }, 0);
-                presenter.Expect("DismissModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("DismissView", new List<object>() { view1 }, 0);
 
                 navigationService.DismissModalView(view1);
 
@@ -470,7 +470,7 @@
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
                 view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("PushView", new List<object>() { view1 }, 0);
 
                 navigationService.PushModalView("foo", activationParameter);
 
@@ -709,7 +709,7 @@
                 factory.Expect("CreateView", new List<object>() { "bar", null }, view2);
                 view2.Expect("Presenting", new List<object>() { navigationService, null }, 0);
                 viewModel.Expect("Presenting", new List<object>() { navigationService, null, null }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view2 }, 0);
+                presenter.Expect("PushView", new List<object>() { view2 }, 0);
                 navigationService.PushModalView("bar", null);
 
                 Assert.IsFalse(_appBarViewModel.IsBarVisible);
@@ -749,12 +749,12 @@
                 factory.Expect("CreateView", new List<object>() { "bar", null }, view2);
                 view2.Expect("Presenting", new List<object>() { navigationService, null }, 0);
                 viewModel.Expect("Presenting", new List<object>() { navigationService, null, null }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view2 }, 0);
+                presenter.Expect("PushView", new List<object>() { view2 }, 0);
                 navigationService.PushModalView("bar", null);
 
                 view2.Expect("Dismissing", new List<object>() { }, 0);
                 viewModel.Expect("Dismissing", new List<object>() { }, 0);
-                presenter.Expect("DismissModalView", new List<object>() { view2 }, 0);
+                presenter.Expect("DismissView", new List<object>() { view2 }, 0);
                 navigationService.DismissModalView(view2);
 
                 Assert.IsFalse(_appBarViewModel.IsBarVisible);
@@ -797,7 +797,7 @@
                 factory.Expect("CreateView", new List<object>() { "bar", null }, view2);
                 view2.Expect("Presenting", new List<object>() { navigationService, null }, 0);
                 viewModel.Expect("Presenting", new List<object>() { navigationService, null, null }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view2 }, 0);
+                presenter.Expect("PushView", new List<object>() { view2 }, 0);
                 navigationService.PushModalView("bar", null);
 
                 Assert.IsFalse(_appBarViewModel.IsBarVisible);
@@ -835,12 +835,12 @@
 
                 factory.Expect("CreateView", new List<object>() { "bar", null }, modalView);
                 modalView.Expect("Presenting", new List<object>() { navigationService, null }, 0);
-                presenter.Expect("PushModalView", new List<object>() { modalView }, 0);
+                presenter.Expect("PushView", new List<object>() { modalView }, 0);
                 navigationService.PushModalView("bar", null, completion);
 
 
                 modalView.Expect("Dismissing", new List<object>() { }, 0);
-                presenter.Expect("DismissModalView", new List<object>() { modalView }, 0);
+                presenter.Expect("DismissView", new List<object>() { modalView }, 0);
                 modalViewModel.ReportResult(modalResult);
 
                 Assert.AreEqual(1, completions.Count);
@@ -890,7 +890,7 @@
 
                 //setup nav so that view is top modal view
                 factory.Expect("CreateView", o => { return view; });
-                presenter.Expect("PushModalView", null);
+                presenter.Expect("PushView", null);
                 view.Expect("Presenting", null);
                 vm.Expect("Presenting", null);
                 nav.PushModalView("view", null);
@@ -1009,14 +1009,14 @@
 
                 //setup nav so that view is top modal view
                 factory.Expect("CreateView", o => { return view; });
-                presenter.Expect("PushModalView", null);                
+                presenter.Expect("PushView", null);                
                 view.Expect("Presenting", null);
                 vm.Expect("Presenting", null);
                 nav.PushModalView("view", null);
 
                 //navigate back without vm handling it and verify view is dismissed
                 vm.Expect("NavigatingBack", new List<object>() { backArgs }, 0);                
-                presenter.Expect("DismissModalView", new List<object>() { view }, 0);
+                presenter.Expect("DismissView", new List<object>() { view }, 0);
                 view.Expect("Dismissing", null);
                 vm.Expect("Dismissing", null);
                 nav.BackCommand.Execute(backArgs);
@@ -1039,7 +1039,7 @@
 
                 //setup nav so that view is top modal view
                 factory.Expect("CreateView", o => { return view; });
-                presenter.Expect("PushModalView", null);
+                presenter.Expect("PushView", null);
                 view.Expect("Presenting", null);
                 vm.Expect("Presenting", null);
                 nav.PushModalView("view", null);
@@ -1077,7 +1077,7 @@
 
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
                 view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("PushView", new List<object>() { view1 }, 0);
 
                 navigationService.PushAccessoryView("foo", activationParameter);
 
@@ -1110,13 +1110,13 @@
                 factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view1);
                 viewModel.Expect("Presenting", new List<object>() { navigationService, activationParameter, null }, 0);
                 view1.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
-                presenter.Expect("PushModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("PushView", new List<object>() { view1 }, 0);
 
                 navigationService.PushAccessoryView("foo", activationParameter);
 
                 viewModel.Expect("Dismissing", new List<object>() { }, 0);
                 view1.Expect("Dismissing", new List<object>() { }, 0);
-                presenter.Expect("DismissModalView", new List<object>() { view1 }, 0);
+                presenter.Expect("DismissView", new List<object>() { view1 }, 0);
 
                 navigationService.DismissAccessoryView(view1);
 

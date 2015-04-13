@@ -179,33 +179,38 @@ namespace RdClient.Shared.Navigation
         private void DismissStackedView(IList<PresentedStackedView> viewStack, IPresentableView stackedView, IStackedViewPresenter presenter)
         {
             Contract.Assert(stackedView != null);
-            Contract.Assert(viewStack.Count > 0);
 
             bool presented = false, dismissed = false;
-
+            //
+            // Check if the view is on the stack
+            //
             foreach (PresentedStackedView psv in viewStack)
+            {
                 if (psv.HasView(stackedView))
+                {
                     presented = true;
+                    break;
+                }
+            }
 
             if(!presented)
                 throw new NavigationServiceException("Dismissing a stacked view that is not presented");
-
-            int index = viewStack.Count - 1;
+            //
+            // From the top of the stack dismiss all the views down to the requested one.
+            //
+            int index = viewStack.Count;
 
             do
             {
-                PresentedStackedView psv = viewStack[index];
+                PresentedStackedView psv = viewStack[--index];
 
                 if(psv.HasView(stackedView))
-                {
-                    CallDismissing(psv.View);
-                    presenter.DismissView(psv.View);
-                    psv.ReportCompletion();
-                    viewStack.RemoveAt(index);
                     dismissed = true;
-                }
 
-                --index;
+                CallDismissing(psv.View);
+                presenter.DismissView(psv.View);
+                psv.ReportCompletion();
+                viewStack.RemoveAt(index);
             } while (!dismissed);
 
             Contract.Assert(dismissed);
@@ -213,13 +218,13 @@ namespace RdClient.Shared.Navigation
 
             if (0 == viewStack.Count)
             {
-                Contract.Assert(-1 == index);
+                Contract.Assert(0 == index);
                 newActiveView = _currentView;
             }
             else
             {
                 Contract.Assert(index >= 0);
-                newActiveView = _accessoryStack[index].View;
+                newActiveView = viewStack[index-1].View;
             }
 
             if (null != newActiveView)
