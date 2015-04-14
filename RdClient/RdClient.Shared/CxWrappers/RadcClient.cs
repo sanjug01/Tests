@@ -60,8 +60,13 @@
         }
 
         public void StartSubscribeToOnPremFeed(string url, Models.CredentialsModel cred, Action<XPlatError.XResult32> completionHandler = null)
-        {
-            Func<int> radcCall = () => { return _client.SubscribeToOnPremFeed(url, cred.Username, cred.Password); };
+        {            
+            Func<int> radcCall = () =>
+            // TODO : SubscribeToOnPremFeed signature changed
+            {
+                string updatedUrl;
+                return _client.SubscribeToOnPremFeed(url, cred.Username, cred.Password, out updatedUrl);
+            };
             CallCxRadcClient(radcCall, completionHandler);
         }
 

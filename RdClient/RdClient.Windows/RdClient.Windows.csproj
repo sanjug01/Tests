@@ -122,6 +122,9 @@
     <Compile Include="Controls\ConnectionCenterTitleBar.xaml.cs">
       <DependentUpon>ConnectionCenterTitleBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DynamicToolbar.xaml.cs">
+      <DependentUpon>DynamicToolbar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ExtendedGatewayControl.xaml.cs">
       <DependentUpon>ExtendedGatewayControl.xaml</DependentUpon>
     </Compile>
@@ -238,6 +241,15 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Content Include="..\..\RdClientCx\openssl\winrt\x86chk\libeay32.dll">
+      <Link>libeay32.dll</Link>
+    </Content>
+    <Content Include="..\..\RdClientCx\RdpWinRTTransportRpc\debug\win32\rdpwinrttransportrpc.dll">
+      <Link>rdpwinrttransportrpc.dll</Link>
+    </Content>
+    <Content Include="..\..\RdClientCx\openssl\winrt\x86chk\ssleay32.dll">
+      <Link>ssleay32.dll</Link>
+    </Content>
     <Content Include="Assets\desktop_placeholder.png" />
     <Content Include="Assets\SegMDL2.1.12.ttf" />
     <None Include="Models\AppDataStorage.cs" />
@@ -286,12 +298,6 @@
     <None Include="RdClient.Windows_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\libeay32.dll">
-      <Link>libeay32.dll</Link>
-    </Content>
-    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\ssleay32.dll">
-      <Link>ssleay32.dll</Link>
-    </Content>
     <Content Include="Assets\desktop_placeholder.scale-100.png" />
     <Content Include="Assets\desktop_placeholder.scale-140.png" />
     <Content Include="Assets\desktop_placeholder.scale-180.png" />
@@ -335,6 +341,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\ConnectionCenterTitleBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DynamicToolbar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
