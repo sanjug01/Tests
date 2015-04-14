@@ -12,11 +12,8 @@
     public interface ISessionCredentials
     {
         CredentialsModel Credentials { get; }
-
-
         void ApplySavedCredentials(IModelContainer<CredentialsModel> savedCredentials);
-
         void SetChangedPassword(string changedPassword);
-
+        bool IsNewPassword { get; }
      }
 }
