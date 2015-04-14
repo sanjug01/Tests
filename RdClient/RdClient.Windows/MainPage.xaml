@@ -205,23 +205,23 @@
     </Page.BottomAppBar>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <controls:AppHeaderControl x:Name="AppHeader" Grid.Row="0"/>
-        </Grid>
-        <Grid Grid.Row="1">
-            <views:ViewPresenter x:Name="ViewPresenter"/>        
-            <!-- Button that shows the application bar -->
-            <Button
-                VerticalAlignment="Bottom"
-                HorizontalAlignment="Stretch"
-                Visibility="{Binding IsShowBarButtonVisible, Converter={StaticResource boolToVisibility}}"
-                Command="{Binding ShowBar}">
-                <TextBlock FontSize="12" x:Uid="MainPage-ShowApplicationBarLabel" Text="show application bar(d)" />
-            </Button>
-        </Grid>
+        <views:ViewPresenter x:Name="ViewPresenter"/>        
+        <!-- Button that shows the application bar -->
+        <Button
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Stretch"
+            Visibility="{Binding IsShowBarButtonVisible, Converter={StaticResource boolToVisibility}}"
+            Command="{Binding ShowBar}">
+            <TextBlock FontSize="12" x:Uid="MainPage-ShowApplicationBarLabel" Text="show application bar(d)" />
+        </Button>
+        <!-- Use our own back button until the Win10 API to show the back button in the taskbar is enabled -->
+        <Button 
+            x:Name="BackButton" 
+            x:FieldModifier="public"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top" 
+            Style="{StaticResource BackButtonStyle}" 
+            Command="{Binding GoBackCommand}">            
+        </Button>
     </Grid>
 </Page>

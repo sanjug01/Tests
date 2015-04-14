@@ -20,7 +20,7 @@
 
             initializer.AppBarViewModel = this.DataContext as IApplicationBarViewModel;
             initializer.ViewPresenter = this.ViewPresenter;
-            initializer.BackButton = this.AppHeader.BackButton;
+            initializer.BackButton = this.BackButton;
             initializer.Initialize();
         }
 

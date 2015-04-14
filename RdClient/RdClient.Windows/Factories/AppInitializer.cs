@@ -81,7 +81,7 @@
 
             _navigationService.NavigateToView(this.LandingPage, null);
 
-            //This will be replaced with a hookup to the back button pressed API once we move to Windows 10
+            //TODO: Remove this once Win10 API to show the back button in the taskbar is enabled
             Button backButton = this.BackButton;
             if (backButton != null)
             {
