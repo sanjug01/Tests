@@ -9,7 +9,7 @@
     /// Information about gateway and assigned credentials model used by a particular session.
     /// This object may be edited by the in-session credentials editing task.
     /// </summary>
-    public sealed class SessionGateway
+    public sealed class SessionGateway : ISessionCredentials
     {
         private readonly GatewayModel _gateway;
         //

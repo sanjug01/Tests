@@ -123,11 +123,13 @@
                         break;
 
                     case RdpDisconnectCode.ProxyNeedCredentials:
-                        // TODO: Gateway needs credential
+                        // Gateway needs credentials
+                        RequestNewGatewayCredentials(e.DisconnectReason);
                         break;
 
                     case RdpDisconnectCode.ProxyLogonFailed:
-                        // TODO: Gateway credentials failed - propmt for new credentials
+                        // Gateway credentials failed - prompt for new credentials
+                        RequestValidGatewayCredentials(e.DisconnectReason);
                         break;
 
                     default:
@@ -253,6 +255,80 @@
                 // Stay in the state and wait for the connection to terminate.
                 //
                 using(LockWrite())
+                {
+                    _cancelledCredentials = true;
+                    _connection.HandleAsyncDisconnectResult((RdpDisconnectReason)e.State, false);
+                }
+            }
+
+
+            private void RequestValidGatewayCredentials(RdpDisconnectReason reason)
+            {
+                //
+                // Emit an event with a credentials editor task.
+                //
+                InSessionCredentialsTask task = new InSessionCredentialsTask(
+                    _session._sessionSetup.SessionGateway,
+                    _session._sessionSetup.DataModel,
+                    "d:Invalid user name or password for the gateway",
+                    reason);
+
+                task.Submitted += this.NewGatewayCredentialsSubmitted;
+                task.Cancelled += this.NewGatewayCredentialsCancelled;
+
+                _session.DeferEmitCredentialsNeeded(task);
+            }
+
+            private void RequestNewGatewayCredentials(RdpDisconnectReason reason)
+            {
+                //
+                // Emit an event with a credentials editor task.
+                //
+                InSessionCredentialsTask task = new InSessionCredentialsTask(
+                    _session._sessionSetup.SessionGateway,
+                    _session._sessionSetup.DataModel,
+                    "d:Gateway server has requested a new password to be typed in",
+                    reason);
+
+                task.Submitted += this.NewGatewayCredentialsSubmitted;
+                task.Cancelled += this.NewGatewayCredentialsCancelled;
+
+                _session.DeferEmitCredentialsNeeded(task);
+            }
+
+            private void NewGatewayCredentialsSubmitted(object sender, InSessionCredentialsTask.SubmittedEventArgs e)
+            {
+                InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
+
+                task.Submitted -= this.NewGatewayCredentialsSubmitted;
+                task.Cancelled -= this.NewGatewayCredentialsCancelled;
+
+                if (e.SaveCredentials)
+                    _session._sessionSetup.SaveGatewayCredentials();
+                //
+                // Go ahead and try to re-connect with new gateway credentials.
+                // Stay in the same state, update the session credentials and call HandleAsyncDisconnectResult
+                // to re-connect.
+                //
+                using (LockWrite())
+                {
+                    _connection.SetGateway(_session._sessionSetup.SessionGateway.Gateway,
+                        _session._sessionSetup.SessionGateway.Credentials);
+                    _connection.HandleAsyncDisconnectResult((RdpDisconnectReason)e.State, true);
+                }
+            }
+
+            private void NewGatewayCredentialsCancelled(object sender, InSessionCredentialsTask.ResultEventArgs e)
+            {
+                InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
+
+                task.Submitted -= this.NewGatewayCredentialsCancelled;
+                task.Cancelled -= this.NewGatewayCredentialsCancelled;
+                //
+                // User has cancelled the credentials dialog.
+                // Stay in the state and wait for the connection to terminate.
+                //
+                using (LockWrite())
                 {
                     _cancelledCredentials = true;
                     _connection.HandleAsyncDisconnectResult((RdpDisconnectReason)e.State, false);
