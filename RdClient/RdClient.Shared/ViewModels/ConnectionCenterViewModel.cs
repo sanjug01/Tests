@@ -10,6 +10,7 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
     using System;
+    using System.Threading;
 
     public class ConnectionCenterViewModel : DeferringViewModelBase,
         IConnectionCenterViewModel,
@@ -43,6 +44,7 @@
         private bool _hasDesktops;
         private bool _hasApps;
 
+        private CancellationTokenSource _accessoryViewCTS;
         private bool _isAccessoryViewVisible;
         private RelayCommand _cancelAccessoryView;
 
@@ -114,6 +116,7 @@
             void IPresentationCompletion.Completed(IPresentableView view, object result)
             {
                 _vm.IsAccessoryViewPresented = false;
+                _vm._accessoryViewCTS = null;
             }
         }
 
@@ -445,10 +448,12 @@
 
         private void AddResource(object parameter)
         {
-            //
-            // TODO: add completion object that clears this.IsAccessoryViewPresented flag.
-            //
-            this.NavigationService.PushAccessoryView("SelectNewResourceTypeView", null, new AccessoryViewCompletion(this));
+            Contract.Assert(null == _accessoryViewCTS);
+
+            _accessoryViewCTS = new CancellationTokenSource();
+            this.NavigationService.PushAccessoryView("SelectNewResourceTypeView",
+                _accessoryViewCTS.Token,
+                new AccessoryViewCompletion(this));
             this.IsAccessoryViewPresented = true;
         }
 
@@ -481,9 +486,24 @@
         private void ExecuteCancelAccessoryView(object parameter)
         {
             //
-            // TODO: cancel the current accessory view (there can be only one).
+            // Cancel the current accessory view (there can be only one).
             //
             Contract.Assert(parameter is IHandleable);
+            Contract.Assert(null != _accessoryViewCTS);
+
+            CancellationTokenSource cts = _accessoryViewCTS;
+            cts.Cancel();
+            //
+            // Assert that the accessory view has cleaned up its cancellation token.
+            // Because another accessory view could have been presented, check that the current
+            // cancellation token is not the one that has been cancelled above.
+            //
+            Contract.Assert(!object.ReferenceEquals(cts, _accessoryViewCTS));
+            //
+            // Mark the event as not handled so the original pointer event will get bubbled up
+            // the visual tree (where it will most likely do nothing).
+            //
+            ((IHandleable)parameter).Handled = false;
         }
     }
 }
