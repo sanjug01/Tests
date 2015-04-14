@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Data;
+    using RdClient.Shared.Test.Helpers;
     using RdClient.Shared.Test.UAP;
     using System;
     using System.Collections.Generic;
@@ -319,6 +320,41 @@
             model2.Property += 1;
             Assert.AreEqual(1, reportedSenders.Count);
             Assert.IsTrue(collection.Save.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void HasModelReturnsFalseForEmptyCollection()
+        {
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+            Assert.IsFalse(collection.HasModel(Guid.NewGuid()));
+        }
+
+        [TestMethod]
+        public void HasModelReturnsTrueForModelsInCollection()
+        {
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+            int numberOfModels = 10;
+            Guid[] modelGuids = new Guid[numberOfModels];
+            for (int i = 0; i < numberOfModels; i++)
+            {
+                modelGuids[i] = collection.AddNewModel(new TestModel());
+            }
+            foreach (Guid guid in modelGuids)
+            {
+                Assert.IsTrue(collection.HasModel(guid));
+            }
+        }
+
+        [TestMethod]
+        public void HasModelReturnsFalseForModelsNotInCollection()
+        {
+            IModelCollection<TestModel> collection = PrimaryModelCollection<TestModel>.Load(_emptyFolder, _serializer);
+            int numberOfModels = 10;
+            for (int i = 0; i < numberOfModels; i++)
+            {
+                collection.AddNewModel(new TestModel());
+            }
+            Assert.IsFalse(collection.HasModel(Guid.NewGuid()));
         }
     }
 }
