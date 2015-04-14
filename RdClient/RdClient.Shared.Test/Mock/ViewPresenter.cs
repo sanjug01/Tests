@@ -3,31 +3,21 @@ using RdMock;
 
 namespace RdClient.Shared.Test.Mock
 {
-    public class ViewPresenter : MockBase, IViewPresenter
+    public class ViewPresenter : MockBase, IViewPresenter, IStackedViewPresenter
     {
-        public void PresentView(IPresentableView view)
+        void IViewPresenter.PresentView(IPresentableView view)
         {
             Invoke(new object[] { view } );
         }
 
-        public void PushModalView(IPresentableView view)
+        void IStackedViewPresenter.PushView(IPresentableView view, bool animated)
         {
-            Invoke(new object[] { view });
+            Invoke(new object[] { view, animated });
         }
 
-        public void DismissModalView(IPresentableView view)
+        void IStackedViewPresenter.DismissView(IPresentableView view, bool animated)
         {
-            Invoke(new object[] { view });
-        }
-
-        public void PresentingFirstModalView()
-        {
-            Invoke(new object[] { });
-        }
-
-        public void DismissedLastModalView()
-        {
-            Invoke(new object[] { });
+            Invoke(new object[] { view, animated });
         }
     }
 }

@@ -19,7 +19,6 @@ namespace RdClient.Views
 
         public void Activating(object activationParameter)
         {
-            
         }
 
         public void Presenting(INavigationService navigationService, object activationParameter)

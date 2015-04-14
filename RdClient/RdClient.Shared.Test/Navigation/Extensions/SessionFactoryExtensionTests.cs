@@ -31,7 +31,7 @@
             }
 
             [DebuggerNonUserCode] // exclude from code coverage
-            void IViewModel.Presenting(INavigationService navigationService, object activationParameter, IModalPresentationContext presentationContext)
+            void IViewModel.Presenting(INavigationService navigationService, object activationParameter, IStackedPresentationContext presentationContext)
             {
                 throw new NotImplementedException();
             }

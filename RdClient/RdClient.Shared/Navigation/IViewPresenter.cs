@@ -10,23 +10,5 @@
         /// </summary>
         /// <param name="view">the view to be added</param>
         void PresentView(IPresentableView view);
-        /// <summary>
-        /// addes a view onto the modal view stack
-        /// </summary>
-        /// <param name="view">the view to be added</param>
-        void PushModalView(IPresentableView view);
-        /// <summary>
-        /// removes a view from the modal view stack
-        /// </summary>
-        /// <param name="view">the view to be removed</param>
-        void DismissModalView(IPresentableView view);
-        /// <summary>
-        /// called after the first modal view is pushed onto the stack
-        /// </summary>
-        void PresentingFirstModalView();
-        /// <summary>
-        /// called after the last modal view has been popped from the stack
-        /// </summary>
-        void DismissedLastModalView();
     }
 }

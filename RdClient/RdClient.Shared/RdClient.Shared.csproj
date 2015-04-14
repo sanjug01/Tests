@@ -291,7 +291,8 @@
     <Compile Include="Navigation\IPresentationAnimation.cs" />
     <Compile Include="Navigation\IBackCommandArgs.cs" />
     <Compile Include="Navigation\IPresentationCompletion.cs" />
-    <Compile Include="Navigation\IModalPresentationContext.cs" />
+    <Compile Include="Navigation\IStackedPresentationContext.cs" />
+    <Compile Include="Navigation\IStackedViewPresenter.cs" />
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
@@ -299,6 +300,7 @@
     <Compile Include="ViewModels\CertificateValidationCompletion.cs" />
     <Compile Include="ViewModels\AddOrEditWorkspaceViewModel.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModel.cs" />
+    <Compile Include="ViewModels\DesktopEditorViewModel.cs" />
     <Compile Include="ViewModels\GatewayViewModel.cs" />
     <Compile Include="ViewModels\CredentialViewModel.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModel.cs" />
@@ -322,6 +324,7 @@
     <Compile Include="ViewModels\IEditCredentialsTask.cs" />
     <Compile Include="ViewModels\IEditCredentialsViewControl.cs" />
     <Compile Include="ViewModels\IEditCredentialsViewModel.cs" />
+    <Compile Include="ViewModels\IHandleable.cs" />
     <Compile Include="ViewModels\IRemoteConnectionViewModel.cs" />
     <Compile Include="ViewModels\IRemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
@@ -346,6 +349,7 @@
     <Compile Include="ViewModels\PanKnobViewModel.cs" />
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
+    <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
     <Compile Include="ViewModels\UserComboBoxElement.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />

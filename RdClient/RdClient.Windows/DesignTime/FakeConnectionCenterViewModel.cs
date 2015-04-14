@@ -19,6 +19,7 @@ namespace RdClient.DesignTime
 
         private readonly ObservableCollection<BarItemModel> _toolbarItemsSource;
         private readonly ReadOnlyObservableCollection<BarItemModel> _toolbarItems;
+        private readonly RelayCommand _cancelAccessoryView;
 
         public FakeConnectionCenterViewModel()
         {
@@ -46,6 +47,8 @@ namespace RdClient.DesignTime
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => { }), "Home"));
             _toolbarItemsSource.Add(new SeparatorBarItemModel());
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => { }), "Home"));
+
+            _cancelAccessoryView = new RelayCommand(o => { });
         }
 
         public RelayCommand AddDesktopCommand
@@ -89,6 +92,16 @@ namespace RdClient.DesignTime
         {
             get { return true; }
             set { }
+        }
+
+        public bool IsAccessoryViewPresented
+        {
+            get { return false; }
+        }
+
+        public ICommand CancelAccessoryView
+        {
+            get { return _cancelAccessoryView; }
         }
     }
 }

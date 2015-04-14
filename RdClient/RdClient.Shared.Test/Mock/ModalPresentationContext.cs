@@ -2,10 +2,10 @@
 
 namespace RdClient.Shared.Test.Mock
 {
-    class ModalPresentationContext : IModalPresentationContext
+    class ModalPresentationContext : IStackedPresentationContext
     {
         public object Result { get; private set; }
-        void IModalPresentationContext.Dismiss(object result)
+        void IStackedPresentationContext.Dismiss(object result)
         {
             this.Result = result;
         }      

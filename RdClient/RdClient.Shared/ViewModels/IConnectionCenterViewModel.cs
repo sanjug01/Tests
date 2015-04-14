@@ -1,7 +1,8 @@
-﻿using System.Collections.ObjectModel;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using System.Collections.ObjectModel;
+    using System.Windows.Input;
+
     public interface IConnectionCenterViewModel
     {
         RelayCommand AddDesktopCommand { get; }
@@ -18,5 +19,8 @@ namespace RdClient.Shared.ViewModels
         bool HasApps { get; }
         bool ShowDesktops { get; set; }
         bool ShowApps { get; set; }
+
+        bool IsAccessoryViewPresented { get; }
+        ICommand CancelAccessoryView { get; }
     }
 }

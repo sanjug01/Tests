@@ -10,7 +10,7 @@
         /// <param name="activationParameter">Arbitrary parameter passed to the navigation service.</param>
         /// <param name="presentationContext">Context of presenting a view/view model on the model stack.
         /// The non-null parameter is passed only to view models pushed onto the model stack.</param>
-        void Presenting(INavigationService navigationService, object activationParameter, IModalPresentationContext presentationContext);
+        void Presenting(INavigationService navigationService, object activationParameter, IStackedPresentationContext presentationContext);
 
         void Dismissing();
 

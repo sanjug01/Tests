@@ -113,6 +113,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AccessoryViewPresenter.xaml.cs">
+      <DependentUpon>AccessoryViewPresenter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\AppHeaderControl.xaml.cs">
       <DependentUpon>AppHeaderControl.xaml</DependentUpon>
     </Compile>
@@ -157,6 +160,9 @@
     </Compile>
     <Compile Include="Controls\MouseLayerControl.xaml.cs">
       <DependentUpon>MouseLayerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PointerPressDetector.xaml.cs">
+      <DependentUpon>PointerPressDetector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RdSessionPanControl.xaml.cs">
       <DependentUpon>RdSessionPanControl.xaml</DependentUpon>
@@ -219,6 +225,9 @@
     <Compile Include="Views\DeleteUserView.xaml.cs">
       <DependentUpon>DeleteUserView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DesktopEditorView.xaml.cs">
+      <DependentUpon>DesktopEditorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EditCredentialsView.xaml.cs">
       <DependentUpon>EditCredentialsView.xaml</DependentUpon>
     </Compile>
@@ -274,6 +283,9 @@
     </Compile>
     <Compile Include="Views\AddOrEditDesktopView.xaml.cs">
       <DependentUpon>AddOrEditDesktopView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectNewResourceTypeView.xaml.cs">
+      <DependentUpon>SelectNewResourceTypeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
@@ -332,6 +344,10 @@
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\AccessoryViewPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\AppHeaderControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -389,6 +405,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MouseLayerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PointerPressDetector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -456,6 +476,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\DesktopEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\EditCredentialsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -505,6 +529,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddOrEditDesktopView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SelectNewResourceTypeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
