@@ -195,6 +195,7 @@
     <Compile Include="Input\Pointer\IPointerManipulator.cs" />
     <Compile Include="Input\Pointer\ITouchContext.cs" />
     <Compile Include="Input\Pointer\MouseMode.cs" />
+    <Compile Include="Input\Pointer\PointerModeControl.cs" />
     <Compile Include="Input\Pointer\PointerModeTransitionConditions.cs" />
     <Compile Include="Input\Pointer\PointerModeTransitions.cs" />
     <Compile Include="Input\Pointer\PointerMode\DirectModeControl.cs" />

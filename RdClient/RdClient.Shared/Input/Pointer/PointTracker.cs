@@ -17,6 +17,7 @@ namespace RdClient.Shared.Input
     {
         private Dictionary<UInt32, Point> _trackedPoints = new Dictionary<UInt32, Point>();
         private LinkedList<UInt32> _pointSequence = new LinkedList<UInt32>();
+        private Point _lastCenter = new Point(0, 0);
 
         public void Track(Point point, UInt32 id)
         {
@@ -62,7 +63,7 @@ namespace RdClient.Shared.Input
             {
                 if(_pointSequence.Count == 0)
                 {
-                    throw new PointTrackerException("no contacts tracked");
+                    return _lastCenter;
                 }
                 else if(_pointSequence.Count == 1)
                 {
@@ -70,11 +71,13 @@ namespace RdClient.Shared.Input
                 }
                 else
                 {
-                    return new Point()
-                    {
-                        X = (_trackedPoints[_pointSequence.ElementAt(0)].X + _trackedPoints[_pointSequence.ElementAt(1)].X) / 2,
-                        Y = (_trackedPoints[_pointSequence.ElementAt(0)].Y + _trackedPoints[_pointSequence.ElementAt(1)].Y) / 2
-                    };
+                    _lastCenter = new Point()
+                        {
+                            X = (_trackedPoints[_pointSequence.ElementAt(0)].X + _trackedPoints[_pointSequence.ElementAt(1)].X) / 2,
+                            Y = (_trackedPoints[_pointSequence.ElementAt(0)].Y + _trackedPoints[_pointSequence.ElementAt(1)].Y) / 2
+                        };
+
+                    return _lastCenter;
                 }
             }
         }

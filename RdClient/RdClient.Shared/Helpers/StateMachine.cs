@@ -52,7 +52,7 @@ namespace RdClient.Shared.Helpers
                 {
                     transition.Action(parameter);
                     _state = transition.Destination;
-                    //Debug.WriteLine(_state);
+                    Debug.WriteLine(_state);
                     return;
                 }
             }

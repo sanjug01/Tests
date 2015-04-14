@@ -13,7 +13,7 @@ namespace RdClient.Shared.Input.Pointer
                 e.Timer.IsExpired(DoubleClickTimer.ClickTimerType.LeftClick) == true;
         }
         public static void Idle_LeftDown_Action(StateMachineEvent e)
-        {
+        {            
         }
 
         public static bool LeftDown_Idle_Condition(StateMachineEvent e)
@@ -89,11 +89,20 @@ namespace RdClient.Shared.Input.Pointer
             e.Timer.Stop();
         }
 
+        public static bool RightDoubleDown_Idle_Condition(StateMachineEvent e)
+        {
+            return e.Input.Action == PointerEventAction.ManipulationCompleted;
+        }
+        public static void RightDoubleDown_Idle_Action(StateMachineEvent e)
+        {
+
+        }
+
         public static bool LeftDown_Move_Condition(StateMachineEvent e)
         {
             return
                 e.Input.Action == PointerEventAction.ManipulationStarted &&
-                RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Cummulative.Translation) > 3;
+                RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Cummulative.Translation) > GlobalConstants.TouchMoveThreshold;
         }
 
         public static void LeftDown_Move_Action(StateMachineEvent e)
@@ -106,19 +115,13 @@ namespace RdClient.Shared.Input.Pointer
         {
             return
                 (e.Input.Action == PointerEventAction.ManipulationDelta &&
-                    RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Delta.Translation) > 3) ||
-                (e.Input.Action == PointerEventAction.ManipulationInertiaStarting &&
-                    RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Cummulative.Translation) > 3);
+                    RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Delta.Translation) > GlobalConstants.TouchMoveThreshold);
         }
         public static void Move_Move_Action(StateMachineEvent e)
         {
             if(e.Input.Action == PointerEventAction.ManipulationDelta)
             {
                 e.Control.Move(((IManipulationRoutedEventProperties)e.Input).Delta.Translation);
-            }
-            else
-            {
-                e.Control.Move(((IManipulationRoutedEventProperties)e.Input).Cummulative.Translation);
             }
         }
 
@@ -134,7 +137,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             return
                 e.Input.Action == PointerEventAction.ManipulationStarted &&
-                RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Cummulative.Translation) > 3;
+                RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Cummulative.Translation) > GlobalConstants.TouchMoveThreshold;
         }
         public static void LeftDoubleDown_LeftDrag_Action(StateMachineEvent e)
         {
@@ -145,7 +148,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             return
                 e.Input.Action == PointerEventAction.ManipulationDelta &&
-                RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Delta.Translation) > 3;
+                RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Delta.Translation) > GlobalConstants.TouchMoveThreshold;
         }
 
         public static void LeftDrag_LeftDrag_Action(StateMachineEvent e)
@@ -167,7 +170,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             return
                 e.Input.Action == PointerEventAction.ManipulationStarted &&
-                RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Cummulative.Translation) > 3;
+                RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Cummulative.Translation) > GlobalConstants.TouchMoveThreshold;
         }
         public static void RightDoubleDown_RightDrag_Action(StateMachineEvent e)
         {
@@ -178,7 +181,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             return
                 e.Input.Action == PointerEventAction.ManipulationDelta &&
-                RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Delta.Translation) > 3;
+                RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Delta.Translation) > GlobalConstants.TouchMoveThreshold;
         }
 
         public static void RightDrag_RightDrag_Action(StateMachineEvent e)
@@ -241,9 +244,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public static bool Scroll_Idle_Condition(StateMachineEvent e)
         {
-            return 
-                e.Tracker.Contacts < 1 ||
-                e.Input.Action == PointerEventAction.ZoomScrollCompleted;
+            return e.Input.Action == PointerEventAction.ManipulationCompleted;
         }
 
         public static void Scroll_Idle_Action(StateMachineEvent e)
@@ -276,9 +277,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public static bool ZoomPan_Idle_Condition(StateMachineEvent e)
         {
-            return
-                e.Tracker.Contacts < 1 ||
-                e.Input.Action == PointerEventAction.ZoomScrollCompleted;
+            return e.Input.Action == PointerEventAction.ManipulationCompleted;
         }
 
         public static void ZoomPan_Idle_Action(StateMachineEvent e)

@@ -14,7 +14,7 @@ namespace RdClient.Input
     public class PointerCapture : IPointerCapture, IPointerManipulator
     {
         private IExecutionDeferrer _deferrer;
-        private IRemoteSessionControl _control;
+        private IRemoteSessionControl _sessionControl;
         private IRenderingPanel _panel;
         private IPointerEventConsumerOld _consumerOld;
         private IPointerEventConsumer _consumer;
@@ -24,13 +24,13 @@ namespace RdClient.Input
             set { _consumerOld.ConsumptionMode = value; }
         }
 
-        public PointerCapture(IExecutionDeferrer deferrer, IRemoteSessionControl control, IRenderingPanel panel, ITimerFactory timerFactory)
+        public PointerCapture(IExecutionDeferrer deferrer, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory)
         {
             _deferrer = deferrer;
-            _control = control;
+            _sessionControl = sessionControl;
             _panel = panel;
             _consumerOld = new PointerEventDispatcher(timerFactory.CreateTimer(), this, panel);
-            _consumer = new PointerModeConsumer(timerFactory.CreateTimer(), new DummyPointerControl());
+            _consumer = new PointerModeConsumer(timerFactory.CreateTimer(), new PointerModeControl(sessionControl));
             this.ConsumptionMode = ConsumptionMode.Pointer;
         }
 
@@ -78,17 +78,17 @@ namespace RdClient.Input
 
         public void SendMouseAction(MouseEventType eventType)
         {
-            this._control.SendMouseAction(new MouseAction(eventType, MousePosition));
+            this._sessionControl.SendMouseAction(new MouseAction(eventType, MousePosition));
         }
 
         public void SendMouseWheel(int delta, bool isHorizontal)
         {
-            this._control.SendMouseWheel(delta, isHorizontal);
+            this._sessionControl.SendMouseWheel(delta, isHorizontal);
         }
 
         public void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime)
         {
-            this._control.SendTouchAction(type, contactId, position, frameTime);
+            this._sessionControl.SendTouchAction(type, contactId, position, frameTime);
         }
 
     }
