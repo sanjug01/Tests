@@ -422,8 +422,9 @@
   <data name="AddOrEditDesktop-PcName.Text" xml:space="preserve">
     <value>(r) PC Name</value>
   </data>
-  <data name="AddOrEditDesktop-PcNameHint.Text" xml:space="preserve">
+  <data name="AddOrEditDesktop-PcNameTextBox.PlaceholderText" xml:space="preserve">
     <value>(r) Host name or IP address</value>
+    <comment>Placeholder text shown when there is no text entered into the PcName text box.</comment>
   </data>
   <data name="AddOrEditDesktop-ConnectToAdminSession.Content" xml:space="preserve">
     <value>(r) Connect to admin session</value>

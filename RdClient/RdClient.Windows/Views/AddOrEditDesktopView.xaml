@@ -77,17 +77,12 @@
                                    Text="PC Name(d)"/>
                     </StackPanel>
                     <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
-                        <TextBlock Margin="4,8" 
-                                       Style="{ThemeResource BodyTextBlockStyle}"
-                                       x:Uid="AddOrEditDesktop-PcNameHint" 
-                                       Text="Host name or IP address(d)" 
-                                       Foreground="{StaticResource rdGrayBrush}"
-                                       Visibility="{Binding ElementName=txtHostEntry, Path=Text, Converter={StaticResource StringLengthToInvisibilityConverter}}" Width="390" />
-
                         <TextBox Name="txtHostEntry" 
-                                     Background="Transparent"
-                                     Margin="0,8" 
-                                     Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    x:Uid="AddOrEditDesktop-PcNameTextBox"
+                                    Background="Transparent"
+                                    PlaceholderText="Host name or IP address (d)"
+                                    Margin="0,8" 
+                                    Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             </TextBox>
                           
                         </Grid>
