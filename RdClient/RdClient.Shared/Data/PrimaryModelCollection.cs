@@ -8,6 +8,7 @@
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.IO;
+    using System.Linq;
     using System.Windows.Input;
 
     public sealed class PrimaryModelCollection<TModel> : IModelCollection<TModel> where TModel : class, IPersistentStatus
@@ -70,6 +71,11 @@
             _save.EmitCanExecuteChanged();
 
             return container.Id;
+        }
+
+        public bool HasModel(Guid id)
+        {
+            return _originalModels.Any(c => id.Equals(c.Id));
         }
 
         TModel IModelCollection<TModel>.GetModel(Guid id)

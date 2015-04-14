@@ -10,6 +10,7 @@
         ReadOnlyObservableCollection<IModelContainer<TModel>> Models { get; }
         Guid AddNewModel(TModel newModel);
         TModel GetModel(Guid id);
+        bool HasModel(Guid id);
         TModel RemoveModel(Guid id);
     }
 }
