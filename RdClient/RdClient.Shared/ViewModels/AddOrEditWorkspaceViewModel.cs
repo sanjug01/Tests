@@ -176,10 +176,10 @@
 
         private UserComboBoxElement GetComboBoxItem(CredentialsModel cred)
         {
-            return this.CredentialOptions.Single(cbe =>
+            return this.CredentialOptions.FirstOrDefault(cbe =>
             {
-                return cbe.Credentials != null && cbe.Credentials.Model == cred;
-            });
+                return cbe.UserComboBoxType == UserComboBoxType.Credentials && cbe.Credentials?.Model == cred;
+            });          
         }
 
         private void LoadComboBoxItems()

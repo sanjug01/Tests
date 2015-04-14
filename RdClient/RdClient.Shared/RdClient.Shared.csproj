@@ -252,6 +252,7 @@
     <Compile Include="Models\RemoteSessionInternalStates\ValidateCertificate.cs" />
     <Compile Include="Models\RemoteSessionSetup.cs" />
     <Compile Include="Models\RemoteSessionState.cs" />
+    <Compile Include="Models\SessionGateway.cs" />
     <Compile Include="Models\SessionCredentials.cs" />
     <Compile Include="Models\SessionFactory.cs" />
     <Compile Include="Models\SessionFailureEventArgs.cs" />
