@@ -7,24 +7,59 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300"
+    d:DesignHeight="400"
     d:DesignWidth="400">
     
     <UserControl.DataContext>
         <vm:SelectNewResourceTypeViewModel />
     </UserControl.DataContext>
-    
-    <Grid>
+
+    <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-            <Button Command="{Binding AddDesktop}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10, 10">
-                <TextBlock Text="(d)Add Desktop" FontSize="30"/>
-            </Button>
-            <Button Command="{Binding AddOnPremiseWorkspace}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10, 10">
-                <TextBlock Text="(d)Add On-premise Workspace" FontSize="30"/>
-            </Button>
-            <Button Command="{Binding AddCloudWorkspace}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10, 10">
-                <TextBlock Text="(d)Add Cloud Workspace" FontSize="30"/>
-            </Button>
+            
+            <TextBlock Margin="20,20" Text="(d) Add New" FontSize="20"/>
+
+            <Grid Margin="30,20">
+                <Grid Margin="10,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="(d) Desktop" />
+                    <TextBlock Grid.Row="1" Text="(d) Connect to a remote PC" />
+                </Grid>
+                <Button Style="{StaticResource InvisibleButtonStyle}" Command="{Binding AddDesktop}"/>
+            </Grid>
+
+            <Grid Margin="30,20">
+                <Grid Margin="10,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="(d) Azure RemoteApp" />
+                    <TextBlock Grid.Row="1" Text="(d) Get to apps from Azure RemoteApp" />
+                </Grid>
+                <Button Style="{StaticResource InvisibleButtonStyle}" Command="{Binding AddCloudWorkspace}"/>
+            </Grid>
+
+
+            <Grid Margin="30,20">
+                <Grid Margin="10,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="(d) Remote Resource" />
+                    <TextBlock Grid.Row="1" Text="(d) Access published apps and desktops" />
+                </Grid>
+                <Button Style="{StaticResource InvisibleButtonStyle}" Command="{Binding AddOnPremiseWorkspace}"/>
+            </Grid>
+            
+            <HyperlinkButton Margin="20,20">
+                <TextBlock Text="(d) Learn more"/>
+            </HyperlinkButton>
+
         </StackPanel>
     </Grid>
 </UserControl>
