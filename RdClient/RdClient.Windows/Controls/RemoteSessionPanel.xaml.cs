@@ -142,7 +142,7 @@
 
         private void OnZoomScrollEvent(object sender, ZoomScrollEventArgs e)
         {
-            
+            this.RenderingPanel.EmitPointerEvent(e.ZoomScrollEvent);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

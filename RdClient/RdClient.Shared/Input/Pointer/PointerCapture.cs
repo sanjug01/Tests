@@ -36,7 +36,7 @@ namespace RdClient.Input
 
         public void OnPointerChangedOld(object sender, PointerEventArgs args)
         {
-            _consumerOld.ConsumeEvent(args.PointerEvent);
+            //_consumerOld.ConsumeEvent(args.PointerEvent);
         }
 
         public void OnPointerChanged(object sender, IPointerEventBase e)

@@ -241,7 +241,9 @@ namespace RdClient.Shared.Input.Pointer
 
         public static bool Scroll_Idle_Condition(StateMachineEvent e)
         {
-            return e.Input.Action == PointerEventAction.ZoomScrollCompleted;
+            return 
+                e.Tracker.Contacts < 1 ||
+                e.Input.Action == PointerEventAction.ZoomScrollCompleted;
         }
 
         public static void Scroll_Idle_Action(StateMachineEvent e)
@@ -274,7 +276,9 @@ namespace RdClient.Shared.Input.Pointer
 
         public static bool ZoomPan_Idle_Condition(StateMachineEvent e)
         {
-            return e.Input.Action == PointerEventAction.ZoomScrollCompleted;
+            return
+                e.Tracker.Contacts < 1 ||
+                e.Input.Action == PointerEventAction.ZoomScrollCompleted;
         }
 
         public static void ZoomPan_Idle_Action(StateMachineEvent e)
