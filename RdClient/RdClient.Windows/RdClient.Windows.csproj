@@ -281,6 +281,9 @@
     <Compile Include="Views\AddOrEditDesktopView.xaml.cs">
       <DependentUpon>AddOrEditDesktopView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SelectNewResourceTypeView.xaml.cs">
+      <DependentUpon>SelectNewResourceTypeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
@@ -519,6 +522,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddOrEditDesktopView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SelectNewResourceTypeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

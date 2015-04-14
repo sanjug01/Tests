@@ -3,10 +3,13 @@
 namespace RdClient.Controls
 {
     using RdClient.Shared.Navigation;
+    using RdClient.Shared.ViewModels;
     using System;
     using System.Diagnostics.Contracts;
+    using System.Windows.Input;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Input;
 
     public sealed partial class AccessoryViewPresenter : UserControl, IStackedViewPresenter
     {
@@ -18,6 +21,27 @@ namespace RdClient.Controls
             typeof(double), typeof(AccessoryViewPresenter),
             new PropertyMetadata(0.0));
 
+        public readonly DependencyProperty CancellationRequestedProperty = DependencyProperty.Register("CancellationRequested",
+            typeof(ICommand), typeof(AccessoryViewPresenter),
+            new PropertyMetadata(null));
+
+        private sealed class CommandParameter : IHandleable
+        {
+            private readonly PointerRoutedEventArgs _e;
+
+            public CommandParameter(PointerRoutedEventArgs e)
+            {
+                Contract.Assert(null != e);
+                _e = e;
+            }
+
+            bool IHandleable.Handled
+            {
+                get { return _e.Handled; }
+                set { _e.Handled = value; }
+            }
+        }
+
         private enum VisualStateName
         {
             SidePanel,
@@ -28,12 +52,19 @@ namespace RdClient.Controls
         {
             this.InitializeComponent();
             this.SizeChanged += this.OnSizeChanged;
+            this.OverlayPanel.PointerPressed += this.OnPointerPressed;
         }
 
         public double AccessoryWidth
         {
             get { return (double)GetValue(AccessoryWidthProperty); }
             set { SetValue(AccessoryWidthProperty, value); }
+        }
+
+        public ICommand CancellationRequested
+        {
+            get { return (ICommand)GetValue(CancellationRequestedProperty); }
+            set { SetValue(CancellationRequestedProperty, value); }
         }
 
         public double FullScreenWidth
@@ -77,6 +108,21 @@ namespace RdClient.Controls
                 visualState = VisualStateName.FullScreen;
 
             VisualStateManager.GoToState(this, visualState.ToString(), true);
+        }
+
+        private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            ICommand command = this.CancellationRequested;
+
+            if(null != command)
+            {
+                IHandleable param = new CommandParameter(e);
+
+                if(command.CanExecute(param))
+                {
+                    command.Execute(param);
+                }
+            }
         }
     }
 }

@@ -1,16 +1,15 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
-    using System.Linq;
+    using System.Windows.Input;
+    using System;
 
     public class ConnectionCenterViewModel : DeferringViewModelBase,
         IConnectionCenterViewModel,
@@ -44,6 +43,9 @@
         private bool _hasDesktops;
         private bool _hasApps;
 
+        private bool _isAccessoryViewVisible;
+        private RelayCommand _cancelAccessoryView;
+
         //
         // App bar items
         //
@@ -60,7 +62,7 @@
         // Alphabetical comparer of desktop model host names; the class is used to automatically
         // sort the observable collection of local desktops.
         //
-        private class DesktopModelAlphabeticalComparer : IComparer<IModelContainer<RemoteConnectionModel>>
+        private sealed class DesktopModelAlphabeticalComparer : IComparer<IModelContainer<RemoteConnectionModel>>
         {
             int IComparer<IModelContainer<RemoteConnectionModel>>.Compare(IModelContainer<RemoteConnectionModel> x, IModelContainer<RemoteConnectionModel> y)
             {
@@ -100,6 +102,21 @@
             }
         }
 
+        private sealed class AccessoryViewCompletion : IPresentationCompletion
+        {
+            private readonly ConnectionCenterViewModel _vm;
+
+            public AccessoryViewCompletion(ConnectionCenterViewModel vm)
+            {
+                _vm = vm;
+            }
+
+            void IPresentationCompletion.Completed(IPresentableView view, object result)
+            {
+                _vm.IsAccessoryViewPresented = false;
+            }
+        }
+
         public ConnectionCenterViewModel()
         {
             this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);            
@@ -115,11 +132,14 @@
             //
             // Add toolbar buttons
             //
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, new RelayCommand(this.AddResource, this.CanAddResource), "Add"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.MultiSelection, new RelayCommand(this.ToggleDesktopSelectionCommandExecute), "Select"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
             //
             //_toolbarItemsSource.Add(new SeparatorBarItemModel());
             //
+            _isAccessoryViewVisible = false;
+            _cancelAccessoryView = new RelayCommand(this.ExecuteCancelAccessoryView);
 
             this.SelectedCount = 0;
         }
@@ -206,6 +226,17 @@
                     SetProperty(ref _showApps, value);
                 }
             }
+        }
+
+        public bool IsAccessoryViewPresented
+        {
+            get { return _isAccessoryViewVisible; }
+            private set { this.SetProperty(ref _isAccessoryViewVisible, value); }
+        }
+
+        public ICommand CancelAccessoryView
+        {
+            get { return _cancelAccessoryView; }
         }
 
         public int SelectedCount
@@ -412,6 +443,20 @@
             }
         }
 
+        private void AddResource(object parameter)
+        {
+            //
+            // TODO: add completion object that clears this.IsAccessoryViewPresented flag.
+            //
+            this.NavigationService.PushAccessoryView("SelectNewResourceTypeView", null, new AccessoryViewCompletion(this));
+            this.IsAccessoryViewPresented = true;
+        }
+
+        private bool CanAddResource(object parameter)
+        {
+            return true;
+        }
+
         private void ToggleDesktopSelectionCommandExecute(object o)
         {
 
@@ -431,6 +476,14 @@
         private IWorkspaceViewModel CreateWorkspaceViewModel(IModelContainer<OnPremiseWorkspaceModel> workspace)
         {
             return new WorkspaceViewModel(workspace, this.ApplicationDataModel, this, this.NavigationService, _sessionFactory);
+        }
+
+        private void ExecuteCancelAccessoryView(object parameter)
+        {
+            //
+            // TODO: cancel the current accessory view (there can be only one).
+            //
+            Contract.Assert(parameter is IHandleable);
         }
     }
 }

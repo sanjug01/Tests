@@ -307,6 +307,7 @@
     <Compile Include="ViewModels\IEditCredentialsTask.cs" />
     <Compile Include="ViewModels\IEditCredentialsViewControl.cs" />
     <Compile Include="ViewModels\IEditCredentialsViewModel.cs" />
+    <Compile Include="ViewModels\IHandleable.cs" />
     <Compile Include="ViewModels\IRemoteConnectionViewModel.cs" />
     <Compile Include="ViewModels\IRemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
@@ -331,6 +332,7 @@
     <Compile Include="ViewModels\PanKnobViewModel.cs" />
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
+    <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
     <Compile Include="ViewModels\UserComboBoxElement.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />

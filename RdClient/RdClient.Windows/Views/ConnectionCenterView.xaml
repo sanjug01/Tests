@@ -41,12 +41,20 @@
                     <controls:ConnectionCenterTitleBar Grid.Column="0" />
                     <controls:DynamicToolbar Grid.Column="1" />
                 </Grid>
+                <controls:PointerPressDetector
+                    Grid.Row="0"
+                    Visibility="{Binding IsAccessoryViewPresented, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    PointerPressDetected="{Binding CancelAccessoryView}" />
 
                 <Grid Grid.Row="1">
                     <controls:ItsLonelyHereControl />
                     <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <controls:AccessoryViewPresenter Visibility="Collapsed" AccessoryWidth="480" FullScreenWidth="640"/>
+                    <controls:AccessoryViewPresenter
+                        Visibility="Collapsed"
+                        AccessoryWidth="480"
+                        FullScreenWidth="640"
+                        CancellationRequested="{Binding CancelAccessoryView}"/>
                 </Grid>
             </Grid>
         </DataTemplate>
@@ -61,17 +69,25 @@
 
                 <Grid Grid.Row="0" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
                     <controls:ConnectionCenterTitleBar />
+                    <controls:PointerPressDetector
+                        Visibility="{Binding IsAccessoryViewPresented, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        PointerPressDetected="{Binding CancelAccessoryView}" />
                 </Grid>
 
                 <Grid Grid.Row="1">
                     <controls:ItsLonelyHereControl />
                     <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <controls:AccessoryViewPresenter Visibility="Collapsed" />
+                    <controls:AccessoryViewPresenter
+                        Visibility="Collapsed"
+                        CancellationRequested="{Binding CancelAccessoryView}" />
                 </Grid>
 
                 <Grid Grid.Row="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
                     <controls:DynamicToolbar HorizontalAlignment="Center"/>
+                    <controls:PointerPressDetector
+                        Visibility="{Binding IsAccessoryViewPresented, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        PointerPressDetected="{Binding CancelAccessoryView}" />
                 </Grid>
             </Grid>
         </DataTemplate>
@@ -85,18 +101,28 @@
                 </Grid.RowDefinitions>
 
                 <controls:ConnectionCenterTitleBar Grid.Row="0" />
+                <controls:PointerPressDetector
+                    Grid.Row="0"
+                    Visibility="{Binding IsAccessoryViewPresented, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    PointerPressDetected="{Binding CancelAccessoryView}" />
 
                 <Grid Grid.Row="1">
                     <controls:ItsLonelyHereControl />
                     <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <controls:AccessoryViewPresenter Visibility="Collapsed" />
+                    <controls:AccessoryViewPresenter
+                        Visibility="Collapsed"
+                        CancellationRequested="{Binding CancelAccessoryView}" />
                 </Grid>
 
                 <Grid Grid.Row="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
                     <!-- Align toolbar buttons to the right to make the layout different from the narrow one -->
                     <controls:DynamicToolbar HorizontalAlignment="Right"/>
                 </Grid>
+                <controls:PointerPressDetector
+                    Grid.Row="2"
+                    Visibility="{Binding IsAccessoryViewPresented, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    PointerPressDetected="{Binding CancelAccessoryView}" />
             </Grid>
         </DataTemplate>
 

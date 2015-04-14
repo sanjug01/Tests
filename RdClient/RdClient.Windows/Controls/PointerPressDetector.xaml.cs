@@ -2,6 +2,7 @@
 
 namespace RdClient.Controls
 {
+    using RdClient.Shared.ViewModels;
     using System.Windows.Input;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
@@ -19,6 +20,22 @@ namespace RdClient.Controls
         public readonly DependencyProperty PointerPressDetectedProperty = DependencyProperty.Register("PointerPressDetected",
             typeof(ICommand), typeof(PointerPressDetector),
             new PropertyMetadata(null));
+
+        private sealed class CommandParameter : IHandleable
+        {
+            private readonly PointerRoutedEventArgs _e;
+
+            public CommandParameter(PointerRoutedEventArgs e)
+            {
+                _e = e;
+            }
+
+            bool IHandleable.Handled
+            {
+                get { return _e.Handled; }
+                set { _e.Handled = value; }
+            }
+        }
 
         public PointerPressDetector()
         {
@@ -41,9 +58,11 @@ namespace RdClient.Controls
             // so it bubbles up the visual tree and some underlying UI element will have a chance to handle
             // the pointer press.
             //
-            if(!e.Handled && null != command && command.CanExecute(e))
+            IHandleable parameter = new CommandParameter(e);
+
+            if(!e.Handled && null != command && command.CanExecute(parameter))
             {
-                command.Execute(e);
+                command.Execute(parameter);
             }
         }
     }
