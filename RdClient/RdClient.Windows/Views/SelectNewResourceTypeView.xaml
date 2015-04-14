@@ -15,8 +15,16 @@
     </UserControl.DataContext>
     
     <Grid>
-        <Button Command="{Binding AddDesktop}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10, 10">
-            <TextBlock Text="Add Desktop" FontSize="30"/>
-        </Button>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+            <Button Command="{Binding AddDesktop}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10, 10">
+                <TextBlock Text="(d)Add Desktop" FontSize="30"/>
+            </Button>
+            <Button Command="{Binding AddOnPremiseWorkspace}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10, 10">
+                <TextBlock Text="(d)Add On-premise Workspace" FontSize="30"/>
+            </Button>
+            <Button Command="{Binding AddCloudWorkspace}" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="10, 10">
+                <TextBlock Text="(d)Add Cloud Workspace" FontSize="30"/>
+            </Button>
+        </StackPanel>
     </Grid>
 </UserControl>

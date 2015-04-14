@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Converters"
+    xmlns:sc="using:RdClient.Shared.Converters"
     xmlns:System="using:System"    
     xmlns:design="using:RdClient.DesignTime"
     xmlns:vm="using:RdClient.Shared.ViewModels"
@@ -24,6 +25,7 @@
     <Page.Resources>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <sc:NegateBooleanConverter x:Key="NegateBooleanConverter" />
         
         <DataTemplate x:Key="DefaultLayoutTemplate">
             <Grid>
@@ -32,14 +34,21 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
+                <Grid
+                    Grid.Row="0"
+                    Background="{StaticResource ConnectionCenterBarBackgroundBrush}"
+                    Height="{StaticResource ConnectionCenterTitleBarHeight}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    
-                    <controls:ConnectionCenterTitleBar Grid.Column="0" />
-                    <controls:DynamicToolbar Grid.Column="1" />
+
+                    <controls:ConnectionCenterTitleBar
+                        Grid.Column="0"
+                        IsEnabled="{Binding IsAccessoryViewPresented, Converter={StaticResource NegateBooleanConverter}}" />
+                    <controls:DynamicToolbar
+                        Grid.Column="1"
+                        IsEnabled="{Binding IsAccessoryViewPresented, Converter={StaticResource NegateBooleanConverter}}" />
                 </Grid>
                 <controls:PointerPressDetector
                     Grid.Row="0"
@@ -68,7 +77,8 @@
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
-                    <controls:ConnectionCenterTitleBar />
+                    <controls:ConnectionCenterTitleBar
+                        IsEnabled="{Binding IsAccessoryViewPresented, Converter={StaticResource NegateBooleanConverter}}" />
                     <controls:PointerPressDetector
                         Visibility="{Binding IsAccessoryViewPresented, Converter={StaticResource BooleanToVisibilityConverter}}"
                         PointerPressDetected="{Binding CancelAccessoryView}" />
@@ -84,7 +94,9 @@
                 </Grid>
 
                 <Grid Grid.Row="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
-                    <controls:DynamicToolbar HorizontalAlignment="Center"/>
+                    <controls:DynamicToolbar
+                        HorizontalAlignment="Center"
+                        IsEnabled="{Binding IsAccessoryViewPresented, Converter={StaticResource NegateBooleanConverter}}" />
                     <controls:PointerPressDetector
                         Visibility="{Binding IsAccessoryViewPresented, Converter={StaticResource BooleanToVisibilityConverter}}"
                         PointerPressDetected="{Binding CancelAccessoryView}" />
@@ -100,7 +112,9 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <controls:ConnectionCenterTitleBar Grid.Row="0" />
+                <controls:ConnectionCenterTitleBar
+                    Grid.Row="0"
+                    IsEnabled="{Binding IsAccessoryViewPresented, Converter={StaticResource NegateBooleanConverter}}" />
                 <controls:PointerPressDetector
                     Grid.Row="0"
                     Visibility="{Binding IsAccessoryViewPresented, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -117,7 +131,9 @@
 
                 <Grid Grid.Row="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
                     <!-- Align toolbar buttons to the right to make the layout different from the narrow one -->
-                    <controls:DynamicToolbar HorizontalAlignment="Right"/>
+                    <controls:DynamicToolbar
+                        HorizontalAlignment="Right"
+                        IsEnabled="{Binding IsAccessoryViewPresented, Converter={StaticResource NegateBooleanConverter}}" />
                 </Grid>
                 <controls:PointerPressDetector
                     Grid.Row="2"

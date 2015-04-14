@@ -58,6 +58,7 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BytesToBitmapConverter.cs" />
     <Compile Include="Converters\EnumMemberToSymbolStringConverter.cs" />
+    <Compile Include="Converters\NegateBooleanConverter.cs" />
     <Compile Include="Converters\NotNullToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\PanKnobStateToBackGroundBrushConverter.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Helpers\ITimer.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
+    <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
     <Compile Include="Input\Pointer\IPointerCapture.cs" />
     <Compile Include="Input\Pointer\MouseAction.cs" />
@@ -280,6 +282,7 @@
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
+    <Compile Include="ViewModels\AccessoryViewModelBase.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModel.cs" />
     <Compile Include="ViewModels\CertificateValidationCompletion.cs" />
     <Compile Include="ViewModels\AddOrEditWorkspaceViewModel.cs" />
