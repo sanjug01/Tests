@@ -75,7 +75,14 @@
 
                 _connection.SetCredentials(_session._sessionSetup.SessionCredentials.Credentials,
                     !_session._sessionSetup.SessionCredentials.IsNewPassword);
-                //TODO: pass gateway if necessary
+
+                // pass gateway, if necessary
+                if (_session._sessionSetup.SessionGateway.HasGateway)
+                {
+                    _connection.SetGateway(
+                        _session._sessionSetup.SessionGateway.Gateway,
+                        _session._sessionSetup.SessionGateway.Credentials);
+                }
 
                 _connection.Connect();
             }
@@ -113,6 +120,14 @@
 
                     case RdpDisconnectCode.FreshCredsRequired:
                         RequestNewPassword(e.DisconnectReason);
+                        break;
+
+                    case RdpDisconnectCode.ProxyNeedCredentials:
+                        // TODO: Gateway needs credential
+                        break;
+
+                    case RdpDisconnectCode.ProxyLogonFailed:
+                        // TODO: Gateway credentials failed - propmt for new credentials
                         break;
 
                     default:
