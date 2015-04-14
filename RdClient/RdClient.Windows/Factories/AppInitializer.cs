@@ -35,8 +35,6 @@
             _backButtonHandler = new BackButtonHandler(systemNavigationManager, _navigationService);
         }
 
-        public Button BackButton { private get; set; }
-
         public void Initialize()
         {
             Contract.Assert(this.ViewPresenter != null);
@@ -80,13 +78,6 @@
             _applicationDataSaver = new DeferredCommand(appDataModel.Save, deferredExecution, timerFactory, SaveDataDelayMilliseconds);
 
             _navigationService.NavigateToView(this.LandingPage, null);
-
-            //TODO: Remove this once Win10 API to show the back button in the taskbar is enabled
-            Button backButton = this.BackButton;
-            if (backButton != null)
-            {
-                backButton.Command = _navigationService.BackCommand;
-            }
         }
 
         public INavigationService CreateNavigationService()

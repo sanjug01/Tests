@@ -214,14 +214,5 @@
             Command="{Binding ShowBar}">
             <TextBlock FontSize="12" x:Uid="MainPage-ShowApplicationBarLabel" Text="show application bar(d)" />
         </Button>
-        <!-- Use our own back button until the Win10 API to show the back button in the taskbar is enabled -->
-        <Button 
-            x:Name="BackButton" 
-            x:FieldModifier="public"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top" 
-            Style="{StaticResource BackButtonStyle}" 
-            Command="{Binding GoBackCommand}">            
-        </Button>
     </Grid>
 </Page>
