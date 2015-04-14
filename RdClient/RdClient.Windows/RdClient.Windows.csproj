@@ -244,11 +244,17 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Content Include="..\..\RdClientCx\openssl\winrt\x86chk\libeay32.dll">
+      <Link>libeay32.dll</Link>
+    </Content>
+    <Content Include="..\..\RdClientCx\openssl\winrt\x86chk\rdpwinrttransportrpc.dll">
+      <Link>rdpwinrttransportrpc.dll</Link>
+    </Content>
+    <Content Include="..\..\RdClientCx\openssl\winrt\x86chk\ssleay32.dll">
+      <Link>ssleay32.dll</Link>
+    </Content>
     <Content Include="Assets\desktop_placeholder.png" />
     <Content Include="Assets\SegMDL2.1.12.ttf" />
-    <Content Include="libeay32.dll" />
-    <Content Include="rdpwinrttransportrpc.dll" />
-    <Content Include="ssleay32.dll" />
     <None Include="Models\AppDataStorage.cs" />
     <Compile Include="Navigation\DispatchedNavigationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
