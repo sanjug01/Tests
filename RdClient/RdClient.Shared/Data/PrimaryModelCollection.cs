@@ -75,7 +75,7 @@
 
         public bool HasModel(Guid id)
         {
-            return _originalModels.Any(c => id.Equals(c.Id));
+            return _originalModels.Any(c => c?.Id.Equals(id) ?? false);
         }
 
         TModel IModelCollection<TModel>.GetModel(Guid id)
