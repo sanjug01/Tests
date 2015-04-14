@@ -654,23 +654,23 @@
     <comment>Title shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
   </data>
   <data name="AddOrEditGateway-ServerName-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Invalid characters in server name</value>
+    <value>(r) Invalid characters in server name</value>
     <comment>Text shown on AddOrEditGateway dialog - error hint</comment>
   </data>
   <data name="AddOrEditGateway-ServerName.Text" xml:space="preserve">
-    <value>Server Name</value>
+    <value>(r) Server Name</value>
     <comment>Text shown on AddOrEditGateway dialog - Server name caption</comment>
   </data>
   <data name="AddOrEditGateway-ServerNameHint.Text" xml:space="preserve">
-    <value>Host name or IP address</value>
+    <value>(r) Host name or IP address</value>
     <comment>Text shown on AddOrEditGateway dialog - Server name hint</comment>
   </data>
   <data name="DeleteGatewayView-Message.Text" xml:space="preserve">
-    <value>Are you sure you want to delete this gateway?</value>
+    <value>(r) Are you sure you want to delete this gateway?</value>
     <comment>Message of the delete gateway dialog</comment>
   </data>
   <data name="DeleteGatewayView-Title.Text" xml:space="preserve">
-    <value>Delete gateway:</value>
+    <value>(r) Delete gateway:</value>
     <comment>Title of the delete gateway dialog</comment>
   </data>
   <data name="Settings_Gateways_AddGateway_Detail.Text" xml:space="preserve">
@@ -682,7 +682,19 @@
     <comment>Title above add gateway button in the gateway settings section of the global settings page</comment>
   </data>
   <data name="Settings_NavBarItem_Gateways.Content" xml:space="preserve">
-    <value>Gateways</value>
+    <value>(r) Gateways</value>
     <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show Gateways Settings</comment>
+  </data>
+  <data name="AddOrEditGateway-AddCaption.Text" xml:space="preserve">
+    <value>(r) Add Gateway</value>
+    <comment>Title of the dialog to add new gateway </comment>
+  </data>
+  <data name="AddOrEditGateway-Credentials.Text" xml:space="preserve">
+    <value>(r) User name</value>
+    <comment>Text shown on AddOrEditGateway view - user name</comment>
+  </data>
+  <data name="AddOrEditGateway-EditCaption.Text" xml:space="preserve">
+    <value>(r) Edit Gateway</value>
+    <comment>Title of the dialog to edit existing gateway</comment>
   </data>
 </root>
