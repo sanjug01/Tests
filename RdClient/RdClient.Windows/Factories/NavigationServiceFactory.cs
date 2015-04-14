@@ -30,6 +30,7 @@ namespace RdClient.Factories
             viewFactory.AddViewClass("AddOrEditGatewayView", typeof(Views.AddOrEditGatewayView));
             viewFactory.AddViewClass("DeleteGatewayView", typeof(Views.DeleteGatewayView));
             viewFactory.AddViewClass("SelectNewResourceTypeView", typeof(Views.SelectNewResourceTypeView));
+            viewFactory.AddViewClass("DesktopEditorView", typeof(Views.DesktopEditorView));
 
             //
             // Remote session view must be a singleton, because it creates the swap chain panel passed

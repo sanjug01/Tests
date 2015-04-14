@@ -225,6 +225,9 @@
     <Compile Include="Views\DeleteUserView.xaml.cs">
       <DependentUpon>DeleteUserView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DesktopEditorView.xaml.cs">
+      <DependentUpon>DesktopEditorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\EditCredentialsView.xaml.cs">
       <DependentUpon>EditCredentialsView.xaml</DependentUpon>
     </Compile>
@@ -470,6 +473,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\DeleteUserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DesktopEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

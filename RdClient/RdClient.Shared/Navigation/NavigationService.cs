@@ -160,11 +160,6 @@ namespace RdClient.Shared.Navigation
                     throw new NavigationServiceException("Trying to present an already presented accessory view.");
                 }
 
-                if (_modalStack.Count == 0)
-                {
-                    EmitPushingFirstModalView();
-                }
-
                 PresentedStackedView presentedView = new PresentedAccessoryView(this, view, presentationCompletion);
                 _accessoryStack.Add(presentedView);
                 CallPresenting(view, activationParameter, presentedView);
@@ -209,6 +204,7 @@ namespace RdClient.Shared.Navigation
             // From the top of the stack dismiss all the views down to the requested one.
             //
             int index = viewStack.Count;
+            IList<PresentedStackedView> reportCompletion = new List<PresentedStackedView>();
 
             do
             {
@@ -219,7 +215,7 @@ namespace RdClient.Shared.Navigation
 
                 CallDismissing(psv.View);
                 presenter.DismissView(psv.View, true);
-                psv.ReportCompletion();
+                reportCompletion.Add(psv);
                 viewStack.RemoveAt(index);
             } while (!dismissed);
 
@@ -253,6 +249,9 @@ namespace RdClient.Shared.Navigation
                         extension.Presenting(vm);
                 });
             }
+
+            foreach (PresentedStackedView psv in reportCompletion)
+                psv.ReportCompletion();
         }
 
         private void BackCommandExecute(object param)

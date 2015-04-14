@@ -104,19 +104,51 @@
             }
         }
 
-        private sealed class AccessoryViewCompletion : IPresentationCompletion
+        private abstract class AccessoryViewCompletion : IPresentationCompletion
         {
             private readonly ConnectionCenterViewModel _vm;
 
-            public AccessoryViewCompletion(ConnectionCenterViewModel vm)
+            protected ConnectionCenterViewModel ViewModel { get { return _vm; } }
+
+            protected AccessoryViewCompletion(ConnectionCenterViewModel vm)
             {
                 _vm = vm;
             }
+
+            protected abstract void OnCompleted(object result);
 
             void IPresentationCompletion.Completed(IPresentableView view, object result)
             {
                 _vm.IsAccessoryViewPresented = false;
                 _vm._accessoryViewCTS = null;
+                OnCompleted(result);
+            }
+        }
+
+        private sealed class NewResourceSelectorCompletion : AccessoryViewCompletion
+        {
+            public NewResourceSelectorCompletion(ConnectionCenterViewModel vm) : base(vm) { }
+
+            protected override void OnCompleted(object result)
+            {
+                if (null != result)
+                {
+                    switch((SelectNewResourceTypeViewModel.Result)result)
+                    {
+                        case SelectNewResourceTypeViewModel.Result.AddDesktop:
+                            this.ViewModel.PushNewDesktopAccessoryView();
+                            break;
+                    }
+                }
+            }
+        }
+
+        private sealed class AddNewDesktopCompletion : AccessoryViewCompletion
+        {
+            public AddNewDesktopCompletion(ConnectionCenterViewModel vm) : base(vm) { }
+
+            protected override void OnCompleted(object result)
+            {
             }
         }
 
@@ -453,7 +485,19 @@
             _accessoryViewCTS = new CancellationTokenSource();
             this.NavigationService.PushAccessoryView("SelectNewResourceTypeView",
                 _accessoryViewCTS.Token,
-                new AccessoryViewCompletion(this));
+                new NewResourceSelectorCompletion(this));
+            this.IsAccessoryViewPresented = true;
+        }
+
+        private void PushNewDesktopAccessoryView()
+        {
+            Contract.Assert(null == _accessoryViewCTS);
+            Contract.Assert(!this.IsAccessoryViewPresented);
+
+            _accessoryViewCTS = new CancellationTokenSource();
+            this.NavigationService.PushAccessoryView("DesktopEditorView",
+                _accessoryViewCTS.Token,
+                new AddNewDesktopCompletion(this));
             this.IsAccessoryViewPresented = true;
         }
 

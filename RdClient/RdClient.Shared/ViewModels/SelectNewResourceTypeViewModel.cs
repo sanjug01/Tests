@@ -8,6 +8,11 @@
     {
         private readonly RelayCommand _addDesktop;
 
+        public enum Result
+        {
+            AddDesktop,
+        }
+
         public ICommand AddDesktop
         {
             get { return _addDesktop; }
@@ -23,7 +28,7 @@
             //
             // Dismiss self as a modal view; this will also dismisses accessory views.
             //
-            this.DismissModal(null);
+            this.DismissModal(Result.AddDesktop);
         }
 
         protected override void OnPresenting(object activationParameter)
