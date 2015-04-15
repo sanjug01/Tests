@@ -9,7 +9,7 @@
     /// Information about gateway and assigned credentials model used by a particular session.
     /// This object may be edited by the in-session credentials editing task.
     /// </summary>
-    public sealed class SessionGateway
+    public sealed class SessionGateway : ISessionCredentials
     {
         private readonly GatewayModel _gateway;
         //
@@ -90,15 +90,17 @@
                 credentialsId = dataModel.Credentials.AddNewModel(newCredentials);
             }
 
+            _gateway.CredentialsId = credentialsId;
+
             return credentialsId;
         }
 
         public SessionGateway()
         {
-            _gateway = null;
-            _credentials = null;
+            _gateway = new GatewayModel();
+            _credentials = new CredentialsModel();
             _hasGateway = false;
-            _newPassword = false;
+            _newPassword = true;
         }
 
         public SessionGateway(
@@ -107,17 +109,13 @@
             )
         {
             _gateway = new GatewayModel();
+            _credentials = new CredentialsModel();
 
             savedGateway.Model.CopyTo(_gateway);
-            if (_gateway.HasCredentials)
+            if (_gateway.HasCredentials && null != savedCredentials)
             {
-                _credentials = new CredentialsModel();
                 savedCredentials.Model.CopyTo(_credentials);
                 _credentials.PropertyChanged += this.OnCredentialsPropertyChanged;
-            }
-            else
-            {
-                _credentials = null;
             }
 
             _newPassword = false;
