@@ -25,18 +25,13 @@
 
     <StackPanel Background="WhiteSmoke">
         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
-        <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
-            <TextBlock Margin="4,8" 
-                                       Style="{ThemeResource BodyTextBlockStyle}"
-                                       x:Uid="AddOrEditDesktop-PcFriendlyNameHint" 
-                                       Text="Connection friendly name (d)" 
-                                       Foreground="{StaticResource rdGrayBrush}"
-                                       Visibility="{Binding ElementName=txtFriendlyNameEntry, Path=Text, Converter={StaticResource StringLengthToInvisibilityConverter}}" Width="390" />
-
-            <TextBox Name="txtFriendlyNameEntry" 
-                                     Background="Transparent"
-                                     Margin="0,8" 
-                                     Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+        <Grid Style="{StaticResource rdEntryFieldGridStyle}">
+            <TextBox Name="txtFriendlyNameEntry"
+                     x:Uid="AddOrEditDesktop-PcFriendlyNameTextbox"
+                     Background="Transparent"
+                     Margin="0,8" 
+                     PlaceholderText="Connection friendly name (d)"           
+                     Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             </TextBox>
         </Grid>
         

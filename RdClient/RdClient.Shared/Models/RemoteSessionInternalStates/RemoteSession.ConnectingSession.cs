@@ -27,6 +27,17 @@
                 _cancelledCredentials = false;
             }
 
+            public ConnectingSession(IRenderingPanel renderingPanel, IRdpConnection connection, InternalState otherState)
+                : base(SessionState.Connecting, otherState)
+            {
+                Contract.Assert(null != renderingPanel);
+                Contract.Assert(null != connection);
+
+                _renderingPanel = renderingPanel;
+                _connection = connection;
+                _cancelledCredentials = false;
+            }
+
             public override void Activate(RemoteSession session)
             {
                 Contract.Assert(null == _session);
@@ -64,27 +75,37 @@
 
             private void OnRenderingPanelReady(object sender, EventArgs e)
             {
-                _connection = _session.InternalCreateConnection(_renderingPanel);
-                Contract.Assert(null != _connection);
-                Contract.Assert(null != _session._syncEvents);
-
-                _session._syncEvents.ClientConnected += this.OnClientConnected;
-                _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
-                _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
-                _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
-
-                _connection.SetCredentials(_session._sessionSetup.SessionCredentials.Credentials,
-                    !_session._sessionSetup.SessionCredentials.IsNewPassword);
-
-                // pass gateway, if necessary
-                if (_session._sessionSetup.SessionGateway.HasGateway)
+                if (null == _connection)
                 {
-                    _connection.SetGateway(
-                        _session._sessionSetup.SessionGateway.Gateway,
-                        _session._sessionSetup.SessionGateway.Credentials);
-                }
+                    _connection = _session.InternalCreateConnection(_renderingPanel);
+                    Contract.Assert(null != _connection);
+                    Contract.Assert(null != _session._syncEvents);
 
-                _connection.Connect();
+                    _session._syncEvents.ClientConnected += this.OnClientConnected;
+                    _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                    _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+                    _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
+
+                    _connection.SetCredentials(_session._sessionSetup.SessionCredentials.Credentials,
+                        !_session._sessionSetup.SessionCredentials.IsNewPassword);
+
+                    // pass gateway, if necessary
+                    if (_session._sessionSetup.SessionGateway.HasGateway)
+                    {
+                        _connection.SetGateway(
+                            _session._sessionSetup.SessionGateway.Gateway,
+                            _session._sessionSetup.SessionGateway.Credentials);
+                    }
+
+                    _connection.Connect();
+                }
+                else
+                {
+                    _session._syncEvents.ClientConnected += this.OnClientConnected;
+                    _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                    _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+                    _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
+                }
             }
 
             private void OnClientConnected(object sender, ClientConnectedArgs e)
@@ -123,13 +144,20 @@
                         break;
 
                     case RdpDisconnectCode.ProxyNeedCredentials:
-                        // TODO: Gateway needs credential
+                        // Gateway needs credentials
+                        RequestNewGatewayCredentials(e.DisconnectReason);
                         break;
 
                     case RdpDisconnectCode.ProxyLogonFailed:
-                        // TODO: Gateway credentials failed - propmt for new credentials
+                        // Gateway credentials failed - prompt for new credentials
+                        RequestValidGatewayCredentials(e.DisconnectReason);
                         break;
 
+                    case RdpDisconnectCode.CredSSPUnsupported:
+                        // TODO: Task:2390695 Should prompt that the server identity cannot be verified 
+                        // we skip validation for now. 
+                        connection.HandleAsyncDisconnectResult(e.DisconnectReason, true);
+                        break;
                     default:
                         connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
                         break;
@@ -184,7 +212,7 @@
                     // Set the state to ValidateCertificate, that will emit a BadCertificate event from the session
                     // and handle the user's response to the event.
                     //
-                    _session.InternalSetState(new ValidateCertificate(_connection, reason, this));
+                    _session.InternalSetState(new ValidateCertificate(_renderingPanel, _connection, reason, this));
                 }
             }
 
@@ -253,6 +281,80 @@
                 // Stay in the state and wait for the connection to terminate.
                 //
                 using(LockWrite())
+                {
+                    _cancelledCredentials = true;
+                    _connection.HandleAsyncDisconnectResult((RdpDisconnectReason)e.State, false);
+                }
+            }
+
+
+            private void RequestValidGatewayCredentials(RdpDisconnectReason reason)
+            {
+                //
+                // Emit an event with a credentials editor task.
+                //
+                InSessionCredentialsTask task = new InSessionCredentialsTask(
+                    _session._sessionSetup.SessionGateway,
+                    _session._sessionSetup.DataModel,
+                    "d:Invalid user name or password for the gateway",
+                    reason);
+
+                task.Submitted += this.NewGatewayCredentialsSubmitted;
+                task.Cancelled += this.NewGatewayCredentialsCancelled;
+
+                _session.DeferEmitCredentialsNeeded(task);
+            }
+
+            private void RequestNewGatewayCredentials(RdpDisconnectReason reason)
+            {
+                //
+                // Emit an event with a credentials editor task.
+                //
+                InSessionCredentialsTask task = new InSessionCredentialsTask(
+                    _session._sessionSetup.SessionGateway,
+                    _session._sessionSetup.DataModel,
+                    "d:Gateway server has requested a new password to be typed in",
+                    reason);
+
+                task.Submitted += this.NewGatewayCredentialsSubmitted;
+                task.Cancelled += this.NewGatewayCredentialsCancelled;
+
+                _session.DeferEmitCredentialsNeeded(task);
+            }
+
+            private void NewGatewayCredentialsSubmitted(object sender, InSessionCredentialsTask.SubmittedEventArgs e)
+            {
+                InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
+
+                task.Submitted -= this.NewGatewayCredentialsSubmitted;
+                task.Cancelled -= this.NewGatewayCredentialsCancelled;
+
+                if (e.SaveCredentials)
+                    _session._sessionSetup.SaveGatewayCredentials();
+                //
+                // Go ahead and try to re-connect with new gateway credentials.
+                // Stay in the same state, update the session credentials and call HandleAsyncDisconnectResult
+                // to re-connect.
+                //
+                using (LockWrite())
+                {
+                    _connection.SetGateway(_session._sessionSetup.SessionGateway.Gateway,
+                        _session._sessionSetup.SessionGateway.Credentials);
+                    _connection.HandleAsyncDisconnectResult((RdpDisconnectReason)e.State, true);
+                }
+            }
+
+            private void NewGatewayCredentialsCancelled(object sender, InSessionCredentialsTask.ResultEventArgs e)
+            {
+                InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
+
+                task.Submitted -= this.NewGatewayCredentialsCancelled;
+                task.Cancelled -= this.NewGatewayCredentialsCancelled;
+                //
+                // User has cancelled the credentials dialog.
+                // Stay in the state and wait for the connection to terminate.
+                //
+                using (LockWrite())
                 {
                     _cancelledCredentials = true;
                     _connection.HandleAsyncDisconnectResult((RdpDisconnectReason)e.State, false);
