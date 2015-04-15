@@ -9,7 +9,7 @@
 
     public sealed class InSessionCredentialsTask : EditCredentialsTaskBase
     {
-        private readonly SessionCredentials _sessionCredentials;
+        private readonly ISessionCredentials _sessionCredentials;
         private readonly ApplicationDataModel _dataModel;
         private readonly string _prompt;
         private readonly IValidationRule _userNameRule;
@@ -44,7 +44,7 @@
             }
         }
 
-        public InSessionCredentialsTask(SessionCredentials sessionCredentials,
+        public InSessionCredentialsTask(ISessionCredentials sessionCredentials,
             ApplicationDataModel dataModel,
             string prompt,
             object state)

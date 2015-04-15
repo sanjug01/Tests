@@ -81,33 +81,22 @@
                                    Text="User (d)"/>
                     </StackPanel>
                     <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
-                        <TextBlock Margin="4,8" 
-                                       Style="{ThemeResource BodyTextBlockStyle}"
-                                       x:Uid="AddUser-UserHint" 
-                                       Text="Username (d)" 
-                                       Foreground="{StaticResource rdGrayBrush}"
-                                       Visibility="{Binding ElementName=txtUser, Path=Text, Converter={StaticResource StringLengthToInvisibilityConverter}}" Width="390" />
-
                         <TextBox Name="txtUser" 
-                                     Background="Transparent"
-                                     Margin="0,8" 
-                                     Text="{Binding Path=User, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-
+                                    x:Uid="AddUser-UsernameTextbox"
+                                    Background="Transparent"
+                                    Margin="0,8" 
+                                    PlaceholderText="Username (d)"
+                                    Text="{Binding Path=User, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
 
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddUser-Password" Text="Password (d)"/>
                     <Grid Style="{StaticResource rdEntryFieldGridStyle}">
-                        <TextBlock Margin="4,8" 
-                                           Style="{ThemeResource BodyTextBlockStyle}"
-                                           x:Uid="AddUser-PasswordHint" 
-                                           Text="Password (d)" 
-                                           Foreground="{StaticResource rdGrayBrush}"
-                                           Visibility="{Binding ElementName=txtPassword, Path=Password, Converter={StaticResource StringLengthToInvisibilityConverter}}" Width="390" />
-
-                        <PasswordBox Name="txtPassword" 
-                                         Background="Transparent"
-                                         Margin="0,8" 
-                                         Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <PasswordBox Name="txtPassword"
+                                     x:Uid="AddUser-PasswordTextbox"
+                                     Background="Transparent"
+                                     Margin="0,8" 
+                                     PlaceholderText="Password (d)"
+                                     Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
                     
                     <CheckBox 
