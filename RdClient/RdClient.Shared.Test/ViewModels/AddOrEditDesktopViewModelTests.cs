@@ -208,6 +208,32 @@
         }
 
         [TestMethod]
+        public void EditDesktop_ShouldResetCredentials()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
+                Guid credId = _dataModel.Credentials.AddNewModel(credentials);
+
+                DesktopModel desktop = new DesktopModel() { HostName = "foo" , CredentialsId = credId};
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+
+                _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 0;
+
+                navigation.Expect("DismissModalView", new List<object> { null }, null);
+                _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+
+                Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
+                Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
+                Assert.AreSame(desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+                Assert.AreEqual(Guid.Empty, ((DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model).CredentialsId);
+            }
+        }
+
+        [TestMethod]
         public void EditDesktop_ShouldSelectAskAlways()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
@@ -573,6 +599,32 @@
                 Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
                 Assert.AreSame(desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
                 Assert.AreEqual(gatewayId, ((DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model).GatewayId);
+            }
+        }
+
+        [TestMethod]
+        public void EditDesktop_ShouldResetGateway()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                GatewayModel gateway = new GatewayModel() { HostName = "fooGateway" };
+                Guid gatewayId = _dataModel.Gateways.AddNewModel(gateway);
+
+                DesktopModel desktop = new DesktopModel() { HostName = "foo", GatewayId = gatewayId };
+                _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+
+                EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+                ((IViewModel)_addOrEditDesktopViewModel).Presenting(navigation, args, null);
+
+                _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex = 0;
+
+                navigation.Expect("DismissModalView", new List<object> { null }, null);
+                _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+
+                Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
+                Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
+                Assert.AreSame(desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+                Assert.AreEqual(Guid.Empty, ((DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model).GatewayId);
             }
         }
 
