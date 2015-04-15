@@ -47,6 +47,11 @@ namespace RdClient.Shared.Input.Pointer
                 PointerModeTransitionConditions.Move_Move_Action);
 
             stateMachine.AddTransition(
+                PointerState.Move, PointerState.LeftDown,
+                PointerModeTransitionConditions.Move_LeftDown_Condition,
+                PointerModeTransitionConditions.Move_LeftDown_Action);
+
+            stateMachine.AddTransition(
                 PointerState.Move, PointerState.Idle,
                 PointerModeTransitionConditions.Move_Idle_Condition,
                 PointerModeTransitionConditions.Move_Idle_Action);

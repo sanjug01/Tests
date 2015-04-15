@@ -133,6 +133,18 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
+        public static bool Move_LeftDown_Condition(StateMachineEvent e)
+        {
+            return
+                e.Input.Action == PointerEventAction.PointerPressed &&
+                e.Tracker.Contacts == 1;
+        }
+
+        public static void Move_LeftDown_Action(StateMachineEvent e)
+        {
+
+        }
+
         public static bool Move_Idle_Condition(StateMachineEvent e)
         {
             return e.Input.Action == PointerEventAction.ManipulationCompleted;
