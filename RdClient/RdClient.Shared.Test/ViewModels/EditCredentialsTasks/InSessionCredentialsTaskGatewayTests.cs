@@ -9,9 +9,6 @@
     using RdClient.Shared.ViewModels;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System.Collections.Generic;
-    using System;
-
-
 
     /// <summary>
     /// using a separate set of test for InSessionCredentialsTask with gateway credentials.
