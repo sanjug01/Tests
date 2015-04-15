@@ -259,7 +259,9 @@
     <Compile Include="Models\ThumbnailEncoder.cs" />
     <Compile Include="Models\Snapshotter.cs" />
     <Compile Include="Models\WorkspaceModel.cs" />
+    <Compile Include="Navigation\BackButtonHandler.cs" />
     <Compile Include="Navigation\BackCommandArgs.cs" />
+    <Compile Include="Navigation\BackRequestedEventArgsWrapper.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarItemsSourceContract.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarSiteContract.cs" />
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
