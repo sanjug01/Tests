@@ -132,6 +132,11 @@
                         RequestValidGatewayCredentials(e.DisconnectReason);
                         break;
 
+                    case RdpDisconnectCode.CredSSPUnsupported:
+                        // TODO: Task:2390695 Should prompt that the server identity cannot be verified 
+                        // we skip validation for now. 
+                        connection.HandleAsyncDisconnectResult(e.DisconnectReason, true);
+                        break;
                     default:
                         connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
                         break;
