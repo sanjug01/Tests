@@ -5,17 +5,27 @@
     using System;
     using System.Diagnostics.Contracts;
 
+    /// <summary>
+    /// Base class for view view models of accessory views shown in the connection center.
+    /// </summary>
     public abstract class AccessoryViewModelBase : ViewModelBase
     {
         private SynchronousCompletion _completion;
 
-        public event EventHandler Completed;
-
+        /// <summary>
+        /// Base class for presentation completion objects passed to the navigation service to report completion
+        /// of accessory views shown in the connection center.
+        /// </summary>
         public abstract class CompletionBase : IPresentationCompletion
         {
             public event EventHandler Completed;
             public event EventHandler Cancelled;
 
+            /// <summary>
+            /// Overridable called when IPresentationCompletion.Completed is called with non-null result.
+            /// </summary>
+            /// <param name="result">Non-null value passed to IPresentationCompletion.Completed</param>
+            /// <remarks>Default implementation does nothing so there is no need to call it.</remarks>
             protected virtual void OnCompleted(object result)
             {
             }
