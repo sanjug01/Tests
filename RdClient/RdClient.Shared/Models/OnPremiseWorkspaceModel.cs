@@ -81,7 +81,18 @@
 
         public CredentialsModel Credential
         {
-            get { return _dataModel.Credentials.GetModel(this.CredentialsId); }
+            get
+            {
+                Guid id = this.CredentialsId;
+                if (id != Guid.Empty)
+                {
+                    return _dataModel.Credentials.GetModel(id);
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         public WorkspaceState State
