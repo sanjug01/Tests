@@ -422,8 +422,9 @@
   <data name="AddOrEditDesktop-PcName.Text" xml:space="preserve">
     <value>(r) PC Name</value>
   </data>
-  <data name="AddOrEditDesktop-PcNameHint.Text" xml:space="preserve">
+  <data name="AddOrEditDesktop-PcNameTextBox.PlaceholderText" xml:space="preserve">
     <value>(r) Host name or IP address</value>
+    <comment>Placeholder text shown when there is no text entered into the PcName text box.</comment>
   </data>
   <data name="AddOrEditDesktop-ConnectToAdminSession.Content" xml:space="preserve">
     <value>(r) Connect to admin session</value>
@@ -441,9 +442,9 @@
     <value>(r) More details</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
-  <data name="AddOrEditDesktop-PcFriendlyNameHint.Text" xml:space="preserve">
+  <data name="AddOrEditDesktop-PcFriendlyNameTextbox.PlaceholderText" xml:space="preserve">
     <value>(r) Connection friendly name</value>
-    <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
+    <comment>Placeholder text shown on AddOrEditDesktop view - extra settings when no friendly name has been entered</comment>
   </data>
   <data name="AddOrEditDesktop-Sound.Text" xml:space="preserve">
     <value>(r) Sound</value>
@@ -471,8 +472,9 @@
   <data name="AddUser-Password.Text" xml:space="preserve">
     <value>(r) Password</value>
   </data>
-  <data name="AddUser-PasswordHint.Text" xml:space="preserve">
+  <data name="AddUser-PasswordTextbox.PlaceholderText" xml:space="preserve">
     <value>(r) Password</value>
+    <comment>Placeholder text shown when there is no password entered in the password text box on the Add user view</comment>
   </data>
   <data name="AddUser-StoreCredentials-Checkbox.Content" xml:space="preserve">
     <value>(r) Store Credentials</value>
@@ -480,8 +482,9 @@
   <data name="AddUser-User.Text" xml:space="preserve">
     <value>(r) User</value>
   </data>
-  <data name="AddUser-UserHint.Text" xml:space="preserve">
+  <data name="AddUser-UsernameTextbox.PlaceholderText" xml:space="preserve">
     <value>(r) Username</value>
+    <comment>Placeholder text shown when there is no username entered in the username text box on the Add user view</comment>
   </data>
   <data name="AddUser-Username-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>(r) Invalid characters in user name</value>
@@ -652,5 +655,49 @@
   <data name="CredentialPromptMode_InvalidCredentials_Title_String" xml:space="preserve">
     <value>(r) Enter Credentials</value>
     <comment>Title shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
+  </data>
+  <data name="AddOrEditGateway-ServerName-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>(r) Invalid characters in server name</value>
+    <comment>Text shown on AddOrEditGateway dialog - error hint</comment>
+  </data>
+  <data name="AddOrEditGateway-ServerName.Text" xml:space="preserve">
+    <value>(r) Server Name</value>
+    <comment>Text shown on AddOrEditGateway dialog - Server name caption</comment>
+  </data>
+  <data name="AddOrEditGateway-ServerNameTextbox.PlaceholderText" xml:space="preserve">
+    <value>(r) Host name or IP address</value>
+    <comment>Placeholder text shown on AddOrEditGateway dialog - Server name hint when no server name has been entered</comment>
+  </data>
+  <data name="DeleteGatewayView-Message.Text" xml:space="preserve">
+    <value>(r) Are you sure you want to delete this gateway?</value>
+    <comment>Message of the delete gateway dialog</comment>
+  </data>
+  <data name="DeleteGatewayView-Title.Text" xml:space="preserve">
+    <value>(r) Delete gateway:</value>
+    <comment>Title of the delete gateway dialog</comment>
+  </data>
+  <data name="Settings_Gateways_AddGateway_Detail.Text" xml:space="preserve">
+    <value>(r) Add a gateway</value>
+    <comment>Text in Gateway settings page that describes what add gateway does in more detail</comment>
+  </data>
+  <data name="Settings_Gateways_AddGateway_Title.Text" xml:space="preserve">
+    <value>(r) Add new gateway</value>
+    <comment>Title above add gateway button in the gateway settings section of the global settings page</comment>
+  </data>
+  <data name="Settings_NavBarItem_Gateways.Content" xml:space="preserve">
+    <value>(r) Gateways</value>
+    <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show Gateways Settings</comment>
+  </data>
+  <data name="AddOrEditGateway-AddCaption.Text" xml:space="preserve">
+    <value>(r) Add Gateway</value>
+    <comment>Title of the dialog to add new gateway </comment>
+  </data>
+  <data name="AddOrEditGateway-Credentials.Text" xml:space="preserve">
+    <value>(r) User name</value>
+    <comment>Text shown on AddOrEditGateway view - user name</comment>
+  </data>
+  <data name="AddOrEditGateway-EditCaption.Text" xml:space="preserve">
+    <value>(r) Edit Gateway</value>
+    <comment>Title of the dialog to edit existing gateway</comment>
   </data>
 </root>

@@ -7,13 +7,14 @@
     >
     
     <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Dark">
-            <SolidColorBrush x:Key="InvisibleButtonPointerOverBackgroundThemeBrush" Color="#22FFFFFF" />
-            <SolidColorBrush x:Key="InvisibleButtonPressedBackgroundThemeBrush" Color="#88FFFFFF" />
+        <ResourceDictionary x:Key="Default">
+
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
-            <SolidColorBrush x:Key="InvisibleButtonPointerOverBackgroundThemeBrush" Color="#22000000" />
-            <SolidColorBrush x:Key="InvisibleButtonPressedBackgroundThemeBrush" Color="#88000000" />
+
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="HighContrast">
+
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
@@ -37,9 +38,6 @@
     <x:String x:Key="KeyboardIcon">&#xE765;</x:String>
     <x:String x:Key="DisconnectIcon">&#xE711;</x:String>
 
-
-    <SolidColorBrush x:Key="InvisibleButtonPointerOverBackgroundBrush" Color="#22FFFFFF" />
-    <SolidColorBrush x:Key="InvisibleButtonPressedBackgroundBrush" Color="#88FFFFFF" />
     <Style x:Key="InvisibleButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
@@ -59,7 +57,7 @@
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
                                                                        Storyboard.TargetProperty="Background">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource InvisibleButtonPointerOverBackgroundThemeBrush}" />
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -67,7 +65,7 @@
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
                                                                        Storyboard.TargetProperty="Background">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource InvisibleButtonPressedBackgroundThemeBrush}" />
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltListAccentHighBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>

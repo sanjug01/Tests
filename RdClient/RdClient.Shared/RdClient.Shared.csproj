@@ -58,6 +58,7 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BytesToBitmapConverter.cs" />
     <Compile Include="Converters\EnumMemberToSymbolStringConverter.cs" />
+    <Compile Include="Converters\NegateBooleanConverter.cs" />
     <Compile Include="Converters\NotNullToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\PanKnobStateToBackGroundBrushConverter.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
+    <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
     <Compile Include="Input\Pointer\DoubleClickTimer.cs" />
     <Compile Include="Input\Pointer\DummyPointerControl.cs" />
@@ -263,9 +265,11 @@
     <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.InactiveSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.NewSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.ReconnectingSession.cs" />
-    <Compile Include="Models\RemoteSessionInternalStates\ValidateCertificate.cs" />
+    <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.ValidateCertificate.cs" />
     <Compile Include="Models\RemoteSessionSetup.cs" />
     <Compile Include="Models\RemoteSessionState.cs" />
+    <Compile Include="Models\ISessionCredentials.cs" />
+    <Compile Include="Models\SessionGateway.cs" />
     <Compile Include="Models\SessionCredentials.cs" />
     <Compile Include="Models\SessionFactory.cs" />
     <Compile Include="Models\SessionFailureEventArgs.cs" />
@@ -273,7 +277,9 @@
     <Compile Include="Models\ThumbnailEncoder.cs" />
     <Compile Include="Models\Snapshotter.cs" />
     <Compile Include="Models\WorkspaceModel.cs" />
+    <Compile Include="Navigation\BackButtonHandler.cs" />
     <Compile Include="Navigation\BackCommandArgs.cs" />
+    <Compile Include="Navigation\BackRequestedEventArgsWrapper.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarItemsSourceContract.cs" />
     <Compile Include="Navigation\Contracts\IApplicationBarSiteContract.cs" />
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
@@ -296,6 +302,7 @@
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
+    <Compile Include="ViewModels\AccessoryViewModelBase.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModel.cs" />
     <Compile Include="ViewModels\CertificateValidationCompletion.cs" />
     <Compile Include="ViewModels\AddOrEditWorkspaceViewModel.cs" />

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RdClient.Shared.ViewModels;
-using System.Windows.Input;
-using System.Collections.ObjectModel;
-
-namespace RdClient.DesignTime
+﻿namespace RdClient.DesignTime
 {
-    public sealed class FakeConnectionCenterViewModel : IConnectionCenterViewModel
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.ViewModels;
+    using System.Collections.ObjectModel;
+    using System.Windows.Input;
+
+    public sealed class FakeConnectionCenterViewModel : DisposableObject, IConnectionCenterViewModel
     {
         private readonly ObservableCollection<IDesktopViewModel> _desktopViewModelsSource;
         private readonly ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;

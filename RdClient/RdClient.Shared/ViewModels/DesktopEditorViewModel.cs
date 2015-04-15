@@ -1,22 +1,14 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Navigation;
+    using System;
     using System.Diagnostics.Contracts;
-    using System.Threading;
 
-    public sealed class DesktopEditorViewModel : ViewModelBase
+    public sealed class DesktopEditorViewModel : AccessoryViewModelBase
     {
-        protected override void OnPresenting(object activationParameter)
+        public sealed class Completion : CompletionBase
         {
-            Contract.Assert(activationParameter is CancellationToken);
-            base.OnPresenting(activationParameter);
-
-            CancellationToken token = (CancellationToken)activationParameter;
-            token.Register(this.OnCancel);
-        }
-
-        private void OnCancel()
-        {
-            this.DismissModal(null);
         }
     }
 }
