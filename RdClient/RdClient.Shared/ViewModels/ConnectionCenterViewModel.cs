@@ -43,6 +43,7 @@
         private bool _showApps;
         private bool _hasDesktops;
         private bool _hasApps;
+        private bool _showSectionLabels;
 
         //
         // App bar items
@@ -158,6 +159,7 @@
                 {
                     this.ShowDesktops = value;
                     this.ShowApps = !value;
+                    SetShowSectionLabels();
                 }
             }
         }
@@ -174,6 +176,7 @@
                 {
                     this.ShowApps = value;
                     this.ShowDesktops = !value;
+                    SetShowSectionLabels();
                 }
             }
         }
@@ -206,6 +209,23 @@
                     SetProperty(ref _showApps, value);
                 }
             }
+        }
+
+        public bool ShowSectionLabels
+        {
+            get
+            {
+                return _showSectionLabels;
+            }
+            private set
+            {
+                SetProperty(ref _showSectionLabels, value);
+            }
+        }
+
+        private void SetShowSectionLabels()
+        {
+            this.ShowSectionLabels = this.HasDesktops && this.HasApps;
         }
 
         public int SelectedCount
