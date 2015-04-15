@@ -44,12 +44,12 @@ namespace RdClient.Shared.Input.Pointer.PointerMode
             if(_context.LastMoveOrientation == PointerMoveOrientation.Vertical)
             {
                 delta = _context.LastMoveVector.Y;
-                _manipulator.SendMouseWheel((int)delta * GlobalConstants.TouchScrollFactor, false);
+                _manipulator.SendMouseWheel((int)(delta * GlobalConstants.TouchScrollFactor), false);
             }
             else
             {
                 delta = _context.LastMoveVector.X;
-                _manipulator.SendMouseWheel((int)delta * GlobalConstants.TouchScrollFactor, true);
+                _manipulator.SendMouseWheel((int)(delta * GlobalConstants.TouchScrollFactor), true);
             }            
         }
 

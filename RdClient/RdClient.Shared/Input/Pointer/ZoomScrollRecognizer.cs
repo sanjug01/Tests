@@ -71,13 +71,13 @@ namespace RdClient.Shared.Input
 
         private ZoomScrollType GuessType(IManipulationRoutedEventProperties manipulation)
         {
-            if(Math.Abs(manipulation.Cummulative.Expansion) > 2.0)
+            if(Math.Abs(manipulation.Cummulative.Expansion) > 3.0)
             {
                 return ZoomScrollType.ZoomPan;
             }
             else
             {
-                if(RdMath.Angle(manipulation.Cummulative.Translation) > 45.0)
+                if(Math.Abs(RdMath.Angle(manipulation.Cummulative.Translation)) > 45.0)
                 {
                     return ZoomScrollType.Scroll;
                 }

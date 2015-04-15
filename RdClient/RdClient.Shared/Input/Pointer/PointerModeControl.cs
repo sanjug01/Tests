@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using System;
 using System.Diagnostics;
@@ -30,17 +31,16 @@ namespace RdClient.Shared.Input.Pointer
 
         public void HScroll(double delta)
         {
-            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.MouseHWheel, new Point(delta, 0)));
+            _sessionControl.SendMouseWheel((int)(delta * GlobalConstants.TouchScrollFactor), true);
         }
 
         public void Scroll(double delta)
         {
-            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.MouseWheel, new Point(0, delta)));
+            _sessionControl.SendMouseWheel((int)(delta * GlobalConstants.TouchScrollFactor), false);
         }
 
         public void LeftClick(IPointerRoutedEventProperties pointerEvent)
         {
-            //MousePosition = pointerEvent.Position;
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftPress, MousePosition));
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftRelease, MousePosition));
         }
@@ -73,7 +73,6 @@ namespace RdClient.Shared.Input.Pointer
 
         public void RightClick(IPointerRoutedEventProperties pointerEvent)
         {
-            //MousePosition = pointerEvent.Position;
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightPress, MousePosition));
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightRelease, MousePosition));
         }
