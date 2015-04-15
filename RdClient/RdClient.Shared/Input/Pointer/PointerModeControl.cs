@@ -17,7 +17,11 @@ namespace RdClient.Shared.Input.Pointer
             get { return _mousePosition; }
             private set
             {
-                _mousePosition = value;
+                Point mP = new Point(
+                    Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Width, Math.Max(0, value.X)),
+                    Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Height, Math.Max(0, value.Y)));
+
+                _mousePosition = mP;
                 _sessionControl.RenderingPanel.MoveMouseCursor(_mousePosition);
             }
         }
