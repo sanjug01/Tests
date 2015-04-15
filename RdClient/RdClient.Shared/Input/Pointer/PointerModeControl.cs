@@ -1,6 +1,7 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
 using System;
+using System.Diagnostics;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Pointer

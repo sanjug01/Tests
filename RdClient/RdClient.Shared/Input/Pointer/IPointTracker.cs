@@ -4,6 +4,7 @@ namespace RdClient.Shared.Input
 {
     public interface IPointTracker
     {
+        Point FirstTouch { get; }
         Point Center { get; }
         int Contacts { get; }
 

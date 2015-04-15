@@ -18,6 +18,7 @@ namespace RdClient.Shared.Input
         private Dictionary<UInt32, Point> _trackedPoints = new Dictionary<UInt32, Point>();
         private LinkedList<UInt32> _pointSequence = new LinkedList<UInt32>();
         private Point _lastCenter = new Point(0, 0);
+        private Point _lastFirstTouch = new Point(0, 0);
 
         public void Track(Point point, UInt32 id)
         {
@@ -26,7 +27,14 @@ namespace RdClient.Shared.Input
                 _pointSequence.AddLast(id);
             }
 
-            _trackedPoints[id] = new Point() { X = point.X, Y = point.Y };
+            Point p = new Point() { X = point.X, Y = point.Y };
+
+            _trackedPoints[id] = p;
+
+            if(_pointSequence.Count == 1)
+            {
+                _lastFirstTouch = p;
+            }
         }
 
         public void Reset()
@@ -78,6 +86,21 @@ namespace RdClient.Shared.Input
                         };
 
                     return _lastCenter;
+                }
+            }
+        }
+
+        public Point FirstTouch
+        {
+            get
+            {
+                if(_pointSequence.Count == 0)
+                {
+                    return _lastFirstTouch;
+                }
+                else
+                {
+                    return _trackedPoints[_pointSequence.ElementAt(0)];
                 }
             }
         }
