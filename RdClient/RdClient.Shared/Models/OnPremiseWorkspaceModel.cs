@@ -37,46 +37,15 @@
         private string _friendlyName;
         private List<RemoteResourceModel> _resources;
         private List<RemoteResourceModel> _tempResources;
-        private RadcClient _client;
+        private IRadcClient _client;
         private ApplicationDataModel _dataModel;
 
-        //We need a no-param constructor for deserialization purposes. RadcClient and dataModel are injected through properties
+        //We need a no-param constructor for deserialization purposes. RadcClient and dataModel are injected through Initialize() method
         public OnPremiseWorkspaceModel()
         {
             _state = WorkspaceState.Unsubscribed;
             _error = XPlatError.XResult32.Succeeded;
             _initialized = false;
-        }
-
-        public void Initialize(RadcClient radcClient, ApplicationDataModel dataModel)
-        {
-            if (_initialized || radcClient == null || dataModel == null)
-            {
-                throw new InvalidOperationException("Should only initialize once, specifying a non-null radcClient and dataModel");
-            }
-            _dataModel = dataModel;
-            _client = radcClient;            
-            _client.FeedUrl = this.FeedUrl;
-            _client.Events.OperationInProgress += OperationInProgress;
-            _client.Events.OperationCompleted += OperationCompleted;
-            _client.Events.AddResourcesStarted += AddResourcesStarted;
-            _client.Events.AddResourcesFinished += AddResourcesFinished;
-            _client.Events.ResourceAdded += ResourceAdded;
-            _client.Events.WorkspaceRemoved += WorkspaceRemoved;
-
-        }
-
-        public void TryAndResubscribe()
-        {
-            if (this.State != WorkspaceState.Subscribed)
-            {
-                TaskCompletionSource<XPlatError.XResult32> taskSource = new TaskCompletionSource<XPlatError.XResult32>();
-                this.UnSubscribe(result => taskSource.SetResult(result));
-                taskSource.Task.Wait();
-                this.State = WorkspaceState.Unsubscribed;
-                taskSource = new TaskCompletionSource<XPlatError.XResult32>();
-                this.Subscribe(result => taskSource.SetResult(result));
-            }
         }
 
         public CredentialsModel Credential
@@ -145,6 +114,37 @@
         {
             get { return _friendlyName; }
             private set { SetProperty(ref _friendlyName, value); }
+        }
+
+        public void Initialize(IRadcClient radcClient, ApplicationDataModel dataModel)
+        {
+            if (_initialized || radcClient == null || dataModel == null)
+            {
+                throw new InvalidOperationException("Should only initialize once, specifying a non-null radcClient and dataModel");
+            }
+            _dataModel = dataModel;
+            _client = radcClient;
+            _client.FeedUrl = this.FeedUrl;
+            _client.Events.OperationInProgress += OperationInProgress;
+            _client.Events.OperationCompleted += OperationCompleted;
+            _client.Events.AddResourcesStarted += AddResourcesStarted;
+            _client.Events.AddResourcesFinished += AddResourcesFinished;
+            _client.Events.ResourceAdded += ResourceAdded;
+            _client.Events.WorkspaceRemoved += WorkspaceRemoved;
+
+        }
+
+        public void TryAndResubscribe()
+        {
+            if (this.State != WorkspaceState.Subscribed)
+            {
+                TaskCompletionSource<XPlatError.XResult32> taskSource = new TaskCompletionSource<XPlatError.XResult32>();
+                this.UnSubscribe(result => taskSource.SetResult(result));
+                taskSource.Task.Wait();
+                this.State = WorkspaceState.Unsubscribed;
+                taskSource = new TaskCompletionSource<XPlatError.XResult32>();
+                this.Subscribe(result => taskSource.SetResult(result));
+            }
         }
 
         public void GetCachedResources(Action<XPlatError.XResult32> completionCallback = null)

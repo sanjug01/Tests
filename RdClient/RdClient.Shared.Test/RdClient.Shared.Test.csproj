@@ -183,6 +183,8 @@
     <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\PointerManipulator.cs" />
     <Compile Include="Mock\PointerManipulatorRecorder.cs" />
+    <Compile Include="Mock\RadcClient.cs" />
+    <Compile Include="Mock\RadcClientEvents.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
     <Compile Include="Mock\RenderingPanel.cs" />
     <Compile Include="Mock\Thumbnail.cs" />
@@ -207,6 +209,7 @@
     <Compile Include="Model\GatewayModelTests.cs" />
     <Compile Include="Model\DesktopModelTests.cs" />
     <Compile Include="Input\Mouse\PointerModeTests.cs" />
+    <Compile Include="Model\SessionGatewayTests.cs" />
     <Compile Include="Model\SessionCredentialsTests.cs" />
     <Compile Include="Model\SnapshotterTests.cs" />
     <Compile Include="Model\WorkspaceModelTests.cs" />
@@ -240,6 +243,7 @@
     <Compile Include="ViewModels\DeferringViewModelBaseTests.cs" />
     <Compile Include="ViewModels\DeleteGatewayViewModelTests.cs" />
     <Compile Include="ViewModels\DeleteUserViewModelTests.cs" />
+    <Compile Include="ViewModels\EditCredentialsTasks\InSessionCredentialsTaskGatewayTests.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\InSessionCredentialsTaskTests.cs" />
     <Compile Include="ViewModels\EditCredentialsViewModelTests.cs" />
     <Compile Include="ViewModels\ErrorMessageViewModelTests.cs" />

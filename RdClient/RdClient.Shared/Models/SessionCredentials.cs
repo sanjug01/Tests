@@ -9,7 +9,7 @@
     /// Information about credentials model used by a particular session.
     /// This object is edited by the in-session credentials editing task.
     /// </summary>
-    public sealed class SessionCredentials
+    public sealed class SessionCredentials : ISessionCredentials
     {
         //
         // Credentials object used by the session; this is always a new object, not stored

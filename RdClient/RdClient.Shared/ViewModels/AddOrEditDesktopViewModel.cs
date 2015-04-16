@@ -189,10 +189,18 @@ namespace RdClient.Shared.ViewModels
                 {
                     this.Desktop.CredentialsId = this.UserOptions[this.SelectedUserOptionsIndex].Credentials.Id;
                 }
+                else
+                {
+                    this.Desktop.CredentialsId = Guid.Empty;
+                }
 
                 if (null != this.GatewayOptions[this.SelectedGatewayOptionsIndex].Gateway)
                 {
                     this.Desktop.GatewayId = this.GatewayOptions[this.SelectedGatewayOptionsIndex].Gateway.Id;
+                }
+                else
+                {
+                    this.Desktop.GatewayId = Guid.Empty;
                 }
 
                 if (this.IsAddingDesktop)
