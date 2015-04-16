@@ -10,7 +10,7 @@
     d:DesignWidth="1024"
     RequestedTheme="Dark">
     
-    <Grid Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
+    <Grid Background="{ThemeResource ConnectionCenterScrollViewBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="72" />
             <RowDefinition Height="Auto"/>

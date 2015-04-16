@@ -14,7 +14,7 @@
     <d:UserControl.DataContext>
         <design:FakeRemoteResourceViewModel />
     </d:UserControl.DataContext>
-    <Grid Width="156" Height="128" Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
+    <Grid Width="156" Height="128" Background="{ThemeResource ConnectionCenterScrollViewBackgroundBrush}">
         <Grid >       
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />

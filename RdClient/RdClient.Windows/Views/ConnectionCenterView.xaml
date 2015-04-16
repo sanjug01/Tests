@@ -10,7 +10,6 @@
     xmlns:design="using:RdClient.DesignTime"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:controls="using:RdClient.Controls"
-    RequestedTheme="Dark"
     mc:Ignorable="d">
 
     <d:Page.DataContext>
@@ -32,7 +31,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
+                <Grid Grid.Row="0" Background="{ThemeResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
@@ -58,7 +57,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
+                <Grid Grid.Row="0" Background="{ThemeResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
                     <controls:ConnectionCenterTitleBar />
                 </Grid>
 
@@ -68,7 +67,7 @@
                     <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </Grid>
 
-                <Grid Grid.Row="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
+                <Grid Grid.Row="2" Background="{ThemeResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
                     <controls:DynamicToolbar HorizontalAlignment="Center"/>
                 </Grid>
             </Grid>
@@ -90,7 +89,7 @@
                     <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </Grid>
 
-                <Grid Grid.Row="2" Background="{StaticResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
+                <Grid Grid.Row="2" Background="{ThemeResource ConnectionCenterBarBackgroundBrush}" Height="{StaticResource ConnectionCenterTitleBarHeight}">
                     <!-- Align toolbar buttons to the right to make the layout different from the narrow one -->
                     <controls:DynamicToolbar HorizontalAlignment="Right"/>
                 </Grid>
@@ -99,7 +98,7 @@
 
     </Page.Resources>
 
-    <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}">
+    <Grid Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
         <!--
         Visual state manager must be placed inside the root grid.
         -->

@@ -10,8 +10,7 @@
     xmlns:converters="using:RdClient.Converters"
     mc:Ignorable="d"
     d:DesignHeight="400"
-    d:DesignWidth="1024"
-    RequestedTheme="Dark">
+    d:DesignWidth="1024">
 
     <d:UserControl.DataContext>
         <design:FakeWorkspaceViewModel />
@@ -38,7 +37,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
+    <Grid Background="{ThemeResource ConnectionCenterScrollViewBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
