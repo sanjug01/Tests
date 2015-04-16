@@ -152,6 +152,30 @@
         }
 
         [TestMethod]
+        public void EditGateway_ShouldResetCredentials()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
+                Guid credId = _dataModel.Credentials.AddNewModel(credentials);
+
+                GatewayModel gateway = new GatewayModel() { HostName = "foo", CredentialsId = credId };
+                _dataModel.Gateways.AddNewModel(gateway);
+
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
+
+                _addOrEditGatewayVM.SelectedUserOptionsIndex = 0;
+                _addOrEditGatewayVM.SaveCommand.Execute(null);
+
+                Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
+                Assert.IsInstanceOfType(_dataModel.Gateways.Models[0].Model, typeof(GatewayModel));
+                Assert.AreSame(gateway, _dataModel.Gateways.Models[0].Model);
+                Assert.AreEqual(Guid.Empty, ((GatewayModel)_dataModel.Gateways.Models[0].Model).CredentialsId);
+            }
+        }
+
+        [TestMethod]
         public void EditGateway_ShouldSelectAskAlways()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
