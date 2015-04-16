@@ -21,7 +21,7 @@ namespace RdClient.Shared.Test.ViewModels
         private TestData _testData;
         private ApplicationDataModel _dataModel;
         private SessionFactory _sessionFactory;
-        private Mock.NavigationService _navService;
+        private Mock.NavigationService _navService;        
         private ConnectionCenterViewModel _vm;
         private IConnectionCenterViewModel _ivm;
 
@@ -63,6 +63,15 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
             }
+
+            Mock.RadcClient radcClient = new Mock.RadcClient();
+            radcClient.Events = new Mock.RadcClientEvents();
+            foreach(OnPremiseWorkspaceModel workspace in _testData.NewSmallListOfOnPremWorkspaces(radcClient, _dataModel, creds))
+            {
+                _dataModel.OnPremWorkspaces.AddNewModel(workspace);
+            }
+            radcClient.Dispose();
+
             _vm = new ConnectionCenterViewModel();
             _ivm = _vm;
             _vm.CastAndCall<IDeferredExecutionSite>(site => site.SetDeferredExecution(new Dispatcher()));
@@ -403,6 +412,52 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.AreSame(dm2, _ivm.DesktopViewModels[1].Desktop);
         }
 
+        [TestMethod]
+        public void HasAppsIsTrueWhenDatamodelHasWorkspace()
+        {
+            Assert.IsTrue(_vm.HasApps);
+        }
+
+        [TestMethod]
+        public void HasAppsIsFalseWhenDatamodelHasNoWorkspaces()
+        {
+            RemoveAllModels(_dataModel.OnPremWorkspaces);
+            Assert.IsFalse(_vm.HasApps);
+        }
+
+        [TestMethod]
+        public void HasDesktopsIsTrueWhenDatamodelHasDesktop()
+        {
+            Assert.IsTrue(_vm.HasDesktops);
+        }
+
+        [TestMethod]
+        public void HasDesktopsIsFalseWhenDatamodelHasNoDesktops()
+        {
+            RemoveAllModels(_dataModel.LocalWorkspace.Connections);
+            Assert.IsFalse(_vm.HasDesktops);
+        }
+
+        [TestMethod]
+        public void ShowSectionLabelsIsFalseWhenHasDesktopsIsFalse()
+        {
+            RemoveAllModels(_dataModel.LocalWorkspace.Connections);
+            Assert.IsFalse(_vm.ShowSectionLabels);
+        }
+
+        [TestMethod]
+        public void ShowSectionLabelsIsFalseWhenHasAppsIsFalse()
+        {
+            RemoveAllModels(_dataModel.OnPremWorkspaces);
+            Assert.IsFalse(_vm.ShowSectionLabels);
+        }
+
+        [TestMethod]
+        public void ShowSectionLabelsIsTrueWhenHasDesktopsAndHasAppsIsTrue()
+        {
+            Assert.IsTrue(_vm.ShowSectionLabels);
+        }
+
         private void AssertDesktopViewModelSelectionEnabledMatchesDesktopsSelectable()
         {
             foreach (DesktopViewModel dvm in _ivm.DesktopViewModels)
@@ -422,6 +477,14 @@ namespace RdClient.Shared.Test.ViewModels
                 {
                     Assert.IsTrue(_ivm.DesktopViewModels.Any((dvm) => dvm.Desktop.Equals((DesktopModel)container.Model)));
                 }
+            }
+        }
+
+        private void RemoveAllModels<T>(IModelCollection<T> modelCollection) where T : class, IPersistentStatus
+        {
+            foreach (var model in modelCollection.Models.ToArray())
+            {
+                modelCollection.RemoveModel(model.Id);
             }
         }
     }
