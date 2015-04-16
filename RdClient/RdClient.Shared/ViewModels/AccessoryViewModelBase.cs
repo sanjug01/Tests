@@ -32,6 +32,15 @@
             _cancellation = null;
         }
 
+        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
+        {
+            base.OnNavigatingBack(backArgs);
+            //
+            // Just dismiss self. This will pull the top-most accessory view from the stack.
+            //
+            DismissModal(null);
+        }
+
         private void OnCancellationRequested(object sender, EventArgs e)
         {
             Contract.Assert(object.ReferenceEquals(_cancellation, sender));

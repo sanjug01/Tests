@@ -356,13 +356,6 @@
             }
         }
 
-        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
-        {
-            base.OnNavigatingBack(backArgs);
-            _accessoryViewCompletion.Complete();
-            _accessoryViewCompletion.Reset();
-        }
-
         private IDesktopViewModel CreateDesktopViewModel(IModelContainer<RemoteConnectionModel> container)
         {
             Contract.Assert(container.Model is DesktopModel, "Data model for a desktop tile is not DesktopModel");
