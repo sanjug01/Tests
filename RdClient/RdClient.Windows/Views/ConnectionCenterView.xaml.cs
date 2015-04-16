@@ -20,8 +20,6 @@
             PhoneLayout
         }
 
-        private INavigationService _nav;
-
         public ConnectionCenterView()
         {
             this.InitializeComponent();
@@ -30,7 +28,7 @@
 
         IViewModel IPresentableView.ViewModel { get { return this.DataContext as IViewModel; } }
         void IPresentableView.Activating(object activationParameter) { }
-        void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { _nav = navigationService; }
+        void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
         void IPresentableView.Dismissing() { }
 
         void IStackedViewPresenter.PushView(IPresentableView view, bool animated)
