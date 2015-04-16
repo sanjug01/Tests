@@ -29,7 +29,7 @@ namespace RdClient.Input
             _deferrer = deferrer;
             _sessionControl = sessionControl;
             _panel = panel;
-            _consumerOld = new PointerEventDispatcher(timerFactory.CreateTimer(), this, panel);
+            _consumerOld = new PointerEventDispatcherOld(timerFactory.CreateTimer(), this, panel);
             _consumer = new PointerModeConsumer(timerFactory.CreateTimer(), new PointerModeControl(sessionControl));
             this.ConsumptionMode = ConsumptionMode.Pointer;
         }

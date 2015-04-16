@@ -20,6 +20,11 @@ using Windows.UI.Xaml.Media.Animation;
             typeof(ICommand), typeof(RightSideBarControl),
             new PropertyMetadata(null, OnNavigateHomeChanged));
 
+        public static readonly DependencyProperty MouseModeProperty = DependencyProperty.Register("MouseMode",
+            typeof(ICommand), typeof(RightSideBarControl),
+            new PropertyMetadata(null, OnMouseModeChanged));
+
+
         public Windows.UI.Xaml.Visibility BarVisibility
         {
             get { return (Windows.UI.Xaml.Visibility)GetValue(BarVisibilityProperty); }
@@ -30,6 +35,11 @@ using Windows.UI.Xaml.Media.Animation;
         {
             get { return (ICommand)GetValue(NavigateHomeProperty); }
             set { SetValue(NavigateHomeProperty, value); }
+        }
+        public ICommand MouseMode
+        {
+            get { return (ICommand)GetValue(MouseModeProperty); }
+            set { SetValue(MouseModeProperty, value); }
         }
 
         public RightSideBarControl()
@@ -102,6 +112,16 @@ using Windows.UI.Xaml.Media.Animation;
         private void InternalOnNavigateHomeChanged(DependencyPropertyChangedEventArgs e)
         {
             this.NavigateHomeButton.Command = (ICommand)e.NewValue;
+        }
+
+        private static void OnMouseModeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            ((RightSideBarControl)sender).InternalMouseModeChanged(e);
+        }
+
+        private void InternalMouseModeChanged(DependencyPropertyChangedEventArgs e)
+        {
+            this.MouseModeButton.Command = (ICommand)e.NewValue;
         }
     }
 }

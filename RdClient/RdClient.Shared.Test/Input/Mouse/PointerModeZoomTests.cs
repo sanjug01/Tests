@@ -12,7 +12,7 @@ namespace RdClient.Shared.Test.Input.Mouse
     public class PointerModeZoomTests
     {        
         protected TestTimer _timer;
-        private PointerEventDispatcher _consumer;
+        private PointerEventDispatcherOld _consumer;
         private Mock.PointerManipulator _manipulator;
         private Mock.RenderingPanel _panel;
 
@@ -22,7 +22,7 @@ namespace RdClient.Shared.Test.Input.Mouse
             _timer = new TestTimer();
             _manipulator = new Mock.PointerManipulator();
             _panel = new Mock.RenderingPanel();
-            _consumer = new PointerEventDispatcher(_timer, _manipulator, _panel);
+            _consumer = new PointerEventDispatcherOld(_timer, _manipulator, _panel);
         }
 
         protected void ConsumeEvents(PointerEventOld[] events)

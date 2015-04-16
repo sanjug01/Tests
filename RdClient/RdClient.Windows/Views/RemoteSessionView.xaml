@@ -73,7 +73,8 @@
         <!-- Right side bar -->
         <c:RightSideBarControl
             BarVisibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-            NavigateHome="{Binding NavigateHome}"/>
+            NavigateHome="{Binding NavigateHome}"
+            MouseMode="{Binding MouseMode}"/>
 
     </Grid>
 </UserControl>

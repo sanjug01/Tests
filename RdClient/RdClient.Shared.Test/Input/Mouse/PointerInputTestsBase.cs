@@ -34,7 +34,7 @@ namespace RdClient.Shared.Test.Input.Mouse
     public class PointerInputTestsBase
     {
         protected TestTimer _timer;
-        private PointerEventDispatcher _consumer;
+        private PointerEventDispatcherOld _consumer;
         private Mock.PointerManipulatorRecorder _manipulator;
         private Mock.RenderingPanel _panel;
 
@@ -50,7 +50,7 @@ namespace RdClient.Shared.Test.Input.Mouse
             _timer = new TestTimer();
             _manipulator = new Mock.PointerManipulatorRecorder();
             _panel = new Mock.RenderingPanel();
-            _consumer = new PointerEventDispatcher(_timer, _manipulator, _panel);
+            _consumer = new PointerEventDispatcherOld(_timer, _manipulator, _panel);
         }
 
         protected void ConsumeEventsHelper(PointerEventOld[] events)

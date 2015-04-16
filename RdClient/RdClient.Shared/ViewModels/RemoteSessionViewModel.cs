@@ -20,6 +20,7 @@
         private readonly RelayCommand _cancelAutoReconnect;
         private readonly RelayCommand _showSideBars;
         private readonly RelayCommand _navigateHome;
+        private readonly RelayCommand _mouseMode;
 
         private IRemoteSessionView _sessionView;
         private IRemoteSession _activeSession;
@@ -117,12 +118,18 @@
             get { return _navigateHome; }
         }
 
+        public ICommand MouseMode
+        {
+            get { return _mouseMode; }
+        }
+
         public RemoteSessionViewModel()
         {
             _dismissFailureMessage = new RelayCommand(this.InternalDismissFailureMessage);
             _cancelAutoReconnect = new RelayCommand(this.InternalCancelAutoReconnect, this.InternalCanAutoReconnect);
             _showSideBars = new RelayCommand(this.InternalShowRightSideBar);
             _navigateHome = new RelayCommand(this.InternalNavigateHome);
+            _mouseMode = new RelayCommand(this.InternalMouseMode);
             _isRightSideBarVisible = false;
         }
 
@@ -363,6 +370,11 @@
         {
             this.IsRightSideBarVisible = false;
             _activeSession.Disconnect();
+        }
+
+        private void InternalMouseMode(object parameter)
+        {
+
         }
 
         public void SetTimerFactory(ITimerFactory timerFactory)
