@@ -419,6 +419,12 @@
 
             EmitHelper<MouseCursorShapeChangedArgs>(args, _mouseCursorShapeChanged);
         }
+        private void DeferEmitMouseCursorShapeChanged(MouseCursorShapeChangedArgs args)
+        {
+            Contract.Assert(null != args);
+
+            DeferEmitHelper<MouseCursorShapeChangedArgs>(args, _mouseCursorShapeChanged);
+        }
 
         private void InternalSetState(InternalState newState)
         {

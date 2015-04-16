@@ -51,13 +51,9 @@ namespace RdClient.Input
         public void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
         {
             Contract.Requires(null != args.Buffer);
-
-            _deferrer.DeferToUI(() =>
-            {
-                ImageSource image = MouseCursorShape.ByteArrayToBitmap(args.Buffer, args.Width, args.Height);
-                MouseCursorShape cursor = new MouseCursorShape(new Point(args.XHotspot, args.YHotspot), image);
-                this._panel.ChangeMouseCursorShape(cursor);
-            });
+            ImageSource image = MouseCursorShape.ByteArrayToBitmap(args.Buffer, args.Width, args.Height);
+            MouseCursorShape cursor = new MouseCursorShape(new Point(args.XHotspot, args.YHotspot), image);
+            this._panel.ChangeMouseCursorShape(cursor);
         }
 
         public void OnMouseModeChanged(object sender, EventArgs e)

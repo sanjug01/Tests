@@ -29,10 +29,7 @@
                     _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
-                    _session._syncEvents.MouseCursorShapeChanged += (s, a) => 
-                    { 
-                        _session.EmitMouseCursorShapeChanged(a); 
-                    };
+                    _session._syncEvents.MouseCursorShapeChanged += (s, a) =>_session.DeferEmitMouseCursorShapeChanged(a);
 
 #if false
                     _session._syncEvents.UserCredentialsRequest += (s, a) => { };
