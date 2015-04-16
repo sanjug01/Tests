@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Navigation;
     using System.Collections.ObjectModel;
     using System.Windows.Input;
 
@@ -20,7 +21,7 @@
         bool ShowDesktops { get; set; }
         bool ShowApps { get; set; }
 
-        bool IsAccessoryViewVisible { get; }
+        IViewVisibility AccessoryViewVisibility { get; }
         ICommand CancelAccessoryView { get; }
     }
 }

@@ -50,9 +50,7 @@
         // by the view model. The view model requests completion when it needs to dismiss the current accessory view.
         //
         private readonly SynchronousCompletion _accessoryViewCompletion;
-        private bool _isAccessoryViewVisible;
-        private readonly RelayCommand _showAccessoryView;
-        private readonly RelayCommand _hideAccessoryView;
+        private readonly IViewVisibility _accessoryViewVisibility;
         private RelayCommand _cancelAccessoryView;
 
         //
@@ -133,9 +131,7 @@
             //_toolbarItemsSource.Add(new SeparatorBarItemModel());
             //
             _accessoryViewCompletion = new SynchronousCompletion();
-            _isAccessoryViewVisible = false;
-            _showAccessoryView = new RelayCommand(param => this.IsAccessoryViewVisible = true);
-            _hideAccessoryView = new RelayCommand(param => this.IsAccessoryViewVisible = false);
+            _accessoryViewVisibility = ViewVisibility.Create(false);
             _cancelAccessoryView = new RelayCommand(this.ExecuteCancelAccessoryView);
 
             this.SelectedCount = 0;
@@ -225,20 +221,9 @@
             }
         }
 
-        public bool IsAccessoryViewVisible
+        public IViewVisibility AccessoryViewVisibility
         {
-            get { return _isAccessoryViewVisible; }
-            private set { this.SetProperty(ref _isAccessoryViewVisible, value); }
-        }
-
-        public ICommand ShowAccessoryView
-        {
-            get { return _showAccessoryView; }
-        }
-
-        public ICommand HideAccessoryView
-        {
-            get { return _hideAccessoryView; }
+            get { return _accessoryViewVisibility; }
         }
 
         public ICommand CancelAccessoryView

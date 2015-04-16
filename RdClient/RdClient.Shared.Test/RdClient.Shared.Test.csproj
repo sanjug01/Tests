@@ -218,6 +218,7 @@
     <Compile Include="Navigation\Extensions\TimerFactoryExtensionTests.cs" />
     <Compile Include="Navigation\ModalPresentationCompletionTests.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgsTests.cs" />
+    <Compile Include="Navigation\ViewVisibilityTests.cs" />
     <Compile Include="RdMock.Test\MockBaseTests.cs" />
     <Compile Include="RdMock\IMockCall.cs" />
     <Compile Include="RdMock\MockBase.cs" />

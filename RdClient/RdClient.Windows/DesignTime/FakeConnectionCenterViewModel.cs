@@ -1,6 +1,7 @@
 ﻿namespace RdClient.DesignTime
 {
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Navigation;
     using RdClient.Shared.ViewModels;
     using System.Collections.ObjectModel;
     using System.Windows.Input;
@@ -15,6 +16,7 @@
 
         private readonly ObservableCollection<BarItemModel> _toolbarItemsSource;
         private readonly ReadOnlyObservableCollection<BarItemModel> _toolbarItems;
+        private readonly IViewVisibility _accessoryViewVisibility;
         private readonly RelayCommand _cancelAccessoryView;
 
         public FakeConnectionCenterViewModel()
@@ -44,6 +46,7 @@
             _toolbarItemsSource.Add(new SeparatorBarItemModel());
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => { }), "Home"));
 
+            _accessoryViewVisibility = ViewVisibility.Create(false);
             _cancelAccessoryView = new RelayCommand(o => { });
         }
 
@@ -90,9 +93,9 @@
             set { }
         }
 
-        public bool IsAccessoryViewVisible
+        public IViewVisibility AccessoryViewVisibility
         {
-            get { return false; }
+            get { return _accessoryViewVisibility; }
         }
 
         public ICommand CancelAccessoryView

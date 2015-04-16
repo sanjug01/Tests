@@ -11,22 +11,9 @@ namespace RdClient.Controls
 
     public sealed partial class AccessoryViewPresenter : UserControl, IStackedViewPresenter
     {
-        /// <summary>
-        /// Dependency property ICommand that the control calls to tell a bound view model that it must
-        /// show the presenter. In response to this command the view model must update a property bound
-        /// to visibility of the presenter and any overlay views that dismiss it.
-        /// </summary>
-        public readonly DependencyProperty ShowPresenterProperty = DependencyProperty.Register("ShowPresenter",
-            typeof(ICommand), typeof(AccessoryViewPresenter),
-            new PropertyMetadata(null));
-
-        /// <summary>
-        /// Dependency property ICommand that the control calls to tell a bound view model that it must
-        /// hide the presenter. In response to this command the view model must update a property bound
-        /// to visibility of the presenter and any overlay views that dismiss it.
-        /// </summary>
-        public readonly DependencyProperty HidePresenterProperty = DependencyProperty.Register("HidePresenter",
-            typeof(ICommand), typeof(AccessoryViewPresenter),
+        public readonly DependencyProperty AccessoryPresenterVisibilityProperty = DependencyProperty.Register(
+            "AccessoryPresenterVisibility",
+            typeof(IViewVisibility), typeof(AccessoryViewPresenter),
             new PropertyMetadata(null));
 
         public AccessoryViewPresenter()
@@ -37,16 +24,10 @@ namespace RdClient.Controls
             this.AccessoriesContainer.DismissedLastView += this.OnDismissedLastView;
         }
 
-        public ICommand ShowPresenter
+        public IViewVisibility AccessoryPresenterVisibility
         {
-            get { return (ICommand)GetValue(ShowPresenterProperty); }
-            set { SetValue(ShowPresenterProperty, value); }
-        }
-
-        public ICommand HidePresenter
-        {
-            get { return (ICommand)GetValue(HidePresenterProperty); }
-            set { SetValue(HidePresenterProperty, value); }
+            get { return (IViewVisibility)GetValue(AccessoryPresenterVisibilityProperty); }
+            set { SetValue(AccessoryPresenterVisibilityProperty, value); }
         }
 
         void IStackedViewPresenter.PushView(IPresentableView view, bool animated)
@@ -62,18 +43,18 @@ namespace RdClient.Controls
 
         private void OnPushingFirstView(object sender, EventArgs e)
         {
-            ICommand command = this.ShowPresenter;
+            IViewVisibility visibility = this.AccessoryPresenterVisibility;
+            Contract.Assert(null != visibility);
 
-            if (null != command && command.CanExecute(null))
-                command.Execute(null);
+            visibility.Show();
         }
 
         private void OnDismissedLastView(object sender, EventArgs e)
         {
-            ICommand command = this.HidePresenter;
+            IViewVisibility visibility = this.AccessoryPresenterVisibility;
+            Contract.Assert(null != visibility);
 
-            if (null != command && command.CanExecute(null))
-                command.Execute(null);
+            visibility.Hide();
         }
     }
 }

@@ -283,8 +283,10 @@
     <Compile Include="Navigation\IPresentationCompletion.cs" />
     <Compile Include="Navigation\IStackedPresentationContext.cs" />
     <Compile Include="Navigation\IStackedViewPresenter.cs" />
+    <Compile Include="Navigation\IViewVisibility.cs" />
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
+    <Compile Include="Navigation\ViewVisibility.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBase.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModel.cs" />
