@@ -8,8 +8,7 @@
     xmlns:design="using:RdClient.DesignTime"
     mc:Ignorable="d"
     d:DesignHeight="128"
-    d:DesignWidth="156"
-    RequestedTheme="Dark">
+    d:DesignWidth="156">
 
     <d:UserControl.DataContext>
         <design:FakeRemoteResourceViewModel />

@@ -9,8 +9,7 @@
     xmlns:c="using:RdClient.Converters"
     xmlns:sc="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
-    mc:Ignorable="d"
-    RequestedTheme="Light">
+    mc:Ignorable="d">
     
     <Page.DataContext>
         <vm:AddUserViewModel />

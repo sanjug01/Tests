@@ -12,8 +12,7 @@
     xmlns:design="using:RdClient.DesignTime"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d"
-    d:DesignHeight="276" Width="342"
-    RequestedTheme="Dark">
+    d:DesignHeight="276" Width="342">
     
     <d:UserControl.DataContext>
         <design:FakeDesktopViewModel />
