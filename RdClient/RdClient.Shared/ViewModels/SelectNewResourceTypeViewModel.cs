@@ -1,6 +1,9 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Navigation;
     using System;
+    using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
     public sealed class SelectNewResourceTypeViewModel : AccessoryViewModelBase
@@ -8,55 +11,6 @@
         private readonly RelayCommand _addDesktop;
         private readonly RelayCommand _addOnPremiseWorkspace;
         private readonly RelayCommand _addCloudWorkspace;
-
-        public enum InternalResult
-        {
-            AddDesktop,
-            AddOnPremiseWorkspace,
-            AddCloudWorkspace
-        }
-
-        public sealed class Completion : CompletionBase
-        {
-            public event EventHandler AddDesktop;
-            public event EventHandler AddOnPremiseWorkspace;
-            public event EventHandler AddCloudWorkspace;
-
-            protected override void OnCompleted(object result)
-            {
-                switch ((InternalResult)result)
-                {
-                    case InternalResult.AddDesktop:
-                        EmitAddDesktop();
-                        break;
-                    case InternalResult.AddOnPremiseWorkspace:
-                        EmitAddOnPremiseWorkspace();
-                        break;
-
-                    case InternalResult.AddCloudWorkspace:
-                        EmitAddCloudWorkspace();
-                        break;
-                }
-            }
-
-            private void EmitAddDesktop()
-            {
-                if (null != this.AddDesktop)
-                    this.AddDesktop(this, EventArgs.Empty);
-            }
-
-            private void EmitAddOnPremiseWorkspace()
-            {
-                if (null != this.AddOnPremiseWorkspace)
-                    this.AddOnPremiseWorkspace(this, EventArgs.Empty);
-            }
-
-            private void EmitAddCloudWorkspace()
-            {
-                if (null != this.AddCloudWorkspace)
-                    this.AddCloudWorkspace(this, EventArgs.Empty);
-            }
-        }
 
         public ICommand AddDesktop
         {
@@ -75,9 +29,51 @@
 
         public SelectNewResourceTypeViewModel()
         {
-            _addDesktop = new RelayCommand(param => this.DismissModal(InternalResult.AddDesktop));
-            _addOnPremiseWorkspace = new RelayCommand(param => this.DismissModal(InternalResult.AddOnPremiseWorkspace));
-            _addCloudWorkspace = new RelayCommand(param => this.DismissModal(InternalResult.AddCloudWorkspace));
+            _addDesktop = new RelayCommand(this.ExecuteAddDesktop);
+            _addOnPremiseWorkspace = new RelayCommand(this.ExecuteAddOnPremiseWorkspace);
+            _addCloudWorkspace = new RelayCommand(this.ExecuteAddCloudWorkspace);
+        }
+
+        private void ExecuteAddDesktop(object parameter)
+        {
+            Contract.Assert(null != this.NavigationService);
+            Contract.Assert(null != this.Cancellation);
+            INavigationService nav = this.NavigationService;
+            SynchronousCompletion cancellation = this.Cancellation;
+            //
+            // First the view must dismiss self, then it must push the next view on the stack;
+            // otherwise, the next view will go on top of the current one and they both will get dismissed.
+            //
+            DismissModal(null);
+            nav.PushAccessoryView("DesktopEditorView", cancellation);
+        }
+
+        private void ExecuteAddOnPremiseWorkspace(object parameter)
+        {
+            Contract.Assert(null != this.NavigationService);
+            Contract.Assert(null != this.Cancellation);
+            INavigationService nav = this.NavigationService;
+            SynchronousCompletion cancellation = this.Cancellation;
+            //
+            // First the view must dismiss self, then it must push the next view on the stack;
+            // otherwise, the next view will go on top of the current one and they both will get dismissed.
+            //
+            DismissModal(null);
+            nav.PushAccessoryView("DesktopEditorView", cancellation);
+        }
+
+        private void ExecuteAddCloudWorkspace(object parameter)
+        {
+            Contract.Assert(null != this.NavigationService);
+            Contract.Assert(null != this.Cancellation);
+            INavigationService nav = this.NavigationService;
+            SynchronousCompletion cancellation = this.Cancellation;
+            //
+            // First the view must dismiss self, then it must push the next view on the stack;
+            // otherwise, the next view will go on top of the current one and they both will get dismissed.
+            //
+            DismissModal(null);
+            nav.PushAccessoryView("DesktopEditorView", cancellation);
         }
     }
 }

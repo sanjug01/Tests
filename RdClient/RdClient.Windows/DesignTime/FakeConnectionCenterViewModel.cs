@@ -90,7 +90,7 @@
             set { }
         }
 
-        public bool IsAccessoryViewPresented
+        public bool IsAccessoryViewVisible
         {
             get { return false; }
         }

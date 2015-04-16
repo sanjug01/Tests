@@ -20,7 +20,7 @@
         bool ShowDesktops { get; set; }
         bool ShowApps { get; set; }
 
-        bool IsAccessoryViewPresented { get; }
+        bool IsAccessoryViewVisible { get; }
         ICommand CancelAccessoryView { get; }
     }
 }

@@ -3,74 +3,50 @@
 namespace RdClient.Controls
 {
     using RdClient.Shared.Navigation;
-    using RdClient.Shared.ViewModels;
     using System;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
-    using Windows.UI.Xaml.Input;
 
     public sealed partial class AccessoryViewPresenter : UserControl, IStackedViewPresenter
     {
-        public readonly DependencyProperty AccessoryWidthProperty = DependencyProperty.Register("AccessoryWidth",
-            typeof(double), typeof(AccessoryViewPresenter),
-            new PropertyMetadata(0.0, OnAccessoryWidthChanged));
-
-        public readonly DependencyProperty FullScreenWidthProperty = DependencyProperty.Register("FullScreenWidth",
-            typeof(double), typeof(AccessoryViewPresenter),
-            new PropertyMetadata(0.0));
-
-        public readonly DependencyProperty CancellationRequestedProperty = DependencyProperty.Register("CancellationRequested",
+        /// <summary>
+        /// Dependency property ICommand that the control calls to tell a bound view model that it must
+        /// show the presenter. In response to this command the view model must update a property bound
+        /// to visibility of the presenter and any overlay views that dismiss it.
+        /// </summary>
+        public readonly DependencyProperty ShowPresenterProperty = DependencyProperty.Register("ShowPresenter",
             typeof(ICommand), typeof(AccessoryViewPresenter),
             new PropertyMetadata(null));
 
-        private sealed class CommandParameter : IHandleable
-        {
-            private readonly PointerRoutedEventArgs _e;
-
-            public CommandParameter(PointerRoutedEventArgs e)
-            {
-                Contract.Assert(null != e);
-                _e = e;
-            }
-
-            bool IHandleable.Handled
-            {
-                get { return _e.Handled; }
-                set { _e.Handled = value; }
-            }
-        }
-
-        private enum VisualStateName
-        {
-            SidePanel,
-            FullScreen
-        }
+        /// <summary>
+        /// Dependency property ICommand that the control calls to tell a bound view model that it must
+        /// hide the presenter. In response to this command the view model must update a property bound
+        /// to visibility of the presenter and any overlay views that dismiss it.
+        /// </summary>
+        public readonly DependencyProperty HidePresenterProperty = DependencyProperty.Register("HidePresenter",
+            typeof(ICommand), typeof(AccessoryViewPresenter),
+            new PropertyMetadata(null));
 
         public AccessoryViewPresenter()
         {
             this.InitializeComponent();
-            this.SizeChanged += this.OnSizeChanged;
-            this.OverlayPanel.PointerPressed += this.OnPointerPressed;
+
+            this.AccessoriesContainer.PushingFirstView += this.OnPushingFirstView;
+            this.AccessoriesContainer.DismissedLastView += this.OnDismissedLastView;
         }
 
-        public double AccessoryWidth
+        public ICommand ShowPresenter
         {
-            get { return (double)GetValue(AccessoryWidthProperty); }
-            set { SetValue(AccessoryWidthProperty, value); }
+            get { return (ICommand)GetValue(ShowPresenterProperty); }
+            set { SetValue(ShowPresenterProperty, value); }
         }
 
-        public ICommand CancellationRequested
+        public ICommand HidePresenter
         {
-            get { return (ICommand)GetValue(CancellationRequestedProperty); }
-            set { SetValue(CancellationRequestedProperty, value); }
-        }
-
-        public double FullScreenWidth
-        {
-            get { return (double)GetValue(FullScreenWidthProperty); }
-            set { SetValue(FullScreenWidthProperty, value); }
+            get { return (ICommand)GetValue(HidePresenterProperty); }
+            set { SetValue(HidePresenterProperty, value); }
         }
 
         void IStackedViewPresenter.PushView(IPresentableView view, bool animated)
@@ -84,45 +60,20 @@ namespace RdClient.Controls
             this.AccessoriesContainer.Pop((UIElement)view, animated);
         }
 
-        private static void OnAccessoryWidthChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        private void OnPushingFirstView(object sender, EventArgs e)
         {
-            AccessoryViewPresenter avp = sender as AccessoryViewPresenter;
+            ICommand command = this.ShowPresenter;
 
-            if(null != avp)
-            {
-                avp.InternalOnAccessoryWidthChanged(e);
-            }
+            if (null != command && command.CanExecute(null))
+                command.Execute(null);
         }
 
-        private void InternalOnAccessoryWidthChanged(DependencyPropertyChangedEventArgs e)
+        private void OnDismissedLastView(object sender, EventArgs e)
         {
-            this.AccessoryColumn.Width = new GridLength((double)e.NewValue);
-        }
+            ICommand command = this.HidePresenter;
 
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            VisualStateName visualState = VisualStateName.SidePanel;
-            double fullScreenWidth = this.FullScreenWidth;
-
-            if (0.0 == fullScreenWidth || e.NewSize.Width <= fullScreenWidth)
-                visualState = VisualStateName.FullScreen;
-
-            VisualStateManager.GoToState(this, visualState.ToString(), true);
-        }
-
-        private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            ICommand command = this.CancellationRequested;
-
-            if(null != command)
-            {
-                IHandleable param = new CommandParameter(e);
-
-                if(command.CanExecute(param))
-                {
-                    command.Execute(param);
-                }
-            }
+            if (null != command && command.CanExecute(null))
+                command.Execute(null);
         }
     }
 }

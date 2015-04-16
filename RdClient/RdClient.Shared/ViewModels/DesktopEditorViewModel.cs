@@ -7,8 +7,5 @@
 
     public sealed class DesktopEditorViewModel : AccessoryViewModelBase
     {
-        public sealed class Completion : CompletionBase
-        {
-        }
     }
 }

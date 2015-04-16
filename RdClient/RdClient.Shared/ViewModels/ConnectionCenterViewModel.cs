@@ -52,6 +52,8 @@
         //
         private readonly SynchronousCompletion _accessoryViewCompletion;
         private bool _isAccessoryViewVisible;
+        private readonly RelayCommand _showAccessoryView;
+        private readonly RelayCommand _hideAccessoryView;
         private RelayCommand _cancelAccessoryView;
 
         //
@@ -134,6 +136,8 @@
             //
             _accessoryViewCompletion = new SynchronousCompletion();
             _isAccessoryViewVisible = false;
+            _showAccessoryView = new RelayCommand(param => this.IsAccessoryViewVisible = true);
+            _hideAccessoryView = new RelayCommand(param => this.IsAccessoryViewVisible = false);
             _cancelAccessoryView = new RelayCommand(this.ExecuteCancelAccessoryView);
 
             this.SelectedCount = 0;
@@ -223,7 +227,7 @@
             }
         }
 
-        public bool IsAccessoryViewPresented
+        public bool IsAccessoryViewVisible
         {
             get { return _isAccessoryViewVisible; }
             private set
@@ -233,6 +237,16 @@
                     _addResourceToolbarCommand.EmitCanExecuteChanged();
                 }
             }
+        }
+
+        public ICommand ShowAccessoryView
+        {
+            get { return _showAccessoryView; }
+        }
+
+        public ICommand HideAccessoryView
+        {
+            get { return _hideAccessoryView; }
         }
 
         public ICommand CancelAccessoryView
@@ -455,20 +469,12 @@
             //
             // Called by the command bound to the "add" toolbar button
             //
-            SelectNewResourceTypeViewModel.Completion completion = new SelectNewResourceTypeViewModel.Completion();
-
-            completion.Completed += this.OnAccessoryViewCompleted;
-            completion.AddDesktop += this.OnAddNewDesktop;
-            completion.AddOnPremiseWorkspace += this.OnAddOnPremiseWorkspace;
-            completion.AddCloudWorkspace += this.OnAddCloudWorkspace;
-            this.IsAccessoryViewPresented = true;
-
-            this.NavigationService.PushAccessoryView("SelectNewResourceTypeView", _accessoryViewCompletion, completion);
+            this.NavigationService.PushAccessoryView("SelectNewResourceTypeView", _accessoryViewCompletion);
         }
 
         private bool CanAddResource(object parameter)
         {
-            return !this.IsAccessoryViewPresented;
+            return !this.IsAccessoryViewVisible;
         }
 
         private void ToggleDesktopSelectionCommandExecute(object o)
@@ -501,71 +507,6 @@
 
             _accessoryViewCompletion.Complete();
             _accessoryViewCompletion.Reset();
-        }
-
-        private void OnAccessoryViewCompleted(object sender, EventArgs e)
-        {
-            //
-            // Called by completion events of all accessory views.
-            //
-            Contract.Assert(sender is AccessoryViewModelBase.CompletionBase);
-            AccessoryViewModelBase.CompletionBase completion = (AccessoryViewModelBase.CompletionBase)sender;
-            completion.Completed -= this.OnAccessoryViewCompleted;
-            //
-            // Set IsAccessoryViewPresented to false to hide overlays that cancel the current accessory view.
-            //
-            this.IsAccessoryViewPresented = false;
-        }
-
-        private void OnAddNewDesktop(object sender, EventArgs e)
-        {
-            //
-            // Called by the completion object passed to the new resource selector accessory view
-            // when user has selected to add a new desktop.
-            //
-            SelectNewResourceTypeViewModel.Completion cSender = ((SelectNewResourceTypeViewModel.Completion)sender);
-            cSender.AddDesktop -= this.OnAddNewDesktop;
-            cSender.AddOnPremiseWorkspace -= this.OnAddOnPremiseWorkspace;
-            cSender.AddCloudWorkspace -= this.OnAddCloudWorkspace;
-
-            DesktopEditorViewModel.Completion completion = new DesktopEditorViewModel.Completion();
-            completion.Completed += this.OnAccessoryViewCompleted;
-            this.IsAccessoryViewPresented = true;
-            this.NavigationService.PushAccessoryView("DesktopEditorView", _accessoryViewCompletion, completion);
-        }
-
-        private void OnAddOnPremiseWorkspace(object sender, EventArgs e)
-        {
-            //
-            // Called by the completion object passed to the new resource selector accessory view
-            // when user has selected to add a new on-premise workspace.
-            //
-            SelectNewResourceTypeViewModel.Completion cSender = ((SelectNewResourceTypeViewModel.Completion)sender);
-            cSender.AddDesktop -= this.OnAddNewDesktop;
-            cSender.AddOnPremiseWorkspace -= this.OnAddOnPremiseWorkspace;
-            cSender.AddCloudWorkspace -= this.OnAddCloudWorkspace;
-
-            DesktopEditorViewModel.Completion completion = new DesktopEditorViewModel.Completion();
-            completion.Completed += this.OnAccessoryViewCompleted;
-            this.IsAccessoryViewPresented = true;
-            this.NavigationService.PushAccessoryView("DesktopEditorView", _accessoryViewCompletion, completion);
-        }
-
-        private void OnAddCloudWorkspace(object sender, EventArgs e)
-        {
-            //
-            // Called by the completion object passed to the new resource selector accessory view
-            // when user has selected to add a new cloud workspace.
-            //
-            SelectNewResourceTypeViewModel.Completion cSender = ((SelectNewResourceTypeViewModel.Completion)sender);
-            cSender.AddDesktop -= this.OnAddNewDesktop;
-            cSender.AddOnPremiseWorkspace -= this.OnAddOnPremiseWorkspace;
-            cSender.AddCloudWorkspace -= this.OnAddCloudWorkspace;
-
-            DesktopEditorViewModel.Completion completion = new DesktopEditorViewModel.Completion();
-            completion.Completed += this.OnAccessoryViewCompleted;
-            this.IsAccessoryViewPresented = true;
-            this.NavigationService.PushAccessoryView("DesktopEditorView", _accessoryViewCompletion, completion);
         }
     }
 }

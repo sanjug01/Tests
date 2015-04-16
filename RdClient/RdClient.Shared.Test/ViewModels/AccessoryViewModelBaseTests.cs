@@ -12,16 +12,6 @@
     {
         private sealed class TestViewModel : AccessoryViewModelBase
         {
-            public sealed class Completion : CompletionBase
-            {
-                public EventHandler<object> OnCompletedCalled;
-
-                protected override void OnCompleted(object result)
-                {
-                    if (null != this.OnCompletedCalled)
-                        this.OnCompletedCalled(this, result);
-                }
-            }
         }
 
 
@@ -143,68 +133,6 @@
             completion.Complete();
 
             Assert.AreEqual(1, dismissedCalls);
-        }
-
-        [TestMethod]
-        public void AccessoryViewModelCompletion_CompletedNoParameter_Cancelled()
-        {
-            TestViewModel.Completion completion = new TestViewModel.Completion();
-            IPresentationCompletion icompletion = completion;
-
-            int cancelledCalls = 0, completedCalls = 0;
-
-            completion.Cancelled += (sender, e) =>
-            {
-                Assert.AreEqual(1, completedCalls);
-                ++cancelledCalls;
-            };
-
-            completion.Completed += (sender, e) =>
-            {
-                Assert.AreEqual(0, cancelledCalls);
-                ++completedCalls;
-            };
-
-            completion.OnCompletedCalled += (sender, e) =>
-            {
-                Assert.Fail();
-            };
-
-            icompletion.Completed(null, null);
-
-            Assert.AreEqual(1, completedCalls);
-            Assert.AreEqual(1, cancelledCalls);
-        }
-
-        [TestMethod]
-        public void AccessoryViewModelCompletion_CompletedParameter_Completed()
-        {
-            TestViewModel.Completion completion = new TestViewModel.Completion();
-            IPresentationCompletion icompletion = completion;
-
-            int completedCalls = 0, onCompletedCalls = 0;
-
-            completion.Cancelled += (sender, e) =>
-            {
-                Assert.Fail();
-            };
-
-            completion.Completed += (sender, e) =>
-            {
-                Assert.AreEqual(0, onCompletedCalls);
-                ++completedCalls;
-            };
-
-            completion.OnCompletedCalled += (sender, e) =>
-            {
-                ++onCompletedCalls;
-                Assert.AreEqual(1, e);
-            };
-
-            icompletion.Completed(null, 1);
-
-            Assert.AreEqual(1, completedCalls);
-            Assert.AreEqual(1, onCompletedCalls);
         }
     }
 }
