@@ -16,7 +16,7 @@
 
         public IServerIdentityValidation ObtainValidation()
         {
-            Contract.Ensures(null != Contract.Result<ICertificateValidation>());
+            Contract.Ensures(null != Contract.Result<IServerIdentityValidation>());
             Contract.Ensures(null == _validation);
 
             IServerIdentityValidation v = _validation;

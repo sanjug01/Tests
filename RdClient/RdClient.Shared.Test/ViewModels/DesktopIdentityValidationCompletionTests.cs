@@ -19,47 +19,11 @@ using System.Collections.Generic;
         private ApplicationDataModel _dataModel;
         private INavigationService _nav;
         private DesktopIdentityValidationViewModel _vm;
-        private IRdpCertificate _certificate;
+        private string _hostName;
         private DesktopIdentityValidationViewModelArgs _args;
         private TestValidation _validation;
-        ////private TestCertificateTrust _permanentTrust, _sessionTrust;
+        private TestServerIdentityTrust _permanentTrust, _sessionTrust;
 
-        private sealed class TestCertificate : IRdpCertificate
-        {
-            private readonly byte[] _serialNumber, _hash;
-            private readonly IRdpCertificateError _error;
-
-            private sealed class Error : IRdpCertificateError
-            {
-                int IRdpCertificateError.ErrorCode { get { return 42; } }
-
-                CertificateError IRdpCertificateError.ErrorFlags { get { return CertificateError.UntrustedRoot; } }
-                ServerCertificateErrorSource IRdpCertificateError.ErrorSource { get { return ServerCertificateErrorSource.None; } }
-            }
-
-            public TestCertificate()
-            {
-                Random rnd = new Random();
-
-                _serialNumber = new byte[16];
-                rnd.NextBytes(_serialNumber);
-                _hash = new byte[32];
-                rnd.NextBytes(_hash);
-                _error = new Error();
-            }
-
-            string IRdpCertificate.FriendlyName { get { return "Friendly Name"; } }
-            bool IRdpCertificate.HasPrivateKey { get { return false; } }
-            bool IRdpCertificate.IsStronglyProtected { get { return true; } }
-            string IRdpCertificate.Issuer { get { return "Issuer"; } }
-            byte[] IRdpCertificate.SerialNumber { get { return _serialNumber; } }
-            string IRdpCertificate.Subject { get { return "Subject"; } }
-            DateTimeOffset IRdpCertificate.ValidFrom { get { return DateTimeOffset.MinValue; } }
-            DateTimeOffset IRdpCertificate.ValidTo { get { return DateTimeOffset.MaxValue; } }
-            byte[] IRdpCertificate.GetHashValue() { return _hash; }
-            byte[] IRdpCertificate.GetHashValue(string hashAlgorithmName) { return _hash; }
-            IRdpCertificateError IRdpCertificate.Error { get { return _error; } }
-        }
 
         private sealed class TestView : IPresentableView
         {
@@ -102,14 +66,14 @@ using System.Collections.Generic;
 
         private sealed class TestValidation : IServerIdentityValidation
         {
-            private readonly IRdpCertificate _certificate;
+            private readonly string _hostName;
 
             public event EventHandler Accepted;
             public event EventHandler Rejected;
 
-            public TestValidation(IRdpCertificate certificate)
+            public TestValidation(string hostName)
             {
-                _certificate = certificate;
+                _hostName = hostName;
             }
 
             void IValidation.Accept()
@@ -123,16 +87,24 @@ using System.Collections.Generic;
                 if (null != this.Rejected)
                     this.Rejected(this, EventArgs.Empty);
             }
+
+            string IServerIdentityValidation.HostName
+            {
+                get { return _hostName; }
+            }
         }
 
-        ////private sealed class TestCertificateTrust : ICertificateTrust
-        ////{
-        ////    public readonly List<IRdpCertificate> Trusted = new List<IRdpCertificate>();
+        private sealed class TestServerIdentityTrust : IServerIdentityTrust
+        {
+            public readonly List<string> Trusted = new List<string>();
 
-        ////    void ICertificateTrust.TrustCertificate(IRdpCertificate certificate) { this.Trusted.Add(certificate); }
-        ////    void ICertificateTrust.RemoveAllTrust() { throw new NotImplementedException(); }
-        ////    bool ICertificateTrust.IsCertificateTrusted(IRdpCertificate certificate) { throw new NotImplementedException(); }
-        ////}
+            void IServerIdentityTrust.TrustServer(string hostName)
+            {
+                this.Trusted.Add(hostName);
+            }
+            void IServerIdentityTrust.RemoveAllTrust() { throw new NotImplementedException(); }
+            bool IServerIdentityTrust.IsServerTrusted(string hostName) { throw new NotImplementedException(); }
+        }
 
         [TestInitialize]
         public void SetUpTest()
@@ -147,11 +119,11 @@ using System.Collections.Generic;
             _nav.ViewFactory = new TestViewFactory(_vm);
             _nav.Presenter = new TestViewPresenter();
             _nav.Extensions.Add(new DataModelExtension() { AppDataModel = _dataModel });
-            _certificate = new TestCertificate();
+            _hostName = "MyHost.com";
             _args = new DesktopIdentityValidationViewModelArgs("host");
-            _validation = new TestValidation(_certificate);
-            //_permanentTrust = new TestCertificateTrust();
-            //_sessionTrust = new TestCertificateTrust();
+            _validation = new TestValidation(_hostName);
+            _permanentTrust = new TestServerIdentityTrust();
+            _sessionTrust = new TestServerIdentityTrust();
         }
 
         [TestCleanup]
@@ -160,11 +132,11 @@ using System.Collections.Generic;
             _vm = null;
             _nav = null;
             _dataModel = null;
-            _certificate = null;
+            _hostName = null;
             _args = null;
             _validation = null;
-            ////_permanentTrust = null;
-            ////_sessionTrust = null;
+            _permanentTrust = null;
+            _sessionTrust = null;
         }
 
         [TestMethod]
@@ -172,8 +144,7 @@ using System.Collections.Generic;
         {
             DesktopIdentityValidationCompletion completion = 
                 new DesktopIdentityValidationCompletion(
-                    _validation 
-                    ////, _permanentTrust, _sessionTrust
+                    _validation , _permanentTrust, _sessionTrust
                     );
             int acceptedCount = 0;
             _validation.Accepted += (sender, e) => ++acceptedCount;
@@ -181,10 +152,10 @@ using System.Collections.Generic;
 
             _nav.PushModalView(ViewName, _args, completion);
             _vm.AcceptOnceCommand.Execute(null);
-            
-            ////Assert.AreEqual(0, _permanentTrust.Trusted.Count);
-            ////Assert.AreEqual(1, _sessionTrust.Trusted.Count);
-            ////Assert.AreSame(_certificate, _sessionTrust.Trusted[0]);
+
+            Assert.AreEqual(0, _permanentTrust.Trusted.Count);
+            Assert.AreEqual(1, _sessionTrust.Trusted.Count);
+            Assert.AreSame(_hostName, _sessionTrust.Trusted[0]);
             Assert.AreEqual(1, acceptedCount);
         }
 
@@ -193,8 +164,9 @@ using System.Collections.Generic;
         {
             DesktopIdentityValidationCompletion completion =
                 new DesktopIdentityValidationCompletion(
-                    _validation
-                    ////, _permanentTrust, _sessionTrust
+                    _validation, 
+                    _permanentTrust, 
+                    _sessionTrust
                     );
             int acceptedCount = 0;
             _validation.Accepted += (sender, e) => ++acceptedCount;
@@ -202,10 +174,10 @@ using System.Collections.Generic;
 
             _nav.PushModalView(ViewName, _args, completion);
             _vm.AcceptIdentityCommand.Execute(null);
-            
-            ////Assert.AreEqual(1, _permanentTrust.Trusted.Count);
-            ////Assert.AreSame(_certificate, _permanentTrust.Trusted[0]);
-            ////Assert.AreEqual(0, _sessionTrust.Trusted.Count);
+
+            Assert.AreEqual(1, _permanentTrust.Trusted.Count);
+            Assert.AreSame(_hostName, _permanentTrust.Trusted[0]);
+            Assert.AreEqual(0, _sessionTrust.Trusted.Count);
             Assert.AreEqual(1, acceptedCount);
         }
 
@@ -214,8 +186,9 @@ using System.Collections.Generic;
         {
             DesktopIdentityValidationCompletion completion =
                 new DesktopIdentityValidationCompletion(
-                    _validation
-                    ////, _permanentTrust, _sessionTrust
+                    _validation, 
+                    _permanentTrust, 
+                    _sessionTrust
                     );
             int rejectedCount = 0;
             _validation.Accepted += (sender, e) => Assert.Fail();
@@ -223,9 +196,9 @@ using System.Collections.Generic;
 
             _nav.PushModalView(ViewName, _args, completion);
             _vm.CancelCommand.Execute(null);
-            
-            ////Assert.AreEqual(0, _permanentTrust.Trusted.Count);
-            ////Assert.AreEqual(0, _sessionTrust.Trusted.Count);
+
+            Assert.AreEqual(0, _permanentTrust.Trusted.Count);
+            Assert.AreEqual(0, _sessionTrust.Trusted.Count);
             Assert.AreEqual(1, rejectedCount);
         }
 
@@ -234,8 +207,9 @@ using System.Collections.Generic;
         {
             DesktopIdentityValidationCompletion completion =
                 new DesktopIdentityValidationCompletion(
-                    _validation
-                    ////, _permanentTrust, _sessionTrust
+                    _validation, 
+                    _permanentTrust, 
+                    _sessionTrust
                     );
             int rejectedCount = 0;
             _validation.Accepted += (sender, e) => Assert.Fail();
@@ -244,8 +218,8 @@ using System.Collections.Generic;
             _nav.PushModalView(ViewName, _args, completion);
             _vm.CastAndCall<IViewModel>(vm => vm.NavigatingBack(new BackCommandArgs()));
 
-            ////Assert.AreEqual(0, _permanentTrust.Trusted.Count);
-            ////Assert.AreEqual(0, _sessionTrust.Trusted.Count);
+            Assert.AreEqual(0, _permanentTrust.Trusted.Count);
+            Assert.AreEqual(0, _sessionTrust.Trusted.Count);
             Assert.AreEqual(1, rejectedCount);
         }
     }

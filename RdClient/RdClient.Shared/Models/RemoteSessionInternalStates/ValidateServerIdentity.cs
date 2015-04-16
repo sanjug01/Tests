@@ -70,6 +70,22 @@
                     _connection.HandleAsyncDisconnectResult(_reason, false);
             }
 
+            string IServerIdentityValidation.HostName
+            {
+                get
+                {
+                    if(null != _session && null != _session._sessionSetup)
+                    {
+                        // hostname is stored in _session._sessionSetup.
+                        return _session._sessionSetup.HostName;
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+                }
+            }
+
             private void OnClientConnected(object sender, ClientConnectedArgs e)
             {
                 _session.InternalSetState(new ConnectedSession(_connection, this));

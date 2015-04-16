@@ -154,10 +154,9 @@
                         break;
 
                     case RdpDisconnectCode.CredSSPUnsupported:
-                        // TODO: Task:2390695 Should prompt that the server identity cannot be verified 
-                        // we skip validation for now. 
-                        // ValidateServerIdentity(e.DisconnectReason);
-                        connection.HandleAsyncDisconnectResult(e.DisconnectReason, true);
+                        // Set the internal state to "certificate validation needed"
+                        // Should prompt that the server identity cannot be verified 
+                        ValidateServerIdentity(_session._sessionSetup.HostName , e.DisconnectReason);
                         break;
                     default:
                         connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
@@ -217,14 +216,14 @@
                 }
             }
 
-            private void ValidateServerIdentity(RdpDisconnectReason reason)
+            private void ValidateServerIdentity(String hostName, RdpDisconnectReason reason)
             {
                 Contract.Assert(null != _session);
                 Contract.Assert(null != _connection);
 
                 if(false)
                 {
-                    // already trusted
+                    // TODO: already trusted
                     _connection.HandleAsyncDisconnectResult(reason, true);
                 }
                 else
