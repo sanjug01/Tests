@@ -30,13 +30,13 @@ namespace RdClient.Controls
             set { SetValue(AccessoryPresenterVisibilityProperty, value); }
         }
 
-        void IStackedViewPresenter.PushView(IPresentableView view, bool animated)
+        public void PushView(IPresentableView view, bool animated)
         {
             Contract.Assert(view is UIElement);
             this.AccessoriesContainer.Push((UIElement)view, animated);
         }
 
-        void IStackedViewPresenter.DismissView(IPresentableView view, bool animated)
+        public void DismissView(IPresentableView view, bool animated)
         {
             this.AccessoriesContainer.Pop((UIElement)view, animated);
         }
