@@ -43,13 +43,13 @@ namespace RdClient.Shared.Input.Pointer
             _sessionControl.SendMouseWheel((int)(delta * GlobalConstants.TouchScrollFactor), false);
         }
 
-        public void LeftClick(IPointerRoutedEventProperties pointerEvent)
+        public virtual void LeftClick(IPointerRoutedEventProperties pointerEvent)
         {
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftPress, MousePosition));
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftRelease, MousePosition));
         }
 
-        public void LeftDrag(PointerDragAction action, Point delta)
+        public virtual void LeftDrag(PointerDragAction action, Point delta)
         {
             MousePosition = new Point(MousePosition.X + delta.X, MousePosition.Y + delta.Y);
 
@@ -69,19 +69,19 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        public void Move(Point delta)
+        public virtual void Move(Point delta)
         {
             MousePosition = new Point(MousePosition.X + delta.X, MousePosition.Y + delta.Y);
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.Move, MousePosition));
         }
 
-        public void RightClick(IPointerRoutedEventProperties pointerEvent)
+        public virtual void RightClick(IPointerRoutedEventProperties pointerEvent)
         {
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightPress, MousePosition));
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightRelease, MousePosition));
         }
 
-        public void RightDrag(PointerDragAction action, Point delta)
+        public virtual void RightDrag(PointerDragAction action, Point delta)
         {
             MousePosition = new Point(MousePosition.X + delta.X, MousePosition.Y + delta.Y);
 
@@ -101,7 +101,7 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        public void ZoomPan(Point center, Point translation, double scale)
+        public virtual void ZoomPan(Point center, Point translation, double scale)
         {
             _sessionControl.RenderingPanel.Viewport.PanAndZoom(center, translation.X, translation.Y, scale, 0);
         }

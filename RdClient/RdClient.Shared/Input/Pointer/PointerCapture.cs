@@ -62,14 +62,10 @@ namespace RdClient.Input
 
         public void OnMouseModeChanged(object sender, EventArgs e)
         {
-            if(ConsumptionMode == ConsumptionMode.Pointer && _consumptionMode != ConsumptionMode.MultiTouch)
-            {
-                ConsumptionMode = ConsumptionMode.DirectTouch;
-            }
-            else if(_consumptionMode == ConsumptionMode.DirectTouch && _consumptionMode != ConsumptionMode.MultiTouch)
-            {
-                ConsumptionMode = ConsumptionMode.Pointer;
-            }
+            // if server supports multi-touch
+            // toggle between pointer mode and multi touch
+            // if server does not support multi touch
+            // toggle between pointer mode and direct mode
         }
     }
 }

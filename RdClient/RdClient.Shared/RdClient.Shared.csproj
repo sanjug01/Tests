@@ -153,6 +153,7 @@
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
+    <Compile Include="Input\Pointer\DirectModeControl.cs" />
     <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
     <Compile Include="Input\Pointer\DoubleClickTimer.cs" />
     <Compile Include="Input\Pointer\DummyPointerControl.cs" />

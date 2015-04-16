@@ -82,7 +82,10 @@ namespace RdClient.Shared.Input.Pointer
 
         public void Reset()
         {
-            _consumers[_lastPointerType].Reset();
+            if(_consumers.ContainsKey(_lastPointerType))
+            {
+                _consumers[_lastPointerType].Reset();
+            }
         }
     }
 }
