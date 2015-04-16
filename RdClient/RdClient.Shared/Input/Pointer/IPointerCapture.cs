@@ -11,6 +11,7 @@ namespace RdClient.Shared.Input.Pointer
         void OnPointerChanged(object sender, IPointerEventBase e);
         void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args);
         void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args);
+        void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs args);
 
     }
 }

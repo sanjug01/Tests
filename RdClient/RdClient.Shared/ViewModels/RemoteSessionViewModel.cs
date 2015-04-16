@@ -301,6 +301,7 @@
                         _keyboardCapture.Start();
                         this.PointerCapture = new PointerCapture(this, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
+                        _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
                         EmitPropertyChanged("IsRenderingPanelActive");
                         this.IsConnectionBarVisible = true;
@@ -311,6 +312,8 @@
                         {
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
+                            _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
+                            _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
                             EmitPropertyChanged("IsRenderingPanelActive");
                             //

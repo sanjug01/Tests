@@ -17,6 +17,7 @@ namespace RdClient.Input
         private IRemoteSessionControl _sessionControl;
         private IRenderingPanel _panel;
         private IPointerEventConsumer _consumer;
+        private bool _multiTouchEnabled;
 
         private ConsumptionMode _consumptionMode;
         private ConsumptionMode ConsumptionMode
@@ -58,10 +59,49 @@ namespace RdClient.Input
 
         public void OnMouseModeChanged(object sender, EventArgs e)
         {
-            // if server supports multi-touch
-            // toggle between pointer mode and multi touch
-            // if server does not support multi touch
-            // toggle between pointer mode and direct mode
+            if (_multiTouchEnabled)
+            {
+                if (ConsumptionMode == ConsumptionMode.MultiTouch)
+                {
+                    ConsumptionMode = ConsumptionMode.Pointer;
+                }
+                else
+                {
+                    ConsumptionMode = ConsumptionMode.MultiTouch;
+                }
+            }
+            else
+            {
+                if (ConsumptionMode == ConsumptionMode.DirectTouch)
+                {
+                    ConsumptionMode = ConsumptionMode.Pointer;
+                }
+                else
+                {
+                    ConsumptionMode = ConsumptionMode.DirectTouch;
+                }
+            }
         }
+
+        public void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs args)
+        {
+            _multiTouchEnabled = args.MultiTouchEnabled;
+            
+            if(_multiTouchEnabled)
+            {
+                if(ConsumptionMode == ConsumptionMode.DirectTouch)
+                {
+                    ConsumptionMode = ConsumptionMode.MultiTouch;
+                }
+            }
+            else
+            {
+                if(ConsumptionMode == ConsumptionMode.MultiTouch)
+                {
+                    ConsumptionMode = ConsumptionMode.DirectTouch;
+                }
+            }
+        }
+
     }
 }

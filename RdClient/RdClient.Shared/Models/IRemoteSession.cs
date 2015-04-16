@@ -32,6 +32,7 @@
         event EventHandler<BadCertificateEventArgs> BadCertificate;
 
         event EventHandler<MouseCursorShapeChangedArgs> MouseCursorShapeChanged;
+        event EventHandler<MultiTouchEnabledChangedArgs> MultiTouchEnabledChanged;
 
         /// <summary>
         /// Session has failed permanently.
