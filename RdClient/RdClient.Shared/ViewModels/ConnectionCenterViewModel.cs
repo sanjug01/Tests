@@ -31,7 +31,6 @@
         // Mutable collection of toolbar item models. When the view model needs to modify contents of the toolbar,
         // it modifies this collection.
         //
-        private readonly RelayCommand _addResourceToolbarCommand;
         private readonly ObservableCollection<BarItemModel> _toolbarItemsSource;
         //
         // Read-only wrapper of the collection of toolbar item models returned by the ToolbarItems property
@@ -127,8 +126,7 @@
             //
             // Add toolbar buttons
             //
-            _addResourceToolbarCommand = new RelayCommand(this.AddResource, this.CanAddResource);
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, _addResourceToolbarCommand, "Add"));
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, new RelayCommand(this.AddResource), "Add"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.MultiSelection, new RelayCommand(this.ToggleDesktopSelectionCommandExecute), "Select"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
             //
@@ -230,13 +228,7 @@
         public bool IsAccessoryViewVisible
         {
             get { return _isAccessoryViewVisible; }
-            private set
-            {
-                if(this.SetProperty(ref _isAccessoryViewVisible, value))
-                {
-                    _addResourceToolbarCommand.EmitCanExecuteChanged();
-                }
-            }
+            private set { this.SetProperty(ref _isAccessoryViewVisible, value); }
         }
 
         public ICommand ShowAccessoryView
@@ -470,11 +462,6 @@
             // Called by the command bound to the "add" toolbar button
             //
             this.NavigationService.PushAccessoryView("SelectNewResourceTypeView", _accessoryViewCompletion);
-        }
-
-        private bool CanAddResource(object parameter)
-        {
-            return !this.IsAccessoryViewVisible;
         }
 
         private void ToggleDesktopSelectionCommandExecute(object o)
