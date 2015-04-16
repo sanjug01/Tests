@@ -23,6 +23,7 @@
 
         private EventHandler<CredentialsNeededEventArgs> _credentialsNeeded;
         private EventHandler<BadCertificateEventArgs> _badCertificate;
+        private EventHandler<BadServerIdentityEventArgs> _badServerIdentity;
         private EventHandler<MouseCursorShapeChangedArgs> _mouseCursorShapeChanged;
         private EventHandler<SessionFailureEventArgs> _failed;
         private EventHandler<SessionInterruptedEventArgs> _interrupted;
@@ -226,6 +227,12 @@
             remove { using (LockWrite()) _badCertificate -= value; }
         }
 
+        event EventHandler<BadServerIdentityEventArgs> IRemoteSession.BadServerIdentity
+        {
+            add { using (LockWrite()) _badServerIdentity += value; }
+            remove { using (LockWrite()) _badServerIdentity -= value; }
+        }
+
         event EventHandler<MouseCursorShapeChangedArgs> IRemoteSession.MouseCursorShapeChanged
         {
             add { using (LockWrite()) _mouseCursorShapeChanged += value; }
@@ -410,6 +417,24 @@
                     Contract.Assert(null != _connection);
                     _connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
                 }            
+            });
+        }
+
+        private void EmitBadServerIdentity(BadServerIdentityEventArgs e)
+        {
+            Contract.Assert(null != e);
+            Contract.Assert(!e.ValidationObtained);
+            
+            EmitHelper<BadServerIdentityEventArgs>(e, _badServerIdentity, () =>
+            {
+                if (!e.ValidationObtained)
+                {
+                    //
+                    // Kill the connection
+                    //
+                    Contract.Assert(null != _connection);
+                    _connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
+                }
             });
         }
 

@@ -233,6 +233,8 @@
     <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
     <Compile Include="ViewModels\AddUserViewModelTests.cs" />
+    <Compile Include="ViewModels\DesktopIdentityValidationViewModelTests.cs" />
+    <Compile Include="ViewModels\DesktopIdentityValidationCompletionTests.cs" />
     <Compile Include="ViewModels\CertificateValidationCompletionTests.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModelTests.cs" />
     <Compile Include="ViewModels\CredentialViewModelTests.cs" />

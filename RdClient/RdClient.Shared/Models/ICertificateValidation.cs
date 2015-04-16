@@ -2,12 +2,8 @@
 {
     using RdClient.Shared.CxWrappers;
 
-    public interface ICertificateValidation
+    public interface ICertificateValidation : IValidation
     {
         IRdpCertificate Certificate { get; }
-
-        void Accept();
-
-        void Reject();
     }
 }

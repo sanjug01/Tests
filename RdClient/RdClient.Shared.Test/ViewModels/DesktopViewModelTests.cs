@@ -56,6 +56,12 @@ namespace RdClient.Shared.Test.ViewModels
                     remove { throw new NotImplementedException(); }
                 }
 
+                event EventHandler<BadServerIdentityEventArgs> IRemoteSession.BadServerIdentity
+                {
+                    add { throw new NotImplementedException(); }
+                    remove { throw new NotImplementedException(); }
+                }
+
                 event EventHandler<SessionFailureEventArgs> IRemoteSession.Failed
                 {
                     add { throw new NotImplementedException(); }

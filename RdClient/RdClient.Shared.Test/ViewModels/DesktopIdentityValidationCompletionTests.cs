@@ -12,17 +12,17 @@ using System;
 using System.Collections.Generic;
 
     [TestClass]
-    public sealed class CertificateValidationCompletionTests
+    public sealed class DesktopIdentityValidationCompletionTests
     {
-        private const string ViewName = "CertificateValidationView";
+        private const string ViewName = "DesktopIdentityValidationView";
 
         private ApplicationDataModel _dataModel;
         private INavigationService _nav;
-        private CertificateValidationViewModel _vm;
+        private DesktopIdentityValidationViewModel _vm;
         private IRdpCertificate _certificate;
-        private CertificateValidationViewModelArgs _args;
+        private DesktopIdentityValidationViewModelArgs _args;
         private TestValidation _validation;
-        private TestCertificateTrust _permanentTrust, _sessionTrust;
+        ////private TestCertificateTrust _permanentTrust, _sessionTrust;
 
         private sealed class TestCertificate : IRdpCertificate
         {
@@ -72,11 +72,13 @@ using System.Collections.Generic;
             void IPresentableView.Dismissing() { }
         }
 
-        private sealed class TestViewPresenter : IViewPresenter, IStackedViewPresenter
+        private sealed class TestViewPresenter : IViewPresenter
         {
             void IViewPresenter.PresentView(IPresentableView view) { }
-            void IStackedViewPresenter.PushView(IPresentableView view, bool animated) { }
-            void IStackedViewPresenter.DismissView(IPresentableView view, bool animated) { }
+            void IViewPresenter.PushModalView(IPresentableView view) { }
+            void IViewPresenter.DismissModalView(IPresentableView view) { }
+            void IViewPresenter.PresentingFirstModalView() { }
+            void IViewPresenter.DismissedLastModalView() { }
         }
 
         private sealed class TestViewFactory : IPresentableViewFactory
@@ -98,7 +100,7 @@ using System.Collections.Generic;
             void IPresentableViewFactory.AddViewClass(string name, System.Type viewClass, bool isSingleton) { }
         }
 
-        private sealed class TestValidation : ICertificateValidation
+        private sealed class TestValidation : IServerIdentityValidation
         {
             private readonly IRdpCertificate _certificate;
 
@@ -109,8 +111,6 @@ using System.Collections.Generic;
             {
                 _certificate = certificate;
             }
-
-            IRdpCertificate ICertificateValidation.Certificate { get { return _certificate; } }
 
             void IValidation.Accept()
             {
@@ -125,14 +125,14 @@ using System.Collections.Generic;
             }
         }
 
-        private sealed class TestCertificateTrust : ICertificateTrust
-        {
-            public readonly List<IRdpCertificate> Trusted = new List<IRdpCertificate>();
+        ////private sealed class TestCertificateTrust : ICertificateTrust
+        ////{
+        ////    public readonly List<IRdpCertificate> Trusted = new List<IRdpCertificate>();
 
-            void ICertificateTrust.TrustCertificate(IRdpCertificate certificate) { this.Trusted.Add(certificate); }
-            void ICertificateTrust.RemoveAllTrust() { throw new NotImplementedException(); }
-            bool ICertificateTrust.IsCertificateTrusted(IRdpCertificate certificate) { throw new NotImplementedException(); }
-        }
+        ////    void ICertificateTrust.TrustCertificate(IRdpCertificate certificate) { this.Trusted.Add(certificate); }
+        ////    void ICertificateTrust.RemoveAllTrust() { throw new NotImplementedException(); }
+        ////    bool ICertificateTrust.IsCertificateTrusted(IRdpCertificate certificate) { throw new NotImplementedException(); }
+        ////}
 
         [TestInitialize]
         public void SetUpTest()
@@ -143,15 +143,15 @@ using System.Collections.Generic;
                 ModelSerializer = new SerializableModelSerializer()
             };
             _nav = new NavigationService();
-            _vm = new CertificateValidationViewModel();
+            _vm = new DesktopIdentityValidationViewModel();
             _nav.ViewFactory = new TestViewFactory(_vm);
             _nav.Presenter = new TestViewPresenter();
             _nav.Extensions.Add(new DataModelExtension() { AppDataModel = _dataModel });
             _certificate = new TestCertificate();
-            _args = new CertificateValidationViewModelArgs("host", _certificate);
+            _args = new DesktopIdentityValidationViewModelArgs("host");
             _validation = new TestValidation(_certificate);
-            _permanentTrust = new TestCertificateTrust();
-            _sessionTrust = new TestCertificateTrust();
+            //_permanentTrust = new TestCertificateTrust();
+            //_sessionTrust = new TestCertificateTrust();
         }
 
         [TestCleanup]
@@ -163,67 +163,80 @@ using System.Collections.Generic;
             _certificate = null;
             _args = null;
             _validation = null;
-            _permanentTrust = null;
-            _sessionTrust = null;
+            ////_permanentTrust = null;
+            ////_sessionTrust = null;
         }
 
         [TestMethod]
-        public void CertificateValidationCompletion_AcceptOnce_AcceptedAndSessionTrusted()
+        public void DesktopIdentityValidationCompletion_AcceptOnce_AcceptedAndSessionTrusted()
         {
-            CertificateValidationCompletion completion = new CertificateValidationCompletion(_validation, _permanentTrust, _sessionTrust);
+            DesktopIdentityValidationCompletion completion = 
+                new DesktopIdentityValidationCompletion(
+                    _validation 
+                    ////, _permanentTrust, _sessionTrust
+                    );
             int acceptedCount = 0;
             _validation.Accepted += (sender, e) => ++acceptedCount;
             _validation.Rejected += (sender, e) => Assert.Fail();
 
             _nav.PushModalView(ViewName, _args, completion);
             _vm.AcceptOnceCommand.Execute(null);
-
-            Assert.AreSame(_vm.Certificate, _certificate);
-            Assert.AreEqual(0, _permanentTrust.Trusted.Count);
-            Assert.AreEqual(1, _sessionTrust.Trusted.Count);
-            Assert.AreSame(_certificate, _sessionTrust.Trusted[0]);
+            
+            ////Assert.AreEqual(0, _permanentTrust.Trusted.Count);
+            ////Assert.AreEqual(1, _sessionTrust.Trusted.Count);
+            ////Assert.AreSame(_certificate, _sessionTrust.Trusted[0]);
             Assert.AreEqual(1, acceptedCount);
         }
 
         [TestMethod]
-        public void CertificateValidationCompletion_AcceptAlways_AcceptedAndPermanentTrusted()
+        public void DesktopIdentityValidationCompletion_AcceptAlways_AcceptedAndPermanentTrusted()
         {
-            CertificateValidationCompletion completion = new CertificateValidationCompletion(_validation, _permanentTrust, _sessionTrust);
+            DesktopIdentityValidationCompletion completion =
+                new DesktopIdentityValidationCompletion(
+                    _validation
+                    ////, _permanentTrust, _sessionTrust
+                    );
             int acceptedCount = 0;
             _validation.Accepted += (sender, e) => ++acceptedCount;
             _validation.Rejected += (sender, e) => Assert.Fail();
 
             _nav.PushModalView(ViewName, _args, completion);
-            _vm.AcceptCertificateCommand.Execute(null);
-
-            Assert.AreSame(_vm.Certificate, _certificate);
-            Assert.AreEqual(1, _permanentTrust.Trusted.Count);
-            Assert.AreSame(_certificate, _permanentTrust.Trusted[0]);
-            Assert.AreEqual(0, _sessionTrust.Trusted.Count);
+            _vm.AcceptIdentityCommand.Execute(null);
+            
+            ////Assert.AreEqual(1, _permanentTrust.Trusted.Count);
+            ////Assert.AreSame(_certificate, _permanentTrust.Trusted[0]);
+            ////Assert.AreEqual(0, _sessionTrust.Trusted.Count);
             Assert.AreEqual(1, acceptedCount);
         }
 
         [TestMethod]
-        public void CertificateValidationCompletion_Reject_Rejected()
+        public void DesktopIdentityValidationCompletion_Reject_Rejected()
         {
-            CertificateValidationCompletion completion = new CertificateValidationCompletion(_validation, _permanentTrust, _sessionTrust);
+            DesktopIdentityValidationCompletion completion =
+                new DesktopIdentityValidationCompletion(
+                    _validation
+                    ////, _permanentTrust, _sessionTrust
+                    );
             int rejectedCount = 0;
             _validation.Accepted += (sender, e) => Assert.Fail();
             _validation.Rejected += (sender, e) => ++rejectedCount;
 
             _nav.PushModalView(ViewName, _args, completion);
             _vm.CancelCommand.Execute(null);
-
-            Assert.AreSame(_vm.Certificate, _certificate);
-            Assert.AreEqual(0, _permanentTrust.Trusted.Count);
-            Assert.AreEqual(0, _sessionTrust.Trusted.Count);
+            
+            ////Assert.AreEqual(0, _permanentTrust.Trusted.Count);
+            ////Assert.AreEqual(0, _sessionTrust.Trusted.Count);
             Assert.AreEqual(1, rejectedCount);
         }
 
         [TestMethod]
-        public void CertificateValidationCompletion_NavigateBack_Rejected()
+        public void DesktopIdentityValidationCompletion_NavigateBack_Rejected()
         {
-            CertificateValidationCompletion completion = new CertificateValidationCompletion(_validation, _permanentTrust, _sessionTrust);
+            DesktopIdentityValidationCompletion completion =
+                new DesktopIdentityValidationCompletion(
+                    _validation
+                    ////, _permanentTrust, _sessionTrust
+                    );
             int rejectedCount = 0;
             _validation.Accepted += (sender, e) => Assert.Fail();
             _validation.Rejected += (sender, e) => ++rejectedCount;
@@ -231,9 +244,8 @@ using System.Collections.Generic;
             _nav.PushModalView(ViewName, _args, completion);
             _vm.CastAndCall<IViewModel>(vm => vm.NavigatingBack(new BackCommandArgs()));
 
-            Assert.AreSame(_vm.Certificate, _certificate);
-            Assert.AreEqual(0, _permanentTrust.Trusted.Count);
-            Assert.AreEqual(0, _sessionTrust.Trusted.Count);
+            ////Assert.AreEqual(0, _permanentTrust.Trusted.Count);
+            ////Assert.AreEqual(0, _sessionTrust.Trusted.Count);
             Assert.AreEqual(1, rejectedCount);
         }
     }

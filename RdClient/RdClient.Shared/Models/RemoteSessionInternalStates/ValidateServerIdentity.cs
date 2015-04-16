@@ -8,19 +8,12 @@
 
     partial class RemoteSession
     {
-        private sealed class ValidateCertificate : InternalState, ICertificateValidation
+        private sealed class ValidateServerIdentity: InternalState, IServerIdentityValidation
         {
             private readonly IRdpConnection _connection;
             private readonly RdpDisconnectReason _reason;
-            private readonly IRdpCertificate _certificate;
-            //
-            // Rendering panel is not used by the state but it is passed to it by the Connecting state
-            // that will want it back after user will have accepted the failed certificate.
-            //
-            private readonly IRenderingPanel _renderingPanel;
 
             private RemoteSession _session;
-            private bool _userRejected;
 
             public override void Activate(RemoteSession session)
             {
@@ -36,7 +29,7 @@
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                 }
 
-                _session.EmitBadCertificate(new BadCertificateEventArgs(_reason, this));
+                _session.EmitBadServerIdentity(new BadServerIdentityEventArgs(_reason, this));
             }
 
             public override void Complete(RemoteSession session)
@@ -54,45 +47,27 @@
                 _session = null;
             }
 
-            public ValidateCertificate(IRenderingPanel renderingPanel, IRdpConnection connection, RdpDisconnectReason reason, InternalState otherState)
+            public ValidateServerIdentity(IRdpConnection connection, RdpDisconnectReason reason, InternalState otherState)
                 : base(SessionState.Idle, otherState)
             {
                 Contract.Assert(null != connection);
                 Contract.Assert(null != reason);
-                Contract.Assert(null != renderingPanel);
 
                 _connection = connection;
                 _reason = reason;
-                _certificate = _connection.GetServerCertificate();
-                _renderingPanel = renderingPanel;
-                _userRejected = false;
             }
-
-            IRdpCertificate ICertificateValidation.Certificate
-            {
-                get { return _certificate; }
-            }
+            
 
             void IValidation.Accept()
             {
                 using (LockUpgradeableRead())
-                {
                     _connection.HandleAsyncDisconnectResult(_reason, true);
-                    //
-                    // Switch back to the Connecting state and give it back the rendering panel
-                    // and connection.
-                    //
-                    _session.InternalSetState(new ConnectingSession(_renderingPanel, _connection, this));
-                }
             }
 
             void IValidation.Reject()
             {
                 using (LockUpgradeableRead())
-                {
-                    _userRejected = true;
                     _connection.HandleAsyncDisconnectResult(_reason, false);
-                }
             }
 
             private void OnClientConnected(object sender, ClientConnectedArgs e)
@@ -110,10 +85,7 @@
             {
                 Contract.Assert(null != _session);
 
-                if(_userRejected)
-                    _session.InternalSetState(new ClosedSession(_connection, this));
-                else
-                    _session.InternalSetState(new FailedSession(_connection, e.DisconnectReason, this));
+                _session.InternalSetState(new FailedSession(_connection, e.DisconnectReason, this));
             }
         }
     }

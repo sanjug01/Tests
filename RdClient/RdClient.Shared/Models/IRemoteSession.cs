@@ -29,7 +29,16 @@
         /// </summary>
         event EventHandler<CredentialsNeededEventArgs> CredentialsNeeded;
 
+        /// <summary>
+        /// Session emits this event when it needs the user to manualy verify server's certificate
+        /// </summary>
         event EventHandler<BadCertificateEventArgs> BadCertificate;
+
+        /// <summary>
+        /// Session emits this event when it needs the user to confirm server's identity, 
+        /// in cases when server authentication is not supported
+        /// </summary>
+        event EventHandler<BadServerIdentityEventArgs> BadServerIdentity;
 
         event EventHandler<MouseCursorShapeChangedArgs> MouseCursorShapeChanged;
 

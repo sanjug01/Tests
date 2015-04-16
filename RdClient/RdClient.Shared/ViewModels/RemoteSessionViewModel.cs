@@ -145,6 +145,7 @@
             _activeSession.Failed += this.OnSessionFailed;
             _activeSession.Interrupted += this.OnSessionInterrupted;
             _activeSession.BadCertificate += this.OnBadCertificate;
+            _activeSession.BadServerIdentity += this.OnBadServerIdentity;
             _activeSession.State.PropertyChanged += this.OnSessionStatePropertyChanged;
 
             if (null != _sessionView && SessionState.Idle == _sessionState)
@@ -165,6 +166,7 @@
             _activeSession.Failed -= this.OnSessionFailed;
             _activeSession.Interrupted -= this.OnSessionInterrupted;
             _activeSession.BadCertificate -= this.OnBadCertificate;
+            _activeSession.BadServerIdentity -= this.OnBadServerIdentity;
             _activeSession.State.PropertyChanged -= this.OnSessionStatePropertyChanged;
             _sessionView.RecycleRenderingPanel(_activeSession.Deactivate());
             _activeSessionControl = null;
@@ -252,6 +254,29 @@
                 this.NavigationService.PushModalView("CertificateValidationView",
                     new CertificateValidationViewModelArgs(session.HostName, validation.Certificate),
                     new CertificateValidationCompletion(validation, this.ApplicationDataModel.CertificateTrust, session.CertificateTrust));
+            }
+        }
+
+        private void OnBadServerIdentity(object sender, BadServerIdentityEventArgs e)
+        {
+            Contract.Assert(sender is IRemoteSession);
+
+            IServerIdentityValidation validation = e.ObtainValidation();
+            IRemoteSession session = (IRemoteSession)sender;
+
+            if (false)
+            {
+                // TODO: previously accepted - do not ask again
+                validation.Accept();
+            }
+            else
+            {
+                // Prompt user to trust or not the server
+                this.NavigationService.PushModalView("DesktopIdentityValidationView",
+                    new DesktopIdentityValidationViewModelArgs(session.HostName),
+                    new DesktopIdentityValidationCompletion(validation)
+                    // TODO: new DesktopIdentityValidationCompletion(validation, this.ApplicationDataModel.CertificateTrust, session.CertificateTrust)
+                    );
             }
         }
 
