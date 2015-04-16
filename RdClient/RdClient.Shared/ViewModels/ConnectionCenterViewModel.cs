@@ -44,6 +44,7 @@
         private bool _showApps;
         private bool _hasDesktops;
         private bool _hasApps;
+        private bool _showSectionLabels;
         //
         // Completion of accessory views passed to all accessory views as the activation parameter.
         // The views subscribe to the completion object and dismiss themselves when completion is requested
@@ -171,6 +172,7 @@
                 {
                     this.ShowDesktops = value;
                     this.ShowApps = !value;
+                    SetShowSectionLabels();
                 }
             }
         }
@@ -187,6 +189,7 @@
                 {
                     this.ShowApps = value;
                     this.ShowDesktops = !value;
+                    SetShowSectionLabels();
                 }
             }
         }
@@ -219,6 +222,23 @@
                     SetProperty(ref _showApps, value);
                 }
             }
+        }
+
+        public bool ShowSectionLabels
+        {
+            get
+            {
+                return _showSectionLabels;
+            }
+            private set
+            {
+                SetProperty(ref _showSectionLabels, value);
+            }
+        }
+
+        private void SetShowSectionLabels()
+        {
+            this.ShowSectionLabels = this.HasDesktops && this.HasApps;
         }
 
         public IViewVisibility AccessoryViewVisibility
@@ -319,7 +339,7 @@
             }
             else
             {
-            }
+            }  
 
             this.HasDesktops = _desktopViewModels.Count > 0;
             this.HasApps = _workspaceViewModels.Count > 0;
