@@ -237,7 +237,7 @@ namespace RdClient.Shared.Navigation
             }
             else
             {
-                Contract.Assert(index >= 0);
+                Contract.Assert(index > 0);
                 newActiveView = viewStack[index-1].View;
             }
 
