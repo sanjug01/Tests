@@ -47,7 +47,7 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        public void ConsumeEvent(IPointerEventBase pointerEvent)
+        public void Consume(IPointerEventBase pointerEvent)
         {
             if(pointerEvent is IPointerRoutedEventProperties)
             {

@@ -22,7 +22,7 @@ namespace RdClient.Shared.Input.Pointer
     {
         event EventHandler<IPointerEventBase> ConsumedEvent;
         ConsumptionMode ConsumptionMode { set; }
-        void ConsumeEvent(IPointerEventBase pointerEvent);
+        void Consume(IPointerEventBase pointerEvent);
         void Reset();
     }
 }

@@ -301,7 +301,6 @@
                         _keyboardCapture.Start();
                         this.PointerCapture = new PointerCapture(this, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
-                        _activeSessionControl.RenderingPanel.PointerChangedOld += this.PointerCapture.OnPointerChangedOld;
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
                         EmitPropertyChanged("IsRenderingPanelActive");
                         this.IsConnectionBarVisible = true;
@@ -312,7 +311,6 @@
                         {
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
-                            _activeSessionControl.RenderingPanel.PointerChangedOld -= this.PointerCapture.OnPointerChangedOld;
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
                             EmitPropertyChanged("IsRenderingPanelActive");
                             //
@@ -374,7 +372,10 @@
 
         private void InternalMouseMode(object parameter)
         {
-
+            if(this.PointerCapture != null)
+            {
+                this.PointerCapture.OnMouseModeChanged(this, EventArgs.Empty);
+            }
         }
 
         public void SetTimerFactory(ITimerFactory timerFactory)

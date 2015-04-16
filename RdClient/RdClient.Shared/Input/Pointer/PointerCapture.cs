@@ -11,17 +11,22 @@ using RdClient.Shared.Input;
 
 namespace RdClient.Input
 {
-    public class PointerCapture : IPointerCapture, IPointerManipulator
+    public class PointerCapture : IPointerCapture
     {
         private IExecutionDeferrer _deferrer;
         private IRemoteSessionControl _sessionControl;
         private IRenderingPanel _panel;
-        private IPointerEventConsumerOld _consumerOld;
         private IPointerEventConsumer _consumer;
 
-        public ConsumptionMode ConsumptionMode
+        private ConsumptionMode _consumptionMode;
+        private ConsumptionMode ConsumptionMode
         {
-            set { _consumerOld.ConsumptionMode = value; }
+            get { return _consumptionMode; }
+            set
+            {
+                _consumer.ConsumptionMode = value;
+                _consumptionMode = value;
+            }
         }
 
         public PointerCapture(IExecutionDeferrer deferrer, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory)
@@ -29,19 +34,13 @@ namespace RdClient.Input
             _deferrer = deferrer;
             _sessionControl = sessionControl;
             _panel = panel;
-            _consumerOld = new PointerEventDispatcherOld(timerFactory.CreateTimer(), this, panel);
-            _consumer = new PointerModeConsumer(timerFactory.CreateTimer(), new PointerModeControl(sessionControl));
+            _consumer = new PointerEventDispatcher(timerFactory, sessionControl);
             this.ConsumptionMode = ConsumptionMode.Pointer;
-        }
-
-        public void OnPointerChangedOld(object sender, PointerEventArgs args)
-        {
-            //_consumerOld.ConsumeEvent(args.PointerEvent);
         }
 
         public void OnPointerChanged(object sender, IPointerEventBase e)
         {
-            _consumer.ConsumeEvent(e);
+            _consumer.Consume(e);
         }
 
         public void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args)
@@ -61,35 +60,16 @@ namespace RdClient.Input
             });
         }
 
-        public double MouseAcceleration { get { return (double)1.4; } }
-
-        private Point _mousePosition;
-        public Point MousePosition 
+        public void OnMouseModeChanged(object sender, EventArgs e)
         {
-            get { return _mousePosition; }
-            set 
+            if(ConsumptionMode == ConsumptionMode.Pointer && _consumptionMode != ConsumptionMode.MultiTouch)
             {
-                _mousePosition.X = Math.Max(0.0, Math.Min(value.X, _panel.Viewport.Size.Width));
-                _mousePosition.Y = Math.Max(0.0, Math.Min(value.Y, _panel.Viewport.Size.Height));
-
-                _deferrer.DeferToUI(() => this._panel.MoveMouseCursor(_mousePosition));
+                ConsumptionMode = ConsumptionMode.DirectTouch;
+            }
+            else if(_consumptionMode == ConsumptionMode.DirectTouch && _consumptionMode != ConsumptionMode.MultiTouch)
+            {
+                ConsumptionMode = ConsumptionMode.Pointer;
             }
         }
-
-        public void SendMouseAction(MouseEventType eventType)
-        {
-            this._sessionControl.SendMouseAction(new MouseAction(eventType, MousePosition));
-        }
-
-        public void SendMouseWheel(int delta, bool isHorizontal)
-        {
-            this._sessionControl.SendMouseWheel(delta, isHorizontal);
-        }
-
-        public void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime)
-        {
-            this._sessionControl.SendTouchAction(type, contactId, position, frameTime);
-        }
-
     }
 }
