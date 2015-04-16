@@ -42,6 +42,10 @@ namespace RdClient.Shared.Input
         PointerDeviceType DeviceType { get; }
         UInt32 PointerId { get; }
         ulong Timestamp { get; }
+        bool LeftButton { get; }
+        bool RightButton { get; }
+        int MouseWheelDelta { get; }
+        bool IsHorizontalWheel { get; }
     }
     public interface IManipulationRoutedEventProperties : IPointerEventBase
     {

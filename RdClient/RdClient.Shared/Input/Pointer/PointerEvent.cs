@@ -1,4 +1,6 @@
-﻿using Windows.Devices.Input;
+﻿using System;
+using System.Diagnostics;
+using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.UI.Input;
 using Windows.UI.Xaml;
@@ -15,6 +17,10 @@ namespace RdClient.Shared.Input
         public uint PointerId { get; private set; }
         public Point Position { get; private set; }
         public ulong Timestamp { get; private set; }
+        public bool LeftButton { get; private set; }
+        public bool RightButton { get; private set; }
+        public int MouseWheelDelta { get; private set; }
+        public bool IsHorizontalWheel { get; private set; }
 
         public PointerRoutedEventArgsCopy(IPointerRoutedEventProperties wrapper)
         {
@@ -23,6 +29,10 @@ namespace RdClient.Shared.Input
             PointerId = wrapper.PointerId;
             Position = wrapper.Position;
             Timestamp = wrapper.Timestamp;
+            LeftButton = wrapper.LeftButton;
+            RightButton = wrapper.RightButton;
+            MouseWheelDelta = wrapper.MouseWheelDelta;
+            IsHorizontalWheel = wrapper.IsHorizontalWheel;
         }
     }
 
@@ -68,6 +78,39 @@ namespace RdClient.Shared.Input
             }
         }
 
+        public bool LeftButton
+        {
+            get
+            {
+                PointerPoint pp = ((PointerRoutedEventArgs)_pointerEvent.Args).GetCurrentPoint(_pointerEvent.Receiver);
+                return pp.Properties.IsLeftButtonPressed;
+            }
+        }
+
+        public bool RightButton
+        {
+            get
+            {
+                PointerPoint pp = ((PointerRoutedEventArgs)_pointerEvent.Args).GetCurrentPoint(_pointerEvent.Receiver);
+                return pp.Properties.IsRightButtonPressed;
+            }
+        }
+        public int MouseWheelDelta
+        {
+            get
+            {
+                PointerPoint pp = ((PointerRoutedEventArgs)_pointerEvent.Args).GetCurrentPoint(_pointerEvent.Receiver);
+                return pp.Properties.MouseWheelDelta;
+            }
+        }
+        public bool IsHorizontalWheel
+        {
+            get
+            {
+                PointerPoint pp = ((PointerRoutedEventArgs)_pointerEvent.Args).GetCurrentPoint(_pointerEvent.Receiver);
+                return pp.Properties.IsHorizontalMouseWheel;
+            }
+        }
         public PointerRoutedEventArgsWrapper(PointerEvent pointerEvent)
         {
             _pointerEvent = pointerEvent;

@@ -238,6 +238,9 @@
         protected override void OnPointerWheelChanged(PointerRoutedEventArgs e)
         {
             this.RenderingPanel.EmitPointerEventOld(PointerEventConverter.PointerArgsConverter(this, e, TouchEventType.Update));
+
+            IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerPressed, PointerEventType.PointerRoutedEventArgs, e, this));
+            this.RenderingPanel.EmitPointerEvent(w);
         }
 
 

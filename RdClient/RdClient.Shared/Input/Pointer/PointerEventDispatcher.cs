@@ -49,7 +49,7 @@ namespace RdClient.Shared.Input.Pointer
             //_directMode = PointerModeFactory.CreateDirectMode(timer, manipulator, panel);
             //_multiTouchMode = new MultiTouchMode(manipulator);
 
-            //_consumers[PointerDeviceType.Mouse] = new MouseMode(manipulator);
+            _consumers[PointerDeviceType.Mouse] = new MouseModeControl(sessionControl);
             //_consumers[PointerDeviceType.Pen] = new MouseMode(manipulator);
             _consumers[PointerDeviceType.Touch] = _pointerMode;
 
