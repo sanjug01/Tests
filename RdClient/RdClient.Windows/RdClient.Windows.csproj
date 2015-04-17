@@ -210,6 +210,7 @@
     <Compile Include="Models\RejectSavedPasswordConnectionSource.cs" />
     <Compile Include="Models\SingleSwapChainPanelRdpConnectionSource.cs" />
     <Compile Include="Models\SuccessfulConnectionSource.cs" />
+    <Compile Include="Navigation\Extensions\DeviceCapabilities.cs" />
     <Compile Include="Views\AddOrEditGatewayView.xaml.cs">
       <DependentUpon>AddOrEditGatewayView.xaml</DependentUpon>
     </Compile>
