@@ -21,6 +21,10 @@
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
+    <ApplicationTheme x:Key="AppMainTheme">Dark</ApplicationTheme>
+    <ElementTheme x:Key="MainTheme">Dark</ElementTheme>
+    <ElementTheme x:Key="AlternateTheme">Light</ElementTheme>
+
     <FontFamily x:Key="IconFont">ms-appx:///Assets/SegMDL2.1.12.ttf#Segoe MDL2 Assets</FontFamily>
     <x:String x:Key="AddIcon">&#xE710;</x:String>
     <x:String x:Key="MultiSelectIcon">&#xE762;</x:String>
