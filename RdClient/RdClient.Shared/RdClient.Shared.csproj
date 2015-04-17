@@ -115,10 +115,8 @@
     <Compile Include="CxWrappers\RdTrace.cs" />
     <Compile Include="CxWrappers\RemoteResourceType.cs" />
     <Compile Include="CxWrappers\TouchEventType.cs" />
-    <Compile Include="Data\ServerIdentityTrust.cs" />
     <Compile Include="Data\CertificateTrust.cs" />
     <Compile Include="Data\FilteringObservableCollection.cs" />
-    <Compile Include="Data\IServerIdentityTrust.cs" />
     <Compile Include="Data\IModelCollection.cs" />
     <Compile Include="Data\IModelContainer.cs" />
     <Compile Include="Data\IModelSerializer.cs" />

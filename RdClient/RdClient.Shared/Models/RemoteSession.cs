@@ -21,6 +21,11 @@
         private readonly ReaderWriterLockSlim _sessionMonitor;
         private readonly ITimerFactory _timerFactory;
 
+        /// <summary>
+        /// indicates that server is trusted and no NLA warning should be presented
+        /// </summary>
+        private bool _isServerTrusted;
+
         private EventHandler<CredentialsNeededEventArgs> _credentialsNeeded;
         private EventHandler<BadCertificateEventArgs> _badCertificate;
         private EventHandler<BadServerIdentityEventArgs> _badServerIdentity;
@@ -195,6 +200,12 @@
         string IRemoteSession.HostName
         {
             get { return _sessionSetup.HostName; }
+        }
+
+        bool IRemoteSession.IsServerTrusted
+        {
+            get { return _isServerTrusted; }
+            set { this.SetProperty(ref _isServerTrusted, value); }
         }
 
         IRemoteSessionState IRemoteSession.State

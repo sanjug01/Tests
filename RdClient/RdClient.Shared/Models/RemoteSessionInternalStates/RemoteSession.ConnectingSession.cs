@@ -219,11 +219,15 @@
             private void ValidateServerIdentity(String hostName, RdpDisconnectReason reason)
             {
                 Contract.Assert(null != _session);
+                Contract.Assert(null != _session._sessionSetup);
                 Contract.Assert(null != _connection);
 
-                if(false)
+                if(
+                    _session._isServerTrusted || 
+                    ( null != (_session._sessionSetup.Connection as DesktopModel)
+                    && (_session._sessionSetup.Connection as DesktopModel).IsTrusted )
+                  )
                 {
-                    // TODO: already trusted
                     _connection.HandleAsyncDisconnectResult(reason, true);
                 }
                 else

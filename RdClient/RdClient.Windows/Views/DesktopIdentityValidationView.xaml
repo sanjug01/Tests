@@ -71,7 +71,7 @@
                         <Button x:Uid="DesktopIdentityValidation-ConnectOnceButton" Content="Connect once (d)" 
                                 Command="{Binding AcceptOnceCommand}" />
                         <Button x:Uid="DesktopIdentityValidation-AlwaysConnectButton" Content="Connect always (d)" 
-                                Command="{Binding AcceptCertificateCommand}" />
+                                Command="{Binding AcceptIdentityCommand}" />
 
                     </StackPanel>
                 </StackPanel>

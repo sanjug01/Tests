@@ -11,6 +11,6 @@
 
     public interface IServerIdentityValidation : IValidation
     {
-        string HostName { get; }
+        DesktopModel Desktop { get; }
     }
 }

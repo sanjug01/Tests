@@ -25,6 +25,11 @@
         ICertificateTrust CertificateTrust { get; }
 
         /// <summary>
+        /// indicates that NLA warning is no longer required
+        /// </summary>
+        bool IsServerTrusted { get; set; }
+
+        /// <summary>
         /// Session emits the event when it needs user to enter credentials.
         /// </summary>
         event EventHandler<CredentialsNeededEventArgs> CredentialsNeeded;

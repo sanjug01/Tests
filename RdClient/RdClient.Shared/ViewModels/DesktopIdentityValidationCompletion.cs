@@ -14,24 +14,15 @@
     public sealed class DesktopIdentityValidationCompletion : IPresentationCompletion
     {
         private readonly IServerIdentityValidation _validation;
-        private readonly IServerIdentityTrust _permanentTrust, _sessionTrust;
 
         public DesktopIdentityValidationCompletion(
-            IServerIdentityValidation validation,
-            IServerIdentityTrust permanentTrust,
-            IServerIdentityTrust sessionTrust
+            IServerIdentityValidation validation
             )
         {
             Contract.Requires(null != validation);
-            Contract.Assert(null != permanentTrust);
-            Contract.Assert(null != sessionTrust);
             Contract.Ensures(null != _validation);
-            Contract.Ensures(null != permanentTrust);
-            Contract.Ensures(null != sessionTrust);
 
             _validation = validation;
-            _permanentTrust = permanentTrust;
-            _sessionTrust = sessionTrust;
         }
 
         void IPresentationCompletion.Completed(IPresentableView view, object result)
@@ -43,14 +34,13 @@
             switch (r.Result)
             {
                 case DesktopIdentityValidationResult.IdentityTrustLevel.AcceptedAlways:
-                    // Add this host to the collection of trusted hosts and allow the session to proceed.
-                    _permanentTrust.TrustServer(_validation.HostName);
+                    // Accept and save to desktop.
+                    _validation.Desktop.IsTrusted = true;
                     _validation.Accept();
                     break;
 
                 case DesktopIdentityValidationResult.IdentityTrustLevel.AcceptedOnce:
-                    // Add this host to to the session's trusted host collection and allow the session to proceed.
-                    _sessionTrust.TrustServer(_validation.HostName);
+                    // Accept without persistence.
                     _validation.Accept();
                     break;
 

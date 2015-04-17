@@ -19,11 +19,9 @@ using System.Collections.Generic;
         private ApplicationDataModel _dataModel;
         private INavigationService _nav;
         private DesktopIdentityValidationViewModel _vm;
-        private string _hostName;
+        private DesktopModel _host;
         private DesktopIdentityValidationViewModelArgs _args;
         private TestValidation _validation;
-        private TestServerIdentityTrust _permanentTrust, _sessionTrust;
-
 
         private sealed class TestView : IPresentableView
         {
@@ -66,14 +64,14 @@ using System.Collections.Generic;
 
         private sealed class TestValidation : IServerIdentityValidation
         {
-            private readonly string _hostName;
+            private readonly DesktopModel _host;
 
             public event EventHandler Accepted;
             public event EventHandler Rejected;
 
-            public TestValidation(string hostName)
+            public TestValidation(DesktopModel host)
             {
-                _hostName = hostName;
+                _host = host;
             }
 
             void IValidation.Accept()
@@ -88,22 +86,10 @@ using System.Collections.Generic;
                     this.Rejected(this, EventArgs.Empty);
             }
 
-            string IServerIdentityValidation.HostName
+            DesktopModel IServerIdentityValidation.Desktop
             {
-                get { return _hostName; }
+                get { return _host; }
             }
-        }
-
-        private sealed class TestServerIdentityTrust : IServerIdentityTrust
-        {
-            public readonly List<string> Trusted = new List<string>();
-
-            void IServerIdentityTrust.TrustServer(string hostName)
-            {
-                this.Trusted.Add(hostName);
-            }
-            void IServerIdentityTrust.RemoveAllTrust() { throw new NotImplementedException(); }
-            bool IServerIdentityTrust.IsServerTrusted(string hostName) { throw new NotImplementedException(); }
         }
 
         [TestInitialize]
@@ -119,11 +105,9 @@ using System.Collections.Generic;
             _nav.ViewFactory = new TestViewFactory(_vm);
             _nav.Presenter = new TestViewPresenter();
             _nav.Extensions.Add(new DataModelExtension() { AppDataModel = _dataModel });
-            _hostName = "MyHost.com";
+            _host = new DesktopModel() { HostName = "MyHost" };
             _args = new DesktopIdentityValidationViewModelArgs("host");
-            _validation = new TestValidation(_hostName);
-            _permanentTrust = new TestServerIdentityTrust();
-            _sessionTrust = new TestServerIdentityTrust();
+            _validation = new TestValidation(_host);
         }
 
         [TestCleanup]
@@ -132,20 +116,16 @@ using System.Collections.Generic;
             _vm = null;
             _nav = null;
             _dataModel = null;
-            _hostName = null;
+            _host = null;
             _args = null;
             _validation = null;
-            _permanentTrust = null;
-            _sessionTrust = null;
         }
 
         [TestMethod]
         public void DesktopIdentityValidationCompletion_AcceptOnce_AcceptedAndSessionTrusted()
         {
             DesktopIdentityValidationCompletion completion = 
-                new DesktopIdentityValidationCompletion(
-                    _validation , _permanentTrust, _sessionTrust
-                    );
+                new DesktopIdentityValidationCompletion(_validation);
             int acceptedCount = 0;
             _validation.Accepted += (sender, e) => ++acceptedCount;
             _validation.Rejected += (sender, e) => Assert.Fail();
@@ -153,9 +133,7 @@ using System.Collections.Generic;
             _nav.PushModalView(ViewName, _args, completion);
             _vm.AcceptOnceCommand.Execute(null);
 
-            Assert.AreEqual(0, _permanentTrust.Trusted.Count);
-            Assert.AreEqual(1, _sessionTrust.Trusted.Count);
-            Assert.AreSame(_hostName, _sessionTrust.Trusted[0]);
+            Assert.IsFalse(_host.IsTrusted);
             Assert.AreEqual(1, acceptedCount);
         }
 
@@ -163,11 +141,7 @@ using System.Collections.Generic;
         public void DesktopIdentityValidationCompletion_AcceptAlways_AcceptedAndPermanentTrusted()
         {
             DesktopIdentityValidationCompletion completion =
-                new DesktopIdentityValidationCompletion(
-                    _validation, 
-                    _permanentTrust, 
-                    _sessionTrust
-                    );
+                new DesktopIdentityValidationCompletion(_validation);
             int acceptedCount = 0;
             _validation.Accepted += (sender, e) => ++acceptedCount;
             _validation.Rejected += (sender, e) => Assert.Fail();
@@ -175,9 +149,7 @@ using System.Collections.Generic;
             _nav.PushModalView(ViewName, _args, completion);
             _vm.AcceptIdentityCommand.Execute(null);
 
-            Assert.AreEqual(1, _permanentTrust.Trusted.Count);
-            Assert.AreSame(_hostName, _permanentTrust.Trusted[0]);
-            Assert.AreEqual(0, _sessionTrust.Trusted.Count);
+            Assert.IsTrue(_host.IsTrusted);
             Assert.AreEqual(1, acceptedCount);
         }
 
@@ -185,11 +157,7 @@ using System.Collections.Generic;
         public void DesktopIdentityValidationCompletion_Reject_Rejected()
         {
             DesktopIdentityValidationCompletion completion =
-                new DesktopIdentityValidationCompletion(
-                    _validation, 
-                    _permanentTrust, 
-                    _sessionTrust
-                    );
+                new DesktopIdentityValidationCompletion(_validation);
             int rejectedCount = 0;
             _validation.Accepted += (sender, e) => Assert.Fail();
             _validation.Rejected += (sender, e) => ++rejectedCount;
@@ -197,8 +165,7 @@ using System.Collections.Generic;
             _nav.PushModalView(ViewName, _args, completion);
             _vm.CancelCommand.Execute(null);
 
-            Assert.AreEqual(0, _permanentTrust.Trusted.Count);
-            Assert.AreEqual(0, _sessionTrust.Trusted.Count);
+            Assert.IsFalse(_host.IsTrusted);
             Assert.AreEqual(1, rejectedCount);
         }
 
@@ -206,11 +173,7 @@ using System.Collections.Generic;
         public void DesktopIdentityValidationCompletion_NavigateBack_Rejected()
         {
             DesktopIdentityValidationCompletion completion =
-                new DesktopIdentityValidationCompletion(
-                    _validation, 
-                    _permanentTrust, 
-                    _sessionTrust
-                    );
+                new DesktopIdentityValidationCompletion(_validation);
             int rejectedCount = 0;
             _validation.Accepted += (sender, e) => Assert.Fail();
             _validation.Rejected += (sender, e) => ++rejectedCount;
@@ -218,8 +181,7 @@ using System.Collections.Generic;
             _nav.PushModalView(ViewName, _args, completion);
             _vm.CastAndCall<IViewModel>(vm => vm.NavigatingBack(new BackCommandArgs()));
 
-            Assert.AreEqual(0, _permanentTrust.Trusted.Count);
-            Assert.AreEqual(0, _sessionTrust.Trusted.Count);
+            Assert.IsFalse(_host.IsTrusted);
             Assert.AreEqual(1, rejectedCount);
         }
     }

@@ -264,12 +264,8 @@
             IServerIdentityValidation validation = e.ObtainValidation();
             IRemoteSession session = (IRemoteSession)sender;
 
-            // TODO: replace temp trust instances
-            Data.IServerIdentityTrust sessionTrust = new Data.ServerIdentityTrust();
-            Data.IServerIdentityTrust persistentTrust = new RdClient.Shared.Data.ServerIdentityTrust();
-
-            if (sessionTrust.IsServerTrusted(session.HostName) 
-                || persistentTrust.IsServerTrusted(session.HostName))
+            if (session.IsServerTrusted 
+                || validation.Desktop.IsTrusted)
             {
                 // previously accepted - do not ask again
                 validation.Accept();
@@ -279,8 +275,7 @@
                 // Prompt user to trust or not the server
                 this.NavigationService.PushModalView("DesktopIdentityValidationView",
                     new DesktopIdentityValidationViewModelArgs(session.HostName),
-                    new DesktopIdentityValidationCompletion(validation, persistentTrust, sessionTrust)
-                    // TODO: new DesktopIdentityValidationCompletion(validation, this.ApplicationDataModel.CertificateTrust, session.CertificateTrust)
+                    new DesktopIdentityValidationCompletion(validation)
                     );
             }
         }

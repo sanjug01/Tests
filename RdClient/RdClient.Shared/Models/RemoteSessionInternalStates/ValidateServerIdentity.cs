@@ -60,8 +60,12 @@
 
             void IValidation.Accept()
             {
+                Contract.Assert(null != _session);
+                _session._isServerTrusted = true;
+
                 using (LockUpgradeableRead())
                     _connection.HandleAsyncDisconnectResult(_reason, true);
+
             }
 
             void IValidation.Reject()
@@ -70,18 +74,18 @@
                     _connection.HandleAsyncDisconnectResult(_reason, false);
             }
 
-            string IServerIdentityValidation.HostName
+            DesktopModel IServerIdentityValidation.Desktop
             {
                 get
                 {
-                    if(null != _session && null != _session._sessionSetup)
+                    if (null != _session && null != _session._sessionSetup)
                     {
                         // hostname is stored in _session._sessionSetup.
-                        return _session._sessionSetup.HostName;
+                        return _session._sessionSetup.Connection as DesktopModel;
                     }
                     else
                     {
-                        return string.Empty;
+                        return null;
                     }
                 }
             }

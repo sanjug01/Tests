@@ -39,10 +39,18 @@
         [DataMember(Name = "AudioMode", EmitDefaultValue = false)]
         private AudioMode _audioMode;
 
+        [DataMember(Name = "IsTrusted", EmitDefaultValue = false)]
+        private bool _isTrusted;
+
         public string HostName
         {
             get { return _hostName; }
-            set { this.SetProperty(ref _hostName, value); }
+            set
+            {
+                this.SetProperty(ref _hostName, value);
+                // name change invalidates the trust
+                this.IsTrusted = false;
+            }
         }
 
         public string FriendlyName
@@ -97,6 +105,12 @@
         {
             get { return _audioMode; }
             set { this.SetProperty(ref _audioMode, value); }
+        }
+
+        public bool IsTrusted
+        {
+            get { return _isTrusted; }
+            set { this.SetProperty(ref _isTrusted, value); }
         }
 
         public DesktopModel()

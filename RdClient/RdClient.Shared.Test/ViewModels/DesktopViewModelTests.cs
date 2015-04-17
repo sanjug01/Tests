@@ -44,6 +44,8 @@ namespace RdClient.Shared.Test.ViewModels
                     get { throw new NotImplementedException(); }
                 }
 
+                bool IRemoteSession.IsServerTrusted { get; set; }
+
                 event EventHandler<CredentialsNeededEventArgs> IRemoteSession.CredentialsNeeded
                 {
                     add { throw new NotImplementedException(); }
