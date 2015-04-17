@@ -184,7 +184,7 @@ namespace RdClient.Shared.Input
                     case PointerEventType.ManipulationStartingRoutedEventArgs:
                     case PointerEventType.ManipulationInertiaStartingRoutedEventArgs:
                     default:
-                        return new Point(0, 0);
+                        return new Point(double.NaN, double.NaN);
                 }
             }
         }

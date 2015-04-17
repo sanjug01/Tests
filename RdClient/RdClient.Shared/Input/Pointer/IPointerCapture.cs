@@ -1,10 +1,14 @@
 ﻿using RdClient.Shared.CxWrappers;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation.Extensions;
 using System;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Pointer
 {
+    public interface IPointerPosition
+    {
+        Point PointerPosition { get; set; }
+    }
+
     public interface IPointerCapture
     {
         void OnMouseModeChanged(object sender, EventArgs e);

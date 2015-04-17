@@ -153,7 +153,6 @@
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
-    <Compile Include="Input\Pointer\DirectModeControl.cs" />
     <Compile Include="Input\Pointer\MouseModeConsumer.cs" />
     <Compile Include="Input\Pointer\MultiTouchConsumer.cs" />
     <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />

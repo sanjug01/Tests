@@ -11,7 +11,7 @@ using RdClient.Shared.Input;
 
 namespace RdClient.Input
 {
-    public class PointerCapture : IPointerCapture
+    public class PointerCapture : IPointerCapture, IPointerPosition
     {
         private IExecutionDeferrer _deferrer;
         private IRemoteSessionControl _sessionControl;
@@ -30,12 +30,27 @@ namespace RdClient.Input
             }
         }
 
+        private Point _pointerPosition;
+        public Point PointerPosition
+        {
+            get { return _pointerPosition; }
+            set
+            {
+                Point mP = new Point(
+                    Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Width, Math.Max(0, value.X)),
+                    Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Height, Math.Max(0, value.Y)));
+
+                _pointerPosition = mP;
+                _deferrer.DeferToUI(() => _sessionControl.RenderingPanel.MoveMouseCursor(_pointerPosition));
+            }
+        }
+
         public PointerCapture(IExecutionDeferrer deferrer, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory)
         {
             _deferrer = deferrer;
             _sessionControl = sessionControl;
             _panel = panel;
-            _consumer = new PointerEventDispatcher(timerFactory, sessionControl);
+            _consumer = new PointerEventDispatcher(timerFactory, sessionControl, this as IPointerPosition);
             this.ConsumptionMode = ConsumptionMode.Pointer;
         }
 

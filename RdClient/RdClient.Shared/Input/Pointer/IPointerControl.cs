@@ -11,8 +11,6 @@ namespace RdClient.Shared.Input
 
     public interface IPointerControl
     {
-        Point MousePosition { get; }
-
         void LeftClick(IPointerRoutedEventProperties pointerEvent);
         void RightClick(IPointerRoutedEventProperties pointerEvent);
 

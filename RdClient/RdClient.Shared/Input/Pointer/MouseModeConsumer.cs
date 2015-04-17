@@ -19,10 +19,12 @@ namespace RdClient.Shared.Input.Pointer
 
         private IPointerRoutedEventProperties _tracked;
         private IRemoteSessionControl _sessionControl;
+        private IPointerPosition _pointerPosition;
 
-        public MouseModeConsumer(IRemoteSessionControl sessionControl)
+        public MouseModeConsumer(IRemoteSessionControl sessionControl, IPointerPosition pointerPosition)
         {
             _sessionControl = sessionControl;
+            _pointerPosition = pointerPosition;
         }
 
         private bool MouseLeftButton(IPointerRoutedEventProperties prep)
@@ -51,7 +53,7 @@ namespace RdClient.Shared.Input.Pointer
 
         private void MouseRecognizer(IPointerRoutedEventProperties prep)
         {
-            _sessionControl.RenderingPanel.MoveMouseCursor(prep.Position);
+            _pointerPosition.PointerPosition = prep.Position;
 
             if(MouseLeftButton(_tracked) == false && MouseLeftButton(prep) == true)
             {

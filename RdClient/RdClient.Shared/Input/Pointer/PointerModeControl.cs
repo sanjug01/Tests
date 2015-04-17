@@ -10,27 +10,12 @@ namespace RdClient.Shared.Input.Pointer
     public class PointerModeControl : IPointerControl
     {
         private IRemoteSessionControl _sessionControl;
-        private Point _mousePosition;
+        private IPointerPosition _pointerPosition;
 
-        public Point MousePosition
-        {
-            get { return _mousePosition; }
-            private set
-            {
-                Point mP = new Point(
-                    Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Width, Math.Max(0, value.X)),
-                    Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Height, Math.Max(0, value.Y)));
-
-                _mousePosition = mP;
-                _sessionControl.RenderingPanel.MoveMouseCursor(_mousePosition);
-            }
-        }
-
-
-        public PointerModeControl(IRemoteSessionControl sessionControl)
+        public PointerModeControl(IRemoteSessionControl sessionControl, IPointerPosition pointerPosition)
         {
             _sessionControl = sessionControl;
-            _mousePosition = new Point(0, 0);
+            _pointerPosition = pointerPosition;
         }
 
         public void HScroll(double delta)
@@ -45,24 +30,26 @@ namespace RdClient.Shared.Input.Pointer
 
         public virtual void LeftClick(IPointerRoutedEventProperties pointerEvent)
         {
-            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftPress, MousePosition));
-            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftRelease, MousePosition));
+            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftPress, _pointerPosition.PointerPosition));
+            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftRelease, _pointerPosition.PointerPosition));
         }
 
         public virtual void LeftDrag(PointerDragAction action, Point delta)
         {
-            MousePosition = new Point(MousePosition.X + delta.X, MousePosition.Y + delta.Y);
+            _pointerPosition.PointerPosition = new Point(
+                _pointerPosition.PointerPosition.X + delta.X, 
+                _pointerPosition.PointerPosition.Y + delta.Y);
 
             switch (action)
             {
                 case PointerDragAction.Begin:
-                    _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftPress, MousePosition));
+                    _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftPress, _pointerPosition.PointerPosition));
                     break;
                 case PointerDragAction.Update:
-                    _sessionControl.SendMouseAction(new MouseAction(MouseEventType.Move, MousePosition));
+                    _sessionControl.SendMouseAction(new MouseAction(MouseEventType.Move, _pointerPosition.PointerPosition));
                     break;
                 case PointerDragAction.End:
-                    _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftRelease, MousePosition));
+                    _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftRelease, _pointerPosition.PointerPosition));
                     break;
                 default:
                     break;
@@ -71,30 +58,34 @@ namespace RdClient.Shared.Input.Pointer
 
         public virtual void Move(Point delta)
         {
-            MousePosition = new Point(MousePosition.X + delta.X, MousePosition.Y + delta.Y);
-            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.Move, MousePosition));
+            _pointerPosition.PointerPosition = new Point(
+                _pointerPosition.PointerPosition.X + delta.X, 
+                _pointerPosition.PointerPosition.Y + delta.Y);
+            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.Move, _pointerPosition.PointerPosition));
         }
 
         public virtual void RightClick(IPointerRoutedEventProperties pointerEvent)
         {
-            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightPress, MousePosition));
-            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightRelease, MousePosition));
+            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightPress, _pointerPosition.PointerPosition));
+            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightRelease, _pointerPosition.PointerPosition));
         }
 
         public virtual void RightDrag(PointerDragAction action, Point delta)
         {
-            MousePosition = new Point(MousePosition.X + delta.X, MousePosition.Y + delta.Y);
+            _pointerPosition.PointerPosition = new Point(
+                _pointerPosition.PointerPosition.X + delta.X, 
+                _pointerPosition.PointerPosition.Y + delta.Y);
 
             switch (action)
             {
                 case PointerDragAction.Begin:
-                    _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightPress, MousePosition));
+                    _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightPress, _pointerPosition.PointerPosition));
                     break;
                 case PointerDragAction.Update:
-                    _sessionControl.SendMouseAction(new MouseAction(MouseEventType.Move, MousePosition));
+                    _sessionControl.SendMouseAction(new MouseAction(MouseEventType.Move, _pointerPosition.PointerPosition));
                     break;
                 case PointerDragAction.End:
-                    _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightRelease, MousePosition));
+                    _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightRelease, _pointerPosition.PointerPosition));
                     break;
                 default:
                     break;

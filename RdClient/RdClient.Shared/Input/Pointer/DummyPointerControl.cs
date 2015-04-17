@@ -6,8 +6,6 @@ namespace RdClient.Shared.Input.Pointer
 {
     public class DummyPointerControl : IPointerControl
     {
-        public Point MousePosition { get { return new Point(0, 0); } }
-
         public void HScroll(double delta)
         {
             Debug.WriteLine("HSCroll");

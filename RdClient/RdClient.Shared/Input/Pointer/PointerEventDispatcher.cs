@@ -2,9 +2,6 @@
 using RdClient.Shared.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Devices.Input;
 
 namespace RdClient.Shared.Input.Pointer
@@ -43,14 +40,14 @@ namespace RdClient.Shared.Input.Pointer
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-        public PointerEventDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl)
+        public PointerEventDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition)
         {
-            _pointerMode = new PointerModeConsumer(timerFactory.CreateTimer(), new PointerModeControl(sessionControl));
-            _multiTouchMode = new MultiTouchConsumer(sessionControl);
-            //_directMode = PointerModeFactory.CreateDirectMode(timer, manipulator, panel);
+            _pointerMode = new PointerModeConsumer(timerFactory.CreateTimer(), new PointerModeControl(sessionControl, pointerPosition));
+            _multiTouchMode = new MultiTouchConsumer(sessionControl, pointerPosition);
+            //_directMode = new PointerModeConsumer(timerFactory.CreateTimer(), new DirectModeControl(sessionControl, pointerPosition));
 
-            _consumers[PointerDeviceType.Mouse] = new MouseModeConsumer(sessionControl);
-            _consumers[PointerDeviceType.Mouse] = new MouseModeConsumer(sessionControl);
+            _consumers[PointerDeviceType.Mouse] = new MouseModeConsumer(sessionControl, pointerPosition);
+            _consumers[PointerDeviceType.Pen] = new MouseModeConsumer(sessionControl, pointerPosition);
             _consumers[PointerDeviceType.Touch] = _pointerMode;
 
         }

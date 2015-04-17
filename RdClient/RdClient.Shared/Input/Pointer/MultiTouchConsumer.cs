@@ -13,6 +13,7 @@ namespace RdClient.Shared.Input.Pointer
         private IPointerRoutedEventProperties _masterTouch;
         private IPointerRoutedEventProperties _lastTouch;
         private IRemoteSessionControl _sessionControl;
+        private IPointerPosition _pointerPosition;
 
         private ConsumptionMode _consumptionMode;
         public ConsumptionMode ConsumptionMode
@@ -25,9 +26,10 @@ namespace RdClient.Shared.Input.Pointer
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-        public MultiTouchConsumer(IRemoteSessionControl sessionControl)
+        public MultiTouchConsumer(IRemoteSessionControl sessionControl, IPointerPosition pointerPosition)
         {
             _sessionControl = sessionControl;
+            _pointerPosition = pointerPosition;
         }
 
         private void InternalConsume(IPointerRoutedEventProperties pointerEvent)
@@ -54,7 +56,7 @@ namespace RdClient.Shared.Input.Pointer
             }
 
             // touch events have a location indicator hint which needs the correct position
-            _sessionControl.RenderingPanel.MoveMouseCursor(pointerEvent.Position);
+            _pointerPosition.PointerPosition = pointerEvent.Position;
 
             TouchEventType touchType = TouchEventType.Unknown;
 
