@@ -10,7 +10,8 @@
     xmlns:design="using:RdClient.DesignTime"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:controls="using:RdClient.Controls"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    RequestedTheme="{StaticResource MainTheme}">
 
     <d:Page.DataContext>
         <design:FakeConnectionCenterViewModel />
