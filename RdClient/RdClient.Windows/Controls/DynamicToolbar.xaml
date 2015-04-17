@@ -9,6 +9,7 @@
     xmlns:helpers="using:RdClient.Helpers"
     xmlns:converters="using:RdClient.Converters"
     xmlns:sconverters="using:RdClient.Shared.Converters"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
     mc:Ignorable="d"
     d:DesignHeight="{StaticResource ConnectionCenterTitleBarHeight}"
     d:DesignWidth="400">

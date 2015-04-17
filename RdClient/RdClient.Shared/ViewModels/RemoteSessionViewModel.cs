@@ -8,6 +8,7 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using System;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
@@ -26,6 +27,7 @@
         private IPointerCapture _pointerCapture;
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
+        private readonly ReadOnlyObservableCollection<object> _connectionBarItems;
         private bool _isRightSideBarVisible;
 
         private bool _failureMessageVisible;
@@ -96,6 +98,11 @@
             private set { this.SetProperty(ref _isConnectionBarVisible, value); }
         }
 
+        public ReadOnlyObservableCollection<object> ConnectionBarItems
+        {
+            get { return _connectionBarItems; }
+        }
+
         public ICommand ShowSideBars
         {
             get { return _showSideBars; }
@@ -119,6 +126,13 @@
             _showSideBars = new RelayCommand(this.InternalShowRightSideBar);
             _navigateHome = new RelayCommand(this.InternalNavigateHome);
             _isRightSideBarVisible = false;
+
+            ObservableCollection<object> items = new ObservableCollection<object>();
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = _showSideBars });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = _showSideBars });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _showSideBars });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _showSideBars });
+            _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
         }
 
         protected override void OnPresenting(object activationParameter)
