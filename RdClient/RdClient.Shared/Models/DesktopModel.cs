@@ -39,16 +39,41 @@
         [DataMember(Name = "AudioMode", EmitDefaultValue = false)]
         private AudioMode _audioMode;
 
+        [DataMember(Name = "IsTrusted", EmitDefaultValue = false)]
+        private bool _isTrusted;
+
         public string HostName
         {
             get { return _hostName; }
-            set { this.SetProperty(ref _hostName, value); }
+            set
+            {
+                this.SetProperty(ref _hostName, value);
+                // name change invalidates the trust
+                this.IsTrusted = false;
+                EmitPropertyChanged("DisplayName");
+            }
         }
 
         public string FriendlyName
         {
             get { return _friendlyName; }
-            set { this.SetProperty(ref _friendlyName, value); }
+            set
+            {
+                this.SetProperty(ref _friendlyName, value);
+                EmitPropertyChanged("DisplayName");
+            }
+        }
+
+        public string DisplayName
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(this.FriendlyName))
+                {
+                    return this.HostName;
+                }
+                return this.FriendlyName;
+            }
         }
 
         public Guid CredentialsId
@@ -97,6 +122,12 @@
         {
             get { return _audioMode; }
             set { this.SetProperty(ref _audioMode, value); }
+        }
+
+        public bool IsTrusted
+        {
+            get { return _isTrusted; }
+            set { this.SetProperty(ref _isTrusted, value); }
         }
 
         public DesktopModel()

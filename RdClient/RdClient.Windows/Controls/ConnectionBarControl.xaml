@@ -7,27 +7,52 @@
     xmlns:local="using:RdClient.Controls"    
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:c="using:RdClient.Converters"            
+    xmlns:helpers="using:RdClient.Helpers"
+    xmlns:converters="using:RdClient.Converters"
+    xmlns:sconverters="using:RdClient.Shared.Converters"
     mc:Ignorable="d"
     d:DesignHeight="40"
-    d:DesignWidth="280">
+    d:DesignWidth="400">
 
     <UserControl.Resources>
         <c:ZoomPanStateToZoomInVisibilityConverter x:Key="ZoomPanStateToZoomInVisibilityConverter"/>
         <c:ZoomPanStateToZoomOutVisibilityConverter x:Key="ZoomPanStateToZoomOutVisibilityConverter"/>        
         <vm:ZoomInTransform x:Key="ZoomIn"/>
         <vm:ZoomOutTransform x:Key="ZoomOut"/>
+
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <sconverters:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
+
+        <Style x:Key="SymbolBarButton" TargetType="Button">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
+            <Setter Property="Background" Value="{StaticResource ConnectionCenterBarBackgroundBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+
     </UserControl.Resources>    
     
     <Grid Width="Auto" Height="Auto" 
               Background="Transparent"
               Opacity="0.6"
               VerticalAlignment="Top" HorizontalAlignment="Center">
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
         </Grid.RowDefinitions>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
+        
         <StackPanel Orientation="Horizontal"
                 Grid.Row="0" Grid.Column="0"  Margin="0">
             <Button x:Uid="SessionView-ConnectionBar-ZoomInButton"
@@ -53,6 +78,38 @@
                     Content="{StaticResource KeyboardIcon}"
                     />            
         </StackPanel>
+        
+        <ItemsControl x:Name="ItemsControl" Grid.Column="1">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+
+            <ItemsControl.ItemTemplateSelector>
+                <!--
+                helpers:TypeNameDataTemplateSelector lists item templates keyed with the name of a bar item model class.
+                x:Key of the <DataTemplate> elements may be one of the following:
+                    › SegoeGlyphBarButtonModel - Glyph property may be converted to an icon by conv:SegoeGlyphToSymbolIconConverter.
+                    › SeparatorBarItemModel - a vertical bar that may separate groups of buttons into logical groups
+                -->
+                <helpers:TypeNameDataTemplateSelector>
+                    <helpers:TypeNameDataTemplateSelector.Templates>
+
+                        <DataTemplate x:Key="SymbolBarButtonModel">
+                            <Button
+                                Style="{StaticResource SymbolBarButton}"
+                                Command="{Binding Command}"
+                                CommandParameter="{Binding CommandParameter}"
+                                Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
+                        </DataTemplate>
+
+                    </helpers:TypeNameDataTemplateSelector.Templates>
+                </helpers:TypeNameDataTemplateSelector>
+            </ItemsControl.ItemTemplateSelector>
+        </ItemsControl>
     </Grid>
 
 </UserControl>

@@ -6,8 +6,10 @@
     /// Subset of Segoe UI app bar icon glyphs.
     /// http://msdn.microsoft.com/en-us/library/windows/apps/jj841126.aspx
     /// </summary>
-    public enum SegoeGlyph : ushort
+    public enum SegoeGlyph
     {
+        HorizontalEllipsis = 0x2026,
+        VerticalEllipsis = 0x22EE,
         Trash = 0xE107,
         Home = 0xE10F,
         Forward = 0xe111,
@@ -17,7 +19,10 @@
         People = 0xE125,
         Add = 0xE109,
         Edit = 0xE104,
-        MultiSelection= 0xE762
+        ZoomIn = 0xE1A3,
+        ZoomOut = 0xE1A4,
+        MultiSelection = 0xE762,
+        Keyboard =0xE765
     }
 
     /// <summary>

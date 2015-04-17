@@ -10,7 +10,6 @@
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System.Collections.Generic;
 
-
     /// <summary>
     /// using a separate set of test for InSessionCredentialsTask with gateway credentials.
     /// </summary>
@@ -39,14 +38,11 @@
             void IPresentableView.Dismissing() { }
         }
 
-        private sealed class TestViewPresenter : IViewPresenter
+        private sealed class TestViewPresenter : IViewPresenter, IStackedViewPresenter
         {
-
             void IViewPresenter.PresentView(IPresentableView view) { }
-            void IViewPresenter.PushModalView(IPresentableView view) { }
-            void IViewPresenter.DismissModalView(IPresentableView view) { }
-            void IViewPresenter.PresentingFirstModalView() { }
-            void IViewPresenter.DismissedLastModalView() { }
+            void IStackedViewPresenter.PushView(IPresentableView view, bool animated) { }
+            void IStackedViewPresenter.DismissView(IPresentableView view, bool animated) { }
         }
 
         private sealed class TestViewFactory : IPresentableViewFactory

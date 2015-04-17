@@ -22,6 +22,7 @@ namespace RdClient.Factories
             viewFactory.AddViewClass("ErrorMessageView", typeof(Views.ErrorMessageView));
             viewFactory.AddViewClass("DeleteDesktopsView", typeof(Views.DeleteDesktopsView));
             viewFactory.AddViewClass("CertificateValidationView", typeof(Views.CertificateValidationView));
+            viewFactory.AddViewClass("DesktopIdentityValidationView", typeof(Views.DesktopIdentityValidationView));
             viewFactory.AddViewClass("SettingsView", typeof(Views.SettingsView));
             viewFactory.AddViewClass("DeleteUserView", typeof(Views.DeleteUserView));
             viewFactory.AddViewClass("EditCredentialsView", typeof(Views.EditCredentialsView));
@@ -29,6 +30,8 @@ namespace RdClient.Factories
             viewFactory.AddViewClass("InSessionEditCredentialsView", typeof(Views.InSessionEditCredentialsView));
             viewFactory.AddViewClass("AddOrEditGatewayView", typeof(Views.AddOrEditGatewayView));
             viewFactory.AddViewClass("DeleteGatewayView", typeof(Views.DeleteGatewayView));
+            viewFactory.AddViewClass("SelectNewResourceTypeView", typeof(Views.SelectNewResourceTypeView));
+            viewFactory.AddViewClass("DesktopEditorView", typeof(Views.DesktopEditorView));
 
             //
             // Remote session view must be a singleton, because it creates the swap chain panel passed

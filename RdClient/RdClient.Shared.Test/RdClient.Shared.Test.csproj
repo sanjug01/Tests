@@ -120,6 +120,7 @@
     <Compile Include="Converters\ByteArrayToStringConverterTests.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\EnumMemberToSymbolStringConverterTests.cs" />
+    <Compile Include="Converters\NegateBooleanConverterTests.cs" />
     <Compile Include="Converters\NotNullToVisibilityConverterTests.cs" />
     <Compile Include="Converters\NullToVisibilityConverterTests.cs" />
     <Compile Include="Converters\GatewayComboBoxElementToLocalizedStringConverterTests.cs" />
@@ -219,6 +220,7 @@
     <Compile Include="Navigation\Extensions\TimerFactoryExtensionTests.cs" />
     <Compile Include="Navigation\ModalPresentationCompletionTests.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgsTests.cs" />
+    <Compile Include="Navigation\ViewVisibilityTests.cs" />
     <Compile Include="RdMock.Test\MockBaseTests.cs" />
     <Compile Include="RdMock\IMockCall.cs" />
     <Compile Include="RdMock\MockBase.cs" />
@@ -228,8 +230,11 @@
     <Compile Include="RdTest\ExceptionExpecter.cs" />
     <Compile Include="RdTest\UAPSleep.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
+    <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
     <Compile Include="ViewModels\AddUserViewModelTests.cs" />
+    <Compile Include="ViewModels\DesktopIdentityValidationViewModelTests.cs" />
+    <Compile Include="ViewModels\DesktopIdentityValidationCompletionTests.cs" />
     <Compile Include="ViewModels\CertificateValidationCompletionTests.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModelTests.cs" />
     <Compile Include="ViewModels\CredentialViewModelTests.cs" />

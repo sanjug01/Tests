@@ -1,16 +1,17 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
-    using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
-    using System.Linq;
+    using System.Threading;
+    using System.Windows.Input;
+    using RdClient.Shared.Navigation;
 
     public class ConnectionCenterViewModel : DeferringViewModelBase,
         IConnectionCenterViewModel,
@@ -44,6 +45,14 @@
         private bool _hasDesktops;
         private bool _hasApps;
         private bool _showSectionLabels;
+        //
+        // Completion of accessory views passed to all accessory views as the activation parameter.
+        // The views subscribe to the completion object and dismiss themselves when completion is requested
+        // by the view model. The view model requests completion when it needs to dismiss the current accessory view.
+        //
+        private readonly SynchronousCompletion _accessoryViewCompletion;
+        private readonly IViewVisibility _accessoryViewVisibility;
+        private RelayCommand _cancelAccessoryView;
 
         //
         // App bar items
@@ -61,7 +70,7 @@
         // Alphabetical comparer of desktop model host names; the class is used to automatically
         // sort the observable collection of local desktops.
         //
-        private class DesktopModelAlphabeticalComparer : IComparer<IModelContainer<RemoteConnectionModel>>
+        private sealed class DesktopModelAlphabeticalComparer : IComparer<IModelContainer<RemoteConnectionModel>>
         {
             int IComparer<IModelContainer<RemoteConnectionModel>>.Compare(IModelContainer<RemoteConnectionModel> x, IModelContainer<RemoteConnectionModel> y)
             {
@@ -116,11 +125,15 @@
             //
             // Add toolbar buttons
             //
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, new RelayCommand(this.AddResource), "Add"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.MultiSelection, new RelayCommand(this.ToggleDesktopSelectionCommandExecute), "Select"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
             //
             //_toolbarItemsSource.Add(new SeparatorBarItemModel());
             //
+            _accessoryViewCompletion = new SynchronousCompletion();
+            _accessoryViewVisibility = ViewVisibility.Create(false);
+            _cancelAccessoryView = new RelayCommand(this.ExecuteCancelAccessoryView);
 
             this.SelectedCount = 0;
         }
@@ -228,6 +241,16 @@
             this.ShowSectionLabels = this.HasDesktops && this.HasApps;
         }
 
+        public IViewVisibility AccessoryViewVisibility
+        {
+            get { return _accessoryViewVisibility; }
+        }
+
+        public ICommand CancelAccessoryView
+        {
+            get { return _cancelAccessoryView; }
+        }
+
         public int SelectedCount
         {
             get { return _selectedCount; }
@@ -316,7 +339,6 @@
             }
             else
             {
-
             }  
 
             this.HasDesktops = _desktopViewModels.Count > 0;
@@ -432,6 +454,14 @@
             }
         }
 
+        private void AddResource(object parameter)
+        {
+            //
+            // Called by the command bound to the "add" toolbar button
+            //
+            this.NavigationService.PushAccessoryView("SelectNewResourceTypeView", _accessoryViewCompletion);
+        }
+
         private void ToggleDesktopSelectionCommandExecute(object o)
         {
 
@@ -451,6 +481,17 @@
         private IWorkspaceViewModel CreateWorkspaceViewModel(IModelContainer<OnPremiseWorkspaceModel> workspace)
         {
             return new WorkspaceViewModel(workspace, this.ApplicationDataModel, this, this.NavigationService, _sessionFactory);
+        }
+
+        private void ExecuteCancelAccessoryView(object parameter)
+        {
+            //
+            // Cancel the current accessory view (there can be only one).
+            //
+            Contract.Assert(parameter is IHandleable);
+
+            _accessoryViewCompletion.Complete();
+            _accessoryViewCompletion.Reset();
         }
     }
 }
