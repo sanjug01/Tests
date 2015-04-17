@@ -13,7 +13,7 @@
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d"
     d:DesignHeight="276" Width="342"
-    RequestedTheme="Dark">
+    RequestedTheme="{StaticResource MainTheme}">
     
     <d:UserControl.DataContext>
         <design:FakeDesktopViewModel />

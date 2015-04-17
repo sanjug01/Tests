@@ -10,7 +10,7 @@
     xmlns:sc="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
-    RequestedTheme="Light">
+    RequestedTheme="{StaticResource AlternateTheme}">
     
     <Page.DataContext>
         <vm:AddUserViewModel />

@@ -9,7 +9,7 @@
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:winmodel="using:RdClient.Models"
     xmlns:lifetime="using:RdClient.LifeTimeManagement"
-    RequestedTheme="Light">
+    RequestedTheme="{StaticResource MainTheme}">
 
     <Application.Resources>
 

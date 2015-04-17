@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     d:DesignHeight="128"
     d:DesignWidth="156"
-    RequestedTheme="Dark">
+    RequestedTheme="{StaticResource MainTheme}">
 
     <d:UserControl.DataContext>
         <design:FakeRemoteResourceViewModel />

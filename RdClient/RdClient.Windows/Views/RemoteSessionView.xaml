@@ -10,7 +10,7 @@
     xmlns:conv="using:RdClient.Converters"
     xmlns:input="using:RdClient.Input"
     mc:Ignorable="d"
-    RequestedTheme="Dark"
+    RequestedTheme="{StaticResource MainTheme}"
     d:DesignHeight="300"
     d:DesignWidth="800">
     

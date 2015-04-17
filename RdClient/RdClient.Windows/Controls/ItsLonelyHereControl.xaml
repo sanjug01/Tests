@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     d:DesignHeight="700"
     d:DesignWidth="1024"
-    RequestedTheme="Dark">
+    RequestedTheme="{StaticResource MainTheme}">
     
     <Grid Background="{ThemeResource ConnectionCenterScrollViewBackgroundBrush}">
         <Grid.RowDefinitions>

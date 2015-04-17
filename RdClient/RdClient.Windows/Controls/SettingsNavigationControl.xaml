@@ -15,7 +15,7 @@
         <design:FakeSettingsViewModel />
     </d:UserControl.DataContext>
 
-    <Grid Background="{StaticResource SettingsNavBarBackgroundBrush}" RequestedTheme="Dark">        
+    <Grid Background="{StaticResource SettingsNavBarBackgroundBrush}" RequestedTheme="{StaticResource MainTheme}">        
         <Grid.RowDefinitions>
             <RowDefinition Height="{StaticResource SettingsTopPadding}" />
             <RowDefinition Height="{StaticResource SettingsItemHeight}" />

@@ -9,7 +9,7 @@
     xmlns:cv="using:RdClient.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
-    RequestedTheme="Light">    
+    RequestedTheme="{StaticResource AlternateTheme}">    
     
     <Page.DataContext>
         <vm:DeleteDesktopsViewModel/>
