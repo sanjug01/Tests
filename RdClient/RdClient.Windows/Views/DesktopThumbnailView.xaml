@@ -42,7 +42,7 @@
     </UserControl.Resources>
 
     <StackPanel> 
-        <Button Style="{StaticResource InvisibleButtonStyle}"
+        <Button Style="{StaticResource FlatButtonStyle}"
                 x:Name="ThumbnailButton"
                 Command="{Binding ConnectCommand}"
                 FlyoutBase.AttachedFlyout="{StaticResource ModifyConnectionMenuFlyout}"

@@ -15,7 +15,7 @@
         <design:FakeRemoteResourceViewModel />
     </d:UserControl.DataContext>
     <Grid Width="156" Height="128" Background="{ThemeResource ConnectionCenterScrollViewBackgroundBrush}">
-        <Button Style="{StaticResource InvisibleButtonStyle}" Command="{Binding ConnectCommand}">
+        <Button Style="{StaticResource FlatButtonStyle}" Command="{Binding ConnectCommand}">
             <Grid >       
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />

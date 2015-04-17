@@ -69,7 +69,7 @@
     <x:String x:Key="KeyboardIcon">&#xE765;</x:String>
     <x:String x:Key="DisconnectIcon">&#xE711;</x:String>
 
-    <Style x:Key="InvisibleButtonStyle" TargetType="Button">
+    <Style x:Key="FlatButtonStyle" TargetType="Button">
         <Setter Property="Padding" Value="0" />
         <Setter Property="Background" Value="Transparent" />        
     </Style>
@@ -84,18 +84,13 @@
     <x:Double x:Key="ConnectionCenterButtonWidth">68</x:Double>
     <GridLength x:Key="ListHeaderHeight">34</GridLength>
 
-    <Style x:Key="ConnectionCenterBarButtonStyle" TargetType="Button">
+    <Style x:Key="ConnectionCenterBarButtonStyle" TargetType="Button" BasedOn="{StaticResource FlatButtonStyle}">
         <Setter Property="Width" Value="{StaticResource ConnectionCenterButtonWidth}" />
         <Setter Property="Height" Value="{StaticResource ConnectionCenterTitleBarHeight}" />
-        <Setter Property="Background" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}" />
-        <Setter Property="Foreground" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
         <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="0" />
     </Style>
 
     <Style x:Key="RemoteSessionSymbolBarButton" TargetType="Button">

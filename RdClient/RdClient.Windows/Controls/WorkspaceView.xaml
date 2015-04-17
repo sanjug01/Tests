@@ -48,7 +48,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>            
-            <Button Style="{StaticResource InvisibleButtonStyle}" Flyout="{StaticResource WorkspaceMenuFlyout}">
+            <Button Style="{StaticResource FlatButtonStyle}" Flyout="{StaticResource WorkspaceMenuFlyout}">
                 <TextBlock Text="{Binding Name}" Style="{StaticResource SubheaderTextBlockStyle}" Margin="10"/>
             </Button>
         </Grid>
