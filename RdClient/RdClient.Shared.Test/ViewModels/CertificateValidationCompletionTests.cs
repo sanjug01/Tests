@@ -112,13 +112,13 @@ using System.Collections.Generic;
 
             IRdpCertificate ICertificateValidation.Certificate { get { return _certificate; } }
 
-            void ICertificateValidation.Accept()
+            void IValidation.Accept()
             {
                 if (null != this.Accepted)
                     this.Accepted(this, EventArgs.Empty);
             }
 
-            void ICertificateValidation.Reject()
+            void IValidation.Reject()
             {
                 if (null != this.Rejected)
                     this.Rejected(this, EventArgs.Empty);

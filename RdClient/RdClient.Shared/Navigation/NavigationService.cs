@@ -128,10 +128,6 @@ namespace RdClient.Shared.Navigation
 
             if (0 == _modalStack.Count)
             {
-                //
-                // TODO:    if there are views on the accessory stack, activate the top one,
-                //          but only if that is necessary (in most cases it it is not).
-                //
                 EmitDismissingLastModalView();
             }
         }
@@ -228,16 +224,12 @@ namespace RdClient.Shared.Navigation
                 // The last view from the stack has been dismissed, the new active view is the currently
                 // presented main view.
                 //
-                // TODO:    it may be that there is another non-empty stack; the top view from that other
-                //          stack needs to be presented here.
-                //
-                //
                 Contract.Assert(0 == index);
                 newActiveView = _currentView;
             }
             else
             {
-                Contract.Assert(index >= 0);
+                Contract.Assert(index > 0);
                 newActiveView = viewStack[index-1].View;
             }
 

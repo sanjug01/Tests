@@ -232,6 +232,7 @@
     <Compile Include="LifeTimeManagement\LaunchEventArgs.cs" />
     <Compile Include="LifeTimeManagement\SuspendEventArgs.cs" />
     <Compile Include="Models\ApplicationDataModel.cs" />
+    <Compile Include="Models\BadServerIdentityEventArgs.cs" />
     <Compile Include="Models\BadCertificateEventArgs.cs" />
     <Compile Include="Models\CloudWorkspaceModel.cs" />
     <Compile Include="Models\CredentialsModel.cs" />
@@ -241,7 +242,7 @@
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Input\Pointer\PointerEventDispatcherOld.cs" />
     <Compile Include="Data\ICertificateTrust.cs" />
-    <Compile Include="Models\ICertificateValidation.cs" />
+    <Compile Include="Models\IValidation.cs" />
     <Compile Include="Models\InterruptedSessionContinuation.cs" />
     <Compile Include="Models\IRdpConnectionSource.cs" />
     <Compile Include="Models\IRemoteSession.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.NewSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.ReconnectingSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.ValidateCertificate.cs" />
+    <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.ValidateServerIdentity.cs" />
     <Compile Include="Models\RemoteSessionSetup.cs" />
     <Compile Include="Models\RemoteSessionState.cs" />
     <Compile Include="Models\ISessionCredentials.cs" />
@@ -302,13 +304,17 @@
     <Compile Include="Navigation\IPresentationCompletion.cs" />
     <Compile Include="Navigation\IStackedPresentationContext.cs" />
     <Compile Include="Navigation\IStackedViewPresenter.cs" />
+    <Compile Include="Navigation\IViewVisibility.cs" />
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
+    <Compile Include="Navigation\ViewVisibility.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBase.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModel.cs" />
+    <Compile Include="ViewModels\DesktopIdentityValidationCompletion.cs" />
     <Compile Include="ViewModels\CertificateValidationCompletion.cs" />
     <Compile Include="ViewModels\AddOrEditWorkspaceViewModel.cs" />
+    <Compile Include="ViewModels\DesktopIdentityValidationViewModel.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\DesktopEditorViewModel.cs" />
     <Compile Include="ViewModels\GatewayViewModel.cs" />

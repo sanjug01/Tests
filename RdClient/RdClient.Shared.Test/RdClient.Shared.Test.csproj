@@ -184,6 +184,8 @@
     <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\PointerManipulator.cs" />
     <Compile Include="Mock\PointerManipulatorRecorder.cs" />
+    <Compile Include="Mock\RadcClient.cs" />
+    <Compile Include="Mock\RadcClientEvents.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
     <Compile Include="Mock\RenderingPanel.cs" />
     <Compile Include="Mock\Thumbnail.cs" />
@@ -218,6 +220,7 @@
     <Compile Include="Navigation\Extensions\TimerFactoryExtensionTests.cs" />
     <Compile Include="Navigation\ModalPresentationCompletionTests.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgsTests.cs" />
+    <Compile Include="Navigation\ViewVisibilityTests.cs" />
     <Compile Include="RdMock.Test\MockBaseTests.cs" />
     <Compile Include="RdMock\IMockCall.cs" />
     <Compile Include="RdMock\MockBase.cs" />
@@ -230,6 +233,8 @@
     <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
     <Compile Include="ViewModels\AddUserViewModelTests.cs" />
+    <Compile Include="ViewModels\DesktopIdentityValidationViewModelTests.cs" />
+    <Compile Include="ViewModels\DesktopIdentityValidationCompletionTests.cs" />
     <Compile Include="ViewModels\CertificateValidationCompletionTests.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModelTests.cs" />
     <Compile Include="ViewModels\CredentialViewModelTests.cs" />

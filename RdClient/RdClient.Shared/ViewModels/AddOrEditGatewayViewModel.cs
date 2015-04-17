@@ -150,6 +150,11 @@ namespace RdClient.Shared.ViewModels
                 {
                     this.Gateway.CredentialsId = this.UserOptions[this.SelectedUserOptionsIndex].Credentials.Id;
                 }
+                else
+                {
+                    this.Gateway.CredentialsId = Guid.Empty;
+                }
+
 
                 if (this.IsAddingGateway)
                 {

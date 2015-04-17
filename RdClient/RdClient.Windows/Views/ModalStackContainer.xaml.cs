@@ -14,6 +14,9 @@ namespace RdClient.Views
     {
         private IPendingAnimation _pendingAnimation;
 
+        public event EventHandler PushingFirstView;
+        public event EventHandler DismissedLastView;
+
         public ModalStackContainer()
         {
             this.InitializeComponent();
@@ -37,6 +40,9 @@ namespace RdClient.Views
                 VerticalContentAlignment = VerticalAlignment.Stretch,
                 Content = view
             };
+
+            if (0 == this.RootGrid.Children.Count && null != this.PushingFirstView)
+                this.PushingFirstView(this, EventArgs.Empty);
 
             if (animated)
             {
@@ -82,6 +88,9 @@ namespace RdClient.Views
                 {
                     this.RootGrid.Children.Remove(cc);
                     cc.Content = null;
+
+                    if (0 == this.RootGrid.Children.Count && null != this.DismissedLastView)
+                        this.DismissedLastView(this, EventArgs.Empty);
                 }
             }
         }
@@ -92,6 +101,9 @@ namespace RdClient.Views
             {
                 _pendingAnimation = null;
             }
+
+            if (0 == this.RootGrid.Children.Count && null != this.DismissedLastView)
+                this.DismissedLastView(this, EventArgs.Empty);
         }
 
     }

@@ -9,6 +9,9 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
     
+    <!--
+    TODO: Get rid of the blue tint after confirming that the detector panels are in the right place and get dismissed.
+    -->
     <Grid
         Background="Blue"
         Opacity="0.25"/>

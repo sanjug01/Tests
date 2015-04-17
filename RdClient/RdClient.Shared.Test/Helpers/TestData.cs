@@ -113,5 +113,26 @@ namespace RdClient.Shared.Test.Helpers
 
             return creds;
         }
+
+        public OnPremiseWorkspaceModel NewOnPremWorkspace(IRadcClient radcClient, ApplicationDataModel dataModel, Guid credId)
+        {
+            var workspace = new OnPremiseWorkspaceModel();
+            workspace.Initialize(radcClient, dataModel);
+            workspace.FeedUrl = "https://" + NewRandomString();
+            workspace.CredentialsId = credId;
+            return workspace;
+        }
+
+        public IList<OnPremiseWorkspaceModel> NewSmallListOfOnPremWorkspaces(IRadcClient radcClient, ApplicationDataModel dataModel, IList<IModelContainer<CredentialsModel>> creds)
+        {
+            int count = RandomSource.Next(3, 10);
+            IList<OnPremiseWorkspaceModel> workspaces = new List<OnPremiseWorkspaceModel>(count);
+            for (int i = 0; i < count; i++)
+            {
+                Guid credId = creds[_rand.Next(0, creds.Count)].Id;
+                workspaces.Add(NewOnPremWorkspace(radcClient, dataModel, credId));
+            }
+            return workspaces;
+        }
     }
 }

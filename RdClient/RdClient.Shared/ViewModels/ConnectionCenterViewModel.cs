@@ -31,7 +31,6 @@
         // Mutable collection of toolbar item models. When the view model needs to modify contents of the toolbar,
         // it modifies this collection.
         //
-        private readonly RelayCommand _addResourceToolbarCommand;
         private readonly ObservableCollection<BarItemModel> _toolbarItemsSource;
         //
         // Read-only wrapper of the collection of toolbar item models returned by the ToolbarItems property
@@ -45,13 +44,14 @@
         private bool _showApps;
         private bool _hasDesktops;
         private bool _hasApps;
+        private bool _showSectionLabels;
         //
         // Completion of accessory views passed to all accessory views as the activation parameter.
         // The views subscribe to the completion object and dismiss themselves when completion is requested
         // by the view model. The view model requests completion when it needs to dismiss the current accessory view.
         //
         private readonly SynchronousCompletion _accessoryViewCompletion;
-        private bool _isAccessoryViewVisible;
+        private readonly IViewVisibility _accessoryViewVisibility;
         private RelayCommand _cancelAccessoryView;
 
         //
@@ -125,15 +125,14 @@
             //
             // Add toolbar buttons
             //
-            _addResourceToolbarCommand = new RelayCommand(this.AddResource, this.CanAddResource);
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, _addResourceToolbarCommand, "Add"));
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, new RelayCommand(this.AddResource), "Add"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.MultiSelection, new RelayCommand(this.ToggleDesktopSelectionCommandExecute), "Select"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
             //
             //_toolbarItemsSource.Add(new SeparatorBarItemModel());
             //
             _accessoryViewCompletion = new SynchronousCompletion();
-            _isAccessoryViewVisible = false;
+            _accessoryViewVisibility = ViewVisibility.Create(false);
             _cancelAccessoryView = new RelayCommand(this.ExecuteCancelAccessoryView);
 
             this.SelectedCount = 0;
@@ -173,6 +172,7 @@
                 {
                     this.ShowDesktops = value;
                     this.ShowApps = !value;
+                    SetShowSectionLabels();
                 }
             }
         }
@@ -189,6 +189,7 @@
                 {
                     this.ShowApps = value;
                     this.ShowDesktops = !value;
+                    SetShowSectionLabels();
                 }
             }
         }
@@ -223,16 +224,26 @@
             }
         }
 
-        public bool IsAccessoryViewPresented
+        public bool ShowSectionLabels
         {
-            get { return _isAccessoryViewVisible; }
+            get
+            {
+                return _showSectionLabels;
+            }
             private set
             {
-                if(this.SetProperty(ref _isAccessoryViewVisible, value))
-                {
-                    _addResourceToolbarCommand.EmitCanExecuteChanged();
-                }
+                SetProperty(ref _showSectionLabels, value);
             }
+        }
+
+        private void SetShowSectionLabels()
+        {
+            this.ShowSectionLabels = this.HasDesktops && this.HasApps;
+        }
+
+        public IViewVisibility AccessoryViewVisibility
+        {
+            get { return _accessoryViewVisibility; }
         }
 
         public ICommand CancelAccessoryView
@@ -328,7 +339,7 @@
             }
             else
             {
-            }
+            }  
 
             this.HasDesktops = _desktopViewModels.Count > 0;
             this.HasApps = _workspaceViewModels.Count > 0;
@@ -348,13 +359,6 @@
             {
                 dvm.Dismissed();
             }
-        }
-
-        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
-        {
-            base.OnNavigatingBack(backArgs);
-            _accessoryViewCompletion.Complete();
-            _accessoryViewCompletion.Reset();
         }
 
         private IDesktopViewModel CreateDesktopViewModel(IModelContainer<RemoteConnectionModel> container)
@@ -455,20 +459,7 @@
             //
             // Called by the command bound to the "add" toolbar button
             //
-            SelectNewResourceTypeViewModel.Completion completion = new SelectNewResourceTypeViewModel.Completion();
-
-            completion.Completed += this.OnAccessoryViewCompleted;
-            completion.AddDesktop += this.OnAddNewDesktop;
-            completion.AddOnPremiseWorkspace += this.OnAddOnPremiseWorkspace;
-            completion.AddCloudWorkspace += this.OnAddCloudWorkspace;
-            this.IsAccessoryViewPresented = true;
-
-            this.NavigationService.PushAccessoryView("SelectNewResourceTypeView", _accessoryViewCompletion, completion);
-        }
-
-        private bool CanAddResource(object parameter)
-        {
-            return !this.IsAccessoryViewPresented;
+            this.NavigationService.PushAccessoryView("SelectNewResourceTypeView", _accessoryViewCompletion);
         }
 
         private void ToggleDesktopSelectionCommandExecute(object o)
@@ -501,71 +492,6 @@
 
             _accessoryViewCompletion.Complete();
             _accessoryViewCompletion.Reset();
-        }
-
-        private void OnAccessoryViewCompleted(object sender, EventArgs e)
-        {
-            //
-            // Called by completion events of all accessory views.
-            //
-            Contract.Assert(sender is AccessoryViewModelBase.CompletionBase);
-            AccessoryViewModelBase.CompletionBase completion = (AccessoryViewModelBase.CompletionBase)sender;
-            completion.Completed -= this.OnAccessoryViewCompleted;
-            //
-            // Set IsAccessoryViewPresented to false to hide overlays that cancel the current accessory view.
-            //
-            this.IsAccessoryViewPresented = false;
-        }
-
-        private void OnAddNewDesktop(object sender, EventArgs e)
-        {
-            //
-            // Called by the completion object passed to the new resource selector accessory view
-            // when user has selected to add a new desktop.
-            //
-            SelectNewResourceTypeViewModel.Completion cSender = ((SelectNewResourceTypeViewModel.Completion)sender);
-            cSender.AddDesktop -= this.OnAddNewDesktop;
-            cSender.AddOnPremiseWorkspace -= this.OnAddOnPremiseWorkspace;
-            cSender.AddCloudWorkspace -= this.OnAddCloudWorkspace;
-
-            DesktopEditorViewModel.Completion completion = new DesktopEditorViewModel.Completion();
-            completion.Completed += this.OnAccessoryViewCompleted;
-            this.IsAccessoryViewPresented = true;
-            this.NavigationService.PushAccessoryView("DesktopEditorView", _accessoryViewCompletion, completion);
-        }
-
-        private void OnAddOnPremiseWorkspace(object sender, EventArgs e)
-        {
-            //
-            // Called by the completion object passed to the new resource selector accessory view
-            // when user has selected to add a new on-premise workspace.
-            //
-            SelectNewResourceTypeViewModel.Completion cSender = ((SelectNewResourceTypeViewModel.Completion)sender);
-            cSender.AddDesktop -= this.OnAddNewDesktop;
-            cSender.AddOnPremiseWorkspace -= this.OnAddOnPremiseWorkspace;
-            cSender.AddCloudWorkspace -= this.OnAddCloudWorkspace;
-
-            DesktopEditorViewModel.Completion completion = new DesktopEditorViewModel.Completion();
-            completion.Completed += this.OnAccessoryViewCompleted;
-            this.IsAccessoryViewPresented = true;
-            this.NavigationService.PushAccessoryView("DesktopEditorView", _accessoryViewCompletion, completion);
-        }
-
-        private void OnAddCloudWorkspace(object sender, EventArgs e)
-        {
-            //
-            // Called by the completion object passed to the new resource selector accessory view
-            // when user has selected to add a new cloud workspace.
-            //
-            SelectNewResourceTypeViewModel.Completion cSender = ((SelectNewResourceTypeViewModel.Completion)sender);
-            cSender.AddDesktop -= this.OnAddNewDesktop;
-            cSender.AddOnPremiseWorkspace -= this.OnAddOnPremiseWorkspace;
-            cSender.AddCloudWorkspace -= this.OnAddCloudWorkspace;
-
-            DesktopEditorViewModel.Completion completion = new DesktopEditorViewModel.Completion();
-            completion.Completed += this.OnAccessoryViewCompleted;
-            this.IsAccessoryViewPresented = true;
-            this.NavigationService.PushAccessoryView("DesktopEditorView", _accessoryViewCompletion, completion);
         }
     }
 }

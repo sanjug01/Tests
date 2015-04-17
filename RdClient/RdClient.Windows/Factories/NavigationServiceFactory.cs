@@ -22,6 +22,7 @@ namespace RdClient.Factories
             viewFactory.AddViewClass("ErrorMessageView", typeof(Views.ErrorMessageView));
             viewFactory.AddViewClass("DeleteDesktopsView", typeof(Views.DeleteDesktopsView));
             viewFactory.AddViewClass("CertificateValidationView", typeof(Views.CertificateValidationView));
+            viewFactory.AddViewClass("DesktopIdentityValidationView", typeof(Views.DesktopIdentityValidationView));
             viewFactory.AddViewClass("SettingsView", typeof(Views.SettingsView));
             viewFactory.AddViewClass("DeleteUserView", typeof(Views.DeleteUserView));
             viewFactory.AddViewClass("EditCredentialsView", typeof(Views.EditCredentialsView));
