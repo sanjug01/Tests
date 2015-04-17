@@ -7,23 +7,47 @@
     >
     
     <ResourceDictionary.ThemeDictionaries>
-        <ResourceDictionary x:Key="Default">
+        <ResourceDictionary x:Key="Default">            
             <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
             <SolidColorBrush x:Key="ConnectionCenterScrollViewBackgroundBrush" Color="{ThemeResource SystemAltHighColor}" />
+
+            <SolidColorBrush x:Key="ConnectionCenterDesktopPlaceholderIconColor" Color="{ThemeResource SystemChromeHighColor}" />
+            <SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="{ThemeResource SystemAltMediumLowColor}" />
+            <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
+            <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
+
+            <SolidColorBrush x:Key="PointerOverHighlightBrush" Color="{ThemeResource ListHoverColor}" />
+            <SolidColorBrush x:Key="PressedHighlightBrush" Color="{ThemeResource ListPressColor}" />
         </ResourceDictionary>        
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
             <SolidColorBrush x:Key="ConnectionCenterScrollViewBackgroundBrush" Color="{ThemeResource SystemAltHighColor}" />
+
+            <SolidColorBrush x:Key="ConnectionCenterDesktopPlaceholderIconColor" Color="{ThemeResource SystemChromeHighColor}" />
+            <SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="{ThemeResource SystemAltMediumLowColor}" />
+            <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
+            <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
+
+            <SolidColorBrush x:Key="PointerOverHighlightBrush" Color="{ThemeResource ListHoverColor}" />
+            <SolidColorBrush x:Key="PressedHighlightBrush" Color="{ThemeResource ListPressColor}" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="HighContrast">
             <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
             <SolidColorBrush x:Key="ConnectionCenterScrollViewBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
+            
+            <SolidColorBrush x:Key="ConnectionCenterDesktopPlaceholderIconColor" Color="{ThemeResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="{ThemeResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}"/>
+            <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}"/>
+
+            <SolidColorBrush x:Key="PointerOverHighlightBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="PressedHighlightBrush" Color="{ThemeResource SystemColorHighlightColor}" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
-    <ApplicationTheme x:Key="AppMainTheme">Dark</ApplicationTheme>
-    <ElementTheme x:Key="MainTheme">Dark</ElementTheme>
-    <ElementTheme x:Key="AlternateTheme">Light</ElementTheme>
+    <ApplicationTheme x:Key="AppMainTheme">Light</ApplicationTheme>
+    <ElementTheme x:Key="MainTheme">Light</ElementTheme>
+    <ElementTheme x:Key="AlternateTheme">Dark</ElementTheme>
 
     <FontFamily x:Key="IconFont">ms-appx:///Assets/SegMDL2.1.12.ttf#Segoe MDL2 Assets</FontFamily>
     <x:String x:Key="AddIcon">&#xE710;</x:String>
@@ -64,7 +88,7 @@
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
                                                                        Storyboard.TargetProperty="Background">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltListAccentLowBrush}" />
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PointerOverHighlightBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -72,7 +96,7 @@
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
                                                                        Storyboard.TargetProperty="Background">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltListAccentHighBrush}" />
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PressedHighlightBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -95,11 +119,6 @@
     Connection Center styles 
     ======================================================================================
     -->            
-    <SolidColorBrush x:Key="ConnectionCenterDesktopPlaceholderIconColor" Color="#9D9D9D" />
-    <SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="#59000000" />    
-    <SolidColorBrush x:Key="ConnectionCenterScrollViewBackgroundBrush" Color="#000000" />
-    <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="#FFFFFF"/>
-    <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="#FFFFFF"/>
     <GridLength x:Key="ConnectionCenterMargin">68</GridLength>   
     <x:Double x:Key="ConnectionCenterTitleBarHeight">68</x:Double>
     <x:Double x:Key="ConnectionCenterButtonWidth">68</x:Double>
@@ -109,7 +128,7 @@
         <Setter Property="Width" Value="{StaticResource ConnectionCenterButtonWidth}" />
         <Setter Property="Height" Value="{StaticResource ConnectionCenterTitleBarHeight}" />
         <Setter Property="Background" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+        <Setter Property="Foreground" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
         <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -125,7 +144,7 @@
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
         <Setter Property="Background" Value="{StaticResource ConnectionCenterBarBackgroundBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+        <Setter Property="Foreground" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="BorderBrush" Value="Transparent" />
@@ -143,7 +162,7 @@
         <Setter Property="Margin" Value="0" />
         <Setter Property="Height" Value="{StaticResource ConnectionCenterTitleBarHeight}" />
         <Setter Property="Background" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+        <Setter Property="Foreground" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
         <Setter Property="TabNavigation" Value="Local" />
         <Setter Property="Padding" Value="34,0,34,0" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -172,7 +191,7 @@
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="InnerGrid"
                                                                     Storyboard.TargetProperty="Background">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
                                                                     Storyboard.TargetProperty="Foreground">
@@ -194,7 +213,7 @@
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
                                                                     Storyboard.TargetProperty="Foreground">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -313,7 +332,7 @@
         <Setter Property="Width" Value="48" />
         <Setter Property="Height" Value="60" />
         <Setter Property="Background" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+        <Setter Property="Foreground" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
         <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -329,7 +348,7 @@
         <Setter Property="Width" Value="48" />
         <Setter Property="Height" Value="60" />
         <Setter Property="Background" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}" />
-        <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+        <Setter Property="Foreground" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
         <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -460,7 +479,7 @@
     <Style x:Key="SettingsEditUserButtonStyle" TargetType="Button">
         <Setter Property="Height" Value="32" />
         <Setter Property="Width" Value="120" />
-        <Setter Property="Foreground" Value="{StaticResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+        <Setter Property="Foreground" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
         <Setter Property="Background" Value="{StaticResource SettingsUserBulletBrush}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />

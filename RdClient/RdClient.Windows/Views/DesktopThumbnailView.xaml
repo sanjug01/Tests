@@ -42,7 +42,7 @@
     </UserControl.Resources>
 
     <StackPanel> 
-        <Grid Background="{StaticResource ConnectionCenterDesktopPlaceholderIconColor}" Height="276" Width="342">
+        <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" Height="276" Width="342">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="42" />
@@ -61,7 +61,7 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center" />
             
-            <Grid Grid.Row="1" Background="{StaticResource ConnectionCenterHostnameBackgroundColor}">
+            <Grid Grid.Row="1" Background="{ThemeResource ConnectionCenterHostnameBackgroundColor}">
                 <TextBlock Text="{Binding Desktop.DisplayName}" 
                            Style="{StaticResource CaptionTextBlockStyle}" 
                            HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0"/>
