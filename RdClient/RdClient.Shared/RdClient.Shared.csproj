@@ -251,7 +251,7 @@
     <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.NewSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.ReconnectingSession.cs" />
     <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.ValidateCertificate.cs" />
-    <Compile Include="Models\RemoteSessionInternalStates\ValidateServerIdentity.cs" />
+    <Compile Include="Models\RemoteSessionInternalStates\RemoteSession.ValidateServerIdentity.cs" />
     <Compile Include="Models\RemoteSessionSetup.cs" />
     <Compile Include="Models\RemoteSessionState.cs" />
     <Compile Include="Models\ISessionCredentials.cs" />

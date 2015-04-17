@@ -23,8 +23,6 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <c:StringLengthToVisibilityConverter x:Key="StringLengthToVisibilityConverter" />
-            <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
             <sc:NotNullToVisibilityConverter x:Key="NotNullToVisibleConverter" />
             <sc:NullToVisibilityConverter x:Key="NullToVisibleConverter" />
             <sc:BytesToBitmapConverter x:Key="BytesToBitmapConverter" />
@@ -64,14 +62,9 @@
                    VerticalAlignment="Center" />
             
             <Grid Grid.Row="1" Background="{StaticResource ConnectionCenterHostnameBackgroundColor}">
-                <TextBlock Text="{Binding Desktop.FriendlyName}" 
-                           Visibility="{Binding Desktop.FriendlyName, Mode=OneWay, Converter={StaticResource StringLengthToVisibilityConverter}}"
+                <TextBlock Text="{Binding Desktop.DisplayName}" 
                            Style="{StaticResource CaptionTextBlockStyle}" 
                            HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0"/>
-                <TextBlock Text="{Binding Desktop.HostName}" 
-                           Visibility="{Binding Desktop.FriendlyName, Mode=OneWay, Converter={StaticResource StringLengthToInvisibilityConverter}}"
-                           Style="{StaticResource CaptionTextBlockStyle}" 
-                           HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0"/>                
             </Grid>
             <Button Grid.RowSpan="2" Style="{StaticResource InvisibleButtonStyle}" 
                     x:Name="ThumbnailButton"

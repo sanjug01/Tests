@@ -14,6 +14,7 @@
             private readonly RdpDisconnectReason _reason;
 
             private RemoteSession _session;
+            private bool _userRejected;
 
             public override void Activate(RemoteSession session)
             {
@@ -55,6 +56,7 @@
 
                 _connection = connection;
                 _reason = reason;
+                _userRejected = false;
             }
             
 
@@ -65,13 +67,15 @@
 
                 using (LockUpgradeableRead())
                     _connection.HandleAsyncDisconnectResult(_reason, true);
-
             }
 
             void IValidation.Reject()
             {
                 using (LockUpgradeableRead())
+                {
+                    _userRejected = true;
                     _connection.HandleAsyncDisconnectResult(_reason, false);
+                }
             }
 
             DesktopModel IServerIdentityValidation.Desktop
@@ -105,7 +109,10 @@
             {
                 Contract.Assert(null != _session);
 
-                _session.InternalSetState(new FailedSession(_connection, e.DisconnectReason, this));
+                if (_userRejected)
+                    _session.InternalSetState(new ClosedSession(_connection, this));
+                else
+                    _session.InternalSetState(new FailedSession(_connection, e.DisconnectReason, this));
             }
         }
     }

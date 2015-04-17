@@ -24,32 +24,22 @@
     </Page.Resources>
 
     <Grid>
+        <Border Style="{StaticResource ModalBackground}" />
         <Border 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch" 
-            Opacity="0.8" 
-            Background="#dd000000"
-        />
-
-        <Border Background="{StaticResource rdWhiteBrush}"
-                Width="580" 
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Top"
-                BorderThickness="4"
-                Margin="0,64,8,0"
-            >
+            Style="{StaticResource DialogBorder}"
+            Width="580">
+            
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="8"/>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="12"/>
+                    <RowDefinition Height="60" />                    
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
                     <TextBlock Margin="24,12,24,12" 
                                Style="{ThemeResource TitleTextBlockStyle}" 
-                               Foreground="{StaticResource rdBlackBrush}" 
                                x:Uid="DesktopIdentityValidation-Caption" 
                                Text="The identity of the remote PC can't be verified (d)"/>
                 </Grid>
@@ -64,16 +54,16 @@
                                Margin="0,20,0,8"
                                x:Uid="DesktopIdentityValidation-ConnectAnywayLabel" 
                                Text="Do you want to connect anyway? (d)"/>
-                    
-                    <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right"
+                                Grid.Row="3">
                         <Button x:Uid="DesktopIdentityValidation-CancelButton" Content="Don't connect (d)" 
                                 Command="{Binding CancelCommand}" />
                         <Button x:Uid="DesktopIdentityValidation-ConnectOnceButton" Content="Connect once (d)" 
                                 Command="{Binding AcceptOnceCommand}" />
                         <Button x:Uid="DesktopIdentityValidation-AlwaysConnectButton" Content="Connect always (d)" 
                                 Command="{Binding AcceptIdentityCommand}" />
-
-                    </StackPanel>
                 </StackPanel>
             </Grid>
         </Border>

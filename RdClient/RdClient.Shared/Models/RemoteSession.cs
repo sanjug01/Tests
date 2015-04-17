@@ -205,7 +205,7 @@
         bool IRemoteSession.IsServerTrusted
         {
             get { return _isServerTrusted; }
-            set { this.SetProperty(ref _isServerTrusted, value); }
+            set { _isServerTrusted = value; }
         }
 
         IRemoteSessionState IRemoteSession.State

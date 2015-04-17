@@ -50,13 +50,30 @@
                 this.SetProperty(ref _hostName, value);
                 // name change invalidates the trust
                 this.IsTrusted = false;
+                EmitPropertyChanged("DisplayName");
             }
         }
 
         public string FriendlyName
         {
             get { return _friendlyName; }
-            set { this.SetProperty(ref _friendlyName, value); }
+            set
+            {
+                this.SetProperty(ref _friendlyName, value);
+                EmitPropertyChanged("DisplayName");
+            }
+        }
+
+        public string DisplayName
+        {
+            get
+            {
+                if(string.IsNullOrEmpty(this.FriendlyName))
+                {
+                    return this.HostName;
+                }
+                return this.FriendlyName;
+            }
         }
 
         public Guid CredentialsId

@@ -700,4 +700,22 @@
     <value>(r) Edit Gateway</value>
     <comment>Title of the dialog to edit existing gateway</comment>
   </data>
+  <data name="DesktopIdentityValidation-AlwaysConnectButton.Content" xml:space="preserve">
+    <value>(r) Connect always</value>
+  </data>
+  <data name="DesktopIdentityValidation-CancelButton.Content" xml:space="preserve">
+    <value>(r) Don't connect</value>
+  </data>
+  <data name="DesktopIdentityValidation-Caption.Text" xml:space="preserve">
+    <value>(r) The identity of the remote PC can't be verified</value>
+  </data>
+  <data name="DesktopIdentityValidation-ConnectAnywayLabel.Text" xml:space="preserve">
+    <value>(r) Do you want to connect anyway?</value>
+  </data>
+  <data name="DesktopIdentityValidation-ConnectOnceButton.Content" xml:space="preserve">
+    <value>(r) Connect once</value>
+  </data>
+  <data name="DesktopIdentityValidation-WarningLabel.Text" xml:space="preserve">
+    <value>(r) This problem can occur if the remote PC is running a version of Windows that is not configured to support server authentication.</value>
+  </data>
 </root>
