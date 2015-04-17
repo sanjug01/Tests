@@ -46,11 +46,11 @@ namespace RdClient.Shared.Input.Pointer
         public PointerEventDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl)
         {
             _pointerMode = new PointerModeConsumer(timerFactory.CreateTimer(), new PointerModeControl(sessionControl));
+            _multiTouchMode = new MultiTouchConsumer(sessionControl);
             //_directMode = PointerModeFactory.CreateDirectMode(timer, manipulator, panel);
-            //_multiTouchMode = new MultiTouchMode(manipulator);
 
-            _consumers[PointerDeviceType.Mouse] = new MouseModeControl(sessionControl);
-            //_consumers[PointerDeviceType.Pen] = new MouseMode(manipulator);
+            _consumers[PointerDeviceType.Mouse] = new MouseModeConsumer(sessionControl);
+            _consumers[PointerDeviceType.Mouse] = new MouseModeConsumer(sessionControl);
             _consumers[PointerDeviceType.Touch] = _pointerMode;
 
         }

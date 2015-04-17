@@ -4,7 +4,7 @@ using System;
 
 namespace RdClient.Shared.Input.Pointer
 {
-    public class MouseModeControl : IPointerEventConsumer
+    public class MouseModeConsumer : IPointerEventConsumer
     {
         private ConsumptionMode _consumptionMode;
         public ConsumptionMode ConsumptionMode
@@ -20,7 +20,7 @@ namespace RdClient.Shared.Input.Pointer
         private IPointerRoutedEventProperties _tracked;
         private IRemoteSessionControl _sessionControl;
 
-        public MouseModeControl(IRemoteSessionControl sessionControl)
+        public MouseModeConsumer(IRemoteSessionControl sessionControl)
         {
             _sessionControl = sessionControl;
         }
@@ -95,7 +95,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public void Reset()
         {
-            throw new NotImplementedException();
+            _tracked = null;
         }
     }
 }
