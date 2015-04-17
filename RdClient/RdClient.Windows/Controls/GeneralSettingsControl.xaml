@@ -8,7 +8,8 @@
     xmlns:design="using:RdClient.DesignTime"
     mc:Ignorable="d"
     d:DesignHeight="768"
-    d:DesignWidth="700">
+    d:DesignWidth="700"
+    RequestedTheme="Light">
 
     <d:UserControl.DataContext>
         <design:FakeSettingsViewModel />

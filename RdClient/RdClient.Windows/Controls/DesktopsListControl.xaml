@@ -9,7 +9,8 @@
     xmlns:design="using:RdClient.DesignTime"
     mc:Ignorable="d"
     d:DesignHeight="700"
-    d:DesignWidth="1024">
+    d:DesignWidth="1024"
+    RequestedTheme="Dark">
 
     <d:UserControl.DataContext>
         <design:FakeConnectionCenterViewModel />

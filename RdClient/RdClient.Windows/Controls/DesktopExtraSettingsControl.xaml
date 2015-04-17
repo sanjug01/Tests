@@ -10,7 +10,9 @@
     xmlns:helpers="using:RdClient.Shared.Helpers"    
     mc:Ignorable="d"
     d:DesignHeight="768"
-    d:DesignWidth="700">
+    d:DesignWidth="700"
+    RequestedTheme="Light">
+
     
     <UserControl.Resources>
         <converters:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />

@@ -8,7 +8,8 @@
     xmlns:conv="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:winmodel="using:RdClient.Models"
-    xmlns:lifetime="using:RdClient.LifeTimeManagement">
+    xmlns:lifetime="using:RdClient.LifeTimeManagement"
+    RequestedTheme="Light">
 
     <Application.Resources>
 

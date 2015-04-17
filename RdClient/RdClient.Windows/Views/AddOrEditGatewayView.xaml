@@ -9,7 +9,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Converters"    
     xmlns:helpers="using:RdClient.Shared.Helpers"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    RequestedTheme="Light">
     
     <Page.DataContext>
         <vm:AddOrEditGatewayViewModel />
