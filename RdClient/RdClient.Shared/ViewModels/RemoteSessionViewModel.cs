@@ -128,10 +128,10 @@
             _isRightSideBarVisible = false;
 
             ObservableCollection<object> items = new ObservableCollection<object>();
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = _showSideBars });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = _showSideBars });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _showSideBars });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _showSideBars });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard });
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
         }
 
