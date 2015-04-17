@@ -27,6 +27,17 @@
                 _cancelledCredentials = false;
             }
 
+            public ConnectingSession(IRenderingPanel renderingPanel, IRdpConnection connection, InternalState otherState)
+                : base(SessionState.Connecting, otherState)
+            {
+                Contract.Assert(null != renderingPanel);
+                Contract.Assert(null != connection);
+
+                _renderingPanel = renderingPanel;
+                _connection = connection;
+                _cancelledCredentials = false;
+            }
+
             public override void Activate(RemoteSession session)
             {
                 Contract.Assert(null == _session);
@@ -64,27 +75,37 @@
 
             private void OnRenderingPanelReady(object sender, EventArgs e)
             {
-                _connection = _session.InternalCreateConnection(_renderingPanel);
-                Contract.Assert(null != _connection);
-                Contract.Assert(null != _session._syncEvents);
-
-                _session._syncEvents.ClientConnected += this.OnClientConnected;
-                _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
-                _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
-                _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
-
-                _connection.SetCredentials(_session._sessionSetup.SessionCredentials.Credentials,
-                    !_session._sessionSetup.SessionCredentials.IsNewPassword);
-
-                // pass gateway, if necessary
-                if (_session._sessionSetup.SessionGateway.HasGateway)
+                if (null == _connection)
                 {
-                    _connection.SetGateway(
-                        _session._sessionSetup.SessionGateway.Gateway,
-                        _session._sessionSetup.SessionGateway.Credentials);
-                }
+                    _connection = _session.InternalCreateConnection(_renderingPanel);
+                    Contract.Assert(null != _connection);
+                    Contract.Assert(null != _session._syncEvents);
 
-                _connection.Connect();
+                    _session._syncEvents.ClientConnected += this.OnClientConnected;
+                    _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                    _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+                    _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
+
+                    _connection.SetCredentials(_session._sessionSetup.SessionCredentials.Credentials,
+                        !_session._sessionSetup.SessionCredentials.IsNewPassword);
+
+                    // pass gateway, if necessary
+                    if (_session._sessionSetup.SessionGateway.HasGateway)
+                    {
+                        _connection.SetGateway(
+                            _session._sessionSetup.SessionGateway.Gateway,
+                            _session._sessionSetup.SessionGateway.Credentials);
+                    }
+
+                    _connection.Connect();
+                }
+                else
+                {
+                    _session._syncEvents.ClientConnected += this.OnClientConnected;
+                    _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                    _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+                    _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
+                }
             }
 
             private void OnClientConnected(object sender, ClientConnectedArgs e)
@@ -191,7 +212,7 @@
                     // Set the state to ValidateCertificate, that will emit a BadCertificate event from the session
                     // and handle the user's response to the event.
                     //
-                    _session.InternalSetState(new ValidateCertificate(_connection, reason, this));
+                    _session.InternalSetState(new ValidateCertificate(_renderingPanel, _connection, reason, this));
                 }
             }
 

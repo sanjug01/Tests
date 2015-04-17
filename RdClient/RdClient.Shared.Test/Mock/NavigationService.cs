@@ -26,6 +26,16 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { modalView });
         }
 
+        void INavigationService.PushAccessoryView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
+        {
+            Invoke(new object[] { viewName, activationParameter, presentationCompletion });
+        }
+
+        public void DismissAccessoryView(IPresentableView accessoryView)
+        {
+            Invoke(new object[] { accessoryView });
+        }
+
         public IViewPresenter Presenter
         {
             set {  }

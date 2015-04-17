@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RdClient.Shared.ViewModels;
-using System.Windows.Input;
-using System.Collections.ObjectModel;
-
-namespace RdClient.DesignTime
+﻿namespace RdClient.DesignTime
 {
-    public sealed class FakeConnectionCenterViewModel : IConnectionCenterViewModel
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.ViewModels;
+    using System.Collections.ObjectModel;
+    using System.Windows.Input;
+
+    public sealed class FakeConnectionCenterViewModel : DisposableObject, IConnectionCenterViewModel
     {
         private readonly ObservableCollection<IDesktopViewModel> _desktopViewModelsSource;
         private readonly ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
@@ -19,6 +16,8 @@ namespace RdClient.DesignTime
 
         private readonly ObservableCollection<BarItemModel> _toolbarItemsSource;
         private readonly ReadOnlyObservableCollection<BarItemModel> _toolbarItems;
+        private readonly IViewVisibility _accessoryViewVisibility;
+        private readonly RelayCommand _cancelAccessoryView;
 
         public FakeConnectionCenterViewModel()
         {
@@ -46,6 +45,9 @@ namespace RdClient.DesignTime
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => { }), "Home"));
             _toolbarItemsSource.Add(new SeparatorBarItemModel());
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => { }), "Home"));
+
+            _accessoryViewVisibility = ViewVisibility.Create(false);
+            _cancelAccessoryView = new RelayCommand(o => { });
         }
 
         public RelayCommand AddDesktopCommand
@@ -89,6 +91,16 @@ namespace RdClient.DesignTime
         {
             get { return true; }
             set { }
+        }
+
+        public IViewVisibility AccessoryViewVisibility
+        {
+            get { return _accessoryViewVisibility; }
+        }
+
+        public ICommand CancelAccessoryView
+        {
+            get { return _cancelAccessoryView; }
         }
     }
 }

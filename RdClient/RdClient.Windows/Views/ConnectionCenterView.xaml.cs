@@ -1,12 +1,13 @@
 ﻿namespace RdClient.Views
 {
     using RdClient.Shared.Navigation;
+    using System.Diagnostics.Contracts;
     using Windows.Foundation;
     using Windows.Graphics.Display;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
-    public sealed partial class ConnectionCenterView : Page, IPresentableView
+    public sealed partial class ConnectionCenterView : Page, IPresentableView, IStackedViewPresenter
     {
         //
         // The enum prevents typos in names of visual states. When a new visual state
@@ -29,6 +30,17 @@
         void IPresentableView.Activating(object activationParameter) { }
         void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
         void IPresentableView.Dismissing() { }
+
+        void IStackedViewPresenter.PushView(IPresentableView view, bool animated)
+        {
+            Contract.Assert(null != view);
+            this.AccessoryViewPresenter.PushView(view, animated);
+        }
+
+        void IStackedViewPresenter.DismissView(IPresentableView view, bool animated)
+        {
+            this.AccessoryViewPresenter.DismissView(view, animated);
+        }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
