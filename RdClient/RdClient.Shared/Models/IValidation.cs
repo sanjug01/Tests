@@ -9,6 +9,11 @@
         void Reject();
     }
 
+    public interface ICertificateValidation : IValidation
+    {
+        IRdpCertificate Certificate { get; }
+    }
+
     public interface IServerIdentityValidation : IValidation
     {
         DesktopModel Desktop { get; }

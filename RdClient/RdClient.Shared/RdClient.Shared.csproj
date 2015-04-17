@@ -224,7 +224,6 @@
     <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
     <Compile Include="Data\ICertificateTrust.cs" />
     <Compile Include="Models\IValidation.cs" />
-    <Compile Include="Models\ICertificateValidation.cs" />
     <Compile Include="Models\InterruptedSessionContinuation.cs" />
     <Compile Include="Models\IRdpConnectionSource.cs" />
     <Compile Include="Models\IRemoteSession.cs" />
