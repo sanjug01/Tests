@@ -11,7 +11,7 @@
     xmlns:design="using:RdClient.DesignTime"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:controls="using:RdClient.Controls"
-    RequestedTheme="Dark"
+    RequestedTheme="{StaticResource MainTheme}"
     mc:Ignorable="d">
 
     <d:Page.DataContext>
@@ -80,7 +80,7 @@
     On top of everything else sits the accessory view presenter that moves in the main grid (see comments in the
     visual states to find out where in the main grid the presenter is located in each visual state).
     -->
-    <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}">
+    <Grid Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
         <!--
         Visual state manager must be placed inside the root grid.
         -->
