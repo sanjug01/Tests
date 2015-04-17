@@ -47,9 +47,10 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding Name}" Style="{StaticResource SubheaderTextBlockStyle}" Margin="10"/>
-            <Button Style="{StaticResource InvisibleButtonStyle}" Flyout="{StaticResource WorkspaceMenuFlyout}" />
+            </Grid.ColumnDefinitions>            
+            <Button Style="{StaticResource InvisibleButtonStyle}" Flyout="{StaticResource WorkspaceMenuFlyout}">
+                <TextBlock Text="{Binding Name}" Style="{StaticResource SubheaderTextBlockStyle}" Margin="10"/>
+            </Button>
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Vertical">
             <TextBlock Text="{Binding State}" Foreground="LimeGreen"/>

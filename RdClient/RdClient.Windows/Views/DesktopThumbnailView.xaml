@@ -42,9 +42,8 @@
     </UserControl.Resources>
 
     <StackPanel> 
-        <Button x:Name="ThumbnailButton"
-                Padding="0"
-                Background="Transparent"
+        <Button Style="{StaticResource InvisibleButtonStyle}"
+                x:Name="ThumbnailButton"
                 Command="{Binding ConnectCommand}"
                 FlyoutBase.AttachedFlyout="{StaticResource ModifyConnectionMenuFlyout}"
                 PointerPressed="DesktopThumbnail_PointerPressed">            
