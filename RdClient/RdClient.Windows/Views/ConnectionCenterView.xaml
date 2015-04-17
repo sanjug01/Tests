@@ -150,6 +150,5 @@
             VerticalContentAlignment="Stretch"
             HorizontalContentAlignment="Stretch"
             ContentTemplate="{StaticResource DefaultLayoutTemplate}"/>
-    </Grid>
-    
+    </Grid>    
 </Page>

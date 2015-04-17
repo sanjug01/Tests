@@ -21,7 +21,7 @@
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
         <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}" 
                  SelectedIndex="0"
                  Visibility="{Binding Path=ShowSectionLabels, Converter={StaticResource BooleanToVisibilityConverter}}">
