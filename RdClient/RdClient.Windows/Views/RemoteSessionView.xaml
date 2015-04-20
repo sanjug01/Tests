@@ -72,7 +72,7 @@
         <ItemsControl
             Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
             HorizontalAlignment="Center" VerticalAlignment="Top"
-            Opacity="0.75"
+            Opacity="{ThemeResource ConnectionOverlayOpacity}"
             ItemsSource="{Binding ConnectionBarItems}">
             
             <ItemsControl.ItemsPanel>
@@ -87,7 +87,7 @@
 
                         <DataTemplate x:Key="SymbolBarButtonModel">
                             <Button
-                                Style="{StaticResource RemoteSessionSymbolBarButton}"
+                                Style="{ThemeResource RemoteSessionSymbolBarButton}"
                                 Margin="4,0"
                                 Command="{Binding Command}"
                                 CommandParameter="{Binding CommandParameter}"

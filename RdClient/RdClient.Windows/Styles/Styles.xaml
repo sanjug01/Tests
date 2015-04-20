@@ -31,6 +31,8 @@
             <SolidColorBrush x:Key="BackButtonBackgroundBrush" Color="#008FF1" />
             <SolidColorBrush x:Key="BackButtonForegroundBrush" Color="White" />
             <SolidColorBrush x:Key="BackButtonBorderBrush" Color="{ThemeResource BackButtonBackgroundBrush}" />
+
+            <x:Double x:Key="ConnectionOverlayOpacity">0.6</x:Double>
         </ResourceDictionary>        
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
@@ -59,6 +61,8 @@
             <SolidColorBrush x:Key="BackButtonBackgroundBrush" Color="#008FF1" />
             <SolidColorBrush x:Key="BackButtonForegroundBrush" Color="White" />
             <SolidColorBrush x:Key="BackButtonBorderBrush" Color="{ThemeResource BackButtonBackgroundBrush}" />
+
+            <x:Double x:Key="ConnectionOverlayOpacity">0.6</x:Double>
         </ResourceDictionary>
         <ResourceDictionary x:Key="HighContrast">
             <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
@@ -84,7 +88,8 @@
             <SolidColorBrush x:Key="BackButtonBackgroundBrush" Color="{ThemeResource SystemColorButtonFaceColor}" />
             <SolidColorBrush x:Key="BackButtonForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
             <SolidColorBrush x:Key="BackButtonBorderBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
-            
+
+            <x:Double x:Key="ConnectionOverlayOpacity">1.0</x:Double>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
@@ -141,12 +146,10 @@
         <Setter Property="Height" Value="40" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
-        <Setter Property="Background" Value="{StaticResource ConnectionCenterBarBackgroundBrush}" />
+        <Setter Property="Background" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}" />
         <Setter Property="Foreground" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Padding" Value="0" />
     </Style>
 
@@ -374,54 +377,6 @@
         <Setter Property="Foreground" Value="{ThemeResource BackButtonForegroundBrush}" />
         <Setter Property="Content" Value="{StaticResource BackIcon}" />
         <Setter Property="Padding" Value="0" />
-    </Style>
-
-    <!-- 
-    ======================================================================================
-    Connection Bar styles 
-    ======================================================================================
-    -->
-    <Style x:Key="ConnectionBarTitleButtonStyle" TargetType="Button">
-        <Setter Property="Height" Value="60" />
-        <Setter Property="Background" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}" />
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="-2,0,-2,0"/>
-        <Setter Property="Opacity" Value="0.6"/>
-    </Style>
-
-    <Style x:Key="ConnectionBarButtonStyle" TargetType="Button">
-        <Setter Property="Width" Value="48" />
-        <Setter Property="Height" Value="60" />
-        <Setter Property="Background" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}" />
-        <Setter Property="Foreground" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
-        <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
-        <Setter Property="FontSize" Value="20" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="0" />        
-        <Setter Property="Margin" Value="-2,0,-2,0"/>
-        <Setter Property="Opacity" Value="0.6"/>
-    </Style>    
-    
-    <Style x:Key="ConnectionBarToggleButtonStyle" TargetType="ToggleButton">
-        <Setter Property="Width" Value="48" />
-        <Setter Property="Height" Value="60" />
-        <Setter Property="Background" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}" />
-        <Setter Property="Foreground" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
-        <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
-        <Setter Property="FontSize" Value="20" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Margin" Value="-2,0,-2,0" />
-        <Setter Property="Opacity" Value="0.6"/>
     </Style>
 
     <!-- 
