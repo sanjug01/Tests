@@ -16,8 +16,20 @@
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
 
-            <SolidColorBrush x:Key="PointerOverHighlightBrush" Color="{ThemeResource ListHoverColor}" />
-            <SolidColorBrush x:Key="PressedHighlightBrush" Color="{ThemeResource ListPressColor}" />
+            <SolidColorBrush x:Key="PointerOverBackgroundBrush" Color="{ThemeResource ListHoverColor}" />
+            <SolidColorBrush x:Key="PointerOverForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
+
+            <SolidColorBrush x:Key="PressedBackgroundBrush" Color="{ThemeResource ListPressColor}" />
+            <SolidColorBrush x:Key="PressedForegroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
+            <SolidColorBrush x:Key="PressedBorderBrush" Color="{ThemeResource ListPressColor}" />
+
+            <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="Transparent" />
+            <SolidColorBrush x:Key="SelectedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
+            <SolidColorBrush x:Key="SelectedBorderBrush" Color="Transparent" />
+
+            <SolidColorBrush x:Key="UnselectedBackgroundBrush" Color="Transparent" />
+            <SolidColorBrush x:Key="UnselectedForegroundBrush" Color="{ThemeResource SystemBaseMediumLowColor}" />
+            <SolidColorBrush x:Key="UnselectedBorderBrush" Color="Transparent" />
         </ResourceDictionary>        
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
@@ -28,8 +40,20 @@
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
 
-            <SolidColorBrush x:Key="PointerOverHighlightBrush" Color="{ThemeResource ListHoverColor}" />
-            <SolidColorBrush x:Key="PressedHighlightBrush" Color="{ThemeResource ListPressColor}" />
+            <SolidColorBrush x:Key="PointerOverBackgroundBrush" Color="{ThemeResource ListHoverColor}" />
+            <SolidColorBrush x:Key="PointerOverForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
+
+            <SolidColorBrush x:Key="PressedBackgroundBrush" Color="{ThemeResource ListPressColor}" />
+            <SolidColorBrush x:Key="PressedForegroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
+            <SolidColorBrush x:Key="PressedBorderBrush" Color="{ThemeResource ListPressColor}" />
+
+            <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="Transparent" />
+            <SolidColorBrush x:Key="SelectedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
+            <SolidColorBrush x:Key="SelectedBorderBrush" Color="Transparent" />
+
+            <SolidColorBrush x:Key="UnselectedBackgroundBrush" Color="Transparent" />
+            <SolidColorBrush x:Key="UnselectedForegroundBrush" Color="{ThemeResource SystemBaseMediumLowColor}" />
+            <SolidColorBrush x:Key="UnselectedBorderBrush" Color="Transparent" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="HighContrast">
             <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
@@ -40,8 +64,20 @@
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}"/>
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}"/>
 
-            <SolidColorBrush x:Key="PointerOverHighlightBrush" Color="{ThemeResource SystemColorHighlightColor}" />
-            <SolidColorBrush x:Key="PressedHighlightBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="PointerOverBackgroundBrush" Color="{ThemeResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="PointerOverForegroundBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+
+            <SolidColorBrush x:Key="PressedBackgroundBrush" Color="{ThemeResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="PressedForegroundBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="PressedBorderBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+
+            <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="SelectedForegroundBrush" Color="{ThemeResource SystemColorHighlightTextColor}" />
+            <SolidColorBrush x:Key="SelectedBorderBrush" Color="{ThemeResource SystemColorHighlightColor}" />
+
+            <SolidColorBrush x:Key="UnselectedBackgroundBrush" Color="{ThemeResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="UnselectedForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
+            <SolidColorBrush x:Key="UnselectedBorderBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
@@ -110,91 +146,158 @@
     <Style x:Key="ConnectionCenterBarNarrowButtonStyle" TargetType="Button" BasedOn="{StaticResource ConnectionCenterBarButtonStyle}">
         <Setter Property="Width" Value="48" />    
     </Style>
-    
-    <SolidColorBrush x:Key="ConnectionCenterSelectorUnselectedBrush" Color="#999999" />
-    <SolidColorBrush x:Key="ConnectionCenterPointerOverBackgroundBrush" Color="#6B6B6B" />    
+
     <Style x:Key="ConnectionCenterSectionSelectorItemStyle" TargetType="ListBoxItem">
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Height" Value="{StaticResource ConnectionCenterTitleBarHeight}" />
-        <Setter Property="Background" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}" />
-        <Setter Property="Foreground" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
-        <Setter Property="TabNavigation" Value="Local" />
-        <Setter Property="Padding" Value="34,0,34,0" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="FontSize" Value="26.667"/>
-        <Setter Property="FontWeight" Value="Light"/> 
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ListBoxItem">
-                    <Border x:Name="LayoutRoot"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal" />
-                                <VisualState x:Name="PointerOver">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="InnerGrid"
-                                                                    Storyboard.TargetProperty="Background">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ConnectionCenterPointerOverBackgroundBrush}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Pressed" >
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="InnerGrid"
-                                                                    Storyboard.TargetProperty="Background">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
-                                                                    Storyboard.TargetProperty="Foreground">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}" />
-                                        </ObjectAnimationUsingKeyFrames>                                        
-                                    </Storyboard>                                    
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="SelectionStates">
-                                <VisualState x:Name="Unselected">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
-                                                                    Storyboard.TargetProperty="Foreground">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ConnectionCenterSelectorUnselectedBrush}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>                                    
-                                </VisualState>
-                                <VisualState x:Name="Selected">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
-                                                                    Storyboard.TargetProperty="Foreground">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="SelectedUnfocused" />
-                                <VisualState x:Name="SelectedDisabled" />
-                                <VisualState x:Name="SelectedPointerOver" />
-                                <VisualState x:Name="SelectedPressed" />
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                        <Grid x:Name="InnerGrid"
-                            Background="Transparent">
-                            <Rectangle x:Name="PressedBackground"
-                                    Fill="{StaticResource SettingsBackgroundBrush}"
-                                    Opacity="0" />
-                            <ContentPresenter x:Name="ContentPresenter"
-                                            Content="{TemplateBinding Content}"
-                                            ContentTransitions="{TemplateBinding ContentTransitions}"
-                                            ContentTemplate="{TemplateBinding ContentTemplate}"
-                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                            Margin="{TemplateBinding Padding}" />
-                        </Grid>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+      <Setter Property="Margin" Value="0" />
+      <Setter Property="Height" Value="{StaticResource ConnectionCenterTitleBarHeight}" />
+      <Setter Property="TabNavigation" Value="Local" />
+      <Setter Property="Padding" Value="34,0,34,0" />
+      <Setter Property="HorizontalContentAlignment" Value="Left" />
+      <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="FontSize" Value="26.667"/>
+      <Setter Property="FontWeight" Value="Light"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ListBoxItem">
+            <Border x:Name="LayoutRoot"
+                    Background="Transparent"
+                    BorderBrush="{ThemeResource UnselectedBorderBrush}"
+                    BorderThickness="2">
+              <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                  <VisualState x:Name="Normal" />
+                  <VisualState x:Name="PointerOver">
+                    <Storyboard>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot"
+                                                  Storyboard.TargetProperty="Background">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PointerOverBackgroundBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                  Storyboard.TargetProperty="Foreground">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PointerOverForegroundBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                  </VisualState>
+                  <VisualState x:Name="Pressed" >
+                    <Storyboard>
+                      <DoubleAnimation Storyboard.TargetName="PressedBackground"
+                                       Storyboard.TargetProperty="Opacity"
+                                       To="1"
+                                       Duration="0" />
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                  Storyboard.TargetProperty="Foreground">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PressedForegroundBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot"
+                                                  Storyboard.TargetProperty="BorderBrush">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource PressedBorderBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                  </VisualState>
+                  <VisualState x:Name="Disabled" />
+                </VisualStateGroup>
+                <VisualStateGroup x:Name="SelectionStates">
+                  <VisualState x:Name="Unselected" />
+                  <VisualState x:Name="Selected">
+                    <Storyboard>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="InnerGrid"
+                                                  Storyboard.TargetProperty="Background">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedBackgroundBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                  Storyboard.TargetProperty="Foreground">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedForegroundBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot"
+                                                  Storyboard.TargetProperty="BorderBrush">
+                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedBorderBrush}" />
+                      </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                  </VisualState>
+                <VisualState x:Name="SelectedUnfocused">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="InnerGrid"
+                                    Storyboard.TargetProperty="Background">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedBackgroundBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                    Storyboard.TargetProperty="Foreground">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedForegroundBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot"
+                                    Storyboard.TargetProperty="BorderBrush">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedBorderBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="SelectedDisabled">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="InnerGrid"
+                                    Storyboard.TargetProperty="Background">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedBackgroundBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                    Storyboard.TargetProperty="Foreground">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedForegroundBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot"
+                                    Storyboard.TargetProperty="BorderBrush">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedBorderBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="SelectedPointerOver">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="InnerGrid"
+                                    Storyboard.TargetProperty="Background">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedBackgroundBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                    Storyboard.TargetProperty="Foreground">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedForegroundBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot"
+                                    Storyboard.TargetProperty="BorderBrush">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedBorderBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="SelectedPressed">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="InnerGrid"
+                                    Storyboard.TargetProperty="Background">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedBackgroundBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                    Storyboard.TargetProperty="Foreground">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedForegroundBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="LayoutRoot"
+                                    Storyboard.TargetProperty="BorderBrush">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SelectedBorderBrush}" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                </VisualStateGroup>
+              </VisualStateManager.VisualStateGroups>
+              <Grid x:Name="InnerGrid"
+                    Background="{ThemeResource UnselectedBackgroundBrush}">
+                <Rectangle x:Name="PressedBackground"
+                           Fill="{ThemeResource PressedBackgroundBrush}"
+                           Opacity="0" />
+                <ContentPresenter x:Name="ContentPresenter"
+                                Foreground="{ThemeResource UnselectedForegroundBrush}"
+                                Content="{TemplateBinding Content}"
+                                ContentTransitions="{TemplateBinding ContentTransitions}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Margin="{TemplateBinding Padding}" />
+              </Grid>
+            </Border>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
     </Style>
     <Style x:Key="ConnectionCenterSectionSelectorStyle" TargetType="ListBox">
         <Setter Property="BorderThickness" Value="0" />
