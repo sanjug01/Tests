@@ -8,7 +8,9 @@
     xmlns:c="using:RdClient.Controls"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:conv="using:RdClient.Converters"
+    xmlns:sconv="using:RdClient.Shared.Converters"
     xmlns:input="using:RdClient.Input"
+    xmlns:helpers="using:RdClient.Helpers"
     mc:Ignorable="d"
     RequestedTheme="Dark"
     d:DesignHeight="300"
@@ -24,6 +26,7 @@
 
     <UserControl.Resources>
         <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <sconv:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
     </UserControl.Resources>
 
     <Grid Background="Green">
@@ -66,10 +69,37 @@
         </Grid>
         
         <!-- Connection Bar -->
-        <c:ConnectionBarControl
+        <ItemsControl
             Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-            MainAction="{Binding ShowSideBars}"/>
-        
+            HorizontalAlignment="Center" VerticalAlignment="Top"
+            Opacity="0.75"
+            ItemsSource="{Binding ConnectionBarItems}">
+            
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplateSelector>
+                <helpers:TypeNameDataTemplateSelector>
+                    <helpers:TypeNameDataTemplateSelector.Templates>
+
+                        <DataTemplate x:Key="SymbolBarButtonModel">
+                            <Button
+                                Style="{StaticResource RemoteSessionSymbolBarButton}"
+                                Margin="4,0"
+                                Command="{Binding Command}"
+                                CommandParameter="{Binding CommandParameter}"
+                                Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
+                        </DataTemplate>
+
+                    </helpers:TypeNameDataTemplateSelector.Templates>
+                </helpers:TypeNameDataTemplateSelector>
+            </ItemsControl.ItemTemplateSelector>
+        </ItemsControl>
+
         <!-- Right side bar -->
         <c:RightSideBarControl
             BarVisibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"

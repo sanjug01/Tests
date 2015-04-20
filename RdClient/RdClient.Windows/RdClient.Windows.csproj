@@ -217,6 +217,9 @@
     <Compile Include="Views\AddOrEditWorkspaceView.xaml.cs">
       <DependentUpon>AddOrEditWorkspaceView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DesktopIdentityValidationView.xaml.cs">
+      <DependentUpon>DesktopIdentityValidationView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DeleteGatewayView.xaml.cs">
       <DependentUpon>DeleteGatewayView.xaml</DependentUpon>
     </Compile>
@@ -464,6 +467,10 @@
     <Page Include="Views\AddOrEditWorkspaceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DesktopIdentityValidationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\DeleteGatewayView.xaml">
       <Generator>MSBuild:Compile</Generator>

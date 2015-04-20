@@ -8,6 +8,7 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using System;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
@@ -26,6 +27,7 @@
         private IPointerCapture _pointerCapture;
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
+        private readonly ReadOnlyObservableCollection<object> _connectionBarItems;
         private bool _isRightSideBarVisible;
 
         private bool _failureMessageVisible;
@@ -96,6 +98,11 @@
             private set { this.SetProperty(ref _isConnectionBarVisible, value); }
         }
 
+        public ReadOnlyObservableCollection<object> ConnectionBarItems
+        {
+            get { return _connectionBarItems; }
+        }
+
         public ICommand ShowSideBars
         {
             get { return _showSideBars; }
@@ -119,6 +126,13 @@
             _showSideBars = new RelayCommand(this.InternalShowRightSideBar);
             _navigateHome = new RelayCommand(this.InternalNavigateHome);
             _isRightSideBarVisible = false;
+
+            ObservableCollection<object> items = new ObservableCollection<object>();
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _showSideBars });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard });
+            _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -145,6 +159,7 @@
             _activeSession.Failed += this.OnSessionFailed;
             _activeSession.Interrupted += this.OnSessionInterrupted;
             _activeSession.BadCertificate += this.OnBadCertificate;
+            _activeSession.BadServerIdentity += this.OnBadServerIdentity;
             _activeSession.State.PropertyChanged += this.OnSessionStatePropertyChanged;
 
             if (null != _sessionView && SessionState.Idle == _sessionState)
@@ -165,6 +180,7 @@
             _activeSession.Failed -= this.OnSessionFailed;
             _activeSession.Interrupted -= this.OnSessionInterrupted;
             _activeSession.BadCertificate -= this.OnBadCertificate;
+            _activeSession.BadServerIdentity -= this.OnBadServerIdentity;
             _activeSession.State.PropertyChanged -= this.OnSessionStatePropertyChanged;
             _sessionView.RecycleRenderingPanel(_activeSession.Deactivate());
             _activeSessionControl = null;
@@ -252,6 +268,29 @@
                 this.NavigationService.PushModalView("CertificateValidationView",
                     new CertificateValidationViewModelArgs(session.HostName, validation.Certificate),
                     new CertificateValidationCompletion(validation, this.ApplicationDataModel.CertificateTrust, session.CertificateTrust));
+            }
+        }
+
+        private void OnBadServerIdentity(object sender, BadServerIdentityEventArgs e)
+        {
+            Contract.Assert(sender is IRemoteSession);
+
+            IServerIdentityValidation validation = e.ObtainValidation();
+            IRemoteSession session = (IRemoteSession)sender;
+
+            if (session.IsServerTrusted 
+                || validation.Desktop.IsTrusted)
+            {
+                // previously accepted - do not ask again
+                validation.Accept();
+            }
+            else
+            {
+                // Prompt user to trust or not the server
+                this.NavigationService.PushModalView("DesktopIdentityValidationView",
+                    new DesktopIdentityValidationViewModelArgs(session.HostName),
+                    new DesktopIdentityValidationCompletion(validation)
+                    );
             }
         }
 
