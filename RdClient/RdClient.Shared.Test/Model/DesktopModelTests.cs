@@ -21,6 +21,16 @@
         }
 
         [TestMethod]
+        public void NewDesktopModel_DefaultExtraSettingsProperties()
+        {
+            DesktopModel model = new DesktopModel();
+
+            Assert.IsFalse(model.IsAdminSession);
+            Assert.IsFalse(model.IsSwapMouseButtons);
+            Assert.AreEqual(AudioMode.Local, model.AudioMode);
+        }
+
+        [TestMethod]
         public void DesktopModel_ChangeCredentialsId_ChangeReported()
         {
             IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
@@ -128,6 +138,28 @@
             Assert.AreEqual("GatewayId", changes[0].PropertyName);
             Assert.AreEqual("Status", changes[1].PropertyName);
             Assert.AreEqual("HasGateway", changes[2].PropertyName);
+        }
+
+        [TestMethod]
+        public void DesktopModel_ChangeExtraSettings_ChangesReported()
+        {
+            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
+            DesktopModel model = new DesktopModel();
+            model.PropertyChanged += (sender, e) => changes.Add(e);
+
+            model.AudioMode = AudioMode.NoSound;
+            model.IsAdminSession = true;
+            model.IsSwapMouseButtons = true;
+
+            Assert.IsTrue(model.IsAdminSession);
+            Assert.IsTrue(model.IsSwapMouseButtons);
+            Assert.AreEqual(AudioMode.NoSound, model.AudioMode);
+
+            Assert.AreEqual(4, changes.Count);
+            Assert.AreEqual("AudioMode", changes[0].PropertyName);
+            Assert.AreEqual("Status", changes[1].PropertyName);
+            Assert.AreEqual("IsAdminSession", changes[2].PropertyName);
+            Assert.AreEqual("IsSwapMouseButtons", changes[3].PropertyName);
         }
     }
 }
