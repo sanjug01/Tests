@@ -152,6 +152,8 @@
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
+    <Compile Include="Input\Keyboard\IInputPanelFactory.cs" />
+    <Compile Include="Input\Keyboard\IInputPanel.cs" />
     <Compile Include="Input\Pointer\IPointerCapture.cs" />
     <Compile Include="Input\Pointer\MouseAction.cs" />
     <Compile Include="Input\Pointer\MouseCursorShape.cs" />

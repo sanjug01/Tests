@@ -36,12 +36,60 @@
                 remove { }
             }
 
-            void IKeyboardCapture.Start()
+            void IKeyboardCapture.Start() { }
+
+            void IKeyboardCapture.Stop() { }
+        }
+
+        private sealed class TestInputPanelFactory : IInputPanelFactory
+        {
+            private readonly IInputPanel _inputPanel;
+
+            private sealed class TestInputPanel : IInputPanel
             {
+                private bool _isVisible;
+
+                public TestInputPanel()
+                {
+                    _isVisible = false;
+                }
+
+                bool IInputPanel.IsVisible
+                {
+                    get { return _isVisible; }
+                }
+
+                public event EventHandler IsVisibleChanged;
+
+                void IInputPanel.Hide()
+                {
+                    if(_isVisible)
+                    {
+                        _isVisible = false;
+                        if (null != this.IsVisibleChanged)
+                            this.IsVisibleChanged(this, EventArgs.Empty);
+                    }
+                }
+
+                void IInputPanel.Show()
+                {
+                    if (!_isVisible)
+                    {
+                        _isVisible = true;
+                        if (null != this.IsVisibleChanged)
+                            this.IsVisibleChanged(this, EventArgs.Empty);
+                    }
+                }
             }
 
-            void IKeyboardCapture.Stop()
+            public TestInputPanelFactory()
             {
+                _inputPanel = new TestInputPanel();
+            }
+
+            IInputPanel IInputPanelFactory.GetInputPanel()
+            {
+                return _inputPanel;
             }
         }
 
@@ -485,7 +533,8 @@
         {
             _vm = new RemoteSessionViewModel()
             {
-                KeyboardCapture = new TestKeyboardCapture()
+                KeyboardCapture = new TestKeyboardCapture(),
+                InputPanelFactory = new TestInputPanelFactory()
             };
 
             _dataModel = new ApplicationDataModel()

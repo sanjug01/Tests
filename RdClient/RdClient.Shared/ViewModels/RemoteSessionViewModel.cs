@@ -13,8 +13,6 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
-    using Windows.Foundation;
-    using Windows.UI.ViewManagement;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, IDeviceCapabilitiesSite
     {
@@ -25,16 +23,16 @@
         private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
         private readonly RelayCommand _navigateHome;
 
-        private IDeviceCapabilities _deviceCapabilities;
         //
         // Input Pane is a fancy name for the touch keyboard.
         //
-        private InputPane _inputPane;
+        private IInputPanel _inputPanel;
 
         private IRemoteSessionView _sessionView;
         private IRemoteSession _activeSession;
         private IRemoteSessionControl _activeSessionControl;
         private IKeyboardCapture _keyboardCapture;
+        private IInputPanelFactory _inputPanelFactory;
         private IPointerCapture _pointerCapture;
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
@@ -91,10 +89,20 @@
             get { return _cancelAutoReconnect; }
         }
 
+        /// <summary>
+        /// Property into that the keyboard capture object is injected in XAML.
+        /// </summary>
         public IKeyboardCapture KeyboardCapture
         {
-            get { return _keyboardCapture; }
-            set { this.SetProperty(ref _keyboardCapture, value); }
+            set { _keyboardCapture = value; }
+        }
+
+        /// <summary>
+        /// Property into that a factory of input panels is injected in XAML.
+        /// </summary>
+        public IInputPanelFactory InputPanelFactory
+        {
+            set { _inputPanelFactory = value; }
         }
 
         public IPointerCapture PointerCapture
@@ -152,6 +160,7 @@
         {
             Contract.Assert(null == _activeSession);
             Contract.Assert(null != _keyboardCapture);
+            Contract.Assert(null != _inputPanelFactory);
 
             base.OnPresenting(activationParameter);
 
@@ -234,27 +243,17 @@
 
         void IDeviceCapabilitiesSite.SetDeviceCapabilities(IDeviceCapabilities deviceCapabilities)
         {
-            _deviceCapabilities = deviceCapabilities;
-
-            if(null != _inputPane)
+            if(null != _inputPanel)
             {
-                _inputPane.Hiding -= this.OnInputPaneHiding;
-                _inputPane.Showing -= this.OnInputPaneHiding;
-                _inputPane = null;
+                _inputPanel.IsVisibleChanged -= this.OnInputPanelIsVisibleChanged;
+                _inputPanel = null;
             }
 
-            if (null != _deviceCapabilities && _deviceCapabilities.TouchPresent)
+            if (null != deviceCapabilities && deviceCapabilities.TouchPresent)
             {
-                _inputPane = InputPane.GetForCurrentView();
-                _inputPane.Hiding += this.OnInputPaneHiding;
-                _inputPane.Showing += this.OnInputPaneHiding;
-                //
-                // Get the actual status of the input pane (touch keyboard).
-                // The way to figure out the status is a bit of a hack - check if the the occluded rectangle
-                // is all zeros.
-                //
-                Rect orc = _inputPane.OccludedRect;
-                _invokeKeyboardModel.IsChecked = 0 != orc.Width || 0 != orc.Height || 0 != orc.Top || 0 != orc.Left;
+                _inputPanel = _inputPanelFactory.GetInputPanel();
+                _inputPanel.IsVisibleChanged += this.OnInputPanelIsVisibleChanged;
+                _invokeKeyboardModel.IsChecked = _inputPanel.IsVisible;
             }
 
             _invokeKeyboard.EmitCanExecuteChanged();
@@ -434,27 +433,23 @@
 
         private void InternalInvokeKeyboard(object parameter)
         {
-            Contract.Assert(null != _inputPane);
+            Contract.Assert(null != _inputPanel);
 
-            if (_invokeKeyboardModel.IsChecked)
-                _inputPane.TryHide();
+            if (_inputPanel.IsVisible)
+                _inputPanel.Hide();
             else
-                _inputPane.TryShow();
+                _inputPanel.Show();
         }
 
         private bool InternalCanInvokeKeyboard(object parameter)
         {
-            return null != _deviceCapabilities && _deviceCapabilities.TouchPresent;
+            return null != _inputPanel;
         }
 
-        private void OnInputPaneHiding(InputPane sender, InputPaneVisibilityEventArgs e)
+        private void OnInputPanelIsVisibleChanged(object sender, EventArgs e)
         {
-            _invokeKeyboardModel.IsChecked = false;
-        }
-
-        private void OnInputPaneShowing(InputPane sender, InputPaneVisibilityEventArgs e)
-        {
-            _invokeKeyboardModel.IsChecked = true;
+            IInputPanel panel = (IInputPanel)sender;
+            _invokeKeyboardModel.IsChecked = panel.IsVisible;
         }
 
         private void InternalNavigateHome(object parameter)

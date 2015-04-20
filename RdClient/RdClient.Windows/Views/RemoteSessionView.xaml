@@ -18,9 +18,14 @@
     
     <UserControl.DataContext>
         <vm:RemoteSessionViewModel>
+            <!-- Inject the keyboard capture based on CoreWindow and CoreDispatcher -->
             <vm:RemoteSessionViewModel.KeyboardCapture>
                 <input:CoreWindowKeyboardCapture/>
             </vm:RemoteSessionViewModel.KeyboardCapture>
+            <!-- Inject the input panel factory based on the InputPane class. -->
+            <vm:RemoteSessionViewModel.InputPanelFactory>
+                <input:InputPaneInputPanelFactory/>
+            </vm:RemoteSessionViewModel.InputPanelFactory>
         </vm:RemoteSessionViewModel>
     </UserControl.DataContext>
 
