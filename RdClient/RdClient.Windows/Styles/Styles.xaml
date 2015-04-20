@@ -18,18 +18,19 @@
 
             <SolidColorBrush x:Key="PointerOverBackgroundBrush" Color="{ThemeResource ListHoverColor}" />
             <SolidColorBrush x:Key="PointerOverForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
-
             <SolidColorBrush x:Key="PressedBackgroundBrush" Color="{ThemeResource ListPressColor}" />
             <SolidColorBrush x:Key="PressedForegroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
             <SolidColorBrush x:Key="PressedBorderBrush" Color="{ThemeResource ListPressColor}" />
-
             <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="Transparent" />
             <SolidColorBrush x:Key="SelectedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
             <SolidColorBrush x:Key="SelectedBorderBrush" Color="Transparent" />
-
             <SolidColorBrush x:Key="UnselectedBackgroundBrush" Color="Transparent" />
             <SolidColorBrush x:Key="UnselectedForegroundBrush" Color="{ThemeResource SystemBaseMediumLowColor}" />
             <SolidColorBrush x:Key="UnselectedBorderBrush" Color="Transparent" />
+
+            <SolidColorBrush x:Key="BackButtonBackgroundBrush" Color="#008FF1" />
+            <SolidColorBrush x:Key="BackButtonForegroundBrush" Color="White" />
+            <SolidColorBrush x:Key="BackButtonBorderBrush" Color="{ThemeResource BackButtonBackgroundBrush}" />
         </ResourceDictionary>        
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
@@ -54,6 +55,10 @@
             <SolidColorBrush x:Key="UnselectedBackgroundBrush" Color="Transparent" />
             <SolidColorBrush x:Key="UnselectedForegroundBrush" Color="{ThemeResource SystemBaseMediumLowColor}" />
             <SolidColorBrush x:Key="UnselectedBorderBrush" Color="Transparent" />
+            
+            <SolidColorBrush x:Key="BackButtonBackgroundBrush" Color="#008FF1" />
+            <SolidColorBrush x:Key="BackButtonForegroundBrush" Color="White" />
+            <SolidColorBrush x:Key="BackButtonBorderBrush" Color="{ThemeResource BackButtonBackgroundBrush}" />
         </ResourceDictionary>
         <ResourceDictionary x:Key="HighContrast">
             <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
@@ -66,24 +71,26 @@
 
             <SolidColorBrush x:Key="PointerOverBackgroundBrush" Color="{ThemeResource SystemColorButtonFaceColor}" />
             <SolidColorBrush x:Key="PointerOverForegroundBrush" Color="{ThemeResource SystemColorHighlightColor}" />
-
             <SolidColorBrush x:Key="PressedBackgroundBrush" Color="{ThemeResource SystemColorButtonFaceColor}" />
             <SolidColorBrush x:Key="PressedForegroundBrush" Color="{ThemeResource SystemColorHighlightColor}" />
             <SolidColorBrush x:Key="PressedBorderBrush" Color="{ThemeResource SystemColorHighlightColor}" />
-
             <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="{ThemeResource SystemColorHighlightColor}" />
             <SolidColorBrush x:Key="SelectedForegroundBrush" Color="{ThemeResource SystemColorHighlightTextColor}" />
             <SolidColorBrush x:Key="SelectedBorderBrush" Color="{ThemeResource SystemColorHighlightColor}" />
-
             <SolidColorBrush x:Key="UnselectedBackgroundBrush" Color="{ThemeResource SystemColorButtonFaceColor}" />
             <SolidColorBrush x:Key="UnselectedForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
             <SolidColorBrush x:Key="UnselectedBorderBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
+
+            <SolidColorBrush x:Key="BackButtonBackgroundBrush" Color="{ThemeResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="BackButtonForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
+            <SolidColorBrush x:Key="BackButtonBorderBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
+            
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
-    <ApplicationTheme x:Key="AppMainTheme">Light</ApplicationTheme>
-    <ElementTheme x:Key="MainTheme">Light</ElementTheme>
-    <ElementTheme x:Key="AlternateTheme">Dark</ElementTheme>
+    <ApplicationTheme x:Key="AppMainTheme">Dark</ApplicationTheme>
+    <ElementTheme x:Key="MainTheme">Dark</ElementTheme>
+    <ElementTheme x:Key="AlternateTheme">Light</ElementTheme>
 
     <FontFamily x:Key="IconFont">ms-appx:///Assets/SegMDL2.1.12.ttf#Segoe MDL2 Assets</FontFamily>
     <x:String x:Key="AddIcon">&#xE710;</x:String>
@@ -356,16 +363,15 @@
     BackButton styles
     ======================================================================================
     -->
-    <x:Double x:Key="BackButtonHeight">30</x:Double>
-    <SolidColorBrush x:Key="BackButtonBackgroundBrush" Color="#008FF1" />
+    <x:Double x:Key="BackButtonHeight">30</x:Double>    
 
     <Style x:Key="BackButtonStyle" TargetType="Button" BasedOn="{StaticResource ConnectionCenterBarButtonStyle}">
         <Setter Property="Height" Value="{StaticResource BackButtonHeight}" />
         <Setter Property="Width" Value="68" />
-        <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Background" Value="{StaticResource BackButtonBackgroundBrush}" />
-        <Setter Property="Foreground" Value="#FFFFFF" />
+        <Setter Property="BorderBrush" Value="{ThemeResource BackButtonBorderBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Background" Value="{ThemeResource BackButtonBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{ThemeResource BackButtonForegroundBrush}" />
         <Setter Property="Content" Value="{StaticResource BackIcon}" />
         <Setter Property="Padding" Value="0" />
     </Style>
