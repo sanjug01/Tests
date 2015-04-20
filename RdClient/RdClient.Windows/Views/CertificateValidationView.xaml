@@ -26,15 +26,9 @@
 
 
     <Grid>
+        <Border Style="{StaticResource ModalBackground}" />
         <Border 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch" 
-            Opacity="0.8" 
-            Background="#dd000000"
-        />
-
-        <Border 
-            Background="{StaticResource rdWhiteBrush}" 
+            Background="{ThemeResource DialogBackgroundColor}" 
             Width="580" 
             HorizontalAlignment="Center" 
             VerticalAlignment="Top" 
