@@ -9,13 +9,14 @@
     mc:Ignorable="d"
     d:DesignHeight="730"
     d:DesignWidth="384"
+    RequestedTheme="{StaticResource MainTheme}"
     >
 
     <d:UserControl.DataContext>
         <design:FakeSettingsViewModel />
     </d:UserControl.DataContext>
 
-    <Grid Background="{StaticResource SettingsNavBarBackgroundBrush}" RequestedTheme="{StaticResource MainTheme}">        
+    <Grid Background="{StaticResource SettingsNavBarBackgroundBrush}">        
         <Grid.RowDefinitions>
             <RowDefinition Height="{StaticResource SettingsTopPadding}" />
             <RowDefinition Height="{StaticResource SettingsItemHeight}" />
