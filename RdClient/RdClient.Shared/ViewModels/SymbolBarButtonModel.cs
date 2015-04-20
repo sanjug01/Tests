@@ -3,9 +3,8 @@
     using RdClient.Shared.Helpers;
     using System;
     using System.Windows.Input;
-    using Windows.UI.Xaml.Data;
 
-    public sealed class SymbolBarButtonModel : MutableObject
+    public class SymbolBarButtonModel : MutableObject
     {
         private SegoeGlyph _glyph;
         private ICommand _command;

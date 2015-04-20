@@ -95,6 +95,18 @@
                                 Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
                         </DataTemplate>
 
+                        <DataTemplate x:Key="SymbolBarToggleButtonModel">
+                            <ToggleButton
+                                Style="{StaticResource RemoteSessionSymbolBarButton}"
+                                Margin="4,0"
+                                Command="{Binding Command}"
+                                CommandParameter="{Binding CommandParameter}"
+                                IsChecked="{Binding IsChecked}"
+                                IsThreeState="False"
+                                Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
+                        </DataTemplate>
+
                     </helpers:TypeNameDataTemplateSelector.Templates>
                 </helpers:TypeNameDataTemplateSelector>
             </ItemsControl.ItemTemplateSelector>

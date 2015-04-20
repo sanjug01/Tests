@@ -7,18 +7,29 @@
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using Windows.Foundation;
+    using Windows.UI.ViewManagement;
 
-    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite
+    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, IDeviceCapabilitiesSite
     {
         private readonly RelayCommand _dismissFailureMessage;
         private readonly RelayCommand _cancelAutoReconnect;
         private readonly RelayCommand _showSideBars;
+        private readonly RelayCommand _invokeKeyboard;
+        private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
         private readonly RelayCommand _navigateHome;
+
+        private IDeviceCapabilities _deviceCapabilities;
+        //
+        // Input Pane is a fancy name for the touch keyboard.
+        //
+        private InputPane _inputPane;
 
         private IRemoteSessionView _sessionView;
         private IRemoteSession _activeSession;
@@ -124,6 +135,8 @@
             _dismissFailureMessage = new RelayCommand(this.InternalDismissFailureMessage);
             _cancelAutoReconnect = new RelayCommand(this.InternalCancelAutoReconnect, this.InternalCanAutoReconnect);
             _showSideBars = new RelayCommand(this.InternalShowRightSideBar);
+            _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
+            _invokeKeyboardModel = new SymbolBarToggleButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
             _navigateHome = new RelayCommand(this.InternalNavigateHome);
             _isRightSideBarVisible = false;
 
@@ -131,7 +144,7 @@
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _showSideBars });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard });
+            items.Add(_invokeKeyboardModel);
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
         }
 
@@ -217,6 +230,34 @@
                 Contract.Assert(null == _activeSessionControl);
                 _activeSessionControl = _activeSession.Activate(_sessionView);
             }
+        }
+
+        void IDeviceCapabilitiesSite.SetDeviceCapabilities(IDeviceCapabilities deviceCapabilities)
+        {
+            _deviceCapabilities = deviceCapabilities;
+
+            if(null != _inputPane)
+            {
+                _inputPane.Hiding -= this.OnInputPaneHiding;
+                _inputPane.Showing -= this.OnInputPaneHiding;
+                _inputPane = null;
+            }
+
+            if (null != _deviceCapabilities && _deviceCapabilities.TouchPresent)
+            {
+                _inputPane = InputPane.GetForCurrentView();
+                _inputPane.Hiding += this.OnInputPaneHiding;
+                _inputPane.Showing += this.OnInputPaneHiding;
+                //
+                // Get the actual status of the input pane (touch keyboard).
+                // The way to figure out the status is a bit of a hack - check if the the occluded rectangle
+                // is all zeros.
+                //
+                Rect orc = _inputPane.OccludedRect;
+                _invokeKeyboardModel.IsChecked = 0 != orc.Width || 0 != orc.Height || 0 != orc.Top || 0 != orc.Left;
+            }
+
+            _invokeKeyboard.EmitCanExecuteChanged();
         }
 
         private void OnCredentialsNeeded(object sender, CredentialsNeededEventArgs e)
@@ -389,6 +430,31 @@
         private void InternalShowRightSideBar(object parameter)
         {
             this.IsRightSideBarVisible = !this.IsRightSideBarVisible;
+        }
+
+        private void InternalInvokeKeyboard(object parameter)
+        {
+            Contract.Assert(null != _inputPane);
+
+            if (_invokeKeyboardModel.IsChecked)
+                _inputPane.TryHide();
+            else
+                _inputPane.TryShow();
+        }
+
+        private bool InternalCanInvokeKeyboard(object parameter)
+        {
+            return null != _deviceCapabilities && _deviceCapabilities.TouchPresent;
+        }
+
+        private void OnInputPaneHiding(InputPane sender, InputPaneVisibilityEventArgs e)
+        {
+            _invokeKeyboardModel.IsChecked = false;
+        }
+
+        private void OnInputPaneShowing(InputPane sender, InputPaneVisibilityEventArgs e)
+        {
+            _invokeKeyboardModel.IsChecked = true;
         }
 
         private void InternalNavigateHome(object parameter)
