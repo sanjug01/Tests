@@ -23,14 +23,14 @@
             set { SetProperty(ref _glyph, value); }
         }
 
-        public object Command
+        public ICommand Command
         {
             get { return _command; }
             set
             {
                 ICommand oldCommand = _command;
 
-                if(SetProperty<ICommand>(ref _command, (ICommand)value))
+                if(SetProperty<ICommand>(ref _command, value))
                 {
                     if (null != oldCommand)
                         oldCommand.CanExecuteChanged -= this.OnCanExecuteCommandChanged;

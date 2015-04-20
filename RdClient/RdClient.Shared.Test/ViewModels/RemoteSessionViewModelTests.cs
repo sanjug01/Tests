@@ -16,14 +16,17 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Windows.Foundation;
+    using System.ComponentModel;
 
     [TestClass]
     public sealed class RemoteSessionViewModelTests
     {
         private INavigationService _nav;
+        private TestInputPanelFactory _inputPanelFactory;
         private RemoteSessionViewModel _vm;
         private ApplicationDataModel _dataModel;
         private TestDeferredExecution _defex;
+        private TestDeviceCapabilities _devCaps;
         private TestTimerFactory _timerFactory;
         private TestConnectionSource _connectionSource;
         private TestViewFactory _viewFactory;
@@ -85,6 +88,16 @@
             public TestInputPanelFactory()
             {
                 _inputPanel = new TestInputPanel();
+            }
+
+            public void ShowPanel()
+            {
+                _inputPanel.Show();
+            }
+
+            public void HidePanel()
+            {
+                _inputPanel.Hide();
             }
 
             IInputPanel IInputPanelFactory.GetInputPanel()
@@ -318,6 +331,19 @@
             }
         }
 
+        private sealed class TestDeviceCapabilities : IDeviceCapabilities
+        {
+            private uint _touchPoints = 0;
+            private bool _touchPresent = false;
+
+            public uint TouchPoints { set { _touchPoints = value; } }
+            public bool TouchPresent { set { _touchPresent = value; } }
+
+            uint IDeviceCapabilities.TouchPoints { get { return _touchPoints; } }
+            bool IDeviceCapabilities.TouchPresent { get { return _touchPresent; } }
+            event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged { add { } remove { } }
+        }
+
         private sealed class TestConnectionSource : IRdpConnectionSource
         {
             private readonly IRdpConnectionFactory _factory;
@@ -531,10 +557,11 @@
         [TestInitialize]
         public void SetUpTest()
         {
+            _inputPanelFactory = new TestInputPanelFactory();
             _vm = new RemoteSessionViewModel()
             {
                 KeyboardCapture = new TestKeyboardCapture(),
-                InputPanelFactory = new TestInputPanelFactory()
+                InputPanelFactory = _inputPanelFactory
             };
 
             _dataModel = new ApplicationDataModel()
@@ -551,6 +578,7 @@
             _viewFactory = new TestViewFactory(_vm);
 
             _defex = new TestDeferredExecution();
+            _devCaps = new TestDeviceCapabilities();
 
             _nav = new NavigationService()
             {
@@ -560,7 +588,8 @@
                 {
                     new DataModelExtension() { AppDataModel = _dataModel },
                     new DeferredExecutionExtension(){ DeferredExecution = _defex },
-                    new SessionFactoryExtension(){ SessionFactory = new TestSessionFactory() }
+                    new SessionFactoryExtension(){ SessionFactory = new TestSessionFactory() },
+                    new DeviceCapabilitiesExtension() { DeviceCapabilities = _devCaps }
                 }
             };
         }
@@ -570,7 +599,9 @@
         {
             _nav = null;
             _vm = null;
+            _inputPanelFactory = null;
             _viewFactory = null;
+            _devCaps = null;
             _defex = null;
             _dataModel = null;
             _timerFactory = null;
@@ -610,6 +641,167 @@
             Assert.IsFalse(_vm.IsInterrupted);
             Assert.IsNotNull(connection);
             Assert.AreEqual(1, connectCount);
+
+            SymbolBarButtonModel ellipsis = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
+                o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.HorizontalEllipsis);
+            Assert.IsNotNull(ellipsis.Command);
+            Assert.IsTrue(ellipsis.Command.CanExecute(null));
+
+            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarItems.First(
+                o => o is SymbolBarToggleButtonModel && ((SymbolBarToggleButtonModel)o).Glyph == SegoeGlyph.Keyboard);
+            Assert.IsNotNull(keyboard.Command);
+            Assert.IsFalse(keyboard.Command.CanExecute(null));
+            Assert.IsFalse(keyboard.IsChecked);
+        }
+
+        [TestMethod]
+        public void RemoteSessionViewModel_PresentNewSessionWithTouch_CorrectInitialState()
+        {
+            RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRdpConnection connection = null;
+            int connectCount = 0;
+
+            _connectionSource.ConnectionCreated += (sender, e) =>
+            {
+                connection = e.Connection;
+                Assert.IsNotNull(connection.Events);
+                IConnectionActivity activity = (IConnectionActivity)connection;
+                //
+                // Subscribe for connection activity events;
+                //
+                activity.Connect += (s, a) =>
+                {
+                    ++connectCount;
+                };
+            };
+
+            _devCaps.TouchPoints = 10;
+            _devCaps.TouchPresent = true;
+
+            _nav.NavigateToView("RemoteSessionView", session);
+            ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
+            _defex.ExecuteAll();
+
+            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarItems.First(
+                o => o is SymbolBarToggleButtonModel && ((SymbolBarToggleButtonModel)o).Glyph == SegoeGlyph.Keyboard);
+            Assert.IsNotNull(keyboard.Command);
+            Assert.IsTrue(keyboard.Command.CanExecute(null));
+            Assert.IsFalse(keyboard.IsChecked);
+        }
+
+        [TestMethod]
+        public void RemoteSessionViewModel_PresentWithVisibleInputPanel_CorrectInitialState()
+        {
+            RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRdpConnection connection = null;
+            int connectCount = 0;
+
+            _inputPanelFactory.ShowPanel();
+            _connectionSource.ConnectionCreated += (sender, e) =>
+            {
+                connection = e.Connection;
+                Assert.IsNotNull(connection.Events);
+                IConnectionActivity activity = (IConnectionActivity)connection;
+                //
+                // Subscribe for connection activity events;
+                //
+                activity.Connect += (s, a) =>
+                {
+                    ++connectCount;
+                };
+            };
+
+            _devCaps.TouchPoints = 10;
+            _devCaps.TouchPresent = true;
+
+            _nav.NavigateToView("RemoteSessionView", session);
+            ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
+            _defex.ExecuteAll();
+
+            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarItems.First(
+                o => o is SymbolBarToggleButtonModel && ((SymbolBarToggleButtonModel)o).Glyph == SegoeGlyph.Keyboard);
+            Assert.IsNotNull(keyboard.Command);
+            Assert.IsTrue(keyboard.Command.CanExecute(null));
+            Assert.IsTrue(keyboard.IsChecked);
+        }
+
+        [TestMethod]
+        public void RemoteSessionViewModel_ShowInputPanel_PanelHides()
+        {
+            RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRdpConnection connection = null;
+            int connectCount = 0;
+
+            _connectionSource.ConnectionCreated += (sender, e) =>
+            {
+                connection = e.Connection;
+                Assert.IsNotNull(connection.Events);
+                IConnectionActivity activity = (IConnectionActivity)connection;
+                //
+                // Subscribe for connection activity events;
+                //
+                activity.Connect += (s, a) =>
+                {
+                    ++connectCount;
+                };
+            };
+
+            _devCaps.TouchPoints = 10;
+            _devCaps.TouchPresent = true;
+
+            _nav.NavigateToView("RemoteSessionView", session);
+            ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
+            _defex.ExecuteAll();
+
+            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarItems.First(
+                o => o is SymbolBarToggleButtonModel && ((SymbolBarToggleButtonModel)o).Glyph == SegoeGlyph.Keyboard);
+            Assert.IsNotNull(keyboard.Command);
+            Assert.IsTrue(keyboard.Command.CanExecute(null));
+            Assert.IsFalse(keyboard.IsChecked);
+            keyboard.Command.Execute(null);
+            Assert.IsTrue(keyboard.IsChecked);
+        }
+
+        [TestMethod]
+        public void RemoteSessionViewModel_HideInputPanel_PanelHides()
+        {
+            RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRdpConnection connection = null;
+            int connectCount = 0;
+
+            _inputPanelFactory.ShowPanel();
+            _connectionSource.ConnectionCreated += (sender, e) =>
+            {
+                connection = e.Connection;
+                Assert.IsNotNull(connection.Events);
+                IConnectionActivity activity = (IConnectionActivity)connection;
+                //
+                // Subscribe for connection activity events;
+                //
+                activity.Connect += (s, a) =>
+                {
+                    ++connectCount;
+                };
+            };
+
+            _devCaps.TouchPoints = 10;
+            _devCaps.TouchPresent = true;
+
+            _nav.NavigateToView("RemoteSessionView", session);
+            ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
+            _defex.ExecuteAll();
+
+            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarItems.First(
+                o => o is SymbolBarToggleButtonModel && ((SymbolBarToggleButtonModel)o).Glyph == SegoeGlyph.Keyboard);
+            Assert.IsNotNull(keyboard.Command);
+            Assert.IsTrue(keyboard.Command.CanExecute(null));
+            Assert.IsTrue(keyboard.IsChecked);
+            keyboard.Command.Execute(null);
+            Assert.IsFalse(keyboard.IsChecked);
         }
 
         [TestMethod]
