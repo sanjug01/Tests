@@ -119,9 +119,6 @@
     <Compile Include="Controls\AppsListControl.xaml.cs">
       <DependentUpon>AppsListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ConnectionBarControl.xaml.cs">
-      <DependentUpon>ConnectionBarControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ConnectionCenterTitleBar.xaml.cs">
       <DependentUpon>ConnectionCenterTitleBar.xaml</DependentUpon>
     </Compile>
@@ -155,14 +152,8 @@
     <Compile Include="Controls\ItsLonelyHereControl.xaml.cs">
       <DependentUpon>ItsLonelyHereControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MouseLayerControl.xaml.cs">
-      <DependentUpon>MouseLayerControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\PointerPressDetector.xaml.cs">
       <DependentUpon>PointerPressDetector.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\RdSessionPanControl.xaml.cs">
-      <DependentUpon>RdSessionPanControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RemoteSessionPanel.xaml.cs">
       <DependentUpon>RemoteSessionPanel.xaml</DependentUpon>
@@ -174,9 +165,6 @@
     </Compile>
     <Compile Include="Controls\RemoteApplicationThumbnailView.xaml.cs">
       <DependentUpon>RemoteApplicationThumbnailView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SessionReconnectControl.xaml.cs">
-      <DependentUpon>SessionReconnectControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SettingsAddGatewayControl.xaml.cs">
       <DependentUpon>SettingsAddGatewayControl.xaml</DependentUpon>
@@ -355,10 +343,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ConnectionBarControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\ConnectionCenterTitleBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -403,17 +387,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\MouseLayerControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\PointerPressDetector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\RdSessionPanControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\RemoteSessionPanel.xaml">
       <SubType>Designer</SubType>
@@ -426,10 +402,6 @@
     <Page Include="Controls\RemoteApplicationThumbnailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\SessionReconnectControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\SettingsAddGatewayControl.xaml">
       <Generator>MSBuild:Compile</Generator>

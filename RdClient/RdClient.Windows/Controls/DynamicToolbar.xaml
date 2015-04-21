@@ -33,7 +33,7 @@
         <sconverters:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
         
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

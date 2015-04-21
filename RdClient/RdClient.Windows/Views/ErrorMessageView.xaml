@@ -9,7 +9,7 @@
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:cv="using:RdClient.Converters"
     mc:Ignorable="d"
-    RequestedTheme="Light">
+    RequestedTheme="{StaticResource AlternateTheme}">
 
     <Page.DataContext>
         <vm:ErrorMessageViewModel/>
@@ -21,15 +21,10 @@
     </Page.Resources>
     
     <Grid>
-        <Border 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch" 
-            Opacity="0.8" 
-            Background="#dd000000"
-        />
+        <Border Style="{ThemeResource ModalBackground}" />
 
         <Border 
-            Background="{StaticResource rdWhiteBrush}" 
+            Background="{ThemeResource DialogBackgroundColor}" 
             Width="600" 
             HorizontalAlignment="Center" 
             VerticalAlignment="Top" 
@@ -49,7 +44,6 @@
                     <TextBlock 
                         Margin="24,12,24,12" 
                         Style="{ThemeResource TitleTextBlockStyle}" 
-                        Foreground="{StaticResource rdBlackBrush}" 
                         Text="{Binding Path=Title}"
                         />
                 </Grid>        

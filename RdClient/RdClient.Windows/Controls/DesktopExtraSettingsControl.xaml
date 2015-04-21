@@ -11,7 +11,7 @@
     mc:Ignorable="d"
     d:DesignHeight="768"
     d:DesignWidth="700"
-    RequestedTheme="Light">
+    RequestedTheme="{StaticResource AlternateTheme}">
 
     
     <UserControl.Resources>
@@ -23,7 +23,7 @@
         </converters:GatewayComboBoxElementToLocalizedStringConverter>
     </UserControl.Resources>
 
-    <StackPanel Background="WhiteSmoke">
+    <StackPanel Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
         <Grid Style="{StaticResource rdEntryFieldGridStyle}">
             <TextBox Name="txtFriendlyNameEntry"
