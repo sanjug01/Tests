@@ -210,6 +210,9 @@
     <Compile Include="Models\RejectSavedPasswordConnectionSource.cs" />
     <Compile Include="Models\SingleSwapChainPanelRdpConnectionSource.cs" />
     <Compile Include="Models\SuccessfulConnectionSource.cs" />
+    <Compile Include="Views\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AddOrEditGatewayView.xaml.cs">
       <DependentUpon>AddOrEditGatewayView.xaml</DependentUpon>
     </Compile>
@@ -456,6 +459,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\WorkspaceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

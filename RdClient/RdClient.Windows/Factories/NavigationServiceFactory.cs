@@ -1,13 +1,11 @@
-﻿using RdClient.Helpers;
-using RdClient.Shared.Helpers;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using RdClient.Shared.Navigation.Extensions;
-using RdClient.Shared.ViewModels;
-using Windows.UI.Core;
-
-namespace RdClient.Factories
+﻿namespace RdClient.Factories
 {
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
+    using RdClient.Shared.ViewModels;
+
     class NavigationServiceFactory
     {
         public INavigationService CreateNavigationService()
@@ -32,6 +30,7 @@ namespace RdClient.Factories
             viewFactory.AddViewClass("DeleteGatewayView", typeof(Views.DeleteGatewayView));
             viewFactory.AddViewClass("SelectNewResourceTypeView", typeof(Views.SelectNewResourceTypeView));
             viewFactory.AddViewClass("DesktopEditorView", typeof(Views.DesktopEditorView));
+            viewFactory.AddViewClass("AboutView", typeof(Views.AboutView));
 
             //
             // Remote session view must be a singleton, because it creates the swap chain panel passed
