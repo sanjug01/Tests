@@ -29,12 +29,7 @@
     </Page.Resources>
 
     <Grid>
-        <Border 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch" 
-            Opacity="0.8" 
-            Background="#dd000000"
-        />
+        <Border Style="{ThemeResource ModalBackground}" />
 
         <Border 
             Background="{ThemeResource DialogBackgroundColor}" 

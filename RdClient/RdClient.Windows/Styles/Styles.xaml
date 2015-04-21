@@ -46,6 +46,7 @@
             <SolidColorBrush x:Key="DialogAcceptButtonBackgroundColor" Color="{ThemeResource BackButtonBackgroundBrush}" />
             <SolidColorBrush x:Key="DialogCancelButtonBackgroundColor" Color="{ThemeResource SystemChromeHighColor}" />
             <SolidColorBrush x:Key="DialogButtonForegroundColor" Color="{ThemeResource SystemAltHighColor}" />
+            <SolidColorBrush x:Key="ModalBackgroundBrush" Color="{ThemeResource SystemChromeBlackMediumLowColor}" />
                         
             <SolidColorBrush x:Key="rdErrorBrush" Color="Red" />
         </ResourceDictionary>        
@@ -88,6 +89,7 @@
             <SolidColorBrush x:Key="DialogAcceptButtonBackgroundColor" Color="{ThemeResource BackButtonBackgroundBrush}" />
             <SolidColorBrush x:Key="DialogCancelButtonBackgroundColor" Color="{ThemeResource SystemChromeHighColor}" />
             <SolidColorBrush x:Key="DialogButtonForegroundColor" Color="{ThemeResource SystemAltHighColor}" />
+            <SolidColorBrush x:Key="ModalBackgroundBrush" Color="{ThemeResource SystemChromeBlackMediumLowColor}" />
 
             <SolidColorBrush x:Key="rdErrorBrush" Color="Red" />
             
@@ -131,6 +133,7 @@
             <SolidColorBrush x:Key="DialogAcceptButtonBackgroundColor" Color="{ThemeResource SystemColorButtonFaceColor}" />
             <SolidColorBrush x:Key="DialogCancelButtonBackgroundColor" Color="{ThemeResource SystemColorButtonFaceColor}" />
             <SolidColorBrush x:Key="DialogButtonForegroundColor" Color="{ThemeResource SystemColorButtonTextColor}" />
+            <SolidColorBrush x:Key="ModalBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
 
             <SolidColorBrush x:Key="rdErrorBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
         </ResourceDictionary>
@@ -745,8 +748,7 @@
     <Style x:Key="ModalBackground" TargetType="Border">
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Setter Property="Opacity" Value="0.8" />
-        <Setter Property="Background" Value="#dd000000" />
+        <Setter Property="Background" Value="{ThemeResource ModalBackgroundBrush}" />
     </Style> 
 
     <Style x:Key="DialogBorder" TargetType="Border">
