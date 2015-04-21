@@ -30,6 +30,7 @@
         private EventHandler<BadCertificateEventArgs> _badCertificate;
         private EventHandler<BadServerIdentityEventArgs> _badServerIdentity;
         private EventHandler<MouseCursorShapeChangedArgs> _mouseCursorShapeChanged;
+        private EventHandler<MultiTouchEnabledChangedArgs> _multiTouchEnabledChanged;
         private EventHandler<SessionFailureEventArgs> _failed;
         private EventHandler<SessionInterruptedEventArgs> _interrupted;
         private EventHandler _closed;
@@ -250,6 +251,12 @@
             remove { using (LockWrite()) _mouseCursorShapeChanged -= value; }
         }
 
+        event EventHandler<MultiTouchEnabledChangedArgs> IRemoteSession.MultiTouchEnabledChanged
+        {
+            add { using (LockWrite()) _multiTouchEnabledChanged += value; }
+            remove { using (LockWrite()) _multiTouchEnabledChanged -= value; }
+        }
+
         event EventHandler<SessionFailureEventArgs> IRemoteSession.Failed
         {
             add { using (LockWrite()) _failed += value; }
@@ -454,6 +461,26 @@
             Contract.Assert(null != args);
 
             EmitHelper<MouseCursorShapeChangedArgs>(args, _mouseCursorShapeChanged);
+        }
+        private void DeferEmitMouseCursorShapeChanged(MouseCursorShapeChangedArgs args)
+        {
+            Contract.Assert(null != args);
+
+            DeferEmitHelper<MouseCursorShapeChangedArgs>(args, _mouseCursorShapeChanged);
+        }
+
+        private void EmitMultiTouchEnabledChanged(MultiTouchEnabledChangedArgs args)
+        {
+            Contract.Assert(null != args);
+
+            EmitHelper<MultiTouchEnabledChangedArgs>(args, _multiTouchEnabledChanged);
+        }
+
+        private void DeferEmitMultiTouchEnabledChanged(MultiTouchEnabledChangedArgs args)
+        {
+            Contract.Assert(null != args);
+
+            DeferEmitHelper<MultiTouchEnabledChangedArgs>(args, _multiTouchEnabledChanged);
         }
 
         private void InternalSetState(InternalState newState)

@@ -7,12 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    RequestedTheme="{StaticResource MainTheme}">
     
     <Grid>
 
         <!-- Right hand side bar -->
-        <Grid x:Name="RightSideBar" Width="Auto" HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="Black" Opacity="0.6" Visibility="Collapsed">
+        <Grid x:Name="RightSideBar" Width="Auto" HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="{ThemeResource SystemControlBackgroundAltHighBrush}" Opacity="{ThemeResource ConnectionOverlayOpacity}" Visibility="Collapsed">
             <Grid.Resources>
                 <Storyboard x:Name="ShowRightSideBarStoryboard">
                     <DoubleAnimation x:Name="ShowRightSideBarAnimation"
@@ -34,7 +35,7 @@
 
             <StackPanel Orientation="Vertical" Margin="12,20">
                 <AppBarButton x:Name="NavigateHomeButton" Icon="Home" x:Uid="SessionView-HomeButton" Label="Home (d)" />
-                <AppBarToggleButton Icon="TouchPointer" x:Uid="SessionView-MouseMode" Label="Mouse-Mode (d)" />
+                <AppBarToggleButton x:Name="MouseModeButton" Icon="TouchPointer" x:Uid="SessionView-MouseMode" Label="Mouse-Mode (d)" />
             </StackPanel>
         </Grid>
     </Grid>

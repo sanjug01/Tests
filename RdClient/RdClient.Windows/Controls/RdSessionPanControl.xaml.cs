@@ -29,20 +29,20 @@ namespace RdClient.Controls
             set { SetValue(ViewSizeProperty, value); }
         }
 
-        public static readonly DependencyProperty PointerEventConsumerProperty = DependencyProperty.Register(
-            "PointerEventConsumer", 
-            typeof(object),
-            typeof(RdSessionPanControl), 
-            new PropertyMetadata(null, PointerEventConsumerPropertyChanged));
-        public IPointerEventConsumer PointerEventConsumer
-        {
-            private get { return (IPointerEventConsumer)GetValue(PointerEventConsumerProperty); }
-            set { SetValue(PointerEventConsumerProperty, value); }
-        }
-        private static void PointerEventConsumerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            IPointerEventConsumer pec = e.NewValue as IPointerEventConsumer;
-        }
+        //public static readonly DependencyProperty PointerEventConsumerProperty = DependencyProperty.Register(
+        //    "PointerEventConsumer", 
+        //    typeof(object),
+        //    typeof(RdSessionPanControl), 
+        //    new PropertyMetadata(null, PointerEventConsumerPropertyChanged));
+        //public IPointerEventConsumerOld PointerEventConsumer
+        //{
+        //    private get { return (IPointerEventConsumerOld)GetValue(PointerEventConsumerProperty); }
+        //    set { SetValue(PointerEventConsumerProperty, value); }
+        //}
+        //private static void PointerEventConsumerPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    IPointerEventConsumerOld pec = e.NewValue as IPointerEventConsumerOld;
+        //}
 
         static readonly DependencyProperty PanKnobTransformProperty = DependencyProperty.Register(
            "PanKnobTransform",
@@ -105,38 +105,38 @@ namespace RdClient.Controls
         }
 
 
-        protected override void OnPointerCanceled(PointerRoutedEventArgs args)
-        {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
+        //protected override void OnPointerCanceled(PointerRoutedEventArgs args)
+        //{
+        //    PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
 
-        }
+        //}
 
-        protected override void OnPointerReleased(PointerRoutedEventArgs args)
-        {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
+        //protected override void OnPointerReleased(PointerRoutedEventArgs args)
+        //{
+        //    PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Up));
 
-        }
+        //}
 
-        protected override void OnPointerPressed(PointerRoutedEventArgs args)
-        {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Down));           
-        }
+        //protected override void OnPointerPressed(PointerRoutedEventArgs args)
+        //{
+        //    PointerEventConsumer.ConsumeEvent(PointerEventConverter.PointerArgsConverter(this, args, TouchEventType.Down));           
+        //}
 
-        protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
-        {
-            args.TranslationBehavior.DesiredDeceleration = GlobalConstants.DesiredDeceleration;
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
-        }
+        //protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs args)
+        //{
+        //    args.TranslationBehavior.DesiredDeceleration = GlobalConstants.DesiredDeceleration;
+        //    PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationInertiaStartingArgsConverter(args));
+        //}
 
-        protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs args)
-        {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationDeltaArgsConverter(args));
-        }
+        //protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs args)
+        //{
+        //    PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationDeltaArgsConverter(args));
+        //}
 
-        protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs args)
-        {
-            PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationCompletedArgsConverter(args));
-        }
+        //protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs args)
+        //{
+        //    PointerEventConsumer.ConsumeEvent(PointerEventConverter.ManipulationCompletedArgsConverter(args));
+        //}
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {

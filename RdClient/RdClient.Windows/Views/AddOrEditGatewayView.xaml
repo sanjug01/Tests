@@ -10,7 +10,7 @@
     xmlns:c="using:RdClient.Converters"    
     xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
-    RequestedTheme="Light">
+    RequestedTheme="{StaticResource AlternateTheme}">
     
     <Page.DataContext>
         <vm:AddOrEditGatewayViewModel />
@@ -28,15 +28,10 @@
     </Page.Resources>
 
     <Grid>
-        <Border 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch" 
-            Opacity="0.8" 
-            Background="#dd000000"
-        />
+        <Border Style="{ThemeResource ModalBackground}" />
 
         <Border 
-            Background="{StaticResource rdWhiteBrush}" 
+            Background="{ThemeResource DialogBackgroundColor}" 
             Width="480" 
             HorizontalAlignment="Center" 
             VerticalAlignment="Top" 
@@ -53,11 +48,9 @@
 
                 <Grid Grid.Row="0">
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
-                               Foreground="{StaticResource rdBlackBrush}" 
                                x:Uid="AddOrEditGateway-AddCaption" Text="Add Gateway(d)"
                                Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
-                               Foreground="{StaticResource rdBlackBrush}" 
                                x:Uid="AddOrEditGateway-EditCaption" Text="Edit Gateway(d)"
                                Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
                 </Grid>

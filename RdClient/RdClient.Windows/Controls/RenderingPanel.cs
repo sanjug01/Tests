@@ -1,20 +1,16 @@
 ﻿namespace RdClient.Controls
 {
-    using RdClient.Shared.Converters;
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Input;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
     using System;
-    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Threading;
-    using System.Threading.Tasks;
     using Windows.Foundation;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Media;
-    using Windows.UI.Xaml.Media.Animation;
-    using Windows.UI.Xaml.Media.Imaging;
 
     /// <summary>
     /// Wrapper of SwapChainPanel that adds the IRenderingPanel interface.
@@ -24,7 +20,7 @@
         private readonly ReaderWriterLockSlim _monitor;
         private IViewport _viewport;
         private EventHandler _ready;
-        private EventHandler<RdClient.Shared.Input.Pointer.PointerEventArgs> _pointerChanged;   
+        private EventHandler<IPointerEventBase> _pointerChanged;
 
         public Image MouseCursor { private get; set; }
         private Point _hotspot = new Point(0,0);
@@ -76,7 +72,7 @@
             remove { _ready -= value; }
         }
 
-        event EventHandler<PointerEventArgs> IRenderingPanel.PointerChanged
+        event EventHandler<IPointerEventBase> IRenderingPanel.PointerChanged
         {
             add
             {
@@ -127,12 +123,12 @@
             }
         }
 
-        public void EmitPointerEvent(PointerEvent e)
+        public void EmitPointerEvent(IPointerEventBase e)
         {
-            using(ReadWriteMonitor.UpgradeableRead(_monitor))
+            using (ReadWriteMonitor.UpgradeableRead(_monitor))
             {
                 if (null != _pointerChanged)
-                    _pointerChanged(this, new PointerEventArgs(e));
+                    _pointerChanged(this, e);
             }
         }
 

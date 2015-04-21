@@ -173,17 +173,9 @@
     <Compile Include="Input\Keyboard\TestSink.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyBaseTests.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactoryTests.cs" />
-    <Compile Include="Input\Mouse\MouseModeTests.cs" />
-    <Compile Include="Input\Mouse\MultiTouchTests.cs" />
-    <Compile Include="Input\Mouse\PointerInputTestsBase.cs" />
-    <Compile Include="Input\Mouse\ClickModeTests.cs" />
-    <Compile Include="Input\Mouse\PointerModeZoomTests.cs" />
-    <Compile Include="Input\Pointer\PointerMode\PointerModeTests.cs" />
     <Compile Include="Mock\BarItemsViewModel.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
-    <Compile Include="Mock\PointerManipulator.cs" />
-    <Compile Include="Mock\PointerManipulatorRecorder.cs" />
     <Compile Include="Mock\RadcClient.cs" />
     <Compile Include="Mock\RadcClientEvents.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
@@ -209,7 +201,6 @@
     <Compile Include="Model\CredentialsModelTests.cs" />
     <Compile Include="Model\GatewayModelTests.cs" />
     <Compile Include="Model\DesktopModelTests.cs" />
-    <Compile Include="Input\Mouse\PointerModeTests.cs" />
     <Compile Include="Model\SessionGatewayTests.cs" />
     <Compile Include="Model\SessionCredentialsTests.cs" />
     <Compile Include="Model\SnapshotterTests.cs" />

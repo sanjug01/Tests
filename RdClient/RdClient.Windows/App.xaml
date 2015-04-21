@@ -8,18 +8,14 @@
     xmlns:conv="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:winmodel="using:RdClient.Models"
-    xmlns:lifetime="using:RdClient.LifeTimeManagement"
-    RequestedTheme="Light">
+    xmlns:lifetime="using:RdClient.LifeTimeManagement">
 
     <Application.Resources>
-
-        <ResourceDictionary>
-            
+        <ResourceDictionary>            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-
             <lifetime:LifeTimeManager x:Key="LifeTimeManager">
                 <lifetime:LifeTimeManager.RootFrameManager>
                     <lifetime:RootFrameManager/>
@@ -32,6 +28,9 @@
                 </conv:TypeToLocalizedStringConverter.LocalizedString>
             </conv:TypeToLocalizedStringConverter>
         </ResourceDictionary>
-    </Application.Resources>
-
+    </Application.Resources>   
+    
+    <Application.RequestedTheme>
+        <StaticResource ResourceKey="AppMainTheme" />
+    </Application.RequestedTheme>
 </Application>

@@ -11,7 +11,8 @@
     xmlns:shelpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
     d:DesignHeight="{StaticResource ConnectionCenterTitleBarHeight}"
-    d:DesignWidth="600">
+    d:DesignWidth="600"
+    RequestedTheme="{StaticResource MainTheme}">
 
     <d:UserControl.DataContext>
         <design:FakeConnectionCenterViewModel />
@@ -21,7 +22,7 @@
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
         <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}" 
                  SelectedIndex="0"
                  Visibility="{Binding Path=ShowSectionLabels, Converter={StaticResource BooleanToVisibilityConverter}}">

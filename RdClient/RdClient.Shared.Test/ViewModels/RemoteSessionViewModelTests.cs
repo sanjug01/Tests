@@ -16,6 +16,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Windows.Foundation;
+    using RdClient.Shared.Input.Pointer;
 
     [TestClass]
     public sealed class RemoteSessionViewModelTests
@@ -80,6 +81,8 @@
             {
                 private EventHandler _ready;
 
+                public event EventHandler<IPointerEventBase> PointerChanged;
+
                 event EventHandler IRenderingPanel.Ready
                 {
                     add
@@ -93,14 +96,6 @@
                         _ready -= value;
                     }
                 }
-
-
-                event EventHandler<Shared.Input.Pointer.PointerEventArgs> IRenderingPanel.PointerChanged
-                {
-                    add { }
-                    remove { }
-                }
-
 
                 IViewport IRenderingPanel.Viewport
                 {

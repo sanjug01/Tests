@@ -1,6 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
-using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation.Extensions;
 using System;
@@ -8,79 +7,114 @@ using System.Diagnostics.Contracts;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media;
 
-namespace RdClient.Input
+namespace RdClient.Shared.Input.Pointer
 {
-    public class PointerCapture : IPointerCapture, IPointerManipulator
+    public class PointerCapture : IPointerCapture, IPointerPosition
     {
         private IExecutionDeferrer _deferrer;
-        private IRemoteSessionControl _control;
+        private IRemoteSessionControl _sessionControl;
         private IRenderingPanel _panel;
         private IPointerEventConsumer _consumer;
+        private bool _multiTouchEnabled;
 
-        public ConsumptionMode ConsumptionMode
+        private ConsumptionMode _consumptionMode;
+        private ConsumptionMode ConsumptionMode
         {
-            set { _consumer.ConsumptionMode = value; }
+            get { return _consumptionMode; }
+            set
+            {
+                _consumer.ConsumptionMode = value;
+                _consumptionMode = value;
+            }
         }
 
-        public PointerCapture(IExecutionDeferrer deferrer, IRemoteSessionControl control, IRenderingPanel panel)
+        private Point _pointerPosition;
+        Point IPointerPosition.PointerPosition
+        {
+            get { return _pointerPosition; }
+            set
+            {
+                Point mP = new Point(
+                    Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Width, Math.Max(0, value.X)),
+                    Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Height, Math.Max(0, value.Y)));
+
+                _pointerPosition = mP;
+                _deferrer.DeferToUI(() => _sessionControl.RenderingPanel.MoveMouseCursor(_pointerPosition));
+            }
+        }
+
+        public PointerCapture(IExecutionDeferrer deferrer, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory)
         {
             _deferrer = deferrer;
-            _control = control;
+            _sessionControl = sessionControl;
             _panel = panel;
-            _consumer = new PointerEventDispatcher(new WinrtThreadPoolTimer(), this, panel);
+            _consumer = new PointerEventDispatcher(timerFactory, sessionControl, this as IPointerPosition);
             this.ConsumptionMode = ConsumptionMode.Pointer;
         }
 
-        public void OnPointerChanged(object sender, PointerEventArgs args)
+        void IPointerCapture.OnPointerChanged(object sender, IPointerEventBase e)
         {
-            _consumer.ConsumeEvent(args.PointerEvent);
+            _consumer.Consume(e);
         }
 
-        public void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args)
+        void IPointerCapture.OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args)
         {
             throw new System.NotImplementedException();
         }
 
-        public void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
+        void IPointerCapture.OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
         {
             Contract.Requires(null != args.Buffer);
-
-            _deferrer.DeferToUI(() =>
-            {
-                ImageSource image = MouseCursorShape.ByteArrayToBitmap(args.Buffer, args.Width, args.Height);
-                MouseCursorShape cursor = new MouseCursorShape(new Point(args.XHotspot, args.YHotspot), image);
-                this._panel.ChangeMouseCursorShape(cursor);
-            });
+            ImageSource image = MouseCursorShape.ByteArrayToBitmap(args.Buffer, args.Width, args.Height);
+            MouseCursorShape cursor = new MouseCursorShape(new Point(args.XHotspot, args.YHotspot), image);
+            this._panel.ChangeMouseCursorShape(cursor);
         }
 
-        public double MouseAcceleration { get { return (double)1.4; } }
-
-        private Point _mousePosition;
-        public Point MousePosition 
+        void IPointerCapture.OnMouseModeChanged(object sender, EventArgs e)
         {
-            get { return _mousePosition; }
-            set 
+            if (_multiTouchEnabled)
             {
-                _mousePosition.X = Math.Max(0.0, Math.Min(value.X, _panel.Viewport.Size.Width));
-                _mousePosition.Y = Math.Max(0.0, Math.Min(value.Y, _panel.Viewport.Size.Height));
-
-                _deferrer.DeferToUI(() => this._panel.MoveMouseCursor(_mousePosition));
+                if (ConsumptionMode == ConsumptionMode.MultiTouch)
+                {
+                    ConsumptionMode = ConsumptionMode.Pointer;
+                }
+                else
+                {
+                    ConsumptionMode = ConsumptionMode.MultiTouch;
+                }
+            }
+            else
+            {
+                if (ConsumptionMode == ConsumptionMode.DirectTouch)
+                {
+                    ConsumptionMode = ConsumptionMode.Pointer;
+                }
+                else
+                {
+                    ConsumptionMode = ConsumptionMode.DirectTouch;
+                }
             }
         }
 
-        public void SendMouseAction(MouseEventType eventType)
+        public void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs args)
         {
-            this._control.SendMouseAction(new MouseAction(eventType, MousePosition));
+            _multiTouchEnabled = args.MultiTouchEnabled;
+            
+            if(_multiTouchEnabled)
+            {
+                if(ConsumptionMode == ConsumptionMode.DirectTouch)
+                {
+                    ConsumptionMode = ConsumptionMode.MultiTouch;
+                }
+            }
+            else
+            {
+                if(ConsumptionMode == ConsumptionMode.MultiTouch)
+                {
+                    ConsumptionMode = ConsumptionMode.DirectTouch;
+                }
+            }
         }
 
-        public void SendMouseWheel(int delta, bool isHorizontal)
-        {
-            this._control.SendMouseWheel(delta, isHorizontal);
-        }
-
-        public void SendTouchAction(TouchEventType type, uint contactId, Point position, ulong frameTime)
-        {
-            this._control.SendTouchAction(type, contactId, position, frameTime);
-        }
     }
 }
