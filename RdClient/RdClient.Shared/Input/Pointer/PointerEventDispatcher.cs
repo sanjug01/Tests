@@ -1,69 +1,77 @@
 ﻿using RdClient.Shared.Helpers;
-using RdClient.Shared.Input.Pointer.PointerMode;
 using RdClient.Shared.Models;
+using System;
 using System.Collections.Generic;
-
+using Windows.Devices.Input;
 
 namespace RdClient.Shared.Input.Pointer
 {
     public class PointerEventDispatcher : IPointerEventConsumer
     {
-        public event System.EventHandler<PointerEvent> ConsumedEvent;
+        private PointerDeviceType _lastPointerType;
 
-        private Dictionary<PointerType, IPointerEventConsumer> _pointerConsumers = new Dictionary<PointerType,IPointerEventConsumer>();
-        private PointerType _lastPointerType = PointerType.Mouse;
+        private Dictionary<PointerDeviceType, IPointerEventConsumer> _consumers = new Dictionary<PointerDeviceType, IPointerEventConsumer>();
 
         private IPointerEventConsumer _pointerMode;
         private IPointerEventConsumer _directMode;
         private IPointerEventConsumer _multiTouchMode;
 
-        private ConsumptionMode _consumptionMode = ConsumptionMode.Pointer;
-        public ConsumptionMode ConsumptionMode {
-            get { return _consumptionMode; }
-            set 
+        private ConsumptionMode _consumptionMode;
+        public ConsumptionMode ConsumptionMode
+        {
+            set
             {
                 _consumptionMode = value;
 
                 switch(_consumptionMode)
                 {
                     case ConsumptionMode.Pointer:
-                        _pointerConsumers[PointerType.Touch] = _pointerMode;
+                        _consumers[PointerDeviceType.Touch] = _pointerMode;
                         break;
                     case ConsumptionMode.DirectTouch:
-                        _pointerConsumers[PointerType.Touch] = _directMode;
+                        _consumers[PointerDeviceType.Touch] = _directMode;
                         break;
                     case ConsumptionMode.MultiTouch:
-                        _pointerConsumers[PointerType.Touch] = _multiTouchMode;
-                        break;
-                    default:
+                        _consumers[PointerDeviceType.Touch] = _multiTouchMode;
                         break;
                 }
-            } 
+            }
         }
 
-        public PointerEventDispatcher(ITimer timer, IPointerManipulator manipulator, IRenderingPanel panel)
-        {
-            _pointerMode = PointerModeFactory.CreatePointerMode(timer, manipulator, panel);
-            _directMode = PointerModeFactory.CreateDirectMode(timer, manipulator, panel);
-            _multiTouchMode = new MultiTouchMode(manipulator);
+        public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-            _pointerConsumers[PointerType.Mouse] = new MouseMode(manipulator);
-            _pointerConsumers[PointerType.Pen] = new MouseMode(manipulator);
-            _pointerConsumers[PointerType.Touch] = _pointerMode;
+        public PointerEventDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition)
+        {
+            _pointerMode = new PointerModeConsumer(timerFactory.CreateTimer(), new PointerModeControl(sessionControl, pointerPosition));
+            _multiTouchMode = new MultiTouchConsumer(sessionControl, pointerPosition);
+            _directMode = new DirectModeConsumer(new DirectModeControl(sessionControl, pointerPosition), pointerPosition);
+            
+            _consumers[PointerDeviceType.Mouse] = new MouseModeConsumer(sessionControl, pointerPosition);
+            _consumers[PointerDeviceType.Pen] = new MouseModeConsumer(sessionControl, pointerPosition);
+            _consumers[PointerDeviceType.Touch] = _pointerMode;
+
         }
 
-        public void ConsumeEvent(PointerEvent pointerEvent)
+        public void Consume(IPointerEventBase pointerEvent)
         {
-            if (_lastPointerType != pointerEvent.PointerType)
+            if(pointerEvent is IPointerRoutedEventProperties)
             {
-                _pointerConsumers[_lastPointerType].Reset();
+                IPointerRoutedEventProperties prep = ((IPointerRoutedEventProperties)pointerEvent);
+
+                if(prep.DeviceType != _lastPointerType)
+                {
+                    Reset();
+                }
+
+                _lastPointerType = prep.DeviceType;
             }
 
-            _pointerConsumers[pointerEvent.PointerType].ConsumeEvent(pointerEvent);
+            if(_consumers.ContainsKey(_lastPointerType))
+            {
+                _consumers[_lastPointerType].Consume(pointerEvent);
+            }
 
-            _lastPointerType = pointerEvent.PointerType;
-
-            if (ConsumedEvent != null)
+            if(ConsumedEvent != null)
             {
                 ConsumedEvent(this, pointerEvent);
             }
@@ -71,7 +79,10 @@ namespace RdClient.Shared.Input.Pointer
 
         public void Reset()
         {
-            _pointerConsumers[_lastPointerType].Reset();
+            if(_consumers.ContainsKey(_lastPointerType))
+            {
+                _consumers[_lastPointerType].Reset();
+            }
         }
     }
 }

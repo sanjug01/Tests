@@ -16,6 +16,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Windows.Foundation;
+    using RdClient.Shared.Input.Pointer;
     using System.ComponentModel;
 
     [TestClass]
@@ -45,7 +46,7 @@
         }
 
         private sealed class TestInputPanelFactory : IInputPanelFactory
-        {
+            {
             private readonly IInputPanel _inputPanel;
 
             private sealed class TestInputPanel : IInputPanel
@@ -55,12 +56,12 @@
                 public TestInputPanel()
                 {
                     _isVisible = false;
-                }
+            }
 
                 bool IInputPanel.IsVisible
-                {
+            {
                     get { return _isVisible; }
-                }
+            }
 
                 public event EventHandler IsVisibleChanged;
 
@@ -71,7 +72,7 @@
                         _isVisible = false;
                         if (null != this.IsVisibleChanged)
                             this.IsVisibleChanged(this, EventArgs.Empty);
-                    }
+        }
                 }
 
                 void IInputPanel.Show()
@@ -141,6 +142,8 @@
             {
                 private EventHandler _ready;
 
+                public event EventHandler<IPointerEventBase> PointerChanged;
+
                 event EventHandler IRenderingPanel.Ready
                 {
                     add
@@ -154,14 +157,6 @@
                         _ready -= value;
                     }
                 }
-
-
-                event EventHandler<Shared.Input.Pointer.PointerEventArgs> IRenderingPanel.PointerChanged
-                {
-                    add { }
-                    remove { }
-                }
-
 
                 IViewport IRenderingPanel.Viewport
                 {
@@ -575,6 +570,7 @@
 
             _timerFactory = new TestTimerFactory();
             _connectionSource = new TestConnectionSource();
+            ((ITimerFactorySite)_vm).SetTimerFactory(_timerFactory);
             _viewFactory = new TestViewFactory(_vm);
 
             _defex = new TestDeferredExecution();

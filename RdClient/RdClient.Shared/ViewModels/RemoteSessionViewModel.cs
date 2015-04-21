@@ -1,10 +1,9 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Input;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Input.Keyboard;
-    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
@@ -13,8 +12,9 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using RdClient.Shared.Helpers;
 
-    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, IDeviceCapabilitiesSite
+    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite
     {
         private readonly RelayCommand _dismissFailureMessage;
         private readonly RelayCommand _cancelAutoReconnect;
@@ -22,6 +22,7 @@
         private readonly RelayCommand _invokeKeyboard;
         private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
         private readonly RelayCommand _navigateHome;
+        private readonly RelayCommand _mouseMode;
 
         //
         // Input Pane is a fancy name for the touch keyboard.
@@ -46,6 +47,8 @@
         private InterruptedSessionContinuation _interruptedContinuation;
         private int _reconnectAttempt;
 
+        private ITimerFactory _timerFactory;
+        public ITimerFactory TimerFactory { get { return _timerFactory; } }
 
         public bool IsConnecting
         {
@@ -148,6 +151,11 @@
             get { return _navigateHome; }
         }
 
+        public ICommand MouseMode
+        {
+            get { return _mouseMode; }
+        }
+
         public RemoteSessionViewModel()
         {
             _dismissFailureMessage = new RelayCommand(this.InternalDismissFailureMessage);
@@ -156,6 +164,7 @@
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
             _invokeKeyboardModel = new SymbolBarToggleButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
             _navigateHome = new RelayCommand(this.InternalNavigateHome);
+            _mouseMode = new RelayCommand(this.InternalMouseMode);
             _isRightSideBarVisible = false;
 
             ObservableCollection<object> items = new ObservableCollection<object>();
@@ -379,8 +388,9 @@
                         _cancelAutoReconnect.EmitCanExecuteChanged();
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
-                        this.PointerCapture = new PointerCapture(this, _activeSessionControl, _activeSessionControl.RenderingPanel);
+                        this.PointerCapture = new PointerCapture(this, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
+                        _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
@@ -392,6 +402,8 @@
                         {
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
+                            _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
+                            _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
                             EmitPropertyChanged("IsRenderingPanelActive");
                             EmitPropertyChanged("IsConnecting");
@@ -471,6 +483,19 @@
         {
             this.IsRightSideBarVisible = false;
             _activeSession.Disconnect();
+        }
+
+        private void InternalMouseMode(object parameter)
+        {
+            if(this.PointerCapture != null)
+            {
+                this.PointerCapture.OnMouseModeChanged(this, EventArgs.Empty);
+            }
+        }
+
+        public void SetTimerFactory(ITimerFactory timerFactory)
+        {
+            _timerFactory = timerFactory;
         }
     }
 }

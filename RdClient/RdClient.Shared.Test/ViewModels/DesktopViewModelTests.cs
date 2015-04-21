@@ -6,6 +6,7 @@ using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
+using RdClient.Shared.CxWrappers;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -82,6 +83,21 @@ namespace RdClient.Shared.Test.ViewModels
                     remove { throw new NotImplementedException(); }
                 }
 
+                event EventHandler<MultiTouchEnabledChangedArgs> IRemoteSession.MultiTouchEnabledChanged
+                {
+                    add
+                    {
+                        throw new NotImplementedException();
+                    }
+
+                    remove
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
+
+                public event EventHandler<MouseCursorShapeChangedArgs> MouseCursorShapeChanged;
+
                 IRemoteSessionControl IRemoteSession.Activate(IRemoteSessionView sessionView)
                 {
                     throw new NotImplementedException();
@@ -103,7 +119,6 @@ namespace RdClient.Shared.Test.ViewModels
                 }
 
 
-                public event EventHandler<Shared.CxWrappers.MouseCursorShapeChangedArgs> MouseCursorShapeChanged;
             }
         }
 

@@ -69,7 +69,6 @@
     <Compile Include="Converters\ErrorLocalizers\IErrorLocalizer.cs" />
     <Compile Include="Converters\ErrorLocalizers\RdpDisconnectReasonLocalizer.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\PointerEventConverter.cs" />
     <Compile Include="Converters\RdpErrorToLocalizedStringConverter.cs" />
     <Compile Include="Converters\ResourceIdToLocalizedStringConverter.cs" />
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
@@ -149,20 +148,37 @@
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\ITimer.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
+    <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
+    <Compile Include="Input\Pointer\DirectModeConsumer.cs" />
+    <Compile Include="Input\Pointer\DirectModeTransitionConditions.cs" />
+    <Compile Include="Input\Pointer\DirectModeTransitions.cs" />
+    <Compile Include="Input\Pointer\DraggingHelper.cs" />
+    <Compile Include="Input\Pointer\GestureRoutedEventPropertiesWrapper.cs" />
+    <Compile Include="Input\Pointer\IGestureRoutedEventProperties.cs" />
+    <Compile Include="Input\Pointer\IManipulationRoutedEventProperties.cs" />
+    <Compile Include="Input\Pointer\IPointerEventBase.cs" />
+    <Compile Include="Input\Pointer\IPointerPosition.cs" />
+    <Compile Include="Input\Pointer\IPointerRoutedEventProperties.cs" />
+    <Compile Include="Input\Pointer\ManipulationRoutedEventArgsWrapper.cs" />
+    <Compile Include="Input\Pointer\MouseModeConsumer.cs" />
+    <Compile Include="Input\Pointer\MultiTouchConsumer.cs" />
+    <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
+    <Compile Include="Input\Pointer\DoubleClickTimer.cs" />
     <Compile Include="Input\Keyboard\IInputPanelFactory.cs" />
     <Compile Include="Input\Keyboard\IInputPanel.cs" />
     <Compile Include="Input\Pointer\IPointerCapture.cs" />
+    <Compile Include="Input\Pointer\IPointerControl.cs" />
+    <Compile Include="Input\Pointer\IPointerEventEnums.cs" />
+    <Compile Include="Input\Pointer\IPointTracker.cs" />
+    <Compile Include="Input\Pointer\IZoomScrollEvent.cs" />
     <Compile Include="Input\Pointer\MouseAction.cs" />
     <Compile Include="Input\Pointer\MouseCursorShape.cs" />
-    <Compile Include="Input\Pointer\MultiTouchMode.cs" />
-    <Compile Include="Input\Pointer\InputModeChangedEventArgs.cs" />
     <Compile Include="Input\Pointer\PointerCapture.cs" />
-    <Compile Include="Input\Pointer\PointerEventArgs.cs" />
-    <Compile Include="Input\Pointer\PointerEventTrace.cs" />
     <Compile Include="Input\Pointer\PointerEvent.cs" />
+    <Compile Include="Input\Pointer\PointerEventConsumer.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
     <Compile Include="Helpers\ReadWriteMonitor.cs" />
     <Compile Include="Helpers\StateMachine.cs" />
@@ -184,21 +200,16 @@
     <Compile Include="Input\Keyboard\SingleReleaseKey.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyBase.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactory.cs" />
-    <Compile Include="Input\Pointer\DirectTouchContext.cs" />
-    <Compile Include="Input\Pointer\DoubleClickTimer.cs" />
     <Compile Include="Input\Pointer\IPointerEventConsumer.cs" />
-    <Compile Include="Input\Pointer\IPointerManipulator.cs" />
-    <Compile Include="Input\Pointer\ITouchContext.cs" />
-    <Compile Include="Input\Pointer\MouseMode.cs" />
-    <Compile Include="Input\Pointer\PointerMode\DirectModeControl.cs" />
-    <Compile Include="Input\Pointer\PointerMode\IPointerContext.cs" />
-    <Compile Include="Input\Pointer\PointerMode\IPointerControl.cs" />
-    <Compile Include="Input\Pointer\PointerMode\PointerConsumer.cs" />
-    <Compile Include="Input\Pointer\PointerMode\PointerContext.cs" />
-    <Compile Include="Input\Pointer\PointerMode\PointerModeControl.cs" />
-    <Compile Include="Input\Pointer\PointerMode\PointerModeFactory.cs" />
-    <Compile Include="Input\Pointer\TouchContext.cs" />
-    <Compile Include="Input\Pointer\TouchModeFactory.cs" />
+    <Compile Include="Input\Pointer\PointerModeControl.cs" />
+    <Compile Include="Input\Pointer\PointerModeTransitionConditions.cs" />
+    <Compile Include="Input\Pointer\PointerModeTransitions.cs" />
+    <Compile Include="Input\Pointer\PointerRoutedEventArgsCopy.cs" />
+    <Compile Include="Input\Pointer\PointerRoutedEventArgsWrapper.cs" />
+    <Compile Include="Input\Pointer\PointerStateMachineEvent.cs" />
+    <Compile Include="Input\Pointer\PointTracker.cs" />
+    <Compile Include="Input\Pointer\ZoomScrollEvent.cs" />
+    <Compile Include="Input\Pointer\ZoomScrollRecognizer.cs" />
     <Compile Include="Input\ZoomPan\ZoomEventArgs.cs" />
     <Compile Include="Input\ZoomPan\PanEventArgs.cs" />
     <Compile Include="Input\ZoomPan\IPanTransform.cs" />
@@ -223,7 +234,6 @@
     <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\DesktopModel.cs" />
     <Compile Include="Models\GeneralSettings.cs" />
-    <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
     <Compile Include="Data\ICertificateTrust.cs" />
     <Compile Include="Models\IValidation.cs" />
     <Compile Include="Models\IDeviceCapabilities.cs" />
@@ -295,6 +305,7 @@
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="Navigation\ViewVisibility.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBase.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModel.cs" />
     <Compile Include="ViewModels\DesktopIdentityValidationCompletion.cs" />
@@ -384,6 +395,9 @@
     <SDKReference Include="Microsoft.VCLibs12.AppLocal, Version=12.0">
       <Name>Microsoft Visual C++ 2013 AppLocal Runtime Package for Windows UAP</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Input\Pointer\DirectModeControl.cs" />
   </ItemGroup>
   <!--<Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />-->
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

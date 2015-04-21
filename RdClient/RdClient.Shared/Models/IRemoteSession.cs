@@ -46,6 +46,7 @@
         event EventHandler<BadServerIdentityEventArgs> BadServerIdentity;
 
         event EventHandler<MouseCursorShapeChangedArgs> MouseCursorShapeChanged;
+        event EventHandler<MultiTouchEnabledChangedArgs> MultiTouchEnabledChanged;
 
         /// <summary>
         /// Session has failed permanently.

@@ -15,10 +15,8 @@ namespace RdClient.Shared.CxWrappers
                     return RdClientCx.TouchEventType.TouchUp;
                 case(TouchEventType.Update):
                     return RdClientCx.TouchEventType.TouchUpdate;
-                case(TouchEventType.Unknown):
-                    return RdClientCx.TouchEventType.TouchUp;
                 default:
-                    return RdClientCx.TouchEventType.TouchUp;
+                    throw new InvalidOperationException("trying to convert unknown TouchEventType");
             }
         }
 

@@ -12,7 +12,7 @@
     xmlns:input="using:RdClient.Input"
     xmlns:helpers="using:RdClient.Helpers"
     mc:Ignorable="d"
-    RequestedTheme="Dark"
+    RequestedTheme="{StaticResource MainTheme}"
     d:DesignHeight="300"
     d:DesignWidth="800">
     
@@ -110,7 +110,7 @@
         <ItemsControl
             Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
             HorizontalAlignment="Center" VerticalAlignment="Top"
-            Opacity="0.75"
+            Opacity="{ThemeResource ConnectionOverlayOpacity}"
             ItemsSource="{Binding ConnectionBarItems}">
             
             <ItemsControl.ItemsPanel>
@@ -125,7 +125,7 @@
 
                         <DataTemplate x:Key="SymbolBarButtonModel">
                             <Button
-                                Style="{StaticResource RemoteSessionSymbolBarButton}"
+                                Style="{ThemeResource RemoteSessionSymbolBarButton}"
                                 Margin="4,0"
                                 Command="{Binding Command}"
                                 CommandParameter="{Binding CommandParameter}"
@@ -153,7 +153,8 @@
         <!-- Right side bar -->
         <c:RightSideBarControl
             BarVisibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-            NavigateHome="{Binding NavigateHome}"/>
+            NavigateHome="{Binding NavigateHome}"
+            MouseMode="{Binding MouseMode}"/>
 
     </Grid>
 </UserControl>

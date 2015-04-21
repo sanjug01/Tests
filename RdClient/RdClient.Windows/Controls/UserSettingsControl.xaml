@@ -10,7 +10,7 @@
     mc:Ignorable="d"
     d:DesignHeight="768"
     d:DesignWidth="700"
-    RequestedTheme="Light">
+    RequestedTheme="{StaticResource AlternateTheme}">
 
     <d:UserControl.DataContext>
         <design:FakeSettingsViewModel />

@@ -8,6 +8,7 @@
     /// </summary>
     public enum SegoeGlyph
     {
+        Help = 0x003F,
         HorizontalEllipsis = 0x2026,
         VerticalEllipsis = 0x22EE,
         Trash = 0xE107,
@@ -22,7 +23,7 @@
         ZoomIn = 0xE1A3,
         ZoomOut = 0xE1A4,
         MultiSelection = 0xE762,
-        Keyboard =0xE765
+        Keyboard =0xE765,
     }
 
     /// <summary>
