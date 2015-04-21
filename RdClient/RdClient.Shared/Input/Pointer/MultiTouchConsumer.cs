@@ -54,7 +54,7 @@ namespace RdClient.Shared.Input.Pointer
             // touch events have a location indicator hint which needs the correct position
             _pointerPosition.PointerPosition = pointerEvent.Position;
 
-            TouchEventType touchType = TouchEventType.Unknown;
+            TouchEventType touchType = TouchEventType.Down;
 
             switch(pointerEvent.Action)
             {
@@ -68,6 +68,8 @@ namespace RdClient.Shared.Input.Pointer
                 case PointerEventAction.PointerCanceled:
                     touchType = TouchEventType.Up;
                     break;
+                default:
+                    throw new InvalidOperationException("trying to convert unknown PointerEventAction");
             }
 
             _sessionControl.SendTouchAction(touchType, pointerEvent.PointerId, pointerEvent.Position, delta);

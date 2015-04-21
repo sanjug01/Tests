@@ -160,6 +160,7 @@
     <Compile Include="Input\Pointer\IGestureRoutedEventProperties.cs" />
     <Compile Include="Input\Pointer\IManipulationRoutedEventProperties.cs" />
     <Compile Include="Input\Pointer\IPointerEventBase.cs" />
+    <Compile Include="Input\Pointer\IPointerPosition.cs" />
     <Compile Include="Input\Pointer\IPointerRoutedEventProperties.cs" />
     <Compile Include="Input\Pointer\ManipulationRoutedEventArgsWrapper.cs" />
     <Compile Include="Input\Pointer\MouseModeConsumer.cs" />

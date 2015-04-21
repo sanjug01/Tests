@@ -7,7 +7,7 @@ namespace RdClient.Shared.Input.Pointer
 {
     public class PointerRoutedEventArgsWrapper : IPointerRoutedEventProperties
     {
-        private PointerEvent _pointerEvent;
+        private readonly PointerEvent _pointerEvent;
 
         public PointerEventAction Action { get { return _pointerEvent.Action; } }
 

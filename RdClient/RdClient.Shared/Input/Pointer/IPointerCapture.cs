@@ -1,14 +1,11 @@
 ﻿using RdClient.Shared.CxWrappers;
 using System;
-using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Pointer
 {
-    public interface IPointerPosition
-    {
-        Point PointerPosition { get; set; }
-    }
 
+    // this interface implements the callbacks from IRemoteSessionControl
+    // typically the implementation will also initiate the setup of the pointer input infrastructure
     public interface IPointerCapture
     {
         void OnMouseModeChanged(object sender, EventArgs e);

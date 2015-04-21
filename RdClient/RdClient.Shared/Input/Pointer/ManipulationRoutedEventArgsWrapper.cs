@@ -6,7 +6,7 @@ namespace RdClient.Shared.Input.Pointer
 {
     public class ManipulationRoutedEventArgsWrapper : IManipulationRoutedEventProperties
     {
-        private PointerEvent _pointerEvent;
+        private readonly PointerEvent _pointerEvent;
 
         public PointerEventAction Action
         {

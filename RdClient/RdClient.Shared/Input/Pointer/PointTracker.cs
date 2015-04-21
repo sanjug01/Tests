@@ -15,8 +15,8 @@ namespace RdClient.Shared.Input.Pointer
 
     public class PointTracker : IPointTracker
     {
-        private Dictionary<UInt32, Point> _trackedPoints = new Dictionary<UInt32, Point>();
-        private LinkedList<UInt32> _pointSequence = new LinkedList<UInt32>();
+        private readonly Dictionary<UInt32, Point> _trackedPoints = new Dictionary<UInt32, Point>();
+        private readonly LinkedList<UInt32> _pointSequence = new LinkedList<UInt32>();
         private Point _lastCenter = new Point(0, 0);
         private Point _lastFirstTouch = new Point(0, 0);
 
