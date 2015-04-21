@@ -1,10 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Pointer
@@ -20,19 +15,18 @@ namespace RdClient.Shared.Input.Pointer
             _pointerPosition = pointerPosition;
         }
 
-        public void HScroll(double delta)
+        void IPointerControl.HScroll(double delta)
         {
-            throw new NotImplementedException();
         }
 
-        public void LeftClick(Point position)
+        void IPointerControl.LeftClick(Point position)
         {
             _pointerPosition.PointerPosition = position;
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftPress, _pointerPosition.PointerPosition));
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftRelease, _pointerPosition.PointerPosition));
         }
 
-        public void LeftDrag(PointerDragAction action, Point delta, Point position)
+        void IPointerControl.LeftDrag(PointerDragAction action, Point delta, Point position)
         {
             _pointerPosition.PointerPosition = new Point(
 				_pointerPosition.PointerPosition.X + delta.X,
@@ -41,19 +35,18 @@ namespace RdClient.Shared.Input.Pointer
             DraggingHelper.Dragging(_sessionControl, action, DragButton.Left, _pointerPosition.PointerPosition);
         }
 
-        public void Move(Point delta)
+        void IPointerControl.Move(Point delta)
         {
-            throw new NotImplementedException();
         }
 
-        public void RightClick(Point position)
+        void IPointerControl.RightClick(Point position)
         {
             _pointerPosition.PointerPosition = position;
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightPress, _pointerPosition.PointerPosition));
             _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightRelease, _pointerPosition.PointerPosition));
         }
 
-        public void RightDrag(PointerDragAction action, Point delta, Point position)
+        void IPointerControl.RightDrag(PointerDragAction action, Point delta, Point position)
         {
             _pointerPosition.PointerPosition = new Point(
                 _pointerPosition.PointerPosition.X + delta.X,
@@ -62,14 +55,12 @@ namespace RdClient.Shared.Input.Pointer
             DraggingHelper.Dragging(_sessionControl, action, DragButton.Right, _pointerPosition.PointerPosition);
         }
 
-        public void Scroll(double delta)
+        void IPointerControl.Scroll(double delta)
         {
-            throw new NotImplementedException();
         }
 
-        public void ZoomPan(Point center, Point translation, double scale)
+        void IPointerControl.ZoomPan(Point center, Point translation, double scale)
         {
-            throw new NotImplementedException();
         }
     }
 }

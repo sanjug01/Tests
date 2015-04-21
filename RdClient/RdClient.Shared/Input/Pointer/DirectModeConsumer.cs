@@ -11,7 +11,7 @@ namespace RdClient.Shared.Input.Pointer
         StateMachineEvent _stateMachineEvent;
 
         private ConsumptionMode _consumptionMode;
-        public ConsumptionMode ConsumptionMode
+        ConsumptionMode IPointerEventConsumer.ConsumptionMode
         {
             set
             {
@@ -19,7 +19,6 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        public event EventHandler<IPointerEventBase> ConsumedEvent;
 
         public DirectModeConsumer(IPointerControl control, IPointerPosition pointerPosition)
         {
@@ -33,7 +32,9 @@ namespace RdClient.Shared.Input.Pointer
             Reset();
         }
 
-        public void Consume(IPointerEventBase pointerEvent)
+        public event EventHandler<IPointerEventBase> ConsumedEvent;
+
+        void IPointerEventConsumer.Consume(IPointerEventBase pointerEvent)
         {
             if(pointerEvent.Action == PointerEventAction.PointerPressed)
             {
@@ -42,7 +43,7 @@ namespace RdClient.Shared.Input.Pointer
 
             if(pointerEvent.Action == PointerEventAction.Tapped)
             {
-                IGestureRoutedEventProperties grep = pointerEvent as IGestureRoutedEventProperties;
+                IGestureRoutedEventProperties grep = (IGestureRoutedEventProperties) pointerEvent;
 
                 if(grep.Action == PointerEventAction.Tapped)
                 {
@@ -68,6 +69,11 @@ namespace RdClient.Shared.Input.Pointer
         public void Reset()
         {
             _stateMachine.SetStart(DirectModeState.Idle);      
+        }
+
+        void IPointerEventConsumer.Reset()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -16,7 +16,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Windows.Foundation;
-    using RdClient.Shared.Input;
+    using RdClient.Shared.Input.Pointer;
 
     [TestClass]
     public sealed class RemoteSessionViewModelTests

@@ -1,10 +1,9 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Input;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Input.Keyboard;
-    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;

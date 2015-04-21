@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Input;
 
-namespace RdClient.Shared.Input
+namespace RdClient.Shared.Input.Pointer
 {
     public enum ZoomScrollType
     {

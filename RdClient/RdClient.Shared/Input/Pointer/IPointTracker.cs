@@ -1,6 +1,6 @@
 ﻿using Windows.Foundation;
 
-namespace RdClient.Shared.Input
+namespace RdClient.Shared.Input.Pointer
 {
     public interface IPointTracker
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.Foundation;
 
-namespace RdClient.Shared.Input
+namespace RdClient.Shared.Input.Pointer
 {
     public class PointTrackerException : Exception
     {

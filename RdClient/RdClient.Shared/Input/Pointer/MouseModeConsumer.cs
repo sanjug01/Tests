@@ -7,7 +7,7 @@ namespace RdClient.Shared.Input.Pointer
     public class MouseModeConsumer : IPointerEventConsumer
     {
         private ConsumptionMode _consumptionMode;
-        public ConsumptionMode ConsumptionMode
+        ConsumptionMode IPointerEventConsumer.ConsumptionMode
         {
             set
             {
@@ -27,7 +27,7 @@ namespace RdClient.Shared.Input.Pointer
             _pointerPosition = pointerPosition;
         }
 
-        private bool MouseLeftButton(IPointerRoutedEventProperties prep)
+        private bool IsLeftMouseButtonPressed(IPointerRoutedEventProperties prep)
         {
             if(prep != null && prep.LeftButton)
             {
@@ -39,7 +39,7 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        private bool MouseRightButton(IPointerRoutedEventProperties prep)
+        private bool IsRightMouseButtonPressed(IPointerRoutedEventProperties prep)
         {
             if (prep != null && prep.RightButton)
             {
@@ -55,19 +55,19 @@ namespace RdClient.Shared.Input.Pointer
         {
             _pointerPosition.PointerPosition = prep.Position;
 
-            if(MouseLeftButton(_tracked) == false && MouseLeftButton(prep) == true)
+            if(IsLeftMouseButtonPressed(_tracked) == false && IsLeftMouseButtonPressed(prep) == true)
             {
                 _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftPress, prep.Position));
             }
-            else if (MouseLeftButton(_tracked) == true && MouseLeftButton(prep) == false)
+            else if (IsLeftMouseButtonPressed(_tracked) == true && IsLeftMouseButtonPressed(prep) == false)
             {
                 _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftRelease, prep.Position));
             }
-            else if (MouseRightButton(_tracked) == false && MouseRightButton(prep) == true)
+            else if (IsRightMouseButtonPressed(_tracked) == false && IsRightMouseButtonPressed(prep) == true)
             {
                 _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightPress, prep.Position));
             }
-            else if (MouseRightButton(_tracked) == true && MouseRightButton(prep) == false)
+            else if (IsRightMouseButtonPressed(_tracked) == true && IsRightMouseButtonPressed(prep) == false)
             {
                 _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightRelease, prep.Position));
             }
@@ -81,12 +81,12 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        public void Consume(IPointerEventBase pointerEvent)
+        void IPointerEventConsumer.Consume(IPointerEventBase pointerEvent)
         {   
             if(pointerEvent is IPointerRoutedEventProperties)
             {
                 MouseRecognizer((IPointerRoutedEventProperties) pointerEvent);
-                _tracked = new PointerRoutedEventArgsCopy(pointerEvent as IPointerRoutedEventProperties);
+                _tracked = new PointerRoutedEventArgsCopy((IPointerRoutedEventProperties)pointerEvent);
             }
                      
             if(ConsumedEvent != null)
@@ -95,7 +95,7 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        public void Reset()
+        void IPointerEventConsumer.Reset()
         {
             _tracked = null;
         }

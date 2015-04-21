@@ -1,15 +1,13 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
-using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models;
 using RdClient.Shared.Navigation.Extensions;
 using System;
 using System.Diagnostics.Contracts;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media;
-using RdClient.Shared.Input;
 
-namespace RdClient.Input
+namespace RdClient.Shared.Input.Pointer
 {
     public class PointerCapture : IPointerCapture, IPointerPosition
     {
@@ -31,7 +29,7 @@ namespace RdClient.Input
         }
 
         private Point _pointerPosition;
-        public Point PointerPosition
+        Point IPointerPosition.PointerPosition
         {
             get { return _pointerPosition; }
             set
@@ -54,17 +52,17 @@ namespace RdClient.Input
             this.ConsumptionMode = ConsumptionMode.Pointer;
         }
 
-        public void OnPointerChanged(object sender, IPointerEventBase e)
+        void IPointerCapture.OnPointerChanged(object sender, IPointerEventBase e)
         {
             _consumer.Consume(e);
         }
 
-        public void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args)
+        void IPointerCapture.OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args)
         {
             throw new System.NotImplementedException();
         }
 
-        public void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
+        void IPointerCapture.OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
         {
             Contract.Requires(null != args.Buffer);
             ImageSource image = MouseCursorShape.ByteArrayToBitmap(args.Buffer, args.Width, args.Height);
@@ -72,7 +70,7 @@ namespace RdClient.Input
             this._panel.ChangeMouseCursorShape(cursor);
         }
 
-        public void OnMouseModeChanged(object sender, EventArgs e)
+        void IPointerCapture.OnMouseModeChanged(object sender, EventArgs e)
         {
             if (_multiTouchEnabled)
             {

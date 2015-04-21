@@ -1,8 +1,7 @@
 ﻿using RdClient.Shared.Helpers;
 using System;
-using System.Diagnostics;
 
-namespace RdClient.Shared.Input
+namespace RdClient.Shared.Input.Pointer
 {
     public class ZoomScrollEventArgs
     {

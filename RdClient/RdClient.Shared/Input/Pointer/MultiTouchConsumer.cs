@@ -1,10 +1,6 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RdClient.Shared.Input.Pointer
 {
@@ -78,7 +74,7 @@ namespace RdClient.Shared.Input.Pointer
         }
 
 
-        public void Consume(IPointerEventBase pointerEvent)
+        void IPointerEventConsumer.Consume(IPointerEventBase pointerEvent)
         {
             if(pointerEvent is IPointerRoutedEventProperties)
             {
@@ -102,7 +98,7 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        public void Reset()
+        void IPointerEventConsumer.Reset()
         {
             // don't reset the master touch because it may crash the protocol stack o_O
             _lastTouch = null;
