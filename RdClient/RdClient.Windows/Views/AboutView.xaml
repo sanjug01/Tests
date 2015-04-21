@@ -1,0 +1,76 @@
+﻿<UserControl
+    x:Class="RdClient.Views.AboutView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    mc:Ignorable="d"
+    d:DesignHeight="400"
+    d:DesignWidth="400">
+    
+    <UserControl.DataContext>
+        <vm:AboutViewModel />
+    </UserControl.DataContext>
+
+    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                FontSize="30"
+                Text="(d) About" />
+            <HyperlinkButton
+                Grid.Row="0"
+                Command="{Binding NavigateBack}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                <TextBlock Text="Close"/>
+            </HyperlinkButton>
+                
+            <StackPanel Margin="0,20,0,0" Grid.Row="1" Orientation="Vertical">
+                <TextBlock Text="(d) Microsoft Remote Desktop"/>
+                <TextBlock Text="(d) Version 0.0.000.00"/>
+                <TextBlock Text="(d) © 2015 Microsoft Corporation"/>
+                <HyperlinkButton Margin="0,15,0,0">
+                    <TextBlock Text="(d) Thirt Party Notices"/>
+                </HyperlinkButton>
+                <HyperlinkButton Margin="0,15,0,0">
+                    <TextBlock Text="(d) Recommended new features"/>
+                </HyperlinkButton>
+            </StackPanel>
+
+            <HyperlinkButton Grid.Row="2">
+                <TextBlock Text="(d) Rate and Review" />
+            </HyperlinkButton>
+
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <HyperlinkButton>
+                    <TextBlock Text="(d) Terms of use"/>
+                </HyperlinkButton>
+
+                <Grid Grid.Column="1" Margin="10,5">
+                    <Rectangle Width="2" VerticalAlignment="Stretch" Fill="{ThemeResource DefaultTextForegroundThemeBrush}"/>
+                </Grid>
+
+                <HyperlinkButton Grid.Column="2">
+                    <TextBlock Text="(d) Privacy Policy" />
+                </HyperlinkButton>
+            </Grid>
+        </Grid>
+    </Grid>
+    
+</UserControl>

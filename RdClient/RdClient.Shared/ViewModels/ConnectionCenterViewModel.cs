@@ -128,6 +128,7 @@
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, new RelayCommand(this.AddResource), "Add"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.MultiSelection, new RelayCommand(this.ToggleDesktopSelectionCommandExecute), "Select"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Help, new RelayCommand(this.PushAboutDialog), "About"));
             //
             //_toolbarItemsSource.Add(new SeparatorBarItemModel());
             //
@@ -471,6 +472,11 @@
         private void GoToSettingsCommandExecute(object o)
         {
             this.NavigationService.NavigateToView("SettingsView", null);
+        }
+
+        private void PushAboutDialog(object parameter)
+        {
+            this.NavigationService.PushAccessoryView("AboutView", _accessoryViewCompletion);
         }
 
         private void AddWorkspaceExecute()
