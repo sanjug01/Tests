@@ -153,7 +153,7 @@
 
                 if (isHorizontal)
                 {
-                    x = delta;
+                    x = -delta;
                     type = MouseEventType.MouseHWheel;
                 }
                 else
