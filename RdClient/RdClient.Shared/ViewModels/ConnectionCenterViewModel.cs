@@ -476,8 +476,7 @@
 
         private void PushAboutDialog(object parameter)
         {
-            this.NavigationService.PushModalView("AboutView", null);
-            //this.NavigationService.PushAccessoryView("AboutView", _accessoryViewCompletion);
+            this.NavigationService.PushAccessoryView("AboutView", _accessoryViewCompletion);
         }
 
         private void AddWorkspaceExecute()
