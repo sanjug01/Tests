@@ -722,4 +722,40 @@
     <value>(r) Preparing the remote connection</value>
     <comment>Message displayed in the connection view, while connecting to remote session.</comment>
   </data>
+  <data name="SelectResource_Azure_Description.Text" xml:space="preserve">
+    <value>(r) Get to apps from Azure RemoteApp</value>
+    <comment>Description of add Azure Remote App option on the add resource view</comment>
+  </data>
+  <data name="SelectResource_Azure_Title.Text" xml:space="preserve">
+    <value>(r) Azure RemoteApp</value>
+    <comment>Title of add Azure Remote App option on the add resource view</comment>
+  </data>
+  <data name="SelectResource_Desktop_Description.Text" xml:space="preserve">
+    <value>(r) Connect to a remote PC</value>
+    <comment>Description of add desktop option on the add resource view</comment>
+  </data>
+  <data name="SelectResource_Desktop_Title.Text" xml:space="preserve">
+    <value>(r) Desktop</value>
+    <comment>Title of add desktop option on the add resource view</comment>
+  </data>
+  <data name="SelectResource_LearnMoreLink.Content" xml:space="preserve">
+    <value>(r) Learn more</value>
+    <comment>Text shown for the learn more link that the user can click on to learn about the different resource types</comment>
+  </data>
+  <data name="SelectResource_LearnMoreLink.NavigateUri" xml:space="preserve">
+    <value>http://bing.com</value>
+    <comment>URL for doc link that explains more about connection types</comment>
+  </data>
+  <data name="SelectResource_OnPrem_Description.Text" xml:space="preserve">
+    <value>(r) Access published apps and desktops</value>
+    <comment>Description of add On Premise Workspace option on the add resource view</comment>
+  </data>
+  <data name="SelectResource_OnPrem_Title.Text" xml:space="preserve">
+    <value>(r) Remote Resource</value>
+    <comment>Title of add On Premise Workspace option on the add resource view</comment>
+  </data>
+  <data name="SelectResource_Title.Text" xml:space="preserve">
+    <value>(r) Add New</value>
+    <comment>Title shown on add resource view page that lets you select which type of resource to add</comment>
+  </data>
 </root>
