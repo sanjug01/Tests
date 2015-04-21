@@ -20,7 +20,6 @@
         private readonly ReaderWriterLockSlim _monitor;
         private IViewport _viewport;
         private EventHandler _ready;
-        private EventHandler<PointerEventArgs> _pointerChangedOld;
         private EventHandler<IPointerEventBase> _pointerChanged;
 
         public Image MouseCursor { private get; set; }
@@ -73,25 +72,6 @@
             remove { _ready -= value; }
         }
 
-        event EventHandler<PointerEventArgs> IRenderingPanel.PointerChangedOld
-        {
-            add
-            {
-                using (ReadWriteMonitor.UpgradeableRead(_monitor))
-                {
-                    _pointerChangedOld += value;
-                }
-            }
-
-            remove
-            {
-                using (ReadWriteMonitor.UpgradeableRead(_monitor))
-                {
-                    _pointerChangedOld -= value;
-                }
-            }
-        }
-
         event EventHandler<IPointerEventBase> IRenderingPanel.PointerChanged
         {
             add
@@ -140,15 +120,6 @@
             {
                 if (null != _ready)
                     _ready(this, EventArgs.Empty);
-            }
-        }
-
-        public void EmitPointerEventOld(PointerEventOld e)
-        {
-            using(ReadWriteMonitor.UpgradeableRead(_monitor))
-            {
-                if (null != _pointerChangedOld)
-                    _pointerChangedOld(this, new PointerEventArgs(e));
             }
         }
 

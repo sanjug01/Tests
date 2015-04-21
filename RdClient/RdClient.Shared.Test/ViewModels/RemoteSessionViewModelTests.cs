@@ -97,14 +97,6 @@
                     }
                 }
 
-
-                event EventHandler<Shared.Input.Pointer.PointerEventArgs> IRenderingPanel.PointerChangedOld
-                {
-                    add { }
-                    remove { }
-                }
-
-
                 IViewport IRenderingPanel.Viewport
                 {
                     get { throw new NotImplementedException(); }

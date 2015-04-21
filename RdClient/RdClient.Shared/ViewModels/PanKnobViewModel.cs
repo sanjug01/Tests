@@ -13,6 +13,7 @@ namespace RdClient.Shared.ViewModels
     using RdClient.Shared.Input.ZoomPan;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Navigation.Extensions;
+    using RdClient.Shared.Input;
 
     public class PanKnobTransform : IPanKnobTransform 
     {
@@ -37,18 +38,19 @@ namespace RdClient.Shared.ViewModels
         public double DeltaY { get; private set; }
     }
 
-    public class PanKnobPointerEventDispatcher : IPointerEventConsumerOld
+    public class PanKnobPointerEventDispatcher : IPointerEventConsumer
     {
 
-        public event EventHandler<PointerEventOld> ConsumedEvent;
-
         private ConsumptionMode _consumptionMode;
+
+        public event EventHandler<IPointerEventBase> ConsumedEvent;
+
         public ConsumptionMode ConsumptionMode
         {
             set { _consumptionMode = value; }
         }
 
-        public void ConsumeEvent(PointerEventOld pointerEvent)
+        public void ConsumeEvent(IPointerEventBase pointerEvent)
         {
             if (ConsumedEvent != null)
             {
@@ -58,6 +60,11 @@ namespace RdClient.Shared.ViewModels
 
         public void Reset()
         {
+        }
+
+        public void Consume(IPointerEventBase pointerEvent)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -147,8 +154,8 @@ namespace RdClient.Shared.ViewModels
 
 
         // handles press&hold, double press&hold and hold release to manage knob state
-        private IPointerEventConsumerOld _pointerEventConsumer;
-        public IPointerEventConsumerOld PointerEventConsumer
+        private IPointerEventConsumer _pointerEventConsumer;
+        public IPointerEventConsumer PointerEventConsumer
         {
             get { return _pointerEventConsumer; }
             set { SetProperty(ref _pointerEventConsumer, value); }
@@ -177,65 +184,65 @@ namespace RdClient.Shared.ViewModels
             _isInertiaEnabled = false;
         }
 
-        void HandlePointerEvent(object sender, PointerEventOld e)
+        void HandlePointerEvent(object sender, IPointerEventBase e)
         {
-            if(e.Inertia)
-            {
-                // inertia is enabled only after ManipulationInertiaStarting
-                _isInertiaEnabled = true;
-            }
+            //if(e.Inertia)
+            //{
+            //    // inertia is enabled only after ManipulationInertiaStarting
+            //    _isInertiaEnabled = true;
+            //}
 
-            if (TouchEventType.Down == e.ActionType)
-            {
-                // click or double click
-                if (_lastTouchTimeStamp != 0 && (e.TimeStamp - _lastTouchTimeStamp < GlobalConstants.MaxDoubleTapUS))
-                {
-                    // This is a double tap guesture so enable moving the pan control
-                    _lastTouchTimeStamp = 0;
-                    this.State = PanKnobState.Moving;
-                }
-                else
-                {
-                    _lastTouchTimeStamp = e.TimeStamp;
-                    this.State = PanKnobState.Active;
-                }
+            //if (TouchEventType.Down == e.ActionType)
+            //{
+            //    // click or double click
+            //    if (_lastTouchTimeStamp != 0 && (e.TimeStamp - _lastTouchTimeStamp < GlobalConstants.MaxDoubleTapUS))
+            //    {
+            //        // This is a double tap guesture so enable moving the pan control
+            //        _lastTouchTimeStamp = 0;
+            //        this.State = PanKnobState.Moving;
+            //    }
+            //    else
+            //    {
+            //        _lastTouchTimeStamp = e.TimeStamp;
+            //        this.State = PanKnobState.Active;
+            //    }
 
-                this.PanOrbOpacity = 1.0;
-                this.IsPanning = true;
-                _isInertiaProcessingNeeded = false;
-            }
-            else if(TouchEventType.Up == e.ActionType)
-            {
-                if (_isInertiaEnabled)
-                {
-                    _isInertiaProcessingNeeded = true;
-                }
-                else
-                {
-                    this.State = PanKnobState.Inactive;
-                }
-                this.IsPanning = false;
-            }
-            else if(_isInertiaProcessingNeeded && PanKnobState.Inactive != this.State)
-            {
-                if (e.Inertia)
-                {
-                    this.ApplyTransform(e.Delta.X, e.Delta.Y);
-                }
-                else
-                {
-                    // completed inertia, will need another OnManipulationInertiaStarting to process again.
-                    _isInertiaProcessingNeeded = false;
-                    _isInertiaEnabled = false;
-                    this.State = PanKnobState.Inactive;
-                }
-            } 
-            else
-            {
-                // move or pan
-                this.ApplyTransform(e.Delta.X, e.Delta.Y);
-                _isInertiaProcessingNeeded = false;
-            }
+            //    this.PanOrbOpacity = 1.0;
+            //    this.IsPanning = true;
+            //    _isInertiaProcessingNeeded = false;
+            //}
+            //else if(TouchEventType.Up == e.ActionType)
+            //{
+            //    if (_isInertiaEnabled)
+            //    {
+            //        _isInertiaProcessingNeeded = true;
+            //    }
+            //    else
+            //    {
+            //        this.State = PanKnobState.Inactive;
+            //    }
+            //    this.IsPanning = false;
+            //}
+            //else if(_isInertiaProcessingNeeded && PanKnobState.Inactive != this.State)
+            //{
+            //    if (e.Inertia)
+            //    {
+            //        this.ApplyTransform(e.Delta.X, e.Delta.Y);
+            //    }
+            //    else
+            //    {
+            //        // completed inertia, will need another OnManipulationInertiaStarting to process again.
+            //        _isInertiaProcessingNeeded = false;
+            //        _isInertiaEnabled = false;
+            //        this.State = PanKnobState.Inactive;
+            //    }
+            //} 
+            //else
+            //{
+            //    // move or pan
+            //    this.ApplyTransform(e.Delta.X, e.Delta.Y);
+            //    _isInertiaProcessingNeeded = false;
+            //}
         }
 
         private void ApplyTransform(double x, double y)

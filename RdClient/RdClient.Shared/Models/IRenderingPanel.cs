@@ -17,7 +17,6 @@
         /// </summary>
         /// <remarks>The rendering panel starts capturing input when the first event handler is registered,
         /// and stops the capture when the last handler has been removed.</remarks>
-        event EventHandler<PointerEventArgs> PointerChangedOld;
         event EventHandler<IPointerEventBase> PointerChanged;
 
         /// <summary>

@@ -213,11 +213,6 @@
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationInertiaStarting, PointerEventType.ManipulationInertiaStartingRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
             this.RenderingPanel.EmitPointerEvent(w);
-
-            if (e.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
-            {
-                this.RenderingPanel.EmitPointerEventOld(PointerEventConverter.ManipulationInertiaStartingArgsConverter(e));
-            }
         }
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
@@ -225,11 +220,6 @@
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationDelta, PointerEventType.ManipulationDeltaRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
             this.RenderingPanel.EmitPointerEvent(w);
-
-            if (e.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
-            {
-                this.RenderingPanel.EmitPointerEventOld(PointerEventConverter.ManipulationDeltaArgsConverter(e));
-            }
         }
 
         protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs e)
@@ -237,17 +227,10 @@
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationCompleted, PointerEventType.ManipulationCompletedRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
             this.RenderingPanel.EmitPointerEvent(w);
-
-            if (e.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Touch)
-            {
-                this.RenderingPanel.EmitPointerEventOld(PointerEventConverter.ManipulationCompletedArgsConverter(e));
-            }
         }
 
         protected override void OnPointerCanceled(PointerRoutedEventArgs e)
         {
-            this.RenderingPanel.EmitPointerEventOld(PointerEventConverter.PointerArgsConverter(this, e, TouchEventType.Up));
-
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCanceled, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
             _platformRecognizer.CompleteGesture();
@@ -255,8 +238,6 @@
 
         protected override void OnPointerReleased(PointerRoutedEventArgs e)
         {
-            this.RenderingPanel.EmitPointerEventOld(PointerEventConverter.PointerArgsConverter(this, e, TouchEventType.Up));
-
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerReleased, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
             _platformRecognizer.ProcessUpEvent(e.GetCurrentPoint(this));
@@ -264,8 +245,6 @@
 
         protected override void OnPointerPressed(PointerRoutedEventArgs e)
         {
-            this.RenderingPanel.EmitPointerEventOld(PointerEventConverter.PointerArgsConverter(this, e, TouchEventType.Down));
-
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerPressed, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
             _platformRecognizer.ProcessDownEvent(e.GetCurrentPoint(this));
@@ -273,8 +252,6 @@
 
         protected override void OnPointerWheelChanged(PointerRoutedEventArgs e)
         {
-            this.RenderingPanel.EmitPointerEventOld(PointerEventConverter.PointerArgsConverter(this, e, TouchEventType.Update));
-
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerPressed, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
         }
@@ -282,8 +259,6 @@
 
         protected override void OnPointerMoved(PointerRoutedEventArgs e)
         {
-            this.RenderingPanel.EmitPointerEventOld(PointerEventConverter.PointerArgsConverter(this, e, TouchEventType.Update));
-
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerMoved, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
 
