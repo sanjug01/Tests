@@ -43,6 +43,15 @@
         private ITimerFactory _timerFactory;
         public ITimerFactory TimerFactory { get { return _timerFactory; } }
 
+        public bool IsConnecting
+        {
+            get
+            {
+                return null != _activeSession
+                    && (SessionState.Connecting == _activeSession.State.State);
+            }
+        }
+
         public bool IsRenderingPanelActive
         {
             get
@@ -181,6 +190,7 @@
             }
 
             EmitPropertyChanged("IsRenderingPanelActive");
+            EmitPropertyChanged("IsConnecting");
             this.IsInterrupted = SessionState.Interrupted == _activeSession.State.State;
             this.IsFailureMessageVisible = SessionState.Failed == _activeSession.State.State;
         }
@@ -254,6 +264,7 @@
             this.ReconnectAttempt = _activeSession.State.ReconnectAttempt;
             this.IsInterrupted = true;
             EmitPropertyChanged("IsRenderingPanelActive");
+            EmitPropertyChanged("IsConnecting");
         }
 
         private void OnBadCertificate(object sender, BadCertificateEventArgs e)
@@ -325,6 +336,7 @@
                         this.IsInterrupted = false;
                         _cancelAutoReconnect.EmitCanExecuteChanged();
                         EmitPropertyChanged("IsRenderingPanelActive");
+                        EmitPropertyChanged("IsConnecting");
                         this.IsConnectionBarVisible = false;
                         break;
 
@@ -343,6 +355,7 @@
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
                         EmitPropertyChanged("IsRenderingPanelActive");
+                        EmitPropertyChanged("IsConnecting");
                         this.IsConnectionBarVisible = true;
                         break;
 
@@ -355,6 +368,7 @@
                             _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
                             EmitPropertyChanged("IsRenderingPanelActive");
+                            EmitPropertyChanged("IsConnecting");
                             //
                             // The connection bar and side bars are not available in any non-connected state.
                             //

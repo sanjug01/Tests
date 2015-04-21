@@ -10,7 +10,7 @@
     xmlns:sc="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
-    RequestedTheme="Light">
+    RequestedTheme="{StaticResource AlternateTheme}">
     
     <Page.DataContext>
         <vm:AddUserViewModel />
@@ -29,15 +29,10 @@
     </Page.Resources>
 
     <Grid>
-        <Border 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch" 
-            Opacity="0.8" 
-            Background="#dd000000"
-        />
+        <Border Style="{ThemeResource ModalBackground}" />
 
         <Border 
-            Background="{StaticResource rdWhiteBrush}" 
+            Background="{ThemeResource DialogBackgroundColor}" 
             Width="480" 
             HorizontalAlignment="Center" 
             VerticalAlignment="Top" 
@@ -54,14 +49,12 @@
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
-                    <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
-                               Foreground="{StaticResource rdBlackBrush}"                                
+                    <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}"                             
                                Text="{Binding Path=Mode, FallbackValue='Enter Credentials (d)', Converter={StaticResource TypeToLocalizedStringConverter}, ConverterParameter=Title}"/>
                 </Grid>
 
                 <Grid Grid.Row="1">
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource BodyTextBlockStyle}" 
-                                Foreground="{StaticResource rdBlackBrush}"
                                 Visibility="{Binding Path=ShowMessage, Converter={StaticResource BooleanToVisibilityConverter}}" 
                                 Text="{Binding Path=Mode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
                 </Grid>

@@ -11,13 +11,13 @@
     mc:Ignorable="d"
     d:DesignHeight="700"
     d:DesignWidth="1024"
-    RequestedTheme="Dark">
+    RequestedTheme="{StaticResource MainTheme}">
 
     <d:UserControl.DataContext>
         <design:FakeConnectionCenterViewModel />
     </d:UserControl.DataContext>
 
-    <Grid Background="{StaticResource ConnectionCenterScrollViewBackgroundBrush}">
+    <Grid Background="{ThemeResource ConnectionCenterScrollViewBackgroundBrush}">
         <ScrollViewer Grid.Row="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.RowDefinitions>
