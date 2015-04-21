@@ -34,7 +34,7 @@
         />
 
         <Border 
-            Background="{StaticResource rdWhiteBrush}" 
+            Background="{ThemeResource DialogBackgroundColor}" 
             Width="600" 
             HorizontalAlignment="Center" 
             VerticalAlignment="Top" 
@@ -56,7 +56,6 @@
                             x:Uid="DeleteDesktopsView-Title-DeleteSingle"
                             Margin="24,12,24,12" 
                             Style="{ThemeResource TitleTextBlockStyle}" 
-                            Foreground="{StaticResource rdBlackBrush}" 
                             Text="Delete connection(d):"
                             Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource  BooleanToVisibilityConverter}}"
                             />
@@ -64,14 +63,12 @@
                             x:Uid="DeleteDesktopsView-Title-DeleteMultiple"
                             Margin="24,12,24,12" 
                             Style="{ThemeResource TitleTextBlockStyle}" 
-                            Foreground="{StaticResource rdBlackBrush}" 
                             Text="Delete connections(d):"
                             Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
                             />
                         <TextBlock 
                             Margin="24,12,24,12" 
                             Style="{ThemeResource TitleTextBlockStyle}" 
-                            Foreground="{StaticResource rdBlackBrush}" 
                             Text="{Binding Path=SelectedDesktops, Converter={StaticResource DesktopsListToLocalizedStringConverter}}"
                         />
                     </StackPanel>

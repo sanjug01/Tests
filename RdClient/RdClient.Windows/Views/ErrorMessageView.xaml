@@ -29,7 +29,7 @@
         />
 
         <Border 
-            Background="{StaticResource rdWhiteBrush}" 
+            Background="{ThemeResource DialogBackgroundColor}" 
             Width="600" 
             HorizontalAlignment="Center" 
             VerticalAlignment="Top" 
@@ -49,7 +49,6 @@
                     <TextBlock 
                         Margin="24,12,24,12" 
                         Style="{ThemeResource TitleTextBlockStyle}" 
-                        Foreground="{StaticResource rdBlackBrush}" 
                         Text="{Binding Path=Title}"
                         />
                 </Grid>        

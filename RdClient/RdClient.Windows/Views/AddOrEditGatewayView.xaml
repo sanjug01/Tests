@@ -36,7 +36,7 @@
         />
 
         <Border 
-            Background="{StaticResource rdWhiteBrush}" 
+            Background="{ThemeResource DialogBackgroundColor}" 
             Width="480" 
             HorizontalAlignment="Center" 
             VerticalAlignment="Top" 
@@ -53,11 +53,9 @@
 
                 <Grid Grid.Row="0">
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
-                               Foreground="{StaticResource rdBlackBrush}" 
                                x:Uid="AddOrEditGateway-AddCaption" Text="Add Gateway(d)"
                                Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
-                               Foreground="{StaticResource rdBlackBrush}" 
                                x:Uid="AddOrEditGateway-EditCaption" Text="Edit Gateway(d)"
                                Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
                 </Grid>

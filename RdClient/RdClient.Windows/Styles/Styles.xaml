@@ -46,10 +46,7 @@
             <SolidColorBrush x:Key="DialogAcceptButtonBackgroundColor" Color="{ThemeResource BackButtonBackgroundBrush}" />
             <SolidColorBrush x:Key="DialogCancelButtonBackgroundColor" Color="{ThemeResource SystemChromeHighColor}" />
             <SolidColorBrush x:Key="DialogButtonForegroundColor" Color="{ThemeResource SystemAltHighColor}" />
-
-            <SolidColorBrush x:Key="rdBlackBrush" Color="Black" />
-            <SolidColorBrush x:Key="rdGrayBrush" Color="Gray" />
-            <SolidColorBrush x:Key="rdWhiteBrush" Color="White" />
+                        
             <SolidColorBrush x:Key="rdErrorBrush" Color="Red" />
         </ResourceDictionary>        
         <ResourceDictionary x:Key="Light">
@@ -91,6 +88,9 @@
             <SolidColorBrush x:Key="DialogAcceptButtonBackgroundColor" Color="{ThemeResource BackButtonBackgroundBrush}" />
             <SolidColorBrush x:Key="DialogCancelButtonBackgroundColor" Color="{ThemeResource SystemChromeHighColor}" />
             <SolidColorBrush x:Key="DialogButtonForegroundColor" Color="{ThemeResource SystemAltHighColor}" />
+
+            <SolidColorBrush x:Key="rdErrorBrush" Color="Red" />
+            
         </ResourceDictionary>
         <ResourceDictionary x:Key="HighContrast">
             <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
@@ -131,6 +131,8 @@
             <SolidColorBrush x:Key="DialogAcceptButtonBackgroundColor" Color="{ThemeResource SystemColorButtonFaceColor}" />
             <SolidColorBrush x:Key="DialogCancelButtonBackgroundColor" Color="{ThemeResource SystemColorButtonFaceColor}" />
             <SolidColorBrush x:Key="DialogButtonForegroundColor" Color="{ThemeResource SystemColorButtonTextColor}" />
+
+            <SolidColorBrush x:Key="rdErrorBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
