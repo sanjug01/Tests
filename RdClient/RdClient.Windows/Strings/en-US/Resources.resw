@@ -718,4 +718,8 @@
   <data name="DesktopIdentityValidation-WarningLabel.Text" xml:space="preserve">
     <value>(r) This problem can occur if the remote PC is running a version of Windows that is not configured to support server authentication.</value>
   </data>
+  <data name="Connection_Pending_Message.Text" xml:space="preserve">
+    <value>(r) Preparing the remote connection</value>
+    <comment>Message displayed in the connection view, while connecting to remote session.</comment>
+  </data>
 </root>

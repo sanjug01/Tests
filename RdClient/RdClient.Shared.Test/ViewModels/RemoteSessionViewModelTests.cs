@@ -634,6 +634,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             _defex.ExecuteAll();
 
+            Assert.IsTrue(_vm.IsConnecting);
             Assert.IsTrue(_vm.IsRenderingPanelActive);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsFalse(_vm.IsFailureMessageVisible);
@@ -834,6 +835,7 @@
             //connectTask.Dispose();
             _defex.ExecuteAll();
 
+            Assert.IsFalse(_vm.IsConnecting);
             Assert.IsTrue(_vm.IsRenderingPanelActive);
             Assert.IsTrue(_vm.IsConnectionBarVisible);
             Assert.IsFalse(_vm.IsFailureMessageVisible);
@@ -891,6 +893,7 @@
             task = null;
             _defex.ExecuteAll();
 
+            Assert.IsFalse(_vm.IsConnecting);
             Assert.IsFalse(_vm.IsRenderingPanelActive);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsFalse(_vm.IsFailureMessageVisible);
@@ -971,6 +974,7 @@
             _defex.ExecuteAll();
 
             Assert.AreEqual(1, credentialsRequestCount);
+            Assert.IsTrue(_vm.IsConnecting);
             Assert.IsTrue(_vm.IsRenderingPanelActive);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsFalse(_vm.IsFailureMessageVisible);
