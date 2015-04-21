@@ -53,8 +53,10 @@
 
             public override void Terminate(RemoteSession session)
             {
-                if(null != _connection)
+                Contract.Assert(null != _session);
+                if (null != _connection)
                     _connection.Disconnect();
+                _session.InternalSetState(new RemoteSession.CancelledSession(this));
             }
 
             public override void Complete(RemoteSession session)

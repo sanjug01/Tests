@@ -34,11 +34,42 @@
             RemoteSessionViewSite="{Binding}"
             Visibility="{Binding IsRenderingPanelActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
+
+        <!-- Connecting progress -->
+        <Grid Visibility="{Binding IsConnecting, Converter={StaticResource BooleanToVisibilityConverter}}"
+              VerticalAlignment="Center"
+              Height="Auto"
+              Background="{StaticResource DialogBackgroundColor}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+            <TextBlock HorizontalAlignment="Center" FontSize="20" Foreground="Purple"
+                       Grid.Row="1"
+                       Margin="0, 0, 0, 12"
+                       Text="Preparing your connection (d)....."
+                       x:Uid="Connection_Pending_Message"/>
+            <ProgressBar Grid.Row="2"
+                         IsIndeterminate="True"
+                         HorizontalAlignment="Stretch"
+                         Width="Auto"
+                         VerticalAlignment="Center" 
+                         />
+            <Button x:Uid="Common_Button_Cancel"
+                    Style="{StaticResource DialogCancelButtonStyle}"
+                    HorizontalAlignment="Center"
+                    Grid.Row="3"
+                    Content="Cancel (d)"
+                    Command="{Binding NavigateHome}" />
+        </Grid>
+
         <!-- Failure message -->
         <Grid Visibility="{Binding IsFailureMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
               VerticalAlignment="Center"
               Height="Auto"
-              Background="Cornsilk">
+              Background="{StaticResource DialogBackgroundColor}">
             <StackPanel Orientation="Vertical" Margin="12,24">
                 <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="Purple"
                            Margin="0, 0, 0, 12"
@@ -46,7 +77,8 @@
                 <TextBlock HorizontalAlignment="Center" FontSize="20" Foreground="Purple"
                            Margin="0, 0, 0, 12"
                            Text="{Binding FailureCode}"/>
-                <Button HorizontalAlignment="Center" Command="{Binding DismissFailureMessage}">
+                <Button HorizontalAlignment="Center" Command="{Binding DismissFailureMessage}"
+                        Style="{StaticResource DialogCancelButtonStyle}">
                     <TextBlock Text="Close (d)"/>
                 </Button>
             </StackPanel>
@@ -55,14 +87,15 @@
         <!-- Session interruption (auto-reconnect) message -->
         <Grid VerticalAlignment="Center"
               Height="Auto"
-              Background="Cornsilk"
+              Background="{StaticResource DialogBackgroundColor}"
               Visibility="{Binding IsInterrupted, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel Orientation="Vertical" Margin="12,24">
                 <TextBlock FontSize="16" HorizontalAlignment="Center" Foreground="Red"
                     Text="Connection has been interrupted. Reconnecting… (d)"/>
                 <TextBlock FontSize="16" HorizontalAlignment="Center" Foreground="Red"
                            Text="{Binding ReconnectAttempt}"/>
-                <Button Command="{Binding CancelAutoReconnect}" HorizontalAlignment="Center">
+                <Button Command="{Binding CancelAutoReconnect}" HorizontalAlignment="Center"
+                        Style="{StaticResource DialogCancelButtonStyle}">
                     <TextBlock Text="Cancel"/>
                 </Button>
             </StackPanel>
