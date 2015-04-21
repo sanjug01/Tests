@@ -44,8 +44,8 @@ namespace RdClient.Shared.Input.Pointer
         {
             _pointerMode = new PointerModeConsumer(timerFactory.CreateTimer(), new PointerModeControl(sessionControl, pointerPosition));
             _multiTouchMode = new MultiTouchConsumer(sessionControl, pointerPosition);
-            //_directMode = new PointerModeConsumer(timerFactory.CreateTimer(), new DirectModeControl(sessionControl, pointerPosition));
-
+            _directMode = new DirectModeConsumer(new DirectModeControl(sessionControl, pointerPosition), pointerPosition);
+            
             _consumers[PointerDeviceType.Mouse] = new MouseModeConsumer(sessionControl, pointerPosition);
             _consumers[PointerDeviceType.Pen] = new MouseModeConsumer(sessionControl, pointerPosition);
             _consumers[PointerDeviceType.Touch] = _pointerMode;

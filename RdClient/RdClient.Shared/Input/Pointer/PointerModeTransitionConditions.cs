@@ -59,8 +59,8 @@ namespace RdClient.Shared.Input.Pointer
         public static void LeftDoubleDown_Idle_Action(StateMachineEvent e)
         {
             IPointerRoutedEventProperties prep = (IPointerRoutedEventProperties)e.Input;
-            e.Control.LeftClick(prep);
-            e.Control.LeftClick(prep);
+            e.Control.LeftClick(prep.Position);
+            e.Control.LeftClick(prep.Position);
         }
 
         public static bool LeftDown_RightDown_Condition(StateMachineEvent e)
@@ -162,7 +162,7 @@ namespace RdClient.Shared.Input.Pointer
         }
         public static void LeftDoubleDown_LeftDrag_Action(StateMachineEvent e)
         {
-            e.Control.LeftDrag(PointerDragAction.Begin, ((IManipulationRoutedEventProperties)e.Input).Delta.Translation);
+            e.Control.LeftDrag(PointerDragAction.Begin, ((IManipulationRoutedEventProperties)e.Input).Delta.Translation, e.Input.Position);
         }
 
         public static bool LeftDrag_LeftDrag_Condition(StateMachineEvent e)
@@ -174,7 +174,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public static void LeftDrag_LeftDrag_Action(StateMachineEvent e)
         {
-            e.Control.LeftDrag(PointerDragAction.Update, ((IManipulationRoutedEventProperties)e.Input).Delta.Translation);
+            e.Control.LeftDrag(PointerDragAction.Update, ((IManipulationRoutedEventProperties)e.Input).Delta.Translation, e.Input.Position);
         }
         public static bool LeftDrag_Idle_Condition(StateMachineEvent e)
         {
@@ -184,7 +184,7 @@ namespace RdClient.Shared.Input.Pointer
         }
         public static void LeftDrag_Idle_Action(StateMachineEvent e)
         {
-            e.Control.LeftDrag(PointerDragAction.End, new Point(0, 0));
+            e.Control.LeftDrag(PointerDragAction.End, new Point(0, 0), e.Input.Position);
             GoTo_Idle_Action(e);
         }
 
@@ -196,7 +196,7 @@ namespace RdClient.Shared.Input.Pointer
         }
         public static void RightDoubleDown_RightDrag_Action(StateMachineEvent e)
         {
-            e.Control.RightDrag(PointerDragAction.Begin, ((IManipulationRoutedEventProperties)e.Input).Delta.Translation);
+            e.Control.RightDrag(PointerDragAction.Begin, ((IManipulationRoutedEventProperties)e.Input).Delta.Translation, e.Input.Position);
         }
 
         public static bool RightDrag_RightDrag_Condition(StateMachineEvent e)
@@ -208,7 +208,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public static void RightDrag_RightDrag_Action(StateMachineEvent e)
         {
-            e.Control.RightDrag(PointerDragAction.Update, ((IManipulationRoutedEventProperties)e.Input).Delta.Translation);
+            e.Control.RightDrag(PointerDragAction.Update, ((IManipulationRoutedEventProperties)e.Input).Delta.Translation, e.Input.Position);
         }
 
         public static bool RightDrag_Idle_Condition(StateMachineEvent e)
@@ -219,7 +219,7 @@ namespace RdClient.Shared.Input.Pointer
         }
         public static void RightDrag_Idle_Action(StateMachineEvent e)
         {
-            e.Control.RightDrag(PointerDragAction.End, new Point(0, 0));
+            e.Control.RightDrag(PointerDragAction.End, new Point(0, 0), e.Input.Position);
             GoTo_Idle_Action(e);
         }
 

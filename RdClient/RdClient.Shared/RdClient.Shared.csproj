@@ -153,6 +153,10 @@
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
+    <Compile Include="Input\Pointer\DirectModeConsumer.cs" />
+    <Compile Include="Input\Pointer\DirectModeTransitionConditions.cs" />
+    <Compile Include="Input\Pointer\DirectModeTransitions.cs" />
+    <Compile Include="Input\Pointer\DraggingHelper.cs" />
     <Compile Include="Input\Pointer\MouseModeConsumer.cs" />
     <Compile Include="Input\Pointer\MultiTouchConsumer.cs" />
     <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
@@ -397,6 +401,9 @@
     <SDKReference Include="Microsoft.VCLibs12.AppLocal, Version=12.0">
       <Name>Microsoft Visual C++ 2013 AppLocal Runtime Package for Windows UAP</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Input\Pointer\DirectModeControl.cs" />
   </ItemGroup>
   <!--<Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />-->
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

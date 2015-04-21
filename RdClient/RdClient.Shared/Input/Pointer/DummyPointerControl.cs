@@ -11,12 +11,12 @@ namespace RdClient.Shared.Input.Pointer
             Debug.WriteLine("HSCroll");
         }
 
-        public void LeftClick(IPointerRoutedEventProperties pointerEvent)
+        public void LeftClick(Point pointerEvent)
         {
             Debug.WriteLine("LeftClick");
         }
 
-        public void LeftDrag(PointerDragAction action, Point delta)
+        public void LeftDrag(PointerDragAction action, Point delta, Point position)
         {
             Debug.WriteLine("LeftDrag");
         }
@@ -26,12 +26,12 @@ namespace RdClient.Shared.Input.Pointer
             //Debug.WriteLine("Move");
         }
 
-        public void RightClick(IPointerRoutedEventProperties pointerEvent)
+        public void RightClick(Point pointerEvent)
         {
             Debug.WriteLine("RightClick");
         }
 
-        public void RightDrag(PointerDragAction action, Point delta)
+        public void RightDrag(PointerDragAction action, Point delta, Point position)
         {
             Debug.WriteLine("RightDrag");
         }

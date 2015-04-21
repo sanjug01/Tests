@@ -7,10 +7,12 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;
     using Windows.Foundation;
+    using Windows.UI.Input;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
@@ -31,6 +33,7 @@
         private bool _viewLoaded;
         private Size _renderingPanelSize;
         private ZoomScrollRecognizer _zoomScrollRecognizer;
+        private GestureRecognizer _platformRecognizer;
 
         public RemoteSessionPanel()
         {
@@ -138,6 +141,36 @@
             this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = site.TimerFactory.CreateTimer());
             _zoomScrollRecognizer = new ZoomScrollRecognizer(timer);
             _zoomScrollRecognizer.ZoomScrollEvent += OnZoomScrollEvent;
+            _platformRecognizer = new GestureRecognizer();
+            _platformRecognizer.GestureSettings = GestureSettings.Tap | GestureSettings.Hold | GestureSettings.Drag;
+            _platformRecognizer.Tapped += OnTapped;
+            _platformRecognizer.Holding += OnHolding;
+        }
+
+        private void OnTapped(object sender, TappedEventArgs e)
+        {
+            IGestureRoutedEventProperties w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.Tapped, PointerEventType.TappedEventArgs, e, this));
+            this.RenderingPanel.EmitPointerEvent(w);
+        }
+
+        private void OnHolding(object sender, HoldingEventArgs e)
+        {
+            IGestureRoutedEventProperties w = null;
+
+            switch(e.HoldingState)
+            {
+                case HoldingState.Started:
+                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingStarted, PointerEventType.HoldingEventArgs, e, this));
+                    break;
+                case HoldingState.Completed:
+                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingCompleted, PointerEventType.HoldingEventArgs, e, this));
+                    break;
+                case HoldingState.Canceled:
+                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingCanceled, PointerEventType.HoldingEventArgs, e, this));
+                    break;
+            }
+
+            this.RenderingPanel.EmitPointerEvent(w);
         }
 
         private void OnZoomScrollEvent(object sender, ZoomScrollEventArgs e)
@@ -217,6 +250,7 @@
 
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCanceled, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
+            _platformRecognizer.CompleteGesture();
         }
 
         protected override void OnPointerReleased(PointerRoutedEventArgs e)
@@ -225,6 +259,7 @@
 
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerReleased, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
+            _platformRecognizer.ProcessUpEvent(e.GetCurrentPoint(this));
         }
 
         protected override void OnPointerPressed(PointerRoutedEventArgs e)
@@ -233,6 +268,7 @@
 
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerPressed, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
+            _platformRecognizer.ProcessDownEvent(e.GetCurrentPoint(this));
         }
 
         protected override void OnPointerWheelChanged(PointerRoutedEventArgs e)
@@ -250,6 +286,8 @@
 
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerMoved, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
+
+            _platformRecognizer.ProcessMoveEvents(e.GetIntermediatePoints(this));
         }
 
         protected override void OnPointerEntered(PointerRoutedEventArgs e)

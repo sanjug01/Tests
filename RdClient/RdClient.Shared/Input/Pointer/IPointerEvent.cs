@@ -18,7 +18,14 @@ namespace RdClient.Shared.Input
         PointerCanceled,
         ZoomScrollStarted,
         ZoomScrollUpdating,
-        ZoomScrollCompleted
+        ZoomScrollCompleted,
+        Tapped,
+        HoldingStarted,
+        HoldingCompleted,
+        HoldingCanceled,
+        DraggingStarted,
+        DraggingUpdated,
+        DraggingCompleted
     }
 
     public enum PointerEventType
@@ -28,7 +35,10 @@ namespace RdClient.Shared.Input
         ManipulationInertiaStartingRoutedEventArgs,
         ManipulationDeltaRoutedEventArgs,
         ManipulationStartedRoutedEventArgs,
-        ManipulationStartingRoutedEventArgs
+        ManipulationStartingRoutedEventArgs,
+        TappedEventArgs,
+        HoldingEventArgs,
+        DraggingEventArgs
     }
 
     public interface IPointerEventBase
@@ -54,5 +64,9 @@ namespace RdClient.Shared.Input
         bool IsInertial { get; }
     }
 
-
+    public interface IGestureRoutedEventProperties : IPointerEventBase
+    {
+        PointerDeviceType DeviceType { get; }
+        uint Count { get; }
+    }
 }

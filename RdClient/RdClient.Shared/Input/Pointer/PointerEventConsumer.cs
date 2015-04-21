@@ -12,7 +12,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public ConsumptionMode ConsumptionMode { set { } }
 
-        private IStateMachine<PointerState, StateMachineEvent> _stateMachine;
+        private IStateMachine<PointerModeState, StateMachineEvent> _stateMachine;
         StateMachineEvent _stateMachineEvent;
         DoubleClickTimer _timer;
 
@@ -22,11 +22,11 @@ namespace RdClient.Shared.Input.Pointer
         {
             _timer = new DoubleClickTimer(timer, 300);
 
-            _stateMachine = new StateMachine<PointerState, StateMachineEvent>();
+            _stateMachine = new StateMachine<PointerModeState, StateMachineEvent>();
             _stateMachineEvent = new StateMachineEvent() { Input = null, Tracker = _tracker, Timer = _timer, Control = control };
 
-            _timer.AddAction(DoubleClickTimer.ClickTimerType.LeftClick, (o) => _stateMachineEvent.Control.LeftClick(o));
-            _timer.AddAction(DoubleClickTimer.ClickTimerType.RightClick, (o) => _stateMachineEvent.Control.RightClick(o));
+            _timer.AddAction(DoubleClickTimer.ClickTimerType.LeftClick, (o) => _stateMachineEvent.Control.LeftClick(o.Position));
+            _timer.AddAction(DoubleClickTimer.ClickTimerType.RightClick, (o) => _stateMachineEvent.Control.RightClick(o.Position));
 
             PointerModeTransitions.AddTransitions(ref _stateMachine);
 
@@ -36,7 +36,7 @@ namespace RdClient.Shared.Input.Pointer
         public void Reset()
         {
             Tracker.Reset();
-            _stateMachine.SetStart(PointerState.Idle);
+            _stateMachine.SetStart(PointerModeState.Idle);
         }
 
         private void EmitConsumedEvent(IPointerEventBase e)

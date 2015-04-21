@@ -9,7 +9,7 @@ namespace RdClient.Shared.Input.Pointer
         Unknown
     }
 
-    public enum PointerState
+    public enum PointerModeState
     {
         Idle,
         LeftDown,
@@ -23,6 +23,13 @@ namespace RdClient.Shared.Input.Pointer
         ZoomPan
     }
 
+    public enum DirectModeState
+    {
+        Idle,
+        LeftDragging,
+        Holding,
+        RightDragging
+    }
 
     public class StateMachineEvent
     {
