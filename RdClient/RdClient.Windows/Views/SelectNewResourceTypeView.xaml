@@ -14,7 +14,7 @@
         <vm:SelectNewResourceTypeViewModel />
     </UserControl.DataContext>
 
-    <Grid Background="{StaticResource ConnectionCenterBarBackgroundBrush}">
+    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
             
             <TextBlock Margin="20,20" Text="(d) Add New" FontSize="20"/>            

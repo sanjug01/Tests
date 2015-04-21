@@ -177,6 +177,10 @@
     <x:Double x:Key="ConnectionCenterTitleBarHeight">68</x:Double>
     <x:Double x:Key="ConnectionCenterButtonWidth">68</x:Double>
     <GridLength x:Key="ListHeaderHeight">34</GridLength>
+    
+    <Style x:Key="ConnectionCenterBarGridStyle" TargetType="Grid">
+        <Setter Property="Background" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}"/>
+    </Style>
 
     <Style x:Key="ConnectionCenterBarButtonStyle" TargetType="Button" BasedOn="{StaticResource FlatButtonStyle}">
         <Setter Property="Width" Value="{StaticResource ConnectionCenterButtonWidth}" />
