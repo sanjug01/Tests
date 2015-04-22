@@ -42,6 +42,10 @@
         private ITimerFactory _timerFactory;
         public ITimerFactory TimerFactory { get { return _timerFactory; } }
 
+        private readonly PointerPosition _pointerPosition = new PointerPosition();
+
+        private readonly ZoomPanMultiTouchModel _zoomPanModel = new ZoomPanMultiTouchModel();
+
         public bool IsConnecting
         {
             get
@@ -148,8 +152,8 @@
             _isRightSideBarVisible = false;
 
             ObservableCollection<object> items = new ObservableCollection<object>();
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = _zoomPanModel.ZoomInCommand });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = _zoomPanModel.ZoomOutCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _showSideBars });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard });
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
@@ -238,6 +242,11 @@
                 Contract.Assert(null == _activeSessionControl);
                 _activeSessionControl = _activeSession.Activate(_sessionView);
             }
+        }
+
+        void ITimerFactorySite.SetTimerFactory(ITimerFactory timerFactory)
+        {
+            _timerFactory = timerFactory;
         }
 
         private void OnCredentialsNeeded(object sender, CredentialsNeededEventArgs e)
@@ -349,7 +358,9 @@
                         _cancelAutoReconnect.EmitCanExecuteChanged();
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
-                        this.PointerCapture = new PointerCapture(this, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
+                        _pointerPosition.Reset(_activeSessionControl, this);
+                        _zoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport, _pointerPosition, _timerFactory.CreateTimer(), this.ExecutionDeferrer);
+                        this.PointerCapture = new PointerCapture(_pointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
@@ -431,11 +442,6 @@
             {
                 this.PointerCapture.OnMouseModeChanged(this, EventArgs.Empty);
             }
-        }
-
-        public void SetTimerFactory(ITimerFactory timerFactory)
-        {
-            _timerFactory = timerFactory;
         }
     }
 }

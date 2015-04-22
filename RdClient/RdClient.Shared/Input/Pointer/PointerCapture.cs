@@ -9,9 +9,8 @@ using Windows.UI.Xaml.Media;
 
 namespace RdClient.Shared.Input.Pointer
 {
-    public class PointerCapture : IPointerCapture, IPointerPosition
+    public class PointerCapture : IPointerCapture
     {
-        private IExecutionDeferrer _deferrer;
         private IRemoteSessionControl _sessionControl;
         private IRenderingPanel _panel;
         private IPointerEventConsumer _consumer;
@@ -27,29 +26,14 @@ namespace RdClient.Shared.Input.Pointer
                 _consumptionMode = value;
             }
         }
+        
 
-        private Point _pointerPosition;
-        Point IPointerPosition.PointerPosition
+        public PointerCapture(IPointerPosition pointerPosition, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory)
         {
-            get { return _pointerPosition; }
-            set
-            {
-                Point mP = new Point(
-                    Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Width, Math.Max(0, value.X)),
-                    Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Height, Math.Max(0, value.Y)));
-
-                _pointerPosition = mP;
-                _deferrer.DeferToUI(() => _sessionControl.RenderingPanel.MoveMouseCursor(_pointerPosition));
-            }
-        }
-
-        public PointerCapture(IExecutionDeferrer deferrer, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory)
-        {
-            _deferrer = deferrer;
             _sessionControl = sessionControl;
             _panel = panel;
-            _consumer = new PointerEventDispatcher(timerFactory, sessionControl, this as IPointerPosition);
-            this.ConsumptionMode = ConsumptionMode.Pointer;
+            _consumer = new PointerEventDispatcher(timerFactory, sessionControl, pointerPosition);
+            this.ConsumptionMode = ConsumptionMode.Pointer;           
         }
 
         void IPointerCapture.OnPointerChanged(object sender, IPointerEventBase e)
