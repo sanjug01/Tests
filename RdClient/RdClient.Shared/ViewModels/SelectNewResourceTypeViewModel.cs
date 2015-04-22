@@ -36,44 +36,28 @@
 
         private void ExecuteAddDesktop(object parameter)
         {
-            Contract.Assert(null != this.NavigationService);
-            Contract.Assert(null != this.Cancellation);
-            INavigationService nav = this.NavigationService;
-            SynchronousCompletion cancellation = this.Cancellation;
-            //
-            // First the view must dismiss self, then it must push the next view on the stack;
-            // otherwise, the next view will go on top of the current one and they both will get dismissed.
-            //
-            DismissModal(null);
-            nav.PushAccessoryView("DesktopEditorView", cancellation);
+            Contract.Assert(null != this.NavigationService);            
+            INavigationService nav = this.NavigationService;            
+
+            nav.PushAccessoryView("DesktopEditorView", null);
         }
 
         private void ExecuteAddOnPremiseWorkspace(object parameter)
         {
             Contract.Assert(null != this.NavigationService);
-            Contract.Assert(null != this.Cancellation);
+            
             INavigationService nav = this.NavigationService;
-            SynchronousCompletion cancellation = this.Cancellation;
-            //
-            // First the view must dismiss self, then it must push the next view on the stack;
-            // otherwise, the next view will go on top of the current one and they both will get dismissed.
-            //
-            DismissModal(null);
-            nav.PushAccessoryView("DesktopEditorView", cancellation);
+            
+            nav.PushAccessoryView("DesktopEditorView", null);
         }
 
         private void ExecuteAddCloudWorkspace(object parameter)
         {
             Contract.Assert(null != this.NavigationService);
-            Contract.Assert(null != this.Cancellation);
+            
             INavigationService nav = this.NavigationService;
-            SynchronousCompletion cancellation = this.Cancellation;
-            //
-            // First the view must dismiss self, then it must push the next view on the stack;
-            // otherwise, the next view will go on top of the current one and they both will get dismissed.
-            //
-            DismissModal(null);
-            nav.PushAccessoryView("DesktopEditorView", cancellation);
+            
+            nav.PushAccessoryView("DesktopEditorView", null);
         }
     }
 }

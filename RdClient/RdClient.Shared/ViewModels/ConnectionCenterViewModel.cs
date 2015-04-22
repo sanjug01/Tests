@@ -50,7 +50,7 @@
         // The views subscribe to the completion object and dismiss themselves when completion is requested
         // by the view model. The view model requests completion when it needs to dismiss the current accessory view.
         //
-        private readonly SynchronousCompletion _accessoryViewCompletion;
+        private SynchronousCompletion _accessoryViewCompletion;
         private readonly IViewVisibility _accessoryViewVisibility;
         private RelayCommand _cancelAccessoryView;
 
@@ -132,7 +132,6 @@
             //
             //_toolbarItemsSource.Add(new SeparatorBarItemModel());
             //
-            _accessoryViewCompletion = new SynchronousCompletion();
             _accessoryViewVisibility = ViewVisibility.Create(false);
             _cancelAccessoryView = new RelayCommand(this.ExecuteCancelAccessoryView);
 
@@ -460,7 +459,7 @@
             //
             // Called by the command bound to the "add" toolbar button
             //
-            this.NavigationService.PushAccessoryView("SelectNewResourceTypeView", _accessoryViewCompletion);
+            _accessoryViewCompletion = this.NavigationService.CreateAccessoryStack("SelectNewResourceTypeView", null);
         }
 
         private void ToggleDesktopSelectionCommandExecute(object o)

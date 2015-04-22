@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Navigation;
+﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.Navigation;
 using RdMock;
 using System;
 using System.Windows.Input;
@@ -29,6 +30,11 @@ namespace RdClient.Shared.Test.Mock
         void INavigationService.PushAccessoryView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
             Invoke(new object[] { viewName, activationParameter, presentationCompletion });
+        }
+
+        SynchronousCompletion INavigationService.CreateAccessoryStack(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
+        {
+            throw new NotImplementedException();
         }
 
         public void DismissAccessoryView(IPresentableView accessoryView)

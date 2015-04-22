@@ -99,6 +99,11 @@
             {
                 throw new NotImplementedException();
             }
+
+            SynchronousCompletion INavigationService.CreateAccessoryStack(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private sealed class TestPresentationContext : IStackedPresentationContext
