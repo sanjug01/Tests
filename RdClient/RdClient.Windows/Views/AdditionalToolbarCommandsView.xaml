@@ -61,7 +61,7 @@
                         HorizontalAlignment="Stretch">
                         
                         <Grid Margin="10,10">
-                            <TextBlock Text="(d) About…" />
+                            <TextBlock x:Uid="AdditionalToolbarCommandsView_About" Text="(d) About…" />
                         </Grid>
                     </Button>
                 </Grid>

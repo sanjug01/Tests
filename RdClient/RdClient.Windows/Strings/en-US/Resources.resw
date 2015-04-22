@@ -786,4 +786,8 @@
     <value>(r) About</value>
     <comment>Title of the About dialog; text shown at the top of the dialog in large font</comment>
   </data>
+  <data name="AdditionalToolbarCommandsView_About.Text" xml:space="preserve">
+    <value>(r) About</value>
+    <comment>Text in the "About" button that opens the About dialog</comment>
+  </data>
 </root>
