@@ -6,7 +6,7 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
-    public sealed class SelectNewResourceTypeViewModel : AccessoryViewModelBase
+    public sealed class SelectNewResourceTypeViewModel : ViewModelBase
     {
         private readonly RelayCommand _addDesktop;
         private readonly RelayCommand _addOnPremiseWorkspace;

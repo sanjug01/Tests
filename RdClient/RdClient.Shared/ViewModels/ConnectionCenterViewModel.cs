@@ -128,7 +128,7 @@
             //_toolbarItemsSource.Add(new SeparatorBarItemModel());
             //
             _accessoryViewVisibility = ViewVisibility.Create(false);
-            _cancelAccessoryView = new RelayCommand(this.ExecuteCancelAccessoryView);
+            _cancelAccessoryView = new RelayCommand(o => this.ExecuteCancelAccessoryView());
 
             this.SelectedCount = 0;
         }
@@ -470,7 +470,7 @@
 
         private void PushAdditionalCommandsDialog(object parameter)
         {
-            this.NavigationService.PushAccessoryView("AdditionalToolbarCommandsView", _accessoryViewCompletion);
+            this.NavigationService.PushAccessoryView("AdditionalToolbarCommandsView", null);
         }
 
         private void AddWorkspaceExecute()
@@ -483,15 +483,9 @@
             return new WorkspaceViewModel(workspace, this.ApplicationDataModel, this, this.NavigationService, _sessionFactory);
         }
 
-        private void ExecuteCancelAccessoryView(object parameter)
+        private void ExecuteCancelAccessoryView()
         {
-            //
-            // Cancel the current accessory view (there can be only one).
-            //
-            Contract.Assert(parameter is IHandleable);
-
-            NavigationService.AccessoryStackCancellation.Complete();
-            NavigationService.AccessoryStackCancellation.Reset();
+            NavigationService.DismissAccessoryViewsCommand.Execute(null);
         }
     }
 }

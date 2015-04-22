@@ -8,7 +8,7 @@
     using Windows.ApplicationModel;
     using Windows.UI.Xaml;
 
-    public sealed class AboutViewModel : AccessoryViewModelBase
+    public sealed class AboutViewModel : ViewModelBase
     {
         private readonly ICommand _navigateBack;
         private string _appVersion;
