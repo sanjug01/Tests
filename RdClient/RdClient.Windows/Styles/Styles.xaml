@@ -191,7 +191,7 @@
         <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="RemoteSessionSymbolBarButton" TargetType="Button">
+    <Style x:Key="RemoteSessionSymbolBarButton" TargetType="ButtonBase">
         <Setter Property="Width" Value="40" />
         <Setter Property="Height" Value="40" />
         <Setter Property="FontSize" Value="20" />

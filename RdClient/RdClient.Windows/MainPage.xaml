@@ -13,6 +13,7 @@
     xmlns:sh="using:RdClient.Shared.Helpers"
     xmlns:nav="using:RdClient.Shared.Navigation"
     xmlns:navext="using:RdClient.Shared.Navigation.Extensions"
+    xmlns:navextimp="using:RdClient.Navigation.Extensions"
     xmlns:design="using:RdClient.DesignTime"
     xmlns:fac="using:RdClient.Factories"
     xmlns:controls="using:RdClient.Controls"
@@ -31,6 +32,9 @@
                 <models:SingleSwapChainPanelRdpConnectionSource/>
                 <!-- <models:BadCertificateConnectionSource/> -->
             </fac:AppInitializer.ConnectionSource>
+            <fac:AppInitializer.DeviceCapabilities>
+                <navextimp:DeviceCapabilities />
+            </fac:AppInitializer.DeviceCapabilities>
         </fac:AppInitializer>
 
         <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
