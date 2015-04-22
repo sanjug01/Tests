@@ -24,7 +24,7 @@ namespace RdClient.Shared.Navigation
         private IPresentableViewFactory _viewFactory;
         private IPresentableView _currentView;
         private readonly ICommand _backCommand;
-        private SynchronousCompletion _cancellation;
+        private SynchronousCompletion _accessoryStackCancellation;
 
         public NavigationService()
         {
@@ -33,6 +33,8 @@ namespace RdClient.Shared.Navigation
 
             _modalStack = new List<PresentedStackedView>();
             _accessoryStack = new List<PresentedStackedView>();
+            _accessoryStackCancellation = new SynchronousCompletion();
+            _accessoryStackCancellation.Completed += AccessoryStackCancelled;
             _backCommand = new RelayCommand(BackCommandExecute);
         }
 
@@ -65,6 +67,8 @@ namespace RdClient.Shared.Navigation
         public IPresentableViewFactory ViewFactory { set { _viewFactory = value; } }
 
         public ICommand BackCommand { get { return _backCommand; } }
+
+        public SynchronousCompletion AccessoryStackCancellation { get { return _accessoryStackCancellation; } }
 
         public void EmitDismissingLastModalView()
         {
@@ -134,30 +138,13 @@ namespace RdClient.Shared.Navigation
             }
         }
 
-        SynchronousCompletion INavigationService.CreateAccessoryStack(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
+        private void AccessoryStackCancelled(object sender, EventArgs e)
         {
-            if (_cancellation != null)
-            {
-                throw new NavigationServiceException("Already have an accessory view");
-            }
-            _cancellation = new SynchronousCompletion();
-            _cancellation.Completed += _cancellation_Completed;
-            (this as INavigationService).PushAccessoryView(viewName, activationParameter, presentationCompletion);
-            return _cancellation;
-        }
-
-        private void _cancellation_Completed(object sender, EventArgs e)
-        {
-            (this as INavigationService).DismissAccessoryView(_accessoryStack[0].View);
+            this.DismissAllAccessoryViews();
         }
 
         void INavigationService.PushAccessoryView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
-            if (_cancellation == null)
-            {
-                throw new NavigationServiceException("Need to call CreateAccessoryStack first");
-            }
-
             IStackedViewPresenter accessoryPresenter = _currentView as IStackedViewPresenter;
 
             if(null == accessoryPresenter)
@@ -250,12 +237,6 @@ namespace RdClient.Shared.Navigation
                 //
                 Contract.Assert(0 == index);
                 newActiveView = _currentView;
-
-                if (viewStack == _accessoryStack)
-                {
-                    _cancellation.Completed -= _cancellation_Completed;
-                    _cancellation = null;
-                }
             }
             else
             {

@@ -17,6 +17,14 @@
 
         private sealed class TestNavigationService : INavigationService
         {
+            SynchronousCompletion INavigationService.AccessoryStackCancellation
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
             ICommand INavigationService.BackCommand
             {
                 get
@@ -96,11 +104,6 @@
             }
 
             void INavigationService.PushModalView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
-            {
-                throw new NotImplementedException();
-            }
-
-            SynchronousCompletion INavigationService.CreateAccessoryStack(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
             {
                 throw new NotImplementedException();
             }

@@ -32,11 +32,6 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { viewName, activationParameter, presentationCompletion });
         }
 
-        SynchronousCompletion INavigationService.CreateAccessoryStack(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
-        {
-            throw new NotImplementedException();
-        }
-
         public void DismissAccessoryView(IPresentableView accessoryView)
         {
             Invoke(new object[] { accessoryView });
@@ -57,16 +52,11 @@ namespace RdClient.Shared.Test.Mock
             set {  }
         }
 
-        public NavigationExtensionList Extensions
-        {
-            get;
-            set;
-        }
+        public NavigationExtensionList Extensions { get; set; }
 
 
-        public ICommand BackCommand
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public ICommand BackCommand { get; set; }
+
+        public SynchronousCompletion AccessoryStackCancellation { get; set; }
     }
 }

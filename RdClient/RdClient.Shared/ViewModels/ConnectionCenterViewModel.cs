@@ -45,12 +45,7 @@
         private bool _hasDesktops;
         private bool _hasApps;
         private bool _showSectionLabels;
-        //
-        // Completion of accessory views passed to all accessory views as the activation parameter.
-        // The views subscribe to the completion object and dismiss themselves when completion is requested
-        // by the view model. The view model requests completion when it needs to dismiss the current accessory view.
-        //
-        private SynchronousCompletion _accessoryViewCompletion;
+
         private readonly IViewVisibility _accessoryViewVisibility;
         private RelayCommand _cancelAccessoryView;
 
@@ -459,7 +454,7 @@
             //
             // Called by the command bound to the "add" toolbar button
             //
-            _accessoryViewCompletion = this.NavigationService.CreateAccessoryStack("SelectNewResourceTypeView", null);
+            this.NavigationService.PushAccessoryView("SelectNewResourceTypeView", null);
         }
 
         private void ToggleDesktopSelectionCommandExecute(object o)
@@ -475,7 +470,7 @@
 
         private void PushAboutDialog(object parameter)
         {
-            this.NavigationService.PushAccessoryView("AboutView", _accessoryViewCompletion);
+            this.NavigationService.PushAccessoryView("AboutView", null);
         }
 
         private void AddWorkspaceExecute()
@@ -495,8 +490,8 @@
             //
             Contract.Assert(parameter is IHandleable);
 
-            _accessoryViewCompletion.Complete();
-            _accessoryViewCompletion.Reset();
+            NavigationService.AccessoryStackCancellation.Complete();
+            NavigationService.AccessoryStackCancellation.Reset();
         }
     }
 }

@@ -17,6 +17,7 @@ namespace RdClient.Shared.Navigation
         IPresentableViewFactory ViewFactory { set; }
         NavigationExtensionList Extensions { get; }
         ICommand BackCommand { get; }        
+        SynchronousCompletion AccessoryStackCancellation { get; }
             
         /// <summary>
         /// Navigate to a view. If the view is not currently shown on the UI, the presenter is asked to present it.
@@ -42,6 +43,7 @@ namespace RdClient.Shared.Navigation
         /// </summary>
         /// <param name="modalView">view to dismiss</param>
         void DismissModalView(IPresentableView modalView);
+
         /// <summary>
         /// Push a modal view onto the accessory view presenter of the currently presented view.
         /// </summary>
@@ -50,8 +52,6 @@ namespace RdClient.Shared.Navigation
         /// <param name="viewName">Name of the view as registered in the view factory.</param>
         /// <param name="activationParameter">A user determined parameter passed to the view.</param>
         void PushAccessoryView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion = null);
-
-        SynchronousCompletion CreateAccessoryStack(string viewName, object activationParameter, IPresentationCompletion presentationCompletion = null);
 
         /// <summary>
         /// Dismiss an accessory view and any views on top of it on the accessory stack.
