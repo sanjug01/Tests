@@ -2,6 +2,7 @@
 
 namespace RdClient.Views
 {
+    using RdClient.Shared.Navigation;
     using System;
     using System.Diagnostics.Contracts;
     using Windows.UI.Xaml;
@@ -20,6 +21,7 @@ namespace RdClient.Views
         public ModalStackContainer()
         {
             this.InitializeComponent();
+            this.VisualStates.CurrentStateChanging += this.OnVisualStateChanging;
         }
 
         /// <summary>
@@ -43,6 +45,14 @@ namespace RdClient.Views
 
             if (0 == this.RootGrid.Children.Count && null != this.PushingFirstView)
                 this.PushingFirstView(this, EventArgs.Empty);
+            //
+            // Apply the current visual state to the new view on the stack
+            //
+            if (null != this.VisualStates.CurrentState)
+            {
+                cc.Content.CastAndCall<Control>(
+                    c => VisualStateManager.GoToState(c, this.VisualStates.CurrentState.Name, true));
+            }
 
             if (animated)
             {
@@ -106,5 +116,17 @@ namespace RdClient.Views
                 this.DismissedLastView(this, EventArgs.Empty);
         }
 
+        private void OnVisualStateChanging(object sender, VisualStateChangedEventArgs e)
+        {
+            //
+            // Apply the new visual style to all controls on the stack
+            //
+            foreach(UIElement ue in this.RootGrid.Children)
+            {
+                ue.CastAndCall<ContentControl>(
+                    cc => cc.Content.CastAndCall<Control>(
+                        c => VisualStateManager.GoToState(c, e.NewState.Name, true)));
+            }
+        }
     }
 }

@@ -152,6 +152,7 @@
     <Compile Include="Controls\ItsLonelyHereControl.xaml.cs">
       <DependentUpon>ItsLonelyHereControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ModalUserControl.cs" />
     <Compile Include="Controls\PointerPressDetector.xaml.cs">
       <DependentUpon>PointerPressDetector.xaml</DependentUpon>
     </Compile>
@@ -199,8 +200,12 @@
     <Compile Include="Models\RejectSavedPasswordConnectionSource.cs" />
     <Compile Include="Models\SingleSwapChainPanelRdpConnectionSource.cs" />
     <Compile Include="Models\SuccessfulConnectionSource.cs" />
+    <Compile Include="Navigation\ModalFocusTracker.cs" />
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AdditionalToolbarCommandsView.xaml.cs">
+      <DependentUpon>AdditionalToolbarCommandsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Navigation\Extensions\DeviceCapabilities.cs" />
     <Compile Include="Views\AddOrEditGatewayView.xaml.cs">
@@ -437,6 +442,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AdditionalToolbarCommandsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -14,6 +14,15 @@
 
         protected SynchronousCompletion Cancellation { get { return _cancellation; } }
 
+        protected void DismissSelfAndPushAccessoryView(string accessoryViewName, object dismissResult = null)
+        {
+            INavigationService nav = this.NavigationService;
+            SynchronousCompletion can = _cancellation;
+
+            DismissModal(dismissResult);
+            nav.PushAccessoryView(accessoryViewName, can);
+        }
+
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Assert(activationParameter is SynchronousCompletion);

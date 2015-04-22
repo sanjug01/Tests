@@ -758,4 +758,32 @@
     <value>(r) Add New</value>
     <comment>Title shown on add resource view page that lets you select which type of resource to add</comment>
   </data>
+  <data name="AboutView_Close.Text" xml:space="preserve">
+    <value>(r) Close</value>
+    <comment>Title of the hyperlink button that closes the about dialog.</comment>
+  </data>
+  <data name="AboutView_PrivacyPolicy.Text" xml:space="preserve">
+    <value>(r) Privacy policy</value>
+    <comment>Title of the "Privacy policy" hyperlink button in the About dialog</comment>
+  </data>
+  <data name="AboutView_RateAndReview.Text" xml:space="preserve">
+    <value>(r) Rate and Review</value>
+    <comment>Title of the "Rate and Review" hyperlink button in the About dialog</comment>
+  </data>
+  <data name="AboutView_RecommendedNewFeatures.Text" xml:space="preserve">
+    <value>(r) Recommended New Features</value>
+    <comment>Title of the "Recommended New Features" hyperlink button in the About dialog</comment>
+  </data>
+  <data name="AboutView_TermsOfUse.Text" xml:space="preserve">
+    <value>(r) Terms of Use</value>
+    <comment>Title of the "Terms of Use" hyperlink button in the About dialog</comment>
+  </data>
+  <data name="AboutView_ThirdPartyNotices.Text" xml:space="preserve">
+    <value>(r) Third Party Notices</value>
+    <comment>Title of the "Third party notices" hyperlink button in the About dialog</comment>
+  </data>
+  <data name="AboutView_Title.Text" xml:space="preserve">
+    <value>(r) About</value>
+    <comment>Title of the About dialog; text shown at the top of the dialog in large font</comment>
+  </data>
 </root>
