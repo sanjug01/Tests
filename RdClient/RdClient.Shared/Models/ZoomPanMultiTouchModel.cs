@@ -3,10 +3,6 @@ using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Navigation.Extensions;
 using RdClient.Shared.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Models
@@ -66,21 +62,21 @@ namespace RdClient.Shared.Models
             }
         }
 
-        private void PanALittle(PanDirection panDirection, double ms)
+        private void PanALittle(PanDirection panDirection)
         {
             switch(panDirection)
             {
                 case PanDirection.Up:
-                    _deferrer.DeferToUI(() => _viewport.PanAndZoom(_viewportCenter, 0, -_panStep, 1.0, ms));
+                    _deferrer.DeferToUI(() => _viewport.PanAndZoom(_viewportCenter, 0, _panStep, 1.0, 0));
                     break;
                 case PanDirection.Down:
-                    _deferrer.DeferToUI(() => _viewport.PanAndZoom(_viewportCenter, 0, _panStep, 1.0, ms));
+                    _deferrer.DeferToUI(() => _viewport.PanAndZoom(_viewportCenter, 0, -_panStep, 1.0, 0));
                     break;
                 case PanDirection.Left:
-                    _deferrer.DeferToUI(() => _viewport.PanAndZoom(_viewportCenter, -_panStep, 0, 1.0, ms));
+                    _deferrer.DeferToUI(() => _viewport.PanAndZoom(_viewportCenter, _panStep, 0, 1.0, 0));
                     break;
                 case PanDirection.Right:
-                    _deferrer.DeferToUI(() => _viewport.PanAndZoom(_viewportCenter, _panStep, 0, 1.0, ms));
+                    _deferrer.DeferToUI(() => _viewport.PanAndZoom(_viewportCenter, -_panStep, 0, 1.0, 0));
                     break;
             }
         }
@@ -116,7 +112,7 @@ namespace RdClient.Shared.Models
                 if(_panning == false)
                 {
                     _timer.Start(
-                        () => PanALittle(direction, _timerStep), 
+                        () => PanALittle(direction), 
                         TimeSpan.FromMilliseconds(_timerStep), 
                         true);
                     _panning = true;
@@ -163,8 +159,8 @@ namespace RdClient.Shared.Models
             _deferrer = deferrer;
 
             _viewportCenter = new Point(_viewport.Size.Width / 2.0, _viewport.Size.Height / 2.0);
-            _xThreshold = _viewport.Size.Width * 0.1;
-            _yThreshold = _viewport.Size.Height * 0.1;
+            _xThreshold = _viewport.Size.Width * 0.08;
+            _yThreshold = _viewport.Size.Height * 0.08;
             _panStep = RdMath.Distance(new Point(_viewport.Size.Width, _viewport.Size.Height)) * 0.1;
 
             _pointerPosition.PositionChanged += OnPointerPositionChanged;
