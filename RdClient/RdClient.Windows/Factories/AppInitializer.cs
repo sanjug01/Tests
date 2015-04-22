@@ -15,7 +15,7 @@
     using Windows.UI.Xaml.Controls;
     using System;
 
-    public class AppInitializer
+    public sealed class AppInitializer
     {
         private INavigationService _navigationService;
         private DeferredCommand _applicationDataSaver;
@@ -29,6 +29,7 @@
         public string LandingPage { private get; set; }
         public ILifeTimeManager LifeTimeManager { private get; set; }
         public IRdpConnectionSource ConnectionSource { private get; set; }
+        public IDeviceCapabilities DeviceCapabilities { private get; set; }
 
         internal void CreateBackButtonHandler(SystemNavigationManager systemNavigationManager)
         {
@@ -42,6 +43,7 @@
             Contract.Assert(!string.IsNullOrEmpty(this.LandingPage));
             Contract.Assert(null != this.LifeTimeManager);
             Contract.Assert(null != this.ConnectionSource);
+            Contract.Assert(null != this.DeviceCapabilities);
 
             ITimerFactory timerFactory = new WinrtThreadPoolTimerFactory();
             IDeferredExecution deferredExecution = new CoreDispatcherDeferredExecution() { Priority = CoreDispatcherPriority.Normal };
@@ -72,6 +74,7 @@
             _navigationService.Extensions.Add(this.CreateApplicationBarExtension(this.AppBarViewModel));
             _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory));
             _navigationService.Extensions.Add(new SessionFactoryExtension() { SessionFactory = sessionFactory });
+            _navigationService.Extensions.Add(new DeviceCapabilitiesExtension() { DeviceCapabilities = this.DeviceCapabilities });
 
             _applicationDataSaver = new DeferredCommand(appDataModel.Save, deferredExecution, timerFactory, SaveDataDelayMilliseconds);
 
