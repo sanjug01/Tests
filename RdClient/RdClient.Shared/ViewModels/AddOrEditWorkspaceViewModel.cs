@@ -69,8 +69,6 @@
             _cancelCommand = new RelayCommand(CancelCommandExecute);
         }
 
-        public IPresentableView PresentableView { private get; set; }
-
         public ICommand SaveCommand { get { return _saveCommand; } }
 
         public ICommand CancelCommand { get { return _cancelCommand; } }
@@ -155,7 +153,7 @@
         {
             AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
-            NavigationService.PushModalView("AddUserView", args, addUserCompleted);
+            NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
         }
 
         private void CredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
@@ -210,12 +208,12 @@
                 {
                     workspace.Subscribe();
                 });
-                NavigationService.DismissModalView(PresentableView);
+                this.DismissModal(null);
             }
         }
         private void CancelCommandExecute(object o)
         {
-            NavigationService.DismissModalView(PresentableView);
+            this.DismissModal(null);
         }
     }
 }

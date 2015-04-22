@@ -43,7 +43,8 @@
             // otherwise, the next view will go on top of the current one and they both will get dismissed.
             //
             DismissModal(null);
-            nav.PushAccessoryView("DesktopEditorView", null);
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs();
+            nav.PushAccessoryView("AddOrEditDesktopView", args);
         }
 
         private void ExecuteAddOnPremiseWorkspace(object parameter)
@@ -55,7 +56,8 @@
             // otherwise, the next view will go on top of the current one and they both will get dismissed.
             //
             DismissModal(null);
-            nav.PushAccessoryView("DesktopEditorView", null);
+            AddWorkspaceViewModelArgs args = new AddWorkspaceViewModelArgs();
+            nav.PushAccessoryView("AddOrEditWorkspaceView", args);
         }
 
         private void ExecuteAddCloudWorkspace(object parameter)

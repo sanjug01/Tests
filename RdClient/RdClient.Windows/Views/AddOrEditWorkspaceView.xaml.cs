@@ -20,9 +20,7 @@
         { }
 
         public void Presenting(INavigationService navigationService, object activationParameter)
-        {
-            (this.ViewModel as AddOrEditWorkspaceViewModel).PresentableView = this;
-        }
+        { }
 
         public void Dismissing()
         { }

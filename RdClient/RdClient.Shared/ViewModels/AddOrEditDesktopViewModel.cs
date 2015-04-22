@@ -208,13 +208,13 @@ namespace RdClient.Shared.ViewModels
                     this.ApplicationDataModel.LocalWorkspace.Connections.AddNewModel(this.Desktop);
                 }
 
-                NavigationService.DismissModalView(PresentableView);
+                this.DismissModal(null);
             }
         }
 
         private void CancelCommandExecute(object o)
         {
-            NavigationService.DismissModalView(PresentableView);
+            this.DismissModal(null);
         }
 
         /// <summary>
