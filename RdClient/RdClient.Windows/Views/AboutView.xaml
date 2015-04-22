@@ -30,28 +30,29 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 FontSize="30"
+                x:Uid="AboutView_Title"
                 Text="(d) About" />
             <HyperlinkButton
                 x:Name="CloseHyperlink"
                 Grid.Row="0"
                 Command="{Binding NavigateBack}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                <TextBlock Text="Close"/>
+                <TextBlock x:Uid="AboutView_Close" Text="(d) Close"/>
             </HyperlinkButton>
                 
             <StackPanel Margin="0,20,0,0" Grid.Row="1" Orientation="Vertical">
-                <TextBlock Text="(d) Microsoft Remote Desktop"/>
-                <TextBlock Text="(d) Version 0.0.000.00"/>
-                <TextBlock Text="(d) © 2015 Microsoft Corporation"/>
-                <HyperlinkButton Margin="0,15,0,0">
-                    <TextBlock Text="(d) Thirt Party Notices"/>
+                <TextBlock Text="{Binding AppName}" Margin="0,0,0,5"/>
+                <TextBlock Text="{Binding AppVersion}" Margin="0,0,0,5"/>
+                <TextBlock Text="{Binding Copyright}"/>
+                <HyperlinkButton Margin="0,20,0,0">
+                    <TextBlock x:Uid="AboutView_ThirdPartyNotices" Text="(d) Third Party Notices"/>
                 </HyperlinkButton>
-                <HyperlinkButton Margin="0,15,0,0">
-                    <TextBlock Text="(d) Recommended new features"/>
+                <HyperlinkButton Margin="0,5,0,0">
+                    <TextBlock x:Uid="AboutView_RecommendedNewFeatures" Text="(d) Recommended new features"/>
                 </HyperlinkButton>
             </StackPanel>
 
             <HyperlinkButton Grid.Row="2">
-                <TextBlock Text="(d) Rate and Review" />
+                <TextBlock x:Uid="AboutView_RateAndReview" Text="(d) Rate and Review" />
             </HyperlinkButton>
 
             <Grid Grid.Row="3">
@@ -62,15 +63,15 @@
                 </Grid.ColumnDefinitions>
 
                 <HyperlinkButton>
-                    <TextBlock Text="(d) Terms of use"/>
+                    <TextBlock x:Uid="AboutView_TermsOfUse" Text="(d) Terms of use"/>
                 </HyperlinkButton>
 
-                <Grid Grid.Column="1" Margin="10,5">
-                    <Rectangle Width="2" VerticalAlignment="Stretch" Fill="{ThemeResource DefaultTextForegroundThemeBrush}"/>
+                <Grid Grid.Column="1" Margin="10,8">
+                    <Rectangle Width="1" VerticalAlignment="Stretch" Fill="{ThemeResource SystemControlHyperlinkTextBrush}"/>
                 </Grid>
 
                 <HyperlinkButton Grid.Column="2">
-                    <TextBlock Text="(d) Privacy Policy" />
+                    <TextBlock x:Uid="AboutView_PrivacyPolicy" Text="(d) Privacy Policy" />
                 </HyperlinkButton>
             </Grid>
         </Grid>
