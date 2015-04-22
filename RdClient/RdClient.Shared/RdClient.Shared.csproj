@@ -302,6 +302,7 @@
     <Compile Include="ValidationRules\IValidationRule.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBase.cs" />
+    <Compile Include="ViewModels\AdditionalToolbarCommandsViewModel.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModel.cs" />
     <Compile Include="ViewModels\DesktopIdentityValidationCompletion.cs" />
     <Compile Include="ViewModels\CertificateValidationCompletion.cs" />

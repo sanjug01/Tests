@@ -30,6 +30,7 @@
             viewFactory.AddViewClass("DeleteGatewayView", typeof(Views.DeleteGatewayView));
             viewFactory.AddViewClass("SelectNewResourceTypeView", typeof(Views.SelectNewResourceTypeView));
             viewFactory.AddViewClass("DesktopEditorView", typeof(Views.DesktopEditorView));
+            viewFactory.AddViewClass("AdditionalToolbarCommandsView", typeof(Views.AdditionalToolbarCommandsView));
             viewFactory.AddViewClass("AboutView", typeof(Views.AboutView));
 
             //
