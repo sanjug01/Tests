@@ -3,9 +3,8 @@
     using RdClient.Shared.Helpers;
     using System;
     using System.Windows.Input;
-    using Windows.UI.Xaml.Data;
 
-    public sealed class SymbolBarButtonModel : MutableObject
+    public class SymbolBarButtonModel : MutableObject
     {
         private SegoeGlyph _glyph;
         private ICommand _command;
@@ -24,14 +23,14 @@
             set { SetProperty(ref _glyph, value); }
         }
 
-        public object Command
+        public ICommand Command
         {
             get { return _command; }
             set
             {
                 ICommand oldCommand = _command;
 
-                if(SetProperty<ICommand>(ref _command, (ICommand)value))
+                if(SetProperty<ICommand>(ref _command, value))
                 {
                     if (null != oldCommand)
                         oldCommand.CanExecuteChanged -= this.OnCanExecuteCommandChanged;

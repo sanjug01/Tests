@@ -14,18 +14,26 @@
     using System.Windows.Input;
     using RdClient.Shared.Helpers;
 
-    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite
+    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite
     {
         private readonly RelayCommand _dismissFailureMessage;
         private readonly RelayCommand _cancelAutoReconnect;
         private readonly RelayCommand _showSideBars;
+        private readonly RelayCommand _invokeKeyboard;
+        private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
         private readonly RelayCommand _navigateHome;
         private readonly RelayCommand _mouseMode;
+
+        //
+        // Input Pane is a fancy name for the touch keyboard.
+        //
+        private IInputPanel _inputPanel;
 
         private IRemoteSessionView _sessionView;
         private IRemoteSession _activeSession;
         private IRemoteSessionControl _activeSessionControl;
         private IKeyboardCapture _keyboardCapture;
+        private IInputPanelFactory _inputPanelFactory;
         private IPointerCapture _pointerCapture;
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
@@ -94,10 +102,20 @@
             get { return _cancelAutoReconnect; }
         }
 
+        /// <summary>
+        /// Property into that the keyboard capture object is injected in XAML.
+        /// </summary>
         public IKeyboardCapture KeyboardCapture
         {
-            get { return _keyboardCapture; }
-            set { this.SetProperty(ref _keyboardCapture, value); }
+            set { _keyboardCapture = value; }
+        }
+
+        /// <summary>
+        /// Property into that a factory of input panels is injected in XAML.
+        /// </summary>
+        public IInputPanelFactory InputPanelFactory
+        {
+            set { _inputPanelFactory = value; }
         }
 
         public IPointerCapture PointerCapture
@@ -143,6 +161,8 @@
             _dismissFailureMessage = new RelayCommand(this.InternalDismissFailureMessage);
             _cancelAutoReconnect = new RelayCommand(this.InternalCancelAutoReconnect, this.InternalCanAutoReconnect);
             _showSideBars = new RelayCommand(this.InternalShowRightSideBar);
+            _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
+            _invokeKeyboardModel = new SymbolBarToggleButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
             _navigateHome = new RelayCommand(this.InternalNavigateHome);
             _mouseMode = new RelayCommand(this.InternalMouseMode);
             _isRightSideBarVisible = false;
@@ -151,7 +171,7 @@
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _showSideBars });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard });
+            items.Add(_invokeKeyboardModel);
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
         }
 
@@ -159,6 +179,7 @@
         {
             Contract.Assert(null == _activeSession);
             Contract.Assert(null != _keyboardCapture);
+            Contract.Assert(null != _inputPanelFactory);
 
             base.OnPresenting(activationParameter);
 
@@ -238,6 +259,24 @@
                 Contract.Assert(null == _activeSessionControl);
                 _activeSessionControl = _activeSession.Activate(_sessionView);
             }
+        }
+
+        void IDeviceCapabilitiesSite.SetDeviceCapabilities(IDeviceCapabilities deviceCapabilities)
+        {
+            if(null != _inputPanel)
+            {
+                _inputPanel.IsVisibleChanged -= this.OnInputPanelIsVisibleChanged;
+                _inputPanel = null;
+            }
+
+            if (null != deviceCapabilities && deviceCapabilities.TouchPresent)
+            {
+                _inputPanel = _inputPanelFactory.GetInputPanel();
+                _inputPanel.IsVisibleChanged += this.OnInputPanelIsVisibleChanged;
+                _invokeKeyboardModel.IsChecked = _inputPanel.IsVisible;
+            }
+
+            _invokeKeyboard.EmitCanExecuteChanged();
         }
 
         private void OnCredentialsNeeded(object sender, CredentialsNeededEventArgs e)
@@ -417,6 +456,27 @@
         private void InternalShowRightSideBar(object parameter)
         {
             this.IsRightSideBarVisible = !this.IsRightSideBarVisible;
+        }
+
+        private void InternalInvokeKeyboard(object parameter)
+        {
+            Contract.Assert(null != _inputPanel);
+
+            if (_inputPanel.IsVisible)
+                _inputPanel.Hide();
+            else
+                _inputPanel.Show();
+        }
+
+        private bool InternalCanInvokeKeyboard(object parameter)
+        {
+            return null != _inputPanel;
+        }
+
+        private void OnInputPanelIsVisibleChanged(object sender, EventArgs e)
+        {
+            IInputPanel panel = (IInputPanel)sender;
+            _invokeKeyboardModel.IsChecked = panel.IsVisible;
         }
 
         private void InternalNavigateHome(object parameter)

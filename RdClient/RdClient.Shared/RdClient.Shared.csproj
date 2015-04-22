@@ -167,6 +167,8 @@
     <Compile Include="Input\Pointer\MultiTouchConsumer.cs" />
     <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
     <Compile Include="Input\Pointer\DoubleClickTimer.cs" />
+    <Compile Include="Input\Keyboard\IInputPanelFactory.cs" />
+    <Compile Include="Input\Keyboard\IInputPanel.cs" />
     <Compile Include="Input\Pointer\IPointerCapture.cs" />
     <Compile Include="Input\Pointer\IPointerControl.cs" />
     <Compile Include="Input\Pointer\IPointerEventEnums.cs" />
@@ -234,6 +236,7 @@
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Data\ICertificateTrust.cs" />
     <Compile Include="Models\IValidation.cs" />
+    <Compile Include="Models\IDeviceCapabilities.cs" />
     <Compile Include="Models\InterruptedSessionContinuation.cs" />
     <Compile Include="Models\IRdpConnectionSource.cs" />
     <Compile Include="Models\IRemoteSession.cs" />
@@ -283,8 +286,10 @@
     <Compile Include="Navigation\Extensions\ApplicationBarExtension.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionException.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtension.cs" />
+    <Compile Include="Navigation\Extensions\DeviceCapabilitiesExtension.cs" />
     <Compile Include="Navigation\Extensions\IApplicationBarSiteControl.cs" />
     <Compile Include="Navigation\Extensions\IDeferredExecutionSite.cs" />
+    <Compile Include="Navigation\Extensions\IDeviceCapabilitiesSite.cs" />
     <Compile Include="Navigation\Extensions\IExecutionDeferrer.cs" />
     <Compile Include="Navigation\Extensions\ISessionFactorySite.cs" />
     <Compile Include="Navigation\Extensions\ITimerFactorySite.cs" />
@@ -359,6 +364,7 @@
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
     <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
     <Compile Include="ViewModels\SymbolBarButtonModel.cs" />
+    <Compile Include="ViewModels\SymbolBarToggleButtonModel.cs" />
     <Compile Include="ViewModels\UserComboBoxElement.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />

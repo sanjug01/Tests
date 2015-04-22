@@ -193,6 +193,7 @@
     <Compile Include="DesignTime\FakeRemoteResourceViewModel.cs" />
     <Compile Include="DesignTime\FakeWorkspaceViewModel.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
+    <Compile Include="Input\InputPaneInputPanelFactory.cs" />
     <Compile Include="Models\BadCertificateConnectionSource.cs" />
     <Compile Include="Models\ImitationRdpConnectionSource.cs" />
     <Compile Include="Models\RejectSavedPasswordConnectionSource.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Navigation\Extensions\DeviceCapabilities.cs" />
     <Compile Include="Views\AddOrEditGatewayView.xaml.cs">
       <DependentUpon>AddOrEditGatewayView.xaml</DependentUpon>
     </Compile>
