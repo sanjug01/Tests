@@ -11,5 +11,14 @@
     public abstract class AccessoryViewModelBase : ViewModelBase
     {
 
+        protected void DismissSelfAndPushAccessoryView(string accessoryViewName, object dismissResult = null)
+        {
+            INavigationService nav = this.NavigationService;
+            SynchronousCompletion can = _cancellation;
+
+            DismissModal(dismissResult);
+            nav.PushAccessoryView(accessoryViewName, can);
+        }
+
     }
 }
