@@ -18,8 +18,15 @@
             Contract.ContractFailed += this.OnCodeContractFailed;
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+            this.Resuming += this.OnResuming;
 
             RdTrace.TraceNrm("Initializing Tracer");
+        }
+
+        private void OnResuming(object sender, object e)
+        {
+            System.Diagnostics.Debug.WriteLine("OnResuming");
+            // throw new System.NotImplementedException();
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
@@ -34,16 +41,19 @@
                 e.PrelaunchActivated,
                 null);
 
+            System.Diagnostics.Debug.WriteLine("OnLAunched");
             this.LifeTimeManager.OnLaunched(aa);
         }
 
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("OnSuspending");
             SuspensionArgs.SuspendingOperationWrapper mso = new SuspensionArgs.SuspendingOperationWrapper(e.SuspendingOperation.Deadline, e.SuspendingOperation.GetDeferral());
             SuspensionArgs sa = new SuspensionArgs(mso);
 
             this.LifeTimeManager.OnSuspending(sender, sa);
         }
+
 
         private ILifeTimeManager LifeTimeManager
         {
