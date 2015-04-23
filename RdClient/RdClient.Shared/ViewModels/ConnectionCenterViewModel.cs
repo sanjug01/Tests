@@ -123,12 +123,12 @@
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, new RelayCommand(this.AddResource), "Add"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.MultiSelection, new RelayCommand(this.ToggleDesktopSelectionCommandExecute), "Select"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Help, new RelayCommand(this.PushAboutDialog), "About"));
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.HorizontalEllipsis, new RelayCommand(this.PushAdditionalCommandsDialog), "More…"));
             //
             //_toolbarItemsSource.Add(new SeparatorBarItemModel());
             //
             _accessoryViewVisibility = ViewVisibility.Create(false);
-            _cancelAccessoryView = new RelayCommand(this.ExecuteCancelAccessoryView);
+            _cancelAccessoryView = new RelayCommand(o => this.ExecuteCancelAccessoryView());
 
             this.SelectedCount = 0;
         }
@@ -468,9 +468,9 @@
             this.NavigationService.NavigateToView("SettingsView", null);
         }
 
-        private void PushAboutDialog(object parameter)
+        private void PushAdditionalCommandsDialog(object parameter)
         {
-            this.NavigationService.PushAccessoryView("AboutView", null);
+            this.NavigationService.PushAccessoryView("AdditionalToolbarCommandsView", null);
         }
 
         private void AddWorkspaceExecute()
@@ -483,15 +483,9 @@
             return new WorkspaceViewModel(workspace, this.ApplicationDataModel, this, this.NavigationService, _sessionFactory);
         }
 
-        private void ExecuteCancelAccessoryView(object parameter)
+        private void ExecuteCancelAccessoryView()
         {
-            //
-            // Cancel the current accessory view (there can be only one).
-            //
-            Contract.Assert(parameter is IHandleable);
-
-            NavigationService.AccessoryStackCancellation.Complete();
-            NavigationService.AccessoryStackCancellation.Reset();
+            NavigationService.DismissAccessoryViewsCommand.Execute(null);
         }
     }
 }

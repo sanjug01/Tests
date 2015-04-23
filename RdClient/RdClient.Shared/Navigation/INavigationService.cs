@@ -16,8 +16,8 @@ namespace RdClient.Shared.Navigation
         IViewPresenter Presenter { set; }
         IPresentableViewFactory ViewFactory { set; }
         NavigationExtensionList Extensions { get; }
-        ICommand BackCommand { get; }        
-        SynchronousCompletion AccessoryStackCancellation { get; }
+        ICommand BackCommand { get; }
+        ICommand DismissAccessoryViewsCommand { get; }
             
         /// <summary>
         /// Navigate to a view. If the view is not currently shown on the UI, the presenter is asked to present it.

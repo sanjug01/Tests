@@ -24,6 +24,7 @@
         {
             this.InitializeComponent();
             this.SizeChanged += this.OnSizeChanged;
+            this.VisualStates.CurrentStateChanging += this.OnVisualStateChanging;
         }
 
         IViewModel IPresentableView.ViewModel { get { return this.DataContext as IViewModel; } }
@@ -83,6 +84,11 @@
             }
 
             return layout;
+        }
+
+        private void OnVisualStateChanging(object sender, VisualStateChangedEventArgs e)
+        {
+            VisualStateManager.GoToState(this.AccessoryViewPresenter, e.NewState.Name, true);
         }
     }
 }

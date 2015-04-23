@@ -57,6 +57,6 @@ namespace RdClient.Shared.Test.Mock
 
         public ICommand BackCommand { get; set; }
 
-        public SynchronousCompletion AccessoryStackCancellation { get; set; }
+        public ICommand DismissAccessoryViewsCommand { get; set; }
     }
 }

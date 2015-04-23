@@ -22,6 +22,7 @@ namespace RdClient.Controls
 
             this.AccessoriesContainer.PushingFirstView += this.OnPushingFirstView;
             this.AccessoriesContainer.DismissedLastView += this.OnDismissedLastView;
+            this.VisualStates.CurrentStateChanging += this.OnVisualStateChanging;
         }
 
         public IViewVisibility AccessoryPresenterVisibility
@@ -55,6 +56,11 @@ namespace RdClient.Controls
             Contract.Assert(null != visibility);
 
             visibility.Hide();
+        }
+
+        private void OnVisualStateChanging(object sender, VisualStateChangedEventArgs e)
+        {
+            VisualStateManager.GoToState(this.AccessoriesContainer, e.NewState.Name, true);
         }
     }
 }

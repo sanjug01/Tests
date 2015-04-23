@@ -2,23 +2,19 @@
 
 namespace RdClient.Views
 {
-    using RdClient.Shared.Navigation;
+    using RdClient.Controls;
     using Windows.UI.Xaml.Controls;
 
-    public sealed partial class SelectNewResourceTypeView : UserControl, IPresentableView
+    public sealed partial class SelectNewResourceTypeView : ModalUserControl
     {
         public SelectNewResourceTypeView()
         {
             this.InitializeComponent();
         }
 
-        IViewModel IPresentableView.ViewModel
+        protected override Control GetFirstTabControl()
         {
-            get { return this.DataContext as IViewModel; }
+            return this.FirstTabControl;
         }
-
-        void IPresentableView.Activating(object activationParameter) { }
-        void IPresentableView.Dismissing() { }
-        void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
     }
 }

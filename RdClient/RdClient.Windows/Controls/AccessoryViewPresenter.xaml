@@ -11,6 +11,27 @@
     d:DesignWidth="400">
     
     <Grid>
-        <views:ModalStackContainer Grid.Column="1" x:Name="AccessoriesContainer" />
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStates">
+                <VisualState x:Name="DefaultLayout">
+                    <Storyboard>
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:Name="NarrowLayout">
+                    <Storyboard>
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:Name="PhoneLayout">
+                    <Storyboard>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+
+        <views:ModalStackContainer x:Name="AccessoriesContainer" />
     </Grid>
 </UserControl>
