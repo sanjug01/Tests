@@ -14,10 +14,5 @@ namespace RdClient.Views
         {
             this.InitializeComponent();
         }
-
-        protected override Control GetFirstTabControl()
-        {
-            return this.CloseHyperlink;
-        }
     }
 }
