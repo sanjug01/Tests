@@ -1,9 +1,6 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.Helpers;
     using RdClient.Shared.Navigation;
-    using System;
-    using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
 
@@ -14,9 +11,6 @@
     {
         private readonly ICommand _cancel;
         private readonly ICommand _defaultAction;
-        private SynchronousCompletion _cancellation;
-
-        protected SynchronousCompletion Cancellation { get { return _cancellation; } }
 
         protected AccessoryViewModelBase()
         {
@@ -44,28 +38,9 @@
         protected void DismissSelfAndPushAccessoryView(string accessoryViewName, object dismissResult = null)
         {
             INavigationService nav = this.NavigationService;
-            SynchronousCompletion can = _cancellation;
 
             DismissModal(dismissResult);
-            nav.PushAccessoryView(accessoryViewName, can);
-        }
-
-        protected override void OnPresenting(object activationParameter)
-        {
-            Contract.Assert(activationParameter is SynchronousCompletion);
-            base.OnPresenting(activationParameter);
-
-            _cancellation = (SynchronousCompletion)activationParameter;
-            _cancellation.Completed += this.OnCancellationRequested;
-        }
-
-        protected override void OnDismissed()
-        {
-            Contract.Assert(null != _cancellation);
-
-            base.OnDismissed();
-            _cancellation.Completed -= this.OnCancellationRequested;
-            _cancellation = null;
+            nav.PushAccessoryView(accessoryViewName, null);
         }
 
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
@@ -75,12 +50,6 @@
             // Just dismiss self. This will pull the top-most accessory view from the stack.
             //
             DismissModal(null);
-        }
-
-        private void OnCancellationRequested(object sender, EventArgs e)
-        {
-            Contract.Assert(object.ReferenceEquals(_cancellation, sender));
-            this.DismissModal(null);
         }
     }
 }

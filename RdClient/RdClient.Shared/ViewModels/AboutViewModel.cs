@@ -1,27 +1,18 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.Navigation;
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using System.Windows.Input;
     using Windows.ApplicationModel;
     using Windows.UI.Xaml;
 
     public sealed class AboutViewModel : AccessoryViewModelBase
     {
-        private readonly ICommand _navigateBack;
         private string _appVersion;
         private string _copyright;
 
         public AboutViewModel()
         {
-            _navigateBack = new RelayCommand(o => this.DismissModal(null));
-        }
-
-        public ICommand NavigateBack
-        {
-            get { return _navigateBack; }
         }
 
         public string AppVersion
@@ -60,23 +51,24 @@
             }
         }
 
-        protected override void OnNavigatingBack(IBackCommandArgs backArgs)
+        protected override void DefaultAction()
         {
-            base.OnNavigatingBack(backArgs);
             DismissModal(null);
         }
 
-        private static T GetAssemblyAttribute<T>( Assembly assembly ) where T : Attribute
+        private static TAttr GetAssemblyAttribute<TAttr>(Assembly assembly) where TAttr : Attribute
         {
-            T rt = null;
-            IEnumerable<Attribute> attrs = assembly.GetCustomAttributes(typeof(T));
+            //
+            // Extract the first custom attribute of the generic type from the assembly.
+            //
+            TAttr rt = null;
+            IEnumerable<Attribute> attrs = assembly.GetCustomAttributes(typeof(TAttr));
             IEnumerator<Attribute> enattr = attrs.GetEnumerator();
 
             if (enattr.MoveNext())
-                rt = enattr.Current as T;
+                rt = enattr.Current as TAttr;
 
             return rt;
         }
-
     }
 }

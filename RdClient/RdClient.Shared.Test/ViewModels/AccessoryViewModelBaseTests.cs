@@ -25,6 +25,14 @@
                 }
             }
 
+            ICommand INavigationService.DismissAccessoryViewsCommand
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
             NavigationExtensionList INavigationService.Extensions
             {
                 get
