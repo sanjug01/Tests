@@ -14,8 +14,25 @@
 
         protected AccessoryViewModelBase()
         {
-            _cancel = new RelayCommand(parameter => this.DismissModal(null));
+            _cancel = new RelayCommand(parameter =>
+            {
+                if (!Cancel())
+                    this.DismissModal(null);
+            });
+
             _defaultAction = new RelayCommand(parameter => this.DefaultAction());
+        }
+
+        /// <summary>
+        /// Overridables called when the Cancel command is executed.
+        /// </summary>
+        /// <returns>True if the overridable has fully processed cancellation and the view model
+        /// must not dismiss itself. Otherwise, false.</returns>
+        /// <remarks>Default implementation returns false and the view model dismisses itself
+        /// with a null completion object.</remarks>
+        protected virtual bool Cancel()
+        {
+            return false;
         }
 
         /// <summary>
@@ -35,12 +52,12 @@
             get { return _defaultAction; }
         }
 
-        protected void DismissSelfAndPushAccessoryView(string accessoryViewName, object dismissResult = null)
+        protected void DismissSelfAndPushAccessoryView(string accessoryViewName, object activationParameter = null, object dismissResult = null)
         {
             INavigationService nav = this.NavigationService;
 
             DismissModal(dismissResult);
-            nav.PushAccessoryView(accessoryViewName, null);
+            nav.PushAccessoryView(accessoryViewName, activationParameter);
         }
 
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
