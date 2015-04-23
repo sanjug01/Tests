@@ -67,16 +67,16 @@ namespace RdClient.Shared.Models
             switch(panDirection)
             {
                 case PanDirection.Up:
-                    _deferrer.DeferToUI(() => _viewport.PanAndZoom(_viewportCenter, 0, _panStep, 1.0, 0));
+                    _deferrer.TryDeferToUI(() => _viewport.PanAndZoom(_viewportCenter, 0, _panStep, 1.0, 0));
                     break;
                 case PanDirection.Down:
-                    _deferrer.DeferToUI(() => _viewport.PanAndZoom(_viewportCenter, 0, -_panStep, 1.0, 0));
+                    _deferrer.TryDeferToUI(() => _viewport.PanAndZoom(_viewportCenter, 0, -_panStep, 1.0, 0));
                     break;
                 case PanDirection.Left:
-                    _deferrer.DeferToUI(() => _viewport.PanAndZoom(_viewportCenter, _panStep, 0, 1.0, 0));
+                    _deferrer.TryDeferToUI(() => _viewport.PanAndZoom(_viewportCenter, _panStep, 0, 1.0, 0));
                     break;
                 case PanDirection.Right:
-                    _deferrer.DeferToUI(() => _viewport.PanAndZoom(_viewportCenter, -_panStep, 0, 1.0, 0));
+                    _deferrer.TryDeferToUI(() => _viewport.PanAndZoom(_viewportCenter, -_panStep, 0, 1.0, 0));
                     break;
             }
         }
