@@ -48,13 +48,13 @@ namespace RdClient.Shared.Test.ViewModels
             _gatewayContainer = TemporaryModelContainer<GatewayModel>.WrapModel(_dataModel.Gateways.AddNewModel(_gatewayContainer.Model), _gatewayContainer.Model);
 
             //add some desktops to the datamodel
-            foreach (DesktopModel desktop in _testData.NewSmallListOfDesktopsWithGateway(_dataModel.Gateways.Models.ToList()))
+            foreach (DesktopModel desktop in _testData.NewSmallListOfDesktopsWithGateway(_dataModel.Gateways.Models).Select(d => d.Model).ToList())
             {
                 _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
             }
 
             //Add at least one desktop referencing this gateway to the datamodel
-            _dataModel.LocalWorkspace.Connections.AddNewModel(_testData.NewValidDesktopWithGateway(_gatewayContainer.Id)); 
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_testData.NewValidDesktopWithGateway(_gatewayContainer.Id).Model); 
 
             _vm = new DeleteGatewayViewModel();
             ((IDataModelSite)_vm).SetDataModel(_dataModel);

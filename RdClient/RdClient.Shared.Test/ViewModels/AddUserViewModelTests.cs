@@ -89,29 +89,36 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void AddUserViewModel_ShouldCallOkHandler()
         {
-            Assert.IsNull(_context.Result);
             CredentialsModel newCreds = _testData.NewValidCredential().Model;
             _vm.User = newCreds.Username;
             _vm.Password = newCreds.Password;
+
+            _context.Expect("Dismiss", parameters =>
+            {
+                CredentialPromptResult result = parameters[0] as CredentialPromptResult;
+                Assert.IsNotNull(result);
+                Assert.IsFalse(result.UserCancelled);
+                Assert.IsNotNull(result.Credentials);
+                Assert.AreEqual(newCreds.Username, result.Credentials.Username);
+                Assert.AreEqual(newCreds.Password, result.Credentials.Password);
+                return null;
+            });
             _vm.OkCommand.Execute(null);
-            CredentialPromptResult result = _context.Result as CredentialPromptResult;
-            Assert.IsNotNull(result);
-            Assert.IsFalse(result.UserCancelled);
-            Assert.IsNotNull(result.Credentials);
-            Assert.AreEqual(newCreds.Username, result.Credentials.Username);
-            Assert.AreEqual(newCreds.Password, result.Credentials.Password);
         }
 
         [TestMethod]
         public void AddUserViewModel_ShouldCallCancelHandler()
         {
-            Assert.IsNull(_context.Result);
+            _context.Expect("Dismiss", parameters =>
+            {
+                CredentialPromptResult result = parameters[0] as CredentialPromptResult;
+                Assert.IsNotNull(result);
+                Assert.IsTrue(result.UserCancelled);
+                Assert.IsFalse(result.Save);
+                Assert.IsNull(result.Credentials);
+                return null;
+            });
             _vm.CancelCommand.Execute(null);
-            CredentialPromptResult result = _context.Result as CredentialPromptResult;
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.UserCancelled);
-            Assert.IsFalse(result.Save);
-            Assert.IsNull(result.Credentials);
         }
 
         [TestMethod]

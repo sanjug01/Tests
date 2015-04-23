@@ -1,13 +1,13 @@
 ﻿using RdClient.Shared.Navigation;
+using RdMock;
 
 namespace RdClient.Shared.Test.Mock
 {
-    class ModalPresentationContext : IStackedPresentationContext
+    class ModalPresentationContext : MockBase, IStackedPresentationContext
     {
-        public object Result { get; private set; }
         void IStackedPresentationContext.Dismiss(object result)
         {
-            this.Result = result;
+            Invoke(new object[] { result });
         }      
     }
 }

@@ -8,6 +8,7 @@ using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
+using RdClient.Shared.Test.Mock;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -22,6 +23,11 @@ namespace RdClient.Shared.Test.ViewModels
 
         private ApplicationDataModel _dataModel;
 
+        private TestDeleteDesktopsViewModel _deleteDesktopsViewModel;
+        private Mock.NavigationService _nav;
+        private PresentableView _view;
+        private ModalPresentationContext _context;
+
         class TestDeleteDesktopsViewModel : DeleteDesktopsViewModel
         {
             public TestDeleteDesktopsViewModel(ApplicationDataModel dataModel)
@@ -31,9 +37,6 @@ namespace RdClient.Shared.Test.ViewModels
                 ((IDataModelSite)this).SetDataModel(dataModel);
             }
         }
-
-        private TestDeleteDesktopsViewModel _deleteDesktopsViewModel;
-
 
         [TestInitialize]
         public void TestSetUp()
@@ -52,192 +55,160 @@ namespace RdClient.Shared.Test.ViewModels
             _emptyDesktopsSelection = new List<IModelContainer<DesktopModel>>();
 
             // can pass a single desktop or a selection with a single element
-            dtm = _testData.NewValidDesktop(Guid.Empty);
+            dtm = _testData.NewValidDesktop(Guid.Empty).Model;
             _singleDesktop = TemporaryModelContainer<DesktopModel>.WrapModel(_dataModel.LocalWorkspace.Connections.AddNewModel(dtm), dtm);
             _singleDesktopSelection = new List<IModelContainer<DesktopModel>>() { _singleDesktop };
 
             _multiDesktopsSelection = new List<IModelContainer<DesktopModel>>();
 
-            dtm = _testData.NewValidDesktop(Guid.Empty);
+            dtm = _testData.NewValidDesktop(Guid.Empty).Model;
             _multiDesktopsSelection.Add(TemporaryModelContainer<DesktopModel>.WrapModel(_dataModel.LocalWorkspace.Connections.AddNewModel(dtm), dtm));
-            dtm = _testData.NewValidDesktop(Guid.Empty);
+            dtm = _testData.NewValidDesktop(Guid.Empty).Model;
             _multiDesktopsSelection.Add(TemporaryModelContainer<DesktopModel>.WrapModel(_dataModel.LocalWorkspace.Connections.AddNewModel(dtm), dtm));
-            dtm = _testData.NewValidDesktop(Guid.Empty);
+            dtm = _testData.NewValidDesktop(Guid.Empty).Model;
             _multiDesktopsSelection.Add(TemporaryModelContainer<DesktopModel>.WrapModel(_dataModel.LocalWorkspace.Connections.AddNewModel(dtm), dtm));
 
             _deleteDesktopsViewModel = new TestDeleteDesktopsViewModel(_dataModel);
+
+            _nav = new Mock.NavigationService();
+            _view = new Mock.PresentableView();
+            _context = new Mock.ModalPresentationContext();
         }
         
         [TestCleanup]
         public void TestTearDown()
         {
-            _singleDesktopSelection.Clear();
-            _multiDesktopsSelection.Clear();
-            _deleteDesktopsViewModel = null;
+            _nav.Dispose();
+            _view.Dispose();
+            _context.Dispose();
         }
 
 
         [TestMethod]
         public void DeleteDesktops_ShouldUpdateDataForEmptySelection()
         {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            {
-                DeleteDesktopsArgs args = new DeleteDesktopsArgs(_emptyDesktopsSelection);
-                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
+            DeleteDesktopsArgs args = new DeleteDesktopsArgs(_emptyDesktopsSelection);
+            ((IViewModel)_deleteDesktopsViewModel).Presenting(_nav, args, null);
 
-                Assert.AreEqual(0,_deleteDesktopsViewModel.DesktopsCount);
-                Assert.IsFalse(_deleteDesktopsViewModel.IsSingleSelection);
-            }
+            Assert.AreEqual(0, _deleteDesktopsViewModel.DesktopsCount);
+            Assert.IsFalse(_deleteDesktopsViewModel.IsSingleSelection);
         }
 
         [TestMethod]
         public void DeleteDesktops_ShouldUpdateDataForSingleSelection()
         {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            {
-                DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktopSelection);
+            DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktopSelection);
 
-                string hostName = _singleDesktopSelection[0].Model.HostName;
+            string hostName = _singleDesktopSelection[0].Model.HostName;
 
-                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
+            ((IViewModel)_deleteDesktopsViewModel).Presenting(_nav, args, null);
 
-                Assert.AreEqual(1, _deleteDesktopsViewModel.DesktopsCount);
-                Assert.IsTrue(_deleteDesktopsViewModel.IsSingleSelection);                
-            }
+            Assert.AreEqual(1, _deleteDesktopsViewModel.DesktopsCount);
+            Assert.IsTrue(_deleteDesktopsViewModel.IsSingleSelection);
         }
 
         [TestMethod]
         public void DeleteDesktops_ShouldUpdateDataForSingleDesktop()
         {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            {
-                DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktop);
+            DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktop);
 
-                string hostName = _singleDesktop.Model.HostName;
+            string hostName = _singleDesktop.Model.HostName;
 
-                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
+            ((IViewModel)_deleteDesktopsViewModel).Presenting(_nav, args, null);
 
-                Assert.AreEqual(1, _deleteDesktopsViewModel.DesktopsCount);
-                Assert.IsTrue(_deleteDesktopsViewModel.IsSingleSelection);
-            }
+            Assert.AreEqual(1, _deleteDesktopsViewModel.DesktopsCount);
+            Assert.IsTrue(_deleteDesktopsViewModel.IsSingleSelection);
         }
 
         [TestMethod]
         public void DeleteDesktops_ShouldUpdateDataForMultiSelection()
         {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            {
-                DeleteDesktopsArgs args = new DeleteDesktopsArgs(_multiDesktopsSelection);
-                string hostName = _multiDesktopsSelection[0].Model.HostName;
-                string hostName2 = _multiDesktopsSelection[2].Model.HostName;
+            DeleteDesktopsArgs args = new DeleteDesktopsArgs(_multiDesktopsSelection);
+            string hostName = _multiDesktopsSelection[0].Model.HostName;
+            string hostName2 = _multiDesktopsSelection[2].Model.HostName;
 
-                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
+            ((IViewModel)_deleteDesktopsViewModel).Presenting(_nav, args, null);
 
-                Assert.AreEqual(_multiDesktopsSelection.Count, _deleteDesktopsViewModel.DesktopsCount);
-                Assert.IsFalse(_deleteDesktopsViewModel.IsSingleSelection);
-            }
+            Assert.AreEqual(_multiDesktopsSelection.Count, _deleteDesktopsViewModel.DesktopsCount);
+            Assert.IsFalse(_deleteDesktopsViewModel.IsSingleSelection);
         }
 
         [TestMethod]
         public void DeleteDesktops_DeleteShouldDismissDialog()
         {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.PresentableView view = new Mock.PresentableView())
-            {
-                DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktopSelection);
-                navigation.Expect("DismissModalView", new List<object> { view }, 0);
+            DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktopSelection);
+            ((IViewModel)_deleteDesktopsViewModel).Presenting(_nav, args, _context);
 
-                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
-                _deleteDesktopsViewModel.DeleteCommand.Execute(null);
-            }
+            _context.Expect("Dismiss", p => { return null; });
+            _deleteDesktopsViewModel.DeleteCommand.Execute(null);
         }
 
         [TestMethod]
         public void DeleteDesktops_CancelShouldDismissDialog()
         {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.PresentableView view = new Mock.PresentableView())
-            {
-                DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktopSelection);
-                navigation.Expect("DismissModalView", new List<object> { view }, 0);
+            DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktopSelection);
+            ((IViewModel)_deleteDesktopsViewModel).Presenting(_nav, args, _context);
 
-                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
-                _deleteDesktopsViewModel.CancelCommand.Execute(null);
-            }
+            _context.Expect("Dismiss", p => { return null; });
+            _deleteDesktopsViewModel.CancelCommand.Execute(null);
         }
 
         [TestMethod]
         public void DeleteDesktops_CancelShouldNotRemoveDesktops()
         {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.PresentableView view = new Mock.PresentableView())
-            {
-                int initialCount, finalCount;
-                DeleteDesktopsArgs args = new DeleteDesktopsArgs(_multiDesktopsSelection);
+            int initialCount, finalCount;
+            DeleteDesktopsArgs args = new DeleteDesktopsArgs(_multiDesktopsSelection);
 
-                navigation.Expect("DismissModalView", new List<object> { view }, 0);
-                ((IDataModelSite)_deleteDesktopsViewModel).SetDataModel(_dataModel);
-                initialCount = _dataModel.LocalWorkspace.Connections.Models.Count;
+            ((IDataModelSite)_deleteDesktopsViewModel).SetDataModel(_dataModel);
+            initialCount = _dataModel.LocalWorkspace.Connections.Models.Count;
 
-                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
-                Assert.IsTrue(_deleteDesktopsViewModel.DesktopsCount > 0);
+            ((IViewModel)_deleteDesktopsViewModel).Presenting(_nav, args, null);
+            Assert.IsTrue(_deleteDesktopsViewModel.DesktopsCount > 0);
 
 
-                _deleteDesktopsViewModel.CancelCommand.Execute(null);
-                finalCount = _dataModel.LocalWorkspace.Connections.Models.Count;
+            _deleteDesktopsViewModel.CancelCommand.Execute(null);
+            finalCount = _dataModel.LocalWorkspace.Connections.Models.Count;
 
-                Assert.AreEqual(initialCount, finalCount);
-            }
+            Assert.AreEqual(initialCount, finalCount);
         }
 
         [TestMethod]
         public void DeleteDesktops_DeleteShouldRemoveDesktops()
         {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.PresentableView view = new Mock.PresentableView())
-            {
-                int initialCount, finalCount, deletedCount;
-                DeleteDesktopsArgs args = new DeleteDesktopsArgs(_multiDesktopsSelection);
-                navigation.Expect("DismissModalView", new List<object> { view }, 0);
+            int initialCount, finalCount, deletedCount;
+            DeleteDesktopsArgs args = new DeleteDesktopsArgs(_multiDesktopsSelection);
 
-                ((IDataModelSite)_deleteDesktopsViewModel).SetDataModel(_dataModel);
-                initialCount = _dataModel.LocalWorkspace.Connections.Models.Count;
+            ((IDataModelSite)_deleteDesktopsViewModel).SetDataModel(_dataModel);
+            initialCount = _dataModel.LocalWorkspace.Connections.Models.Count;
 
-                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
-                deletedCount = _deleteDesktopsViewModel.DesktopsCount;
-                Assert.IsTrue(deletedCount > 0);
+            ((IViewModel)_deleteDesktopsViewModel).Presenting(_nav, args, null);
+            deletedCount = _deleteDesktopsViewModel.DesktopsCount;
+            Assert.IsTrue(deletedCount > 0);
 
 
-                _deleteDesktopsViewModel.DeleteCommand.Execute(null);
-                finalCount = _dataModel.LocalWorkspace.Connections.Models.Count;
+            _deleteDesktopsViewModel.DeleteCommand.Execute(null);
+            finalCount = _dataModel.LocalWorkspace.Connections.Models.Count;
 
-                Assert.AreEqual(initialCount, finalCount + deletedCount);
-            }
+            Assert.AreEqual(initialCount, finalCount + deletedCount);
         }
 
         [TestMethod]
         public void DeleteDesktops_DeleteShouldRemoveSingleDesktop()
         {
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.PresentableView view = new Mock.PresentableView())
-            {
-                int initialCount, finalCount;
-                DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktop);
+            int initialCount, finalCount;
+            DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktop);
 
-                navigation.Expect("DismissModalView", new List<object> { view }, 0);
+            ((IDataModelSite)_deleteDesktopsViewModel).SetDataModel(_dataModel);
+            initialCount = _dataModel.LocalWorkspace.Connections.Models.Count;
 
-                ((IDataModelSite)_deleteDesktopsViewModel).SetDataModel(_dataModel);
-                initialCount = _dataModel.LocalWorkspace.Connections.Models.Count;
-
-                ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
-                Assert.IsTrue(_deleteDesktopsViewModel.DesktopsCount > 0);
+            ((IViewModel)_deleteDesktopsViewModel).Presenting(_nav, args, null);
+            Assert.IsTrue(_deleteDesktopsViewModel.DesktopsCount > 0);
 
 
-                _deleteDesktopsViewModel.DeleteCommand.Execute(null);
-                finalCount = _dataModel.LocalWorkspace.Connections.Models.Count;
+            _deleteDesktopsViewModel.DeleteCommand.Execute(null);
+            finalCount = _dataModel.LocalWorkspace.Connections.Models.Count;
 
-                Assert.AreEqual(initialCount, finalCount + 1);
-            }
+            Assert.AreEqual(initialCount, finalCount + 1);
         }
     }
 }

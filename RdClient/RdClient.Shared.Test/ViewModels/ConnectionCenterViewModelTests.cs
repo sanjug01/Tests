@@ -59,7 +59,7 @@ namespace RdClient.Shared.Test.ViewModels
                 _dataModel.Credentials.AddNewModel(cred.Model);
             }
 
-            foreach(DesktopModel desktop in _testData.NewSmallListOfDesktops(creds))
+            foreach(DesktopModel desktop in _testData.NewSmallListOfDesktops(creds).Select(d => d.Model))
             {
                 _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
             }
@@ -115,7 +115,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _vm.DesktopsSelectable = true;
             _ivm.DesktopViewModels[_testData.RandomSource.Next(_ivm.DesktopViewModels.Count)].IsSelected = true;
-            _navService.Expect("PushModalView", new List<object> { "AddOrEditDesktopView", null, null }, 0);
+            _navService.Expect("PushAccessoryView", new List<object> { "AddOrEditDesktopView", null, null }, 0);
             _vm.EditDesktopCommand.Execute(null);
         }
 
@@ -124,7 +124,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _vm.DesktopsSelectable = true;
             _ivm.DesktopViewModels[_testData.RandomSource.Next(_ivm.DesktopViewModels.Count)].IsSelected = true;
-            _navService.Expect("PushModalView", new List<object> { "DeleteDesktopsView", null, null }, 0);
+            _navService.Expect("PushAccessoryView", new List<object> { "DeleteDesktopsView", null, null }, 0);
             _vm.DeleteDesktopCommand.Execute(null);
         }
 
@@ -182,7 +182,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestDesktopViewModelAddedWhenDesktopAdded()
         {
-            _dataModel.LocalWorkspace.Connections.AddNewModel(_testData.NewValidDesktop(Guid.Empty));
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_testData.NewValidDesktop(Guid.Empty).Model);
             AssertDesktopViewModelsMatchDesktops();
         }
 
@@ -244,7 +244,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestAddDesktopWhenSelectionEnabledEnablesSelectionOnNewDesktopViewModel()
         {
             _vm.DesktopsSelectable = true;
-            DesktopModel newDesktop = _testData.NewValidDesktop(Guid.Empty);
+            DesktopModel newDesktop = _testData.NewValidDesktop(Guid.Empty).Model;
             _dataModel.LocalWorkspace.Connections.AddNewModel(newDesktop);
             IDesktopViewModel dvm = _ivm.DesktopViewModels.Single(d => object.ReferenceEquals(newDesktop, d.Desktop));
             Assert.IsTrue(dvm.SelectionEnabled);
@@ -254,7 +254,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestAddDesktopWhenSelectionDisabledDisablesSelectionOnNewDesktopViewModel()
         {
             _vm.DesktopsSelectable = false;
-            DesktopModel newDesktop = _testData.NewValidDesktop(Guid.Empty);
+            DesktopModel newDesktop = _testData.NewValidDesktop(Guid.Empty).Model;
             _dataModel.LocalWorkspace.Connections.AddNewModel(newDesktop);
             IDesktopViewModel dvm = _ivm.DesktopViewModels.Single(d => object.ReferenceEquals(newDesktop, d.Desktop));
             Assert.IsFalse(dvm.SelectionEnabled);

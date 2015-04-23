@@ -54,10 +54,13 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 ((IViewModel)_vm).Presenting(navigation, _testArgs, _context);
 
+                _context.Expect("Dismiss", parameters =>
+                {
+                    DesktopIdentityValidationResult result = parameters[0] as DesktopIdentityValidationResult;
+                    Assert.AreEqual(DesktopIdentityValidationResult.IdentityTrustLevel.AcceptedAlways, result.Result);
+                    return null;
+                });
                 _vm.AcceptIdentityCommand.Execute(null);
-
-                Assert.IsTrue(_context.Result is DesktopIdentityValidationResult);
-                Assert.AreEqual(DesktopIdentityValidationResult.IdentityTrustLevel.AcceptedAlways, (_context.Result as DesktopIdentityValidationResult).Result);
             }
         }
 
@@ -68,9 +71,13 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 ((IViewModel)_vm).Presenting(navigation, _testArgs, _context);
 
+                _context.Expect("Dismiss", parameters =>
+                {
+                    DesktopIdentityValidationResult result = parameters[0] as DesktopIdentityValidationResult;
+                    Assert.AreEqual(DesktopIdentityValidationResult.IdentityTrustLevel.AcceptedOnce, result.Result);
+                    return null;
+                });
                 _vm.AcceptOnceCommand.Execute(null);
-                Assert.IsTrue(_context.Result is DesktopIdentityValidationResult);
-                Assert.AreEqual(DesktopIdentityValidationResult.IdentityTrustLevel.AcceptedOnce, (_context.Result as DesktopIdentityValidationResult).Result);
             }
         }
 
@@ -81,11 +88,14 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 ((IViewModel)_vm).Presenting(navigation, _testArgs, _context);
 
-                _vm.CancelCommand.Execute(null);
-                Assert.IsTrue(_context.Result is DesktopIdentityValidationResult);
-                Assert.AreEqual(DesktopIdentityValidationResult.IdentityTrustLevel.Denied, (_context.Result as DesktopIdentityValidationResult).Result);
+                _context.Expect("Dismiss", parameters =>
+                {
+                    DesktopIdentityValidationResult result = parameters[0] as DesktopIdentityValidationResult;
+                    Assert.AreEqual(DesktopIdentityValidationResult.IdentityTrustLevel.Denied, result.Result);
+                    return null;
+                });
+                _vm.CancelCommand.Execute(null);                
             }
         }
-
     }
 }

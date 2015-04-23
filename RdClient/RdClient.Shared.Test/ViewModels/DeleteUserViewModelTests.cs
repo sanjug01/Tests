@@ -47,11 +47,11 @@ namespace RdClient.Shared.Test.ViewModels
             _cred = TemporaryModelContainer<CredentialsModel>.WrapModel(_dataModel.Credentials.AddNewModel(_cred.Model), _cred.Model);
 
             //add some desktops to the datamodel
-            foreach (DesktopModel desktop in _testData.NewSmallListOfDesktops(_dataModel.Credentials.Models.ToList()))
+            foreach (DesktopModel desktop in _testData.NewSmallListOfDesktops(_dataModel.Credentials.Models.ToList()).Select(d => d.Model))
             {
                 _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
             }
-            _dataModel.LocalWorkspace.Connections.AddNewModel(_testData.NewValidDesktop(_cred.Id)); //Add at least one desktop referencing this credential to the datamodel
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_testData.NewValidDesktop(_cred.Id).Model); //Add at least one desktop referencing this credential to the datamodel
             
             _vm = new DeleteUserViewModel();
             ((IDataModelSite)_vm).SetDataModel(_dataModel);
