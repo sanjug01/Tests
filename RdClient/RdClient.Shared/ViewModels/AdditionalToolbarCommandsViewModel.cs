@@ -14,9 +14,10 @@
 
         private void ShowAboutViewCommandExecute()
         {
+            var nav = NavigationService;
             //Dismiss ourselves first, no need to wait on the AboutView
             this.DismissModal(null);
-            NavigationService.PushAccessoryView("AboutView", null);
+            nav.PushAccessoryView("AboutView", null);
         }
 
         public ICommand ShowAboutDialog
