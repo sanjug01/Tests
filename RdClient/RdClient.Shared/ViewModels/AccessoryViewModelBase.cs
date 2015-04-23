@@ -1,44 +1,63 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.Helpers;
     using RdClient.Shared.Navigation;
-    using System;
-    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
+
 
     /// <summary>
     /// Base class for view view models of accessory views shown in the connection center.
     /// </summary>
-    public abstract class AccessoryViewModelBase : ViewModelBase
+    public abstract class AccessoryViewModelBase : ViewModelBase, IDialogViewModel
     {
-        private SynchronousCompletion _cancellation;
+        private readonly ICommand _cancel;
+        private readonly ICommand _defaultAction;
 
-        protected SynchronousCompletion Cancellation { get { return _cancellation; } }
+        protected AccessoryViewModelBase()
+        {
+            _cancel = new RelayCommand(parameter =>
+            {
+                if (!Cancel())
+                    this.DismissModal(null);
+            });
 
-        protected void DismissSelfAndPushAccessoryView(string accessoryViewName, object dismissResult = null)
+            _defaultAction = new RelayCommand(parameter => this.DefaultAction());
+        }
+
+        /// <summary>
+        /// Overridables called when the Cancel command is executed.
+        /// </summary>
+        /// <returns>True if the overridable has fully processed cancellation and the view model
+        /// must not dismiss itself. Otherwise, false.</returns>
+        /// <remarks>Default implementation returns false and the view model dismisses itself
+        /// with a null completion object.</remarks>
+        protected virtual bool Cancel()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Overridable executed when user presses Enter in the accessory view. Default implementation does nothing.
+        /// </summary>
+        protected virtual void DefaultAction()
+        {
+        }
+
+        ICommand IDialogViewModel.Cancel
+        {
+            get { return _cancel; }
+        }
+
+        ICommand IDialogViewModel.DefaultAction
+        {
+            get { return _defaultAction; }
+        }
+
+        protected void DismissSelfAndPushAccessoryView(string accessoryViewName, object activationParameter = null, object dismissResult = null)
         {
             INavigationService nav = this.NavigationService;
-            SynchronousCompletion can = _cancellation;
 
             DismissModal(dismissResult);
-            nav.PushAccessoryView(accessoryViewName, can);
-        }
-
-        protected override void OnPresenting(object activationParameter)
-        {
-            Contract.Assert(activationParameter is SynchronousCompletion);
-            base.OnPresenting(activationParameter);
-
-            _cancellation = (SynchronousCompletion)activationParameter;
-            _cancellation.Completed += this.OnCancellationRequested;
-        }
-
-        protected override void OnDismissed()
-        {
-            Contract.Assert(null != _cancellation);
-
-            base.OnDismissed();
-            _cancellation.Completed -= this.OnCancellationRequested;
-            _cancellation = null;
+            nav.PushAccessoryView(accessoryViewName, activationParameter);
         }
 
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
@@ -48,12 +67,6 @@
             // Just dismiss self. This will pull the top-most accessory view from the stack.
             //
             DismissModal(null);
-        }
-
-        private void OnCancellationRequested(object sender, EventArgs e)
-        {
-            Contract.Assert(object.ReferenceEquals(_cancellation, sender));
-            this.DismissModal(null);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RdClient.Shared.Helpers;
+using System;
 using System.Windows.Input;
 
 namespace RdClient.Shared.Navigation
@@ -15,7 +16,8 @@ namespace RdClient.Shared.Navigation
         IViewPresenter Presenter { set; }
         IPresentableViewFactory ViewFactory { set; }
         NavigationExtensionList Extensions { get; }
-        ICommand BackCommand { get; }        
+        ICommand BackCommand { get; }
+        ICommand DismissAccessoryViewsCommand { get; }
             
         /// <summary>
         /// Navigate to a view. If the view is not currently shown on the UI, the presenter is asked to present it.
@@ -41,6 +43,7 @@ namespace RdClient.Shared.Navigation
         /// </summary>
         /// <param name="modalView">view to dismiss</param>
         void DismissModalView(IPresentableView modalView);
+
         /// <summary>
         /// Push a modal view onto the accessory view presenter of the currently presented view.
         /// </summary>
@@ -49,6 +52,7 @@ namespace RdClient.Shared.Navigation
         /// <param name="viewName">Name of the view as registered in the view factory.</param>
         /// <param name="activationParameter">A user determined parameter passed to the view.</param>
         void PushAccessoryView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion = null);
+
         /// <summary>
         /// Dismiss an accessory view and any views on top of it on the accessory stack.
         /// If the view was presented modally, it is removed from the modal atack with all modal views

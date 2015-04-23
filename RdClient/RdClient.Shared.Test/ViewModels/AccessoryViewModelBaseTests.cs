@@ -25,6 +25,14 @@
                 }
             }
 
+            ICommand INavigationService.DismissAccessoryViewsCommand
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
             NavigationExtensionList INavigationService.Extensions
             {
                 get
@@ -101,38 +109,9 @@
             }
         }
 
-        private sealed class TestPresentationContext : IStackedPresentationContext
-        {
-            public event EventHandler<object> DismissCalled;
-
-            void IStackedPresentationContext.Dismiss(object result)
-            {
-                if (null != this.DismissCalled)
-                    this.DismissCalled(this, result);
-            }
-        }
-
         [TestMethod]
         public void AccessoryViewModel_PresentComplete_DismissesSelf()
         {
-            TestViewModel vm = new TestViewModel();
-            IViewModel ivm = vm;
-            SynchronousCompletion completion = new SynchronousCompletion();
-            INavigationService nav = new TestNavigationService();
-            TestPresentationContext context = new TestPresentationContext();
-
-            int dismissedCalls = 0;
-
-            context.DismissCalled += (sender, e) =>
-            {
-                ++dismissedCalls;
-                Assert.IsNull(e);
-            };
-
-            ivm.Presenting(nav, completion, context);
-            completion.Complete();
-
-            Assert.AreEqual(1, dismissedCalls);
         }
     }
 }

@@ -3,9 +3,6 @@
 namespace RdClient.Views
 {
     using RdClient.Controls;
-    using RdClient.Navigation;
-    using RdClient.Shared.Navigation;
-    using System.Diagnostics.Contracts;
     using Windows.UI.Xaml.Controls;
 
     public sealed partial class AboutView : ModalUserControl
@@ -13,11 +10,6 @@ namespace RdClient.Views
         public AboutView()
         {
             this.InitializeComponent();
-        }
-
-        protected override Control GetFirstTabControl()
-        {
-            return this.CloseHyperlink;
         }
     }
 }
