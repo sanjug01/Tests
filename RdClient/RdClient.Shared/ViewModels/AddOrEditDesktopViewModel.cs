@@ -299,30 +299,25 @@ namespace RdClient.Shared.ViewModels
 
         private void LaunchAddUserView()
         {
-            //
-            // Push the EditCredentialsView with a task to create new credentials
-            // and save it in the data model.
-            //
-            NewCredentialsTask.Present(this.NavigationService, this.ApplicationDataModel,
-                //
-                // Resource name in this case is the host name of the desktop object
-                //
-                this.Desktop.HostName,
-                //
-                // The editor has saved new credentials and reported their ID;
-                // Update the desktop object and reload the list od credentials.
-                //
-                credentialsId =>
-                {
-                    this.LoadUsers();
-                    this.SelectUserId(credentialsId);
-                },
-                //
-                // The editor has been cancelled; reload the list of credentials and restore the
-                // selected item representing the current choice in the desktop object; if this is not done,
-                // the selection in the list will stay at the "Add new" item.
-                //
-                () => this.Update());
+            AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
+            ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
+            NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
+        }
+
+        private void CredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
+        {
+            CredentialPromptResult result = args.Result as CredentialPromptResult;
+
+            if (result != null && !result.UserCancelled)
+            {
+                Guid credId = this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
+                LoadUsers();
+                this.SelectUserId(credId);
+            }
+            else
+            {
+                this.Update();
+            }
         }
 
         private void LoadUsers()
