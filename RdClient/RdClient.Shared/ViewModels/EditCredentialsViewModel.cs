@@ -210,8 +210,10 @@
         private void InternalCancel(object parameter)
         {
             Contract.Assert(null != _task, "EditCredentialsViewModel.CancelView|cancelled without task");
-            _task.Cancelled(_taskToken);
+            IEditCredentialsTask task = _task;
+            object taskToken = _taskToken;
             this.DismissModal(null);
+            task.Cancelled(taskToken);            
         }
 
         private void InternalDismiss(object parameter)

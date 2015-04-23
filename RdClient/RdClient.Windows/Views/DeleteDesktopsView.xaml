@@ -8,8 +8,7 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:cv="using:RdClient.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
-    mc:Ignorable="d"
-    RequestedTheme="{StaticResource AlternateTheme}">    
+    mc:Ignorable="d">    
     
     <Page.DataContext>
         <vm:DeleteDesktopsViewModel/>
@@ -24,51 +23,41 @@
             </cv:DesktopsListToLocalizedStringConverter.LocalizedString>
         </cv:DesktopsListToLocalizedStringConverter>
     </Page.Resources>
-    
-    <Grid>
-        <Border Style="{ThemeResource ModalBackground}" />
 
-        <Border 
-            Background="{ThemeResource DialogBackgroundColor}" 
-            Width="600" 
-            HorizontalAlignment="Center" 
-            VerticalAlignment="Top" 
-            BorderThickness="4"
-            Margin="0,128,8,0"
-            >
-            <Grid MinHeight="200" MinWidth="600">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="8"/>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="12"/>
-                </Grid.RowDefinitions>
-        
-                <Grid Grid.Row="0">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                        <TextBlock 
+    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="8"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="12"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <TextBlock 
                             x:Uid="DeleteDesktopsView-Title-DeleteSingle"
                             Margin="24,12,24,12" 
                             Style="{ThemeResource TitleTextBlockStyle}" 
                             Text="Delete connection(d):"
                             Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource  BooleanToVisibilityConverter}}"
                             />
-                        <TextBlock 
+                    <TextBlock 
                             x:Uid="DeleteDesktopsView-Title-DeleteMultiple"
                             Margin="24,12,24,12" 
                             Style="{ThemeResource TitleTextBlockStyle}" 
                             Text="Delete connections(d):"
                             Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
                             />
-                        <TextBlock 
+                    <TextBlock 
                             Margin="24,12,24,12" 
                             Style="{ThemeResource TitleTextBlockStyle}" 
                             Text="{Binding Path=SelectedDesktops, Converter={StaticResource DesktopsListToLocalizedStringConverter}}"
                         />
-                    </StackPanel>
-                </Grid>        
-                <TextBlock 
+                </StackPanel>
+            </Grid>
+            <TextBlock 
                     x:Uid="DeleteDesktopsView-Message-DeleteSingle"
                     Grid.Row="2"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
@@ -78,7 +67,7 @@
                     TextWrapping="Wrap" 
                     Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource BooleanToVisibilityConverter}}"                    
                     />
-                <TextBlock 
+            <TextBlock 
                     x:Uid="DeleteDesktopsView-Message-DeleteMultiple"
                     Grid.Row="2"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
@@ -88,23 +77,22 @@
                     TextWrapping="Wrap" 
                     Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource InverseBooleanToVisibilityConverter}}"                    
                     />
-                <StackPanel 
+            <StackPanel 
                     Grid.Row="3"           
                     Orientation="Horizontal" 
                     VerticalAlignment="Bottom" 
                     HorizontalAlignment="Center">
-                    <Button MinWidth="93"
+                <Button MinWidth="93"
                             Command="{Binding Path=DeleteCommand}"
                             x:Uid="Common_Button_DeleteItem"
                             Content="Delete(d)"
                             />
-                    <Button MinWidth="93"
+                <Button MinWidth="93"
                             Command="{Binding Path=CancelCommand}"
                             x:Uid="Common_Button_Cancel"
                             Content="Cancel(d)"
                             />
-                </StackPanel>
-            </Grid>
-        </Border>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

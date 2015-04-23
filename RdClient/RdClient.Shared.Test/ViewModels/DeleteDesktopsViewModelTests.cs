@@ -28,7 +28,6 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 Assert.IsNotNull(dataModel);
 
-                this.DialogView = new Mock.PresentableView();
                 ((IDataModelSite)this).SetDataModel(dataModel);
             }
         }
@@ -146,7 +145,6 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
                 DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktopSelection);
-                _deleteDesktopsViewModel.DialogView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
 
                 ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
@@ -161,7 +159,6 @@ namespace RdClient.Shared.Test.ViewModels
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
                 DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktopSelection);
-                _deleteDesktopsViewModel.DialogView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
 
                 ((IViewModel)_deleteDesktopsViewModel).Presenting(navigation, args, null);
@@ -178,7 +175,6 @@ namespace RdClient.Shared.Test.ViewModels
                 int initialCount, finalCount;
                 DeleteDesktopsArgs args = new DeleteDesktopsArgs(_multiDesktopsSelection);
 
-                _deleteDesktopsViewModel.DialogView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
                 ((IDataModelSite)_deleteDesktopsViewModel).SetDataModel(_dataModel);
                 initialCount = _dataModel.LocalWorkspace.Connections.Models.Count;
@@ -202,7 +198,6 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 int initialCount, finalCount, deletedCount;
                 DeleteDesktopsArgs args = new DeleteDesktopsArgs(_multiDesktopsSelection);
-                _deleteDesktopsViewModel.DialogView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
 
                 ((IDataModelSite)_deleteDesktopsViewModel).SetDataModel(_dataModel);
@@ -229,7 +224,6 @@ namespace RdClient.Shared.Test.ViewModels
                 int initialCount, finalCount;
                 DeleteDesktopsArgs args = new DeleteDesktopsArgs(_singleDesktop);
 
-                _deleteDesktopsViewModel.DialogView = view;
                 navigation.Expect("DismissModalView", new List<object> { view }, 0);
 
                 ((IDataModelSite)_deleteDesktopsViewModel).SetDataModel(_dataModel);

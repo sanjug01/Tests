@@ -34,7 +34,6 @@
 
         public ICommand DeleteCommand { get { return _deleteCommand; } }
         public ICommand CancelCommand { get { return _cancelCommand; } }
-        public IPresentableView DialogView { private get; set; }
 
         public IList<IModelContainer<DesktopModel>> SelectedDesktops 
         {
@@ -86,12 +85,12 @@
                 this.DesktopsCount = 0;
             }
 
-            NavigationService.DismissModalView(DialogView);
+            this.DismissModal(null);            
         }
 
         private void Cancel(object o)
         {
-            NavigationService.DismissModalView(DialogView);
+            this.DismissModal(null);
         }
 
         protected override void OnPresenting(object activationParameter)

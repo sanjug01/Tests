@@ -23,7 +23,6 @@ namespace RdClient.Views
 
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
-            (this.DataContext as DeleteDesktopsViewModel).DialogView = this;
         }
 
         public void Dismissing()

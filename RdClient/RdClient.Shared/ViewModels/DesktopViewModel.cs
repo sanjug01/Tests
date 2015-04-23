@@ -151,7 +151,7 @@
 
         private void EditCommandExecute(object o)
         {
-            _navigationService.PushModalView("AddOrEditDesktopView", new EditDesktopViewModelArgs(this.Desktop));
+            _navigationService.PushAccessoryView("AddOrEditDesktopView", new EditDesktopViewModelArgs(this.Desktop));
         }
 
         private void ConnectCommandExecute(object o)
@@ -204,7 +204,7 @@
 
         private void DeleteCommandExecute(object o)
         {
-            _navigationService.PushModalView("DeleteDesktopsView", new DeleteDesktopsArgs(TemporaryModelContainer<DesktopModel>.WrapModel(_desktopId, _desktop)));            
+            _navigationService.PushAccessoryView("DeleteDesktopsView", new DeleteDesktopsArgs(TemporaryModelContainer<DesktopModel>.WrapModel(_desktopId, _desktop)));            
         }
     }
 }

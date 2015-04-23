@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Helpers;
+﻿using RdClient.Shared.Data;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,13 @@ namespace RdClient.Converters
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            IList<DesktopModel> desktopList = value as IList<DesktopModel>;
+            IList<IModelContainer<DesktopModel>> desktopModelList = value as IList<IModelContainer<DesktopModel>>;
 
             if (_localizedString == null)
             {
                 throw new InvalidOperationException("LocalizedString property must be set before Convert is called");
             }
-            else if (desktopList == null || desktopList.Count < 1)
+            else if (desktopModelList == null || desktopModelList.Count < 1)
             {
                 return _localizedString.GetLocalizedString(emptyDesktopListStringId);
             }
@@ -31,13 +32,13 @@ namespace RdClient.Converters
             {
                 string separator = _localizedString.GetLocalizedString(itemSeparatorStringId);
                 StringBuilder localizedList = new StringBuilder();
-                for (int i = 0; i < desktopList.Count; i++)
+                for (int i = 0; i < desktopModelList.Count; i++)
                 {
                     if (i > 0)
                     {
                         localizedList.Append(separator);
                     }
-                    localizedList.Append(desktopList[i].HostName);
+                    localizedList.Append(desktopModelList[i].Model.HostName);
                 }
                 return localizedList.ToString();
             }
