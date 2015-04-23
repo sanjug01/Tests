@@ -55,7 +55,6 @@
             <StackPanel Margin="30,20" Orientation="Vertical">
                 <Grid>
                     <Button
-                        x:Name="FirstTabControl"
                         Style="{StaticResource FlatButtonStyle}"
                         Command="{Binding ShowAboutDialog}"
                         HorizontalAlignment="Stretch">

@@ -3,18 +3,12 @@
 namespace RdClient.Views
 {
     using RdClient.Controls;
-    using Windows.UI.Xaml.Controls;
 
     public sealed partial class AdditionalToolbarCommandsView : ModalUserControl
     {
         public AdditionalToolbarCommandsView()
         {
             this.InitializeComponent();
-        }
-
-        protected override Control GetFirstTabControl()
-        {
-            return this.FirstTabControl; 
         }
     }
 }
