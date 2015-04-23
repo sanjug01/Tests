@@ -1,10 +1,6 @@
 ﻿using RdClient.Shared.Models;
 using RdClient.Shared.Navigation.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Pointer
