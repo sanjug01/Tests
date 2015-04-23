@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Navigation;
     using System.Windows.Input;
 
     public sealed class AdditionalToolbarCommandsViewModel : AccessoryViewModelBase
@@ -8,7 +9,12 @@
 
         public AdditionalToolbarCommandsViewModel()
         {
-            _about = new RelayCommand(parameter => DismissSelfAndPushAccessoryView("AboutView"));
+            _about = new RelayCommand(o => ShowAboutViewCommandExecute());
+        }
+
+        private void ShowAboutViewCommandExecute()
+        {
+            DismissSelfAndPushAccessoryView("AboutView");
         }
 
         public ICommand ShowAboutDialog

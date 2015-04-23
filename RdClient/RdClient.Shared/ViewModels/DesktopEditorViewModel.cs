@@ -5,7 +5,7 @@
     using System;
     using System.Diagnostics.Contracts;
 
-    public sealed class DesktopEditorViewModel : AccessoryViewModelBase
+    public sealed class DesktopEditorViewModel : ViewModelBase
     {
     }
 }
