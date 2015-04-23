@@ -33,6 +33,7 @@
                 x:Uid="AboutView_Title"
                 Text="(d) About" />
             <HyperlinkButton
+                x:Name="CloseHyperlink"
                 Grid.Row="0"
                 Command="{Binding NavigateBack}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                 <TextBlock x:Uid="AboutView_Close" Text="(d) Close"/>

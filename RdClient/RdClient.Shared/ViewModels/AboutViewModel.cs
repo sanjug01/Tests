@@ -60,11 +60,6 @@
             }
         }
 
-        protected override void DefaultAction()
-        {
-            DismissModal(null);
-        }
-
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
         {
             base.OnNavigatingBack(backArgs);

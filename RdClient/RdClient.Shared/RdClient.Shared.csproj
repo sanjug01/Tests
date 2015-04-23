@@ -299,7 +299,6 @@
     <Compile Include="Navigation\IBackCommandArgs.cs" />
     <Compile Include="Navigation\IPresentationCompletion.cs" />
     <Compile Include="Navigation\IStackedPresentationContext.cs" />
-    <Compile Include="Navigation\IDialogViewModel.cs" />
     <Compile Include="Navigation\IStackedViewPresenter.cs" />
     <Compile Include="Navigation\IViewVisibility.cs" />
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />

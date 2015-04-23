@@ -9,6 +9,8 @@
     {
         private ModalFocusTracker _focusTracker;
 
+        protected abstract Control GetFirstTabControl();
+
         public IViewModel ViewModel
         {
             get { return this.DataContext as IViewModel; }
@@ -27,7 +29,7 @@
         public void Presenting(INavigationService navigationService, object activationParameter)
         {
             Contract.Assert(null == _focusTracker);
-            _focusTracker = ModalFocusTracker.Install(this);
+            _focusTracker = ModalFocusTracker.Install(this, GetFirstTabControl());
         }
     }
 }
