@@ -12,22 +12,27 @@ namespace RdClient.Shared.Input.Pointer
 
         public event EventHandler<Point> PositionChanged;
 
-        private Point _pointerPosition;
-        Point IPointerPosition.PointerPosition
+        private Point _viewportPosition;
+        Point IPointerPosition.ViewportPosition
         {
-            get { return _pointerPosition; }
+            get { return _viewportPosition; }
             set
             {
                 Point mP = new Point(
                     Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Width, Math.Max(0, value.X)),
                     Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Height, Math.Max(0, value.Y)));
 
-                _pointerPosition = mP;
+                _viewportPosition = mP;
                 _deferrer.DeferToUI(() => {
-                    _sessionControl.RenderingPanel.MoveMouseCursor(_pointerPosition);
-                    EmitPositionChanged(_pointerPosition);
+                    _sessionControl.RenderingPanel.MoveMouseCursor(_viewportPosition);
+                    EmitPositionChanged(_viewportPosition);
                 });
             }
+        }
+
+        Point IPointerPosition.SessionPosition
+        {
+            get { return _sessionControl.RenderingPanel.Viewport.TransformPoint(_viewportPosition); }
         }
 
         private void EmitPositionChanged(Point position)

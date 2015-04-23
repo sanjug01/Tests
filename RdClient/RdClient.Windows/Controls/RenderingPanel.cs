@@ -26,12 +26,17 @@
         private Point _hotspot = new Point(0,0);
 
         private TranslateTransform _mouseTransform;
-        public TranslateTransform MouseTransform {
+        public TranslateTransform MouseTransform
+        {
             get { return _mouseTransform; }
-            set
-            {
-                _mouseTransform = value;
-            }
+            set { _mouseTransform = value; }
+        }
+
+        private ScaleTransform _mouseScaleTransform;
+        public ScaleTransform MouseScaleTransform
+        {
+            get { return _mouseScaleTransform; }
+            set { _mouseScaleTransform = value; }
         }
 
         public RenderingPanel()
@@ -101,17 +106,16 @@
             }
         }
 
-        public void ChangeMouseCursorShape(MouseCursorShape shape)
+        void IRenderingPanel.ChangeMouseCursorShape(MouseCursorShape shape)
         {
             this.MouseCursor.Source = shape.ImageSource;
             _hotspot = shape.Hotspot;
         }
 
-
-        public void MoveMouseCursor(Point point)
+        void IRenderingPanel.MoveMouseCursor(Point point)
         {
-            this.MouseTransform.X = point.X - _hotspot.X;
-            this.MouseTransform.Y = point.Y - _hotspot.Y;
+            this.MouseTransform.X = point.X - _hotspot.X * this.MouseScaleTransform.ScaleX;
+            this.MouseTransform.Y = point.Y - _hotspot.Y * this.MouseScaleTransform.ScaleY;
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)

@@ -16,7 +16,7 @@
         private static readonly Point _origin = new Point();
 
         private readonly RemoteSessionPanel _sessionPanel;
-        private readonly SwapChainPanel _renderingPanel;
+        private readonly RenderingPanel _renderingPanel;
         private readonly Storyboard _storyboard;
         private readonly CompositeTransform _transformation;
 
@@ -25,7 +25,7 @@
         private double _zoomFactor;
         private Storyboard _activeStoryboard;
 
-        public RenderingPanelViewport(RemoteSessionPanel sessionPanel, SwapChainPanel renderingPanel,
+        public RenderingPanelViewport(RemoteSessionPanel sessionPanel, RenderingPanel renderingPanel,
             CompositeTransform transformation)
         {
             Contract.Assert(null != sessionPanel);
@@ -55,6 +55,11 @@
         double IViewport.ZoomFactor
         {
             get { return _zoomFactor; }
+        }
+
+        Point IViewport.TransformPoint(Point point)
+        {
+            return _transformation.Inverse.TransformPoint(point);
         }
 
         void IViewport.Set(double zoomFactor, Size offset, bool animated)
@@ -87,6 +92,8 @@
             {
                 _transformation.ScaleX = zoomFactor;
                 _transformation.ScaleY = zoomFactor;
+                _renderingPanel.MouseScaleTransform.ScaleX = zoomFactor;
+                _renderingPanel.MouseScaleTransform.ScaleY = zoomFactor;
                 _transformation.TranslateX = -offset.Width;
                 _transformation.TranslateY = -offset.Height;
                 this.ZoomFactor = zoomFactor;
@@ -165,6 +172,8 @@
 
                 _transformation.ScaleX = newTransform.ScaleX;
                 _transformation.ScaleY = newTransform.ScaleY;
+                _renderingPanel.MouseScaleTransform.ScaleX = newTransform.ScaleX;
+                _renderingPanel.MouseScaleTransform.ScaleY = newTransform.ScaleY;
                 _transformation.TranslateX = newTransform.TranslateX;
                 _transformation.TranslateY = newTransform.TranslateY;
 

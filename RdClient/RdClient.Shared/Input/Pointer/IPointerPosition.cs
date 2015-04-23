@@ -8,6 +8,7 @@ namespace RdClient.Shared.Input.Pointer
     public interface IPointerPosition
     {
         event EventHandler<Point> PositionChanged;
-        Point PointerPosition { get; set; }
+        Point ViewportPosition { get; set; }
+        Point SessionPosition { get; }
     }
 }

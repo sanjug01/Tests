@@ -43,7 +43,7 @@ namespace RdClient.Shared.Input.Pointer
             }
 
             // touch events have a location indicator hint which needs the correct position
-            _pointerPosition.PointerPosition = pointerEvent.Position;
+            _pointerPosition.ViewportPosition = pointerEvent.Position;
 
             TouchEventType touchType = TouchEventType.Down;
 
@@ -63,7 +63,7 @@ namespace RdClient.Shared.Input.Pointer
                     throw new InvalidOperationException("trying to convert unknown PointerEventAction");
             }
 
-            _sessionControl.SendTouchAction(touchType, pointerEvent.PointerId, pointerEvent.Position, delta);
+            _sessionControl.SendTouchAction(touchType, pointerEvent.PointerId, _pointerPosition.ViewportPosition, delta);
         }
 
 

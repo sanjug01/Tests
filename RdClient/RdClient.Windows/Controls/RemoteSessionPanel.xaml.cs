@@ -77,6 +77,7 @@
 
             this.RenderingPanel.MouseCursor = this.MouseCursor;
             this.RenderingPanel.MouseTransform = this.MouseTransform;
+            this.RenderingPanel.MouseScaleTransform = this.MouseScaleTransform;
 
             return this.RenderingPanel;
         }
@@ -276,18 +277,27 @@
 
         private void MakeCursorVisible()
         {
-            Window.Current.CoreWindow.PointerCursor = _exitCursor;
+            if (Window.Current.CoreWindow.PointerCursor == null)
+            {
+                Window.Current.CoreWindow.PointerCursor = new CoreCursor(CoreCursorType.Arrow, 0);
+            }
             this.MouseCursor.Visibility = Visibility.Collapsed;
         }
 
         protected override void OnPointerEntered(PointerRoutedEventArgs e)
         {
-            MakeCursorInvisible();
+            if(e.Pointer.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Mouse)
+            {
+                MakeCursorInvisible();
+            }
         }
 
         protected override void OnPointerExited(PointerRoutedEventArgs e)
         {
-            MakeCursorVisible();
+            if (e.Pointer.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Mouse)
+            {
+                MakeCursorVisible();
+            }
         }
     }
 }

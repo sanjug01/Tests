@@ -28,21 +28,17 @@ namespace RdClient.Shared.Input.Pointer
         {
             if(pointerEvent.Action == PointerEventAction.PointerPressed)
             {
-                _pointerPosition.PointerPosition = pointerEvent.Position;
+                _pointerPosition.ViewportPosition = pointerEvent.Position;
             }
 
             if(pointerEvent.Action == PointerEventAction.Tapped)
             {
                 IGestureRoutedEventProperties grep = (IGestureRoutedEventProperties) pointerEvent;
-
-                if(grep.Action == PointerEventAction.Tapped)
+                int i;
+                for(i = 0; i < grep.Count; i++)
                 {
-                    int i;
-                    for(i = 0; i < grep.Count; i++)
-                    {
-                        _control.LeftClick(grep.Position);
-                    }
-                }
+                    _control.LeftClick(_pointerPosition.SessionPosition);
+                }                
             }
             else
             {

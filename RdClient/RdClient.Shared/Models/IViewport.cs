@@ -48,5 +48,7 @@
         /// actually scrolls to the left.</para>
         /// </remarks>
         void PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor, double durationMilliseconds);
+
+        Point TransformPoint(Point point);
     }
 }
