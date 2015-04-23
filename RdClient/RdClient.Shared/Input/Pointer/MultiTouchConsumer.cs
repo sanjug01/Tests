@@ -9,16 +9,7 @@ namespace RdClient.Shared.Input.Pointer
         private IPointerRoutedEventProperties _masterTouch;
         private IPointerRoutedEventProperties _lastTouch;
         private IRemoteSessionControl _sessionControl;
-        private IPointerPosition _pointerPosition;
-
-        private ConsumptionMode _consumptionMode;
-        public ConsumptionMode ConsumptionMode
-        {
-            set
-            {
-                _consumptionMode = value;
-            }
-        }
+        private IPointerPosition _pointerPosition;        
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 

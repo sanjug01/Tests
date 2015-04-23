@@ -40,6 +40,8 @@ namespace RdClient.Shared.Models
 
         private bool _panning = false;
 
+        private ConsumptionModeType _consumptionMode;
+
         private void ZoomInHandler(object parameter)
         {
             if(_viewport != null)
@@ -60,6 +62,13 @@ namespace RdClient.Shared.Models
                 _zoomInCommand.EmitCanExecuteChanged();
                 _zoomOutCommand.EmitCanExecuteChanged();
             }
+        }
+
+        public void OnConsumptionModeChanged(object sender, ConsumptionModeType consumptionMode)
+        {
+            _consumptionMode = consumptionMode;
+            _zoomInCommand.EmitCanExecuteChanged();
+            _zoomOutCommand.EmitCanExecuteChanged();
         }
 
         private void PanALittle(PanDirection panDirection)
@@ -137,7 +146,7 @@ namespace RdClient.Shared.Models
                 }, 
                 o =>
                 {
-                    return _isZoomedIn == false;
+                    return _isZoomedIn == false && _consumptionMode != ConsumptionModeType.Pointer;
                 });
             _zoomOutCommand = new RelayCommand(
                 o =>
@@ -146,7 +155,7 @@ namespace RdClient.Shared.Models
                 }, 
                 o =>
                 {
-                    return _isZoomedIn == true;
+                    return _isZoomedIn == true && _consumptionMode != ConsumptionModeType.Pointer;
                 });
         }
 

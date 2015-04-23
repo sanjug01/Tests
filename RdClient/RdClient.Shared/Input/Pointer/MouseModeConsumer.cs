@@ -6,15 +6,6 @@ namespace RdClient.Shared.Input.Pointer
 {
     public class MouseModeConsumer : IPointerEventConsumer
     {
-        private ConsumptionMode _consumptionMode;
-        ConsumptionMode IPointerEventConsumer.ConsumptionMode
-        {
-            set
-            {
-                _consumptionMode = value;
-            }
-        }
-
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
         private IPointerRoutedEventProperties _tracked;

@@ -16,24 +16,17 @@ namespace RdClient.Shared.Input.Pointer
         private IPointerEventConsumer _consumer;
         private bool _multiTouchEnabled;
 
-        private ConsumptionMode _consumptionMode;
-        private ConsumptionMode ConsumptionMode
-        {
-            get { return _consumptionMode; }
-            set
-            {
-                _consumer.ConsumptionMode = value;
-                _consumptionMode = value;
-            }
-        }
-        
+        private IConsumptionMode _consumptionMode;
+        public IConsumptionMode ConsumptionMode { get { return _consumptionMode; } }
 
         public PointerCapture(IPointerPosition pointerPosition, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory)
         {
             _sessionControl = sessionControl;
             _panel = panel;
-            _consumer = new PointerEventDispatcher(timerFactory, sessionControl, pointerPosition);
-            this.ConsumptionMode = ConsumptionMode.Pointer;           
+            PointerEventDispatcher dispatcher = new PointerEventDispatcher(timerFactory, sessionControl, pointerPosition);
+            _consumer = dispatcher;
+            _consumptionMode = new ConsumptionModeTracker() { ConsumptionMode = ConsumptionModeType.Pointer };
+            _consumptionMode.ConsumptionModeChanged += (s, o) => dispatcher.ConsumptionMode = o;
         }
 
         void IPointerCapture.OnPointerChanged(object sender, IPointerEventBase e)
@@ -58,47 +51,46 @@ namespace RdClient.Shared.Input.Pointer
         {
             if (_multiTouchEnabled)
             {
-                if (ConsumptionMode == ConsumptionMode.MultiTouch)
+                if (_consumptionMode.ConsumptionMode == ConsumptionModeType.MultiTouch)
                 {
-                    ConsumptionMode = ConsumptionMode.Pointer;
+                    _consumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
                 }
                 else
                 {
-                    ConsumptionMode = ConsumptionMode.MultiTouch;
+                    _consumptionMode.ConsumptionMode = ConsumptionModeType.MultiTouch;
                 }
             }
             else
             {
-                if (ConsumptionMode == ConsumptionMode.DirectTouch)
+                if (_consumptionMode.ConsumptionMode == ConsumptionModeType.DirectTouch)
                 {
-                    ConsumptionMode = ConsumptionMode.Pointer;
+                    _consumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
                 }
                 else
                 {
-                    ConsumptionMode = ConsumptionMode.DirectTouch;
+                    _consumptionMode.ConsumptionMode = ConsumptionModeType.DirectTouch;
                 }
             }
         }
 
-        public void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs args)
+        void IPointerCapture.OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs args)
         {
             _multiTouchEnabled = args.MultiTouchEnabled;
             
             if(_multiTouchEnabled)
             {
-                if(ConsumptionMode == ConsumptionMode.DirectTouch)
+                if(_consumptionMode.ConsumptionMode == ConsumptionModeType.DirectTouch)
                 {
-                    ConsumptionMode = ConsumptionMode.MultiTouch;
+                    _consumptionMode.ConsumptionMode = ConsumptionModeType.MultiTouch;
                 }
             }
             else
             {
-                if(ConsumptionMode == ConsumptionMode.MultiTouch)
+                if(_consumptionMode.ConsumptionMode == ConsumptionModeType.MultiTouch)
                 {
-                    ConsumptionMode = ConsumptionMode.DirectTouch;
+                    _consumptionMode.ConsumptionMode = ConsumptionModeType.DirectTouch;
                 }
             }
         }
-
     }
 }

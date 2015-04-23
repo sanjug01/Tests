@@ -8,17 +8,7 @@ namespace RdClient.Shared.Input.Pointer
         private IPointerControl _control;
         private IPointerPosition _pointerPosition;
         private IStateMachine<DirectModeState, StateMachineEvent> _stateMachine;
-        StateMachineEvent _stateMachineEvent;
-
-        private ConsumptionMode _consumptionMode;
-        ConsumptionMode IPointerEventConsumer.ConsumptionMode
-        {
-            set
-            {
-                _consumptionMode = value;
-            }
-        }
-
+        StateMachineEvent _stateMachineEvent;        
 
         public DirectModeConsumer(IPointerControl control, IPointerPosition pointerPosition)
         {

@@ -152,11 +152,13 @@
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
+    <Compile Include="Input\Pointer\ConsumptionModeTracker.cs" />
     <Compile Include="Input\Pointer\DirectModeConsumer.cs" />
     <Compile Include="Input\Pointer\DirectModeTransitionConditions.cs" />
     <Compile Include="Input\Pointer\DirectModeTransitions.cs" />
     <Compile Include="Input\Pointer\DraggingHelper.cs" />
     <Compile Include="Input\Pointer\GestureRoutedEventPropertiesWrapper.cs" />
+    <Compile Include="Input\Pointer\IConsumptionMode.cs" />
     <Compile Include="Input\Pointer\IGestureRoutedEventProperties.cs" />
     <Compile Include="Input\Pointer\IManipulationRoutedEventProperties.cs" />
     <Compile Include="Input\Pointer\IPointerEventBase.cs" />

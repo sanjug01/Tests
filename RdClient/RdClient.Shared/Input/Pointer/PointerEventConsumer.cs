@@ -10,7 +10,7 @@ namespace RdClient.Shared.Input.Pointer
         private IPointTracker _tracker = new PointTracker();
         public IPointTracker Tracker { get { return _tracker; } }
 
-        public ConsumptionMode ConsumptionMode { set { } }
+        public ConsumptionModeType ConsumptionMode { set { } }
 
         private IStateMachine<PointerModeState, StateMachineEvent> _stateMachine;
         StateMachineEvent _stateMachineEvent;
