@@ -458,6 +458,18 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(_vm.ShowSectionLabels);
         }
 
+        [TestMethod]
+        public void CancelAccessoryViewCommandCallsNavigationServiceDismissAccessoryViewsCommand()
+        {
+            bool commandCalled = false;
+            _navService.DismissAccessoryViewsCommand = new RelayCommand(o =>
+            {
+                commandCalled = true;
+            });
+            _vm.CancelAccessoryView.Execute(null);
+            Assert.IsTrue(commandCalled);
+        }
+
         private void AssertDesktopViewModelSelectionEnabledMatchesDesktopsSelectable()
         {
             foreach (DesktopViewModel dvm in _ivm.DesktopViewModels)

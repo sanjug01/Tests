@@ -306,7 +306,6 @@
     <Compile Include="Navigation\ViewVisibility.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
-    <Compile Include="ViewModels\AccessoryViewModelBase.cs" />
     <Compile Include="ViewModels\AdditionalToolbarCommandsViewModel.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModel.cs" />
     <Compile Include="ViewModels\DesktopIdentityValidationCompletion.cs" />

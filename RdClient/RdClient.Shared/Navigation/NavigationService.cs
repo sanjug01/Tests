@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.ViewModels;
+﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -23,6 +24,7 @@ namespace RdClient.Shared.Navigation
         private IPresentableViewFactory _viewFactory;
         private IPresentableView _currentView;
         private readonly ICommand _backCommand;
+        private readonly ICommand _dismissAccessoryViewsCommand;
 
         public NavigationService()
         {
@@ -31,6 +33,7 @@ namespace RdClient.Shared.Navigation
 
             _modalStack = new List<PresentedStackedView>();
             _accessoryStack = new List<PresentedStackedView>();
+            _dismissAccessoryViewsCommand = new RelayCommand(o => DismissAccessoryViewsCommandExecute());
             _backCommand = new RelayCommand(BackCommandExecute);
         }
 
@@ -63,6 +66,8 @@ namespace RdClient.Shared.Navigation
         public IPresentableViewFactory ViewFactory { set { _viewFactory = value; } }
 
         public ICommand BackCommand { get { return _backCommand; } }
+
+        public ICommand DismissAccessoryViewsCommand { get { return _dismissAccessoryViewsCommand; } }
 
         public void EmitDismissingLastModalView()
         {
@@ -294,15 +299,21 @@ namespace RdClient.Shared.Navigation
 
         private void DismissAllAccessoryViews()
         {
-            IStackedViewPresenter accessoryPresenter = _currentView as IStackedViewPresenter;
+            var presenter = _currentView as IStackedViewPresenter;
+            var stack = _accessoryStack;
 
-            if(null != accessoryPresenter && _accessoryStack.Count > 0)
+            if (presenter == null) //must be using the modal stack instead
             {
-                //
-                // Simply dismiss the accessory view at the bottom of the stack, which will
-                // automatically dismiss all views on the stack.
-                //
-                DismissStackedView(_accessoryStack, _accessoryStack[0].View, accessoryPresenter);
+                presenter = _modalPresenter;
+                stack = _modalStack;
+            }
+
+            // Need to dismiss one by one instead of just dismissing bottom view on stack
+            // because views may dismiss themselves when other views are dismissed (via completions). 
+            // This can lead to crash if using DismissStackedView because it doesn't call completions until after all the views have been dismissed (Bug 2537012)
+            while (stack.Count > 0)
+            {
+                DismissStackedView(stack, stack[stack.Count - 1].View, presenter);
             }
         }
 
@@ -320,6 +331,11 @@ namespace RdClient.Shared.Navigation
             });
 
             view.Dismissing();
+        }
+
+        private void DismissAccessoryViewsCommandExecute()
+        {
+            this.DismissAllAccessoryViews();
         }
 
         private abstract class PresentedStackedView : IStackedPresentationContext

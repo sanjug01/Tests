@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Navigation;
+﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.Navigation;
 using RdMock;
 using System;
 using System.Windows.Input;
@@ -51,16 +52,11 @@ namespace RdClient.Shared.Test.Mock
             set {  }
         }
 
-        public NavigationExtensionList Extensions
-        {
-            get;
-            set;
-        }
+        public NavigationExtensionList Extensions { get; set; }
 
 
-        public ICommand BackCommand
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public ICommand BackCommand { get; set; }
+
+        public ICommand DismissAccessoryViewsCommand { get; set; }
     }
 }

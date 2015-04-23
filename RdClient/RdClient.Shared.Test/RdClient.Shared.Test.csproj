@@ -221,7 +221,6 @@
     <Compile Include="RdTest\ExceptionExpecter.cs" />
     <Compile Include="RdTest\UAPSleep.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
-    <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
     <Compile Include="ViewModels\AddUserViewModelTests.cs" />
     <Compile Include="ViewModels\DesktopIdentityValidationViewModelTests.cs" />

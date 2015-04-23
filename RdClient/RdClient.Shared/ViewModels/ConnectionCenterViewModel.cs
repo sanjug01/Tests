@@ -45,12 +45,7 @@
         private bool _hasDesktops;
         private bool _hasApps;
         private bool _showSectionLabels;
-        //
-        // Completion of accessory views passed to all accessory views as the activation parameter.
-        // The views subscribe to the completion object and dismiss themselves when completion is requested
-        // by the view model. The view model requests completion when it needs to dismiss the current accessory view.
-        //
-        private readonly SynchronousCompletion _accessoryViewCompletion;
+
         private readonly IViewVisibility _accessoryViewVisibility;
         private RelayCommand _cancelAccessoryView;
 
@@ -132,9 +127,8 @@
             //
             //_toolbarItemsSource.Add(new SeparatorBarItemModel());
             //
-            _accessoryViewCompletion = new SynchronousCompletion();
             _accessoryViewVisibility = ViewVisibility.Create(false);
-            _cancelAccessoryView = new RelayCommand(this.ExecuteCancelAccessoryView);
+            _cancelAccessoryView = new RelayCommand(o => this.ExecuteCancelAccessoryView());
 
             this.SelectedCount = 0;
         }
@@ -460,7 +454,7 @@
             //
             // Called by the command bound to the "add" toolbar button
             //
-            this.NavigationService.PushAccessoryView("SelectNewResourceTypeView", _accessoryViewCompletion);
+            this.NavigationService.PushAccessoryView("SelectNewResourceTypeView", null);
         }
 
         private void ToggleDesktopSelectionCommandExecute(object o)
@@ -476,7 +470,7 @@
 
         private void PushAdditionalCommandsDialog(object parameter)
         {
-            this.NavigationService.PushAccessoryView("AdditionalToolbarCommandsView", _accessoryViewCompletion);
+            this.NavigationService.PushAccessoryView("AdditionalToolbarCommandsView", null);
         }
 
         private void AddWorkspaceExecute()
@@ -489,15 +483,9 @@
             return new WorkspaceViewModel(workspace, this.ApplicationDataModel, this, this.NavigationService, _sessionFactory);
         }
 
-        private void ExecuteCancelAccessoryView(object parameter)
+        private void ExecuteCancelAccessoryView()
         {
-            //
-            // Cancel the current accessory view (there can be only one).
-            //
-            Contract.Assert(parameter is IHandleable);
-
-            _accessoryViewCompletion.Complete();
-            _accessoryViewCompletion.Reset();
+            NavigationService.DismissAccessoryViewsCommand.Execute(null);
         }
     }
 }
