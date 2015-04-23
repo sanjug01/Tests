@@ -3,7 +3,7 @@
     using RdClient.Shared.Navigation;
     using System.Windows.Input;
 
-    public sealed class AdditionalToolbarCommandsViewModel : ViewModelBase
+    public sealed class AdditionalToolbarCommandsViewModel : AccessoryViewModelBase
     {
         private ICommand _about;
 
@@ -14,10 +14,7 @@
 
         private void ShowAboutViewCommandExecute()
         {
-            var nav = NavigationService;
-            //Dismiss ourselves first, no need to wait on the AboutView
-            this.DismissModal(null);
-            nav.PushAccessoryView("AboutView", null);
+            DismissSelfAndPushAccessoryView("AboutView");
         }
 
         public ICommand ShowAboutDialog

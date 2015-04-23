@@ -1,12 +1,8 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.Helpers;
-    using RdClient.Shared.Navigation;
-    using System;
-    using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
-    public sealed class SelectNewResourceTypeViewModel : ViewModelBase
+    public sealed class SelectNewResourceTypeViewModel : AccessoryViewModelBase
     {
         private readonly RelayCommand _addDesktop;
         private readonly RelayCommand _addOnPremiseWorkspace;
@@ -36,40 +32,20 @@
 
         private void ExecuteAddDesktop(object parameter)
         {
-            Contract.Assert(null != this.NavigationService);
-            INavigationService nav = this.NavigationService;            
-            //
-            // First the view must dismiss self, then it must push the next view on the stack;
-            // otherwise, the next view will go on top of the current one and they both will get dismissed.
-            //
-            DismissModal(null);
             AddDesktopViewModelArgs args = new AddDesktopViewModelArgs();
-            nav.PushAccessoryView("AddOrEditDesktopView", args);
+            DismissSelfAndPushAccessoryView("AddOrEditDesktopView", args);
         }
 
         private void ExecuteAddOnPremiseWorkspace(object parameter)
         {
-            Contract.Assert(null != this.NavigationService);
-            INavigationService nav = this.NavigationService;
-            //
-            // First the view must dismiss self, then it must push the next view on the stack;
-            // otherwise, the next view will go on top of the current one and they both will get dismissed.
-            //
-            DismissModal(null);
+
             AddWorkspaceViewModelArgs args = new AddWorkspaceViewModelArgs();
-            nav.PushAccessoryView("AddOrEditWorkspaceView", args);
+            DismissSelfAndPushAccessoryView("AddOrEditWorkspaceView", args);
         }
 
         private void ExecuteAddCloudWorkspace(object parameter)
         {
-            Contract.Assert(null != this.NavigationService);
-            INavigationService nav = this.NavigationService;
-            //
-            // First the view must dismiss self, then it must push the next view on the stack;
-            // otherwise, the next view will go on top of the current one and they both will get dismissed.
-            //
-            DismissModal(null);
-            nav.PushAccessoryView("DesktopEditorView", null);
+            DismissSelfAndPushAccessoryView("DesktopEditorView", null);
         }
     }
 }

@@ -44,16 +44,17 @@
         <Grid Visibility="{Binding IsConnecting, Converter={StaticResource BooleanToVisibilityConverter}}"
               VerticalAlignment="Center"
               Height="Auto"
-              Background="{StaticResource DialogBackgroundColor}">
+              RequestedTheme="{StaticResource AlternateTheme}"
+              Background="{ThemeResource DialogBackgroundColor}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="40" />
             </Grid.RowDefinitions>
-            <TextBlock HorizontalAlignment="Center" FontSize="20" Foreground="Purple"
+            <TextBlock HorizontalAlignment="Center" 
+                       Style="{ThemeResource SubtitleTextBlockStyle}"
                        Grid.Row="1"
-                       Margin="0, 0, 0, 12"
                        Text="Preparing your connection (d)....."
                        x:Uid="Connection_Pending_Message"/>
             <ProgressBar Grid.Row="2"
@@ -63,7 +64,7 @@
                          VerticalAlignment="Center" 
                          />
             <Button x:Uid="Common_Button_Cancel"
-                    Style="{StaticResource DialogCancelButtonStyle}"
+                    Style="{ThemeResource DialogCancelButtonStyle}"
                     HorizontalAlignment="Center"
                     Grid.Row="3"
                     Content="Cancel (d)"
@@ -74,16 +75,19 @@
         <Grid Visibility="{Binding IsFailureMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
               VerticalAlignment="Center"
               Height="Auto"
-              Background="{StaticResource DialogBackgroundColor}">
+              RequestedTheme="{StaticResource AlternateTheme}"
+              Background="{ThemeResource DialogBackgroundColor}">
             <StackPanel Orientation="Vertical" Margin="12,24">
-                <TextBlock HorizontalAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="Purple"
+                <TextBlock HorizontalAlignment="Center" 
+                           Style="{ThemeResource BodyTextBlockStyle}"
                            Margin="0, 0, 0, 12"
                            Text="Connection has failed (d)"/>
-                <TextBlock HorizontalAlignment="Center" FontSize="20" Foreground="Purple"
+                <TextBlock HorizontalAlignment="Center" 
+                           Style="{ThemeResource SubtitleTextBlockStyle}"
                            Margin="0, 0, 0, 12"
                            Text="{Binding FailureCode}"/>
                 <Button HorizontalAlignment="Center" Command="{Binding DismissFailureMessage}"
-                        Style="{StaticResource DialogCancelButtonStyle}">
+                        Style="{ThemeResource DialogCancelButtonStyle}">
                     <TextBlock Text="Close (d)"/>
                 </Button>
             </StackPanel>
@@ -92,15 +96,20 @@
         <!-- Session interruption (auto-reconnect) message -->
         <Grid VerticalAlignment="Center"
               Height="Auto"
-              Background="{StaticResource DialogBackgroundColor}"
+              RequestedTheme="{StaticResource AlternateTheme}"
+              Background="{ThemeResource DialogBackgroundColor}"
               Visibility="{Binding IsInterrupted, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel Orientation="Vertical" Margin="12,24">
-                <TextBlock FontSize="16" HorizontalAlignment="Center" Foreground="Red"
+                <TextBlock HorizontalAlignment="Center" 
+                           Style="{ThemeResource BodyTextBlockStyle}"
+                           Foreground="{ThemeResource rdErrorBrush}"
                     Text="Connection has been interrupted. Reconnecting… (d)"/>
-                <TextBlock FontSize="16" HorizontalAlignment="Center" Foreground="Red"
+                <TextBlock HorizontalAlignment="Center" 
+                           Style="{ThemeResource BodyTextBlockStyle}"
+                           Foreground="{ThemeResource rdErrorBrush}"
                            Text="{Binding ReconnectAttempt}"/>
                 <Button Command="{Binding CancelAutoReconnect}" HorizontalAlignment="Center"
-                        Style="{StaticResource DialogCancelButtonStyle}">
+                        Style="{ThemeResource DialogCancelButtonStyle}">
                     <TextBlock Text="Cancel"/>
                 </Button>
             </StackPanel>
