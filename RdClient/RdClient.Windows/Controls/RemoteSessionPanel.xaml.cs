@@ -261,8 +261,6 @@
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerMoved, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
-
-            _platformRecognizer.ProcessMoveEvents(e.GetIntermediatePoints(this));
         }
 
         protected override void OnPointerEntered(PointerRoutedEventArgs e)
