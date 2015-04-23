@@ -299,11 +299,21 @@ namespace RdClient.Shared.Navigation
 
         private void DismissAllAccessoryViews()
         {
-            IStackedViewPresenter accessoryPresenter = _currentView as IStackedViewPresenter;
+            var presenter = _currentView as IStackedViewPresenter;
+            var stack = _accessoryStack;
 
-            while (null != accessoryPresenter && _accessoryStack.Count > 0)
+            if (presenter == null) //must be using the modal stack instead
             {
-                DismissStackedView(_accessoryStack, _accessoryStack[_accessoryStack.Count - 1].View, accessoryPresenter);
+                presenter = _modalPresenter;
+                stack = _modalStack;
+            }
+
+            // Need to dismiss one by one instead of just dismissing bottom view on stack
+            // because views may dismiss themselves when other views are dismissed (via completions). 
+            // This can lead to crash if using DismissStackedView because it doesn't call completions until after all the views have been dismissed (Bug 2537012)
+            while (stack.Count > 0)
+            {
+                DismissStackedView(stack, stack[stack.Count - 1].View, presenter);
             }
         }
 
