@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class DeleteGatewayViewModel : ViewModelBase
+    public class DeleteGatewayViewModel : ViewModelBase, IDialogViewModel
     {
         private IModelContainer<GatewayModel> _gatewayContainer;
         private readonly ICommand _deleteCommand;
@@ -28,12 +28,12 @@ namespace RdClient.Shared.ViewModels
             get { return _gatewayContainer.Model; }
         }
 
-        public ICommand DeleteCommand
+        public ICommand DefaultAction
         {
             get { return _deleteCommand; }
         }
 
-        public ICommand CancelCommand
+        public ICommand Cancel
         {
             get { return _cancelCommand; }
         }

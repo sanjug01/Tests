@@ -160,30 +160,6 @@
             IRemoteSession session = _sessionFactory.CreateSession(sessionSetup);
 
             _navigationService.NavigateToView("RemoteSessionView", session);
-#if false
-            if (this.Credentials != null)
-            {
-                InternalConnect(this.Credentials, false);
-            }
-            else
-            {
-                AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), true);
-
-                ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion();
-
-                addUserCompleted.Completed += (s, e) =>
-                {
-                    CredentialPromptResult result = e.Result as CredentialPromptResult;
-
-                    if (result != null && !result.UserCancelled)
-                    {
-                        InternalConnect(result.Credentials, result.Save);
-                    }
-                };
-
-                _navigationService.PushModalView("AddUserView", args, addUserCompleted);
-            }            
-#endif
         }
 
         private void InternalConnect(CredentialsModel credentials, bool storeCredentials)

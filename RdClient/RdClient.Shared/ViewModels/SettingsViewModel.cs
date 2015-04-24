@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class SettingsViewModel : ViewModelBase, ISettingsViewModel 
+    public class SettingsViewModel : ViewModelBase, ISettingsViewModel, IDialogViewModel 
     {
         private RelayCommand _goBackCommand;
         private RelayCommand _addUserCommand;
@@ -28,9 +28,15 @@ namespace RdClient.Shared.ViewModels
             _addGatewayCommand = new RelayCommand(o => this.AddGatewayCommandExecute());
         }
 
-        public ICommand GoBackCommand
+        public ICommand Cancel
         {
             get { return _goBackCommand; }
+        }
+
+        //Implement IDialogViewModel. Do nothing when enter is pressed
+        public ICommand DefaultAction
+        {
+            get { return new RelayCommand(o => { } ); }
         }
 
         public ICommand AddUserCommand
@@ -145,7 +151,7 @@ namespace RdClient.Shared.ViewModels
 
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
         {
-            this.GoBackCommand.Execute(null);
+            this.Cancel.Execute(null);
             backArgs.Handled = true;
         }
 

@@ -50,7 +50,7 @@
         }
     }
 
-    public sealed class AddOrEditWorkspaceViewModel : DeferringViewModelBase
+    public sealed class AddOrEditWorkspaceViewModel : DeferringViewModelBase, IDialogViewModel
     {
         private RelayCommand _saveCommand;
         private RelayCommand _cancelCommand;
@@ -69,9 +69,9 @@
             _cancelCommand = new RelayCommand(CancelCommandExecute);
         }
 
-        public ICommand SaveCommand { get { return _saveCommand; } }
+        public ICommand DefaultAction { get { return _saveCommand; } }
 
-        public ICommand CancelCommand { get { return _cancelCommand; } }
+        public ICommand Cancel { get { return _cancelCommand; } }
 
         public string FeedUrl 
         { 

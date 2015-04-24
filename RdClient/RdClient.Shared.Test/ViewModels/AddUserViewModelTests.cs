@@ -59,7 +59,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _vm.User = "Don Pedro";
             _vm.Password = "secret";
-            Assert.IsTrue(_vm.OkCommand.CanExecute(null));
+            Assert.IsTrue(_vm.DefaultAction.CanExecute(null));
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _vm.User = null;
             _vm.Password = "secret";
-            Assert.IsFalse(_vm.OkCommand.CanExecute(null));
+            Assert.IsFalse(_vm.DefaultAction.CanExecute(null));
         }
 
         [TestMethod]
@@ -75,7 +75,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _vm.User = "Don Pedro";
             _vm.Password = null;
-            Assert.IsFalse(_vm.OkCommand.CanExecute(null));
+            Assert.IsFalse(_vm.DefaultAction.CanExecute(null));
         }
 
         [TestMethod]
@@ -83,7 +83,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _vm.User = "Don Pedro";
             _vm.Password = "";
-            Assert.IsFalse(_vm.OkCommand.CanExecute(null));
+            Assert.IsFalse(_vm.DefaultAction.CanExecute(null));
         }
 
         [TestMethod]
@@ -103,7 +103,7 @@ namespace RdClient.Shared.Test.ViewModels
                 Assert.AreEqual(newCreds.Password, result.Credentials.Password);
                 return null;
             });
-            _vm.OkCommand.Execute(null);
+            _vm.DefaultAction.Execute(null);
         }
 
         [TestMethod]
@@ -118,7 +118,7 @@ namespace RdClient.Shared.Test.ViewModels
                 Assert.IsNull(result.Credentials);
                 return null;
             });
-            _vm.CancelCommand.Execute(null);
+            _vm.Cancel.Execute(null);
         }
 
         [TestMethod]

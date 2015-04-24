@@ -29,7 +29,7 @@ namespace RdClient.Shared.ViewModels
         }
     }
 
-    public class AddOrEditDesktopViewModel : ViewModelBase
+    public class AddOrEditDesktopViewModel : DeferringViewModelBase, IDialogViewModel
     {
         private string _host;
         private bool _isHostValid;
@@ -67,18 +67,24 @@ namespace RdClient.Shared.ViewModels
             this.IsExpandedView = false;
         }
 
+        public ObservableCollection<UserComboBoxElement> UserOptions { get; private set; }
+
+        public ObservableCollection<GatewayComboBoxElement> GatewayOptions { get; private set; }
+
+        public IPresentableView PresentableView { private get; set; }
+        public ICommand DefaultAction { get { return _saveCommand; } }
+        public ICommand Cancel { get { return _cancelCommand; } }
+        public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
+        public ICommand HideDetailsCommand { get { return _hideDetailsCommand; } }
+
         public bool IsAddingDesktop
         {
             get { return _isAddingDesktop; }
-            private set 
+            private set
             {
                 this.SetProperty(ref _isAddingDesktop, value, "IsAddingDesktop");
             }
         }
-
-        public ObservableCollection<UserComboBoxElement> UserOptions { get; private set; }
-
-        public ObservableCollection<GatewayComboBoxElement> GatewayOptions { get; private set; }
 
         public int SelectedUserOptionsIndex 
         { 
@@ -111,15 +117,6 @@ namespace RdClient.Shared.ViewModels
                 }
             }
         }
-
-        public IPresentableView PresentableView { private get; set; }
-
-        public ICommand SaveCommand { get { return _saveCommand; } }
-
-        public ICommand CancelCommand { get { return _cancelCommand; } }
-
-        public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
-        public ICommand HideDetailsCommand { get { return _hideDetailsCommand; } }
 
         public DesktopModel Desktop
         {
@@ -294,7 +291,7 @@ namespace RdClient.Shared.ViewModels
         {
             AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
             ModalPresentationCompletion addGatewayCompleted = new ModalPresentationCompletion(GatewayPromptResultHandler);
-            NavigationService.PushModalView("AddOrEditGatewayView", args, addGatewayCompleted);
+            NavigationService.PushAccessoryView("AddOrEditGatewayView", args, addGatewayCompleted);
         }
 
         private void LaunchAddUserView()

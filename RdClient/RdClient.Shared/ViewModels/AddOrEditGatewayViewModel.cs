@@ -58,7 +58,7 @@ namespace RdClient.Shared.ViewModels
         public bool UserCancelled { get; private set; }
     }
 
-    public class AddOrEditGatewayViewModel : ViewModelBase
+    public class AddOrEditGatewayViewModel : ViewModelBase, IDialogViewModel
     {
         private string _host;
         private bool _isHostValid;
@@ -112,9 +112,9 @@ namespace RdClient.Shared.ViewModels
 
         public IPresentableView PresentableView { private get; set; }
 
-        public ICommand SaveCommand { get { return _saveCommand; } }
+        public ICommand DefaultAction { get { return _saveCommand; } }
 
-        public ICommand CancelCommand { get { return _cancelCommand; } }
+        public ICommand Cancel { get { return _cancelCommand; } }
 
         public GatewayModel Gateway
         {

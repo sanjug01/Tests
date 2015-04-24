@@ -72,8 +72,8 @@
 
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
             _addOrEditDesktopViewModel.Host = "MyPC";
-            Assert.IsTrue(_addOrEditDesktopViewModel.SaveCommand.CanExecute(null));
-            Assert.IsTrue(_addOrEditDesktopViewModel.CancelCommand.CanExecute(null));            
+            Assert.IsTrue(_addOrEditDesktopViewModel.DefaultAction.CanExecute(null));
+            Assert.IsTrue(_addOrEditDesktopViewModel.Cancel.CanExecute(null));            
         }
 
         [TestMethod]
@@ -145,8 +145,8 @@
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
             _addOrEditDesktopViewModel.Host = String.Empty;
 
-            Assert.IsFalse(_addOrEditDesktopViewModel.SaveCommand.CanExecute(null));
-            Assert.IsTrue(_addOrEditDesktopViewModel.CancelCommand.CanExecute(null));
+            Assert.IsFalse(_addOrEditDesktopViewModel.DefaultAction.CanExecute(null));
+            Assert.IsTrue(_addOrEditDesktopViewModel.Cancel.CanExecute(null));
         }
 
         [TestMethod]
@@ -159,7 +159,7 @@
 
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
             Assert.AreEqual(desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
@@ -179,7 +179,7 @@
 
             _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 2;
 
-            _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
@@ -201,7 +201,7 @@
 
             _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 0;
 
-            _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
@@ -288,7 +288,7 @@
             _addOrEditDesktopViewModel.Host = expectedDesktop.HostName;
 
             Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "no desktop should be added until save command is executed");
-            _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(null);
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
             DesktopModel savedDesktop = (DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model;
@@ -309,7 +309,7 @@
             _addOrEditDesktopViewModel.Host = expectedDesktop.HostName;
 
             Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "no desktop should be added until save command is executed");
-            _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(null);
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
             DesktopModel savedDesktop = (DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model;
@@ -336,7 +336,7 @@
             _addOrEditDesktopViewModel.IsUseAdminSession = true;
 
             Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "no desktop should be added until save command is executed");
-            _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(null);
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
             DesktopModel savedDesktop = (DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model;
@@ -360,7 +360,7 @@
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
             _addOrEditDesktopViewModel.Host = expectedDesktop.HostName;
-            _addOrEditDesktopViewModel.CancelCommand.Execute(null);
+            _addOrEditDesktopViewModel.Cancel.Execute(null);
             Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "no desktop should be added when cancel command is executed");
         }
 
@@ -379,7 +379,7 @@
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
             _addOrEditDesktopViewModel.Host = "myNewPC";
-            _addOrEditDesktopViewModel.SaveCommand.Execute(saveParam);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(saveParam);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
             DesktopModel addedDesktop = (DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model;
             Assert.AreEqual(_addOrEditDesktopViewModel.Host, addedDesktop.HostName);
@@ -402,7 +402,7 @@
             _addOrEditDesktopViewModel.AudioMode = (int)AudioMode.Remote;
             _addOrEditDesktopViewModel.IsSwapMouseButtons = true;
             _addOrEditDesktopViewModel.IsUseAdminSession = true;
-            _addOrEditDesktopViewModel.SaveCommand.Execute(saveParam);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(saveParam);
 
             //
             // Commented out - the _view model believes that an existing desktop is being edited,
@@ -432,7 +432,7 @@
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
             _addOrEditDesktopViewModel.Host = "MyNewPC_not_updated";
-            _addOrEditDesktopViewModel.CancelCommand.Execute(saveParam);
+            _addOrEditDesktopViewModel.Cancel.Execute(saveParam);
 
             Assert.AreNotEqual(desktop.HostName, _addOrEditDesktopViewModel.Host);
         }
@@ -452,13 +452,13 @@
             _addOrEditDesktopViewModel.Host = invalidHostName;
 
             Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "no desktop should be added until save command is executed");
-            _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(null);
             Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "Should not add desktop with invalid name!");
             Assert.IsFalse(_addOrEditDesktopViewModel.IsHostValid);
 
             // update name and save again
             _addOrEditDesktopViewModel.Host = validHostName;
-            _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(null);
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count, "Should add desktop with valid name!");
             Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
 
@@ -483,12 +483,12 @@
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
             _addOrEditDesktopViewModel.Host = invalidHostName;
-            _addOrEditDesktopViewModel.SaveCommand.Execute(saveParam);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(saveParam);
             Assert.IsFalse(_addOrEditDesktopViewModel.IsHostValid);
 
             // update name and save again
             _addOrEditDesktopViewModel.Host = validHostName;
-            _addOrEditDesktopViewModel.SaveCommand.Execute(saveParam);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(saveParam);
             Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
         }
 
@@ -509,7 +509,7 @@
 
             _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex = 2;
 
-            _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
@@ -531,7 +531,7 @@
 
             _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex = 0;
 
-            _addOrEditDesktopViewModel.SaveCommand.Execute(null);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
@@ -599,7 +599,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _nav.Expect("PushModalView", new List<object> { "AddOrEditGatewayView", null, null }, null);
+            _nav.Expect("PushAccessoryView", new List<object> { "AddOrEditGatewayView", null, null }, null);
 
             _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex = 1;
         }

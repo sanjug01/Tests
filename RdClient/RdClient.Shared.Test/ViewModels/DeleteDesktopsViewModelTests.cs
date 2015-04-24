@@ -140,7 +140,7 @@ namespace RdClient.Shared.Test.ViewModels
             ((IViewModel)_deleteDesktopsViewModel).Presenting(_nav, args, _context);
 
             _context.Expect("Dismiss", p => { return null; });
-            _deleteDesktopsViewModel.DeleteCommand.Execute(null);
+            _deleteDesktopsViewModel.DefaultAction.Execute(null);
         }
 
         [TestMethod]
@@ -150,7 +150,7 @@ namespace RdClient.Shared.Test.ViewModels
             ((IViewModel)_deleteDesktopsViewModel).Presenting(_nav, args, _context);
 
             _context.Expect("Dismiss", p => { return null; });
-            _deleteDesktopsViewModel.CancelCommand.Execute(null);
+            _deleteDesktopsViewModel.Cancel.Execute(null);
         }
 
         [TestMethod]
@@ -166,7 +166,7 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(_deleteDesktopsViewModel.DesktopsCount > 0);
 
 
-            _deleteDesktopsViewModel.CancelCommand.Execute(null);
+            _deleteDesktopsViewModel.Cancel.Execute(null);
             finalCount = _dataModel.LocalWorkspace.Connections.Models.Count;
 
             Assert.AreEqual(initialCount, finalCount);
@@ -186,7 +186,7 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(deletedCount > 0);
 
 
-            _deleteDesktopsViewModel.DeleteCommand.Execute(null);
+            _deleteDesktopsViewModel.DefaultAction.Execute(null);
             finalCount = _dataModel.LocalWorkspace.Connections.Models.Count;
 
             Assert.AreEqual(initialCount, finalCount + deletedCount);
@@ -205,7 +205,7 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(_deleteDesktopsViewModel.DesktopsCount > 0);
 
 
-            _deleteDesktopsViewModel.DeleteCommand.Execute(null);
+            _deleteDesktopsViewModel.DefaultAction.Execute(null);
             finalCount = _dataModel.LocalWorkspace.Connections.Models.Count;
 
             Assert.AreEqual(initialCount, finalCount + 1);

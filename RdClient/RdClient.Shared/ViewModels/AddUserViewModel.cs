@@ -67,7 +67,7 @@
         public CredentialPromptMode Mode { get { return _mode; } }
     }
 
-    public class AddUserViewModel : ViewModelBase
+    public class AddUserViewModel : ViewModelBase, IDialogViewModel
     {
         private readonly UsernameValidationRule _ruleUsername;
 
@@ -98,9 +98,9 @@
 
         public bool ShowSave { get; private set; }
 
-        public ICommand OkCommand { get { return _okCommand; } }
+        public ICommand DefaultAction { get { return _okCommand; } }
 
-        public ICommand CancelCommand { get { return _cancelCommand; } }
+        public ICommand Cancel { get { return _cancelCommand; } }
 
         public CredentialPromptMode Mode
         {

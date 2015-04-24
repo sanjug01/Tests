@@ -45,7 +45,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestGoBackCommandNavigatesToConnectionCenter()
         {
             _navService.Expect("NavigateToView", new List<object>() { "ConnectionCenterView", null }, 0);
-            _vm.GoBackCommand.Execute(null);
+            _vm.Cancel.Execute(null);
         }
 
         [TestMethod]
