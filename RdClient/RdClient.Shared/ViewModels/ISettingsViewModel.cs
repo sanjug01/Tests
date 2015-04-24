@@ -6,7 +6,7 @@ namespace RdClient.Shared.ViewModels
 {
     public interface ISettingsViewModel
     {
-        ICommand GoBackCommand { get; }
+        ICommand Cancel { get; }
         ICommand AddUserCommand { get; }
         ICommand AddGatewayCommand { get; }
         bool ShowGatewaySettings { get; set; }

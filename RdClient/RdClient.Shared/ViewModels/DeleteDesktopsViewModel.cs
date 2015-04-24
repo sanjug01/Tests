@@ -25,16 +25,23 @@
         }
     }
 
-    public class DeleteDesktopsViewModel : ViewModelBase
+    public class DeleteDesktopsViewModel : ViewModelBase, IDialogViewModel
     {
         private readonly ICommand _deleteCommand;
         private readonly ICommand _cancelCommand;
         private IList<IModelContainer<DesktopModel>> _selectedDesktops;
         private int _desktopsCount;
 
-        public ICommand DeleteCommand { get { return _deleteCommand; } }
-        public ICommand CancelCommand { get { return _cancelCommand; } }
-        public IPresentableView DialogView { private get; set; }
+        public DeleteDesktopsViewModel()
+        {
+            _selectedDesktops = null;
+            _deleteCommand = new RelayCommand(o => DeleteDesktops());
+            _cancelCommand = new RelayCommand(o => CancelCommandExecute());
+            this.DesktopsCount = 0;
+        }
+
+        public ICommand DefaultAction { get { return _deleteCommand; } }
+        public ICommand Cancel { get { return _cancelCommand; } }
 
         public IList<IModelContainer<DesktopModel>> SelectedDesktops 
         {
@@ -63,15 +70,7 @@
             }
         }
 
-        public DeleteDesktopsViewModel()
-        {
-            _selectedDesktops = null;
-            _deleteCommand = new RelayCommand(new Action<object>(DeleteDesktops));
-            _cancelCommand = new RelayCommand(new Action<object>(Cancel));
-            this.DesktopsCount = 0;
-        }
-
-        private void DeleteDesktops(object o)
+        private void DeleteDesktops()
         {
             Contract.Requires(null != this.ApplicationDataModel);
 
@@ -86,12 +85,12 @@
                 this.DesktopsCount = 0;
             }
 
-            NavigationService.DismissModalView(DialogView);
+            this.DismissModal(null);            
         }
 
-        private void Cancel(object o)
+        private void CancelCommandExecute()
         {
-            NavigationService.DismissModalView(DialogView);
+            this.DismissModal(null);
         }
 
         protected override void OnPresenting(object activationParameter)

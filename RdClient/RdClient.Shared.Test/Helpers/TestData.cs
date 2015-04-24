@@ -30,14 +30,23 @@ namespace RdClient.Shared.Test.Helpers
             return new RdpScreenSnapshot(width, height, bytes);
         }
 
-        public DesktopModel NewValidDesktop(Guid credId)
-        {
-            return new DesktopModel() { HostName = NewRandomString(), CredentialsId = credId };
+        public IModelContainer<DesktopModel> NewValidDesktop(Guid credId)
+        {            
+            return TemporaryModelContainer<DesktopModel>.WrapModel(Guid.NewGuid(), new DesktopModel()
+            {
+                HostName = NewRandomString(),
+                CredentialsId = credId
+            });
         }
 
-        public DesktopModel NewValidDesktopWithGateway(Guid gatewayId)
+        public IModelContainer<DesktopModel> NewValidDesktopWithGateway(Guid gatewayId)
         {
-            return new DesktopModel() { HostName = NewRandomString(), CredentialsId = Guid.Empty, GatewayId = gatewayId };
+            return TemporaryModelContainer<DesktopModel>.WrapModel(Guid.NewGuid(), new DesktopModel()
+            {
+                HostName = NewRandomString(),
+                CredentialsId = Guid.Empty,
+                GatewayId = gatewayId
+            });
         }
 
         public IModelContainer<GatewayModel> NewValidGateway()
@@ -68,10 +77,10 @@ namespace RdClient.Shared.Test.Helpers
             return new GatewayModel() { HostName = NewRandomString(), CredentialsId = credId };
         }
 
-        public IList<DesktopModel> NewSmallListOfDesktops(IList<IModelContainer<CredentialsModel>> creds)
+        public IList<IModelContainer<DesktopModel>> NewSmallListOfDesktops(IList<IModelContainer<CredentialsModel>> creds)
         {
             int count = RandomSource.Next(3, 10);
-            IList<DesktopModel> desktops = new List<DesktopModel>(count);
+            IList<IModelContainer<DesktopModel>> desktops = new List<IModelContainer<DesktopModel>>(count);
             for (int i = 0; i < count; i++)
             {
                 Guid credId = creds[_rand.Next(0, creds.Count)].Id;
@@ -80,10 +89,10 @@ namespace RdClient.Shared.Test.Helpers
             return desktops;
         }
 
-        public IList<DesktopModel> NewSmallListOfDesktopsWithGateway(IList<IModelContainer<GatewayModel>> gateways)
+        public IList<IModelContainer<DesktopModel>> NewSmallListOfDesktopsWithGateway(IList<IModelContainer<GatewayModel>> gateways)
         {
             int count = RandomSource.Next(3, 10);
-            IList<DesktopModel> desktops = new List<DesktopModel>(count);
+            IList<IModelContainer<DesktopModel>> desktops = new List<IModelContainer<DesktopModel>>(count);
             for (int i = 0; i < count; i++)
             {
                 Guid gatewayId = gateways[_rand.Next(0, gateways.Count)].Id;

@@ -29,7 +29,7 @@ namespace RdClient.Shared.ViewModels
         }
     }
 
-    public class AddOrEditDesktopViewModel : ViewModelBase
+    public class AddOrEditDesktopViewModel : ViewModelBase, IDialogViewModel
     {
         private string _host;
         private bool _isHostValid;
@@ -67,18 +67,24 @@ namespace RdClient.Shared.ViewModels
             this.IsExpandedView = false;
         }
 
+        public ObservableCollection<UserComboBoxElement> UserOptions { get; private set; }
+
+        public ObservableCollection<GatewayComboBoxElement> GatewayOptions { get; private set; }
+
+        public IPresentableView PresentableView { private get; set; }
+        public ICommand DefaultAction { get { return _saveCommand; } }
+        public ICommand Cancel { get { return _cancelCommand; } }
+        public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
+        public ICommand HideDetailsCommand { get { return _hideDetailsCommand; } }
+
         public bool IsAddingDesktop
         {
             get { return _isAddingDesktop; }
-            private set 
+            private set
             {
                 this.SetProperty(ref _isAddingDesktop, value, "IsAddingDesktop");
             }
         }
-
-        public ObservableCollection<UserComboBoxElement> UserOptions { get; private set; }
-
-        public ObservableCollection<GatewayComboBoxElement> GatewayOptions { get; private set; }
 
         public int SelectedUserOptionsIndex 
         { 
@@ -111,15 +117,6 @@ namespace RdClient.Shared.ViewModels
                 }
             }
         }
-
-        public IPresentableView PresentableView { private get; set; }
-
-        public ICommand SaveCommand { get { return _saveCommand; } }
-
-        public ICommand CancelCommand { get { return _cancelCommand; } }
-
-        public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
-        public ICommand HideDetailsCommand { get { return _hideDetailsCommand; } }
 
         public DesktopModel Desktop
         {
@@ -208,13 +205,13 @@ namespace RdClient.Shared.ViewModels
                     this.ApplicationDataModel.LocalWorkspace.Connections.AddNewModel(this.Desktop);
                 }
 
-                NavigationService.DismissModalView(PresentableView);
+                this.DismissModal(null);
             }
         }
 
         private void CancelCommandExecute(object o)
         {
-            NavigationService.DismissModalView(PresentableView);
+            this.DismissModal(null);
         }
 
         /// <summary>
@@ -294,35 +291,30 @@ namespace RdClient.Shared.ViewModels
         {
             AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
             ModalPresentationCompletion addGatewayCompleted = new ModalPresentationCompletion(GatewayPromptResultHandler);
-            NavigationService.PushModalView("AddOrEditGatewayView", args, addGatewayCompleted);
+            NavigationService.PushAccessoryView("AddOrEditGatewayView", args, addGatewayCompleted);
         }
 
         private void LaunchAddUserView()
         {
-            //
-            // Push the EditCredentialsView with a task to create new credentials
-            // and save it in the data model.
-            //
-            NewCredentialsTask.Present(this.NavigationService, this.ApplicationDataModel,
-                //
-                // Resource name in this case is the host name of the desktop object
-                //
-                this.Desktop.HostName,
-                //
-                // The editor has saved new credentials and reported their ID;
-                // Update the desktop object and reload the list od credentials.
-                //
-                credentialsId =>
-                {
-                    this.LoadUsers();
-                    this.SelectUserId(credentialsId);
-                },
-                //
-                // The editor has been cancelled; reload the list of credentials and restore the
-                // selected item representing the current choice in the desktop object; if this is not done,
-                // the selection in the list will stay at the "Add new" item.
-                //
-                () => this.Update());
+            AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
+            ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
+            NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
+        }
+
+        private void CredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
+        {
+            CredentialPromptResult result = args.Result as CredentialPromptResult;
+
+            if (result != null && !result.UserCancelled)
+            {
+                Guid credId = this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
+                LoadUsers();
+                this.SelectUserId(credId);
+            }
+            else
+            {
+                this.Update();
+            }
         }
 
         private void LoadUsers()

@@ -43,7 +43,7 @@ namespace RdClient.DesignTime
             _gatewayVMs = new ReadOnlyObservableCollection<IGatewayViewModel>(_sourceGateways);
         }
 
-        public ICommand GoBackCommand {get; set;}
+        public ICommand Cancel {get; set;}
 
         public bool ShowGatewaySettings {get; set;}
 

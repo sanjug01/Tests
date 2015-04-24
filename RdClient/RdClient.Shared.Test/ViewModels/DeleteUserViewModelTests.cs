@@ -47,11 +47,11 @@ namespace RdClient.Shared.Test.ViewModels
             _cred = TemporaryModelContainer<CredentialsModel>.WrapModel(_dataModel.Credentials.AddNewModel(_cred.Model), _cred.Model);
 
             //add some desktops to the datamodel
-            foreach (DesktopModel desktop in _testData.NewSmallListOfDesktops(_dataModel.Credentials.Models.ToList()))
+            foreach (DesktopModel desktop in _testData.NewSmallListOfDesktops(_dataModel.Credentials.Models.ToList()).Select(d => d.Model))
             {
                 _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
             }
-            _dataModel.LocalWorkspace.Connections.AddNewModel(_testData.NewValidDesktop(_cred.Id)); //Add at least one desktop referencing this credential to the datamodel
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_testData.NewValidDesktop(_cred.Id).Model); //Add at least one desktop referencing this credential to the datamodel
             
             _vm = new DeleteUserViewModel();
             ((IDataModelSite)_vm).SetDataModel(_dataModel);
@@ -76,14 +76,14 @@ namespace RdClient.Shared.Test.ViewModels
         public void CancelCommandDismissesView()
         {
             _navService.Expect("DismissModalView", new object[] { _view }, 0);
-            _vm.CancelCommand.Execute(null);
+            _vm.Cancel.Execute(null);
         }
 
         [TestMethod]
         public void DeleteCommandDismissesView()
         {
             _navService.Expect("DismissModalView", new object[] { _view }, 0);
-            _vm.CancelCommand.Execute(null);
+            _vm.Cancel.Execute(null);
         }
 
         [TestMethod]
@@ -93,7 +93,7 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 Assert.AreSame(_cred.Model, _dataModel.Credentials.GetModel(_cred.Id));
                 _navService.Expect("DismissModalView", new object[] { _view }, 0);
-                _vm.DeleteCommand.Execute(null);
+                _vm.DefaultAction.Execute(null);
                 CredentialsModel model = _dataModel.Credentials.GetModel(_cred.Id);
             }));
         }
@@ -105,7 +105,7 @@ namespace RdClient.Shared.Test.ViewModels
                 _dataModel.LocalWorkspace.Connections.Models.OfType<IModelContainer<RemoteConnectionModel>>().Any(d => ((DesktopModel)d.Model).CredentialsId.Equals(_cred.Id));
             Assert.IsTrue(desktopsReferenceCred());
             _navService.Expect("DismissModalView", new object[] { _view }, 0);
-            _vm.DeleteCommand.Execute(null);
+            _vm.DefaultAction.Execute(null);
             Assert.IsFalse(desktopsReferenceCred());
         }
 
@@ -114,7 +114,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             int credCount = _dataModel.Credentials.Models.Count;
             _navService.Expect("DismissModalView", new object[] { _view }, 0);
-            _vm.DeleteCommand.Execute(null);
+            _vm.DefaultAction.Execute(null);
             Assert.AreEqual(credCount - 1, _dataModel.Credentials.Models.Count);
         }
 
@@ -131,7 +131,7 @@ namespace RdClient.Shared.Test.ViewModels
             }
             //delete credential
             _navService.Expect("DismissModalView", new object[] { _view }, 0);
-            _vm.DeleteCommand.Execute(null);
+            _vm.DefaultAction.Execute(null);
             //check that only desktops referencing the deleted credential are changed
             foreach (IModelContainer<RemoteConnectionModel> desktop in _dataModel.LocalWorkspace.Connections.Models)
             {

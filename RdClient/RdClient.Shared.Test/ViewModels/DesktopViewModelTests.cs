@@ -133,7 +133,7 @@ namespace RdClient.Shared.Test.ViewModels
             };
             _navService = new Mock.NavigationService();
             _cred = _testData.NewValidCredential().Model;
-            _desktop = _testData.NewValidDesktop(_dataModel.Credentials.AddNewModel(_cred));
+            _desktop = _testData.NewValidDesktop(_dataModel.Credentials.AddNewModel(_cred)).Model;
 
             _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
@@ -188,7 +188,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestEditCommandExecute()
         {
 
-            _navService.Expect("PushModalView", new List<object> { "AddOrEditDesktopView", null, null }, 0);
+            _navService.Expect("PushAccessoryView", new List<object> { "AddOrEditDesktopView", null, null }, 0);
             _vm.EditCommand.Execute(null);
         }
 
@@ -212,7 +212,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestDeleteCommandExecute()
         {
-            _navService.Expect("PushModalView", new List<object> { "DeleteDesktopsView", null, null }, 0);
+            _navService.Expect("PushAccessoryView", new List<object> { "DeleteDesktopsView", null, null }, 0);
             _vm.DeleteCommand.Execute(null);
         }
 

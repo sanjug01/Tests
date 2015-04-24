@@ -59,7 +59,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _vm.User = "Don Pedro";
             _vm.Password = "secret";
-            Assert.IsTrue(_vm.OkCommand.CanExecute(null));
+            Assert.IsTrue(_vm.DefaultAction.CanExecute(null));
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _vm.User = null;
             _vm.Password = "secret";
-            Assert.IsFalse(_vm.OkCommand.CanExecute(null));
+            Assert.IsFalse(_vm.DefaultAction.CanExecute(null));
         }
 
         [TestMethod]
@@ -75,7 +75,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _vm.User = "Don Pedro";
             _vm.Password = null;
-            Assert.IsFalse(_vm.OkCommand.CanExecute(null));
+            Assert.IsFalse(_vm.DefaultAction.CanExecute(null));
         }
 
         [TestMethod]
@@ -83,35 +83,42 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _vm.User = "Don Pedro";
             _vm.Password = "";
-            Assert.IsFalse(_vm.OkCommand.CanExecute(null));
+            Assert.IsFalse(_vm.DefaultAction.CanExecute(null));
         }
 
         [TestMethod]
         public void AddUserViewModel_ShouldCallOkHandler()
         {
-            Assert.IsNull(_context.Result);
             CredentialsModel newCreds = _testData.NewValidCredential().Model;
             _vm.User = newCreds.Username;
             _vm.Password = newCreds.Password;
-            _vm.OkCommand.Execute(null);
-            CredentialPromptResult result = _context.Result as CredentialPromptResult;
-            Assert.IsNotNull(result);
-            Assert.IsFalse(result.UserCancelled);
-            Assert.IsNotNull(result.Credentials);
-            Assert.AreEqual(newCreds.Username, result.Credentials.Username);
-            Assert.AreEqual(newCreds.Password, result.Credentials.Password);
+
+            _context.Expect("Dismiss", parameters =>
+            {
+                CredentialPromptResult result = parameters[0] as CredentialPromptResult;
+                Assert.IsNotNull(result);
+                Assert.IsFalse(result.UserCancelled);
+                Assert.IsNotNull(result.Credentials);
+                Assert.AreEqual(newCreds.Username, result.Credentials.Username);
+                Assert.AreEqual(newCreds.Password, result.Credentials.Password);
+                return null;
+            });
+            _vm.DefaultAction.Execute(null);
         }
 
         [TestMethod]
         public void AddUserViewModel_ShouldCallCancelHandler()
         {
-            Assert.IsNull(_context.Result);
-            _vm.CancelCommand.Execute(null);
-            CredentialPromptResult result = _context.Result as CredentialPromptResult;
-            Assert.IsNotNull(result);
-            Assert.IsTrue(result.UserCancelled);
-            Assert.IsFalse(result.Save);
-            Assert.IsNull(result.Credentials);
+            _context.Expect("Dismiss", parameters =>
+            {
+                CredentialPromptResult result = parameters[0] as CredentialPromptResult;
+                Assert.IsNotNull(result);
+                Assert.IsTrue(result.UserCancelled);
+                Assert.IsFalse(result.Save);
+                Assert.IsNull(result.Credentials);
+                return null;
+            });
+            _vm.Cancel.Execute(null);
         }
 
         [TestMethod]

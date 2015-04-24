@@ -103,7 +103,7 @@
 
         private void EditCommandExecute()
         {
-            _navigationService.PushModalView("AddOrEditWorkspaceView", new EditWorkspaceViewModelArgs(_workspace.Model));
+            _navigationService.PushAccessoryView("AddOrEditWorkspaceView", new EditWorkspaceViewModelArgs(_workspace.Model));
         }
 
         private void WorkspacePropertyChanged(object sender, PropertyChangedEventArgs args)

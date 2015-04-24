@@ -74,10 +74,13 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 ((IViewModel)_vm).Presenting(navigation, _testArgs, _context);
 
+                _context.Expect("Dismiss", parameters =>
+                {
+                    CertificateValidationResult result = parameters[0] as CertificateValidationResult;
+                    Assert.AreEqual(CertificateValidationResult.CertificateTrustLevel.AcceptedAlways, (result.Result));
+                    return null;
+                });
                 _vm.AcceptCertificateCommand.Execute(null);
-
-                Assert.IsTrue(_context.Result is CertificateValidationResult);
-                Assert.AreEqual(CertificateValidationResult.CertificateTrustLevel.AcceptedAlways, (_context.Result as CertificateValidationResult).Result);
             }
         }
 
@@ -88,9 +91,13 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 ((IViewModel)_vm).Presenting(navigation, _testArgs, _context);
 
+                _context.Expect("Dismiss", parameters =>
+                {
+                    CertificateValidationResult result = parameters[0] as CertificateValidationResult;
+                    Assert.AreEqual(CertificateValidationResult.CertificateTrustLevel.AcceptedOnce, result.Result);
+                    return null;
+                });
                 _vm.AcceptOnceCommand.Execute(null);
-                Assert.IsTrue(_context.Result is CertificateValidationResult);
-                Assert.AreEqual(CertificateValidationResult.CertificateTrustLevel.AcceptedOnce, (_context.Result as CertificateValidationResult).Result);
             }
         }
 
@@ -101,9 +108,13 @@ namespace RdClient.Shared.Test.ViewModels
             {
                 ((IViewModel)_vm).Presenting(navigation, _testArgs, _context);
 
+                _context.Expect("Dismiss", parameters =>
+                {
+                    CertificateValidationResult result = parameters[0] as CertificateValidationResult;
+                    Assert.AreEqual(CertificateValidationResult.CertificateTrustLevel.Denied, result.Result);
+                    return null;
+                });
                 _vm.CancelCommand.Execute(null);
-                Assert.IsTrue(_context.Result is CertificateValidationResult);
-                Assert.AreEqual(CertificateValidationResult.CertificateTrustLevel.Denied, (_context.Result as CertificateValidationResult).Result);
             }
         }
 

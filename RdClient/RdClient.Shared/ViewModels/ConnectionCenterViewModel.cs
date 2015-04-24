@@ -420,7 +420,7 @@
             {
                 if (vm.IsSelected)
                 {
-                    NavigationService.PushModalView("AddOrEditDesktopView", 
+                    NavigationService.PushAccessoryView("AddOrEditDesktopView", 
                         new EditDesktopViewModelArgs(vm.Desktop));
                     break;
                 }
@@ -444,7 +444,7 @@
 
             if (null != selectedDesktops)
             {
-                this.NavigationService.PushModalView("DeleteDesktopsView",
+                this.NavigationService.PushAccessoryView("DeleteDesktopsView",
                     new DeleteDesktopsArgs(selectedDesktops));
             }
         }

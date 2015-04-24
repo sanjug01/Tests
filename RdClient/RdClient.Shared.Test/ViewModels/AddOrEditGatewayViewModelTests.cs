@@ -71,8 +71,8 @@
 
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
                 _addOrEditGatewayVM.Host = "MyPC";
-                Assert.IsTrue(_addOrEditGatewayVM.SaveCommand.CanExecute(null));
-                Assert.IsTrue(_addOrEditGatewayVM.CancelCommand.CanExecute(null));
+                Assert.IsTrue(_addOrEditGatewayVM.DefaultAction.CanExecute(null));
+                Assert.IsTrue(_addOrEditGatewayVM.Cancel.CanExecute(null));
             }
         }
 
@@ -103,8 +103,8 @@
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
                 _addOrEditGatewayVM.Host = String.Empty;
 
-                Assert.IsFalse(_addOrEditGatewayVM.SaveCommand.CanExecute(null));
-                Assert.IsTrue(_addOrEditGatewayVM.CancelCommand.CanExecute(null));
+                Assert.IsFalse(_addOrEditGatewayVM.DefaultAction.CanExecute(null));
+                Assert.IsTrue(_addOrEditGatewayVM.Cancel.CanExecute(null));
             }
         }
 
@@ -120,7 +120,7 @@
 
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                _addOrEditGatewayVM.SaveCommand.Execute(null);
+                _addOrEditGatewayVM.DefaultAction.Execute(null);
 
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
                 Assert.AreEqual(gateway, _dataModel.Gateways.Models[0].Model);
@@ -142,7 +142,7 @@
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 _addOrEditGatewayVM.SelectedUserOptionsIndex = 2;
-                _addOrEditGatewayVM.SaveCommand.Execute(null);
+                _addOrEditGatewayVM.DefaultAction.Execute(null);
 
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
                 Assert.IsInstanceOfType(_dataModel.Gateways.Models[0].Model, typeof(GatewayModel));
@@ -166,7 +166,7 @@
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 _addOrEditGatewayVM.SelectedUserOptionsIndex = 0;
-                _addOrEditGatewayVM.SaveCommand.Execute(null);
+                _addOrEditGatewayVM.DefaultAction.Execute(null);
 
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
                 Assert.IsInstanceOfType(_dataModel.Gateways.Models[0].Model, typeof(GatewayModel));
@@ -269,7 +269,7 @@
                 _addOrEditGatewayVM.Host = expectedGateway.HostName;
 
                 Assert.AreEqual(0, _dataModel.Gateways.Models.Count, "no gateway should be added until save command is executed");
-                _addOrEditGatewayVM.SaveCommand.Execute(null);
+                _addOrEditGatewayVM.DefaultAction.Execute(null);
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
                 Assert.IsInstanceOfType(_dataModel.Gateways.Models[0].Model, typeof(GatewayModel));
                 GatewayModel savedGateway = (GatewayModel)_dataModel.Gateways.Models[0].Model;
@@ -294,7 +294,7 @@
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 _addOrEditGatewayVM.Host = expectedGateway.HostName;
-                _addOrEditGatewayVM.CancelCommand.Execute(null);
+                _addOrEditGatewayVM.Cancel.Execute(null);
                 Assert.AreEqual(0, _dataModel.Gateways.Models.Count, "no gateway should be added when cancel command is executed");
             }
         }
@@ -317,7 +317,7 @@
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 _addOrEditGatewayVM.Host = "myNewPC";
-                _addOrEditGatewayVM.SaveCommand.Execute(saveParam);
+                _addOrEditGatewayVM.DefaultAction.Execute(saveParam);
                 Assert.IsInstanceOfType(_dataModel.Gateways.Models[0].Model, typeof(GatewayModel));
                 GatewayModel addedGateway = (GatewayModel)_dataModel.Gateways.Models[0].Model;
                 Assert.AreEqual(_addOrEditGatewayVM.Host, addedGateway.HostName);
@@ -340,7 +340,7 @@
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 _addOrEditGatewayVM.Host = "MyNewPC_not_updated";
-                _addOrEditGatewayVM.CancelCommand.Execute(saveParam);
+                _addOrEditGatewayVM.Cancel.Execute(saveParam);
 
                 Assert.AreNotEqual(gateway.HostName, _addOrEditGatewayVM.Host);
             }
@@ -364,13 +364,13 @@
                 _addOrEditGatewayVM.Host = invalidHostName;
 
                 Assert.AreEqual(0, _dataModel.Gateways.Models.Count, "no gateway should be added until save command is executed");
-                _addOrEditGatewayVM.SaveCommand.Execute(null);
+                _addOrEditGatewayVM.DefaultAction.Execute(null);
                 Assert.AreEqual(0, _dataModel.Gateways.Models.Count, "Should not add gateway with invalid name!");
                 Assert.IsFalse(_addOrEditGatewayVM.IsHostValid);
 
                 // update name and save again
                 _addOrEditGatewayVM.Host = validHostName;
-                _addOrEditGatewayVM.SaveCommand.Execute(null);
+                _addOrEditGatewayVM.DefaultAction.Execute(null);
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count, "Should add gateway with valid name!");
                 Assert.IsTrue(_addOrEditGatewayVM.IsHostValid);
 
@@ -399,12 +399,12 @@
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 _addOrEditGatewayVM.Host = invalidHostName;
-                _addOrEditGatewayVM.SaveCommand.Execute(saveParam);
+                _addOrEditGatewayVM.DefaultAction.Execute(saveParam);
                 Assert.IsFalse(_addOrEditGatewayVM.IsHostValid);
 
                 // update name and save again
                 _addOrEditGatewayVM.Host = validHostName;
-                _addOrEditGatewayVM.SaveCommand.Execute(saveParam);
+                _addOrEditGatewayVM.DefaultAction.Execute(saveParam);
                 Assert.IsTrue(_addOrEditGatewayVM.IsHostValid);
             }
         }

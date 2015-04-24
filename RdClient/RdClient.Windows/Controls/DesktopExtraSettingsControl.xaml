@@ -10,8 +10,7 @@
     xmlns:helpers="using:RdClient.Shared.Helpers"    
     mc:Ignorable="d"
     d:DesignHeight="768"
-    d:DesignWidth="700"
-    RequestedTheme="{StaticResource AlternateTheme}">
+    d:DesignWidth="700">
 
     
     <UserControl.Resources>
@@ -23,7 +22,7 @@
         </converters:GatewayComboBoxElementToLocalizedStringConverter>
     </UserControl.Resources>
 
-    <StackPanel Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
+    <StackPanel>
         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
         <Grid Style="{StaticResource rdEntryFieldGridStyle}">
             <TextBox Name="txtFriendlyNameEntry"

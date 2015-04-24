@@ -32,12 +32,15 @@
 
         private void ExecuteAddDesktop(object parameter)
         {
-            DismissSelfAndPushAccessoryView("DesktopEditorView");
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs();
+            DismissSelfAndPushAccessoryView("AddOrEditDesktopView", args);
         }
 
         private void ExecuteAddOnPremiseWorkspace(object parameter)
         {
-            DismissSelfAndPushAccessoryView("DesktopEditorView", null);
+
+            AddWorkspaceViewModelArgs args = new AddWorkspaceViewModelArgs();
+            DismissSelfAndPushAccessoryView("AddOrEditWorkspaceView", args);
         }
 
         private void ExecuteAddCloudWorkspace(object parameter)
