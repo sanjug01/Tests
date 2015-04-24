@@ -210,6 +210,8 @@
         private void InternalCancel(object parameter)
         {
             Contract.Assert(null != _task, "EditCredentialsViewModel.CancelView|cancelled without task");
+            //TODO: Bug 2555470 - If task.Cancelled() is called before DismissModal() it causes a crash. 
+            // _task and _taskToken must be saved to local variables as they are set to null in DismissModal()
             IEditCredentialsTask task = _task;
             object taskToken = _taskToken;
             this.DismissModal(null);
