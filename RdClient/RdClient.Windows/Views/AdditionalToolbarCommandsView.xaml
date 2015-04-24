@@ -16,7 +16,7 @@
         <vm:AdditionalToolbarCommandsViewModel />
     </controls:ModalUserControl.DataContext>
 
-    <Grid>
+    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState x:Name="DefaultLayout">
@@ -57,7 +57,7 @@
                     <Button
                         Style="{StaticResource FlatButtonStyle}"
                         Command="{Binding ShowAboutDialog}"
-                        HorizontalAlignment="Stretch">
+                        >
                         
                         <Grid Margin="10,10">
                             <TextBlock x:Uid="AdditionalToolbarCommandsView_About" Text="(d) About…" />
