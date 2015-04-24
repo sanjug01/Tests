@@ -70,6 +70,25 @@
                         </TextBox>
                     </Grid>
 
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                               x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                               Foreground="{ThemeResource UnselectedForegroundBrush}"
+                               x:Uid="AddOrEditDesktop-FriendlyName_OptLabel" 
+                               Text="(optional) (d)" 
+                               Margin="16,0,0,0"/>
+                </StackPanel>
+                <Grid Style="{StaticResource rdEntryFieldGridStyle}">
+                    <TextBox Name="txtFriendlyNameEntry"
+                     x:Uid="AddOrEditDesktop-PcFriendlyNameTextbox"
+                     Background="Transparent"
+                     Margin="0,8" 
+                     PlaceholderText="Connection friendly name (d)"           
+                     Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    </TextBox>
+                </Grid>
+
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
                     <ComboBox Margin="0,8" 
                           x:Uid="AddOrEditDesktop-Credentials-ComboBox"
@@ -88,10 +107,12 @@
                         <Button Background="Transparent"
                                 VerticalAlignment="Center"
                                 Command="{Binding ShowDetailsCommand}"
-                                Style="{StaticResource DialogDetailsButtonStyle}"                
+                                Style="{StaticResource DialogDetailsButtonStyle}"     
+                                Foreground ="{ThemeResource SystemControlHyperlinkTextBrush}"
                                 Content="{StaticResource MoreDetailsIcon}"
                                 Margin="-8,8,0,0" />
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                               Foreground ="{ThemeResource SystemControlHyperlinkTextBrush}"
                                    VerticalAlignment="Center"
                                    x:Uid="AddOrEditDesktop-MoreDetailsLabel"
                                    Text="More details (d)"/>
@@ -101,11 +122,13 @@
                                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Button Background="Transparent"
                                 VerticalAlignment="Center"
-                                Command="{Binding HideDetailsCommand}"
+                                Command="{Binding HideDetailsCommand}"                            
                                 Style="{StaticResource DialogDetailsButtonStyle}"                
+                                Foreground ="{ThemeResource SystemControlHyperlinkTextBrush}"                            
                                 Content="{StaticResource LessDetailsIcon}"
                                 Margin="-8,8,0,0" />
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                               Foreground ="{ThemeResource SystemControlHyperlinkTextBrush}"
                                    VerticalAlignment="Center"
                                    x:Uid="AddOrEditDesktop-LessDetailsLabel"
                                    Text="Less details (d)"/>
