@@ -301,7 +301,10 @@ namespace RdClient.Shared.Input.Pointer
 
         public static bool ZoomPan_Idle_Condition(StateMachineEvent e)
         {
-            return e.Input.Action == PointerEventAction.ManipulationCompleted;
+            return 
+                e.Input.Action == PointerEventAction.ManipulationCompleted || 
+                e.Input.Action == PointerEventAction.PointerCanceled || 
+                e.Input.Action == PointerEventAction.PointerReleased;
         }
 
         public static void ZoomPan_Idle_Action(StateMachineEvent e)

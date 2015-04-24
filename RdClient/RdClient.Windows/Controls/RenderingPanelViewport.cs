@@ -3,6 +3,7 @@
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using Windows.Foundation;
     using Windows.UI.Xaml;
@@ -15,7 +16,7 @@
         private static readonly Point _origin = new Point();
 
         private readonly RemoteSessionPanel _sessionPanel;
-        private readonly SwapChainPanel _renderingPanel;
+        private readonly RenderingPanel _renderingPanel;
         private readonly Storyboard _storyboard;
         private readonly CompositeTransform _transformation;
 
@@ -24,7 +25,7 @@
         private double _zoomFactor;
         private Storyboard _activeStoryboard;
 
-        public RenderingPanelViewport(RemoteSessionPanel sessionPanel, SwapChainPanel renderingPanel,
+        public RenderingPanelViewport(RemoteSessionPanel sessionPanel, RenderingPanel renderingPanel,
             CompositeTransform transformation)
         {
             Contract.Assert(null != sessionPanel);
@@ -54,6 +55,11 @@
         double IViewport.ZoomFactor
         {
             get { return _zoomFactor; }
+        }
+
+        Point IViewport.TransformPoint(Point point)
+        {
+            return _transformation.Inverse.TransformPoint(point);
         }
 
         void IViewport.Set(double zoomFactor, Size offset, bool animated)
@@ -86,6 +92,8 @@
             {
                 _transformation.ScaleX = zoomFactor;
                 _transformation.ScaleY = zoomFactor;
+                _renderingPanel.MouseScaleTransform.ScaleX = zoomFactor;
+                _renderingPanel.MouseScaleTransform.ScaleY = zoomFactor;
                 _transformation.TranslateX = -offset.Width;
                 _transformation.TranslateY = -offset.Height;
                 this.ZoomFactor = zoomFactor;
@@ -125,40 +133,47 @@
             //
             Point newTranslatedAnchorPoint = newTransform.TransformPoint(anchorPoint);
             Point newShift = new Point(newTranslatedAnchorPoint.X - translatedAnchorPoint.X, newTranslatedAnchorPoint.Y - translatedAnchorPoint.Y);
+            
             newShift.X -= dx;
             newShift.Y -= dy;
 
             newTransform.TranslateX = _transformation.TranslateX - newShift.X;
             newTransform.TranslateY = _transformation.TranslateY - newShift.Y;
+
             //
             // Adjust the viewport so it does not go outside of the rendering panel.
             //
-            Rect newView = newTransform.TransformBounds(new Rect(_origin, _size));
+            Rect oldView = new Rect(_origin, _size);
+            Rect newView = newTransform.TransformBounds(oldView);
 
-            if (newView.Left > 0.0)
+            if (newView.Left > oldView.Left)
                 newTransform.TranslateX -= newView.Left;
-            else if (newView.Right < _size.Width)
-                newTransform.TranslateX += _size.Width - newView.Right;
+            else if (newView.Right < oldView.Right)
+                newTransform.TranslateX += oldView.Right - newView.Right;
 
-            if (newView.Top > 0.0)
+            if (newView.Top > oldView.Top)
                 newTransform.TranslateY -= newView.Top;
-            else if (newView.Bottom < _size.Height)
-                newTransform.TranslateY += _size.Height - newView.Bottom;
+            else if (newView.Bottom < oldView.Bottom)
+                newTransform.TranslateY += oldView.Bottom - newView.Bottom;
             //
             // Round the translate transfortmation down to avoid sub-pixel rendering of the final position.
             //
-            newTransform.TranslateX = Math.Floor(newTransform.TranslateX);
-            newTransform.TranslateY = Math.Floor(newTransform.TranslateY);
+            newTransform.TranslateX = Math.Round(newTransform.TranslateX);
+            newTransform.TranslateY = Math.Round(newTransform.TranslateY);
+
             //
             // Animate the transition
             //
-            if(durationMilliseconds < 0.02)
+            if (durationMilliseconds < 0.02)
             {
                 //
                 // Too fast for animation, just update the transformation.
                 //
+
                 _transformation.ScaleX = newTransform.ScaleX;
                 _transformation.ScaleY = newTransform.ScaleY;
+                _renderingPanel.MouseScaleTransform.ScaleX = newTransform.ScaleX;
+                _renderingPanel.MouseScaleTransform.ScaleY = newTransform.ScaleY;
                 _transformation.TranslateX = newTransform.TranslateX;
                 _transformation.TranslateY = newTransform.TranslateY;
 

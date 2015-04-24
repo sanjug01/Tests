@@ -152,11 +152,13 @@
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
+    <Compile Include="Input\Pointer\ConsumptionModeTracker.cs" />
     <Compile Include="Input\Pointer\DirectModeConsumer.cs" />
     <Compile Include="Input\Pointer\DirectModeTransitionConditions.cs" />
     <Compile Include="Input\Pointer\DirectModeTransitions.cs" />
     <Compile Include="Input\Pointer\DraggingHelper.cs" />
     <Compile Include="Input\Pointer\GestureRoutedEventPropertiesWrapper.cs" />
+    <Compile Include="Input\Pointer\IConsumptionMode.cs" />
     <Compile Include="Input\Pointer\IGestureRoutedEventProperties.cs" />
     <Compile Include="Input\Pointer\IManipulationRoutedEventProperties.cs" />
     <Compile Include="Input\Pointer\IPointerEventBase.cs" />
@@ -204,6 +206,7 @@
     <Compile Include="Input\Pointer\PointerModeControl.cs" />
     <Compile Include="Input\Pointer\PointerModeTransitionConditions.cs" />
     <Compile Include="Input\Pointer\PointerModeTransitions.cs" />
+    <Compile Include="Input\Pointer\PointerPosition.cs" />
     <Compile Include="Input\Pointer\PointerRoutedEventArgsCopy.cs" />
     <Compile Include="Input\Pointer\PointerRoutedEventArgsWrapper.cs" />
     <Compile Include="Input\Pointer\PointerStateMachineEvent.cs" />
@@ -276,6 +279,7 @@
     <Compile Include="Models\ThumbnailEncoder.cs" />
     <Compile Include="Models\Snapshotter.cs" />
     <Compile Include="Models\WorkspaceModel.cs" />
+    <Compile Include="Models\ZoomPanMultiTouchModel.cs" />
     <Compile Include="Navigation\BackButtonHandler.cs" />
     <Compile Include="Navigation\BackCommandArgs.cs" />
     <Compile Include="Navigation\BackRequestedEventArgsWrapper.cs" />
@@ -300,6 +304,7 @@
     <Compile Include="Navigation\IBackCommandArgs.cs" />
     <Compile Include="Navigation\IPresentationCompletion.cs" />
     <Compile Include="Navigation\IStackedPresentationContext.cs" />
+    <Compile Include="Navigation\IStackedView.cs" />
     <Compile Include="Navigation\IStackedViewPresenter.cs" />
     <Compile Include="Navigation\IViewVisibility.cs" />
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
@@ -382,7 +387,6 @@
     <Compile Include="Navigation\PresentableViewFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\DeferringViewModelBase.cs" />
-    <Compile Include="ViewModels\ZoomPanViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">

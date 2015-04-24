@@ -8,11 +8,12 @@ namespace RdClient.Shared.Input.Pointer
     // typically the implementation will also initiate the setup of the pointer input infrastructure
     public interface IPointerCapture
     {
+        IConsumptionMode ConsumptionMode { get; }
+
         void OnMouseModeChanged(object sender, EventArgs e);
         void OnPointerChanged(object sender, IPointerEventBase e);
         void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args);
         void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args);
         void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs args);
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using Windows.Foundation;
+﻿using System;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Pointer
 {
@@ -6,6 +7,8 @@ namespace RdClient.Shared.Input.Pointer
     // keeping the position of the local cursor in sync between different input modes
     public interface IPointerPosition
     {
-        Point PointerPosition { get; set; }
+        event EventHandler<Point> PositionChanged;
+        Point ViewportPosition { get; set; }
+        Point SessionPosition { get; }
     }
 }

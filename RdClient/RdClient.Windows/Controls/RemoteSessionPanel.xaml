@@ -12,6 +12,13 @@
     ManipulationMode="All"
     Loaded="OnLoaded"
     Unloaded="OnUnloaded">
+    
+    <UserControl.Resources>
+        <TransformGroup x:Key="MouseTransformGroup">
+            <ScaleTransform x:Name="MouseScaleTransform" CenterX="0" CenterY="0"/>
+            <TranslateTransform x:Name="MouseTransform" />
+        </TransformGroup>
+    </UserControl.Resources>
 
     <Grid Background="Gray">
         <c:RenderingPanel x:Name="RenderingPanel">
@@ -22,13 +29,8 @@
                                         TranslateX="0.0" TranslateY="0.0"/>
                 </TransformGroup>
             </SwapChainPanel.RenderTransform>
-            <Image x:Name="MouseCursor" CacheMode="BitmapCache" Stretch="None" Width="Auto" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left">
-                <Image.RenderTransform>
-                    <TransformGroup>
-                        <TranslateTransform x:Name="MouseTransform"/>
-                    </TransformGroup>
-                </Image.RenderTransform>
-            </Image>
         </c:RenderingPanel>
+        <Image x:Name="MouseCursor" CacheMode="BitmapCache" Stretch="None" Width="Auto" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"
+                   RenderTransform="{StaticResource MouseTransformGroup}" />
     </Grid>
 </UserControl>

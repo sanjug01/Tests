@@ -9,16 +9,7 @@ namespace RdClient.Shared.Input.Pointer
         private IPointerRoutedEventProperties _masterTouch;
         private IPointerRoutedEventProperties _lastTouch;
         private IRemoteSessionControl _sessionControl;
-        private IPointerPosition _pointerPosition;
-
-        private ConsumptionMode _consumptionMode;
-        public ConsumptionMode ConsumptionMode
-        {
-            set
-            {
-                _consumptionMode = value;
-            }
-        }
+        private IPointerPosition _pointerPosition;        
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
@@ -52,7 +43,7 @@ namespace RdClient.Shared.Input.Pointer
             }
 
             // touch events have a location indicator hint which needs the correct position
-            _pointerPosition.PointerPosition = pointerEvent.Position;
+            _pointerPosition.ViewportPosition = pointerEvent.Position;
 
             TouchEventType touchType = TouchEventType.Down;
 
@@ -72,7 +63,7 @@ namespace RdClient.Shared.Input.Pointer
                     throw new InvalidOperationException("trying to convert unknown PointerEventAction");
             }
 
-            _sessionControl.SendTouchAction(touchType, pointerEvent.PointerId, pointerEvent.Position, delta);
+            _sessionControl.SendTouchAction(touchType, pointerEvent.PointerId, _pointerPosition.ViewportPosition, delta);
         }
 
 
