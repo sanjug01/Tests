@@ -8,25 +8,21 @@
     xmlns:design="using:RdClient.DesignTime"
     mc:Ignorable="d"
     d:DesignHeight="768"
-    d:DesignWidth="700"
-    RequestedTheme="{StaticResource AlternateTheme}">
+    d:DesignWidth="700">
 
     <d:UserControl.DataContext>
         <design:FakeSettingsViewModel />
     </d:UserControl.DataContext>
 
-    <Grid Background="{StaticResource SettingsBackgroundBrush}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="{StaticResource SettingsItemHeight}" />
             <RowDefinition Height="{StaticResource SettingsItemHeight}" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{StaticResource SettingsItemColumnWidth}" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" Foreground="{StaticResource SettingsSelectedItemBackgroundBrush}" x:Uid="Settings_General_Title" Text="General (d)" />
-        <TextBlock Grid.Row="1" VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" x:Uid="Settings_General_ShowThumbnails" Text="Show thumbnails for Desktops (d)" />
-        <ToggleSwitch Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" IsOn="{Binding Path=GeneralSettings.UseThumbnails, Mode=TwoWay}"/>
+        <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" x:Uid="Settings_General_Title" Text="General (d)" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" x:Uid="Settings_General_ShowThumbnails" Text="Show thumbnails for Desktops (d)" />
+            <ToggleSwitch VerticalAlignment="Center" IsOn="{Binding Path=GeneralSettings.UseThumbnails, Mode=TwoWay}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

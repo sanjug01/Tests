@@ -9,9 +9,7 @@ namespace RdClient.Shared.ViewModels
         ICommand Cancel { get; }
         ICommand AddUserCommand { get; }
         ICommand AddGatewayCommand { get; }
-        bool ShowGatewaySettings { get; set; }
-        bool ShowGeneralSettings { get; set; }
-        bool ShowUserSettings { get; set; }
+
         bool HasCredentials { get; }
         bool HasGateways { get; }
         GeneralSettings GeneralSettings { get; }

@@ -7,6 +7,7 @@
     xmlns:local="using:RdClient.Controls"
     xmlns:design="using:RdClient.DesignTime"    
     xmlns:converters="using:RdClient.Converters"
+    xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
     d:DesignHeight="768"
     d:DesignWidth="700"
@@ -18,20 +19,37 @@
 
     <UserControl.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:UserComboBoxElementToLocalizedStringConverter x:Key="UserComboBoxElementToLocalizedStringConverter">
+            <converters:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
+                <helpers:LocalizedString />
+            </converters:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
+        </converters:UserComboBoxElementToLocalizedStringConverter>        
     </UserControl.Resources>
 
-    <Grid Background="{StaticResource SettingsBackgroundBrush}">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="20" />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{StaticResource SettingsItemColumnWidth}" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-      
-        <local:SettingsAddGatewayControl Grid.Row="0" />
-        <local:GatewayListControl Grid.Row="2" Visibility="{Binding Path=HasGateways, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        <TextBlock Grid.Row="0" Text="Gateways" />
+        <ComboBox Grid.Row="1" Margin="0,8" ItemsSource="{Binding CredentialOptions}" SelectedItem="{Binding SelectedCredentialOption, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="Delete" />
+            <Button Grid.Column="2" Content="Edit" />
+        </Grid>
     </Grid>
 </UserControl>
