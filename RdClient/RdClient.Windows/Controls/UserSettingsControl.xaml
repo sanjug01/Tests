@@ -17,7 +17,6 @@
     </d:UserControl.DataContext>
     
     <UserControl.Resources>
-        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:UserComboBoxElementToLocalizedStringConverter x:Key="UserComboBoxElementToLocalizedStringConverter">
             <converters:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
@@ -27,28 +26,26 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="20" />
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="User accounts" />
-        <ComboBox Grid.Row="1" Margin="0,8" ItemsSource="{Binding CredentialOptions}" SelectedItem="{Binding SelectedCredentialOption, Mode=TwoWay}">
+        <ComboBox Grid.Row="0" Header="User accounts (d)" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Delete" />
-            <Button Grid.Column="2" Content="Edit" />
+            <Button Grid.Column="0" x:Uid="Common_Button_DeleteItem" Content="Delete(d)" Command="{Binding DeleteUserCommand}" />
+            <Button Grid.Column="2" x:Uid="Common_Button_EditItem" Content="Edit(d)" Command="{Binding EditUserCommand}" />
         </Grid>
     </Grid>
 </UserControl>

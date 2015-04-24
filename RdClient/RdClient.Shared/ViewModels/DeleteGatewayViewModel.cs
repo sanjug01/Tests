@@ -53,14 +53,13 @@ namespace RdClient.Shared.ViewModels
             // Remove the gateway from the data model.
             // The data model will remove references to the removed gateway from all desktops.
             this.ApplicationDataModel.Gateways.RemoveModel(_gatewayContainer.Id);
-            
-            NavigationService.DismissModalView(this.PresentableView);
+            this.DismissModal(null);
         }
 
         private void CancelCommandExecute()
         {
             Contract.Requires(null != this.NavigationService);
-            NavigationService.DismissModalView(this.PresentableView);
+            this.DismissModal(null);
         }
     }
 }

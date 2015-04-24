@@ -21,8 +21,6 @@ namespace RdClient.Shared.ViewModels
             _cancelCommand = new RelayCommand(o => this.CancelCommandExecute());        
         }
 
-        public IPresentableView PresentableView { private get; set; }
-
         public CredentialsModel Credentials
         {
             get { return _cred.Model; }
@@ -51,17 +49,17 @@ namespace RdClient.Shared.ViewModels
             Contract.Assert(null != this.Credentials);
             //
             // Remove the credentials from the data model.
-            // The data model will remove references to the removed credentials from all desktops.
+            // The data model will remove references to the removed credentials from all desktops, gateways and workspaces
             //
             this.ApplicationDataModel.Credentials.RemoveModel(_cred.Id);
-            
-            NavigationService.DismissModalView(this.PresentableView);
+
+            this.DismissModal(null);
         }
 
         private void CancelCommandExecute()
         {
             Contract.Requires(null != this.NavigationService);
-            NavigationService.DismissModalView(this.PresentableView);
+            this.DismissModal(null);
         }
     }
 }

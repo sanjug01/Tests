@@ -22,16 +22,18 @@
     <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
         <Grid Margin="20">
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="20" />
-                <RowDefinition />
-                <RowDefinition Height="20" />
-                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
-            <controls:GeneralSettingsControl Grid.Row="0"/>
-            <controls:UserSettingsControl Grid.Row="1"/>
-            <controls:GatewaySettingsControl Grid.Row="2"/>
+            <TextBlock Grid.Row="0" Text="Settings(d)" Style="{ThemeResource TitleTextBlockStyle}" />
+            <controls:GeneralSettingsControl Grid.Row="2"/>
+            <controls:UserSettingsControl Grid.Row="4"/>
+            <controls:GatewaySettingsControl Grid.Row="6"/>
         </Grid>
     </Grid>
 </controls:ModalUserControl>

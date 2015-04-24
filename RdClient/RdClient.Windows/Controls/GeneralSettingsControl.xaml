@@ -15,12 +15,7 @@
     </d:UserControl.DataContext>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
-            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Style="{ThemeResource SubheaderTextBlockStyle}" x:Uid="Settings_General_Title" Text="General (d)" />
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal">
             <TextBlock VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" x:Uid="Settings_General_ShowThumbnails" Text="Show thumbnails for Desktops (d)" />
             <ToggleSwitch VerticalAlignment="Center" IsOn="{Binding Path=GeneralSettings.UseThumbnails, Mode=TwoWay}"/>
         </StackPanel>

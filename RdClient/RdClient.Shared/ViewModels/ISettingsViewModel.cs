@@ -1,19 +1,25 @@
-﻿using RdClient.Shared.Models;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Models;
+    using System.Collections.Generic;
+    using System.Windows.Input;
+
     public interface ISettingsViewModel
     {
         ICommand Cancel { get; }
-        ICommand AddUserCommand { get; }
-        ICommand AddGatewayCommand { get; }
 
-        bool HasCredentials { get; }
-        bool HasGateways { get; }
         GeneralSettings GeneralSettings { get; }
-        ReadOnlyObservableCollection<ICredentialViewModel> CredentialsViewModels { get; }
-        ReadOnlyObservableCollection<IGatewayViewModel> GatewaysViewModels { get; } 
+
+        IList<UserComboBoxElement> Users { get; }
+        UserComboBoxElement SelectedUser { get; set; }
+        ICommand DeleteUserCommand { get; }
+        ICommand EditUserCommand { get; }
+        ICommand AddUserCommand { get; }
+
+        IList<GatewayComboBoxElement> Gateways { get; }
+        GatewayComboBoxElement SelectedGateway { get; set; }
+        ICommand DeleteGatewayCommand { get; }
+        ICommand EditGatewayCommand { get; }
+        ICommand AddGatewayCommand { get; }
     }
 }
