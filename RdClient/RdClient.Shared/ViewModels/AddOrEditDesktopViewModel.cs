@@ -29,7 +29,7 @@ namespace RdClient.Shared.ViewModels
         }
     }
 
-    public class AddOrEditDesktopViewModel : DeferringViewModelBase, IDialogViewModel
+    public class AddOrEditDesktopViewModel : ViewModelBase, IDialogViewModel
     {
         private string _host;
         private bool _isHostValid;
