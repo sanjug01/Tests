@@ -21,8 +21,6 @@ namespace RdClient.Shared.ViewModels
             _cancelCommand = new RelayCommand(o => this.CancelCommandExecute());        
         }
 
-        public IPresentableView PresentableView { private get; set; }
-
         public GatewayModel Gateway
         {
             get { return _gatewayContainer.Model; }

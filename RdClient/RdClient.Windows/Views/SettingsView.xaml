@@ -30,7 +30,7 @@
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Text="Settings(d)" Style="{ThemeResource TitleTextBlockStyle}" />
+            <TextBlock Grid.Row="0" x:Uid="Settings_NavBar_Title" Text="Settings(d)" Style="{ThemeResource TitleTextBlockStyle}" />
             <controls:GeneralSettingsControl Grid.Row="2"/>
             <controls:UserSettingsControl Grid.Row="4"/>
             <controls:GatewaySettingsControl Grid.Row="6"/>

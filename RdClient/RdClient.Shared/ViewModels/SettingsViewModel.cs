@@ -207,7 +207,7 @@ namespace RdClient.Shared.ViewModels
 
         private void AddUserCommandExecute()
         {
-            var args = new AddUserViewArgs(new CredentialsModel(), false, CredentialPromptMode.EditCredentials);
+            var args = new AddUserViewArgs(new CredentialsModel(), false, CredentialPromptMode.EnterCredentials);
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion((s, e) =>
             {
                 CredentialPromptResult result = e.Result as CredentialPromptResult;
