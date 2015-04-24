@@ -13,53 +13,50 @@
         <vm:DeleteGatewayViewModel />
     </controls:ModalUserControl.DataContext>
 
-    <Grid>
-        <Border Style="{StaticResource ModalBackground}" />
-        <Border Style="{StaticResource DialogBorder}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="32"/>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="32"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="12" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" x:Uid="DeleteGatewayView-Title" Style="{ThemeResource TitleTextBlockStyle}" Text="Delete gateway(d):"/>
-                    <TextBlock Grid.Column="2" Style="{ThemeResource TitleTextBlockStyle}" Text="{Binding Gateway.HostName}"/>
-                </Grid>
-                <Grid Grid.Row="2">
-                    <TextBlock HorizontalAlignment="Center" x:Uid="DeleteGatewayView-Message" Style="{ThemeResource BodyTextBlockStyle}">
+    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" x:Uid="DeleteGatewayView-Title" Style="{ThemeResource TitleTextBlockStyle}" Text="Delete gateway(d):"/>
+                <TextBlock Grid.Column="2" Style="{ThemeResource TitleTextBlockStyle}" Text="{Binding Gateway.HostName}"/>
+            </Grid>
+            <Grid Grid.Row="2">
+                <TextBlock HorizontalAlignment="Center" x:Uid="DeleteGatewayView-Message" Style="{ThemeResource BodyTextBlockStyle}">
                         Are you sure you want to delete this gateway(d)?
-                    </TextBlock>                                        
-                </Grid>
-                <Grid Grid.Row="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="46" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="1"
+                </TextBlock>
+            </Grid>
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="46" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1"
                         Style="{StaticResource DialogCancelButtonStyle}"
                         Command="{Binding Path=Cancel}"
                         x:Uid="Common_Button_Cancel"
                         Content="Cancel(d)"
                         />
-                    <Button Grid.Column="3"
+                <Button Grid.Column="3"
                         Style="{StaticResource DialogAcceptButtonStyle}"
                         Command="{Binding Path=DefaultAction}"
                         x:Uid="Common_Button_DeleteItem"
                         Content="Delete(d)"
-                        />                    
-                </Grid>
+                        />
             </Grid>
-        </Border>
+        </Grid>
     </Grid>
 </controls:ModalUserControl>

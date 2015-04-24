@@ -2,6 +2,8 @@
 using RdClient.Shared.ViewModels;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System;
+using System.Collections.Generic;
 
 namespace RdClient.DesignTime
 {
@@ -82,6 +84,80 @@ namespace RdClient.DesignTime
         public ReadOnlyObservableCollection<IGatewayViewModel> GatewaysViewModels
         {
             get { return _gatewayVMs; }
+        }
+
+        public IList<UserComboBoxElement> Users
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public UserComboBoxElement SelectedUser
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public ICommand DeleteUserCommand
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public ICommand EditUserCommand
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IList<GatewayComboBoxElement> Gateways
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public GatewayComboBoxElement SelectedGateway
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public ICommand DeleteGatewayCommand
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public ICommand EditGatewayCommand
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

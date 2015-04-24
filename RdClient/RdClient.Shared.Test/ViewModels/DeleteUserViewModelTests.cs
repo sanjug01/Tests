@@ -55,7 +55,6 @@ namespace RdClient.Shared.Test.ViewModels
             
             _vm = new DeleteUserViewModel();
             ((IDataModelSite)_vm).SetDataModel(_dataModel);
-            _vm.PresentableView = _view;
             ((IViewModel)_vm).Presenting(_navService, _cred, null);
         }
 

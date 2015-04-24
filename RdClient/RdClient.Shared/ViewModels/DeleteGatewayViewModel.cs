@@ -1,14 +1,11 @@
-﻿using RdClient.Shared.Data;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Windows.Input;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Data;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
+
     public class DeleteGatewayViewModel : ViewModelBase, IDialogViewModel
     {
         private IModelContainer<GatewayModel> _gatewayContainer;
@@ -20,8 +17,6 @@ namespace RdClient.Shared.ViewModels
             _deleteCommand = new RelayCommand(o => this.DeleteCommandExecute());
             _cancelCommand = new RelayCommand(o => this.CancelCommandExecute());        
         }
-
-        public IPresentableView PresentableView { private get; set; }
 
         public GatewayModel Gateway
         {
@@ -53,14 +48,12 @@ namespace RdClient.Shared.ViewModels
             // Remove the gateway from the data model.
             // The data model will remove references to the removed gateway from all desktops.
             this.ApplicationDataModel.Gateways.RemoveModel(_gatewayContainer.Id);
-            
-            NavigationService.DismissModalView(this.PresentableView);
+            this.DismissModal(null);
         }
 
         private void CancelCommandExecute()
         {
-            Contract.Requires(null != this.NavigationService);
-            NavigationService.DismissModalView(this.PresentableView);
+            this.DismissModal(null);
         }
     }
 }

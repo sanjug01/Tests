@@ -790,4 +790,12 @@
     <value>(r) About</value>
     <comment>Text in the "About" button that opens the About dialog</comment>
   </data>
+  <data name="Settings_Gateways_Combobox.Header" xml:space="preserve">
+    <value>(r) Gateways</value>
+    <comment>Header of the combobox in the settings page that lists all the saved gateways</comment>
+  </data>
+  <data name="Settings_Users_Combobox.Header" xml:space="preserve">
+    <value>(r) User accounts</value>
+    <comment>Header of the combobox in the settings page that lists all the saved users</comment>
+  </data>
 </root>

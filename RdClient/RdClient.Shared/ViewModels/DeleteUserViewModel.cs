@@ -1,14 +1,11 @@
-﻿using RdClient.Shared.Data;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Windows.Input;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Data;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
+
     public class DeleteUserViewModel : ViewModelBase, IDialogViewModel
     {
         private IModelContainer<CredentialsModel> _cred;
@@ -20,8 +17,6 @@ namespace RdClient.Shared.ViewModels
             _deleteCommand = new RelayCommand(o => this.DeleteCommandExecute());
             _cancelCommand = new RelayCommand(o => this.CancelCommandExecute());        
         }
-
-        public IPresentableView PresentableView { private get; set; }
 
         public CredentialsModel Credentials
         {
@@ -51,17 +46,16 @@ namespace RdClient.Shared.ViewModels
             Contract.Assert(null != this.Credentials);
             //
             // Remove the credentials from the data model.
-            // The data model will remove references to the removed credentials from all desktops.
+            // The data model will remove references to the removed credentials from all desktops, gateways and workspaces
             //
             this.ApplicationDataModel.Credentials.RemoveModel(_cred.Id);
-            
-            NavigationService.DismissModalView(this.PresentableView);
+
+            this.DismissModal(null);
         }
 
         private void CancelCommandExecute()
         {
-            Contract.Requires(null != this.NavigationService);
-            NavigationService.DismissModalView(this.PresentableView);
+            this.DismissModal(null);
         }
     }
 }
