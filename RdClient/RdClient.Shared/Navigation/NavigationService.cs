@@ -119,12 +119,23 @@ namespace RdClient.Shared.Navigation
             {
                 EmitPushingFirstModalView();
             }
+            else
+            {
+                //
+                // Tell the top view on the stack that is is no longer the top view.
+                //
+                _modalStack[_modalStack.Count - 1].View.CastAndCall<IStackedView>(sv => sv.Deactivate());
+            }
 
             PresentedStackedView presentedView = new PresentedModalView(this, view, presentationCompletion);
             _modalStack.Add(presentedView);
             CallPresenting(view, activationParameter, presentedView);
 
             _modalPresenter.PushView(view, true);
+            //
+            // Tell the view that it is now the top of the stack.
+            //
+            view.CastAndCall<IStackedView>(sv => sv.Activate());
         }
 
         public virtual void DismissModalView(IPresentableView modalView)
@@ -161,11 +172,23 @@ namespace RdClient.Shared.Navigation
                     throw new NavigationServiceException("Trying to present an already presented accessory view.");
                 }
 
+                if (0 != _accessoryStack.Count)
+                {
+                    //
+                    // Tell the top view on the stack that is is no longer the top view.
+                    //
+                    _accessoryStack[_accessoryStack.Count - 1].View.CastAndCall<IStackedView>(sv => sv.Deactivate());
+                }
+
                 PresentedStackedView presentedView = new PresentedAccessoryView(this, view, presentationCompletion);
                 _accessoryStack.Add(presentedView);
                 CallPresenting(view, activationParameter, presentedView);
 
                 accessoryPresenter.PushView(view, true);
+                //
+                // Tell the view that it is now the top of the stack.
+                //
+                view.CastAndCall<IStackedView>(sv => sv.Activate());
             }
         }
         void INavigationService.DismissAccessoryView(IPresentableView accessoryView)
@@ -213,10 +236,19 @@ namespace RdClient.Shared.Navigation
 
                 if(psv.HasView(stackedView))
                     dismissed = true;
-
+                //
+                // Tell the view that it is not at the top of the stack anymore.
+                //
+                psv.View.CastAndCall<IStackedView>(sv => sv.Deactivate());
+                //
+                // Properly dismiss the view.
+                //
                 CallDismissing(psv.View);
                 presenter.DismissView(psv.View, true);
                 reportCompletion.Add(psv);
+                //
+                // Remove the view from the list that represents the stack.
+                //
                 viewStack.RemoveAt(index);
             } while (!dismissed);
 
@@ -236,6 +268,10 @@ namespace RdClient.Shared.Navigation
             {
                 Contract.Assert(index > 0);
                 newActiveView = viewStack[index-1].View;
+                //
+                // Tell the view that it is now the top of the stack.
+                //
+                newActiveView.CastAndCall<IStackedView>(sv => sv.Activate());
             }
 
             if (null != newActiveView)
