@@ -1,14 +1,11 @@
-﻿using RdClient.Shared.Data;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Windows.Input;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Data;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
+
     public class DeleteUserViewModel : ViewModelBase, IDialogViewModel
     {
         private IModelContainer<CredentialsModel> _cred;
@@ -58,7 +55,6 @@ namespace RdClient.Shared.ViewModels
 
         private void CancelCommandExecute()
         {
-            Contract.Requires(null != this.NavigationService);
             this.DismissModal(null);
         }
     }
