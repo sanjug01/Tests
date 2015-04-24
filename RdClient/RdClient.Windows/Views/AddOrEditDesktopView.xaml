@@ -9,6 +9,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Converters"    
     xmlns:helpers="using:RdClient.Shared.Helpers"
+    d:DesignWidth="480"
+    d:DesignHeight="600"
     mc:Ignorable="d">
 
     <controls:ModalUserControl.DataContext>
@@ -32,9 +34,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="8"/>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="12"/>
             </Grid.RowDefinitions>
-
+            
             <Grid Grid.Row="0">
                 <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
                                x:Uid="AddOrEditDesktop-AddCaption" Text="Add PC or Server(d)"
@@ -43,83 +44,87 @@
                                x:Uid="AddOrEditDesktop-EditCaption" Text="Edit PC or Server(d)"
                                Visibility="{Binding Path=IsAddingDesktop, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
             </Grid>
-
+            
             <Border Grid.Row="1" Height="1" Margin="0" />
 
-            <StackPanel Grid.Row="2" Margin="26,12,26,0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Uid="AddOrEditDesktop-PcName-Error"
+            <ScrollViewer Grid.Row="2" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="26,0,26,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Uid="AddOrEditDesktop-PcName-Error"
                                    Text="(*)(d)" Padding="0,0,8,0"
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Foreground="{StaticResource rdErrorBrush}"
                                    Visibility="{Binding Path=IsHostValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
                                    />
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    x:Uid="AddOrEditDesktop-PcName" 
                                    Text="PC Name(d)"/>
-                </StackPanel>
-                <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
-                    <TextBox Name="txtHostEntry" 
+                    </StackPanel>
+                    <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
+                        <TextBox Name="txtHostEntry" 
                                     x:Uid="AddOrEditDesktop-PcNameTextBox"
                                     Background="Transparent"
                                     PlaceholderText="Host name or IP address (d)"
                                     Margin="0,8" 
                                     Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    </TextBox>
-                </Grid>
+                        </TextBox>
+                    </Grid>
 
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
-                <ComboBox Margin="0,8" 
-                              x:Uid="AddOrEditDesktop-Credentials-ComboBox"
-                              ItemsSource="{Binding Path=UserOptions}"
-                              SelectedIndex="{Binding Path=SelectedUserOptionsIndex, Mode=TwoWay}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
+                    <ComboBox Margin="0,8" 
+                          x:Uid="AddOrEditDesktop-Credentials-ComboBox"
+                          HorizontalAlignment="Stretch"
+                          ItemsSource="{Binding Path=UserOptions}"
+                          SelectedIndex="{Binding Path=SelectedUserOptionsIndex, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
-                <StackPanel Orientation="Horizontal"
+                    <StackPanel Orientation="Horizontal"
                                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                    <Button Background="Transparent"
+                        <Button Background="Transparent"
                                 VerticalAlignment="Center"
                                 Command="{Binding ShowDetailsCommand}"
                                 Style="{StaticResource DialogDetailsButtonStyle}"                
                                 Content="{StaticResource MoreDetailsIcon}"
                                 Margin="-8,8,0,0" />
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    VerticalAlignment="Center"
                                    x:Uid="AddOrEditDesktop-MoreDetailsLabel"
                                    Text="More details (d)"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <StackPanel Orientation="Horizontal"
+                    <StackPanel Orientation="Horizontal"
                                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Button Background="Transparent"
+                        <Button Background="Transparent"
                                 VerticalAlignment="Center"
                                 Command="{Binding HideDetailsCommand}"
                                 Style="{StaticResource DialogDetailsButtonStyle}"                
                                 Content="{StaticResource LessDetailsIcon}"
                                 Margin="-8,8,0,0" />
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    VerticalAlignment="Center"
                                    x:Uid="AddOrEditDesktop-LessDetailsLabel"
                                    Text="Less details (d)"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <controls:DesktopExtraSettingsControl
-                        Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"
-                        />
+                    <controls:DesktopExtraSettingsControl
+                        Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
-                    <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
+                    <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
+                        <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
                                 Command="{Binding Path=DefaultAction}" />
-                    <Button x:Uid="Common_Button_Cancel" Content="Cancel(d)" 
+                        <Button x:Uid="Common_Button_Cancel" Content="Cancel(d)"
+                                Margin="8,0,0,0"
                                 Command="{Binding Path=Cancel}" />
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </ScrollViewer>
         </Grid>
+
     </Grid>
 
 </controls:ModalUserControl>
