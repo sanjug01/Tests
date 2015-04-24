@@ -32,12 +32,51 @@
     <UserControl.Resources>
         <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <sconv:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
+        <sconv:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
     </UserControl.Resources>
 
     <Grid Background="Green">
         <c:RemoteSessionPanel
             RemoteSessionViewSite="{Binding}"
             Visibility="{Binding IsRenderingPanelActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        <!--
+        Belly-band container of in-session dialogs.
+        The band is visible when the BellyBandViewModel property of the remote session view model
+        is not null.
+        -->
+        <Grid
+            Visibility="{Binding BellyBandViewModel, Converter={StaticResource NotNullToVisibilityConverter}}"
+            VerticalAlignment="Center"
+            Height="Auto"
+            RequestedTheme="{StaticResource AlternateTheme}"
+            Background="{ThemeResource DialogBackgroundColor}">
+            
+            <ContentControl
+                Margin="0,20"
+                Content="{Binding BellyBandViewModel}">
+                <ContentControl.ContentTemplateSelector>
+                    <helpers:TypeNameDataTemplateSelector>
+                        
+                        <helpers:TypeNameDataTemplateSelector.Templates>
+                            
+                            <DataTemplate x:Key="Plop">
+                            </DataTemplate>
+
+                            <DataTemplate x:Key="Flop">
+                            </DataTemplate>
+
+                        </helpers:TypeNameDataTemplateSelector.Templates>
+                        
+                        <helpers:TypeNameDataTemplateSelector.DefaultTemplate>
+                            <DataTemplate />
+                        </helpers:TypeNameDataTemplateSelector.DefaultTemplate>
+                        
+                    </helpers:TypeNameDataTemplateSelector>
+                </ContentControl.ContentTemplateSelector>
+            </ContentControl>
+
+        </Grid>
 
 
         <!-- Connecting progress -->

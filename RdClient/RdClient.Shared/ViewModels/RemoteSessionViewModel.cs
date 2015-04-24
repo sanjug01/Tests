@@ -55,6 +55,8 @@
 
         private readonly ZoomPanMultiTouchModel _zoomPanModel = new ZoomPanMultiTouchModel();
 
+        private object _bellyBandViewModel;
+
         public bool IsConnecting
         {
             get
@@ -159,6 +161,16 @@
         public ICommand MouseMode
         {
             get { return _mouseMode; }
+        }
+
+        /// <summary>
+        /// View model of the view shown in the belly band across the session view when input is needed from user.
+        /// Setting the property to a non-null value shows the belly band.
+        /// </summary>
+        public object BellyBandViewModel
+        {
+            get { return _bellyBandViewModel; }
+            private set { this.SetProperty(ref _bellyBandViewModel, value); }
         }
 
         public RemoteSessionViewModel()
