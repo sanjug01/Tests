@@ -46,7 +46,7 @@
                     <TextBlock x:Uid="AddOrEditWorkspace-FeedExtraLabel" 
                                Style="{ThemeResource BodyTextBlockStyle}" Text="(or email address) (d)"
                                Foreground="{ThemeResource UnselectedForegroundBrush}"
-                               Margin="16,0,0,0" />
+                               Margin="8,0,0,0" />
                 </StackPanel>
                 <TextBox x:Uid="AddOrEditWorkspace-Feed"
                          Margin="0,8" 

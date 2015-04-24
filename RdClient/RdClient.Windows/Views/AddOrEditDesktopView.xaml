@@ -77,7 +77,7 @@
                                Foreground="{ThemeResource UnselectedForegroundBrush}"
                                x:Uid="AddOrEditDesktop-FriendlyName_OptLabel" 
                                Text="(optional) (d)" 
-                               Margin="16,0,0,0"/>
+                               Margin="8,0,0,0"/>
                 </StackPanel>
                 <Grid Style="{StaticResource rdEntryFieldGridStyle}">
                     <TextBox Name="txtFriendlyNameEntry"
@@ -102,37 +102,32 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <StackPanel Orientation="Horizontal"
+                    <Button Background="Transparent"
+                                Command="{Binding ShowDetailsCommand}"     
+                                Margin="-8,8,0,0" 
                                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                        <Button Background="Transparent"
-                                VerticalAlignment="Center"
-                                Command="{Binding ShowDetailsCommand}"
-                                Style="{StaticResource DialogDetailsButtonStyle}"     
-                                Foreground ="{ThemeResource SystemControlHyperlinkTextBrush}"
-                                Content="{StaticResource MoreDetailsIcon}"
-                                Margin="-8,8,0,0" />
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                               Foreground ="{ThemeResource SystemControlHyperlinkTextBrush}"
-                                   VerticalAlignment="Center"
-                                   x:Uid="AddOrEditDesktop-MoreDetailsLabel"
-                                   Text="More details (d)"/>
-                    </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{StaticResource MoreDetailsIcon}"
+                                       Style="{ThemeResource DialogDetailsIconStyle}"/>
+                            <TextBlock x:Uid="AddOrEditDesktop-MoreDetailsLabel"
+                                       Style="{ThemeResource DialogDetailsTextStyle}"
+                                       Text="More details (d)"/>
+                        </StackPanel>
+                    </Button>
 
-                    <StackPanel Orientation="Horizontal"
-                                Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <Button Background="Transparent"
-                                VerticalAlignment="Center"
+                    <Button Background="Transparent"
                                 Command="{Binding HideDetailsCommand}"                            
-                                Style="{StaticResource DialogDetailsButtonStyle}"                
-                                Foreground ="{ThemeResource SystemControlHyperlinkTextBrush}"                            
-                                Content="{StaticResource LessDetailsIcon}"
-                                Margin="-8,8,0,0" />
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                               Foreground ="{ThemeResource SystemControlHyperlinkTextBrush}"
-                                   VerticalAlignment="Center"
-                                   x:Uid="AddOrEditDesktop-LessDetailsLabel"
-                                   Text="Less details (d)"/>
-                    </StackPanel>
+                                Margin="-8,8,0,0" 
+                                Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{StaticResource LessDetailsIcon}"
+                                       Style="{ThemeResource DialogDetailsIconStyle}"/>
+                            <TextBlock x:Uid="AddOrEditDesktop-LessDetailsLabel"
+                                       Style="{ThemeResource DialogDetailsTextStyle}"                                       
+                                       Text="Less details (d)"/>
+                        </StackPanel>
+                    </Button>
+
 
                     <controls:DesktopExtraSettingsControl
                         Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"/>
