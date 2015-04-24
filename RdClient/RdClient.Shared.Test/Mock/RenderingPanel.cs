@@ -3,6 +3,7 @@ using RdClient.Shared.Models;
 using RdMock;
 using System;
 using RdClient.Shared.Input;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Test.Mock
 {

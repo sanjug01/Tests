@@ -41,11 +41,11 @@ namespace RdClient.Shared.ViewModels
     public class PanKnobPointerEventDispatcher : IPointerEventConsumer
     {
 
-        private ConsumptionMode _consumptionMode;
+        private ConsumptionModeType _consumptionMode;
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-        public ConsumptionMode ConsumptionMode
+        public ConsumptionModeType ConsumptionMode
         {
             set { _consumptionMode = value; }
         }
@@ -164,7 +164,6 @@ namespace RdClient.Shared.ViewModels
         public PanKnobViewModel()
         {
             this.PointerEventConsumer = new PanKnobPointerEventDispatcher();
-            this.PointerEventConsumer.ConsumptionMode = ConsumptionMode.Pointer;
             this.PointerEventConsumer.ConsumedEvent += HandlePointerEvent;
 
             _showKnobCommand = new RelayCommand((o) => { this.PanKnobTransform = new PanKnobTransform(PanKnobTransformType.ShowKnob); });

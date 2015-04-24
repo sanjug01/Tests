@@ -21,18 +21,18 @@ namespace RdClient.Shared.Input.Pointer
 
         void IPointerControl.LeftClick(Point position)
         {
-            _pointerPosition.PointerPosition = position;
-            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftPress, _pointerPosition.PointerPosition));
-            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftRelease, _pointerPosition.PointerPosition));
+            _pointerPosition.ViewportPosition = position;
+            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftPress, _pointerPosition.SessionPosition));
+            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftRelease, _pointerPosition.SessionPosition));
         }
 
         void IPointerControl.LeftDrag(PointerDragAction action, Point delta, Point position)
         {
-            _pointerPosition.PointerPosition = new Point(
-				_pointerPosition.PointerPosition.X + delta.X,
-				_pointerPosition.PointerPosition.Y + delta.Y);
+            _pointerPosition.ViewportPosition = new Point(
+				_pointerPosition.ViewportPosition.X + delta.X,
+				_pointerPosition.ViewportPosition.Y + delta.Y);
 
-            DraggingHelper.Dragging(_sessionControl, action, DragButton.Left, _pointerPosition.PointerPosition);
+            DraggingHelper.Dragging(_sessionControl, action, DragButton.Left, _pointerPosition.SessionPosition);
         }
 
         void IPointerControl.Move(Point delta)
@@ -41,18 +41,18 @@ namespace RdClient.Shared.Input.Pointer
 
         void IPointerControl.RightClick(Point position)
         {
-            _pointerPosition.PointerPosition = position;
-            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightPress, _pointerPosition.PointerPosition));
-            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightRelease, _pointerPosition.PointerPosition));
+            _pointerPosition.ViewportPosition = position;
+            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightPress, _pointerPosition.SessionPosition));
+            _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightRelease, _pointerPosition.SessionPosition));
         }
 
         void IPointerControl.RightDrag(PointerDragAction action, Point delta, Point position)
         {
-            _pointerPosition.PointerPosition = new Point(
-                _pointerPosition.PointerPosition.X + delta.X,
-                _pointerPosition.PointerPosition.Y + delta.Y);
+            _pointerPosition.ViewportPosition = new Point(
+                _pointerPosition.ViewportPosition.X + delta.X,
+                _pointerPosition.ViewportPosition.Y + delta.Y);
 
-            DraggingHelper.Dragging(_sessionControl, action, DragButton.Right, _pointerPosition.PointerPosition);
+            DraggingHelper.Dragging(_sessionControl, action, DragButton.Right, _pointerPosition.SessionPosition);
         }
 
         void IPointerControl.Scroll(double delta)

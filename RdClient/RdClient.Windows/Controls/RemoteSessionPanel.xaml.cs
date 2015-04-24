@@ -12,6 +12,7 @@
     using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;
     using Windows.Foundation;
+    using Windows.UI.Core;
     using Windows.UI.Input;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
@@ -34,6 +35,7 @@
         private Size _renderingPanelSize;
         private ZoomScrollRecognizer _zoomScrollRecognizer;
         private GestureRecognizer _platformRecognizer;
+        private CoreCursor _exitCursor;
 
         public RemoteSessionPanel()
         {
@@ -75,6 +77,7 @@
 
             this.RenderingPanel.MouseCursor = this.MouseCursor;
             this.RenderingPanel.MouseTransform = this.MouseTransform;
+            this.RenderingPanel.MouseScaleTransform = this.MouseScaleTransform;
 
             return this.RenderingPanel;
         }
@@ -180,6 +183,8 @@
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
+            MakeCursorVisible();
+
             if (null != _closed)
                 _closed(this, EventArgs.Empty);
         }
@@ -261,21 +266,38 @@
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerMoved, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
+        }
 
-            _platformRecognizer.ProcessMoveEvents(e.GetIntermediatePoints(this));
+        private void MakeCursorInvisible()
+        {
+            _exitCursor = Window.Current.CoreWindow.PointerCursor;
+            Window.Current.CoreWindow.PointerCursor = null;
+            this.MouseCursor.Visibility = Visibility.Visible;
+        }
+
+        private void MakeCursorVisible()
+        {
+            if (Window.Current.CoreWindow.PointerCursor == null)
+            {
+                Window.Current.CoreWindow.PointerCursor = new CoreCursor(CoreCursorType.Arrow, 0);
+            }
+            this.MouseCursor.Visibility = Visibility.Collapsed;
         }
 
         protected override void OnPointerEntered(PointerRoutedEventArgs e)
         {
-            //_exitCursor = Window.Current.CoreWindow.PointerCursor;
-            //Window.Current.CoreWindow.PointerCursor = null;
-            //this.MouseCursor.Visibility = Visibility.Visible;
+            if(e.Pointer.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Mouse)
+            {
+                MakeCursorInvisible();
+            }
         }
 
         protected override void OnPointerExited(PointerRoutedEventArgs e)
         {
-            //Window.Current.CoreWindow.PointerCursor = _exitCursor;
-            //this.MouseCursor.Visibility = Visibility.Collapsed;
+            if (e.Pointer.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Mouse)
+            {
+                MakeCursorVisible();
+            }
         }
     }
 }
