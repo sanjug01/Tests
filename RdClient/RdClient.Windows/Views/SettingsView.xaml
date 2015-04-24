@@ -15,39 +15,25 @@
         <design:FakeSettingsViewModel />
     </d:ModalUserControl.DataContext>
 
-    <controls:ModalUserControl.Resources>
-        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-    </controls:ModalUserControl.Resources>
-
     <controls:ModalUserControl.DataContext>
         <vm:SettingsViewModel />
     </controls:ModalUserControl.DataContext>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="384" />
-            <ColumnDefinition Width="2.5*" />
-        </Grid.ColumnDefinitions>            
-        <Grid Grid.Column="0">
-            <controls:SettingsNavigationControl />
-        </Grid>
-    <ScrollViewer Grid.Column="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
-        <Grid Background="{StaticResource SettingsBackgroundBrush}">
+    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
+        <Grid Margin="20">
             <Grid.RowDefinitions>
-                <RowDefinition Height="{StaticResource SettingsTopPadding}" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="{StaticResource SettingsMargin}" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{StaticResource SettingsMargin}" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Row="1" Grid.Column="1">
-                <controls:GeneralSettingsControl Visibility="{Binding Path=ShowGeneralSettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <controls:UserSettingsControl Visibility="{Binding Path=ShowUserSettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <controls:GatewaySettingsControl Visibility="{Binding Path=ShowGatewaySettings, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            </Grid>
+            <TextBlock Grid.Row="0" x:Uid="Settings_NavBar_Title" Text="Settings(d)" Style="{ThemeResource TitleTextBlockStyle}" />
+            <controls:GeneralSettingsControl Grid.Row="2"/>
+            <controls:UserSettingsControl Grid.Row="4"/>
+            <controls:GatewaySettingsControl Grid.Row="6"/>
         </Grid>
-    </ScrollViewer>
     </Grid>
 </controls:ModalUserControl>

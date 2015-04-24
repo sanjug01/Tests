@@ -465,7 +465,7 @@
 
         private void GoToSettingsCommandExecute(object o)
         {
-            this.NavigationService.NavigateToView("SettingsView", null);
+            this.NavigationService.PushAccessoryView("SettingsView", null);
         }
 
         private void PushAdditionalCommandsDialog(object parameter)

@@ -58,7 +58,6 @@ namespace RdClient.Shared.Test.ViewModels
 
             _vm = new DeleteGatewayViewModel();
             ((IDataModelSite)_vm).SetDataModel(_dataModel);
-            _vm.PresentableView = _view;
             ((IViewModel)_vm).Presenting(_navService, _gatewayContainer, null);
         }
 
