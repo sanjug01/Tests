@@ -4,160 +4,105 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System;
 using System.Collections.Generic;
+using RdClient.Shared.Data;
 
 namespace RdClient.DesignTime
 {
     public class FakeSettingsViewModel : ISettingsViewModel
     {
-        private readonly ObservableCollection<ICredentialViewModel> _source;
-        private readonly ReadOnlyObservableCollection<ICredentialViewModel> _credVMs;
-        private readonly ObservableCollection<IGatewayViewModel> _sourceGateways;
-        private readonly ReadOnlyObservableCollection<IGatewayViewModel> _gatewayVMs;
+        private IList<GatewayComboBoxElement> _gateways;
+        private GeneralSettings _general;
+        private GatewayComboBoxElement _selectedGateway;
+        private UserComboBoxElement _selectedUser;
+        private IList<UserComboBoxElement> _users;
 
         public FakeSettingsViewModel()
         {
-            this.ShowGeneralSettings = true;
-            this.GeneralSettings = new GeneralSettings();
-            this.GeneralSettings.UseThumbnails = true;
+            _general = new GeneralSettings();
+            _general.UseThumbnails = true;
 
-            _source = new ObservableCollection<ICredentialViewModel>()
+            _gateways = new List<GatewayComboBoxElement>();
+            _gateways.Add(new GatewayComboBoxElement(GatewayComboBoxType.AddNew));
+            for (int i = 0; i < 5; i++)
             {
-                new FakeCredentialViewModel(),
-                new FakeCredentialViewModel(),
-                new FakeCredentialViewModel(),
-                new FakeCredentialViewModel(),
-                new FakeCredentialViewModel(),
-                new FakeCredentialViewModel(),
-                new FakeCredentialViewModel(),
-                new FakeCredentialViewModel(),
-                new FakeCredentialViewModel(),
-                new FakeCredentialViewModel(),
-            };
-            _credVMs = new ReadOnlyObservableCollection<ICredentialViewModel>(_source);
+                var gateway = new GatewayModel() { HostName = "gateway" + i };
+                var gatewayModel = TemporaryModelContainer<GatewayModel>.WrapModel(Guid.NewGuid(), gateway);
+                _gateways.Add(new GatewayComboBoxElement(GatewayComboBoxType.Gateway, gatewayModel));
+            }
+            _selectedGateway = _gateways[1];
 
-            _sourceGateways = new ObservableCollection<IGatewayViewModel>()
+            _users = new List<UserComboBoxElement>();
+            _users.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
+            for (int i = 0; i < 10; i++)
             {
-                new FakeGatewayViewModel(),
-                new FakeGatewayViewModel(),
-                new FakeGatewayViewModel(),
-                new FakeGatewayViewModel(),
-            };
-            _gatewayVMs = new ReadOnlyObservableCollection<IGatewayViewModel>(_sourceGateways);
-        }
-
-        public ICommand Cancel {get; set;}
-
-        public bool ShowGatewaySettings {get; set;}
-
-        public bool ShowGeneralSettings {get; set;}
-
-        public bool ShowUserSettings {get; set;}
-
-        public Shared.Models.GeneralSettings GeneralSettings {get; set;}
-
-
-        public ICommand AddUserCommand
-        {
-            get { return null; }
+                var user = new CredentialsModel() { Username = "user" + i, Password = "12345" };
+                var userModel = TemporaryModelContainer<CredentialsModel>.WrapModel(Guid.NewGuid(), user);
+                _users.Add(new UserComboBoxElement(UserComboBoxType.Credentials, userModel));
+            }
+            _selectedUser = _users[4];
         }
 
         public ICommand AddGatewayCommand
         {
-            get { return null; }
+            get { return new RelayCommand(o => { }, o=> true); }
         }
 
-        public bool HasCredentials
+
+        public ICommand AddUserCommand
         {
-            get { return this.CredentialsViewModels.Count > 0; }
+            get { return new RelayCommand(o => { }, o => true); }
         }
 
-        public bool HasGateways
+        public ICommand Cancel
         {
-            get { return this.GatewaysViewModels.Count > 0; }
-        }
-
-        public ReadOnlyObservableCollection<ICredentialViewModel> CredentialsViewModels
-        {
-            get { return _credVMs; }
-        }
-
-        public ReadOnlyObservableCollection<IGatewayViewModel> GatewaysViewModels
-        {
-            get { return _gatewayVMs; }
-        }
-
-        public IList<UserComboBoxElement> Users
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public UserComboBoxElement SelectedUser
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public ICommand DeleteUserCommand
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public ICommand EditUserCommand
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public IList<GatewayComboBoxElement> Gateways
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public GatewayComboBoxElement SelectedGateway
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { return new RelayCommand(o => { }, o => true); }
         }
 
         public ICommand DeleteGatewayCommand
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return new RelayCommand(o => { }, o => false); }
+        }
+
+        public ICommand DeleteUserCommand
+        {
+            get { return new RelayCommand(o => { }, o => true); }
         }
 
         public ICommand EditGatewayCommand
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return new RelayCommand(o => { }, o => false); }
+        }
+
+        public ICommand EditUserCommand
+        {
+            get { return new RelayCommand(o => { }, o => true); }
+        }
+
+        public IList<GatewayComboBoxElement> Gateways
+        {
+            get { return _gateways; }            
+        }
+
+        public GeneralSettings GeneralSettings
+        {
+            get { return _general; }
+        }
+
+        public GatewayComboBoxElement SelectedGateway
+        {
+            get { return _selectedGateway; }
+            set { _selectedGateway = value; }
+        }
+
+        public UserComboBoxElement SelectedUser
+        {
+            get{ return _selectedUser; }
+            set { _selectedUser = value; }
+        }
+
+        public IList<UserComboBoxElement> Users
+        {
+            get { return _users; }
         }
     }
 }
