@@ -416,6 +416,7 @@
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
+                Assert.AreEqual(0, _dataModel.Credentials.Models.Count);
                 AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
 
                 _addOrEditGatewayVM.PresentableView = view;
@@ -438,50 +439,21 @@
                 var promptResult = CredentialPromptResult.CreateWithCredentials(creds, true);
                 completion.Completed(null, promptResult);
 
+                // a new user should have been added
                 int newCntUsers = _addOrEditGatewayVM.UserOptions.Count;
+                Assert.AreEqual(1, _dataModel.Credentials.Models.Count);
+                IModelContainer<CredentialsModel> savedCredentials = _dataModel.Credentials.Models[0];
+
                 Assert.IsTrue(_addOrEditGatewayVM.SelectedUserOptionsIndex > 1);
                 Assert.AreEqual(cntUsers + 1, newCntUsers);
+                Assert.AreEqual(creds.Username,
+                    _addOrEditGatewayVM.UserOptions[_addOrEditGatewayVM.SelectedUserOptionsIndex].Credentials.Model.Username);
+                Assert.AreEqual(savedCredentials,
+                    _addOrEditGatewayVM.UserOptions[_addOrEditGatewayVM.SelectedUserOptionsIndex].Credentials);
+
+
             }
         }
 
-        [TestMethod]
-        public void EditGateway_SelectingAddUserComboBoxItem_AddsAndSelectsUser()
-        {
-            IPresentationCompletion completion = null;
-            using (Mock.NavigationService navigation = new Mock.NavigationService())
-            using (Mock.PresentableView view = new Mock.PresentableView())
-            {
-                object saveParam = new object();
-                GatewayModel gateway = new GatewayModel() { HostName = "myPC" };
-
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
-
-                _addOrEditGatewayVM.PresentableView = view;
-                Assert.IsTrue(_addOrEditGatewayVM.IsHostValid);
-
-                ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
-                int cntUsers = _addOrEditGatewayVM.UserOptions.Count;
-
-                navigation.Expect("PushAccessoryView", p =>
-                {
-                    Assert.AreEqual("AddUserView", p[0] as string);
-                    Assert.IsTrue(p[1] is AddUserViewArgs);
-                    completion = p[2] as IPresentationCompletion;
-                    Assert.IsNotNull(completion);
-                    return null;
-                });
-
-                // add user
-                _addOrEditGatewayVM.SelectedUserOptionsIndex = 1;
-
-                CredentialsModel creds = _testData.NewValidCredential().Model;
-                var promptResult = CredentialPromptResult.CreateWithCredentials(creds, true);
-                completion.Completed(null, promptResult);
-
-                int newCntUsers = _addOrEditGatewayVM.UserOptions.Count;
-                Assert.IsTrue(_addOrEditGatewayVM.SelectedUserOptionsIndex > 1);
-                Assert.AreEqual(cntUsers + 1, newCntUsers);
-            }
-        }
     }
 }
