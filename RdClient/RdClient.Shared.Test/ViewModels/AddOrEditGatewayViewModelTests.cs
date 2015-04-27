@@ -248,7 +248,7 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                navigation.Expect("PushModalView", new List<object> { "EditCredentialsView", null, null }, null);
+                navigation.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
 
                 _addOrEditGatewayVM.SelectedUserOptionsIndex = 1;
             }
@@ -406,6 +406,81 @@
                 _addOrEditGatewayVM.Host = validHostName;
                 _addOrEditGatewayVM.DefaultAction.Execute(saveParam);
                 Assert.IsTrue(_addOrEditGatewayVM.IsHostValid);
+            }
+        }
+
+        [TestMethod]
+        public void AddGateway_SelectingAddUserComboBoxItem_AddsAndSelectsUser()
+        {
+            IPresentationCompletion completion = null;
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.PresentableView view = new Mock.PresentableView())
+            {
+                AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
+
+                _addOrEditGatewayVM.PresentableView = view;
+                ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
+                int cntUsers = _addOrEditGatewayVM.UserOptions.Count;
+
+                navigation.Expect("PushAccessoryView", p =>
+                {
+                    Assert.AreEqual("AddUserView", p[0] as string);
+                    Assert.IsTrue(p[1] is AddUserViewArgs);
+                    completion = p[2] as IPresentationCompletion;
+                    Assert.IsNotNull(completion);
+                    return null;
+                });
+
+                // add user
+                _addOrEditGatewayVM.SelectedUserOptionsIndex = 1;
+
+                CredentialsModel creds =  _testData.NewValidCredential().Model;
+                var promptResult = CredentialPromptResult.CreateWithCredentials(creds, true);
+                completion.Completed(null, promptResult);
+
+                int newCntUsers = _addOrEditGatewayVM.UserOptions.Count;
+                Assert.IsTrue(_addOrEditGatewayVM.SelectedUserOptionsIndex > 1);
+                Assert.AreEqual(cntUsers + 1, newCntUsers);
+            }
+        }
+
+        [TestMethod]
+        public void EditGateway_SelectingAddUserComboBoxItem_AddsAndSelectsUser()
+        {
+            IPresentationCompletion completion = null;
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.PresentableView view = new Mock.PresentableView())
+            {
+                object saveParam = new object();
+                GatewayModel gateway = new GatewayModel() { HostName = "myPC" };
+
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+
+                _addOrEditGatewayVM.PresentableView = view;
+                Assert.IsTrue(_addOrEditGatewayVM.IsHostValid);
+
+                ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
+                int cntUsers = _addOrEditGatewayVM.UserOptions.Count;
+
+                navigation.Expect("PushAccessoryView", p =>
+                {
+                    Assert.AreEqual("AddUserView", p[0] as string);
+                    Assert.IsTrue(p[1] is AddUserViewArgs);
+                    completion = p[2] as IPresentationCompletion;
+                    Assert.IsNotNull(completion);
+                    return null;
+                });
+
+                // add user
+                _addOrEditGatewayVM.SelectedUserOptionsIndex = 1;
+
+                CredentialsModel creds = _testData.NewValidCredential().Model;
+                var promptResult = CredentialPromptResult.CreateWithCredentials(creds, true);
+                completion.Completed(null, promptResult);
+
+                int newCntUsers = _addOrEditGatewayVM.UserOptions.Count;
+                Assert.IsTrue(_addOrEditGatewayVM.SelectedUserOptionsIndex > 1);
+                Assert.AreEqual(cntUsers + 1, newCntUsers);
             }
         }
     }
