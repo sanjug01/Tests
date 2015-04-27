@@ -23,24 +23,15 @@
     </UserControl.Resources>
 
     <StackPanel>
-        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
-        <Grid Style="{StaticResource rdEntryFieldGridStyle}">
-            <TextBox Name="txtFriendlyNameEntry"
-                     x:Uid="AddOrEditDesktop-PcFriendlyNameTextbox"
-                     Background="Transparent"
-                     Margin="0,8" 
-                     PlaceholderText="Connection friendly name (d)"           
-                     Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            </TextBox>
-        </Grid>
         
         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                    x:Uid="AddOrEditDesktop-Gateway" 
                    Text="Gateway(d)"/>
         <ComboBox Margin="0,8" 
-                              x:Uid="AddOrEditDesktop-Gateways-ComboBox"
-                              ItemsSource="{Binding Path=GatewayOptions}"
-                              SelectedIndex="{Binding Path=SelectedGatewayOptionsIndex, Mode=TwoWay}">
+                  HorizontalAlignment="Stretch"                  
+                  x:Uid="AddOrEditDesktop-Gateways-ComboBox"
+                  ItemsSource="{Binding Path=GatewayOptions}"
+                  SelectedIndex="{Binding Path=SelectedGatewayOptionsIndex, Mode=TwoWay}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Converter={StaticResource GatewayComboBoxElementToLocalizedStringConverter}}" />
@@ -49,8 +40,9 @@
         </ComboBox>
 
         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Sound" Text="Sound(d)"/>
-        <ComboBox Margin="0,8"                                 
-                                SelectedIndex="{Binding Path=AudioMode, Mode=TwoWay}">
+        <ComboBox Margin="0,8"
+                  HorizontalAlignment="Stretch"
+                  SelectedIndex="{Binding Path=AudioMode, Mode=TwoWay}">
             <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnThisDevice" Content="Play on this device(d)" />
             <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnRemotePc" Content="Play on remote PC(d)" />
             <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-DontPlaySounds" Content="Don't play sounds(d)" />

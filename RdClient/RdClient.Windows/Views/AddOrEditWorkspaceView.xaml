@@ -35,15 +35,32 @@
                 <RowDefinition Height="Auto"/>                    
             </Grid.RowDefinitions>        
             <Grid Grid.Row="0">
-                <TextBlock Grid.Column="0" Style="{ThemeResource TitleTextBlockStyle}" Text="Add Remote Resources"/>
+                <TextBlock Grid.Column="0" 
+                           x:Uid="AddOrEditWorkspace-Caption"
+                           Style="{ThemeResource TitleTextBlockStyle}" Text="Add Remote Resources (d)"/>
             </Grid>
             <StackPanel Grid.Row="2">
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="Feed URL (d)"/>
-                <TextBox Background="Transparent" Margin="0,8" Text="{Binding Path=FeedUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock x:Uid="AddOrEditWorkspace-FeedLabel" 
+                               Style="{ThemeResource BodyTextBlockStyle}" Text="Web feed URL (d)"/>
+                    <TextBlock x:Uid="AddOrEditWorkspace-FeedExtraLabel" 
+                               Style="{ThemeResource BodyTextBlockStyle}" Text="(or email address) (d)"
+                               Foreground="{ThemeResource UnselectedForegroundBrush}"
+                               Margin="8,0,0,0" />
+                </StackPanel>
+                <TextBox x:Uid="AddOrEditWorkspace-Feed"
+                         Margin="0,8" 
+                         PlaceholderText="https://webfeed.contoso_example.com (d)"
+                         Text="{Binding Path=FeedUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <StackPanel Grid.Row="4">
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
-                <ComboBox Margin="0,8" ItemsSource="{Binding CredentialOptions}" SelectedItem="{Binding SelectedCredentialOption, Mode=TwoWay}">
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle }" 
+                           x:Uid="AddOrEditWorkspace-Credentials" Text="User name(d)"/>
+                <ComboBox Margin="0,8" 
+                          x:Uid="AddOrEditWorkspace-CredentialsComboBox"
+                          HorizontalAlignment="Stretch"
+                          ItemsSource="{Binding CredentialOptions}" SelectedItem="{Binding SelectedCredentialOption, Mode=TwoWay}"
+                          PlaceholderText="Select user or add new (d)">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
@@ -68,8 +85,8 @@
                 <Button Grid.Column="3"
                     Style="{StaticResource DialogAcceptButtonStyle}"
                     Command="{Binding Path=DefaultAction}"
-                    x:Uid="Common_Button_Ok"
-                    Content="Ok(d)"
+                    x:Uid="AddOrEditWorkspace-SaveButton"
+                    Content="Find feed(d)"
                     />
             </Grid>
         </Grid>

@@ -28,11 +28,13 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock x:Uid="SelectResource_Desktop_Title" Grid.Row="0" Text="(d) Desktop" />
-                        <TextBlock x:Uid="SelectResource_Desktop_Description" Grid.Row="1" Text="(d) Connect to a remote PC" />
+                        <TextBlock x:Uid="SelectResource_Desktop_Description" Grid.Row="1" Text="(d) Connect to a remote PC" 
+                                   Style="{ThemeResource BodyTextBlockStyle}"
+                                   Foreground="{ThemeResource UnselectedForegroundBrush}" />                                   
                     </Grid>
                 </Button>
             </Grid>      
-            
+            <!-- disabled until functionality available 
             <Grid Margin="30,20">
                 <Button Style="{StaticResource FlatButtonStyle}" Command="{Binding AddCloudWorkspace}">
                     <Grid Margin="10,10">
@@ -41,10 +43,13 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock x:Uid="SelectResource_Azure_Title" Grid.Row="0" Text="(d) Azure RemoteApp" />
-                        <TextBlock x:Uid="SelectResource_Azuer_Description" Grid.Row="1" Text="(d) Get to apps from Azure RemoteApp" />
+                        <TextBlock x:Uid="SelectResource_Azure_Description" Grid.Row="1" Text="(d) Get to apps from Azure RemoteApp" 
+                                   Style="{ThemeResource BodyTextBlockStyle}"
+                                   Foreground="{ThemeResource UnselectedForegroundBrush}" />
                     </Grid>
                 </Button>
             </Grid>
+            -->
             <Grid Margin="30,20">
                 <Button Style="{StaticResource FlatButtonStyle}" Command="{Binding AddOnPremiseWorkspace}">
                     <Grid Margin="10,10">
@@ -53,7 +58,9 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock x:Uid="SelectResource_OnPrem_Title" Grid.Row="0" Text="(d) Remote Resource" />
-                        <TextBlock x:Uid="SelectResource_OnPrem_Description" Grid.Row="1" Text="(d) Access published apps and desktops" />
+                        <TextBlock x:Uid="SelectResource_OnPrem_Description" Grid.Row="1" Text="(d) Access published apps and desktops" 
+                                   Style="{ThemeResource BodyTextBlockStyle}"
+                                   Foreground="{ThemeResource UnselectedForegroundBrush}" />
                     </Grid>
                 </Button>
             </Grid>
