@@ -7,31 +7,45 @@
     xmlns:local="using:RdClient.Controls"
     xmlns:design="using:RdClient.DesignTime"    
     xmlns:converters="using:RdClient.Converters"
+    xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
     d:DesignHeight="768"
-    d:DesignWidth="700"
-    RequestedTheme="{StaticResource AlternateTheme}">
+    d:DesignWidth="700">
 
     <d:UserControl.DataContext>
         <design:FakeSettingsViewModel />
     </d:UserControl.DataContext>
     
     <UserControl.Resources>
-        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:UserComboBoxElementToLocalizedStringConverter x:Key="UserComboBoxElementToLocalizedStringConverter">
+            <converters:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
+                <helpers:LocalizedString />
+            </converters:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
+        </converters:UserComboBoxElementToLocalizedStringConverter>        
     </UserControl.Resources>
     
-    <Grid Background="{StaticResource SettingsBackgroundBrush}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="{StaticResource SettingsItemHeight}" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{StaticResource SettingsItemColumnWidth}" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
 
-        <local:SettingsAddUserControl Grid.Row="0" />
-        <local:CredentialListControl Grid.Row="2" Visibility="{Binding Path=HasCredentials, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <ComboBox Grid.Row="0" x:Uid="Settings_Users_Combobox" Header="User accounts (d)" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" x:Uid="Common_Button_DeleteItem" Content="Delete(d)" Command="{Binding DeleteUserCommand}" />
+            <Button Grid.Column="2" x:Uid="Common_Button_EditItem" Content="Edit(d)" Command="{Binding EditUserCommand}" />
+        </Grid>
     </Grid>
 </UserControl>

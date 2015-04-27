@@ -434,12 +434,16 @@
     <value>(r) Friendly name</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
+  <data name="AddOrEditDesktop-FriendlyName_OptLabel.Text" xml:space="preserve">
+    <value> (r) (optional)</value>
+    <comment>Showing optional in a different color for the FriendlyName label. Should have a separator space prefix</comment>
+  </data>
   <data name="AddOrEditDesktop-LessDetailsLabel.Text" xml:space="preserve">
-    <value>(r) Less details</value>
+    <value>(r) Less</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-MoreDetailsLabel.Text" xml:space="preserve">
-    <value>(r) More details</value>
+    <value>(r) More</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-PcFriendlyNameTextbox.PlaceholderText" xml:space="preserve">
@@ -789,5 +793,40 @@
   <data name="AdditionalToolbarCommandsView_About.Text" xml:space="preserve">
     <value>(r) About</value>
     <comment>Text in the "About" button that opens the About dialog</comment>
+  </data>
+  <data name="Settings_Gateways_Combobox.Header" xml:space="preserve">
+    <value>(r) Gateways</value>
+    <comment>Header of the combobox in the settings page that lists all the saved gateways</comment>
+  </data>
+  <data name="Settings_Users_Combobox.Header" xml:space="preserve">
+    <value>(r) User accounts</value>
+    <comment>Header of the combobox in the settings page that lists all the saved users</comment>
+  </data>
+  <data name="AddOrEditWorkspace-Caption.Text" xml:space="preserve">
+    <value>(r) Add Remote Resource</value>
+    <comment>Title of Add workspace dialog</comment>
+  </data>
+  <data name="AddOrEditWorkspace-Credential.Text" xml:space="preserve">
+    <value>(r) User account name</value>
+    <comment>Label for the workspace credentials</comment>
+  </data>
+  <data name="AddOrEditWorkspace-CredentialsComboBox.PlaceholderText" xml:space="preserve">
+    <value>(r) Select user account or add new</value>
+    <comment>Placeholder text shown in workspace credential combobox showing instructions.</comment>
+  </data>
+  <data name="AddOrEditWorkspace-Feed.PlaceholderText" xml:space="preserve">
+    <value>(r) https://webfeed/contoso_example.com</value>
+    <comment>Placeholder text indicating a sample workspace feed or instructions.</comment>
+  </data>
+  <data name="AddOrEditWorkspace-FeedExtraLabel.Text" xml:space="preserve">
+    <value>(r) (or email address)</value>
+    <comment>Extra explanation label for the workspace feed showing in gray color</comment>
+  </data>
+  <data name="AddOrEditWorkspace-FeedLabel.Text" xml:space="preserve">
+    <value>(r) Web feed URL</value>
+    <comment>Label for the workspace feed</comment>
+  </data>
+  <data name="AddOrEditWorkspace-SaveButton.Content" xml:space="preserve">
+    <value>(r) Find feed</value>
   </data>
 </root>
