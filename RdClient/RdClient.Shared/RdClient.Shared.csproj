@@ -321,8 +321,6 @@
     <Compile Include="ViewModels\DesktopIdentityValidationViewModel.cs" />
     <Compile Include="ViewModels\CertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\DesktopEditorViewModel.cs" />
-    <Compile Include="ViewModels\GatewayViewModel.cs" />
-    <Compile Include="ViewModels\CredentialViewModel.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModel.cs" />
     <Compile Include="ViewModels\DeleteGatewayViewModel.cs" />
     <Compile Include="ViewModels\DeleteUserViewModel.cs" />

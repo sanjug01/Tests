@@ -274,7 +274,7 @@ namespace RdClient.Shared.Test.ViewModels
             }
 
             Assert.IsNotNull(buttonCommand);
-            _navService.Expect("NavigateToView", new List<object>() { "SettingsView", null }, 0);
+            _navService.Expect("PushAccessoryView", new List<object>() { "SettingsView", null, null }, 0);
             buttonCommand.Execute(null);
         }
 
