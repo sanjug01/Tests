@@ -28,24 +28,10 @@
             <SolidColorBrush x:Key="UnselectedForegroundBrush" Color="{ThemeResource SystemBaseMediumLowColor}" />
             <SolidColorBrush x:Key="UnselectedBorderBrush" Color="Transparent" />
 
-            <SolidColorBrush x:Key="BackButtonBackgroundBrush" Color="{ThemeResource SystemAccentColor}" />
-            <SolidColorBrush x:Key="BackButtonForegroundBrush" Color="White" />
-            <SolidColorBrush x:Key="BackButtonBorderBrush" Color="{ThemeResource BackButtonBackgroundBrush}" />
-
             <x:Double x:Key="ConnectionOverlayOpacity">0.6</x:Double>
 
-            <SolidColorBrush x:Key="SettingsNavBarBackgroundBrush" Color="{ThemeResource SystemAltHighColor}" />
-            <SolidColorBrush x:Key="SettingsSelectedItemBackgroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
-            <SolidColorBrush x:Key="SettingsBackgroundBrush" Color="{ThemeResource SystemAltHighColor}" />
-            <SolidColorBrush x:Key="SettingsAddUserButtonBackgroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
-            <SolidColorBrush x:Key="SettingsAddUserButtonForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
-            <SolidColorBrush x:Key="SettingsUserBulletBrush" Color="{ThemeResource BackButtonBackgroundBrush}" />
-            <SolidColorBrush x:Key="CredentialSelectedColor" Color="{ThemeResource SystemBaseLowColor}" />
-
             <SolidColorBrush x:Key="DialogBackgroundColor" Color="{ThemeResource SystemAltHighColor}" />
-            <SolidColorBrush x:Key="DialogAcceptButtonBackgroundColor" Color="{ThemeResource BackButtonBackgroundBrush}" />
-            <SolidColorBrush x:Key="DialogCancelButtonBackgroundColor" Color="{ThemeResource SystemChromeHighColor}" />
-            <SolidColorBrush x:Key="DialogButtonForegroundColor" Color="{ThemeResource SystemAltHighColor}" />
+            <SolidColorBrush x:Key="AccentedButtonBackgroundColor" Color="{ThemeResource SystemAccentColor}" />
             <SolidColorBrush x:Key="ModalBackgroundBrush" Color="{ThemeResource SystemChromeBlackMediumLowColor}" />
                         
             <SolidColorBrush x:Key="rdErrorBrush" Color="Red" />
@@ -71,24 +57,10 @@
             <SolidColorBrush x:Key="UnselectedForegroundBrush" Color="{ThemeResource SystemBaseMediumLowColor}" />
             <SolidColorBrush x:Key="UnselectedBorderBrush" Color="Transparent" />
 
-            <SolidColorBrush x:Key="BackButtonBackgroundBrush" Color="{ThemeResource SystemAccentColor}" />
-            <SolidColorBrush x:Key="BackButtonForegroundBrush" Color="White" />
-            <SolidColorBrush x:Key="BackButtonBorderBrush" Color="{ThemeResource BackButtonBackgroundBrush}" />
-
             <x:Double x:Key="ConnectionOverlayOpacity">0.6</x:Double>
 
-            <SolidColorBrush x:Key="SettingsNavBarBackgroundBrush" Color="{ThemeResource SystemAltHighColor}" />
-            <SolidColorBrush x:Key="SettingsSelectedItemBackgroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
-            <SolidColorBrush x:Key="SettingsBackgroundBrush" Color="{ThemeResource SystemAltHighColor}" />
-            <SolidColorBrush x:Key="SettingsAddUserButtonBackgroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
-            <SolidColorBrush x:Key="SettingsAddUserButtonForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
-            <SolidColorBrush x:Key="SettingsUserBulletBrush" Color="{ThemeResource BackButtonBackgroundBrush}" />
-            <SolidColorBrush x:Key="CredentialSelectedColor" Color="{ThemeResource SystemBaseLowColor}" />
-
             <SolidColorBrush x:Key="DialogBackgroundColor" Color="{ThemeResource SystemAltHighColor}" />
-            <SolidColorBrush x:Key="DialogAcceptButtonBackgroundColor" Color="{ThemeResource BackButtonBackgroundBrush}" />
-            <SolidColorBrush x:Key="DialogCancelButtonBackgroundColor" Color="{ThemeResource SystemChromeHighColor}" />
-            <SolidColorBrush x:Key="DialogButtonForegroundColor" Color="{ThemeResource SystemAltHighColor}" />
+            <SolidColorBrush x:Key="AccentedButtonBackgroundColor" Color="{ThemeResource SystemAccentColor}" />
             <SolidColorBrush x:Key="ModalBackgroundBrush" Color="{ThemeResource SystemChromeBlackMediumLowColor}" />
 
             <SolidColorBrush x:Key="rdErrorBrush" Color="Red" />
@@ -115,24 +87,10 @@
             <SolidColorBrush x:Key="UnselectedForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
             <SolidColorBrush x:Key="UnselectedBorderBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
 
-            <SolidColorBrush x:Key="BackButtonBackgroundBrush" Color="{ThemeResource SystemColorButtonFaceColor}" />
-            <SolidColorBrush x:Key="BackButtonForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
-            <SolidColorBrush x:Key="BackButtonBorderBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
-
             <x:Double x:Key="ConnectionOverlayOpacity">1.0</x:Double>
 
-            <SolidColorBrush x:Key="SettingsNavBarBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
-            <SolidColorBrush x:Key="SettingsSelectedItemBackgroundBrush" Color="{ThemeResource SystemColorHighlightColor}" />
-            <SolidColorBrush x:Key="SettingsBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
-            <SolidColorBrush x:Key="SettingsAddUserButtonBackgroundBrush" Color="{ThemeResource SystemColorButtonFaceColor}" />
-            <SolidColorBrush x:Key="SettingsAddUserButtonForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}" />
-            <SolidColorBrush x:Key="SettingsUserBulletBrush" Color="{ThemeResource SystemColorHighlightColor}" />
-            <SolidColorBrush x:Key="CredentialSelectedColor" Color="Transparent" />
-
             <SolidColorBrush x:Key="DialogBackgroundColor" Color="{ThemeResource SystemColorWindowColor}" />
-            <SolidColorBrush x:Key="DialogAcceptButtonBackgroundColor" Color="{ThemeResource SystemColorButtonFaceColor}" />
-            <SolidColorBrush x:Key="DialogCancelButtonBackgroundColor" Color="{ThemeResource SystemColorButtonFaceColor}" />
-            <SolidColorBrush x:Key="DialogButtonForegroundColor" Color="{ThemeResource SystemColorButtonTextColor}" />
+            <SolidColorBrush x:Key="AccentedButtonBackgroundColor" Color="{ThemeResource SystemColorButtonFaceColor}" />
             <SolidColorBrush x:Key="ModalBackgroundBrush" Color="{ThemeResource SystemColorWindowColor}" />
 
             <SolidColorBrush x:Key="rdErrorBrush" Color="{ThemeResource SystemColorWindowTextColor}" />
@@ -416,17 +374,14 @@
     Dialog styles 
     ======================================================================================
     -->    
-    <Style x:Key="DialogCancelButtonStyle" TargetType="Button">
+    <Style x:Key="DialogButtonStyle" TargetType="Button">
         <Setter Property="Height" Value="32" />
         <Setter Property="Width" Value="120" />
-        <Setter Property="Foreground" Value="{ThemeResource DialogButtonForegroundColor}" />
-        <Setter Property="Background" Value="{ThemeResource DialogCancelButtonBackgroundColor}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="Padding" Value="0" />
     </Style>
-    <Style x:Key="DialogAcceptButtonStyle" TargetType="Button" BasedOn="{StaticResource SettingsEditUserButtonStyle}">
-        <Setter Property="Background" Value="{ThemeResource DialogAcceptButtonBackgroundColor}" />
+    <Style x:Key="DialogAccentedButtonStyle" TargetType="Button" BasedOn="{StaticResource DialogButtonStyle}">
+        <Setter Property="Background" Value="{ThemeResource AccentedButtonBackgroundColor}" />        
     </Style>
    
     <Style x:Key="DialogDetailsButtonStyle" TargetType="Button">
