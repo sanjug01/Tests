@@ -633,7 +633,7 @@
             Assert.IsTrue(_vm.IsConnecting);
             Assert.IsTrue(_vm.IsRenderingPanelActive);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
-            Assert.IsFalse(_vm.IsFailureMessageVisible);
+            Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsFalse(_vm.IsRightSideBarVisible);
             Assert.IsFalse(_vm.IsInterrupted);
             Assert.IsNotNull(connection);
@@ -834,7 +834,7 @@
             Assert.IsFalse(_vm.IsConnecting);
             Assert.IsTrue(_vm.IsRenderingPanelActive);
             Assert.IsTrue(_vm.IsConnectionBarVisible);
-            Assert.IsFalse(_vm.IsFailureMessageVisible);
+            Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsFalse(_vm.IsRightSideBarVisible);
             Assert.IsFalse(_vm.IsInterrupted);
         }
@@ -892,7 +892,7 @@
             Assert.IsFalse(_vm.IsConnecting);
             Assert.IsFalse(_vm.IsRenderingPanelActive);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
-            Assert.IsFalse(_vm.IsFailureMessageVisible);
+            Assert.IsNull(_vm.BellyBandViewModel);
             Assert.AreEqual(1, cleanupCount);
         }
 
@@ -973,7 +973,7 @@
             Assert.IsTrue(_vm.IsConnecting);
             Assert.IsTrue(_vm.IsRenderingPanelActive);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
-            Assert.IsFalse(_vm.IsFailureMessageVisible);
+            Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsFalse(_vm.IsRightSideBarVisible);
             Assert.IsFalse(_vm.IsInterrupted);
         }

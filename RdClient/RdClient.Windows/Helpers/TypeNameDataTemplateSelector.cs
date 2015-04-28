@@ -27,6 +27,7 @@
     public sealed class TypeNameDataTemplateSelector : DataTemplateSelector
     {
         private readonly Dictionary<string, DataTemplate> _templates;
+        private DataTemplate _defaultTemplate;
 
         public TypeNameDataTemplateSelector()
         {
@@ -35,18 +36,30 @@
 
         public Dictionary<string, DataTemplate> Templates { get { return _templates; } }
 
+        public DataTemplate DefaultTemplate
+        {
+            get { return _defaultTemplate; }
+            set { _defaultTemplate = value; }
+        }
+
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
-            DataTemplate template;
+            DataTemplate template = null;
 
-            try
+            if (null != item)
             {
-                template = _templates[item.GetType().Name];
+                try
+                {
+                    template = _templates[item.GetType().Name];
+                }
+                catch
+                {
+                    template = base.SelectTemplateCore(item, container);
+                }
             }
-            catch
-            {
-                template = base.SelectTemplateCore(item, container);
-            }
+
+            if (null == template)
+                template = _defaultTemplate;
 
             return template;
         }
