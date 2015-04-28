@@ -1,6 +1,7 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Pointer;
 using System;
+using System.Diagnostics;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Recognizers
@@ -69,6 +70,8 @@ namespace RdClient.Shared.Input.Recognizers
 
         public void Consume(IPointerEventBase pointerEvent)
         {
+            Debug.WriteLine(pointerEvent.Action);
+
             switch(pointerEvent.Action)
             {
                 case PointerEventAction.PointerPressed:

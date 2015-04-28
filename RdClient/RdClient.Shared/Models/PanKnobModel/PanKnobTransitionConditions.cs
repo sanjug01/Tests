@@ -1,5 +1,7 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Pointer;
+using RdClient.Shared.Input.Recognizers;
+using System.Diagnostics;
 
 namespace RdClient.Shared.Models.PanKnobModel
 {
@@ -37,9 +39,12 @@ namespace RdClient.Shared.Models.PanKnobModel
 
         public static bool Idle_Dragging_Condition(PanKnobStateMachineEvent o)
         {
+            if(o.Input is ITapEvent)
+            {
+                Debug.WriteLine(((ITapEvent)o.Input).Type);
+            }
             return
-                o.Input.Action == PointerEventAction.Tapped &&
-                ((IGestureRoutedEventProperties)o.Input).Count > 1;
+                false;
         }
 
         public static void Idle_Dragging_Action(PanKnobStateMachineEvent o)

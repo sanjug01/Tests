@@ -32,8 +32,6 @@ namespace RdClient.Controls
             this.PanKnobSite = newSite;
         }
 
-        private int _fingersDown = 0;
-
         private IPanKnobSite _panKnobSite;
         public IPanKnobSite PanKnobSite
         {
@@ -52,10 +50,19 @@ namespace RdClient.Controls
                     });
                 _zoomScrollRecognizer = new ZoomScrollRecognizer(timer);
                 _zoomScrollRecognizer.ZoomScrollEvent += OnZoomScrollEvent;
+
+                _panKnobSite.CastAndCall<IPanKnobSite>(
+                    site =>
+                    {
+                        timer = site.TimerFactory.CreateTimer();
+                    });
+                _tapRecognizer = new TapRecognizer(timer);
+                _tapRecognizer.TapEvent += OnTapEvent;
             }
         }
 
-        private GestureRecognizer _platformRecognizer;
+
+        private TapRecognizer _tapRecognizer;
         private ZoomScrollRecognizer _zoomScrollRecognizer;
 
         bool IPanKnob.IsVisible
@@ -94,10 +101,6 @@ namespace RdClient.Controls
         public PanKnob()
         {
             this.InitializeComponent();
-
-            _platformRecognizer = new GestureRecognizer();
-            _platformRecognizer.GestureSettings = GestureSettings.Tap;
-            _platformRecognizer.Tapped += OnTapped;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -105,9 +108,14 @@ namespace RdClient.Controls
 
         }
 
-        private void OnZoomScrollEvent(object sender, ZoomScrollEventArgs e)
+        private void OnZoomScrollEvent(object sender, IZoomScrollEvent e)
         {
-            _panKnobSite.Consume(e.ZoomScrollEvent);
+            _panKnobSite.Consume(e);
+        }
+
+        private void OnTapEvent(object sender, ITapEvent e)
+        {
+            _panKnobSite.Consume(e);
         }
 
         private void InternalConsume(IPointerEventBase pointer)
@@ -178,33 +186,28 @@ namespace RdClient.Controls
 
         protected override void OnPointerPressed(PointerRoutedEventArgs e)
         {
-            _fingersDown++;
-
-            if(_fingersDown == 1)
-            {
-                this.CapturePointer(e.Pointer);
-            }
+            this.CapturePointer(e.Pointer);
 
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerPressed, PointerEventType.PointerRoutedEventArgs, e, this));
+            _tapRecognizer.Consume(w);
             InternalConsume(w);
         }
 
         protected override void OnPointerCanceled(PointerRoutedEventArgs e)
         {
-            _fingersDown = 0;
+            this.ReleasePointerCapture(e.Pointer);
 
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCancelled, PointerEventType.PointerRoutedEventArgs, e, this));
+            _tapRecognizer.Consume(w);
             InternalConsume(w);
         }
 
         protected override void OnPointerReleased(PointerRoutedEventArgs e)
         {
-            if(_fingersDown == 0)
-            {
-                this.ReleasePointerCapture(e.Pointer);
-            }
+            this.ReleasePointerCapture(e.Pointer);            
 
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerReleased, PointerEventType.PointerRoutedEventArgs, e, this));
+            _tapRecognizer.Consume(w);
             InternalConsume(w);
         }
     }

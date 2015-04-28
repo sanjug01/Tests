@@ -174,9 +174,9 @@
             this.RenderingPanel.EmitPointerEvent(w);
         }
 
-        private void OnZoomScrollEvent(object sender, ZoomScrollEventArgs e)
+        private void OnZoomScrollEvent(object sender, IZoomScrollEvent e)
         {
-            this.RenderingPanel.EmitPointerEvent(e.ZoomScrollEvent);
+            this.RenderingPanel.EmitPointerEvent(e);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)

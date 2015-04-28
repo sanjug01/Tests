@@ -5,6 +5,6 @@ namespace RdClient.Shared.Input.Recognizers
 {
     public interface IZoomScrollRecognizer : IPointerEventConsumer
     {
-        event EventHandler<ZoomScrollEventArgs> ZoomScrollEvent;
+        event EventHandler<IZoomScrollEvent> ZoomScrollEvent;
     }
 }

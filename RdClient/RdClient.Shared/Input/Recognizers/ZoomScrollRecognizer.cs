@@ -4,15 +4,6 @@ using System;
 
 namespace RdClient.Shared.Input.Recognizers
 {
-    public class ZoomScrollEventArgs
-    {
-        public IZoomScrollEvent ZoomScrollEvent { get; private set; }
-        public ZoomScrollEventArgs(IZoomScrollEvent e)
-        {
-            ZoomScrollEvent = e;
-        }
-    }
-
     public class ZoomScrollRecognizer : IZoomScrollRecognizer
     {
         private ITimer _timer;
@@ -20,7 +11,7 @@ namespace RdClient.Shared.Input.Recognizers
         private PointerEventAction _stateAction;
         private ZoomScrollType _stateType;
 
-        public event EventHandler<ZoomScrollEventArgs> ZoomScrollEvent;
+        public event EventHandler<IZoomScrollEvent> ZoomScrollEvent;
 
         public ZoomScrollRecognizer(ITimer timer)
         {
@@ -36,7 +27,7 @@ namespace RdClient.Shared.Input.Recognizers
         {
             if(ZoomScrollEvent != null)
             {
-                ZoomScrollEvent(this, new ZoomScrollEventArgs(e));
+                ZoomScrollEvent(this, e);
             }
         }
 
