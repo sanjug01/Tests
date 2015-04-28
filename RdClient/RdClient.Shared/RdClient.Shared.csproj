@@ -239,6 +239,7 @@
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Data\ICertificateTrust.cs" />
     <Compile Include="Models\PanKnobModel\IPanKnob.cs" />
+    <Compile Include="Models\PanKnobModel\IPanKnobControl.cs" />
     <Compile Include="Models\PanKnobModel\IPanKnobSite.cs" />
     <Compile Include="Models\IValidation.cs" />
     <Compile Include="Models\IDeviceCapabilities.cs" />
@@ -256,6 +257,7 @@
     <Compile Include="Models\OnPremiseWorkspaceModel.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
     <Compile Include="Models\IThumbnailEncoder.cs" />
+    <Compile Include="Models\PanKnobModel\PanKnobControl.cs" />
     <Compile Include="Models\PanKnobModel\PanKnobTransitionConditions.cs" />
     <Compile Include="Models\PanKnobModel\PanKnobTransitions.cs" />
     <Compile Include="Models\RemoteResourceModel.cs" />
