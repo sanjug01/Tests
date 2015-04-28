@@ -259,15 +259,26 @@ namespace RdClient.Shared.ViewModels
 
         private void LaunchAddUserView()
         {
-            // Push the EditCredentialsView with a task to create new credentials and save it in the data model.
-            NewCredentialsTask.Present(this.NavigationService, this.ApplicationDataModel,
-                this.Gateway.HostName,      // Resource name 
-                credentialsId =>            // Saved credentials handler
-                {
-                    this.LoadUsers();
-                    this.SelectUserId(credentialsId);
-                },
-                () => this.Update());       // Cancel handler
+            AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
+            ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
+            NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
         }
+
+        private void CredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
+        {
+            CredentialPromptResult result = args.Result as CredentialPromptResult;
+
+            if (result != null && !result.UserCancelled)
+            {
+                Guid credId = this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
+                LoadUsers();
+                this.SelectUserId(credId);
+            }
+            else
+            {
+                this.Update();
+            }
+        }
+
     }
 }

@@ -125,21 +125,6 @@
     <Compile Include="Controls\DynamicToolbar.xaml.cs">
       <DependentUpon>DynamicToolbar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ExtendedGatewayControl.xaml.cs">
-      <DependentUpon>ExtendedGatewayControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\GatewayControl.xaml.cs">
-      <DependentUpon>GatewayControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\CredentialControl.xaml.cs">
-      <DependentUpon>CredentialControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\GatewayListControl.xaml.cs">
-      <DependentUpon>GatewayListControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\CredentialListControl.xaml.cs">
-      <DependentUpon>CredentialListControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\DesktopsListControl.xaml.cs">
       <DependentUpon>DesktopsListControl.xaml</DependentUpon>
     </Compile>
@@ -169,18 +154,6 @@
     </Compile>
     <Compile Include="Controls\RemoteApplicationThumbnailView.xaml.cs">
       <DependentUpon>RemoteApplicationThumbnailView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SettingsAddGatewayControl.xaml.cs">
-      <DependentUpon>SettingsAddGatewayControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SettingsAddUserControl.xaml.cs">
-      <DependentUpon>SettingsAddUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SettingsNavigationControl.xaml.cs">
-      <DependentUpon>SettingsNavigationControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ExtendedCredentialControl.xaml.cs">
-      <DependentUpon>ExtendedCredentialControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\DesktopExtraSettingsControl.xaml.cs">
       <DependentUpon>DesktopExtraSettingsControl.xaml</DependentUpon>
@@ -364,26 +337,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ExtendedGatewayControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\GatewayControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\CredentialControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\GatewayListControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\CredentialListControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\DesktopsListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -417,22 +370,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\RemoteApplicationThumbnailView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\SettingsAddGatewayControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\SettingsAddUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\SettingsNavigationControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ExtendedCredentialControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

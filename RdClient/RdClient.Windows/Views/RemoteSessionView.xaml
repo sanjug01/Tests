@@ -74,7 +74,7 @@
                         <helpers:TypeNameDataTemplateSelector.DefaultTemplate>
                             <DataTemplate />
                         </helpers:TypeNameDataTemplateSelector.DefaultTemplate>
-                        
+
                     </helpers:TypeNameDataTemplateSelector>
                 </ContentControl.ContentTemplateSelector>
             </ContentControl>
@@ -106,13 +106,13 @@
                          VerticalAlignment="Center" 
                          />
             <Button x:Uid="Common_Button_Cancel"
-                    Style="{ThemeResource DialogCancelButtonStyle}"
+                    Style="{ThemeResource DialogButtonStyle}"
                     HorizontalAlignment="Center"
                     Grid.Row="3"
                     Content="Cancel (d)"
                     Command="{Binding NavigateHome}" />
         </Grid>
-        
+
         <!-- Session interruption (auto-reconnect) message -->
         <Grid VerticalAlignment="Center"
               Height="Auto"
@@ -129,7 +129,7 @@
                            Foreground="{ThemeResource rdErrorBrush}"
                            Text="{Binding ReconnectAttempt}"/>
                 <Button Command="{Binding CancelAutoReconnect}" HorizontalAlignment="Center"
-                        Style="{ThemeResource DialogCancelButtonStyle}">
+                        Style="{ThemeResource DialogButtonStyle}">
                     <TextBlock Text="Cancel"/>
                 </Button>
             </StackPanel>

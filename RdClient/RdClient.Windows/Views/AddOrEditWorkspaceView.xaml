@@ -77,13 +77,13 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="1"
-                    Style="{StaticResource DialogCancelButtonStyle}"
+                    Style="{StaticResource DialogButtonStyle}"
                     Command="{Binding Path=Cancel}"
                     x:Uid="Common_Button_Cancel"
                     Content="Cancel(d)"
                     />
                 <Button Grid.Column="3"
-                    Style="{StaticResource DialogAcceptButtonStyle}"
+                    Style="{StaticResource DialogAccentedButtonStyle}"
                     Command="{Binding Path=DefaultAction}"
                     x:Uid="AddOrEditWorkspace-SaveButton"
                     Content="Find feed(d)"
