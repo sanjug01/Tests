@@ -46,16 +46,16 @@
         is not null.
         -->
         <Grid Visibility="{Binding BellyBandViewModel, Converter={StaticResource NotNullToVisibilityConverter}}">
-            <Grid
-                VerticalAlignment="Center"
-                Height="Auto"
-                RequestedTheme="{StaticResource AlternateTheme}"
-                Background="{ThemeResource DialogBackgroundColor}">
-
-                <ContentControl
-                    Margin="0,20"
-                    Content="{Binding BellyBandViewModel}"
-                    HorizontalContentAlignment="Center">
+        <Grid
+            VerticalAlignment="Center"
+            Height="Auto"
+            RequestedTheme="{StaticResource AlternateTheme}"
+            Background="{ThemeResource DialogBackgroundColor}">
+            
+            <ContentControl
+                Margin="0,20"
+                Content="{Binding BellyBandViewModel}"
+                HorizontalContentAlignment="Center">
 
                     <ContentControl.ContentTransitions>
                         <TransitionCollection>
@@ -63,18 +63,18 @@
                         </TransitionCollection>
                     </ContentControl.ContentTransitions>
 
-                    <ContentControl.ContentTemplateSelector>
-                        <helpers:TypeNameDataTemplateSelector>
+                <ContentControl.ContentTemplateSelector>
+                    <helpers:TypeNameDataTemplateSelector>
+                        
+                        <helpers:TypeNameDataTemplateSelector.Templates>
 
-                            <helpers:TypeNameDataTemplateSelector.Templates>
-
-                                <!--
+                            <!--
                             For the RemoteSessionFailureViewModel view model class show RemoteSessionFailureControl.
                             The control will take the RemoteSessionFailureViewModel as its main binding.
                             -->
-                                <DataTemplate x:Key="RemoteSessionFailureViewModel">
-                                    <c:RemoteSessionFailureControl />
-                                </DataTemplate>
+                            <DataTemplate x:Key="RemoteSessionFailureViewModel">
+                                <c:RemoteSessionFailureControl />
+                            </DataTemplate>
 
                                 <!--
                             RemoteSessionInterruptionViewModel - the session got interrupted and is reconnecting.
@@ -83,17 +83,17 @@
                                     <c:RemoteSessionInterruptionControl />
                                 </DataTemplate>
 
-                            </helpers:TypeNameDataTemplateSelector.Templates>
+                        </helpers:TypeNameDataTemplateSelector.Templates>
+                        
+                        <helpers:TypeNameDataTemplateSelector.DefaultTemplate>
+                            <DataTemplate />
+                        </helpers:TypeNameDataTemplateSelector.DefaultTemplate>
+                        
+                    </helpers:TypeNameDataTemplateSelector>
+                </ContentControl.ContentTemplateSelector>
+            </ContentControl>
 
-                            <helpers:TypeNameDataTemplateSelector.DefaultTemplate>
-                                <DataTemplate />
-                            </helpers:TypeNameDataTemplateSelector.DefaultTemplate>
-
-                        </helpers:TypeNameDataTemplateSelector>
-                    </ContentControl.ContentTemplateSelector>
-                </ContentControl>
-
-            </Grid>
+        </Grid>
         </Grid>
 
 
@@ -120,7 +120,7 @@
                          Width="Auto"
                          VerticalAlignment="Center" />
             <Button x:Uid="Common_Button_Cancel"
-                    Style="{ThemeResource DialogCancelButtonStyle}"
+                    Style="{ThemeResource DialogButtonStyle}"
                     HorizontalAlignment="Center"
                     Grid.Row="3"
                     Content="Cancel (d)"
@@ -144,7 +144,7 @@
                            Foreground="{ThemeResource rdErrorBrush}"
                            Text="{Binding ReconnectAttempt}"/>
                 <Button Command="{Binding CancelAutoReconnect}" HorizontalAlignment="Center"
-                        Style="{ThemeResource DialogCancelButtonStyle}">
+                        Style="{ThemeResource DialogButtonStyle}">
                     <TextBlock Text="Cancel"/>
                 </Button>
             </StackPanel>

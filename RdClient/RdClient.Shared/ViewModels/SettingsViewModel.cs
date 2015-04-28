@@ -153,7 +153,12 @@ namespace RdClient.Shared.ViewModels
             if (GatewayCommandsEnabled())
             {
                 var args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway.Model);
-                this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, new ModalPresentationCompletion((s, e) => LoadGateways()));
+                var editGatewayCompleted = new ModalPresentationCompletion((s, e) =>
+                {
+                    LoadGateways();
+                    LoadUsers();
+                });
+                this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, editGatewayCompleted);
             }
         }
 
@@ -168,7 +173,12 @@ namespace RdClient.Shared.ViewModels
         private void AddGatewayCommandExecute()
         {
             var args = new AddGatewayViewModelArgs();
-            this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, new ModalPresentationCompletion((s, e) => LoadGateways()));
+            var completed = new ModalPresentationCompletion((s, e) =>
+            {
+                LoadGateways();
+                LoadUsers();
+            });
+            this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, completed);
         }
 
         private void LoadUsers()
@@ -207,7 +217,8 @@ namespace RdClient.Shared.ViewModels
 
         private void AddUserCommandExecute()
         {
-            var args = new AddUserViewArgs(new CredentialsModel(), false, CredentialPromptMode.EnterCredentials);
+            var creds = new CredentialsModel() { Username = "", Password = "" };
+            var args = new AddUserViewArgs(creds, false, CredentialPromptMode.EnterCredentials);
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion((s, e) =>
             {
                 CredentialPromptResult result = e.Result as CredentialPromptResult;
