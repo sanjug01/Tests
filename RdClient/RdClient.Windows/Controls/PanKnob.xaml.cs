@@ -8,32 +8,53 @@ using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using System;
+using RdClient.Shared.Input.Recognizers;
 
 namespace RdClient.Controls
 {
     public sealed partial class PanKnob : UserControl, IPanKnob
     {
         public static readonly DependencyProperty PanKnobSiteProperty = DependencyProperty.Register("PanKnobSite",
-            typeof(object),
-            typeof(PanKnob),
-            new PropertyMetadata(null, OnPanKnobSiteChanged));
+       typeof(object),
+       typeof(PanKnob),
+       new PropertyMetadata(null, OnPanKnobSiteChanged));
 
         private static void OnPanKnobSiteChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             Contract.Assert(sender is PanKnob);
             Contract.Assert(null == e.NewValue || e.NewValue is IPanKnobSite);
-            ((PanKnob)sender).OnPanKnobSiteChanged((IPanKnobSite)e.OldValue, (IPanKnobSite) e.NewValue);
-        }
 
+            ((PanKnob)sender).OnPanKnobSiteChanged((IPanKnobSite)e.OldValue, (IPanKnobSite)e.NewValue);
+        }
         private void OnPanKnobSiteChanged(IPanKnobSite oldSite, IPanKnobSite newSite)
         {
-            _panKnobSite = newSite;
-            _panKnobSite.SetPanKnob(this);
+            this.PanKnobSite = newSite;
         }
 
         private int _fingersDown = 0;
 
         private IPanKnobSite _panKnobSite;
+        public IPanKnobSite PanKnobSite
+        {
+            get { return _panKnobSite; }
+            set
+            {
+                _panKnobSite = value;
+                _panKnobSite.SetPanKnob(this);
+
+
+                ITimer timer = null;
+                _panKnobSite.CastAndCall<IPanKnobSite>(
+                    site =>
+                    {
+                        timer = site.TimerFactory.CreateTimer();
+                    });
+                _zoomScrollRecognizer = new ZoomScrollRecognizer(timer);
+                _zoomScrollRecognizer.ZoomScrollEvent += OnZoomScrollEvent;
+            }
+        }
+
         private GestureRecognizer _platformRecognizer;
         private ZoomScrollRecognizer _zoomScrollRecognizer;
 
@@ -77,11 +98,11 @@ namespace RdClient.Controls
             _platformRecognizer = new GestureRecognizer();
             _platformRecognizer.GestureSettings = GestureSettings.Tap;
             _platformRecognizer.Tapped += OnTapped;
+        }
 
-            ITimer timer = null;
-            _panKnobSite.CastAndCall<IPanKnobSite>(site => timer = site.TimerFactory.CreateTimer());
-            _zoomScrollRecognizer = new ZoomScrollRecognizer(timer);
-            _zoomScrollRecognizer.ZoomScrollEvent += OnZoomScrollEvent;
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void OnZoomScrollEvent(object sender, ZoomScrollEventArgs e)
@@ -106,21 +127,31 @@ namespace RdClient.Controls
         protected override void OnManipulationStarting(ManipulationStartingRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarting, PointerEventType.ManipulationStartingRoutedEventArgs, e, this));
-            _zoomScrollRecognizer.Consume(w);
+
+            if(_zoomScrollRecognizer != null)
+            {
+                _zoomScrollRecognizer.Consume(w);
+            }
             InternalConsume(w);
         }
 
         protected override void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarted, PointerEventType.ManipulationStartedRoutedEventArgs, e, this));
-            _zoomScrollRecognizer.Consume(w);
+            if (_zoomScrollRecognizer != null)
+            {
+                _zoomScrollRecognizer.Consume(w);
+            }
             InternalConsume(w);
         }
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationDelta, PointerEventType.ManipulationDeltaRoutedEventArgs, e, this));
-            _zoomScrollRecognizer.Consume(w);
+            if (_zoomScrollRecognizer != null)
+            {
+                _zoomScrollRecognizer.Consume(w);
+            }
             InternalConsume(w);
         }
 
@@ -128,14 +159,20 @@ namespace RdClient.Controls
         {
             e.TranslationBehavior.DesiredDeceleration = GlobalConstants.DesiredDeceleration;
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationInertiaStarting, PointerEventType.ManipulationInertiaStartingRoutedEventArgs, e, this));
-            _zoomScrollRecognizer.Consume(w);
+            if (_zoomScrollRecognizer != null)
+            {
+                _zoomScrollRecognizer.Consume(w);
+            }
             InternalConsume(w);
         }
 
         protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationCompleted, PointerEventType.ManipulationCompletedRoutedEventArgs, e, this));
-            _zoomScrollRecognizer.Consume(w);
+            if (_zoomScrollRecognizer != null)
+            {
+                _zoomScrollRecognizer.Consume(w);
+            }
             InternalConsume(w);
         }
 
@@ -170,6 +207,5 @@ namespace RdClient.Controls
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerReleased, PointerEventType.PointerRoutedEventArgs, e, this));
             InternalConsume(w);
         }
-
     }
 }

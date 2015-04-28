@@ -14,7 +14,7 @@ namespace RdClient.Shared.Models.PanKnobModel
 
     public class PanKnobTransitions
     {
-        public static void AddTransitions(ref IStateMachine<PanKnobState, StateMachineEvent> stateMachine)
+        public static void AddTransitions(ref IStateMachine<PanKnobState, PanKnobStateMachineEvent> stateMachine)
         {
             stateMachine.AddTransition(
                 PanKnobState.Idle, PanKnobState.Panning,

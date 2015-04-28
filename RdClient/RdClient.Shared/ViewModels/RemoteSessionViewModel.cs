@@ -13,6 +13,7 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Models.PanKnobModel;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite
     {
@@ -54,6 +55,20 @@
         private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
 
         private readonly ZoomPanMultiTouchModel _zoomPanModel = new ZoomPanMultiTouchModel();
+
+        private IPanKnobSite _panKnobSite;
+        public IPanKnobSite PanKnobSite
+        {
+            get
+            {
+                return _panKnobSite;
+            }
+
+            set
+            {
+                this.SetProperty(ref _panKnobSite, value);
+            }
+        }
 
         public bool IsConnecting
         {
@@ -211,6 +226,7 @@
             if (null != _sessionView && SessionState.Idle == _sessionState)
             {
                 Contract.Assert(null == _activeSessionControl);
+                
                 _activeSessionControl = _activeSession.Activate(_sessionView);
             }
 
@@ -405,6 +421,9 @@
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
+                        this.PanKnobSite = new PanKnobSite(this.TimerFactory);
+                        _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
                         this.IsConnectionBarVisible = true;

@@ -7,16 +7,16 @@ namespace RdClient.Shared.Input.Pointer
     {
         private IPointerControl _control;
         private IPointerPosition _pointerPosition;
-        private IStateMachine<DirectModeState, StateMachineEvent> _stateMachine;
-        StateMachineEvent _stateMachineEvent;        
+        private IStateMachine<DirectModeState, PointerStateMachineEvent> _stateMachine;
+        PointerStateMachineEvent _stateMachineEvent;        
 
         public DirectModeConsumer(IPointerControl control, IPointerPosition pointerPosition)
         {
             _control = control;
             _pointerPosition = pointerPosition;
 
-            _stateMachine = new StateMachine<DirectModeState, StateMachineEvent>();
-            _stateMachineEvent = new StateMachineEvent() { Input = null, Tracker = null, Timer = null, Control = control };
+            _stateMachine = new StateMachine<DirectModeState, PointerStateMachineEvent>();
+            _stateMachineEvent = new PointerStateMachineEvent() { Input = null, Tracker = null, Timer = null, Control = control };
             DirectModeTransitions.AddTransitions(ref _stateMachine);
 
             Reset();

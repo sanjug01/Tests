@@ -3,11 +3,13 @@ using RdClient.Shared.Input.Pointer;
 
 namespace RdClient.Shared.Models.PanKnobModel
 {
-    public interface IPanKnobSite
+    public interface IPanKnobSite : IPointerEventConsumer
     {
         ITimerFactory TimerFactory { get; }
+        IViewport Viewport { set; }
 
         void SetPanKnob(IPanKnob panKnob);
-        void Consume(IPointerEventBase pointer);
+
+        void OnConsumptionModeChanged(object sender, ConsumptionModeType consumptionMode);
     }
 }

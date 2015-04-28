@@ -38,6 +38,9 @@
         <c:RemoteSessionPanel
             RemoteSessionViewSite="{Binding}"
             Visibility="{Binding IsRenderingPanelActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        
+        <c:PanKnob x:Name="PanKnob"
+                   PanKnobSite="{Binding PanKnobSite}"/>
 
 
         <!-- Connecting progress -->

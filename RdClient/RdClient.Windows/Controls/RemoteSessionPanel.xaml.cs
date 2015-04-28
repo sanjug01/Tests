@@ -2,6 +2,7 @@
 {
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Pointer;
+    using RdClient.Shared.Input.Recognizers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using System;

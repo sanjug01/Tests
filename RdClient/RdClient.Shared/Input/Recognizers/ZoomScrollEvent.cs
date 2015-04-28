@@ -1,7 +1,8 @@
-﻿using Windows.Foundation;
+﻿using RdClient.Shared.Input.Pointer;
+using Windows.Foundation;
 using Windows.UI.Input;
 
-namespace RdClient.Shared.Input.Pointer
+namespace RdClient.Shared.Input.Recognizers
 {
     public class ZoomScrollEvent : IZoomScrollEvent
     {

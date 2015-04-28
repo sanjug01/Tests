@@ -4,7 +4,7 @@ namespace RdClient.Shared.Input.Pointer
 {
     public class DirectModeTransitions
     {
-        public static void AddTransitions(ref IStateMachine<DirectModeState, StateMachineEvent> stateMachine)
+        public static void AddTransitions(ref IStateMachine<DirectModeState, PointerStateMachineEvent> stateMachine)
         {
             stateMachine.AddTransition(
                 DirectModeState.Idle, DirectModeState.LeftDragging,

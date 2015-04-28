@@ -4,7 +4,7 @@ namespace RdClient.Shared.Input.Pointer
 {
     public class PointerModeTransitions
     {
-        public static void AddTransitions(ref IStateMachine<PointerModeState, StateMachineEvent> stateMachine)
+        public static void AddTransitions(ref IStateMachine<PointerModeState, PointerStateMachineEvent> stateMachine)
         {
             stateMachine.AddTransition(
                 PointerModeState.Idle, PointerModeState.LeftDown, 
