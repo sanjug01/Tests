@@ -16,7 +16,6 @@
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite
     {
-        private readonly RelayCommand _cancelAutoReconnect;
         private readonly RelayCommand _showSideBars;
         private readonly RelayCommand _invokeKeyboard;
         private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
@@ -38,13 +37,6 @@
         private bool _isConnectionBarVisible;
         private readonly ReadOnlyObservableCollection<object> _connectionBarItems;
         private bool _isRightSideBarVisible;
-
-        private bool _failureMessageVisible;
-        private RdpDisconnectCode _failureCode;
-
-        private bool _interrupted;
-        private InterruptedSessionContinuation _interruptedContinuation;
-        private int _reconnectAttempt;
 
         private ITimerFactory _timerFactory;
         public ITimerFactory TimerFactory { get { return _timerFactory; } }
@@ -72,29 +64,6 @@
                 return null != _activeSession
                     && (SessionState.Connected == _activeSession.State.State || SessionState.Connecting == _activeSession.State.State);
             }
-        }
-
-        public bool IsInterrupted
-        {
-            get { return _interrupted; }
-            private set { this.SetProperty(ref _interrupted, value); }
-        }
-
-        public RdpDisconnectCode FailureCode
-        {
-            get { return _failureCode; }
-            private set { this.SetProperty(ref _failureCode, value); }
-        }
-
-        public int ReconnectAttempt
-        {
-            get { return _reconnectAttempt; }
-            private set { this.SetProperty(ref _reconnectAttempt, value); }
-        }
-
-        public ICommand CancelAutoReconnect
-        {
-            get { return _cancelAutoReconnect; }
         }
 
         /// <summary>
@@ -163,7 +132,6 @@
 
         public RemoteSessionViewModel()
         {
-            _cancelAutoReconnect = new RelayCommand(this.InternalCancelAutoReconnect, this.InternalCanAutoReconnect);
             _showSideBars = new RelayCommand(this.InternalShowRightSideBar);
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
             _invokeKeyboardModel = new SymbolBarToggleButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
@@ -215,7 +183,6 @@
 
             EmitPropertyChanged("IsRenderingPanelActive");
             EmitPropertyChanged("IsConnecting");
-            this.IsInterrupted = SessionState.Interrupted == _activeSession.State.State;
         }
 
         protected override void OnDismissed()
@@ -231,8 +198,11 @@
             _activeSessionControl = null;
             _activeSession = null;
             _sessionView = null;
-            _interrupted = false;
-            _interruptedContinuation = null;
+
+            //
+            // TODO: restore the belly band view model from the session state.
+            //
+            this.BellyBandViewModel = null;
 
             base.OnDismissed();
         }
@@ -302,12 +272,10 @@
 
         private void OnSessionInterrupted(object sender, SessionInterruptedEventArgs e)
         {
-            Contract.Assert(null == _interruptedContinuation);
-
-            _interruptedContinuation = e.ObtainContinuation();
-            _cancelAutoReconnect.EmitCanExecuteChanged();
-            this.ReconnectAttempt = _activeSession.State.ReconnectAttempt;
-            this.IsInterrupted = true;
+            RemoteSessionInterruptionViewModel vm = new RemoteSessionInterruptionViewModel(_activeSession, e.ObtainContinuation());
+            //
+            // TODO: do something about the rendering panel
+            //
             EmitPropertyChanged("IsRenderingPanelActive");
             EmitPropertyChanged("IsConnecting");
         }
@@ -377,9 +345,7 @@
                 switch(_activeSession.State.State)
                 {
                     case SessionState.Connecting:
-                        _interruptedContinuation = null;
-                        this.IsInterrupted = false;
-                        _cancelAutoReconnect.EmitCanExecuteChanged();
+                        Contract.Assert(null == this.BellyBandViewModel);
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
                         this.IsConnectionBarVisible = false;
@@ -387,12 +353,13 @@
 
                     case SessionState.Connected:
                         //
+                        // Remove any belly-band view that may be shown (transitioning from reconnect or connecting state)
+                        //
+                        this.BellyBandViewModel = null;
+                        //
                         // If the session has been interrupted but reconnected automatically, clear the IsInterrupted flag
                         // to remote any interruption UI.
                         //
-                        _interruptedContinuation = null;
-                        this.IsInterrupted = false;
-                        _cancelAutoReconnect.EmitCanExecuteChanged();
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
                         _pointerPosition.Reset(_activeSessionControl, this);
@@ -428,25 +395,6 @@
 
                 _sessionState = _activeSession.State.State;
             }
-            else if(e.PropertyName.EndsWith("ReconnectAttempt"))
-            {
-                this.ReconnectAttempt = _activeSession.State.ReconnectAttempt;
-            }
-        }
-
-        private void InternalCancelAutoReconnect(object parameter)
-        {
-            Contract.Assert(null != _interruptedContinuation);
-
-            _interruptedContinuation.Cancel();
-            _interruptedContinuation = null;
-            _cancelAutoReconnect.EmitCanExecuteChanged();
-            this.IsInterrupted = false;
-        }
-
-        private bool InternalCanAutoReconnect(object parameter)
-        {
-            return null != _interruptedContinuation;
         }
 
         private void OnKeystroke(object sender, KeystrokeEventArgs e)

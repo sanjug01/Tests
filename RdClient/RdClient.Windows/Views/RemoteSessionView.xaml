@@ -35,7 +35,7 @@
         <sconv:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
     </UserControl.Resources>
 
-    <Grid Background="Green">
+    <Grid>
         <c:RemoteSessionPanel
             RemoteSessionViewSite="{Binding}"
             Visibility="{Binding IsRenderingPanelActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -45,40 +45,55 @@
         The band is visible when the BellyBandViewModel property of the remote session view model
         is not null.
         -->
-        <Grid
-            Visibility="{Binding BellyBandViewModel, Converter={StaticResource NotNullToVisibilityConverter}}"
-            VerticalAlignment="Center"
-            Height="Auto"
-            RequestedTheme="{StaticResource AlternateTheme}"
-            Background="{ThemeResource DialogBackgroundColor}">
-            
-            <ContentControl
-                Margin="0,20"
-                Content="{Binding BellyBandViewModel}"
-                HorizontalContentAlignment="Center">
-                <ContentControl.ContentTemplateSelector>
-                    <helpers:TypeNameDataTemplateSelector>
-                        
-                        <helpers:TypeNameDataTemplateSelector.Templates>
+        <Grid Visibility="{Binding BellyBandViewModel, Converter={StaticResource NotNullToVisibilityConverter}}">
+            <Grid
+                VerticalAlignment="Center"
+                Height="Auto"
+                RequestedTheme="{StaticResource AlternateTheme}"
+                Background="{ThemeResource DialogBackgroundColor}">
 
-                            <!--
+                <ContentControl
+                    Margin="0,20"
+                    Content="{Binding BellyBandViewModel}"
+                    HorizontalContentAlignment="Center">
+
+                    <ContentControl.ContentTransitions>
+                        <TransitionCollection>
+                            <ContentThemeTransition />
+                        </TransitionCollection>
+                    </ContentControl.ContentTransitions>
+
+                    <ContentControl.ContentTemplateSelector>
+                        <helpers:TypeNameDataTemplateSelector>
+
+                            <helpers:TypeNameDataTemplateSelector.Templates>
+
+                                <!--
                             For the RemoteSessionFailureViewModel view model class show RemoteSessionFailureControl.
                             The control will take the RemoteSessionFailureViewModel as its main binding.
                             -->
-                            <DataTemplate x:Key="RemoteSessionFailureViewModel">
-                                <c:RemoteSessionFailureControl />
-                            </DataTemplate>
+                                <DataTemplate x:Key="RemoteSessionFailureViewModel">
+                                    <c:RemoteSessionFailureControl />
+                                </DataTemplate>
 
-                        </helpers:TypeNameDataTemplateSelector.Templates>
-                        
-                        <helpers:TypeNameDataTemplateSelector.DefaultTemplate>
-                            <DataTemplate />
-                        </helpers:TypeNameDataTemplateSelector.DefaultTemplate>
-                        
-                    </helpers:TypeNameDataTemplateSelector>
-                </ContentControl.ContentTemplateSelector>
-            </ContentControl>
+                                <!--
+                            RemoteSessionInterruptionViewModel - the session got interrupted and is reconnecting.
+                            -->
+                                <DataTemplate x:Key="RemoteSessionInterruptionViewModel">
+                                    <c:RemoteSessionInterruptionControl />
+                                </DataTemplate>
 
+                            </helpers:TypeNameDataTemplateSelector.Templates>
+
+                            <helpers:TypeNameDataTemplateSelector.DefaultTemplate>
+                                <DataTemplate />
+                            </helpers:TypeNameDataTemplateSelector.DefaultTemplate>
+
+                        </helpers:TypeNameDataTemplateSelector>
+                    </ContentControl.ContentTemplateSelector>
+                </ContentControl>
+
+            </Grid>
         </Grid>
 
 
@@ -89,22 +104,21 @@
               RequestedTheme="{StaticResource AlternateTheme}"
               Background="{ThemeResource DialogBackgroundColor}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="20"/>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="20" />
                 <RowDefinition Height="40" />
             </Grid.RowDefinitions>
             <TextBlock HorizontalAlignment="Center" 
                        Style="{ThemeResource SubtitleTextBlockStyle}"
                        Grid.Row="1"
                        Text="Preparing your connection (d)....."
-                       x:Uid="Connection_Pending_Message"/>
+                       x:Uid="Connection_Pending_Message" />
             <ProgressBar Grid.Row="2"
                          IsIndeterminate="True"
                          HorizontalAlignment="Stretch"
                          Width="Auto"
-                         VerticalAlignment="Center" 
-                         />
+                         VerticalAlignment="Center" />
             <Button x:Uid="Common_Button_Cancel"
                     Style="{ThemeResource DialogCancelButtonStyle}"
                     HorizontalAlignment="Center"
@@ -114,6 +128,7 @@
         </Grid>
         
         <!-- Session interruption (auto-reconnect) message -->
+        <!--
         <Grid VerticalAlignment="Center"
               Height="Auto"
               RequestedTheme="{StaticResource AlternateTheme}"
@@ -134,6 +149,7 @@
                 </Button>
             </StackPanel>
         </Grid>
+        -->
         
         <!-- Connection Bar -->
         <ItemsControl

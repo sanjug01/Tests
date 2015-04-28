@@ -837,4 +837,13 @@
     <value>(r) Remote Connection Has Failed</value>
     <comment>Title of the in-session connection failure message. The title is shown at the top of the belly-band across the session view.</comment>
   </data>
+  <data name="RemoteSessionInterruptionControl_Cancel.Text" xml:space="preserve">
+    <value>(r) Cancel</value>
+    <comment>"Cancel" button in the remote connection interruption dialog; the button cancels the auto-reconnect process
+</comment>
+  </data>
+  <data name="RemoteSessionInterruptionControl_Title.Text" xml:space="preserve">
+    <value>(r) Remote Connection Has Been Interrupted</value>
+    <comment>Title of the belly-band message shown in the session view when the connection got interrupted and is reconnecting</comment>
+  </data>
 </root>

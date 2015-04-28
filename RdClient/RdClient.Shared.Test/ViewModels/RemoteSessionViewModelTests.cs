@@ -635,7 +635,7 @@
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsFalse(_vm.IsRightSideBarVisible);
-            Assert.IsFalse(_vm.IsInterrupted);
+            Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsNotNull(connection);
             Assert.AreEqual(1, connectCount);
 
@@ -836,7 +836,6 @@
             Assert.IsTrue(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsFalse(_vm.IsRightSideBarVisible);
-            Assert.IsFalse(_vm.IsInterrupted);
         }
 
         [TestMethod]
@@ -975,7 +974,6 @@
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsFalse(_vm.IsRightSideBarVisible);
-            Assert.IsFalse(_vm.IsInterrupted);
         }
     }
 }
