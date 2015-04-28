@@ -39,9 +39,9 @@
         </ComboBox>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Style="{StaticResource DialogButtonStyle}" x:Uid="Common_Button_DeleteItem" Content="Delete(d)" Command="{Binding DeleteGatewayCommand}" />
             <Button Grid.Column="2" Style="{StaticResource DialogButtonStyle}" x:Uid="Common_Button_EditItem" Content="Edit(d)" Command="{Binding EditGatewayCommand}" />
