@@ -304,7 +304,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             return 
                 e.Input.Action == PointerEventAction.ManipulationCompleted || 
-                e.Input.Action == PointerEventAction.PointerCanceled || 
+                e.Input.Action == PointerEventAction.PointerCancelled || 
                 e.Input.Action == PointerEventAction.PointerReleased;
         }
 

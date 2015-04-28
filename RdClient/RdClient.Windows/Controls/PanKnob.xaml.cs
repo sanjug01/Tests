@@ -193,7 +193,7 @@ namespace RdClient.Controls
         {
             _fingersDown = 0;
 
-            IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCanceled, PointerEventType.PointerRoutedEventArgs, e, this));
+            IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCancelled, PointerEventType.PointerRoutedEventArgs, e, this));
             InternalConsume(w);
         }
 

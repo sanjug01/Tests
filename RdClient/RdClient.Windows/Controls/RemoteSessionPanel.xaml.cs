@@ -167,7 +167,7 @@
                     w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingCompleted, PointerEventType.HoldingEventArgs, e, this));
                     break;
                 case HoldingState.Canceled:
-                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingCanceled, PointerEventType.HoldingEventArgs, e, this));
+                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingCancelled, PointerEventType.HoldingEventArgs, e, this));
                     break;
             }
 
@@ -234,7 +234,7 @@
 
         protected override void OnPointerCanceled(PointerRoutedEventArgs e)
         {
-            IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCanceled, PointerEventType.PointerRoutedEventArgs, e, this));
+            IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCancelled, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
             _platformRecognizer.CompleteGesture();
         }

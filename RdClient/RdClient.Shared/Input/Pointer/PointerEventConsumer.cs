@@ -57,7 +57,7 @@ namespace RdClient.Shared.Input.Pointer
                         Tracker.Track(pp.Position, pp.PointerId);
                         break;
                     case PointerEventAction.PointerReleased:
-                    case PointerEventAction.PointerCanceled:
+                    case PointerEventAction.PointerCancelled:
                         Tracker.Untrack(pp.PointerId);
                         break;
                 }

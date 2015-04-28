@@ -170,6 +170,8 @@
     <Compile Include="Input\Pointer\IPointerControl.cs" />
     <Compile Include="Input\Pointer\IPointerEventEnums.cs" />
     <Compile Include="Input\Pointer\IPointTracker.cs" />
+    <Compile Include="Input\Recognizers\ITapEvent.cs" />
+    <Compile Include="Input\Recognizers\ITapRecognizer.cs" />
     <Compile Include="Input\Recognizers\IZoomScrollEvent.cs" />
     <Compile Include="Input\Pointer\MouseAction.cs" />
     <Compile Include="Input\Pointer\MouseCursorShape.cs" />
@@ -207,6 +209,8 @@
     <Compile Include="Input\Pointer\PointerStateMachineEvent.cs" />
     <Compile Include="Input\Pointer\PointTracker.cs" />
     <Compile Include="Input\Recognizers\IZoomScrollRecognizer.cs" />
+    <Compile Include="Input\Recognizers\TapEvent.cs" />
+    <Compile Include="Input\Recognizers\TapRecognizer.cs" />
     <Compile Include="Input\Recognizers\ZoomScrollEvent.cs" />
     <Compile Include="Input\Recognizers\ZoomScrollRecognizer.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />

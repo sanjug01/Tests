@@ -56,10 +56,5 @@ namespace RdClient.Shared.Input.Pointer
         {
             _stateMachine.SetStart(DirectModeState.Idle);      
         }
-
-        void IPointerEventConsumer.Reset()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
