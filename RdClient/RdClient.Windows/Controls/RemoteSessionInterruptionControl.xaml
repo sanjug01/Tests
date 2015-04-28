@@ -21,7 +21,7 @@
                        HorizontalAlignment="Center"
                        Text="{Binding ReconnectAttempt}"/>
 
-            <Button Style="{ThemeResource DialogCancelButtonStyle}"
+            <Button Style="{ThemeResource DialogButtonStyle}"
                     HorizontalAlignment="Center"
                     Command="{Binding Cancel}">
                 <TextBlock x:Uid="RemoteSessionInterruptionControl_Cancel" Text="(d) Cancel"/>

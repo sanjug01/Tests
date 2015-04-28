@@ -21,7 +21,7 @@
                        HorizontalAlignment="Center"
                        Text="{Binding FailureCode}"/>
 
-            <Button Style="{ThemeResource DialogCancelButtonStyle}"
+            <Button Style="{ThemeResource DialogButtonStyle}"
                     HorizontalAlignment="Center"
                     Command="{Binding Dismiss}">
                 <TextBlock x:Uid="RemoteSessionFailureControl_Dismiss" Text="(d) Close"/>
