@@ -829,4 +829,12 @@
   <data name="AddOrEditWorkspace-SaveButton.Content" xml:space="preserve">
     <value>(r) Find feed</value>
   </data>
+  <data name="RemoteSessionFailureControl_Dismiss.Text" xml:space="preserve">
+    <value>(r)Close</value>
+    <comment>Text on the button that dismisses the session failure belly-band message and takes the app to the connection center view</comment>
+  </data>
+  <data name="RemoteSessionFailureControl_Title.Text" xml:space="preserve">
+    <value>(r) Remote Connection Has Failed</value>
+    <comment>Title of the in-session connection failure message. The title is shown at the top of the belly-band across the session view.</comment>
+  </data>
 </root>

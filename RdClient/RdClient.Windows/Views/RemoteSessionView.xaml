@@ -54,16 +54,19 @@
             
             <ContentControl
                 Margin="0,20"
-                Content="{Binding BellyBandViewModel}">
+                Content="{Binding BellyBandViewModel}"
+                HorizontalContentAlignment="Center">
                 <ContentControl.ContentTemplateSelector>
                     <helpers:TypeNameDataTemplateSelector>
                         
                         <helpers:TypeNameDataTemplateSelector.Templates>
-                            
-                            <DataTemplate x:Key="Plop">
-                            </DataTemplate>
 
-                            <DataTemplate x:Key="Flop">
+                            <!--
+                            For the RemoteSessionFailureViewModel view model class show RemoteSessionFailureControl.
+                            The control will take the RemoteSessionFailureViewModel as its main binding.
+                            -->
+                            <DataTemplate x:Key="RemoteSessionFailureViewModel">
+                                <c:RemoteSessionFailureControl />
                             </DataTemplate>
 
                         </helpers:TypeNameDataTemplateSelector.Templates>
@@ -108,28 +111,6 @@
                     Grid.Row="3"
                     Content="Cancel (d)"
                     Command="{Binding NavigateHome}" />
-        </Grid>
-
-        <!-- Failure message -->
-        <Grid Visibility="{Binding IsFailureMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-              VerticalAlignment="Center"
-              Height="Auto"
-              RequestedTheme="{StaticResource AlternateTheme}"
-              Background="{ThemeResource DialogBackgroundColor}">
-            <StackPanel Orientation="Vertical" Margin="12,24">
-                <TextBlock HorizontalAlignment="Center" 
-                           Style="{ThemeResource BodyTextBlockStyle}"
-                           Margin="0, 0, 0, 12"
-                           Text="Connection has failed (d)"/>
-                <TextBlock HorizontalAlignment="Center" 
-                           Style="{ThemeResource SubtitleTextBlockStyle}"
-                           Margin="0, 0, 0, 12"
-                           Text="{Binding FailureCode}"/>
-                <Button HorizontalAlignment="Center" Command="{Binding DismissFailureMessage}"
-                        Style="{ThemeResource DialogCancelButtonStyle}">
-                    <TextBlock Text="Close (d)"/>
-                </Button>
-            </StackPanel>
         </Grid>
         
         <!-- Session interruption (auto-reconnect) message -->

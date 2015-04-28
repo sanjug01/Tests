@@ -16,7 +16,6 @@
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite
     {
-        private readonly RelayCommand _dismissFailureMessage;
         private readonly RelayCommand _cancelAutoReconnect;
         private readonly RelayCommand _showSideBars;
         private readonly RelayCommand _invokeKeyboard;
@@ -75,12 +74,6 @@
             }
         }
 
-        public bool IsFailureMessageVisible
-        {
-            get { return _failureMessageVisible; }
-            private set { this.SetProperty(ref _failureMessageVisible, value); }
-        }
-
         public bool IsInterrupted
         {
             get { return _interrupted; }
@@ -91,11 +84,6 @@
         {
             get { return _failureCode; }
             private set { this.SetProperty(ref _failureCode, value); }
-        }
-
-        public ICommand DismissFailureMessage
-        {
-            get { return _dismissFailureMessage; }
         }
 
         public int ReconnectAttempt
@@ -175,7 +163,6 @@
 
         public RemoteSessionViewModel()
         {
-            _dismissFailureMessage = new RelayCommand(this.InternalDismissFailureMessage);
             _cancelAutoReconnect = new RelayCommand(this.InternalCancelAutoReconnect, this.InternalCanAutoReconnect);
             _showSideBars = new RelayCommand(this.InternalShowRightSideBar);
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
@@ -229,7 +216,6 @@
             EmitPropertyChanged("IsRenderingPanelActive");
             EmitPropertyChanged("IsConnecting");
             this.IsInterrupted = SessionState.Interrupted == _activeSession.State.State;
-            this.IsFailureMessageVisible = SessionState.Failed == _activeSession.State.State;
         }
 
         protected override void OnDismissed()
@@ -245,7 +231,6 @@
             _activeSessionControl = null;
             _activeSession = null;
             _sessionView = null;
-            _failureMessageVisible = false;
             _interrupted = false;
             _interruptedContinuation = null;
 
@@ -254,14 +239,8 @@
 
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
         {
-            if (this.IsFailureMessageVisible)
-            {
-                this.DismissFailureMessage.Execute(null);
-            }
-            else
-            {
-                this.NavigateHome.Execute(null);
-            }
+            this.BellyBandViewModel = null;
+            this.NavigateHome.Execute(null);
             backArgs.Handled = true;
         }
 
@@ -311,8 +290,14 @@
             //
             // Show the failure UI
             //
-            this.FailureCode = e.DisconnectCode;
-            this.IsFailureMessageVisible = true;
+            this.BellyBandViewModel = new RemoteSessionFailureViewModel(e.DisconnectCode,()=>
+            {
+                Contract.Assert(SessionState.Failed == _activeSession.State.State);
+
+                this.BellyBandViewModel = null;
+                this.NavigationService.NavigateToView("ConnectionCenterView", null);
+            });
+            EmitPropertyChanged("IsConnecting");
         }
 
         private void OnSessionInterrupted(object sender, SessionInterruptedEventArgs e)
@@ -447,14 +432,6 @@
             {
                 this.ReconnectAttempt = _activeSession.State.ReconnectAttempt;
             }
-        }
-
-        private void InternalDismissFailureMessage(object parameter)
-        {
-            Contract.Assert(SessionState.Failed == _activeSession.State.State);
-
-            this.IsFailureMessageVisible = false;
-            this.NavigationService.NavigateToView("ConnectionCenterView", null);
         }
 
         private void InternalCancelAutoReconnect(object parameter)

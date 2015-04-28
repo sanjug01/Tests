@@ -156,6 +156,9 @@
     <Compile Include="Controls\PointerPressDetector.xaml.cs">
       <DependentUpon>PointerPressDetector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RemoteSessionFailureControl.xaml.cs">
+      <DependentUpon>RemoteSessionFailureControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RemoteSessionPanel.xaml.cs">
       <DependentUpon>RemoteSessionPanel.xaml</DependentUpon>
     </Compile>
@@ -398,6 +401,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\PointerPressDetector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RemoteSessionFailureControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
