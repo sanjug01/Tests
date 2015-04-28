@@ -1,0 +1,175 @@
+﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.Navigation;
+using RdClient.Shared.Input.Pointer;
+using RdClient.Shared.Models.PanKnobModel;
+using System.Diagnostics.Contracts;
+using Windows.Foundation;
+using Windows.UI.Input;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+
+namespace RdClient.Controls
+{
+    public sealed partial class PanKnob : UserControl, IPanKnob
+    {
+        public static readonly DependencyProperty PanKnobSiteProperty = DependencyProperty.Register("PanKnobSite",
+            typeof(object),
+            typeof(PanKnob),
+            new PropertyMetadata(null, OnPanKnobSiteChanged));
+
+        private static void OnPanKnobSiteChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            Contract.Assert(sender is PanKnob);
+            Contract.Assert(null == e.NewValue || e.NewValue is IPanKnobSite);
+            ((PanKnob)sender).OnPanKnobSiteChanged((IPanKnobSite)e.OldValue, (IPanKnobSite) e.NewValue);
+        }
+
+        private void OnPanKnobSiteChanged(IPanKnobSite oldSite, IPanKnobSite newSite)
+        {
+            _panKnobSite = newSite;
+            _panKnobSite.SetPanKnob(this);
+        }
+
+        private int _fingersDown = 0;
+
+        private IPanKnobSite _panKnobSite;
+        private GestureRecognizer _platformRecognizer;
+        private ZoomScrollRecognizer _zoomScrollRecognizer;
+
+        bool IPanKnob.IsVisible
+        {
+            get
+            {
+                return PanKnobGrid.Visibility == Visibility.Visible;
+            }
+
+            set
+            {
+                if(value == true)
+                {
+                    PanKnobGrid.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    PanKnobGrid.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
+
+        Point IPanKnob.Position
+        {
+            get
+            {
+                return new Point(PanKnobTranslateTransform.X, PanKnobTranslateTransform.Y);
+            }
+            set
+            {
+                PanKnobTranslateTransform.X = value.X;
+                PanKnobTranslateTransform.Y = value.Y;
+            }
+        }
+
+        public PanKnob()
+        {
+            this.InitializeComponent();
+
+            _platformRecognizer = new GestureRecognizer();
+            _platformRecognizer.GestureSettings = GestureSettings.Tap;
+            _platformRecognizer.Tapped += OnTapped;
+
+            ITimer timer = null;
+            _panKnobSite.CastAndCall<IPanKnobSite>(site => timer = site.TimerFactory.CreateTimer());
+            _zoomScrollRecognizer = new ZoomScrollRecognizer(timer);
+            _zoomScrollRecognizer.ZoomScrollEvent += OnZoomScrollEvent;
+        }
+
+        private void OnZoomScrollEvent(object sender, ZoomScrollEventArgs e)
+        {
+            _panKnobSite.Consume(e.ZoomScrollEvent);
+        }
+
+        private void InternalConsume(IPointerEventBase pointer)
+        {
+            if(_panKnobSite != null)
+            {
+                _panKnobSite.Consume(pointer);
+            }
+        }
+
+        private void OnTapped(object sender, TappedEventArgs e)
+        {
+            IGestureRoutedEventProperties w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.Tapped, PointerEventType.TappedEventArgs, e, this));
+            InternalConsume(w);
+        }
+
+        protected override void OnManipulationStarting(ManipulationStartingRoutedEventArgs e)
+        {
+            IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarting, PointerEventType.ManipulationStartingRoutedEventArgs, e, this));
+            _zoomScrollRecognizer.Consume(w);
+            InternalConsume(w);
+        }
+
+        protected override void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
+        {
+            IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarted, PointerEventType.ManipulationStartedRoutedEventArgs, e, this));
+            _zoomScrollRecognizer.Consume(w);
+            InternalConsume(w);
+        }
+
+        protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
+        {
+            IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationDelta, PointerEventType.ManipulationDeltaRoutedEventArgs, e, this));
+            _zoomScrollRecognizer.Consume(w);
+            InternalConsume(w);
+        }
+
+        protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
+        {
+            e.TranslationBehavior.DesiredDeceleration = GlobalConstants.DesiredDeceleration;
+            IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationInertiaStarting, PointerEventType.ManipulationInertiaStartingRoutedEventArgs, e, this));
+            _zoomScrollRecognizer.Consume(w);
+            InternalConsume(w);
+        }
+
+        protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs e)
+        {
+            IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationCompleted, PointerEventType.ManipulationCompletedRoutedEventArgs, e, this));
+            _zoomScrollRecognizer.Consume(w);
+            InternalConsume(w);
+        }
+
+        protected override void OnPointerPressed(PointerRoutedEventArgs e)
+        {
+            _fingersDown++;
+
+            if(_fingersDown == 1)
+            {
+                this.CapturePointer(e.Pointer);
+            }
+
+            IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerPressed, PointerEventType.PointerRoutedEventArgs, e, this));
+            InternalConsume(w);
+        }
+
+        protected override void OnPointerCanceled(PointerRoutedEventArgs e)
+        {
+            _fingersDown = 0;
+
+            IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCanceled, PointerEventType.PointerRoutedEventArgs, e, this));
+            InternalConsume(w);
+        }
+
+        protected override void OnPointerReleased(PointerRoutedEventArgs e)
+        {
+            if(_fingersDown == 0)
+            {
+                this.ReleasePointerCapture(e.Pointer);
+            }
+
+            IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerReleased, PointerEventType.PointerRoutedEventArgs, e, this));
+            InternalConsume(w);
+        }
+
+    }
+}

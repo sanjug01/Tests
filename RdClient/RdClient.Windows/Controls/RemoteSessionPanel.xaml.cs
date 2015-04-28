@@ -1,13 +1,10 @@
 ﻿namespace RdClient.Controls
 {
-    using RdClient.Shared.Converters;
-    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;

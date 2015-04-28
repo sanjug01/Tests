@@ -152,7 +152,6 @@ namespace RdClient.Shared.ViewModels
         private readonly ICommand _hideKnobCommand;
         public ICommand HideKnobCommand { get { return _hideKnobCommand; } }
 
-
         // handles press&hold, double press&hold and hold release to manage knob state
         private IPointerEventConsumer _pointerEventConsumer;
         public IPointerEventConsumer PointerEventConsumer

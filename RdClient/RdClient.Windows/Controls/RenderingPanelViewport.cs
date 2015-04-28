@@ -53,7 +53,7 @@
         }
 
         double IViewport.ZoomFactor
-        {
+        {   
             get { return _zoomFactor; }
         }
 
