@@ -442,16 +442,13 @@
                 // a new user should have been added
                 int newCntUsers = _addOrEditGatewayVM.UserOptions.Count;
                 Assert.AreEqual(1, _dataModel.Credentials.Models.Count);
-                IModelContainer<CredentialsModel> savedCredentials = _dataModel.Credentials.Models[0];
-
-                Assert.IsTrue(_addOrEditGatewayVM.SelectedUserOptionsIndex > 1);
                 Assert.AreEqual(cntUsers + 1, newCntUsers);
-                Assert.AreEqual(creds.Username,
-                    _addOrEditGatewayVM.UserOptions[_addOrEditGatewayVM.SelectedUserOptionsIndex].Credentials.Model.Username);
-                Assert.AreEqual(savedCredentials,
-                    _addOrEditGatewayVM.UserOptions[_addOrEditGatewayVM.SelectedUserOptionsIndex].Credentials);
 
+                IModelContainer<CredentialsModel> savedCredentials = _dataModel.Credentials.Models[0];            
+                Assert.AreEqual(creds, savedCredentials.Model);
 
+                // verify the new credentials are selected
+                Assert.AreEqual(creds, _addOrEditGatewayVM.UserOptions[_addOrEditGatewayVM.SelectedUserOptionsIndex].Credentials.Model);
             }
         }
 
