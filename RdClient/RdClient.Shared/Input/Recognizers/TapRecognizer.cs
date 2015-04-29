@@ -70,14 +70,20 @@ namespace RdClient.Shared.Input.Recognizers
 
         public void Consume(IPointerEventBase pointerEvent)
         {
-            Debug.WriteLine(pointerEvent.Action);
-
             switch(pointerEvent.Action)
             {
                 case PointerEventAction.PointerPressed:
                     _fingersDown++;
                     _position = pointerEvent.Position;
                     _timer.Reset(TapTimerExpired);
+                    break;
+                case PointerEventAction.ManipulationDelta:
+                    if(_fingersDown > 0 && 
+                        _taps > 0 && 
+                        RdMath.Distance(((IManipulationRoutedEventProperties) pointerEvent).Delta.Translation) > GlobalConstants.TouchMoveThreshold)
+                    { 
+                        EmitTapEvent(TapEventType.TapMovingStarted);
+                    }
                     break;
                 case PointerEventAction.PointerReleased:
                     if(_timer.IsExpired == false)

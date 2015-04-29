@@ -7,6 +7,7 @@ namespace RdClient.Shared.Input.Recognizers
         Tap,
         HoldingStarted,
         TapHoldingStarted,
+        TapMovingStarted,
         HoldingCompleted,
         HoldingCancelled,
         DoubleTap,

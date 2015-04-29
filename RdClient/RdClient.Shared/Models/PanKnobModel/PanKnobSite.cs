@@ -1,6 +1,8 @@
 ﻿using System;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Pointer;
+using System.Diagnostics;
+using RdClient.Shared.Input.Recognizers;
 
 namespace RdClient.Shared.Models.PanKnobModel
 {
@@ -11,8 +13,14 @@ namespace RdClient.Shared.Models.PanKnobModel
 
         private IStateMachine<PanKnobState, PanKnobStateMachineEvent> _stateMachine;
         private PanKnobStateMachineEvent _stateMachineEvent;
-        private IViewport _viewport;
-        public IViewport Viewport { set { _viewport = value; } }
+
+        public IViewport Viewport
+        {
+            set
+            {
+                _stateMachineEvent.Control.Viewport = value;
+            }
+        }
         private IPanKnob _panKnob;
 
         public PanKnobSite(ITimerFactory timerFactory)
@@ -31,7 +39,7 @@ namespace RdClient.Shared.Models.PanKnobModel
         void IPanKnobSite.SetPanKnob(IPanKnob panKnob)
         {
             _panKnob = panKnob;
-            _stateMachineEvent.Control = new PanKnobControl(_viewport, _panKnob);
+            _stateMachineEvent.Control = new PanKnobControl(panKnob);           
         }
 
         void IPointerEventConsumer.Consume(IPointerEventBase pointerEvent)

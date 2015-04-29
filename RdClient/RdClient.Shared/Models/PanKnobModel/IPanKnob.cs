@@ -6,5 +6,7 @@ namespace RdClient.Shared.Models.PanKnobModel
     {
         bool IsVisible { get; set; }
         Point Position { get; set; }
+
+        Size Size { get; }
     }
 }

@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using System;
 using RdClient.Shared.Input.Recognizers;
+using System.Diagnostics;
 
 namespace RdClient.Controls
 {
@@ -98,6 +99,14 @@ namespace RdClient.Controls
             }
         }
 
+        Size IPanKnob.Size
+        {
+            get
+            {
+                return this.PanKnobGrid.RenderSize;
+            }
+        }
+
         public PanKnob()
         {
             this.InitializeComponent();
@@ -120,10 +129,7 @@ namespace RdClient.Controls
 
         private void InternalConsume(IPointerEventBase pointer)
         {
-            if(_panKnobSite != null)
-            {
-                _panKnobSite.Consume(pointer);
-            }
+            _panKnobSite.Consume(pointer);
         }
 
         private void OnTapped(object sender, TappedEventArgs e)
@@ -136,51 +142,41 @@ namespace RdClient.Controls
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarting, PointerEventType.ManipulationStartingRoutedEventArgs, e, this));
 
-            if(_zoomScrollRecognizer != null)
-            {
-                _zoomScrollRecognizer.Consume(w);
-            }
+            _zoomScrollRecognizer.Consume(w);
+            _tapRecognizer.Consume(w);
             InternalConsume(w);
         }
 
         protected override void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarted, PointerEventType.ManipulationStartedRoutedEventArgs, e, this));
-            if (_zoomScrollRecognizer != null)
-            {
-                _zoomScrollRecognizer.Consume(w);
-            }
+            _zoomScrollRecognizer.Consume(w);
+            _tapRecognizer.Consume(w);
             InternalConsume(w);
         }
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationDelta, PointerEventType.ManipulationDeltaRoutedEventArgs, e, this));
-            if (_zoomScrollRecognizer != null)
-            {
-                _zoomScrollRecognizer.Consume(w);
-            }
+            _zoomScrollRecognizer.Consume(w);
+            _tapRecognizer.Consume(w);
             InternalConsume(w);
         }
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
         {
-            e.TranslationBehavior.DesiredDeceleration = GlobalConstants.DesiredDeceleration;
+            e.TranslationBehavior.DesiredDeceleration = 0.005;
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationInertiaStarting, PointerEventType.ManipulationInertiaStartingRoutedEventArgs, e, this));
-            if (_zoomScrollRecognizer != null)
-            {
-                _zoomScrollRecognizer.Consume(w);
-            }
+            _zoomScrollRecognizer.Consume(w);
+            _tapRecognizer.Consume(w);
             InternalConsume(w);
         }
 
         protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationCompleted, PointerEventType.ManipulationCompletedRoutedEventArgs, e, this));
-            if (_zoomScrollRecognizer != null)
-            {
-                _zoomScrollRecognizer.Consume(w);
-            }
+            _zoomScrollRecognizer.Consume(w);
+            _tapRecognizer.Consume(w);
             InternalConsume(w);
         }
 
@@ -207,6 +203,13 @@ namespace RdClient.Controls
             this.ReleasePointerCapture(e.Pointer);            
 
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerReleased, PointerEventType.PointerRoutedEventArgs, e, this));
+            _tapRecognizer.Consume(w);
+            InternalConsume(w);
+        }
+
+        protected override void OnPointerMoved(PointerRoutedEventArgs e)
+        {
+            IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerMoved, PointerEventType.PointerRoutedEventArgs, e, this));
             _tapRecognizer.Consume(w);
             InternalConsume(w);
         }
