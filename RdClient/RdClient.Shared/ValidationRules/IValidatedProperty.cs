@@ -6,7 +6,6 @@
     public interface IValidatedProperty<T> : INotifyPropertyChanged
     {
         T Value { get; set; }
-        bool IsValid { get; }
-        IEnumerable<object> Errors { get; }
+        IValidationResult State { get; }
     }
 }

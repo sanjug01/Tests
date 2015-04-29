@@ -38,7 +38,7 @@
             Contract.Requires(null != _credentialsAdded);
             Contract.Ensures(null != _credentials);
 
-            _userNameRule = new UsernameValidationRule();
+            _userNameRule = new UsernameFormatValidationRule();
             _resourceName = resourceName;
             _dataModel = dataModel;
             _credentialsAdded = credentialsAdded;

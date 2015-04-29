@@ -58,7 +58,7 @@
             _dataModel = dataModel;
             _prompt = prompt;
             _state = state;
-            _userNameRule = new UsernameValidationRule();
+            _userNameRule = new UsernameFormatValidationRule();
             _savedCredentials = FindSavedCredentials(sessionCredentials.Credentials.Username);
             _passwordChanged = false;
         }

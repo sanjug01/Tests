@@ -4,6 +4,7 @@
     using RdClient.Shared.Navigation;
     using RdClient.Shared.ValidationRules;
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Globalization;
     using System.Windows.Input;
@@ -80,21 +81,17 @@
 
         public AddUserViewModel()
         {
-            _user = new ValidatedProperty<string>(new UsernameValidationRule());
-            _okCommand = new RelayCommand(o => OkCommandHandler(o), o => _user.IsValid);
-            _cancelCommand = new RelayCommand(new Action<object>(CancelCommandHandler));
+            var usernameRule = new CompositeValidationRule<string>(new List<IValidationRule<string>>() { new UsernameFormatValidationRule() });
+            _user = new ValidatedProperty<string>(usernameRule);
+            _okCommand = new RelayCommand(o => OkCommandHandler(o), o => _user.State.IsValid);
             _user.PropertyChanged += (s, e) =>
             {
-                if (s == _user && e.PropertyName == "IsValid")
+                if (s == _user && e.PropertyName == "State")
                 {
                     _okCommand.EmitCanExecuteChanged();
                 }
             };
-        }
-
-        private void _user_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            throw new NotImplementedException();
+            _cancelCommand = new RelayCommand(new Action<object>(CancelCommandHandler));
         }
 
         public IPresentableView PresentableView { private get; set; }

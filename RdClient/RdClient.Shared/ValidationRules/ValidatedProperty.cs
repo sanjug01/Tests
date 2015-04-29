@@ -11,22 +11,12 @@ namespace RdClient.Shared.ValidationRules
     public class ValidatedProperty<T> : MutableObject, IValidatedProperty<T>
     {
         private T _value;
-        private readonly List<IValidationRule<T>> _rules;
-        private IEnumerable<object> _errors;
-        private bool _isValid;
-
-        public ValidatedProperty(IEnumerable<IValidationRule<T>> rules)
-        {
-            _rules = new List<IValidationRule<T>>();
-            foreach (var rule in rules)
-            {
-                _rules.Add(rule);
-            }
-        }
+        private readonly IValidationRule<T> _rule;
+        private IValidationResult _state;
 
         public ValidatedProperty(IValidationRule<T> rule)
-            : this(new List<IValidationRule<T>>() { rule })
         {
+            _rule = rule;
         }
 
         public T Value
@@ -40,40 +30,21 @@ namespace RdClient.Shared.ValidationRules
             {
                 if (SetProperty(ref _value, value))
                 {
-                    Validate();
+                    this.State = _rule.Validate(value);
                 }
             }
         }
 
-        public IEnumerable<object> Errors
+        public IValidationResult State
         {
             get
             {
-                return _errors;
+                return _state;
             }
             private set
             {
-                if (SetProperty(ref _errors, value))
-                {
-                    SetIsValid();
-                }
+                SetProperty(ref _state, value);
             }
-        }
-
-        public bool IsValid
-        {
-            get { return _isValid; }
-            private set { SetProperty(ref _isValid, value); }
-        }
-
-        private void Validate()
-        {
-            this.Errors = _rules.Select(r => r.Validate(this.Value)).Where(r => !r.IsValid).Select(r => r.ErrorContent);
-        }
-
-        private void SetIsValid()
-        {
-            this.IsValid = !this.Errors?.Any() ?? true;
         }
     }
 }
