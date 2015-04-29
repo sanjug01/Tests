@@ -1,19 +1,15 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
-
-namespace RdClient.Converters
+﻿namespace RdClient.Converters
 {
     using RdClient.Shared.Input.ZoomPan;
+    using System;
+    using Windows.UI;
+    using Windows.UI.Xaml.Data;
+    using Windows.UI.Xaml.Media;
+
     public class PanKnobStateToBackgroundBrushConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            Contract.Requires(targetType.Equals(typeof(Brush)));
-
             if (!(value is PanKnobState))
             {
                 throw new ArgumentException("Invalid value type, expected PanKnobState", "value");

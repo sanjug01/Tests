@@ -33,12 +33,13 @@
         <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <sconv:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
         <sconv:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
+        <sconv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
     </UserControl.Resources>
 
     <Grid>
         <c:RemoteSessionPanel
             RemoteSessionViewSite="{Binding}"
-            Visibility="{Binding IsRenderingPanelActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
 
         <!-- Connection Bar -->
         <ItemsControl

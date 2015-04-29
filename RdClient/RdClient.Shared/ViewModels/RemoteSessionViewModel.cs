@@ -1,9 +1,9 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.CxWrappers;
-    using RdClient.Shared.CxWrappers.Errors;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Keyboard;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
@@ -12,7 +12,6 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
-    using RdClient.Shared.Helpers;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite
     {
@@ -48,13 +47,10 @@
 
         private object _bellyBandViewModel;
 
-        public bool IsRenderingPanelActive
+        public SessionState SessionState
         {
-            get
-            {
-                return null != _activeSession
-                    && (SessionState.Connected == _activeSession.State.State || SessionState.Connecting == _activeSession.State.State);
-            }
+            get { return _sessionState; }
+            private set { SetProperty(ref _sessionState, value); }
         }
 
         /// <summary>
@@ -129,6 +125,7 @@
             _navigateHome = new RelayCommand(this.InternalNavigateHome);
             _mouseMode = new RelayCommand(this.InternalMouseMode);
             _isRightSideBarVisible = false;
+            _sessionState = SessionState.Idle;
 
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = _zoomPanModel.ZoomInCommand });
@@ -156,7 +153,7 @@
             IRemoteSession newSession = (IRemoteSession)activationParameter;
 
             _activeSession = newSession;
-            _sessionState = _activeSession.State.State;
+            this.SessionState = _activeSession.State.State;
 
             _activeSession.CredentialsNeeded += this.OnCredentialsNeeded;
             _activeSession.Closed += this.OnSessionClosed;
@@ -171,8 +168,6 @@
                 Contract.Assert(null == _activeSessionControl);
                 _activeSessionControl = _activeSession.Activate(_sessionView);
             }
-
-            EmitPropertyChanged("IsRenderingPanelActive");
         }
 
         protected override void OnDismissed()
@@ -263,10 +258,6 @@
         private void OnSessionInterrupted(object sender, SessionInterruptedEventArgs e)
         {
             RemoteSessionInterruptionViewModel vm = new RemoteSessionInterruptionViewModel(_activeSession, e.ObtainContinuation());
-            //
-            // TODO: do something about the rendering panel
-            //
-            EmitPropertyChanged("IsRenderingPanelActive");
         }
 
         private void OnBadCertificate(object sender, BadCertificateEventArgs e)
@@ -336,7 +327,6 @@
                     case SessionState.Connecting:
                         Contract.Assert(null == this.BellyBandViewModel);
                         this.BellyBandViewModel = new RemoteSessionConnectingViewModel(() => _activeSession.Disconnect());
-                        EmitPropertyChanged("IsRenderingPanelActive");
                         this.IsConnectionBarVisible = false;
                         break;
 
@@ -358,7 +348,6 @@
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
-                        EmitPropertyChanged("IsRenderingPanelActive");
                         this.IsConnectionBarVisible = true;
                         break;
 
@@ -370,7 +359,6 @@
                             _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
                             _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
-                            EmitPropertyChanged("IsRenderingPanelActive");
                             //
                             // The connection bar and side bars are not available in any non-connected state.
                             //
@@ -380,7 +368,7 @@
                         break;
                 }
 
-                _sessionState = _activeSession.State.State;
+                this.SessionState = _activeSession.State.State;
             }
         }
 
