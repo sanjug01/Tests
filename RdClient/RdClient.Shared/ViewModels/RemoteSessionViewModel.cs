@@ -15,7 +15,7 @@
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite
     {
-        private readonly RelayCommand _showSideBars;
+        private readonly RelayCommand _toggleSideBars;
         private readonly RelayCommand _invokeKeyboard;
         private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
         private readonly RelayCommand _navigateHome;
@@ -38,7 +38,6 @@
         private bool _isRightSideBarVisible;
 
         private ITimerFactory _timerFactory;
-        public ITimerFactory TimerFactory { get { return _timerFactory; } }
 
         private readonly PointerPosition _pointerPosition = new PointerPosition();
         private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
@@ -51,6 +50,11 @@
         {
             get { return _sessionState; }
             private set { SetProperty(ref _sessionState, value); }
+        }
+
+        public ITimerFactory TimerFactory
+        {
+            get { return _timerFactory; }
         }
 
         /// <summary>
@@ -86,9 +90,9 @@
             get { return _connectionBarItems; }
         }
 
-        public ICommand ShowSideBars
+        public ICommand ToggleSideBars
         {
-            get { return _showSideBars; }
+            get { return _toggleSideBars; }
         }
 
         public bool IsRightSideBarVisible
@@ -119,7 +123,7 @@
 
         public RemoteSessionViewModel()
         {
-            _showSideBars = new RelayCommand(this.InternalShowRightSideBar);
+            _toggleSideBars = new RelayCommand(this.InternalToggleRightSideBar);
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
             _invokeKeyboardModel = new SymbolBarToggleButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
             _navigateHome = new RelayCommand(this.InternalNavigateHome);
@@ -130,7 +134,7 @@
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = _zoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = _zoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _showSideBars });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _toggleSideBars });
             items.Add(_invokeKeyboardModel);
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
         }
@@ -385,7 +389,7 @@
             _activeSessionControl.SendKeystroke(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
         }
 
-        private void InternalShowRightSideBar(object parameter)
+        private void InternalToggleRightSideBar(object parameter)
         {
             this.IsRightSideBarVisible = !this.IsRightSideBarVisible;
         }

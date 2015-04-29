@@ -84,6 +84,11 @@
                 </helpers:TypeNameDataTemplateSelector>
             </ItemsControl.ItemTemplateSelector>
         </ItemsControl>
+        
+        <!-- Transparent overlay that dismisses the side bars -->
+        <c:PointerPressDetector
+            Visibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+            PointerPressDetected="{Binding ToggleSideBars}" />
 
         <!-- Right side bar -->
         <c:RightSideBarControl

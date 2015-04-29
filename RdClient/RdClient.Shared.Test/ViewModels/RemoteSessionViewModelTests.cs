@@ -875,7 +875,7 @@
             //task.Dispose();
             task = null;
             _defex.ExecuteAll();
-            _vm.ShowSideBars.Execute(null);
+            _vm.ToggleSideBars.Execute(null);
             _vm.NavigateHome.Execute(null);
 
             Assert.IsNotNull(task);
@@ -918,8 +918,8 @@
             connectTask.Wait();
             //connectTask.Dispose();
             _defex.ExecuteAll();
-            Assert.IsTrue(_vm.ShowSideBars.CanExecute(null));
-            _vm.ShowSideBars.Execute(null);
+            Assert.IsTrue(_vm.ToggleSideBars.CanExecute(null));
+            _vm.ToggleSideBars.Execute(null);
 
             Assert.IsTrue(_vm.IsRightSideBarVisible);
             Assert.IsTrue(_vm.NavigateHome.CanExecute(true));
