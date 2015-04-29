@@ -15,7 +15,7 @@
     /// </summary>
     public sealed class NewCredentialsTask : EditCredentialsTaskBase
     {
-        private readonly IValidationRule _userNameRule;
+        private readonly IValidationRule<string> _userNameRule;
         private readonly ApplicationDataModel _dataModel;
         private readonly Action<Guid> _credentialsAdded;
         private readonly Action _viewCancelled;
@@ -75,7 +75,7 @@
                 //
                 valid = false;
             }
-            else if(!_userNameRule.Validate(userName, CultureInfo.CurrentCulture))
+            else if(!_userNameRule.Validate(userName).IsValid)
             {
                 //
                 // TODO: update the view model to show the "invalid user name" error

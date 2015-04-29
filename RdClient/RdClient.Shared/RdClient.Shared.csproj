@@ -310,7 +310,9 @@
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="Navigation\ViewVisibility.cs" />
+    <Compile Include="ValidationRules\IValidationResult.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
+    <Compile Include="ValidationRules\ValidationResult.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBase.cs" />
     <Compile Include="ViewModels\AdditionalToolbarCommandsViewModel.cs" />

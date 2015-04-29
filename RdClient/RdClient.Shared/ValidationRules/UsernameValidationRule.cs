@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RdClient.Shared.ValidationRules
 {
-    public class UsernameValidationRule : IValidationRule
+    public class UsernameValidationRule : IValidationRule<string>
     {
         private CharacterOccurenceValidationRule _illegalCharacterValidationRule;
 
@@ -15,14 +15,12 @@ namespace RdClient.Shared.ValidationRules
             _illegalCharacterValidationRule = new CharacterOccurenceValidationRule("/[]\":;|<>+=,?*%");
         }
 
-        public bool Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        public IValidationResult Validate(string stringValue)
         {
-            string stringValue = value as string;
-
-            return 
-                string.IsNullOrEmpty(stringValue) == false &&
-                _illegalCharacterValidationRule.Validate(stringValue, cultureInfo) && 
-                stringValue.Count(x => x == '\\') < 2;
+            bool result = string.IsNullOrEmpty(stringValue) == false &&
+                            _illegalCharacterValidationRule.Validate(stringValue).IsValid && 
+                            stringValue.Count(x => x == '\\') < 2;
+            return new ValidationResult(result);
         }
     }
 }

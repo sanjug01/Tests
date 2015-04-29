@@ -128,7 +128,7 @@
 
         public bool IsUsernameValid
         {
-            get { return _ruleUsername.Validate(this.User, CultureInfo.CurrentCulture); }
+            get { return _ruleUsername.Validate(this.User).IsValid; }
         }
 
         public string User

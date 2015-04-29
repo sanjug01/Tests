@@ -12,7 +12,7 @@
         private readonly ISessionCredentials _sessionCredentials;
         private readonly ApplicationDataModel _dataModel;
         private readonly string _prompt;
-        private readonly IValidationRule _userNameRule;
+        private readonly IValidationRule<string> _userNameRule;
         private readonly object _state;
         private IModelContainer<CredentialsModel> _savedCredentials;
         private bool _passwordChanged;
@@ -171,7 +171,7 @@
 
             if(valid)
             {
-                valid = _userNameRule.Validate(viewModel.UserName, CultureInfo.CurrentUICulture);
+                valid = _userNameRule.Validate(viewModel.UserName).IsValid;
             }
 
             return valid;

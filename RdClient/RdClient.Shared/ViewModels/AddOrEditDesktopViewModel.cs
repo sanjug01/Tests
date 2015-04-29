@@ -223,7 +223,7 @@ namespace RdClient.Shared.ViewModels
         {
             HostNameValidationRule rule = new HostNameValidationRule();
             bool isValid = true;
-            if (!(this.IsHostValid = rule.Validate(this.Host, System.Globalization.CultureInfo.CurrentCulture)))
+            if (!(this.IsHostValid = rule.Validate(this.Host).IsValid))
             {
                 isValid = isValid && this.IsHostValid;
             }

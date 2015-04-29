@@ -14,7 +14,7 @@
     using System;
     using RdClient.Shared.ValidationRules;
 
-    public class FeedUrlValidationRule : IValidationRule
+    public class FeedUrlValidationRule : IValidationRule<string>
     {
         private OnPremiseWorkspaceModel _workspace;
         private IModelCollection<OnPremiseWorkspaceModel> _workspaceCollection;
@@ -25,11 +25,12 @@
             _workspaceCollection = workspaceCollection;
         }
 
-        public bool Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        public IValidationResult Validate(string value)
         {
-            string feedUrl = value as string ?? "";
+            string feedUrl = value ?? "";
             bool alreadyAWorkspace = _workspaceCollection.Models.Any(w => w.Model != _workspace && string.Compare(w.Model.FeedUrl, feedUrl, StringComparison.OrdinalIgnoreCase) == 0);
-            return !alreadyAWorkspace && Uri.IsWellFormedUriString(feedUrl, UriKind.Absolute);
+            bool result = !alreadyAWorkspace && Uri.IsWellFormedUriString(feedUrl, UriKind.Absolute);
+            return new ValidationResult(result);
         }
     }
 
@@ -195,7 +196,7 @@
         {
             if (this.SelectedCredentialOption != null
                 && this.SelectedCredentialOption.Credentials != null
-                && _feedValidationRule.Validate(this.FeedUrl, null))
+                && _feedValidationRule.Validate(this.FeedUrl).IsValid)
             {
                 OnPremiseWorkspaceModel workspace = this.Workspace;
                 if (this.Adding)
