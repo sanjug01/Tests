@@ -13,34 +13,17 @@ namespace RdClient.Helpers
     public class SynchronizedTransform
     {
         private CompositeTransform _transform;
-        ReaderWriterLockSlim _rwLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-
-        private System.Double LockRead(ref System.Double parameter)
-        {
-            System.Double result;
-            _rwLock.EnterReadLock();
-            result = parameter;
-            _rwLock.ExitReadLock();
-            return result;
-        }
-
-        private void LockWrite(ref System.Double parameter, System.Double value)
-        {
-            _rwLock.EnterWriteLock();
-            parameter = value;
-            _rwLock.ExitWriteLock();
-        }
 
         private System.Double _centerX;
         public System.Double CenterX
         {
             get
             {
-                return LockRead(ref _centerX);
+                return _centerX;
             }
             set
             {
-                LockWrite(ref _centerX, value);
+                Interlocked.Exchange(ref _centerX, value);
                 _transform.CenterX = value;
             }
         }
@@ -50,11 +33,11 @@ namespace RdClient.Helpers
         {
             get
             {
-                return LockRead(ref _centerY);
+                return _centerY;
             }
             set
             {
-                LockWrite(ref _centerY, value);
+                Interlocked.Exchange(ref _centerY, value);
                 _transform.CenterY = value;
             }
         }
@@ -64,11 +47,11 @@ namespace RdClient.Helpers
         {
             get
             {
-                return LockRead(ref _rotation);
+                return _rotation;
             }
             set
             {
-                LockWrite(ref _rotation, value);
+                Interlocked.Exchange(ref _rotation, value);
                 _transform.Rotation = value;
             }
         }
@@ -78,11 +61,11 @@ namespace RdClient.Helpers
         {
             get
             {
-                return LockRead(ref _scaleX);
+                return _scaleX;
             }
             set
             {
-                LockWrite(ref _scaleX, value);
+                Interlocked.Exchange(ref _scaleX, value);
                 _transform.ScaleX = value;
             }
         }
@@ -92,11 +75,11 @@ namespace RdClient.Helpers
         {
             get
             {
-                return LockRead(ref _scaleY);
+                return _scaleY;
             }
             set
             {
-                LockWrite(ref _scaleY, value);
+                Interlocked.Exchange(ref _scaleY, value);
                 _transform.ScaleY = value;
             }
         }
@@ -106,11 +89,11 @@ namespace RdClient.Helpers
         {
             get
             {
-                return LockRead(ref _skewX);
+                return _skewX;
             }
             set
             {
-                LockWrite(ref _skewX, value);
+                Interlocked.Exchange(ref _skewX, value);
                 _transform.SkewX = value;
             }
         }
@@ -120,11 +103,11 @@ namespace RdClient.Helpers
         {
             get
             {
-                return LockRead(ref _skewY);
+                return _skewY;
             }
             set
             {
-                LockWrite(ref _skewY, value);
+                Interlocked.Exchange(ref _skewY, value);
                 _transform.SkewY = value;
             }
         }
@@ -134,11 +117,11 @@ namespace RdClient.Helpers
         {
             get
             {
-                return LockRead(ref _translateX);
+                return _translateX;
             }
             set
             {
-                LockWrite(ref _translateX, value);
+                Interlocked.Exchange(ref _translateX, value);
                 _transform.TranslateX = value;
             }
         }
@@ -148,11 +131,11 @@ namespace RdClient.Helpers
         {
             get
             {
-                return LockRead(ref _translateY);
+                return _translateY;
             }
             set
             {
-                LockWrite(ref _translateY, value);
+                Interlocked.Exchange(ref _translateY, value);
                 _transform.TranslateY = value;
             }
         }
