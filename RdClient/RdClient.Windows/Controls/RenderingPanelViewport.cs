@@ -59,7 +59,14 @@
 
         Point IViewport.TransformPoint(Point point)
         {
-            return _transformation.Inverse.TransformPoint(point);
+            CompositeTransform inverse = new CompositeTransform();
+
+            inverse.ScaleX = 1.0 / _transformation.ScaleX;
+            inverse.ScaleY = 1.0 / _transformation.ScaleY;
+            inverse.TranslateX = -_transformation.TranslateX;
+            inverse.TranslateY = -_transformation.TranslateY;
+
+            return inverse.TransformPoint(point);
         }
 
         void IViewport.Set(double zoomFactor, Size offset, bool animated)
