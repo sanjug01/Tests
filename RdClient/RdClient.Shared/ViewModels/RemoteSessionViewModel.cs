@@ -190,7 +190,8 @@
             _sessionView = null;
 
             //
-            // TODO: restore the belly band view model from the session state.
+            // TODO:    restore the belly band view model from the session state.
+            // TFS:     2679737
             //
             this.BellyBandViewModel = null;
 
