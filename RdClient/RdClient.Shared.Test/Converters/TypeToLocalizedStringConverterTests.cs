@@ -3,6 +3,7 @@ using RdClient.Shared.Converters;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Test.UAP;
 using System;
+using Windows.UI.Xaml;
 
 namespace RdClient.Shared.Test.Converters
 {
@@ -84,6 +85,14 @@ namespace RdClient.Shared.Test.Converters
             TestEnum te = TestEnum.TestValue;
             object parameter = new Object();
             Assert.AreEqual("TestEnum_TestValue_Stringloc", ttlsc.Convert(te, typeof(string), parameter, null));
+        }
+
+        [TestMethod]
+        public void ConvertNullValueReturnsUnsetValue()
+        {
+            TypeToLocalizedStringConverter ttlsc = new TypeToLocalizedStringConverter();
+            ttlsc.LocalizedString = new TestStringLocalizer();
+            Assert.AreEqual(DependencyProperty.UnsetValue, ttlsc.Convert(null, typeof(string), null, null));
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
 namespace RdClient.Shared.Converters
@@ -35,7 +36,14 @@ namespace RdClient.Shared.Converters
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return this.LocalizedString.GetLocalizedString(GetKey(value, parameter as string));
+            if (value != null)
+            {
+                return this.LocalizedString.GetLocalizedString(GetKey(value, parameter as string));
+            }
+            else
+            {
+                return DependencyProperty.UnsetValue;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

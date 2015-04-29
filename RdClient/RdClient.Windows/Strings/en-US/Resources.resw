@@ -837,4 +837,8 @@
     <value>(r) Remote Connection Has Failed</value>
     <comment>Title of the in-session connection failure message. The title is shown at the top of the belly-band across the session view.</comment>
   </data>
+  <data name="UsernameValidationFailure_InvalidFormat_String" xml:space="preserve">
+    <value>(r) Enter a user name</value>
+    <comment>Text displayed under username textbox when username is empty</comment>
+  </data>
 </root>

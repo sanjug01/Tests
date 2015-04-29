@@ -154,6 +154,7 @@
 
         private void OkCommandHandler(object o)
         {
+            this.User.EnableValidation = true;
             if (_okCommand.CanExecute(o))
             {
                 _args.Credentials.Username = this.User.Value;
