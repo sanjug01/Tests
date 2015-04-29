@@ -18,8 +18,7 @@
             
             <ProgressBar Margin="0,15"
                          IsIndeterminate="True"
-                         HorizontalAlignment="Stretch"
-                         Width="Auto"/>
+                         HorizontalAlignment="Stretch" />
 
             <Button Style="{ThemeResource DialogButtonStyle}"
                     x:Uid="Common_Button_Cancel"

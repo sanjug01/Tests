@@ -846,4 +846,8 @@
     <value>(r) Remote Connection Has Been Interrupted</value>
     <comment>Title of the belly-band message shown in the session view when the connection got interrupted and is reconnecting</comment>
   </data>
+  <data name="RemoteSessionInterruptionControl_Message.Text" xml:space="preserve">
+    <value>(r) The remote connection has been interrupted and is reconnecting…</value>
+    <comment>Message displayed in the "reconnecting"belly-band dialog of the session view</comment>
+  </data>
 </root>
