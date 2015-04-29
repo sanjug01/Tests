@@ -1,4 +1,5 @@
-﻿using Windows.Foundation;
+﻿using System;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Models.PanKnobModel
 {
@@ -27,13 +28,27 @@ namespace RdClient.Shared.Models.PanKnobModel
         {
             Point current = _panKnob.Position;
 
-            if (current.X + dx < -(_viewport.Size.Width / 2) ||
-                current.X + _panKnob.Size.Width + dx > _viewport.Size.Width / 2)
+            if (current.X + dx < -(_viewport.Size.Width / 2) + (_panKnob.Size.Width / 2))
+            {            
+                current.X = -(_viewport.Size.Width / 2) + (_panKnob.Size.Width / 2);
                 tDx = tDx * -1;
+            }
+            else if(current.X + _panKnob.Size.Width / 2 + dx > _viewport.Size.Width / 2)
+            {
+                current.X = _viewport.Size.Width / 2 - (_panKnob.Size.Width / 2);
+                tDx = tDx * -1;
+            }
 
-            if (current.Y + dy < -(_viewport.Size.Height / 2) ||
-                current.Y + _panKnob.Size.Height + dy > _viewport.Size.Height / 2)
+            if (current.Y + dy < -(_viewport.Size.Height / 2) + (_panKnob.Size.Height / 2))
+            {
+                current.Y = -(_viewport.Size.Height / 2) + (_panKnob.Size.Height / 2);
                 tDy = tDy * -1;
+            }
+            else if (current.Y + _panKnob.Size.Height / 2 + dy > _viewport.Size.Height / 2)
+            {
+                current.Y = _viewport.Size.Height / 2 - (_panKnob.Size.Height / 2);
+                tDy = tDy * -1;
+            }
 
             _panKnob.Position = new Point(current.X + dx * tDx, current.Y + dy * tDy);
         }
