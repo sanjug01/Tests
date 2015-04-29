@@ -352,6 +352,13 @@
                         break;
 
                     default:
+                        //
+                        // Remove the belly-band message
+                        //
+                        this.BellyBandViewModel = null;
+                        //
+                        // If changing state from Connected, remove all event handlers specific to the connected state.
+                        //
                         if (SessionState.Connected == _sessionState)
                         {
                             _keyboardCapture.Stop();
