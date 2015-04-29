@@ -423,6 +423,7 @@
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
                         this.PanKnobSite = new PanKnobSite(this.TimerFactory);
                         _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+                        _panKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");

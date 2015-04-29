@@ -3,11 +3,9 @@
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using System;
-    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using Windows.Foundation;
     using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Media;
     using Windows.UI.Xaml.Media.Animation;
 
