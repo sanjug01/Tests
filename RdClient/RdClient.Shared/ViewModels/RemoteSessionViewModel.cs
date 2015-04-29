@@ -54,7 +54,7 @@
         private readonly PointerPosition _pointerPosition = new PointerPosition();
         private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
 
-        private readonly ZoomPanMultiTouchModel _zoomPanModel = new ZoomPanMultiTouchModel();
+        private readonly ZoomPanModel _zoomPanModel = new ZoomPanModel();
 
         private IPanKnobSite _panKnobSite;
         public IPanKnobSite PanKnobSite

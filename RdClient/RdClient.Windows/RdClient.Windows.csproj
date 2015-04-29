@@ -196,6 +196,7 @@
     <Compile Include="DesignTime\FakeEditCredentialsViewModel.cs" />
     <Compile Include="DesignTime\FakeRemoteResourceViewModel.cs" />
     <Compile Include="DesignTime\FakeWorkspaceViewModel.cs" />
+    <Compile Include="Helpers\SynchronizedTransform.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
     <Compile Include="Input\InputPaneInputPanelFactory.cs" />
     <Compile Include="Models\BadCertificateConnectionSource.cs" />

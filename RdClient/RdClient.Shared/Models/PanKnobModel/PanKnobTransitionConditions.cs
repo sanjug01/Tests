@@ -1,6 +1,5 @@
 ﻿using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Input.Recognizers;
-using System;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Models.PanKnobModel

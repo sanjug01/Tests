@@ -32,7 +32,10 @@ namespace RdClient.Shared.Input.Pointer
 
         Point IPointerPosition.SessionPosition
         {
-            get { return _sessionControl.RenderingPanel.Viewport.TransformPoint(_viewportPosition); }
+            get
+            {
+                return _sessionControl.RenderingPanel.Viewport.TransformPoint(_viewportPosition);
+            }
         }
 
         private void EmitPositionChanged(Point position)
