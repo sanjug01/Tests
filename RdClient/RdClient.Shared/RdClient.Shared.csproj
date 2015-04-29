@@ -363,7 +363,9 @@
     <Compile Include="ViewModels\ILayoutAwareViewModel.cs" />
     <Compile Include="ViewModels\IWorkspaceViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\RemoteSessionConnectingViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionFailureViewModel.cs" />
+    <Compile Include="ViewModels\RemoteSessionInterruptionViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
     <Compile Include="ViewModels\PanKnobViewModel.cs" />
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />

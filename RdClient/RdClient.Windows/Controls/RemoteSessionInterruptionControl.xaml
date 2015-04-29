@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="RdClient.Controls.RemoteSessionFailureControl"
+    x:Class="RdClient.Controls.RemoteSessionInterruptionControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RdClient.Controls"
@@ -12,20 +12,21 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
-                       HorizontalAlignment="Center"
-                       x:Uid="RemoteSessionFailureControl_Title"
-                       Text="(d) Session has failed"/>
+                       TextAlignment="Center"
+                       x:Uid="RemoteSessionInterruptionControl_Title"
+                       Text="(d) Remote Connection Has Been Interrupted" />
 
             <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}"
                        Margin="0,10"
                        HorizontalAlignment="Center"
-                       Text="{Binding FailureCode}"/>
+                       Text="{Binding ReconnectAttempt}"/>
 
             <Button Style="{ThemeResource DialogButtonStyle}"
                     HorizontalAlignment="Center"
-                    Command="{Binding Dismiss}">
-                <TextBlock x:Uid="RemoteSessionFailureControl_Dismiss" Text="(d) Close"/>
+                    Command="{Binding Cancel}">
+                <TextBlock x:Uid="RemoteSessionInterruptionControl_Cancel" Text="(d) Cancel"/>
             </Button>
         </StackPanel>
     </Grid>
+    
 </UserControl>

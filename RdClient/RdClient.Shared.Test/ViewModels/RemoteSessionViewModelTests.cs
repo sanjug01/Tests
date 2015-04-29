@@ -630,12 +630,11 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             _defex.ExecuteAll();
 
-            Assert.IsTrue(_vm.IsConnecting);
             Assert.IsTrue(_vm.IsRenderingPanelActive);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsFalse(_vm.IsRightSideBarVisible);
-            Assert.IsFalse(_vm.IsInterrupted);
+            Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsNotNull(connection);
             Assert.AreEqual(1, connectCount);
 
@@ -831,12 +830,10 @@
             //connectTask.Dispose();
             _defex.ExecuteAll();
 
-            Assert.IsFalse(_vm.IsConnecting);
             Assert.IsTrue(_vm.IsRenderingPanelActive);
             Assert.IsTrue(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsFalse(_vm.IsRightSideBarVisible);
-            Assert.IsFalse(_vm.IsInterrupted);
         }
 
         [TestMethod]
@@ -889,7 +886,6 @@
             task = null;
             _defex.ExecuteAll();
 
-            Assert.IsFalse(_vm.IsConnecting);
             Assert.IsFalse(_vm.IsRenderingPanelActive);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
@@ -970,12 +966,10 @@
             _defex.ExecuteAll();
 
             Assert.AreEqual(1, credentialsRequestCount);
-            Assert.IsTrue(_vm.IsConnecting);
             Assert.IsTrue(_vm.IsRenderingPanelActive);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsFalse(_vm.IsRightSideBarVisible);
-            Assert.IsFalse(_vm.IsInterrupted);
         }
     }
 }

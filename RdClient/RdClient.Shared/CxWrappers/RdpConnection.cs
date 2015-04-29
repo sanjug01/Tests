@@ -93,9 +93,9 @@ namespace RdClient.Shared.CxWrappers
         {
             _instrument.Instrument("SetCredentials");
             int xRes = _rdpConnectionCx.SetUserCredentials(
-                credentials.Username,
+                credentials.Username.EmptyIfNull(),
                 string.Empty, // Empty domain strings; the application doesn't have UI where the domain may be entered
-                credentials.Password,
+                credentials.Password.EmptyIfNull(),
                 fUsingSavedCreds);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set user credentials.");
         }
