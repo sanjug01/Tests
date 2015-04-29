@@ -57,7 +57,7 @@
                                    Text="(*)(d)" Padding="0,0,8,0"
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Foreground="{StaticResource rdErrorBrush}"
-                                   Visibility="{Binding Path=IsUsernameValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
+                                   Visibility="{Binding Path=User.IsValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
                                    />
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    x:Uid="AddUser-User" 
@@ -69,7 +69,7 @@
                                     Background="Transparent"
                                     Margin="0,8" 
                                     PlaceholderText="Username (d)"
-                                    Text="{Binding Path=User, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    Text="{Binding Path=User.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
 
                 <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddUser-Password" Text="Password (d)"/>

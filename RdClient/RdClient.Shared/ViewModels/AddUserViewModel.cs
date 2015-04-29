@@ -69,11 +69,9 @@
 
     public class AddUserViewModel : ViewModelBase, IDialogViewModel
     {
-        private readonly UsernameValidationRule _ruleUsername;
-
         private AddUserViewArgs _args;
         private bool _storeCredentials;
-        private string _user;
+        private readonly IValidatedProperty<string> _user;
         private string _password;
         private readonly RelayCommand _okCommand;
         private readonly RelayCommand _cancelCommand;
@@ -82,16 +80,21 @@
 
         public AddUserViewModel()
         {
-            _ruleUsername = new UsernameValidationRule();
-
-            _okCommand = new RelayCommand(new Action<object>(OkCommandHandler), (o) => {
-                return 
-                    (this.User != null) && 
-                    (this.Password != null) && 
-                    (this.IsUsernameValid) && 
-                    (this.Password.Length > 0);
-            } );
+            _user = new ValidatedProperty<string>(new UsernameValidationRule());
+            _okCommand = new RelayCommand(o => OkCommandHandler(o), o => _user.IsValid);
             _cancelCommand = new RelayCommand(new Action<object>(CancelCommandHandler));
+            _user.PropertyChanged += (s, e) =>
+            {
+                if (s == _user && e.PropertyName == "IsValid")
+                {
+                    _okCommand.EmitCanExecuteChanged();
+                }
+            };
+        }
+
+        private void _user_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public IPresentableView PresentableView { private get; set; }
@@ -126,20 +129,9 @@
             set { SetProperty(ref _storeCredentials, value); }
         }
 
-        public bool IsUsernameValid
-        {
-            get { return _ruleUsername.Validate(this.User).IsValid; }
-        }
-
-        public string User
+        public IValidatedProperty<string> User
         {
             get { return _user; }
-            set
-            {
-                SetProperty(ref _user, value);
-                this.EmitPropertyChanged("IsUsernameValid");
-                _okCommand.EmitCanExecuteChanged();
-            }
         }
 
         public string Password
@@ -148,7 +140,6 @@
             set
             {
                 SetProperty(ref _password, value);
-                _okCommand.EmitCanExecuteChanged();
             }
         }
 
@@ -159,17 +150,19 @@
             _args = activationParameter as AddUserViewArgs;
 
             this.ShowSave = _args.ShowSave;
-            this.User = _args.Credentials.Username;
+            this.User.Value = _args.Credentials.Username;
             this.Password = _args.Credentials.Password;
             this.Mode = _args.Mode;         
         }
 
         private void OkCommandHandler(object o)
         {
-            _args.Credentials.Username = this.User;
-            _args.Credentials.Password = this.Password;
-
-            DismissModal(CredentialPromptResult.CreateWithCredentials(_args.Credentials, this.StoreCredentials));
+            if (_okCommand.CanExecute(o))
+            {
+                _args.Credentials.Username = this.User.Value;
+                _args.Credentials.Password = this.Password;
+                DismissModal(CredentialPromptResult.CreateWithCredentials(_args.Credentials, this.StoreCredentials));
+            }
         }
 
         private void CancelCommandHandler(object o)
