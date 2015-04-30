@@ -41,5 +41,6 @@ namespace RdClient.Shared.Test.Mock
         public event EventHandler<RemoteAppWindowTitleUpdatedArgs> RemoteAppWindowTitleUpdated;
 
         public event EventHandler<RemoteAppWindowIconUpdatedArgs> RemoteAppWindowIconUpdated;
+#pragma warning restore 67 // warning CS0067: the event <...> is never used
     }
 }
