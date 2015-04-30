@@ -20,12 +20,15 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{StaticResource ConnectionCenterMargin}" />
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Style="{ThemeResource SubheaderTextBlockStyle}" x:Uid="ConnectionCenter_DayZeroTitle" Text="It's lonely here :( (d)" />
-        <TextBlock Grid.Row="3" Grid.Column="1" Style="{ThemeResource BodyTextBlockStyle}" x:Uid="ConnectionCenter_DayZero">
+        <TextBlock Grid.Row="1" Grid.Column="1" Style="{ThemeResource SubheaderTextBlockStyle}" x:Uid="ConnectionCenter_DayZeroTitle" Text="It's lonely here :( (d)" />
+        <TextBlock 
+            Grid.Row="3"  Grid.Column="1" 
+            Style="{ThemeResource BodyTextBlockStyle}" 
+            x:Uid="ConnectionCenter_DayZero" 
+            MaxWidth="500"
+            HorizontalAlignment="Left">
                 To get started, add the remote desktop that you want to connect to
                 using this device. You can add remote resources to work with apps and 
                 desktops your administrator has set up for you. (d)
