@@ -1,6 +1,7 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Pointer;
 using System;
+using System.Diagnostics;
 
 namespace RdClient.Shared.Input.Recognizers
 {
@@ -75,7 +76,7 @@ namespace RdClient.Shared.Input.Recognizers
 
         private ZoomScrollType GuessType(IManipulationRoutedEventProperties manipulation)
         {
-            if(Math.Abs(manipulation.Cummulative.Expansion) > 3.0)
+            if (Math.Abs(manipulation.Velocities.Expansion) > 0.04)
             {
                 return ZoomScrollType.ZoomPan;
             }
