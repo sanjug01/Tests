@@ -5,6 +5,7 @@
     xmlns:local="using:RdClient.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    TabNavigation="Cycle"
     mc:Ignorable="d"
     Width="480"
     d:DesignHeight="200">
@@ -22,6 +23,7 @@
                        Text="{Binding FailureCode}"/>
 
             <Button Style="{ThemeResource DialogButtonStyle}"
+                    x:Name="DismissButton"
                     HorizontalAlignment="Center"
                     Command="{Binding Dismiss}">
                 <TextBlock x:Uid="RemoteSessionFailureControl_Dismiss" Text="(d) Close"/>

@@ -5,6 +5,7 @@
     xmlns:local="using:RdClient.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    TabNavigation="Cycle"
     mc:Ignorable="d"
     d:DesignWidth="480"
     d:DesignHeight="200">
@@ -21,6 +22,7 @@
                          HorizontalAlignment="Stretch" />
 
             <Button Style="{ThemeResource DialogButtonStyle}"
+                    x:Name="CancelButton"
                     x:Uid="Common_Button_Cancel"
                     Content="(d) Cancel"
                     HorizontalAlignment="Center"
