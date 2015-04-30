@@ -75,13 +75,31 @@
 
                 if(null != dmX && null != dmY)
                 {
-                    comparison = CompareStrings(dmX.HostName, dmY.HostName);
+                    string
+                        nameX = GetModelName(dmX),
+                        nameY = GetModelName(dmY);
+
+                    comparison = CompareStrings(nameX, nameY);
 
                     if (0 == comparison)
-                        comparison = CompareStrings(dmX.FriendlyName, dmY.FriendlyName);
+                    {
+                        //
+                        // If strings are the same, compare the hashes.
+                        //
+                        int hashX = dmX.GetHashCode(),
+                            hashY = dmY.GetHashCode();
+
+                        comparison = hashX < hashY ? -1 : hashX == hashY ? 0 : 1;
+                    }
                 }
 
                 return comparison;
+            }
+
+            private static string GetModelName(DesktopModel model)
+            {
+                Contract.Requires(null != model);
+                return string.IsNullOrEmpty(model.FriendlyName) ? model.HostName : model.FriendlyName;
             }
 
             private static int CompareStrings(string x, string y)

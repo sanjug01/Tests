@@ -614,10 +614,6 @@
     <value>(r) Connection attempt: {0} of {1}</value>
     <comment>Label  to warn about the number of reconnect attempts for a lost connection</comment>
   </data>
-  <data name="Session_Reconnect_Message.Text" xml:space="preserve">
-    <value>(r) The connection has been lost. Attempting to reconnect to your session...</value>
-    <comment>Reconnecting dialog message</comment>
-  </data>
   <data name="Session_Reconnect_Title.Text" xml:space="preserve">
     <value>(r) Reconnecting</value>
     <comment>Reconnecting dialog title</comment>
@@ -828,5 +824,26 @@
   </data>
   <data name="AddOrEditWorkspace-SaveButton.Content" xml:space="preserve">
     <value>(r) Find feed</value>
+  </data>
+  <data name="RemoteSessionFailureControl_Dismiss.Text" xml:space="preserve">
+    <value>(r)Close</value>
+    <comment>Text on the button that dismisses the session failure belly-band message and takes the app to the connection center view</comment>
+  </data>
+  <data name="RemoteSessionFailureControl_Title.Text" xml:space="preserve">
+    <value>(r) Remote Connection Has Failed</value>
+    <comment>Title of the in-session connection failure message. The title is shown at the top of the belly-band across the session view.</comment>
+  </data>
+  <data name="RemoteSessionInterruptionControl_Cancel.Text" xml:space="preserve">
+    <value>(r) Cancel</value>
+    <comment>"Cancel" button in the remote connection interruption dialog; the button cancels the auto-reconnect process
+</comment>
+  </data>
+  <data name="RemoteSessionInterruptionControl_Title.Text" xml:space="preserve">
+    <value>(r) Remote Connection Has Been Interrupted</value>
+    <comment>Title of the belly-band message shown in the session view when the connection got interrupted and is reconnecting</comment>
+  </data>
+  <data name="RemoteSessionInterruptionControl_Message.Text" xml:space="preserve">
+    <value>(r) The remote connection has been interrupted and is reconnecting…</value>
+    <comment>Message displayed in the "reconnecting"belly-band dialog of the session view</comment>
   </data>
 </root>

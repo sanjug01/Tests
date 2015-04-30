@@ -1,9 +1,9 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.CxWrappers;
-    using RdClient.Shared.CxWrappers.Errors;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Keyboard;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
@@ -17,9 +17,7 @@
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite
     {
-        private readonly RelayCommand _dismissFailureMessage;
-        private readonly RelayCommand _cancelAutoReconnect;
-        private readonly RelayCommand _showSideBars;
+        private readonly RelayCommand _toggleSideBars;
         private readonly RelayCommand _invokeKeyboard;
         private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
         private readonly RelayCommand _navigateHome;
@@ -41,15 +39,7 @@
         private readonly ReadOnlyObservableCollection<object> _connectionBarItems;
         private bool _isRightSideBarVisible;
 
-        private bool _failureMessageVisible;
-        private RdpDisconnectCode _failureCode;
-
-        private bool _interrupted;
-        private InterruptedSessionContinuation _interruptedContinuation;
-        private int _reconnectAttempt;
-
         private ITimerFactory _timerFactory;
-        public ITimerFactory TimerFactory { get { return _timerFactory; } }
 
         private readonly PointerPosition _pointerPosition = new PointerPosition();
         private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
@@ -70,56 +60,17 @@
             }
         }
 
-        public bool IsConnecting
+        private object _bellyBandViewModel;
+
+        public SessionState SessionState
         {
-            get
-            {
-                return null != _activeSession
-                    && (SessionState.Connecting == _activeSession.State.State);
-            }
+            get { return _sessionState; }
+            private set { SetProperty(ref _sessionState, value); }
         }
 
-        public bool IsRenderingPanelActive
+        public ITimerFactory TimerFactory
         {
-            get
-            {
-                return null != _activeSession
-                    && (SessionState.Connected == _activeSession.State.State || SessionState.Connecting == _activeSession.State.State);
-            }
-        }
-
-        public bool IsFailureMessageVisible
-        {
-            get { return _failureMessageVisible; }
-            private set { this.SetProperty(ref _failureMessageVisible, value); }
-        }
-
-        public bool IsInterrupted
-        {
-            get { return _interrupted; }
-            private set { this.SetProperty(ref _interrupted, value); }
-        }
-
-        public RdpDisconnectCode FailureCode
-        {
-            get { return _failureCode; }
-            private set { this.SetProperty(ref _failureCode, value); }
-        }
-
-        public ICommand DismissFailureMessage
-        {
-            get { return _dismissFailureMessage; }
-        }
-
-        public int ReconnectAttempt
-        {
-            get { return _reconnectAttempt; }
-            private set { this.SetProperty(ref _reconnectAttempt, value); }
-        }
-
-        public ICommand CancelAutoReconnect
-        {
-            get { return _cancelAutoReconnect; }
+            get { return _timerFactory; }
         }
 
         /// <summary>
@@ -155,9 +106,9 @@
             get { return _connectionBarItems; }
         }
 
-        public ICommand ShowSideBars
+        public ICommand ToggleSideBars
         {
-            get { return _showSideBars; }
+            get { return _toggleSideBars; }
         }
 
         public bool IsRightSideBarVisible
@@ -176,21 +127,30 @@
             get { return _mouseMode; }
         }
 
+        /// <summary>
+        /// View model of the view shown in the belly band across the session view when input is needed from user.
+        /// Setting the property to a non-null value shows the belly band.
+        /// </summary>
+        public object BellyBandViewModel
+        {
+            get { return _bellyBandViewModel; }
+            private set { this.SetProperty(ref _bellyBandViewModel, value); }
+        }
+
         public RemoteSessionViewModel()
         {
-            _dismissFailureMessage = new RelayCommand(this.InternalDismissFailureMessage);
-            _cancelAutoReconnect = new RelayCommand(this.InternalCancelAutoReconnect, this.InternalCanAutoReconnect);
-            _showSideBars = new RelayCommand(this.InternalShowRightSideBar);
+            _toggleSideBars = new RelayCommand(this.InternalToggleRightSideBar);
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
             _invokeKeyboardModel = new SymbolBarToggleButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
             _navigateHome = new RelayCommand(this.InternalNavigateHome);
             _mouseMode = new RelayCommand(this.InternalMouseMode);
             _isRightSideBarVisible = false;
+            _sessionState = SessionState.Idle;
 
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = _zoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = _zoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _showSideBars });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _toggleSideBars });
             items.Add(_invokeKeyboardModel);
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
         }
@@ -213,7 +173,7 @@
             IRemoteSession newSession = (IRemoteSession)activationParameter;
 
             _activeSession = newSession;
-            _sessionState = _activeSession.State.State;
+            this.SessionState = _activeSession.State.State;
 
             _activeSession.CredentialsNeeded += this.OnCredentialsNeeded;
             _activeSession.Closed += this.OnSessionClosed;
@@ -226,14 +186,9 @@
             if (null != _sessionView && SessionState.Idle == _sessionState)
             {
                 Contract.Assert(null == _activeSessionControl);
-                
+
                 _activeSessionControl = _activeSession.Activate(_sessionView);
             }
-
-            EmitPropertyChanged("IsRenderingPanelActive");
-            EmitPropertyChanged("IsConnecting");
-            this.IsInterrupted = SessionState.Interrupted == _activeSession.State.State;
-            this.IsFailureMessageVisible = SessionState.Failed == _activeSession.State.State;
         }
 
         protected override void OnDismissed()
@@ -249,23 +204,20 @@
             _activeSessionControl = null;
             _activeSession = null;
             _sessionView = null;
-            _failureMessageVisible = false;
-            _interrupted = false;
-            _interruptedContinuation = null;
+
+            //
+            // TODO:    restore the belly band view model from the session state.
+            // TFS:     2679737
+            //
+            this.BellyBandViewModel = null;
 
             base.OnDismissed();
         }
 
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
         {
-            if (this.IsFailureMessageVisible)
-            {
-                this.DismissFailureMessage.Execute(null);
-            }
-            else
-            {
-                this.NavigateHome.Execute(null);
-            }
+            this.BellyBandViewModel = null;
+            this.NavigateHome.Execute(null);
             backArgs.Handled = true;
         }
 
@@ -315,20 +267,18 @@
             //
             // Show the failure UI
             //
-            this.FailureCode = e.DisconnectCode;
-            this.IsFailureMessageVisible = true;
+            this.BellyBandViewModel = new RemoteSessionFailureViewModel(e.DisconnectCode,()=>
+            {
+                Contract.Assert(SessionState.Failed == _activeSession.State.State);
+
+                this.BellyBandViewModel = null;
+                this.NavigationService.NavigateToView("ConnectionCenterView", null);
+            });
         }
 
         private void OnSessionInterrupted(object sender, SessionInterruptedEventArgs e)
         {
-            Contract.Assert(null == _interruptedContinuation);
-
-            _interruptedContinuation = e.ObtainContinuation();
-            _cancelAutoReconnect.EmitCanExecuteChanged();
-            this.ReconnectAttempt = _activeSession.State.ReconnectAttempt;
-            this.IsInterrupted = true;
-            EmitPropertyChanged("IsRenderingPanelActive");
-            EmitPropertyChanged("IsConnecting");
+            RemoteSessionInterruptionViewModel vm = new RemoteSessionInterruptionViewModel(_activeSession, e.ObtainContinuation());
         }
 
         private void OnBadCertificate(object sender, BadCertificateEventArgs e)
@@ -396,22 +346,20 @@
                 switch(_activeSession.State.State)
                 {
                     case SessionState.Connecting:
-                        _interruptedContinuation = null;
-                        this.IsInterrupted = false;
-                        _cancelAutoReconnect.EmitCanExecuteChanged();
-                        EmitPropertyChanged("IsRenderingPanelActive");
-                        EmitPropertyChanged("IsConnecting");
+                        Contract.Assert(null == this.BellyBandViewModel);
+                        this.BellyBandViewModel = new RemoteSessionConnectingViewModel(() => _activeSession.Disconnect());
                         this.IsConnectionBarVisible = false;
                         break;
 
                     case SessionState.Connected:
                         //
+                        // Remove any belly-band view that may be shown (transitioning from reconnect or connecting state)
+                        //
+                        this.BellyBandViewModel = null;
+                        //
                         // If the session has been interrupted but reconnected automatically, clear the IsInterrupted flag
                         // to remote any interruption UI.
                         //
-                        _interruptedContinuation = null;
-                        this.IsInterrupted = false;
-                        _cancelAutoReconnect.EmitCanExecuteChanged();
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
                         _pointerPosition.Reset(_activeSessionControl, this);
@@ -431,6 +379,13 @@
                         break;
 
                     default:
+                        //
+                        // Remove the belly-band message
+                        //
+                        this.BellyBandViewModel = null;
+                        //
+                        // If changing state from Connected, remove all event handlers specific to the connected state.
+                        //
                         if (SessionState.Connected == _sessionState)
                         {
                             _keyboardCapture.Stop();
@@ -438,8 +393,6 @@
                             _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
                             _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
-                            EmitPropertyChanged("IsRenderingPanelActive");
-                            EmitPropertyChanged("IsConnecting");
                             //
                             // The connection bar and side bars are not available in any non-connected state.
                             //
@@ -449,35 +402,8 @@
                         break;
                 }
 
-                _sessionState = _activeSession.State.State;
+                this.SessionState = _activeSession.State.State;
             }
-            else if(e.PropertyName.EndsWith("ReconnectAttempt"))
-            {
-                this.ReconnectAttempt = _activeSession.State.ReconnectAttempt;
-            }
-        }
-
-        private void InternalDismissFailureMessage(object parameter)
-        {
-            Contract.Assert(SessionState.Failed == _activeSession.State.State);
-
-            this.IsFailureMessageVisible = false;
-            this.NavigationService.NavigateToView("ConnectionCenterView", null);
-        }
-
-        private void InternalCancelAutoReconnect(object parameter)
-        {
-            Contract.Assert(null != _interruptedContinuation);
-
-            _interruptedContinuation.Cancel();
-            _interruptedContinuation = null;
-            _cancelAutoReconnect.EmitCanExecuteChanged();
-            this.IsInterrupted = false;
-        }
-
-        private bool InternalCanAutoReconnect(object parameter)
-        {
-            return null != _interruptedContinuation;
         }
 
         private void OnKeystroke(object sender, KeystrokeEventArgs e)
@@ -486,7 +412,7 @@
             _activeSessionControl.SendKeystroke(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
         }
 
-        private void InternalShowRightSideBar(object parameter)
+        private void InternalToggleRightSideBar(object parameter)
         {
             this.IsRightSideBarVisible = !this.IsRightSideBarVisible;
         }

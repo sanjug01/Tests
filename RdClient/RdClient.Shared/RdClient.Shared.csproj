@@ -61,6 +61,8 @@
     <Compile Include="Converters\NegateBooleanConverter.cs" />
     <Compile Include="Converters\NotNullToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Converters\PanKnobStateToBackGroundBrushConverter.cs" />
+    <Compile Include="Converters\SessionStateToOpacityConverter.cs" />
     <Compile Include="Converters\TypeToLocalizedStringConverter.cs" />
     <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverter.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverter.cs" />
@@ -362,6 +364,9 @@
     <Compile Include="ViewModels\ILayoutAwareViewModel.cs" />
     <Compile Include="ViewModels\IWorkspaceViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
+    <Compile Include="ViewModels\RemoteSessionConnectingViewModel.cs" />
+    <Compile Include="ViewModels\RemoteSessionFailureViewModel.cs" />
+    <Compile Include="ViewModels\RemoteSessionInterruptionViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />

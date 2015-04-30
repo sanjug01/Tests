@@ -15,7 +15,7 @@
     RequestedTheme="{StaticResource MainTheme}"
     d:DesignHeight="300"
     d:DesignWidth="800">
-    
+
     <UserControl.DataContext>
         <vm:RemoteSessionViewModel>
             <!-- Inject the keyboard capture based on CoreWindow and CoreDispatcher -->
@@ -32,99 +32,25 @@
     <UserControl.Resources>
         <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <sconv:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
+        <sconv:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
+        <sconv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
     </UserControl.Resources>
 
-    <Grid Background="Green">
+    <Grid>
         <c:RemoteSessionPanel
             RemoteSessionViewSite="{Binding}"
-            Visibility="{Binding IsRenderingPanelActive, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-        
+            Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
+
         <c:PanKnob x:Name="PanKnob"
                    PanKnobSite="{Binding PanKnobSite}"/>
 
-
-        <!-- Connecting progress -->
-        <Grid Visibility="{Binding IsConnecting, Converter={StaticResource BooleanToVisibilityConverter}}"
-              VerticalAlignment="Center"
-              Height="Auto"
-              RequestedTheme="{StaticResource AlternateTheme}"
-              Background="{ThemeResource DialogBackgroundColor}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="40" />
-            </Grid.RowDefinitions>
-            <TextBlock HorizontalAlignment="Center" 
-                       Style="{ThemeResource SubtitleTextBlockStyle}"
-                       Grid.Row="1"
-                       Text="Preparing your connection (d)....."
-                       x:Uid="Connection_Pending_Message"/>
-            <ProgressBar Grid.Row="2"
-                         IsIndeterminate="True"
-                         HorizontalAlignment="Stretch"
-                         Width="Auto"
-                         VerticalAlignment="Center" 
-                         />
-            <Button x:Uid="Common_Button_Cancel"
-                    Style="{ThemeResource DialogButtonStyle}"
-                    HorizontalAlignment="Center"
-                    Grid.Row="3"
-                    Content="Cancel (d)"
-                    Command="{Binding NavigateHome}" />
-        </Grid>
-
-        <!-- Failure message -->
-        <Grid Visibility="{Binding IsFailureMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-              VerticalAlignment="Center"
-              Height="Auto"
-              RequestedTheme="{StaticResource AlternateTheme}"
-              Background="{ThemeResource DialogBackgroundColor}">
-            <StackPanel Orientation="Vertical" Margin="12,24">
-                <TextBlock HorizontalAlignment="Center" 
-                           Style="{ThemeResource BodyTextBlockStyle}"
-                           Margin="0, 0, 0, 12"
-                           Text="Connection has failed (d)"/>
-                <TextBlock HorizontalAlignment="Center" 
-                           Style="{ThemeResource SubtitleTextBlockStyle}"
-                           Margin="0, 0, 0, 12"
-                           Text="{Binding FailureCode}"/>
-                <Button HorizontalAlignment="Center" Command="{Binding DismissFailureMessage}"
-                        Style="{ThemeResource DialogButtonStyle}">
-                    <TextBlock Text="Close (d)"/>
-                </Button>
-            </StackPanel>
-        </Grid>
-        
-        <!-- Session interruption (auto-reconnect) message -->
-        <Grid VerticalAlignment="Center"
-              Height="Auto"
-              RequestedTheme="{StaticResource AlternateTheme}"
-              Background="{ThemeResource DialogBackgroundColor}"
-              Visibility="{Binding IsInterrupted, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <StackPanel Orientation="Vertical" Margin="12,24">
-                <TextBlock HorizontalAlignment="Center" 
-                           Style="{ThemeResource BodyTextBlockStyle}"
-                           Foreground="{ThemeResource rdErrorBrush}"
-                    Text="Connection has been interrupted. Reconnecting… (d)"/>
-                <TextBlock HorizontalAlignment="Center" 
-                           Style="{ThemeResource BodyTextBlockStyle}"
-                           Foreground="{ThemeResource rdErrorBrush}"
-                           Text="{Binding ReconnectAttempt}"/>
-                <Button Command="{Binding CancelAutoReconnect}" HorizontalAlignment="Center"
-                        Style="{ThemeResource DialogButtonStyle}">
-                    <TextBlock Text="Cancel"/>
-                </Button>
-            </StackPanel>
-        </Grid>
-        
         <!-- Connection Bar -->
         <ItemsControl
             Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
             HorizontalAlignment="Center" VerticalAlignment="Top"
             Opacity="{ThemeResource ConnectionOverlayOpacity}"
             ItemsSource="{Binding ConnectionBarItems}">
-            
+
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"/>
@@ -162,11 +88,91 @@
             </ItemsControl.ItemTemplateSelector>
         </ItemsControl>
 
+        <!-- Transparent overlay that dismisses the side bars -->
+        <c:PointerPressDetector
+            Visibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+            PointerPressDetected="{Binding ToggleSideBars}" />
+
         <!-- Right side bar -->
         <c:RightSideBarControl
             BarVisibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
             NavigateHome="{Binding NavigateHome}"
             MouseMode="{Binding MouseMode}"/>
+
+        <!--
+        Belly-band container of in-session dialogs.
+        The band is visible when the BellyBandViewModel property of the remote session view model
+        is not null.
+        -->
+        <Grid Visibility="{Binding BellyBandViewModel, Converter={StaticResource NotNullToVisibilityConverter}}"
+              Background="Transparent">
+            <!--
+            Inner Grid - the belly-band itself
+            -->
+            <Grid
+                VerticalAlignment="Center"
+                Height="Auto"
+                RequestedTheme="{StaticResource AlternateTheme}"
+                Background="{ThemeResource DialogBackgroundColor}">
+
+                <ContentControl
+                    Margin="0,20"
+                    Content="{Binding BellyBandViewModel}"
+                    HorizontalContentAlignment="Center">
+
+                        <ContentControl.ContentTransitions>
+                            <TransitionCollection>
+                                <ContentThemeTransition />
+                            </TransitionCollection>
+                        </ContentControl.ContentTransitions>
+
+                    <ContentControl.ContentTemplateSelector>
+                        <helpers:TypeNameDataTemplateSelector>
+
+                            <helpers:TypeNameDataTemplateSelector.Templates>
+
+                                <!--
+                                For the RemoteSessionFailureViewModel view model class show RemoteSessionFailureControl.
+                                The control will take the RemoteSessionFailureViewModel as its main binding.
+                                -->
+                                <DataTemplate x:Key="RemoteSessionFailureViewModel">
+                                    <c:RemoteSessionFailureControl />
+                                </DataTemplate>
+
+                                <!--
+                                RemoteSessionInterruptionViewModel - the session got interrupted and is reconnecting.
+                                -->
+                                <DataTemplate x:Key="RemoteSessionInterruptionViewModel">
+                                    <c:RemoteSessionInterruptionControl />
+                                </DataTemplate>
+
+                                <DataTemplate x:Key="RemoteSessionConnectingViewModel">
+                                    <c:RemoteSessionConnectingControl />
+                                </DataTemplate>
+
+                            </helpers:TypeNameDataTemplateSelector.Templates>
+
+                            <helpers:TypeNameDataTemplateSelector.DefaultTemplate>
+                                <DataTemplate>
+                                    <!-- Template of an unknown belly-band view model -->
+                                    <Grid Background="Red">
+                                        <Grid Background="White" Margin="5">
+                                            <TextBlock Margin="20,20"
+                                                       FontSize="20"
+                                                       FontWeight="Bold"
+                                                       Foreground="Red"
+                                                       Text="Unknown belly-band view"/>
+                                        </Grid>
+                                    </Grid>
+                                </DataTemplate>
+                            </helpers:TypeNameDataTemplateSelector.DefaultTemplate>
+
+                        </helpers:TypeNameDataTemplateSelector>
+                    </ContentControl.ContentTemplateSelector>
+                </ContentControl>
+
+            </Grid>
+        </Grid>
 
     </Grid>
 </UserControl>
