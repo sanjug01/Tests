@@ -59,13 +59,5 @@
         {
             return new DeferredExecutionExtension() { DeferredExecution = deferredExecution };
         }
-
-        public INavigationExtension CreateApplicationBarExtension(IApplicationBarViewModel applicationBarViewModel)
-        {
-            ApplicationBarExtension applicationBarExtension = new ApplicationBarExtension();
-            applicationBarExtension.ViewModel = applicationBarViewModel;
-
-            return applicationBarExtension;
-        }
     }
 }

@@ -25,7 +25,6 @@
         private readonly NavigationServiceFactory _navigationServiceFactory = new NavigationServiceFactory();
 
         public IViewPresenter ViewPresenter { private get; set; }
-        public IApplicationBarViewModel AppBarViewModel { private get; set; }
         public string LandingPage { private get; set; }
         public ILifeTimeManager LifeTimeManager { private get; set; }
         public IRdpConnectionSource ConnectionSource { private get; set; }
@@ -39,7 +38,6 @@
         public void Initialize()
         {
             Contract.Assert(this.ViewPresenter != null);
-            Contract.Assert(this.AppBarViewModel != null);
             Contract.Assert(!string.IsNullOrEmpty(this.LandingPage));
             Contract.Assert(null != this.LifeTimeManager);
             Contract.Assert(null != this.ConnectionSource);
@@ -71,7 +69,6 @@
 
             _navigationService.Extensions.Add(this.CreateDataModelExtension(appDataModel));
             _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));
-            _navigationService.Extensions.Add(this.CreateApplicationBarExtension(this.AppBarViewModel));
             _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory));
             _navigationService.Extensions.Add(new SessionFactoryExtension() { SessionFactory = sessionFactory });
             _navigationService.Extensions.Add(new DeviceCapabilitiesExtension() { DeviceCapabilities = this.DeviceCapabilities });
@@ -94,11 +91,6 @@
         public INavigationExtension CreateDeferredExecutionExtension(IDeferredExecution deferredExecution)
         {
             return _navigationServiceFactory.CreateDeferredExecutionExtension(deferredExecution);
-        }
-
-        public INavigationExtension CreateApplicationBarExtension(IApplicationBarViewModel applicationBarViewModel)
-        {
-            return _navigationServiceFactory.CreateApplicationBarExtension(applicationBarViewModel);
         }
     }
 }
