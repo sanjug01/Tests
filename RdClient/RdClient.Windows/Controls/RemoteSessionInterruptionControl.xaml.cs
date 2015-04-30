@@ -4,9 +4,9 @@ namespace RdClient.Controls
 {
     using Windows.UI.Xaml.Controls;
 
-    public sealed partial class RemoteSessionFailureControl : UserControl
+    public sealed partial class RemoteSessionInterruptionControl : UserControl
     {
-        public RemoteSessionFailureControl()
+        public RemoteSessionInterruptionControl()
         {
             this.InitializeComponent();
         }
