@@ -17,7 +17,7 @@
     <Grid>
         <StackPanel Orientation="Horizontal">
             <TextBlock VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" x:Uid="Settings_General_ShowThumbnails" Text="Show thumbnails for Desktops (d)" />
-            <ToggleSwitch VerticalAlignment="Center" IsOn="{Binding Path=GeneralSettings.UseThumbnails, Mode=TwoWay}"/>
+            <ToggleSwitch Margin="60,0,0,0" VerticalAlignment="Center" IsOn="{Binding Path=GeneralSettings.UseThumbnails, Mode=TwoWay}"/>
         </StackPanel>
     </Grid>
 </UserControl>

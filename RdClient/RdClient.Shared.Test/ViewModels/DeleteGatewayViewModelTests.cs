@@ -20,7 +20,7 @@ namespace RdClient.Shared.Test.ViewModels
         private ApplicationDataModel _dataModel;
         private Mock.NavigationService _navService;
         private Mock.PresentableView _view;
-        //private GatewayModel _gateway;
+        private Mock.ModalPresentationContext _context;        
         private IModelContainer<GatewayModel> _gatewayContainer;
         private DeleteGatewayViewModel _vm;
 
@@ -31,6 +31,7 @@ namespace RdClient.Shared.Test.ViewModels
             _gatewayContainer = _testData.NewValidGateway();
             _navService = new Mock.NavigationService();
             _view = new Mock.PresentableView();
+            _context = new Mock.ModalPresentationContext();
 
             _dataModel = new ApplicationDataModel()
             {
@@ -65,6 +66,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestCleanup()
         {
             _navService.Dispose();
+            _context.Dispose();
             _dataModel = null;
         }
 
@@ -77,15 +79,17 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void GatewaysDelete_CancelCommandDismissesView()
         {
-            _navService.Expect("DismissModalView", new object[] { _view }, 0);
+            ((IViewModel)_vm).Presenting(_navService, _gatewayContainer, _context);
+            _context.Expect("Dismiss", p => { return null; });            
             _vm.Cancel.Execute(null);
         }
 
         [TestMethod]
         public void GatewaysDelete_DeleteCommandDismissesView()
         {
-            _navService.Expect("DismissModalView", new object[] { _view }, 0);
-            _vm.Cancel.Execute(null);
+            ((IViewModel)_vm).Presenting(_navService, _gatewayContainer, _context);
+            _context.Expect("Dismiss", p => { return null; });
+            _vm.DefaultAction.Execute(null);
         }
 
         [TestMethod]
@@ -93,7 +97,6 @@ namespace RdClient.Shared.Test.ViewModels
         public void GatewaysDelete_DeleteCommandDeletesGatewayFromDataModel()
         {
             Assert.AreSame(_gatewayContainer.Model, _dataModel.Gateways.GetModel(_gatewayContainer.Id));
-            _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DefaultAction.Execute(null);
 
             Assert.IsTrue( ExceptionExpecter.ExpectException<KeyNotFoundException>(() =>
@@ -107,7 +110,6 @@ namespace RdClient.Shared.Test.ViewModels
         public void GatewaysDelete_DeleteCommandDeletesOnlyOneGateway()
         {
             int gatewayCount = _dataModel.Gateways.Models.Count;
-            _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DefaultAction.Execute(null);
             Assert.AreEqual(gatewayCount - 1, _dataModel.Gateways.Models.Count);
         }
@@ -118,7 +120,6 @@ namespace RdClient.Shared.Test.ViewModels
             Func<bool> desktopsReferenceGateway = () =>
                 _dataModel.LocalWorkspace.Connections.Models.OfType<IModelContainer<RemoteConnectionModel>>().Any(d => ((DesktopModel)d.Model).GatewayId.Equals(_gatewayContainer.Id));
             Assert.IsTrue(desktopsReferenceGateway());
-            _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DefaultAction.Execute(null);
             Assert.IsFalse(desktopsReferenceGateway());
         }
@@ -136,7 +137,6 @@ namespace RdClient.Shared.Test.ViewModels
             }
 
             //delete 
-            _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DefaultAction.Execute(null);
 
             //check that only desktops referencing the deleted gateway are changed

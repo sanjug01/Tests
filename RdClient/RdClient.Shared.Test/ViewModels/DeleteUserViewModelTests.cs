@@ -20,6 +20,7 @@ namespace RdClient.Shared.Test.ViewModels
         private ApplicationDataModel _dataModel;
         private Mock.NavigationService _navService;
         private Mock.PresentableView _view;
+        private Mock.ModalPresentationContext _context;
         private IModelContainer<CredentialsModel> _cred;
         private DeleteUserViewModel _vm;
         
@@ -30,6 +31,7 @@ namespace RdClient.Shared.Test.ViewModels
             _cred = _testData.NewValidCredential();
             _navService = new Mock.NavigationService();
             _view = new Mock.PresentableView();
+            _context = new Mock.ModalPresentationContext();
 
             _dataModel = new ApplicationDataModel()
             {
@@ -62,6 +64,7 @@ namespace RdClient.Shared.Test.ViewModels
         public void TestCleanup()
         {
             _navService.Dispose();
+            _context.Dispose();
             _dataModel = null;
         }
 
@@ -74,15 +77,17 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void CancelCommandDismissesView()
         {
-            _navService.Expect("DismissModalView", new object[] { _view }, 0);
+            ((IViewModel)_vm).Presenting(_navService, _cred, _context);
+            _context.Expect("Dismiss", p => { return null; });
             _vm.Cancel.Execute(null);
         }
 
         [TestMethod]
         public void DeleteCommandDismissesView()
         {
-            _navService.Expect("DismissModalView", new object[] { _view }, 0);
-            _vm.Cancel.Execute(null);
+            ((IViewModel)_vm).Presenting(_navService, _cred, _context);
+            _context.Expect("Dismiss", p => { return null; });
+            _vm.DefaultAction.Execute(null);
         }
 
         [TestMethod]
@@ -91,7 +96,6 @@ namespace RdClient.Shared.Test.ViewModels
             Assert.IsTrue(ExceptionExpecter.ExpectException<KeyNotFoundException>(() =>
             {
                 Assert.AreSame(_cred.Model, _dataModel.Credentials.GetModel(_cred.Id));
-                _navService.Expect("DismissModalView", new object[] { _view }, 0);
                 _vm.DefaultAction.Execute(null);
                 CredentialsModel model = _dataModel.Credentials.GetModel(_cred.Id);
             }));
@@ -103,7 +107,6 @@ namespace RdClient.Shared.Test.ViewModels
             Func<bool> desktopsReferenceCred = () =>
                 _dataModel.LocalWorkspace.Connections.Models.OfType<IModelContainer<RemoteConnectionModel>>().Any(d => ((DesktopModel)d.Model).CredentialsId.Equals(_cred.Id));
             Assert.IsTrue(desktopsReferenceCred());
-            _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DefaultAction.Execute(null);
             Assert.IsFalse(desktopsReferenceCred());
         }
@@ -112,7 +115,6 @@ namespace RdClient.Shared.Test.ViewModels
         public void DeleteCommandDeletesOnlyOneCredential()
         {
             int credCount = _dataModel.Credentials.Models.Count;
-            _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DefaultAction.Execute(null);
             Assert.AreEqual(credCount - 1, _dataModel.Credentials.Models.Count);
         }
@@ -129,7 +131,6 @@ namespace RdClient.Shared.Test.ViewModels
                 previousCreds.Add((DesktopModel)desktop.Model, ((DesktopModel)desktop.Model).CredentialsId);
             }
             //delete credential
-            _navService.Expect("DismissModalView", new object[] { _view }, 0);
             _vm.DefaultAction.Execute(null);
             //check that only desktops referencing the deleted credential are changed
             foreach (IModelContainer<RemoteConnectionModel> desktop in _dataModel.LocalWorkspace.Connections.Models)
