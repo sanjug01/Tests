@@ -13,9 +13,16 @@
         private string _copyright;
         private readonly RelayCommand _closeCommand;
 
+        private readonly RelayCommand _showEulaCommand;
+        private readonly RelayCommand _showThirdPartyDocCommand;
+        private readonly RelayCommand _showPrivacyCommand;
+
         public AboutViewModel()
         {
             _closeCommand = new RelayCommand(o => { this.DismissModal(null); });
+            _showEulaCommand = new RelayCommand(ShowEulaExecute);
+            _showPrivacyCommand = new RelayCommand(ShowPrivacyDocExecute);
+            _showThirdPartyDocCommand = new RelayCommand(ShowThirdPartyDocExecute);
         }
 
         public string AppVersion
@@ -55,6 +62,9 @@
         }
 
         public ICommand Close { get { return _closeCommand; } }
+        public ICommand ShowEulaCommand { get { return _showEulaCommand; } }
+        public ICommand ShowPrivacyCommand { get { return _showPrivacyCommand; } }
+        public ICommand ShowThirdPartyNoticesCommand { get { return _showThirdPartyDocCommand; } }
 
         protected override void DefaultAction()
         {
@@ -74,6 +84,24 @@
                 rt = enattr.Current as TAttr;
 
             return rt;
+        }
+
+        private void ShowEulaExecute(object o)
+        {
+            RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.EulaDoc);
+            NavigationService.PushAccessoryView("RichTextView", args);
+        }
+
+        private void ShowThirdPartyDocExecute(object o)
+        {
+            RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.ThirdPartyNotices);
+            NavigationService.PushAccessoryView("RichTextView", args);
+        }
+
+        private void ShowPrivacyDocExecute(object o)
+        {
+            RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.PrivacyDoc);
+            NavigationService.PushAccessoryView("RichTextView", args);
         }
     }
 }

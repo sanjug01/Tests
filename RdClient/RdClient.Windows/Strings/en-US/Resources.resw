@@ -774,14 +774,6 @@
     <value>http://www.bing.com/search?q=microsoft+rdp+client+recommended+new+features</value>
     <comment>Hyperlink for the "Recommended New Features" hyperlink button in the About dialog</comment>
   </data>
-  <data name="AboutView_Link_TermsOfUse.NavigateUri" xml:space="preserve">
-    <value>http://www.bing.com/search?q=microsoft+rdp+terms+of+use</value>
-    <comment>Hyperlink for the "Terms of Use" hyperlink button in the About dialog</comment>
-  </data>
-  <data name="AboutView_Link_ThirdPartyNotices.NavigateUri" xml:space="preserve">
-    <value>http://www.bing.com/search?q=microsoft+rdp+client+third+party+notices</value>
-    <comment>Hyperlink for the "Third party notices" hyperlink button in the About dialog</comment>
-  </data>
   <data name="AboutView_PrivacyPolicy.Text" xml:space="preserve">
     <value>(r) Privacy policy</value>
     <comment>Title of the "Privacy policy" hyperlink button in the About dialog</comment>
