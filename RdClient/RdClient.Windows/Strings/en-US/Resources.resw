@@ -762,6 +762,26 @@
     <value>(r) Close</value>
     <comment>Title of the hyperlink button that closes the about dialog.</comment>
   </data>
+  <data name="AboutView_Link_PrivacyPolicy.NavigateUri" xml:space="preserve">
+    <value>http://www.bing.com/search?q=microsoft+rdp+privacy+policy</value>
+    <comment>Hyperlink for the "Privacy policy" hyperlink button in the About dialog</comment>
+  </data>
+  <data name="AboutView_Link_RateAndReview.NavigateUri" xml:space="preserve">
+    <value>http://www.bing.com/search?q=microsoft+rdp+client+rate+and+review</value>
+    <comment>Hyperlink for the "Rate and Review" hyperlink button in the About dialog</comment>
+  </data>
+  <data name="AboutView_Link_RecommendedNewFeatures.NavigateUri" xml:space="preserve">
+    <value>http://www.bing.com/search?q=microsoft+rdp+client+recommended+new+features</value>
+    <comment>Hyperlink for the "Recommended New Features" hyperlink button in the About dialog</comment>
+  </data>
+  <data name="AboutView_Link_TermsOfUse.NavigateUri" xml:space="preserve">
+    <value>http://www.bing.com/search?q=microsoft+rdp+terms+of+use</value>
+    <comment>Hyperlink for the "Terms of Use" hyperlink button in the About dialog</comment>
+  </data>
+  <data name="AboutView_Link_ThirdPartyNotices.NavigateUri" xml:space="preserve">
+    <value>http://www.bing.com/search?q=microsoft+rdp+client+third+party+notices</value>
+    <comment>Hyperlink for the "Third party notices" hyperlink button in the About dialog</comment>
+  </data>
   <data name="AboutView_PrivacyPolicy.Text" xml:space="preserve">
     <value>(r) Privacy policy</value>
     <comment>Title of the "Privacy policy" hyperlink button in the About dialog</comment>
@@ -786,10 +806,18 @@
     <value>(r) About</value>
     <comment>Title of the About dialog; text shown at the top of the dialog in large font</comment>
   </data>
+  <data name="AdditionalToolbarCommandsView_News.Text" xml:space="preserve">
+    <value>(r) What's new</value>
+    <comment>Text in the "What's new" button from additional commands</comment>
+  </data>
   <data name="AdditionalToolbarCommandsView_About.Text" xml:space="preserve">
     <value>(r) About</value>
     <comment>Text in the "About" button that opens the About dialog</comment>
   </data>
+  <data name="AdditionalToolbarCommandsView_Help.Text" xml:space="preserve">
+    <value>(r) Help</value>
+    <comment>Text in the "Help" button from additional commands</comment>
+  </data>  
   <data name="Settings_Gateways_Combobox.Header" xml:space="preserve">
     <value>(r) Gateways</value>
     <comment>Header of the combobox in the settings page that lists all the saved gateways</comment>

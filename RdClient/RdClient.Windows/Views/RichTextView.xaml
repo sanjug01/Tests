@@ -1,0 +1,47 @@
+﻿<controls:ModalUserControl
+    x:Class="RdClient.Views.RichTextView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:controls="using:RdClient.Controls"
+    TabNavigation="Cycle"
+    mc:Ignorable="d"
+    d:DesignHeight="400"
+    d:DesignWidth="400">
+
+    <controls:ModalUserControl.DataContext>
+        <vm:AboutViewModel />
+    </controls:ModalUserControl.DataContext>
+
+    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock x:Uid="RichTextView_Title"
+                       Grid.Row="0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Bottom"
+                       FontSize="30"
+                       Text="(d) Info" />
+
+            <RichEditBox x:Uid="RichTextView_InfoBox"
+                         x:Name="InfoBox"
+                         Grid.Row="1"
+                         PlaceholderText="(d) Loading info ....."  
+                         Loaded="RichEditBox_Loaded">
+                
+                
+            </RichEditBox>
+ 
+
+        </Grid>
+    </Grid>
+    
+</controls:ModalUserControl>

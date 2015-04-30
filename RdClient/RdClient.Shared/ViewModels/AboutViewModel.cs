@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using System.Windows.Input;
     using Windows.ApplicationModel;
     using Windows.UI.Xaml;
 
@@ -10,9 +11,11 @@
     {
         private string _appVersion;
         private string _copyright;
+        private readonly RelayCommand _closeCommand;
 
         public AboutViewModel()
         {
+            _closeCommand = new RelayCommand(o => { this.DismissModal(null); });
         }
 
         public string AppVersion
@@ -51,11 +54,13 @@
             }
         }
 
+        public ICommand Close { get { return _closeCommand; } }
+
         protected override void DefaultAction()
         {
             DismissModal(null);
         }
-
+        
         private static TAttr GetAssemblyAttribute<TAttr>(Assembly assembly) where TAttr : Attribute
         {
             //

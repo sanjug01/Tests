@@ -183,6 +183,9 @@
     <Compile Include="Models\SingleSwapChainPanelRdpConnectionSource.cs" />
     <Compile Include="Models\SuccessfulConnectionSource.cs" />
     <Compile Include="Navigation\ModalFocusTracker.cs" />
+    <Compile Include="Views\RichTextView.xaml.cs">
+      <DependentUpon>RichTextView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -285,6 +288,8 @@
     <Compile Include="Views\ViewPresenter.xaml.cs">
       <DependentUpon>ViewPresenter.xaml</DependentUpon>
     </Compile>
+    <Content Include="Strings\en-US\EULA.rtf" />
+    <Content Include="Strings\en-US\ThirdPartyNotices.rtf" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -398,6 +403,10 @@
     <Page Include="Controls\WorkspaceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RichTextView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\AboutView.xaml">
       <SubType>Designer</SubType>
