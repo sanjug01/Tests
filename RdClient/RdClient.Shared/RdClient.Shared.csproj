@@ -61,7 +61,6 @@
     <Compile Include="Converters\NegateBooleanConverter.cs" />
     <Compile Include="Converters\NotNullToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
-    <Compile Include="Converters\PanKnobStateToBackGroundBrushConverter.cs" />
     <Compile Include="Converters\SessionStateToOpacityConverter.cs" />
     <Compile Include="Converters\TypeToLocalizedStringConverter.cs" />
     <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverter.cs" />
