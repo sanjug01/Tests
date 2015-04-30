@@ -4,6 +4,7 @@
     using RdClient.Shared.Navigation;
     using RdClient.Shared.ViewModels;
     using System.Diagnostics.Contracts;
+    using Windows.Foundation;
     using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
@@ -11,9 +12,17 @@
 
     public sealed partial class MainPage : Page
     {
+        private enum SharedVisualState
+        {
+            DefaultLayout,
+            NarrowLayout
+        }
+
         public MainPage()
         {
             this.InitializeComponent();
+            this.SizeChanged += this.OnSizeChanged;
+            this.SharedVisualStates.CurrentStateChanging += this.OnSharedVisualStateChanging;
 
             AppInitializer initializer = (this.Resources["AppInitializer"] as AppInitializer);
             Contract.Assert(null != initializer);
@@ -65,6 +74,26 @@
                     lavm.OrientationChanged(e.Size.Height < e.Size.Width ? ViewOrientation.Landscape : ViewOrientation.Portrait);
                 });
             }
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            VisualStateManager.GoToState(this, GetVisualState(e.NewSize).ToString(), true);
+        }
+
+        private SharedVisualState GetVisualState(Size size)
+        {
+            SharedVisualState state = SharedVisualState.DefaultLayout;
+
+            if (size.Width <= 640.0)
+                state = SharedVisualState.NarrowLayout;
+
+            return state;
+        }
+
+        private void OnSharedVisualStateChanging(object sender, VisualStateChangedEventArgs e)
+        {
+            VisualStateManager.GoToState(this.ViewPresenter, e.NewState.Name, true);
         }
     }
 }

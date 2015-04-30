@@ -209,6 +209,22 @@
     </Page.BottomAppBar>
 
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="SharedVisualStates">
+
+                <VisualState x:Name="DefaultLayout">
+                    <Storyboard>
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:Name="NarrowLayout">
+                    <Storyboard>
+                    </Storyboard>
+                </VisualState>
+
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
         <views:ViewPresenter x:Name="ViewPresenter"/>        
         <!-- Button that shows the application bar -->
         <Button
