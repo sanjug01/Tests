@@ -13,7 +13,7 @@
     d:DesignWidth="400">
 
     <controls:ModalUserControl.DataContext>
-        <vm:AboutViewModel />
+        <vm:RichTextViewModel />
     </controls:ModalUserControl.DataContext>
 
     <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
@@ -21,23 +21,27 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
+            <!-- optional title, should be independent of the file content -->
             <TextBlock x:Uid="RichTextView_Title"
                        Grid.Row="0"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Bottom"
-                       FontSize="30"
+                       Style="{ThemeResource TitleTextBlockStyle}" 
                        Text="(d) Info" />
 
             <RichEditBox x:Uid="RichTextView_InfoBox"
                          x:Name="InfoBox"
                          Grid.Row="1"
-                         PlaceholderText="(d) Loading info ....."  
-                         Loaded="RichEditBox_Loaded">
-                
-                
+                         Foreground ="Azure" 
+                         PlaceholderText="(d) Loading info ....." 
+                         IsReadOnly="True"
+                         IsSpellCheckEnabled="False"
+                         IsTapEnabled="False"
+                         IsDoubleTapEnabled="False"
+                         IsRightTapEnabled="False"
+                         PreventKeyboardDisplayOnProgrammaticFocus="True"
+                         ScrollViewer.VerticalScrollBarVisibility="Visible"
+                         Loaded="RichEditBox_Loaded" >
             </RichEditBox>
  
 
