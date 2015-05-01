@@ -25,8 +25,12 @@
 
         private void OnResuming(object sender, object e)
         {
+            RdTrace.TraceNrm("App Resuming");
             System.Diagnostics.Debug.WriteLine("OnResuming");
-            // throw new System.NotImplementedException();
+            ResumingArgs.ResumingOperationWrapper mro = new ResumingArgs.ResumingOperationWrapper(e);
+            ResumingArgs resumeArgs = new ResumingArgs(mro);
+
+            this.LifeTimeManager.OnResuming(sender, resumeArgs);
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
@@ -47,6 +51,7 @@
 
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
+            RdTrace.TraceNrm("App Suspending");
             System.Diagnostics.Debug.WriteLine("OnSuspending");
             SuspensionArgs.SuspendingOperationWrapper mso = new SuspensionArgs.SuspendingOperationWrapper(e.SuspendingOperation.Deadline, e.SuspendingOperation.GetDeferral());
             SuspensionArgs sa = new SuspensionArgs(mso);

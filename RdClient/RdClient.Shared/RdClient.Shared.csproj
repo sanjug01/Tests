@@ -216,8 +216,10 @@
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
     <Compile Include="LifeTimeManagement\IRootFrameManager.cs" />
+    <Compile Include="LifeTimeManagement\IResumingArgs.cs" />
     <Compile Include="LifeTimeManagement\ISuspensionArgs.cs" />
     <Compile Include="LifeTimeManagement\LaunchEventArgs.cs" />
+    <Compile Include="LifeTimeManagement\ResumeEventArgs.cs" />
     <Compile Include="LifeTimeManagement\SuspendEventArgs.cs" />
     <Compile Include="Models\ApplicationDataModel.cs" />
     <Compile Include="Models\BadServerIdentityEventArgs.cs" />

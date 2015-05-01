@@ -184,6 +184,7 @@
     <Compile Include="Helpers\SynchronizedTransform.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
     <Compile Include="Input\InputPaneInputPanelFactory.cs" />
+    <Compile Include="LifeTimeManagement\ResumingArgs.cs" />
     <Compile Include="Models\BadCertificateConnectionSource.cs" />
     <Compile Include="Models\ImitationRdpConnectionSource.cs" />
     <Compile Include="Models\RejectSavedPasswordConnectionSource.cs" />

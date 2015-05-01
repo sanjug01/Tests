@@ -191,6 +191,8 @@
             // that does not do anything.
             //
             _internalState = new InactiveSession(_sessionMonitor);
+
+            // TODO: RemoteSession also needs to register for ILifeCycle.Suspend/Resume
         }
 
         protected override void DisposeManagedState()
@@ -323,6 +325,15 @@
             Contract.Assert(null != _renderingPanel);
             Contract.Assert(null != _sessionView);
 
+            // TODO : if connection is active then call
+            // _connection.Suspend();
+            throw new NotImplementedException();
+        }
+
+        void IRemoteSession.Resume()
+        {
+            // TODO : should recover after suspend
+            // _connection.Resume();
             throw new NotImplementedException();
         }
 
