@@ -398,6 +398,10 @@ namespace RdClient.Shared.Navigation
             {
                 DismissStackedView(stack, stack[stack.Count - 1].View, presenter);
             }
+
+            //// repro for bug
+            //if (stack.Count > 0)
+            //DismissStackedView(stack, stack[0].View, presenter);
         }
 
         private void CallDismissing(IPresentableView view)
