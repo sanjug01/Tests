@@ -17,7 +17,7 @@
         {
             _nav = navigationService;
             _navManager = navManager;
-            _navManager.IsShellChromeBackVisible = true;
+            _navManager.AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             _navManager.BackRequested += BackButtonHandler_BackRequested;           
         }
 

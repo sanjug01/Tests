@@ -419,7 +419,6 @@
     </Style> 
 
     <Style x:Key="DialogBorder" TargetType="Border">
-        <Setter Property="RequestedTheme" Value="{StaticResource AlternateTheme}" />
         <Setter Property="Width" Value="434" />
         <Setter Property="Background" Value="{ThemeResource DialogBackgroundColor}" />
         <Setter Property="HorizontalAlignment" Value="Center" />
