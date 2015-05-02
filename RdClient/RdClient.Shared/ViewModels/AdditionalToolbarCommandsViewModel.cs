@@ -20,7 +20,9 @@
         }
         private void ShowHelpCommandExecute()
         {
-            DismissSelfAndPushAccessoryView("RichTextView");
+            // TODO : not decided if link or internal document
+            RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.EulaDoc);
+            DismissSelfAndPushAccessoryView("RichTextView", args);
         }
 
         public ICommand ShowAboutDialog
