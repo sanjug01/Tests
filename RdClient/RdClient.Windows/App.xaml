@@ -29,8 +29,4 @@
             </conv:TypeToLocalizedStringConverter>
         </ResourceDictionary>
     </Application.Resources>   
-    
-    <Application.RequestedTheme>
-        <StaticResource ResourceKey="AppMainTheme" />
-    </Application.RequestedTheme>
 </Application>

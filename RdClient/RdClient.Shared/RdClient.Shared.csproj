@@ -11,8 +11,8 @@
     <AssemblyName>RdClient.Shared</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10030.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.9927.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.10069.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10069.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -407,12 +407,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Input\Pointer\DirectModeControl.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="Microsoft.VCLibs.AppLocal, Version=14.0">
+      <Name>Microsoft Visual C++  AppLocal Runtime Package for Windows UAP</Name>
+    </SDKReference>
     <SDKReference Include="Microsoft.VCLibs12.AppLocal, Version=12.0">
       <Name>Microsoft Visual C++ 2013 AppLocal Runtime Package for Windows UAP</Name>
     </SDKReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Input\Pointer\DirectModeControl.cs" />
   </ItemGroup>
   <!--<Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />-->
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
