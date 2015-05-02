@@ -13,7 +13,6 @@
     d:DesignWidth="400">
 
     <UserControl.Resources>
-        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         <sc:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter" >
             <sc:TypeToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
@@ -24,13 +23,13 @@
     <StackPanel>
         <Grid>
             <ContentPresenter x:Name="ContentPresenter" />
-            <Border BorderBrush="{ThemeResource rdErrorBrush}" BorderThickness="2" Visibility="{Binding Path=State.IsValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+            <Border BorderBrush="{ThemeResource rdErrorBrush}" BorderThickness="2" Visibility="{Binding Path=ErrorVisible}" />
         </Grid>
         <TextBlock 
             Foreground="{ThemeResource rdErrorBrush}"
             TextTrimming="CharacterEllipsis"
             Text="{Binding Path=State.ErrorContent, FallbackValue='Please enter a valid value (d)', Converter={StaticResource TypeToLocalizedStringConverter}}"
-            Visibility="{Binding Path=State.IsValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}">            
+            Visibility="{Binding Path=ErrorVisible}">            
         </TextBlock>
     </StackPanel>
 

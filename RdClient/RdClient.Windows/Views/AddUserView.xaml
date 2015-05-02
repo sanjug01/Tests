@@ -64,7 +64,7 @@
                                 x:Uid="AddUser-UsernameTextbox"
                                 Background="Transparent"
                                 PlaceholderText="Username (d)"
-                                Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">                                
+                                Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=Default}">                                
                             </TextBox>
                         </controls:ErrorControl.PresentedContent>
                     </controls:ErrorControl>
