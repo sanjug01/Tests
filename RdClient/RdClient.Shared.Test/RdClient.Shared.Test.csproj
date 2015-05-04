@@ -173,7 +173,6 @@
     <Compile Include="Input\Keyboard\TestSink.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyBaseTests.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactoryTests.cs" />
-    <Compile Include="Mock\BarItemsViewModel.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\RadcClient.cs" />
@@ -205,7 +204,6 @@
     <Compile Include="Model\SessionCredentialsTests.cs" />
     <Compile Include="Model\SnapshotterTests.cs" />
     <Compile Include="Model\WorkspaceModelTests.cs" />
-    <Compile Include="Navigation\Extensions\ApplicationBarExtensionTests.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtensionTests.cs" />
     <Compile Include="Navigation\Extensions\SessionFactoryExtensionTests.cs" />
     <Compile Include="Navigation\Extensions\TimerFactoryExtensionTests.cs" />
@@ -242,7 +240,6 @@
     <Compile Include="ViewModels\EditCredentialsTasks\InSessionCredentialsTaskTests.cs" />
     <Compile Include="ViewModels\EditCredentialsViewModelTests.cs" />
     <Compile Include="ViewModels\ErrorMessageViewModelTests.cs" />
-    <Compile Include="ViewModels\MainPageViewModelTests.cs" />
     <Compile Include="ViewModels\PanKnobViewModelTests.cs" />
     <Compile Include="ViewModels\RemoteSessionViewModelTests.cs" />
     <Compile Include="ViewModels\RelayCommandTests.cs" />
