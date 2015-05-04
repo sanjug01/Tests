@@ -78,7 +78,7 @@ namespace RdClient.Shared.Input.Recognizers
                     _timer.Reset(TapTimerExpired);
                     break;
                 case PointerEventAction.ManipulationDelta:
-                    if(_fingersDown > 0 && 
+                    if (_fingersDown > 0 && 
                         _taps > 0 && 
                         RdMath.Distance(((IManipulationRoutedEventProperties) pointerEvent).Delta.Translation) > GlobalConstants.TouchMoveThreshold)
                     { 

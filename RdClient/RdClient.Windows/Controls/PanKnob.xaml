@@ -11,7 +11,7 @@
     ManipulationMode="All"
     Loaded="OnLoaded">
 
-    <Grid Name="PanKnobGrid" Width="60" Height="60" Visibility="Visible" Opacity="1"
+    <Grid Name="PanKnobGrid" Width="60" Height="60" Visibility="Collapsed" Opacity="1"
             VerticalAlignment="Center" HorizontalAlignment="Center">
 
         <Grid.Resources>

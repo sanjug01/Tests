@@ -21,7 +21,6 @@ namespace RdClient.Shared.Models.PanKnobModel
                 _stateMachineEvent.Control.Viewport = value;
             }
         }
-        private IPanKnob _panKnob;
 
         public PanKnobSite(ITimerFactory timerFactory)
         {
@@ -36,10 +35,17 @@ namespace RdClient.Shared.Models.PanKnobModel
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-        void IPanKnobSite.SetPanKnob(IPanKnob panKnob)
+        private IPanKnob _panKnob;
+        IPanKnob IPanKnobSite.PanKnob
         {
-            _panKnob = panKnob;
-            _stateMachineEvent.Control = new PanKnobControl(panKnob);           
+            get
+            {
+                return _panKnob;
+            }
+            set {
+                _panKnob = value;
+                _stateMachineEvent.Control = new PanKnobControl(value);
+            }
         }
 
         void IPointerEventConsumer.Consume(IPointerEventBase pointerEvent)

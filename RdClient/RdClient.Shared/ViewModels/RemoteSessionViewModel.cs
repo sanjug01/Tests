@@ -349,6 +349,7 @@
                         Contract.Assert(null == this.BellyBandViewModel);
                         this.BellyBandViewModel = new RemoteSessionConnectingViewModel(() => _activeSession.Disconnect());
                         this.IsConnectionBarVisible = false;
+
                         break;
 
                     case SessionState.Connected:
@@ -362,17 +363,25 @@
                         //
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
+
                         _pointerPosition.Reset(_activeSessionControl, this);
                         _zoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport, _pointerPosition, _timerFactory.CreateTimer(), this.ExecutionDeferrer);
+
                         this.PointerCapture = new PointerCapture(_pointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
+                        this.PanKnobSite = new PanKnobSite(this.TimerFactory);
+
+                        _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+
+                        _panKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
+                        _zoomPanModel.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
+
+                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _zoomPanModel.OnConsumptionModeChanged;
+
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
-                        this.PanKnobSite = new PanKnobSite(this.TimerFactory);
-                        _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
-                        _panKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
-                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
+
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
                         this.IsConnectionBarVisible = true;
@@ -393,11 +402,16 @@
                             _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
                             _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
+
+                            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
+                            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _zoomPanModel.OnConsumptionModeChanged;
+
                             //
                             // The connection bar and side bars are not available in any non-connected state.
                             //
                             this.IsConnectionBarVisible = false;
                             this.IsRightSideBarVisible = false;
+                            _panKnobSite.PanKnob.IsVisible = false;
                         }
                         break;
                 }

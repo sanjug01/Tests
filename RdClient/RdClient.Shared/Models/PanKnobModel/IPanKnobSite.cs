@@ -8,7 +8,7 @@ namespace RdClient.Shared.Models.PanKnobModel
         ITimerFactory TimerFactory { get; }
         IViewport Viewport { set; }
 
-        void SetPanKnob(IPanKnob panKnob);
+        IPanKnob PanKnob { get; set; }
 
         void OnConsumptionModeChanged(object sender, ConsumptionModeType consumptionMode);
     }

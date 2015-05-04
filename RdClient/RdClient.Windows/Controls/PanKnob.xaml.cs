@@ -40,7 +40,7 @@ namespace RdClient.Controls
             set
             {
                 _panKnobSite = value;
-                _panKnobSite.SetPanKnob(this);
+                _panKnobSite.PanKnob = this;
 
 
                 ITimer timer = null;
@@ -114,7 +114,6 @@ namespace RdClient.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void OnZoomScrollEvent(object sender, IZoomScrollEvent e)

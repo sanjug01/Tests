@@ -41,9 +41,6 @@
             RemoteSessionViewSite="{Binding}"
             Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
 
-        <c:PanKnob x:Name="PanKnob"
-                   PanKnobSite="{Binding PanKnobSite}"/>
-
         <!-- Connection Bar -->
         <ItemsControl
             Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -174,5 +171,7 @@
             </Grid>
         </Grid>
 
+        <c:PanKnob x:Name="PanKnob"
+                   PanKnobSite="{Binding PanKnobSite}"/>
     </Grid>
 </UserControl>
