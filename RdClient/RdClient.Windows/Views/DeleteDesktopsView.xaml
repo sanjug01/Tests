@@ -29,48 +29,47 @@
         <Grid Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="8"/>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="12"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                    <TextBlock 
-                            x:Uid="DeleteDesktopsView-Title-DeleteSingle"
-                            Margin="24,12,24,12" 
-                            Style="{ThemeResource TitleTextBlockStyle}" 
-                            Text="Delete connection(d):"
-                            Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource  BooleanToVisibilityConverter}}"
-                            />
-                    <TextBlock 
-                            x:Uid="DeleteDesktopsView-Title-DeleteMultiple"
-                            Margin="24,12,24,12" 
-                            Style="{ThemeResource TitleTextBlockStyle}" 
-                            Text="Delete connections(d):"
-                            Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
-                            />
-                    <TextBlock 
-                            Margin="24,12,24,12" 
-                            Style="{ThemeResource TitleTextBlockStyle}" 
-                            Text="{Binding Path=SelectedDesktops, Converter={StaticResource DesktopsListToLocalizedStringConverter}}"
-                        />
-                </StackPanel>
+                <TextBlock 
+                    x:Uid="DeleteDesktopsView-Title-DeleteSingle"
+                    Margin="24,12,24,12" 
+                    Style="{ThemeResource TitleTextBlockStyle}" 
+                    Text="Delete connection(d):"
+                    Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource  BooleanToVisibilityConverter}}">                    
+                </TextBlock>
+                <TextBlock 
+                    x:Uid="DeleteDesktopsView-Title-DeleteMultiple"
+                    Margin="24,12,24,12" 
+                    Style="{ThemeResource TitleTextBlockStyle}" 
+                    Text="Delete connections(d):"
+                    Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource InverseBooleanToVisibilityConverter}}">                    
+                </TextBlock>
             </Grid>
             <TextBlock 
+                    Grid.Row="1"
+                    Margin="24,12,24,12" 
+                    Style="{ThemeResource TitleTextBlockStyle}" 
+                    Text="{Binding Path=SelectedDesktops, Converter={StaticResource DesktopsListToLocalizedStringConverter}}">                                        
+            </TextBlock>
+            <Grid Grid.Row="3">
+            <TextBlock 
                     x:Uid="DeleteDesktopsView-Message-DeleteSingle"
-                    Grid.Row="2"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     FontSize="16"
                     Margin="1,0" 
                     Text="Are you sure you want to delete this connection(d)?" 
-                    TextWrapping="Wrap" 
+                    TextWrapping="WrapWholeWords"
                     Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource BooleanToVisibilityConverter}}"                    
                     />
             <TextBlock 
                     x:Uid="DeleteDesktopsView-Message-DeleteMultiple"
-                    Grid.Row="2"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     FontSize="16"
                     Margin="1,0" 
@@ -78,8 +77,9 @@
                     TextWrapping="Wrap" 
                     Visibility="{Binding Path=IsSingleSelection, Converter={StaticResource InverseBooleanToVisibilityConverter}}"                    
                     />
+            </Grid>
             <StackPanel 
-                    Grid.Row="3"           
+                    Grid.Row="4"           
                     Orientation="Horizontal" 
                     VerticalAlignment="Bottom" 
                     HorizontalAlignment="Center">
