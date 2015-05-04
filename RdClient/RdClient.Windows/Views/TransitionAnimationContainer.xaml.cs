@@ -15,11 +15,20 @@
         public TransitionAnimationContainer()
         {
             this.InitializeComponent();
+            this.SharedVisualStates.CurrentStateChanging += this.OnSharedVisualStateChanging;
         }
 
         public void ShowContent(UIElement content)
         {
             Contract.Requires(null != content);
+            //
+            // Apply the current shared visual state before presenting the new element.
+            //
+            if (null != this.SharedVisualStates.CurrentState)
+            {
+                _currentContent.CastAndCall<Control>(
+                    c => VisualStateManager.GoToState(c, this.SharedVisualStates.CurrentState.Name, true));
+            }
 
             if (null != _currentContent)
             {
@@ -87,6 +96,12 @@
         private void OnCrossFadeCompleted(object sender, object e)
         {
             CommitPendingAnimation(false);
+        }
+
+        private void OnSharedVisualStateChanging(object sender, VisualStateChangedEventArgs e)
+        {
+            CommitPendingAnimation(true);
+            _currentContent.CastAndCall<Control>(c => VisualStateManager.GoToState(c, e.NewState.Name, true));
         }
     }
 }

@@ -283,15 +283,11 @@
     <Compile Include="Navigation\BackButtonHandler.cs" />
     <Compile Include="Navigation\BackCommandArgs.cs" />
     <Compile Include="Navigation\BackRequestedEventArgsWrapper.cs" />
-    <Compile Include="Navigation\Contracts\IApplicationBarItemsSourceContract.cs" />
-    <Compile Include="Navigation\Contracts\IApplicationBarSiteContract.cs" />
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
     <Compile Include="Navigation\Contracts\IPresentationCompletionContract.cs" />
-    <Compile Include="Navigation\Extensions\ApplicationBarExtension.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionException.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtension.cs" />
     <Compile Include="Navigation\Extensions\DeviceCapabilitiesExtension.cs" />
-    <Compile Include="Navigation\Extensions\IApplicationBarSiteControl.cs" />
     <Compile Include="Navigation\Extensions\IDeferredExecutionSite.cs" />
     <Compile Include="Navigation\Extensions\IDeviceCapabilitiesSite.cs" />
     <Compile Include="Navigation\Extensions\IExecutionDeferrer.cs" />
@@ -347,12 +343,9 @@
     <Compile Include="ViewModels\IRemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="Navigation\Extensions\IDataModelSite.cs" />
-    <Compile Include="Navigation\ApplicationBarSite.cs" />
     <Compile Include="ValidationRules\HostNameValidationRule.cs" />
     <Compile Include="ViewModels\BarButtonModel.cs" />
     <Compile Include="ViewModels\BarItemModel.cs" />
-    <Compile Include="Navigation\Extensions\IApplicationBarItemsSource.cs" />
-    <Compile Include="Navigation\Extensions\IApplicationBarSite.cs" />
     <Compile Include="ViewModels\ConnectionCenterViewModel.cs" />
     <Compile Include="ViewModels\IApplicationBarViewModel.cs" />
     <Compile Include="Navigation\IPresentableViewConstructor.cs" />
@@ -360,7 +353,6 @@
     <Compile Include="ViewModels\AddOrEditDesktopViewModel.cs" />
     <Compile Include="ViewModels\ErrorMessageViewModel.cs" />
     <Compile Include="Navigation\IViewModel.cs" />
-    <Compile Include="ViewModels\ILayoutAwareViewModel.cs" />
     <Compile Include="ViewModels\IWorkspaceViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionConnectingViewModel.cs" />

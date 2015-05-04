@@ -794,10 +794,18 @@
     <value>(r) Gateways</value>
     <comment>Header of the combobox in the settings page that lists all the saved gateways</comment>
   </data>
+  <data name="Settings_Gateways_Combobox.PlaceholderText" xml:space="preserve">
+    <value>(r) Select gateway server</value>
+    <comment>Placeholder text of the combobox in the settings page that lists all the saved gateways</comment>
+  </data>  
   <data name="Settings_Users_Combobox.Header" xml:space="preserve">
     <value>(r) User accounts</value>
     <comment>Header of the combobox in the settings page that lists all the saved users</comment>
   </data>
+  <data name="Settings_Users_Combobox.PlaceholderText" xml:space="preserve">
+    <value>(r) Select user</value>
+    <comment>Placeholder text of the combobox in the settings page that lists all the saved users</comment>
+  </data>  
   <data name="AddOrEditWorkspace-Caption.Text" xml:space="preserve">
     <value>(r) Add Remote Resource</value>
     <comment>Title of Add workspace dialog</comment>
