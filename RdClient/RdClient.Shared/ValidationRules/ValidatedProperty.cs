@@ -18,6 +18,7 @@ namespace RdClient.Shared.ValidationRules
         public ValidatedProperty(IValidationRule<T> rule)
         {
             _rule = rule;
+            Validate();
         }
 
         public T Value
