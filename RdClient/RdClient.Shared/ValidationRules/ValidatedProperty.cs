@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml;
 
 namespace RdClient.Shared.ValidationRules
 {
@@ -14,14 +13,11 @@ namespace RdClient.Shared.ValidationRules
         private T _value;
         private readonly IValidationRule<T> _rule;
         private IValidationResult _state;
-        private bool _showErrors;
-        private Visibility _errorVisible;
+        private bool _enableValidation;
 
         public ValidatedProperty(IValidationRule<T> rule)
         {
             _rule = rule;
-            _showErrors = true;
-            Validate();
         }
 
         public T Value
@@ -47,54 +43,35 @@ namespace RdClient.Shared.ValidationRules
             }
             private set
             {
-                if (SetProperty(ref _state, value))
-                {
-                    SetErrorVisible();
-                }
+                SetProperty(ref _state, value);
             }
         }
 
-        public bool ShowErrors
+        public bool EnableValidation
         {
             get
             {
-                return _showErrors;
+                return _enableValidation;
             }
-
             set
             {
-                if (SetProperty(ref _showErrors, value))
+                if (SetProperty(ref _enableValidation, value))
                 {
-                    SetErrorVisible();
+                    Validate();
                 }
-            }
-        }
-
-        private void SetErrorVisible()
-        {
-            Visibility errorVisibility = Visibility.Collapsed;
-            if (this.ShowErrors && !this.State.IsValid)
-            {
-                errorVisibility = Visibility.Visible;
-            }
-            this.ErrorVisible = errorVisibility;
-        }
-
-        public Visibility ErrorVisible
-        {
-            get
-            {
-                return _errorVisible;
-            }
-            private set
-            {
-                SetProperty(ref _errorVisible, value);
             }
         }
 
         private void Validate()
         {
-            this.State = _rule.Validate(this.Value);
+            if (this.EnableValidation)
+            {
+                this.State = _rule.Validate(this.Value);
+            }
+            else
+            {
+                this.State = new ValidationResult(true);
+            }
         }
     }
 }

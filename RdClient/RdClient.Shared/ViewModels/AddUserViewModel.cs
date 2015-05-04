@@ -83,7 +83,7 @@
         {
             var usernameRule = new CompositeValidationRule<string>(new List<IValidationRule<string>>() { new UsernameFormatValidationRule() });
             _user = new ValidatedProperty<string>(usernameRule);
-            _okCommand = new RelayCommand(o => OkCommandHandler(o), o => !_user.ShowErrors || _user.State.IsValid);
+            _okCommand = new RelayCommand(o => OkCommandHandler(o), o => _user.State.IsValid);
             _user.PropertyChanged += (s, e) =>
             {
                 if (s == _user && e.PropertyName == "State")
@@ -147,7 +147,6 @@
             _args = activationParameter as AddUserViewArgs;
 
             this.ShowSave = _args.ShowSave;
-            this.User.ShowErrors = false;
             this.User.Value = _args.Credentials.Username;
             this.Password = _args.Credentials.Password;
             this.Mode = _args.Mode;         
@@ -155,7 +154,7 @@
 
         private void OkCommandHandler(object o)
         {
-            this.User.ShowErrors = true;
+            this.User.EnableValidation = true;
             if (_okCommand.CanExecute(o))
             {
                 _args.Credentials.Username = this.User.Value;

@@ -2,13 +2,11 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel;
-    using Windows.UI.Xaml;
 
     public interface IValidatedProperty<T> : INotifyPropertyChanged
     {
         T Value { get; set; }
-        bool ShowErrors { get; set; }
-        Visibility ErrorVisible { get; }
+        bool EnableValidation { get; set; }
         IValidationResult State { get; }
     }
 }
