@@ -128,7 +128,6 @@
     <Compile Include="Converters\PanKnobStateConvertersTests.cs" />
     <Compile Include="Converters\ErrorLocalizers\RdpDisconnectReasonLocalizerTests.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverterTests.cs" />
-    <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverterTests.cs" />
     <Compile Include="Converters\ResourceIdToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverterTests.cs" />

@@ -64,7 +64,6 @@
     <Compile Include="Converters\PanKnobStateToBackGroundBrushConverter.cs" />
     <Compile Include="Converters\SessionStateToOpacityConverter.cs" />
     <Compile Include="Converters\TypeToLocalizedStringConverter.cs" />
-    <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverter.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverter.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverter.cs" />
     <Compile Include="Converters\ErrorLocalizers\IErrorLocalizer.cs" />
