@@ -34,7 +34,7 @@
                 Text="(d) About" />
             <HyperlinkButton
                 Grid.Row="0"
-                Command="{Binding NavigateBack}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                Command="{Binding Close}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                 <TextBlock x:Uid="AboutView_Close" Text="(d) Close"/>
             </HyperlinkButton>
                 
@@ -42,15 +42,24 @@
                 <TextBlock Text="{Binding AppName}" Margin="0,0,0,5"/>
                 <TextBlock Text="{Binding AppVersion}" Margin="0,0,0,5"/>
                 <TextBlock Text="{Binding Copyright}"/>
-                <HyperlinkButton Margin="0,20,0,0">
+                <HyperlinkButton Margin="0,20,0,0"
+                                 x:Uid="AboutView_Link_ThirdPartyNotices"
+                                 Command="{Binding ShowThirdPartyNoticesCommand}"
+                                 >
                     <TextBlock x:Uid="AboutView_ThirdPartyNotices" Text="(d) Third Party Notices"/>
                 </HyperlinkButton>
-                <HyperlinkButton Margin="0,5,0,0">
+                <HyperlinkButton Margin="0,5,0,0"
+                                 x:Uid="AboutView_Link_RecommendedNewFeatures"
+                                 NavigateUri="https://www.google.com/search?q=microsoft+rdp+client+recommended+new+features"
+                                 >
                     <TextBlock x:Uid="AboutView_RecommendedNewFeatures" Text="(d) Recommended new features"/>
                 </HyperlinkButton>
             </StackPanel>
 
-            <HyperlinkButton Grid.Row="2">
+            <HyperlinkButton Grid.Row="2"
+                             x:Uid="AboutView_Link_RateAndReview"
+                             NavigateUri="https://www.google.com/search?q=microsoft+rdp+client+rate+and+review"
+                             >
                 <TextBlock x:Uid="AboutView_RateAndReview" Text="(d) Rate and Review" />
             </HyperlinkButton>
 
@@ -61,7 +70,9 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <HyperlinkButton>
+                <HyperlinkButton x:Uid="AboutView_Link_TermsOfUse"
+                                 Command="{Binding ShowEulaCommand}"
+                                 >
                     <TextBlock x:Uid="AboutView_TermsOfUse" Text="(d) Terms of use"/>
                 </HyperlinkButton>
 
@@ -69,7 +80,14 @@
                     <Rectangle Width="1" VerticalAlignment="Stretch" Fill="{ThemeResource SystemControlHyperlinkTextBrush}"/>
                 </Grid>
 
-                <HyperlinkButton Grid.Column="2">
+                <!-- Should display a text instead of link. 
+                     Document not yet available
+                     Command="{Binding ShowPrivacyCommand}"
+                -->
+                <HyperlinkButton Grid.Column="2"
+                                 x:Uid="AboutView_Link_PrivacyPolicy"
+                                 NavigateUri="https://www.google.com/search?q=microsoft+rdp+privacy+policy"
+                                 >
                     <TextBlock x:Uid="AboutView_PrivacyPolicy" Text="(d) Privacy Policy" />
                 </HyperlinkButton>
             </Grid>
