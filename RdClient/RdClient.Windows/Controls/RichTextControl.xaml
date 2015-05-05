@@ -22,6 +22,7 @@
                      IsRightTapEnabled="False"
                      PreventKeyboardDisplayOnProgrammaticFocus="True"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                     Height="Auto"
                      >
             
         </RichEditBox>

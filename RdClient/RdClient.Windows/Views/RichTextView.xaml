@@ -21,12 +21,15 @@
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />        
     </controls:ModalUserControl.Resources>
-
+    
+    <ScrollViewer
+        VerticalScrollBarVisibility="Auto"
+        HorizontalScrollBarVisibility="Hidden">
         <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
         <Grid Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <!-- Document title, should be localized -->
@@ -53,10 +56,11 @@
                          Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <controls:RichTextControl 
                 Grid.Row="1"
+                Margin="0,10,0,0"
                 RtfDocument="{Binding Document, UpdateSourceTrigger=PropertyChanged}"
                 Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
 
         </Grid>
     </Grid>
-    
+    </ScrollViewer>
 </controls:ModalUserControl>

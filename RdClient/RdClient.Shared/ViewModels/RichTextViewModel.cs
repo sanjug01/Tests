@@ -100,7 +100,7 @@
                     this.ResourceUri = "ms-appx:///Strings/EULA.rtf";
                     break;
                 case InternalDocType.ThirdPartyNotices:
-                    this.Title = "Third Part Notices";
+                    this.Title = "Third Party Notices";
                     this.ResourceUri = "ms-appx:///Strings/ThirdPartyNotices.rtf";
                     break;
                 case InternalDocType.PrivacyDoc:
