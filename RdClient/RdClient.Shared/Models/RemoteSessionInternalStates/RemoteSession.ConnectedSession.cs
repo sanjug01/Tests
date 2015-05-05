@@ -30,7 +30,7 @@
                     _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                     _session._syncEvents.MouseCursorShapeChanged += (s, a) =>_session.DeferEmitMouseCursorShapeChanged(a);
-                    _session._syncEvents.MultiTouchEnabledChanged += (s, a) => _session.EmitMultiTouchEnabledChanged(a);
+                    _session._syncEvents.MultiTouchEnabledChanged += (s, a) => _session.DeferEmitMultiTouchEnabledChanged(a);
 
 #if false
                     _session._syncEvents.UserCredentialsRequest += (s, a) => { };

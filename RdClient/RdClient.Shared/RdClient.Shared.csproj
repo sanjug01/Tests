@@ -61,7 +61,6 @@
     <Compile Include="Converters\NegateBooleanConverter.cs" />
     <Compile Include="Converters\NotNullToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
-    <Compile Include="Converters\PanKnobStateToBackGroundBrushConverter.cs" />
     <Compile Include="Converters\SessionStateToOpacityConverter.cs" />
     <Compile Include="Converters\TypeToLocalizedStringConverter.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverter.cs" />
@@ -74,11 +73,7 @@
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverter.cs" />
     <Compile Include="Converters\ByteArrayToStringConverter.cs" />
-    <Compile Include="Converters\PanKnobStateToForegroundBrushConverter.cs" />
     <Compile Include="Converters\GatewayComboBoxElementToLocalizedStringConverter.cs" />
-    <Compile Include="Converters\ZoomPanStateToPanKnobVisibilityConverter.cs" />
-    <Compile Include="Converters\ZoomPanStateToZoomInVisibilityConverter.cs" />
-    <Compile Include="Converters\ZoomPanStateToZoomOutVisibilityConverter.cs" />
     <Compile Include="Converters\StringLengthToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
     <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverter.cs" />
@@ -175,7 +170,9 @@
     <Compile Include="Input\Pointer\IPointerControl.cs" />
     <Compile Include="Input\Pointer\IPointerEventEnums.cs" />
     <Compile Include="Input\Pointer\IPointTracker.cs" />
-    <Compile Include="Input\Pointer\IZoomScrollEvent.cs" />
+    <Compile Include="Input\Recognizers\ITapEvent.cs" />
+    <Compile Include="Input\Recognizers\ITapRecognizer.cs" />
+    <Compile Include="Input\Recognizers\IZoomScrollEvent.cs" />
     <Compile Include="Input\Pointer\MouseAction.cs" />
     <Compile Include="Input\Pointer\MouseCursorShape.cs" />
     <Compile Include="Input\Pointer\PointerCapture.cs" />
@@ -211,17 +208,11 @@
     <Compile Include="Input\Pointer\PointerRoutedEventArgsWrapper.cs" />
     <Compile Include="Input\Pointer\PointerStateMachineEvent.cs" />
     <Compile Include="Input\Pointer\PointTracker.cs" />
-    <Compile Include="Input\Pointer\ZoomScrollEvent.cs" />
-    <Compile Include="Input\Pointer\ZoomScrollRecognizer.cs" />
-    <Compile Include="Input\ZoomPan\ZoomEventArgs.cs" />
-    <Compile Include="Input\ZoomPan\PanEventArgs.cs" />
-    <Compile Include="Input\ZoomPan\IPanTransform.cs" />
-    <Compile Include="Input\ZoomPan\IZoomPanManipulator.cs" />
-    <Compile Include="Input\ZoomPan\IPanKnobTransform.cs" />
-    <Compile Include="Input\ZoomPan\IZoomPanTransform.cs" />
-    <Compile Include="Input\ZoomPan\PanKnobState.cs" />
-    <Compile Include="Input\ZoomPan\ZoomPanState.cs" />
-    <Compile Include="Input\ZoomPan\IZoomTransform.cs" />
+    <Compile Include="Input\Recognizers\IZoomScrollRecognizer.cs" />
+    <Compile Include="Input\Recognizers\TapEvent.cs" />
+    <Compile Include="Input\Recognizers\TapRecognizer.cs" />
+    <Compile Include="Input\Recognizers\ZoomScrollEvent.cs" />
+    <Compile Include="Input\Recognizers\ZoomScrollRecognizer.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
     <Compile Include="LifeTimeManagement\IRootFrameManager.cs" />
@@ -238,6 +229,9 @@
     <Compile Include="Models\DesktopModel.cs" />
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Data\ICertificateTrust.cs" />
+    <Compile Include="Models\PanKnobModel\IPanKnob.cs" />
+    <Compile Include="Models\PanKnobModel\IPanKnobControl.cs" />
+    <Compile Include="Models\PanKnobModel\IPanKnobSite.cs" />
     <Compile Include="Models\IValidation.cs" />
     <Compile Include="Models\IDeviceCapabilities.cs" />
     <Compile Include="Models\InterruptedSessionContinuation.cs" />
@@ -254,6 +248,11 @@
     <Compile Include="Models\OnPremiseWorkspaceModel.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
     <Compile Include="Models\IThumbnailEncoder.cs" />
+    <Compile Include="Models\PanKnobModel\PanKnobControl.cs" />
+    <Compile Include="Models\PanKnobModel\PanKnobSite.cs" />
+    <Compile Include="Models\PanKnobModel\PanKnobStateMachineEvent.cs" />
+    <Compile Include="Models\PanKnobModel\PanKnobTransitionConditions.cs" />
+    <Compile Include="Models\PanKnobModel\PanKnobTransitions.cs" />
     <Compile Include="Models\RemoteResourceModel.cs" />
     <Compile Include="Data\SerializableCompositionModel.cs" />
     <Compile Include="Models\RemoteConnectionModel.cs" />
@@ -359,7 +358,6 @@
     <Compile Include="ViewModels\RemoteSessionFailureViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionInterruptionViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
-    <Compile Include="ViewModels\PanKnobViewModel.cs" />
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
     <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
@@ -398,6 +396,7 @@
   <ItemGroup>
     <Compile Include="Input\Pointer\DirectModeControl.cs" />
   </ItemGroup>
+  <ItemGroup />
   <!--<Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />-->
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

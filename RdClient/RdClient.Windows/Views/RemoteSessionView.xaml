@@ -15,7 +15,7 @@
     RequestedTheme="{StaticResource MainTheme}"
     d:DesignHeight="300"
     d:DesignWidth="800">
-    
+
     <UserControl.DataContext>
         <vm:RemoteSessionViewModel>
             <!-- Inject the keyboard capture based on CoreWindow and CoreDispatcher -->
@@ -84,7 +84,7 @@
                 </helpers:TypeNameDataTemplateSelector>
             </ItemsControl.ItemTemplateSelector>
         </ItemsControl>
-        
+
         <!-- Transparent overlay that dismisses the side bars -->
         <c:PointerPressDetector
             Visibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -111,7 +111,7 @@
                 Height="Auto"
                 RequestedTheme="{StaticResource AlternateTheme}"
                 Background="{ThemeResource DialogBackgroundColor}">
-            
+
                 <ContentControl
                     Margin="0,20"
                     Content="{Binding BellyBandViewModel}"
@@ -125,7 +125,7 @@
 
                     <ContentControl.ContentTemplateSelector>
                         <helpers:TypeNameDataTemplateSelector>
-                        
+
                             <helpers:TypeNameDataTemplateSelector.Templates>
 
                                 <!--
@@ -142,13 +142,13 @@
                                 <DataTemplate x:Key="RemoteSessionInterruptionViewModel">
                                     <c:RemoteSessionInterruptionControl />
                                 </DataTemplate>
-                                
+
                                 <DataTemplate x:Key="RemoteSessionConnectingViewModel">
                                     <c:RemoteSessionConnectingControl />
                                 </DataTemplate>
 
                             </helpers:TypeNameDataTemplateSelector.Templates>
-                        
+
                             <helpers:TypeNameDataTemplateSelector.DefaultTemplate>
                                 <DataTemplate>
                                     <!-- Template of an unknown belly-band view model -->
@@ -163,7 +163,7 @@
                                     </Grid>
                                 </DataTemplate>
                             </helpers:TypeNameDataTemplateSelector.DefaultTemplate>
-                        
+
                         </helpers:TypeNameDataTemplateSelector>
                     </ContentControl.ContentTemplateSelector>
                 </ContentControl>
@@ -171,5 +171,7 @@
             </Grid>
         </Grid>
 
+        <c:PanKnob x:Name="PanKnob"
+                   PanKnobSite="{Binding PanKnobSite}"/>
     </Grid>
 </UserControl>

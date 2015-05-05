@@ -124,8 +124,6 @@
     <Compile Include="Converters\NotNullToVisibilityConverterTests.cs" />
     <Compile Include="Converters\NullToVisibilityConverterTests.cs" />
     <Compile Include="Converters\GatewayComboBoxElementToLocalizedStringConverterTests.cs" />
-    <Compile Include="Converters\ZoomPanStateConvertersTests.cs" />
-    <Compile Include="Converters\PanKnobStateConvertersTests.cs" />
     <Compile Include="Converters\ErrorLocalizers\RdpDisconnectReasonLocalizerTests.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverterTests.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverterTests.cs" />
@@ -172,8 +170,10 @@
     <Compile Include="Input\Keyboard\TestSink.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyBaseTests.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactoryTests.cs" />
+    <Compile Include="Input\Recognizers\TapRecognizerTests.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
+    <Compile Include="Mock\PointerEvent.cs" />
     <Compile Include="Mock\RadcClient.cs" />
     <Compile Include="Mock\RadcClientEvents.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />

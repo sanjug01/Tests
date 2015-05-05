@@ -96,6 +96,27 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
+        public ManipulationVelocities Velocities
+        {
+            get
+            {
+                switch (_pointerEvent.Type)
+                {
+                    case PointerEventType.ManipulationDeltaRoutedEventArgs:
+                        return ((ManipulationDeltaRoutedEventArgs)_pointerEvent.Args).Velocities;
+                    case PointerEventType.ManipulationInertiaStartingRoutedEventArgs:
+                        return ((ManipulationInertiaStartingRoutedEventArgs)_pointerEvent.Args).Velocities;
+                    case PointerEventType.ManipulationCompletedRoutedEventArgs:
+                        return ((ManipulationCompletedRoutedEventArgs)_pointerEvent.Args).Velocities;
+                    case PointerEventType.ManipulationStartedRoutedEventArgs:
+                        return ((ManipulationCompletedRoutedEventArgs)_pointerEvent.Args).Velocities;
+                    case PointerEventType.ManipulationStartingRoutedEventArgs:
+                    default:
+                        return new ManipulationVelocities() { Angular = 0, Expansion = 0, Linear = new Point(0, 0) };
+                }
+            }
+        }
+
         public ManipulationRoutedEventArgsWrapper(PointerEvent pointerEvent)
         {
             _pointerEvent = pointerEvent;
