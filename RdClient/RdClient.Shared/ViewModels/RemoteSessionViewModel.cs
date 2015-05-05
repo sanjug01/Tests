@@ -12,6 +12,8 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Models.PanKnobModel;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite
     {
@@ -42,7 +44,21 @@
         private readonly PointerPosition _pointerPosition = new PointerPosition();
         private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
 
-        private readonly ZoomPanMultiTouchModel _zoomPanModel = new ZoomPanMultiTouchModel();
+        private readonly ZoomPanModel _zoomPanModel = new ZoomPanModel();
+
+        private IPanKnobSite _panKnobSite;
+        public IPanKnobSite PanKnobSite
+        {
+            get
+            {
+                return _panKnobSite;
+            }
+
+            set
+            {
+                this.SetProperty(ref _panKnobSite, value);
+            }
+        }
 
         private object _bellyBandViewModel;
 
@@ -170,6 +186,7 @@
             if (null != _sessionView && SessionState.Idle == _sessionState)
             {
                 Contract.Assert(null == _activeSessionControl);
+
                 _activeSessionControl = _activeSession.Activate(_sessionView);
             }
         }
@@ -332,6 +349,7 @@
                         Contract.Assert(null == this.BellyBandViewModel);
                         this.BellyBandViewModel = new RemoteSessionConnectingViewModel(() => _activeSession.Disconnect());
                         this.IsConnectionBarVisible = false;
+
                         break;
 
                     case SessionState.Connected:
@@ -345,13 +363,27 @@
                         //
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
+
                         _pointerPosition.Reset(_activeSessionControl, this);
                         _zoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport, _pointerPosition, _timerFactory.CreateTimer(), this.ExecutionDeferrer);
+
                         this.PointerCapture = new PointerCapture(_pointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
+                        this.PanKnobSite = new PanKnobSite(this.TimerFactory);
+
+                        _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+
+                        _panKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
+                        _zoomPanModel.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
+
+                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _zoomPanModel.OnConsumptionModeChanged;
+
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
+
+                        EmitPropertyChanged("IsRenderingPanelActive");
+                        EmitPropertyChanged("IsConnecting");
                         this.IsConnectionBarVisible = true;
                         break;
 
@@ -370,11 +402,16 @@
                             _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
                             _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
+
+                            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
+                            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _zoomPanModel.OnConsumptionModeChanged;
+
                             //
                             // The connection bar and side bars are not available in any non-connected state.
                             //
                             this.IsConnectionBarVisible = false;
                             this.IsRightSideBarVisible = false;
+                            _panKnobSite.PanKnob.IsVisible = false;
                         }
                         break;
                 }

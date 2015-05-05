@@ -13,18 +13,13 @@
     <Grid>
 
         <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="VisualStates">
+            <VisualStateGroup x:Name="SharedVisualStates">
                 <VisualState x:Name="DefaultLayout">
                     <Storyboard>
                     </Storyboard>
                 </VisualState>
 
                 <VisualState x:Name="NarrowLayout">
-                    <Storyboard>
-                    </Storyboard>
-                </VisualState>
-
-                <VisualState x:Name="PhoneLayout">
                     <Storyboard>
                     </Storyboard>
                 </VisualState>

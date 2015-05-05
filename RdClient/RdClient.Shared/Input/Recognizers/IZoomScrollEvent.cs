@@ -1,6 +1,7 @@
-﻿using Windows.UI.Input;
+﻿using RdClient.Shared.Input.Pointer;
+using Windows.UI.Input;
 
-namespace RdClient.Shared.Input.Pointer
+namespace RdClient.Shared.Input.Recognizers
 {
     public enum ZoomScrollType
     {

@@ -1,13 +1,11 @@
 ﻿namespace RdClient.Controls
 {
-    using RdClient.Shared.Converters;
-    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Pointer;
+    using RdClient.Shared.Input.Recognizers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;
@@ -169,16 +167,16 @@
                     w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingCompleted, PointerEventType.HoldingEventArgs, e, this));
                     break;
                 case HoldingState.Canceled:
-                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingCanceled, PointerEventType.HoldingEventArgs, e, this));
+                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingCancelled, PointerEventType.HoldingEventArgs, e, this));
                     break;
             }
 
             this.RenderingPanel.EmitPointerEvent(w);
         }
 
-        private void OnZoomScrollEvent(object sender, ZoomScrollEventArgs e)
+        private void OnZoomScrollEvent(object sender, IZoomScrollEvent e)
         {
-            this.RenderingPanel.EmitPointerEvent(e.ZoomScrollEvent);
+            this.RenderingPanel.EmitPointerEvent(e);
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -236,7 +234,7 @@
 
         protected override void OnPointerCanceled(PointerRoutedEventArgs e)
         {
-            IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCanceled, PointerEventType.PointerRoutedEventArgs, e, this));
+            IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCancelled, PointerEventType.PointerRoutedEventArgs, e, this));
             this.RenderingPanel.EmitPointerEvent(w);
             _platformRecognizer.CompleteGesture();
         }

@@ -6,6 +6,7 @@ namespace RdClient.Shared.Input.Pointer
     {
         ManipulationDelta Cummulative { get; }
         ManipulationDelta Delta { get; }
+        ManipulationVelocities Velocities { get; }
         bool IsInertial { get; }
     }
 }

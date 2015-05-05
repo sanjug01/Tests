@@ -11,6 +11,7 @@ namespace RdClient.Shared.Test.Mock
 #pragma warning disable 67 // warning CS0067: the event <...> is never used
         public event EventHandler PushingFirstModalView;
         public event EventHandler DismissingLastModalView;
+#pragma warning restore 67 // warning CS0067: the event <...> is never used
 
         public void NavigateToView(string viewName, object activationParameter)
         {

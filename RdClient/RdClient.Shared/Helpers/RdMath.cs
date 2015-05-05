@@ -13,6 +13,6 @@ namespace RdClient.Shared.Helpers
         public static double Angle(Point p)
         {
             return Math.Asin(p.Y / Math.Sqrt(p.X * p.X + p.Y * p.Y)) * 180 / Math.PI;
-        }
+        }        
     }
 }
