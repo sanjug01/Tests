@@ -11,6 +11,7 @@
     using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.Helpers;
     using System.Threading.Tasks;
+    using RdClient.Shared.Navigation;
 
     public enum InternalDocType
     {
@@ -50,9 +51,9 @@
         /// FileName should be empty, or match a resource file.
         /// Other cases may result in exceptions while loading the view. 
         /// </summary>
-        private String ResourceUri { get; set; }
+        private string ResourceUri { get; set; }
 
-        public String Document
+        public string Document
         {
             get { return _infoText; }
             private set
@@ -64,7 +65,7 @@
         /// <summary>
         /// Document title - should apply localization
         /// </summary>
-        public String Title
+        public string Title
         {
             get { return _title; }
             private set
@@ -130,12 +131,12 @@
                 catch (Exception exc)
                 {
                     // TODO : remove try/catch in released version.
-                    System.Diagnostics.Debug.WriteLine("Could not open resource file:" + this.ResourceUri + " becuase" + exc.Message);
+                    System.Diagnostics.Debug.WriteLine("Could not open resource file:" + this.ResourceUri + " because" + exc.Message);
                 }
             }
             else
             {
-                // TDO: this should never happen
+                // TODO: this should never happen
                 // but until we finalize all internal documents will show the progress bar.
                 this.Document = "No document available";
                 // this.IsLoading = false;
@@ -145,20 +146,38 @@
 
         private void OnStreamOpened(Task<StorageFile> task)
         {
-            FileIO.ReadTextAsync(task.Result).AsTask<string>().ContinueWith(OnTextLoaded);
+            try
+            {
+                FileIO.ReadTextAsync(task.Result).AsTask<string>().ContinueWith(OnTextLoaded);
+            }
+            catch (Exception exc)
+            {
+                this.Document = "Failed to read document";
+                this.IsLoading = false;
+                System.Diagnostics.Debug.WriteLine("Could not read resource file:" + this.ResourceUri + " because" + exc.Message);
+            }
         }
 
         private void OnTextLoaded(Task<string> task)
         {
-            string infoText = task.Result;
-            
-            // Defer displaying od the text
-            _dispatcher.Defer(() =>
-                    {
-                        this.Document = infoText;
-                        this.IsLoading = false;
-                    }
-            );
+            string infoText ;
+            try
+            {
+                infoText = task.Result;
+            }
+            catch
+            {
+                infoText = string.Empty;
+                System.Diagnostics.Debug.WriteLine("Could not read string content from resource file:" + this.ResourceUri);
+            }
+
+            // Defer displaying the text
+            _dispatcher.CastAndCall<IDeferredExecution>(
+                de => de.Defer(() =>
+                {
+                    this.Document = infoText;
+                    this.IsLoading = false;
+                } ));
         }
 
 

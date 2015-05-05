@@ -11,11 +11,10 @@
     {
         private string _appVersion;
         private string _copyright;
-        private readonly RelayCommand _closeCommand;
-
-        private readonly RelayCommand _showEulaCommand;
-        private readonly RelayCommand _showThirdPartyDocCommand;
-        private readonly RelayCommand _showPrivacyCommand;
+        private readonly ICommand _closeCommand;
+        private readonly ICommand _showEulaCommand;
+        private readonly ICommand _showThirdPartyDocCommand;
+        private readonly ICommand _showPrivacyCommand;
 
         public AboutViewModel()
         {
