@@ -5,8 +5,8 @@
 
     public sealed class AdditionalToolbarCommandsViewModel : AccessoryViewModelBase
     {
-        private ICommand _about;
-        private ICommand _help;
+        private readonly ICommand _about;
+        private readonly ICommand _help;
 
         public AdditionalToolbarCommandsViewModel()
         {
@@ -21,7 +21,7 @@
         private void ShowHelpCommandExecute()
         {
             // TODO : not decided if link or internal document
-            RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.EulaDoc);
+            RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.HelpDoc);
             DismissSelfAndPushAccessoryView("RichTextView", args);
         }
 

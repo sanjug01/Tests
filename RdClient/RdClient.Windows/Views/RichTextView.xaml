@@ -7,43 +7,54 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:controls="using:RdClient.Controls"
+    xmlns:c="using:RdClient.Converters"    
     TabNavigation="Cycle"
     mc:Ignorable="d"
     d:DesignHeight="400"
     d:DesignWidth="400">
-
+  
     <controls:ModalUserControl.DataContext>
         <vm:RichTextViewModel />
     </controls:ModalUserControl.DataContext>
 
-    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
+    <controls:ModalUserControl.Resources>
+        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />        
+    </controls:ModalUserControl.Resources>
+
+        <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
         <Grid Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!-- optional title, should be independent of the file content -->
+            <!-- Document title, should be localized -->
             <TextBlock x:Uid="RichTextView_Title"
                        Grid.Row="0"
-                       Style="{ThemeResource TitleTextBlockStyle}" 
-                       Text="(d) Info" />
+                       Style="{ThemeResource TitleTextBlockStyle}"                        
+                       Text="{Binding Title}" />
+            <HyperlinkButton
+                Grid.Row="0"
+                Command="{Binding Close}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                <TextBlock x:Uid="RichTextView_Close" Text="(d) Close"/>
+            </HyperlinkButton>            
 
-            <RichEditBox x:Uid="RichTextView_InfoBox"
-                         x:Name="InfoBox"
+            <TextBlock Grid.Row="1"
+                       x:Uid="RichTextView_Loading"
+                       Style="{ThemeResource BodyTextBlockStyle}"                        
+                       Text="(d) Loading..." 
+                       Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <ProgressBar Margin="0,15"
                          Grid.Row="1"
-                         Foreground ="Azure" 
-                         PlaceholderText="(d) Loading info ....." 
-                         IsReadOnly="True"
-                         IsSpellCheckEnabled="False"
-                         IsTapEnabled="False"
-                         IsDoubleTapEnabled="False"
-                         IsRightTapEnabled="False"
-                         PreventKeyboardDisplayOnProgrammaticFocus="True"
-                         ScrollViewer.VerticalScrollBarVisibility="Visible"
-                         Loaded="RichEditBox_Loaded" >
-            </RichEditBox>
- 
+                         IsIndeterminate="True"
+                         HorizontalAlignment="Stretch" 
+                         Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <controls:RichTextControl 
+                Grid.Row="1"
+                RtfDocument="{Binding Document, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
 
         </Grid>
     </Grid>

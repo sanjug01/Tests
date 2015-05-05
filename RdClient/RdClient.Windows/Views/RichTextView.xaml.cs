@@ -16,7 +16,7 @@
 
         private void RichEditBox_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            this.LoadResourceFile();
+            // this.LoadResourceFile();
         }
 
         private async void LoadResourceFile()
@@ -46,12 +46,13 @@
 
         private void ApplyRichText(string text)
         {
-            // apply text
-            this.InfoBox.IsReadOnly = false;
-            this.InfoBox.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
-            this.InfoBox.IsReadOnly = true;
-            // bug with the foreground color
-            this.InfoBox.Focus(Windows.UI.Xaml.FocusState.Programmatic);
+            ////// apply text
+            ////this.TextControl.
+            ////this.InfoBox.IsReadOnly = false;
+            ////this.InfoBox.Document.SetText(Windows.UI.Text.TextSetOptions.FormatRtf, text);
+            ////this.InfoBox.IsReadOnly = true;
+            ////// bug with the foreground color
+            ////this.InfoBox.Focus(Windows.UI.Xaml.FocusState.Programmatic);
         }
 
         private string _resourceUri;
