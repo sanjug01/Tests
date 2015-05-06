@@ -34,7 +34,7 @@
                            x:Uid="Settings_General_Feedback" 
                            Text="Send anonymous data to Microsoft (d)" />
                 <ToggleSwitch HorizontalAlignment="Left"
-                              IsOn="{Binding Path=GeneralSettings.UseThumbnails, Mode=TwoWay}"/>
+                              IsOn="{Binding Path=GeneralSettings.SendFeedback, Mode=TwoWay}"/>
             </StackPanel>
         </StackPanel>
     </Grid>

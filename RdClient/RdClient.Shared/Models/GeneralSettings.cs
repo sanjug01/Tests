@@ -17,6 +17,7 @@
         private IModelSerializer _modelSerializer;
 
         private bool _useThumbnails;
+        private bool _sendFeedback;
 
         public static GeneralSettings Load(IStorageFolder storageFolder, string fileName, IModelSerializer modelSerializer)
         {
@@ -65,9 +66,24 @@
             }
         }
 
+        [DataMember]
+        public bool SendFeeback
+        {
+            get
+            {
+                return _sendFeedback;
+            }
+            set
+            {
+                if (SetProperty(ref _sendFeedback, value))
+                    this.PersistentStatus = Data.PersistentStatus.Modified;
+            }
+        }
+
         private void SetDefaults()
         {
             this.UseThumbnails = true;
+            this.SendFeeback = false;
         }
 
         ICommand IPersistentObject.Save
