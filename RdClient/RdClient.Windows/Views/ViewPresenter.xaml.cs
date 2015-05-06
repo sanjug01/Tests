@@ -6,7 +6,6 @@ namespace RdClient.Views
     using System.Diagnostics.Contracts;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
-    using System;
 
 
     /// <summary>
@@ -20,6 +19,7 @@ namespace RdClient.Views
         public ViewPresenter()
         {
             this.InitializeComponent();
+            this.SharedVisualStates.CurrentStateChanging += this.OnSharedVisualStateChanging;
             _modalStackDepth = 0;
         }
 
@@ -64,6 +64,12 @@ namespace RdClient.Views
         {
             this.ModalStackContainer.Visibility = Visibility.Collapsed;
             this.TransitionAnimationContainer.IsEnabled = true;
+        }
+
+        private void OnSharedVisualStateChanging(object sender, VisualStateChangedEventArgs e)
+        {
+            VisualStateManager.GoToState(this.ModalStackContainer, e.NewState.Name, true);
+            VisualStateManager.GoToState(this.TransitionAnimationContainer, e.NewState.Name, true);
         }
     }
 }

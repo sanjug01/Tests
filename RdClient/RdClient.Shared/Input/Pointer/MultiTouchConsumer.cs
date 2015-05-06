@@ -35,7 +35,7 @@ namespace RdClient.Shared.Input.Pointer
             // if the position to the up event is not the same as the last recorded position, 
             // update the position before sending the up event
             if ((pointerEvent.Action == PointerEventAction.PointerReleased ||
-                 pointerEvent.Action == PointerEventAction.PointerCanceled) &&                 
+                 pointerEvent.Action == PointerEventAction.PointerCancelled) &&                 
                 _lastTouch != null && 
                 _lastTouch.Position != pointerEvent.Position)
             {
@@ -56,7 +56,7 @@ namespace RdClient.Shared.Input.Pointer
                     touchType = TouchEventType.Update;
                     break;
                 case PointerEventAction.PointerReleased:
-                case PointerEventAction.PointerCanceled:
+                case PointerEventAction.PointerCancelled:
                     touchType = TouchEventType.Up;
                     break;
                 default:

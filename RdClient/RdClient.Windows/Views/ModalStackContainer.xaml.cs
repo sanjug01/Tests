@@ -21,7 +21,7 @@ namespace RdClient.Views
         public ModalStackContainer()
         {
             this.InitializeComponent();
-            this.VisualStates.CurrentStateChanging += this.OnVisualStateChanging;
+            this.SharedVisualStates.CurrentStateChanging += this.OnVisualStateChanging;
         }
 
         /// <summary>
@@ -48,10 +48,10 @@ namespace RdClient.Views
             //
             // Apply the current visual state to the new view on the stack
             //
-            if (null != this.VisualStates.CurrentState)
+            if (null != this.SharedVisualStates.CurrentState)
             {
                 cc.Content.CastAndCall<Control>(
-                    c => VisualStateManager.GoToState(c, this.VisualStates.CurrentState.Name, true));
+                    c => VisualStateManager.GoToState(c, this.SharedVisualStates.CurrentState.Name, true));
             }
 
             if (animated)

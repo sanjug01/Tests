@@ -610,10 +610,6 @@
     <value>(r) The credentials that were used to connect to the remote PC didn't work. Enter different credentials and try again.</value>
     <comment>Text shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
   </data>
-  <data name="Session_Reconnect_Attempts_String" xml:space="preserve">
-    <value>(r) Connection attempt: {0} of {1}</value>
-    <comment>Label  to warn about the number of reconnect attempts for a lost connection</comment>
-  </data>
   <data name="Session_Reconnect_Title.Text" xml:space="preserve">
     <value>(r) Reconnecting</value>
     <comment>Reconnecting dialog title</comment>
@@ -762,6 +758,18 @@
     <value>(r) Close</value>
     <comment>Title of the hyperlink button that closes the about dialog.</comment>
   </data>
+  <data name="AboutView_Link_PrivacyPolicy.NavigateUri" xml:space="preserve">
+    <value>http://www.bing.com/search?q=microsoft+rdp+privacy+policy</value>
+    <comment>Hyperlink for the "Privacy policy" hyperlink button in the About dialog</comment>
+  </data>
+  <data name="AboutView_Link_RateAndReview.NavigateUri" xml:space="preserve">
+    <value>http://www.bing.com/search?q=microsoft+rdp+client+rate+and+review</value>
+    <comment>Hyperlink for the "Rate and Review" hyperlink button in the About dialog</comment>
+  </data>
+  <data name="AboutView_Link_RecommendedNewFeatures.NavigateUri" xml:space="preserve">
+    <value>http://www.bing.com/search?q=microsoft+rdp+client+recommended+new+features</value>
+    <comment>Hyperlink for the "Recommended New Features" hyperlink button in the About dialog</comment>
+  </data>
   <data name="AboutView_PrivacyPolicy.Text" xml:space="preserve">
     <value>(r) Privacy policy</value>
     <comment>Title of the "Privacy policy" hyperlink button in the About dialog</comment>
@@ -786,10 +794,18 @@
     <value>(r) About</value>
     <comment>Title of the About dialog; text shown at the top of the dialog in large font</comment>
   </data>
+  <data name="AdditionalToolbarCommandsView_News.Text" xml:space="preserve">
+    <value>(r) What's new</value>
+    <comment>Text in the "What's new" button from additional commands</comment>
+  </data>
   <data name="AdditionalToolbarCommandsView_About.Text" xml:space="preserve">
     <value>(r) About</value>
     <comment>Text in the "About" button that opens the About dialog</comment>
   </data>
+  <data name="AdditionalToolbarCommandsView_Help.Text" xml:space="preserve">
+    <value>(r) Help</value>
+    <comment>Text in the "Help" button from additional commands</comment>
+  </data>  
   <data name="Settings_Gateways_Combobox.Header" xml:space="preserve">
     <value>(r) Gateways</value>
     <comment>Header of the combobox in the settings page that lists all the saved gateways</comment>

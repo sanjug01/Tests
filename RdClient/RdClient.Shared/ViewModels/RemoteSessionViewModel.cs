@@ -12,8 +12,10 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using RdClient.Shared.Models.PanKnobModel;
+    using RdClient.Shared.LifeTimeManagement;
 
-    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite
+    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite
     {
         private readonly RelayCommand _toggleSideBars;
         private readonly RelayCommand _invokeKeyboard;
@@ -38,11 +40,26 @@
         private bool _isRightSideBarVisible;
 
         private ITimerFactory _timerFactory;
+        private ILifeTimeManager _lifeTimeManager;
 
         private readonly PointerPosition _pointerPosition = new PointerPosition();
         private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
 
-        private readonly ZoomPanMultiTouchModel _zoomPanModel = new ZoomPanMultiTouchModel();
+        private readonly ZoomPanModel _zoomPanModel = new ZoomPanModel();
+
+        private IPanKnobSite _panKnobSite;
+        public IPanKnobSite PanKnobSite
+        {
+            get
+            {
+                return _panKnobSite;
+            }
+
+            set
+            {
+                this.SetProperty(ref _panKnobSite, value);
+            }
+        }
 
         private object _bellyBandViewModel;
 
@@ -166,16 +183,23 @@
             _activeSession.BadCertificate += this.OnBadCertificate;
             _activeSession.BadServerIdentity += this.OnBadServerIdentity;
             _activeSession.State.PropertyChanged += this.OnSessionStatePropertyChanged;
-
+            
             if (null != _sessionView && SessionState.Idle == _sessionState)
             {
                 Contract.Assert(null == _activeSessionControl);
+
                 _activeSessionControl = _activeSession.Activate(_sessionView);
             }
-        }
 
+            _lifeTimeManager.Suspending += OnAppSuspending;
+            _lifeTimeManager.Resuming += OnAppResuming;
+        }
+        
         protected override void OnDismissed()
         {
+            _lifeTimeManager.Resuming -= OnAppResuming;
+            _lifeTimeManager.Suspending -= OnAppSuspending;
+
             _activeSession.CredentialsNeeded -= this.OnCredentialsNeeded;
             _activeSession.Closed -= this.OnSessionClosed;
             _activeSession.Failed -= this.OnSessionFailed;
@@ -238,6 +262,12 @@
             }
 
             _invokeKeyboard.EmitCanExecuteChanged();
+        }
+
+
+        void ILifeTimeSite.SetLifeTimeManager(ILifeTimeManager lftManager)
+        {
+            _lifeTimeManager = lftManager;
         }
 
         private void OnCredentialsNeeded(object sender, CredentialsNeededEventArgs e)
@@ -332,6 +362,7 @@
                         Contract.Assert(null == this.BellyBandViewModel);
                         this.BellyBandViewModel = new RemoteSessionConnectingViewModel(() => _activeSession.Disconnect());
                         this.IsConnectionBarVisible = false;
+
                         break;
 
                     case SessionState.Connected:
@@ -345,13 +376,27 @@
                         //
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
+
                         _pointerPosition.Reset(_activeSessionControl, this);
                         _zoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport, _pointerPosition, _timerFactory.CreateTimer(), this.ExecutionDeferrer);
+
                         this.PointerCapture = new PointerCapture(_pointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
+                        this.PanKnobSite = new PanKnobSite(this.TimerFactory);
+
+                        _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+
+                        _panKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
+                        _zoomPanModel.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
+
+                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _zoomPanModel.OnConsumptionModeChanged;
+
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
+
+                        EmitPropertyChanged("IsRenderingPanelActive");
+                        EmitPropertyChanged("IsConnecting");
                         this.IsConnectionBarVisible = true;
                         break;
 
@@ -370,11 +415,16 @@
                             _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
                             _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
+
+                            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
+                            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _zoomPanModel.OnConsumptionModeChanged;
+
                             //
                             // The connection bar and side bars are not available in any non-connected state.
                             //
                             this.IsConnectionBarVisible = false;
                             this.IsRightSideBarVisible = false;
+                            _panKnobSite.PanKnob.IsVisible = false;
                         }
                         break;
                 }
@@ -387,6 +437,19 @@
         {
             Contract.Assert(null != _activeSessionControl);
             _activeSessionControl.SendKeystroke(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
+        }
+
+
+        private void OnAppSuspending(object sender, SuspendEventArgs e)
+        {
+            Contract.Assert(null != _activeSession);
+            _activeSession.Suspend();
+        }
+
+        private void OnAppResuming(object sender, ResumeEventArgs e)
+        {
+            Contract.Assert(null != _activeSession);
+            _activeSession.Resume();
         }
 
         private void InternalToggleRightSideBar(object parameter)
@@ -428,5 +491,6 @@
                 this.PointerCapture.OnMouseModeChanged(this, EventArgs.Empty);
             }
         }
+
     }
 }

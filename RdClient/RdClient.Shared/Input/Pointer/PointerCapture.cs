@@ -17,7 +17,11 @@ namespace RdClient.Shared.Input.Pointer
         private bool _multiTouchEnabled;
 
         private IConsumptionMode _consumptionMode;
-        public IConsumptionMode ConsumptionMode { get { return _consumptionMode; } }
+        public IConsumptionMode ConsumptionMode
+        {
+            get { return _consumptionMode; }
+        }
+
 
         public PointerCapture(IPointerPosition pointerPosition, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory)
         {

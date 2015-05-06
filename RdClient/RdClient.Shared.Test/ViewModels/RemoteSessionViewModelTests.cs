@@ -4,8 +4,9 @@
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Data;
-    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Helpers;    
     using RdClient.Shared.Input.Keyboard;
+    using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
@@ -30,6 +31,7 @@
         private TestDeviceCapabilities _devCaps;
         private TestTimerFactory _timerFactory;
         private TestConnectionSource _connectionSource;
+        private TestLifeTimeManager _lftManager;
         private TestViewFactory _viewFactory;
 
         private sealed class TestKeyboardCapture : IKeyboardCapture
@@ -339,6 +341,28 @@
             event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged { add { } remove { } }
         }
 
+        private sealed class TestLifeTimeManager : ILifeTimeManager
+        {
+            event EventHandler<LaunchEventArgs> ILifeTimeManager.Launched { add { } remove { } }
+            event EventHandler<ResumeEventArgs> ILifeTimeManager.Resuming { add { } remove { } }
+            event EventHandler<SuspendEventArgs> ILifeTimeManager.Suspending { add { } remove { } }
+
+            void ILifeTimeManager.OnLaunched(IActivationArgs e)
+            {
+                throw new NotImplementedException();
+            }
+
+            void ILifeTimeManager.OnResuming(object sender, IResumingArgs e)
+            {
+                throw new NotImplementedException();
+            }
+
+            void ILifeTimeManager.OnSuspending(object sender, ISuspensionArgs e)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         private sealed class TestConnectionSource : IRdpConnectionSource
         {
             private readonly IRdpConnectionFactory _factory;
@@ -575,6 +599,7 @@
 
             _defex = new TestDeferredExecution();
             _devCaps = new TestDeviceCapabilities();
+            _lftManager = new TestLifeTimeManager();
 
             _nav = new NavigationService()
             {
@@ -585,7 +610,8 @@
                     new DataModelExtension() { AppDataModel = _dataModel },
                     new DeferredExecutionExtension(){ DeferredExecution = _defex },
                     new SessionFactoryExtension(){ SessionFactory = new TestSessionFactory() },
-                    new DeviceCapabilitiesExtension() { DeviceCapabilities = _devCaps }
+                    new DeviceCapabilitiesExtension() { DeviceCapabilities = _devCaps },
+                    new LifeTimeExtension() { LifeTimeManager = _lftManager }
                 }
             };
         }

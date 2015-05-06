@@ -1,13 +1,12 @@
 ﻿namespace RdClient.Controls
 {
+    using RdClient.Helpers;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using System;
-    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using Windows.Foundation;
     using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Media;
     using Windows.UI.Xaml.Media.Animation;
 
@@ -18,7 +17,7 @@
         private readonly RemoteSessionPanel _sessionPanel;
         private readonly RenderingPanel _renderingPanel;
         private readonly Storyboard _storyboard;
-        private readonly CompositeTransform _transformation;
+        private readonly SynchronizedTransform _transformation;
 
         private Size _size;
         private Point _offset;
@@ -39,7 +38,7 @@
             _renderingPanel = renderingPanel;
             _storyboard = new Storyboard();
             _storyboard.Completed += this.OnAnimationCompleted;
-            _transformation = transformation;
+            _transformation = new SynchronizedTransform(transformation);
         }
 
         Size IViewport.Size
@@ -53,13 +52,20 @@
         }
 
         double IViewport.ZoomFactor
-        {
+        {   
             get { return _zoomFactor; }
         }
 
         Point IViewport.TransformPoint(Point point)
         {
-            return _transformation.Inverse.TransformPoint(point);
+            Point transformed = new Point(point.X, point.Y);           
+
+            transformed.X *= 1.0 / _transformation.ScaleX;
+            transformed.Y *= 1.0 / _transformation.ScaleY;
+            transformed.X -= _transformation.TranslateX;
+            transformed.Y -= _transformation.TranslateY;
+
+            return transformed;
         }
 
         void IViewport.Set(double zoomFactor, Size offset, bool animated)
@@ -118,7 +124,7 @@
             //
             // Get the position of the anchor point (that is is viewport coordinates) in the rendering panel.
             //
-            Point translatedAnchorPoint = _transformation.TransformPoint(anchorPoint);
+            Point translatedAnchorPoint = _transformation.Transform.TransformPoint(anchorPoint);
             //
             // Construct a new transformation with the new scale and current translation (offset) and use it to get the position
             // of the anchor point using new scale.
@@ -210,14 +216,14 @@
             _storyboard.Children.Add(animationScaleY);
             _storyboard.Duration = new Duration(TimeSpan.FromMilliseconds(duration));
 
-            Storyboard.SetTarget(animationTranslateX, _transformation);
+            Storyboard.SetTarget(animationTranslateX, _transformation.Transform);
             Storyboard.SetTargetProperty(animationTranslateX, "TranslateX");
-            Storyboard.SetTarget(animationTranslateY, _transformation);
+            Storyboard.SetTarget(animationTranslateY, _transformation.Transform);
             Storyboard.SetTargetProperty(animationTranslateY, "TranslateY");
 
-            Storyboard.SetTarget(animationScaleX, _transformation);
+            Storyboard.SetTarget(animationScaleX, _transformation.Transform);
             Storyboard.SetTargetProperty(animationScaleX, "ScaleX");
-            Storyboard.SetTarget(animationScaleY, _transformation);
+            Storyboard.SetTarget(animationScaleY, _transformation.Transform);
             Storyboard.SetTargetProperty(animationScaleY, "ScaleY");
 
             Contract.Assert(null == _activeStoryboard);

@@ -198,9 +198,8 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestHasCorrectApplicationBarItems()
         {
-            IEnumerable<BarItemModel> barItems = (_vm as IApplicationBarItemsSource).GetItems(null);
+            IEnumerable<BarItemModel> barItems = _vm.ToolbarItems;
             IEnumerable<SegoeGlyphBarButtonModel> barButtons = barItems.OfType<SegoeGlyphBarButtonModel>();
-            Assert.AreEqual(2, barButtons.Count());
             Assert.IsTrue(barButtons.Any((b) => b.Command.Equals(_vm.EditDesktopCommand)), "ApplicationBarItems should contain a button linked to EditDesktopCommand");
             Assert.IsTrue(barButtons.Any((b) => b.Command.Equals(_vm.DeleteDesktopCommand)), "ApplicationBarItems should contain a button linked to DeleteDesktopCommand");
         }

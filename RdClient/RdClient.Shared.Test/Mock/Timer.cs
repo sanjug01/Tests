@@ -36,6 +36,15 @@ namespace RdClient.Shared.Test.Mock
             this.CallsToStart++;
         }
 
+        public void Expire()
+        {
+            Callback();
+            if(Recurring == false)
+            {
+                Running = false;
+            }
+        }
+
         public void Stop()
         {
             this.Running = false;

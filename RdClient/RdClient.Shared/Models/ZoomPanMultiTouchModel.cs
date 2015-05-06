@@ -16,7 +16,7 @@ namespace RdClient.Shared.Models
         Stopped
     }
 
-    public class ZoomPanMultiTouchModel
+    public class ZoomPanModel
     {
         private IViewport _viewport;
         private Point _viewportCenter;
@@ -114,30 +114,33 @@ namespace RdClient.Shared.Models
 
         private void OnPointerPositionChanged(object sender, Point position)
         {
-            PanDirection direction = ShouldPan(position);
+            if(_consumptionMode == ConsumptionModeType.Pointer)
+            {
+                PanDirection direction = ShouldPan(position);
 
-            if(direction != PanDirection.Stopped)
-            {
-                if(_panning == false)
+                if (direction != PanDirection.Stopped)
                 {
-                    _timer.Start(
-                        () => PanALittle(direction), 
-                        TimeSpan.FromMilliseconds(_timerStep), 
-                        true);
-                    _panning = true;
+                    if (_panning == false)
+                    {
+                        _timer.Start(
+                            () => PanALittle(direction),
+                            TimeSpan.FromMilliseconds(_timerStep),
+                            true);
+                        _panning = true;
+                    }
                 }
-            }
-            else
-            {
-                if(_panning == true)
+                else
                 {
-                    _timer.Stop();
-                    _panning = false;
+                    if (_panning == true)
+                    {
+                        _timer.Stop();
+                        _panning = false;
+                    }
                 }
             }
         }
 
-        public ZoomPanMultiTouchModel()
+        public ZoomPanModel()
         {
             _zoomInCommand = new RelayCommand(
                 o =>

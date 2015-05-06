@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using System.Windows.Input;
     using Windows.ApplicationModel;
     using Windows.UI.Xaml;
 
@@ -10,9 +11,17 @@
     {
         private string _appVersion;
         private string _copyright;
+        private readonly ICommand _closeCommand;
+        private readonly ICommand _showEulaCommand;
+        private readonly ICommand _showThirdPartyDocCommand;
+        private readonly ICommand _showPrivacyCommand;
 
         public AboutViewModel()
         {
+            _closeCommand = new RelayCommand(o => { this.DismissModal(null); });
+            _showEulaCommand = new RelayCommand(ShowEulaExecute);
+            _showPrivacyCommand = new RelayCommand(ShowPrivacyDocExecute);
+            _showThirdPartyDocCommand = new RelayCommand(ShowThirdPartyDocExecute);
         }
 
         public string AppVersion
@@ -51,11 +60,16 @@
             }
         }
 
+        public ICommand Close { get { return _closeCommand; } }
+        public ICommand ShowEulaCommand { get { return _showEulaCommand; } }
+        public ICommand ShowPrivacyCommand { get { return _showPrivacyCommand; } }
+        public ICommand ShowThirdPartyNoticesCommand { get { return _showThirdPartyDocCommand; } }
+
         protected override void DefaultAction()
         {
             DismissModal(null);
         }
-
+        
         private static TAttr GetAssemblyAttribute<TAttr>(Assembly assembly) where TAttr : Attribute
         {
             //
@@ -69,6 +83,24 @@
                 rt = enattr.Current as TAttr;
 
             return rt;
+        }
+
+        private void ShowEulaExecute(object o)
+        {
+            RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.EulaDoc);
+            NavigationService.PushAccessoryView("RichTextView", args);
+        }
+
+        private void ShowThirdPartyDocExecute(object o)
+        {
+            RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.ThirdPartyNotices);
+            NavigationService.PushAccessoryView("RichTextView", args);
+        }
+
+        private void ShowPrivacyDocExecute(object o)
+        {
+            RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.PrivacyDoc);
+            NavigationService.PushAccessoryView("RichTextView", args);
         }
     }
 }
