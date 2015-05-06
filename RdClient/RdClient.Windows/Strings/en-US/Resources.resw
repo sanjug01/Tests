@@ -395,6 +395,10 @@
     <value>(r) Edit</value>
     <comment>Verb. Text in a button that is pressed to edit an item.</comment>
   </data>
+    <data name="Common_Button_AddNewItem.Content" xml:space="preserve">
+    <value>(r) Add new</value>
+    <comment>Verb. Text in a button that is pressed to add a new item.</comment>
+  </data>
   <data name="Settings_General_ShowThumbnails.Text" xml:space="preserve">
     <value>(r) Show thumbnails for Desktops</value>
     <comment>Text next to the toggle switch that changes whether thumbnails are saved and displayed for desktop connections</comment>

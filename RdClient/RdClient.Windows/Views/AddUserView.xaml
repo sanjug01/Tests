@@ -10,7 +10,8 @@
     xmlns:sc="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:controls="using:RdClient.Controls"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    d:DesignWidth="500">
 
     <controls:ModalUserControl.DataContext>
         <vm:AddUserViewModel />
@@ -52,36 +53,40 @@
             <Border Grid.Row="2" Height="1" Margin="0" />
 
             <StackPanel Grid.Row="3" Margin="26,12,26,0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock x:Uid="AddUser-Username-Error"
+                <StackPanel Orientation="Vertical" Margin="0,0,0,20">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Uid="AddUser-Username-Error"
                                    Text="(*)(d)" Padding="0,0,8,0"
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Foreground="{StaticResource rdErrorBrush}"
                                    Visibility="{Binding Path=IsUsernameValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
                                    />
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    x:Uid="AddUser-User" 
                                    Text="User (d)"/>
-                </StackPanel>
-                <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
-                    <TextBox Name="txtUser" 
+                    </StackPanel>
+                    <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
+                        <TextBox Name="txtUser" 
                                     x:Uid="AddUser-UsernameTextbox"
                                     Background="Transparent"
                                     Margin="0,8" 
                                     PlaceholderText="Username (d)"
                                     Text="{Binding Path=User, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </Grid>
+                    </Grid>
+                </StackPanel>
 
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddUser-Password" Text="Password (d)"/>
-                <Grid Style="{StaticResource rdEntryFieldGridStyle}">
-                    <PasswordBox Name="txtPassword"
+                <StackPanel Orientation="Vertical" Margin="0,0,0,20">
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddUser-Password" Text="Password (d)"/>
+                    <Grid Style="{StaticResource rdEntryFieldGridStyle}">
+                        <PasswordBox Name="txtPassword"
                                      x:Uid="AddUser-PasswordTextbox"
                                      Background="Transparent"
                                      Margin="0,8" 
                                      PlaceholderText="Password (d)"
                                      Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </Grid>
-
+                    </Grid>
+                </StackPanel>
+                
                 <CheckBox 
                         Name="chkStoreCredentials"
                         x:Uid="AddUser-StoreCredentials-Checkbox"
@@ -89,12 +94,27 @@
                         IsChecked="{Binding Path=StoreCredentials, Mode=TwoWay}"
                         Visibility="{Binding Path=ShowSave, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
-                    <Button x:Uid="Common_Button_Ok" Content="Ok (d)" 
-                                Command="{Binding Path=DefaultAction}" />
-                    <Button x:Uid="Common_Button_Cancel" Content="Cancel (d)" 
-                                Command="{Binding Path=Cancel}" />
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Uid="Common_Button_Cancel" Content="Cancel(d)" 
+                            Grid.Column="0" Style="{StaticResource DialogButtonStyle}" 
+                            Command="{Binding Path=Cancel}" />
+                    <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
+                            Grid.Column="2" Style="{StaticResource DialogButtonStyle}" 
+                            Command="{Binding Path=DefaultAction}" />
+                </Grid>                
+
+                <HyperlinkButton x:Uid="AddUser-DeleteUserLink"
+                                 Margin="0,20"
+                                 Command="{Binding Path=Delete}">
+                    <TextBlock x:Uid="AddUser-DeleteUserText" 
+                               Text="(d) Delete this account"/>
+                </HyperlinkButton>                
             </StackPanel>
         </Grid>
     </Grid>

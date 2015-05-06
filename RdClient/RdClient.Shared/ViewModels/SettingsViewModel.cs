@@ -134,7 +134,7 @@ namespace RdClient.Shared.ViewModels
         private void LoadGateways()
         {
             IList<GatewayComboBoxElement> gateways = new List<GatewayComboBoxElement>();
-            gateways.Add(new GatewayComboBoxElement(GatewayComboBoxType.AddNew));
+            // gateways.Add(new GatewayComboBoxElement(GatewayComboBoxType.AddNew));
             foreach (IModelContainer<GatewayModel> gatewayModel in this.ApplicationDataModel.Gateways.Models)
             {
                 gateways.Add(new GatewayComboBoxElement(GatewayComboBoxType.Gateway, gatewayModel));
@@ -184,7 +184,7 @@ namespace RdClient.Shared.ViewModels
         private void LoadUsers()
         {
             IList<UserComboBoxElement> users = new List<UserComboBoxElement>();
-            users.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
+            // users.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
             foreach (IModelContainer<CredentialsModel> credModel in this.ApplicationDataModel.Credentials.Models)
             {
                 users.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credModel));

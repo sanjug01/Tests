@@ -66,6 +66,8 @@ namespace RdClient.Shared.ViewModels
 
         private readonly RelayCommand _saveCommand;
         private readonly RelayCommand _cancelCommand;
+        private readonly RelayCommand _deleteCommand;
+
         private GatewayModel _gateway;
         private int _selectedUserOptionsIndex;
 
@@ -77,6 +79,7 @@ namespace RdClient.Shared.ViewModels
                     return (string.IsNullOrEmpty(this.Host) == false);
                 });
             _cancelCommand = new RelayCommand(CancelCommandExecute);
+            _deleteCommand = new RelayCommand(DeleteCommandExecute);
 
             IsHostValid = true;
 
@@ -115,6 +118,8 @@ namespace RdClient.Shared.ViewModels
         public ICommand DefaultAction { get { return _saveCommand; } }
 
         public ICommand Cancel { get { return _cancelCommand; } }
+
+        public ICommand Delete { get { return _deleteCommand; } }
 
         public GatewayModel Gateway
         {
@@ -169,6 +174,11 @@ namespace RdClient.Shared.ViewModels
         private void CancelCommandExecute(object o)
         {
             DismissModal(GatewayPromptResult.CreateCancelled());
+        }
+
+        private void DeleteCommandExecute(object o)
+        {
+            // TODO.
         }
 
         /// <summary>

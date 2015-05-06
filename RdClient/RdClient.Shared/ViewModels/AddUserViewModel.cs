@@ -77,6 +77,7 @@
         private string _password;
         private readonly RelayCommand _okCommand;
         private readonly RelayCommand _cancelCommand;
+        private readonly RelayCommand _deleteCommand;
         private CredentialPromptMode _mode;
         private bool _showMessage;
 
@@ -92,6 +93,7 @@
                     (this.Password.Length > 0);
             } );
             _cancelCommand = new RelayCommand(new Action<object>(CancelCommandHandler));
+            _deleteCommand = new RelayCommand(new Action<object>(DeleteCommandHandler));
         }
 
         public IPresentableView PresentableView { private get; set; }
@@ -101,6 +103,8 @@
         public ICommand DefaultAction { get { return _okCommand; } }
 
         public ICommand Cancel { get { return _cancelCommand; } }
+
+        public ICommand Delete { get { return _deleteCommand; } }
 
         public CredentialPromptMode Mode
         {
@@ -175,6 +179,11 @@
         private void CancelCommandHandler(object o)
         {
             DismissModal(CredentialPromptResult.CreateCancelled());
+        }
+
+        private void DeleteCommandHandler(object o)
+        {
+            // TODO:
         }
     }
 }
