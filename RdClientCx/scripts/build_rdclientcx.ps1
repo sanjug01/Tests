@@ -28,3 +28,4 @@ xcopy $SDXROOT\testsrc\termsrvtestdata\REDIST\WinRTClientBin\Debug ..\WinRTClien
 xcopy $SDXROOT\testsrc\termsrvtestdata\REDIST\WinRTClientBin\Release ..\WinRTClientBin\Release /i /s /y
 xcopy $SDXROOT\termsrv\CloudDv\Externals\ADAL ..\ADAL /i /s /y
 xcopy $SDXROOT\termsrv\rdp\externals\openssl ..\openssl /i /s /y
+xcopy $SDXROOT\termsrv\rdp\externals\RdpWinRTTransportRpc ..\RdpWinRTTransportRpc /i /s /y
