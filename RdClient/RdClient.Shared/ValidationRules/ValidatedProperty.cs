@@ -13,12 +13,12 @@ namespace RdClient.Shared.ValidationRules
         private T _value;
         private readonly IValidationRule<T> _rule;
         private IValidationResult _state;
-        private bool _enableValidation;
 
-        public ValidatedProperty(IValidationRule<T> rule)
+        public ValidatedProperty(IValidationRule<T> rule, T initialValue)
         {
+            _value = initialValue;
             _rule = rule;
-            Validate();
+            _state = new ValidationResult(true);
         }
 
         public T Value
@@ -31,7 +31,7 @@ namespace RdClient.Shared.ValidationRules
             {
                 if (SetProperty(ref _value, value))
                 {
-                    Validate();
+                    SetState();
                 }
             }
         }
@@ -48,31 +48,15 @@ namespace RdClient.Shared.ValidationRules
             }
         }
 
-        public bool EnableValidation
+        private void SetState()
         {
-            get
-            {
-                return _enableValidation;
-            }
-            set
-            {
-                if (SetProperty(ref _enableValidation, value))
-                {
-                    Validate();
-                }
-            }
+            this.State = _rule.Validate(this.Value);
         }
 
-        private void Validate()
+        public bool ValidateNow()
         {
-            if (this.EnableValidation)
-            {
-                this.State = _rule.Validate(this.Value);
-            }
-            else
-            {
-                this.State = new ValidationResult(true);
-            }
+            SetState();
+            return this.State?.IsValid ?? false;
         }
     }
 }

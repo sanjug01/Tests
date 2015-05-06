@@ -72,7 +72,7 @@
     {
         private AddUserViewArgs _args;
         private bool _storeCredentials;
-        private readonly IValidatedProperty<string> _user;
+        private IValidatedProperty<string> _user;
         private string _password;
         private readonly RelayCommand _okCommand;
         private readonly RelayCommand _cancelCommand;
@@ -81,16 +81,7 @@
 
         public AddUserViewModel()
         {
-            var usernameRule = new CompositeValidationRule<string>(new List<IValidationRule<string>>() { new UsernameFormatValidationRule() });
-            _user = new ValidatedProperty<string>(usernameRule);
-            _okCommand = new RelayCommand(o => OkCommandHandler(o), o => _user.State.IsValid);
-            _user.PropertyChanged += (s, e) =>
-            {
-                if (s == _user && e.PropertyName == "State")
-                {
-                    _okCommand.EmitCanExecuteChanged();
-                }
-            };
+            _okCommand = new RelayCommand(o => OkCommandHandler(o), o => OkCommandIsEnabled(o));
             _cancelCommand = new RelayCommand(new Action<object>(CancelCommandHandler));
         }
 
@@ -129,6 +120,7 @@
         public IValidatedProperty<string> User
         {
             get { return _user; }
+            private set { SetProperty(ref _user, value); }
         }
 
         public string Password
@@ -146,21 +138,36 @@
 
             _args = activationParameter as AddUserViewArgs;
 
+            var usernameRule = new CompositeValidationRule<string>(new List<IValidationRule<string>>() { new UsernameFormatValidationRule() });
+
             this.ShowSave = _args.ShowSave;
-            this.User.Value = _args.Credentials.Username;
+            this.User = new ValidatedProperty<string>(usernameRule, _args.Credentials.Username);
             this.Password = _args.Credentials.Password;
-            this.Mode = _args.Mode;         
+            this.Mode = _args.Mode;
+
+            this.User.PropertyChanged += (s, e) =>
+            {
+                if (s == _user && e.PropertyName == "State")
+                {
+                    _okCommand.EmitCanExecuteChanged();
+                }
+            };
         }
 
         private void OkCommandHandler(object o)
         {
-            this.User.EnableValidation = true;
+            this.User.ValidateNow();
             if (_okCommand.CanExecute(o))
             {
                 _args.Credentials.Username = this.User.Value;
                 _args.Credentials.Password = this.Password;
                 DismissModal(CredentialPromptResult.CreateWithCredentials(_args.Credentials, this.StoreCredentials));
             }
+        }
+
+        private bool OkCommandIsEnabled(object o)
+        {
+            return this.User?.State?.IsValid ?? false;
         }
 
         private void CancelCommandHandler(object o)
