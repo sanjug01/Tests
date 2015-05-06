@@ -4,7 +4,6 @@
     using RdClient.Shared.Helpers;
     using System.Diagnostics.Contracts;
     using System.Runtime.Serialization;
-    using Windows.Security.Credentials;
 
     [DataContract(IsReference = true)]
     public class CredentialsModel : SerializableModel
@@ -31,22 +30,34 @@
             this.Password = otherModel.Password;
         }
 
+        [OnSerializing]
+        public void OnSerializing(StreamingContext context)
+        {
+            Contract.Assert(null != _scrambler);
+
+            if (null == _password)
+                _scrambledPassword = null;
+            else
+                _scrambledPassword = _scrambler.Scramble(_password);
+        }
+
+        /// <summary>
+        /// Called immediately after loading the model from storage.
+        /// </summary>
+        /// <param name="scrambler">Data scrambler object used to scramble the password before saving it to the storage.</param>
         public void SetScrambler(IDataScrambler scrambler)
         {
             Contract.Assert(null != scrambler);
 
-            if (!object.ReferenceEquals(scrambler, _scrambler))
+            if (!object.ReferenceEquals(_scrambler, scrambler))
             {
                 _scrambler = scrambler;
 
-                if (null == _scrambledPassword)
+                if (null != _scrambledPassword)
                 {
-                    if (null != _password)
-                        _scrambledPassword = _scrambler.Scramble(_password);
-                }
-                else
-                {
+                    Contract.Assert(null == _password);
                     _password = _scrambler.Unscramble(_scrambledPassword);
+                    _scrambledPassword = null;
                 }
             }
         }
@@ -74,20 +85,7 @@
         public string Password
         {
             get { return _password; }
-            set
-            {
-                if(SetProperty(ref _password, value) && null != _scrambler)
-                {
-                    if (null == value)
-                    {
-                        _scrambledPassword = null;
-                    }
-                    else
-                    {
-                        _scrambledPassword = _scrambler.Scramble(value);
-                    }
-                }
-            }
+            set { this.SetProperty(ref _password, value); }
         }
     }
 }
