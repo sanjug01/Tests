@@ -72,6 +72,7 @@
             _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory));
             _navigationService.Extensions.Add(new SessionFactoryExtension() { SessionFactory = sessionFactory });
             _navigationService.Extensions.Add(new DeviceCapabilitiesExtension() { DeviceCapabilities = this.DeviceCapabilities });
+            _navigationService.Extensions.Add(new LifeTimeExtension() { LifeTimeManager = this.LifeTimeManager });
 
             _applicationDataSaver = new DeferredCommand(appDataModel.Save, deferredExecution, timerFactory, SaveDataDelayMilliseconds);
 

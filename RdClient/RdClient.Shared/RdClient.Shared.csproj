@@ -287,8 +287,10 @@
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
     <Compile Include="Navigation\Contracts\IPresentationCompletionContract.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionException.cs" />
+    <Compile Include="Navigation\Extensions\LifeTimeExtension.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtension.cs" />
     <Compile Include="Navigation\Extensions\DeviceCapabilitiesExtension.cs" />
+    <Compile Include="Navigation\Extensions\ILifeTimeSite.cs" />
     <Compile Include="Navigation\Extensions\IDeferredExecutionSite.cs" />
     <Compile Include="Navigation\Extensions\IDeviceCapabilitiesSite.cs" />
     <Compile Include="Navigation\Extensions\IExecutionDeferrer.cs" />

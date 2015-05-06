@@ -325,16 +325,20 @@
             Contract.Assert(null != _renderingPanel);
             Contract.Assert(null != _sessionView);
 
-            // TODO : if connection is active then call
-            // _connection.Suspend();
-            throw new NotImplementedException();
+            // if connection is active then call
+            if (null != _connection)
+            {
+                _connection.Suspend();
+            }
         }
 
         void IRemoteSession.Resume()
         {
-            // TODO : should recover after suspend
-            // _connection.Resume();
-            throw new NotImplementedException();
+            // should recover after suspend
+            if (null != _connection)
+            {
+                _connection.Resume();
+            }
         }
 
         void IRemoteSession.Disconnect()
