@@ -4,6 +4,7 @@
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Keyboard;
     using RdClient.Shared.Input.Pointer;
+    using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
     using RdClient.Shared.Models.PanKnobModel;
     using RdClient.Shared.Navigation;
@@ -14,7 +15,7 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
-    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite
+    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite
     {
         private readonly RelayCommand _toggleSideBars;
         private readonly RelayCommand _invokeKeyboard;
@@ -39,6 +40,7 @@
         private bool _isRightSideBarVisible;
 
         private ITimerFactory _timerFactory;
+        private ILifeTimeManager _lifeTimeManager;
 
         private readonly PointerPosition _pointerPosition = new PointerPosition();
         private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
@@ -188,10 +190,16 @@
 
                 _activeSessionControl = _activeSession.Activate(_sessionView);
             }
+
+            _lifeTimeManager.Suspending += OnAppSuspending;
+            _lifeTimeManager.Resuming += OnAppResuming;
         }
 
         protected override void OnDismissed()
         {
+            _lifeTimeManager.Resuming -= OnAppResuming;
+            _lifeTimeManager.Suspending -= OnAppSuspending;
+
             _activeSession.CredentialsNeeded -= this.OnCredentialsNeeded;
             _activeSession.Closed -= this.OnSessionClosed;
             _activeSession.Failed -= this.OnSessionFailed;
@@ -254,6 +262,12 @@
             }
 
             _invokeKeyboard.EmitCanExecuteChanged();
+        }
+
+
+        void ILifeTimeSite.SetLifeTimeManager(ILifeTimeManager lftManager)
+        {
+            _lifeTimeManager = lftManager;
         }
 
         private void OnCredentialsNeeded(object sender, CredentialsNeededEventArgs e)
@@ -425,6 +439,19 @@
             _activeSessionControl.SendKeystroke(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
         }
 
+
+        private void OnAppSuspending(object sender, SuspendEventArgs e)
+        {
+            Contract.Assert(null != _activeSession);
+            _activeSession.Suspend();
+        }
+
+        private void OnAppResuming(object sender, ResumeEventArgs e)
+        {
+            Contract.Assert(null != _activeSession);
+            _activeSession.Resume();
+        }
+
         private void InternalToggleRightSideBar(object parameter)
         {
             this.IsRightSideBarVisible = !this.IsRightSideBarVisible;
@@ -464,5 +491,6 @@
                 this.PointerCapture.OnMouseModeChanged(this, EventArgs.Empty);
             }
         }
+
     }
 }

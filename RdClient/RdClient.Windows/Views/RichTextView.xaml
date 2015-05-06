@@ -1,0 +1,66 @@
+﻿<controls:ModalUserControl
+    x:Class="RdClient.Views.RichTextView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:controls="using:RdClient.Controls"
+    xmlns:c="using:RdClient.Converters"    
+    TabNavigation="Cycle"
+    mc:Ignorable="d"
+    d:DesignHeight="400"
+    d:DesignWidth="400">
+  
+    <controls:ModalUserControl.DataContext>
+        <vm:RichTextViewModel />
+    </controls:ModalUserControl.DataContext>
+
+    <controls:ModalUserControl.Resources>
+        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />        
+    </controls:ModalUserControl.Resources>
+    
+    <ScrollViewer
+        VerticalScrollBarVisibility="Auto"
+        HorizontalScrollBarVisibility="Hidden">
+        <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Document title, should be localized -->
+            <TextBlock x:Uid="RichTextView_Title"
+                       Grid.Row="0"
+                       Style="{ThemeResource TitleTextBlockStyle}"                        
+                       Text="{Binding Title}" />
+            <HyperlinkButton
+                Grid.Row="0"
+                Command="{Binding Close}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                <TextBlock x:Uid="RichTextView_Close" Text="(d) Close"/>
+            </HyperlinkButton>            
+
+            <TextBlock Grid.Row="1"
+                       x:Uid="RichTextView_Loading"
+                       Style="{ThemeResource BodyTextBlockStyle}"                        
+                       Text="(d) Loading..." 
+                       Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+            <ProgressBar Margin="0,15"
+                         Grid.Row="1"
+                         IsIndeterminate="True"
+                         HorizontalAlignment="Stretch" 
+                         Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <controls:RichTextControl 
+                Grid.Row="1"
+                Margin="0,10,0,0"
+                RtfDocument="{Binding Document, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="{Binding IsLoading, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+
+        </Grid>
+    </Grid>
+    </ScrollViewer>
+</controls:ModalUserControl>

@@ -10,6 +10,7 @@
         private IRootFrameManager _rootFrameManager;
         private EventHandler<LaunchEventArgs> _launched;
         private EventHandler<SuspendEventArgs> _suspending;
+        private EventHandler<ResumeEventArgs> _resuming;
 
         public IRootFrameManager RootFrameManager
         {
@@ -33,12 +34,17 @@
         {
             var deferral = e.SuspendingOperation.Deferral;
 
-            // TODO: Save application state and stop any background activity
+            // Save application state and stop any background activity
             EmitSuspending(e);
 
             deferral.Complete();
         }
 
+        public void OnResuming(object sender, IResumingArgs e)
+        {
+            // Restore application state and restart any background activity
+            EmitResuming(e);
+        }
 
         event EventHandler<LaunchEventArgs> ILifeTimeManager.Launched
         {
@@ -52,6 +58,12 @@
             remove { _suspending -= value; }
         }
 
+        event EventHandler<ResumeEventArgs> ILifeTimeManager.Resuming
+        {
+            add { _resuming += value; }
+            remove { _resuming -= value; }
+        }
+
         private void EmitLaunched(IActivationArgs args)
         {
             if (null != _launched)
@@ -62,6 +74,12 @@
         {
             if (null != _suspending)
                 _suspending(this, new SuspendEventArgs(args));
+        }
+
+        private void EmitResuming(IResumingArgs args)
+        {
+            if (null != _resuming)
+                _resuming(this, new ResumeEventArgs(args));
         }
     }
 }

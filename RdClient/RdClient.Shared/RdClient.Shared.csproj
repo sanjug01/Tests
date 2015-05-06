@@ -219,8 +219,10 @@
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
     <Compile Include="LifeTimeManagement\IRootFrameManager.cs" />
+    <Compile Include="LifeTimeManagement\IResumingArgs.cs" />
     <Compile Include="LifeTimeManagement\ISuspensionArgs.cs" />
     <Compile Include="LifeTimeManagement\LaunchEventArgs.cs" />
+    <Compile Include="LifeTimeManagement\ResumeEventArgs.cs" />
     <Compile Include="LifeTimeManagement\SuspendEventArgs.cs" />
     <Compile Include="Models\ApplicationDataModel.cs" />
     <Compile Include="Models\BadServerIdentityEventArgs.cs" />
@@ -288,8 +290,10 @@
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
     <Compile Include="Navigation\Contracts\IPresentationCompletionContract.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionException.cs" />
+    <Compile Include="Navigation\Extensions\LifeTimeExtension.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtension.cs" />
     <Compile Include="Navigation\Extensions\DeviceCapabilitiesExtension.cs" />
+    <Compile Include="Navigation\Extensions\ILifeTimeSite.cs" />
     <Compile Include="Navigation\Extensions\IDeferredExecutionSite.cs" />
     <Compile Include="Navigation\Extensions\IDeviceCapabilitiesSite.cs" />
     <Compile Include="Navigation\Extensions\IExecutionDeferrer.cs" />
@@ -309,6 +313,7 @@
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="Navigation\ViewVisibility.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
+    <Compile Include="ViewModels\RichTextViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBase.cs" />
     <Compile Include="ViewModels\AdditionalToolbarCommandsViewModel.cs" />
