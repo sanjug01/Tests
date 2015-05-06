@@ -397,10 +397,7 @@
     <Compile Include="Input\Pointer\DirectModeControl.cs" />
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Microsoft.VCLibs.AppLocal, Version=14.0">
-      <Name>Microsoft Visual C++  AppLocal Runtime Package for Windows UAP</Name>
-    </SDKReference>
-    <SDKReference Include="Microsoft.VCLibs12.AppLocal, Version=12.0">
+    <SDKReference Include="Microsoft.VCLibs.AppLocal, Version=12.0">
       <Name>Microsoft Visual C++ 2013 AppLocal Runtime Package for Windows UAP</Name>
     </SDKReference>
   </ItemGroup>
