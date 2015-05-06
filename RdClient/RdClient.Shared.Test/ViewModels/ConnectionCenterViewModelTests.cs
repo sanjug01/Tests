@@ -196,37 +196,8 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void TestHasCorrectApplicationBarItems()
-        {
-            IEnumerable<BarItemModel> barItems = _vm.ToolbarItems;
-            IEnumerable<SegoeGlyphBarButtonModel> barButtons = barItems.OfType<SegoeGlyphBarButtonModel>();
-            Assert.IsTrue(barButtons.Any((b) => b.Command.Equals(_vm.EditDesktopCommand)), "ApplicationBarItems should contain a button linked to EditDesktopCommand");
-            Assert.IsTrue(barButtons.Any((b) => b.Command.Equals(_vm.DeleteDesktopCommand)), "ApplicationBarItems should contain a button linked to DeleteDesktopCommand");
-        }
-
-        [TestMethod]
         public void TestDesktopsSelectableInitiallyFalse()
         {
-            Assert.IsFalse(_vm.DesktopsSelectable);
-        }
-
-        [TestMethod]
-        public void TestToggleDesktopSelectionCommandEnablesSelection()
-        {
-            ICommand buttonCommand = null;
-
-            foreach(BarItemModel model in _vm.ToolbarItems)
-            {
-                SegoeGlyphBarButtonModel button = model as SegoeGlyphBarButtonModel;
-
-                if (null != button && button.Glyph == SegoeGlyph.MultiSelection)
-                    buttonCommand = button.Command;
-            }
-
-            Assert.IsNotNull(buttonCommand);
-            buttonCommand.Execute(null);
-            Assert.IsTrue(_vm.DesktopsSelectable);
-            buttonCommand.Execute(null);
             Assert.IsFalse(_vm.DesktopsSelectable);
         }
 

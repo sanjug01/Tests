@@ -136,10 +136,6 @@
             //
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, new RelayCommand(this.AddResource), "Add"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
-
-            _toolbarItemsSource.Add(_editItem);
-            _toolbarItemsSource.Add(_deleteItem);
-
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.HorizontalEllipsis, new RelayCommand(this.PushAdditionalCommandsDialog), "More…"));
             //
             //_toolbarItemsSource.Add(new SeparatorBarItemModel());
