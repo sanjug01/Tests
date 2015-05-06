@@ -40,22 +40,30 @@ namespace RdClient.Shared.ViewModels
         {
             return new GatewayPromptResult();
         }
+        public static GatewayPromptResult CreateDeleted()
+        {
+            return new GatewayPromptResult() { Deleted = true } ;
+        }
 
         private GatewayPromptResult()
         {
             this.UserCancelled = true;
             this.GatewayId = Guid.Empty;
+            this.Deleted = false;
         }
 
         private GatewayPromptResult(Guid gatewayId)
         {
             this.GatewayId = gatewayId;
             this.UserCancelled = false;
+            this.Deleted = false;
         }
 
         public Guid GatewayId { get; private set; }
 
         public bool UserCancelled { get; private set; }
+
+        public bool Deleted { get; private set; }
     }
 
     public class AddOrEditGatewayViewModel : ViewModelBase, IDialogViewModel
@@ -178,7 +186,8 @@ namespace RdClient.Shared.ViewModels
 
         private void DeleteCommandExecute(object o)
         {
-            // TODO.
+            // parent view should present the confirmation dialog and perform deletion
+            DismissModal(GatewayPromptResult.CreateDeleted());
         }
 
         /// <summary>
@@ -216,13 +225,11 @@ namespace RdClient.Shared.ViewModels
             {
                 this.Gateway = editArgs.Gateway;
                 this.Host = this.Gateway.HostName;
-
                 this.IsAddingGateway = false;
             }
             else if(addArgs != null)
             {
                 this.Gateway = new GatewayModel();
-
                 this.IsAddingGateway = true;
             }
 

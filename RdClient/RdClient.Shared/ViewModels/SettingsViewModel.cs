@@ -153,10 +153,20 @@ namespace RdClient.Shared.ViewModels
             if (GatewayCommandsEnabled())
             {
                 var args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway.Model);
+
+                // edit can also indicate deletion of the selected Gateway
                 var editGatewayCompleted = new ModalPresentationCompletion((s, e) =>
                 {
-                    LoadGateways();
-                    LoadUsers();
+                    GatewayPromptResult result = e.Result as GatewayPromptResult;
+                    if (result.Deleted)
+                    {
+                        this.DeleteGatewayCommand.Execute(null);
+                    }
+                    else
+                    {
+                        LoadGateways();
+                        LoadUsers();
+                    }
                 });
                 this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, editGatewayCompleted);
             }
@@ -203,7 +213,19 @@ namespace RdClient.Shared.ViewModels
             if (UserCommandsEnabled())
             {
                 var args = new AddUserViewArgs(this.SelectedUser.Credentials.Model, false, CredentialPromptMode.EditCredentials);
-                this.NavigationService.PushAccessoryView("AddUserView", args, new ModalPresentationCompletion((s, e) => LoadUsers()));
+                ModalPresentationCompletion editUserCompleted = new ModalPresentationCompletion((s, e) =>
+                {
+                    CredentialPromptResult result = e.Result as CredentialPromptResult;
+                    if (result != null && result.Deleted)
+                    {
+                        this.DeleteUserCommand.Execute(null);
+                    }
+                    else
+                    {
+                        LoadUsers();
+                    }
+                });
+                this.NavigationService.PushAccessoryView("AddUserView", args, editUserCompleted);
             }
         }
 

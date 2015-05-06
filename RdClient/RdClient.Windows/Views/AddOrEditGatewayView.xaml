@@ -101,7 +101,7 @@
                             Grid.Column="0" Style="{StaticResource DialogButtonStyle}" 
                             Command="{Binding Path=Cancel}" />
                     <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
-                            Grid.Column="2" Style="{StaticResource DialogButtonStyle}" 
+                            Grid.Column="2" Style="{StaticResource DialogAccentedButtonStyle}" 
                             Command="{Binding Path=DefaultAction}" />
                 </Grid>
                 
