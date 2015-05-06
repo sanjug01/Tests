@@ -190,7 +190,7 @@
             // _internalState must never be null, so the initial state is assigned to a state object
             // that does not do anything.
             //
-            _internalState = new InactiveSession(_sessionMonitor);
+            _internalState = new InactiveSession(_sessionMonitor);            
         }
 
         protected override void DisposeManagedState()
@@ -323,7 +323,20 @@
             Contract.Assert(null != _renderingPanel);
             Contract.Assert(null != _sessionView);
 
-            throw new NotImplementedException();
+            // if connection is active then call
+            if (null != _connection)
+            {
+                _connection.Suspend();
+            }
+        }
+
+        void IRemoteSession.Resume()
+        {
+            // should recover after suspend
+            if (null != _connection)
+            {
+                _connection.Resume();
+            }
         }
 
         void IRemoteSession.Disconnect()

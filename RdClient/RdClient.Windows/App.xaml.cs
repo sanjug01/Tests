@@ -18,8 +18,17 @@
             Contract.ContractFailed += this.OnCodeContractFailed;
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
+            this.Resuming += this.OnResuming;
 
             RdTrace.TraceNrm("Initializing Tracer");
+        }
+
+        private void OnResuming(object sender, object e)
+        {
+            ResumingArgs.ResumingOperationWrapper mro = new ResumingArgs.ResumingOperationWrapper(e);
+            ResumingArgs resumeArgs = new ResumingArgs(mro);
+
+            this.LifeTimeManager.OnResuming(sender, resumeArgs);
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
@@ -33,7 +42,7 @@
                 e.CurrentlyShownApplicationViewId,
                 e.PrelaunchActivated,
                 null);
-
+            
             this.LifeTimeManager.OnLaunched(aa);
         }
 

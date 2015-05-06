@@ -84,8 +84,14 @@
 
         /// <summary>
         /// Suspend the session. Once suspended, the session must release and recycle al its rendering panels.
+        /// Resuming an active session is possible after suspend.
         /// </summary>
         void Suspend();
+
+        /// <summary>
+        /// Resume the sssion after suspended state
+        /// </summary>
+        void Resume();
 
         void Disconnect();
     }

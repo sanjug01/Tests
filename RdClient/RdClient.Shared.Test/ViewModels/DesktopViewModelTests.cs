@@ -113,6 +113,11 @@ namespace RdClient.Shared.Test.ViewModels
                     throw new NotImplementedException();
                 }
 
+                void IRemoteSession.Resume()
+                {
+                    throw new NotImplementedException();
+                }
+
                 void IRemoteSession.Disconnect()
                 {
                     throw new NotImplementedException();
