@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Test.Data;
     using RdClient.Shared.Test.Mock;
@@ -9,7 +10,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Input;
-    
+
     [TestClass]
     public sealed class ApplicationDataModelTests
     {
@@ -19,7 +20,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             IPersistentObject po = adm;
 
@@ -38,7 +43,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             IPersistentObject po = adm;
 
@@ -53,7 +62,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             IPersistentObject po = adm;
 
@@ -68,7 +81,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             IPersistentObject po = adm;
 
@@ -85,7 +102,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             IPersistentObject po = adm;
 
@@ -110,7 +131,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 ModelSerializer = new SerializableModelSerializer(),
-                RootFolder = new MemoryStorageFolder()
+                RootFolder = new MemoryStorageFolder(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             IPersistentObject po = adm;
 
@@ -135,7 +160,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             IPersistentObject po = adm;
             po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
@@ -154,7 +183,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             IPersistentObject po = adm;
             po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
@@ -177,7 +210,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             IPersistentObject po = adm;
             Guid credentialsId = adm.Credentials.AddNewModel(new CredentialsModel());
@@ -211,7 +248,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 ModelSerializer = new SerializableModelSerializer(),
-                RootFolder = new MemoryStorageFolder()
+                RootFolder = new MemoryStorageFolder(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             IPersistentObject po = adm;
 
@@ -235,7 +276,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             IPersistentObject po = adm;
             Guid gatewayId = adm.Gateways.AddNewModel(new GatewayModel());
@@ -271,7 +316,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             IPersistentObject po = adm;
             Guid credentialsId = adm.Credentials.AddNewModel(new CredentialsModel());

@@ -149,6 +149,7 @@
     <Compile Include="Data\TestModel.cs" />
     <Compile Include="Data\TestModelSerializer.cs" />
     <Compile Include="Data\TransformingObservableCollectionTests.cs" />
+    <Compile Include="Helpers\DataProtectionProviderDataScramblerTests.cs" />
     <Compile Include="Helpers\DeferredCommandTests.cs" />
     <Compile Include="Helpers\ExtensionsTests.cs" />
     <Compile Include="Helpers\GroupCommandTests.cs" />

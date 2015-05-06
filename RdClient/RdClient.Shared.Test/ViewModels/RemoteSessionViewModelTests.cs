@@ -562,7 +562,11 @@
             _dataModel = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
 
             Guid credId = _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "user", Password = "password" });
@@ -631,9 +635,9 @@
             _defex.ExecuteAll();
 
             Assert.IsFalse(_vm.IsConnectionBarVisible);
-            Assert.IsNull(_vm.BellyBandViewModel);
+            Assert.IsNotNull(_vm.BellyBandViewModel);
+            Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
             Assert.IsFalse(_vm.IsRightSideBarVisible);
-            Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsNotNull(connection);
             Assert.AreEqual(1, connectCount);
 
@@ -964,7 +968,8 @@
 
             Assert.AreEqual(1, credentialsRequestCount);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
-            Assert.IsNull(_vm.BellyBandViewModel);
+            Assert.IsNotNull(_vm.BellyBandViewModel);
+            Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
             Assert.IsFalse(_vm.IsRightSideBarVisible);
         }
     }

@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
@@ -29,7 +30,11 @@
             _dataModel = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             foreach (var cred in _testData.NewSmallListOfCredentials())
             {

@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using System.IO;
 
@@ -11,13 +12,18 @@
         [TestMethod]
         public void SerializableModelSerializer_SerializeLoadCredentialsModel_Loads()
         {
+            IDataScrambler scrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" };
             IModelSerializer serializer = new SerializableModelSerializer();
-            CredentialsModel model = new CredentialsModel() { Username = "User", Password = "Password" };
             MemoryStream stream = new MemoryStream();
+            CredentialsModel model = new CredentialsModel();
+            model.SetScrambler(scrambler);
+            model.Username = "User";
+            model.Password = "Password";
 
             serializer.WriteModel(model, stream);
             stream.Seek(0, SeekOrigin.Begin);
             CredentialsModel loadedModel = serializer.ReadModel<CredentialsModel>(stream);
+            loadedModel.SetScrambler(scrambler);
             Assert.IsNotNull(loadedModel);
             Assert.AreNotSame(model, loadedModel);
             Assert.AreEqual(model.Username, loadedModel.Username);

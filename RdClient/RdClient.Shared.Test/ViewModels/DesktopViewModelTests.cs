@@ -7,6 +7,7 @@ using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Helpers;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -129,7 +130,11 @@ namespace RdClient.Shared.Test.ViewModels
             _dataModel = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             _navService = new Mock.NavigationService();
             _cred = _testData.NewValidCredential().Model;

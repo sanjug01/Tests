@@ -17,6 +17,7 @@
 
         private IStorageFolder _rootFolder;
         private IModelSerializer _modelSerializer;
+        private IDataScrambler _dataScrambler;
         private CertificateTrust _certificateTrust;
         private GeneralSettings _settings;
         private WorkspaceModel<LocalWorkspaceModel> _localWorkspace;
@@ -55,6 +56,18 @@
                 Contract.Assert(null != value, "ModelSerializer cannot be removed");
 
                 if (this.SetProperty(ref _modelSerializer, value))
+                {
+                    ComposeDataModel();
+                }
+            }
+        }
+
+        public IDataScrambler DataScrambler
+        {
+            get { return _dataScrambler; }
+            set
+            {
+                if(this.SetProperty(ref _dataScrambler, value))
                 {
                     ComposeDataModel();
                 }
@@ -107,7 +120,7 @@
 
         private void ComposeDataModel()
         {
-            if (null != _rootFolder && null != _modelSerializer)
+            if (null != _rootFolder && null != _modelSerializer && null != _dataScrambler)
             {
                 Contract.Assert(null == _localWorkspace);
                 Contract.Assert(null == _certificateTrust);
@@ -117,6 +130,10 @@
                 // have been set (in XAML).
                 //
                 this.Credentials = PrimaryModelCollection<CredentialsModel>.Load(_rootFolder.CreateFolder("credentials"), _modelSerializer);
+                foreach(IModelContainer<CredentialsModel> container in this.Credentials.Models)
+                {
+                    container.Model.SetScrambler(_dataScrambler);
+                }
                 SubscribeForPersistentStateUpdates(this.Credentials);
 
                 this.LocalWorkspace = new WorkspaceModel<LocalWorkspaceModel>(_rootFolder.CreateFolder("LocalWorkspace"), _modelSerializer);
@@ -158,6 +175,16 @@
         {
             switch(e.Action)
             {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (IModelContainer<CredentialsModel> credentialsContainer in e.NewItems)
+                    {
+                        //
+                        // Attach the scrambler to the new credentials model.
+                        //
+                        credentialsContainer.Model.SetScrambler(_dataScrambler);
+                    }
+                    break;
+
                 case NotifyCollectionChangedAction.Remove:
                     foreach(IModelContainer<CredentialsModel> credentialsContainer in e.OldItems)
                     {

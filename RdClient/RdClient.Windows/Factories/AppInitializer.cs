@@ -49,7 +49,11 @@
             ApplicationDataModel appDataModel = new ApplicationDataModel()
             {
                 RootFolder = new ApplicationDataLocalStorageFolder() { FolderName = "RemoteDesktopData" },
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             //initialize the loaded workspaces
             foreach (IModelContainer<OnPremiseWorkspaceModel> workspace in appDataModel.OnPremWorkspaces.Models)

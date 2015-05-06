@@ -49,7 +49,11 @@ namespace RdClient.Shared.Test.ViewModels
             _dataModel = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             _sessionFactory = new SessionFactory();
             IList<IModelContainer<CredentialsModel>> creds = _testData.NewSmallListOfCredentials();

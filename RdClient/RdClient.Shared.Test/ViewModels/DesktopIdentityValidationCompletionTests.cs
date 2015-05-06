@@ -3,13 +3,14 @@
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.Test.Data;
     using RdClient.Shared.ViewModels;
-using System;
-using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
 
     [TestClass]
     public sealed class DesktopIdentityValidationCompletionTests
@@ -96,7 +97,11 @@ using System.Collections.Generic;
             _dataModel = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                //
+                // Set the data scrambler to use the local user's key
+                //
+                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
             };
             _nav = new NavigationService();
             _vm = new DesktopIdentityValidationViewModel();
