@@ -25,8 +25,6 @@
 
         private void OnResuming(object sender, object e)
         {
-            RdTrace.TraceNrm("App Resuming");
-            System.Diagnostics.Debug.WriteLine("OnResuming");
             ResumingArgs.ResumingOperationWrapper mro = new ResumingArgs.ResumingOperationWrapper(e);
             ResumingArgs resumeArgs = new ResumingArgs(mro);
 
@@ -44,21 +42,17 @@
                 e.CurrentlyShownApplicationViewId,
                 e.PrelaunchActivated,
                 null);
-
-            System.Diagnostics.Debug.WriteLine("OnLAunched");
+            
             this.LifeTimeManager.OnLaunched(aa);
         }
 
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            RdTrace.TraceNrm("App Suspending");
-            System.Diagnostics.Debug.WriteLine("OnSuspending");
             SuspensionArgs.SuspendingOperationWrapper mso = new SuspensionArgs.SuspendingOperationWrapper(e.SuspendingOperation.Deadline, e.SuspendingOperation.GetDeferral());
             SuspensionArgs sa = new SuspensionArgs(mso);
 
             this.LifeTimeManager.OnSuspending(sender, sa);
         }
-
 
         private ILifeTimeManager LifeTimeManager
         {

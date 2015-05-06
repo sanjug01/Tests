@@ -34,7 +34,7 @@
         {
             var deferral = e.SuspendingOperation.Deferral;
 
-            // TODO: Save application state and stop any background activity
+            // Save application state and stop any background activity
             EmitSuspending(e);
 
             deferral.Complete();
@@ -42,11 +42,9 @@
 
         public void OnResuming(object sender, IResumingArgs e)
         {
-            // TODO: Restore application state and restart any background activity
+            // Restore application state and restart any background activity
             EmitResuming(e);
-
         }
-
 
         event EventHandler<LaunchEventArgs> ILifeTimeManager.Launched
         {

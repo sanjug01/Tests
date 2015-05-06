@@ -82,15 +82,14 @@
         /// <returns></returns>
         IRenderingPanel Deactivate();
 
-        // TODO: There is a confusion in the comment below. Suspend should only call rdpConnection.Suspend when the app is brought in the background
-        // TODO: Currently not implemented, should implement.
         /// <summary>
         /// Suspend the session. Once suspended, the session must release and recycle al its rendering panels.
+        /// Resuming an active session is possible after suspend.
         /// </summary>
         void Suspend();
 
         /// <summary>
-        /// The session could be resumed after suspend
+        /// Resume the sssion after suspended state
         /// </summary>
         void Resume();
 

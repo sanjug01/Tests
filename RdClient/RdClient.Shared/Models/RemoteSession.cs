@@ -190,9 +190,7 @@
             // _internalState must never be null, so the initial state is assigned to a state object
             // that does not do anything.
             //
-            _internalState = new InactiveSession(_sessionMonitor);
-
-            // TODO: RemoteSession also needs to register for ILifeCycle.Suspend/Resume
+            _internalState = new InactiveSession(_sessionMonitor);            
         }
 
         protected override void DisposeManagedState()
