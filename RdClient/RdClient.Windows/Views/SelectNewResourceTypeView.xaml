@@ -21,7 +21,11 @@
 
             <TextBlock x:Uid="SelectResource_Title" Text="(d) Add New" Style="{ThemeResource TitleTextBlockStyle}"/>            
             <Grid Margin="20">
-                <Button Style="{StaticResource FlatButtonStyle}" Command="{Binding AddDesktop}" Padding="10">
+                <Button Style="{StaticResource FlatButtonStyle}" 
+                        Command="{Binding AddDesktop}" 
+                        Padding="10"
+                        HorizontalAlignment="Stretch" 
+                        HorizontalContentAlignment="Left">
                     <StackPanel Orientation="Vertical">
                         <TextBlock x:Uid="SelectResource_Desktop_Title" Text="(d) Desktop" />
                         <TextBlock x:Uid="SelectResource_Desktop_Description" 
@@ -33,7 +37,11 @@
             </Grid>      
             <!-- disabled until functionality available 
             <Grid Margin="20">
-                <Button Style="{StaticResource FlatButtonStyle}" Command="{Binding AddCloudWorkspace}" Padding="10">
+                <Button Style="{StaticResource FlatButtonStyle}" 
+                        Command="{Binding AddCloudWorkspace}"
+                        Padding="10"
+                        HorizontalAlignment="Stretch" 
+                        HorizontalContentAlignment="Left">            
                     <StackPanel Orientation="Vertical">
                         <TextBlock x:Uid="SelectResource_Azure_Title" Text="(d) Azure RemoteApp" />
                         <TextBlock x:Uid="SelectResource_Azure_Description" Text="(d) Get to apps from Azure RemoteApp" 
@@ -44,7 +52,11 @@
             </Grid>
             -->
             <Grid Margin="20">
-                <Button Style="{StaticResource FlatButtonStyle}" Command="{Binding AddOnPremiseWorkspace}" Padding="10">
+                <Button Style="{StaticResource FlatButtonStyle}" 
+                        Command="{Binding AddOnPremiseWorkspace}" 
+                        Padding="10"
+                        HorizontalAlignment="Stretch" 
+                        HorizontalContentAlignment="Left">
                     <StackPanel>
                         <TextBlock x:Uid="SelectResource_OnPrem_Title" Text="(d) Remote Resource" />
                         <TextBlock x:Uid="SelectResource_OnPrem_Description" 
