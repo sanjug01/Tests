@@ -83,7 +83,7 @@
         private void SetDefaults()
         {
             this.UseThumbnails = true;
-            this.SendFeeback = false;
+            this.SendFeeback = true;
         }
 
         ICommand IPersistentObject.Save
