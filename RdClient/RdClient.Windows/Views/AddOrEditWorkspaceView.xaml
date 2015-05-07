@@ -24,8 +24,8 @@
         </c:UserComboBoxElementToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
-    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
-        <Grid Margin="20">
+    <ContentControl Style="{StaticResource AccessoryViewStyle}">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="32"/>
@@ -96,5 +96,5 @@
                     />
             </Grid>
         </Grid>
-    </Grid>
+    </ContentControl>
 </controls:ModalUserControl>

@@ -16,56 +16,58 @@
         <vm:SelectNewResourceTypeViewModel />
     </controls:ModalUserControl.DataContext>
 
-    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
+    <ContentControl Style="{StaticResource AccessoryViewStyle}">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
 
-            <TextBlock x:Uid="SelectResource_Title" Margin="20,20" Text="(d) Add New" FontSize="20"/>            
-            <Grid Margin="30,20">
-                <Button Style="{StaticResource FlatButtonStyle}" Command="{Binding AddDesktop}">
-                    <Grid Margin="10,10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock x:Uid="SelectResource_Desktop_Title" Grid.Row="0" Text="(d) Desktop" />
-                        <TextBlock x:Uid="SelectResource_Desktop_Description" Grid.Row="1" Text="(d) Connect to a remote PC" 
+            <TextBlock x:Uid="SelectResource_Title" Text="(d) Add New" Style="{ThemeResource TitleTextBlockStyle}"/>            
+            <Grid Margin="20">
+                <Button Style="{StaticResource FlatButtonStyle}" 
+                        Command="{Binding AddDesktop}" 
+                        Padding="10"
+                        HorizontalAlignment="Stretch" 
+                        HorizontalContentAlignment="Left">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock x:Uid="SelectResource_Desktop_Title" Text="(d) Desktop" />
+                        <TextBlock x:Uid="SelectResource_Desktop_Description" 
+                                   Text="(d) Connect to a remote PC" 
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Foreground="{ThemeResource UnselectedForegroundBrush}" />                                   
-                    </Grid>
+                    </StackPanel>
                 </Button>
             </Grid>      
             <!-- disabled until functionality available 
-            <Grid Margin="30,20">
-                <Button Style="{StaticResource FlatButtonStyle}" Command="{Binding AddCloudWorkspace}">
-                    <Grid Margin="10,10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock x:Uid="SelectResource_Azure_Title" Grid.Row="0" Text="(d) Azure RemoteApp" />
-                        <TextBlock x:Uid="SelectResource_Azure_Description" Grid.Row="1" Text="(d) Get to apps from Azure RemoteApp" 
+            <Grid Margin="20">
+                <Button Style="{StaticResource FlatButtonStyle}" 
+                        Command="{Binding AddCloudWorkspace}"
+                        Padding="10"
+                        HorizontalAlignment="Stretch" 
+                        HorizontalContentAlignment="Left">            
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock x:Uid="SelectResource_Azure_Title" Text="(d) Azure RemoteApp" />
+                        <TextBlock x:Uid="SelectResource_Azure_Description" Text="(d) Get to apps from Azure RemoteApp" 
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Foreground="{ThemeResource UnselectedForegroundBrush}" />
-                    </Grid>
+                    </StackPanel>
                 </Button>
             </Grid>
             -->
-            <Grid Margin="30,20">
-                <Button Style="{StaticResource FlatButtonStyle}" Command="{Binding AddOnPremiseWorkspace}">
-                    <Grid Margin="10,10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock x:Uid="SelectResource_OnPrem_Title" Grid.Row="0" Text="(d) Remote Resource" />
-                        <TextBlock x:Uid="SelectResource_OnPrem_Description" Grid.Row="1" Text="(d) Access published apps and desktops" 
+            <Grid Margin="20">
+                <Button Style="{StaticResource FlatButtonStyle}" 
+                        Command="{Binding AddOnPremiseWorkspace}" 
+                        Padding="10"
+                        HorizontalAlignment="Stretch" 
+                        HorizontalContentAlignment="Left">
+                    <StackPanel>
+                        <TextBlock x:Uid="SelectResource_OnPrem_Title" Text="(d) Remote Resource" />
+                        <TextBlock x:Uid="SelectResource_OnPrem_Description" 
+                                   Text="(d) Access published apps and desktops" 
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Foreground="{ThemeResource UnselectedForegroundBrush}" />
-                    </Grid>
+                    </StackPanel>
                 </Button>
             </Grid>
             
-            <HyperlinkButton x:Uid="SelectResource_LearnMoreLink" Margin="20,20" Content="(d) Learn more" />
+            <HyperlinkButton x:Uid="SelectResource_LearnMoreLink" Margin="30,20" Content="(d) Learn more" />
         </StackPanel>
-    </Grid>
+    </ContentControl>
 </controls:ModalUserControl>
