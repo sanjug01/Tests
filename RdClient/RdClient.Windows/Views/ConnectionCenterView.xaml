@@ -34,12 +34,8 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <controls:ConnectionCenterTitleBar
-                    Grid.Column="0"
-                    IsEnabled="{Binding AccessoryViewVisibility.IsVisible, Converter={StaticResource NegateBooleanConverter}}" />
-                <controls:DynamicToolbar
-                    Grid.Column="1"
-                    IsEnabled="{Binding AccessoryViewVisibility.IsVisible, Converter={StaticResource NegateBooleanConverter}}" />
+                <controls:ConnectionCenterTitleBar Grid.Column="0" />
+                <controls:DynamicToolbar Grid.Column="1" />
             </Grid>
         </DataTemplate>
         
