@@ -134,7 +134,6 @@ namespace RdClient.Shared.ViewModels
         private void LoadGateways()
         {
             IList<GatewayComboBoxElement> gateways = new List<GatewayComboBoxElement>();
-            gateways.Add(new GatewayComboBoxElement(GatewayComboBoxType.AddNew));
             foreach (IModelContainer<GatewayModel> gatewayModel in this.ApplicationDataModel.Gateways.Models)
             {
                 gateways.Add(new GatewayComboBoxElement(GatewayComboBoxType.Gateway, gatewayModel));
@@ -153,9 +152,19 @@ namespace RdClient.Shared.ViewModels
             if (GatewayCommandsEnabled())
             {
                 var args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway.Model);
+
+                // edit can also indicate deletion of the selected Gateway
                 var editGatewayCompleted = new ModalPresentationCompletion((s, e) =>
                 {
-                    LoadGateways();
+                    GatewayPromptResult result = e.Result as GatewayPromptResult;
+                    if (result.Deleted)
+                    {
+                        this.DeleteGatewayCommand.Execute(null);
+                    }
+                    else
+                    {
+                        LoadGateways();
+                    }
                     LoadUsers();
                 });
                 this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, editGatewayCompleted);
@@ -184,7 +193,6 @@ namespace RdClient.Shared.ViewModels
         private void LoadUsers()
         {
             IList<UserComboBoxElement> users = new List<UserComboBoxElement>();
-            users.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
             foreach (IModelContainer<CredentialsModel> credModel in this.ApplicationDataModel.Credentials.Models)
             {
                 users.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credModel));
@@ -203,7 +211,19 @@ namespace RdClient.Shared.ViewModels
             if (UserCommandsEnabled())
             {
                 var args = new AddUserViewArgs(this.SelectedUser.Credentials.Model, false, CredentialPromptMode.EditCredentials);
-                this.NavigationService.PushAccessoryView("AddUserView", args, new ModalPresentationCompletion((s, e) => LoadUsers()));
+                ModalPresentationCompletion editUserCompleted = new ModalPresentationCompletion((s, e) =>
+                {
+                    CredentialPromptResult result = e.Result as CredentialPromptResult;
+                    if (result != null && result.Deleted)
+                    {
+                        this.DeleteUserCommand.Execute(null);
+                    }
+                    else
+                    {
+                        LoadUsers();
+                    }
+                });
+                this.NavigationService.PushAccessoryView("AddUserView", args, editUserCompleted);
             }
         }
 

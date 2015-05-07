@@ -9,6 +9,7 @@
     xmlns:c="using:RdClient.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:controls="using:RdClient.Controls"
+    d:DesignWidth="480"    
     mc:Ignorable="d">
 
     <controls:ModalUserControl.DataContext>
@@ -23,8 +24,8 @@
         </c:UserComboBoxElementToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
-    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
-        <Grid Margin="20">
+    <ContentControl Style="{StaticResource AccessoryViewStyle}">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="32"/>
@@ -53,7 +54,9 @@
                          PlaceholderText="https://webfeed.contoso_example.com (d)"
                          Text="{Binding Path=FeedUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
-            <StackPanel Grid.Row="4">
+
+            <StackPanel Grid.Row="4"
+                        Margin="0,0,0,80">
                 <TextBlock Style="{ThemeResource BodyTextBlockStyle }" 
                            x:Uid="AddOrEditWorkspace-Credentials" Text="User name(d)"/>
                 <ComboBox Margin="0,8" 
@@ -66,23 +69,26 @@
                             <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
-                </ComboBox>                    
+                </ComboBox>
+                <Button x:Uid="Common_Button_AddUserAccount" 
+                        Content="Add account(d)" 
+                        Command="{Binding Path=AddUser}" />
             </StackPanel>
+
             <Grid Grid.Row="6">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="46" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="1"
+
+                <Button Grid.Column="0"
                     Style="{StaticResource DialogButtonStyle}"
                     Command="{Binding Path=Cancel}"
                     x:Uid="Common_Button_Cancel"
                     Content="Cancel(d)"
                     />
-                <Button Grid.Column="3"
+                <Button Grid.Column="2"
                     Style="{StaticResource DialogAccentedButtonStyle}"
                     Command="{Binding Path=DefaultAction}"
                     x:Uid="AddOrEditWorkspace-SaveButton"
@@ -90,5 +96,5 @@
                     />
             </Grid>
         </Grid>
-    </Grid>
+    </ContentControl>
 </controls:ModalUserControl>
