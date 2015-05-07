@@ -141,7 +141,7 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                _addOrEditGatewayVM.SelectedUserOptionsIndex = 2;
+                _addOrEditGatewayVM.SelectedUserOptionsIndex = 1;
                 _addOrEditGatewayVM.DefaultAction.Execute(null);
 
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
@@ -212,7 +212,7 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(2, _addOrEditGatewayVM.SelectedUserOptionsIndex);
+                Assert.AreEqual(1, _addOrEditGatewayVM.SelectedUserOptionsIndex);
                 Assert.AreSame(credentials, _addOrEditGatewayVM.UserOptions[_addOrEditGatewayVM.SelectedUserOptionsIndex].Credentials.Model);
                 Assert.AreEqual(gateway.CredentialsId, _addOrEditGatewayVM.UserOptions[_addOrEditGatewayVM.SelectedUserOptionsIndex].Credentials.Id);
             }
@@ -232,12 +232,12 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(2, _addOrEditGatewayVM.SelectedUserOptionsIndex);
+                Assert.AreEqual(1, _addOrEditGatewayVM.SelectedUserOptionsIndex);
             }
         }
 
         [TestMethod]
-        public void EditGateway_ShouldOpenAddUserDialog()
+        public void EditGateway_AddUser_ShouldOpenAddUserDialog()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
@@ -250,7 +250,8 @@
 
                 navigation.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
 
-                _addOrEditGatewayVM.SelectedUserOptionsIndex = 1;
+                // add User
+                _addOrEditGatewayVM.AddUser.Execute(null);
             }
         }
 
@@ -410,7 +411,7 @@
         }
 
         [TestMethod]
-        public void AddGateway_SelectingAddUserComboBoxItem_AddsAndSelectsUser()
+        public void AddGateway_AddUser_AddsAndSelectsUser()
         {
             IPresentationCompletion completion = null;
             using (Mock.NavigationService navigation = new Mock.NavigationService())
@@ -433,7 +434,7 @@
                 });
 
                 // add user
-                _addOrEditGatewayVM.SelectedUserOptionsIndex = 1;
+                _addOrEditGatewayVM.AddUser.Execute(null);
 
                 CredentialsModel creds =  _testData.NewValidCredential().Model;
                 var promptResult = CredentialPromptResult.CreateWithCredentials(creds, true);
@@ -450,6 +451,51 @@
                 // verify the new credentials are selected
                 Assert.AreEqual(creds, _addOrEditGatewayVM.UserOptions[_addOrEditGatewayVM.SelectedUserOptionsIndex].Credentials.Model);
             }
+        }
+
+        [TestMethod]
+        public void AddGateway_CannotDelete()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                AddGatewayViewModelArgs args =
+                    new AddGatewayViewModelArgs();
+                ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
+                Assert.IsFalse(_addOrEditGatewayVM.Delete.CanExecute(null));
+            }
+        }
+
+        [TestMethod]
+        public void EditGateway_CanDelete()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                object saveParam = new object();
+                GatewayModel gateway = new GatewayModel() { HostName = "myPC" };
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
+                Assert.IsTrue(_addOrEditGatewayVM.Delete.CanExecute(null));
+            }
+        }
+
+        [TestMethod]
+        public void EditGateway_ShouldCallDeleteHandler()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.ModalPresentationContext context = new Mock.ModalPresentationContext())
+            {
+                context.Expect("Dismiss", parameters =>
+                {
+                    GatewayPromptResult result = parameters[0] as GatewayPromptResult;
+                    Assert.IsNotNull(result);
+                    Assert.IsTrue(result.Deleted);
+                    return null;
+                });
+                GatewayModel gateway = new GatewayModel() { HostName = "myPC" };
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, context);
+                _addOrEditGatewayVM.Delete.Execute(null);
+            }           
         }
 
     }

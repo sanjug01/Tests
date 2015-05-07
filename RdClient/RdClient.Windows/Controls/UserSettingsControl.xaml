@@ -48,7 +48,7 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Style="{StaticResource DialogButtonStyle}" x:Uid="Common_Button_DeleteItem" Content="Delete(d)" Command="{Binding DeleteUserCommand}" />
+            <Button Grid.Column="0" Style="{StaticResource DialogButtonStyle}" x:Uid="Common_Button_AddNewItem" Content="Add new(d)" Command="{Binding AddUserCommand}" />
             <Button Grid.Column="2" Style="{StaticResource DialogButtonStyle}" x:Uid="Common_Button_EditItem" Content="Edit(d)" Command="{Binding EditUserCommand}" />
         </Grid>
     </Grid>

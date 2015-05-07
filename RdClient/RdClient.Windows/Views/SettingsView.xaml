@@ -9,8 +9,9 @@
     xmlns:controls="using:RdClient.Controls"
     xmlns:c="using:RdClient.Converters"
     xmlns:design="using:RdClient.DesignTime"    
-    mc:Ignorable="d"
->
+    mc:Ignorable="d"    
+    d:DesignWidth="500">
+    
     <d:ModalUserControl.DataContext>
         <design:FakeSettingsViewModel />
     </d:ModalUserControl.DataContext>
@@ -25,9 +26,9 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="20"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="20"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" x:Uid="Settings_NavBar_Title" Text="Settings(d)" Style="{ThemeResource TitleTextBlockStyle}" />
