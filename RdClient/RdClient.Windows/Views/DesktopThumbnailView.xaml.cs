@@ -12,16 +12,11 @@ namespace RdClient.Views
             this.InitializeComponent();
         }
 
-        private void DesktopThumbnail_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void ThumbnailButton_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
         {
-            if (e.Pointer.PointerDeviceType == PointerDeviceType.Mouse)
-            {
-                PointerPoint ptrPt = e.GetCurrentPoint(this.ThumbnailButton);
-                if(ptrPt.Properties.IsRightButtonPressed)
-                {
-                    Flyout.ShowAttachedFlyout((FrameworkElement)sender);
-                }
-            }
+            var element = sender as FrameworkElement;
+            Flyout.ShowAttachedFlyout(element);
+            e.Handled = true;
         }
     }
 }

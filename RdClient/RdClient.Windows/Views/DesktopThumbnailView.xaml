@@ -12,8 +12,7 @@
     xmlns:design="using:RdClient.DesignTime"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d"
-    d:DesignHeight="276" Width="342"
-    RequestedTheme="{StaticResource MainTheme}">
+    d:DesignHeight="276" Width="342">
     
     <d:UserControl.DataContext>
         <design:FakeDesktopViewModel />
@@ -46,7 +45,8 @@
                 x:Name="ThumbnailButton"
                 Command="{Binding ConnectCommand}"
                 FlyoutBase.AttachedFlyout="{StaticResource ModifyConnectionMenuFlyout}"
-                PointerPressed="DesktopThumbnail_PointerPressed">            
+                IsRightTapEnabled="True"
+                RightTapped="ThumbnailButton_RightTapped">            
             <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" Height="276" Width="342">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
