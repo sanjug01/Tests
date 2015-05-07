@@ -453,5 +453,50 @@
             }
         }
 
+        [TestMethod]
+        public void AddGateway_CannotDelete()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                AddGatewayViewModelArgs args =
+                    new AddGatewayViewModelArgs();
+                ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
+                Assert.IsFalse(_addOrEditGatewayVM.Delete.CanExecute(null));
+            }
+        }
+
+        [TestMethod]
+        public void EditGateway_CanDelete()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            {
+                object saveParam = new object();
+                GatewayModel gateway = new GatewayModel() { HostName = "myPC" };
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
+                Assert.IsTrue(_addOrEditGatewayVM.Delete.CanExecute(null));
+            }
+        }
+
+        [TestMethod]
+        public void EditGateway_ShouldCallDeleteHandler()
+        {
+            using (Mock.NavigationService navigation = new Mock.NavigationService())
+            using (Mock.ModalPresentationContext context = new Mock.ModalPresentationContext())
+            {
+                context.Expect("Dismiss", parameters =>
+                {
+                    GatewayPromptResult result = parameters[0] as GatewayPromptResult;
+                    Assert.IsNotNull(result);
+                    Assert.IsTrue(result.Deleted);
+                    return null;
+                });
+                GatewayModel gateway = new GatewayModel() { HostName = "myPC" };
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, context);
+                _addOrEditGatewayVM.Delete.Execute(null);
+            }           
+        }
+
     }
 }
