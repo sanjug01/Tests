@@ -199,6 +199,7 @@
     <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\ApplicationDataModelTests.cs" />
+    <Compile Include="Model\GeneralSettingsModelTests.cs" />
     <Compile Include="Model\CredentialsModelTests.cs" />
     <Compile Include="Model\GatewayModelTests.cs" />
     <Compile Include="Model\DesktopModelTests.cs" />

@@ -8,16 +8,34 @@
     xmlns:design="using:RdClient.DesignTime"
     mc:Ignorable="d"
     d:DesignHeight="768"
-    d:DesignWidth="700">
+    d:DesignWidth="500">
 
     <d:UserControl.DataContext>
         <design:FakeSettingsViewModel />
     </d:UserControl.DataContext>
 
-    <Grid>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock VerticalAlignment="Center" Style="{ThemeResource BodyTextBlockStyle}" x:Uid="Settings_General_ShowThumbnails" Text="Show thumbnails for Desktops (d)" />
-            <ToggleSwitch Margin="60,0,0,0" VerticalAlignment="Center" IsOn="{Binding Path=GeneralSettings.UseThumbnails, Mode=TwoWay}"/>
+    <Grid>        
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical"
+                        Margin="0,0,0,20">
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                       x:Uid="Settings_General_ShowThumbnails" 
+                       Text="Show thumbnails for Desktops (d)" />
+                <ToggleSwitch HorizontalAlignment="Left" 
+                              IsOn="{Binding Path=GeneralSettings.UseThumbnails, Mode=TwoWay}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                           x:Uid="Settings_General_Feedback" 
+                           Text="Help improve Remote Desktop (d)" />
+                <TextBlock Style="{ThemeResource CaptionTextBlockStyle}"
+                           Foreground="{ThemeResource UnselectedForegroundBrush}"
+                           x:Uid="Settings_General_FeedbackCaption" 
+                           Text="Send anonymous data to Microsoft (d)" />
+                <ToggleSwitch HorizontalAlignment="Left"
+                              IsOn="{Binding Path=GeneralSettings.SendFeedback, Mode=TwoWay}"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

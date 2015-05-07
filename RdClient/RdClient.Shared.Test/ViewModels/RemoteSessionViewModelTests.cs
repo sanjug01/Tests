@@ -116,6 +116,45 @@
             void IStackedViewPresenter.DismissView(IPresentableView view, bool animated) { }
         }
 
+        private sealed class TestViewport : IViewport
+        {
+            Point IViewport.Offset
+            {
+                get { return new Point(100, 200); }
+            }
+
+            Size IViewport.Size
+            {
+                get { return Size.Empty;  }
+            }
+
+            double IViewport.ZoomFactor
+            {
+                get { return 2.0; }
+            }
+
+            event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+            {
+                add { }
+                remove { }
+            }
+
+            void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor, double durationMilliseconds)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IViewport.Set(double zoomFactor, Size offset, bool animated)
+            {
+                throw new NotImplementedException();
+            }
+
+            Point IViewport.TransformPoint(Point point)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         private sealed class TestHelperView : IPresentableView
         {
             private readonly IViewModel _vm;
@@ -162,7 +201,7 @@
 
                 IViewport IRenderingPanel.Viewport
                 {
-                    get { throw new NotImplementedException(); }
+                    get { return new TestViewport(); }
                 }
 
                 void IRenderingPanel.ChangeMouseCursorShape(Shared.Input.Pointer.MouseCursorShape shape)
