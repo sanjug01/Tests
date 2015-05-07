@@ -175,7 +175,8 @@ namespace RdClient.Shared.ViewModels
         {
             if (GatewayCommandsEnabled())
             {
-                this.NavigationService.PushAccessoryView("DeleteGatewayView", this.SelectedGateway.Gateway, new ModalPresentationCompletion((s, e) => LoadGateways()));
+                this.ApplicationDataModel.Gateways.RemoveModel(this.SelectedGateway.Gateway.Id);
+                LoadGateways();
             }
         }
 
@@ -231,7 +232,8 @@ namespace RdClient.Shared.ViewModels
         {
             if (UserCommandsEnabled())
             {
-                this.NavigationService.PushAccessoryView("DeleteUserView", this.SelectedUser.Credentials, new ModalPresentationCompletion((s, e) => LoadUsers()));
+                this.ApplicationDataModel.Credentials.RemoveModel(this.SelectedUser.Credentials.Id);
+                LoadUsers();                
             }
         }
 
