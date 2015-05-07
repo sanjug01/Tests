@@ -20,8 +20,8 @@
         <vm:SettingsViewModel />
     </controls:ModalUserControl.DataContext>
 
-    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
-        <Grid Margin="20">
+    <ContentControl Style="{StaticResource AccessoryViewStyle}">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="20"/>
@@ -36,5 +36,5 @@
             <controls:UserSettingsControl Grid.Row="4"/>
             <controls:GatewaySettingsControl Grid.Row="6"/>
         </Grid>
-    </Grid>
+    </ContentControl>
 </controls:ModalUserControl>
