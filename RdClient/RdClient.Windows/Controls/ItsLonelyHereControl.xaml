@@ -21,6 +21,7 @@
             <ColumnDefinition Width="{StaticResource ConnectionCenterMargin}" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+
         <TextBlock Grid.Row="1" Grid.Column="1" Style="{ThemeResource SubheaderTextBlockStyle}" x:Uid="ConnectionCenter_DayZeroTitle" Text="It's lonely here :( (d)" />
         <TextBlock 
             Grid.Row="3"  Grid.Column="1" 
@@ -32,5 +33,11 @@
                 using this device. You can add remote resources to work with apps and 
                 desktops your administrator has set up for you. (d)
         </TextBlock>
+        <Image Source="ms-appx:///Assets/Day0.png"
+               Grid.Row="4"
+               Grid.Column="1"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Bottom"
+            />
     </Grid>
 </UserControl>

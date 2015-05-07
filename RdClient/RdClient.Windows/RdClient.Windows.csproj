@@ -253,6 +253,7 @@
     <Content Include="..\..\RdClientCx\openssl\winrt\x86chk\ssleay32.dll">
       <Link>ssleay32.dll</Link>
     </Content>
+    <Content Include="Assets\Day0.png" />
     <Content Include="Assets\desktop_placeholder.png" />
     <Content Include="Assets\SegMDL2.1.12.ttf" />
     <None Include="Models\AppDataStorage.cs" />
