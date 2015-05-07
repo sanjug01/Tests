@@ -49,69 +49,77 @@
 
             <ScrollViewer Grid.Row="2" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="26,0,26,0">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Uid="AddOrEditDesktop-PcName-Error"
-                                   Text="(*)(d)" Padding="0,0,8,0"
-                                   Style="{ThemeResource BodyTextBlockStyle}"
-                                   Foreground="{StaticResource rdErrorBrush}"
-                                   Visibility="{Binding Path=IsHostValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
-                                   />
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                   x:Uid="AddOrEditDesktop-PcName" 
-                                   Text="PC Name(d)"/>
-                    </StackPanel>
-                    <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
+                    <StackPanel Orientation="Vertical"
+                                Margin="0,0,0,20">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Uid="AddOrEditDesktop-PcName-Error"
+                                       Text="(*)(d)" Padding="0,0,8,0"
+                                       Style="{ThemeResource BodyTextBlockStyle}"
+                                       Foreground="{StaticResource rdErrorBrush}"
+                                       Visibility="{Binding Path=IsHostValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
+                                       />
+                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                       x:Uid="AddOrEditDesktop-PcName" 
+                                       Text="PC Name(d)"/>
+                        </StackPanel>
                         <TextBox Name="txtHostEntry" 
                                     x:Uid="AddOrEditDesktop-PcNameTextBox"
                                     Background="Transparent"
                                     PlaceholderText="Host name or IP address (d)"
                                     Margin="0,8" 
                                     Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                         </TextBox>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical"
+                                Margin="0,0,0,20">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                       x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
+                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                                       Foreground="{ThemeResource UnselectedForegroundBrush}"
+                                       x:Uid="AddOrEditDesktop-FriendlyName_OptLabel" 
+                                       Text="(optional) (d)" 
+                                       Margin="8,0,0,0"/>
+                        </StackPanel>
+                        <TextBox Name="txtFriendlyNameEntry"
+                                     x:Uid="AddOrEditDesktop-PcFriendlyNameTextbox"
+                                     Background="Transparent"
+                                     Margin="0,8" 
+                                     PlaceholderText="Connection friendly name (d)" 
+                                     Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         </TextBox>
-                    </Grid>
+                    </StackPanel>
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                               x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                               Foreground="{ThemeResource UnselectedForegroundBrush}"
-                               x:Uid="AddOrEditDesktop-FriendlyName_OptLabel" 
-                               Text="(optional) (d)" 
-                               Margin="8,0,0,0"/>
-                </StackPanel>
-                <Grid Style="{StaticResource rdEntryFieldGridStyle}">
-                    <TextBox Name="txtFriendlyNameEntry"
-                     x:Uid="AddOrEditDesktop-PcFriendlyNameTextbox"
-                     Background="Transparent"
-                     Margin="0,8" 
-                     PlaceholderText="Connection friendly name (d)"           
-                     Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    </TextBox>
-                </Grid>
-
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
-                    <ComboBox Margin="0,8" 
+                    <StackPanel Orientation="Vertical"
+                                Margin="0,0,0,20">
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
+                        <ComboBox Margin="0,8" 
                           x:Uid="AddOrEditDesktop-Credentials-ComboBox"
                           HorizontalAlignment="Stretch"
                           ItemsSource="{Binding Path=UserOptions}"
                           SelectedIndex="{Binding Path=SelectedUserOptionsIndex, Mode=TwoWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button x:Uid="Common_Button_AddUserAccount" 
+                            Content="Add account(d)" 
+                            Command="{Binding Path=AddUser}" />
+                    </StackPanel>
+                    
                     <Button Background="Transparent"
                                 Command="{Binding ShowDetailsCommand}"     
                                 Margin="-8,8,0,0" 
                                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{StaticResource MoreDetailsIcon}"
-                                       Style="{ThemeResource DialogDetailsIconStyle}"/>
                             <TextBlock x:Uid="AddOrEditDesktop-MoreDetailsLabel"
                                        Style="{ThemeResource DialogDetailsTextStyle}"
                                        Text="More details (d)"/>
+                            <TextBlock Text="{StaticResource MoreDetailsIcon}"
+                                       Style="{ThemeResource DialogDetailsIconStyle}"/>                            
                         </StackPanel>
                     </Button>
 
@@ -120,25 +128,32 @@
                                 Margin="-8,8,0,0" 
                                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}" >
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{StaticResource LessDetailsIcon}"
-                                       Style="{ThemeResource DialogDetailsIconStyle}"/>
                             <TextBlock x:Uid="AddOrEditDesktop-LessDetailsLabel"
                                        Style="{ThemeResource DialogDetailsTextStyle}"                                       
                                        Text="Less details (d)"/>
+                            <TextBlock Text="{StaticResource LessDetailsIcon}"
+                                       Style="{ThemeResource DialogDetailsIconStyle}"/>                            
                         </StackPanel>
                     </Button>
-
 
                     <controls:DesktopExtraSettingsControl
                         Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,18,0,0" HorizontalAlignment="Right">
-                        <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
-                                Command="{Binding Path=DefaultAction}" />
+                    <Grid Margin="0,18,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
                         <Button x:Uid="Common_Button_Cancel" Content="Cancel(d)"
-                                Margin="8,0,0,0"
+                                Grid.Column="0"
+                                Style="{StaticResource DialogButtonStyle}"
                                 Command="{Binding Path=Cancel}" />
-                    </StackPanel>
+                        <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
+                                Grid.Column="2"
+                                Style="{StaticResource DialogAccentedButtonStyle}"
+                                Command="{Binding Path=DefaultAction}" />                        
+                    </Grid>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

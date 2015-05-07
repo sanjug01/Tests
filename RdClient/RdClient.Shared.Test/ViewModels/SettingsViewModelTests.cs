@@ -134,7 +134,7 @@
         }
 
         [TestMethod]
-        public void SelectingAddUserComboBoxItemShowsAddUserViewAddsUserToDatamodelAndUpdatesUsers()
+        public void AddUserShowsAddUserViewAddsUserToDatamodelAndUpdatesUsers()
         {
             IPresentationCompletion completion = null;
 
@@ -150,7 +150,8 @@
                 Assert.IsNotNull(completion);
                 return null;
             });
-            _vm.SelectedUser = _vm.Users.First(u => u.UserComboBoxType == UserComboBoxType.AddNew);
+
+            _vm.AddUserCommand.Execute(null);
 
             var newCreds = _testData.NewValidCredential().Model;
             var promptResult = CredentialPromptResult.CreateWithCredentials(newCreds, true);
@@ -238,7 +239,7 @@
         }
 
         [TestMethod]
-        public void SelectingAddGatewayComboBoxItemShowsExecutesAddGateway()
+        public void AddGatewayNavigatesToAddGatewayView()
         {
             IPresentationCompletion completion = null;
             _navService.Expect("PushAccessoryView", p =>
@@ -249,7 +250,8 @@
                 Assert.IsNotNull(completion);
                 return null;
             });
-            _vm.SelectedGateway = _vm.Gateways.First(g => g.GatewayComboBoxType == GatewayComboBoxType.AddNew);
+
+            _vm.AddGatewayCommand.Execute(null);
 
             Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);
             Guid newGatewayId = _dataModel.Gateways.AddNewModel(_testData.NewValidGatewayWithCredential(newCredId));
@@ -342,20 +344,18 @@
 
         private void AssertUserOptionsCorrect()
         {
-            //Add user option first
-            Assert.AreEqual(UserComboBoxType.AddNew, _vm.Users[0].UserComboBoxType);
+            //Add user option - no longer used
             //Remaining options match datamodel users
-            Assert.AreEqual(_dataModel.Credentials.Models.Count + 1, _vm.Users.Count);
+            Assert.AreEqual(_dataModel.Credentials.Models.Count, _vm.Users.Count);
             var loadedUsers = _vm.Users.Where(u => u.UserComboBoxType == UserComboBoxType.Credentials).Select(u => u.Credentials).ToList();
             CollectionAssert.AreEqual(_dataModel.Credentials.Models, loadedUsers);
         }
 
         private void AssertGatewayOptionsCorrect()
         {
-            //Add gateway option first
-            Assert.AreEqual(GatewayComboBoxType.AddNew, _vm.Gateways[0].GatewayComboBoxType);
+            //Add gateway option - no longer used
             //Remaining options match datamodel users
-            Assert.AreEqual(_dataModel.Gateways.Models.Count + 1, _vm.Gateways.Count);
+            Assert.AreEqual(_dataModel.Gateways.Models.Count, _vm.Gateways.Count);
             var loadedGateways = _vm.Gateways.Where(g => g.GatewayComboBoxType == GatewayComboBoxType.Gateway).Select(g => g.Gateway).ToList();
             CollectionAssert.AreEqual(_dataModel.Gateways.Models, loadedGateways);
         }
