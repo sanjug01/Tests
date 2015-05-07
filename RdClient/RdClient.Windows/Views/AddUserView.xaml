@@ -28,8 +28,8 @@
         </sc:TypeToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
-    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
-        <Grid Margin="20">
+    <ContentControl Style="{StaticResource AccessoryViewStyle}">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -97,5 +97,5 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-    </Grid>
+    </ContentControl>
 </controls:ModalUserControl>

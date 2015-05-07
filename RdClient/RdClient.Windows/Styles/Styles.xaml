@@ -120,7 +120,7 @@
     <Style x:Key="FlatButtonStyle" TargetType="Button">
         <Setter Property="Padding" Value="0" />
         <Setter Property="Background" Value="Transparent" />        
-    </Style>
+    </Style>   
 
     <!-- 
     ======================================================================================
@@ -422,6 +422,22 @@
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Margin" Value="186" />
         <Setter Property="Padding" Value="43,15,43,35" />
+    </Style>
+
+    <Style x:Key="AccessoryViewStyle" TargetType="ContentControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContentControl">
+                    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                            <Grid Margin="20">
+                                <ContentPresenter />
+                            </Grid>
+                        </ScrollViewer>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
     <!-- 
     ======================================================================================
