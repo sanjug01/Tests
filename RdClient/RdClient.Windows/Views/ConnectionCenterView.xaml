@@ -44,14 +44,11 @@
         </DataTemplate>
 
         <DataTemplate x:Key="TopBarNarrowLayout">
-            <controls:ConnectionCenterTitleBar
-                IsEnabled="{Binding AccessoryViewVisibility.IsVisible, Converter={StaticResource NegateBooleanConverter}}" />
+            <controls:ConnectionCenterTitleBar />
         </DataTemplate>
 
         <DataTemplate x:Key="BottomBarNarrowLayout">
-            <controls:DynamicToolbar
-                HorizontalAlignment="Center"
-                IsEnabled="{Binding AccessoryViewVisibility.IsVisible, Converter={StaticResource NegateBooleanConverter}}" />
+            <controls:DynamicToolbar HorizontalAlignment="Center" />
         </DataTemplate>
 
     </Page.Resources>
