@@ -52,8 +52,9 @@
 
     public sealed class AddOrEditWorkspaceViewModel : DeferringViewModelBase, IDialogViewModel
     {
-        private RelayCommand _saveCommand;
-        private RelayCommand _cancelCommand;
+        private readonly RelayCommand _saveCommand;
+        private readonly RelayCommand _cancelCommand;
+        private readonly RelayCommand _addUserCommand;
         private string _feedUrl;
         private ObservableCollection<UserComboBoxElement> _credOptions;
         private UserComboBoxElement _selectedCredOption;
@@ -67,11 +68,14 @@
             _selectedCredOption = null;
             _saveCommand = new RelayCommand(SaveCommandExecute);
             _cancelCommand = new RelayCommand(CancelCommandExecute);
+            _addUserCommand = new RelayCommand(LaunchAddUserView);
         }
 
         public ICommand DefaultAction { get { return _saveCommand; } }
 
         public ICommand Cancel { get { return _cancelCommand; } }
+
+        public ICommand AddUser { get { return _addUserCommand; } }
 
         public string FeedUrl 
         { 
@@ -96,20 +100,7 @@
         public UserComboBoxElement SelectedCredentialOption
         {
             get { return _selectedCredOption; }
-            set 
-            { 
-                if (SetProperty(ref _selectedCredOption, value))
-                {
-                    if (value != null && value.UserComboBoxType == UserComboBoxType.AddNew)
-                    {
-                        LaunchAddUserView();
-                    }
-                    else
-                    {
-                        _saveCommand.EmitCanExecuteChanged();
-                    }
-                }
-            }
+            set { SetProperty(ref _selectedCredOption, value); }
         }
 
         public OnPremiseWorkspaceModel Workspace
@@ -149,7 +140,7 @@
             _feedValidationRule = new FeedUrlValidationRule(this.Workspace, this.ApplicationDataModel.OnPremWorkspaces);
         }
 
-        private void LaunchAddUserView()
+        private void LaunchAddUserView(object o)
         {
             AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
@@ -183,7 +174,6 @@
         private void LoadComboBoxItems()
         {
             List<UserComboBoxElement> comboBoxes = new List<UserComboBoxElement>();
-            this.CredentialOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
             foreach (IModelContainer<CredentialsModel> cred in this.ApplicationDataModel.Credentials.Models)
             {
                 this.CredentialOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, cred));
