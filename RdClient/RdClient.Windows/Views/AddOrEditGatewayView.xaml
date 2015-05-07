@@ -86,7 +86,7 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <Button x:Uid="AddOrEditGateway-AddUser" Content="Add account(d)" 
+                    <Button x:Uid="Common_Button_AddUserAccount" Content="Add account(d)" 
                                 Command="{Binding Path=AddUser}" />
                 </StackPanel>
 

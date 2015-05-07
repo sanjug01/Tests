@@ -8,7 +8,7 @@
     xmlns:design="using:RdClient.DesignTime"
     mc:Ignorable="d"
     d:DesignHeight="768"
-    d:DesignWidth="700">
+    d:DesignWidth="500">
 
     <d:UserControl.DataContext>
         <design:FakeSettingsViewModel />
@@ -31,7 +31,7 @@
                            Text="Help improve Remote Desktop (d)" />
                 <TextBlock Style="{ThemeResource CaptionTextBlockStyle}"
                            Foreground="{ThemeResource UnselectedForegroundBrush}"
-                           x:Uid="Settings_General_Feedback" 
+                           x:Uid="Settings_General_FeedbackCaption" 
                            Text="Send anonymous data to Microsoft (d)" />
                 <ToggleSwitch HorizontalAlignment="Left"
                               IsOn="{Binding Path=GeneralSettings.SendFeedback, Mode=TwoWay}"/>

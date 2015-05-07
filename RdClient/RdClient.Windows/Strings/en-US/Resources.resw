@@ -395,13 +395,21 @@
     <value>(r) Edit</value>
     <comment>Verb. Text in a button that is pressed to edit an item.</comment>
   </data>
-    <data name="Common_Button_AddNewItem.Content" xml:space="preserve">
+  <data name="Common_Button_AddNewItem.Content" xml:space="preserve">
     <value>(r) Add new</value>
     <comment>Verb. Text in a button that is pressed to add a new item.</comment>
   </data>
   <data name="Settings_General_ShowThumbnails.Text" xml:space="preserve">
     <value>(r) Show thumbnails for Desktops</value>
     <comment>Text next to the toggle switch that changes whether thumbnails are saved and displayed for desktop connections</comment>
+  </data>
+  <data name="Settings_General_Feedback.Text" xml:space="preserve">
+    <value>(r) Help improve Remote Desktop</value>
+    <comment>Text next to the toggle switch that changes whether feedback permission is given</comment>
+  </data>
+  <data name="Settings_General_FeedbackCaption.Text" xml:space="preserve">
+    <value>(r) Send anonymous data to Microsoft</value>
+    <comment>Text under the toggle switch that changes whether feedback permission is given</comment>
   </data>
   <data name="Settings_NavBarItem_General.Content" xml:space="preserve">
     <value>(r) General</value>
@@ -496,6 +504,10 @@
   </data>
   <data name="AddUser-Username-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>(r) Invalid characters in user name</value>
+  </data>
+  <data name="AddUser-DeleteUserText.Text" xml:space="preserve">
+    <value>(r) Delete this account</value>
+    <comment>Text shown on AddUser dialog - Delete account link </comment>
   </data>
   <data name="CertificateValidation-AlwaysConnectButton.Content" xml:space="preserve">
     <value>(r) Always connect</value>
@@ -668,6 +680,10 @@
     <value>(r) Host name or IP address</value>
     <comment>Placeholder text shown on AddOrEditGateway dialog - Server name hint when no server name has been entered</comment>
   </data>
+  <data name="AddOrEditGateway-DeleteGatewayText.Text" xml:space="preserve">
+    <value>(r) Delete this gateway </value>
+    <comment>Text shown on AddOrEditGateway dialog - Delete gateway link </comment>
+  </data>
   <data name="DeleteGatewayView-Message.Text" xml:space="preserve">
     <value>(r) Are you sure you want to delete this gateway?</value>
     <comment>Message of the delete gateway dialog</comment>
@@ -809,7 +825,7 @@
   <data name="AdditionalToolbarCommandsView_Help.Text" xml:space="preserve">
     <value>(r) Help</value>
     <comment>Text in the "Help" button from additional commands</comment>
-  </data>  
+  </data>
   <data name="Settings_Gateways_Combobox.Header" xml:space="preserve">
     <value>(r) Gateways</value>
     <comment>Header of the combobox in the settings page that lists all the saved gateways</comment>
@@ -817,7 +833,7 @@
   <data name="Settings_Gateways_Combobox.PlaceholderText" xml:space="preserve">
     <value>(r) Select gateway server</value>
     <comment>Placeholder text of the combobox in the settings page that lists all the saved gateways</comment>
-  </data>  
+  </data>
   <data name="Settings_Users_Combobox.Header" xml:space="preserve">
     <value>(r) User accounts</value>
     <comment>Header of the combobox in the settings page that lists all the saved users</comment>
@@ -825,7 +841,7 @@
   <data name="Settings_Users_Combobox.PlaceholderText" xml:space="preserve">
     <value>(r) Select user</value>
     <comment>Placeholder text of the combobox in the settings page that lists all the saved users</comment>
-  </data>  
+  </data>
   <data name="AddOrEditWorkspace-Caption.Text" xml:space="preserve">
     <value>(r) Add Remote Resource</value>
     <comment>Title of Add workspace dialog</comment>
@@ -873,5 +889,9 @@
   <data name="RemoteSessionInterruptionControl_Message.Text" xml:space="preserve">
     <value>(r) The remote connection has been interrupted and is reconnecting…</value>
     <comment>Message displayed in the "reconnecting"belly-band dialog of the session view</comment>
+  </data>
+  <data name="Common_Button_AddUserAccount.Content" xml:space="preserve">
+    <value>(r) Add account</value>
+    <comment>Verb. Text under user's lists to add a new user account.</comment>
   </data>
 </root>
