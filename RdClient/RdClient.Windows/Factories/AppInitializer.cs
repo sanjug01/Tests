@@ -53,7 +53,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             //initialize the loaded workspaces
             foreach (IModelContainer<OnPremiseWorkspaceModel> workspace in appDataModel.OnPremWorkspaces.Models)

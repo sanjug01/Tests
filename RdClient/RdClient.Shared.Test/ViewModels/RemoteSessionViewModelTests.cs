@@ -590,7 +590,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
 
             Guid credId = _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "user", Password = "password" });

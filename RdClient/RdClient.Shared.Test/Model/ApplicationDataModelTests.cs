@@ -24,7 +24,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             IPersistentObject po = adm;
 
@@ -47,7 +47,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             IPersistentObject po = adm;
 
@@ -66,7 +66,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             IPersistentObject po = adm;
 
@@ -85,7 +85,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             IPersistentObject po = adm;
 
@@ -106,7 +106,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             IPersistentObject po = adm;
 
@@ -135,7 +135,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             IPersistentObject po = adm;
 
@@ -164,7 +164,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             IPersistentObject po = adm;
             po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
@@ -187,7 +187,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             IPersistentObject po = adm;
             po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
@@ -214,7 +214,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             IPersistentObject po = adm;
             Guid credentialsId = adm.Credentials.AddNewModel(new CredentialsModel());
@@ -252,7 +252,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             IPersistentObject po = adm;
 
@@ -280,7 +280,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             IPersistentObject po = adm;
             Guid gatewayId = adm.Gateways.AddNewModel(new GatewayModel());
@@ -320,7 +320,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             IPersistentObject po = adm;
             Guid credentialsId = adm.Credentials.AddNewModel(new CredentialsModel());

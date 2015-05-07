@@ -21,7 +21,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "usr1", Password = "pwd1" });
             _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "usr2", Password = "pwd2" });

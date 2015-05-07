@@ -2,6 +2,8 @@
 {
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
+    using System;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Runtime.Serialization;
 
@@ -56,7 +58,14 @@
                 if (null != _scrambledPassword)
                 {
                     Contract.Assert(null == _password);
-                    _password = _scrambler.Unscramble(_scrambledPassword);
+                    try
+                    {
+                        _password = _scrambler.Unscramble(_scrambledPassword);
+                    }
+                    catch(Exception ex)
+                    {
+                        Debug.WriteLine("Failed to unscramble the password for {0}|{1}", _username, ex);
+                    }
                     _scrambledPassword = null;
                 }
             }

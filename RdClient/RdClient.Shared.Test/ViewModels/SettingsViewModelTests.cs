@@ -34,7 +34,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             foreach (var cred in _testData.NewSmallListOfCredentials())
             {

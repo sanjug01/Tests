@@ -8,7 +8,7 @@
     using Windows.Storage.Streams;
 
     [TestClass]
-    public sealed class DataProtectionProviderDataScramblerTests
+    public sealed class Rc4DataScramblerTests
     {
         [TestMethod]
         public void Rc4DataScrambler_Scramble_DataProduced()

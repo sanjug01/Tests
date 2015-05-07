@@ -157,6 +157,7 @@
     <Compile Include="Helpers\ITimerTests.cs" />
     <Compile Include="Helpers\CertificateErrorHelperTests.cs" />
     <Compile Include="Helpers\MutableObjectTests.cs" />
+    <Compile Include="Helpers\Rc4DataScramblerTests.cs" />
     <Compile Include="Helpers\ReadWriteMonitorTests.cs" />
     <Compile Include="Helpers\StateMachineTests.cs" />
     <Compile Include="Helpers\TestData.cs" />

@@ -12,7 +12,7 @@
         [TestMethod]
         public void SerializableModelSerializer_SerializeLoadCredentialsModel_Loads()
         {
-            IDataScrambler scrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" };
+            IDataScrambler scrambler = new Rc4DataScrambler();
             IModelSerializer serializer = new SerializableModelSerializer();
             MemoryStream stream = new MemoryStream();
             CredentialsModel model = new CredentialsModel();

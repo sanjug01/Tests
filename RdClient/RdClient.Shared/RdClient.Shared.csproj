@@ -145,6 +145,7 @@
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\ITimer.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
+    <Compile Include="Helpers\Rc4DataScrambler.cs" />
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Models\ScrambledString.cs" />

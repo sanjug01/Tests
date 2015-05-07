@@ -101,7 +101,7 @@
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             _nav = new NavigationService();
             _vm = new DesktopIdentityValidationViewModel();

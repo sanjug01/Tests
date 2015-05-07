@@ -53,7 +53,7 @@ namespace RdClient.Shared.Test.ViewModels
                 //
                 // Set the data scrambler to use the local user's key
                 //
-                DataScrambler = new DataProtectionProviderDataScrambler() { Scope = "LOCAL=user" }
+                DataScrambler = new Rc4DataScrambler()
             };
             _sessionFactory = new SessionFactory();
             IList<IModelContainer<CredentialsModel>> creds = _testData.NewSmallListOfCredentials();
