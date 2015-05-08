@@ -41,6 +41,7 @@
                 ModelSerializer = new SerializableModelSerializer(),
                 DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
             ((IDataModelSite)_addOrEditDesktopViewModel).SetDataModel(_dataModel);
 
             _nav = new Mock.NavigationService();

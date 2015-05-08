@@ -40,6 +40,7 @@ namespace RdClient.Shared.Test.ViewModels
                 ModelSerializer = new SerializableModelSerializer(),
                 DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
 
             //add some credentials to the datamodel
             foreach (IModelContainer<CredentialsModel> cred in _testData.NewSmallListOfCredentials())

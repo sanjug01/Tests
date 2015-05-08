@@ -100,6 +100,7 @@
                 ModelSerializer = new SerializableModelSerializer(),
                 DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
             _nav = new NavigationService();
             _vm = new DesktopIdentityValidationViewModel();
             _nav.ViewFactory = new TestViewFactory(_vm);

@@ -138,6 +138,7 @@ namespace RdClient.Shared.Test.ViewModels
                 ModelSerializer = new SerializableModelSerializer(),
                 DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
             _navService = new Mock.NavigationService();
             _cred = _testData.NewValidCredential().Model;
             _desktop = _testData.NewValidDesktop(_dataModel.Credentials.AddNewModel(_cred)).Model;

@@ -39,6 +39,7 @@
                 ModelSerializer = new SerializableModelSerializer(),
                 DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
             ((IDataModelSite)_addOrEditGatewayVM).SetDataModel(_dataModel);
         }
 

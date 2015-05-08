@@ -21,6 +21,7 @@
                 ModelSerializer = new SerializableModelSerializer(),
                 DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
 
             Guid gUser1 = _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "usr1", Password = "pwd1" });
             Guid gUser2 = _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "usr2", Password = "pwd2" });

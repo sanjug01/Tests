@@ -25,6 +25,8 @@
             };
             IPersistentObject po = adm;
 
+            adm.Compose();
+
             Assert.IsNotNull(adm.RootFolder);
             Assert.IsNotNull(adm.ModelSerializer);
             Assert.IsNotNull(adm.LocalWorkspace);
@@ -44,6 +46,7 @@
                 DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
 
             adm.LocalWorkspace.Connections.AddNewModel(new DesktopModel());
 
@@ -60,7 +63,7 @@
                 DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
-
+            adm.Compose();
             adm.Credentials.AddNewModel(new CredentialsModel());
 
             Assert.IsTrue(po.Save.CanExecute(null));
@@ -76,6 +79,7 @@
                 DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
 
             adm.LocalWorkspace.Connections.AddNewModel(new DesktopModel());
             po.Save.Execute(null);
@@ -94,6 +98,7 @@
                 DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
 
             adm.LocalWorkspace.Connections.AddNewModel(new DesktopModel());
             po.Save.Execute(null);
@@ -120,6 +125,7 @@
                 DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
 
             adm.Credentials.AddNewModel(new CredentialsModel());
             po.Save.Execute(null);
@@ -146,6 +152,7 @@
                 DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
             po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
 
             adm.CertificateTrust.TrustCertificate(new TestRdpCertificate());
@@ -166,6 +173,7 @@
                 DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
             po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
 
             adm.CertificateTrust.TrustCertificate(new TestRdpCertificate());
@@ -190,6 +198,7 @@
                 DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
             Guid credentialsId = adm.Credentials.AddNewModel(new CredentialsModel());
             for (int i = 0; i < 100; ++i )
             {
@@ -224,6 +233,7 @@
                 RootFolder = new MemoryStorageFolder(),
                 DataScrambler = new Mock.DummyDataScrambler()
             };
+            adm.Compose();
             IPersistentObject po = adm;
 
             adm.Gateways.AddNewModel(new GatewayModel());
@@ -250,6 +260,7 @@
                 DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
             Guid gatewayId = adm.Gateways.AddNewModel(new GatewayModel());
             for (int i = 0; i < 100; ++i)
             {
@@ -287,6 +298,7 @@
                 DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
             Guid credentialsId = adm.Credentials.AddNewModel(new CredentialsModel());
             for (int i = 0; i < 100; ++i)
             {

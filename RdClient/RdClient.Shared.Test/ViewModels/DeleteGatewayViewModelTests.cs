@@ -40,6 +40,7 @@ namespace RdClient.Shared.Test.ViewModels
                 ModelSerializer = new SerializableModelSerializer(),
                 DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
 
             //add some gateways to the datamodel
             foreach (IModelContainer<GatewayModel> gateway in _testData.NewSmallListOfGateways())

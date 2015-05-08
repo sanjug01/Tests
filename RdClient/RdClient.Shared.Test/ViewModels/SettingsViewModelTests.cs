@@ -33,6 +33,7 @@
                 ModelSerializer = new SerializableModelSerializer(),
                 DataScrambler = new Rc4DataScrambler()
             };
+            _dataModel.Compose();
             foreach (var cred in _testData.NewSmallListOfCredentials())
             {
                 _dataModel.Credentials.AddNewModel(cred.Model);
