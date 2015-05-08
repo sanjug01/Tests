@@ -133,6 +133,7 @@
     <Compile Include="Converters\StringLengthToVisbilityConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverterTests.cs" />
     <Compile Include="Converters\TypeToLocalizedStringConverterTests.cs" />
+    <Compile Include="Converters\RtfDocumentTypeToLocalizedTitleStringConverterTests.cs" />
     <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverterTests.cs" />
     <Compile Include="CxWrappers\RdpEventArgsTests.cs" />
     <Compile Include="CxWrappers\RdpEventSourceTests.cs" />

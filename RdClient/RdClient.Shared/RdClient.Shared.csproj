@@ -76,6 +76,7 @@
     <Compile Include="Converters\GatewayComboBoxElementToLocalizedStringConverter.cs" />
     <Compile Include="Converters\StringLengthToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
+    <Compile Include="Converters\RtfDocumentTypeToLocalizedTitleStringConverter.cs" />
     <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverter.cs" />
     <Compile Include="CxWrappers\Errors\AdalError.cs" />
     <Compile Include="CxWrappers\Errors\AutoReconnectError.cs" />
