@@ -49,8 +49,10 @@ namespace RdClient.Shared.Test.ViewModels
             _dataModel = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
             _sessionFactory = new SessionFactory();
             IList<IModelContainer<CredentialsModel>> creds = _testData.NewSmallListOfCredentials();
 

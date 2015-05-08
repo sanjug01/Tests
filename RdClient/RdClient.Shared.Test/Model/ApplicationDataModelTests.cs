@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Test.Data;
     using RdClient.Shared.Test.Mock;
@@ -9,7 +10,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Input;
-    
+
     [TestClass]
     public sealed class ApplicationDataModelTests
     {
@@ -19,9 +20,12 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+
+            adm.Compose();
 
             Assert.IsNotNull(adm.RootFolder);
             Assert.IsNotNull(adm.ModelSerializer);
@@ -38,9 +42,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
 
             adm.LocalWorkspace.Connections.AddNewModel(new DesktopModel());
 
@@ -53,10 +59,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
-
+            adm.Compose();
             adm.Credentials.AddNewModel(new CredentialsModel());
 
             Assert.IsTrue(po.Save.CanExecute(null));
@@ -68,9 +75,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
 
             adm.LocalWorkspace.Connections.AddNewModel(new DesktopModel());
             po.Save.Execute(null);
@@ -85,9 +94,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
 
             adm.LocalWorkspace.Connections.AddNewModel(new DesktopModel());
             po.Save.Execute(null);
@@ -110,9 +121,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 ModelSerializer = new SerializableModelSerializer(),
-                RootFolder = new MemoryStorageFolder()
+                RootFolder = new MemoryStorageFolder(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
 
             adm.Credentials.AddNewModel(new CredentialsModel());
             po.Save.Execute(null);
@@ -135,9 +148,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
             po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
 
             adm.CertificateTrust.TrustCertificate(new TestRdpCertificate());
@@ -154,9 +169,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
             po.Save.CanExecuteChanged += (sender, e) => changes.Add((ICommand)sender);
 
             adm.CertificateTrust.TrustCertificate(new TestRdpCertificate());
@@ -177,9 +194,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
             Guid credentialsId = adm.Credentials.AddNewModel(new CredentialsModel());
             for (int i = 0; i < 100; ++i )
             {
@@ -211,8 +230,10 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 ModelSerializer = new SerializableModelSerializer(),
-                RootFolder = new MemoryStorageFolder()
+                RootFolder = new MemoryStorageFolder(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
+            adm.Compose();
             IPersistentObject po = adm;
 
             adm.Gateways.AddNewModel(new GatewayModel());
@@ -235,9 +256,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
             Guid gatewayId = adm.Gateways.AddNewModel(new GatewayModel());
             for (int i = 0; i < 100; ++i)
             {
@@ -271,9 +294,11 @@
             ApplicationDataModel adm = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             IPersistentObject po = adm;
+            adm.Compose();
             Guid credentialsId = adm.Credentials.AddNewModel(new CredentialsModel());
             for (int i = 0; i < 100; ++i)
             {

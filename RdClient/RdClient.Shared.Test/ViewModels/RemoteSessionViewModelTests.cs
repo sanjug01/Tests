@@ -4,8 +4,9 @@
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Data;
-    using RdClient.Shared.Helpers;    
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Keyboard;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
@@ -14,11 +15,10 @@
     using RdClient.Shared.ViewModels;
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
     using System.Threading.Tasks;
     using Windows.Foundation;
-    using RdClient.Shared.Input.Pointer;
-    using System.ComponentModel;
 
     [TestClass]
     public sealed class RemoteSessionViewModelTests
@@ -625,8 +625,10 @@
             _dataModel = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
 
             Guid credId = _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "user", Password = "password" });
             _dataModel.LocalWorkspace.Connections.AddNewModel(new DesktopModel() { CredentialsId = credId, HostName = "192.168.2.2", FriendlyName = "localhost" });
@@ -696,8 +698,8 @@
             _defex.ExecuteAll();
 
             Assert.IsFalse(_vm.IsConnectionBarVisible);
-            // connecting state implies _vm.BellyBandViewModel exists
             Assert.IsNotNull(_vm.BellyBandViewModel);
+            Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
             Assert.IsFalse(_vm.IsRightSideBarVisible);
             Assert.IsNotNull(connection);
             Assert.AreEqual(1, connectCount);
@@ -1029,8 +1031,8 @@
 
             Assert.AreEqual(1, credentialsRequestCount);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
-            // connecting state implies _vm.BellyBandViewModel exists
             Assert.IsNotNull(_vm.BellyBandViewModel);
+            Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
             Assert.IsFalse(_vm.IsRightSideBarVisible);
         }
     }

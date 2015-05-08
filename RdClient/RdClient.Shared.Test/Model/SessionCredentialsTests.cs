@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Test.Data;
 
@@ -16,8 +17,10 @@
             _dataModel = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
             _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "usr1", Password = "pwd1" });
             _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "usr2", Password = "pwd2" });
             _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "usr3" });

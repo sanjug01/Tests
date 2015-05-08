@@ -49,9 +49,13 @@
             ApplicationDataModel appDataModel = new ApplicationDataModel()
             {
                 RootFolder = new ApplicationDataLocalStorageFolder() { FolderName = "RemoteDesktopData" },
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Rc4DataScrambler()
             };
-            //initialize the loaded workspaces
+            appDataModel.Compose();
+            //
+            // initialize the loaded workspaces
+            //
             foreach (IModelContainer<OnPremiseWorkspaceModel> workspace in appDataModel.OnPremWorkspaces.Models)
             {
                 workspace.Model.Initialize(new RadcClient(new RadcEventSource(), new TaskExecutor()), appDataModel);

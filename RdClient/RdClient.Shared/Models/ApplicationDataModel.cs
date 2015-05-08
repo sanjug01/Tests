@@ -17,6 +17,7 @@
 
         private IStorageFolder _rootFolder;
         private IModelSerializer _modelSerializer;
+        private IDataScrambler _dataScrambler;
         private CertificateTrust _certificateTrust;
         private GeneralSettings _settings;
         private WorkspaceModel<LocalWorkspaceModel> _localWorkspace;
@@ -38,10 +39,7 @@
                 Contract.Assert(null == _rootFolder, "RootFolder may be set only once");
                 Contract.Assert(null != value, "RootFolder cannot be removed");
 
-                if(this.SetProperty(ref _rootFolder, value))
-                {
-                    ComposeDataModel();
-                }
+                this.SetProperty(ref _rootFolder, value);
             }
         }
 
@@ -54,11 +52,14 @@
                 Contract.Assert(null == _modelSerializer, "ModelSerializer may be set only once");
                 Contract.Assert(null != value, "ModelSerializer cannot be removed");
 
-                if (this.SetProperty(ref _modelSerializer, value))
-                {
-                    ComposeDataModel();
-                }
+                this.SetProperty(ref _modelSerializer, value);
             }
+        }
+
+        public IDataScrambler DataScrambler
+        {
+            get { return _dataScrambler; }
+            set { this.SetProperty(ref _dataScrambler, value); }
         }
 
         public IModelCollection<OnPremiseWorkspaceModel> OnPremWorkspaces 
@@ -105,48 +106,52 @@
             private set { this.SetProperty(ref _credentials, value); }
         }
 
-        private void ComposeDataModel()
+        public void Compose()
         {
-            if (null != _rootFolder && null != _modelSerializer)
+            Contract.Assert(null != _rootFolder);
+            Contract.Assert(null != _modelSerializer);
+            Contract.Assert(null != _dataScrambler);
+            Contract.Assert(null == _localWorkspace);
+            Contract.Assert(null == _certificateTrust);
+            Contract.Assert(null == _settings);
+            //
+            // Create all subcomponents of the data model. This is done only once, when both the root folder and model serializer
+            // have been set (in XAML).
+            //
+            this.Credentials = PrimaryModelCollection<CredentialsModel>.Load(_rootFolder.CreateFolder("credentials"), _modelSerializer);
+            foreach(IModelContainer<CredentialsModel> container in this.Credentials.Models)
             {
-                Contract.Assert(null == _localWorkspace);
-                Contract.Assert(null == _certificateTrust);
-                Contract.Assert(null == _settings);
-                //
-                // Create all subcomponents of the data model. This is done only once, when both the root folder and model serializer
-                // have been set (in XAML).
-                //
-                this.Credentials = PrimaryModelCollection<CredentialsModel>.Load(_rootFolder.CreateFolder("credentials"), _modelSerializer);
-                SubscribeForPersistentStateUpdates(this.Credentials);
-
-                this.LocalWorkspace = new WorkspaceModel<LocalWorkspaceModel>(_rootFolder.CreateFolder("LocalWorkspace"), _modelSerializer);
-                SubscribeForPersistentStateUpdates(this.LocalWorkspace);
-                //
-                // Load the certificate trust (the full name of the class is used so the compiler does not confuse the class
-                // and property of the same name.
-                //
-                _certificateTrust = RdClient.Shared.Data.CertificateTrust.Load(_rootFolder, "CertificateTrust.model", _modelSerializer);
-                SubscribeForPersistentStateUpdates(_certificateTrust);
-
-                _settings = GeneralSettings.Load(_rootFolder, "GeneralSettings.model", _modelSerializer);
-                SubscribeForPersistentStateUpdates(_settings);
-
-                //load workspaces from disk
-                this.OnPremWorkspaces = PrimaryModelCollection<OnPremiseWorkspaceModel>.Load(_rootFolder.CreateFolder("OnPremWorkspaces"), _modelSerializer);
-                SubscribeForPersistentStateUpdates(this.OnPremWorkspaces);
-
-                //load gateways from disk
-                this.Gateways = PrimaryModelCollection<GatewayModel>.Load(_rootFolder.CreateFolder("Gateways"), _modelSerializer);
-                SubscribeForPersistentStateUpdates(this.Gateways);
-
-                // manage changes for Credentials collection
-                INotifyCollectionChanged ncc = this.Credentials.Models;
-                ncc.CollectionChanged += this.OnCredentialsCollectionChanged;
-
-                // manage changes for Gateways collection
-                ncc = this.Gateways.Models;
-                ncc.CollectionChanged += this.OnGatewaysCollectionChanged;
+                container.Model.SetScrambler(_dataScrambler);
             }
+            SubscribeForPersistentStateUpdates(this.Credentials);
+
+            this.LocalWorkspace = new WorkspaceModel<LocalWorkspaceModel>(_rootFolder.CreateFolder("LocalWorkspace"), _modelSerializer);
+            SubscribeForPersistentStateUpdates(this.LocalWorkspace);
+            //
+            // Load the certificate trust (the full name of the class is used so the compiler does not confuse the class
+            // and property of the same name.
+            //
+            _certificateTrust = RdClient.Shared.Data.CertificateTrust.Load(_rootFolder, "CertificateTrust.model", _modelSerializer);
+            SubscribeForPersistentStateUpdates(_certificateTrust);
+
+            _settings = GeneralSettings.Load(_rootFolder, "GeneralSettings.model", _modelSerializer);
+            SubscribeForPersistentStateUpdates(_settings);
+
+            //load workspaces from disk
+            this.OnPremWorkspaces = PrimaryModelCollection<OnPremiseWorkspaceModel>.Load(_rootFolder.CreateFolder("OnPremWorkspaces"), _modelSerializer);
+            SubscribeForPersistentStateUpdates(this.OnPremWorkspaces);
+
+            //load gateways from disk
+            this.Gateways = PrimaryModelCollection<GatewayModel>.Load(_rootFolder.CreateFolder("Gateways"), _modelSerializer);
+            SubscribeForPersistentStateUpdates(this.Gateways);
+
+            // manage changes for Credentials collection
+            INotifyCollectionChanged ncc = this.Credentials.Models;
+            ncc.CollectionChanged += this.OnCredentialsCollectionChanged;
+
+            // manage changes for Gateways collection
+            ncc = this.Gateways.Models;
+            ncc.CollectionChanged += this.OnGatewaysCollectionChanged;
         }
 
         private void SubscribeForPersistentStateUpdates(IPersistentObject persistentObject)
@@ -158,6 +163,16 @@
         {
             switch(e.Action)
             {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (IModelContainer<CredentialsModel> credentialsContainer in e.NewItems)
+                    {
+                        //
+                        // Attach the scrambler to the new credentials model.
+                        //
+                        credentialsContainer.Model.SetScrambler(_dataScrambler);
+                    }
+                    break;
+
                 case NotifyCollectionChangedAction.Remove:
                     foreach(IModelContainer<CredentialsModel> credentialsContainer in e.OldItems)
                     {

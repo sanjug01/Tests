@@ -9,6 +9,7 @@ using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using RdClient.Shared.Test.Mock;
+using RdClient.Shared.Helpers;
 
 namespace RdClient.Shared.Test.ViewModels
 {
@@ -49,8 +50,10 @@ namespace RdClient.Shared.Test.ViewModels
             _dataModel = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
 
             _emptyDesktopsSelection = new List<IModelContainer<DesktopModel>>();
 

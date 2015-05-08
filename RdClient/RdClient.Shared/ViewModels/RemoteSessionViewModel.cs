@@ -4,7 +4,9 @@
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Keyboard;
     using RdClient.Shared.Input.Pointer;
+    using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
+    using RdClient.Shared.Models.PanKnobModel;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
     using System;
@@ -12,8 +14,6 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
-    using RdClient.Shared.Models.PanKnobModel;
-    using RdClient.Shared.LifeTimeManagement;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite
     {
@@ -183,7 +183,7 @@
             _activeSession.BadCertificate += this.OnBadCertificate;
             _activeSession.BadServerIdentity += this.OnBadServerIdentity;
             _activeSession.State.PropertyChanged += this.OnSessionStatePropertyChanged;
-            
+
             if (null != _sessionView && SessionState.Idle == _sessionState)
             {
                 Contract.Assert(null == _activeSessionControl);
@@ -194,7 +194,7 @@
             _lifeTimeManager.Suspending += OnAppSuspending;
             _lifeTimeManager.Resuming += OnAppResuming;
         }
-        
+
         protected override void OnDismissed()
         {
             _lifeTimeManager.Resuming -= OnAppResuming;
