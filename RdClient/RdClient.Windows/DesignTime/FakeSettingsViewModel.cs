@@ -10,18 +10,18 @@ namespace RdClient.DesignTime
 {
     public class FakeSettingsViewModel : ISettingsViewModel
     {
-        private IList<GatewayComboBoxElement> _gateways;
+        private ObservableCollection<GatewayComboBoxElement> _gateways;
         private GeneralSettings _general;
         private GatewayComboBoxElement _selectedGateway;
         private UserComboBoxElement _selectedUser;
-        private IList<UserComboBoxElement> _users;
+        private ObservableCollection<UserComboBoxElement> _users;
 
         public FakeSettingsViewModel()
         {
             _general = new GeneralSettings();
             _general.UseThumbnails = true;
 
-            _gateways = new List<GatewayComboBoxElement>();
+            _gateways = new ObservableCollection<GatewayComboBoxElement>();
             _gateways.Add(new GatewayComboBoxElement(GatewayComboBoxType.AddNew));
             for (int i = 0; i < 5; i++)
             {
@@ -31,7 +31,7 @@ namespace RdClient.DesignTime
             }
             _selectedGateway = _gateways[1];
 
-            _users = new List<UserComboBoxElement>();
+            _users = new ObservableCollection<UserComboBoxElement>();
             _users.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
             for (int i = 0; i < 10; i++)
             {
@@ -78,9 +78,9 @@ namespace RdClient.DesignTime
             get { return new RelayCommand(o => { }, o => true); }
         }
 
-        public IList<GatewayComboBoxElement> Gateways
+        public ReadOnlyObservableCollection<GatewayComboBoxElement> Gateways
         {
-            get { return _gateways; }            
+            get { return new ReadOnlyObservableCollection<GatewayComboBoxElement>(_gateways); }            
         }
 
         public GeneralSettings GeneralSettings
@@ -100,9 +100,9 @@ namespace RdClient.DesignTime
             set { _selectedUser = value; }
         }
 
-        public IList<UserComboBoxElement> Users
+        public ReadOnlyObservableCollection<UserComboBoxElement> Users
         {
-            get { return _users; }
+            get { return new ReadOnlyObservableCollection<UserComboBoxElement>(_users); }
         }
     }
 }

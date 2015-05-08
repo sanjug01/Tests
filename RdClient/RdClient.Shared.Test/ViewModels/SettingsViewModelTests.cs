@@ -201,7 +201,7 @@
             var promptResult = CredentialPromptResult.CreateWithCredentials(user.Credentials.Model, true);
             completion.Completed(null, promptResult);
             AssertUserOptionsCorrect();
-            Assert.IsNull(_vm.SelectedUser);
+            Assert.AreEqual(user, _vm.SelectedUser);
         }
 
         [TestMethod]
@@ -262,13 +262,10 @@
         [TestMethod]
         public void AddGatewayNavigatesToAddGatewayView()
         {
-            IPresentationCompletion completion = null;
             _navService.Expect("PushAccessoryView", p =>
             {
                 Assert.AreEqual("AddOrEditGatewayView", p[0] as string);
                 Assert.IsTrue(p[1] is AddGatewayViewModelArgs);
-                completion = p[2] as IPresentationCompletion;
-                Assert.IsNotNull(completion);
                 return null;
             });
 
@@ -276,8 +273,6 @@
 
             Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);
             Guid newGatewayId = _dataModel.Gateways.AddNewModel(_testData.NewValidGatewayWithCredential(newCredId));
-            var promptResult = GatewayPromptResult.CreateWithGateway(newGatewayId);
-            completion.Completed(null, promptResult);
             
             AssertGatewayOptionsCorrect();
             Assert.IsNull(_vm.SelectedGateway);
@@ -323,7 +318,7 @@
 
             AssertUserOptionsCorrect();
             AssertGatewayOptionsCorrect();
-            Assert.IsNull(_vm.SelectedGateway);
+            Assert.AreEqual(gateway, _vm.SelectedGateway);
         }
 
         [TestMethod]
