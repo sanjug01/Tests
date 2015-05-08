@@ -151,7 +151,7 @@
 
             _args = activationParameter as AddUserViewArgs;
 
-            var usernameRule = new CompositeValidationRule<string>(new List<IValidationRule<string>>() { new UsernameFormatValidationRule() });
+            var usernameRule = new UsernameFormatValidationRule();
 
             this.ShowSave = _args.ShowSave;
             this.User = new ValidatedProperty<string>(usernameRule, _args.Credentials.Username);
