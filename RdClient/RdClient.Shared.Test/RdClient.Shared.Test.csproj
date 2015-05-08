@@ -18,6 +18,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>UnitTestProject2_TemporaryKey.pfx</PackageCertificateKeyFile>
     <UnitTestPlatformVersion Condition="'$(UnitTestPlatformVersion)' == ''">14.0</UnitTestPlatformVersion>
+    <EnableCoreRuntime>false</EnableCoreRuntime>
   </PropertyGroup>
   <PropertyGroup>
     <AppXPackage>True</AppXPackage>
@@ -110,12 +111,8 @@
   </PropertyGroup>
   <ItemGroup>
     <!--A reference to the entire .Net Framework and Windows SDK are automatically included-->
-    <SDKReference Include="MSTestFramework.Universal, Version=14.0">
-      <Name>MSTest for Managed Projects</Name>
-    </SDKReference>
-    <SDKReference Include="TestPlatform.Universal, Version=14.0">
-      <Name>Microsoft Visual Studio Test Core</Name>
-    </SDKReference>
+    <SDKReference Include="MSTestFramework.Universal, Version=$(UnitTestPlatformVersion)" />
+    <SDKReference Include="TestPlatform.Universal, Version=$(UnitTestPlatformVersion)" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\BarItemsAlignmentFilteringConverterTests.cs" />
@@ -128,11 +125,8 @@
     <Compile Include="Converters\NotNullToVisibilityConverterTests.cs" />
     <Compile Include="Converters\NullToVisibilityConverterTests.cs" />
     <Compile Include="Converters\GatewayComboBoxElementToLocalizedStringConverterTests.cs" />
-    <Compile Include="Converters\ZoomPanStateConvertersTests.cs" />
-    <Compile Include="Converters\PanKnobStateConvertersTests.cs" />
     <Compile Include="Converters\ErrorLocalizers\RdpDisconnectReasonLocalizerTests.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverterTests.cs" />
-    <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverterTests.cs" />
     <Compile Include="Converters\ResourceIdToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverterTests.cs" />
@@ -156,12 +150,14 @@
     <Compile Include="Data\TestModel.cs" />
     <Compile Include="Data\TestModelSerializer.cs" />
     <Compile Include="Data\TransformingObservableCollectionTests.cs" />
+    <Compile Include="Helpers\DataProtectionProviderDataScramblerTests.cs" />
     <Compile Include="Helpers\DeferredCommandTests.cs" />
     <Compile Include="Helpers\ExtensionsTests.cs" />
     <Compile Include="Helpers\GroupCommandTests.cs" />
     <Compile Include="Helpers\ITimerTests.cs" />
     <Compile Include="Helpers\CertificateErrorHelperTests.cs" />
     <Compile Include="Helpers\MutableObjectTests.cs" />
+    <Compile Include="Helpers\Rc4DataScramblerTests.cs" />
     <Compile Include="Helpers\ReadWriteMonitorTests.cs" />
     <Compile Include="Helpers\StateMachineTests.cs" />
     <Compile Include="Helpers\TestData.cs" />
@@ -177,9 +173,11 @@
     <Compile Include="Input\Keyboard\TestSink.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyBaseTests.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactoryTests.cs" />
-    <Compile Include="Mock\BarItemsViewModel.cs" />
+    <Compile Include="Input\Recognizers\TapRecognizerTests.cs" />
+    <Compile Include="Mock\DummyDataScrambler.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
+    <Compile Include="Mock\PointerEvent.cs" />
     <Compile Include="Mock\RadcClient.cs" />
     <Compile Include="Mock\RadcClientEvents.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
@@ -202,6 +200,7 @@
     <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\ApplicationDataModelTests.cs" />
+    <Compile Include="Model\GeneralSettingsModelTests.cs" />
     <Compile Include="Model\CredentialsModelTests.cs" />
     <Compile Include="Model\GatewayModelTests.cs" />
     <Compile Include="Model\DesktopModelTests.cs" />
@@ -209,7 +208,6 @@
     <Compile Include="Model\SessionCredentialsTests.cs" />
     <Compile Include="Model\SnapshotterTests.cs" />
     <Compile Include="Model\WorkspaceModelTests.cs" />
-    <Compile Include="Navigation\Extensions\ApplicationBarExtensionTests.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtensionTests.cs" />
     <Compile Include="Navigation\Extensions\SessionFactoryExtensionTests.cs" />
     <Compile Include="Navigation\Extensions\TimerFactoryExtensionTests.cs" />
@@ -246,7 +244,6 @@
     <Compile Include="ViewModels\EditCredentialsTasks\InSessionCredentialsTaskTests.cs" />
     <Compile Include="ViewModels\EditCredentialsViewModelTests.cs" />
     <Compile Include="ViewModels\ErrorMessageViewModelTests.cs" />
-    <Compile Include="ViewModels\MainPageViewModelTests.cs" />
     <Compile Include="ViewModels\PanKnobViewModelTests.cs" />
     <Compile Include="ViewModels\RemoteSessionViewModelTests.cs" />
     <Compile Include="ViewModels\RelayCommandTests.cs" />
@@ -285,7 +282,7 @@
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

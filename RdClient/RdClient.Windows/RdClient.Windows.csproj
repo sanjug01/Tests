@@ -137,10 +137,16 @@
     <Compile Include="Controls\GeneralSettingsControl.xaml.cs">
       <DependentUpon>GeneralSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RichTextControl.xaml.cs">
+      <DependentUpon>RichTextControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ItsLonelyHereControl.xaml.cs">
       <DependentUpon>ItsLonelyHereControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ModalUserControl.cs" />
+    <Compile Include="Controls\PanKnob.xaml.cs">
+      <DependentUpon>PanKnob.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PointerPressDetector.xaml.cs">
       <DependentUpon>PointerPressDetector.xaml</DependentUpon>
     </Compile>
@@ -178,14 +184,19 @@
     <Compile Include="DesignTime\FakeEditCredentialsViewModel.cs" />
     <Compile Include="DesignTime\FakeRemoteResourceViewModel.cs" />
     <Compile Include="DesignTime\FakeWorkspaceViewModel.cs" />
+    <Compile Include="Helpers\SynchronizedTransform.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
     <Compile Include="Input\InputPaneInputPanelFactory.cs" />
+    <Compile Include="LifeTimeManagement\ResumingArgs.cs" />
     <Compile Include="Models\BadCertificateConnectionSource.cs" />
     <Compile Include="Models\ImitationRdpConnectionSource.cs" />
     <Compile Include="Models\RejectSavedPasswordConnectionSource.cs" />
     <Compile Include="Models\SingleSwapChainPanelRdpConnectionSource.cs" />
     <Compile Include="Models\SuccessfulConnectionSource.cs" />
     <Compile Include="Navigation\ModalFocusTracker.cs" />
+    <Compile Include="Views\RichTextView.xaml.cs">
+      <DependentUpon>RichTextView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -245,6 +256,7 @@
     <Content Include="..\..\RdClientCx\openssl\winrt\x86chk\ssleay32.dll">
       <Link>ssleay32.dll</Link>
     </Content>
+    <Content Include="Assets\Day0.png" />
     <Content Include="Assets\desktop_placeholder.png" />
     <Content Include="Assets\SegMDL2.1.12.ttf" />
     <None Include="Models\AppDataStorage.cs" />
@@ -288,6 +300,8 @@
     <Compile Include="Views\ViewPresenter.xaml.cs">
       <DependentUpon>ViewPresenter.xaml</DependentUpon>
     </Compile>
+    <Content Include="Strings\en-US\EULA.rtf" />
+    <Content Include="Strings\en-US\ThirdPartyNotices.rtf" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -362,9 +376,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\RichTextControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\ItsLonelyHereControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PanKnob.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\PointerPressDetector.xaml">
       <SubType>Designer</SubType>
@@ -405,6 +427,10 @@
     <Page Include="Controls\WorkspaceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RichTextView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\AboutView.xaml">
       <SubType>Designer</SubType>
@@ -523,9 +549,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Microsoft.VCLibs.AppLocal, Version=14.0">
-      <Name>Microsoft Visual C++  AppLocal Runtime Package for Windows UAP</Name>
-    </SDKReference>
     <SDKReference Include="Microsoft.VCLibs12.AppLocal, Version=12.0">
       <Name>Microsoft Visual C++ 2013 AppLocal Runtime Package for Windows UAP</Name>
     </SDKReference>

@@ -1,21 +1,17 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.Data;
-    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
-    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
-    using System.Threading;
     using System.Windows.Input;
-    using RdClient.Shared.Navigation;
 
     public class ConnectionCenterViewModel : DeferringViewModelBase,
         IConnectionCenterViewModel,
-        IApplicationBarItemsSource,
         ISessionFactorySite
     {
         //
@@ -138,8 +134,7 @@
             //
             // Add toolbar buttons
             //
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, new RelayCommand(this.AddResource), "Add"));
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.MultiSelection, new RelayCommand(this.ToggleDesktopSelectionCommandExecute), "Select"));
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, this.AddDesktopCommand, "Add"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.HorizontalEllipsis, new RelayCommand(this.PushAdditionalCommandsDialog), "More…"));
             //
@@ -287,15 +282,6 @@
             }
         }
 
-        IEnumerable<BarItemModel> IApplicationBarItemsSource.GetItems(IApplicationBarSite applicationBarSite)
-        {
-            return new BarItemModel[]
-            {               
-                _editItem,
-                _deleteItem
-            };
-        }
-
         void ISessionFactorySite.SetSessionFactory(ISessionFactory sessionFactory)
         {
             _sessionFactory = sessionFactory;
@@ -396,7 +382,7 @@
 
         private void AddDesktopExecute(object o)
         {
-            NavigationService.PushModalView("AddOrEditDesktopView", new AddDesktopViewModelArgs());
+            NavigationService.PushAccessoryView("AddOrEditDesktopView", new AddDesktopViewModelArgs());
         }
 
         private void OnDesktopViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)

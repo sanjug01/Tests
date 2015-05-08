@@ -13,5 +13,6 @@
         public event EventHandler<RadcOperationInProgressArgs> OperationInProgress;
         public event EventHandler<RadcResourceAddedArgs> ResourceAdded;
         public event EventHandler<RadcWorkspaceRemovedArgs> WorkspaceRemoved;
+        #pragma warning restore 67 // warning CS0067: the event <...> is never used
     }
 }

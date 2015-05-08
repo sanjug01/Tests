@@ -32,6 +32,7 @@
                     x:Uid="Common_Flyout_EditItem"                 
                     Text="Edit(d)" 
                     Command="{Binding EditCommand}"/>
+                <MenuFlyoutSeparator />
                 <MenuFlyoutItem 
                     x:Uid="Common_Flyout_DeleteItem"                 
                     Text="Delete(d)" 
@@ -45,7 +46,8 @@
                 x:Name="ThumbnailButton"
                 Command="{Binding ConnectCommand}"
                 FlyoutBase.AttachedFlyout="{StaticResource ModifyConnectionMenuFlyout}"
-                PointerPressed="DesktopThumbnail_PointerPressed">            
+                IsRightTapEnabled="True"
+                RightTapped="ThumbnailButton_RightTapped">            
             <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" Height="276" Width="342">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />

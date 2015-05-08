@@ -44,6 +44,7 @@ namespace RdClient.Shared.ViewModels
         private readonly RelayCommand _cancelCommand;
         private readonly RelayCommand _showDetailsCommand;
         private readonly RelayCommand _hideDetailsCommand;
+        private readonly RelayCommand _addUserCommand;
         private DesktopModel _desktop;
         private int _selectedUserOptionsIndex;
         private int _selectedGatewayOptionsIndex;
@@ -58,6 +59,7 @@ namespace RdClient.Shared.ViewModels
             _cancelCommand = new RelayCommand(CancelCommandExecute);
             _showDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = true; });
             _hideDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = false; });
+            _addUserCommand = new RelayCommand(LaunchAddUserView);
 
             IsHostValid = true;
 
@@ -74,6 +76,7 @@ namespace RdClient.Shared.ViewModels
         public IPresentableView PresentableView { private get; set; }
         public ICommand DefaultAction { get { return _saveCommand; } }
         public ICommand Cancel { get { return _cancelCommand; } }
+        public ICommand AddUser { get { return _addUserCommand; } }
         public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
         public ICommand HideDetailsCommand { get { return _hideDetailsCommand; } }
 
@@ -89,17 +92,7 @@ namespace RdClient.Shared.ViewModels
         public int SelectedUserOptionsIndex 
         { 
             get { return _selectedUserOptionsIndex; }
-
-            set
-            {
-                if (SetProperty(ref _selectedUserOptionsIndex, value))
-                {
-                    if (value >= 0 && UserComboBoxType.AddNew == this.UserOptions[value].UserComboBoxType)
-                    {
-                        this.LaunchAddUserView();
-                    }
-                }
-            }
+            set { SetProperty(ref _selectedUserOptionsIndex, value); }
         }
 
         public int SelectedGatewayOptionsIndex
@@ -294,7 +287,7 @@ namespace RdClient.Shared.ViewModels
             NavigationService.PushAccessoryView("AddOrEditGatewayView", args, addGatewayCompleted);
         }
 
-        private void LaunchAddUserView()
+        private void LaunchAddUserView(object o)
         {
             AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
@@ -322,7 +315,6 @@ namespace RdClient.Shared.ViewModels
             // load users list
             this.UserOptions.Clear();
             this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
-            this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AddNew));
 
             foreach (IModelContainer<CredentialsModel> credentials in this.ApplicationDataModel.Credentials.Models)
             {

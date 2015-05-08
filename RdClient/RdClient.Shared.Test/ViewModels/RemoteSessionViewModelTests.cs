@@ -6,6 +6,8 @@
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Keyboard;
+    using RdClient.Shared.Input.Pointer;
+    using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
@@ -13,11 +15,10 @@
     using RdClient.Shared.ViewModels;
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
     using System.Threading.Tasks;
     using Windows.Foundation;
-    using RdClient.Shared.Input.Pointer;
-    using System.ComponentModel;
 
     [TestClass]
     public sealed class RemoteSessionViewModelTests
@@ -30,6 +31,7 @@
         private TestDeviceCapabilities _devCaps;
         private TestTimerFactory _timerFactory;
         private TestConnectionSource _connectionSource;
+        private TestLifeTimeManager _lftManager;
         private TestViewFactory _viewFactory;
 
         private sealed class TestKeyboardCapture : IKeyboardCapture
@@ -114,6 +116,45 @@
             void IStackedViewPresenter.DismissView(IPresentableView view, bool animated) { }
         }
 
+        private sealed class TestViewport : IViewport
+        {
+            Point IViewport.Offset
+            {
+                get { return new Point(100, 200); }
+            }
+
+            Size IViewport.Size
+            {
+                get { return Size.Empty;  }
+            }
+
+            double IViewport.ZoomFactor
+            {
+                get { return 2.0; }
+            }
+
+            event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+            {
+                add { }
+                remove { }
+            }
+
+            void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor, double durationMilliseconds)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IViewport.Set(double zoomFactor, Size offset, bool animated)
+            {
+                throw new NotImplementedException();
+            }
+
+            Point IViewport.TransformPoint(Point point)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         private sealed class TestHelperView : IPresentableView
         {
             private readonly IViewModel _vm;
@@ -160,7 +201,7 @@
 
                 IViewport IRenderingPanel.Viewport
                 {
-                    get { throw new NotImplementedException(); }
+                    get { return new TestViewport(); }
                 }
 
                 void IRenderingPanel.ChangeMouseCursorShape(Shared.Input.Pointer.MouseCursorShape shape)
@@ -337,6 +378,28 @@
             uint IDeviceCapabilities.TouchPoints { get { return _touchPoints; } }
             bool IDeviceCapabilities.TouchPresent { get { return _touchPresent; } }
             event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged { add { } remove { } }
+        }
+
+        private sealed class TestLifeTimeManager : ILifeTimeManager
+        {
+            event EventHandler<LaunchEventArgs> ILifeTimeManager.Launched { add { } remove { } }
+            event EventHandler<ResumeEventArgs> ILifeTimeManager.Resuming { add { } remove { } }
+            event EventHandler<SuspendEventArgs> ILifeTimeManager.Suspending { add { } remove { } }
+
+            void ILifeTimeManager.OnLaunched(IActivationArgs e)
+            {
+                throw new NotImplementedException();
+            }
+
+            void ILifeTimeManager.OnResuming(object sender, IResumingArgs e)
+            {
+                throw new NotImplementedException();
+            }
+
+            void ILifeTimeManager.OnSuspending(object sender, ISuspensionArgs e)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private sealed class TestConnectionSource : IRdpConnectionSource
@@ -562,8 +625,10 @@
             _dataModel = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
 
             Guid credId = _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "user", Password = "password" });
             _dataModel.LocalWorkspace.Connections.AddNewModel(new DesktopModel() { CredentialsId = credId, HostName = "192.168.2.2", FriendlyName = "localhost" });
@@ -575,6 +640,7 @@
 
             _defex = new TestDeferredExecution();
             _devCaps = new TestDeviceCapabilities();
+            _lftManager = new TestLifeTimeManager();
 
             _nav = new NavigationService()
             {
@@ -585,7 +651,8 @@
                     new DataModelExtension() { AppDataModel = _dataModel },
                     new DeferredExecutionExtension(){ DeferredExecution = _defex },
                     new SessionFactoryExtension(){ SessionFactory = new TestSessionFactory() },
-                    new DeviceCapabilitiesExtension() { DeviceCapabilities = _devCaps }
+                    new DeviceCapabilitiesExtension() { DeviceCapabilities = _devCaps },
+                    new LifeTimeExtension() { LifeTimeManager = _lftManager }
                 }
             };
         }
@@ -631,9 +698,9 @@
             _defex.ExecuteAll();
 
             Assert.IsFalse(_vm.IsConnectionBarVisible);
-            Assert.IsNull(_vm.BellyBandViewModel);
+            Assert.IsNotNull(_vm.BellyBandViewModel);
+            Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
             Assert.IsFalse(_vm.IsRightSideBarVisible);
-            Assert.IsNull(_vm.BellyBandViewModel);
             Assert.IsNotNull(connection);
             Assert.AreEqual(1, connectCount);
 
@@ -964,7 +1031,8 @@
 
             Assert.AreEqual(1, credentialsRequestCount);
             Assert.IsFalse(_vm.IsConnectionBarVisible);
-            Assert.IsNull(_vm.BellyBandViewModel);
+            Assert.IsNotNull(_vm.BellyBandViewModel);
+            Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
             Assert.IsFalse(_vm.IsRightSideBarVisible);
         }
     }

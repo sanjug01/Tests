@@ -169,5 +169,42 @@ namespace RdClient.Shared.Test.ViewModels
     //            }
     //        }
     //    }
+
+        [TestMethod]
+        public void AddUserViewModel_EditUser_CanDelete()
+        {
+            AddUserViewArgs args =
+                new AddUserViewArgs(
+                    _testData.NewValidCredential().Model,
+                    true,
+                    CredentialPromptMode.EditCredentials);
+            ((IViewModel)_vm).Presenting(_nav, args, _context);
+            Assert.IsTrue(_vm.Delete.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void AddUserViewModel_AddUser_CannotDelete()
+        {
+            AddUserViewArgs args = 
+                new AddUserViewArgs(
+                    _testData.NewValidCredential().Model,
+                    true,
+                    CredentialPromptMode.EnterCredentials);
+            ((IViewModel)_vm).Presenting(_nav, args, _context);
+            Assert.IsFalse(_vm.Delete.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void AddUserViewModel_ShouldCallDeleteHandler()
+        {
+            _context.Expect("Dismiss", parameters =>
+            {
+                CredentialPromptResult result = parameters[0] as CredentialPromptResult;
+                Assert.IsNotNull(result);
+                Assert.IsTrue(result.Deleted);
+                return null;
+            });
+            _vm.Delete.Execute(null);
+        }
     //}
 }

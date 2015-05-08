@@ -32,6 +32,7 @@
             viewFactory.AddViewClass("DesktopEditorView", typeof(Views.DesktopEditorView));
             viewFactory.AddViewClass("AdditionalToolbarCommandsView", typeof(Views.AdditionalToolbarCommandsView));
             viewFactory.AddViewClass("AboutView", typeof(Views.AboutView));
+            viewFactory.AddViewClass("RichTextView", typeof(Views.RichTextView));
 
             //
             // Remote session view must be a singleton, because it creates the swap chain panel passed
@@ -58,14 +59,6 @@
         public INavigationExtension CreateDeferredExecutionExtension(IDeferredExecution deferredExecution)
         {
             return new DeferredExecutionExtension() { DeferredExecution = deferredExecution };
-        }
-
-        public INavigationExtension CreateApplicationBarExtension(IApplicationBarViewModel applicationBarViewModel)
-        {
-            ApplicationBarExtension applicationBarExtension = new ApplicationBarExtension();
-            applicationBarExtension.ViewModel = applicationBarViewModel;
-
-            return applicationBarExtension;
         }
     }
 }

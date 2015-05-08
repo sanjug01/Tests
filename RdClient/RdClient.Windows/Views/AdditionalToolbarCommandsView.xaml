@@ -16,55 +16,80 @@
         <vm:AdditionalToolbarCommandsViewModel />
     </controls:ModalUserControl.DataContext>
 
-    <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState x:Name="DefaultLayout">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MenuPanel" Storyboard.TargetProperty="(Grid.Row)">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
-                
-                <VisualState x:Name="NarrowLayout">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MenuPanel" Storyboard.TargetProperty="(Grid.Row)">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="2"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
+    <ContentControl Style="{StaticResource AccessoryViewStyle}">
+        <Grid>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup>
+                    <VisualState x:Name="DefaultLayout">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MenuPanel" Storyboard.TargetProperty="(Grid.Row)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
 
-                <VisualState x:Name="PhoneLayout">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MenuPanel" Storyboard.TargetProperty="(Grid.Row)">
-                            <DiscreteObjectKeyFrame KeyTime="0" Value="2"/>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-        
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+                    <VisualState x:Name="NarrowLayout">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MenuPanel" Storyboard.TargetProperty="(Grid.Row)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="2"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
 
-        <Grid x:Name="MenuPanel" Grid.Row="0" Style="{StaticResource ConnectionCenterBarGridStyle}">
-            <StackPanel Margin="30,20" Orientation="Vertical">
-                <Grid>
-                    <Button
+                    <VisualState x:Name="PhoneLayout">
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MenuPanel" Storyboard.TargetProperty="(Grid.Row)">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="2"/>
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid x:Name="MenuPanel" Grid.Row="0" Style="{StaticResource ConnectionCenterBarGridStyle}">
+                <StackPanel Margin="30,20" Orientation="Vertical">
+                    <Grid>
+                        <Button
+                        Style="{StaticResource FlatButtonStyle}"
+                        >
+
+                            <Grid Margin="10,10">
+                                <TextBlock x:Uid="AdditionalToolbarCommandsView_News" Text="(d) What's new" />
+                            </Grid>
+                        </Button>
+                    </Grid>
+
+                    <Grid>
+                        <Button
                         Style="{StaticResource FlatButtonStyle}"
                         Command="{Binding ShowAboutDialog}"
                         >
-                        
-                        <Grid Margin="10,10">
-                            <TextBlock x:Uid="AdditionalToolbarCommandsView_About" Text="(d) About…" />
-                        </Grid>
-                    </Button>
-                </Grid>
-            </StackPanel>
+
+                            <Grid Margin="10,10">
+                                <TextBlock x:Uid="AdditionalToolbarCommandsView_About" Text="(d) About…" />
+                            </Grid>
+                        </Button>
+                    </Grid>
+
+                    <Grid>
+                        <Button
+                        Style="{StaticResource FlatButtonStyle}"
+                        Command="{Binding ShowHelpDialog}"                        
+                        >
+
+                            <Grid Margin="10,10">
+                                <TextBlock x:Uid="AdditionalToolbarCommandsView_Help" Text="(d) Help" />
+                            </Grid>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </Grid>
         </Grid>
-    </Grid>
+    </ContentControl>
 </controls:ModalUserControl>

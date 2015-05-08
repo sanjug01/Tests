@@ -2,6 +2,7 @@
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
@@ -37,8 +38,10 @@
             _dataModel = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
             ((IDataModelSite)_addOrEditDesktopViewModel).SetDataModel(_dataModel);
 
             _nav = new Mock.NavigationService();
@@ -177,7 +180,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 2;
+            _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 1;
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
@@ -241,7 +244,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(2, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
+            Assert.AreEqual(1, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
             Assert.AreSame(credentials, _addOrEditDesktopViewModel.UserOptions[_addOrEditDesktopViewModel.SelectedUserOptionsIndex].Credentials.Model);
             Assert.AreEqual(desktop.CredentialsId, _addOrEditDesktopViewModel.UserOptions[_addOrEditDesktopViewModel.SelectedUserOptionsIndex].Credentials.Id);
         }
@@ -258,7 +261,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(2, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
+            Assert.AreEqual(1, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
         }
 
         [TestMethod]
@@ -273,7 +276,7 @@
 
             _nav.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
 
-            _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 1;
+            _addOrEditDesktopViewModel.AddUser.Execute(null);
         }
 
         [TestMethod]

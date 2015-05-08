@@ -27,6 +27,7 @@
                     x:Uid="Common_Flyout_RefreshItem"                 
                     Text="Refresh(d)" 
                     Command="{Binding RefreshCommand}"/>
+                <MenuFlyoutSeparator />
                 <MenuFlyoutItem 
                     x:Uid="Common_Flyout_DeleteItem"                 
                     Text="Delete(d)" 

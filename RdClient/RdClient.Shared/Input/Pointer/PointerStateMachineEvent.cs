@@ -31,7 +31,7 @@ namespace RdClient.Shared.Input.Pointer
         RightDragging
     }
 
-    public class StateMachineEvent
+    public class PointerStateMachineEvent
     {
         public IPointerEventBase Input { get; set; }
         public IPointTracker Tracker { get; set; }

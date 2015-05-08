@@ -10,8 +10,8 @@ namespace RdClient.Shared.Input.Pointer
         private IPointTracker _tracker = new PointTracker();
         public IPointTracker Tracker { get { return _tracker; } }
 
-        private IStateMachine<PointerModeState, StateMachineEvent> _stateMachine;
-        StateMachineEvent _stateMachineEvent;
+        private IStateMachine<PointerModeState, PointerStateMachineEvent> _stateMachine;
+        PointerStateMachineEvent _stateMachineEvent;
         DoubleClickTimer _timer;
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
@@ -20,8 +20,8 @@ namespace RdClient.Shared.Input.Pointer
         {
             _timer = new DoubleClickTimer(timer, 300);
 
-            _stateMachine = new StateMachine<PointerModeState, StateMachineEvent>();
-            _stateMachineEvent = new StateMachineEvent() { Input = null, Tracker = _tracker, Timer = _timer, Control = control };
+            _stateMachine = new StateMachine<PointerModeState, PointerStateMachineEvent>();
+            _stateMachineEvent = new PointerStateMachineEvent() { Input = null, Tracker = _tracker, Timer = _timer, Control = control };
 
             _timer.AddAction(DoubleClickTimer.ClickTimerType.LeftClick, (o) => _stateMachineEvent.Control.LeftClick(o.Position));
             _timer.AddAction(DoubleClickTimer.ClickTimerType.RightClick, (o) => _stateMachineEvent.Control.RightClick(o.Position));
@@ -57,7 +57,7 @@ namespace RdClient.Shared.Input.Pointer
                         Tracker.Track(pp.Position, pp.PointerId);
                         break;
                     case PointerEventAction.PointerReleased:
-                    case PointerEventAction.PointerCanceled:
+                    case PointerEventAction.PointerCancelled:
                         Tracker.Untrack(pp.PointerId);
                         break;
                 }

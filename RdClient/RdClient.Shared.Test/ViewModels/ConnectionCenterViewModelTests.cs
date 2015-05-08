@@ -49,8 +49,10 @@ namespace RdClient.Shared.Test.ViewModels
             _dataModel = new ApplicationDataModel()
             {
                 RootFolder = new MemoryStorageFolder(),
-                ModelSerializer = new SerializableModelSerializer()
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
             };
+            _dataModel.Compose();
             _sessionFactory = new SessionFactory();
             IList<IModelContainer<CredentialsModel>> creds = _testData.NewSmallListOfCredentials();
 
@@ -100,7 +102,13 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestAddDesktopCommandExecute()
         {
-            _navService.Expect("PushModalView", new List<object> { "AddOrEditDesktopView", null, null }, 0);
+            _navService.Expect("PushAccessoryView", p =>
+            {
+                Assert.IsTrue(string.Equals("AddOrEditDesktopView", p[0]));
+                Assert.IsTrue(p[1] is AddDesktopViewModelArgs);
+                Assert.IsNull(p[2]);
+                return null;
+            });
             _vm.AddDesktopCommand.Execute(null);
         }
 
@@ -196,38 +204,8 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void TestHasCorrectApplicationBarItems()
-        {
-            IEnumerable<BarItemModel> barItems = (_vm as IApplicationBarItemsSource).GetItems(null);
-            IEnumerable<SegoeGlyphBarButtonModel> barButtons = barItems.OfType<SegoeGlyphBarButtonModel>();
-            Assert.AreEqual(2, barButtons.Count());
-            Assert.IsTrue(barButtons.Any((b) => b.Command.Equals(_vm.EditDesktopCommand)), "ApplicationBarItems should contain a button linked to EditDesktopCommand");
-            Assert.IsTrue(barButtons.Any((b) => b.Command.Equals(_vm.DeleteDesktopCommand)), "ApplicationBarItems should contain a button linked to DeleteDesktopCommand");
-        }
-
-        [TestMethod]
         public void TestDesktopsSelectableInitiallyFalse()
         {
-            Assert.IsFalse(_vm.DesktopsSelectable);
-        }
-
-        [TestMethod]
-        public void TestToggleDesktopSelectionCommandEnablesSelection()
-        {
-            ICommand buttonCommand = null;
-
-            foreach(BarItemModel model in _vm.ToolbarItems)
-            {
-                SegoeGlyphBarButtonModel button = model as SegoeGlyphBarButtonModel;
-
-                if (null != button && button.Glyph == SegoeGlyph.MultiSelection)
-                    buttonCommand = button.Command;
-            }
-
-            Assert.IsNotNull(buttonCommand);
-            buttonCommand.Execute(null);
-            Assert.IsTrue(_vm.DesktopsSelectable);
-            buttonCommand.Execute(null);
             Assert.IsFalse(_vm.DesktopsSelectable);
         }
 

@@ -61,10 +61,8 @@
     <Compile Include="Converters\NegateBooleanConverter.cs" />
     <Compile Include="Converters\NotNullToVisibilityConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
-    <Compile Include="Converters\PanKnobStateToBackGroundBrushConverter.cs" />
     <Compile Include="Converters\SessionStateToOpacityConverter.cs" />
     <Compile Include="Converters\TypeToLocalizedStringConverter.cs" />
-    <Compile Include="Converters\ReconnectAttemptsToLocalizedStringConverter.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverter.cs" />
     <Compile Include="Converters\RdpCertificateToErrorListConverter.cs" />
     <Compile Include="Converters\ErrorLocalizers\IErrorLocalizer.cs" />
@@ -75,11 +73,7 @@
     <Compile Include="Converters\SegoeGlyphToSymbolIconConverter.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverter.cs" />
     <Compile Include="Converters\ByteArrayToStringConverter.cs" />
-    <Compile Include="Converters\PanKnobStateToForegroundBrushConverter.cs" />
     <Compile Include="Converters\GatewayComboBoxElementToLocalizedStringConverter.cs" />
-    <Compile Include="Converters\ZoomPanStateToPanKnobVisibilityConverter.cs" />
-    <Compile Include="Converters\ZoomPanStateToZoomInVisibilityConverter.cs" />
-    <Compile Include="Converters\ZoomPanStateToZoomOutVisibilityConverter.cs" />
     <Compile Include="Converters\StringLengthToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
     <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverter.cs" />
@@ -135,12 +129,14 @@
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
     <Compile Include="Helpers\ContractAssertionException.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
+    <Compile Include="Helpers\DataProtectionProviderDataScrambler.cs" />
     <Compile Include="Helpers\DataStorageExtensions.cs" />
     <Compile Include="Helpers\DeferredCommand.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />
     <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\GlobalConstants.cs" />
     <Compile Include="Helpers\GroupCommand.cs" />
+    <Compile Include="Helpers\IDataScrambler.cs" />
     <Compile Include="Helpers\IDeferredExecution.cs" />
     <Compile Include="Helpers\ILocalizedString.cs" />
     <Compile Include="Helpers\IPhysicalScreenSize.cs" />
@@ -149,8 +145,10 @@
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\ITimer.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
+    <Compile Include="Helpers\Rc4DataScrambler.cs" />
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
+    <Compile Include="Models\ScrambledString.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
     <Compile Include="Input\Pointer\ConsumptionModeTracker.cs" />
@@ -176,7 +174,9 @@
     <Compile Include="Input\Pointer\IPointerControl.cs" />
     <Compile Include="Input\Pointer\IPointerEventEnums.cs" />
     <Compile Include="Input\Pointer\IPointTracker.cs" />
-    <Compile Include="Input\Pointer\IZoomScrollEvent.cs" />
+    <Compile Include="Input\Recognizers\ITapEvent.cs" />
+    <Compile Include="Input\Recognizers\ITapRecognizer.cs" />
+    <Compile Include="Input\Recognizers\IZoomScrollEvent.cs" />
     <Compile Include="Input\Pointer\MouseAction.cs" />
     <Compile Include="Input\Pointer\MouseCursorShape.cs" />
     <Compile Include="Input\Pointer\PointerCapture.cs" />
@@ -212,22 +212,18 @@
     <Compile Include="Input\Pointer\PointerRoutedEventArgsWrapper.cs" />
     <Compile Include="Input\Pointer\PointerStateMachineEvent.cs" />
     <Compile Include="Input\Pointer\PointTracker.cs" />
-    <Compile Include="Input\Pointer\ZoomScrollEvent.cs" />
-    <Compile Include="Input\Pointer\ZoomScrollRecognizer.cs" />
-    <Compile Include="Input\ZoomPan\ZoomEventArgs.cs" />
-    <Compile Include="Input\ZoomPan\PanEventArgs.cs" />
-    <Compile Include="Input\ZoomPan\IPanTransform.cs" />
-    <Compile Include="Input\ZoomPan\IZoomPanManipulator.cs" />
-    <Compile Include="Input\ZoomPan\IPanKnobTransform.cs" />
-    <Compile Include="Input\ZoomPan\IZoomPanTransform.cs" />
-    <Compile Include="Input\ZoomPan\PanKnobState.cs" />
-    <Compile Include="Input\ZoomPan\ZoomPanState.cs" />
-    <Compile Include="Input\ZoomPan\IZoomTransform.cs" />
+    <Compile Include="Input\Recognizers\IZoomScrollRecognizer.cs" />
+    <Compile Include="Input\Recognizers\TapEvent.cs" />
+    <Compile Include="Input\Recognizers\TapRecognizer.cs" />
+    <Compile Include="Input\Recognizers\ZoomScrollEvent.cs" />
+    <Compile Include="Input\Recognizers\ZoomScrollRecognizer.cs" />
     <Compile Include="LifeTimeManagement\IActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\ILifeTimeManager.cs" />
     <Compile Include="LifeTimeManagement\IRootFrameManager.cs" />
+    <Compile Include="LifeTimeManagement\IResumingArgs.cs" />
     <Compile Include="LifeTimeManagement\ISuspensionArgs.cs" />
     <Compile Include="LifeTimeManagement\LaunchEventArgs.cs" />
+    <Compile Include="LifeTimeManagement\ResumeEventArgs.cs" />
     <Compile Include="LifeTimeManagement\SuspendEventArgs.cs" />
     <Compile Include="Models\ApplicationDataModel.cs" />
     <Compile Include="Models\BadServerIdentityEventArgs.cs" />
@@ -239,6 +235,9 @@
     <Compile Include="Models\DesktopModel.cs" />
     <Compile Include="Models\GeneralSettings.cs" />
     <Compile Include="Data\ICertificateTrust.cs" />
+    <Compile Include="Models\PanKnobModel\IPanKnob.cs" />
+    <Compile Include="Models\PanKnobModel\IPanKnobControl.cs" />
+    <Compile Include="Models\PanKnobModel\IPanKnobSite.cs" />
     <Compile Include="Models\IValidation.cs" />
     <Compile Include="Models\IDeviceCapabilities.cs" />
     <Compile Include="Models\InterruptedSessionContinuation.cs" />
@@ -255,6 +254,11 @@
     <Compile Include="Models\OnPremiseWorkspaceModel.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
     <Compile Include="Models\IThumbnailEncoder.cs" />
+    <Compile Include="Models\PanKnobModel\PanKnobControl.cs" />
+    <Compile Include="Models\PanKnobModel\PanKnobSite.cs" />
+    <Compile Include="Models\PanKnobModel\PanKnobStateMachineEvent.cs" />
+    <Compile Include="Models\PanKnobModel\PanKnobTransitionConditions.cs" />
+    <Compile Include="Models\PanKnobModel\PanKnobTransitions.cs" />
     <Compile Include="Models\RemoteResourceModel.cs" />
     <Compile Include="Data\SerializableCompositionModel.cs" />
     <Compile Include="Models\RemoteConnectionModel.cs" />
@@ -284,15 +288,13 @@
     <Compile Include="Navigation\BackButtonHandler.cs" />
     <Compile Include="Navigation\BackCommandArgs.cs" />
     <Compile Include="Navigation\BackRequestedEventArgsWrapper.cs" />
-    <Compile Include="Navigation\Contracts\IApplicationBarItemsSourceContract.cs" />
-    <Compile Include="Navigation\Contracts\IApplicationBarSiteContract.cs" />
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
     <Compile Include="Navigation\Contracts\IPresentationCompletionContract.cs" />
-    <Compile Include="Navigation\Extensions\ApplicationBarExtension.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionException.cs" />
+    <Compile Include="Navigation\Extensions\LifeTimeExtension.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtension.cs" />
     <Compile Include="Navigation\Extensions\DeviceCapabilitiesExtension.cs" />
-    <Compile Include="Navigation\Extensions\IApplicationBarSiteControl.cs" />
+    <Compile Include="Navigation\Extensions\ILifeTimeSite.cs" />
     <Compile Include="Navigation\Extensions\IDeferredExecutionSite.cs" />
     <Compile Include="Navigation\Extensions\IDeviceCapabilitiesSite.cs" />
     <Compile Include="Navigation\Extensions\IExecutionDeferrer.cs" />
@@ -320,6 +322,7 @@
     <Compile Include="ValidationRules\UsernameValidationFailure.cs" />
     <Compile Include="ValidationRules\ValidatedProperty.cs" />
     <Compile Include="ValidationRules\ValidationResult.cs" />
+    <Compile Include="ViewModels\RichTextViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBase.cs" />
     <Compile Include="ViewModels\AdditionalToolbarCommandsViewModel.cs" />
@@ -355,12 +358,9 @@
     <Compile Include="ViewModels\IRemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="Navigation\Extensions\IDataModelSite.cs" />
-    <Compile Include="Navigation\ApplicationBarSite.cs" />
     <Compile Include="ValidationRules\HostNameValidationRule.cs" />
     <Compile Include="ViewModels\BarButtonModel.cs" />
     <Compile Include="ViewModels\BarItemModel.cs" />
-    <Compile Include="Navigation\Extensions\IApplicationBarItemsSource.cs" />
-    <Compile Include="Navigation\Extensions\IApplicationBarSite.cs" />
     <Compile Include="ViewModels\ConnectionCenterViewModel.cs" />
     <Compile Include="ViewModels\IApplicationBarViewModel.cs" />
     <Compile Include="Navigation\IPresentableViewConstructor.cs" />
@@ -368,14 +368,12 @@
     <Compile Include="ViewModels\AddOrEditDesktopViewModel.cs" />
     <Compile Include="ViewModels\ErrorMessageViewModel.cs" />
     <Compile Include="Navigation\IViewModel.cs" />
-    <Compile Include="ViewModels\ILayoutAwareViewModel.cs" />
     <Compile Include="ViewModels\IWorkspaceViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionConnectingViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionFailureViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionInterruptionViewModel.cs" />
     <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
-    <Compile Include="ViewModels\PanKnobViewModel.cs" />
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
     <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
@@ -410,9 +408,6 @@
     <Compile Include="Input\Pointer\DirectModeControl.cs" />
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Microsoft.VCLibs.AppLocal, Version=14.0">
-      <Name>Microsoft Visual C++  AppLocal Runtime Package for Windows UAP</Name>
-    </SDKReference>
     <SDKReference Include="Microsoft.VCLibs12.AppLocal, Version=12.0">
       <Name>Microsoft Visual C++ 2013 AppLocal Runtime Package for Windows UAP</Name>
     </SDKReference>

@@ -29,9 +29,15 @@
             return new CredentialPromptResult();
         }
 
+        public static CredentialPromptResult CreateDeleted()
+        {
+            return new CredentialPromptResult() { Deleted = true };
+        }
+
         private CredentialPromptResult()
         {
             this.UserCancelled = true;
+            this.Deleted = false;
         }
 
         private CredentialPromptResult(CredentialsModel credentials, bool save)
@@ -39,6 +45,7 @@
             this.Credentials = credentials;
             this.Save = save;
             this.UserCancelled = false;
+            this.Deleted = false;
         }
 
         public CredentialsModel Credentials { get; private set; }
@@ -46,6 +53,8 @@
         public bool Save { get; private set; }
 
         public bool UserCancelled { get; private set; }
+
+        public bool Deleted { get; private set; }
     }
 
     public class AddUserViewArgs
@@ -76,6 +85,7 @@
         private string _password;
         private readonly RelayCommand _okCommand;
         private readonly RelayCommand _cancelCommand;
+        private readonly RelayCommand _deleteCommand;
         private CredentialPromptMode _mode;
         private bool _showMessage;
 
@@ -83,6 +93,7 @@
         {
             _okCommand = new RelayCommand(o => OkCommandHandler(o), o => OkCommandIsEnabled(o));
             _cancelCommand = new RelayCommand(new Action<object>(CancelCommandHandler));
+            _deleteCommand = new RelayCommand(new Action<object>(DeleteCommandHandler), p => this.CanDelete );
         }
 
         public IPresentableView PresentableView { private get; set; }
@@ -92,6 +103,8 @@
         public ICommand DefaultAction { get { return _okCommand; } }
 
         public ICommand Cancel { get { return _cancelCommand; } }
+
+        public ICommand Delete { get { return _deleteCommand; } }
 
         public CredentialPromptMode Mode
         {
@@ -173,6 +186,23 @@
         private void CancelCommandHandler(object o)
         {
             DismissModal(CredentialPromptResult.CreateCancelled());
+        }
+
+        private void DeleteCommandHandler(object o)
+        {
+            // parent view should present the confirmation dialog and perform deletion
+            DismissModal(CredentialPromptResult.CreateDeleted());
+        }
+
+        /// <summary>
+        /// can delete only if editing existing credentials
+        /// </summary>
+        private bool CanDelete
+        {
+            get
+            {
+                return (CredentialPromptMode.EditCredentials == this.Mode);
+            }
         }
     }
 }
