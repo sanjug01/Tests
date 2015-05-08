@@ -27,6 +27,7 @@
             <Border BorderBrush="{ThemeResource rdErrorBrush}" BorderThickness="2" Visibility="{Binding Path=State.IsValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
         </Grid>
         <TextBlock 
+            Margin="0,2"
             Foreground="{ThemeResource rdErrorBrush}"
             TextTrimming="CharacterEllipsis"
             Text="{Binding Path=State.ErrorContent, FallbackValue='Please enter a valid value (d)', Converter={StaticResource TypeToLocalizedStringConverter}}"
