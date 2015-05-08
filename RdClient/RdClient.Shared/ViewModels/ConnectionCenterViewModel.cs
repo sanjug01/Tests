@@ -134,7 +134,7 @@
             //
             // Add toolbar buttons
             //
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, new RelayCommand(this.AddResource), "Add"));
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, this.AddDesktopCommand, "Add"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.HorizontalEllipsis, new RelayCommand(this.PushAdditionalCommandsDialog), "More…"));
             //
@@ -382,7 +382,7 @@
 
         private void AddDesktopExecute(object o)
         {
-            NavigationService.PushModalView("AddOrEditDesktopView", new AddDesktopViewModelArgs());
+            NavigationService.PushAccessoryView("AddOrEditDesktopView", new AddDesktopViewModelArgs());
         }
 
         private void OnDesktopViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)

@@ -102,7 +102,13 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestAddDesktopCommandExecute()
         {
-            _navService.Expect("PushModalView", new List<object> { "AddOrEditDesktopView", null, null }, 0);
+            _navService.Expect("PushAccessoryView", p =>
+            {
+                Assert.IsTrue(string.Equals("AddOrEditDesktopView", p[0]));
+                Assert.IsTrue(p[1] is AddDesktopViewModelArgs);
+                Assert.IsNull(p[2]);
+                return null;
+            });
             _vm.AddDesktopCommand.Execute(null);
         }
 
