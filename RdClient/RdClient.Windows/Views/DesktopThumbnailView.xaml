@@ -32,6 +32,7 @@
                     x:Uid="Common_Flyout_EditItem"                 
                     Text="Edit(d)" 
                     Command="{Binding EditCommand}"/>
+                <MenuFlyoutSeparator />
                 <MenuFlyoutItem 
                     x:Uid="Common_Flyout_DeleteItem"                 
                     Text="Delete(d)" 
