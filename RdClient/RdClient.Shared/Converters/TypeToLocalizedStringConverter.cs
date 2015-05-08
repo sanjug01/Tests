@@ -1,13 +1,13 @@
-﻿using RdClient.Shared.Helpers;
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Data;
-
-namespace RdClient.Shared.Converters
+﻿namespace RdClient.Shared.Converters
 {
+    using RdClient.Shared.Helpers;
+    using System;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Data;
+
     public class TypeToLocalizedStringConverter : IValueConverter
     {
         public IStringTable LocalizedString { get; set; }

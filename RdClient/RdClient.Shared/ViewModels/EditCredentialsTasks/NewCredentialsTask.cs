@@ -7,7 +7,6 @@
     using RdClient.Shared.ValidationRules;
     using System;
     using System.Diagnostics.Contracts;
-    using System.Globalization;
 
     /// <summary>
     /// Edit credentials task launched to add new credentials to the data model.

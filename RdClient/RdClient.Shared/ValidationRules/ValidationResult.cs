@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RdClient.Shared.ValidationRules
+﻿namespace RdClient.Shared.ValidationRules
 {
     class ValidationResult : IValidationResult
     {

@@ -4,9 +4,7 @@
     using RdClient.Shared.Navigation;
     using RdClient.Shared.ValidationRules;
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Globalization;
     using System.Windows.Input;
 
     public enum CredentialPromptMode

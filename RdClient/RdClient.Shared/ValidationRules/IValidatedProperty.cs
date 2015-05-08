@@ -1,6 +1,5 @@
 ﻿namespace RdClient.Shared.ValidationRules
 {
-    using System.Collections.Generic;
     using System.ComponentModel;
 
     public interface IValidatedProperty<T> : INotifyPropertyChanged

@@ -1,18 +1,15 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.CxWrappers;
-    using RdClient.Shared.CxWrappers.Errors;
+    using RdClient.Shared.Data;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
-    using System.Windows.Input;
-    using System.ComponentModel;
-    using System.Collections.ObjectModel;
-    using System.Collections.Generic;
-    using RdClient.Shared.Data;
-    using System.Linq;
-    using System.Diagnostics.Contracts;
-    using System;
     using RdClient.Shared.ValidationRules;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Windows.Input;
 
     public class FeedUrlValidationRule : IValidationRule<string>
     {

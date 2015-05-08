@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RdClient.Shared.ValidationRules
+﻿namespace RdClient.Shared.ValidationRules
 {
+    using System.Collections.Generic;
+
     class CompositeValidationRule<T> : IValidationRule<T>
     {
         private readonly List<IValidationRule<T>> _rules;

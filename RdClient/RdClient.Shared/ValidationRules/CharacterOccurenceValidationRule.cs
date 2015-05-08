@@ -1,7 +1,4 @@
-﻿using System;
-using System.Globalization;
-
-namespace RdClient.Shared.ValidationRules
+﻿namespace RdClient.Shared.ValidationRules
 {
     public class CharacterOccurenceValidationRule : IValidationRule<string>
     {

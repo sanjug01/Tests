@@ -1,15 +1,14 @@
-﻿using RdClient.Shared.Data;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using RdClient.Shared.ValidationRules;
-using RdClient.Shared.ViewModels.EditCredentialsTasks;
-using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics.Contracts;
-using System.Windows.Input;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Data;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.ValidationRules;
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
+
     public class AddDesktopViewModelArgs
     {
         public AddDesktopViewModelArgs()

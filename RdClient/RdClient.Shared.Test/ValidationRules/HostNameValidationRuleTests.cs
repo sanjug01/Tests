@@ -1,14 +1,8 @@
-﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-
-using RdClient.Shared.ValidationRules;
-
-namespace RdClient.Shared.Test.ValidationRules
+﻿namespace RdClient.Shared.Test.ValidationRules
 {
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+    using RdClient.Shared.ValidationRules;
+
     [TestClass]
     public class HostNameValidationRuleTests
     {

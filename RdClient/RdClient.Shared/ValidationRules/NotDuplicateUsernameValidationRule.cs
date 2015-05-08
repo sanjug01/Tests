@@ -1,13 +1,10 @@
-﻿using RdClient.Shared.Data;
-using RdClient.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RdClient.Shared.ValidationRules
+﻿namespace RdClient.Shared.ValidationRules
 {
+    using RdClient.Shared.Data;
+    using RdClient.Shared.Models;
+    using System;
+    using System.Linq;
+
     public class NotDuplicateUsernameValidationRule : IValidationRule<string>
     {
         private readonly IModelCollection<CredentialsModel> _credCollection;
@@ -23,7 +20,7 @@ namespace RdClient.Shared.ValidationRules
             _credId = credId;
         }
 
-        //Return valid iff there are no saved credentials with the same username but a different Id
+        //Return valid iff there are no saved credentials with a different Id but the same username (case insensitive)
         public IValidationResult Validate(string value)
         {
             StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;

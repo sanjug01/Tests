@@ -1,12 +1,12 @@
-﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using RdClient.Shared.Test.Helpers;
-using RdClient.Shared.ViewModels;
-using System;
-
-namespace RdClient.Shared.Test.ViewModels
+﻿namespace RdClient.Shared.Test.ViewModels
 {
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.Test.Helpers;
+    using RdClient.Shared.ViewModels;
+    using System;
+
     [TestClass]
     public class AddUserViewModelTests
     {

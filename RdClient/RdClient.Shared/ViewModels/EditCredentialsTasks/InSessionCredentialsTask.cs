@@ -5,7 +5,6 @@
     using RdClient.Shared.ValidationRules;
     using System;
     using System.Diagnostics.Contracts;
-    using System.Globalization;
 
     public sealed class InSessionCredentialsTask : EditCredentialsTaskBase
     {

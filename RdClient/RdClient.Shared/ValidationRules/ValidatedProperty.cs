@@ -1,13 +1,7 @@
-﻿using RdClient.Shared.Helpers;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RdClient.Shared.ValidationRules
+﻿namespace RdClient.Shared.ValidationRules
 {
+    using RdClient.Shared.Helpers;
+
     public class ValidatedProperty<T> : MutableObject, IValidatedProperty<T>
     {
         private T _value;
