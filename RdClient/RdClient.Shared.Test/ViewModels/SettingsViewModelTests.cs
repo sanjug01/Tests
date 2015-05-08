@@ -247,7 +247,6 @@
         [TestMethod]
         public void DeleteUserCommandCallsAddUserViewAndUpdatesUsersWhenComplete()
         {
-            IPresentationCompletion completion = null;
             var user = _vm.Users.First(u => u.UserComboBoxType == UserComboBoxType.Credentials);
             _vm.SelectedUser = user;
 
@@ -367,7 +366,6 @@
         [TestMethod]
         public void DeleteGatewayCommandCallsDeletGatewayViewAndUpdatesWhenComplete()
         {
-            IPresentationCompletion completion = null;
             var gateway = _vm.Gateways.First(g => g.GatewayComboBoxType == GatewayComboBoxType.Gateway);
             _vm.SelectedGateway = gateway;
 
