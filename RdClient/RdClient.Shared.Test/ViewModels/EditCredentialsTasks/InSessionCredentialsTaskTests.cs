@@ -73,10 +73,7 @@
             {
                 RootFolder = new MemoryStorageFolder(),
                 ModelSerializer = new SerializableModelSerializer(),
-                //
-                // Set the data scrambler to use the local user's key
-                //
-                DataScrambler = new Rc4DataScrambler()
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             _nav = new NavigationService();
             _vm = new EditCredentialsViewModel();

@@ -4,8 +4,9 @@
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Data;
-    using RdClient.Shared.Helpers;    
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Keyboard;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
@@ -14,11 +15,10 @@
     using RdClient.Shared.ViewModels;
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
     using System.Threading.Tasks;
     using Windows.Foundation;
-    using RdClient.Shared.Input.Pointer;
-    using System.ComponentModel;
 
     [TestClass]
     public sealed class RemoteSessionViewModelTests
@@ -626,10 +626,7 @@
             {
                 RootFolder = new MemoryStorageFolder(),
                 ModelSerializer = new SerializableModelSerializer(),
-                //
-                // Set the data scrambler to use the local user's key
-                //
-                DataScrambler = new Rc4DataScrambler()
+                DataScrambler = new Mock.DummyDataScrambler()
             };
 
             Guid credId = _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "user", Password = "password" });

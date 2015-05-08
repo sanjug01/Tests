@@ -18,10 +18,7 @@
             {
                 RootFolder = new MemoryStorageFolder(),
                 ModelSerializer = new SerializableModelSerializer(),
-                //
-                // Set the data scrambler to use the local user's key
-                //
-                DataScrambler = new Rc4DataScrambler()
+                DataScrambler = new Mock.DummyDataScrambler()
             };
             _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "usr1", Password = "pwd1" });
             _dataModel.Credentials.AddNewModel(new CredentialsModel() { Username = "usr2", Password = "pwd2" });

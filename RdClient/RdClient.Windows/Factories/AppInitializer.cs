@@ -50,9 +50,6 @@
             {
                 RootFolder = new ApplicationDataLocalStorageFolder() { FolderName = "RemoteDesktopData" },
                 ModelSerializer = new SerializableModelSerializer(),
-                //
-                // Set the data scrambler to use the local user's key
-                //
                 DataScrambler = new Rc4DataScrambler()
             };
             //initialize the loaded workspaces
