@@ -34,7 +34,7 @@
         private readonly RelayCommand _closeCommand;
         // private string _resourceFileUri;
         private string _infoText;
-        private string _title;
+        private InternalDocType _docType;
         private bool _isLoading;
         private IDeferredExecution _dispatcher;
 
@@ -62,15 +62,12 @@
             }
         }
 
-        /// <summary>
-        /// Document title - should apply localization
-        /// </summary>
-        public string Title
+        public InternalDocType DocumentType
         {
-            get { return _title; }
+            get { return _docType; }
             private set
             {
-                this.SetProperty(ref _title, value);
+                this.SetProperty(ref _docType, value);
             }
         }
 
@@ -93,24 +90,21 @@
             Contract.Assert(null != activationParameter as RichTextViewModelArgs);
 
             RichTextViewModelArgs args = activationParameter as RichTextViewModelArgs;
+            this.DocumentType = args.DocumentType;
             switch (args.DocumentType)
             {
                 case InternalDocType.EulaDoc:
-                    this.Title = "Terms of Use";
                     this.ResourceUri = "ms-appx:///Strings/EULA.rtf";
                     break;
                 case InternalDocType.ThirdPartyNotices:
-                    this.Title = "Third Party Notices";
                     this.ResourceUri = "ms-appx:///Strings/ThirdPartyNotices.rtf";
                     break;
                 case InternalDocType.PrivacyDoc:
-                    this.Title = "Privacy";
                     // TODO: doc not yet available, using link until then
                     this.ResourceUri = string.Empty;
                     break;
                 case InternalDocType.HelpDoc:
-                    this.Title = "Help";
-                    // TODO: doc not yet available, using link until then
+                    // TODO: is it doc or link?
                     this.ResourceUri = string.Empty;
                     break;
             }
@@ -130,7 +124,6 @@
                 }
                 catch (Exception exc)
                 {
-                    // TODO : remove try/catch in released version.
                     System.Diagnostics.Debug.WriteLine("Could not open resource file:" + this.ResourceUri + " because" + exc.Message);
                 }
             }

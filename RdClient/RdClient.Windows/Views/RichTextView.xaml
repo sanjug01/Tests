@@ -19,7 +19,8 @@
 
     <controls:ModalUserControl.Resources>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />        
+        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <c:RtfDocumentTypeToLocalizedTitleStringConverter x:Key="RtfDocumentTypeToLocalizedTitleStringConverter" />
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">
@@ -33,7 +34,7 @@
             <TextBlock x:Uid="RichTextView_Title"
                        Grid.Row="0"
                        Style="{ThemeResource TitleTextBlockStyle}"                        
-                       Text="{Binding Title}" />
+                       Text="{Binding DocumentType, Converter={StaticResource RtfDocumentTypeToLocalizedTitleStringConverter}}" />
             <HyperlinkButton
                 Grid.Row="0"
                 Command="{Binding Close}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
