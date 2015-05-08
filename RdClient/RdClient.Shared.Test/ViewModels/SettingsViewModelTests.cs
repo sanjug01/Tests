@@ -204,6 +204,32 @@
             var promptResult = CredentialPromptResult.CreateWithCredentials(user.Credentials.Model, true);
             completion.Completed(null, promptResult);
             AssertUserOptionsCorrect();
+            Assert.AreEqual(user, _vm.SelectedUser);
+        }
+
+        [TestMethod]
+        public void EditUserCommandDeletesUserIfEditUserViewReturnsDeleteResult()
+        {
+            IPresentationCompletion completion = null;
+            var user = _vm.Users.First(u => u.UserComboBoxType == UserComboBoxType.Credentials);
+            _vm.SelectedUser = user;
+
+            _navService.Expect("PushAccessoryView", p =>
+            {
+                completion = p[2] as IPresentationCompletion;
+                Assert.IsNotNull(completion);
+                return null;
+            });
+            _vm.EditUserCommand.Execute(null);
+
+            user.Credentials.Model.Username = _testData.NewRandomString();
+            var promptResult = CredentialPromptResult.CreateDeleted();
+
+            Assert.IsTrue(_dataModel.Credentials.HasModel(user.Credentials.Id));//user should exist still
+            completion.Completed(null, promptResult);
+            Assert.IsFalse(_dataModel.Credentials.HasModel(user.Credentials.Id));//user should have been deleted in the completion
+
+            AssertUserOptionsCorrect();
             Assert.IsNull(_vm.SelectedUser);
         }
 
@@ -224,19 +250,13 @@
         [TestMethod]
         public void DeleteUserCommandCallsAddUserViewAndUpdatesUsersWhenComplete()
         {
-            IPresentationCompletion completion = null;
             var user = _vm.Users.First(u => u.UserComboBoxType == UserComboBoxType.Credentials);
             _vm.SelectedUser = user;
-            _navService.Expect("PushAccessoryView", p =>
-            {
-                Assert.AreEqual("DeleteUserView", p[0] as string);
-                Assert.AreEqual(user.Credentials, p[1]);
-                completion = p[2] as IPresentationCompletion;
-                return null;
-            });
+
+            Assert.IsTrue(_dataModel.Credentials.HasModel(user.Credentials.Id));//user should exist still
             _vm.DeleteUserCommand.Execute(null);
-            _dataModel.Credentials.RemoveModel(user.Credentials.Id);           
-            completion.Completed(null, null);
+            Assert.IsFalse(_dataModel.Credentials.HasModel(user.Credentials.Id));//user should have been deleted
+
             AssertUserOptionsCorrect();
             Assert.IsNull(_vm.SelectedUser);
         }
@@ -244,13 +264,10 @@
         [TestMethod]
         public void AddGatewayNavigatesToAddGatewayView()
         {
-            IPresentationCompletion completion = null;
             _navService.Expect("PushAccessoryView", p =>
             {
                 Assert.AreEqual("AddOrEditGatewayView", p[0] as string);
                 Assert.IsTrue(p[1] is AddGatewayViewModelArgs);
-                completion = p[2] as IPresentationCompletion;
-                Assert.IsNotNull(completion);
                 return null;
             });
 
@@ -258,8 +275,6 @@
 
             Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);
             Guid newGatewayId = _dataModel.Gateways.AddNewModel(_testData.NewValidGatewayWithCredential(newCredId));
-            var promptResult = GatewayPromptResult.CreateWithGateway(newGatewayId);
-            completion.Completed(null, promptResult);
             
             AssertGatewayOptionsCorrect();
             Assert.IsNull(_vm.SelectedGateway);
@@ -296,8 +311,8 @@
                 return null;
             });
             _vm.EditGatewayCommand.Execute(null);
-
-            Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);
+            
+            Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);//EditGatewayView may add a user as well as a gateway
             gateway.Gateway.Model.CredentialsId = newCredId;
             gateway.Gateway.Model.HostName = _testData.NewRandomString();
             var promptResult = GatewayPromptResult.CreateWithGateway(Guid.Empty);
@@ -305,7 +320,36 @@
 
             AssertUserOptionsCorrect();
             AssertGatewayOptionsCorrect();
-            Assert.IsNull(_vm.SelectedGateway);
+            Assert.AreEqual(gateway, _vm.SelectedGateway);
+        }
+
+        [TestMethod]
+        public void EditGatewayCommandDeletesGatewayIfEditGatewayViewReturnsDeleteResult()
+        {
+            IPresentationCompletion completion = null;
+            var gateway = _vm.Gateways.First(g => g.GatewayComboBoxType == GatewayComboBoxType.Gateway);
+            _vm.SelectedGateway = gateway;
+            _navService.Expect("PushAccessoryView", p =>
+            {
+                completion = p[2] as IPresentationCompletion;
+                Assert.IsNotNull(completion);
+                return null;
+            });
+            _vm.EditGatewayCommand.Execute(null);
+
+            Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);//EditGatewayView may add a user as well as a gateway
+            gateway.Gateway.Model.CredentialsId = newCredId;
+            gateway.Gateway.Model.HostName = _testData.NewRandomString();
+            var promptResult = GatewayPromptResult.CreateDeleted();
+
+            Assert.IsTrue(_dataModel.Gateways.HasModel(gateway.Gateway.Id));//gateway should exist at this point
+            completion.Completed(null, promptResult);
+            Assert.IsFalse(_dataModel.Gateways.HasModel(gateway.Gateway.Id));//gateway should have been deleted
+
+            //Some other checks
+            AssertUserOptionsCorrect();
+            AssertGatewayOptionsCorrect();
+            Assert.IsNull(_vm.SelectedGateway);                        
         }
 
         [TestMethod]
@@ -325,20 +369,12 @@
         [TestMethod]
         public void DeleteGatewayCommandCallsDeletGatewayViewAndUpdatesWhenComplete()
         {
-            IPresentationCompletion completion = null;
             var gateway = _vm.Gateways.First(g => g.GatewayComboBoxType == GatewayComboBoxType.Gateway);
             _vm.SelectedGateway = gateway;
-            _navService.Expect("PushAccessoryView", p =>
-            {
-                Assert.AreEqual("DeleteGatewayView", p[0] as string);
-                Assert.AreEqual(gateway.Gateway, p[1]);
-                completion = p[2] as IPresentationCompletion;
-                Assert.IsNotNull(completion);
-                return null;
-            });
+
+            Assert.IsTrue(_dataModel.Gateways.HasModel(gateway.Gateway.Id));//gateway should exist at this point
             _vm.DeleteGatewayCommand.Execute(null);
-            _dataModel.Gateways.RemoveModel(gateway.Gateway.Id);
-            completion.Completed(null, null);
+            Assert.IsFalse(_dataModel.Gateways.HasModel(gateway.Gateway.Id));//gateway should have been deleted
 
             AssertUserOptionsCorrect();
             AssertGatewayOptionsCorrect();

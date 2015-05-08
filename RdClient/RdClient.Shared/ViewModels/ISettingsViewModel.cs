@@ -2,6 +2,7 @@
 {
     using RdClient.Shared.Models;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Windows.Input;
 
     public interface ISettingsViewModel
@@ -10,13 +11,13 @@
 
         GeneralSettings GeneralSettings { get; }
 
-        IList<UserComboBoxElement> Users { get; }
+        ReadOnlyObservableCollection<UserComboBoxElement> Users { get; }
         UserComboBoxElement SelectedUser { get; set; }
         ICommand DeleteUserCommand { get; }
         ICommand EditUserCommand { get; }
         ICommand AddUserCommand { get; }
 
-        IList<GatewayComboBoxElement> Gateways { get; }
+        ReadOnlyObservableCollection<GatewayComboBoxElement> Gateways { get; }
         GatewayComboBoxElement SelectedGateway { get; set; }
         ICommand DeleteGatewayCommand { get; }
         ICommand EditGatewayCommand { get; }

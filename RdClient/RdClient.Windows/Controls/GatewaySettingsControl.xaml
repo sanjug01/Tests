@@ -37,7 +37,7 @@
                   ItemsSource="{Binding Gateways}" SelectedItem="{Binding SelectedGateway, Mode=TwoWay}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Converter={StaticResource GatewayComboBoxElementToLocalizedStringConverter}}" />
+                    <TextBlock Text="{Binding Gateway.Model.HostName}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>

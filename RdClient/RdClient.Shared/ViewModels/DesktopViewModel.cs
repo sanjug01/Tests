@@ -179,8 +179,8 @@
         }
 
         private void DeleteCommandExecute(object o)
-        {
-            _navigationService.PushAccessoryView("DeleteDesktopsView", new DeleteDesktopsArgs(TemporaryModelContainer<DesktopModel>.WrapModel(_desktopId, _desktop)));            
+        {            
+            _dataModel.LocalWorkspace.Connections.RemoveModel(this.DesktopId);            
         }
     }
 }

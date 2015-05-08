@@ -19,9 +19,9 @@ namespace RdClient.Shared.ViewModels
         private readonly RelayCommand _editGatewayCommand;
         private readonly RelayCommand _addGatewayCommand;
         private GeneralSettings _generalSettings;
-        private IList<UserComboBoxElement> _users;
+        private ReadOnlyObservableCollection<UserComboBoxElement> _users;
         private UserComboBoxElement _selectedUser;
-        private IList<GatewayComboBoxElement> _gateways;
+        private ReadOnlyObservableCollection<GatewayComboBoxElement> _gateways;
         private GatewayComboBoxElement _selectedGateway;
 
         public SettingsViewModel()
@@ -51,7 +51,7 @@ namespace RdClient.Shared.ViewModels
             private set { SetProperty(ref _generalSettings, value); }
         }
 
-        public IList<UserComboBoxElement> Users
+        public ReadOnlyObservableCollection<UserComboBoxElement> Users
         {
             get { return _users; }
             private set { SetProperty(ref _users, value); }
@@ -74,7 +74,7 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        public IList<GatewayComboBoxElement> Gateways
+        public ReadOnlyObservableCollection<GatewayComboBoxElement> Gateways
         {
             get { return _gateways; }
             private set { SetProperty(ref _gateways, value); }
@@ -100,8 +100,28 @@ namespace RdClient.Shared.ViewModels
         protected override void OnPresenting(object activationParameter)
         {
             this.GeneralSettings = this.ApplicationDataModel.Settings;
-            LoadUsers();
-            LoadGateways();
+
+            this.Gateways = TransformingObservableCollection<IModelContainer<GatewayModel>, GatewayComboBoxElement>.Create(
+                this.ApplicationDataModel.Gateways.Models,
+                g => new GatewayComboBoxElement(GatewayComboBoxType.Gateway, g),
+                gcbe =>
+                {
+                    if (this.SelectedGateway == gcbe)
+                    {
+                        this.SelectedGateway = null;
+                    }
+                });
+
+            this.Users = TransformingObservableCollection<IModelContainer<CredentialsModel>, UserComboBoxElement>.Create(
+                this.ApplicationDataModel.Credentials.Models,
+                c => new UserComboBoxElement(UserComboBoxType.Credentials, c),
+                ucbe =>
+                {
+                    if (this.SelectedUser == ucbe)
+                    {
+                        this.SelectedUser = null;
+                    }
+                });
         }
 
         protected override void OnDismissed()
@@ -131,17 +151,6 @@ namespace RdClient.Shared.ViewModels
             this.DismissModal(null);
         }
 
-        private void LoadGateways()
-        {
-            IList<GatewayComboBoxElement> gateways = new List<GatewayComboBoxElement>();
-            foreach (IModelContainer<GatewayModel> gatewayModel in this.ApplicationDataModel.Gateways.Models)
-            {
-                gateways.Add(new GatewayComboBoxElement(GatewayComboBoxType.Gateway, gatewayModel));
-            }
-            this.SelectedGateway = null;
-            this.Gateways = gateways;
-        }
-
         private bool GatewayCommandsEnabled()
         {            
             return this.SelectedGateway?.Gateway?.Model != null;
@@ -161,11 +170,6 @@ namespace RdClient.Shared.ViewModels
                     {
                         this.DeleteGatewayCommand.Execute(null);
                     }
-                    else
-                    {
-                        LoadGateways();
-                    }
-                    LoadUsers();
                 });
                 this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, editGatewayCompleted);
             }
@@ -175,30 +179,14 @@ namespace RdClient.Shared.ViewModels
         {
             if (GatewayCommandsEnabled())
             {
-                this.NavigationService.PushAccessoryView("DeleteGatewayView", this.SelectedGateway.Gateway, new ModalPresentationCompletion((s, e) => LoadGateways()));
+                this.ApplicationDataModel.Gateways.RemoveModel(this.SelectedGateway.Gateway.Id);
             }
         }
 
         private void AddGatewayCommandExecute()
         {
             var args = new AddGatewayViewModelArgs();
-            var completed = new ModalPresentationCompletion((s, e) =>
-            {
-                LoadGateways();
-                LoadUsers();
-            });
-            this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, completed);
-        }
-
-        private void LoadUsers()
-        {
-            IList<UserComboBoxElement> users = new List<UserComboBoxElement>();
-            foreach (IModelContainer<CredentialsModel> credModel in this.ApplicationDataModel.Credentials.Models)
-            {
-                users.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credModel));
-            }
-            this.SelectedUser = null;
-            this.Users = users;
+            this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args);
         }
 
         private bool UserCommandsEnabled()
@@ -218,10 +206,6 @@ namespace RdClient.Shared.ViewModels
                     {
                         this.DeleteUserCommand.Execute(null);
                     }
-                    else
-                    {
-                        LoadUsers();
-                    }
                 });
                 this.NavigationService.PushAccessoryView("AddUserView", args, editUserCompleted);
             }
@@ -231,7 +215,7 @@ namespace RdClient.Shared.ViewModels
         {
             if (UserCommandsEnabled())
             {
-                this.NavigationService.PushAccessoryView("DeleteUserView", this.SelectedUser.Credentials, new ModalPresentationCompletion((s, e) => LoadUsers()));
+                this.ApplicationDataModel.Credentials.RemoveModel(this.SelectedUser.Credentials.Id);                
             }
         }
 
@@ -246,7 +230,6 @@ namespace RdClient.Shared.ViewModels
                 {
                     this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);                    
                 }
-                LoadUsers();
             });
             this.NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
         }

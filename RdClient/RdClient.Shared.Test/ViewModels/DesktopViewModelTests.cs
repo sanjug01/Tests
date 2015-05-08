@@ -5,6 +5,7 @@ using RdClient.Shared.Test.Data;
 using RdClient.Shared.Test.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
@@ -218,10 +219,11 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void TestDeleteCommandExecute()
+        public void DeleteCommandRemovesDesktop()
         {
-            _navService.Expect("PushAccessoryView", new List<object> { "DeleteDesktopsView", null, null }, 0);
+            var expectedDesktops = _dataModel.LocalWorkspace.Connections.Models.Where(mc => mc.Model != _desktop).ToList();
             _vm.DeleteCommand.Execute(null);
+            CollectionAssert.AreEqual(expectedDesktops, _dataModel.LocalWorkspace.Connections.Models);
         }
 
         [TestMethod]

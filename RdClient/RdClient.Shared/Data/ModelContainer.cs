@@ -13,12 +13,12 @@
         private readonly TModel _model;
         private PersistentStatus _status;
 
-        Guid  IModelContainer<TModel>.Id
+        public Guid Id
         {
             get { return _id; }
         }
 
-        TModel IModelContainer<TModel>.Model
+        public TModel Model
         {
             get
             {
