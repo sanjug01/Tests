@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    class CompositeValidationRule<T> : IValidationRule<T>
+    public class CompositeValidationRule<T> : IValidationRule<T>
     {
         private readonly List<IValidationRule<T>> _rules;
 

@@ -223,7 +223,10 @@
     <Compile Include="RdMock\MockInvokedCall.cs" />
     <Compile Include="RdTest\ExceptionExpecter.cs" />
     <Compile Include="RdTest\UAPSleep.cs" />
+    <Compile Include="ValidationRules\CompositeValidationRuleTests.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
+    <Compile Include="ValidationRules\NotDuplicateUsernameValidationRuleTests.cs" />
+    <Compile Include="ValidationRules\UsernameFormatValidationRuleTests.cs" />
     <Compile Include="ValidationRules\ValidatedPropertyTests.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
