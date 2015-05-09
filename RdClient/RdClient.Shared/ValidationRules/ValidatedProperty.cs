@@ -23,10 +23,8 @@
             }
             set
             {
-                if (SetProperty(ref _value, value))
-                {
-                    SetState();
-                }
+                SetProperty(ref _value, value);                
+                SetState();                
             }
         }
 

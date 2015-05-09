@@ -1,6 +1,6 @@
 ﻿namespace RdClient.Shared.ValidationRules
 {
-    class ValidationResult : IValidationResult
+    public class ValidationResult : IValidationResult
     {
         private readonly bool _valid;
         private readonly object _content;
