@@ -20,7 +20,8 @@
     <controls:ModalUserControl.Resources>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <c:RtfDocumentTypeToLocalizedTitleStringConverter x:Key="RtfDocumentTypeToLocalizedTitleStringConverter" />
+        <c:RtfDocumentTypeToLocalizedTitleStringConverter x:Key="RtfDocumentTypeToLocalizedTitleStringConverter" 
+                                                          TypeToLocalizedStringConverter="{StaticResource TypeToLocalizedStringConverter}"/>
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">

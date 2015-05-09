@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Converters;
+using RdClient.Shared.Converters;
 using RdClient.Shared.Data;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
@@ -15,15 +16,19 @@ namespace RdClient.Shared.Test.Converters
     {
         private RtfDocumentTypeToLocalizedTitleStringConverter _converter;
         private IStringTable _stringTable;
-        InternalDocType _docType;
+        InternalDocType _testDocType;
 
         [TestInitialize]
         public void TestSetup()
         {
             _stringTable = new Mock.LocalizedString();
+            _stringTable = new Mock.LocalizedString();
             _converter = new RtfDocumentTypeToLocalizedTitleStringConverter();
-            _converter.LocalizedString = _stringTable;
-            _docType = InternalDocType.PrivacyDoc;
+            TypeToLocalizedStringConverter ttlsc = new TypeToLocalizedStringConverter();
+            ttlsc.LocalizedString = _stringTable;
+            _converter.TypeToLocalizedStringConverter = ttlsc;
+
+            _testDocType = InternalDocType.PrivacyDoc;
         }
 
         [TestMethod]
@@ -37,12 +42,10 @@ namespace RdClient.Shared.Test.Converters
             Assert.IsNotNull(result);
         }
 
-
-
         [TestMethod]
         public void ConvertNullThrows()
         {
-            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            Assert.IsTrue(ExceptionExpecter.ExpectException<NullReferenceException>(() =>
             {
                 _converter.Convert(null, null, null, null);
             }));
@@ -51,7 +54,7 @@ namespace RdClient.Shared.Test.Converters
         [TestMethod]
         public void ConvertWrongTypeThrows()
         {
-            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
+            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidCastException>(() =>
             {
                 _converter.Convert(new object(), null, null, null);
             }));
@@ -62,8 +65,8 @@ namespace RdClient.Shared.Test.Converters
         {
             Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
             {
-                _converter.LocalizedString = null;
-                _converter.Convert(_docType, null, null, null);
+                _converter.TypeToLocalizedStringConverter = null;
+                _converter.Convert(_testDocType, null, null, null);
             }));
         }
 
