@@ -27,6 +27,7 @@ Function BcxPlatform($platform)
 	$p.WaitForExit()
 }
 
+$sw = [Diagnostics.Stopwatch]::StartNew()
 if($Platform -eq "all")
 {
 	BcxPlatform "x86chk"
@@ -48,3 +49,6 @@ if($CopyAll)
 	xcopy $SDXROOT\termsrv\rdp\externals\openssl ..\openssl /i /s /y
 	xcopy $SDXROOT\termsrv\rdp\externals\RdpWinRTTransportRpc ..\RdpWinRTTransportRpc /i /s /y
 }
+
+$sw.Stop()
+Write-Host $sw.Elapsed
