@@ -7,6 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:controls="using:RdClient.Controls"
+    xmlns:helpers="using:RdClient.Shared.Helpers" 
+    xmlns:sc="using:RdClient.Shared.Converters"    
     xmlns:c="using:RdClient.Converters"    
     TabNavigation="Cycle"
     mc:Ignorable="d"
@@ -14,14 +16,17 @@
     d:DesignWidth="400">
   
     <controls:ModalUserControl.DataContext>
-        <vm:RichTextViewModel />
+        <vm:RichTextViewModel/>
     </controls:ModalUserControl.DataContext>
 
     <controls:ModalUserControl.Resources>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <c:RtfDocumentTypeToLocalizedTitleStringConverter x:Key="RtfDocumentTypeToLocalizedTitleStringConverter" 
-                                                          TypeToLocalizedStringConverter="{StaticResource TypeToLocalizedStringConverter}"/>
+        <sc:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter">
+            <sc:TypeToLocalizedStringConverter.LocalizedString>
+                <helpers:LocalizedString />
+            </sc:TypeToLocalizedStringConverter.LocalizedString>            
+        </sc:TypeToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">
@@ -35,7 +40,7 @@
             <TextBlock x:Uid="RichTextView_Title"
                        Grid.Row="0"
                        Style="{ThemeResource TitleTextBlockStyle}"                        
-                       Text="{Binding DocumentType, Converter={StaticResource RtfDocumentTypeToLocalizedTitleStringConverter}}" />
+                       Text="{Binding DocumentType, Converter={StaticResource TypeToLocalizedStringConverter}}" />
             <HyperlinkButton
                 Grid.Row="0"
                 Command="{Binding Close}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
