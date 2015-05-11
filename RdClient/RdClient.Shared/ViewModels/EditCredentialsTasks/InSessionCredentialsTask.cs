@@ -5,14 +5,13 @@
     using RdClient.Shared.ValidationRules;
     using System;
     using System.Diagnostics.Contracts;
-    using System.Globalization;
 
     public sealed class InSessionCredentialsTask : EditCredentialsTaskBase
     {
         private readonly ISessionCredentials _sessionCredentials;
         private readonly ApplicationDataModel _dataModel;
         private readonly string _prompt;
-        private readonly IValidationRule _userNameRule;
+        private readonly IValidationRule<string> _userNameRule;
         private readonly object _state;
         private IModelContainer<CredentialsModel> _savedCredentials;
         private bool _passwordChanged;
@@ -58,7 +57,7 @@
             _dataModel = dataModel;
             _prompt = prompt;
             _state = state;
-            _userNameRule = new UsernameValidationRule();
+            _userNameRule = new UsernameFormatValidationRule();
             _savedCredentials = FindSavedCredentials(sessionCredentials.Credentials.Username);
             _passwordChanged = false;
         }
@@ -171,7 +170,7 @@
 
             if(valid)
             {
-                valid = _userNameRule.Validate(viewModel.UserName, CultureInfo.CurrentUICulture);
+                valid = _userNameRule.Validate(viewModel.UserName).IsValid;
             }
 
             return valid;

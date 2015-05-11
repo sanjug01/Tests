@@ -196,6 +196,7 @@
     <Compile Include="Mock\TestBarItemModel.cs" />
     <Compile Include="Mock\Timer.cs" />
     <Compile Include="Mock\TestRdpCertificate.cs" />
+    <Compile Include="Mock\ValidationRule.cs" />
     <Compile Include="Mock\ViewFactory.cs" />
     <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
@@ -222,7 +223,11 @@
     <Compile Include="RdMock\MockInvokedCall.cs" />
     <Compile Include="RdTest\ExceptionExpecter.cs" />
     <Compile Include="RdTest\UAPSleep.cs" />
+    <Compile Include="ValidationRules\CompositeValidationRuleTests.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
+    <Compile Include="ValidationRules\NotDuplicateUsernameValidationRuleTests.cs" />
+    <Compile Include="ValidationRules\UsernameFormatValidationRuleTests.cs" />
+    <Compile Include="ValidationRules\ValidatedPropertyTests.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
     <Compile Include="ViewModels\AddUserViewModelTests.cs" />

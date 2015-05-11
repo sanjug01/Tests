@@ -1,18 +1,12 @@
-﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-
-using RdClient.Shared.ValidationRules;
-
-namespace RdClient.Shared.Test.ValidationRules
+﻿namespace RdClient.Shared.Test.ValidationRules
 {
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+    using RdClient.Shared.ValidationRules;
+
     [TestClass]
     public class HostNameValidationRuleTests
     {
-        // list of illegal caracters 
+        // list of illegal characters 
         private const string _illegalCharacters = "`~!#@$%^&*()=+{}\\|;'\",< >/?";
 
         [TestMethod]
@@ -21,19 +15,19 @@ namespace RdClient.Shared.Test.ValidationRules
             HostNameValidationRule rule = new HostNameValidationRule();
 
             string hostName = "aBC";
-            Assert.IsTrue(rule.Validate(hostName, CultureInfo.CurrentCulture));
+            Assert.IsTrue(rule.Validate(hostName).IsValid);
 
             hostName = "abc.mydomain.com";
-            Assert.IsTrue(rule.Validate(hostName, CultureInfo.CurrentCulture));
+            Assert.IsTrue(rule.Validate(hostName).IsValid);
 
             hostName = "_myHost123Cd";
-            Assert.IsTrue(rule.Validate(hostName, CultureInfo.CurrentCulture));
+            Assert.IsTrue(rule.Validate(hostName).IsValid);
 
             hostName = "23.24.11.22";
-            Assert.IsTrue(rule.Validate(hostName, CultureInfo.CurrentCulture));
+            Assert.IsTrue(rule.Validate(hostName).IsValid);
 
             hostName = "mypc.com";
-            Assert.IsTrue(rule.Validate(hostName, CultureInfo.CurrentCulture));
+            Assert.IsTrue(rule.Validate(hostName).IsValid);
         }
 
         [TestMethod]
@@ -45,11 +39,11 @@ namespace RdClient.Shared.Test.ValidationRules
             string suffix = "_2df";
             string core;
             string hostName;
-            for(int i = 0 ; i< _illegalCharacters.Length ; i++)
+            for (int i = 0; i < _illegalCharacters.Length; i++)
             {
                 core = _illegalCharacters[i].ToString();
                 hostName = prefix + core + suffix;
-                Assert.IsFalse(rule.Validate(hostName, CultureInfo.InvariantCulture));
+                Assert.IsFalse(rule.Validate(hostName).IsValid);
             }
         }
 
@@ -58,7 +52,7 @@ namespace RdClient.Shared.Test.ValidationRules
         {
             HostNameValidationRule rule = new HostNameValidationRule();
 
-            string prefix ;
+            string prefix;
             string suffix = "d3f";
             string core = "xy_";
             string hostName;
@@ -66,7 +60,7 @@ namespace RdClient.Shared.Test.ValidationRules
             {
                 prefix = _illegalCharacters[i].ToString();
                 hostName = prefix + core + suffix;
-                Assert.IsFalse(rule.Validate(hostName, CultureInfo.InvariantCulture));
+                Assert.IsFalse(rule.Validate(hostName).IsValid);
             }
         }
 
@@ -75,15 +69,15 @@ namespace RdClient.Shared.Test.ValidationRules
         {
             HostNameValidationRule rule = new HostNameValidationRule();
 
-            string prefix="pq";
-            string suffix ;
+            string prefix = "pq";
+            string suffix;
             string core = "_tv_";
             string hostName;
             for (int i = 0; i < _illegalCharacters.Length; i++)
             {
                 suffix = _illegalCharacters[i].ToString();
                 hostName = prefix + core + suffix;
-                Assert.IsFalse(rule.Validate(hostName, CultureInfo.CurrentCulture));
+                Assert.IsFalse(rule.Validate(hostName).IsValid);
             }
         }
     }

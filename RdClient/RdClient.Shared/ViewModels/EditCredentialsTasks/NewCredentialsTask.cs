@@ -7,7 +7,6 @@
     using RdClient.Shared.ValidationRules;
     using System;
     using System.Diagnostics.Contracts;
-    using System.Globalization;
 
     /// <summary>
     /// Edit credentials task launched to add new credentials to the data model.
@@ -15,7 +14,7 @@
     /// </summary>
     public sealed class NewCredentialsTask : EditCredentialsTaskBase
     {
-        private readonly IValidationRule _userNameRule;
+        private readonly IValidationRule<string> _userNameRule;
         private readonly ApplicationDataModel _dataModel;
         private readonly Action<Guid> _credentialsAdded;
         private readonly Action _viewCancelled;
@@ -38,7 +37,7 @@
             Contract.Requires(null != _credentialsAdded);
             Contract.Ensures(null != _credentials);
 
-            _userNameRule = new UsernameValidationRule();
+            _userNameRule = new UsernameFormatValidationRule();
             _resourceName = resourceName;
             _dataModel = dataModel;
             _credentialsAdded = credentialsAdded;
@@ -75,7 +74,7 @@
                 //
                 valid = false;
             }
-            else if(!_userNameRule.Validate(userName, CultureInfo.CurrentCulture))
+            else if(!_userNameRule.Validate(userName).IsValid)
             {
                 //
                 // TODO: update the view model to show the "invalid user name" error
