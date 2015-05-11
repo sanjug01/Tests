@@ -136,7 +136,7 @@
             //
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, this.AddDesktopCommand, "Add"));
             _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.HorizontalEllipsis, new RelayCommand(this.PushAdditionalCommandsDialog), "More…"));
+            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.More, new RelayCommand(this.PushAdditionalCommandsDialog), "More…"));
             //
             //_toolbarItemsSource.Add(new SeparatorBarItemModel());
             //

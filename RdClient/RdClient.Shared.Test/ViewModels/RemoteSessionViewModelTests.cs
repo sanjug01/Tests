@@ -705,7 +705,7 @@
             Assert.AreEqual(1, connectCount);
 
             SymbolBarButtonModel ellipsis = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
-                o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.HorizontalEllipsis);
+                o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.More);
             Assert.IsNotNull(ellipsis.Command);
             Assert.IsTrue(ellipsis.Command.CanExecute(null));
 

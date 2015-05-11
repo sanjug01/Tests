@@ -258,7 +258,6 @@
     </Content>
     <Content Include="Assets\Day0.png" />
     <Content Include="Assets\desktop_placeholder.png" />
-    <Content Include="Assets\SegMDL2.1.12.ttf" />
     <None Include="Models\AppDataStorage.cs" />
     <Compile Include="Navigation\DispatchedNavigationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

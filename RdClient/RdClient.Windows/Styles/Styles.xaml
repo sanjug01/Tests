@@ -97,25 +97,9 @@
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
-    <FontFamily x:Key="IconFont">ms-appx:///Assets/SegMDL2.1.12.ttf#Segoe MDL2 Assets</FontFamily>
-    <x:String x:Key="AddIcon">&#xE710;</x:String>
-    <x:String x:Key="MultiSelectIcon">&#xE762;</x:String>
-    <x:String x:Key="MoreIcon">&#xE712;</x:String>
-    <x:String x:Key="SearchIcon">&#xE721;</x:String>
-    <x:String x:Key="SettingsIcon">&#xE713;</x:String>
-    <x:String x:Key="EditIcon">&#xE70F;</x:String>
-    <x:String x:Key="DeleteIcon">&#xE74D;</x:String>
-    <x:String x:Key="BackIcon">&#xE112;</x:String>
-    <x:String x:Key="ZoomInIcon">&#xE1A3;</x:String>
-    <x:String x:Key="ZoomOutIcon">&#xE1A4;</x:String>
-    <x:String x:Key="UpIcon">&#xE110;</x:String>
-    <x:String x:Key="DownIcon">&#xE1FD;</x:String>
-    <x:String x:Key="LeftIcon">&#xE112;</x:String>
-    <x:String x:Key="RightIcon">&#xE111;</x:String>
+    <FontFamily x:Key="IconFont">Segoe MDL2 Assets</FontFamily>
     <x:String x:Key="MoreDetailsIcon">&#xE099;</x:String>
     <x:String x:Key="LessDetailsIcon">&#xE098;</x:String>
-    <x:String x:Key="KeyboardIcon">&#xE765;</x:String>
-    <x:String x:Key="DisconnectIcon">&#xE711;</x:String>
 
     <Style x:Key="FlatButtonStyle" TargetType="Button">
         <Setter Property="Padding" Value="0" />
