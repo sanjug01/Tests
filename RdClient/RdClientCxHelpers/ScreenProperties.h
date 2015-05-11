@@ -15,9 +15,9 @@ namespace RdClientCxHelpers
 	{
 	public:
 		ScreenProperties();
-		property Windows::Foundation::Point Resolution
+		property Windows::Foundation::Size Resolution
 		{
-			Windows::Foundation::Point get();
+			Windows::Foundation::Size get();
 		}
 
 	private:

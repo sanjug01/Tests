@@ -59,7 +59,7 @@ ScreenProperties::ScreenProperties()
 		);
 }
 
-Point ScreenProperties::Resolution::get()
+Windows::Foundation::Size ScreenProperties::Resolution::get()
 {
 	// Obtain the underlying DXGI device of the Direct3D11.1 device.
 	ComPtr<IDXGIDevice> dxgiDevice;
@@ -78,8 +78,8 @@ Point ScreenProperties::Resolution::get()
 	{
 		DXGI_OUTPUT_DESC desc;
 		pOutput->GetDesc(&desc);
-		return Point(desc.DesktopCoordinates.right, desc.DesktopCoordinates.bottom);
+		return Windows::Foundation::Size((float) desc.DesktopCoordinates.right, (float) desc.DesktopCoordinates.bottom);
 	}
 
-	return Point(0, 0);
+	return Windows::Foundation::Size(0, 0);
 }
