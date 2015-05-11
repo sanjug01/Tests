@@ -12,7 +12,10 @@
     d:DesignHeight="768"
     d:DesignWidth="480">
 
-    
+    <d:UserControl.DataContext>
+        <design:FakeAddOrEditDesktopViewModel />
+    </d:UserControl.DataContext>
+
     <UserControl.Resources>
         <converters:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
         <converters:GatewayComboBoxElementToLocalizedStringConverter x:Key="GatewayComboBoxElementToLocalizedStringConverter">
@@ -28,7 +31,7 @@
                   Content="Connect to admin session(d)"
                   IsChecked="{Binding Path=IsUseAdminSession, Mode=TwoWay}" />
 
-        <!-- Display section - TODO: to enble when functional -->
+        <!-- Display section - TODO: to enable when functional -->
         <StackPanel Orientation="Vertical"
                     Margin="0,0,0,40" 
                     Visibility="Collapsed">
@@ -55,11 +58,11 @@
                        Grid.Row="0"                   
                        x:Uid="AddOrEditDesktop-Gateway" 
                        Text="Gateway(d)"/>
-            <ComboBox Grid.Row="1"  
-                  HorizontalAlignment="Stretch"                  
-                  x:Uid="AddOrEditDesktop-Gateways-ComboBox"
-                  ItemsSource="{Binding Path=GatewayOptions}"
-                  SelectedIndex="{Binding Path=SelectedGatewayOptionsIndex, Mode=TwoWay}">
+            <ComboBox Grid.Row="1"
+                      HorizontalAlignment="Stretch"
+                      x:Uid="AddOrEditDesktop-Gateways-ComboBox"
+                      ItemsSource="{Binding GatewayOptions}"
+                      SelectedItem="{Binding SelectedGateway, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource GatewayComboBoxElementToLocalizedStringConverter}}" />

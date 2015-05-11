@@ -7,6 +7,7 @@
     using System;
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
+    using System.Linq;
     using System.Windows.Input;
 
     public class AddDesktopViewModelArgs
@@ -28,7 +29,7 @@
         }
     }
 
-    public class AddOrEditDesktopViewModel : ViewModelBase, IDialogViewModel
+    public class AddOrEditDesktopViewModel : ViewModelBase, IAddOrEditDesktopViewModel, IDialogViewModel
     {
         private string _host;
         private bool _isHostValid;
@@ -48,8 +49,11 @@
         private readonly RelayCommand _addGatewayCommand;
         private readonly RelayCommand _editGatewayCommand;
         private DesktopModel _desktop;
-        private int _selectedUserOptionsIndex;
-        private int _selectedGatewayOptionsIndex;
+
+        private ObservableCollection<UserComboBoxElement> _users;
+        private ObservableCollection<GatewayComboBoxElement> _gateways;
+        private UserComboBoxElement _selectedUser;
+        private GatewayComboBoxElement _selectedGateway;
 
         public AddOrEditDesktopViewModel()
         {
@@ -61,24 +65,27 @@
             _cancelCommand = new RelayCommand(CancelCommandExecute);
             _showDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = true; });
             _hideDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = false; });
-            _addUserCommand = new RelayCommand(LaunchAddUserView);
-            _addGatewayCommand = new RelayCommand(LaunchAddGatewayView);
-            _editUserCommand = new RelayCommand(LaunchEditUserView,
-                p => { return this.SelectedUserOptionsIndex > 0; } );
-            _editGatewayCommand = new RelayCommand(LaunchEditGatewayView,
-                p => { return this.SelectedGatewayOptionsIndex > 0; } );
+            _addUserCommand = new RelayCommand(AddUserCommandExecute);
+            _addGatewayCommand = new RelayCommand(AddGatewayCommandExecute);
+            _editUserCommand = new RelayCommand(EditUserCommandExecute, EditUserCommandCanExecute);
+            _editGatewayCommand = new RelayCommand(EditGatewayCommandExecute, EditGatewayCommandCanExecute);
 
-            IsHostValid = true;
-
+            this.IsHostValid = true;
+            this.IsExpandedView = false;
             this.UserOptions = new ObservableCollection<UserComboBoxElement>();
             this.GatewayOptions = new ObservableCollection<GatewayComboBoxElement>();
-            //this.SelectedUserOptionsIndex = 0;
-            this.IsExpandedView = false;
         }
 
-        public ObservableCollection<UserComboBoxElement> UserOptions { get; private set; }
-
-        public ObservableCollection<GatewayComboBoxElement> GatewayOptions { get; private set; }
+        public ObservableCollection<UserComboBoxElement> UserOptions
+        {
+            get { return _users; }
+            private set { SetProperty(ref _users, value); }
+        }
+        public ObservableCollection<GatewayComboBoxElement> GatewayOptions
+        {
+            get { return _gateways; }
+            private set { SetProperty(ref _gateways, value); }
+        }
 
         public IPresentableView PresentableView { private get; set; }
         public ICommand DefaultAction { get { return _saveCommand; } }
@@ -99,23 +106,47 @@
             }
         }
 
-        public int SelectedUserOptionsIndex 
-        { 
-            get { return _selectedUserOptionsIndex; }
+        //public int SelectedUserOptionsIndex 
+        //{ 
+        //    get { return _selectedUserOptionsIndex; }
+        //    set
+        //    {
+        //        SetProperty(ref _selectedUserOptionsIndex, value);
+        //        _editUserCommand.EmitCanExecuteChanged();
+        //    }
+        //}
+
+        //public int SelectedGatewayOptionsIndex
+        //{
+        //    get { return _selectedGatewayOptionsIndex; }
+        //    set
+        //    {
+        //        SetProperty(ref _selectedGatewayOptionsIndex, value);
+        //        _editGatewayCommand.EmitCanExecuteChanged();
+        //    }
+        //}
+
+        public UserComboBoxElement SelectedUser
+        {
+            get { return _selectedUser; }
             set
             {
-                SetProperty(ref _selectedUserOptionsIndex, value);
-                _editUserCommand.EmitCanExecuteChanged();
+                if (SetProperty(ref _selectedUser, value))
+                {
+                    _editUserCommand.EmitCanExecuteChanged();
+                }
             }
         }
 
-        public int SelectedGatewayOptionsIndex
+        public GatewayComboBoxElement SelectedGateway
         {
-            get { return _selectedGatewayOptionsIndex; }
+            get { return _selectedGateway; }
             set
             {
-                SetProperty(ref _selectedGatewayOptionsIndex, value);
-                _editGatewayCommand.EmitCanExecuteChanged();
+                if (SetProperty(ref _selectedGateway, value))
+                {
+                    _editGatewayCommand.EmitCanExecuteChanged();
+                }
             }
         }
 
@@ -154,7 +185,7 @@
         }
 
         public bool IsUseAdminSession
-                {
+        {
             get { return _isUseAdminSession; }
             set { SetProperty(ref _isUseAdminSession, value); }
         }
@@ -176,25 +207,25 @@
             if (this.Validate())
             {
                 this.Desktop.HostName = this.Host;
-
-                this.Desktop.HostName = this.Host;
                 this.Desktop.FriendlyName = this.FriendlyName;
                 this.Desktop.IsAdminSession = this.IsUseAdminSession;
                 this.Desktop.IsSwapMouseButtons = this.IsSwapMouseButtons;
                 this.Desktop.AudioMode = (AudioMode) this.AudioMode;
 
-                if (null != this.UserOptions[this.SelectedUserOptionsIndex].Credentials)
+                if (null != this.SelectedUser 
+                    && UserComboBoxType.Credentials == this.SelectedUser.UserComboBoxType)
                 {
-                    this.Desktop.CredentialsId = this.UserOptions[this.SelectedUserOptionsIndex].Credentials.Id;
+                    this.Desktop.CredentialsId = this.SelectedUser.Credentials.Id;
                 }
                 else
                 {
                     this.Desktop.CredentialsId = Guid.Empty;
                 }
 
-                if (null != this.GatewayOptions[this.SelectedGatewayOptionsIndex].Gateway)
+                if (null != this.SelectedGateway
+                    && GatewayComboBoxType.Gateway == this.SelectedGateway.GatewayComboBoxType)
                 {
-                    this.Desktop.GatewayId = this.GatewayOptions[this.SelectedGatewayOptionsIndex].Gateway.Id;
+                    this.Desktop.GatewayId = this.SelectedGateway.Gateway.Id;
                 }
                 else
                 {
@@ -273,7 +304,6 @@
                 this.IsAddingDesktop = true;
             }
             this.IsExpandedView = false;
-
             Update();
         }
 
@@ -288,30 +318,61 @@
             }
         }
 
-        private void LaunchAddGatewayView(object o)
+        private void AddGatewayCommandExecute(object o)
         {
             AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
             ModalPresentationCompletion addGatewayCompleted = new ModalPresentationCompletion(GatewayPromptResultHandler);
             NavigationService.PushAccessoryView("AddOrEditGatewayView", args, addGatewayCompleted);
         }
 
-        private void LaunchEditGatewayView(object o)
+        private void EditGatewayCommandExecute(object o)
         {
-            // TODO
+            EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway.Model);
+            ModalPresentationCompletion editGatewayCompleted = new ModalPresentationCompletion((s, e) =>
+                {
+                    GatewayPromptResult result = e.Result as GatewayPromptResult;
+                    if (result != null && !result.UserCancelled)
+                    {
+                        Guid gatewayId = this.SelectedGateway.Gateway.Id;
+                        LoadGateways();
+                        this.SelectGatewayId(gatewayId);
+                    }
+                });
+            this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, editGatewayCompleted);
         }
 
-        private void LaunchAddUserView(object o)
+        private bool EditGatewayCommandCanExecute(object o)
+        {
+            return this.SelectedGateway?.Gateway?.Model != null;
+        }
+
+        private void AddUserCommandExecute(object o)
         {
             AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
             NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
         }
 
-        private void LaunchEditUserView(object o)
+        private void EditUserCommandExecute(object o)
         {
-            // TODO
+            AddUserViewArgs args = new AddUserViewArgs(this.SelectedUser.Credentials.Model, false, CredentialPromptMode.EditCredentials);            
+            ModalPresentationCompletion editUserCompleted = new ModalPresentationCompletion((s, e) =>
+            {
+                CredentialPromptResult result = e.Result as CredentialPromptResult;
+                if (result != null && !result.UserCancelled)
+                {
+                    Guid credId = this.SelectedUser.Credentials.Id;
+                    LoadUsers();
+                    this.SelectUserId(credId);
+                }
+            });
+            this.NavigationService.PushAccessoryView("AddUserView", args, editUserCompleted);
         }
 
+        private bool EditUserCommandCanExecute(object o)
+        {
+            return this.SelectedUser?.Credentials?.Model != null;
+        }
 
         private void CredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
         {
@@ -359,23 +420,12 @@
         /// <param name="userId"> user id for the selected user </param>
         private void SelectUserId(Guid userId)
         {
-            int idx = 0;
-            if (Guid.Empty != userId)
+            var selected = this.UserOptions.FirstOrDefault(cbe =>
             {
-                for (idx = 0; idx < this.UserOptions.Count; idx++)
-                {
-                    if (this.UserOptions[idx].UserComboBoxType == UserComboBoxType.Credentials &&
-                        this.UserOptions[idx].Credentials.Id == userId)
-                        break;
-                }
+                return cbe.UserComboBoxType == UserComboBoxType.Credentials && cbe.Credentials?.Id == userId;
+            });
 
-                if (idx == this.UserOptions.Count)
-                {
-                    idx = 0;
-                }
-            }
-
-            this.SelectedUserOptionsIndex = idx;
+            this.SelectedUser = (null != selected) ? selected : this.UserOptions[0];
         }
 
         /// <summary>
@@ -384,23 +434,12 @@
         /// <param name="gatewayId"> gateway id for the selected gateway </param>
         private void SelectGatewayId(Guid gatewayId)
         {
-            int idx = 0;
-            if (Guid.Empty != gatewayId)
+            var selected = this.GatewayOptions.FirstOrDefault(cbe =>
             {
-                for (idx = 0; idx < this.GatewayOptions.Count; idx++)
-                {
-                    if (this.GatewayOptions[idx].GatewayComboBoxType == GatewayComboBoxType.Gateway &&
-                        this.GatewayOptions[idx].Gateway.Id == gatewayId)
-                        break;
-                }
+                return cbe.GatewayComboBoxType == GatewayComboBoxType.Gateway && cbe.Gateway?.Id == gatewayId;
+            });
 
-                if (idx == this.GatewayOptions.Count)
-                {
-                    idx = 0;
-                }
-            }
-
-            this.SelectedGatewayOptionsIndex = idx;
+            this.SelectedGateway = (null != selected) ? selected : this.GatewayOptions[0];
         }
 
     }

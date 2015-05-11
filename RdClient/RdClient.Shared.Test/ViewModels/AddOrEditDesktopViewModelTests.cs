@@ -180,7 +180,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 1;
+            _addOrEditDesktopViewModel.SelectedUser = _addOrEditDesktopViewModel.UserOptions[1];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
@@ -202,7 +202,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 0;
+            _addOrEditDesktopViewModel.SelectedUser = _addOrEditDesktopViewModel.UserOptions[0];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
@@ -226,7 +226,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(0, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
+            Assert.AreEqual(UserComboBoxType.AskEveryTime, _addOrEditDesktopViewModel.SelectedUser.UserComboBoxType);
         }
 
         [TestMethod]
@@ -244,9 +244,8 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(1, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
-            Assert.AreSame(credentials, _addOrEditDesktopViewModel.UserOptions[_addOrEditDesktopViewModel.SelectedUserOptionsIndex].Credentials.Model);
-            Assert.AreEqual(desktop.CredentialsId, _addOrEditDesktopViewModel.UserOptions[_addOrEditDesktopViewModel.SelectedUserOptionsIndex].Credentials.Id);
+            Assert.AreSame(credentials, _addOrEditDesktopViewModel.SelectedUser.Credentials);
+            Assert.AreEqual(desktop.CredentialsId, _addOrEditDesktopViewModel.SelectedUser.Credentials.Id);
         }
 
         [TestMethod]
@@ -261,7 +260,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(1, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
+            Assert.AreEqual(credentials, _addOrEditDesktopViewModel.SelectedUser);
         }
 
         [TestMethod]
@@ -510,7 +509,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex = 2;
+            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.GatewayOptions[1];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
@@ -532,7 +531,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex = 0;
+            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.GatewayOptions[0];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
@@ -554,7 +553,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(0, _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex);
+            Assert.AreEqual(GatewayComboBoxType.None, _addOrEditDesktopViewModel.SelectedGateway.GatewayComboBoxType);
         }
 
         [TestMethod]
@@ -571,10 +570,9 @@
 
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
-
-            Assert.AreEqual(2, _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex);
-            Assert.AreSame(gateway, _addOrEditDesktopViewModel.GatewayOptions[_addOrEditDesktopViewModel.SelectedGatewayOptionsIndex].Gateway.Model);
-            Assert.AreEqual(desktop.GatewayId, _addOrEditDesktopViewModel.GatewayOptions[_addOrEditDesktopViewModel.SelectedGatewayOptionsIndex].Gateway.Id);
+            
+            Assert.AreSame(gateway, _addOrEditDesktopViewModel.SelectedGateway.Gateway.Model);
+            Assert.AreEqual(desktop.GatewayId, _addOrEditDesktopViewModel.SelectedGateway.Gateway.Id);
         }
 
         [TestMethod]
@@ -589,7 +587,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(2, _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex);
+            Assert.AreSame(gateway, _addOrEditDesktopViewModel.SelectedGateway.Gateway);
         }
 
         [TestMethod]
@@ -604,7 +602,7 @@
 
             _nav.Expect("PushAccessoryView", new List<object> { "AddOrEditGatewayView", null, null }, null);
 
-            _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex = 1;
+            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.GatewayOptions[1];
         }
     }
 }

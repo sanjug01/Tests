@@ -9,10 +9,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Converters"    
     xmlns:helpers="using:RdClient.Shared.Helpers"
+    xmlns:design="using:RdClient.DesignTime"
     d:DesignWidth="480"
     d:DesignHeight="1200"
     mc:Ignorable="d">
 
+
+    <d:ModalUserControl.DataContext>
+        <design:FakeAddOrEditDesktopViewModel />
+    </d:ModalUserControl.DataContext>
+    
     <controls:ModalUserControl.DataContext>
         <vm:AddOrEditDesktopViewModel />
     </controls:ModalUserControl.DataContext>
@@ -102,7 +108,7 @@
                               Header="User name(d)"
                               HorizontalAlignment="Stretch"
                               ItemsSource="{Binding Path=UserOptions}"
-                              SelectedIndex="{Binding Path=SelectedUserOptionsIndex, Mode=TwoWay}">
+                              SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
