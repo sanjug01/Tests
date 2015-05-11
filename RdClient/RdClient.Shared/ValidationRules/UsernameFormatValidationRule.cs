@@ -1,6 +1,6 @@
 ﻿namespace RdClient.Shared.ValidationRules
 {
-    class UsernameFormatValidationRule : IValidationRule<string>
+    public class UsernameFormatValidationRule : IValidationRule<string>
     {
         public IValidationResult Validate(string value)
         {
