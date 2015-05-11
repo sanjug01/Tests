@@ -453,10 +453,10 @@ namespace RdClient.Shared.CxWrappers
 
             RdClientCx.ServerCertificateError certErrors;
             Certificate cert = null;
-            _rdpConnectionCx.GetServerCertificateDetails(out cert);
+            _rdpConnectionCx.GetServerCertificateDetails(RdClientCx.ServerCertificateProviderType.Endpoint, out cert);
             if (null != cert)
             {
-                _rdpConnectionCx.GetServerCertificateValidationErrors(out certErrors);
+                _rdpConnectionCx.GetServerCertificateValidationErrors(RdClientCx.ServerCertificateProviderType.Endpoint, out certErrors);
                 rdpCertificate = new RdpCertificate(cert, certErrors);
             }
 

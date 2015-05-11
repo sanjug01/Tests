@@ -31,10 +31,16 @@
 
     public sealed class RichTextViewModel : AccessoryViewModelBase, IDeferredExecutionSite
     {
+        private const string EULA_URI = "ms-appx:///Strings/EULA.rtf";
+        private const string THIRD_PARTY_URI = "ms-appx:///Strings/ThirdPartyNotices.rtf";
+        // we don't have Privacy/Help documents yet
+        private const string PRIVACY_DOC_URI = "";      // TODO: doc not yet available, using link until then
+        private const string HELP_DOC_URI = "";         // TODO: is it doc or link?
+
         private readonly RelayCommand _closeCommand;
         // private string _resourceFileUri;
         private string _infoText;
-        private string _title;
+        private InternalDocType _docType;
         private bool _isLoading;
         private IDeferredExecution _dispatcher;
 
@@ -62,15 +68,12 @@
             }
         }
 
-        /// <summary>
-        /// Document title - should apply localization
-        /// </summary>
-        public string Title
+        public InternalDocType DocumentType
         {
-            get { return _title; }
+            get { return _docType; }
             private set
             {
-                this.SetProperty(ref _title, value);
+                this.SetProperty(ref _docType, value);
             }
         }
 
@@ -93,25 +96,20 @@
             Contract.Assert(null != activationParameter as RichTextViewModelArgs);
 
             RichTextViewModelArgs args = activationParameter as RichTextViewModelArgs;
+            this.DocumentType = args.DocumentType;
             switch (args.DocumentType)
             {
                 case InternalDocType.EulaDoc:
-                    this.Title = "Terms of Use";
-                    this.ResourceUri = "ms-appx:///Strings/EULA.rtf";
+                    this.ResourceUri = EULA_URI;
                     break;
                 case InternalDocType.ThirdPartyNotices:
-                    this.Title = "Third Party Notices";
-                    this.ResourceUri = "ms-appx:///Strings/ThirdPartyNotices.rtf";
+                    this.ResourceUri = THIRD_PARTY_URI;
                     break;
-                case InternalDocType.PrivacyDoc:
-                    this.Title = "Privacy";
-                    // TODO: doc not yet available, using link until then
-                    this.ResourceUri = string.Empty;
+                case InternalDocType.PrivacyDoc:                    
+                    this.ResourceUri = PRIVACY_DOC_URI;
                     break;
-                case InternalDocType.HelpDoc:
-                    this.Title = "Help";
-                    // TODO: doc not yet available, using link until then
-                    this.ResourceUri = string.Empty;
+                case InternalDocType.HelpDoc:                    
+                    this.ResourceUri = HELP_DOC_URI;
                     break;
             }
 
@@ -130,7 +128,6 @@
                 }
                 catch (Exception exc)
                 {
-                    // TODO : remove try/catch in released version.
                     System.Diagnostics.Debug.WriteLine("Could not open resource file:" + this.ResourceUri + " because" + exc.Message);
                 }
             }

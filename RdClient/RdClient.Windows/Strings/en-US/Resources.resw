@@ -897,4 +897,20 @@
     <value>(r) Add account</value>
     <comment>Verb. Text under user's lists to add a new user account.</comment>
   </data>
+  <data name="InternalDocType_EulaDoc_String" xml:space="preserve">
+    <value>(r) Terms of use</value>
+    <comment>Title of the "Terms of use document" page</comment>
+  </data>
+  <data name="InternalDocType_HelpDoc_String" xml:space="preserve">
+    <value>(r) Help</value>
+    <comment>Title of the "Help" document page</comment>
+  </data>
+  <data name="InternalDocType_PrivacyDoc_String" xml:space="preserve">
+    <value>(r) Privacy Notice</value>
+    <comment>Title of the "Privacy" document page</comment>
+  </data>
+  <data name="InternalDocType_ThirdPartyNotices_String" xml:space="preserve">
+    <value>(r) Third party notices</value>
+    <comment>Title of the "Thrid party notices" document page</comment>
+  </data>
 </root>

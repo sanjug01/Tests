@@ -247,13 +247,13 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Content Include="..\..\RdClientCx\openssl\winrt\x86chk\libeay32.dll">
+    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\libeay32.dll">
       <Link>libeay32.dll</Link>
     </Content>
     <Content Include="..\..\RdClientCx\RdpWinRTTransportRpc\debug\win32\rdpwinrttransportrpc.dll">
       <Link>rdpwinrttransportrpc.dll</Link>
     </Content>
-    <Content Include="..\..\RdClientCx\openssl\winrt\x86chk\ssleay32.dll">
+    <Content Include="..\..\RdClientCx\openssl\WinRTPhone\x86chk\ssleay32.dll">
       <Link>ssleay32.dll</Link>
     </Content>
     <Content Include="Assets\Day0.png" />
