@@ -276,7 +276,7 @@
 
             _nav.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
 
-            _addOrEditDesktopViewModel.AddUser.Execute(null);
+            _addOrEditDesktopViewModel.AddUserCommand.Execute(null);
         }
 
         [TestMethod]

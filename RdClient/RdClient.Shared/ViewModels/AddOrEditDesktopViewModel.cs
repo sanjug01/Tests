@@ -44,6 +44,9 @@
         private readonly RelayCommand _showDetailsCommand;
         private readonly RelayCommand _hideDetailsCommand;
         private readonly RelayCommand _addUserCommand;
+        private readonly RelayCommand _editUserCommand;
+        private readonly RelayCommand _addGatewayCommand;
+        private readonly RelayCommand _editGatewayCommand;
         private DesktopModel _desktop;
         private int _selectedUserOptionsIndex;
         private int _selectedGatewayOptionsIndex;
@@ -59,6 +62,11 @@
             _showDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = true; });
             _hideDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = false; });
             _addUserCommand = new RelayCommand(LaunchAddUserView);
+            _addGatewayCommand = new RelayCommand(LaunchAddGatewayView);
+            _editUserCommand = new RelayCommand(LaunchEditUserView,
+                p => { return this.SelectedUserOptionsIndex > 0; } );
+            _editGatewayCommand = new RelayCommand(LaunchEditGatewayView,
+                p => { return this.SelectedGatewayOptionsIndex > 0; } );
 
             IsHostValid = true;
 
@@ -75,7 +83,10 @@
         public IPresentableView PresentableView { private get; set; }
         public ICommand DefaultAction { get { return _saveCommand; } }
         public ICommand Cancel { get { return _cancelCommand; } }
-        public ICommand AddUser { get { return _addUserCommand; } }
+        public ICommand AddUserCommand { get { return _addUserCommand; } }
+        public ICommand EditUserCommand { get { return _editUserCommand; } }
+        public ICommand AddGatewayCommand { get { return _addGatewayCommand; } }
+        public ICommand EditGatewayCommand { get { return _editGatewayCommand; } }
         public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
         public ICommand HideDetailsCommand { get { return _hideDetailsCommand; } }
 
@@ -91,22 +102,20 @@
         public int SelectedUserOptionsIndex 
         { 
             get { return _selectedUserOptionsIndex; }
-            set { SetProperty(ref _selectedUserOptionsIndex, value); }
+            set
+            {
+                SetProperty(ref _selectedUserOptionsIndex, value);
+                _editUserCommand.EmitCanExecuteChanged();
+            }
         }
 
         public int SelectedGatewayOptionsIndex
         {
             get { return _selectedGatewayOptionsIndex; }
-
             set
             {
-                if (SetProperty(ref _selectedGatewayOptionsIndex, value))
-                {
-                    if (value >= 0 && GatewayComboBoxType.AddNew == this.GatewayOptions[value].GatewayComboBoxType)
-                    {
-                        this.LaunchAddGatewayView();
-                    }
-                }
+                SetProperty(ref _selectedGatewayOptionsIndex, value);
+                _editGatewayCommand.EmitCanExecuteChanged();
             }
         }
 
@@ -279,11 +288,16 @@
             }
         }
 
-        private void LaunchAddGatewayView()
+        private void LaunchAddGatewayView(object o)
         {
             AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
             ModalPresentationCompletion addGatewayCompleted = new ModalPresentationCompletion(GatewayPromptResultHandler);
             NavigationService.PushAccessoryView("AddOrEditGatewayView", args, addGatewayCompleted);
+        }
+
+        private void LaunchEditGatewayView(object o)
+        {
+            // TODO
         }
 
         private void LaunchAddUserView(object o)
@@ -292,6 +306,12 @@
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
             NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
         }
+
+        private void LaunchEditUserView(object o)
+        {
+            // TODO
+        }
+
 
         private void CredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
         {
@@ -326,7 +346,6 @@
             // load gateways list
             this.GatewayOptions.Clear();
             this.GatewayOptions.Add(new GatewayComboBoxElement(GatewayComboBoxType.None));
-            this.GatewayOptions.Add(new GatewayComboBoxElement(GatewayComboBoxType.AddNew));
 
             foreach (IModelContainer<GatewayModel> gateway in this.ApplicationDataModel.Gateways.Models)
             {
