@@ -48,7 +48,7 @@
             <Border Grid.Row="1" Height="1" Margin="0" />
 
             <StackPanel Grid.Row="2" Margin="26,12,26,0">
-                <StackPanel Orientation="Vertical" Margin="0,0,0,20">
+                <StackPanel Style="{StaticResource DialogSectionPanel}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock x:Uid="AddOrEditGateway-ServerName-Error"
                                        Text="(*)(d)" Padding="0,0,8,0"

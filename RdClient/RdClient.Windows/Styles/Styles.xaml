@@ -353,7 +353,12 @@
     ======================================================================================
     Dialog styles 
     ======================================================================================
-    -->    
+    -->
+
+    <Style x:Key="DialogSectionPanel" TargetType="StackPanel">
+        <Setter Property="Orientation" Value="Vertical" />
+        <Setter Property="Margin" Value="0,0,0,20" />
+    </Style>
     <Style x:Key="DialogButtonStyle" TargetType="Button">
         <Setter Property="Height" Value="32" />
         <Setter Property="Width" Value="120" />

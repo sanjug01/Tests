@@ -54,8 +54,7 @@
             <Border Grid.Row="1" Height="1" Margin="0" />
 
             <StackPanel Grid.Row="2" Margin="26,0,26,0">
-                <StackPanel Orientation="Vertical"
-                                Margin="0,0,0,20">
+                <StackPanel Style="{StaticResource DialogSectionPanel}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock x:Uid="AddOrEditDesktop-PcName-Error"
                                        Text="(*)(d)" Padding="0,0,8,0"
@@ -76,8 +75,7 @@
                     </TextBox>
                 </StackPanel>
 
-                <StackPanel Orientation="Vertical"
-                                Margin="0,0,0,20">
+                <StackPanel Style="{StaticResource DialogSectionPanel}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                        x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
@@ -96,43 +94,45 @@
                     </TextBox>
                 </StackPanel>
 
-                <Grid Margin="0,0,0,20">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    
-                    <ComboBox x:Uid="AddOrEditDesktop-Credentials-ComboBox"
+                <StackPanel Style="{StaticResource DialogSectionPanel}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <ComboBox x:Uid="AddOrEditDesktop-Credentials-ComboBox"
                               Grid.Row="0"
                               Header="User name(d)"
                               HorizontalAlignment="Stretch"
                               ItemsSource="{Binding Path=UserOptions}"
                               SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <Grid Grid.Row="2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" 
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" 
                                 Style="{StaticResource DialogButtonStyle}" 
                                 x:Uid="Common_Button_AddUserAccount" 
                                 Content="Add account(d)" 
                                 Command="{Binding AddUserCommand}" />
-                        <Button Grid.Column="2" 
+                            <Button Grid.Column="2" 
                                 Style="{StaticResource DialogButtonStyle}" 
                                 x:Uid="Common_Button_EditItem" 
                                 Content="Edit(d)" 
                                 Command="{Binding EditUserCommand}" />
+                        </Grid>
                     </Grid>
-                </Grid>
+                </StackPanel>
 
                 <Button Background="Transparent"
                                 Command="{Binding ShowDetailsCommand}"     
