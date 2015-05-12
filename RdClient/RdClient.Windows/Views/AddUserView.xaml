@@ -109,7 +109,7 @@
                 </Grid>                
 
                 <HyperlinkButton x:Uid="AddUser-DeleteUserLink"
-                                 Margin="0,20"
+                                 Margin="{StaticResource DialogDoubleSizeMargin}"
                                  Command="{Binding Path=Delete}">
                     <TextBlock x:Uid="AddUser-DeleteUserText" 
                                Text="(d) Delete this account"/>

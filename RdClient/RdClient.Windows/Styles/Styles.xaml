@@ -355,6 +355,7 @@
     ======================================================================================
     -->
 
+    <Thickness x:Key="DialogDoubleSizeMargin">0,40,0,0</Thickness>
     <Style x:Key="DialogSectionStackPanelStyle" TargetType="StackPanel">
         <Setter Property="Orientation" Value="Vertical" />
         <Setter Property="Margin" Value="0,0,0,20" />

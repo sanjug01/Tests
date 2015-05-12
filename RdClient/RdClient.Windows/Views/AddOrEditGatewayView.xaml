@@ -106,7 +106,7 @@
                 </Grid>
                 
                 <HyperlinkButton x:Uid="AddOrEditGateway-DeleteGatewayLink"
-                                 Margin="0,20"
+                                 Margin="{StaticResource DialogDoubleSizeMargin}"
                                  Command="{Binding Path=Delete}"
                                  Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                     <TextBlock x:Uid="AddOrEditGateway-DeleteGatewayText" 
