@@ -34,25 +34,25 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="8"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="12"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-                <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}"                             
+                <TextBlock Margin="0,12,0,12" Style="{ThemeResource TitleTextBlockStyle}"                             
                                Text="{Binding Path=Mode, FallbackValue='Enter Credentials (d)', Converter={StaticResource TypeToLocalizedStringConverter}, ConverterParameter=Title}"/>
             </Grid>
 
             <Grid Grid.Row="1">
-                <TextBlock Margin="24,12,24,12" Style="{ThemeResource BodyTextBlockStyle}" 
+                <TextBlock Margin="0,12,0,12" Style="{ThemeResource BodyTextBlockStyle}" 
                                 Visibility="{Binding Path=ShowMessage, Converter={StaticResource BooleanToVisibilityConverter}}" 
                                 Text="{Binding Path=Mode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
             </Grid>
 
             <Border Grid.Row="2" Height="1" Margin="0" />
 
-            <StackPanel Grid.Row="3" Margin="26,12,26,0">
+            <StackPanel Grid.Row="3">
                 <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
