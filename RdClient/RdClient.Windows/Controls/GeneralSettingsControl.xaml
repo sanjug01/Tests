@@ -16,7 +16,7 @@
 
     <Grid>        
         <StackPanel Orientation="Vertical">
-            <StackPanel Style="{StaticResource DialogSectionPanel}">
+            <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
                 <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                        x:Uid="Settings_General_ShowThumbnails" 
                        Text="Show thumbnails for Desktops (d)" />

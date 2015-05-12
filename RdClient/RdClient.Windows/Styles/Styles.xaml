@@ -355,7 +355,7 @@
     ======================================================================================
     -->
 
-    <Style x:Key="DialogSectionPanel" TargetType="StackPanel">
+    <Style x:Key="DialogSectionStackPanelStyle" TargetType="StackPanel">
         <Setter Property="Orientation" Value="Vertical" />
         <Setter Property="Margin" Value="0,0,0,20" />
     </Style>

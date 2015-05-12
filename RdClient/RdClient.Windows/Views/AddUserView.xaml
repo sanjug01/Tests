@@ -53,7 +53,7 @@
             <Border Grid.Row="2" Height="1" Margin="0" />
 
             <StackPanel Grid.Row="3" Margin="26,12,26,0">
-                <StackPanel Style="{StaticResource DialogSectionPanel}">
+                <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    x:Uid="AddUser-User" 
@@ -73,7 +73,7 @@
                     </Grid>
                 </StackPanel>
 
-                <StackPanel Style="{StaticResource DialogSectionPanel}">
+                <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddUser-Password" Text="Password (d)"/>
                     <Grid Style="{StaticResource rdEntryFieldGridStyle}">
                     <PasswordBox 
