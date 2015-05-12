@@ -287,37 +287,17 @@
             Update();
         }
 
-        private void GatewayPromptResultHandler(object sender, PresentationCompletionEventArgs args)
-        {
-            GatewayPromptResult result = args.Result as GatewayPromptResult;
-
-            if (result != null && !result.UserCancelled)
-            {
-                this.LoadGateways();
-                this.SelectGatewayId(result.GatewayId);
-            }
-        }
-
         private void AddGatewayCommandExecute(object o)
         {
             AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
-            ModalPresentationCompletion addGatewayCompleted = new ModalPresentationCompletion(GatewayPromptResultHandler);
+            ModalPresentationCompletion addGatewayCompleted = new ModalPresentationCompletion(AddGatewayPromptResultHandler);
             NavigationService.PushAccessoryView("AddOrEditGatewayView", args, addGatewayCompleted);
         }
 
         private void EditGatewayCommandExecute(object o)
         {
             EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway.Model);
-            ModalPresentationCompletion editGatewayCompleted = new ModalPresentationCompletion((s, e) =>
-                {
-                    GatewayPromptResult result = e.Result as GatewayPromptResult;
-                    if (result != null && !result.UserCancelled)
-                    {
-                        Guid gatewayId = this.SelectedGateway.Gateway.Id;
-                        LoadGateways();
-                        this.SelectGatewayId(gatewayId);
-                    }
-                });
+            ModalPresentationCompletion editGatewayCompleted = new ModalPresentationCompletion(EditGatewayPromptResultHandler);
             this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, editGatewayCompleted);
         }
 
@@ -329,45 +309,20 @@
         private void AddUserCommandExecute(object o)
         {
             AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
-            ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
+            ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(AddCredentialPromptResultHandler);
             NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
         }
 
         private void EditUserCommandExecute(object o)
         {
             AddUserViewArgs args = new AddUserViewArgs(this.SelectedUser.Credentials.Model, false, CredentialPromptMode.EditCredentials);            
-            ModalPresentationCompletion editUserCompleted = new ModalPresentationCompletion((s, e) =>
-            {
-                CredentialPromptResult result = e.Result as CredentialPromptResult;
-                if (result != null && !result.UserCancelled)
-                {
-                    Guid credId = this.SelectedUser.Credentials.Id;
-                    LoadUsers();
-                    this.SelectUserId(credId);
-                }
-            });
+            ModalPresentationCompletion editUserCompleted = new ModalPresentationCompletion(EditGatewayPromptResultHandler);
             this.NavigationService.PushAccessoryView("AddUserView", args, editUserCompleted);
         }
 
         private bool EditUserCommandCanExecute(object o)
         {
             return this.SelectedUser?.Credentials?.Model != null;
-        }
-
-        private void CredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
-        {
-            CredentialPromptResult result = args.Result as CredentialPromptResult;
-
-            if (result != null && !result.UserCancelled)
-            {
-                Guid credId = this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
-                LoadUsers();
-                this.SelectUserId(credId);
-            }
-            else
-            {
-                this.Update();
-            }
         }
 
         private void LoadUsers()
@@ -420,6 +375,61 @@
             });
 
             this.SelectedGateway = (null != selected) ? selected : this.GatewayOptions[0];
+        }
+
+        private void AddCredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
+        {
+            CredentialPromptResult result = args.Result as CredentialPromptResult;
+
+            if (result != null && !result.UserCancelled)
+            {
+                Guid credId = this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
+                LoadUsers();
+                this.SelectUserId(credId);
+            }
+            else
+            {
+                this.Update();
+            }
+        }
+        private void EditCredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
+        {
+            CredentialPromptResult result = args.Result as CredentialPromptResult;
+            if (result != null && !result.UserCancelled)
+            {
+                Guid credId = this.SelectedUser.Credentials.Id;
+                LoadUsers();
+                this.SelectUserId(credId);
+            }
+        }
+
+        private void AddGatewayPromptResultHandler(object sender, PresentationCompletionEventArgs args)
+        {
+            GatewayPromptResult result = args.Result as GatewayPromptResult;
+
+            if (result != null && !result.UserCancelled)
+            {
+                this.LoadGateways();
+                this.SelectGatewayId(result.GatewayId);
+            }
+
+            // load users list, since users may have been added
+            this.LoadUsers();
+            this.SelectUserId(this.Desktop.CredentialsId);
+        }
+        private void EditGatewayPromptResultHandler(object sender, PresentationCompletionEventArgs args)
+        {
+            GatewayPromptResult result = args.Result as GatewayPromptResult;
+            if (result != null && !result.UserCancelled)
+            {
+                Guid gatewayId = this.SelectedGateway.Gateway.Id;
+                LoadGateways();
+                this.SelectGatewayId(gatewayId);
+            }
+
+            // load users list, since users may have been added
+            this.LoadUsers();
+            this.SelectUserId(this.Desktop.CredentialsId);
         }
 
     }
