@@ -164,13 +164,9 @@
                         Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 
                 <Grid Margin="0,18,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
-                                Grid.Column="2"
+                    <Button x:Uid="AddOrEditDesktop-SaveButton" Content="Save and connect(d)" 
+                                HorizontalAlignment="Right"
+                                Width="Auto"
                                 Style="{StaticResource DialogAccentedButtonStyle}"
                                 Command="{Binding Path=DefaultAction}" />
                 </Grid>

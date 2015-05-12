@@ -105,27 +105,7 @@
                 this.SetProperty(ref _isAddingDesktop, value, "IsAddingDesktop");
             }
         }
-
-        //public int SelectedUserOptionsIndex 
-        //{ 
-        //    get { return _selectedUserOptionsIndex; }
-        //    set
-        //    {
-        //        SetProperty(ref _selectedUserOptionsIndex, value);
-        //        _editUserCommand.EmitCanExecuteChanged();
-        //    }
-        //}
-
-        //public int SelectedGatewayOptionsIndex
-        //{
-        //    get { return _selectedGatewayOptionsIndex; }
-        //    set
-        //    {
-        //        SetProperty(ref _selectedGatewayOptionsIndex, value);
-        //        _editGatewayCommand.EmitCanExecuteChanged();
-        //    }
-        //}
-
+        
         public UserComboBoxElement SelectedUser
         {
             get { return _selectedUser; }

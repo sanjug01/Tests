@@ -56,7 +56,7 @@
 
             <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" 
                        Grid.Row="0"                   
-                       x:Uid="AddOrEditDesktop-Gateway" 
+                       x:Uid="AddOrEditDesktop-GatewaysSectionTitle" 
                        Text="Gateway(d)"/>
             <ComboBox Grid.Row="1"
                       HorizontalAlignment="Stretch"
@@ -92,12 +92,13 @@
                     Margin="0,0,0,40">
             <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" 
                        Grid.Row="0"                   
-                       x:Uid="AddOrEditDesktop-Redirection" 
+                       x:Uid="AddOrEditDesktop-RedirectionSectionTitle" 
                        Text="Redirection(d)"/>            
             <ComboBox Margin="0,8"
-                  Header="Sound(d)"
-                  HorizontalAlignment="Stretch"
-                  SelectedIndex="{Binding Path=AudioMode, Mode=TwoWay}">
+                      x:Uid="AddOrEditDesktop-SoundComboBox"
+                      Header="Sound(d)"
+                      HorizontalAlignment="Stretch"
+                      SelectedIndex="{Binding Path=AudioMode, Mode=TwoWay}">
                 <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnThisDevice" Content="Play on this device(d)" />
                 <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnRemotePc" Content="Play on remote PC(d)" />
                 <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-DontPlaySounds" Content="Don't play sounds(d)" />
