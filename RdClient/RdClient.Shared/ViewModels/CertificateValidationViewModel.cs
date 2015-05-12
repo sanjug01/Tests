@@ -33,7 +33,7 @@ namespace RdClient.Shared.ViewModels
         public CertificateTrustLevel Result { get; private set; }
     }
 
-    public class CertificateValidationViewModel : ViewModelBase
+    public class CertificateValidationViewModel : ViewModelBase, ICertificateValidationViewModel
     {
         private string _host;
         private IRdpCertificate _certificate;
