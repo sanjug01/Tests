@@ -130,7 +130,7 @@ namespace RdClient.DesignTime
         {
             get
             {
-                return true;
+                return false;
             }
 
             set
