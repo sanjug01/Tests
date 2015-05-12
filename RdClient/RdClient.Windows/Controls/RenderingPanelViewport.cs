@@ -4,6 +4,7 @@
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using System;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using Windows.Foundation;
     using Windows.UI.Xaml;
@@ -16,13 +17,11 @@
 
         private readonly RemoteSessionPanel _sessionPanel;
         private readonly RenderingPanel _renderingPanel;
-        private readonly Storyboard _storyboard;
         private readonly SynchronizedTransform _transformation;
 
         private Size _size;
         private Point _offset;
         private double _zoomFactor;
-        private Storyboard _activeStoryboard;
 
         public RenderingPanelViewport(RemoteSessionPanel sessionPanel, RenderingPanel renderingPanel,
             CompositeTransform transformation)
@@ -31,13 +30,13 @@
             Contract.Assert(null != renderingPanel);
 
             _sessionPanel = sessionPanel;
-            _size = new Size(_sessionPanel.ActualWidth, _sessionPanel.ActualHeight);
+            _renderingPanel = renderingPanel;
+
+            _size = new Size();
             _offset = new Point();
             _zoomFactor = 1.0;
+
             _sessionPanel.SizeChanged += this.OnSizeChanged;
-            _renderingPanel = renderingPanel;
-            _storyboard = new Storyboard();
-            _storyboard.Completed += this.OnAnimationCompleted;
             _transformation = new SynchronizedTransform(transformation);
         }
 
@@ -68,7 +67,7 @@
             return transformed;
         }
 
-        void IViewport.Set(double zoomFactor, Size offset, bool animated)
+        void IViewport.Set(double zoomFactor, Size offset)
         {
             zoomFactor = AdjustZoomFactor(zoomFactor);
 
@@ -90,41 +89,28 @@
             else
                 offset.Height = Math.Floor(offset.Height);
 
-            if(animated)
-            {
-                Animate(zoomFactor, offset.Width, offset.Height, 0.1);
-            }
-            else
-            {
-                _transformation.ScaleX = zoomFactor;
-                _transformation.ScaleY = zoomFactor;
-                _renderingPanel.MouseScaleTransform.ScaleX = zoomFactor;
-                _renderingPanel.MouseScaleTransform.ScaleY = zoomFactor;
-                _transformation.TranslateX = -offset.Width;
-                _transformation.TranslateY = -offset.Height;
-                this.ZoomFactor = zoomFactor;
-                this.Offset = new Point(offset.Width, offset.Height);
-            }
+            _transformation.ScaleX = zoomFactor;
+            _transformation.ScaleY = zoomFactor;
+            _renderingPanel.MouseScaleTransform.ScaleX = zoomFactor;
+            _renderingPanel.MouseScaleTransform.ScaleY = zoomFactor;
+            _transformation.TranslateX = -offset.Width;
+            _transformation.TranslateY = -offset.Height;
+            this.ZoomFactor = zoomFactor;
+            this.Offset = new Point(offset.Width, offset.Height);
         }
 
-        void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor, double durationMilliseconds)
+        void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor)
         {
-            //
-            // If the animation is running, stop it.
-            //
-            if(null != _activeStoryboard)
-            {
-                ConcludeAnimation(_activeStoryboard);
-                _activeStoryboard = null;
-            }
-            //
-            // Calculate the new scale and adjust it to the range 1.0-4.0.
-            //
-            double newScale = AdjustZoomFactor(_transformation.ScaleX * scaleFactor);
             //
             // Get the position of the anchor point (that is is viewport coordinates) in the rendering panel.
             //
             Point translatedAnchorPoint = _transformation.Transform.TransformPoint(anchorPoint);
+
+            //
+            // Calculate the new scale and adjust it to the range 1.0-4.0.
+            //
+            double newScale = AdjustZoomFactor(_transformation.ScaleX * scaleFactor);
+
             //
             // Construct a new transformation with the new scale and current translation (offset) and use it to get the position
             // of the anchor point using new scale.
@@ -134,6 +120,7 @@
                 ScaleX = newScale, ScaleY = newScale,
                 TranslateX = _transformation.TranslateX, TranslateY = _transformation.TranslateY
             };
+            
             //
             // Align the current and new anchor points and move the new anchor point the specified distance (dx/dy).
             //
@@ -149,47 +136,42 @@
             //
             // Adjust the viewport so it does not go outside of the rendering panel.
             //
-            Rect oldView = new Rect(_origin, _size);
-            Rect newView = newTransform.TransformBounds(oldView);
+            Rect renderingRect = new Rect(_origin, new Size(_renderingPanel.Width, _renderingPanel.Height));
+            Rect viewportRect =  new Rect(new Point(-newTransform.TranslateX, -newTransform.TranslateY), new Size(_size.Width * newScale, _size.Height * newScale));
 
-            if (newView.Left > oldView.Left)
-                newTransform.TranslateX -= newView.Left;
-            else if (newView.Right < oldView.Right)
-                newTransform.TranslateX += oldView.Right - newView.Right;
+            if (viewportRect.Left < renderingRect.Left)
+            {
+                newTransform.TranslateX -= renderingRect.Left - viewportRect.Left;
+            }
+            else if (viewportRect.Right > renderingRect.Right)
+            {
+                newTransform.TranslateX += viewportRect.Right - renderingRect.Right;
+            }
 
-            if (newView.Top > oldView.Top)
-                newTransform.TranslateY -= newView.Top;
-            else if (newView.Bottom < oldView.Bottom)
-                newTransform.TranslateY += oldView.Bottom - newView.Bottom;
-            //
+            if (viewportRect.Top < renderingRect.Top)
+            {
+                newTransform.TranslateY -= renderingRect.Top - viewportRect.Top;
+            }
+            else if (viewportRect.Bottom > renderingRect.Bottom)
+            {
+                newTransform.TranslateY += viewportRect.Bottom - renderingRect.Bottom;
+            }
+
             // Round the translate transfortmation down to avoid sub-pixel rendering of the final position.
             //
             newTransform.TranslateX = Math.Round(newTransform.TranslateX);
             newTransform.TranslateY = Math.Round(newTransform.TranslateY);
 
-            //
-            // Animate the transition
-            //
-            if (durationMilliseconds < 0.02)
-            {
-                //
-                // Too fast for animation, just update the transformation.
-                //
+            _transformation.ScaleX = newTransform.ScaleX;
+            _transformation.ScaleY = newTransform.ScaleY;
+            _renderingPanel.MouseScaleTransform.ScaleX = newTransform.ScaleX;
+            _renderingPanel.MouseScaleTransform.ScaleY = newTransform.ScaleY;
+            _transformation.TranslateX = newTransform.TranslateX;
+            _transformation.TranslateY = newTransform.TranslateY;
 
-                _transformation.ScaleX = newTransform.ScaleX;
-                _transformation.ScaleY = newTransform.ScaleY;
-                _renderingPanel.MouseScaleTransform.ScaleX = newTransform.ScaleX;
-                _renderingPanel.MouseScaleTransform.ScaleY = newTransform.ScaleY;
-                _transformation.TranslateX = newTransform.TranslateX;
-                _transformation.TranslateY = newTransform.TranslateY;
+            this.ZoomFactor = _transformation.ScaleX;
+            this.Offset = new Point(_transformation.TranslateX, _transformation.TranslateY);
 
-                this.ZoomFactor = _transformation.ScaleX;
-                this.Offset = new Point(_transformation.TranslateX, _transformation.TranslateY);
-            }
-            else
-            {
-                Animate(newTransform.ScaleX, -newTransform.TranslateX, -newTransform.TranslateY, durationMilliseconds);
-            }
         }
 
         private static double AdjustZoomFactor(double desiredZoomFactor)
@@ -200,35 +182,6 @@
                 desiredZoomFactor = 1.0;
 
             return desiredZoomFactor;
-        }
-
-        private void Animate(double zoomFactor, double offsetX, double offsetY, double duration)
-        {
-            DoubleAnimation
-                animationTranslateX = new DoubleAnimation() { From = _transformation.TranslateX, To = -offsetX },
-                animationTranslateY = new DoubleAnimation() { From = _transformation.TranslateY, To = -offsetY },
-                animationScaleX = new DoubleAnimation() { From = _transformation.ScaleX, To = zoomFactor },
-                animationScaleY = new DoubleAnimation() { From = _transformation.ScaleY, To = zoomFactor };
-
-            _storyboard.Children.Add(animationTranslateX);
-            _storyboard.Children.Add(animationTranslateY);
-            _storyboard.Children.Add(animationScaleX);
-            _storyboard.Children.Add(animationScaleY);
-            _storyboard.Duration = new Duration(TimeSpan.FromMilliseconds(duration));
-
-            Storyboard.SetTarget(animationTranslateX, _transformation.Transform);
-            Storyboard.SetTargetProperty(animationTranslateX, "TranslateX");
-            Storyboard.SetTarget(animationTranslateY, _transformation.Transform);
-            Storyboard.SetTargetProperty(animationTranslateY, "TranslateY");
-
-            Storyboard.SetTarget(animationScaleX, _transformation.Transform);
-            Storyboard.SetTargetProperty(animationScaleX, "ScaleX");
-            Storyboard.SetTarget(animationScaleY, _transformation.Transform);
-            Storyboard.SetTargetProperty(animationScaleY, "ScaleY");
-
-            Contract.Assert(null == _activeStoryboard);
-            _activeStoryboard = _storyboard;
-            _activeStoryboard.Begin();
         }
 
         private Size Size
@@ -251,20 +204,8 @@
             //
             // Adjust the viewport position to its new size;
             //
-            if(null != _activeStoryboard)
-            {
-                ConcludeAnimation(_activeStoryboard);
-                _activeStoryboard = null;
-            }
 
             this.Size = e.NewSize;
-        }
-
-        private void OnAnimationCompleted(object sender, object e)
-        {
-            Contract.Assert(object.ReferenceEquals(_activeStoryboard, _storyboard));
-            ConcludeAnimation(_activeStoryboard);
-            _activeStoryboard = null;
         }
 
         private void ConcludeAnimation(Storyboard storyboard)

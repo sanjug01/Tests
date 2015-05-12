@@ -46,7 +46,7 @@ namespace RdClient.Shared.Models
         {
             if(_viewport != null)
             {
-                _viewport.Set(2, new Size(_viewportCenter.X, _viewportCenter.Y), false);
+                _viewport.Set(2, new Size(_viewportCenter.X, _viewportCenter.Y));
                 _isZoomedIn = true;
                 _zoomInCommand.EmitCanExecuteChanged();
                 _zoomOutCommand.EmitCanExecuteChanged();
@@ -57,7 +57,7 @@ namespace RdClient.Shared.Models
         {
             if(_viewport != null)
             {
-                _viewport.Set(1, new Size(_viewportCenter.X, _viewportCenter.Y), false);
+                _viewport.Set(1, new Size(_viewportCenter.X, _viewportCenter.Y));
                 _isZoomedIn = false;
                 _zoomInCommand.EmitCanExecuteChanged();
                 _zoomOutCommand.EmitCanExecuteChanged();
@@ -76,16 +76,16 @@ namespace RdClient.Shared.Models
             switch(panDirection)
             {
                 case PanDirection.Up:
-                    _deferrer.TryDeferToUI(() => _viewport.PanAndZoom(_viewportCenter, 0, _panStep, 1.0, 0));
+                    _deferrer.TryDeferToUI(() => _viewport.PanAndZoom(_viewportCenter, 0, _panStep, 1.0));
                     break;
                 case PanDirection.Down:
-                    _deferrer.TryDeferToUI(() => _viewport.PanAndZoom(_viewportCenter, 0, -_panStep, 1.0, 0));
+                    _deferrer.TryDeferToUI(() => _viewport.PanAndZoom(_viewportCenter, 0, -_panStep, 1.0));
                     break;
                 case PanDirection.Left:
-                    _deferrer.TryDeferToUI(() => _viewport.PanAndZoom(_viewportCenter, _panStep, 0, 1.0, 0));
+                    _deferrer.TryDeferToUI(() => _viewport.PanAndZoom(_viewportCenter, _panStep, 0, 1.0));
                     break;
                 case PanDirection.Right:
-                    _deferrer.TryDeferToUI(() => _viewport.PanAndZoom(_viewportCenter, -_panStep, 0, 1.0, 0));
+                    _deferrer.TryDeferToUI(() => _viewport.PanAndZoom(_viewportCenter, -_panStep, 0, 1.0));
                     break;
             }
         }

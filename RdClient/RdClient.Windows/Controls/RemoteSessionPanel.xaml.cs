@@ -12,6 +12,7 @@
     using Windows.Foundation;
     using Windows.UI.Core;
     using Windows.UI.Input;
+    using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
@@ -72,6 +73,7 @@
         {
             Contract.Assert(_viewLoaded);
             Contract.Ensures(null != Contract.Result<IRenderingPanel>());
+            //ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
 
             this.RenderingPanel.MouseCursor = this.MouseCursor;
             this.RenderingPanel.MouseTransform = this.MouseTransform;
@@ -182,6 +184,7 @@
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             MakeCursorVisible();
+            //ApplicationView.GetForCurrentView().ExitFullScreenMode();
 
             if (null != _closed)
                 _closed(this, EventArgs.Empty);
