@@ -118,6 +118,7 @@
     <Compile Include="Data\IPersistentObject.cs" />
     <Compile Include="Data\IPersistentStatus.cs" />
     <Compile Include="Data\IStorageFolder.cs" />
+    <Compile Include="Data\JoinedObservableCollection.cs" />
     <Compile Include="Data\ModelContainer.cs" />
     <Compile Include="Data\OrderedObservableCollection.cs" />
     <Compile Include="Data\PrimaryModelCollection.cs" />
@@ -323,6 +324,7 @@
     <Compile Include="ValidationRules\ValidatedProperty.cs" />
     <Compile Include="ValidationRules\ValidationResult.cs" />
     <Compile Include="ViewModels\ICertificateValidationViewModel.cs" />
+    <Compile Include="ViewModels\IAddOrEditDEsktopViewModel.cs" />
     <Compile Include="ViewModels\RichTextViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBase.cs" />
