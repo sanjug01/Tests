@@ -141,6 +141,7 @@
     <Compile Include="Data\CertificateTrustTests.cs" />
     <Compile Include="Data\FailingModelSerializer.cs" />
     <Compile Include="Data\FilteringObservableCollectionTests.cs" />
+    <Compile Include="Data\JoinedObservableCollectionTests.cs" />
     <Compile Include="Data\MemoryStorageFolder.cs" />
     <Compile Include="Data\ModelContainerTests.cs" />
     <Compile Include="Data\OrderedObservableCollectionTests.cs" />

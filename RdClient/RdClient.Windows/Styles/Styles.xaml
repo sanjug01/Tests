@@ -112,7 +112,7 @@
     ======================================================================================
     -->            
     <GridLength x:Key="ConnectionCenterMargin">68</GridLength>   
-    <x:Double x:Key="ConnectionCenterTitleBarHeight">68</x:Double>
+    <x:Double x:Key="ConnectionCenterTitleBarHeight">48</x:Double>
     <x:Double x:Key="ConnectionCenterButtonWidth">68</x:Double>
     <GridLength x:Key="ListHeaderHeight">34</GridLength>
     
@@ -355,6 +355,7 @@
     ======================================================================================
     -->
 
+    <Thickness x:Key="DialogDoubleSizeMargin">0,40,0,0</Thickness>
     <Style x:Key="DialogSectionStackPanelStyle" TargetType="StackPanel">
         <Setter Property="Orientation" Value="Vertical" />
         <Setter Property="Margin" Value="0,0,0,20" />
