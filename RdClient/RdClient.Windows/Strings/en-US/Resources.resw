@@ -762,9 +762,13 @@
     <value>(r) This problem can occur if the remote PC is running a version of Windows that is not configured to support server authentication.</value>
   </data>
   <data name="Connection_Pending_Message.Text" xml:space="preserve">
-    <value>(r) Preparing the remote connection</value>
+    <value>(r) Initiating the remote connection</value>
     <comment>Message displayed in the connection view, while connecting to remote session.</comment>
   </data>
+  <data name="Connection_Pending_ConnectToMessage.Text" xml:space="preserve">
+    <value>(r) Connecting to</value>
+    <comment>Message displayed in the connection view, while connecting to remote session.</comment>
+  </data>  
   <data name="SelectResource_Azure_Description.Text" xml:space="preserve">
     <value>(r) Get to apps from Azure RemoteApp</value>
     <comment>Description of add Azure Remote App option on the add resource view</comment>
@@ -917,7 +921,7 @@
     <comment>Title of the belly-band message shown in the session view when the connection got interrupted and is reconnecting</comment>
   </data>
   <data name="RemoteSessionInterruptionControl_Message.Text" xml:space="preserve">
-    <value>(r) The remote connection has been interrupted and is reconnecting…</value>
+    <value>(r) Reconnecting to </value>
     <comment>Message displayed in the "reconnecting"belly-band dialog of the session view</comment>
   </data>
   <data name="Common_Button_AddUserAccount.Content" xml:space="preserve">
