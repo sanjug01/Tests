@@ -6,8 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignHeight="200"
+    d:DesignWidth="300">
     
     <UserControl.Resources>
         <Style x:Key="DialogDefaultStyle" TargetType="ContentControl">
@@ -16,21 +16,22 @@
                     <ControlTemplate TargetType="ContentControl">
                         <Grid>
                             <Border Style="{StaticResource ModalBackground}">
-                                <Border 
-                                    BorderBrush="{ThemeResource SystemAccentColor}" 
-                                    BorderThickness="2"
+                                <Grid 
+                                    Style="{StaticResource ConnectionCenterBarGridStyle}"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Margin="40"
+                                    Margin="{StaticResource DialogDefaultLayoutMargin}"
                                     Height="Auto"
-                                    Width="368">
-                                    <Grid 
-                                        Style="{StaticResource ConnectionCenterBarGridStyle}">
-                                        <Grid Margin="20">
+                                    MinWidth="{StaticResource DialogMinWidth}"
+                                    MaxWidth="{StaticResource DialogMaxWidth}">
+                                    <Border 
+                                        BorderBrush="{ThemeResource SystemAccentColor}" 
+                                        BorderThickness="2">
+                                        <Grid Margin="{StaticResource DialogDefaultLayoutMargin}">
                                             <ContentPresenter />
                                         </Grid>
-                                    </Grid>
-                                </Border>
+                                    </Border>
+                                </Grid>
                             </Border>
                         </Grid>
                     </ControlTemplate>
@@ -42,7 +43,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ContentControl">
                         <Grid Style="{StaticResource ConnectionCenterBarGridStyle}">
-                            <Grid Margin="20">
+                            <Grid Margin="{StaticResource DialogNarrowLayoutMargin}">
                                 <ContentPresenter />
                             </Grid>
                         </Grid>
