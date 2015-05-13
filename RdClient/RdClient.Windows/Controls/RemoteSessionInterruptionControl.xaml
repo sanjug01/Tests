@@ -34,7 +34,7 @@
                    Style="{ThemeResource BodyTextBlockStyle}"
                    Foreground="{ThemeResource UnselectedForegroundBrush}"                   
                    x:Uid="RemoteSessionInterruptionControl_Message"
-                   Text="(d) The remote connection has been interrupted and is reconnecting to"/>
+                   Text="(d) Reconnecting to"/>
 
         <TextBlock Grid.Row="4" 
                    HorizontalAlignment="Left"

@@ -33,7 +33,7 @@
                    HorizontalAlignment="Left"
                    Style="{ThemeResource BodyTextBlockStyle}"
                    Foreground="{ThemeResource UnselectedForegroundBrush}"
-                   x:Uid="Connection_ConnectTo_Message"
+                   x:Uid="Connection_Pending_ConnectToMessage"
                    Text="(d) Connecting to "/>
 
         <TextBlock Grid.Row="4" 
