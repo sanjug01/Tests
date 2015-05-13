@@ -137,6 +137,9 @@
     <Compile Include="Controls\GeneralSettingsControl.xaml.cs">
       <DependentUpon>GeneralSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\InSessionDialogControl.xaml.cs">
+      <DependentUpon>InSessionDialogControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RichTextControl.xaml.cs">
       <DependentUpon>RichTextControl.xaml</DependentUpon>
     </Compile>
@@ -373,6 +376,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\GeneralSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\InSessionDialogControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
