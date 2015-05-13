@@ -57,17 +57,6 @@
                     <Grid>
                         <Button
                         Style="{StaticResource FlatButtonStyle}"
-                        >
-
-                            <Grid Margin="10,10">
-                                <TextBlock x:Uid="AdditionalToolbarCommandsView_News" Text="(d) What's new" />
-                            </Grid>
-                        </Button>
-                    </Grid>
-
-                    <Grid>
-                        <Button
-                        Style="{StaticResource FlatButtonStyle}"
                         Command="{Binding ShowAboutDialog}"
                         >
 

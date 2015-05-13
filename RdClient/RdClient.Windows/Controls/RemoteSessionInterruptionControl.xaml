@@ -9,31 +9,51 @@
     mc:Ignorable="d"
     d:DesignWidth="640"
     d:DesignHeight="200">
-    
-    <Grid>
-        <StackPanel Orientation="Vertical">
-            <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
-                       TextAlignment="Center"
-                       x:Uid="RemoteSessionInterruptionControl_Title"
-                       Text="(d) Remote Connection Has Been Interrupted" />
 
-            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}"
-                       Margin="0,10,0,5"
-                       HorizontalAlignment="Center"
-                       x:Uid="RemoteSessionInterruptionControl_Message"
-                       Text="(d) The remote connection has been interrupted and is reconnecting…"/>
+    <Grid HorizontalAlignment="Stretch"
+          Margin="40,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
 
-            <ProgressBar Margin="0,0,0,15"
-                         IsIndeterminate="True"
-                         HorizontalAlignment="Stretch" />
+        <ProgressBar Grid.Row="0"
+                     IsIndeterminate="True"
+                     HorizontalAlignment="Stretch" />
 
-            <Button Style="{ThemeResource DialogButtonStyle}"
-                    x:Name="CancelButton"
-                    HorizontalAlignment="Center"
-                    Command="{Binding Cancel}">
-                <TextBlock x:Uid="RemoteSessionInterruptionControl_Cancel" Text="(d) Cancel"/>
-            </Button>
-        </StackPanel>
+        <TextBlock Grid.Row="2"
+                   HorizontalAlignment="Left"
+                   Style="{ThemeResource BodyTextBlockStyle}"
+                   Foreground="{ThemeResource UnselectedForegroundBrush}"                   
+                   x:Uid="RemoteSessionInterruptionControl_Message"
+                   Text="(d) Reconnecting to"/>
+
+        <TextBlock Grid.Row="4" 
+                   HorizontalAlignment="Left"
+                   Style="{ThemeResource BodyTextBlockStyle}"
+                   x:Uid="RemoteSessionInterruptionControl_ConnectToHost"
+                   Text="{Binding Path=HostName}"/>
+
+        <TextBlock Grid.Row="6"
+                   HorizontalAlignment="Left"
+                   Style="{ThemeResource BodyTextBlockStyle}"
+                   x:Uid="RemoteSessionInterruptionControl_Title"
+                   Text="(d) Remote Connection Has Been Interrupted" />
+        
+        <Button Grid.Row="8"
+                Style="{ThemeResource DialogButtonStyle}"
+                x:Name="CancelButton"
+                HorizontalAlignment="Center"
+                Command="{Binding Cancel}">
+            <TextBlock x:Uid="RemoteSessionInterruptionControl_Cancel" Text="(d) Cancel"/>
+        </Button>
     </Grid>
-    
 </UserControl>
