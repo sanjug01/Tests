@@ -29,8 +29,8 @@
         <c:RdpCertificateToErrorListConverter x:Key="RdpCertificateToErrorListConverter" TypeToLocalizedStringConverter="{StaticResource TypeToLocalizedStringConverter}" />
     </Page.Resources>
 
-    <controls:InSessionDialogControl>
-        <controls:InSessionDialogControl.DialogContent>
+    <controls:ModalDialogControl>
+        <controls:ModalDialogControl.DialogContent>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -174,7 +174,7 @@
                     </Button>
                 </Grid>
             </Grid>
-        </controls:InSessionDialogControl.DialogContent>
-    </controls:InSessionDialogControl>
+        </controls:ModalDialogControl.DialogContent>
+    </controls:ModalDialogControl>
 </Page>
 
