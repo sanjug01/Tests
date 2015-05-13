@@ -360,7 +360,9 @@
                 {
                     case SessionState.Connecting:
                         Contract.Assert(null == this.BellyBandViewModel);
-                        this.BellyBandViewModel = new RemoteSessionConnectingViewModel(() => _activeSession.Disconnect());
+                        this.BellyBandViewModel = new RemoteSessionConnectingViewModel(
+                            _activeSession.HostName,
+                            () => _activeSession.Disconnect() );
                         this.IsConnectionBarVisible = false;
 
                         break;
