@@ -45,8 +45,6 @@
             _viewLoaded = false;
             _renderingPanelSize = Size.Empty;
             this.RenderingPanel.SetViewport(new RenderingPanelViewport(this, this.RenderingPanel, this.Transformation));
-
-
         }
 
         public object RemoteSessionViewSite

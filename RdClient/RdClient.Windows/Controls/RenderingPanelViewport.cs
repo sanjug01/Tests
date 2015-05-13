@@ -133,30 +133,39 @@
             newTransform.TranslateX = _transformation.TranslateX - newShift.X;
             newTransform.TranslateY = _transformation.TranslateY - newShift.Y;
 
+            AdjustViewport(newTransform);
+        }
+
+        private void AdjustViewport(CompositeTransform newTransform)
+        {
             //
             // Adjust the viewport so it does not go outside of the rendering panel.
             //
-            Rect renderingRect = new Rect(_origin, new Size(_renderingPanel.Width, _renderingPanel.Height));
-            Rect viewportRect =  new Rect(new Point(-newTransform.TranslateX, -newTransform.TranslateY), new Size(_size.Width * newScale, _size.Height * newScale));
+            double epsilonHorizontal = Math.Max(0, (_size.Width - _renderingPanel.Width));
+            double epsilonVertical = Math.Max(0, (_size.Height - _renderingPanel.Height));
 
-            if (viewportRect.Left < renderingRect.Left)
+            Rect renderingRect = new Rect(_origin, new Size(_renderingPanel.Width + epsilonHorizontal, _renderingPanel.Height + epsilonVertical));
+            Rect viewportRect = new Rect(new Point(-newTransform.TranslateX, -newTransform.TranslateY), new Size(_size.Width * newTransform.ScaleX, _size.Height * newTransform.ScaleY));
+
+            if (viewportRect.Left <= renderingRect.Left)
             {
-                newTransform.TranslateX -= renderingRect.Left - viewportRect.Left;
+                newTransform.TranslateX -= renderingRect.Left - viewportRect.Left - epsilonHorizontal / 2.0;
             }
             else if (viewportRect.Right > renderingRect.Right)
             {
-                newTransform.TranslateX += viewportRect.Right - renderingRect.Right;
+                newTransform.TranslateX += viewportRect.Right - renderingRect.Right + epsilonHorizontal / 2.0;
             }
 
-            if (viewportRect.Top < renderingRect.Top)
+            if (viewportRect.Top <= renderingRect.Top)
             {
-                newTransform.TranslateY -= renderingRect.Top - viewportRect.Top;
+                newTransform.TranslateY -= renderingRect.Top - viewportRect.Top - epsilonVertical / 2.0;
             }
             else if (viewportRect.Bottom > renderingRect.Bottom)
             {
-                newTransform.TranslateY += viewportRect.Bottom - renderingRect.Bottom;
+                newTransform.TranslateY += viewportRect.Bottom - renderingRect.Bottom + epsilonVertical / 2.0;
             }
 
+            //
             // Round the translate transfortmation down to avoid sub-pixel rendering of the final position.
             //
             newTransform.TranslateX = Math.Round(newTransform.TranslateX);
@@ -164,14 +173,17 @@
 
             _transformation.ScaleX = newTransform.ScaleX;
             _transformation.ScaleY = newTransform.ScaleY;
-            _renderingPanel.MouseScaleTransform.ScaleX = newTransform.ScaleX;
-            _renderingPanel.MouseScaleTransform.ScaleY = newTransform.ScaleY;
+            if (_renderingPanel.MouseScaleTransform != null)
+            {
+                _renderingPanel.MouseScaleTransform.ScaleX = newTransform.ScaleX;
+                _renderingPanel.MouseScaleTransform.ScaleY = newTransform.ScaleY;
+
+            }
             _transformation.TranslateX = newTransform.TranslateX;
             _transformation.TranslateY = newTransform.TranslateY;
 
             this.ZoomFactor = _transformation.ScaleX;
             this.Offset = new Point(_transformation.TranslateX, _transformation.TranslateY);
-
         }
 
         private static double AdjustZoomFactor(double desiredZoomFactor)
@@ -206,33 +218,7 @@
             //
 
             this.Size = e.NewSize;
-        }
-
-        private void ConcludeAnimation(Storyboard storyboard)
-        {
-            //
-            // Save the current animated values.
-            //
-            double
-                animatedScale = _transformation.ScaleX,
-                animatedTranslateX = _transformation.TranslateX,
-                animatedTranslateY = _transformation.TranslateY;
-            //
-            // Stop the storyboard and remove all animations from it.
-            //
-            storyboard.Stop();
-            storyboard.Children.Clear();
-            //
-            // Restore saved transformation values.
-            //
-            _transformation.ScaleX = animatedScale;
-            _transformation.TranslateX = animatedTranslateX;
-            _transformation.TranslateY = animatedTranslateY;
-            //
-            // Report the new zoom factor and offset by setting the properties of the IViewport object.
-            //
-            this.ZoomFactor = _transformation.ScaleX;
-            this.Offset = new Point(_transformation.TranslateX, _transformation.TranslateY);
-        }
+            AdjustViewport(_transformation.Transform);
+        }        
     }
 }
