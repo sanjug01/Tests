@@ -15,10 +15,11 @@
        <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="10"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+           <RowDefinition Height="Auto"/>
             <RowDefinition Height="60"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="20"/>
@@ -35,25 +36,24 @@
                    x:Uid="Connection_ConnectTo_Message"
                    Text="(d) Connecting to "/>
 
-        <TextBlock Grid.Row="3" 
+        <TextBlock Grid.Row="4" 
                    HorizontalAlignment="Left"
                    Style="{ThemeResource BodyTextBlockStyle}"
                    x:Uid="Connection_ConnectToHost"
                    Text="{Binding Path=HostName}"/>
 
-        <TextBlock Grid.Row="5"
+        <TextBlock Grid.Row="6"
                 HorizontalAlignment="Left"
                        Style="{ThemeResource BodyTextBlockStyle}"
                        x:Uid="Connection_Pending_Message"
                        Text="(d) Initiating remote connection "/>
 
-        <Button Grid.Row="7"
+        <Button Grid.Row="8"
                     Style="{ThemeResource DialogButtonStyle}"
                     x:Name="CancelButton"
                     x:Uid="Common_Button_Cancel"
                     Content="(d) Cancel"
                     HorizontalAlignment="Right"
                     Command="{Binding Cancel}"/>
-
     </Grid>
 </UserControl>

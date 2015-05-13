@@ -15,10 +15,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="10"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="60"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="20"/>
@@ -35,19 +36,19 @@
                    x:Uid="RemoteSessionInterruptionControl_Message"
                    Text="(d) The remote connection has been interrupted and is reconnecting to"/>
 
-        <TextBlock Grid.Row="3" 
+        <TextBlock Grid.Row="4" 
                    HorizontalAlignment="Left"
                    Style="{ThemeResource BodyTextBlockStyle}"
                    x:Uid="RemoteSessionInterruptionControl_ConnectToHost"
                    Text="{Binding Path=HostName}"/>
 
-        <TextBlock Grid.Row="5"
+        <TextBlock Grid.Row="6"
                    HorizontalAlignment="Left"
                    Style="{ThemeResource BodyTextBlockStyle}"
                    x:Uid="RemoteSessionInterruptionControl_Title"
                    Text="(d) Remote Connection Has Been Interrupted" />
         
-        <Button Grid.Row="7"
+        <Button Grid.Row="8"
                 Style="{ThemeResource DialogButtonStyle}"
                 x:Name="CancelButton"
                 HorizontalAlignment="Center"
