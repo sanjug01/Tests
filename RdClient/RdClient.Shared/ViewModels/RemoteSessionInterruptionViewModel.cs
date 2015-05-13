@@ -25,14 +25,17 @@
             private set { SetProperty(ref _reconnectAttempt, value); }
         }
 
+        public string HostName { get; private set; }
+
         public RemoteSessionInterruptionViewModel(IRemoteSession session, InterruptedSessionContinuation continuation)
         {
             _session = session;
             _continuation = continuation;
             _cancel = new RelayCommand(this.CancelReconnect, this.CanCancelReconnect);
-
             _session.State.PropertyChanged += this.OnSessionStatePropertyChanged;
-            _reconnectAttempt = session.State.ReconnectAttempt;
+            this.ReconnectAttempt = session.State.ReconnectAttempt;
+            this.HostName = _session.HostName;
+
         }
 
         private void CancelReconnect(object parameter)
