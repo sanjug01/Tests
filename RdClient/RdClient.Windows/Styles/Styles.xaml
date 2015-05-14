@@ -110,9 +110,9 @@
     ======================================================================================
     Connection Center styles 
     ======================================================================================
-    -->            
-    <GridLength x:Key="ConnectionCenterMargin">24</GridLength>   
-    <x:Double x:Key="ConnectionCenterTitleBarHeight">48</x:Double>
+    -->
+	<GridLength x:Key="ConnectionCenterMargin">24</GridLength>
+	<x:Double x:Key="ConnectionCenterTitleBarHeight">48</x:Double>
 	<x:Double x:Key="ConnectionCenterButtonWidth">68</x:Double>
 
 	<Style x:Key="ConnectionCenterBarGridStyle" TargetType="Grid">
@@ -148,7 +148,7 @@
       <Setter Property="Margin" Value="0" />
       <Setter Property="Height" Value="{StaticResource ConnectionCenterTitleBarHeight}" />
       <Setter Property="TabNavigation" Value="Local" />
-      <Setter Property="Padding" Value="34,0,34,0" />
+      <Setter Property="Padding" Value="12,0,12,0" />
       <Setter Property="HorizontalContentAlignment" Value="Left" />
       <Setter Property="VerticalAlignment" Value="Center" />
       <Setter Property="FontSize" Value="26.667"/>
@@ -300,9 +300,9 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="Foreground" Value="Transparent" />
-        <Setter Property="Padding" Value="34,0,0,0" />
-        <Setter Property="ItemContainerStyle" Value="{StaticResource ConnectionCenterSectionSelectorItemStyle}" />
+		<Setter Property="Foreground" Value="Transparent" />
+		<Setter Property="Padding" Value="12,0,12,0" />
+		<Setter Property="ItemContainerStyle" Value="{StaticResource ConnectionCenterSectionSelectorItemStyle}" />
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>

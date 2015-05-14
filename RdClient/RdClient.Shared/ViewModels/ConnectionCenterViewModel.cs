@@ -246,7 +246,7 @@
 
         private void SetShowSectionLabels()
         {
-            this.ShowSectionLabels = this.HasDesktops && this.HasApps;
+            this.ShowSectionLabels = this.HasDesktops || this.HasApps;
         }
 
         public IViewVisibility AccessoryViewVisibility
