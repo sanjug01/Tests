@@ -326,6 +326,7 @@
     <Compile Include="ValidationRules\UsernameValidationFailure.cs" />
     <Compile Include="ValidationRules\ValidatedProperty.cs" />
     <Compile Include="ValidationRules\ValidationResult.cs" />
+    <Compile Include="ViewModels\ICertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\IAddOrEditDEsktopViewModel.cs" />
     <Compile Include="ViewModels\RichTextViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
