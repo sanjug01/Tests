@@ -34,6 +34,10 @@
         //
         private readonly ReadOnlyObservableCollection<BarItemModel> _toolbarItems;
 
+        private readonly ICommand _showSettings;
+        private readonly ICommand _showAbout;
+        private readonly ICommand _showHelp;
+
         private int _selectedCount;
         private bool _desktopsSelectable;
         private bool _showDesktops;
@@ -121,7 +125,10 @@
 
         public ConnectionCenterViewModel()
         {
-            this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);            
+            this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);
+            _showSettings = new RelayCommand(this.GoToSettingsCommandExecute);
+            _showAbout = new RelayCommand(this.ShowAboutCommandExecute);
+            _showHelp = new RelayCommand(this.ShowHelpCommandExecute);
             this.EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => (1 == this.SelectedCount) );
             this.DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
             this.AddWorkspaceCommand = new RelayCommand(o => AddWorkspaceExecute());
@@ -164,6 +171,9 @@
         }
 
         public RelayCommand AddDesktopCommand { get; private set; }
+        public ICommand ShowSettings { get { return _showSettings; } }
+        public ICommand ShowAbout { get { return _showAbout; } }
+        public ICommand ShowHelp { get { return _showHelp; } }
         public RelayCommand EditDesktopCommand { get; private set; }
         public RelayCommand DeleteDesktopCommand { get; private set; }
         public RelayCommand AddWorkspaceCommand { get; private set; }
@@ -470,6 +480,15 @@
         private void GoToSettingsCommandExecute(object o)
         {
             this.NavigationService.PushAccessoryView("SettingsView", null);
+        }
+
+        private void ShowAboutCommandExecute(object o)
+        {
+            this.NavigationService.PushAccessoryView("AboutView", null);
+        }
+
+        private void ShowHelpCommandExecute(object o)
+        {
         }
 
         private void PushAdditionalCommandsDialog(object parameter)
