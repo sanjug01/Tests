@@ -24,6 +24,7 @@
         MultiSelection = 0xE762,
         Keyboard =0xE765,
         EnterFullScreen = 0xE1D9,
+        ExitFullScreen = 0xE1D8
     }
 
     /// <summary>

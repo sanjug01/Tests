@@ -152,6 +152,7 @@
 
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.EnterFullScreen, Command = _fullScreenModel.EnterFullScreenCommand });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ExitFullScreen, Command = _fullScreenModel.ExitFullScreenCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = _zoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = _zoomPanModel.ZoomOutCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = _toggleSideBars });
@@ -402,6 +403,7 @@
 
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
+                        _fullScreenModel.EnterFullScreenCommand.Execute(null);
                         this.IsConnectionBarVisible = true;
                         break;
 
@@ -430,6 +432,7 @@
                             this.IsConnectionBarVisible = false;
                             this.IsRightSideBarVisible = false;
                             _panKnobSite.PanKnob.IsVisible = false;
+                            _fullScreenModel.ExitFullScreenCommand.Execute(null);
                         }
                         break;
                 }
