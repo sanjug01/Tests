@@ -12,6 +12,7 @@
     using Windows.Foundation;
     using Windows.UI.Core;
     using Windows.UI.Input;
+    using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
@@ -44,8 +45,6 @@
             _viewLoaded = false;
             _renderingPanelSize = Size.Empty;
             this.RenderingPanel.SetViewport(new RenderingPanelViewport(this, this.RenderingPanel, this.Transformation));
-
-
         }
 
         public object RemoteSessionViewSite

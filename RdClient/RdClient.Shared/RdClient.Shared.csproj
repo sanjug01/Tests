@@ -94,6 +94,7 @@
     <Compile Include="CxWrappers\IRdpConnectionFactory.cs" />
     <Compile Include="CxWrappers\IRdpEventHandlers.cs" />
     <Compile Include="CxWrappers\IRdpProperties.cs" />
+    <Compile Include="CxWrappers\IScreenProperties.cs" />
     <Compile Include="CxWrappers\MouseEventTypes.cs" />
     <Compile Include="CxWrappers\RadcClient.cs" />
     <Compile Include="CxWrappers\RadcEventSource.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
     <Compile Include="CxWrappers\RemoteResourceType.cs" />
+    <Compile Include="CxWrappers\ScreenProperties.cs" />
     <Compile Include="CxWrappers\TouchEventType.cs" />
     <Compile Include="Data\CertificateTrust.cs" />
     <Compile Include="Data\FilteringObservableCollection.cs" />
@@ -149,6 +151,7 @@
     <Compile Include="Helpers\Rc4DataScrambler.cs" />
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
+    <Compile Include="Models\FullScreenModel.cs" />
     <Compile Include="Models\ScrambledString.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
@@ -402,9 +405,9 @@
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
       <HintPath>..\..\RdClientCx\ADAL\wpa81\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd</HintPath>
     </Reference>
-    <Reference Include="RdClientCx, Version=255.255.255.255, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RdClientCx\WinRTClientBin\Debug\Win32\RdClientCx.winmd</HintPath>
+    <Reference Include="RdClientCx">
+      <HintPath Condition="'$(Platform)' == 'x86'">..\..\RdClientCx\WinRTClientBin\$(Configuration)\Win32\RdClientCx.winmd</HintPath>
+      <HintPath Condition="'$(Platform)' == 'ARM'">..\..\RdClientCx\WinRTClientBin\$(Configuration)\ARM\RdClientCx.winmd</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -415,12 +418,40 @@
       <Name>Microsoft Visual C++ 2013 AppLocal Runtime Package for Windows UAP</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RdClientCxHelpers\RdClientCxHelpers.vcxproj">
+      <Project>{8b29c07c-36fe-466c-9244-9932ac815c45}</Project>
+      <Name>RdClientCxHelpers</Name>
+    </ProjectReference>
+  </ItemGroup>
   <!--<Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />-->
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UAP</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UAP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

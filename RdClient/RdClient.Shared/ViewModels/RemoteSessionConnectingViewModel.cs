@@ -14,10 +14,13 @@
             get { return _cancel; }
         }
 
-        public RemoteSessionConnectingViewModel(Action cancelAction)
+        public string HostName { get; private set; }
+
+        public RemoteSessionConnectingViewModel(string hostName, Action cancelAction)
         {
             Contract.Assert(null != cancelAction);
 
+            this.HostName = hostName;
             _cancelAction = cancelAction;
             _cancel = new RelayCommand(this.CancelConnection, this.CanCancelConnection);
         }

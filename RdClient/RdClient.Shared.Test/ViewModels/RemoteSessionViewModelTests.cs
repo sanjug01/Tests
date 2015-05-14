@@ -139,12 +139,12 @@
                 remove { }
             }
 
-            void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor, double durationMilliseconds)
+            void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor)
             {
                 throw new NotImplementedException();
             }
 
-            void IViewport.Set(double zoomFactor, Size offset, bool animated)
+            void IViewport.Set(double zoomFactor, Size offset)
             {
                 throw new NotImplementedException();
             }

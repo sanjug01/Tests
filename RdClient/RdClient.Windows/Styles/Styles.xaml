@@ -98,8 +98,8 @@
     </ResourceDictionary.ThemeDictionaries>
 
     <FontFamily x:Key="IconFont">Segoe MDL2 Assets</FontFamily>
-    <x:String x:Key="MoreDetailsIcon">&#xE099;</x:String>
-    <x:String x:Key="LessDetailsIcon">&#xE098;</x:String>
+    <x:String x:Key="MoreDetailsIcon">&#xE70D;</x:String>
+    <x:String x:Key="LessDetailsIcon">&#xE70E;</x:String>
 
     <Style x:Key="FlatButtonStyle" TargetType="Button">
         <Setter Property="Padding" Value="0" />

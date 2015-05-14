@@ -6,6 +6,7 @@
     using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Controls.Primitives;
     using Windows.UI.Xaml.Media;
 
     sealed class ModalFocusTracker
@@ -67,8 +68,13 @@
                     case VirtualKey.Enter:
                         //
                         // Execute the DefaultAction command in the dialog view model.
+                        // The default action is executed only if the control that has input focus is not a button (any kind of a button),
+                        // and there is a default action command, and the command can be executed.
                         //
-                        if (null != _dialogViewModel && null != _dialogViewModel.DefaultAction && _dialogViewModel.DefaultAction.CanExecute(null))
+                        if (null != _dialogViewModel
+                            && !(_focused is ButtonBase)
+                            && null != _dialogViewModel.DefaultAction
+                            && _dialogViewModel.DefaultAction.CanExecute(null))
                         {
                             _dialogViewModel.DefaultAction.Execute(null);
                             e.Handled = true;

@@ -23,12 +23,12 @@
         {
             _glyphTranslation = new SortedDictionary<SegoeGlyph, Symbol>()
             {
-                { SegoeGlyph.Trash, Symbol.Delete },
+                { SegoeGlyph.Delete, Symbol.Delete },
                 { SegoeGlyph.Home, Symbol.Home },
                 { SegoeGlyph.Forward, Symbol.Forward },
                 { SegoeGlyph.Back, Symbol.Back },
                 { SegoeGlyph.Settings, Symbol.Setting },
-                { SegoeGlyph.Find, Symbol.Find },
+                { SegoeGlyph.Search, Symbol.Find },
                 { SegoeGlyph.People, Symbol.People },
                 { SegoeGlyph.Add, Symbol.Add },
                 { SegoeGlyph.Edit, Symbol.Edit },

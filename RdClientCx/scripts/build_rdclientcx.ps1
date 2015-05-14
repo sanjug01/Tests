@@ -1,3 +1,4 @@
+param([switch]$Clean, [switch]$CopyAll, [string]$Platform="all")
 $SDXROOT = "e:\sdx\clouddv"
 
 Function BcxPlatform($platform)
@@ -13,19 +14,41 @@ Function BcxPlatform($platform)
 	$p.Start()
 	$p.StandardInput.WriteLine("cd /D $SDXROOT")
 	$p.StandardInput.WriteLine(".\tools\razzle.cmd $platform no_certcheck no_oacr no_opt")
-	$p.StandardInput.WriteLine("cd .\termsrv\rdp\winrt\RdClientCx\")
-	$p.StandardInput.WriteLine("bcx.cmd")
+	$p.StandardInput.WriteLine("cd .\termsrv\rdp\winrt\RdClientCxUAP\")
+	if($Clean)
+	{
+		$p.StandardInput.WriteLine("bcx.cmd")
+	}
+	else
+	{
+		$p.StandardInput.WriteLine("bx.cmd")
+	}
 	$p.StandardInput.WriteLine("exit")
 	$p.WaitForExit()
 }
 
-BcxPlatform "x86chk"
-BcxPlatform "x86fre"
-BcxPlatform "armchk"
-BcxPlatform "armfre"
+$sw = [Diagnostics.Stopwatch]::StartNew()
+if($Platform -eq "all")
+{
+	BcxPlatform "x86chk"
+	BcxPlatform "x86fre"
+	BcxPlatform "armchk"
+	BcxPlatform "armfre"
+}
+else
+{
+	BcxPlatform $Platform
+}
 
 xcopy $SDXROOT\testsrc\termsrvtestdata\REDIST\WinRTClientBin\Debug ..\WinRTClientBin\Debug /i /s /y
 xcopy $SDXROOT\testsrc\termsrvtestdata\REDIST\WinRTClientBin\Release ..\WinRTClientBin\Release /i /s /y
-xcopy $SDXROOT\termsrv\CloudDv\Externals\ADAL ..\ADAL /i /s /y
-xcopy $SDXROOT\termsrv\rdp\externals\openssl ..\openssl /i /s /y
-xcopy $SDXROOT\termsrv\rdp\externals\RdpWinRTTransportRpc ..\RdpWinRTTransportRpc /i /s /y
+
+if($CopyAll)
+{
+	xcopy $SDXROOT\termsrv\CloudDv\Externals\ADAL ..\ADAL /i /s /y
+	xcopy $SDXROOT\termsrv\rdp\externals\openssl ..\openssl /i /s /y
+	xcopy $SDXROOT\termsrv\rdp\externals\RdpWinRTTransportRpc ..\RdpWinRTTransportRpc /i /s /y
+}
+
+$sw.Stop()
+Write-Host $sw.Elapsed

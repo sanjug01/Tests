@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Controls"
+    xmlns:cx="using:RdClient.Shared.CxWrappers"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
@@ -18,10 +19,13 @@
             <ScaleTransform x:Name="MouseScaleTransform" CenterX="0" CenterY="0"/>
             <TranslateTransform x:Name="MouseTransform" />
         </TransformGroup>
+        <cx:ScreenProperties x:Key="ScreenProperties"/>
     </UserControl.Resources>
 
-    <Grid Background="Gray">
-        <c:RenderingPanel x:Name="RenderingPanel">
+    <Canvas Background="Gray">
+        <c:RenderingPanel x:Name="RenderingPanel"
+                          Width="{Binding Source={StaticResource ScreenProperties}, Path=Resolution.Width}" 
+                          Height="{Binding Source={StaticResource ScreenProperties}, Path=Resolution.Height}">
             <SwapChainPanel.RenderTransform>
                 <TransformGroup>
                     <CompositeTransform x:Name="Transformation"
@@ -32,5 +36,5 @@
         </c:RenderingPanel>
         <Image x:Name="MouseCursor" CacheMode="BitmapCache" Stretch="None" Width="Auto" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"
                    RenderTransform="{StaticResource MouseTransformGroup}" />
-    </Grid>
+    </Canvas>
 </UserControl>
