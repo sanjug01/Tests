@@ -91,7 +91,7 @@
 
                 navigationService.NavigateToView("bar", activationParameter);
 
-        }
+            }
         }
 
         [TestMethod]
@@ -836,11 +836,6 @@
         }
 
         [TestMethod]
-        public void HaveAccessoryPresenter_PushAccessoryView_PushedAccessoryView()
-        {
-        }
-
-        [TestMethod]
         public void DismissAccessoryViewsCommandDismissesAccessoryViews()
         {
             using (Mock.PresentableView view1 = new Mock.PresentableView())
@@ -868,6 +863,49 @@
                 view1.Expect("Dismissing", new List<object>() { }, 0);
                 presenter.Expect("DismissView", new List<object>() { view1, true }, 0);               
                 navigationService.DismissAccessoryViewsCommand.Execute(null);
+            }
+        }
+
+        [TestMethod]
+        public void HaveAccessoryPresenter_Back_DismissedAccessory()
+        {
+            using (Mock.PresentableViewWithStackedPresenter view = new Mock.PresentableViewWithStackedPresenter())
+            using (Mock.PresentableView accessory = new Mock.PresentableStackedView())
+            using (Mock.ViewFactory factory = new Mock.ViewFactory())
+            using (Mock.ViewPresenter presenter = new Mock.ViewPresenter())
+            using (Mock.ViewModel viewModel = new Mock.ViewModel())
+            using (Mock.ViewModel accessoryViewModel = new Mock.ViewModel())
+            {
+                view.ViewModel = viewModel;
+                accessory.ViewModel = accessoryViewModel;
+
+                INavigationService navigationService = new NavigationService()
+                {
+                    Presenter = presenter,
+                    ViewFactory = factory,
+                    Extensions = new NavigationExtensionList()
+                };
+                object activationParameter = new object();
+                IBackCommandArgs backArgs = new BackCommandArgs();
+
+                factory.Expect("CreateView", new List<object>() { "foo", activationParameter }, view);
+                viewModel.Expect("Presenting", new List<object>() { navigationService, activationParameter, null }, 0);
+                view.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                presenter.Expect("PresentView", new List<object>() { view }, 0);
+                factory.Expect("CreateView", new List<object>() { "bar", activationParameter }, accessory);
+                accessoryViewModel.Expect("Presenting", new List<object>() { navigationService, activationParameter, null }, 0);
+                accessory.Expect("Presenting", new List<object>() { navigationService, activationParameter }, 0);
+                view.Expect("PushView", new List<object>() { accessory, true }, 0);
+                accessory.Expect("Activate", null);
+                accessoryViewModel.Expect("NavigatingBack", new List<object>() { backArgs }, 0);
+                accessory.Expect("Deactivate", null);
+                accessory.Expect("Dismissing", null);
+                view.Expect("DismissView", new List<object>() { accessory, true }, 0);
+                accessoryViewModel.Expect("Dismissing", null);
+
+                navigationService.NavigateToView("foo", activationParameter);
+                navigationService.PushAccessoryView("bar", activationParameter);
+                navigationService.BackCommand.Execute(backArgs);
             }
         }
 

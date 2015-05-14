@@ -179,6 +179,8 @@
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\PointerEvent.cs" />
+    <Compile Include="Mock\PresentableStackedView.cs" />
+    <Compile Include="Mock\PresentableViewWithStackedPresenter.cs" />
     <Compile Include="Mock\RadcClient.cs" />
     <Compile Include="Mock\RadcClientEvents.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
