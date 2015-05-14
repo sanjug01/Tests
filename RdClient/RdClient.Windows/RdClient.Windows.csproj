@@ -89,9 +89,6 @@
     <Compile Include="Controls\ConnectionCenterTitleBar.xaml.cs">
       <DependentUpon>ConnectionCenterTitleBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DynamicToolbar.xaml.cs">
-      <DependentUpon>DynamicToolbar.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\DesktopsListControl.xaml.cs">
       <DependentUpon>DesktopsListControl.xaml</DependentUpon>
     </Compile>
@@ -318,10 +315,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\DynamicToolbar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\DesktopsListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -532,8 +525,6 @@
       <Visible>true</Visible>
     </Content>
   </ItemGroup>
-  
-  
   <ItemGroup>
     <ProjectReference Include="..\RdClient.Shared\RdClient.Shared.csproj">
       <Project>{ff57219c-0e7b-4cd5-9e02-287cea2d0d83}</Project>

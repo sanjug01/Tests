@@ -23,16 +23,6 @@
         //
         private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
         private ReadOnlyObservableCollection<IWorkspaceViewModel> _workspaceViewModels;
-        //
-        // Mutable collection of toolbar item models. When the view model needs to modify contents of the toolbar,
-        // it modifies this collection.
-        //
-        private readonly ObservableCollection<BarItemModel> _toolbarItemsSource;
-        //
-        // Read-only wrapper of the collection of toolbar item models returned by the ToolbarItems property
-        // of the IConnectionCenterViewModel interface. The property is used in XAML bindings.
-        //
-        private readonly ReadOnlyObservableCollection<BarItemModel> _toolbarItems;
 
         private readonly ICommand _showSettings;
         private readonly ICommand _showAbout;
@@ -136,17 +126,6 @@
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, EditItemStringId, BarItemModel.ItemAlignment.Right);
             _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Delete, DeleteDesktopCommand, DeleteItemStringId, BarItemModel.ItemAlignment.Right);
 
-            _toolbarItemsSource = new ObservableCollection<BarItemModel>();
-            _toolbarItems = new ReadOnlyObservableCollection<BarItemModel>(_toolbarItemsSource);
-            //
-            // Add toolbar buttons
-            //
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, this.AddDesktopCommand, "Add"));
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.More, new RelayCommand(this.PushAdditionalCommandsDialog), "More…"));
-            //
-            //_toolbarItemsSource.Add(new SeparatorBarItemModel());
-            //
             _accessoryViewVisibility = ViewVisibility.Create(false);
             _cancelAccessoryView = new RelayCommand(o => this.ExecuteCancelAccessoryView());
 
@@ -163,11 +142,6 @@
         {
             get { return _workspaceViewModels; }
             private set { SetProperty(ref _workspaceViewModels, value); }
-        }
-
-        public ReadOnlyObservableCollection<BarItemModel> ToolbarItems
-        {
-            get { return _toolbarItems; }
         }
 
         public RelayCommand AddDesktopCommand { get; private set; }
