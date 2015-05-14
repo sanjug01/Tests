@@ -230,10 +230,10 @@
 						Command="{Binding CancelCommand}">
 					</Button>
 					<Button Grid.Column="2"
-						x:Uid="CertificateValidation-AlwaysConnectButton" 
+						x:Uid="CertificateValidation-ConnectOnceButton" 
 						Content="Connect anyway (d)" 
 						HorizontalAlignment="Stretch"
-						Command="{Binding AcceptCertificateCommand}">
+						Command="{Binding AcceptOnceCommand}">
 					</Button>
 				</Grid>
 			</Grid>
