@@ -4,27 +4,28 @@
 
     /// <summary>
     /// Subset of glyphs for use with the Segoe MDL2 Assets font.
-    /// http://msdn.microsoft.com/en-us/library/windows/apps/jj841126.aspx
+    /// http://osgdesigntools/iconfontviewer/
     /// </summary>
     public enum SegoeGlyph
     {
-        Help = 0x003F,
-        Trash = 0xE107,
-        Home = 0xE10F,
-        Forward = 0xe111,
-        Back = 0xE112,
-        Settings = 0xE115,
-        Find = 0xE11A,
-        People = 0xE125,
-        Add = 0xE109,
-        More = 0xE10C,
-        Edit = 0xE104,
-        ZoomIn = 0xE1A3,
-        ZoomOut = 0xE1A4,
+        Help = 0xE897,
+        Delete = 0xE74D,
+        Home = 0xE80F,
+        Forward = 0xE72A,
+        Back = 0xE72B,
+        Settings = 0xE713,
+        Search = 0xE721,
+        People = 0xE716,
+        Add = 0xE710,
+        More = 0xE712,
+        Edit = 0xE70F,
+        Zoom = 0xE71E,
+        ZoomIn = 0xE8A3,
+        ZoomOut = 0xE71F,
         MultiSelection = 0xE762,
         Keyboard =0xE765,
-        EnterFullScreen = 0xE1D9,
-        ExitFullScreen = 0xE1D8
+        EnterFullScreen = 0xE740,
+        ExitFullScreen = 0xE73F
     }
 
     /// <summary>

@@ -127,7 +127,7 @@
             this.AddWorkspaceCommand = new RelayCommand(o => AddWorkspaceExecute());
 
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, EditItemStringId, BarItemModel.ItemAlignment.Right);
-            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, DeleteItemStringId, BarItemModel.ItemAlignment.Right);
+            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Delete, DeleteDesktopCommand, DeleteItemStringId, BarItemModel.ItemAlignment.Right);
 
             _toolbarItemsSource = new ObservableCollection<BarItemModel>();
             _toolbarItems = new ReadOnlyObservableCollection<BarItemModel>(_toolbarItemsSource);
