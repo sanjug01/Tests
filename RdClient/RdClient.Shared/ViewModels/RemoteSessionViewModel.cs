@@ -14,6 +14,7 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using Windows.UI.Xaml;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite
     {
@@ -46,6 +47,7 @@
         private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
 
         private readonly ZoomPanModel _zoomPanModel = new ZoomPanModel();
+        private readonly FullScreenModel _fullScreenModel = new FullScreenModel();
 
         private IPanKnobSite _panKnobSite;
         public IPanKnobSite PanKnobSite
@@ -149,6 +151,7 @@
             _sessionState = SessionState.Idle;
 
             ObservableCollection<object> items = new ObservableCollection<object>();
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.EnterFullScreen, Command = _fullScreenModel.EnterFullScreenCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = _zoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = _zoomPanModel.ZoomOutCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _toggleSideBars });

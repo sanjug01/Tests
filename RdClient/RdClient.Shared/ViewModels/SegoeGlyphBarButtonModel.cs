@@ -24,6 +24,7 @@
         ZoomOut = 0xE1A4,
         MultiSelection = 0xE762,
         Keyboard =0xE765,
+        EnterFullScreen = 0xE1D9,
     }
 
     /// <summary>

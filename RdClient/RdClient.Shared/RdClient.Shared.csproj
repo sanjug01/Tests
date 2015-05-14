@@ -150,6 +150,7 @@
     <Compile Include="Helpers\Rc4DataScrambler.cs" />
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
+    <Compile Include="Models\FullScreenModel.cs" />
     <Compile Include="Models\ScrambledString.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
