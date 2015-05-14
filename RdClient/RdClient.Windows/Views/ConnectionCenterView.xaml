@@ -35,7 +35,34 @@
                 </Grid.ColumnDefinitions>
 
                 <controls:ConnectionCenterTitleBar Grid.Column="0" />
-                <controls:DynamicToolbar Grid.Column="1" />
+
+                <CommandBar Grid.Column="1">
+                    <AppBarButton x:Uid="ConnectionCenter_Toolbar_Add"
+                                  Command="{Binding AddDesktopCommand}"
+                                  Margin="0,0,5,5"
+                                  Icon="Add"
+                                  Label="(d) Add"
+                                  ToolTipService.ToolTip="(d) Add a new remote resource"/>
+                    <AppBarButton x:Uid="ConnectionCenter_Toolbar_Settings"
+                                  Command="{Binding ShowSettings}"
+                                  Margin="0,0,5,5"
+                                  Icon="Setting"
+                                  Label="(d) Settings"
+                                  ToolTipService.ToolTip="(d) Show the application settings"/>
+
+                    <CommandBar.SecondaryCommands>
+                        <AppBarButton x:Uid="ConnectionCenter_Toolbar_About"
+                                      Command="{Binding ShowAbout}"
+                                      Icon="Help"
+                                      Label="(d) About"
+                                      ToolTipService.ToolTip="(d) About the Remote Desktop Client" />
+                        <AppBarButton x:Uid="ConnectionCenter_Toolbar_Help"
+                                      Command="{Binding ShowHelp}"
+                                      Icon="Help"
+                                      Label="(d) Help"
+                                      ToolTipService.ToolTip="(d) Go to Remote Desktop help page"/>
+                    </CommandBar.SecondaryCommands>
+                </CommandBar>
             </Grid>
         </DataTemplate>
         
@@ -48,7 +75,31 @@
         </DataTemplate>
 
         <DataTemplate x:Key="BottomBarNarrowLayout">
-            <controls:DynamicToolbar HorizontalAlignment="Center" />
+            <CommandBar>
+                <AppBarButton x:Uid="ConnectionCenter_Toolbar_Add"
+                              Command="{Binding AddDesktopCommand}"
+                              Icon="Add"
+                              Label="(d) Add"
+                              ToolTipService.ToolTip="(d) Add a new remote resource"/>
+                <AppBarButton x:Uid="ConnectionCenter_Toolbar_Settings"
+                              Command="{Binding ShowSettings}"
+                              Icon="Setting"
+                              Label="(d) Settings"
+                              ToolTipService.ToolTip="(d) Show the application settings"/>
+
+                <CommandBar.SecondaryCommands>
+                    <AppBarButton x:Uid="ConnectionCenter_Toolbar_About"
+                                      Command="{Binding ShowAbout}"
+                                      Icon="Help"
+                                      Label="(d) About"
+                                      ToolTipService.ToolTip="(d) About the Remote Desktop Client" />
+                    <AppBarButton x:Uid="ConnectionCenter_Toolbar_Help"
+                                      Command="{Binding ShowHelp}"
+                                      Icon="Help"
+                                      Label="(d) Help"
+                                      ToolTipService.ToolTip="(d) Go to Remote Desktop help page"/>
+                </CommandBar.SecondaryCommands>
+            </CommandBar>
         </DataTemplate>
 
     </Page.Resources>
