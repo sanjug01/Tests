@@ -8,7 +8,7 @@
     
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Default">
-            <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemChromeDisabledHighColor}" />
+            <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemChromeMediumColor}" />
             <SolidColorBrush x:Key="ConnectionCenterScrollViewBackgroundBrush" Color="{ThemeResource SystemAltHighColor}" />
 
             <SolidColorBrush x:Key="ConnectionCenterDesktopPlaceholderIconColor" Color="{ThemeResource SystemChromeHighColor}" />
@@ -37,7 +37,7 @@
             <SolidColorBrush x:Key="rdErrorBrush" Color="Red" />
         </ResourceDictionary>        
         <ResourceDictionary x:Key="Light">
-            <SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemChromeDisabledHighColor}" />
+			<SolidColorBrush x:Key="ConnectionCenterBarBackgroundBrush" Color="{ThemeResource SystemChromeMediumColor}" />
             <SolidColorBrush x:Key="ConnectionCenterScrollViewBackgroundBrush" Color="{ThemeResource SystemAltHighColor}" />
 
             <SolidColorBrush x:Key="ConnectionCenterDesktopPlaceholderIconColor" Color="{ThemeResource SystemChromeHighColor}" />
