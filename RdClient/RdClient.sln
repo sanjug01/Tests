@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdClient.Windows", "RdClient.Windows\RdClient.Windows.csproj", "{A89F0E52-1E86-4D53-81F5-11237460A6E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdClient.Shared", "RdClient.Shared\RdClient.Shared.csproj", "{FF57219C-0E7B-4CD5-9E02-287CEA2D0D83}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8B29C07C-36FE-466C-9244-9932AC815C45} = {8B29C07C-36FE-466C-9244-9932AC815C45}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdClient.Shared.Test", "RdClient.Shared.Test\RdClient.Shared.Test.csproj", "{9F4E7B07-FD91-4EE0-B177-F29A88B68F68}"
 EndProject
@@ -118,6 +121,7 @@ Global
 		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|x64.Build.0 = Debug|x64
 		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|x86.ActiveCfg = Debug|Win32
 		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|x86.Build.0 = Debug|Win32
+		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|x86.Deploy.0 = Debug|Win32
 		{8B29C07C-36FE-466C-9244-9932AC815C45}.Release|Any CPU.ActiveCfg = Release|Win32
 		{8B29C07C-36FE-466C-9244-9932AC815C45}.Release|ARM.ActiveCfg = Release|ARM
 		{8B29C07C-36FE-466C-9244-9932AC815C45}.Release|ARM.Build.0 = Release|ARM
