@@ -60,16 +60,16 @@
                                    Text="User (d)"/>
                     </StackPanel>
                     <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
-                    <controls:ErrorControl Margin="0,8" DataContext="{Binding Path=User}" >
-                        <controls:ErrorControl.PresentedContent>
-                            <TextBox 
-                                x:Uid="AddUser-UsernameTextbox"
-                                Background="Transparent"
-                                PlaceholderText="Username (d)"
-                                Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=Default}">                                
-                            </TextBox>
-                        </controls:ErrorControl.PresentedContent>
-                    </controls:ErrorControl>
+                        <controls:ErrorControl Margin="0,8" Property="{Binding Path=User}" >
+                            <controls:ErrorControl.PresentedContent>
+                                <TextBox 
+                                    x:Uid="AddUser-UsernameTextbox"
+                                    Background="Transparent"
+                                    PlaceholderText="Username (d)"
+                                    Text="{Binding Path=User.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">                                
+                                </TextBox>
+                            </controls:ErrorControl.PresentedContent>
+                        </controls:ErrorControl>
                     </Grid>
                 </StackPanel>
 

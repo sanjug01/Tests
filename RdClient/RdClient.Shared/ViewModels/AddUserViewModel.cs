@@ -167,8 +167,7 @@
 
         private void OkCommandHandler(object o)
         {
-            this.User.ValidateNow();
-            if (_okCommand.CanExecute(o))
+            if (_okCommand.CanExecute(o) && this.User.ValidateNow())
             {
                 _args.Credentials.Username = this.User.Value;
                 _args.Credentials.Password = this.Password;
@@ -178,7 +177,7 @@
 
         private bool OkCommandIsEnabled(object o)
         {
-            return this.User?.State?.IsValid ?? false;
+            return !string.IsNullOrWhiteSpace(this.User?.Value);
         }
 
         private void CancelCommandHandler(object o)
