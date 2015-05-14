@@ -68,6 +68,8 @@
                     case VirtualKey.Enter:
                         //
                         // Execute the DefaultAction command in the dialog view model.
+                        // The default action is executed only if the control that has input focus is not a button (any kind of a button),
+                        // and there is a default action command, and the command can be executed.
                         //
                         if (null != _dialogViewModel
                             && !(_focused is ButtonBase)
