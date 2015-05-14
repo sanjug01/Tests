@@ -143,6 +143,14 @@
             }
         }
 
+        /// <summary>
+        /// can delete only if editing existing credentials
+        /// </summary>
+        public bool CanDelete
+        {
+            get { return (CredentialPromptMode.EditCredentials == this.Mode); }
+        }
+
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Assert(activationParameter is AddUserViewArgs);
@@ -151,10 +159,10 @@
 
             var usernameRule = new UsernameFormatValidationRule();
 
+            this.Mode = _args.Mode;
             this.ShowSave = _args.ShowSave;
             this.User = new ValidatedProperty<string>(usernameRule, _args.Credentials.Username);
-            this.Password = _args.Credentials.Password;
-            this.Mode = _args.Mode;
+            this.Password = _args.Credentials.Password;            
 
             this.User.PropertyChanged += (s, e) =>
             {
@@ -190,17 +198,6 @@
         {
             // parent view should present the confirmation dialog and perform deletion
             DismissModal(CredentialPromptResult.CreateDeleted());
-        }
-
-        /// <summary>
-        /// can delete only if editing existing credentials
-        /// </summary>
-        private bool CanDelete
-        {
-            get
-            {
-                return (CredentialPromptMode.EditCredentials == this.Mode);
-            }
         }
     }
 }

@@ -213,5 +213,29 @@
             });
             _vm.Delete.Execute(null);
         }
+
+        [TestMethod]
+        public void CanDeleteTrueWhenEditingUser()
+        {
+            AddUserViewArgs args =
+                new AddUserViewArgs(
+                    _testData.NewValidCredential().Model,
+                    true,
+                    CredentialPromptMode.EditCredentials);
+            ((IViewModel)_vm).Presenting(_nav, args, _context);
+            Assert.IsTrue(_vm.CanDelete);
+        }
+
+        [TestMethod]
+        public void CanDeleteFalseWhenAddingUser()
+        {
+            AddUserViewArgs args =
+                new AddUserViewArgs(
+                    _testData.NewValidCredential().Model,
+                    true,
+                    CredentialPromptMode.EnterCredentials);
+            ((IViewModel)_vm).Presenting(_nav, args, _context);
+            Assert.IsFalse(_vm.CanDelete);
+        }
     }
 }
