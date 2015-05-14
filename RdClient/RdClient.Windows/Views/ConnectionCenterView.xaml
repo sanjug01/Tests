@@ -36,6 +36,15 @@
 
                 <controls:ConnectionCenterTitleBar Grid.Column="0" />
                 <controls:DynamicToolbar Grid.Column="1" />
+                
+                <CommandBar Grid.Column="1" Visibility="Collapsed">
+                    <AppBarButton Icon="Add" />
+                    <AppBarButton Icon="Setting" />
+
+                    <CommandBar.SecondaryCommands>
+                        <AppBarButton Icon="Help" />
+                    </CommandBar.SecondaryCommands>
+                </CommandBar>
             </Grid>
         </DataTemplate>
         
