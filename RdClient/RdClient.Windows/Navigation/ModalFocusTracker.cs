@@ -6,6 +6,7 @@
     using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Controls.Primitives;
     using Windows.UI.Xaml.Media;
 
     sealed class ModalFocusTracker
@@ -68,7 +69,10 @@
                         //
                         // Execute the DefaultAction command in the dialog view model.
                         //
-                        if (null != _dialogViewModel && null != _dialogViewModel.DefaultAction && _dialogViewModel.DefaultAction.CanExecute(null))
+                        if (null != _dialogViewModel
+                            && !(_focused is ButtonBase)
+                            && null != _dialogViewModel.DefaultAction
+                            && _dialogViewModel.DefaultAction.CanExecute(null))
                         {
                             _dialogViewModel.DefaultAction.Execute(null);
                             e.Handled = true;
