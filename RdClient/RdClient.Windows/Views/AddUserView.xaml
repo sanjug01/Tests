@@ -34,56 +34,55 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="8"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="12"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-                <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}"                             
+                <TextBlock Margin="0,12,0,12" Style="{ThemeResource TitleTextBlockStyle}"                             
                                Text="{Binding Path=Mode, FallbackValue='Enter Credentials (d)', Converter={StaticResource TypeToLocalizedStringConverter}, ConverterParameter=Title}"/>
             </Grid>
 
             <Grid Grid.Row="1">
-                <TextBlock Margin="24,12,24,12" Style="{ThemeResource BodyTextBlockStyle}" 
+                <TextBlock Margin="0,12,0,12" Style="{ThemeResource BodyTextBlockStyle}" 
                                 Visibility="{Binding Path=ShowMessage, Converter={StaticResource BooleanToVisibilityConverter}}" 
                                 Text="{Binding Path=Mode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
             </Grid>
 
             <Border Grid.Row="2" Height="1" Margin="0" />
 
-            <StackPanel Grid.Row="3" Margin="26,12,26,0">
-                <StackPanel Orientation="Vertical" Margin="0,0,0,20">
+            <StackPanel Grid.Row="3">
+                <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Uid="AddUser-Username-Error"
-                                   Text="(*)(d)" Padding="0,0,8,0"
-                                   Style="{ThemeResource BodyTextBlockStyle}"
-                                   Foreground="{StaticResource rdErrorBrush}"
-                                   Visibility="{Binding Path=IsUsernameValid, Converter={StaticResource InverseBooleanToVisibilityConverter}}" 
-                                   />
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                    x:Uid="AddUser-User" 
                                    Text="User (d)"/>
                     </StackPanel>
                     <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
-                        <TextBox Name="txtUser" 
-                                    x:Uid="AddUser-UsernameTextbox"
-                                    Background="Transparent"
-                                    Margin="0,8" 
-                                    PlaceholderText="Username (d)"
-                                    Text="{Binding Path=User, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <controls:ErrorControl Margin="0,8" DataContext="{Binding Path=User}" >
+                        <controls:ErrorControl.PresentedContent>
+                            <TextBox 
+                                x:Uid="AddUser-UsernameTextbox"
+                                Background="Transparent"
+                                PlaceholderText="Username (d)"
+                                Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=Default}">                                
+                            </TextBox>
+                        </controls:ErrorControl.PresentedContent>
+                    </controls:ErrorControl>
                     </Grid>
                 </StackPanel>
 
-                <StackPanel Orientation="Vertical" Margin="0,0,0,20">
+                <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddUser-Password" Text="Password (d)"/>
                     <Grid Style="{StaticResource rdEntryFieldGridStyle}">
-                        <PasswordBox Name="txtPassword"
-                                     x:Uid="AddUser-PasswordTextbox"
-                                     Background="Transparent"
-                                     Margin="0,8" 
-                                     PlaceholderText="Password (d)"
-                                     Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <PasswordBox 
+                        x:Uid="AddUser-PasswordTextbox"
+                        Background="Transparent"
+                        Margin="0,8" 
+                        PlaceholderText="Password (d)"
+                        Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">                        
+                    </PasswordBox>
                     </Grid>
                 </StackPanel>
                 
@@ -110,7 +109,7 @@
                 </Grid>                
 
                 <HyperlinkButton x:Uid="AddUser-DeleteUserLink"
-                                 Margin="0,20"
+                                 Margin="{StaticResource DialogDoubleSizeMargin}"
                                  Command="{Binding Path=Delete}">
                     <TextBlock x:Uid="AddUser-DeleteUserText" 
                                Text="(d) Delete this account"/>

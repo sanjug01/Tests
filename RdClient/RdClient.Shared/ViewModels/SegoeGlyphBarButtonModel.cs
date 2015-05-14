@@ -3,14 +3,12 @@
     using System.Windows.Input;
 
     /// <summary>
-    /// Subset of Segoe UI app bar icon glyphs.
+    /// Subset of glyphs for use with the Segoe MDL2 Assets font.
     /// http://msdn.microsoft.com/en-us/library/windows/apps/jj841126.aspx
     /// </summary>
     public enum SegoeGlyph
     {
         Help = 0x003F,
-        HorizontalEllipsis = 0x2026,
-        VerticalEllipsis = 0x22EE,
         Trash = 0xE107,
         Home = 0xE10F,
         Forward = 0xe111,
@@ -19,6 +17,7 @@
         Find = 0xE11A,
         People = 0xE125,
         Add = 0xE109,
+        More = 0xE10C,
         Edit = 0xE104,
         ZoomIn = 0xE1A3,
         ZoomOut = 0xE1A4,

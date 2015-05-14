@@ -1,8 +1,7 @@
-﻿using System;
-namespace RdClient.Shared.ValidationRules
+﻿namespace RdClient.Shared.ValidationRules
 {
-    public interface IValidationRule
+    public interface IValidationRule<T>
     {
-        bool Validate(object value, System.Globalization.CultureInfo cultureInfo);
+        IValidationResult Validate(T value);
     }
 }

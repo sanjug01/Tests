@@ -425,6 +425,9 @@
   <data name="AddOrEditDesktop-Credentials.Text" xml:space="preserve">
     <value>(r) User name</value>
   </data>
+  <data name="AddOrEditDesktop-Credentials-ComboBox.Header" xml:space="preserve">
+    <value>(r) User name</value>
+  </data>
   <data name="AddOrEditDesktop-EditCaption.Text" xml:space="preserve">
     <value>(r) Edit PC or Server</value>
   </data>
@@ -432,10 +435,10 @@
     <value>(r) Invalid characters in host name</value>
   </data>
   <data name="AddOrEditDesktop-PcName.Text" xml:space="preserve">
-    <value>(r) PC Name</value>
+    <value>(r) PC Name or IP address</value>
   </data>
   <data name="AddOrEditDesktop-PcNameTextBox.PlaceholderText" xml:space="preserve">
-    <value>(r) Host name or IP address</value>
+    <value>(r) contoso.workpc-sf.work.contoso.com</value>
     <comment>Placeholder text shown when there is no text entered into the PcName text box.</comment>
   </data>
   <data name="AddOrEditDesktop-ConnectToAdminSession.Content" xml:space="preserve">
@@ -459,10 +462,30 @@
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-PcFriendlyNameTextbox.PlaceholderText" xml:space="preserve">
-    <value>(r) Connection friendly name</value>
+    <value>(r) Descriptive name for the computer</value>
     <comment>Placeholder text shown on AddOrEditDesktop view - extra settings when no friendly name has been entered</comment>
   </data>
-  <data name="AddOrEditDesktop-Sound.Text" xml:space="preserve">
+  <data name="AddOrEditDesktop-RedirectionSectionTitle.Text" xml:space="preserve">
+    <value>(r) Redirection</value>
+    <comment>Text shown on AddOrEditDesktop view</comment>
+  </data>
+  <data name="AddOrEditDesktop-GatewaysSectionTitle.Text" xml:space="preserve">
+    <value>(r) Gateway</value>
+    <comment>Text shown on AddOrEditDesktop view</comment>
+  </data>
+  <data name="AddOrEditDesktop-DisplaySectionTitle.Text" xml:space="preserve">
+    <value>(r) Display</value>
+    <comment>Text shown on AddOrEditDesktop view</comment>
+  </data>
+  <data name="AddOrEditDesktop-FullScreenOption.Content" xml:space="preserve">
+    <value>(r)Start session full screen</value>
+    <comment>Text shown on AddOrEditDesktop view</comment>
+  </data>
+  <data name="AddOrEditDesktop-ScaleDisplayOption.Content" xml:space="preserve">
+    <value>(r)Scale display content</value>
+    <comment>Text shown on AddOrEditDesktop view</comment>
+  </data>
+  <data name="AddOrEditDesktop-SoundComboBox.Header" xml:space="preserve">
     <value>(r) Sound</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
@@ -481,6 +504,10 @@
   <data name="AddOrEditDesktop-SwapMouseButtons.Content" xml:space="preserve">
     <value>(r) Swap mouse buttons</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
+  </data>
+  <data name="AddOrEditDesktop-SaveButton.Content" xml:space="preserve">
+    <value>(r) Save and connect</value>
+    <comment>Text shown on AddOrEditDesktop view - save button</comment>
   </data>
   <data name="AddUser-AddCaption.Text" xml:space="preserve">
     <value>(r) Enter Credentials</value>
@@ -591,7 +618,7 @@
     <comment>Text shown on AddOrEditDesktop view if new gateway should be added and stored for the desktop</comment>
   </data>
   <data name="AddOrEditDesktop_GatewayOption_None_String" xml:space="preserve">
-    <value>(r) No gateway</value>
+    <value>(r) Gateway not needed</value>
     <comment>Text shown on AddOrEditDesktop view if no gateway is stored for the desktop</comment>
   </data>
   <data name="Common_Delete_String" xml:space="preserve">
@@ -735,9 +762,13 @@
     <value>(r) This problem can occur if the remote PC is running a version of Windows that is not configured to support server authentication.</value>
   </data>
   <data name="Connection_Pending_Message.Text" xml:space="preserve">
-    <value>(r) Preparing the remote connection</value>
+    <value>(r) Initiating the remote connection</value>
     <comment>Message displayed in the connection view, while connecting to remote session.</comment>
   </data>
+  <data name="Connection_Pending_ConnectToMessage.Text" xml:space="preserve">
+    <value>(r) Connecting to</value>
+    <comment>Message displayed in the connection view, while connecting to remote session.</comment>
+  </data>  
   <data name="SelectResource_Azure_Description.Text" xml:space="preserve">
     <value>(r) Get to apps from Azure RemoteApp</value>
     <comment>Description of add Azure Remote App option on the add resource view</comment>
@@ -877,21 +908,40 @@
     <value>(r) Remote Connection Has Failed</value>
     <comment>Title of the in-session connection failure message. The title is shown at the top of the belly-band across the session view.</comment>
   </data>
+  <data name="UsernameValidationFailure_InvalidFormat_String" xml:space="preserve">
+    <value>(r) Enter a user name</value>
+    <comment>Text displayed under username textbox when username is empty</comment>
+  </data>
   <data name="RemoteSessionInterruptionControl_Cancel.Text" xml:space="preserve">
     <value>(r) Cancel</value>
-    <comment>"Cancel" button in the remote connection interruption dialog; the button cancels the auto-reconnect process
-</comment>
+    <comment>"Cancel" button in the remote connection interruption dialog; the button cancels the auto-reconnect process</comment>
   </data>
   <data name="RemoteSessionInterruptionControl_Title.Text" xml:space="preserve">
     <value>(r) Remote Connection Has Been Interrupted</value>
     <comment>Title of the belly-band message shown in the session view when the connection got interrupted and is reconnecting</comment>
   </data>
   <data name="RemoteSessionInterruptionControl_Message.Text" xml:space="preserve">
-    <value>(r) The remote connection has been interrupted and is reconnecting…</value>
+    <value>(r) Reconnecting to </value>
     <comment>Message displayed in the "reconnecting"belly-band dialog of the session view</comment>
   </data>
   <data name="Common_Button_AddUserAccount.Content" xml:space="preserve">
     <value>(r) Add account</value>
     <comment>Verb. Text under user's lists to add a new user account.</comment>
+  </data>
+  <data name="InternalDocType_EulaDoc_String" xml:space="preserve">
+    <value>(r) Terms of use</value>
+    <comment>Title of the "Terms of use document" page</comment>
+  </data>
+  <data name="InternalDocType_HelpDoc_String" xml:space="preserve">
+    <value>(r) Help</value>
+    <comment>Title of the "Help" document page</comment>
+  </data>
+  <data name="InternalDocType_PrivacyDoc_String" xml:space="preserve">
+    <value>(r) Privacy Notice</value>
+    <comment>Title of the "Privacy" document page</comment>
+  </data>
+  <data name="InternalDocType_ThirdPartyNotices_String" xml:space="preserve">
+    <value>(r) Third party notices</value>
+    <comment>Title of the "Thrid party notices" document page</comment>
   </data>
 </root>

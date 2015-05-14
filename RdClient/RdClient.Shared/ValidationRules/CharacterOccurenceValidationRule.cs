@@ -1,8 +1,6 @@
-﻿using System.Globalization;
-
-namespace RdClient.Shared.ValidationRules
+﻿namespace RdClient.Shared.ValidationRules
 {
-    public class CharacterOccurenceValidationRule : IValidationRule
+    public class CharacterOccurenceValidationRule : IValidationRule<string>
     {
         private readonly string _illegalCharacters;
         protected string IllegalCharacters { get { return _illegalCharacters; } }
@@ -11,18 +9,19 @@ namespace RdClient.Shared.ValidationRules
         {
             _illegalCharacters = illegalCharacters;
         }
-        public bool Validate(object value, CultureInfo cultureInfo)
+        public IValidationResult Validate(string stringValue)
         {
-            string stringValue = value as string;
+            bool result = true;
 
             if (!string.IsNullOrEmpty(stringValue))
             {
                 if (HasIllegalCharacters(stringValue))
                 {
-                    return false;
+                    result = false;
                 }
             }
-            return true;
+
+            return new ValidationResult(result);
         }
 
         private bool HasIllegalCharacters(string hostName)

@@ -46,6 +46,10 @@ build/
 *.log
 *.scc
 
+# Include the PDB files in the OpenSSL and RdpWinRTTransportRpc subdirectories
+!/RdClientCx/openssl/[Ww]in[Rr][Tt]*/*/*.pdb
+!/RdClientCx/RdpWinRTTransportRpc/*/*/*.pdb
+
 # Visual C++ cache files
 ipch/
 *.aps

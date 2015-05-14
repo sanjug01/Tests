@@ -120,6 +120,7 @@
     <Compile Include="Data\IPersistentObject.cs" />
     <Compile Include="Data\IPersistentStatus.cs" />
     <Compile Include="Data\IStorageFolder.cs" />
+    <Compile Include="Data\JoinedObservableCollection.cs" />
     <Compile Include="Data\ModelContainer.cs" />
     <Compile Include="Data\OrderedObservableCollection.cs" />
     <Compile Include="Data\PrimaryModelCollection.cs" />
@@ -316,7 +317,16 @@
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="Navigation\ViewVisibility.cs" />
+    <Compile Include="ValidationRules\CompositeValidationRule.cs" />
+    <Compile Include="ValidationRules\IValidatedProperty.cs" />
+    <Compile Include="ValidationRules\IValidationResult.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
+    <Compile Include="ValidationRules\NotDuplicateUsernameValidationRule.cs" />
+    <Compile Include="ValidationRules\UsernameFormatValidationRule.cs" />
+    <Compile Include="ValidationRules\UsernameValidationFailure.cs" />
+    <Compile Include="ValidationRules\ValidatedProperty.cs" />
+    <Compile Include="ValidationRules\ValidationResult.cs" />
+    <Compile Include="ViewModels\IAddOrEditDEsktopViewModel.cs" />
     <Compile Include="ViewModels\RichTextViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBase.cs" />
@@ -335,7 +345,6 @@
     <Compile Include="Navigation\Extensions\DataModelExtension.cs" />
     <Compile Include="Navigation\INavigationExtension.cs" />
     <Compile Include="ValidationRules\CharacterOccurenceValidationRule.cs" />
-    <Compile Include="ValidationRules\UsernameValidationRule.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\EditCredentialsTaskBase.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\InSessionCredentialsTask.cs" />
@@ -395,9 +404,9 @@
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
       <HintPath>..\..\RdClientCx\ADAL\wpa81\Microsoft.IdentityModel.Clients.ActiveDirectory.winmd</HintPath>
     </Reference>
-    <Reference Include="RdClientCx, Version=255.255.255.255, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\RdClientCx\WinRTClientBin\Debug\Win32\RdClientCx.winmd</HintPath>
+    <Reference Include="RdClientCx">
+      <HintPath Condition="'$(Platform)' == 'x86'">..\..\RdClientCx\WinRTClientBin\$(Configuration)\Win32\RdClientCx.winmd</HintPath>
+      <HintPath Condition="'$(Platform)' == 'ARM'">..\..\RdClientCx\WinRTClientBin\$(Configuration)\ARM\RdClientCx.winmd</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -420,6 +429,28 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UAP</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UAP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

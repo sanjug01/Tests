@@ -154,7 +154,7 @@
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.EnterFullScreen, Command = _fullScreenModel.EnterFullScreenCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = _zoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = _zoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _toggleSideBars });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = _toggleSideBars });
             items.Add(_invokeKeyboardModel);
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
         }
@@ -363,7 +363,9 @@
                 {
                     case SessionState.Connecting:
                         Contract.Assert(null == this.BellyBandViewModel);
-                        this.BellyBandViewModel = new RemoteSessionConnectingViewModel(() => _activeSession.Disconnect());
+                        this.BellyBandViewModel = new RemoteSessionConnectingViewModel(
+                            _activeSession.HostName,
+                            () => _activeSession.Disconnect() );
                         this.IsConnectionBarVisible = false;
 
                         break;

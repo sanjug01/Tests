@@ -14,13 +14,13 @@
   <mp:PhoneIdentity PhoneProductId="2d129dd4-8a88-4e6f-a1b9-d55effc0921d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Microsoft Remote Desktop</DisplayName>
+    <DisplayName>Rd Client</DisplayName>
     <PublisherDisplayName>Microsoft Corporation</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
   <Dependencies>
-    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10069.0" MaxVersionTested="10.0.10069.0" />
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.1.0" MaxVersionTested="10.0.1.0" />
   </Dependencies>
 
   <Resources>
@@ -32,10 +32,10 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="RdClient.Windows.App">
       <uap:VisualElements
-        DisplayName="RdClientUAP"
+        DisplayName="Rd Client"
         Square150x150Logo="Assets\Logo.png"
         Square44x44Logo="Assets\SmallLogo.png"
-        Description="RdClientUAP"
+        Description="Rd Client"
         BackgroundColor="#464646">
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>

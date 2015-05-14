@@ -1,12 +1,12 @@
-﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using RdClient.Shared.Test.Helpers;
-using RdClient.Shared.ViewModels;
-using System;
-
-namespace RdClient.Shared.Test.ViewModels
+﻿namespace RdClient.Shared.Test.ViewModels
 {
+    using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.Test.Helpers;
+    using RdClient.Shared.ViewModels;
+    using System;
+
     [TestClass]
     public class AddUserViewModelTests
     {
@@ -41,56 +41,63 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShouldUserNameValid()
+        public void UserValidForNonEmptyEmptyUsername()
         {
-            _vm.User = "Don Pedro";
-            Assert.IsTrue(_vm.IsUsernameValid);
+            _vm.User.Value = "Don Pedro";
+            Assert.IsTrue(_vm.User.State.IsValid);
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShouldUserNameInvalid()
+        public void UserValidForUserWithNonAlphanumericCharacters()
         {
-            _vm.User = "Don Pedro>";
-            Assert.IsFalse(_vm.IsUsernameValid);
+            _vm.User.Value = "!";
+            Assert.IsTrue(_vm.User.State.IsValid);
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShouldOkCanExecuteTrue()
+        public void UserInvalidForEmptyUsername()
         {
-            _vm.User = "Don Pedro";
+            _vm.User.Value = "";
+            Assert.IsFalse(_vm.User.State.IsValid);
+        }
+
+        [TestMethod]
+        public void OkCommandCanExecuteTrueForValidUsernameAndPassword()
+        {
+            _vm.User.Value = "Don Pedro";
             _vm.Password = "secret";
             Assert.IsTrue(_vm.DefaultAction.CanExecute(null));
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShouldOkCanExecuteFalse1()
+        public void OkCommandCanExecuteFalseForNullUsername()
         {
-            _vm.User = null;
+            _vm.User.Value = null;
             _vm.Password = "secret";
             Assert.IsFalse(_vm.DefaultAction.CanExecute(null));
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShouldOkCanExecuteFalse2()
+        public void OkCommandCanExecuteTrueForValidUsernameAndNullPassword()
         {
-            _vm.User = "Don Pedro";
+            _vm.User.Value = "Don Pedro";
             _vm.Password = null;
-            Assert.IsFalse(_vm.DefaultAction.CanExecute(null));
+            Assert.IsTrue(_vm.DefaultAction.CanExecute(null));
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShouldOkCanExecuteFalse3()
+        public void OkCommandCanExecuteTrueForValidUsernameAndEmptyPassword()
         {
-            _vm.User = "Don Pedro";
+            _vm.User.Value = "Don Pedro";
             _vm.Password = "";
-            Assert.IsFalse(_vm.DefaultAction.CanExecute(null));
+            Assert.IsTrue(_vm.DefaultAction.CanExecute(null));
         }
 
         [TestMethod]
         public void AddUserViewModel_ShouldCallOkHandler()
         {
             CredentialsModel newCreds = _testData.NewValidCredential().Model;
-            _vm.User = newCreds.Username;
+            _vm.User.Value = newCreds.Username;
             _vm.Password = newCreds.Password;
 
             _context.Expect("Dismiss", parameters =>
@@ -136,7 +143,7 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void AddUserViewModel_UsernameSetByArgs()
         {
-            Assert.AreEqual(_args.Credentials.Username, _vm.User);            
+            Assert.AreEqual(_args.Credentials.Username, _vm.User.Value);            
         }
 
         [TestMethod]

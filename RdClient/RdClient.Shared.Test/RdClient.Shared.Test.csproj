@@ -141,6 +141,7 @@
     <Compile Include="Data\CertificateTrustTests.cs" />
     <Compile Include="Data\FailingModelSerializer.cs" />
     <Compile Include="Data\FilteringObservableCollectionTests.cs" />
+    <Compile Include="Data\JoinedObservableCollectionTests.cs" />
     <Compile Include="Data\MemoryStorageFolder.cs" />
     <Compile Include="Data\ModelContainerTests.cs" />
     <Compile Include="Data\OrderedObservableCollectionTests.cs" />
@@ -178,6 +179,8 @@
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\PointerEvent.cs" />
+    <Compile Include="Mock\PresentableStackedView.cs" />
+    <Compile Include="Mock\PresentableViewWithStackedPresenter.cs" />
     <Compile Include="Mock\RadcClient.cs" />
     <Compile Include="Mock\RadcClientEvents.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
@@ -196,6 +199,7 @@
     <Compile Include="Mock\TestBarItemModel.cs" />
     <Compile Include="Mock\Timer.cs" />
     <Compile Include="Mock\TestRdpCertificate.cs" />
+    <Compile Include="Mock\ValidationRule.cs" />
     <Compile Include="Mock\ViewFactory.cs" />
     <Compile Include="Mock\ViewModel.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
@@ -222,7 +226,11 @@
     <Compile Include="RdMock\MockInvokedCall.cs" />
     <Compile Include="RdTest\ExceptionExpecter.cs" />
     <Compile Include="RdTest\UAPSleep.cs" />
+    <Compile Include="ValidationRules\CompositeValidationRuleTests.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
+    <Compile Include="ValidationRules\NotDuplicateUsernameValidationRuleTests.cs" />
+    <Compile Include="ValidationRules\UsernameFormatValidationRuleTests.cs" />
+    <Compile Include="ValidationRules\ValidatedPropertyTests.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
     <Compile Include="ViewModels\AddUserViewModelTests.cs" />
