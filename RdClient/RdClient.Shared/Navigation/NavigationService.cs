@@ -290,22 +290,40 @@ namespace RdClient.Shared.Navigation
         private void BackCommandExecute(object param)
         {
             Contract.Assert(param is IBackCommandArgs || param == null);
+
             IBackCommandArgs args = param as IBackCommandArgs ?? new BackCommandArgs();
+
             if (args.Handled == false)
             {
-                if (_modalStack.Count <= 0) //No modal views
-                {
-                    _currentView.ViewModel.NavigatingBack(args);
-                }
-                else //Modal view currently being shown
+                if (_modalStack.Count != 0)
                 {
                     IPresentableView topModalView = _modalStack[_modalStack.Count - 1].View;
+
                     topModalView.ViewModel.NavigatingBack(args);
                     if (!args.Handled)
                     {
                         DismissModalView(topModalView);
                         args.Handled = true;
                     }
+                }
+                else if (_accessoryStack.Count != 0)
+                {
+                    IPresentableView topAccessoryView = _accessoryStack[_accessoryStack.Count - 1].View;
+
+                    topAccessoryView.ViewModel.NavigatingBack(args);
+
+                    if (!args.Handled)
+                    {
+                        Contract.Assert(_currentView is IStackedViewPresenter);
+                        IStackedViewPresenter accessoryPresenter = (IStackedViewPresenter)_currentView;
+
+                        DismissStackedView(_accessoryStack, topAccessoryView, accessoryPresenter);
+                        args.Handled = true;
+                    }
+                }
+                else
+                {
+                    _currentView.ViewModel.NavigatingBack(args);
                 }
             }
         }
