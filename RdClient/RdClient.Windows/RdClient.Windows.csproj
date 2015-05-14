@@ -104,6 +104,9 @@
     <Compile Include="Controls\GeneralSettingsControl.xaml.cs">
       <DependentUpon>GeneralSettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ModalDialogControl.xaml.cs">
+      <DependentUpon>ModalDialogControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\RichTextControl.xaml.cs">
       <DependentUpon>RichTextControl.xaml</DependentUpon>
     </Compile>
@@ -147,6 +150,7 @@
       <DependentUpon>WorkspaceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Data\ApplicationDataLocalStorageFolder.cs" />
+    <Compile Include="DesignTime\FakeCertificateValidationViewModel.cs" />
     <Compile Include="DesignTime\FakeGatewayViewModel.cs" />
     <Compile Include="DesignTime\FakeEditCredentialsViewModel.cs" />
     <Compile Include="DesignTime\FakeRemoteResourceViewModel.cs" />
@@ -331,6 +335,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\GeneralSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ModalDialogControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
