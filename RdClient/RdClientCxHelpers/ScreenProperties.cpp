@@ -7,7 +7,6 @@ using namespace Microsoft::WRL;
 using namespace Windows::Foundation;
 using namespace RdClientCxHelpers;
 using namespace Platform;
-using namespace D2D1;
 
 ScreenProperties::ScreenProperties()
 {

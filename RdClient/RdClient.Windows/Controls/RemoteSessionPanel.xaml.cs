@@ -71,7 +71,6 @@
         {
             Contract.Assert(_viewLoaded);
             Contract.Ensures(null != Contract.Result<IRenderingPanel>());
-            //ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
 
             this.RenderingPanel.MouseCursor = this.MouseCursor;
             this.RenderingPanel.MouseTransform = this.MouseTransform;
@@ -182,7 +181,6 @@
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             MakeCursorVisible();
-            //ApplicationView.GetForCurrentView().ExitFullScreenMode();
 
             if (null != _closed)
                 _closed(this, EventArgs.Empty);
