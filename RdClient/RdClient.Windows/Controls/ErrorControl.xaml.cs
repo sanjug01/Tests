@@ -45,6 +45,18 @@
                     errorControl.ErrorBorder.Visibility = Visibility.Visible;
                 }
             };
+            newContent.KeyDown += (sender, args) =>
+            {
+                if (args.Key == Windows.System.VirtualKey.Enter
+                    && !errorControl.Property.State.IsValid)
+                {
+                    errorControl.ErrorBorder.Visibility = Visibility.Visible;
+                }
+            };
+            newContent.GotFocus += (sender, args) =>
+            {
+                errorControl.ErrorBorder.Visibility = Visibility.Collapsed;
+            };
         }
 
         private static void PropertyPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
