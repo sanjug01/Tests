@@ -1,239 +1,243 @@
 ﻿<Page
-    x:Class="RdClient.Views.CertificateValidationView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:RdClient.Views"
-    xmlns:vm="using:RdClient.Shared.ViewModels"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:c="using:RdClient.Converters"    
-    xmlns:helpers="using:RdClient.Shared.Helpers"
-    xmlns:controls="using:RdClient.Controls"
-    xmlns:design="using:RdClient.DesignTime"
-    mc:Ignorable="d"
-    d:DesignHeight="768"
-    d:DesignWidth="1024"    
-    RequestedTheme="Dark">
+	x:Class="RdClient.Views.CertificateValidationView"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="using:RdClient.Views"
+	xmlns:vm="using:RdClient.Shared.ViewModels"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:c="using:RdClient.Converters"    
+	xmlns:helpers="using:RdClient.Shared.Helpers"
+	xmlns:controls="using:RdClient.Controls"
+	xmlns:design="using:RdClient.DesignTime"
+	mc:Ignorable="d"
+	d:DesignHeight="768"
+	d:DesignWidth="1024"    
+	RequestedTheme="Dark">
 
-    <Page.DataContext>
-        <vm:CertificateValidationViewModel/>
-    </Page.DataContext>
+	<Page.DataContext>
+		<vm:CertificateValidationViewModel/>
+	</Page.DataContext>
 
-    <d:Page.DataContext>
-        <design:FakeCertificateValidationViewModel />
-    </d:Page.DataContext>
+	<d:Page.DataContext>
+		<design:FakeCertificateValidationViewModel />
+	</d:Page.DataContext>
 
-    <Page.Resources>
-        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
-        <c:ByteArrayToStringConverter x:Key="ByteArrayToStringConverter" />
-        <c:RdpCertificateToErrorListConverter x:Key="RdpCertificateToErrorListConverter" TypeToLocalizedStringConverter="{StaticResource TypeToLocalizedStringConverter}" />
-    </Page.Resources>
+	<Page.Resources>
+		<c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+		<c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+		<c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
+		<c:ByteArrayToStringConverter x:Key="ByteArrayToStringConverter" />
+		<c:RdpCertificateToErrorListConverter x:Key="RdpCertificateToErrorListConverter" TypeToLocalizedStringConverter="{StaticResource TypeToLocalizedStringConverter}" />
+	</Page.Resources>
 
-    <controls:ModalDialogControl>
-        <controls:ModalDialogControl.DialogContent>
-            <Grid>     
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <ScrollViewer Grid.Row="0"
-                    HorizontalScrollMode="Disabled" 
-                    VerticalScrollMode="Enabled"
-                    VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-                <!-- Title-->
-                <TextBlock 
-                        Style="{ThemeResource SubtitleTextBlockStyle}" 
-                        x:Uid="CertificateValidation-Caption" 
-                        Text="Certificate cannot be verified (d)"
-                        Margin="{StaticResource DialogItemVerticalSpacing}">
-                </TextBlock>
-
-                <!-- Name of host -->
-                <TextBlock 
-                        Style="{ThemeResource BodyTextBlockStyle}" 
-                        x:Uid="CertificateValidation-PcNameLabel" 
-                        Text="Name in certificate from remote PC:(d)"
-                        Margin="{StaticResource DialogItemVerticalSpacing}">
-                </TextBlock>
-                <Grid
-                        Margin="{StaticResource DialogItemIndentation}">
-                    <TextBlock                         
-                            Style="{ThemeResource BodyTextBlockStyle}"                                   
-                            Text="{Binding Host}" 
-                            Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"
-                            Margin="{StaticResource DialogItemVerticalSpacing}">
-                    </TextBlock>
-                </Grid>
-
-                <!-- Certificate Errors -->
-                <TextBlock 
-                    Style="{ThemeResource BodyTextBlockStyle }" 
-                    x:Uid="CertificateValidation-ReasonsLabel" 
-                    Text="It may not be safe to connect to this PC because of the following reasons: (d)">
-                </TextBlock>
-                <Grid
-                    Margin="{StaticResource DialogItemIndentation}">
-                    <ListView 
-                        Margin="{StaticResource DialogItemVerticalSpacing}"
-                        ItemsSource="{Binding Path=Certificate, Converter={StaticResource RdpCertificateToErrorListConverter}}"                  
-                        SelectionMode="None" 
-                        IsHitTestVisible="False">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Left" />
-                                <Setter Property="Style" Value="{ThemeResource BodyTextBlockStyle}" />
-                                <Setter Property="Foreground" Value="{ThemeResource SystemControlPageTextBaseMediumBrush}" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                    </ListView>
-                </Grid>
-
-                <TextBlock 
-                    Style="{ThemeResource BodyTextBlockStyle}" 
-                    Margin="{StaticResource DialogItemVerticalSpacing}"
-                    x:Uid="CertificateValidation-ConnectAnywayLabel" 
-                    Text="Do you want to connect anyway? (d)">
-                </TextBlock>
+	<controls:ModalDialogControl>
+		<controls:ModalDialogControl.DialogContent>
+			<Grid>     
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
                 
-                <CheckBox 
-                    Margin="{StaticResource DialogItemVerticalSpacing}"
-                    Content="Remember my choice for this certificate (d)">
-                </CheckBox>
+				<ScrollViewer Grid.Row="0"
+					HorizontalScrollMode="Disabled" 
+					VerticalScrollMode="Enabled"
+					VerticalScrollBarVisibility="Auto">
+					<StackPanel>
+						<!-- Title-->
+						<TextBlock 
+							Style="{ThemeResource SubtitleTextBlockStyle}" 
+							x:Uid="CertificateValidation-Caption" 
+							Text="Certificate cannot be verified (d)"
+							Margin="{StaticResource DialogItemVerticalSpacing}">
+						</TextBlock>
 
-                <!-- Show/hide details buttons -->
-                <StackPanel 
-                        Margin="{StaticResource DialogItemVerticalSpacing}"
-                        Orientation="Horizontal"
-                        Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                    <Button 
-                            VerticalAlignment="Center"
-                            Background="Transparent"
-                            Command="{Binding ShowDetailsCommand}"
-                            Style="{StaticResource DialogDetailsButtonStyle}"                
-                            Content="{StaticResource MoreDetailsIcon}">
-                    </Button>
-                    <TextBlock 
-                            Style="{ThemeResource BodyTextBlockStyle}" 
-                            VerticalAlignment="Center"
-                            x:Uid="CertificateValidation-MoreDetailsLabel"
-                            Text="Details (d)">
-                    </TextBlock>
-                </StackPanel>
-                <StackPanel 
-                        Margin="{StaticResource DialogItemVerticalSpacing}"
-                        Orientation="Horizontal"
-                        Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Button 
-                            VerticalAlignment="Center"
-                            Background="Transparent"
-                            Command="{Binding HideDetailsCommand}"
-                            Style="{StaticResource DialogDetailsButtonStyle}"                
-                            Content="{StaticResource LessDetailsIcon}">
-                    </Button>
-                    <TextBlock 
-                            Style="{ThemeResource BodyTextBlockStyle}" 
-                            VerticalAlignment="Center"
-                            x:Uid="CertificateValidation-LessDetailsLabel"
-                            Text="Details (d)">
-                    </TextBlock>
-                </StackPanel>
+						<!-- Name of host -->
+						<TextBlock 
+							Style="{ThemeResource BodyTextBlockStyle}" 
+							x:Uid="CertificateValidation-PcNameLabel" 
+							Text="Name in certificate from remote PC:(d)"
+							Margin="{StaticResource DialogItemVerticalSpacing}">
+						</TextBlock>
+						<Grid
+							Margin="{StaticResource DialogItemIndentation}">
+							<TextBlock                         
+								Style="{ThemeResource BodyTextBlockStyle}"                                   
+								Text="{Binding Host}" 
+								Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"
+								Margin="{StaticResource DialogItemVerticalSpacing}">
+							</TextBlock>
+						</Grid>
 
-                <!-- Certificate Details -->
-                    <StackPanel 
-                    Margin="{StaticResource DialogItemVerticalSpacing}"
-                    Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
-                        <TextBlock 
-                        Margin="{StaticResource DialogItemVerticalSpacing}"
-                        Style="{ThemeResource BodyTextBlockStyle}" 
-                        x:Uid="CertificateValidation-IssuerLabel" 
-                        Text="Certificate issuer (d)">
-                        </TextBlock>
-                        <Grid
-                        Margin="{StaticResource DialogItemIndentation}">
-                            <TextBlock 
-                            Margin="{StaticResource DialogItemVerticalSpacing}" 
-                            Style="{ThemeResource BodyTextBlockStyle}"                                       
-                            Text="{Binding Certificate.Issuer}" 
-                            Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}">
-                            </TextBlock>
-                        </Grid>
+						<!-- Certificate Errors -->
+						<TextBlock 
+							Margin="{StaticResource DialogItemVerticalSpacing}"
+							Style="{ThemeResource BodyTextBlockStyle }" 
+							x:Uid="CertificateValidation-ReasonsLabel" 
+							Text="It may not be safe to connect to this PC because of the following reasons: (d)">
+						</TextBlock>
+						<ListView 
+							Margin="{StaticResource DialogItemVerticalSpacing}"
+							ItemsSource="{Binding Path=Certificate, Converter={StaticResource RdpCertificateToErrorListConverter}}"                  
+							SelectionMode="None" 
+							IsHitTestVisible="False">
+							<ListView.ItemContainerStyle>
+								<Style TargetType="ListViewItem">
+									<Setter Property="HorizontalContentAlignment" Value="Left" />
+									<Setter Property="Style" Value="{ThemeResource BodyTextBlockStyle}" />
+									<Setter Property="Foreground" Value="{ThemeResource SystemControlPageTextBaseMediumBrush}" />
+								</Style>
+							</ListView.ItemContainerStyle>
+						</ListView>
 
-                        <TextBlock 
-                        Margin="{StaticResource DialogItemVerticalSpacing}"
-                        Style="{ThemeResource BodyTextBlockStyle}" 
-                        x:Uid="CertificateValidation-ThumbprintLabel" 
-                        Text="Certificate thumbprint (d)">
-                        </TextBlock>
-                        <Grid
-                            Margin="{StaticResource DialogItemIndentation}">
-                            <TextBlock 
-                            Margin="{StaticResource DialogItemVerticalSpacing}" 
-                            Style="{ThemeResource BodyTextBlockStyle}"                                       
-                            Text="{Binding Certificate.SerialNumber, Converter={StaticResource ByteArrayToStringConverter}}" 
-                            Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}">
-                            </TextBlock>
-                        </Grid>
+						<TextBlock 
+							Style="{ThemeResource BodyTextBlockStyle}" 
+							Margin="{StaticResource DialogItemVerticalSpacing}"
+							x:Uid="CertificateValidation-ConnectAnywayLabel" 
+							Text="Do you want to connect anyway? (d)">
+						</TextBlock>
+                
+						<CheckBox 
+							Margin="{StaticResource DialogItemVerticalSpacing}"
+							Content="Remember my choice for this certificate (d)">
+						</CheckBox>
 
-                        <TextBlock 
-                        Margin="{StaticResource DialogItemVerticalSpacing}"
-                        Style="{ThemeResource BodyTextBlockStyle}" 
-                        x:Uid="CertificateValidation-ValidBeforeLabel" 
-                        Text="Certificate valid before (d)">
-                        </TextBlock>
-                        <Grid
-                        Margin="{StaticResource DialogItemIndentation}">
-                            <TextBlock 
-                            Margin="{StaticResource DialogItemVerticalSpacing}" 
-                            Style="{ThemeResource BodyTextBlockStyle}"                                        
-                            Text="{Binding Certificate.ValidTo}" 
-                            Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}">
-                            </TextBlock>
-                        </Grid>
+						<!-- Show/hide details buttons -->
+						<StackPanel 
+							Margin="{StaticResource DialogItemVerticalSpacing}"
+							Orientation="Horizontal"
+							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+							<Button 
+								VerticalAlignment="Center"
+								Background="Transparent"
+								Command="{Binding ShowDetailsCommand}"
+								Style="{StaticResource DialogDetailsButtonStyle}"                
+								Content="{StaticResource MoreDetailsIcon}">
+							</Button>
+							<TextBlock 
+								Style="{StaticResource DialogDetailsTextStyle}" 
+								VerticalAlignment="Center"
+								x:Uid="CertificateValidation-MoreDetailsLabel"
+								Text="Details (d)">
+							</TextBlock>
+						</StackPanel>
+						<StackPanel 
+							Margin="{StaticResource DialogItemVerticalSpacing}"
+							Orientation="Horizontal"
+							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
+							<Button 
+								VerticalAlignment="Center"
+								Background="Transparent"
+								Command="{Binding HideDetailsCommand}"
+								Style="{StaticResource DialogDetailsButtonStyle}"                
+								Content="{StaticResource LessDetailsIcon}">
+							</Button>
+							<TextBlock 
+								Style="{StaticResource DialogDetailsTextStyle}" 
+								VerticalAlignment="Center"
+								x:Uid="CertificateValidation-LessDetailsLabel"
+								Text="Details (d)">
+							</TextBlock>
+						</StackPanel>
 
-                        <TextBlock 
-                        Style="{ThemeResource BodyTextBlockStyle}" 
-                        x:Uid="CertificateValidation-ValidAfterLabel" 
-                        Text="Certificate valid after (d)">
-                        </TextBlock>
-                        <Grid
-                        Margin="{StaticResource DialogItemIndentation}">
-                            <TextBlock 
-                            Margin="{StaticResource DialogItemVerticalSpacing}"  
-                            Style="{ThemeResource BodyTextBlockStyle}"                                       
-                            Text="{Binding Certificate.ValidFrom}" 
-                            Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}">
-                            </TextBlock>
-                        </Grid>
-                    </StackPanel>
-                </StackPanel>
-                </ScrollViewer>
-                <!-- Buttons -->
-                <Grid Grid.Row="1"
-                    HorizontalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="8" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0"
-                        x:Uid="CertificateValidation-CancelButton" 
-                        Content="Cancel (d)" 
-                        HorizontalAlignment="Stretch"
-                        Command="{Binding CancelCommand}">
-                    </Button>
-                    <Button Grid.Column="2"
-                        x:Uid="CertificateValidation-AlwaysConnectButton" 
-                        Content="Connect anyway (d)" 
-                        HorizontalAlignment="Stretch"
-                        Command="{Binding AcceptCertificateCommand}">
-                    </Button>
-                </Grid>
-            </Grid>
-        </controls:ModalDialogControl.DialogContent>
-    </controls:ModalDialogControl>
+						<!-- Certificate Details -->
+						<Grid
+							Margin="{StaticResource DialogItemVerticalSpacing}"
+							Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
+							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
+							<StackPanel 
+								Margin="{StaticResource DialogItemIndentation}">
+								<TextBlock 
+									Margin="{StaticResource DialogItemVerticalSpacing}"
+									Style="{ThemeResource BodyTextBlockStyle}" 
+									x:Uid="CertificateValidation-IssuerLabel" 
+									Text="Certificate issuer (d)">
+								</TextBlock>
+								<Grid
+									Margin="{StaticResource DialogItemIndentation}">
+									<TextBlock 
+										Margin="{StaticResource DialogItemVerticalSpacing}" 
+										Style="{ThemeResource BodyTextBlockStyle}"                                       
+										Text="{Binding Certificate.Issuer}" 
+										Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}">
+									</TextBlock>
+								</Grid>
+
+								<TextBlock 
+									Margin="{StaticResource DialogItemVerticalSpacing}"
+									Style="{ThemeResource BodyTextBlockStyle}" 
+									x:Uid="CertificateValidation-ThumbprintLabel" 
+									Text="Certificate thumbprint (d)">
+								</TextBlock>
+								<Grid
+									Margin="{StaticResource DialogItemIndentation}">
+									<TextBlock 
+										Margin="{StaticResource DialogItemVerticalSpacing}" 
+										Style="{ThemeResource BodyTextBlockStyle}"                                       
+										Text="{Binding Certificate.SerialNumber, Converter={StaticResource ByteArrayToStringConverter}}" 
+										Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}">
+									</TextBlock>
+								</Grid>
+
+								<TextBlock 
+									Margin="{StaticResource DialogItemVerticalSpacing}"
+									Style="{ThemeResource BodyTextBlockStyle}" 
+									x:Uid="CertificateValidation-ValidAfterLabel" 
+									Text="Certificate valid after (d)">
+								</TextBlock>
+								<Grid
+									Margin="{StaticResource DialogItemIndentation}">
+									<TextBlock 
+										Margin="{StaticResource DialogItemVerticalSpacing}"  
+										Style="{ThemeResource BodyTextBlockStyle}"                                       
+										Text="{Binding Certificate.ValidFrom}" 
+										Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}">
+									</TextBlock>
+								</Grid>
+
+								<TextBlock 
+									Margin="{StaticResource DialogItemVerticalSpacing}"
+									Style="{ThemeResource BodyTextBlockStyle}" 
+									x:Uid="CertificateValidation-ValidBeforeLabel" 
+									Text="Certificate valid before (d)">
+								</TextBlock>
+								<Grid
+									Margin="{StaticResource DialogItemIndentation}">
+									<TextBlock 
+										Margin="{StaticResource DialogItemVerticalSpacing}" 
+										Style="{ThemeResource BodyTextBlockStyle}"                                        
+										Text="{Binding Certificate.ValidTo}" 
+										Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}">
+									</TextBlock>
+								</Grid>
+							</StackPanel>
+						</Grid>
+					</StackPanel>
+				</ScrollViewer>
+                
+				<!-- Buttons -->
+				<Grid Grid.Row="1"
+					HorizontalAlignment="Stretch">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="8" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Button Grid.Column="0"
+						x:Uid="CertificateValidation-CancelButton" 
+						Content="Cancel (d)" 
+						HorizontalAlignment="Stretch"
+						Command="{Binding CancelCommand}">
+					</Button>
+					<Button Grid.Column="2"
+						x:Uid="CertificateValidation-AlwaysConnectButton" 
+						Content="Connect anyway (d)" 
+						HorizontalAlignment="Stretch"
+						Command="{Binding AcceptCertificateCommand}">
+					</Button>
+				</Grid>
+			</Grid>
+		</controls:ModalDialogControl.DialogContent>
+	</controls:ModalDialogControl>
 </Page>
 
