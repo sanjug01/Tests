@@ -179,7 +179,8 @@
             _validation.Rejected += (sender, e) => Assert.Fail();
 
             _nav.PushModalView(ViewName, _args, completion);
-            _vm.AcceptOnceCommand.Execute(null);
+            _vm.RememberChoice = false;
+            _vm.AcceptCertificate.Execute(null);
 
             Assert.AreSame(_vm.Certificate, _certificate);
             Assert.AreEqual(0, _permanentTrust.Trusted.Count);
@@ -197,7 +198,8 @@
             _validation.Rejected += (sender, e) => Assert.Fail();
 
             _nav.PushModalView(ViewName, _args, completion);
-            _vm.AcceptCertificateCommand.Execute(null);
+            _vm.RememberChoice = true;
+            _vm.AcceptCertificate.Execute(null);
 
             Assert.AreSame(_vm.Certificate, _certificate);
             Assert.AreEqual(1, _permanentTrust.Trusted.Count);
@@ -215,7 +217,7 @@
             _validation.Rejected += (sender, e) => ++rejectedCount;
 
             _nav.PushModalView(ViewName, _args, completion);
-            _vm.CancelCommand.Execute(null);
+            _vm.Cancel.Execute(null);
 
             Assert.AreSame(_vm.Certificate, _certificate);
             Assert.AreEqual(0, _permanentTrust.Trusted.Count);

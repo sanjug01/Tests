@@ -98,7 +98,8 @@
 						<CheckBox 
 							Margin="{StaticResource DialogItemVerticalSpacing}"
 							x:Uid="CertificateValidation-RememberChoiceCheckbox"
-							Content="Remember my choice for this certificate (d)">
+							Content="Remember my choice for this certificate (d)"
+							IsChecked="{Binding RememberChoice, Mode=TwoWay}">
 						</CheckBox>
 
 						<!-- Show/hide details buttons -->
@@ -109,7 +110,7 @@
 							<Button 
 								VerticalAlignment="Center"
 								Background="Transparent"
-								Command="{Binding ShowDetailsCommand}"
+								Command="{Binding ShowDetails}"
 								Style="{StaticResource DialogDetailsButtonStyle}"                
 								Content="{StaticResource MoreDetailsIcon}">
 							</Button>
@@ -127,7 +128,7 @@
 							<Button 
 								VerticalAlignment="Center"
 								Background="Transparent"
-								Command="{Binding HideDetailsCommand}"
+								Command="{Binding HideDetails}"
 								Style="{StaticResource DialogDetailsButtonStyle}"                
 								Content="{StaticResource LessDetailsIcon}">
 							</Button>
@@ -223,18 +224,17 @@
 						x:Uid="Common_Button_Cancel" 
 						Content="Cancel (d)" 
 						HorizontalAlignment="Stretch"
-						Command="{Binding CancelCommand}">
+						Command="{Binding Cancel}">
 					</Button>
 					<Button Grid.Column="2"
 						Style="{StaticResource DialogAccentedButtonStyle}"
 						x:Uid="CertificateValidation-ConnectAnywayButton" 
 						Content="Connect anyway (d)" 
 						HorizontalAlignment="Stretch"
-						Command="{Binding AcceptOnceCommand}">
+						Command="{Binding AcceptCertificate}">
 					</Button>
 				</Grid>
 			</Grid>
 		</controls:ModalDialogControl.DialogContent>
 	</controls:ModalDialogControl>
 </Page>
-
