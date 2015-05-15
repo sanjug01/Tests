@@ -62,11 +62,13 @@
                     </StackPanel>
                     <Grid Style="{StaticResource rdEntryFieldGridStyle}" >
                         <TextBox Name="txtHostEntry" 
-                                     x:Uid="AddOrEditGateway-ServerNameTextbox"
-                                     Background="Transparent"
-                                     Margin="0,8" 
-                                     PlaceholderText="Host name or IP address(d)"
-                                     Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                 x:Uid="AddOrEditGateway-ServerNameTextbox"
+                                 Background="Transparent"
+                                 Margin="0,8"
+                                 IsTextPredictionEnabled="False"
+                                 IsSpellCheckEnabled="False"
+                                 PlaceholderText="Host name or IP address(d)"
+                                 Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         </TextBox>
                     </Grid>
                 </StackPanel>
