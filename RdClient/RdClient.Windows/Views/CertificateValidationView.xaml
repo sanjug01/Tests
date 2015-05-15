@@ -103,42 +103,46 @@
 						</CheckBox>
 
 						<!-- Show/hide details buttons -->
-						<StackPanel 
+						<HyperlinkButton 
 							Margin="{StaticResource DialogTripleVerticalSpacing}"
-							Orientation="Horizontal"
-							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-							<Button 
-								VerticalAlignment="Center"
-								Background="Transparent"
-								Command="{Binding ShowDetails}"
-								Style="{StaticResource DialogDetailsButtonStyle}"                
-								Content="{StaticResource MoreDetailsIcon}">
-							</Button>
-							<TextBlock 
-								Style="{StaticResource DialogDetailsTextStyle}" 
-								VerticalAlignment="Center"
-								x:Uid="CertificateValidation-MoreDetailsLabel"
-								Text="Details (d)">
-							</TextBlock>
-						</StackPanel>
-						<StackPanel 
+							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+							Command="{Binding ShowDetails}">
+							<StackPanel Orientation="Horizontal">
+								<TextBlock 
+									Text="{StaticResource MoreDetailsIcon}"
+									Style="{ThemeResource BodyTextBlockStyle}"
+									FontFamily="{StaticResource IconFont}"
+									VerticalAlignment="Center">
+								</TextBlock>
+								<TextBlock 
+									Margin="{StaticResource DialogItemIndentation}"
+									Style="{StaticResource BodyTextBlockStyle}" 
+									VerticalAlignment="Center"
+									x:Uid="CertificateValidation-MoreDetailsLabel"
+									Text="Details (d)">
+								</TextBlock>
+							</StackPanel>
+						</HyperlinkButton>
+						<HyperlinkButton 
 							Margin="{StaticResource DialogItemVerticalSpacing}"
-							Orientation="Horizontal"
-							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
-							<Button 
-								VerticalAlignment="Center"
-								Background="Transparent"
-								Command="{Binding HideDetails}"
-								Style="{StaticResource DialogDetailsButtonStyle}"                
-								Content="{StaticResource LessDetailsIcon}">
-							</Button>
-							<TextBlock 
-								Style="{StaticResource DialogDetailsTextStyle}" 
-								VerticalAlignment="Center"
-								x:Uid="CertificateValidation-LessDetailsLabel"
-								Text="Details (d)">
-							</TextBlock>
-						</StackPanel>
+							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"
+							Command="{Binding HideDetails}">
+							<StackPanel Orientation="Horizontal">
+								<TextBlock 
+									Text="{StaticResource LessDetailsIcon}"
+									Style="{ThemeResource BodyTextBlockStyle}"
+									FontFamily="{StaticResource IconFont}"
+									VerticalAlignment="Center">
+								</TextBlock>
+								<TextBlock 
+									Margin="{StaticResource DialogItemIndentation}"
+									Style="{StaticResource BodyTextBlockStyle}" 
+									VerticalAlignment="Center"
+									x:Uid="CertificateValidation-LessDetailsLabel"
+									Text="Details (d)">
+								</TextBlock>
+							</StackPanel>
+						</HyperlinkButton>
 
 						<!-- Certificate Details -->
 						<Grid
