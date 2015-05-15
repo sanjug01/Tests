@@ -976,10 +976,10 @@
     <value>(r) Show the applications settings panel</value>
     <comment>Tooltip of the "settings" button in the toolbar on the connection center page</comment>
   </data>
-  <data name="InSessionEditCredentials-ConfirmNo.Content" xml:space="preserve">
+  <data name="Common_Button_No.Content" xml:space="preserve">
     <value>(r) No</value>
   </data>
-  <data name="InSessionEditCredentials-ConfirmYes.Content" xml:space="preserve">
+  <data name="Common_Button_Yes.Content" xml:space="preserve">
     <value>(r) Yes</value>
   </data>
   <data name="InSessionEditCredentials-Password.Header" xml:space="preserve">
