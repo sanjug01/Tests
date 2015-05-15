@@ -155,7 +155,7 @@
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ExitFullScreen, Command = _fullScreenModel.ExitFullScreenCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = _zoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = _zoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = _toggleSideBars });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.AllApps, Command = _toggleSideBars });
             items.Add(_invokeKeyboardModel);
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
         }

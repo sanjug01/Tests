@@ -25,7 +25,9 @@
         MultiSelection = 0xE762,
         Keyboard =0xE765,
         EnterFullScreen = 0xE740,
-        ExitFullScreen = 0xE73F
+        ExitFullScreen = 0xE73F,
+        GlobalNavButton = 0xE700,
+        AllApps = 0xE71D,
     }
 
     /// <summary>

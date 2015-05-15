@@ -24,16 +24,20 @@
     <Grid Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
         <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}" 
                  SelectedIndex="0"
+				 HorizontalAlignment="Left"
+				 VerticalAlignment="Top"
                  Visibility="{Binding Path=ShowSectionLabels, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ListBoxItem 
                 x:Uid="ConnectionCenter_DesktopLabel"
                 IsSelected="{Binding Path=ShowDesktops, Mode=TwoWay}"
                 Visibility="{Binding Path=HasDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"
+				IsEnabled="{Binding Path=HasApps}"
                 Content="Desktops(d)"/>
             <ListBoxItem
                 x:Uid="ConnectionCenter_AppLabel"
                 IsSelected="{Binding Path=ShowApps, Mode=TwoWay}"
                 Visibility="{Binding Path=HasApps, Converter={StaticResource BooleanToVisibilityConverter}}"
+				IsEnabled="{Binding Path=HasDesktops}"
                 Content="Apps(d)" />
         </ListBox>
     </Grid>

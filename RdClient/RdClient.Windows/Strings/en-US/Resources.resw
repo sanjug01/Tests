@@ -768,7 +768,7 @@
   <data name="Connection_Pending_ConnectToMessage.Text" xml:space="preserve">
     <value>(r) Connecting to</value>
     <comment>Message displayed in the connection view, while connecting to remote session.</comment>
-  </data>  
+  </data>
   <data name="SelectResource_Azure_Description.Text" xml:space="preserve">
     <value>(r) Get to apps from Azure RemoteApp</value>
     <comment>Description of add Azure Remote App option on the add resource view</comment>
@@ -943,5 +943,37 @@
   <data name="InternalDocType_ThirdPartyNotices_String" xml:space="preserve">
     <value>(r) Third party notices</value>
     <comment>Title of the "Thrid party notices" document page</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_About.Label" xml:space="preserve">
+    <value>(r) About</value>
+    <comment>Label of the "About" button in the toolbar on the connection center page. The button shows the "about" side panel.</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_About.ToolTipService.ToolTip" xml:space="preserve">
+    <value>(r) About</value>
+    <comment>Tooltip of the "about" button in the toolbar on the connection center page</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_Add.Label" xml:space="preserve">
+    <value>(r) Add</value>
+    <comment>Label of the "Add" button in the toolbar on the connection center page. The button shows the selector of a type of a new resource, or the "add desktop" side panel.</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_Add.ToolTipService.ToolTip" xml:space="preserve">
+    <value>(r) Add a new remote resource</value>
+    <comment>Tooltip of the "add" button in the toolbar on the connection center page</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_Help.Label" xml:space="preserve">
+    <value>(r) Help</value>
+    <comment>Label of the "Help" button in the toolbar on the connection center page. The button navigates the default browser to the application help page</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_Help.ToolTipService.ToolTip" xml:space="preserve">
+    <value>(r) Go to the application help page</value>
+    <comment>Tooltip of the "help" button in the toolbar on the connection center page</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_Settings.Label" xml:space="preserve">
+    <value>(r)Settings</value>
+    <comment>Label of the "Settings" button in the toolbar on the connection center page. The button shows the settings side panel.</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_Settings.ToolTipService.ToolTip" xml:space="preserve">
+    <value>(r) Show the applications settings panel</value>
+    <comment>Tooltip of the "settings" button in the toolbar on the connection center page</comment>
   </data>
 </root>

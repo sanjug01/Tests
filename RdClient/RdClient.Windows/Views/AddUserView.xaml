@@ -55,7 +55,7 @@
             <StackPanel Grid.Row="3">
                 <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
                                    x:Uid="AddUser-User" 
                                    Text="User (d)"/>
                     </StackPanel>
@@ -66,6 +66,8 @@
                                 x:Uid="AddUser-UsernameTextbox"
                                 Background="Transparent"
                                 PlaceholderText="Username (d)"
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
                                 Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=Default}">                                
                             </TextBox>
                         </controls:ErrorControl.PresentedContent>
@@ -110,7 +112,8 @@
 
                 <HyperlinkButton x:Uid="AddUser-DeleteUserLink"
                                  Margin="{StaticResource DialogDoubleSizeMargin}"
-                                 Command="{Binding Path=Delete}">
+                                 Command="{Binding Path=Delete}"
+								 Visibility="{Binding Path=CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <TextBlock x:Uid="AddUser-DeleteUserText" 
                                Text="(d) Delete this account"/>
                 </HyperlinkButton>                
