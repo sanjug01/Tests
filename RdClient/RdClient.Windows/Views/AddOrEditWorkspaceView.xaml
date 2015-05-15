@@ -52,7 +52,8 @@
                 <TextBox x:Uid="AddOrEditWorkspace-Feed"
                          Margin="0,8" 
                          PlaceholderText="https://webfeed.contoso_example.com (d)"
-                         Text="{Binding Path=FeedUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                         InputScope="Uri"
+                         Text="{Binding Path=FeedUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Url" />
             </StackPanel>
 
             <StackPanel Grid.Row="4"
