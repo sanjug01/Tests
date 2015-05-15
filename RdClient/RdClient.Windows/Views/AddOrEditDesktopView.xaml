@@ -71,6 +71,8 @@
                                     Background="Transparent"
                                     PlaceholderText="Host name or IP address (d)"
                                     Margin="0,8" 
+                                    IsTextPredictionEnabled="False"
+                                    IsSpellCheckEnabled="False"
                                     Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     </TextBox>
                 </StackPanel>
@@ -80,17 +82,19 @@
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                        x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                       Foreground="{ThemeResource UnselectedForegroundBrush}"
-                                       x:Uid="AddOrEditDesktop-FriendlyName_OptLabel" 
-                                       Text="(optional) (d)" 
-                                       Margin="8,0,0,0"/>
+                                   Foreground="{ThemeResource UnselectedForegroundBrush}"
+                                   x:Uid="AddOrEditDesktop-FriendlyName_OptLabel" 
+                                   Text="(optional) (d)" 
+                                   Margin="8,0,0,0"/>
                     </StackPanel>
                     <TextBox Name="txtFriendlyNameEntry"
-                                     x:Uid="AddOrEditDesktop-PcFriendlyNameTextbox"
-                                     Background="Transparent"
-                                     Margin="0,8" 
-                                     PlaceholderText="Connection friendly name (d)" 
-                                     Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                             x:Uid="AddOrEditDesktop-PcFriendlyNameTextbox"
+                             Background="Transparent"
+                             Margin="0,8"
+                             InputScope="Text"
+                             IsSpellCheckEnabled="False"
+                             PlaceholderText="Connection friendly name (d)" 
+                             Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     </TextBox>
                 </StackPanel>
 

@@ -65,11 +65,6 @@
             get { return _workspaceViewModels; }
         }
 
-        ReadOnlyObservableCollection<BarItemModel> IConnectionCenterViewModel.ToolbarItems
-        {
-            get { return _toolbarItems; }
-        }
-
         public bool HasDesktops
         {
             get { return true; }
