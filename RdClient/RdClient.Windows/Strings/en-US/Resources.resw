@@ -506,9 +506,13 @@
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
   <data name="AddOrEditDesktop-SaveButton.Content" xml:space="preserve">
-    <value>(r) Save and connect</value>
+    <value>(r) Save</value>
     <comment>Text shown on AddOrEditDesktop view - save button</comment>
   </data>
+  <data name="AddOrEditDesktop-AddButton.Content" xml:space="preserve">
+    <value>(r) Add</value>
+    <comment>Text shown on AddOrEditDesktop view - Add button</comment>
+  </data>  
   <data name="AddUser-AddCaption.Text" xml:space="preserve">
     <value>(r) Enter Credentials</value>
   </data>
