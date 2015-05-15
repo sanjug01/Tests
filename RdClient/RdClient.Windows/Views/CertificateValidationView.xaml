@@ -40,6 +40,7 @@
 				</Grid.RowDefinitions>
                 
 				<ScrollViewer Grid.Row="0"
+					Margin="{StaticResource DialogSectionVerticalSpacing}"
 					HorizontalScrollMode="Disabled" 
 					VerticalScrollMode="Enabled"
 					VerticalScrollBarVisibility="Auto">
@@ -103,8 +104,7 @@
 						</CheckBox>
 
 						<!-- Show/hide details buttons -->
-						<HyperlinkButton 
-							Margin="{StaticResource DialogTripleVerticalSpacing}"
+						<HyperlinkButton
 							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
 							Command="{Binding ShowDetails}">
 							<StackPanel Orientation="Horizontal">
@@ -145,10 +145,10 @@
 						</HyperlinkButton>
 
 						<!-- Certificate Details -->
-						<Grid
-							Margin="{StaticResource DialogTripleVerticalSpacing}"
+						<StackPanel
 							Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
 							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
+							<Grid Margin="{StaticResource DialogItemVerticalSpacing}" />
 							<StackPanel 
 								Margin="{StaticResource DialogItemIndentation}">
 								<TextBlock 
@@ -211,16 +211,16 @@
 									</TextBlock>
 								</Grid>
 							</StackPanel>
-						</Grid>
+						</StackPanel>
 					</StackPanel>
 				</ScrollViewer>
                 
 				<!-- Buttons -->
 				<Grid Grid.Row="1"
-					HorizontalAlignment="Stretch">
+					HorizontalAlignment="Stretch">					
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
-						<ColumnDefinition Width="12" />
+						<ColumnDefinition Width="{StaticResource DialogButtonSpacing}" />
 						<ColumnDefinition Width="*" />
 					</Grid.ColumnDefinitions>
 					<Button Grid.Column="0"
