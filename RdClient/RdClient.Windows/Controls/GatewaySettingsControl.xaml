@@ -7,6 +7,7 @@
     xmlns:local="using:RdClient.Controls"
     xmlns:design="using:RdClient.DesignTime"    
     xmlns:converters="using:RdClient.Converters"
+	xmlns:sc="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
     d:DesignHeight="768"
@@ -21,8 +22,9 @@
             <converters:GatewayComboBoxElementToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
             </converters:GatewayComboBoxElementToLocalizedStringConverter.LocalizedString>
-        </converters:GatewayComboBoxElementToLocalizedStringConverter>        
-    </UserControl.Resources>
+        </converters:GatewayComboBoxElementToLocalizedStringConverter>
+		<sc:IntIsGreaterThanZeroConverter x:Key="IntIsGreaterThanZeroConverter" />
+	</UserControl.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -34,7 +36,9 @@
                   x:Uid="Settings_Gateways_Combobox" 
                   Header="Gateways(d)" 
                   PlaceholderText="Select gateway server(d)"
-                  ItemsSource="{Binding Gateways}" SelectedItem="{Binding SelectedGateway, Mode=TwoWay}">
+                  ItemsSource="{Binding Gateways}" 
+				  SelectedItem="{Binding SelectedGateway, Mode=TwoWay}"
+				  IsEnabled="{Binding Gateways.Count, Converter={StaticResource IntIsGreaterThanZeroConverter}}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Gateway.Model.HostName}" />

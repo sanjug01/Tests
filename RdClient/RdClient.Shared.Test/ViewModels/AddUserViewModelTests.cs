@@ -161,11 +161,16 @@
         [TestMethod]
         public void AddUserViewModel_ShowMessageFalseIffInEnterCredentialsMode()
         {
-            _vm.Mode = CredentialPromptMode.EnterCredentials;
-            Assert.IsFalse(_vm.ShowMessage);
             foreach (CredentialPromptMode mode in Enum.GetValues(typeof(CredentialPromptMode)))
             {
-                _vm.Mode = mode;
+                AddUserViewArgs args =
+                    new AddUserViewArgs(
+                        _testData.NewValidCredential().Model,
+                        true,
+                        mode);
+                _vm = new AddUserViewModel();
+                ((IViewModel)_vm).Presenting(_nav, args, _context);
+
                 if (mode == CredentialPromptMode.EnterCredentials)
                 {
                     Assert.IsFalse(_vm.ShowMessage);
@@ -178,27 +183,27 @@
         }
 
         [TestMethod]
-        public void AddUserViewModel_EditUser_CanDelete()
+        public void AddUserViewModel_CanDeleteTrueIffEditCredentialsMode()
         {
-            AddUserViewArgs args =
-                new AddUserViewArgs(
-                    _testData.NewValidCredential().Model,
-                    true,
-                    CredentialPromptMode.EditCredentials);
-            ((IViewModel)_vm).Presenting(_nav, args, _context);
-            Assert.IsTrue(_vm.Delete.CanExecute(null));
-        }
+            foreach (CredentialPromptMode mode in Enum.GetValues(typeof(CredentialPromptMode)))
+            {
+                AddUserViewArgs args =
+                    new AddUserViewArgs(
+                        _testData.NewValidCredential().Model,
+                        true,
+                        mode);
+                _vm = new AddUserViewModel();
+                ((IViewModel)_vm).Presenting(_nav, args, _context);
 
-        [TestMethod]
-        public void AddUserViewModel_AddUser_CannotDelete()
-        {
-            AddUserViewArgs args = 
-                new AddUserViewArgs(
-                    _testData.NewValidCredential().Model,
-                    true,
-                    CredentialPromptMode.EnterCredentials);
-            ((IViewModel)_vm).Presenting(_nav, args, _context);
-            Assert.IsFalse(_vm.Delete.CanExecute(null));
+                if (mode == CredentialPromptMode.EditCredentials)
+                {
+                    Assert.IsTrue(_vm.CanDelete);
+                }
+                else
+                {
+                    Assert.IsFalse(_vm.CanDelete);
+                }
+            }
         }
 
         [TestMethod]
@@ -212,6 +217,30 @@
                 return null;
             });
             _vm.Delete.Execute(null);
+        }
+
+        [TestMethod]
+        public void CanDeleteTrueWhenEditingUser()
+        {
+            AddUserViewArgs args =
+                new AddUserViewArgs(
+                    _testData.NewValidCredential().Model,
+                    true,
+                    CredentialPromptMode.EditCredentials);
+            ((IViewModel)_vm).Presenting(_nav, args, _context);
+            Assert.IsTrue(_vm.CanDelete);
+        }
+
+        [TestMethod]
+        public void CanDeleteFalseWhenAddingUser()
+        {
+            AddUserViewArgs args =
+                new AddUserViewArgs(
+                    _testData.NewValidCredential().Model,
+                    true,
+                    CredentialPromptMode.EnterCredentials);
+            ((IViewModel)_vm).Presenting(_nav, args, _context);
+            Assert.IsFalse(_vm.CanDelete);
         }
     }
 }

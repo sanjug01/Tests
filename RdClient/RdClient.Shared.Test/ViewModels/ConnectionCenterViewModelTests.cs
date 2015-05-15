@@ -407,21 +407,29 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void ShowSectionLabelsIsFalseWhenHasDesktopsIsFalse()
+        public void ShowSectionLabelsIsFalseWhenHasDesktopsIsFalseAndHasAppsIsFalse()
         {
             RemoveAllModels(_dataModel.LocalWorkspace.Connections);
-            Assert.IsFalse(_vm.ShowSectionLabels);
-        }
-
-        [TestMethod]
-        public void ShowSectionLabelsIsFalseWhenHasAppsIsFalse()
-        {
             RemoveAllModels(_dataModel.OnPremWorkspaces);
             Assert.IsFalse(_vm.ShowSectionLabels);
         }
 
         [TestMethod]
-        public void ShowSectionLabelsIsTrueWhenHasDesktopsAndHasAppsIsTrue()
+        public void ShowSectionLabelsIsTrueWhenHasDesktopsIsTrue()
+        {
+            RemoveAllModels(_dataModel.OnPremWorkspaces);
+            Assert.IsTrue(_vm.ShowSectionLabels);
+        }
+
+        [TestMethod]
+        public void ShowSectionLabelsIsTrueWhenHasAppsIsTrue()
+        {
+            RemoveAllModels(_dataModel.OnPremWorkspaces);
+            Assert.IsTrue(_vm.ShowSectionLabels);
+        }
+
+        [TestMethod]
+        public void ShowSectionLabelsIsTrueWhenHasAppsIsTrueAndHasDesktopsIsTrue()
         {
             Assert.IsTrue(_vm.ShowSectionLabels);
         }

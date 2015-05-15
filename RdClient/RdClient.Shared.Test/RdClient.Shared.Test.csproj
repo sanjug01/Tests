@@ -119,6 +119,7 @@
     <Compile Include="Converters\BooleanToPasswordRevealModeConverterTests.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverterTests.cs" />
     <Compile Include="Converters\ByteArrayToStringConverterTests.cs" />
+    <Compile Include="Converters\IntIsGreaterThanZeroConverterTests.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\EnumMemberToSymbolStringConverterTests.cs" />
     <Compile Include="Converters\NegateBooleanConverterTests.cs" />

@@ -164,7 +164,7 @@
                 {
                     this.ShowDesktops = value;
                     this.ShowApps = !value;
-                    SetShowSectionLabels();
+                    UpdateShowSectionLabels();
                 }
             }
         }
@@ -181,7 +181,7 @@
                 {
                     this.ShowApps = value;
                     this.ShowDesktops = !value;
-                    SetShowSectionLabels();
+                    UpdateShowSectionLabels();
                 }
             }
         }
@@ -226,11 +226,6 @@
             {
                 SetProperty(ref _showSectionLabels, value);
             }
-        }
-
-        private void SetShowSectionLabels()
-        {
-            this.ShowSectionLabels = this.HasDesktops && this.HasApps;
         }
 
         public IViewVisibility AccessoryViewVisibility
@@ -391,6 +386,11 @@
             this.SelectedCount = newSelectedCount;            
             EditDesktopCommand.EmitCanExecuteChanged();
             DeleteDesktopCommand.EmitCanExecuteChanged();
+        }
+
+        private void UpdateShowSectionLabels()
+        {
+            this.ShowSectionLabels = this.HasDesktops || this.HasApps;
         }
 
         private void DesktopSelection_PropertyChanged(object sender, PropertyChangedEventArgs e)
