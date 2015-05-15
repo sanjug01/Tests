@@ -46,7 +46,7 @@
 					<StackPanel>
 						<!-- Title-->
 						<TextBlock 
-							Style="{ThemeResource SubtitleTextBlockStyle}" 
+							Style="{ThemeResource TitleTextBlockStyle}" 
 							x:Uid="CertificateValidation-Caption" 
 							Text="Certificate cannot be verified (d)"
 							Margin="{StaticResource DialogItemVerticalSpacing}">
@@ -56,8 +56,7 @@
 						<TextBlock 
 							Style="{ThemeResource BodyTextBlockStyle}" 
 							x:Uid="CertificateValidation-PcNameLabel" 
-							Text="Name in certificate from remote PC:(d)"
-							Margin="{StaticResource DialogItemVerticalSpacing}">
+							Text="Name in certificate from remote PC:(d)">
 						</TextBlock>
 						<Grid
 							Margin="{StaticResource DialogItemIndentation}">
@@ -70,11 +69,10 @@
 						</Grid>
 
 						<!-- Certificate Errors -->
-						<TextBlock 
-							Margin="{StaticResource DialogItemVerticalSpacing}"
+						<TextBlock
 							Style="{ThemeResource BodyTextBlockStyle }" 
 							x:Uid="CertificateValidation-ReasonsLabel" 
-							Text="It may not be safe to connect to this PC because of the following reasons: (d)">
+							Text="It may not be safe to connect to this PC: (d)">
 						</TextBlock>
 						<ListView 
 							Margin="{StaticResource DialogItemVerticalSpacing}"
@@ -104,7 +102,7 @@
 
 						<!-- Show/hide details buttons -->
 						<StackPanel 
-							Margin="{StaticResource DialogItemVerticalSpacing}"
+							Margin="{StaticResource DialogSectionVerticalSpacing}"
 							Orientation="Horizontal"
 							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
 							<Button 
@@ -142,13 +140,12 @@
 
 						<!-- Certificate Details -->
 						<Grid
-							Margin="{StaticResource DialogItemVerticalSpacing}"
+							Margin="{StaticResource DialogSectionVerticalSpacing}"
 							Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
 							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
 							<StackPanel 
 								Margin="{StaticResource DialogItemIndentation}">
 								<TextBlock 
-									Margin="{StaticResource DialogItemVerticalSpacing}"
 									Style="{ThemeResource BodyTextBlockStyle}" 
 									x:Uid="CertificateValidation-IssuerLabel" 
 									Text="Certificate issuer (d)">
@@ -164,7 +161,6 @@
 								</Grid>
 
 								<TextBlock 
-									Margin="{StaticResource DialogItemVerticalSpacing}"
 									Style="{ThemeResource BodyTextBlockStyle}" 
 									x:Uid="CertificateValidation-ThumbprintLabel" 
 									Text="Certificate thumbprint (d)">
@@ -180,7 +176,6 @@
 								</Grid>
 
 								<TextBlock 
-									Margin="{StaticResource DialogItemVerticalSpacing}"
 									Style="{ThemeResource BodyTextBlockStyle}" 
 									x:Uid="CertificateValidation-ValidAfterLabel" 
 									Text="Certificate valid after (d)">
@@ -196,7 +191,6 @@
 								</Grid>
 
 								<TextBlock 
-									Margin="{StaticResource DialogItemVerticalSpacing}"
 									Style="{ThemeResource BodyTextBlockStyle}" 
 									x:Uid="CertificateValidation-ValidBeforeLabel" 
 									Text="Certificate valid before (d)">
@@ -220,16 +214,18 @@
 					HorizontalAlignment="Stretch">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
-						<ColumnDefinition Width="8" />
+						<ColumnDefinition Width="12" />
 						<ColumnDefinition Width="*" />
 					</Grid.ColumnDefinitions>
 					<Button Grid.Column="0"
+						Style="{StaticResource DialogButtonStyle}"
 						x:Uid="CertificateValidation-CancelButton" 
 						Content="Cancel (d)" 
 						HorizontalAlignment="Stretch"
 						Command="{Binding CancelCommand}">
 					</Button>
 					<Button Grid.Column="2"
+						Style="{StaticResource DialogAccentedButtonStyle}"
 						x:Uid="CertificateValidation-ConnectOnceButton" 
 						Content="Connect anyway (d)" 
 						HorizontalAlignment="Stretch"
