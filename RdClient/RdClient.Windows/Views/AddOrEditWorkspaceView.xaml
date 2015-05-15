@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:RdClient.Views"
     xmlns:vm="using:RdClient.Shared.ViewModels"
-    xmlns:c="using:RdClient.Converters"
+    xmlns:c="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:controls="using:RdClient.Controls"
     d:DesignWidth="480"    

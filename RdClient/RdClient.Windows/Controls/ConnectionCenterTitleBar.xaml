@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:RdClient.Controls"    
     xmlns:design="using:RdClient.DesignTime" 
-    xmlns:converters="using:RdClient.Converters"
+    xmlns:converters="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Helpers"
     xmlns:shelpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"

@@ -5,8 +5,7 @@
     xmlns:local="using:RdClient.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:c="using:RdClient.Converters"
-    xmlns:sc="using:RdClient.Shared.Converters"
+    xmlns:c="using:RdClient.Shared.Converters"
     xmlns:System="using:System"    
     xmlns:design="using:RdClient.DesignTime"
     xmlns:vm="using:RdClient.Shared.ViewModels"
@@ -25,7 +24,7 @@
     <Page.Resources>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <sc:NegateBooleanConverter x:Key="NegateBooleanConverter" />
+        <c:NegateBooleanConverter x:Key="NegateBooleanConverter" />
         
         <DataTemplate x:Key="TopBarDefaultLayout">
             <Grid>

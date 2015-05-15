@@ -8,7 +8,7 @@
     xmlns:views="using:RdClient.Views"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:models="using:RdClient.Models"
-    xmlns:conv="using:RdClient.Converters"
+    xmlns:conv="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Helpers"
     xmlns:sh="using:RdClient.Shared.Helpers"
     xmlns:nav="using:RdClient.Shared.Navigation"

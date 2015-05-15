@@ -7,9 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:controls="using:RdClient.Controls"
-    xmlns:helpers="using:RdClient.Shared.Helpers" 
-    xmlns:sc="using:RdClient.Shared.Converters"    
-    xmlns:c="using:RdClient.Converters"    
+    xmlns:helpers="using:RdClient.Shared.Helpers"   
+    xmlns:c="using:RdClient.Shared.Converters"    
     TabNavigation="Cycle"
     mc:Ignorable="d"
     d:DesignHeight="400"
@@ -22,11 +21,11 @@
     <controls:ModalUserControl.Resources>
         <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <sc:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter">
-            <sc:TypeToLocalizedStringConverter.LocalizedString>
+        <c:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter">
+            <c:TypeToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
-            </sc:TypeToLocalizedStringConverter.LocalizedString>            
-        </sc:TypeToLocalizedStringConverter>
+            </c:TypeToLocalizedStringConverter.LocalizedString>            
+        </c:TypeToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">

@@ -6,7 +6,7 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:c="using:RdClient.Converters"    
+    xmlns:c="using:RdClient.Shared.Converters"    
     xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
     RequestedTheme="Light">

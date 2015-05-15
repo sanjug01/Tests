@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Controls"
     xmlns:vm="using:RdClient.Shared.ViewModels"
-    xmlns:conv="using:RdClient.Converters"
+    xmlns:conv="using:RdClient.Shared.Converters"
     xmlns:sconv="using:RdClient.Shared.Converters"
     xmlns:input="using:RdClient.Input"
     xmlns:helpers="using:RdClient.Helpers"

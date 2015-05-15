@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using Windows.UI.Xaml.Data;
 
-namespace RdClient.Converters
+namespace RdClient.Shared.Converters
 {
     public class DesktopsListToLocalizedStringConverter: IValueConverter
     {                

@@ -1,12 +1,11 @@
-﻿using RdClient.Shared.Converters;
-using RdClient.Shared.Converters.ErrorLocalizers;
+﻿using RdClient.Shared.Converters.ErrorLocalizers;
 using RdClient.Shared.CxWrappers.Errors;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Windows.UI.Xaml.Data;
 
-namespace RdClient.Converters
+namespace RdClient.Shared.Converters
 {
     public class RdpErrorToLocalizedStringConverter : IValueConverter
     {

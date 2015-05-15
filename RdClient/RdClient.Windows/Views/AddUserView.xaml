@@ -6,8 +6,7 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:c="using:RdClient.Converters"
-    xmlns:sc="using:RdClient.Shared.Converters"
+    xmlns:c="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:controls="using:RdClient.Controls"
     mc:Ignorable="d"
@@ -22,11 +21,11 @@
         <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
         <c:StringLengthToVisibilityConverter x:Key="StringLengthToVisibilityConverter" />
-        <sc:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter" >
-            <sc:TypeToLocalizedStringConverter.LocalizedString>
+        <c:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter" >
+            <c:TypeToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
-            </sc:TypeToLocalizedStringConverter.LocalizedString>
-        </sc:TypeToLocalizedStringConverter>
+            </c:TypeToLocalizedStringConverter.LocalizedString>
+        </c:TypeToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">

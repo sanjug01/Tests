@@ -3,7 +3,7 @@ using System.Diagnostics.Contracts;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
-namespace RdClient.Converters
+namespace RdClient.Shared.Converters
 {
     public class StringLengthToVisibilityConverter : IValueConverter
     {
