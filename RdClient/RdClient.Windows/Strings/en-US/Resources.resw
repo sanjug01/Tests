@@ -976,4 +976,28 @@
     <value>(r) Show the applications settings panel</value>
     <comment>Tooltip of the "settings" button in the toolbar on the connection center page</comment>
   </data>
+  <data name="Common_Button_No.Content" xml:space="preserve">
+    <value>(r) No</value>
+  </data>
+  <data name="Common_Button_Yes.Content" xml:space="preserve">
+    <value>(r) Yes</value>
+  </data>
+  <data name="InSessionEditCredentials-Password.Header" xml:space="preserve">
+    <value>(r) Password</value>
+  </data>
+  <data name="InSessionEditCredentials-Password.PlaceholderText" xml:space="preserve">
+    <value>(r) Enter password</value>
+  </data>
+  <data name="InSessionEditCredentials-SaveUser.Content" xml:space="preserve">
+    <value>(r) Save user name and password</value>
+  </data>
+  <data name="InSessionEditCredentials-Title.Text" xml:space="preserve">
+    <value>(r) Credentials required</value>
+  </data>
+  <data name="InSessionEditCredentials-UserName.Header" xml:space="preserve">
+    <value>(r) User name</value>
+  </data>
+  <data name="InSessionEditCredentials-UserName.PlaceholderText" xml:space="preserve">
+    <value>(r) user@contoso.com</value>
+  </data>
 </root>
