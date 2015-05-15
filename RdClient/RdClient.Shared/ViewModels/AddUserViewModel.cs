@@ -86,6 +86,7 @@
         private readonly RelayCommand _deleteCommand;
         private CredentialPromptMode _mode;
         private bool _showMessage;
+        private bool _canDelete;
 
         public AddUserViewModel()
         {
@@ -107,11 +108,13 @@
         public CredentialPromptMode Mode
         {
             get { return _mode; }
-            set
+            private set
             {
                 if (SetProperty(ref _mode, value))
                 {
                     this.ShowMessage = this.Mode != CredentialPromptMode.EnterCredentials;
+                    // Delete only makes sense if editing existing credentials
+                    this.CanDelete = this.Mode == CredentialPromptMode.EditCredentials;
                 }
             }
         }
@@ -120,6 +123,12 @@
         {
             get { return _showMessage; }
             private set { SetProperty(ref _showMessage, value); }
+        }
+
+        public bool CanDelete
+        {
+            get { return _canDelete; }
+            private set { SetProperty(ref _canDelete, value); }
         }
 
         public bool StoreCredentials
@@ -141,14 +150,6 @@
             {
                 SetProperty(ref _password, value);
             }
-        }
-
-        /// <summary>
-        /// can delete only if editing existing credentials
-        /// </summary>
-        public bool CanDelete
-        {
-            get { return (CredentialPromptMode.EditCredentials == this.Mode); }
         }
 
         protected override void OnPresenting(object activationParameter)
