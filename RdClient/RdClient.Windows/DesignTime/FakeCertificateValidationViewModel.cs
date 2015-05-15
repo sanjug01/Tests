@@ -95,50 +95,51 @@ namespace RdClient.DesignTime
 
     public class FakeCertificateValidationViewModel : ICertificateValidationViewModel
     {
-        public ICommand AcceptCertificateCommand { get { return null; } }
-
-        public ICommand AcceptOnceCommand { get { return null; } }
-
-        public ICommand CancelCommand { get { return null; } }
-
-        public ICommand HideDetailsCommand { get { return null; } }
-
-        public ICommand ShowDetailsCommand { get { return null; } }
+        private bool _isExpanded = true;
+        private bool _rememberChoice = true;
+        private string _hostname = "Example-Hostname";
+        private IRdpCertificate _cert = new FakeRdpCertificate();
 
         public IRdpCertificate Certificate
         {
-            get
-            {
-                return new FakeRdpCertificate();
-            }
+            get { return _cert; }
         }
 
         public string Host
         {
-            get
-            {
-                return "sample-Hostname";
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { return _hostname; }
         }
 
         public bool IsExpandedView
         {
-            get
-            {
-                return false;
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get { return _isExpanded; }
+            set { _isExpanded = value; }
         }
 
+        public bool RememberChoice
+        {
+            get { return _rememberChoice; }
+            set { _rememberChoice = value; }
+        }
 
+        public ICommand AcceptCertificate
+        {
+            get { return null; }            
+        }
+
+        public ICommand Cancel
+        {
+            get { return null; }
+        }
+
+        public ICommand ShowDetails
+        {
+            get { return null; }
+        }
+
+        public ICommand HideDetails
+        {
+            get { return null; }
+        }
     }
 }

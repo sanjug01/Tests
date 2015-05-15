@@ -5,13 +5,13 @@ namespace RdClient.Shared.ViewModels
 {
     public interface ICertificateValidationViewModel
     {
-        ICommand AcceptCertificateCommand { get; }
-        ICommand AcceptOnceCommand { get; }
-        ICommand CancelCommand { get; }
+        ICommand AcceptCertificate { get; }
+        ICommand Cancel { get; }        
+        ICommand ShowDetails { get; }
+        ICommand HideDetails { get; }            
         IRdpCertificate Certificate { get; }
-        ICommand HideDetailsCommand { get; }
-        string Host { get; set; }
+        string Host { get; }        
+        bool RememberChoice { get; set; }
         bool IsExpandedView { get; set; }
-        ICommand ShowDetailsCommand { get; }
     }
 }
