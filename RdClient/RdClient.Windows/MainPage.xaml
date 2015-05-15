@@ -8,7 +8,7 @@
     xmlns:views="using:RdClient.Views"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:models="using:RdClient.Models"
-    xmlns:conv="using:RdClient.Shared.Converters"
+    xmlns:cv="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Helpers"
     xmlns:sh="using:RdClient.Shared.Helpers"
     xmlns:nav="using:RdClient.Shared.Navigation"
@@ -37,15 +37,15 @@
             </fac:AppInitializer.DeviceCapabilities>
         </fac:AppInitializer>
 
-        <conv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
-        <conv:SegoeGlyphToSymbolIconConverter x:Key="segoeToSymbolIcon"/>
-        <conv:BarItemsAlignmentFilteringConverter x:Key="leftAlignedFilter" Alignment="Left" />
-        <conv:BarItemsAlignmentFilteringConverter x:Key="rightAlignedFilter" Alignment="Right" />
-        <conv:ResourceIdToLocalizedStringConverter x:Key="ResourceIdToLocalizedStringConverter">
-            <conv:ResourceIdToLocalizedStringConverter.LocalizedString>
+        <cv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
+        <cv:SegoeGlyphToSymbolIconConverter x:Key="segoeToSymbolIcon"/>
+        <cv:BarItemsAlignmentFilteringConverter x:Key="leftAlignedFilter" Alignment="Left" />
+        <cv:BarItemsAlignmentFilteringConverter x:Key="rightAlignedFilter" Alignment="Right" />
+        <cv:ResourceIdToLocalizedStringConverter x:Key="ResourceIdToLocalizedStringConverter">
+            <cv:ResourceIdToLocalizedStringConverter.LocalizedString>
                 <sh:LocalizedString/>
-            </conv:ResourceIdToLocalizedStringConverter.LocalizedString>            
-        </conv:ResourceIdToLocalizedStringConverter>
+            </cv:ResourceIdToLocalizedStringConverter.LocalizedString>            
+        </cv:ResourceIdToLocalizedStringConverter>
     </Page.Resources>
 
     <Grid>

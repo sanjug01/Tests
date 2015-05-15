@@ -6,7 +6,7 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:c="using:RdClient.Shared.Converters"
+    xmlns:cv="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:controls="using:RdClient.Controls"
     mc:Ignorable="d"
@@ -17,15 +17,15 @@
     </controls:ModalUserControl.DataContext>
 
     <controls:ModalUserControl.Resources>
-        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
-        <c:StringLengthToVisibilityConverter x:Key="StringLengthToVisibilityConverter" />
-        <c:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter" >
-            <c:TypeToLocalizedStringConverter.LocalizedString>
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <cv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <cv:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
+        <cv:StringLengthToVisibilityConverter x:Key="StringLengthToVisibilityConverter" />
+        <cv:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter" >
+            <cv:TypeToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
-            </c:TypeToLocalizedStringConverter.LocalizedString>
-        </c:TypeToLocalizedStringConverter>
+            </cv:TypeToLocalizedStringConverter.LocalizedString>
+        </cv:TypeToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">

@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:RdClient.Views"
-    xmlns:c="using:RdClient.Shared.Converters"
+    xmlns:cv="using:RdClient.Shared.Converters"
     xmlns:design="using:RdClient.DesignTime"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d"
@@ -18,11 +18,11 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <c:NotNullToVisibilityConverter x:Key="NotNullToVisibleConverter" />
-            <c:NullToVisibilityConverter x:Key="NullToVisibleConverter" />
-            <c:BytesToBitmapConverter x:Key="BytesToBitmapConverter" />
-            <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+            <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <cv:NotNullToVisibilityConverter x:Key="NotNullToVisibleConverter" />
+            <cv:NullToVisibilityConverter x:Key="NullToVisibleConverter" />
+            <cv:BytesToBitmapConverter x:Key="BytesToBitmapConverter" />
+            <cv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
             <MenuFlyout x:Name="ModifyConnectionMenuFlyout"
                         Placement="Right">
                 <MenuFlyoutItem 

@@ -7,8 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Controls"
     xmlns:vm="using:RdClient.Shared.ViewModels"
-    xmlns:conv="using:RdClient.Shared.Converters"
-    xmlns:sconv="using:RdClient.Shared.Converters"
+    xmlns:cv="using:RdClient.Shared.Converters"    
     xmlns:input="using:RdClient.Input"
     xmlns:helpers="using:RdClient.Helpers"
     mc:Ignorable="d"
@@ -30,14 +29,14 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <sconv:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
-        <sconv:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
-        <sconv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <cv:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
+        <cv:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
+        <cv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
     </UserControl.Resources>
 
     <Grid Background="{ThemeResource SystemBaseMediumHighColor}">
-        <c:RemoteSessionPanel
+        <cv:RemoteSessionPanel
             RemoteSessionViewSite="{Binding}"
             Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
 
@@ -86,12 +85,12 @@
         </ItemsControl>
 
         <!-- Transparent overlay that dismisses the side bars -->
-        <c:PointerPressDetector
+        <cv:PointerPressDetector
             Visibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
             PointerPressDetected="{Binding ToggleSideBars}" />
 
         <!-- Right side bar -->
-        <c:RightSideBarControl
+        <cv:RightSideBarControl
             BarVisibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
             NavigateHome="{Binding NavigateHome}"
             MouseMode="{Binding MouseMode}"/>
@@ -132,18 +131,18 @@
                                 The control will take the RemoteSessionFailureViewModel as its main binding.
                                 -->
                                 <DataTemplate x:Key="RemoteSessionFailureViewModel">
-                                    <c:RemoteSessionFailureControl />
+                                    <cv:RemoteSessionFailureControl />
                                 </DataTemplate>
 
                                 <!--
                                 RemoteSessionInterruptionViewModel - the session got interrupted and is reconnecting.
                                 -->
                                 <DataTemplate x:Key="RemoteSessionInterruptionViewModel">
-                                    <c:RemoteSessionInterruptionControl />
+                                    <cv:RemoteSessionInterruptionControl />
                                 </DataTemplate>
 
                                 <DataTemplate x:Key="RemoteSessionConnectingViewModel">
-                                    <c:RemoteSessionConnectingControl />
+                                    <cv:RemoteSessionConnectingControl />
                                 </DataTemplate>
 
                             </helpers:TypeNameDataTemplateSelector.Templates>
@@ -170,7 +169,7 @@
             </Grid>
         </Grid>
 
-        <c:PanKnob x:Name="PanKnob"
+        <cv:PanKnob x:Name="PanKnob"
                    PanKnobSite="{Binding PanKnobSite}"/>
     </Grid>
 </UserControl>

@@ -6,7 +6,7 @@
 	xmlns:vm="using:RdClient.Shared.ViewModels"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:c="using:RdClient.Shared.Converters"    
+	xmlns:cv="using:RdClient.Shared.Converters"    
 	xmlns:helpers="using:RdClient.Shared.Helpers"
 	xmlns:controls="using:RdClient.Controls"
 	xmlns:design="using:RdClient.DesignTime"
@@ -24,11 +24,11 @@
 	</d:Page.DataContext>
 
 	<Page.Resources>
-		<c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-		<c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-		<c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
-		<c:ByteArrayToStringConverter x:Key="ByteArrayToStringConverter" />
-		<c:RdpCertificateToErrorListConverter x:Key="RdpCertificateToErrorListConverter" TypeToLocalizedStringConverter="{StaticResource TypeToLocalizedStringConverter}" />
+		<cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+		<cv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+		<cv:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
+		<cv:ByteArrayToStringConverter x:Key="ByteArrayToStringConverter" />
+		<cv:RdpCertificateToErrorListConverter x:Key="RdpCertificateToErrorListConverter" TypeToLocalizedStringConverter="{StaticResource TypeToLocalizedStringConverter}" />
 	</Page.Resources>
 
 	<controls:ModalDialogControl>

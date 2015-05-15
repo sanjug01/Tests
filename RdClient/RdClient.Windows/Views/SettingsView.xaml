@@ -7,7 +7,6 @@
     xmlns:local="using:RdClient.Views"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:controls="using:RdClient.Controls"
-    xmlns:c="using:RdClient.Shared.Converters"
     xmlns:design="using:RdClient.DesignTime"    
     mc:Ignorable="d"    
     d:DesignWidth="500">

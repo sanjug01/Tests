@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RdClient.Styles"
     xmlns:controls="using:RdClient.Controls"
-    xmlns:c="using:RdClient.Shared.Converters"
+    xmlns:cv="using:RdClient.Shared.Converters"
     >
     
     <ResourceDictionary.ThemeDictionaries>

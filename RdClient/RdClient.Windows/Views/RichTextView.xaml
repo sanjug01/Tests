@@ -8,7 +8,7 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:controls="using:RdClient.Controls"
     xmlns:helpers="using:RdClient.Shared.Helpers"   
-    xmlns:c="using:RdClient.Shared.Converters"    
+    xmlns:cv="using:RdClient.Shared.Converters"    
     TabNavigation="Cycle"
     mc:Ignorable="d"
     d:DesignHeight="400"
@@ -19,13 +19,13 @@
     </controls:ModalUserControl.DataContext>
 
     <controls:ModalUserControl.Resources>
-        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <c:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter">
-            <c:TypeToLocalizedStringConverter.LocalizedString>
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <cv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <cv:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter">
+            <cv:TypeToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
-            </c:TypeToLocalizedStringConverter.LocalizedString>            
-        </c:TypeToLocalizedStringConverter>
+            </cv:TypeToLocalizedStringConverter.LocalizedString>            
+        </cv:TypeToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">
