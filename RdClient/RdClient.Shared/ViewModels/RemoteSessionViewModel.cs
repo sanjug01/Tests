@@ -23,7 +23,9 @@
         private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
         private readonly RelayCommand _navigateHome;
         private readonly RelayCommand _mouseMode;
-
+        //
+        // Device capabilities objecvt injected by the navigation service through IDeviceCapabilitiesSite.
+        //
         private IDeviceCapabilities _deviceCapabilities;
         //
         // Input Pane is another name for the touch keyboard.
