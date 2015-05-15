@@ -24,6 +24,8 @@
     <Grid Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
         <ListBox Style="{StaticResource ConnectionCenterSectionSelectorStyle}" 
                  SelectedIndex="0"
+				 HorizontalAlignment="Left"
+				 VerticalAlignment="Top"
                  Visibility="{Binding Path=ShowSectionLabels, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ListBoxItem 
                 x:Uid="ConnectionCenter_DesktopLabel"
