@@ -536,35 +536,37 @@
     <value>(r) Delete this account</value>
     <comment>Text shown on AddUser dialog - Delete account link </comment>
   </data>
-  <data name="CertificateValidation-AlwaysConnectButton.Content" xml:space="preserve">
-    <value>(r) Always connect</value>
-  </data>
-  <data name="CertificateValidation-CancelButton.Content" xml:space="preserve">
-    <value>(r) Don't connect</value>
-  </data>
   <data name="CertificateValidation-Caption.Text" xml:space="preserve">
-    <value>(r) The certificate can't be verified</value>
+    <value>(r) Certificate cannot be verified</value>
+    <comment>Title text for certificate validation prompt that is shown to the user when a certificate is invalid</comment>
   </data>
   <data name="CertificateValidation-ConnectAnywayLabel.Text" xml:space="preserve">
     <value>(r) Do you want to connect anyway?</value>
+    <comment>Question asking user if they want to connect despite the invalid certificate</comment>
   </data>
-  <data name="CertificateValidation-ConnectOnceButton.Content" xml:space="preserve">
-    <value>(r) Connect once</value>
+  <data name="CertificateValidation-ConnectAnywayButton.Content" xml:space="preserve">
+    <value>(r) Connect anyway</value>
+    <comment>Text for button that connects despite the invalid certificate</comment>
   </data>
   <data name="CertificateValidation-IssuerLabel.Text" xml:space="preserve">
     <value>(r) Certificate issuer</value>
+    <comment>Caption displayed above text which shows the issuer of the invalid certificate</comment>
   </data>
   <data name="CertificateValidation-LessDetailsLabel.Text" xml:space="preserve">
-    <value>(r) Less details</value>
+    <value>(r) Details</value>
+    <comment>Text for button that hides the display of certificate details for the invalid certificate</comment>
   </data>
   <data name="CertificateValidation-MoreDetailsLabel.Text" xml:space="preserve">
-    <value>(r) More details</value>
+    <value>(r) Details</value>
+    <comment>Text for button that shows certificate details for the invalid certificate</comment>
   </data>
   <data name="CertificateValidation-PcNameLabel.Text" xml:space="preserve">
-    <value>(r) Name in certificate from remote:pc</value>
+    <value>(r) Name in certificate from remote PC:</value>
+    <comment>Caption displayed above text which shows the PC name given on the certificate</comment>
   </data>
   <data name="CertificateValidation-ReasonsLabel.Text" xml:space="preserve">
-    <value>(r) It may not be safe to connect to this PC because of the following reasons:</value>
+    <value>(r) It may not be safe to connect to this PC:</value>
+    <comment>Caption displayed above the list of reasons the certificate is invalid</comment>
   </data>
   <data name="CertificateValidation-ThumbprintLabel.Text" xml:space="preserve">
     <value>(r) Certificate thumbprint</value>
@@ -999,5 +1001,9 @@
   </data>
   <data name="InSessionEditCredentials-UserName.PlaceholderText" xml:space="preserve">
     <value>(r) user@contoso.com</value>
+  </data>
+  <data name="CertificateValidation-RememberChoiceCheckbox.Content" xml:space="preserve">
+    <value>(r) Remember my choice for this certificate</value>
+    <comment>Text displayed next to checkbox that user can check to never show errors for this certificate again.</comment>
   </data>
 </root>

@@ -97,12 +97,13 @@
                 
 						<CheckBox 
 							Margin="{StaticResource DialogItemVerticalSpacing}"
+							x:Uid="CertificateValidation-RememberChoiceCheckbox"
 							Content="Remember my choice for this certificate (d)">
 						</CheckBox>
 
 						<!-- Show/hide details buttons -->
 						<StackPanel 
-							Margin="{StaticResource DialogSectionVerticalSpacing}"
+							Margin="{StaticResource DialogTripleVerticalSpacing}"
 							Orientation="Horizontal"
 							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
 							<Button 
@@ -140,7 +141,7 @@
 
 						<!-- Certificate Details -->
 						<Grid
-							Margin="{StaticResource DialogSectionVerticalSpacing}"
+							Margin="{StaticResource DialogTripleVerticalSpacing}"
 							Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}"
 							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">
 							<StackPanel 
@@ -219,14 +220,14 @@
 					</Grid.ColumnDefinitions>
 					<Button Grid.Column="0"
 						Style="{StaticResource DialogButtonStyle}"
-						x:Uid="CertificateValidation-CancelButton" 
+						x:Uid="Common_Button_Cancel" 
 						Content="Cancel (d)" 
 						HorizontalAlignment="Stretch"
 						Command="{Binding CancelCommand}">
 					</Button>
 					<Button Grid.Column="2"
 						Style="{StaticResource DialogAccentedButtonStyle}"
-						x:Uid="CertificateValidation-ConnectOnceButton" 
+						x:Uid="CertificateValidation-ConnectAnywayButton" 
 						Content="Connect anyway (d)" 
 						HorizontalAlignment="Stretch"
 						Command="{Binding AcceptOnceCommand}">
