@@ -23,7 +23,7 @@
     </UserControl.Resources>
 
     <Canvas Background="Gray">
-        <cv:RenderingPanel x:Name="RenderingPanel"
+        <c:RenderingPanel x:Name="RenderingPanel"
                           Width="{Binding Source={StaticResource ScreenProperties}, Path=Resolution.Width}" 
                           Height="{Binding Source={StaticResource ScreenProperties}, Path=Resolution.Height}">
             <SwapChainPanel.RenderTransform>
@@ -33,7 +33,7 @@
                                         TranslateX="0.0" TranslateY="0.0"/>
                 </TransformGroup>
             </SwapChainPanel.RenderTransform>
-        </cv:RenderingPanel>
+        </c:RenderingPanel>
         <Image x:Name="MouseCursor" CacheMode="BitmapCache" Stretch="None" Width="Auto" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"
                    RenderTransform="{StaticResource MouseTransformGroup}" />
     </Canvas>

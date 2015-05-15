@@ -36,7 +36,7 @@
     </UserControl.Resources>
 
     <Grid Background="{ThemeResource SystemBaseMediumHighColor}">
-        <cv:RemoteSessionPanel
+        <c:RemoteSessionPanel
             RemoteSessionViewSite="{Binding}"
             Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
 
@@ -85,12 +85,12 @@
         </ItemsControl>
 
         <!-- Transparent overlay that dismisses the side bars -->
-        <cv:PointerPressDetector
+        <c:PointerPressDetector
             Visibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
             PointerPressDetected="{Binding ToggleSideBars}" />
 
         <!-- Right side bar -->
-        <cv:RightSideBarControl
+        <c:RightSideBarControl
             BarVisibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
             NavigateHome="{Binding NavigateHome}"
             MouseMode="{Binding MouseMode}"/>
@@ -131,18 +131,18 @@
                                 The control will take the RemoteSessionFailureViewModel as its main binding.
                                 -->
                                 <DataTemplate x:Key="RemoteSessionFailureViewModel">
-                                    <cv:RemoteSessionFailureControl />
+                                    <c:RemoteSessionFailureControl />
                                 </DataTemplate>
 
                                 <!--
                                 RemoteSessionInterruptionViewModel - the session got interrupted and is reconnecting.
                                 -->
                                 <DataTemplate x:Key="RemoteSessionInterruptionViewModel">
-                                    <cv:RemoteSessionInterruptionControl />
+                                    <c:RemoteSessionInterruptionControl />
                                 </DataTemplate>
 
                                 <DataTemplate x:Key="RemoteSessionConnectingViewModel">
-                                    <cv:RemoteSessionConnectingControl />
+                                    <c:RemoteSessionConnectingControl />
                                 </DataTemplate>
 
                             </helpers:TypeNameDataTemplateSelector.Templates>
@@ -169,7 +169,7 @@
             </Grid>
         </Grid>
 
-        <cv:PanKnob x:Name="PanKnob"
+        <c:PanKnob x:Name="PanKnob"
                    PanKnobSite="{Binding PanKnobSite}"/>
     </Grid>
 </UserControl>
