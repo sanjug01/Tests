@@ -51,9 +51,10 @@
         <Button Grid.Row="8"
                 Style="{ThemeResource DialogButtonStyle}"
                 x:Name="CancelButton"
-                HorizontalAlignment="Center"
+                HorizontalAlignment="Right"
                 Command="{Binding Cancel}">
-            <TextBlock x:Uid="RemoteSessionInterruptionControl_Cancel" Text="(d) Cancel"/>
+            <TextBlock x:Uid="RemoteSessionInterruptionControl_Cancel" 
+                       Text="(d) Cancel"/>
         </Button>
     </Grid>
 </UserControl>
