@@ -53,7 +53,7 @@
                          Margin="0,8" 
                          PlaceholderText="https://webfeed.contoso_example.com (d)"
                          InputScope="Uri"
-                         Text="{Binding Path=FeedUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputScope="Url" />
+                         Text="{Binding Path=FeedUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
 
             <StackPanel Grid.Row="4"
