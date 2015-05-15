@@ -57,11 +57,11 @@ namespace RdClient.Shared.Test.ViewModels
                 Assert.IsFalse(_vm.IsExpandedView);
 
                 // show extra details
-                _vm.ShowDetailsCommand.Execute(null);
+                _vm.ShowDetails.Execute(null);
                 Assert.IsTrue(_vm.IsExpandedView);
 
                 // hide it back
-                _vm.HideDetailsCommand.Execute(null);
+                _vm.HideDetails.Execute(null);
                 Assert.IsFalse(_vm.IsExpandedView);
             }
         }
@@ -80,7 +80,8 @@ namespace RdClient.Shared.Test.ViewModels
                     Assert.AreEqual(CertificateValidationResult.CertificateTrustLevel.AcceptedAlways, (result.Result));
                     return null;
                 });
-                _vm.AcceptCertificateCommand.Execute(null);
+                _vm.RememberChoice = true;
+                _vm.AcceptCertificate.Execute(null);
             }
         }
 
@@ -97,7 +98,8 @@ namespace RdClient.Shared.Test.ViewModels
                     Assert.AreEqual(CertificateValidationResult.CertificateTrustLevel.AcceptedOnce, result.Result);
                     return null;
                 });
-                _vm.AcceptOnceCommand.Execute(null);
+                _vm.RememberChoice = false;
+                _vm.AcceptCertificate.Execute(null);
             }
         }
 
@@ -114,7 +116,7 @@ namespace RdClient.Shared.Test.ViewModels
                     Assert.AreEqual(CertificateValidationResult.CertificateTrustLevel.Denied, result.Result);
                     return null;
                 });
-                _vm.CancelCommand.Execute(null);
+                _vm.Cancel.Execute(null);
             }
         }
 

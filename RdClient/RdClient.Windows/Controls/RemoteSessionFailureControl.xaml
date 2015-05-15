@@ -1,14 +1,24 @@
 ﻿<UserControl
     x:Class="RdClient.Controls.RemoteSessionFailureControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:RdClient.Controls"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:local="using:RdClient.Controls"
+	xmlns:sc="using:RdClient.Shared.Converters"
+	xmlns:helpers="using:RdClient.Shared.Helpers"
     TabNavigation="Cycle"
     mc:Ignorable="d"
     Width="480"
     d:DesignHeight="200">
+	
+	<UserControl.Resources>
+		<sc:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter">
+			<sc:TypeToLocalizedStringConverter.LocalizedString>
+				<helpers:LocalizedString />
+			</sc:TypeToLocalizedStringConverter.LocalizedString>
+		</sc:TypeToLocalizedStringConverter>
+	</UserControl.Resources>
     
     <Grid>
         <StackPanel Orientation="Vertical">
@@ -20,7 +30,7 @@
             <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}"
                        Margin="0,10"
                        HorizontalAlignment="Center"
-                       Text="{Binding FailureCode}"/>
+                       Text="{Binding Path=FailureCode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
 
             <Button Style="{ThemeResource DialogButtonStyle}"
                     x:Name="DismissButton"
