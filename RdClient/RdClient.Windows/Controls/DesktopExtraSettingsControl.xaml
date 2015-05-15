@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:RdClient.Controls"
     xmlns:design="using:RdClient.DesignTime"    
-    xmlns:converters="using:RdClient.Converters"
+    xmlns:cv="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"    
     mc:Ignorable="d"
     d:DesignHeight="768"
@@ -17,12 +17,12 @@
     </d:UserControl.DataContext>
 
     <UserControl.Resources>
-        <converters:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
-        <converters:GatewayComboBoxElementToLocalizedStringConverter x:Key="GatewayComboBoxElementToLocalizedStringConverter">
-            <converters:GatewayComboBoxElementToLocalizedStringConverter.LocalizedString>
+        <cv:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
+        <cv:GatewayComboBoxElementToLocalizedStringConverter x:Key="GatewayComboBoxElementToLocalizedStringConverter">
+            <cv:GatewayComboBoxElementToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
-            </converters:GatewayComboBoxElementToLocalizedStringConverter.LocalizedString>
-        </converters:GatewayComboBoxElementToLocalizedStringConverter>
+            </cv:GatewayComboBoxElementToLocalizedStringConverter.LocalizedString>
+        </cv:GatewayComboBoxElementToLocalizedStringConverter>
     </UserControl.Resources>
 
     <StackPanel>

@@ -1,7 +1,7 @@
 ﻿namespace RdClient.Shared.Test.Converters
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-    using RdClient.Converters;
+    using RdClient.Shared.Converters;
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;

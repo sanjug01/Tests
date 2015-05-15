@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using RdClient.Converters;
+using RdClient.Shared.Converters;
 using RdClient.Shared.Test.UAP;
 using System;
 using Windows.UI.Xaml;

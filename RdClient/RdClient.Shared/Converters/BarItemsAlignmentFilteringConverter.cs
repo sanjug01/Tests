@@ -1,4 +1,4 @@
-﻿namespace RdClient.Converters
+﻿namespace RdClient.Shared.Converters
 {
     using RdClient.Shared.Helpers;
     using RdClient.Shared.ViewModels;

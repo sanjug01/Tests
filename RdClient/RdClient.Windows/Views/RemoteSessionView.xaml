@@ -7,8 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Controls"
     xmlns:vm="using:RdClient.Shared.ViewModels"
-    xmlns:conv="using:RdClient.Converters"
-    xmlns:sconv="using:RdClient.Shared.Converters"
+    xmlns:cv="using:RdClient.Shared.Converters"    
     xmlns:input="using:RdClient.Input"
     xmlns:helpers="using:RdClient.Helpers"
     mc:Ignorable="d"
@@ -30,10 +29,10 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <sconv:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
-        <sconv:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
-        <sconv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <cv:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
+        <cv:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
+        <cv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
     </UserControl.Resources>
 
     <Grid Background="{ThemeResource SystemBaseMediumHighColor}">

@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:RdClient.Views"
     xmlns:vm="using:RdClient.Shared.ViewModels"
-    xmlns:c="using:RdClient.Converters"
+    xmlns:cv="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:controls="using:RdClient.Controls"
     d:DesignWidth="480"    
@@ -17,11 +17,11 @@
     </controls:ModalUserControl.DataContext>
 
     <controls:ModalUserControl.Resources>
-        <c:UserComboBoxElementToLocalizedStringConverter x:Key="UserComboBoxElementToLocalizedStringConverter">
-            <c:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
+        <cv:UserComboBoxElementToLocalizedStringConverter x:Key="UserComboBoxElementToLocalizedStringConverter">
+            <cv:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
-            </c:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
-        </c:UserComboBoxElementToLocalizedStringConverter>
+            </cv:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
+        </cv:UserComboBoxElementToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">

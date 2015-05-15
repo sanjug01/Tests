@@ -5,21 +5,20 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:RdClient.Controls"
-    xmlns:c="using:RdClient.Converters"
-    xmlns:sc="using:RdClient.Shared.Converters"
+    xmlns:cv="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
 
     <UserControl.Resources>
-        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <cv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
         
-        <sc:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter" >
-            <sc:TypeToLocalizedStringConverter.LocalizedString>
+        <cv:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter" >
+            <cv:TypeToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
-            </sc:TypeToLocalizedStringConverter.LocalizedString>
-        </sc:TypeToLocalizedStringConverter>
+            </cv:TypeToLocalizedStringConverter.LocalizedString>
+        </cv:TypeToLocalizedStringConverter>
         
         <Thickness x:Key="ErrorBorderThickness">2</Thickness>
     </UserControl.Resources>

@@ -7,9 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:controls="using:RdClient.Controls"
-    xmlns:helpers="using:RdClient.Shared.Helpers" 
-    xmlns:sc="using:RdClient.Shared.Converters"    
-    xmlns:c="using:RdClient.Converters"    
+    xmlns:helpers="using:RdClient.Shared.Helpers"   
+    xmlns:cv="using:RdClient.Shared.Converters"    
     TabNavigation="Cycle"
     mc:Ignorable="d"
     d:DesignHeight="400"
@@ -20,13 +19,13 @@
     </controls:ModalUserControl.DataContext>
 
     <controls:ModalUserControl.Resources>
-        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <sc:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter">
-            <sc:TypeToLocalizedStringConverter.LocalizedString>
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <cv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <cv:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter">
+            <cv:TypeToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
-            </sc:TypeToLocalizedStringConverter.LocalizedString>            
-        </sc:TypeToLocalizedStringConverter>
+            </cv:TypeToLocalizedStringConverter.LocalizedString>            
+        </cv:TypeToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">
