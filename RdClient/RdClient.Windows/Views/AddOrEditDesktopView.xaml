@@ -168,11 +168,17 @@
                         Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 
                 <Grid Margin="0,18,0,0">
-                    <Button x:Uid="AddOrEditDesktop-SaveButton" Content="Save and connect(d)" 
+                    <!-- Save button shows either Save or Add -->
+                    <Button x:Uid="AddOrEditDesktop-SaveButton" Content="Save(d)" 
                                 HorizontalAlignment="Right"
-                                Width="Auto"
+                                Visibility="{Binding Path=IsAddingDesktop, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
                                 Style="{StaticResource DialogAccentedButtonStyle}"
                                 Command="{Binding Path=DefaultAction}" />
+                    <Button x:Uid="AddOrEditDesktop-AddButton" Content="Add (d)" 
+                                HorizontalAlignment="Right"
+                                Visibility="{Binding Path=IsAddingDesktop, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Style="{StaticResource DialogAccentedButtonStyle}"
+                                Command="{Binding Path=DefaultAction}" />                    
                 </Grid>
             </StackPanel>
         </Grid>
