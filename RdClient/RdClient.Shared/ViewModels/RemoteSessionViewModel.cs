@@ -14,7 +14,6 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
-    using Windows.UI.Xaml;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite
     {
@@ -23,9 +22,12 @@
         private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
         private readonly RelayCommand _navigateHome;
         private readonly RelayCommand _mouseMode;
-
         //
-        // Input Pane is a fancy name for the touch keyboard.
+        // Device capabilities objecvt injected by the navigation service through IDeviceCapabilitiesSite.
+        //
+        private IDeviceCapabilities _deviceCapabilities;
+        //
+        // Input Pane is another name for the touch keyboard.
         //
         private IInputPanel _inputPanel;
 
@@ -252,14 +254,19 @@
 
         void IDeviceCapabilitiesSite.SetDeviceCapabilities(IDeviceCapabilities deviceCapabilities)
         {
-            if(null != _inputPanel)
+            if (null != _deviceCapabilities)
             {
+                _deviceCapabilities.PropertyChanged -= this.OnDeviceCapabilitiesPropertyChanged;
                 _inputPanel.IsVisibleChanged -= this.OnInputPanelIsVisibleChanged;
                 _inputPanel = null;
             }
 
-            if (null != deviceCapabilities && deviceCapabilities.TouchPresent)
+            _deviceCapabilities = deviceCapabilities;
+
+            if (null != _deviceCapabilities)
             {
+                _deviceCapabilities.PropertyChanged += this.OnDeviceCapabilitiesPropertyChanged;
+
                 _inputPanel = _inputPanelFactory.GetInputPanel();
                 _inputPanel.IsVisibleChanged += this.OnInputPanelIsVisibleChanged;
                 _invokeKeyboardModel.IsChecked = _inputPanel.IsVisible;
@@ -477,7 +484,7 @@
 
         private bool InternalCanInvokeKeyboard(object parameter)
         {
-            return null != _inputPanel;
+            return null != _inputPanel && null != _deviceCapabilities && _deviceCapabilities.CanShowInputPanel;
         }
 
         private void OnInputPanelIsVisibleChanged(object sender, EventArgs e)
@@ -500,5 +507,12 @@
             }
         }
 
+        private void OnDeviceCapabilitiesPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName.Equals("CanShowInputPanel"))
+            {
+                _invokeKeyboard.EmitCanExecuteChanged();
+            }
+        }
     }
 }
