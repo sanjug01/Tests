@@ -302,7 +302,8 @@
 
         private void OnSessionInterrupted(object sender, SessionInterruptedEventArgs e)
         {
-            RemoteSessionInterruptionViewModel vm = new RemoteSessionInterruptionViewModel(_activeSession, e.ObtainContinuation());
+            this.BellyBandViewModel = new RemoteSessionInterruptionViewModel(_activeSession, e.ObtainContinuation());
+            this.IsConnectionBarVisible = true;
         }
 
         private void OnBadCertificate(object sender, BadCertificateEventArgs e)

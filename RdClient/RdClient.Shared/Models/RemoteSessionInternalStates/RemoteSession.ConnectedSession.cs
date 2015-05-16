@@ -27,17 +27,16 @@
                     _session = session;
                     _session._state.SetReconnectAttempt(0);
                     _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                    _session._syncEvents.ConnectionHealthStateChanged += this.OnConnectionHealthStateChanged;
                     _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
+                    _session._syncEvents.MouseCursorShapeChanged += this.OnMouseCursorShapeChanged;
+                    _session._syncEvents.MultiTouchEnabledChanged += this.OnMultiTouchEnabledChanged;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
-                    _session._syncEvents.MouseCursorShapeChanged += (s, a) =>_session.DeferEmitMouseCursorShapeChanged(a);
-                    _session._syncEvents.MultiTouchEnabledChanged += (s, a) => _session.DeferEmitMultiTouchEnabledChanged(a);
-
 #if false
                     _session._syncEvents.UserCredentialsRequest += (s, a) => { };
                     _session._syncEvents.MouseCursorPositionChanged += (s, a) => { };
                     _session._syncEvents.MultiTouchEnabledChanged += (s, a) => { };
-                    _session._syncEvents.ConnectionHealthStateChanged += (s, a) => { };
-                    _session._syncEvents.ClientAutoReconnectComplete += (s, a) => { };
+
                     _session._syncEvents.LoginCompleted += (s, a) => { };
                     _session._syncEvents.StatusInfoReceived += (s, a) => { };
                     _session._syncEvents.FirstGraphicsUpdate += (s, a) => { };
@@ -54,6 +53,16 @@
                         _session._sessionSetup.DataModel.Settings);
                     _snapshotter.Activate();
                 }
+            }
+
+            private void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs e)
+            {
+                _session.DeferEmitMultiTouchEnabledChanged(e);
+            }
+
+            private void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs e)
+            {
+                _session.DeferEmitMouseCursorShapeChanged(e);
             }
 
             public override void Deactivate(RemoteSession session)
@@ -78,9 +87,12 @@
                     //
                     // Stop tracking the session events;
                     //
-                    _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
-                    _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
+                    _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
+                    _session._syncEvents.ConnectionHealthStateChanged -= this.OnConnectionHealthStateChanged;
+                    _session._syncEvents.MouseCursorShapeChanged -= this.OnMouseCursorShapeChanged;
+                    _session._syncEvents.MultiTouchEnabledChanged -= this.OnMultiTouchEnabledChanged;
+                    _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
                     _session = null;
                 }
             }
@@ -105,6 +117,19 @@
             {
                 _connection = connection;
                 _thumbnailEncoder = ThumbnailEncoder.Create(ThumbnailHeight);
+            }
+
+            private void OnConnectionHealthStateChanged(object sender, ConnectionHealthStateChangedArgs e)
+            {
+                Contract.Assert(object.ReferenceEquals(_connection, sender));
+                using (LockWrite())
+                {
+                    if ((int)RdClientCx.ConnectionHealthState.Warn == e.ConnectionState)
+                    {
+                        // similar to Autoreconnecting event
+                        _session.InternalSetState(new ReconnectingSession(_connection, this));
+                    }
+                }
             }
 
             private void OnClientAsyncDisconnect(object sender, ClientAsyncDisconnectArgs e)
