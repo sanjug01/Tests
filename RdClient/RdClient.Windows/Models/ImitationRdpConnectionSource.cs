@@ -361,6 +361,11 @@
                 throw new NotImplementedException();
             }
 
+            protected virtual IRdpCertificate GetGatewayCertificate()
+            {
+                throw new NotImplementedException();
+            }
+
             protected Connection(IRenderingPanel renderingPanel)
             {
                 Contract.Assert(null != renderingPanel);
@@ -476,6 +481,11 @@
             }
 
             void IRdpProperties.SetBoolProperty(string propertyName, bool value)
+            {
+                throw new NotImplementedException();
+            }
+
+            IRdpCertificate IRdpConnection.GetGatewayCertificate()
             {
                 throw new NotImplementedException();
             }

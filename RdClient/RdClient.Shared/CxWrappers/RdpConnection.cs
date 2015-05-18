@@ -463,6 +463,24 @@ namespace RdClient.Shared.CxWrappers
             return rdpCertificate;
         }
 
+        public IRdpCertificate GetGatewayCertificate()
+        {
+            _instrument.Instrument("GetGatewayCertificate");
+
+            RdpCertificate rdpCertificate = null;
+
+            RdClientCx.ServerCertificateError certErrors;
+            Certificate cert = null;
+
+            _rdpConnectionCx.GetServerCertificateDetails(RdClientCx.ServerCertificateProviderType.Gateway, out cert);
+            if (null != cert)
+            {
+                _rdpConnectionCx.GetServerCertificateValidationErrors(RdClientCx.ServerCertificateProviderType.Gateway, out certErrors);
+                rdpCertificate = new RdpCertificate(cert, certErrors);
+            }
+
+            return rdpCertificate;
+        }
 
     }
 }

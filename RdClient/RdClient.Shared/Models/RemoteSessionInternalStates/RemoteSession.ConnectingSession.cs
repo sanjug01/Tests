@@ -154,6 +154,13 @@
                         RequestValidGatewayCredentials(e.DisconnectReason);
                         break;
 
+                    case RdpDisconnectCode.ProxyInvalidCA:
+                        // Gateway certificate needs validation
+                        // TODO: connection.GetGatewayCertificate()
+                        // ValidateCertificate(connection.GetServerCertificate(),
+                        //    e.DisconnectReason);
+                        break;
+
                     case RdpDisconnectCode.CredSSPUnsupported:
                         // Set the internal state to "certificate validation needed"
                         // Should prompt that the server identity cannot be verified 
