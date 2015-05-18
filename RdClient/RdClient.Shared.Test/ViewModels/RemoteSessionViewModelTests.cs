@@ -144,7 +144,7 @@
                 throw new NotImplementedException();
             }
 
-            void IViewport.Set(double zoomFactor, Size offset)
+            void IViewport.Set(double zoomFactor, Point offset)
             {
                 throw new NotImplementedException();
             }

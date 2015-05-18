@@ -46,7 +46,7 @@ namespace RdClient.Shared.Models
         {
             if(_viewport != null)
             {
-                _viewport.Set(2, new Size(_viewportCenter.X, _viewportCenter.Y));
+                _viewport.Set(2, new Point(_viewportCenter.X, _viewportCenter.Y));
                 _isZoomedIn = true;
                 _zoomInCommand.EmitCanExecuteChanged();
                 _zoomOutCommand.EmitCanExecuteChanged();
@@ -57,7 +57,7 @@ namespace RdClient.Shared.Models
         {
             if(_viewport != null)
             {
-                _viewport.Set(1, new Size(_viewportCenter.X, _viewportCenter.Y));
+                _viewport.Set(1, new Point(_viewportCenter.X, _viewportCenter.Y));
                 _isZoomedIn = false;
                 _zoomInCommand.EmitCanExecuteChanged();
                 _zoomOutCommand.EmitCanExecuteChanged();

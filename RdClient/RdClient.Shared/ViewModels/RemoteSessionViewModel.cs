@@ -50,6 +50,7 @@
 
         private readonly ZoomPanModel _zoomPanModel = new ZoomPanModel();
         private readonly FullScreenModel _fullScreenModel = new FullScreenModel();
+        private readonly SymbolBarSliderButtonModel _zoomButtonModel = new SymbolBarSliderButtonModel();
 
         private IPanKnobSite _panKnobSite;
         public IPanKnobSite PanKnobSite
@@ -153,12 +154,14 @@
             _sessionState = SessionState.Idle;
 
             ObservableCollection<object> items = new ObservableCollection<object>();
+
+            _zoomButtonModel.Glyph = SegoeGlyph.ZoomIn;
+            items.Add(_zoomButtonModel);
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.EnterFullScreen, Command = _fullScreenModel.EnterFullScreenCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ExitFullScreen, Command = _fullScreenModel.ExitFullScreenCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = _zoomPanModel.ZoomInCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = _zoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.AllApps, Command = _toggleSideBars });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = _toggleSideBars });
             items.Add(_invokeKeyboardModel);
+            
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
         }
 
@@ -401,6 +404,7 @@
 
                         _panKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
                         _zoomPanModel.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
+                        _zoomButtonModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _zoomPanModel.OnConsumptionModeChanged;
@@ -433,6 +437,8 @@
 
                             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
                             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _zoomPanModel.OnConsumptionModeChanged;
+
+                            _zoomButtonModel.Viewport = null;
 
                             //
                             // The connection bar and side bars are not available in any non-connected state.

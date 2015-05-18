@@ -1,5 +1,4 @@
 ﻿using RdClient.Shared.ViewModels;
-using Windows.Foundation;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;

@@ -67,7 +67,7 @@
             return transformed;
         }
 
-        void IViewport.Set(double zoomFactor, Size offset)
+        void IViewport.Set(double zoomFactor, Point anchorPoint)
         {
             zoomFactor = AdjustZoomFactor(zoomFactor);
 
@@ -75,28 +75,17 @@
             {
                 ScaleX = zoomFactor,
                 ScaleY = zoomFactor,
+                TranslateX = _transformation.TranslateX,
+                TranslateY = _transformation.TranslateY
             };
 
-            Point newSize = newTransform.TransformPoint(new Point(_size.Width, _size.Height));
+            Point translatedAnchorPoint = _transformation.Transform.TransformPoint(anchorPoint);
+            Point newTranslatedAnchorPoint = newTransform.TransformPoint(anchorPoint);
+            Point newShift = new Point(newTranslatedAnchorPoint.X - translatedAnchorPoint.X, newTranslatedAnchorPoint.Y - translatedAnchorPoint.Y);
+            newTransform.TranslateX = _transformation.TranslateX - newShift.X;
+            newTransform.TranslateY = _transformation.TranslateY - newShift.Y;
 
-            if (offset.Width + _size.Width > newSize.X)
-                offset.Width = Math.Floor(newSize.X - _size.Width);
-            else
-                offset.Width = Math.Floor(offset.Width);
-
-            if (offset.Height + _size.Height > newSize.Y)
-                offset.Height = Math.Floor(newSize.Y - _size.Height);
-            else
-                offset.Height = Math.Floor(offset.Height);
-
-            _transformation.ScaleX = zoomFactor;
-            _transformation.ScaleY = zoomFactor;
-            _renderingPanel.MouseScaleTransform.ScaleX = zoomFactor;
-            _renderingPanel.MouseScaleTransform.ScaleY = zoomFactor;
-            _transformation.TranslateX = -offset.Width;
-            _transformation.TranslateY = -offset.Height;
-            this.ZoomFactor = zoomFactor;
-            this.Offset = new Point(offset.Width, offset.Height);
+            AdjustViewport(newTransform);
         }
 
         void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor)

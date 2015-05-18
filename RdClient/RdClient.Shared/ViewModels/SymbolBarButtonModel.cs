@@ -4,7 +4,7 @@
     using System;
     using System.Windows.Input;
 
-    public class SymbolBarButtonModel : MutableObject
+    public class SymbolBarButtonModel : MutableObject, ISymbolBarItemModel
     {
         private SegoeGlyph _glyph;
         private ICommand _command;
