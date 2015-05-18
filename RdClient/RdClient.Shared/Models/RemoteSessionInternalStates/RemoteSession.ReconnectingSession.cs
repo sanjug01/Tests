@@ -19,6 +19,7 @@
                 {
                     _session = session;
                     _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
+                    _session._syncEvents.ConnectionHealthStateChanged += this.OnConnectionHealthStateChanged; ;
                     _session._syncEvents.ClientAutoReconnectComplete += this.OnClientAutoReconnectComplete;
                     _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
@@ -34,6 +35,7 @@
                 {
                     _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
                     _session._syncEvents.ClientAutoReconnectComplete -= this.OnClientAutoReconnectComplete;
+                    _session._syncEvents.ConnectionHealthStateChanged -= this.OnConnectionHealthStateChanged;
                     _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                     _session = null;
@@ -71,6 +73,18 @@
                     //
                     if(!_cancelled)
                         _session._state.SetReconnectAttempt(e.AttemptCount);
+                }
+            }
+
+            private void OnConnectionHealthStateChanged(object sender, ConnectionHealthStateChangedArgs e)
+            {
+                using (LockWrite())
+                {
+                    if ((int)RdClientCx.ConnectionHealthState.Connected == e.ConnectionState)
+                    {
+                        // same as reconnecting complete
+                        _session.InternalSetState(new ConnectedSession(_connection, this));
+                    }
                 }
             }
 

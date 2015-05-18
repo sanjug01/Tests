@@ -6,7 +6,7 @@
 
     public class Snapshotter : MutableObject
     {
-        private static readonly TimeSpan FirstSnapshotTime = new TimeSpan(0, 0, 2);
+        private static readonly TimeSpan FirstSnapshotTime = new TimeSpan(0, 0, 5);
         private static readonly TimeSpan SnapshotPeriod = new TimeSpan(0, 0, 15);
 
         private readonly IRdpConnection _connection;

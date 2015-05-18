@@ -23,16 +23,10 @@
         //
         private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
         private ReadOnlyObservableCollection<IWorkspaceViewModel> _workspaceViewModels;
-        //
-        // Mutable collection of toolbar item models. When the view model needs to modify contents of the toolbar,
-        // it modifies this collection.
-        //
-        private readonly ObservableCollection<BarItemModel> _toolbarItemsSource;
-        //
-        // Read-only wrapper of the collection of toolbar item models returned by the ToolbarItems property
-        // of the IConnectionCenterViewModel interface. The property is used in XAML bindings.
-        //
-        private readonly ReadOnlyObservableCollection<BarItemModel> _toolbarItems;
+
+        private readonly ICommand _showSettings;
+        private readonly ICommand _showAbout;
+        private readonly ICommand _showHelp;
 
         private int _selectedCount;
         private bool _desktopsSelectable;
@@ -121,25 +115,17 @@
 
         public ConnectionCenterViewModel()
         {
-            this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);            
+            this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);
+            _showSettings = new RelayCommand(this.GoToSettingsCommandExecute);
+            _showAbout = new RelayCommand(this.ShowAboutCommandExecute);
+            _showHelp = new RelayCommand(this.ShowHelpCommandExecute);
             this.EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => (1 == this.SelectedCount) );
             this.DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
             this.AddWorkspaceCommand = new RelayCommand(o => AddWorkspaceExecute());
 
             _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, EditItemStringId, BarItemModel.ItemAlignment.Right);
-            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Trash, DeleteDesktopCommand, DeleteItemStringId, BarItemModel.ItemAlignment.Right);
+            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Delete, DeleteDesktopCommand, DeleteItemStringId, BarItemModel.ItemAlignment.Right);
 
-            _toolbarItemsSource = new ObservableCollection<BarItemModel>();
-            _toolbarItems = new ReadOnlyObservableCollection<BarItemModel>(_toolbarItemsSource);
-            //
-            // Add toolbar buttons
-            //
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Add, this.AddDesktopCommand, "Add"));
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Settings, new RelayCommand(this.GoToSettingsCommandExecute), "Settings"));
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.HorizontalEllipsis, new RelayCommand(this.PushAdditionalCommandsDialog), "More…"));
-            //
-            //_toolbarItemsSource.Add(new SeparatorBarItemModel());
-            //
             _accessoryViewVisibility = ViewVisibility.Create(false);
             _cancelAccessoryView = new RelayCommand(o => this.ExecuteCancelAccessoryView());
 
@@ -158,12 +144,10 @@
             private set { SetProperty(ref _workspaceViewModels, value); }
         }
 
-        public ReadOnlyObservableCollection<BarItemModel> ToolbarItems
-        {
-            get { return _toolbarItems; }
-        }
-
         public RelayCommand AddDesktopCommand { get; private set; }
+        public ICommand ShowSettings { get { return _showSettings; } }
+        public ICommand ShowAbout { get { return _showAbout; } }
+        public ICommand ShowHelp { get { return _showHelp; } }
         public RelayCommand EditDesktopCommand { get; private set; }
         public RelayCommand DeleteDesktopCommand { get; private set; }
         public RelayCommand AddWorkspaceCommand { get; private set; }
@@ -180,7 +164,7 @@
                 {
                     this.ShowDesktops = value;
                     this.ShowApps = !value;
-                    SetShowSectionLabels();
+                    UpdateShowSectionLabels();
                 }
             }
         }
@@ -197,7 +181,7 @@
                 {
                     this.ShowApps = value;
                     this.ShowDesktops = !value;
-                    SetShowSectionLabels();
+                    UpdateShowSectionLabels();
                 }
             }
         }
@@ -242,11 +226,6 @@
             {
                 SetProperty(ref _showSectionLabels, value);
             }
-        }
-
-        private void SetShowSectionLabels()
-        {
-            this.ShowSectionLabels = this.HasDesktops && this.HasApps;
         }
 
         public IViewVisibility AccessoryViewVisibility
@@ -409,6 +388,11 @@
             DeleteDesktopCommand.EmitCanExecuteChanged();
         }
 
+        private void UpdateShowSectionLabels()
+        {
+            this.ShowSectionLabels = this.HasDesktops || this.HasApps;
+        }
+
         private void DesktopSelection_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName.Equals("IsSelected"))
@@ -470,6 +454,15 @@
         private void GoToSettingsCommandExecute(object o)
         {
             this.NavigationService.PushAccessoryView("SettingsView", null);
+        }
+
+        private void ShowAboutCommandExecute(object o)
+        {
+            this.NavigationService.PushAccessoryView("AboutView", null);
+        }
+
+        private void ShowHelpCommandExecute(object o)
+        {
         }
 
         private void PushAdditionalCommandsDialog(object parameter)

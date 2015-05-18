@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:helpers="using:RdClient.Shared.Helpers"
-    xmlns:cv="using:RdClient.Converters"
+    xmlns:cv="using:RdClient.Shared.Converters"
     RequestedTheme="Light"
     mc:Ignorable="d">
 

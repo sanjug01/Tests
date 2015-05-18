@@ -7,25 +7,31 @@
     xmlns:controls="using:RdClient.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:c="using:RdClient.Converters"    
+    xmlns:cv="using:RdClient.Shared.Converters"    
     xmlns:helpers="using:RdClient.Shared.Helpers"
+    xmlns:design="using:RdClient.DesignTime"
     d:DesignWidth="480"
-    d:DesignHeight="600"
+    d:DesignHeight="1200"
     mc:Ignorable="d">
 
+
+    <d:ModalUserControl.DataContext>
+        <design:FakeAddOrEditDesktopViewModel />
+    </d:ModalUserControl.DataContext>
+    
     <controls:ModalUserControl.DataContext>
         <vm:AddOrEditDesktopViewModel />
     </controls:ModalUserControl.DataContext>
 
     <controls:ModalUserControl.Resources>
-        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
-        <c:UserComboBoxElementToLocalizedStringConverter x:Key="UserComboBoxElementToLocalizedStringConverter">
-            <c:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <cv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <cv:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
+        <cv:UserComboBoxElementToLocalizedStringConverter x:Key="UserComboBoxElementToLocalizedStringConverter">
+            <cv:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
-            </c:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
-        </c:UserComboBoxElementToLocalizedStringConverter>
+            </cv:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
+        </cv:UserComboBoxElementToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">
@@ -37,19 +43,18 @@
             </Grid.RowDefinitions>
             
             <Grid Grid.Row="0">
-                <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
+                <TextBlock Margin="0,12,0,12" Style="{ThemeResource TitleTextBlockStyle}" 
                                x:Uid="AddOrEditDesktop-AddCaption" Text="Add PC or Server(d)"
                                Visibility="{Binding Path=IsAddingDesktop, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}" 
+                <TextBlock Margin="0,12,0,12" Style="{ThemeResource TitleTextBlockStyle}" 
                                x:Uid="AddOrEditDesktop-EditCaption" Text="Edit PC or Server(d)"
                                Visibility="{Binding Path=IsAddingDesktop, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
             </Grid>
             
             <Border Grid.Row="1" Height="1" Margin="0" />
 
-            <StackPanel Grid.Row="2" Margin="26,0,26,0">
-                <StackPanel Orientation="Vertical"
-                                Margin="0,0,0,20">
+            <StackPanel Grid.Row="2">
+                <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock x:Uid="AddOrEditDesktop-PcName-Error"
                                        Text="(*)(d)" Padding="0,0,8,0"
@@ -66,47 +71,71 @@
                                     Background="Transparent"
                                     PlaceholderText="Host name or IP address (d)"
                                     Margin="0,8" 
+                                    IsTextPredictionEnabled="False"
+                                    IsSpellCheckEnabled="False"
                                     Text="{Binding Path=Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     </TextBox>
                 </StackPanel>
 
-                <StackPanel Orientation="Vertical"
-                                Margin="0,0,0,20">
+                <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                                        x:Uid="AddOrEditDesktop-FriendlyName" Text="Friendly name(d)" />
                         <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                       Foreground="{ThemeResource UnselectedForegroundBrush}"
-                                       x:Uid="AddOrEditDesktop-FriendlyName_OptLabel" 
-                                       Text="(optional) (d)" 
-                                       Margin="8,0,0,0"/>
+                                   Foreground="{ThemeResource UnselectedForegroundBrush}"
+                                   x:Uid="AddOrEditDesktop-FriendlyName_OptLabel" 
+                                   Text="(optional) (d)" 
+                                   Margin="8,0,0,0"/>
                     </StackPanel>
                     <TextBox Name="txtFriendlyNameEntry"
-                                     x:Uid="AddOrEditDesktop-PcFriendlyNameTextbox"
-                                     Background="Transparent"
-                                     Margin="0,8" 
-                                     PlaceholderText="Connection friendly name (d)" 
-                                     Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                             x:Uid="AddOrEditDesktop-PcFriendlyNameTextbox"
+                             Background="Transparent"
+                             Margin="0,8"
+                             InputScope="Text"
+                             IsSpellCheckEnabled="False"
+                             PlaceholderText="Connection friendly name (d)" 
+                             Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     </TextBox>
                 </StackPanel>
 
-                <StackPanel Orientation="Vertical"
-                                Margin="0,0,0,20">
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" x:Uid="AddOrEditDesktop-Credentials" Text="User name(d)"/>
-                    <ComboBox Margin="0,8" 
-                          x:Uid="AddOrEditDesktop-Credentials-ComboBox"
-                          HorizontalAlignment="Stretch"
-                          ItemsSource="{Binding Path=UserOptions}"
-                          SelectedIndex="{Binding Path=SelectedUserOptionsIndex, Mode=TwoWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <Button x:Uid="Common_Button_AddUserAccount" 
-                            Content="Add account(d)" 
-                            Command="{Binding Path=AddUser}" />
+                <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <ComboBox x:Uid="AddOrEditDesktop-Credentials-ComboBox"
+                              Grid.Row="0"
+                              Header="User name(d)"
+                              HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding Path=UserOptions}"
+                              SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" 
+                                Style="{StaticResource DialogButtonStyle}" 
+                                x:Uid="Common_Button_AddUserAccount" 
+                                Content="Add account(d)" 
+                                Command="{Binding AddUserCommand}" />
+                            <Button Grid.Column="2" 
+                                Style="{StaticResource DialogButtonStyle}" 
+                                x:Uid="Common_Button_EditItem" 
+                                Content="Edit(d)" 
+                                Command="{Binding EditUserCommand}" />
+                        </Grid>
+                    </Grid>
                 </StackPanel>
 
                 <Button Background="Transparent"
@@ -137,21 +166,19 @@
 
                 <controls:DesktopExtraSettingsControl
                         Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
+                
                 <Grid Margin="0,18,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Button x:Uid="Common_Button_Cancel" Content="Cancel(d)"
-                                Grid.Column="0"
-                                Style="{StaticResource DialogButtonStyle}"
-                                Command="{Binding Path=Cancel}" />
-                    <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
-                                Grid.Column="2"
+                    <!-- Save button shows either Save or Add -->
+                    <Button x:Uid="AddOrEditDesktop-SaveButton" Content="Save(d)" 
+                                HorizontalAlignment="Right"
+                                Visibility="{Binding Path=IsAddingDesktop, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
                                 Style="{StaticResource DialogAccentedButtonStyle}"
                                 Command="{Binding Path=DefaultAction}" />
+                    <Button x:Uid="AddOrEditDesktop-AddButton" Content="Add (d)" 
+                                HorizontalAlignment="Right"
+                                Visibility="{Binding Path=IsAddingDesktop, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Style="{StaticResource DialogAccentedButtonStyle}"
+                                Command="{Binding Path=DefaultAction}" />                    
                 </Grid>
             </StackPanel>
         </Grid>

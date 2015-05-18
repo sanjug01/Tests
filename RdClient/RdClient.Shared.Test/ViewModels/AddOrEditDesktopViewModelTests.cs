@@ -20,6 +20,9 @@
         private TestAddOrEditDesktopViewModel _addOrEditDesktopViewModel;
         private Mock.NavigationService _nav;
         private Mock.PresentableView _view;
+        private CredentialsModel _credentials;
+        private GatewayModel _gateway;
+        private DesktopModel _desktop;
 
         class TestAddOrEditDesktopViewModel : AddOrEditDesktopViewModel
         {
@@ -46,6 +49,10 @@
 
             _nav = new Mock.NavigationService();
             _view = new Mock.PresentableView();
+
+            _credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
+            _desktop = new DesktopModel()  { HostName = "foo" };
+            _gateway = new GatewayModel() { HostName = "fooGateway" };
         }
 
         [TestCleanup]
@@ -106,20 +113,18 @@
         [TestMethod]
         public void EditDesktop_PresentingShouldPassArgs()
         {
-            DesktopModel desktop = new DesktopModel() { HostName = "myPc" };
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
 
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(desktop, _addOrEditDesktopViewModel.Desktop);
+            Assert.AreEqual(_desktop, _addOrEditDesktopViewModel.Desktop);
             Assert.IsFalse(_addOrEditDesktopViewModel.IsAddingDesktop);        
         }
 
         [TestMethod]
         public void EditDesktop_ShowHideExtraSettings()
         {
-            DesktopModel desktop = new DesktopModel() { HostName = "myPc" };
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
 
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
@@ -155,128 +160,141 @@
         [TestMethod]
         public void EditDesktop_ShouldNotAddExistingDesktop()
         {
-            DesktopModel desktop = new DesktopModel() { HostName = "foo" };
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
 
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
-            Assert.AreEqual(desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            Assert.AreEqual(_desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
         }
 
         [TestMethod]
         public void EditDesktop_ShouldSaveCredentials()
         {
-            CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
-            Guid credId = _dataModel.Credentials.AddNewModel(credentials);
+            Guid credId = _dataModel.Credentials.AddNewModel(_credentials);            
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            DesktopModel desktop = new DesktopModel() { HostName = "foo" };
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
-
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 1;
+            _addOrEditDesktopViewModel.SelectedUser = _addOrEditDesktopViewModel.UserOptions[1];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
-            Assert.AreSame(desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            Assert.AreSame(_desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
             Assert.AreEqual(credId, ((DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model).CredentialsId);
         }
 
         [TestMethod]
         public void EditDesktop_ShouldResetCredentials()
         {
-            CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
-            Guid credId = _dataModel.Credentials.AddNewModel(credentials);
+            Guid credId = _dataModel.Credentials.AddNewModel(_credentials);
+            _desktop.CredentialsId = credId;
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            DesktopModel desktop = new DesktopModel() { HostName = "foo", CredentialsId = credId };
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
-
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedUserOptionsIndex = 0;
+            _addOrEditDesktopViewModel.SelectedUser = _addOrEditDesktopViewModel.UserOptions[0];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
-            Assert.AreSame(desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            Assert.AreSame(_desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
             Assert.AreEqual(Guid.Empty, ((DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model).CredentialsId);
         }
 
         [TestMethod]
         public void EditDesktop_ShouldSelectAskAlways()
         {
-            CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            DesktopModel desktop = new DesktopModel()
-            {
-                HostName = "foo"
-            };
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
-
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(0, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
+            Assert.AreEqual(UserComboBoxType.AskEveryTime, _addOrEditDesktopViewModel.SelectedUser.UserComboBoxType);
         }
 
         [TestMethod]
         public void EditDesktop_ShouldSelectCorrectCredentials()
         {
-            CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
+            _desktop.CredentialsId = _dataModel.Credentials.AddNewModel(_credentials);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            DesktopModel desktop = new DesktopModel()
-            {
-                HostName = "foo",
-                CredentialsId = _dataModel.Credentials.AddNewModel(credentials)
-            };
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
-
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(1, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
-            Assert.AreSame(credentials, _addOrEditDesktopViewModel.UserOptions[_addOrEditDesktopViewModel.SelectedUserOptionsIndex].Credentials.Model);
-            Assert.AreEqual(desktop.CredentialsId, _addOrEditDesktopViewModel.UserOptions[_addOrEditDesktopViewModel.SelectedUserOptionsIndex].Credentials.Id);
+            Assert.AreEqual(_credentials.Username, _addOrEditDesktopViewModel.SelectedUser.Credentials.Model.Username);
+            Assert.AreEqual(_desktop.CredentialsId, _addOrEditDesktopViewModel.SelectedUser.Credentials.Id);
         }
 
         [TestMethod]
-        public void EditDesktop_ShouldUpdateSelectedIndex()
+        public void EditDesktop_ShouldUpdateSelectedItem()
         {
-            CredentialsModel credentials = new CredentialsModel { Username = "Don Pedro", Password = "secret" };
-            DesktopModel desktop = new DesktopModel() { HostName = "myPc" };
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
+            _desktop.CredentialsId = _dataModel.Credentials.AddNewModel(_credentials);
 
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
-            desktop.CredentialsId = _dataModel.Credentials.AddNewModel(credentials);
-
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(1, _addOrEditDesktopViewModel.SelectedUserOptionsIndex);
+            Assert.AreEqual(_credentials.Username, _addOrEditDesktopViewModel.SelectedUser.Credentials.Model.Username);
         }
 
         [TestMethod]
         public void EditDesktop_ShouldOpenAddUserDialog()
         {
-            DesktopModel desktop = new DesktopModel() { HostName = "myPc" };
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
-
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
             _nav.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
 
-            _addOrEditDesktopViewModel.AddUser.Execute(null);
+            _addOrEditDesktopViewModel.AddUserCommand.Execute(null);
+        }
+
+        [TestMethod]
+        public void EditDesktop_CannotEditDefaultUser()
+        {
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
+
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
+            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
+
+            Assert.IsFalse(_addOrEditDesktopViewModel.EditUserCommand.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void EditDesktop_CanEditSelectedUser()
+        {
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
+            _desktop.CredentialsId = _dataModel.Credentials.AddNewModel(_credentials);
+
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
+            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
+
+            Assert.IsTrue(_addOrEditDesktopViewModel.EditUserCommand.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void EditDesktop_ShouldOpenEditUserDialog()
+        {
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
+            _desktop.CredentialsId = _dataModel.Credentials.AddNewModel(_credentials);
+
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
+            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
+
+            _nav.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
+
+            _addOrEditDesktopViewModel.EditUserCommand.Execute(null);
         }
 
         [TestMethod]
@@ -371,11 +389,10 @@
         public void EditDesktop_ShouldSaveUpdatedDesktop()
         {
             object saveParam = new object();
-            DesktopModel desktop = new DesktopModel() { HostName = "myPC" };
 
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
 
             _addOrEditDesktopViewModel.PresentableView = _view;
 
@@ -392,9 +409,8 @@
         public void EditDesktop_ShouldSaveUpdatedDesktopWithExtraSettings()
         {
             object saveParam = new object();
-            DesktopModel desktop = new DesktopModel() { HostName = "myPC" };
 
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
 
             _addOrEditDesktopViewModel.PresentableView = _view;
 
@@ -415,20 +431,19 @@
             //Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
             //DesktopModel addedDesktop = (DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model;
 
-            Assert.AreEqual(_addOrEditDesktopViewModel.Host, desktop.HostName);
-            Assert.AreEqual("FriendlyPc", desktop.FriendlyName);
-            Assert.IsTrue(desktop.IsAdminSession);
-            Assert.IsTrue(desktop.IsSwapMouseButtons);
-            Assert.AreEqual(AudioMode.Remote, desktop.AudioMode);
+            Assert.AreEqual(_addOrEditDesktopViewModel.Host, _desktop.HostName);
+            Assert.AreEqual("FriendlyPc", _desktop.FriendlyName);
+            Assert.IsTrue(_desktop.IsAdminSession);
+            Assert.IsTrue(_desktop.IsSwapMouseButtons);
+            Assert.AreEqual(AudioMode.Remote, _desktop.AudioMode);
         }
 
         [TestMethod]
         public void CancelEditDesktop_ShouldNotSaveUpdatedDesktop()
         {
             object saveParam = new object();
-            DesktopModel desktop = new DesktopModel() { HostName = "myPC" };
 
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
 
             _addOrEditDesktopViewModel.PresentableView = _view;
 
@@ -437,7 +452,7 @@
             _addOrEditDesktopViewModel.Host = "MyNewPC_not_updated";
             _addOrEditDesktopViewModel.Cancel.Execute(saveParam);
 
-            Assert.AreNotEqual(desktop.HostName, _addOrEditDesktopViewModel.Host);
+            Assert.AreNotEqual(_desktop.HostName, _addOrEditDesktopViewModel.Host);
         }
 
         [TestMethod]
@@ -476,9 +491,8 @@
             string validHostName = "MyNewPC";
 
             object saveParam = new object();
-            DesktopModel desktop = new DesktopModel() { HostName = "myPC" };
 
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
 
             _addOrEditDesktopViewModel.PresentableView = _view;
             Assert.IsTrue(_addOrEditDesktopViewModel.IsHostValid);
@@ -501,110 +515,128 @@
         [TestMethod]
         public void EditDesktop_ShouldSaveGateway()
         {
-            GatewayModel gateway = new GatewayModel() { HostName = "fooGateway" };
-            Guid gatewayId = _dataModel.Gateways.AddNewModel(gateway);
+            Guid gatewayId = _dataModel.Gateways.AddNewModel(_gateway);
+            
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            DesktopModel desktop = new DesktopModel() { HostName = "foo" };
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
-
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex = 2;
+            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.GatewayOptions[1];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
-            Assert.AreSame(desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            Assert.AreSame(_desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
             Assert.AreEqual(gatewayId, ((DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model).GatewayId);
         }
 
         [TestMethod]
         public void EditDesktop_ShouldResetGateway()
         {
-            GatewayModel gateway = new GatewayModel() { HostName = "fooGateway" };
-            Guid gatewayId = _dataModel.Gateways.AddNewModel(gateway);
+            Guid gatewayId = _dataModel.Gateways.AddNewModel(_gateway);
+            _desktop.GatewayId = gatewayId;
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            DesktopModel desktop = new DesktopModel() { HostName = "foo", GatewayId = gatewayId };
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
-
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex = 0;
+            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.GatewayOptions[0];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
             Assert.AreEqual(1, _dataModel.LocalWorkspace.Connections.Models.Count);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
-            Assert.AreSame(desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
+            Assert.AreSame(_desktop, _dataModel.LocalWorkspace.Connections.Models[0].Model);
             Assert.AreEqual(Guid.Empty, ((DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model).GatewayId);
         }
 
         [TestMethod]
         public void EditDesktop_ShouldSelectNoGatewayByDefault()
         {
-            DesktopModel desktop = new DesktopModel()
-            {
-                HostName = "foo"
-            };
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(0, _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex);
+            Assert.AreEqual(GatewayComboBoxType.None, _addOrEditDesktopViewModel.SelectedGateway.GatewayComboBoxType);
         }
 
         [TestMethod]
         public void EditDesktop_ShouldSelectCorrectGateway()
         {
-            GatewayModel gateway = new GatewayModel() { HostName = "fooGateway" };
+            _desktop.GatewayId = _dataModel.Gateways.AddNewModel(_gateway);
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            DesktopModel desktop = new DesktopModel()
-            {
-                HostName = "foo",
-                GatewayId = _dataModel.Gateways.AddNewModel(gateway)
-            };
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
-
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
-
-            Assert.AreEqual(2, _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex);
-            Assert.AreSame(gateway, _addOrEditDesktopViewModel.GatewayOptions[_addOrEditDesktopViewModel.SelectedGatewayOptionsIndex].Gateway.Model);
-            Assert.AreEqual(desktop.GatewayId, _addOrEditDesktopViewModel.GatewayOptions[_addOrEditDesktopViewModel.SelectedGatewayOptionsIndex].Gateway.Id);
+            
+            Assert.AreSame(_gateway, _addOrEditDesktopViewModel.SelectedGateway.Gateway.Model);
+            Assert.AreEqual(_desktop.GatewayId, _addOrEditDesktopViewModel.SelectedGateway.Gateway.Id);
         }
 
         [TestMethod]
         public void EditDesktop_ShouldUpdateSelectedGatewayIndex()
         {
-            GatewayModel gateway = new GatewayModel() { HostName = "fooGateway" };
-            DesktopModel desktop = new DesktopModel() { HostName = "myPc" };
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
+            _desktop.GatewayId = _dataModel.Gateways.AddNewModel(_gateway);
 
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
-            desktop.GatewayId = _dataModel.Gateways.AddNewModel(gateway);
-
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.AreEqual(2, _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex);
+            Assert.AreEqual(_gateway.HostName, _addOrEditDesktopViewModel.SelectedGateway.Gateway.Model.HostName);
         }
 
         [TestMethod]
         public void EditDesktop_ShouldOpenAddGatewayDialog()
         {
-            DesktopModel desktop = new DesktopModel() { HostName = "myPc" };
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            _dataModel.LocalWorkspace.Connections.AddNewModel(desktop);
-
-            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(desktop);
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
             _nav.Expect("PushAccessoryView", new List<object> { "AddOrEditGatewayView", null, null }, null);
 
-            _addOrEditDesktopViewModel.SelectedGatewayOptionsIndex = 1;
+            _addOrEditDesktopViewModel.AddGatewayCommand.Execute(null);
         }
+
+        [TestMethod]
+        public void EditDesktop_CannotEditDefaultGateway()
+        {
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
+
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
+            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
+
+            Assert.IsFalse(_addOrEditDesktopViewModel.EditGatewayCommand.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void EditDesktop_CanEditSelectedGateway()
+        {
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
+            _desktop.GatewayId = _dataModel.Gateways.AddNewModel(_gateway);
+
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
+            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
+
+            Assert.IsTrue(_addOrEditDesktopViewModel.EditGatewayCommand.CanExecute(null));
+        }
+
+        [TestMethod]
+        public void EditDesktop_ShouldOpenEditGatewayDialog()
+        {
+            _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
+            _desktop.GatewayId = _dataModel.Gateways.AddNewModel(_gateway);
+
+            EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
+            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
+
+            _nav.Expect("PushAccessoryView", new List<object> { "AddOrEditGatewayView", null, null }, null);
+
+            _addOrEditDesktopViewModel.EditGatewayCommand.Execute(null);
+        }
+
     }
 }

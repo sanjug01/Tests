@@ -2,7 +2,7 @@
 using System;
 using Windows.UI.Xaml.Data;
 
-namespace RdClient.Converters
+namespace RdClient.Shared.Converters
 {
     public sealed class ResourceIdToLocalizedStringConverter : IValueConverter
     {                

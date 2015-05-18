@@ -6,8 +6,7 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:c="using:RdClient.Converters"
-    xmlns:sc="using:RdClient.Shared.Converters"
+    xmlns:cv="using:RdClient.Shared.Converters"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:controls="using:RdClient.Controls"
     mc:Ignorable="d"
@@ -18,15 +17,15 @@
     </controls:ModalUserControl.DataContext>
 
     <controls:ModalUserControl.Resources>
-        <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
-        <c:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
-        <c:StringLengthToVisibilityConverter x:Key="StringLengthToVisibilityConverter" />
-        <sc:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter" >
-            <sc:TypeToLocalizedStringConverter.LocalizedString>
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <cv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+        <cv:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
+        <cv:StringLengthToVisibilityConverter x:Key="StringLengthToVisibilityConverter" />
+        <cv:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter" >
+            <cv:TypeToLocalizedStringConverter.LocalizedString>
                 <helpers:LocalizedString />
-            </sc:TypeToLocalizedStringConverter.LocalizedString>
-        </sc:TypeToLocalizedStringConverter>
+            </cv:TypeToLocalizedStringConverter.LocalizedString>
+        </cv:TypeToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">
@@ -34,28 +33,28 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="8"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="12"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-                <TextBlock Margin="24,12,24,12" Style="{ThemeResource TitleTextBlockStyle}"                             
+                <TextBlock Margin="0,12,0,12" Style="{ThemeResource TitleTextBlockStyle}"                             
                                Text="{Binding Path=Mode, FallbackValue='Enter Credentials (d)', Converter={StaticResource TypeToLocalizedStringConverter}, ConverterParameter=Title}"/>
             </Grid>
 
             <Grid Grid.Row="1">
-                <TextBlock Margin="24,12,24,12" Style="{ThemeResource BodyTextBlockStyle}" 
+                <TextBlock Margin="0,12,0,12" Style="{ThemeResource BodyTextBlockStyle}" 
                                 Visibility="{Binding Path=ShowMessage, Converter={StaticResource BooleanToVisibilityConverter}}" 
                                 Text="{Binding Path=Mode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
             </Grid>
 
             <Border Grid.Row="2" Height="1" Margin="0" />
 
-            <StackPanel Grid.Row="3" Margin="26,12,26,0">
-                <StackPanel Orientation="Vertical" Margin="0,0,0,20">
+            <StackPanel Grid.Row="3">
+                <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                        <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
                                    x:Uid="AddUser-User" 
                                    Text="User (d)"/>
                     </StackPanel>
@@ -66,6 +65,8 @@
                                     x:Uid="AddUser-UsernameTextbox"
                                     Background="Transparent"
                                     PlaceholderText="Username (d)"
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
                                     Text="{Binding Path=User.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">                                
                                 </TextBox>
                             </controls:ErrorControl.PresentedContent>
@@ -73,7 +74,7 @@
                     </Grid>
                 </StackPanel>
 
-                <StackPanel Orientation="Vertical" Margin="0,0,0,20">
+                <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
                     <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddUser-Password" Text="Password (d)"/>
                     <Grid Style="{StaticResource rdEntryFieldGridStyle}">
                     <PasswordBox 
@@ -109,8 +110,9 @@
                 </Grid>                
 
                 <HyperlinkButton x:Uid="AddUser-DeleteUserLink"
-                                 Margin="0,20"
-                                 Command="{Binding Path=Delete}">
+                                 Margin="{StaticResource DialogDoubleSizeMargin}"
+                                 Command="{Binding Path=Delete}"
+								 Visibility="{Binding Path=CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <TextBlock x:Uid="AddUser-DeleteUserText" 
                                Text="(d) Delete this account"/>
                 </HyperlinkButton>                

@@ -119,6 +119,7 @@
     <Compile Include="Converters\BooleanToPasswordRevealModeConverterTests.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverterTests.cs" />
     <Compile Include="Converters\ByteArrayToStringConverterTests.cs" />
+    <Compile Include="Converters\IntIsGreaterThanZeroConverterTests.cs" />
     <Compile Include="Converters\DesktopsListToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\EnumMemberToSymbolStringConverterTests.cs" />
     <Compile Include="Converters\NegateBooleanConverterTests.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="Data\CertificateTrustTests.cs" />
     <Compile Include="Data\FailingModelSerializer.cs" />
     <Compile Include="Data\FilteringObservableCollectionTests.cs" />
+    <Compile Include="Data\JoinedObservableCollectionTests.cs" />
     <Compile Include="Data\MemoryStorageFolder.cs" />
     <Compile Include="Data\ModelContainerTests.cs" />
     <Compile Include="Data\OrderedObservableCollectionTests.cs" />
@@ -178,6 +180,8 @@
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\PointerEvent.cs" />
+    <Compile Include="Mock\PresentableStackedView.cs" />
+    <Compile Include="Mock\PresentableViewWithStackedPresenter.cs" />
     <Compile Include="Mock\RadcClient.cs" />
     <Compile Include="Mock\RadcClientEvents.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />

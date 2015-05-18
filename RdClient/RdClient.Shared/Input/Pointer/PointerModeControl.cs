@@ -68,7 +68,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public void ZoomPan(Point center, Point translation, double scale)
         {
-            _sessionControl.RenderingPanel.Viewport.PanAndZoom(center, translation.X, translation.Y, scale, 0);
+            _sessionControl.RenderingPanel.Viewport.PanAndZoom(center, translation.X, translation.Y, scale);
         }
     }
 }

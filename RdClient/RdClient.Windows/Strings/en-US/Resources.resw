@@ -425,6 +425,9 @@
   <data name="AddOrEditDesktop-Credentials.Text" xml:space="preserve">
     <value>(r) User name</value>
   </data>
+  <data name="AddOrEditDesktop-Credentials-ComboBox.Header" xml:space="preserve">
+    <value>(r) User name</value>
+  </data>
   <data name="AddOrEditDesktop-EditCaption.Text" xml:space="preserve">
     <value>(r) Edit PC or Server</value>
   </data>
@@ -432,10 +435,10 @@
     <value>(r) Invalid characters in host name</value>
   </data>
   <data name="AddOrEditDesktop-PcName.Text" xml:space="preserve">
-    <value>(r) PC Name</value>
+    <value>(r) PC Name or IP address</value>
   </data>
   <data name="AddOrEditDesktop-PcNameTextBox.PlaceholderText" xml:space="preserve">
-    <value>(r) Host name or IP address</value>
+    <value>(r) contoso.workpc-sf.work.contoso.com</value>
     <comment>Placeholder text shown when there is no text entered into the PcName text box.</comment>
   </data>
   <data name="AddOrEditDesktop-ConnectToAdminSession.Content" xml:space="preserve">
@@ -459,10 +462,30 @@
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-PcFriendlyNameTextbox.PlaceholderText" xml:space="preserve">
-    <value>(r) Connection friendly name</value>
+    <value>(r) Descriptive name for the computer</value>
     <comment>Placeholder text shown on AddOrEditDesktop view - extra settings when no friendly name has been entered</comment>
   </data>
-  <data name="AddOrEditDesktop-Sound.Text" xml:space="preserve">
+  <data name="AddOrEditDesktop-RedirectionSectionTitle.Text" xml:space="preserve">
+    <value>(r) Redirection</value>
+    <comment>Text shown on AddOrEditDesktop view</comment>
+  </data>
+  <data name="AddOrEditDesktop-GatewaysSectionTitle.Text" xml:space="preserve">
+    <value>(r) Gateway</value>
+    <comment>Text shown on AddOrEditDesktop view</comment>
+  </data>
+  <data name="AddOrEditDesktop-DisplaySectionTitle.Text" xml:space="preserve">
+    <value>(r) Display</value>
+    <comment>Text shown on AddOrEditDesktop view</comment>
+  </data>
+  <data name="AddOrEditDesktop-FullScreenOption.Content" xml:space="preserve">
+    <value>(r)Start session full screen</value>
+    <comment>Text shown on AddOrEditDesktop view</comment>
+  </data>
+  <data name="AddOrEditDesktop-ScaleDisplayOption.Content" xml:space="preserve">
+    <value>(r)Scale display content</value>
+    <comment>Text shown on AddOrEditDesktop view</comment>
+  </data>
+  <data name="AddOrEditDesktop-SoundComboBox.Header" xml:space="preserve">
     <value>(r) Sound</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
@@ -482,6 +505,14 @@
     <value>(r) Swap mouse buttons</value>
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
+  <data name="AddOrEditDesktop-SaveButton.Content" xml:space="preserve">
+    <value>(r) Save</value>
+    <comment>Text shown on AddOrEditDesktop view - save button</comment>
+  </data>
+  <data name="AddOrEditDesktop-AddButton.Content" xml:space="preserve">
+    <value>(r) Add</value>
+    <comment>Text shown on AddOrEditDesktop view - Add button</comment>
+  </data>  
   <data name="AddUser-AddCaption.Text" xml:space="preserve">
     <value>(r) Enter Credentials</value>
   </data>
@@ -509,35 +540,37 @@
     <value>(r) Delete this account</value>
     <comment>Text shown on AddUser dialog - Delete account link </comment>
   </data>
-  <data name="CertificateValidation-AlwaysConnectButton.Content" xml:space="preserve">
-    <value>(r) Always connect</value>
-  </data>
-  <data name="CertificateValidation-CancelButton.Content" xml:space="preserve">
-    <value>(r) Don't connect</value>
-  </data>
   <data name="CertificateValidation-Caption.Text" xml:space="preserve">
-    <value>(r) The certificate can't be verified</value>
+    <value>(r) Certificate cannot be verified</value>
+    <comment>Title text for certificate validation prompt that is shown to the user when a certificate is invalid</comment>
   </data>
   <data name="CertificateValidation-ConnectAnywayLabel.Text" xml:space="preserve">
     <value>(r) Do you want to connect anyway?</value>
+    <comment>Question asking user if they want to connect despite the invalid certificate</comment>
   </data>
-  <data name="CertificateValidation-ConnectOnceButton.Content" xml:space="preserve">
-    <value>(r) Connect once</value>
+  <data name="CertificateValidation-ConnectAnywayButton.Content" xml:space="preserve">
+    <value>(r) Connect anyway</value>
+    <comment>Text for button that connects despite the invalid certificate</comment>
   </data>
   <data name="CertificateValidation-IssuerLabel.Text" xml:space="preserve">
     <value>(r) Certificate issuer</value>
+    <comment>Caption displayed above text which shows the issuer of the invalid certificate</comment>
   </data>
   <data name="CertificateValidation-LessDetailsLabel.Text" xml:space="preserve">
-    <value>(r) Less details</value>
+    <value>(r) Details</value>
+    <comment>Text for button that hides the display of certificate details for the invalid certificate</comment>
   </data>
   <data name="CertificateValidation-MoreDetailsLabel.Text" xml:space="preserve">
-    <value>(r) More details</value>
+    <value>(r) Details</value>
+    <comment>Text for button that shows certificate details for the invalid certificate</comment>
   </data>
   <data name="CertificateValidation-PcNameLabel.Text" xml:space="preserve">
-    <value>(r) Name in certificate from remote:pc</value>
+    <value>(r) Name in certificate from remote PC:</value>
+    <comment>Caption displayed above text which shows the PC name given on the certificate</comment>
   </data>
   <data name="CertificateValidation-ReasonsLabel.Text" xml:space="preserve">
-    <value>(r) It may not be safe to connect to this PC because of the following reasons:</value>
+    <value>(r) It may not be safe to connect to this PC:</value>
+    <comment>Caption displayed above the list of reasons the certificate is invalid</comment>
   </data>
   <data name="CertificateValidation-ThumbprintLabel.Text" xml:space="preserve">
     <value>(r) Certificate thumbprint</value>
@@ -591,7 +624,7 @@
     <comment>Text shown on AddOrEditDesktop view if new gateway should be added and stored for the desktop</comment>
   </data>
   <data name="AddOrEditDesktop_GatewayOption_None_String" xml:space="preserve">
-    <value>(r) No gateway</value>
+    <value>(r) Gateway not needed</value>
     <comment>Text shown on AddOrEditDesktop view if no gateway is stored for the desktop</comment>
   </data>
   <data name="Common_Delete_String" xml:space="preserve">
@@ -735,7 +768,11 @@
     <value>(r) This problem can occur if the remote PC is running a version of Windows that is not configured to support server authentication.</value>
   </data>
   <data name="Connection_Pending_Message.Text" xml:space="preserve">
-    <value>(r) Preparing the remote connection</value>
+    <value>(r) Initiating the remote connection</value>
+    <comment>Message displayed in the connection view, while connecting to remote session.</comment>
+  </data>
+  <data name="Connection_Pending_ConnectToMessage.Text" xml:space="preserve">
+    <value>(r) Connecting to</value>
     <comment>Message displayed in the connection view, while connecting to remote session.</comment>
   </data>
   <data name="SelectResource_Azure_Description.Text" xml:space="preserve">
@@ -890,7 +927,7 @@
     <comment>Title of the belly-band message shown in the session view when the connection got interrupted and is reconnecting</comment>
   </data>
   <data name="RemoteSessionInterruptionControl_Message.Text" xml:space="preserve">
-    <value>(r) The remote connection has been interrupted and is reconnecting…</value>
+    <value>(r) Reconnecting to </value>
     <comment>Message displayed in the "reconnecting"belly-band dialog of the session view</comment>
   </data>
   <data name="Common_Button_AddUserAccount.Content" xml:space="preserve">
@@ -912,5 +949,65 @@
   <data name="InternalDocType_ThirdPartyNotices_String" xml:space="preserve">
     <value>(r) Third party notices</value>
     <comment>Title of the "Thrid party notices" document page</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_About.Label" xml:space="preserve">
+    <value>(r) About</value>
+    <comment>Label of the "About" button in the toolbar on the connection center page. The button shows the "about" side panel.</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_About.ToolTipService.ToolTip" xml:space="preserve">
+    <value>(r) About</value>
+    <comment>Tooltip of the "about" button in the toolbar on the connection center page</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_Add.Label" xml:space="preserve">
+    <value>(r) Add</value>
+    <comment>Label of the "Add" button in the toolbar on the connection center page. The button shows the selector of a type of a new resource, or the "add desktop" side panel.</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_Add.ToolTipService.ToolTip" xml:space="preserve">
+    <value>(r) Add a new remote resource</value>
+    <comment>Tooltip of the "add" button in the toolbar on the connection center page</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_Help.Label" xml:space="preserve">
+    <value>(r) Help</value>
+    <comment>Label of the "Help" button in the toolbar on the connection center page. The button navigates the default browser to the application help page</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_Help.ToolTipService.ToolTip" xml:space="preserve">
+    <value>(r) Go to the application help page</value>
+    <comment>Tooltip of the "help" button in the toolbar on the connection center page</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_Settings.Label" xml:space="preserve">
+    <value>(r)Settings</value>
+    <comment>Label of the "Settings" button in the toolbar on the connection center page. The button shows the settings side panel.</comment>
+  </data>
+  <data name="ConnectionCenter_Toolbar_Settings.ToolTipService.ToolTip" xml:space="preserve">
+    <value>(r) Show the applications settings panel</value>
+    <comment>Tooltip of the "settings" button in the toolbar on the connection center page</comment>
+  </data>
+  <data name="Common_Button_No.Content" xml:space="preserve">
+    <value>(r) No</value>
+  </data>
+  <data name="Common_Button_Yes.Content" xml:space="preserve">
+    <value>(r) Yes</value>
+  </data>
+  <data name="InSessionEditCredentials-Password.Header" xml:space="preserve">
+    <value>(r) Password</value>
+  </data>
+  <data name="InSessionEditCredentials-Password.PlaceholderText" xml:space="preserve">
+    <value>(r) Enter password</value>
+  </data>
+  <data name="InSessionEditCredentials-SaveUser.Content" xml:space="preserve">
+    <value>(r) Save user name and password</value>
+  </data>
+  <data name="InSessionEditCredentials-Title.Text" xml:space="preserve">
+    <value>(r) Credentials required</value>
+  </data>
+  <data name="InSessionEditCredentials-UserName.Header" xml:space="preserve">
+    <value>(r) User name</value>
+  </data>
+  <data name="InSessionEditCredentials-UserName.PlaceholderText" xml:space="preserve">
+    <value>(r) user@contoso.com</value>
+  </data>
+  <data name="CertificateValidation-RememberChoiceCheckbox.Content" xml:space="preserve">
+    <value>(r) Remember my choice for this certificate</value>
+    <comment>Text displayed next to checkbox that user can check to never show errors for this certificate again.</comment>
   </data>
 </root>

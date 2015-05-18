@@ -4,15 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:i="using:Microsoft.Xaml.Interactivity"
-    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:local="using:RdClient.Views"
-    xmlns:c="using:RdClient.Converters"
-    xmlns:sc="using:RdClient.Shared.Converters"
+    xmlns:cv="using:RdClient.Shared.Converters"
     xmlns:design="using:RdClient.DesignTime"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d"
-    d:DesignHeight="276" Width="342">
+    d:DesignHeight="276" Width="368">
     
     <d:UserControl.DataContext>
         <design:FakeDesktopViewModel />
@@ -21,11 +18,11 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <c:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <sc:NotNullToVisibilityConverter x:Key="NotNullToVisibleConverter" />
-            <sc:NullToVisibilityConverter x:Key="NullToVisibleConverter" />
-            <sc:BytesToBitmapConverter x:Key="BytesToBitmapConverter" />
-            <c:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+            <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <cv:NotNullToVisibilityConverter x:Key="NotNullToVisibleConverter" />
+            <cv:NullToVisibilityConverter x:Key="NullToVisibleConverter" />
+            <cv:BytesToBitmapConverter x:Key="BytesToBitmapConverter" />
+            <cv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
             <MenuFlyout x:Name="ModifyConnectionMenuFlyout"
                         Placement="Right">
                 <MenuFlyoutItem 
@@ -48,7 +45,7 @@
                 FlyoutBase.AttachedFlyout="{StaticResource ModifyConnectionMenuFlyout}"
                 IsRightTapEnabled="True"
                 RightTapped="ThumbnailButton_RightTapped">            
-            <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" Height="276" Width="342">
+            <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" Height="276" Width="368">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="42" />
@@ -67,12 +64,26 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
             
-                <Grid Grid.Row="1" Background="{ThemeResource ConnectionCenterHostnameBackgroundColor}">
-                    <TextBlock Text="{Binding Desktop.DisplayName}" 
-                               Style="{ThemeResource CaptionTextBlockStyle}" 
-                               HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0"/>
+                <Grid Grid.Row="1" 
+					Background="{ThemeResource ConnectionCenterHostnameBackgroundColor}">
+					<TextBlock 
+						Text="{Binding Desktop.DisplayName}" 
+                        Style="{ThemeResource BodyTextBlockStyle}" 
+                        HorizontalAlignment="Left" 
+						VerticalAlignment="Center" 
+						TextLineBounds="Tight"
+						TextWrapping="NoWrap"
+						TextTrimming="None"
+						Margin="10,0,0,0">						
+					</TextBlock>
                 </Grid>
-                <CheckBox Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" Visibility="{Binding SelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+				<CheckBox Grid.Row="1" 
+					HorizontalAlignment="Right" 
+					VerticalAlignment="Center" 
+					Margin="10,0,10,0" 
+					IsChecked="{Binding Path=IsSelected, Mode=TwoWay}"				 
+					Visibility="{Binding SelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">					
+				</CheckBox>
             </Grid>
         </Button>
     </StackPanel>

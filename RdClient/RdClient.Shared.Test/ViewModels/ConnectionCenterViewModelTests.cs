@@ -241,19 +241,9 @@ namespace RdClient.Shared.Test.ViewModels
         [TestMethod]
         public void TestGoToSettingsCommandNavigatesToSettingsView()
         {
-            ICommand buttonCommand = null;
-
-            foreach (BarItemModel model in _vm.ToolbarItems)
-            {
-                SegoeGlyphBarButtonModel button = model as SegoeGlyphBarButtonModel;
-
-                if (null != button && button.Glyph == SegoeGlyph.Settings)
-                    buttonCommand = button.Command;
-            }
-
-            Assert.IsNotNull(buttonCommand);
             _navService.Expect("PushAccessoryView", new List<object>() { "SettingsView", null, null }, 0);
-            buttonCommand.Execute(null);
+            Assert.IsTrue(_vm.ShowSettings.CanExecute(null));
+            _vm.ShowSettings.Execute(null);
         }
 
         [TestMethod]
@@ -417,21 +407,29 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void ShowSectionLabelsIsFalseWhenHasDesktopsIsFalse()
+        public void ShowSectionLabelsIsFalseWhenHasDesktopsIsFalseAndHasAppsIsFalse()
         {
             RemoveAllModels(_dataModel.LocalWorkspace.Connections);
-            Assert.IsFalse(_vm.ShowSectionLabels);
-        }
-
-        [TestMethod]
-        public void ShowSectionLabelsIsFalseWhenHasAppsIsFalse()
-        {
             RemoveAllModels(_dataModel.OnPremWorkspaces);
             Assert.IsFalse(_vm.ShowSectionLabels);
         }
 
         [TestMethod]
-        public void ShowSectionLabelsIsTrueWhenHasDesktopsAndHasAppsIsTrue()
+        public void ShowSectionLabelsIsTrueWhenHasDesktopsIsTrue()
+        {
+            RemoveAllModels(_dataModel.OnPremWorkspaces);
+            Assert.IsTrue(_vm.ShowSectionLabels);
+        }
+
+        [TestMethod]
+        public void ShowSectionLabelsIsTrueWhenHasAppsIsTrue()
+        {
+            RemoveAllModels(_dataModel.OnPremWorkspaces);
+            Assert.IsTrue(_vm.ShowSectionLabels);
+        }
+
+        [TestMethod]
+        public void ShowSectionLabelsIsTrueWhenHasAppsIsTrueAndHasDesktopsIsTrue()
         {
             Assert.IsTrue(_vm.ShowSectionLabels);
         }

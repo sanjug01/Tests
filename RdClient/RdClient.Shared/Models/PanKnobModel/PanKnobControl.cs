@@ -57,7 +57,7 @@ namespace RdClient.Shared.Models.PanKnobModel
         {
             if(_viewport != null)
             {
-                _viewport.PanAndZoom(_nullPoint, dx, dy, 1.0, 0.0);
+                _viewport.PanAndZoom(_nullPoint, dx, dy, 1.0);
             }
         }
 
@@ -65,7 +65,7 @@ namespace RdClient.Shared.Models.PanKnobModel
         {
             if(_viewport != null)
             {
-                _viewport.PanAndZoom(center, translation.X, translation.Y, scale, 0.0);
+                _viewport.PanAndZoom(center, translation.X, translation.Y, scale);
             }
         }
     }

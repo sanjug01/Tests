@@ -31,7 +31,7 @@
         /// <param name="offset">Desired offset.</param>
         /// <remarks>The viewport may adjust the desired zoom factor and offset values based on its internal logic.
         /// The adjusted values will be reported through the Offset and ZoomFactor properties.</remarks>
-        void Set(double zoomFactor, Size offset, bool animated);
+        void Set(double zoomFactor, Size offset);
 
         /// <summary>
         /// Pan the view port and zoom the rendering panel.
@@ -47,7 +47,7 @@
         /// <para>The method moves the anchor point in the viewport. When the anchor point goes to the right, the rendering panel
         /// actually scrolls to the left.</para>
         /// </remarks>
-        void PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor, double durationMilliseconds);
+        void PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor);
 
         Point TransformPoint(Point point);
     }

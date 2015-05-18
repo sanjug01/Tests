@@ -33,56 +33,53 @@ namespace RdClient.Shared.ViewModels
         public CertificateTrustLevel Result { get; private set; }
     }
 
-    public class CertificateValidationViewModel : ViewModelBase
+    public class CertificateValidationViewModel : ViewModelBase, ICertificateValidationViewModel
     {
         private string _host;
         private IRdpCertificate _certificate;
-
         private bool _isExpandedView;
+        private bool _rememberChoice;
 
         private readonly RelayCommand _acceptCertificateCommand;
-        private readonly RelayCommand _acceptOnceCommand;
         private readonly RelayCommand _cancelCommand;
         private readonly RelayCommand _showDetailsCommand;
         private readonly RelayCommand _hideDetailsCommand;
 
         public CertificateValidationViewModel()
         {
-            _acceptCertificateCommand = new RelayCommand((o) => { DismissModal(new CertificateValidationResult(CertificateValidationResult.CertificateTrustLevel.AcceptedAlways)); });
-            _acceptOnceCommand = new RelayCommand((o) => { DismissModal(new CertificateValidationResult(CertificateValidationResult.CertificateTrustLevel.AcceptedOnce)); });
-            _cancelCommand = new RelayCommand((o) => { DismissModal(new CertificateValidationResult(CertificateValidationResult.CertificateTrustLevel.Denied)); });
+            _acceptCertificateCommand = new RelayCommand((o) => AcceptCertificateCommandExecute());
+            _cancelCommand = new RelayCommand((o) => CancelCommandExecute());
             _showDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = true; });
             _hideDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = false; });
-
-            this.IsExpandedView = false;
         }
 
-        public ICommand AcceptCertificateCommand { get { return _acceptCertificateCommand; } }
-        public ICommand AcceptOnceCommand { get { return _acceptOnceCommand; } }
-        public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
-        public ICommand HideDetailsCommand { get { return _hideDetailsCommand; } }
-        public ICommand CancelCommand { get { return _cancelCommand; } }
+        public ICommand AcceptCertificate { get { return _acceptCertificateCommand; } }
+        public ICommand ShowDetails { get { return _showDetailsCommand; } }
+        public ICommand HideDetails { get { return _hideDetailsCommand; } }
+        public ICommand Cancel { get { return _cancelCommand; } }
 
         public string Host
         {
             get { return _host; }
-            set { SetProperty(ref _host, value); }
+            private set { SetProperty(ref _host, value); }
         }
 
         public IRdpCertificate Certificate
         {
             get { return _certificate; }
-            private set 
-            { 
-                SetProperty(ref _certificate, value);
-                _acceptCertificateCommand.EmitCanExecuteChanged();
-            }
+            private set { SetProperty(ref _certificate, value); }            
         }
 
         public bool IsExpandedView
         {
             get { return _isExpandedView; }
             set { SetProperty(ref _isExpandedView, value); }
+        }
+
+        public bool RememberChoice
+        {
+            get { return _rememberChoice; }
+            set { SetProperty(ref _rememberChoice, value); }
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -93,13 +90,34 @@ namespace RdClient.Shared.ViewModels
             
             this.Certificate = args.Certificate;
             this.Host = args.Host;
+            this.RememberChoice = false;
             this.IsExpandedView = false;
         }
 
         protected override void OnNavigatingBack(Navigation.IBackCommandArgs backArgs)
         {
-            this.CancelCommand.Execute(null);
+            this.Cancel.Execute(null);
             backArgs.Handled = true;
+        }
+
+        private void AcceptCertificateCommandExecute()
+        {
+            var trustLevel = CertificateValidationResult.CertificateTrustLevel.AcceptedOnce;
+            if (this.RememberChoice)
+            {
+                trustLevel = CertificateValidationResult.CertificateTrustLevel.AcceptedAlways;
+            }
+            Dismiss(trustLevel);
+        }
+
+        private void CancelCommandExecute()
+        {
+            Dismiss(CertificateValidationResult.CertificateTrustLevel.Denied);
+        }
+
+        private void Dismiss(CertificateValidationResult.CertificateTrustLevel trustLevel)
+        {
+            DismissModal(new CertificateValidationResult(trustLevel));
         }
     }
 }

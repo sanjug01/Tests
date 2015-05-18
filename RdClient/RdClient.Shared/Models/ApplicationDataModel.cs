@@ -2,14 +2,12 @@
 {
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Navigation;
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
-    using RdClient.Shared.Navigation;
-    using RdClient.Shared.CxWrappers;
 
     public sealed class ApplicationDataModel : MutableObject, IPersistentObject
     {

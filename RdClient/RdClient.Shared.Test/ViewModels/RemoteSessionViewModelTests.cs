@@ -139,12 +139,12 @@
                 remove { }
             }
 
-            void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor, double durationMilliseconds)
+            void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor)
             {
                 throw new NotImplementedException();
             }
 
-            void IViewport.Set(double zoomFactor, Size offset, bool animated)
+            void IViewport.Set(double zoomFactor, Size offset)
             {
                 throw new NotImplementedException();
             }
@@ -367,16 +367,19 @@
             }
         }
 
-        private sealed class TestDeviceCapabilities : IDeviceCapabilities
+        private sealed class TestDeviceCapabilities : MutableObject, IDeviceCapabilities
         {
             private uint _touchPoints = 0;
             private bool _touchPresent = false;
+            private bool _canShowInputPanel;
 
-            public uint TouchPoints { set { _touchPoints = value; } }
-            public bool TouchPresent { set { _touchPresent = value; } }
+            public uint TouchPoints { set { SetProperty(ref _touchPoints, value); } }
+            public bool TouchPresent { set { SetProperty(ref _touchPresent, value); } }
+            public bool CanShowInputPanel { set { SetProperty(ref _canShowInputPanel, value); } }
 
             uint IDeviceCapabilities.TouchPoints { get { return _touchPoints; } }
             bool IDeviceCapabilities.TouchPresent { get { return _touchPresent; } }
+            bool IDeviceCapabilities.CanShowInputPanel { get { return _canShowInputPanel; } }
             event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged { add { } remove { } }
         }
 
@@ -705,7 +708,7 @@
             Assert.AreEqual(1, connectCount);
 
             SymbolBarButtonModel ellipsis = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
-                o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.HorizontalEllipsis);
+                o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.AllApps);
             Assert.IsNotNull(ellipsis.Command);
             Assert.IsTrue(ellipsis.Command.CanExecute(null));
 

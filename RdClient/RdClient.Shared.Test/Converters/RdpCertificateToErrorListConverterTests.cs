@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using RdClient.Converters;
 using RdClient.Shared.Converters;
 using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;

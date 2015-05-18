@@ -22,9 +22,12 @@
         private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
         private readonly RelayCommand _navigateHome;
         private readonly RelayCommand _mouseMode;
-
         //
-        // Input Pane is a fancy name for the touch keyboard.
+        // Device capabilities objecvt injected by the navigation service through IDeviceCapabilitiesSite.
+        //
+        private IDeviceCapabilities _deviceCapabilities;
+        //
+        // Input Pane is another name for the touch keyboard.
         //
         private IInputPanel _inputPanel;
 
@@ -46,6 +49,7 @@
         private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
 
         private readonly ZoomPanModel _zoomPanModel = new ZoomPanModel();
+        private readonly FullScreenModel _fullScreenModel = new FullScreenModel();
 
         private IPanKnobSite _panKnobSite;
         public IPanKnobSite PanKnobSite
@@ -149,9 +153,11 @@
             _sessionState = SessionState.Idle;
 
             ObservableCollection<object> items = new ObservableCollection<object>();
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.EnterFullScreen, Command = _fullScreenModel.EnterFullScreenCommand });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ExitFullScreen, Command = _fullScreenModel.ExitFullScreenCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = _zoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = _zoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.HorizontalEllipsis, Command = _toggleSideBars });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.AllApps, Command = _toggleSideBars });
             items.Add(_invokeKeyboardModel);
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
         }
@@ -248,14 +254,19 @@
 
         void IDeviceCapabilitiesSite.SetDeviceCapabilities(IDeviceCapabilities deviceCapabilities)
         {
-            if(null != _inputPanel)
+            if (null != _deviceCapabilities)
             {
+                _deviceCapabilities.PropertyChanged -= this.OnDeviceCapabilitiesPropertyChanged;
                 _inputPanel.IsVisibleChanged -= this.OnInputPanelIsVisibleChanged;
                 _inputPanel = null;
             }
 
-            if (null != deviceCapabilities && deviceCapabilities.TouchPresent)
+            _deviceCapabilities = deviceCapabilities;
+
+            if (null != _deviceCapabilities)
             {
+                _deviceCapabilities.PropertyChanged += this.OnDeviceCapabilitiesPropertyChanged;
+
                 _inputPanel = _inputPanelFactory.GetInputPanel();
                 _inputPanel.IsVisibleChanged += this.OnInputPanelIsVisibleChanged;
                 _invokeKeyboardModel.IsChecked = _inputPanel.IsVisible;
@@ -291,7 +302,8 @@
 
         private void OnSessionInterrupted(object sender, SessionInterruptedEventArgs e)
         {
-            RemoteSessionInterruptionViewModel vm = new RemoteSessionInterruptionViewModel(_activeSession, e.ObtainContinuation());
+            this.BellyBandViewModel = new RemoteSessionInterruptionViewModel(_activeSession, e.ObtainContinuation());
+            this.IsConnectionBarVisible = true;
         }
 
         private void OnBadCertificate(object sender, BadCertificateEventArgs e)
@@ -360,7 +372,9 @@
                 {
                     case SessionState.Connecting:
                         Contract.Assert(null == this.BellyBandViewModel);
-                        this.BellyBandViewModel = new RemoteSessionConnectingViewModel(() => _activeSession.Disconnect());
+                        this.BellyBandViewModel = new RemoteSessionConnectingViewModel(
+                            _activeSession.HostName,
+                            () => _activeSession.Disconnect() );
                         this.IsConnectionBarVisible = false;
 
                         break;
@@ -397,6 +411,7 @@
 
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
+                        _fullScreenModel.EnterFullScreenCommand.Execute(null);
                         this.IsConnectionBarVisible = true;
                         break;
 
@@ -425,6 +440,7 @@
                             this.IsConnectionBarVisible = false;
                             this.IsRightSideBarVisible = false;
                             _panKnobSite.PanKnob.IsVisible = false;
+                            _fullScreenModel.ExitFullScreenCommand.Execute(null);
                         }
                         break;
                 }
@@ -469,7 +485,7 @@
 
         private bool InternalCanInvokeKeyboard(object parameter)
         {
-            return null != _inputPanel;
+            return null != _inputPanel && null != _deviceCapabilities && _deviceCapabilities.CanShowInputPanel;
         }
 
         private void OnInputPanelIsVisibleChanged(object sender, EventArgs e)
@@ -492,5 +508,12 @@
             }
         }
 
+        private void OnDeviceCapabilitiesPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName.Equals("CanShowInputPanel"))
+            {
+                _invokeKeyboard.EmitCanExecuteChanged();
+            }
+        }
     }
 }
