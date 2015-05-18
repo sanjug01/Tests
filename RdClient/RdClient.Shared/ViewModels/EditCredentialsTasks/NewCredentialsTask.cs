@@ -21,12 +21,12 @@
         private readonly string _resourceName;
         private readonly CredentialsModel _credentials;
 
-        public static void Present(INavigationService navigationService, ApplicationDataModel dataModel,
+        public static void Present(string viewName, INavigationService navigationService, ApplicationDataModel dataModel,
             string resourceName,
             Action<Guid> credentialsAdded,
             Action viewCancelled = null)
         {
-            navigationService.PushModalView("EditCredentialsView", new NewCredentialsTask(resourceName, dataModel, credentialsAdded, viewCancelled));
+            navigationService.PushModalView(viewName, new NewCredentialsTask(resourceName, dataModel, credentialsAdded, viewCancelled));
         }
 
         private NewCredentialsTask(string resourceName, ApplicationDataModel dataModel,
