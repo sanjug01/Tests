@@ -140,6 +140,7 @@ namespace RdClient.Shared.CxWrappers
                 _rdpConnectionCx.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
                 _rdpConnectionCx.OnClientDisconnected -= OnClientDisconnectedHandler;
                 _rdpConnectionCx.OnUserCredentialsRequest -= OnUserCredentialsRequestHandler;
+                _rdpConnectionCx.OnCheckGatewayCertificateTrust -= OnCheckGatewayCertificateTrust;
                 _rdpConnectionCx.OnMouseCursorShapeChanged -= OnMouseCursorShapeChanged;
                 _rdpConnectionCx.OnMouseCursorPositionChanged -= OnMouseCursorPositionChanged;
                 _rdpConnectionCx.OnMultiTouchEnabledChanged -= OnMultiTouchEnabledChanged;
@@ -448,7 +449,7 @@ namespace RdClient.Shared.CxWrappers
 
         void OnCheckGatewayCertificateTrust(Certificate spCertificate, out bool pfIsTrusted)
         {
-            _instrument.Instrument("OnRemoteAppWindowIconUpdatedHandler");
+            _instrument.Instrument("OnCheckGatewayCertificateTrust");
 
             bool _isTrusted = false;
             RdClientCx.ServerCertificateError certErrors = new RdClientCx.ServerCertificateError() { errorCode = 0 };

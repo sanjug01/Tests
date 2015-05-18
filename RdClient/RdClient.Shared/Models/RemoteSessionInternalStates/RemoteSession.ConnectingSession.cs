@@ -70,6 +70,7 @@
                     _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                     _session._syncEvents.StatusInfoReceived -= this.OnStatusInfoReceived;
+                    _session._syncEvents.CheckGatewayCertificateTrust -= this.OnCheckGatewayCertificateTrust;
                 }
                 _session = null;
             }
@@ -86,6 +87,7 @@
                     _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                     _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
+                    _session._syncEvents.CheckGatewayCertificateTrust += this.OnCheckGatewayCertificateTrust;
 
                     _connection.SetCredentials(_session._sessionSetup.SessionCredentials.Credentials,
                         !_session._sessionSetup.SessionCredentials.IsNewPassword);
@@ -106,6 +108,27 @@
                     _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                     _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
+                    _session._syncEvents.CheckGatewayCertificateTrust += this.OnCheckGatewayCertificateTrust;
+                }
+            }
+
+            private void OnCheckGatewayCertificateTrust(object sender, CheckGatewayCertificateTrustArgs e)
+            {
+                // (pre)validation of the gateway certificate, per RDPConnection request
+                IRdpCertificate certificate = e.Certificate;
+                Contract.Assert(null != certificate);
+                Contract.Assert(null != _session);
+                
+                if (_session._certificateTrust.IsCertificateTrusted(certificate)
+                    || _session._sessionSetup.DataModel.CertificateTrust.IsCertificateTrusted(certificate))
+                {
+                    // The certificate has been accepted already;
+                    e.TrustDelegate.Invoke(true);
+                }
+                else
+                {
+                    // The certificate has not been trusted yet
+                    e.TrustDelegate.Invoke(false);
                 }
             }
 
@@ -156,7 +179,7 @@
 
                     case RdpDisconnectCode.ProxyInvalidCA:
                         // Gateway certificate needs validation
-                        ValidateCertificate(connection.GetServerCertificate(), e.DisconnectReason);
+                        ValidateCertificate(connection.GetGatewayCertificate(), e.DisconnectReason);
                         break;
 
                     case RdpDisconnectCode.CredSSPUnsupported:
