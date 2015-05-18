@@ -35,6 +35,7 @@
         private EventHandler<RemoteAppWindowDeletedArgs> _remoteAppWindowDeleted;
         private EventHandler<RemoteAppWindowTitleUpdatedArgs> _remoteAppWindowTitleUpdated;
         private EventHandler<RemoteAppWindowIconUpdatedArgs> _remoteAppWindowIconUpdated;
+        private EventHandler<CheckGatewayCertificateTrustArgs> _checkGatewayCertificateTrust;
 
         public static IRdpEvents Create(IRdpEvents source, ReaderWriterLockSlim monitor)
         {
@@ -446,6 +447,29 @@
             }
         }
 
+        event EventHandler<CheckGatewayCertificateTrustArgs> IRdpEvents.CheckGatewayCertificateTrust
+        {
+            add
+            {
+                using (ReadWriteMonitor.Write(_monitor))
+                {
+                    if (null == _checkGatewayCertificateTrust)
+                        _source.CheckGatewayCertificateTrust += this.EmitCheckGatewayCertificateTrust;
+                    _checkGatewayCertificateTrust += value;
+                }
+            }
+
+            remove
+            {
+                using (ReadWriteMonitor.Write(_monitor))
+                {
+                    _checkGatewayCertificateTrust -= value;
+                    if (null == _checkGatewayCertificateTrust)
+                        _source.CheckGatewayCertificateTrust -= this.EmitCheckGatewayCertificateTrust;
+                }
+            }
+        }
+
         private void EmitClientConnected(object sender, ClientConnectedArgs e)
         {
             using(ReadWriteMonitor.UpgradeableRead(_monitor))
@@ -592,5 +616,11 @@
             if (null != _remoteAppWindowIconUpdated)
                 _remoteAppWindowIconUpdated(sender, e);
         }
+
+        private void EmitCheckGatewayCertificateTrust(object sender, CheckGatewayCertificateTrustArgs e)
+        {
+            if (null != _checkGatewayCertificateTrust)
+                _checkGatewayCertificateTrust(sender, e);
+        }        
     }
 }

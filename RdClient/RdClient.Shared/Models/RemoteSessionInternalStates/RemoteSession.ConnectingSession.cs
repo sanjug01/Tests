@@ -156,9 +156,7 @@
 
                     case RdpDisconnectCode.ProxyInvalidCA:
                         // Gateway certificate needs validation
-                        // TODO: connection.GetGatewayCertificate()
-                        // ValidateCertificate(connection.GetServerCertificate(),
-                        //    e.DisconnectReason);
+                        ValidateCertificate(connection.GetServerCertificate(), e.DisconnectReason);
                         break;
 
                     case RdpDisconnectCode.CredSSPUnsupported:

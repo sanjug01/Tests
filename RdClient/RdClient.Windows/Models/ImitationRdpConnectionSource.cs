@@ -45,6 +45,7 @@
             private EventHandler<RemoteAppWindowDeletedArgs> _remoteAppWindowDeleted;
             private EventHandler<RemoteAppWindowTitleUpdatedArgs> _remoteAppWindowTitleUpdated;
             private EventHandler<RemoteAppWindowIconUpdatedArgs> _remoteAppWindowIconUpdated;
+            private EventHandler<CheckGatewayCertificateTrustArgs> _checkGatewayCertificateTrustRequest;
             //
             // IRdpEvents
             //
@@ -148,6 +149,11 @@
             {
                 add { using (LockWrite()) _remoteAppWindowIconUpdated += value; }
                 remove { using (LockWrite()) _remoteAppWindowIconUpdated -= value; }
+            }
+            event EventHandler<CheckGatewayCertificateTrustArgs> IRdpEvents.CheckGatewayCertificateTrust
+            {
+                add { using (LockWrite()) _checkGatewayCertificateTrustRequest += value; }
+                remove { using (LockWrite()) _checkGatewayCertificateTrustRequest -= value; }
             }
             //
             // IRdpEventSource
@@ -303,6 +309,96 @@
                     if (null != _remoteAppWindowIconUpdated)
                         _remoteAppWindowIconUpdated(sender, args);
                 }
+            }
+
+            void IRdpEventSource.EmitClientConnected(IRdpConnection sender, ClientConnectedArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitClientAsyncDisconnect(IRdpConnection sender, ClientAsyncDisconnectArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitClientDisconnected(IRdpConnection sender, ClientDisconnectedArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitUserCredentialsRequest(IRdpConnection sender, UserCredentialsRequestArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitMouseCursorShapeChanged(IRdpConnection sender, MouseCursorShapeChangedArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitMouseCursorPositionChanged(IRdpConnection sender, MouseCursorPositionChangedArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitMultiTouchEnabledChanged(IRdpConnection sender, MultiTouchEnabledChangedArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitConnectionHealthStateChanged(IRdpConnection sender, ConnectionHealthStateChangedArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitClientAutoReconnecting(IRdpConnection sender, ClientAutoReconnectingArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitClientAutoReconnectComplete(IRdpConnection sender, ClientAutoReconnectCompleteArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitLoginCompleted(IRdpConnection sender, LoginCompletedArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitStatusInfoReceived(IRdpConnection sender, StatusInfoReceivedArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitFirstGraphicsUpdate(IRdpConnection sender, FirstGraphicsUpdateArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitRemoteAppWindowCreated(IRdpConnection sender, RemoteAppWindowCreatedArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitRemoteAppWindowDeleted(IRdpConnection sender, RemoteAppWindowDeletedArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitRemoteAppWindowTitleUpdated(IRdpConnection sender, RemoteAppWindowTitleUpdatedArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitRemoteAppWindowIconUpdated(IRdpConnection sender, RemoteAppWindowIconUpdatedArgs args)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IRdpEventSource.EmitCheckGatewayCertificateTrust(IRdpConnection sender, CheckGatewayCertificateTrustArgs args)
+            {
+                throw new NotImplementedException();
             }
         }
 
