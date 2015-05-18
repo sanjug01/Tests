@@ -56,7 +56,6 @@
                 Contract.Assert(null != _session);
                 if (null != _connection)
                     _connection.Disconnect();
-                _session.InternalSetState(new RemoteSession.CancelledSession(this));
             }
 
             public override void Complete(RemoteSession session)
@@ -191,7 +190,7 @@
 
             private void OnStatusInfoReceived(object sender, StatusInfoReceivedArgs e)
             {
-                Debug.WriteLine("StatusInfoReceived|StatusCode={0}", e.StatusCode);
+                Debug.WriteLine("Connecting|StatusInfoReceived|StatusCode={0}", e.StatusCode);
             }
 
             private void ValidateCertificate(IRdpCertificate certificate, RdpDisconnectReason reason)
