@@ -45,7 +45,6 @@
                     // Show any errors after user has finished editing the content
                     content.LostFocus += (sender, args) =>
                     {
-                        Debug.WriteLine("Lost focus");
                         errorControl.ShowErrors();
                     };
                     // Show any errors after user tries to submit by pressing enter
@@ -53,7 +52,6 @@
                     {
                         if (args.Key == VirtualKey.Enter)
                         {
-                            Debug.WriteLine("Enter pressed");
                             errorControl.ShowErrors();
                         }
                     };
@@ -61,7 +59,6 @@
                     // (Any errors will be shown again once they finish editing or try to submit)
                     content.GotFocus += (sender, args) =>
                     {
-                        Debug.WriteLine("Got focus");
                         errorControl.HideErrors();
                     };
                 }
@@ -79,7 +76,6 @@
                 {
                     if (string.Equals("Value", e.PropertyName))
                     {
-                        Debug.WriteLine("Value changed");
                         this.HideErrors();
                     }
                 };
