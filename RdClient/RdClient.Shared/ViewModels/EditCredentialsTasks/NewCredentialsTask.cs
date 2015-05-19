@@ -58,7 +58,6 @@
             // will be saved unconditionally.
             //
             viewModel.CanSaveCredentials = false;
-            viewModel.DismissLabel = "d:Add Credentials";
         }
 
         protected override bool Validate(IEditCredentialsViewModel viewModel)

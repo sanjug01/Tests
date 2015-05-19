@@ -14,7 +14,6 @@
 
         private string _resourceName;
         private string _prompt;
-        private string _dismissLabel;
         private bool _saveCredentials;
         private bool _canSaveCredentials;
         private bool _canRevealPassword;
@@ -53,12 +52,6 @@
         {
             get { return _prompt; }
             set { this.SetProperty(ref _prompt, value); }
-        }
-
-        public string DismissLabel
-        {
-            get { return _dismissLabel; }
-            set { this.SetProperty(ref _dismissLabel, value); }
         }
 
         public bool SaveCredentials
@@ -129,7 +122,6 @@
             _canSaveCredentials = true;
             _resourceName = "d:Resource Name";
             _prompt = "d:Prompt";
-            _dismissLabel = "d:Dismiss";
         }
 
         protected override void OnPresenting(object activationParameter)
