@@ -54,11 +54,12 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" 
+            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                        Grid.Row="0"                   
                        x:Uid="AddOrEditDesktop-GatewaysSectionTitle" 
                        Text="Gateway(d)"/>
             <ComboBox Grid.Row="1"
+                      Margin="0,8"
                       HorizontalAlignment="Stretch"
                       x:Uid="AddOrEditDesktop-Gateways-ComboBox"
                       ItemsSource="{Binding GatewayOptions}"
@@ -90,7 +91,7 @@
         <!-- Redirection section -->
         <StackPanel Orientation="Vertical"
                     Margin="0,0,0,40">
-            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" 
+            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
                        Grid.Row="0"                   
                        x:Uid="AddOrEditDesktop-RedirectionSectionTitle" 
                        Text="Redirection(d)"/>            
