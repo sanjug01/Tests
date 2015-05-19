@@ -5,6 +5,7 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
+    using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
@@ -157,9 +158,29 @@
         private void ConnectCommandExecute(object o)
         {
             RemoteSessionSetup sessionSetup = new RemoteSessionSetup(_dataModel, this.Desktop);
-            IRemoteSession session = _sessionFactory.CreateSession(sessionSetup);
 
-            _navigationService.NavigateToView("RemoteSessionView", session);
+            if (Guid.Empty.Equals(this.Desktop.CredentialsId))
+            {
+                InSessionCredentialsTask task = new InSessionCredentialsTask(sessionSetup.SessionCredentials,
+                    _dataModel, null, sessionSetup);
+
+                task.Submitted += (sender, e) =>
+                {
+                    RemoteSessionSetup setup = (RemoteSessionSetup)e.State;
+                    IRemoteSession session = _sessionFactory.CreateSession(setup);
+
+                    if (e.SaveCredentials)
+                        setup.SaveCredentials();
+
+                    _navigationService.NavigateToView("RemoteSessionView", session);
+                };
+
+                _navigationService.PushModalView("InSessionEditCredentialsView", task);
+            }
+            else
+            {
+                _navigationService.NavigateToView("RemoteSessionView", _sessionFactory.CreateSession(sessionSetup));
+            }
         }
 
         private void InternalConnect(CredentialsModel credentials, bool storeCredentials)
