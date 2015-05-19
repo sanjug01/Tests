@@ -1004,7 +1004,7 @@
     <value>(r) User name</value>
   </data>
   <data name="InSessionEditCredentials-UserName.PlaceholderText" xml:space="preserve">
-    <value>(r) user@contoso.com</value>
+    <value>(r) user or domain\user </value>
   </data>
   <data name="CertificateValidation-RememberChoiceCheckbox.Content" xml:space="preserve">
     <value>(r) Remember my choice for this certificate</value>
