@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
@@ -36,7 +37,7 @@
     }
 
 
-    public class UserComboBoxElement
+    public class UserComboBoxElement : MutableObject
     {
         private readonly IModelContainer<CredentialsModel> _credentials;
 
@@ -50,5 +51,6 @@
             _userComboBoxType  = userComboBoxType;
             _credentials = credentials;
         }
+
     }
 }

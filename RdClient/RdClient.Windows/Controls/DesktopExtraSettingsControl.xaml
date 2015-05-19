@@ -57,7 +57,7 @@
                       Margin="0,8"
                       HorizontalAlignment="Stretch"
                       x:Uid="AddOrEditDesktop-Gateways-ComboBox"
-                      ItemsSource="{Binding GatewayOptions}"
+                      ItemsSource="{Binding Gateways}"
                       SelectedItem="{Binding SelectedGateway, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>

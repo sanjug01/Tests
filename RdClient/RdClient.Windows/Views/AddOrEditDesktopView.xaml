@@ -108,7 +108,7 @@
                               Grid.Row="0"
                               Header="User name(d)"
                               HorizontalAlignment="Stretch"
-                              ItemsSource="{Binding Path=UserOptions}"
+                              ItemsSource="{Binding Path=Users}"
                               SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>

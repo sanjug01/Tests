@@ -181,7 +181,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedUser = _addOrEditDesktopViewModel.UserOptions[1];
+            _addOrEditDesktopViewModel.SelectedUser = _addOrEditDesktopViewModel.Users[1];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
@@ -201,7 +201,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedUser = _addOrEditDesktopViewModel.UserOptions[0];
+            _addOrEditDesktopViewModel.SelectedUser = _addOrEditDesktopViewModel.Users[0];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
@@ -521,7 +521,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.GatewayOptions[1];
+            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.Gateways[1];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
@@ -541,7 +541,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.GatewayOptions[0];
+            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.Gateways[0];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 

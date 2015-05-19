@@ -8,12 +8,12 @@
     {
         ICommand Cancel { get; }
         
-        ObservableCollection<UserComboBoxElement> UserOptions { get; }
+        ReadOnlyObservableCollection<UserComboBoxElement> Users { get; }
         UserComboBoxElement SelectedUser { get; set; }
         ICommand EditUserCommand { get; }
         ICommand AddUserCommand { get; }
 
-        ObservableCollection<GatewayComboBoxElement> GatewayOptions { get; }
+        ReadOnlyObservableCollection<GatewayComboBoxElement> Gateways { get; }
         GatewayComboBoxElement SelectedGateway { get; set; }
         ICommand EditGatewayCommand { get; }
         ICommand AddGatewayCommand { get; }

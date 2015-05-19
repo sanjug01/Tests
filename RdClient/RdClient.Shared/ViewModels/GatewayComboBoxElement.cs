@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;
@@ -34,7 +35,7 @@
         }
     }
 
-    public class GatewayComboBoxElement
+    public class GatewayComboBoxElement: MutableObject
     {
         private readonly IModelContainer<GatewayModel> _gateway;
 

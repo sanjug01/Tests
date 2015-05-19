@@ -75,9 +75,9 @@
             get { return new RelayCommand(o => { }, o => true); }
         }
 
-        public ObservableCollection<GatewayComboBoxElement> GatewayOptions
+        public ReadOnlyObservableCollection<GatewayComboBoxElement> Gateways
         {
-            get { return _gateways; }            
+            get { return new ReadOnlyObservableCollection<GatewayComboBoxElement>(_gateways); }            
         }
         
         public GatewayComboBoxElement SelectedGateway
@@ -87,9 +87,9 @@
         }
 
 
-        public ObservableCollection<UserComboBoxElement> UserOptions
+        public ReadOnlyObservableCollection<UserComboBoxElement> Users
         {
-            get { return _users; }
+            get { return new ReadOnlyObservableCollection<UserComboBoxElement>(_users); }
         }
 
         public UserComboBoxElement SelectedUser
