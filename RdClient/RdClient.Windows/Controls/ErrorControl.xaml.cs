@@ -12,8 +12,7 @@
     {
         public ErrorControl()
         {
-            this.InitializeComponent();            
-            this.DataContextChanged += ErrorControl_DataContextChanged;
+            this.InitializeComponent();
             this.ErrorButton.Command = new RelayCommand(o => FlyoutBase.ShowAttachedFlyout(this.ErrorBorder));
             this.HideErrors();
         }
@@ -40,6 +39,7 @@
                 //show the new content
                 errorControl.ContentPresenter.Content = content;
                 
+                //hook up error display to new content
                 if (content != null)
                 {
                     // Show any errors after user has finished editing the content
@@ -47,14 +47,21 @@
                     {
                         errorControl.ShowErrors();
                     };
-                    // Show any errors after user tries to submit by pressing enter
+                    
                     content.KeyDown += (sender, args) =>
                     {
+                        // Show any errors after user tries to submit by pressing enter
                         if (args.Key == VirtualKey.Enter)
                         {
                             errorControl.ShowErrors();
                         }
+                        // Hide any errors when the user is editing
+                        else
+                        {
+                            errorControl.HideErrors();
+                        }
                     };
+
                     // Hide any displayed errors once the user starts editing the content to fix them
                     // (Any errors will be shown again once they finish editing or try to submit)
                     content.GotFocus += (sender, args) =>
@@ -65,23 +72,6 @@
             }
         }
 
-        private void ErrorControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
-        {
-            var property = args.NewValue as ValidatedProperty<string>;
-            if (property != null)
-            {
-                // When the user presses enter to submit we want to show the error only until they start editing the value to fix it.
-                // (Then we hide the error until they finish editing or try to submit again)
-                property.PropertyChanged += (s, e) =>
-                {
-                    if (string.Equals("Value", e.PropertyName))
-                    {
-                        this.HideErrors();
-                    }
-                };
-            }
-        }
-
         //Make the error border visible if there are any errors to display
         private void ShowErrors()
         {
@@ -89,14 +79,12 @@
             if (property?.State?.IsValid == false)
             {
                 this.ErrorBorder.Visibility = Visibility.Visible;
-                this.ErrorButton.Visibility = Visibility.Visible;
             }
         }
 
         private void HideErrors()
         {            
-            this.ErrorBorder.Visibility = Visibility.Collapsed;
-            this.ErrorButton.Visibility = Visibility.Collapsed;        
+            this.ErrorBorder.Visibility = Visibility.Collapsed;     
             FlyoutBase.GetAttachedFlyout(this.ErrorBorder).Hide();
         }
     }
