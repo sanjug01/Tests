@@ -46,7 +46,7 @@ namespace RdClient.Shared.Models
             _enterFullScreenCommand = new RelayCommand(
                 o =>
                 {
-                    ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
+                    //ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
                 },
                 o => 
                 {

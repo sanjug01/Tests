@@ -254,7 +254,7 @@
     <Compile Include="Models\IRemoteSessionViewSite.cs" />
     <Compile Include="Models\IRenderingPanel.cs" />
     <Compile Include="Models\ISessionFactory.cs" />
-    <Compile Include="Models\IViewport.cs" />
+    <Compile Include="Models\Viewport\IViewport.cs" />
     <Compile Include="Models\LocalWorkspaceModel.cs" />
     <Compile Include="Models\OnPremiseWorkspaceModel.cs" />
     <Compile Include="Models\ConnectionInformation.cs" />
@@ -288,6 +288,12 @@
     <Compile Include="Models\SessionInterruptedEventArgs.cs" />
     <Compile Include="Models\ThumbnailEncoder.cs" />
     <Compile Include="Models\Snapshotter.cs" />
+    <Compile Include="Models\Viewport\IViewportPanel.cs" />
+    <Compile Include="Models\Viewport\IViewportTransform.cs" />
+    <Compile Include="Models\Viewport\Panel.cs" />
+    <Compile Include="Models\Viewport\Transform.cs" />
+    <Compile Include="Models\Viewport\Viewport.cs" />
+    <Compile Include="Models\Viewport\ViewportTransformWrapper.cs" />
     <Compile Include="Models\WorkspaceModel.cs" />
     <Compile Include="Models\ZoomPanMultiTouchModel.cs" />
     <Compile Include="Navigation\BackButtonHandler.cs" />
@@ -427,6 +433,7 @@
       <Name>RdClientCxHelpers</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <!--<Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />-->
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

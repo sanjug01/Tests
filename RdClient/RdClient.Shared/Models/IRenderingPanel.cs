@@ -1,7 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
-    using RdClient.Shared.Input;
     using RdClient.Shared.Input.Pointer;
+    using RdClient.Shared.Models.Viewport;
     using System;
     using Windows.Foundation;
 

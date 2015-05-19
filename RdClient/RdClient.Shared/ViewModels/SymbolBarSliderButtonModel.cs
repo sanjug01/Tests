@@ -1,5 +1,6 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
+using RdClient.Shared.Models.Viewport;
 using System;
 using System.Diagnostics;
 using System.Windows.Input;

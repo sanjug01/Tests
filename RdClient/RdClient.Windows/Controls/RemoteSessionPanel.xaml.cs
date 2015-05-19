@@ -4,6 +4,7 @@
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Input.Recognizers;
     using RdClient.Shared.Models;
+    using RdClient.Shared.Models.Viewport;
     using RdClient.Shared.Navigation;
     using System;
     using System.ComponentModel;
@@ -16,12 +17,14 @@
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
+    using Windows.UI.Xaml.Media;
+
 
     /// <summary>
     /// A panel shown in the remote session view (RemoteSessionView) that renders contents of the remote session
     /// and captures keyboard, mouse, pen and touch input.
     /// </summary>
-    public sealed partial class RemoteSessionPanel : UserControl, IRemoteSessionView
+    public sealed partial class RemoteSessionPanel : UserControl, IRemoteSessionView, IViewportPanel
     {
         public static readonly DependencyProperty RemoteSessionViewSiteProperty = DependencyProperty.Register("RemoteSessionViewSite",
             typeof(object),
@@ -44,7 +47,6 @@
 
             _viewLoaded = false;
             _renderingPanelSize = Size.Empty;
-            this.RenderingPanel.SetViewport(new RenderingPanelViewport(this, this.RenderingPanel, this.Transformation));
         }
 
         public object RemoteSessionViewSite
@@ -59,6 +61,38 @@
         {
             get { return _renderingPanelSize; }
             private set { this.SetProperty(ref _renderingPanelSize, value); }
+        }
+
+        double IViewportPanel.Width
+        {
+            get
+            {
+                return this.ActualWidth;
+            }
+            set
+            {
+                this.Width = value;
+            }
+        }
+
+        double IViewportPanel.Height
+        {
+            get
+            {
+                return this.ActualHeight;
+            }
+            set
+            {
+                this.Height = value;
+            }
+        }
+
+        public IViewportTransform Transform
+        {
+            get
+            {
+                return null;
+            }
         }
 
         event EventHandler IRemoteSessionView.Closed
@@ -131,6 +165,10 @@
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             _viewLoaded = true;
+
+            this.RenderingPanel.SetViewport(new Viewport(this.RenderingPanel, this));
+            this.RenderingPanel.SetTransform(new ViewportTransformWrapper(this.RenderPanelTransform));
+
             _renderingPanelSize = this.RenderingPanel.RenderSize;
             //
             // Set self as the remote session view in the view model.
