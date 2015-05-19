@@ -26,11 +26,6 @@
     </UserControl.Resources>
 
     <StackPanel>
-        <CheckBox Margin="0,0,0,40" 
-                  x:Uid="AddOrEditDesktop-ConnectToAdminSession" 
-                  Content="Connect to admin session(d)"
-                  IsChecked="{Binding Path=IsUseAdminSession, Mode=TwoWay}" />
-
         <!-- Display section - TODO: to enable when functional -->
         <StackPanel Orientation="Vertical"
                     Margin="0,0,0,40" 
@@ -46,7 +41,7 @@
         </StackPanel>
         
         <!-- Gateway section -->
-        <Grid Margin="0,0,0,40">
+        <Grid Margin="0,20,0,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />                
@@ -105,6 +100,11 @@
                 <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-DontPlaySounds" Content="Don't play sounds(d)" />
             </ComboBox>
 
+            <CheckBox Margin="0,8" 
+                  x:Uid="AddOrEditDesktop-ConnectToAdminSession" 
+                  Content="Connect to admin session(d)"
+                  IsChecked="{Binding Path=IsUseAdminSession, Mode=TwoWay}" />
+            
             <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" 
                       Content="Swap mouse buttons(d)" 
                       Margin="0,8" 
