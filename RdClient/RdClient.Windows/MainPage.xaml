@@ -37,7 +37,7 @@
                 <navextimp:DeviceCapabilities />
             </fac:AppInitializer.DeviceCapabilities>
             <fac:AppInitializer.TelemetryClient>
-                <telemetry:DummyTelemetryClient/>
+                <telemetry:ApplicationInsightsTelemetryClient/>
             </fac:AppInitializer.TelemetryClient>
         </fac:AppInitializer>
 
