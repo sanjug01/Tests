@@ -14,6 +14,8 @@
         private RelayCommand _save;
         private IStorageFolder _storageFolder;
         private string _fileName;
+        [DataMember(Name = "IsTelemetryActive", IsRequired = false, EmitDefaultValue = false)]
+        private bool _isTelemetryActive;
         private IModelSerializer _modelSerializer;
 
         private bool _useThumbnails;
@@ -80,10 +82,28 @@
             }
         }
 
+        public bool IsTelemetryActive
+        {
+            get
+            {
+                return _isTelemetryActive;
+            }
+
+            set
+            {
+                if (SetProperty(ref _isTelemetryActive, value))
+                    this.PersistentStatus = Data.PersistentStatus.Modified;
+            }
+        }
+
         private void SetDefaults()
         {
             this.UseThumbnails = true;
             this.SendFeeback = true;
+            //
+            // Telemetry is enabled by default; user has an option to opt-out on the settings page.
+            //
+            this.IsTelemetryActive = true;
         }
 
         ICommand IPersistentObject.Save

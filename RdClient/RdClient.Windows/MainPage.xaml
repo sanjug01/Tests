@@ -17,6 +17,7 @@
     xmlns:design="using:RdClient.DesignTime"
     xmlns:fac="using:RdClient.Factories"
     xmlns:controls="using:RdClient.Controls"
+    xmlns:telemetry="using:RdClient.Telemetry"
     mc:Ignorable="d">
 
     <Page.DataContext>        
@@ -35,6 +36,9 @@
             <fac:AppInitializer.DeviceCapabilities>
                 <navextimp:DeviceCapabilities />
             </fac:AppInitializer.DeviceCapabilities>
+            <fac:AppInitializer.TelemetryClient>
+                <telemetry:DummyTelemetryClient/>
+            </fac:AppInitializer.TelemetryClient>
         </fac:AppInitializer>
 
         <cv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>

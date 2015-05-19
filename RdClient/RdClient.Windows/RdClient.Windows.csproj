@@ -162,6 +162,7 @@
     <Compile Include="Models\RejectSavedPasswordConnectionSource.cs" />
     <Compile Include="Models\SingleSwapChainPanelRdpConnectionSource.cs" />
     <Compile Include="Models\SuccessfulConnectionSource.cs" />
+    <Compile Include="Telemetry\DummyTelemetryClient.cs" />
     <Compile Include="Navigation\ModalFocusTracker.cs" />
     <Compile Include="Views\RichTextView.xaml.cs">
       <DependentUpon>RichTextView.xaml</DependentUpon>

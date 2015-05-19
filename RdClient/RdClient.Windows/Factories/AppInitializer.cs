@@ -9,11 +9,9 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
-    using RdClient.Shared.ViewModels;
+    using RdClient.Shared.Telemetry;
     using System.Diagnostics.Contracts;
     using Windows.UI.Core;
-    using Windows.UI.Xaml.Controls;
-    using System;
 
     public sealed class AppInitializer
     {
@@ -29,6 +27,7 @@
         public ILifeTimeManager LifeTimeManager { private get; set; }
         public IRdpConnectionSource ConnectionSource { private get; set; }
         public IDeviceCapabilities DeviceCapabilities { private get; set; }
+        public ITelemetryClient TelemetryClient { private get; set; }
 
         internal void CreateBackButtonHandler(SystemNavigationManager systemNavigationManager)
         {
@@ -61,7 +60,9 @@
                 workspace.Model.Initialize(new RadcClient(new RadcEventSource(), new TaskExecutor()), appDataModel);
                 workspace.Model.TryAndResubscribe();
             }
-            //All the resources for the workspaces are cached internally by RadcClient. Here we load them into our workspaces
+            //
+            // All the resources for the workspaces are cached internally by RadcClient. Here we load them into our workspaces
+            //
             RadcClient radcClient = new RadcClient(new RadcEventSource(), new TaskExecutor());
             radcClient.StartGetCachedFeeds(); 
 
@@ -77,9 +78,23 @@
             _navigationService.Extensions.Add(new SessionFactoryExtension() { SessionFactory = sessionFactory });
             _navigationService.Extensions.Add(new DeviceCapabilitiesExtension() { DeviceCapabilities = this.DeviceCapabilities });
             _navigationService.Extensions.Add(new LifeTimeExtension() { LifeTimeManager = this.LifeTimeManager });
-
+            //
+            // Inject and enable telemetry if necessary.
+            //
+            if (null != this.TelemetryClient)
+            {
+                this.TelemetryClient.IsActive = appDataModel.Settings.IsTelemetryActive;
+                _navigationService.Extensions.Add(new TelemetryExtension() { Client = this.TelemetryClient });
+            }
+            //
+            // Set up deferred execution of the app data's Save command. As soon as the command reports that it can be executed,
+            // DeferredCommand will set a timer for the specified duration and when the timer will fire it will execute the command.
+            // After execution of the command DeferredCommand will expect the ICommand to disable itself.
+            //
             _applicationDataSaver = new DeferredCommand(appDataModel.Save, deferredExecution, timerFactory, SaveDataDelayMilliseconds);
-
+            //
+            // Navigate to the landing view.
+            //
             _navigationService.NavigateToView(this.LandingPage, null);
         }
 
