@@ -193,9 +193,6 @@
     <Compile Include="Views\DesktopEditorView.xaml.cs">
       <DependentUpon>DesktopEditorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\EditCredentialsView.xaml.cs">
-      <DependentUpon>EditCredentialsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\InSessionEditCredentialsView.xaml.cs">
       <DependentUpon>InSessionEditCredentialsView.xaml</DependentUpon>
     </Compile>
@@ -422,10 +419,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DesktopEditorView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\EditCredentialsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

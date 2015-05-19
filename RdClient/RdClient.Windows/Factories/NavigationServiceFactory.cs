@@ -23,7 +23,6 @@
             viewFactory.AddViewClass("DesktopIdentityValidationView", typeof(Views.DesktopIdentityValidationView));
             viewFactory.AddViewClass("SettingsView", typeof(Views.SettingsView));
             viewFactory.AddViewClass("DeleteUserView", typeof(Views.DeleteUserView));
-            viewFactory.AddViewClass("EditCredentialsView", typeof(Views.EditCredentialsView));
             viewFactory.AddViewClass("AddOrEditWorkspaceView", typeof(Views.AddOrEditWorkspaceView));
             viewFactory.AddViewClass("InSessionEditCredentialsView", typeof(Views.InSessionEditCredentialsView));
             viewFactory.AddViewClass("AddOrEditGatewayView", typeof(Views.AddOrEditGatewayView));
