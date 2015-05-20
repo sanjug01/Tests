@@ -2,10 +2,11 @@
 {
     using RdClient.Shared.ValidationRules;
     using RdClient.Shared.ViewModels;
+    using System;
     using System.Collections.ObjectModel;
     using System.Windows.Input;
 
-    public class FakeAddOrEditDesktopViewModel : FakeUsersAndGatewaysCollectorBase, IAddOrEditDesktopViewModel
+    public sealed class FakeAddOrEditDesktopViewModel : FakeUsersAndGatewaysCollectorBase, IAddOrEditDesktopViewModel, IDisposable
     {
         private ValidatedProperty<string> _host;
         public FakeAddOrEditDesktopViewModel()
