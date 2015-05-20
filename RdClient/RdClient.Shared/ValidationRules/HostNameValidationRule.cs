@@ -1,11 +1,9 @@
-﻿using System.Globalization;
-
-namespace RdClient.Shared.ValidationRules
+﻿namespace RdClient.Shared.ValidationRules
 {
-    public class HostNameValidationRule : CharacterOccurenceValidationRule
+    public class HostnameValidationRule : CharacterOccurenceValidationRule
     {
         // list of illegal caracters - as for android
-        public HostNameValidationRule() : base("`~!#@$%^&*()=+{}\\|;'\",< >/?")
+        public HostnameValidationRule() : base("`~!#@$%^&*()=+{}\\|;'\",< >/?", HostnameValidationFailure.InvalidCharacters)
         {
         }
     }

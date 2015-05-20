@@ -17,12 +17,12 @@
             foreach (var rule in _rules)
             {
                 var result = rule.Validate(value);
-                if (result.IsValid == false)
+                if (result.Status != ValidationResultStatus.Valid)
                 {
                     return result;
                 }
             }
-            return new ValidationResult(true);
+            return ValidationResult.Valid();
         }
     }
 }

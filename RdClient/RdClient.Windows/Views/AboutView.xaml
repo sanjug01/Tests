@@ -48,12 +48,6 @@
                                  >
                     <TextBlock x:Uid="AboutView_ThirdPartyNotices" Text="(d) Third Party Notices"/>
                 </HyperlinkButton>
-                <HyperlinkButton Margin="0,5,0,0"
-                                 x:Uid="AboutView_Link_RecommendedNewFeatures"
-                                 NavigateUri="https://www.google.com/search?q=microsoft+rdp+client+recommended+new+features"
-                                 >
-                    <TextBlock x:Uid="AboutView_RecommendedNewFeatures" Text="(d) Recommended new features"/>
-                </HyperlinkButton>
             </StackPanel>
 
             <HyperlinkButton Grid.Row="2"
