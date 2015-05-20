@@ -347,10 +347,6 @@
     <value>Desktops</value>
     <comment>The text that is the header for the desktops section</comment>
   </data>
-  <data name="ConnectionCenter_TitleHeader.Text" xml:space="preserve">
-    <value>Remote Desktop</value>
-    <comment>The text at the top of the screen on the connection center</comment>
-  </data>
   <data name="Menu-AddDesktop.Text" xml:space="preserve">
     <value>Add a Desktop</value>
     <comment>Option to add PC or Server</comment>
@@ -363,29 +359,9 @@
     <value>Edit</value>
     <comment>Verb. Text in a button or pop out menu that is pressed to edit an item.</comment>
   </data>
-  <data name="Settings_Gateways_Title.Text" xml:space="preserve">
-    <value>Gateways</value>
-    <comment>Noun. Title of the Gateways section in the global settings page</comment>
-  </data>
-  <data name="Settings_General_Title.Text" xml:space="preserve">
-    <value>(r) General</value>
-    <comment>Noun. Title of the General settings section in the global settings page</comment>
-  </data>
   <data name="Settings_NavBar_Title.Text" xml:space="preserve">
     <value>Settings</value>
     <comment>Noun. Main title of the global settings page</comment>
-  </data>
-  <data name="Settings_Users_AddUser_Detail.Text" xml:space="preserve">
-    <value>(r) Add a username</value>
-    <comment>Text in User settings page that describes what add user does in more detail</comment>
-  </data>
-  <data name="Settings_Users_AddUser_Title.Text" xml:space="preserve">
-    <value>Add a user</value>
-    <comment>Title above add user button in the user settings section of the global settings page</comment>
-  </data>
-  <data name="Settings_Users_Title.Text" xml:space="preserve">
-    <value>User accounts</value>
-    <comment>Title of the User settings section of the global settings page</comment>
   </data>
   <data name="Common_Button_DeleteItem.Content" xml:space="preserve">
     <value>Remove</value>
@@ -411,14 +387,6 @@
     <value>Send anonymous data to Microsoft</value>
     <comment>Text under the toggle switch that changes whether feedback permission is given</comment>
   </data>
-  <data name="Settings_NavBarItem_General.Content" xml:space="preserve">
-    <value>(r) General</value>
-    <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show General Settings</comment>
-  </data>
-  <data name="Settings_NavBarItem_Users.Content" xml:space="preserve">
-    <value>User accounts</value>
-    <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show User Settings</comment>
-  </data>
   <data name="AddOrEditDesktop-AddCaption.Text" xml:space="preserve">
     <value>(r) Add a PC or Server</value>
   </data>
@@ -430,9 +398,6 @@
   </data>
   <data name="AddOrEditDesktop-EditCaption.Text" xml:space="preserve">
     <value>Edit a PC or Server</value>
-  </data>
-  <data name="AddOrEditDesktop-PcName-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>(r) Invalid characters in host name</value>
   </data>
   <data name="AddOrEditDesktop-PcName.Text" xml:space="preserve">
     <value>PC Name</value>
@@ -513,9 +478,6 @@
     <value>(r) Add</value>
     <comment>Text shown on AddOrEditDesktop view - Add button</comment>
   </data>
-  <data name="AddUser-AddCaption.Text" xml:space="preserve">
-    <value>Log in</value>
-  </data>
   <data name="AddUser-Password.Text" xml:space="preserve">
     <value>Password</value>
   </data>
@@ -532,9 +494,6 @@
   <data name="AddUser-UsernameTextbox.PlaceholderText" xml:space="preserve">
     <value>jdoe@contoso.com</value>
     <comment>Placeholder text shown when there is no username entered in the username text box on the Add user view</comment>
-  </data>
-  <data name="AddUser-Username-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>(r) Invalid characters in user name</value>
   </data>
   <data name="AddUser-DeleteUserText.Text" xml:space="preserve">
     <value>Delete this account</value>
@@ -602,15 +561,6 @@
   <data name="DeleteDesktopsView-Title-DeleteSingle.Text" xml:space="preserve">
     <value>Remove connection</value>
   </data>
-  <data name="MainPage-ShowApplicationBarLabel.Text" xml:space="preserve">
-    <value>Ahow the app bar</value>
-  </data>
-  <data name="AddOrEditDesktop-PcName-Error.Text" xml:space="preserve">
-    <value>(*)</value>
-  </data>
-  <data name="AddUser-Username-Error.Text" xml:space="preserve">
-    <value>(*)</value>
-  </data>
   <data name="AddOrEditDesktop_CredOption_Add_String" xml:space="preserve">
     <value>Add an account</value>
     <comment>Text shown on AddOrEditDesktop view if new credentials should be added and stored for the desktop</comment>
@@ -659,19 +609,11 @@
     <value>The username and password that were used to connect to the remote PC didn't work. Try a different account.</value>
     <comment>Text shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
   </data>
-  <data name="Session_Reconnect_Title.Text" xml:space="preserve">
-    <value>Reconnecting</value>
-    <comment>Reconnecting dialog title</comment>
-  </data>
   <data name="SessionView-HomeButton.Label" xml:space="preserve">
     <value>(r) Home</value>
   </data>
   <data name="SessionView-MouseMode.Label" xml:space="preserve">
     <value>(r) Mouse-Mode</value>
-  </data>
-  <data name="Menu-AddWorkspace.Text" xml:space="preserve">
-    <value>(r) Add Workspace</value>
-    <comment>Option to add an on premise workspace</comment>
   </data>
   <data name="ConnectionCenter_AppLabel.Content" xml:space="preserve">
     <value>(r) RemoteApps</value>
@@ -701,10 +643,6 @@
     <value>Log in</value>
     <comment>Title shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
   </data>
-  <data name="AddOrEditGateway-ServerName-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>(r) Invalid characters in server name</value>
-    <comment>Text shown on AddOrEditGateway dialog - error hint</comment>
-  </data>
   <data name="AddOrEditGateway-ServerName.Text" xml:space="preserve">
     <value>Server name</value>
     <comment>Text shown on AddOrEditGateway dialog - Server name caption</comment>
@@ -724,18 +662,6 @@
   <data name="DeleteGatewayView-Title.Text" xml:space="preserve">
     <value>Remove gateway:</value>
     <comment>Title of the delete gateway dialog</comment>
-  </data>
-  <data name="Settings_Gateways_AddGateway_Detail.Text" xml:space="preserve">
-    <value>(r)Add a gateway</value>
-    <comment>Text in Gateway settings page that describes what add gateway does in more detail</comment>
-  </data>
-  <data name="Settings_Gateways_AddGateway_Title.Text" xml:space="preserve">
-    <value>Add a gateway</value>
-    <comment>Title above add gateway button in the gateway settings section of the global settings page</comment>
-  </data>
-  <data name="Settings_NavBarItem_Gateways.Content" xml:space="preserve">
-    <value>Gateways</value>
-    <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show Gateways Settings</comment>
   </data>
   <data name="AddOrEditGateway-AddCaption.Text" xml:space="preserve">
     <value>Add a Gateway</value>
@@ -850,10 +776,6 @@
   <data name="AboutView_Title.Text" xml:space="preserve">
     <value>About</value>
     <comment>Title of the About dialog; text shown at the top of the dialog in large font</comment>
-  </data>
-  <data name="AdditionalToolbarCommandsView_News.Text" xml:space="preserve">
-    <value>What's new</value>
-    <comment>Text in the "What's new" button from additional commands</comment>
   </data>
   <data name="AdditionalToolbarCommandsView_About.Text" xml:space="preserve">
     <value>About</value>
