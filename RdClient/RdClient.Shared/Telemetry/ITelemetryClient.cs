@@ -7,5 +7,17 @@
     public interface ITelemetryClient
     {
         bool IsActive { get; set; }
+
+        /// <summary>
+        /// Report a unique application event.
+        /// </summary>
+        /// <param name="eventName">Name of the event that can be queried from the telemetry back-end.</param>
+        void Event(string eventName);
+
+        /// <summary>
+        /// Start a stopwatch that will track the duration of a process in the app.
+        /// </summary>
+        /// <returns>The stopwatch object that can be stopped to report the duration to the telemetry back-end.</returns>
+        ITelemetryStopwatch StartStopwatch();
     }
 }

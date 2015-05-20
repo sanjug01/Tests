@@ -2,10 +2,27 @@
 {
     using RdClient.Shared.Telemetry;
     using System.Diagnostics;
+    using System;
 
     sealed class DummyTelemetryClient : ITelemetryClient
     {
         private bool _isActive;
+
+        private sealed class Stopwatch : ITelemetryStopwatch
+        {
+            private readonly DateTime _startTime;
+
+            public Stopwatch(ApplicationInsightsTelemetryCore core)
+            {
+                _startTime = DateTime.UtcNow;
+            }
+
+            void ITelemetryStopwatch.Stop(string eventName)
+            {
+                TimeSpan duration = DateTime.UtcNow - _startTime;
+                Debug.WriteLine("DummyTelemetryClient|Duration:{0}={1}", eventName, duration.Milliseconds);
+            }
+        }
 
         bool ITelemetryClient.IsActive
         {
@@ -26,6 +43,17 @@
                         TurnOff();
                 }
             }
+        }
+
+        void ITelemetryClient.Event(string eventName)
+        {
+            if(_isActive)
+                Debug.WriteLine("DummyTelemetryClient|Event:{0}", eventName);
+        }
+
+        ITelemetryStopwatch ITelemetryClient.StartStopwatch()
+        {
+            throw new NotImplementedException();
         }
 
         private void TurnOn()
