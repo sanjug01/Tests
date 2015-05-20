@@ -167,6 +167,7 @@
     <Compile Include="Models\SingleSwapChainPanelRdpConnectionSource.cs" />
     <Compile Include="Models\SuccessfulConnectionSource.cs" />
     <Compile Include="Telemetry\ApplicationInsightsTelemetryClient.cs" />
+    <Compile Include="Telemetry\ApplicationInsightsTelemetryCore.cs" />
     <Compile Include="Telemetry\DummyTelemetryClient.cs" />
     <Compile Include="Navigation\ModalFocusTracker.cs" />
     <Compile Include="Views\RichTextView.xaml.cs">
