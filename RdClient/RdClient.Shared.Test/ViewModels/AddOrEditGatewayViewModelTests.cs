@@ -325,7 +325,7 @@
                 _addOrEditGatewayVM.DefaultAction.Execute(saveParam);
                 Assert.IsInstanceOfType(_dataModel.Gateways.Models[0].Model, typeof(GatewayModel));
                 GatewayModel addedGateway = (GatewayModel)_dataModel.Gateways.Models[0].Model;
-                Assert.AreEqual(_addOrEditGatewayVM.Host, addedGateway.HostName);
+                Assert.AreEqual(_addOrEditGatewayVM.Host.Value, addedGateway.HostName);
             }
         }
 
