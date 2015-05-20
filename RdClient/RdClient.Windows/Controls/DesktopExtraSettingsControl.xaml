@@ -13,7 +13,7 @@
     d:DesignWidth="480">
 
     <d:UserControl.DataContext>
-        <design:FakeAddOrEditDesktopViewModel />
+        <design:FakeAddOrEditViewModel />
     </d:UserControl.DataContext>
 
     <UserControl.Resources>

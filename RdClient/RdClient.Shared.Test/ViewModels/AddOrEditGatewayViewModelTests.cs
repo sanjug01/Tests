@@ -235,7 +235,6 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(1, _addOrEditGatewayVM.SelectedUser);
                 Assert.AreEqual(credentials.Username, _addOrEditGatewayVM.SelectedUser.Credentials.Model.Username);
                 Assert.AreEqual(gateway.CredentialsId, _addOrEditGatewayVM.SelectedUser.Credentials.Id);
             }
