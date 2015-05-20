@@ -21,7 +21,7 @@
         ICommand AddGatewayCommand { get; }
 
         bool IsAddingDesktop { get; }
-        ValidatedProperty<string> Host { get; }
+        IValidatedProperty<string> Host { get; }
         bool IsExpandedView { get; }
         string FriendlyName { get; }
         bool IsUseAdminSession { get; set; }

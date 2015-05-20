@@ -98,7 +98,7 @@ namespace RdClient.DesignTime
             set { _selectedUser = value; }
         }
 
-        public ValidatedProperty<string> Host
+        public IValidatedProperty<string> Host
         {
             get { return _host; }
         }

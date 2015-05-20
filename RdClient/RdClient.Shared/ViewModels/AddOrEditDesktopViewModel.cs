@@ -177,14 +177,6 @@
             set { SetProperty(ref _audioMode, value); }
         }
 
-        ValidatedProperty<string> IAddOrEditDesktopViewModel.Host
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         private bool SaveCommandCanExecute()
         {
             return this.Host.State.Status != ValidationResultStatus.Empty;
