@@ -25,13 +25,13 @@
         [TestMethod]
         public void InitiallyNullOrEmpty()
         {
-            Assert.IsTrue(_prop.State.Status == ValidationResultStatus.NullOrEmpty);
+            Assert.IsTrue(_prop.State.Status == ValidationResultStatus.Empty);
         }
 
         [TestMethod]
         public void SettingValueSetsStateToValidationRuleResult()
         {
-            var expectedState = new ValidationResult(ValidationResultStatus.Invalid);
+            var expectedState = ValidationResult.Invalid();
             var setValue = new object();
             _rule.Expect("Validate", p =>
             {

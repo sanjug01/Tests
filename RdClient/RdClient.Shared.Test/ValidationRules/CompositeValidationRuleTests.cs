@@ -57,7 +57,7 @@ namespace RdClient.Shared.Test.ValidationRules
         {
             foreach (var rule in _rules)
             {
-                rule.Expect("Validate", p => new ValidationResult(ValidationResultStatus.Valid));
+                rule.Expect("Validate", p => ValidationResult.Valid());
             }
             Assert.IsTrue(_underTest.Validate(new object()).Status == ValidationResultStatus.Valid);
         }
@@ -71,7 +71,7 @@ namespace RdClient.Shared.Test.ValidationRules
                 rule.Expect("Validate", p =>
                 {
                     Assert.AreEqual(passedObject, p[0]);//we should receive the passed object
-                    return new ValidationResult(ValidationResultStatus.Valid);//return Valid result so all rules will be validated
+                    return ValidationResult.Valid();//return Valid result so all rules will be validated
                 });
             }
             _underTest.Validate(passedObject);
@@ -81,12 +81,12 @@ namespace RdClient.Shared.Test.ValidationRules
         public void FirstValidationFailureReturned()
         {
             int failureIndex = _testData.RandomSource.Next(_rules.Count);
-            var failureResult = new ValidationResult(ValidationResultStatus.Invalid);
+            var failureResult = ValidationResult.Invalid();
 
             //All the passed validation rules (rules after failed one shouldn't be called)
             for (int i = 0; i < failureIndex; i++)
             {
-                _rules[i].Expect("Validate", p => new ValidationResult(ValidationResultStatus.Valid));
+                _rules[i].Expect("Validate", p => ValidationResult.Valid());
             }
             //failing falidation rule
             _rules[failureIndex].Expect("Validate", p => failureResult);

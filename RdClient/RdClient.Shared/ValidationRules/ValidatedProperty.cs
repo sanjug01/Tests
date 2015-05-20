@@ -11,7 +11,7 @@
         public ValidatedProperty(IValidationRule<T> rule)
         {
             _rule = rule;
-            _state = new ValidationResult(ValidationResultStatus.NullOrEmpty);
+            _state = ValidationResult.Empty();
         }
 
         public T Value

@@ -1,20 +1,20 @@
-﻿using RdClient.Shared.Models;
+﻿using RdClient.Shared.Data;
+using RdClient.Shared.Models;
+using RdClient.Shared.ValidationRules;
 using RdClient.Shared.ViewModels;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using System;
-using System.Collections.Generic;
-using RdClient.Shared.Data;
-using RdClient.Shared.ValidationRules;
 
 namespace RdClient.DesignTime
 {
-    public class FakeAddOrEditDesktopViewModel : IAddOrEditDesktopViewModel, IDisposable
+    public sealed class FakeAddOrEditDesktopViewModel : IAddOrEditDesktopViewModel, IDisposable
     {
         private ObservableCollection<GatewayComboBoxElement> _gateways;
         private ObservableCollection<UserComboBoxElement> _users;
         private GatewayComboBoxElement _selectedGateway;
         private UserComboBoxElement _selectedUser;
+        private ValidatedProperty<string> _host;
 
         public FakeAddOrEditDesktopViewModel()
         {
@@ -39,7 +39,7 @@ namespace RdClient.DesignTime
             _selectedUser = _users[4];
 
             IsAddingDesktop = true;
-            Host = new ValidatedProperty<string>(new HostNameValidationRule());
+            _host = new ValidatedProperty<string>(new HostNameValidationRule());
             Host.Value = "TestHost";
             FriendlyName = "TestFriendlyName";
             IsExpandedView = true;
@@ -97,18 +97,23 @@ namespace RdClient.DesignTime
             get { return _selectedUser; }
             set { _selectedUser = value; }
         }
-        
+
+        public ValidatedProperty<string> Host
+        {
+            get { return _host; }
+        }
+
         public bool IsAddingDesktop { get; set; }
-        public ValidatedProperty<string> Host { get; }
         public bool IsExpandedView { get; set; }
         public string FriendlyName { get; set; }
         public bool IsUseAdminSession { get; set; }
         public bool IsSwapMouseButtons { get; set; }
         public int AudioMode { get; set; }
 
+        //To remove a build warning
         public void Dispose()
         {
-            this.Host.Dispose();
+            _host.Dispose();
         }
     }
 }

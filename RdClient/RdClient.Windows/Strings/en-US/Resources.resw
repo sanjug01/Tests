@@ -512,7 +512,7 @@
   <data name="AddOrEditDesktop-AddButton.Content" xml:space="preserve">
     <value>(r) Add</value>
     <comment>Text shown on AddOrEditDesktop view - Add button</comment>
-  </data>  
+  </data>
   <data name="AddUser-AddCaption.Text" xml:space="preserve">
     <value>Log in</value>
   </data>
@@ -1009,5 +1009,9 @@
   <data name="CertificateValidation-RememberChoiceCheckbox.Content" xml:space="preserve">
     <value>(r) Remember my choice for this certificate</value>
     <comment>Text displayed next to checkbox that user can check to never show errors for this certificate again.</comment>
+  </data>
+  <data name="HostnameValidationFailure_InvalidCharacters_String" xml:space="preserve">
+    <value>(r) Can't contain `~!#@$%^&amp;*()=+{}\\|;'\",&lt; &gt;/?</value>
+    <comment>Text explaining that a hostname is invalid because it contains invalid characters</comment>
   </data>
 </root>

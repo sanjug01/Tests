@@ -3,26 +3,29 @@
     public class CharacterOccurenceValidationRule : IValidationRule<string>
     {
         private readonly string _illegalCharacters;
+        private readonly object _errorDetail;
+
         protected string IllegalCharacters { get { return _illegalCharacters; } }
 
-        public CharacterOccurenceValidationRule(string illegalCharacters)
+        public CharacterOccurenceValidationRule(string illegalCharacters, object errorDetail = null)
         {
             _illegalCharacters = illegalCharacters;
+            _errorDetail = errorDetail;
         }
         public IValidationResult Validate(string stringValue)
         {
-            ValidationResultStatus status = ValidationResultStatus.Invalid;
-
             if (string.IsNullOrEmpty(stringValue))
             {
-                status = ValidationResultStatus.NullOrEmpty;
+                return ValidationResult.Empty();
             }
-            else if (!HasIllegalCharacters(stringValue))
+            else if (HasIllegalCharacters(stringValue))
             {
-                status = ValidationResultStatus.Valid;
+                return ValidationResult.Invalid(_errorDetail);
             }
-
-            return new ValidationResult(status);
+            else
+            {
+                return ValidationResult.Valid();
+            }
         }
 
         private bool HasIllegalCharacters(string hostName)

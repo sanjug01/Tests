@@ -24,21 +24,23 @@
 
         public IValidationResult Validate(string value)
         {
-            var status = ValidationResultStatus.Invalid;
             string feedUrl = value ?? "";            
             if (string.IsNullOrEmpty(feedUrl))
             {
-                status = ValidationResultStatus.NullOrEmpty;
+                return ValidationResult.Empty();
             }
             else
             {
                 bool alreadyAWorkspace = _workspaceCollection.Models.Any(w => w.Model != _workspace && string.Compare(w.Model.FeedUrl, feedUrl, StringComparison.OrdinalIgnoreCase) == 0);
                 if (!alreadyAWorkspace && Uri.IsWellFormedUriString(feedUrl, UriKind.Absolute))
                 {
-                    status = ValidationResultStatus.Valid;
+                    return ValidationResult.Valid();
+                }
+                else
+                {
+                    return ValidationResult.Invalid();
                 }
             }                        
-            return new ValidationResult(status);
         }
     }
 

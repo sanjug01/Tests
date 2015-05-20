@@ -22,7 +22,7 @@
                     return result;
                 }
             }
-            return new ValidationResult(ValidationResultStatus.Valid);
+            return ValidationResult.Valid();
         }
     }
 }

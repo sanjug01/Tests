@@ -319,6 +319,7 @@
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="Navigation\ViewVisibility.cs" />
     <Compile Include="ValidationRules\CompositeValidationRule.cs" />
+    <Compile Include="ValidationRules\HostnameValidationFailure.cs" />
     <Compile Include="ValidationRules\IValidatedProperty.cs" />
     <Compile Include="ValidationRules\IValidationResult.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />

@@ -177,7 +177,7 @@
 
         private bool OkCommandIsEnabled()
         {
-            return this.User.State.Status != ValidationResultStatus.NullOrEmpty;
+            return this.User.State.Status != ValidationResultStatus.Empty;
         }
 
         private void OkCommandHandler()

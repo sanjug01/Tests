@@ -26,15 +26,15 @@
             StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
             if (string.IsNullOrEmpty(value))
             {
-                return new ValidationResult(ValidationResultStatus.NullOrEmpty);
+                return ValidationResult.Empty();
             }
             else if (_credCollection.Models.Any(c => c.Id != _credId && comparer.Equals(c.Model.Username, value)))
             {
-                return new ValidationResult(ValidationResultStatus.Invalid, UsernameValidationFailure.Duplicate);
+                return ValidationResult.Invalid(UsernameValidationFailure.Duplicate);
             }
             else
             {
-                return new ValidationResult(ValidationResultStatus.Valid);
+                return ValidationResult.Valid();
             }
         }
     }

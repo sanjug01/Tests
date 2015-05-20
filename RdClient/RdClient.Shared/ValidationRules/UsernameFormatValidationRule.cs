@@ -6,15 +6,15 @@
         {
             if (string.IsNullOrEmpty(value))
             {
-                return new ValidationResult(ValidationResultStatus.NullOrEmpty);
+                return ValidationResult.Empty();
             }
             else if (string.Equals("invalid", value))
             {
-                return new ValidationResult(ValidationResultStatus.Invalid, UsernameValidationFailure.InvalidFormat);
+                return ValidationResult.Invalid(UsernameValidationFailure.InvalidFormat);
             }
             else
             {
-                return new ValidationResult(ValidationResultStatus.Valid);
+                return ValidationResult.Valid();
             }            
         }
     }

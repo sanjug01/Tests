@@ -187,7 +187,7 @@
 
         private bool SaveCommandCanExecute()
         {
-            return this.Host.State.Status != ValidationResultStatus.NullOrEmpty;
+            return this.Host.State.Status != ValidationResultStatus.Empty;
         }
 
         private void SaveCommandExecute()

@@ -4,7 +4,7 @@
     {
         Valid,
         Invalid,
-        NullOrEmpty
+        Empty
     }
 
     public interface IValidationResult

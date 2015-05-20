@@ -71,13 +71,13 @@
         [TestMethod]
         public void ReturnsNullOrEmptyForEmptyUsername()
         {
-            Assert.IsTrue(_rule.Validate("").Status == ValidationResultStatus.NullOrEmpty);
+            Assert.IsTrue(_rule.Validate("").Status == ValidationResultStatus.Empty);
         }
 
         [TestMethod]
         public void ReturnsNullOrEmptyForNullUsername()
         {
-            Assert.IsTrue(_rule.Validate(null).Status == ValidationResultStatus.NullOrEmpty);
+            Assert.IsTrue(_rule.Validate(null).Status == ValidationResultStatus.Empty);
         }
 
         [TestMethod]
