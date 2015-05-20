@@ -48,9 +48,7 @@
         private readonly PointerPosition _pointerPosition = new PointerPosition();
         private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
 
-        private readonly ZoomPanModel _zoomPanModel = new ZoomPanModel();
         private readonly FullScreenModel _fullScreenModel = new FullScreenModel();
-        private readonly SymbolBarSliderButtonModel _zoomButtonModel = new SymbolBarSliderButtonModel();
 
         private IPanKnobSite _panKnobSite;
         public IPanKnobSite PanKnobSite
@@ -155,8 +153,6 @@
 
             ObservableCollection<object> items = new ObservableCollection<object>();
 
-            _zoomButtonModel.Glyph = SegoeGlyph.ZoomIn;
-            items.Add(_zoomButtonModel);
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.EnterFullScreen, Command = _fullScreenModel.EnterFullScreenCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ExitFullScreen, Command = _fullScreenModel.ExitFullScreenCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = _toggleSideBars });
@@ -395,7 +391,6 @@
                         _keyboardCapture.Start();
 
                         _pointerPosition.Reset(_activeSessionControl, this);
-                        _zoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport, _pointerPosition, _timerFactory.CreateTimer(), this.ExecutionDeferrer);
 
                         this.PointerCapture = new PointerCapture(_pointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
                         this.PanKnobSite = new PanKnobSite(this.TimerFactory);
@@ -403,11 +398,8 @@
                         _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
                         _panKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
-                        _zoomPanModel.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
-                        _zoomButtonModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
-                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _zoomPanModel.OnConsumptionModeChanged;
 
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
@@ -436,9 +428,6 @@
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
 
                             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
-                            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _zoomPanModel.OnConsumptionModeChanged;
-
-                            _zoomButtonModel.Viewport = null;
 
                             //
                             // The connection bar and side bars are not available in any non-connected state.

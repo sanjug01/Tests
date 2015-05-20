@@ -140,9 +140,6 @@
     <Compile Include="Controls\DesktopExtraSettingsControl.xaml.cs">
       <DependentUpon>DesktopExtraSettingsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SliderButton.xaml.cs">
-      <DependentUpon>SliderButton.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\UserSettingsControl.xaml.cs">
       <DependentUpon>UserSettingsControl.xaml</DependentUpon>
     </Compile>
@@ -381,10 +378,6 @@
     <Page Include="Controls\DesktopExtraSettingsControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\SliderButton.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\UserSettingsControl.xaml">
       <SubType>Designer</SubType>

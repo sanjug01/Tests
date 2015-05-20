@@ -295,7 +295,6 @@
     <Compile Include="Models\Viewport\Viewport.cs" />
     <Compile Include="Models\Viewport\ViewportTransformWrapper.cs" />
     <Compile Include="Models\WorkspaceModel.cs" />
-    <Compile Include="Models\ZoomPanMultiTouchModel.cs" />
     <Compile Include="Navigation\BackButtonHandler.cs" />
     <Compile Include="Navigation\BackCommandArgs.cs" />
     <Compile Include="Navigation\BackRequestedEventArgsWrapper.cs" />
@@ -392,7 +391,6 @@
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
     <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
     <Compile Include="ViewModels\SymbolBarButtonModel.cs" />
-    <Compile Include="ViewModels\SymbolBarSliderButtonModel.cs" />
     <Compile Include="ViewModels\SymbolBarToggleButtonModel.cs" />
     <Compile Include="ViewModels\UserComboBoxElement.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
