@@ -177,6 +177,22 @@ namespace RdClient.Shared.CxWrappers
         }
     }
 
+    public delegate void CheckGatewayCertificateTrustDelegate(bool isTrusted);
+    public class CheckGatewayCertificateTrustArgs : EventArgs
+    {
+        private readonly IRdpCertificate _certificate;
+        private readonly CheckGatewayCertificateTrustDelegate _trustDelegate;
+
+        public IRdpCertificate Certificate { get { return _certificate; } }
+        public CheckGatewayCertificateTrustDelegate TrustDelegate { get { return _trustDelegate; } }
+
+        public CheckGatewayCertificateTrustArgs(RdpCertificate certificate, CheckGatewayCertificateTrustDelegate trustDelegate)
+        {
+            _certificate = certificate;
+            _trustDelegate = trustDelegate;
+        }
+    }
+
     public interface IRdpEvents
     {
         event EventHandler<ClientConnectedArgs> ClientConnected;
@@ -196,6 +212,7 @@ namespace RdClient.Shared.CxWrappers
         event EventHandler<RemoteAppWindowDeletedArgs> RemoteAppWindowDeleted;
         event EventHandler<RemoteAppWindowTitleUpdatedArgs> RemoteAppWindowTitleUpdated;
         event EventHandler<RemoteAppWindowIconUpdatedArgs> RemoteAppWindowIconUpdated;
+        event EventHandler<CheckGatewayCertificateTrustArgs> CheckGatewayCertificateTrust;
     }
 
     public interface IRdpEventSource
@@ -217,5 +234,6 @@ namespace RdClient.Shared.CxWrappers
         void EmitRemoteAppWindowDeleted(IRdpConnection sender, RemoteAppWindowDeletedArgs args);
         void EmitRemoteAppWindowTitleUpdated(IRdpConnection sender, RemoteAppWindowTitleUpdatedArgs args);
         void EmitRemoteAppWindowIconUpdated(IRdpConnection sender, RemoteAppWindowIconUpdatedArgs args);
+        void EmitCheckGatewayCertificateTrust(IRdpConnection sender, CheckGatewayCertificateTrustArgs args);
     }
 }

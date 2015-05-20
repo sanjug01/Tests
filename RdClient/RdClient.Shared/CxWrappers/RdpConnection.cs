@@ -32,10 +32,10 @@ namespace RdClient.Shared.CxWrappers
             _rdpConnectionCx.OnClientAsyncDisconnect += OnClientAsyncDisconnectHandler;
             _rdpConnectionCx.OnClientDisconnected += OnClientDisconnectedHandler;
             _rdpConnectionCx.OnUserCredentialsRequest += OnUserCredentialsRequestHandler;
+            _rdpConnectionCx.OnCheckGatewayCertificateTrust += OnCheckGatewayCertificateTrust;
             _rdpConnectionCx.OnMouseCursorShapeChanged += OnMouseCursorShapeChanged;
             _rdpConnectionCx.OnMouseCursorPositionChanged += OnMouseCursorPositionChanged;
             _rdpConnectionCx.OnMultiTouchEnabledChanged += OnMultiTouchEnabledChanged;
-
             _rdpConnectionCx.OnConnectionHealthStateChanged += OnConnectionHealthStateChangedHandler;
             _rdpConnectionCx.OnClientAutoReconnecting += OnClientAutoReconnectingHandler;
             _rdpConnectionCx.OnClientAutoReconnectComplete += OnClientAutoReconnectCompleteHandler;
@@ -61,6 +61,7 @@ namespace RdClient.Shared.CxWrappers
                 _rdpConnectionCx.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
                 _rdpConnectionCx.OnClientDisconnected -= OnClientDisconnectedHandler;
                 _rdpConnectionCx.OnUserCredentialsRequest -= OnUserCredentialsRequestHandler;
+                _rdpConnectionCx.OnCheckGatewayCertificateTrust -= OnCheckGatewayCertificateTrust;
                 _rdpConnectionCx.OnMouseCursorShapeChanged -= OnMouseCursorShapeChanged;
                 _rdpConnectionCx.OnMouseCursorPositionChanged -= OnMouseCursorPositionChanged;
                 _rdpConnectionCx.OnMultiTouchEnabledChanged -= OnMultiTouchEnabledChanged;
@@ -139,6 +140,7 @@ namespace RdClient.Shared.CxWrappers
                 _rdpConnectionCx.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
                 _rdpConnectionCx.OnClientDisconnected -= OnClientDisconnectedHandler;
                 _rdpConnectionCx.OnUserCredentialsRequest -= OnUserCredentialsRequestHandler;
+                _rdpConnectionCx.OnCheckGatewayCertificateTrust -= OnCheckGatewayCertificateTrust;
                 _rdpConnectionCx.OnMouseCursorShapeChanged -= OnMouseCursorShapeChanged;
                 _rdpConnectionCx.OnMouseCursorPositionChanged -= OnMouseCursorPositionChanged;
                 _rdpConnectionCx.OnMultiTouchEnabledChanged -= OnMultiTouchEnabledChanged;
@@ -445,6 +447,20 @@ namespace RdClient.Shared.CxWrappers
             _eventProxy.EmitRemoteAppWindowIconUpdated(this, new RemoteAppWindowIconUpdatedArgs(windowId, icon, iconWidth, iconHeight));
         }
 
+        void OnCheckGatewayCertificateTrust(Certificate spCertificate, out bool pfIsTrusted)
+        {
+            _instrument.Instrument("OnCheckGatewayCertificateTrust");
+
+            bool _isTrusted = false;
+            RdClientCx.ServerCertificateError certErrors = new RdClientCx.ServerCertificateError() { errorCode = 0 };
+            RdpCertificate rdpCertificate = new RdpCertificate(spCertificate, certErrors);
+            CheckGatewayCertificateTrustDelegate shouldTrust = (__isTrusted) => { _isTrusted = __isTrusted; };
+            _eventProxy.EmitCheckGatewayCertificateTrust(this, 
+                new CheckGatewayCertificateTrustArgs(rdpCertificate, shouldTrust) );
+            pfIsTrusted = _isTrusted;
+        }
+
+
         public IRdpCertificate GetServerCertificate()
         {
             _instrument.Instrument("GetServerCertificate");
@@ -463,6 +479,24 @@ namespace RdClient.Shared.CxWrappers
             return rdpCertificate;
         }
 
+        public IRdpCertificate GetGatewayCertificate()
+        {
+            _instrument.Instrument("GetGatewayCertificate");
+
+            RdpCertificate rdpCertificate = null;
+
+            RdClientCx.ServerCertificateError certErrors;
+            Certificate cert = null;
+
+            _rdpConnectionCx.GetServerCertificateDetails(RdClientCx.ServerCertificateProviderType.Gateway, out cert);
+            if (null != cert)
+            {
+                _rdpConnectionCx.GetServerCertificateValidationErrors(RdClientCx.ServerCertificateProviderType.Gateway, out certErrors);
+                rdpCertificate = new RdpCertificate(cert, certErrors);
+            }
+
+            return rdpCertificate;
+        }
 
     }
 }

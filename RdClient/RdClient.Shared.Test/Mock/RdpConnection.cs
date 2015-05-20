@@ -117,6 +117,11 @@ namespace RdClient.Shared.Test.Mock
             return (IRdpCertificate)Invoke(new object[] { });
         }
 
+        public IRdpCertificate GetGatewayCertificate()
+        {
+            return (IRdpCertificate)Invoke(new object[] { });
+        }
+
         public void SendMouseEvent(MouseEventType type, float xPos, float yPos)
         {
             Invoke(new object[] { type, xPos, yPos });
