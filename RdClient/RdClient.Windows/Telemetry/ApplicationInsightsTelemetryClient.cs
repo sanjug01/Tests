@@ -1,44 +1,73 @@
 ﻿namespace RdClient.Telemetry
 {
-    using Microsoft.ApplicationInsights;
     using RdClient.Shared.Telemetry;
+    using System;
     using System.Diagnostics.Contracts;
 
     sealed class ApplicationInsightsTelemetryClient : ITelemetryClient
     {
-        private bool _isActive;
-        private TelemetryClient _telemetryClient;
+        private readonly ApplicationInsightsTelemetryCore _core;
+
+        private sealed class Stopwatch : ITelemetryStopwatch
+        {
+            private readonly DateTime _startTime;
+            private ApplicationInsightsTelemetryCore _core;
+
+            public Stopwatch(ApplicationInsightsTelemetryCore core)
+            {
+                Contract.Requires(null != core);
+                Contract.Ensures(null != _core);
+                _startTime = DateTime.UtcNow;
+                _core = core;
+            }
+
+            void ITelemetryStopwatch.Stop(string eventName)
+            {
+                if (null != _core)
+                {
+                    _core.Duration(eventName, DateTime.UtcNow - _startTime);
+                    _core = null;
+                }
+            }
+        }
 
         public ApplicationInsightsTelemetryClient()
         {
+            Contract.Ensures(null != _core);
+            _core = new ApplicationInsightsTelemetryCore();
         }
 
         bool ITelemetryClient.IsActive
         {
             get
             {
-                return _isActive;
+                return _core.IsActive;
             }
 
             set
             {
-                if(value != _isActive)
+                if(value != _core.IsActive)
                 {
-                    _isActive = value;
-
                     if (value)
                     {
-                        Contract.Assert(null == _telemetryClient);
-                        _telemetryClient = new TelemetryClient();
+                        _core.Activate();
                     }
                     else
                     {
-                        Contract.Assert(null != _telemetryClient);
-                        _telemetryClient.Flush();
-                        _telemetryClient = null;
+                        _core.Deactivate();
                     }
                 }
             }
+        }
+
+        void ITelemetryClient.Event(string eventName)
+        {
+            _core.Event(eventName);
+        }
+
+        ITelemetryStopwatch ITelemetryClient.StartStopwatch()
+        {
+            return new Stopwatch(_core);
         }
     }
 }
