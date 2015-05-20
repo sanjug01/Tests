@@ -45,6 +45,7 @@
             private EventHandler<RemoteAppWindowDeletedArgs> _remoteAppWindowDeleted;
             private EventHandler<RemoteAppWindowTitleUpdatedArgs> _remoteAppWindowTitleUpdated;
             private EventHandler<RemoteAppWindowIconUpdatedArgs> _remoteAppWindowIconUpdated;
+            private EventHandler<CheckGatewayCertificateTrustArgs> _checkGatewayCertificateTrust;
             //
             // IRdpEvents
             //
@@ -148,6 +149,11 @@
             {
                 add { using (LockWrite()) _remoteAppWindowIconUpdated += value; }
                 remove { using (LockWrite()) _remoteAppWindowIconUpdated -= value; }
+            }
+            event EventHandler<CheckGatewayCertificateTrustArgs> IRdpEvents.CheckGatewayCertificateTrust
+            {
+                add { using (LockWrite()) _checkGatewayCertificateTrust += value; }
+                remove { using (LockWrite()) _checkGatewayCertificateTrust -= value; }
             }
             //
             // IRdpEventSource
@@ -304,6 +310,15 @@
                         _remoteAppWindowIconUpdated(sender, args);
                 }
             }
+
+            public void EmitCheckGatewayCertificateTrust(IRdpConnection sender, CheckGatewayCertificateTrustArgs args)
+            {
+                using (LockUpgradeableRead())
+                {
+                    if (null != _checkGatewayCertificateTrust)
+                        _checkGatewayCertificateTrust(sender, args);
+                }
+            }
         }
 
         protected abstract class Connection : MutableObject, IRdpConnection, IRdpProperties
@@ -357,6 +372,11 @@
             }
 
             protected virtual IRdpCertificate GetServerCertificate()
+            {
+                throw new NotImplementedException();
+            }
+
+            protected virtual IRdpCertificate GetGatewayCertificate()
             {
                 throw new NotImplementedException();
             }
@@ -476,6 +496,11 @@
             }
 
             void IRdpProperties.SetBoolProperty(string propertyName, bool value)
+            {
+                throw new NotImplementedException();
+            }
+
+            IRdpCertificate IRdpConnection.GetGatewayCertificate()
             {
                 throw new NotImplementedException();
             }

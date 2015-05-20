@@ -296,6 +296,7 @@
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
     <Compile Include="Navigation\Contracts\IPresentationCompletionContract.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionException.cs" />
+    <Compile Include="Navigation\Extensions\ITelemetryClientSite.cs" />
     <Compile Include="Navigation\Extensions\LifeTimeExtension.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtension.cs" />
     <Compile Include="Navigation\Extensions\DeviceCapabilitiesExtension.cs" />
@@ -306,6 +307,7 @@
     <Compile Include="Navigation\Extensions\ISessionFactorySite.cs" />
     <Compile Include="Navigation\Extensions\ITimerFactorySite.cs" />
     <Compile Include="Navigation\Extensions\SessionFactoryExtension.cs" />
+    <Compile Include="Navigation\Extensions\TelemetryExtension.cs" />
     <Compile Include="Navigation\Extensions\TimerFactoryExtension.cs" />
     <Compile Include="Navigation\IDialogViewModel.cs" />
     <Compile Include="Navigation\IPresentationAnimation.cs" />
@@ -318,6 +320,8 @@
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="Navigation\ViewVisibility.cs" />
+    <Compile Include="Telemetry\ITelemetryClient.cs" />
+    <Compile Include="Telemetry\ITelemetryStopwatch.cs" />
     <Compile Include="ValidationRules\CompositeValidationRule.cs" />
     <Compile Include="ValidationRules\HostnameValidationFailure.cs" />
     <Compile Include="ValidationRules\IValidatedProperty.cs" />

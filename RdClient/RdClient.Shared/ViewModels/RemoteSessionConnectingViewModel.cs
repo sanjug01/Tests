@@ -29,6 +29,10 @@
         {
             Contract.Assert(null != _cancelAction);
             _cancelAction();
+            //
+            // Clear the cancellation action and emit the "can execute changed" event from the command
+            // to let the UI update the button. Cancellation command may be executed only once.
+            //
             _cancelAction = null;
             _cancel.EmitCanExecuteChanged();
         }
