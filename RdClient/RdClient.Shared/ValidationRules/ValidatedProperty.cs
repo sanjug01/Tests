@@ -8,11 +8,10 @@
         private readonly IValidationRule<T> _rule;
         private IValidationResult _state;
 
-        public ValidatedProperty(IValidationRule<T> rule, T initialValue)
+        public ValidatedProperty(IValidationRule<T> rule)
         {
-            _value = initialValue;
             _rule = rule;
-            _state = new ValidationResult(true);
+            _state = ValidationResult.Empty();
         }
 
         public T Value
@@ -43,12 +42,6 @@
         private void SetState()
         {
             this.State = _rule.Validate(this.Value);
-        }
-
-        public bool ValidateNow()
-        {
-            SetState();
-            return this.State?.IsValid ?? false;
         }
     }
 }

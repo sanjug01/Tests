@@ -31,8 +31,6 @@
 
     public class AddOrEditDesktopViewModel : ViewModelBase, IAddOrEditDesktopViewModel, IDialogViewModel
     {
-        private string _host;
-        private bool _isHostValid;
         private bool _isAddingDesktop;
         private bool _isExpandedView;
         private string _friendlyName;
@@ -48,6 +46,7 @@
         private readonly RelayCommand _editUserCommand;
         private readonly RelayCommand _addGatewayCommand;
         private readonly RelayCommand _editGatewayCommand;
+        private readonly ValidatedProperty<string> _host;
         private DesktopModel _desktop;
 
         private ObservableCollection<UserComboBoxElement> _users;
@@ -57,20 +56,27 @@
 
         public AddOrEditDesktopViewModel()
         {
-            _saveCommand = new RelayCommand(SaveCommandExecute,
-                o =>
-                {
-                    return (string.IsNullOrEmpty(this.Host) == false);
-                });
+            _saveCommand = new RelayCommand(o => SaveCommandExecute(), o => SaveCommandCanExecute());
             _cancelCommand = new RelayCommand(CancelCommandExecute);
+
             _showDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = true; });
             _hideDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = false; });
+
             _addUserCommand = new RelayCommand(AddUserCommandExecute);
-            _addGatewayCommand = new RelayCommand(AddGatewayCommandExecute);
             _editUserCommand = new RelayCommand(EditUserCommandExecute, EditUserCommandCanExecute);
+
+            _addGatewayCommand = new RelayCommand(AddGatewayCommandExecute);            
             _editGatewayCommand = new RelayCommand(EditGatewayCommandExecute, EditGatewayCommandCanExecute);
 
-            this.IsHostValid = true;
+            _host = new ValidatedProperty<string>(new HostnameValidationRule());
+            _host.PropertyChanged += (s, e) =>
+            {
+                if (s == _host && e.PropertyName == "State")
+                {
+                    _saveCommand.EmitCanExecuteChanged();
+                }
+            };
+
             this.IsExpandedView = false;
             this.UserOptions = new ObservableCollection<UserComboBoxElement>();
             this.GatewayOptions = new ObservableCollection<GatewayComboBoxElement>();
@@ -136,20 +142,9 @@
             private set { this.SetProperty(ref _desktop, value); }
         }
 
-        public string Host
+        public IValidatedProperty<string> Host
         {
             get { return _host; }
-            set 
-            { 
-                SetProperty(ref _host, value); 
-                _saveCommand.EmitCanExecuteChanged();
-            }
-        }
-
-        public bool IsHostValid
-        {
-            get { return _isHostValid; }
-            private set { SetProperty(ref _isHostValid, value); }
         }
 
         public bool IsExpandedView
@@ -182,11 +177,16 @@
             set { SetProperty(ref _audioMode, value); }
         }
 
-        private void SaveCommandExecute(object o)
+        private bool SaveCommandCanExecute()
         {
-            if (this.Validate())
+            return this.Host.State.Status != ValidationResultStatus.Empty;
+        }
+
+        private void SaveCommandExecute()
+        {
+            if (this.Host.State.Status == ValidationResultStatus.Valid)
             {
-                this.Desktop.HostName = this.Host;
+                this.Desktop.HostName = this.Host.Value;
                 this.Desktop.FriendlyName = this.FriendlyName;
                 this.Desktop.IsAdminSession = this.IsUseAdminSession;
                 this.Desktop.IsSwapMouseButtons = this.IsSwapMouseButtons;
@@ -226,23 +226,6 @@
             this.DismissModal(null);
         }
 
-        /// <summary>
-        /// This method performs all validation tests.
-        ///     Currently the validation is performed only on Save command
-        /// </summary>
-        /// <returns>true, if all validations pass</returns>
-        private bool Validate()
-        {
-            HostNameValidationRule rule = new HostNameValidationRule();
-            bool isValid = true;
-            if (!(this.IsHostValid = rule.Validate(this.Host).IsValid))
-            {
-                isValid = isValid && this.IsHostValid;
-            }
-
-            return isValid;
-        }
-
         private void Update()
         {
             // load users list
@@ -265,7 +248,7 @@
             if (editArgs != null)
             {
                 this.Desktop = editArgs.Desktop;
-                this.Host = this.Desktop.HostName;
+                this.Host.Value = this.Desktop.HostName;
                 this.FriendlyName = this.Desktop.FriendlyName;
                 this.AudioMode = (int) this.Desktop.AudioMode;
                 this.IsSwapMouseButtons = this.Desktop.IsSwapMouseButtons;
@@ -276,6 +259,7 @@
             else if(addArgs != null)
             {
                 this.Desktop = new DesktopModel();
+                this.Host.Value = string.Empty;
                 this.FriendlyName = string.Empty;
                 this.AudioMode = (int)RdClient.Shared.Models.AudioMode.Local;
                 this.IsSwapMouseButtons = false;

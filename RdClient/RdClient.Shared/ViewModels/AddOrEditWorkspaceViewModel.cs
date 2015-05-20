@@ -24,10 +24,23 @@
 
         public IValidationResult Validate(string value)
         {
-            string feedUrl = value ?? "";
-            bool alreadyAWorkspace = _workspaceCollection.Models.Any(w => w.Model != _workspace && string.Compare(w.Model.FeedUrl, feedUrl, StringComparison.OrdinalIgnoreCase) == 0);
-            bool result = !alreadyAWorkspace && Uri.IsWellFormedUriString(feedUrl, UriKind.Absolute);
-            return new ValidationResult(result);
+            string feedUrl = value ?? "";            
+            if (string.IsNullOrEmpty(feedUrl))
+            {
+                return ValidationResult.Empty();
+            }
+            else
+            {
+                bool alreadyAWorkspace = _workspaceCollection.Models.Any(w => w.Model != _workspace && string.Compare(w.Model.FeedUrl, feedUrl, StringComparison.OrdinalIgnoreCase) == 0);
+                if (!alreadyAWorkspace && Uri.IsWellFormedUriString(feedUrl, UriKind.Absolute))
+                {
+                    return ValidationResult.Valid();
+                }
+                else
+                {
+                    return ValidationResult.Invalid();
+                }
+            }                        
         }
     }
 
@@ -183,7 +196,7 @@
         {
             if (this.SelectedCredentialOption != null
                 && this.SelectedCredentialOption.Credentials != null
-                && _feedValidationRule.Validate(this.FeedUrl).IsValid)
+                && _feedValidationRule.Validate(this.FeedUrl).Status == ValidationResultStatus.Valid)
             {
                 OnPremiseWorkspaceModel workspace = this.Workspace;
                 if (this.Adding)
