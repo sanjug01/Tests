@@ -37,12 +37,12 @@
 					<Flyout.FlyoutPresenterStyle>
 						<Style TargetType="FlyoutPresenter">
 							<Setter Property="Background" Value="{ThemeResource rdErrorBrush}" />
-							<Setter Property="Foreground" Value="White" />
+							<Setter Property="Foreground" Value="{ThemeResource SystemControlBackgroundChromeWhiteBrush}" />
 							<Setter Property="BorderThickness" Value="0" />
 						</Style>
 					</Flyout.FlyoutPresenterStyle>
 					<Grid
-						Background="Red">
+						Background="{ThemeResource rdErrorBrush}">
 						<TextBlock
 							Text="{Binding State.ErrorContent, FallbackValue='Please enter a valid value (d)', Converter={StaticResource TypeToLocalizedStringConverter}}">
 						</TextBlock>
