@@ -37,6 +37,21 @@ namespace RdClient.Shared.Models
             }
         }
 
+        public void ToggleFullScreen()
+        {
+            if(ApplicationView.GetForCurrentView().IsFullScreenMode)
+            {
+                _exitFullScreenCommand.Execute(null);
+            }
+            else
+            {
+                _enterFullScreenCommand.Execute(null);
+            }
+
+            _enterFullScreenCommand.EmitCanExecuteChanged();
+            _exitFullScreenCommand.EmitCanExecuteChanged();
+        }
+
         public FullScreenModel()
         {
             _wasFullScreenMode = ApplicationView.GetForCurrentView().IsFullScreenMode;
@@ -46,7 +61,7 @@ namespace RdClient.Shared.Models
             _enterFullScreenCommand = new RelayCommand(
                 o =>
                 {
-                    //ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
+                    ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
                 },
                 o => 
                 {

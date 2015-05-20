@@ -22,6 +22,8 @@
         private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
         private readonly RelayCommand _navigateHome;
         private readonly RelayCommand _mouseMode;
+        private readonly RelayCommand _fullScreen;
+
         //
         // Device capabilities objecvt injected by the navigation service through IDeviceCapabilitiesSite.
         //
@@ -131,6 +133,11 @@
             get { return _mouseMode; }
         }
 
+        public ICommand FullScreen
+        {
+            get { return _fullScreen; }
+        }
+
         /// <summary>
         /// View model of the view shown in the belly band across the session view when input is needed from user.
         /// Setting the property to a non-null value shows the belly band.
@@ -148,13 +155,12 @@
             _invokeKeyboardModel = new SymbolBarToggleButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
             _navigateHome = new RelayCommand(this.InternalNavigateHome);
             _mouseMode = new RelayCommand(this.InternalMouseMode);
+            _fullScreen = new RelayCommand(this.InternalFullScreen);
             _isRightSideBarVisible = false;
             _sessionState = SessionState.Idle;
 
             ObservableCollection<object> items = new ObservableCollection<object>();
 
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.EnterFullScreen, Command = _fullScreenModel.EnterFullScreenCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ExitFullScreen, Command = _fullScreenModel.ExitFullScreenCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = _toggleSideBars });
             items.Add(_invokeKeyboardModel);
             
@@ -501,6 +507,11 @@
             {
                 this.PointerCapture.OnMouseModeChanged(this, EventArgs.Empty);
             }
+        }
+
+        private void InternalFullScreen(object parameter)
+        {
+            _fullScreenModel.ToggleFullScreen();
         }
 
         private void OnDeviceCapabilitiesPropertyChanged(object sender, PropertyChangedEventArgs e)

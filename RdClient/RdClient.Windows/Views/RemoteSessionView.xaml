@@ -110,7 +110,8 @@
         <c:RightSideBarControl
             BarVisibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
             NavigateHome="{Binding NavigateHome}"
-            MouseMode="{Binding MouseMode}"/>
+            MouseMode="{Binding MouseMode}"
+            FullScreen="{Binding FullScreen}"/>
 
         <!--
         Belly-band container of in-session dialogs.
