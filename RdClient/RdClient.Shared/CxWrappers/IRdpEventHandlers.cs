@@ -180,13 +180,16 @@ namespace RdClient.Shared.CxWrappers
     public delegate void CheckGatewayCertificateTrustDelegate(bool isTrusted);
     public class CheckGatewayCertificateTrustArgs : EventArgs
     {
-        public RdpCertificate Certificate { get; private set; }
-        public CheckGatewayCertificateTrustDelegate TrustDelegate { get; private set; }
+        private readonly IRdpCertificate _certificate;
+        private readonly CheckGatewayCertificateTrustDelegate _trustDelegate;
+
+        public IRdpCertificate Certificate { get { return _certificate; } }
+        public CheckGatewayCertificateTrustDelegate TrustDelegate { get { return _trustDelegate; } }
 
         public CheckGatewayCertificateTrustArgs(RdpCertificate certificate, CheckGatewayCertificateTrustDelegate trustDelegate)
         {
-            Certificate = certificate;
-            TrustDelegate = trustDelegate;
+            _certificate = certificate;
+            _trustDelegate = trustDelegate;
         }
     }
 
