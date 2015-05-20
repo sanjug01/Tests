@@ -18,6 +18,8 @@
         private TestData _testData;
         private ApplicationDataModel _dataModel;
         private TestAddOrEditGatewayViewModel _addOrEditGatewayVM;
+        private GatewayModel _gateway;
+        private CredentialsModel _credentials;
 
         class TestAddOrEditGatewayViewModel : AddOrEditGatewayViewModel
         {
@@ -32,6 +34,8 @@
         {
             _testData = new TestData();
             _addOrEditGatewayVM = new TestAddOrEditGatewayViewModel();
+            _gateway = new GatewayModel() { HostName = _testData.NewRandomString() };
+            _credentials = new CredentialsModel() { Username = _testData.NewRandomString(), Password = _testData.NewRandomString() };
 
             _dataModel = new ApplicationDataModel()
             {
@@ -54,13 +58,12 @@
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                GatewayModel gateway = new GatewayModel();
                 EditGatewayViewModelArgs args =
-                    new EditGatewayViewModelArgs(gateway);
+                    new EditGatewayViewModelArgs(_gateway);
 
                 ((IViewModel) _addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(gateway, _addOrEditGatewayVM.Gateway);
+                Assert.AreEqual(_gateway, _addOrEditGatewayVM.Gateway);
             }
         }
 
@@ -85,12 +88,11 @@
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                GatewayModel gateway = new GatewayModel() { HostName = "myPc" };
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
 
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(gateway, _addOrEditGatewayVM.Gateway);
+                Assert.AreEqual(_gateway, _addOrEditGatewayVM.Gateway);
                 Assert.IsFalse(_addOrEditGatewayVM.IsAddingGateway);
             }
         }
@@ -116,17 +118,14 @@
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                GatewayModel gateway = new GatewayModel() { HostName = "foo" };
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
-
-                _dataModel.Gateways.AddNewModel(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                _dataModel.Gateways.AddNewModel(_gateway);
 
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
-
                 _addOrEditGatewayVM.DefaultAction.Execute(null);
 
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
-                Assert.AreEqual(gateway, _dataModel.Gateways.Models[0].Model);
+                Assert.AreEqual(_gateway, _dataModel.Gateways.Models[0].Model);
             }
         }
 
@@ -135,13 +134,11 @@
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
-                Guid credId = _dataModel.Credentials.AddNewModel(credentials);
+                Guid credId = _dataModel.Credentials.AddNewModel(_credentials);
 
-                GatewayModel gateway = new GatewayModel() { HostName = "foo" };
-                _dataModel.Gateways.AddNewModel(gateway); 
+                _dataModel.Gateways.AddNewModel(_gateway); 
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 _addOrEditGatewayVM.SelectedUser = _addOrEditGatewayVM.Users[1];
@@ -149,7 +146,7 @@
 
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
                 Assert.IsInstanceOfType(_dataModel.Gateways.Models[0].Model, typeof(GatewayModel));
-                Assert.AreSame(gateway, _dataModel.Gateways.Models[0].Model);
+                Assert.AreSame(_gateway, _dataModel.Gateways.Models[0].Model);
                 Assert.AreEqual(credId, ((GatewayModel)_dataModel.Gateways.Models[0].Model).CredentialsId);
             }
         }
@@ -159,13 +156,12 @@
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
-                Guid credId = _dataModel.Credentials.AddNewModel(credentials);
+                Guid credId = _dataModel.Credentials.AddNewModel(_credentials);
 
-                GatewayModel gateway = new GatewayModel() { HostName = "foo", CredentialsId = credId };
-                _dataModel.Gateways.AddNewModel(gateway);
+                _gateway.CredentialsId = credId;
+                _dataModel.Gateways.AddNewModel(_gateway);
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 _addOrEditGatewayVM.SelectedUser = _addOrEditGatewayVM.Users[0];
@@ -173,7 +169,7 @@
 
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
                 Assert.IsInstanceOfType(_dataModel.Gateways.Models[0].Model, typeof(GatewayModel));
-                Assert.AreSame(gateway, _dataModel.Gateways.Models[0].Model);
+                Assert.AreSame(_gateway, _dataModel.Gateways.Models[0].Model);
                 Assert.AreEqual(Guid.Empty, ((GatewayModel)_dataModel.Gateways.Models[0].Model).CredentialsId);
             }
         }
@@ -183,15 +179,9 @@
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
+                _dataModel.Gateways.AddNewModel(_gateway);
 
-                GatewayModel gateway = new GatewayModel()
-                {
-                    HostName = "foo"
-                };
-                _dataModel.Gateways.AddNewModel(gateway);
-
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 Assert.AreEqual(UserComboBoxType.AskEveryTime, _addOrEditGatewayVM.SelectedUser.UserComboBoxType);
@@ -203,21 +193,15 @@
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                CredentialsModel credentials = new CredentialsModel() { Username = "foo", Password = "bar" };
+                _gateway.CredentialsId = _dataModel.Credentials.AddNewModel(_credentials);
+                _dataModel.Gateways.AddNewModel(_gateway);
 
-                GatewayModel gateway = new GatewayModel()
-                {
-                    HostName = "foo",
-                    CredentialsId = _dataModel.Credentials.AddNewModel(credentials)
-                };
-                _dataModel.Gateways.AddNewModel(gateway);
-
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(credentials.Username, _addOrEditGatewayVM.SelectedUser.Credentials.Model.Username);
-                Assert.AreSame(credentials, _addOrEditGatewayVM.SelectedUser.Credentials.Model);
-                Assert.AreEqual(gateway.CredentialsId, _addOrEditGatewayVM.SelectedUser.Credentials.Id);
+                Assert.AreEqual(_credentials.Username, _addOrEditGatewayVM.SelectedUser.Credentials.Model.Username);
+                Assert.AreSame(_credentials, _addOrEditGatewayVM.SelectedUser.Credentials.Model);
+                Assert.AreEqual(_gateway.CredentialsId, _addOrEditGatewayVM.SelectedUser.Credentials.Id);
             }
         }
 
@@ -226,17 +210,14 @@
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                CredentialsModel credentials = new CredentialsModel { Username = "Don Pedro", Password = "secret" };
-                GatewayModel gateway = new GatewayModel() { HostName = "myPc" };
+                _dataModel.Gateways.AddNewModel(_gateway);
+                _gateway.CredentialsId = _dataModel.Credentials.AddNewModel(_credentials);
 
-                _dataModel.Gateways.AddNewModel(gateway);
-                gateway.CredentialsId = _dataModel.Credentials.AddNewModel(credentials);
-
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(credentials.Username, _addOrEditGatewayVM.SelectedUser.Credentials.Model.Username);
-                Assert.AreEqual(gateway.CredentialsId, _addOrEditGatewayVM.SelectedUser.Credentials.Id);
+                Assert.AreEqual(_credentials.Username, _addOrEditGatewayVM.SelectedUser.Credentials.Model.Username);
+                Assert.AreEqual(_gateway.CredentialsId, _addOrEditGatewayVM.SelectedUser.Credentials.Id);
             }
         }
 
@@ -245,11 +226,9 @@
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                GatewayModel gateway = new GatewayModel() { HostName = "myPc" };
+                _dataModel.Gateways.AddNewModel(_gateway);
 
-                _dataModel.Gateways.AddNewModel(gateway);
-
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 navigation.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
@@ -311,11 +290,10 @@
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
                 object saveParam = new object();
-                GatewayModel gateway = new GatewayModel() { HostName = "myPC" };
 
-                _dataModel.Gateways.AddNewModel(gateway);
+                _dataModel.Gateways.AddNewModel(_gateway);
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
 
                 _addOrEditGatewayVM.PresentableView = view;
 
@@ -336,9 +314,8 @@
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
                 object saveParam = new object();
-                GatewayModel gateway = new GatewayModel() { HostName = "myPC" };
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
 
                 _addOrEditGatewayVM.PresentableView = view;
 
@@ -347,7 +324,7 @@
                 _addOrEditGatewayVM.Host.Value = "MyNewPC_not_updated";
                 _addOrEditGatewayVM.Cancel.Execute(saveParam);
 
-                Assert.AreNotEqual(gateway.HostName, _addOrEditGatewayVM.Host);
+                Assert.AreNotEqual(_gateway.HostName, _addOrEditGatewayVM.Host);
             }
         }
 
@@ -395,9 +372,8 @@
             using (Mock.PresentableView view = new Mock.PresentableView())
             {
                 object saveParam = new object();
-                GatewayModel gateway = new GatewayModel() { HostName = "myPC" };
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
 
                 _addOrEditGatewayVM.PresentableView = view;                
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
@@ -476,8 +452,7 @@
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 object saveParam = new object();
-                GatewayModel gateway = new GatewayModel() { HostName = "myPC" };
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
                 Assert.IsTrue(_addOrEditGatewayVM.Delete.CanExecute(null));
             }
@@ -496,8 +471,7 @@
                     Assert.IsTrue(result.Deleted);
                     return null;
                 });
-                GatewayModel gateway = new GatewayModel() { HostName = "myPC" };
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, context);
                 _addOrEditGatewayVM.Delete.Execute(null);
             }           
