@@ -5,10 +5,11 @@ using System.Windows.Input;
 using System;
 using System.Collections.Generic;
 using RdClient.Shared.Data;
+using RdClient.Shared.ValidationRules;
 
 namespace RdClient.DesignTime
 {
-    public class FakeAddOrEditDesktopViewModel : IAddOrEditDesktopViewModel
+    public class FakeAddOrEditDesktopViewModel : IAddOrEditDesktopViewModel, IDisposable
     {
         private ObservableCollection<GatewayComboBoxElement> _gateways;
         private ObservableCollection<UserComboBoxElement> _users;
@@ -38,10 +39,10 @@ namespace RdClient.DesignTime
             _selectedUser = _users[4];
 
             IsAddingDesktop = true;
-            Host = "TestHost";
+            Host = new ValidatedProperty<string>(new HostNameValidationRule());
+            Host.Value = "TestHost";
             FriendlyName = "TestFriendlyName";
             IsExpandedView = true;
-            IsHostValid = false;
             IsSwapMouseButtons = true;
             IsUseAdminSession = true;
             AudioMode = 1;
@@ -98,12 +99,16 @@ namespace RdClient.DesignTime
         }
         
         public bool IsAddingDesktop { get; set; }
-        public string Host { get; set; }
-        public bool IsHostValid { get; set; }
+        public ValidatedProperty<string> Host { get; }
         public bool IsExpandedView { get; set; }
         public string FriendlyName { get; set; }
         public bool IsUseAdminSession { get; set; }
         public bool IsSwapMouseButtons { get; set; }
         public int AudioMode { get; set; }
+
+        public void Dispose()
+        {
+            this.Host.Dispose();
+        }
     }
 }
