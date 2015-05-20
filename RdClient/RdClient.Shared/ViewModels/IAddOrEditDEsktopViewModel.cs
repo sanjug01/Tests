@@ -4,20 +4,10 @@
     using System.Collections.ObjectModel;
     using System.Windows.Input;
 
-    public interface IAddOrEditDesktopViewModel
+    public interface IAddOrEditDesktopViewModel : IUsersCollector, IGatewaysCollector
     {
         ICommand Cancel { get; }
         
-        ReadOnlyObservableCollection<UserComboBoxElement> Users { get; }
-        UserComboBoxElement SelectedUser { get; set; }
-        ICommand EditUserCommand { get; }
-        ICommand AddUserCommand { get; }
-
-        ReadOnlyObservableCollection<GatewayComboBoxElement> Gateways { get; }
-        GatewayComboBoxElement SelectedGateway { get; set; }
-        ICommand EditGatewayCommand { get; }
-        ICommand AddGatewayCommand { get; }
-
         bool IsAddingDesktop { get; }
         IValidatedProperty<string> Host { get; }
         bool IsExpandedView { get; }

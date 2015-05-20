@@ -151,11 +151,13 @@
       <DependentUpon>WorkspaceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Data\ApplicationDataLocalStorageFolder.cs" />
+    <Compile Include="DesignTime\FakeUsersAndGatewaysCollectorBase.cs" />
+    <Compile Include="DesignTime\FakeUsersCollectorBase.cs" />
     <Compile Include="DesignTime\FakeCertificateValidationViewModel.cs" />
     <Compile Include="DesignTime\FakeGatewayViewModel.cs" />
     <Compile Include="DesignTime\FakeEditCredentialsViewModel.cs" />
     <Compile Include="DesignTime\FakeRemoteResourceViewModel.cs" />
-    <Compile Include="DesignTime\FakeAddOrEditViewModel.cs" />
+    <Compile Include="DesignTime\FakeAddOrEditDesktopViewModel.cs" />
     <Compile Include="DesignTime\FakeWorkspaceViewModel.cs" />
     <Compile Include="Helpers\SynchronizedTransform.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />

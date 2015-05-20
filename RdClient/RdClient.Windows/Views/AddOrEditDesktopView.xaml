@@ -126,12 +126,12 @@
                                 Style="{StaticResource DialogButtonStyle}" 
                                 x:Uid="Common_Button_AddUserAccount" 
                                 Content="Add account(d)" 
-                                Command="{Binding AddUserCommand}" />
+                                Command="{Binding AddUser}" />
                             <Button Grid.Column="2" 
                                 Style="{StaticResource DialogButtonStyle}" 
                                 x:Uid="Common_Button_EditItem" 
                                 Content="Edit(d)" 
-                                Command="{Binding EditUserCommand}" />
+                                Command="{Binding EditUser}" />
                         </Grid>
                     </Grid>
                 </StackPanel>

@@ -75,11 +75,11 @@
                 <Button Grid.Column="0" Style="{StaticResource DialogButtonStyle}" 
                         x:Uid="Common_Button_AddNewItem" 
                         Content="Add New(d)" 
-                        Command="{Binding AddGatewayCommand}" />
+                        Command="{Binding AddGateway}" />
                 <Button Grid.Column="2" Style="{StaticResource DialogButtonStyle}" 
                         x:Uid="Common_Button_EditItem" 
                         Content="Edit(d)" 
-                        Command="{Binding EditGatewayCommand}" />
+                        Command="{Binding EditGateway}" />
             </Grid>
         </Grid>
         

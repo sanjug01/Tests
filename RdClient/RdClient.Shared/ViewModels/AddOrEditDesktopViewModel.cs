@@ -95,10 +95,10 @@
         public IPresentableView PresentableView { private get; set; }
         public ICommand DefaultAction { get { return _saveCommand; } }
         public ICommand Cancel { get { return _cancelCommand; } }
-        public ICommand AddUserCommand { get { return _addUserCommand; } }
-        public ICommand EditUserCommand { get { return _editUserCommand; } }
-        public ICommand AddGatewayCommand { get { return _addGatewayCommand; } }
-        public ICommand EditGatewayCommand { get { return _editGatewayCommand; } }
+        public ICommand AddUser { get { return _addUserCommand; } }
+        public ICommand EditUser { get { return _editUserCommand; } }
+        public ICommand AddGateway { get { return _addGatewayCommand; } }
+        public ICommand EditGateway { get { return _editGatewayCommand; } }
         public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
         public ICommand HideDetailsCommand { get { return _hideDetailsCommand; } }
 

@@ -144,7 +144,7 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                _addOrEditGatewayVM.SelectedUserOptionsIndex = 1;
+                _addOrEditGatewayVM.SelectedUser = _addOrEditGatewayVM.Users[1];
                 _addOrEditGatewayVM.DefaultAction.Execute(null);
 
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
@@ -168,7 +168,7 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                _addOrEditGatewayVM.SelectedUserOptionsIndex = 0;
+                _addOrEditGatewayVM.SelectedUser = _addOrEditGatewayVM.Users[0];
                 _addOrEditGatewayVM.DefaultAction.Execute(null);
 
                 Assert.AreEqual(1, _dataModel.Gateways.Models.Count);
@@ -194,7 +194,7 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(0, _addOrEditGatewayVM.SelectedUserOptionsIndex);
+                Assert.AreEqual(UserComboBoxType.AskEveryTime, _addOrEditGatewayVM.SelectedUser.UserComboBoxType);
             }
         }
 
@@ -215,14 +215,14 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(1, _addOrEditGatewayVM.SelectedUserOptionsIndex);
-                Assert.AreSame(credentials, _addOrEditGatewayVM.UserOptions[_addOrEditGatewayVM.SelectedUserOptionsIndex].Credentials.Model);
-                Assert.AreEqual(gateway.CredentialsId, _addOrEditGatewayVM.UserOptions[_addOrEditGatewayVM.SelectedUserOptionsIndex].Credentials.Id);
+                Assert.AreEqual(credentials.Username, _addOrEditGatewayVM.SelectedUser.Credentials.Model.Username);
+                Assert.AreSame(credentials, _addOrEditGatewayVM.SelectedUser.Credentials.Model);
+                Assert.AreEqual(gateway.CredentialsId, _addOrEditGatewayVM.SelectedUser.Credentials.Id);
             }
         }
 
         [TestMethod]
-        public void EditGateway_ShouldUpdateSelectedIndex()
+        public void EditGateway_ShouldUpdateSelectedItem()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
@@ -235,7 +235,9 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(gateway);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(1, _addOrEditGatewayVM.SelectedUserOptionsIndex);
+                Assert.AreEqual(1, _addOrEditGatewayVM.SelectedUser);
+                Assert.AreEqual(credentials.Username, _addOrEditGatewayVM.SelectedUser.Credentials.Model.Username);
+                Assert.AreEqual(gateway.CredentialsId, _addOrEditGatewayVM.SelectedUser.Credentials.Id);
             }
         }
 
@@ -426,7 +428,7 @@
 
                 _addOrEditGatewayVM.PresentableView = view;
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
-                int cntUsers = _addOrEditGatewayVM.UserOptions.Count;
+                int cntUsers = _addOrEditGatewayVM.Users.Count;
 
                 navigation.Expect("PushAccessoryView", p =>
                 {
@@ -445,7 +447,7 @@
                 completion.Completed(null, promptResult);
 
                 // a new user should have been added
-                int newCntUsers = _addOrEditGatewayVM.UserOptions.Count;
+                int newCntUsers = _addOrEditGatewayVM.Users.Count;
                 Assert.AreEqual(1, _dataModel.Credentials.Models.Count);
                 Assert.AreEqual(cntUsers + 1, newCntUsers);
 
@@ -453,7 +455,7 @@
                 Assert.AreEqual(creds, savedCredentials.Model);
 
                 // verify the new credentials are selected
-                Assert.AreEqual(creds, _addOrEditGatewayVM.UserOptions[_addOrEditGatewayVM.SelectedUserOptionsIndex].Credentials.Model);
+                Assert.AreEqual(creds, _addOrEditGatewayVM.SelectedUser.Credentials.Model);
             }
         }
 
