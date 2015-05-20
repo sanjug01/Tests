@@ -664,7 +664,7 @@
     <comment>Reconnecting dialog title</comment>
   </data>
   <data name="SessionView-HomeButton.Label" xml:space="preserve">
-    <value>(r) Home</value>
+    <value>(r) Disconnect</value>
   </data>
   <data name="SessionView-MouseMode.Label" xml:space="preserve">
     <value>(r) Mouse-Mode</value>
