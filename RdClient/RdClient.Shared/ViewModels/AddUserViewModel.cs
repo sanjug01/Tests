@@ -90,7 +90,7 @@
 
         public AddUserViewModel()
         {
-            _okCommand = new RelayCommand(o => OkCommandHandler(o), o => OkCommandIsEnabled(o));
+            _okCommand = new RelayCommand(o => OkCommandHandler(), o => OkCommandIsEnabled());
             _cancelCommand = new RelayCommand(new Action<object>(CancelCommandHandler));
             _deleteCommand = new RelayCommand(new Action<object>(DeleteCommandHandler), p => this.CanDelete );
         }
@@ -175,19 +175,19 @@
             };
         }
 
-        private void OkCommandHandler(object o)
+        private bool OkCommandIsEnabled()
         {
-            if (_okCommand.CanExecute(o) && this.User.State.Status == ValidationResultStatus.Valid)
+            return this.User.State.Status != ValidationResultStatus.NullOrEmpty;
+        }
+
+        private void OkCommandHandler()
+        {
+            if (this.User.State.Status == ValidationResultStatus.Valid)
             {
                 _args.Credentials.Username = this.User.Value;
                 _args.Credentials.Password = this.Password;
                 DismissModal(CredentialPromptResult.CreateWithCredentials(_args.Credentials, this.StoreCredentials));
             }
-        }
-
-        private bool OkCommandIsEnabled(object o)
-        {
-            return !string.IsNullOrWhiteSpace(this.User?.Value);
         }
 
         private void CancelCommandHandler(object o)
