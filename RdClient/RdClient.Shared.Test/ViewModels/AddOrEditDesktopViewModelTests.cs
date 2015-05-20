@@ -403,7 +403,7 @@
             _addOrEditDesktopViewModel.DefaultAction.Execute(saveParam);
             Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
             DesktopModel addedDesktop = (DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model;
-            Assert.AreEqual(_addOrEditDesktopViewModel.Host, addedDesktop.HostName);
+            Assert.AreEqual(_addOrEditDesktopViewModel.Host.Value, addedDesktop.HostName);
         }
 
         [TestMethod]
@@ -432,7 +432,7 @@
             //Assert.IsInstanceOfType(_dataModel.LocalWorkspace.Connections.Models[0].Model, typeof(DesktopModel));
             //DesktopModel addedDesktop = (DesktopModel)_dataModel.LocalWorkspace.Connections.Models[0].Model;
 
-            Assert.AreEqual(_addOrEditDesktopViewModel.Host, _desktop.HostName);
+            Assert.AreEqual(_addOrEditDesktopViewModel.Host.Value, _desktop.HostName);
             Assert.AreEqual("FriendlyPc", _desktop.FriendlyName);
             Assert.IsTrue(_desktop.IsAdminSession);
             Assert.IsTrue(_desktop.IsSwapMouseButtons);
@@ -466,14 +466,14 @@
 
             _addOrEditDesktopViewModel.PresentableView = _view;
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
-            Assert.IsTrue(_addOrEditDesktopViewModel.Host.State.Status == ValidationResultStatus.Valid);
 
             _addOrEditDesktopViewModel.Host.Value = invalidHostName;
+            Assert.IsTrue(_addOrEditDesktopViewModel.Host.State.Status == ValidationResultStatus.Invalid);
 
             Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "no desktop should be added until save command is executed");
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
             Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "Should not add desktop with invalid name!");
-            Assert.IsTrue(_addOrEditDesktopViewModel.Host.State.Status == ValidationResultStatus.Invalid);
+            
 
             // update name and save again
             _addOrEditDesktopViewModel.Host.Value = validHostName;
@@ -496,18 +496,17 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
 
             _addOrEditDesktopViewModel.PresentableView = _view;
-            Assert.IsTrue(_addOrEditDesktopViewModel.Host.State.Status == ValidationResultStatus.Valid);
 
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
             _addOrEditDesktopViewModel.Host.Value = invalidHostName;
-            _addOrEditDesktopViewModel.DefaultAction.Execute(saveParam);
             Assert.IsTrue(_addOrEditDesktopViewModel.Host.State.Status == ValidationResultStatus.Invalid);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(saveParam);            
 
             // update name and save again
             _addOrEditDesktopViewModel.Host.Value = validHostName;
-            _addOrEditDesktopViewModel.DefaultAction.Execute(saveParam);
             Assert.IsTrue(_addOrEditDesktopViewModel.Host.State.Status == ValidationResultStatus.Valid);
+            _addOrEditDesktopViewModel.DefaultAction.Execute(saveParam);            
         }
 
         /* ****************************

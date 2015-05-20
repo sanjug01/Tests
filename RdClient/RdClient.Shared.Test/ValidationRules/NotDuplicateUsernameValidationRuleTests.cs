@@ -86,7 +86,7 @@
             int randomIndex = _testData.RandomSource.Next(0, _credCollection.Models.Count);
             string username = _credCollection.Models[randomIndex].Model.Username;
 
-            Assert.IsTrue(_rule.Validate(null).Status == ValidationResultStatus.Invalid);
+            Assert.IsTrue(_rule.Validate(username).Status == ValidationResultStatus.Invalid);
         }
 
         [TestMethod]
@@ -97,7 +97,7 @@
             string otherUsername = _credCollection.Models[(randomIndex + 1) % _credCollection.Models.Count].Model.Username;
             _rule = new NotDuplicateUsernameValidationRule(_credCollection, id);
 
-            Assert.IsTrue(_rule.Validate(null).Status == ValidationResultStatus.Invalid);
+            Assert.IsTrue(_rule.Validate(otherUsername).Status == ValidationResultStatus.Invalid);
         }
 
         [TestMethod]
@@ -133,7 +133,7 @@
             string newUsername = sb.ToString();
 
             //username with only switched case is considered duplicate and should return invalid
-            Assert.IsTrue(_rule.Validate(null).Status == ValidationResultStatus.Invalid);
+            Assert.IsTrue(_rule.Validate(newUsername).Status == ValidationResultStatus.Invalid);
         }
     }
 }
