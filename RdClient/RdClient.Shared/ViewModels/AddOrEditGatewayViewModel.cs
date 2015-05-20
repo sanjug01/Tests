@@ -183,7 +183,7 @@
             orderedUsers.Order = new UserComboBoxOrder();
             this.Users = orderedUsers.Models;
 
-            Update();
+            this.SelectUserId(this.Gateway.CredentialsId);
         }
 
         private bool SaveCommandCanExecute()
@@ -229,11 +229,6 @@
             DismissModal(GatewayPromptResult.CreateDeleted());
         }
 
-        private void Update()
-        {
-            this.SelectUserId(this.Gateway.CredentialsId);           
-        }
-
         /// <summary>
         /// change user selection without saving to the desktop instance.
         /// </summary>
@@ -263,10 +258,6 @@
             {
                 Guid credId = this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
                 this.SelectUserId(credId);
-            }
-            else
-            {
-                this.Update();
             }
         }
 

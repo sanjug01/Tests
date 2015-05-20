@@ -225,13 +225,6 @@
             this.DismissModal(null);
         }
 
-        private void Update()
-        {
-            this.SelectUserId(this.Desktop.CredentialsId);
-            this.SelectGatewayId(this.Desktop.GatewayId);
-        }
-
-
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Assert(null != activationParameter);
@@ -284,6 +277,8 @@
             orderedUsers.Order = new UserComboBoxOrder();
             this.Users = orderedUsers.Models;
 
+            this.SelectUserId(this.Desktop.CredentialsId);
+
             // initialize gateways colection
             GatewayComboBoxElement defaultGateway = new GatewayComboBoxElement(GatewayComboBoxType.None);
             JoinedObservableCollection<GatewayComboBoxElement> gatewayCollection = JoinedObservableCollection<GatewayComboBoxElement>.Create();
@@ -305,7 +300,7 @@
             orderedGateways.Order = new GatewayComboBoxOrder();
             this.Gateways = orderedGateways.Models;
 
-            Update();
+            this.SelectGatewayId(this.Desktop.GatewayId);
         }
 
         private void AddGatewayCommandExecute(object o)
