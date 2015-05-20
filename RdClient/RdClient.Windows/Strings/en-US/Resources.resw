@@ -512,7 +512,7 @@
   <data name="AddOrEditDesktop-AddButton.Content" xml:space="preserve">
     <value>(r) Add</value>
     <comment>Text shown on AddOrEditDesktop view - Add button</comment>
-  </data>  
+  </data>
   <data name="AddUser-AddCaption.Text" xml:space="preserve">
     <value>Log in</value>
   </data>
@@ -1004,10 +1004,14 @@
     <value>(r) User name</value>
   </data>
   <data name="InSessionEditCredentials-UserName.PlaceholderText" xml:space="preserve">
-    <value>(r) user@contoso.com</value>
+    <value>(r) user or domain\user </value>
   </data>
   <data name="CertificateValidation-RememberChoiceCheckbox.Content" xml:space="preserve">
     <value>(r) Remember my choice for this certificate</value>
     <comment>Text displayed next to checkbox that user can check to never show errors for this certificate again.</comment>
+  </data>
+  <data name="InSessionEditCredentials-DismissButton.Content" xml:space="preserve">
+    <value>(r) Connect</value>
+    <comment>Label of the "Connect" button in the in-session credentials editor dialog shown when credentials are missing or invalid</comment>
   </data>
 </root>

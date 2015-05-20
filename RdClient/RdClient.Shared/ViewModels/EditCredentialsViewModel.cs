@@ -4,22 +4,6 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
-    /// <summary>
-    /// Extension for INavigationService that presents the EditCredentialsView modally with
-    /// a presentation task.
-    /// </summary>
-    public static class EditCredentialsExtension
-    {
-        public static void EditCredentials(this INavigationService navigationService, IEditCredentialsTask task)
-        {
-            Contract.Assert(null != navigationService, "EditCredentials|cannot present with null navigation service");
-            Contract.Requires(null != task);
-
-            navigationService.PushModalView("EditCredentialsView", task,
-                new ModalPresentationCompletion((sender, e) => { }));
-        }
-    }
-
     public sealed class EditCredentialsViewModel : ViewModelBase, IEditCredentialsViewModel, IEditCredentialsViewControl
     {
         private readonly RelayCommand _cancel;
@@ -75,12 +59,6 @@
         {
             get { return _prompt; }
             set { this.SetProperty(ref _prompt, value); }
-        }
-
-        public string DismissLabel
-        {
-            get { return _dismissLabel; }
-            set { this.SetProperty(ref _dismissLabel, value); }
         }
 
         public bool SaveCredentials

@@ -70,7 +70,6 @@
             viewModel.UserName = _sessionCredentials.Credentials.Username;
             viewModel.Password = _sessionCredentials.Credentials.Password;
             viewModel.CanSaveCredentials = true;
-            viewModel.DismissLabel = "d:Connect";
             viewModel.Prompt = _prompt;
         }
 
