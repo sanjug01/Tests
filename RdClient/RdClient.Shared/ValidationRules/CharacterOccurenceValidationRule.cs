@@ -11,17 +11,18 @@
         }
         public IValidationResult Validate(string stringValue)
         {
-            bool result = true;
+            ValidationResultStatus status = ValidationResultStatus.Invalid;
 
-            if (!string.IsNullOrEmpty(stringValue))
+            if (string.IsNullOrEmpty(stringValue))
             {
-                if (HasIllegalCharacters(stringValue))
-                {
-                    result = false;
-                }
+                status = ValidationResultStatus.NullOrEmpty;
+            }
+            else if (!HasIllegalCharacters(stringValue))
+            {
+                status = ValidationResultStatus.Valid;
             }
 
-            return new ValidationResult(result);
+            return new ValidationResult(status);
         }
 
         private bool HasIllegalCharacters(string hostName)

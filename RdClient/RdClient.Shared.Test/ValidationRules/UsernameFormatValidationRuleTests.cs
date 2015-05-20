@@ -15,21 +15,21 @@
         }
 
         [TestMethod]
-        public void ValidateNullUsernameReturnsInvalid()
+        public void ValidateNullUsernameReturnsNullOrEmpty()
         {
-            Assert.IsFalse(_rule.Validate(null).IsValid);
+            Assert.IsTrue(_rule.Validate(null).Status == ValidationResultStatus.NullOrEmpty);
         }
 
         [TestMethod]
-        public void ValidateEmptyUsernameReturnsInvalid()
+        public void ValidateEmptyUsernameReturnsNullOrEmpty()
         {
-            Assert.IsFalse(_rule.Validate("").IsValid);
+            Assert.IsTrue(_rule.Validate("").Status == ValidationResultStatus.NullOrEmpty);
         }
 
         [TestMethod]
         public void ValidateNonEmptyUsernameReturnsValid()
         {
-            Assert.IsTrue(_rule.Validate("!").IsValid);
+            Assert.IsTrue(_rule.Validate("!").Status == ValidationResultStatus.Valid);
         }
     }
 }

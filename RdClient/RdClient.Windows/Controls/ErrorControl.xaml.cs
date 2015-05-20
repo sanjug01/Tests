@@ -76,7 +76,7 @@
         private void ShowErrors()
         {
             var property = this.DataContext as ValidatedProperty<string>;
-            if (property?.State?.IsValid == false)
+            if (property?.State?.Status == ValidationResultStatus.Invalid)
             {
                 this.ErrorBorder.Visibility = Visibility.Visible;
             }

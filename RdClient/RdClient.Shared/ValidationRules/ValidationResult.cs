@@ -1,18 +1,20 @@
-﻿namespace RdClient.Shared.ValidationRules
+﻿using System;
+
+namespace RdClient.Shared.ValidationRules
 {
     public class ValidationResult : IValidationResult
     {
-        private readonly bool _valid;
+        private readonly ValidationResultStatus _status;
         private readonly object _content;
 
-        public  ValidationResult(bool valid, object content = null)
+        public  ValidationResult(ValidationResultStatus status, object content = null)
         {
-            _valid = valid;
+            _status = status;
             _content = content;
         }
 
-        public bool IsValid { get { return _valid; } }
+        public object ErrorContent { get { return _content; } }
 
-        public object ErrorContent { get { return _content; } }        
+        public ValidationResultStatus Status { get { return _status; } }
     }
 }

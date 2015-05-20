@@ -67,14 +67,7 @@
 
             string userName = TrimViewModelString(viewModel.UserName);
 
-            if (string.IsNullOrEmpty(userName))
-            {
-                //
-                // TODO: update the view model to show the "empty user name" error
-                //
-                valid = false;
-            }
-            else if(!_userNameRule.Validate(userName).IsValid)
+            if(_userNameRule.Validate(userName).Status != ValidationResultStatus.Valid)
             {
                 //
                 // TODO: update the view model to show the "invalid user name" error

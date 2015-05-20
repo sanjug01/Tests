@@ -162,7 +162,8 @@
 
             this.Mode = _args.Mode;
             this.ShowSave = _args.ShowSave;
-            this.User = new ValidatedProperty<string>(usernameRule, _args.Credentials.Username);
+            this.User = new ValidatedProperty<string>(usernameRule);
+            this.User.Value = _args.Credentials.Username;
             this.Password = _args.Credentials.Password;            
 
             this.User.PropertyChanged += (s, e) =>
@@ -176,7 +177,7 @@
 
         private void OkCommandHandler(object o)
         {
-            if (_okCommand.CanExecute(o) && this.User.ValidateNow())
+            if (_okCommand.CanExecute(o) && this.User.State.Status == ValidationResultStatus.Valid)
             {
                 _args.Credentials.Username = this.User.Value;
                 _args.Credentials.Password = this.Password;

@@ -8,14 +8,12 @@
     {
         ValidatedProperty<object> _prop;
         Mock.ValidationRule<object> _rule;
-        object _initialValue;
 
         [TestInitialize]
         public void TestSetup()
         {
-            _initialValue = new object();
             _rule = new Mock.ValidationRule<object>();
-            _prop = new ValidatedProperty<object>(_rule, _initialValue);
+            _prop = new ValidatedProperty<object>(_rule);
         }
 
         [TestCleanup]
@@ -25,21 +23,15 @@
         }
 
         [TestMethod]
-        public void ValueSetToInitialValue()
+        public void InitiallyNullOrEmpty()
         {
-            Assert.AreEqual(_initialValue, _prop.Value);
-        }
-
-        [TestMethod]
-        public void InitiallyValid()
-        {
-            Assert.IsTrue(_prop.State.IsValid);
+            Assert.IsTrue(_prop.State.Status == ValidationResultStatus.NullOrEmpty);
         }
 
         [TestMethod]
         public void SettingValueSetsStateToValidationRuleResult()
         {
-            var expectedState = new ValidationResult(false);
+            var expectedState = new ValidationResult(ValidationResultStatus.Invalid);
             var setValue = new object();
             _rule.Expect("Validate", p =>
             {
@@ -52,36 +44,14 @@
 
         [TestMethod]
         public void SettingValueToTheSameValueValidates()
-        {
-            _rule.Expect("Validate", p => null);
-            _prop.Value = _initialValue;
-        }
+        {                        
+            var value = new object();
 
-        [TestMethod]
-        public void CallingValidateSetsStateToValidationRuleResult()
-        {
-            var expectedState = new ValidationResult(false);
-            _rule.Expect("Validate", p =>
-            {
-                Assert.AreEqual(_initialValue, p[0]);
-                return expectedState;
-            });
-            _prop.ValidateNow();
-            Assert.AreEqual(expectedState, _prop.State);
-        }
-
-        [TestMethod]
-        public void PropertyChangedEventsFiredWhenCallingValidate()
-        {
-            int stateChangedEvents = 0;
-            _prop.PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName.Equals("State"))                
-                    stateChangedEvents++;                
-            };
             _rule.Expect("Validate", p => null);
-            _prop.ValidateNow();
-            Assert.IsTrue(stateChangedEvents == 1);
+            _prop.Value = value;
+
+            _rule.Expect("Validate", p => null);
+            _prop.Value = value;
         }
 
         [TestMethod]

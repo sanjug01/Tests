@@ -54,7 +54,7 @@
             while (_credCollection.Models.Any(c => string.Equals(c.Model.Username, username)));
 
             //validation of non-duplicate username should return valid
-            Assert.IsTrue(_rule.Validate(username).IsValid);
+            Assert.IsTrue(_rule.Validate(username).Status == ValidationResultStatus.Valid);
         }
 
         [TestMethod]
@@ -65,19 +65,19 @@
             _rule = new NotDuplicateUsernameValidationRule(_credCollection, id);
             string username = _credCollection.GetModel(id).Username;
 
-            Assert.IsTrue(_rule.Validate(username).IsValid);
+            Assert.IsTrue(_rule.Validate(username).Status == ValidationResultStatus.Valid);
         }
 
         [TestMethod]
-        public void ReturnsValidForEmptyUsername()
+        public void ReturnsNullOrEmptyForEmptyUsername()
         {
-            Assert.IsTrue(_rule.Validate("").IsValid);
+            Assert.IsTrue(_rule.Validate("").Status == ValidationResultStatus.NullOrEmpty);
         }
 
         [TestMethod]
-        public void ReturnsValidForNullUsername()
+        public void ReturnsNullOrEmptyForNullUsername()
         {
-            Assert.IsTrue(_rule.Validate(null).IsValid);
+            Assert.IsTrue(_rule.Validate(null).Status == ValidationResultStatus.NullOrEmpty);
         }
 
         [TestMethod]
@@ -86,7 +86,7 @@
             int randomIndex = _testData.RandomSource.Next(0, _credCollection.Models.Count);
             string username = _credCollection.Models[randomIndex].Model.Username;
 
-            Assert.IsFalse(_rule.Validate(username).IsValid);
+            Assert.IsTrue(_rule.Validate(null).Status == ValidationResultStatus.Invalid);
         }
 
         [TestMethod]
@@ -96,8 +96,8 @@
             Guid id = _credCollection.Models[randomIndex].Id;
             string otherUsername = _credCollection.Models[(randomIndex + 1) % _credCollection.Models.Count].Model.Username;
             _rule = new NotDuplicateUsernameValidationRule(_credCollection, id);
-            
-            Assert.IsFalse(_rule.Validate(otherUsername).IsValid);
+
+            Assert.IsTrue(_rule.Validate(null).Status == ValidationResultStatus.Invalid);
         }
 
         [TestMethod]
@@ -133,7 +133,7 @@
             string newUsername = sb.ToString();
 
             //username with only switched case is considered duplicate and should return invalid
-            Assert.IsFalse(_rule.Validate(username).IsValid);
+            Assert.IsTrue(_rule.Validate(null).Status == ValidationResultStatus.Invalid);
         }
     }
 }

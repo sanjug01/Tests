@@ -192,7 +192,7 @@
         {
             HostNameValidationRule rule = new HostNameValidationRule();
             bool isValid = true;
-            if (!(this.IsHostValid = rule.Validate(this.Host).IsValid))
+            if (!(this.IsHostValid = rule.Validate(this.Host).Status == ValidationResultStatus.Valid))
             {
                 isValid = isValid && this.IsHostValid;
             }
