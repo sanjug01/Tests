@@ -30,6 +30,7 @@ $files = @(get-childitem $RdClientLocation -Recurse |
 
 $unusedNodes = @()
 $usedNodes = @()
+$possiblyUnusedNodes = @()
 foreach ($node in $dataNodes)
 {
     $resourceName = $node.name
@@ -39,18 +40,26 @@ foreach ($node in $dataNodes)
         $resourceName = $resourceName.Substring(0, $lastDotIndex)
     }
     Write-Output "$resourceName"
-    $results = @( $files | Select-String -SimpleMatch "$resourceName")
-	if ($results.Count -le 0)
-	{
-		$unusedNodes += $node
-        Write-Output "No match found!"
-	}
-    else
+    
+    if ($resourceName.EndsWith("_String"))
     {
-        $usedNodes += $node
-        Write-Output $results	
+		$possiblyUnusedNodes += $node
+		Write-Output "Needs manual investigation - may be used by TypeToLocalizedStringConverter"
     }
-
+    else
+	{    
+		$results = @( $files | Select-String -SimpleMatch "$resourceName")
+		if ($results.Count -le 0)
+		{
+			$unusedNodes += $node
+			Write-Output "No match found!"    
+		}
+		else
+		{
+			$usedNodes += $node
+			Write-Output $results	
+		}
+	}	
 	Write-Output "."
 }
 
@@ -61,10 +70,19 @@ foreach($node in $unusedNodes)
     $resourcesXml.root.RemoveChild($node) | Out-Null
 }
 
+Write-OUtput "Resources that are not referenced directly but may be used in TypeToLocalizedStringConverter..."
+foreach($node in $possiblyUnusedNodes)
+{
+    Write-Output "$($node.name)"
+}
+
 Write-Output "$($dataNodes.Count) total resources"
 Write-Output "$($usedNodes.Count) used resources"
 Write-Output "$($unusedNodes.Count) unused resources" 
+Write-Output "$($possiblyUnusedNodes.Count) possibly unused resources"
 
 $cleanedResourceFile = "$($resourceXmlFile).new"
 Write-Output "writing cleaned resource file to $cleanedResourceFile"
 $resourcesXml.Save("$cleanedResourceFile")
+
+
