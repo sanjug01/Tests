@@ -1,8 +1,6 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using RdClient.Shared.Models;
     using RdClient.Shared.ValidationRules;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Windows.Input;
 

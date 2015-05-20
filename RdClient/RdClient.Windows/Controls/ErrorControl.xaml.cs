@@ -2,7 +2,6 @@
 {
     using RdClient.Shared.ValidationRules;
     using RdClient.Shared.ViewModels;
-    using System.Diagnostics;
     using Windows.System;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;

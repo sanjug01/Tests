@@ -1,6 +1,4 @@
-﻿
-
-namespace RdClient.Shared.Test.ValidationRules
+﻿namespace RdClient.Shared.Test.ValidationRules
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Test.Helpers;

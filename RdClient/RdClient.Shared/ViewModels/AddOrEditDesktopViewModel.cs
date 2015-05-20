@@ -68,7 +68,7 @@
             _addGatewayCommand = new RelayCommand(AddGatewayCommandExecute);            
             _editGatewayCommand = new RelayCommand(EditGatewayCommandExecute, EditGatewayCommandCanExecute);
 
-            _host = new ValidatedProperty<string>(new HostNameValidationRule());
+            _host = new ValidatedProperty<string>(new HostnameValidationRule());
             _host.PropertyChanged += (s, e) =>
             {
                 if (s == _host && e.PropertyName == "State")

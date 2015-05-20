@@ -1,13 +1,13 @@
-﻿using RdClient.Shared.Data;
-using RdClient.Shared.Models;
-using RdClient.Shared.ValidationRules;
-using RdClient.Shared.ViewModels;
-using System;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-
-namespace RdClient.DesignTime
+﻿namespace RdClient.DesignTime
 {
+    using RdClient.Shared.Data;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.ValidationRules;
+    using RdClient.Shared.ViewModels;
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Windows.Input;
+
     public sealed class FakeAddOrEditDesktopViewModel : IAddOrEditDesktopViewModel, IDisposable
     {
         private ObservableCollection<GatewayComboBoxElement> _gateways;
@@ -39,7 +39,7 @@ namespace RdClient.DesignTime
             _selectedUser = _users[4];
 
             IsAddingDesktop = true;
-            _host = new ValidatedProperty<string>(new HostNameValidationRule());
+            _host = new ValidatedProperty<string>(new HostnameValidationRule());
             Host.Value = "TestHost";
             FriendlyName = "TestFriendlyName";
             IsExpandedView = true;

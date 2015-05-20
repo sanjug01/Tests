@@ -8,10 +8,6 @@
             {
                 return ValidationResult.Empty();
             }
-            else if (string.Equals("invalid", value))
-            {
-                return ValidationResult.Invalid(UsernameValidationFailure.InvalidFormat);
-            }
             else
             {
                 return ValidationResult.Valid();

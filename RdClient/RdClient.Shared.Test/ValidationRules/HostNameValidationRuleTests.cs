@@ -12,7 +12,7 @@
         [TestMethod]
         public void ValidHostNames_ShouldBeValidated()
         {
-            HostNameValidationRule rule = new HostNameValidationRule();
+            HostnameValidationRule rule = new HostnameValidationRule();
 
             string hostName = "aBC";
             Assert.IsTrue(rule.Validate(hostName).Status == ValidationResultStatus.Valid);
@@ -33,7 +33,7 @@
         [TestMethod]
         public void HostNamesHasInvalidCharacters_ShouldFailValidation()
         {
-            HostNameValidationRule rule = new HostNameValidationRule();
+            HostnameValidationRule rule = new HostnameValidationRule();
 
             string prefix = "a1b";
             string suffix = "_2df";
@@ -50,7 +50,7 @@
         [TestMethod]
         public void HostNamesStartsWithInvalidCharacters_ShouldFailValidation()
         {
-            HostNameValidationRule rule = new HostNameValidationRule();
+            HostnameValidationRule rule = new HostnameValidationRule();
 
             string prefix;
             string suffix = "d3f";
@@ -67,7 +67,7 @@
         [TestMethod]
         public void HostNameEndsWithInvalidCharacters_ShouldFailValidation()
         {
-            HostNameValidationRule rule = new HostNameValidationRule();
+            HostnameValidationRule rule = new HostnameValidationRule();
 
             string prefix = "pq";
             string suffix;

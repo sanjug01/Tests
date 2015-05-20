@@ -85,7 +85,7 @@
             _deleteCommand = new RelayCommand(DeleteCommandExecute, p => !this.IsAddingGateway);
             _addUserCommand = new RelayCommand(LaunchAddUserView);
 
-            _host = new ValidatedProperty<string>(new HostNameValidationRule());
+            _host = new ValidatedProperty<string>(new HostnameValidationRule());
             _host.PropertyChanged += (s, e) =>
             {
                 if (s == _host && e.PropertyName == "State")
