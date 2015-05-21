@@ -166,7 +166,7 @@ namespace RdClient.Shared.ViewModels
                 var editGatewayCompleted = new ModalPresentationCompletion((s, e) =>
                 {
                     GatewayPromptResult result = e.Result as GatewayPromptResult;
-                    if (result.Deleted)
+                    if (null != result && result.Deleted)
                     {
                         this.DeleteGateway.Execute(null);
                     }
