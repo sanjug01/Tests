@@ -441,6 +441,7 @@
 	<Thickness x:Key="DialogSectionVerticalSpacing">0,0,0,48</Thickness>
 	<Thickness x:Key="DialogTripleVerticalSpacing">0,0,0,72</Thickness>
 	<Thickness x:Key="DialogItemHalfVerticalSpacing">0,0,0,12</Thickness>
+	<Thickness x:Key="DialogHeaderVerticalSpacing">0,0,0,8</Thickness>
 	<Thickness x:Key="DialogItemIndentation">12,0,12,0</Thickness>
 	<GridLength x:Key="DialogButtonSpacing">12</GridLength>
 	
