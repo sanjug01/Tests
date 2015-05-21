@@ -34,20 +34,27 @@ $possiblyUnusedNodes = @()
 foreach ($node in $dataNodes)
 {
     $resourceName = $node.name
-    $lastDotIndex = $resourceName.LastIndexOf(".")
-    if ($lastDotIndex -gt 0)
-    {
-        $resourceName = $resourceName.Substring(0, $lastDotIndex)
-    }
-    Write-Output "$resourceName"
-    
     if ($resourceName.EndsWith("_String"))
     {
 		$possiblyUnusedNodes += $node
 		Write-Output "Needs manual investigation - may be used by TypeToLocalizedStringConverter"
     }
     else
-	{    
+    {
+		#Ignore tooltip, we just want the Uid
+		$toolTipIndex = $resourceName.LastIndexOf("[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip")
+		if ($toolTipIndex -gt 0)
+		{
+			$resourceName = $resourceName.Substring(0, $toolTipIndex)
+		}
+		#Ignore property, we just want the Uid
+		$lastDotIndex = $resourceName.LastIndexOf(".")
+		if ($lastDotIndex -gt 0)
+		{
+			$resourceName = $resourceName.Substring(0, $lastDotIndex)
+		}
+		Write-Output "$resourceName"
+    
 		$results = @( $files | Select-String -SimpleMatch "$resourceName")
 		if ($results.Count -le 0)
 		{
