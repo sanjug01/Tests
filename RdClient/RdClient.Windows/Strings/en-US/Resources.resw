@@ -469,7 +469,7 @@
     <value>(r) Redirection</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
-  <data name="AddOrEditDesktop-GatewaysSectionTitle.Text" xml:space="preserve">
+  <data name="AddOrEditDesktop-Gateways-ComboBox.Header" xml:space="preserve">
     <value>(r) Gateway</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>

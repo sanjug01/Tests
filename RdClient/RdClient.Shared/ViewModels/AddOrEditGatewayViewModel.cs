@@ -240,7 +240,7 @@
                 return cbe.UserComboBoxType == UserComboBoxType.Credentials && cbe.Credentials?.Id == userId;
             });
 
-            this.SelectedUser = (null != selected) ? selected : this.Users[0];
+            this.SelectedUser = selected?? this.Users[0];
         }
 
         private void LaunchAddUserView(object o)
