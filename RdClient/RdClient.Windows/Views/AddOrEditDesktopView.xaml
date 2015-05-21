@@ -138,7 +138,7 @@
 
                 <Button Background="Transparent"
                                 Command="{Binding ShowDetailsCommand}"     
-                                Margin="-8,8,0,0" 
+                                Margin="{StaticResource DialogItemVerticalSpacing}" 
                                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock x:Uid="AddOrEditDesktop-MoreDetailsLabel"
@@ -151,7 +151,7 @@
 
                 <Button Background="Transparent"
                                 Command="{Binding HideDetailsCommand}"                            
-                                Margin="-8,8,0,0" 
+                                Margin="{StaticResource DialogItemVerticalSpacing}" 
                                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}" >
                     <StackPanel Orientation="Horizontal">
                         <TextBlock x:Uid="AddOrEditDesktop-LessDetailsLabel"

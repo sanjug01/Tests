@@ -28,7 +28,7 @@
     <StackPanel>
         <!-- Display section - TODO: to enable when functional -->
         <StackPanel Orientation="Vertical"
-                    Margin="0,0,0,40" 
+                    Margin="{StaticResource DialogSectionVerticalSpacing}" 
                     Visibility="Collapsed">
             <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" 
                        Grid.Row="0"                   
@@ -41,7 +41,7 @@
         </StackPanel>
         
         <!-- Gateway section -->
-        <Grid Margin="0,20,0,20">
+		<Grid Margin="{StaticResource DialogSectionVerticalSpacing}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />                
@@ -50,11 +50,11 @@
             </Grid.RowDefinitions>
 
             <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+					   Margin="0,0,0,8"
                        Grid.Row="0"                   
                        x:Uid="AddOrEditDesktop-GatewaysSectionTitle" 
                        Text="Gateway(d)"/>
             <ComboBox Grid.Row="1"
-                      Margin="0,8"
                       HorizontalAlignment="Stretch"
                       x:Uid="AddOrEditDesktop-Gateways-ComboBox"
                       ItemsSource="{Binding GatewayOptions}"
@@ -84,13 +84,9 @@
         </Grid>
         
         <!-- Redirection section -->
-        <StackPanel Orientation="Vertical"
-                    Margin="0,0,0,40">
-            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                       Grid.Row="0"                   
-                       x:Uid="AddOrEditDesktop-RedirectionSectionTitle" 
-                       Text="Redirection(d)"/>            
-            <ComboBox Margin="0,8"
+		<StackPanel Orientation="Vertical"
+                    Margin="{StaticResource DialogSectionVerticalSpacing}">
+			<ComboBox
                       x:Uid="AddOrEditDesktop-SoundComboBox"
                       Header="Sound(d)"
                       HorizontalAlignment="Stretch"

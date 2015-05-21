@@ -32,10 +32,10 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="RdClient.Windows.App">
       <uap:VisualElements
-        DisplayName="Rd Client"
+        DisplayName="Remote Desktop"
         Square150x150Logo="Assets\Logo.png"
         Square44x44Logo="Assets\SmallLogo.png"
-        Description="Rd Client"
+        Description="Remote Desktop"
         BackgroundColor="#D24726">
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#D24726" />
       </uap:VisualElements>

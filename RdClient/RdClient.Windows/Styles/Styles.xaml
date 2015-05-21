@@ -12,7 +12,7 @@
             <SolidColorBrush x:Key="ConnectionCenterScrollViewBackgroundBrush" Color="{ThemeResource SystemAltHighColor}" />
 
             <SolidColorBrush x:Key="ConnectionCenterDesktopPlaceholderIconColor" Color="{ThemeResource SystemChromeHighColor}" />
-            <SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="{ThemeResource SystemAltMediumLowColor}" />
+            <SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="{ThemeResource SystemAltMediumColor}" />
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
 
@@ -41,7 +41,7 @@
             <SolidColorBrush x:Key="ConnectionCenterScrollViewBackgroundBrush" Color="{ThemeResource SystemAltHighColor}" />
 
             <SolidColorBrush x:Key="ConnectionCenterDesktopPlaceholderIconColor" Color="{ThemeResource SystemChromeHighColor}" />
-            <SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="{ThemeResource SystemAltMediumLowColor}" />
+			<SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="{ThemeResource SystemAltMediumColor}" />
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
 
@@ -151,8 +151,8 @@
       <Setter Property="Padding" Value="12,0,12,0" />
       <Setter Property="HorizontalContentAlignment" Value="Left" />
       <Setter Property="VerticalAlignment" Value="Center" />
-      <Setter Property="FontSize" Value="24"/>
-      <Setter Property="FontWeight" Value="SemiLight"/>
+      <Setter Property="FontSize" Value="15"/>
+      <Setter Property="FontWeight" Value="Normal"/>
       <Setter Property="Template">
         <Setter.Value>
           <ControlTemplate TargetType="ListBoxItem">
@@ -361,7 +361,7 @@
     </Style>
     <Style x:Key="DialogButtonStyle" TargetType="Button">
         <Setter Property="Height" Value="32" />
-        <Setter Property="MinWidth" Value="140" />
+        <Setter Property="MinWidth" Value="142" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
@@ -438,7 +438,7 @@
     <x:Double x:Key="DialogMaxWidth">540</x:Double>
 	
 	<Thickness x:Key="DialogItemVerticalSpacing">0,0,0,24</Thickness>
-	<Thickness x:Key="DialogSectionVerticalSpacing">0,0,0,48</Thickness>
+	<Thickness x:Key="DialogSectionVerticalSpacing">0,0,0,56</Thickness>
 	<Thickness x:Key="DialogTripleVerticalSpacing">0,0,0,72</Thickness>
     <Thickness x:Key="DialogItemIndentation">12,0,6,0</Thickness>
 	<GridLength x:Key="DialogButtonSpacing">12</GridLength>
