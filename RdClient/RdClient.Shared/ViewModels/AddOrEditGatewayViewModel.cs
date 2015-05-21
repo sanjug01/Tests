@@ -67,8 +67,7 @@
 
     public class AddOrEditGatewayViewModel : ViewModelBase, IDialogViewModel
     {
-        private string _host;
-        private bool _isHostValid;
+        private IValidatedProperty<string> _host;
         private bool _isAddingGateway;
     
         private readonly RelayCommand _saveCommand;
@@ -81,16 +80,19 @@
 
         public AddOrEditGatewayViewModel()
         {
-            _saveCommand = new RelayCommand(SaveCommandExecute,
-                o =>
-                {
-                    return (string.IsNullOrEmpty(this.Host) == false);
-                });
+            _saveCommand = new RelayCommand(o => SaveCommandExecute(), o => SaveCommandCanExecute());
             _cancelCommand = new RelayCommand(CancelCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute, p => !this.IsAddingGateway);
             _addUserCommand = new RelayCommand(LaunchAddUserView);
 
-            IsHostValid = true;
+            _host = new ValidatedProperty<string>(new HostnameValidationRule());
+            _host.PropertyChanged += (s, e) =>
+            {
+                if (s == _host && e.PropertyName == "State")
+                {
+                    _saveCommand.EmitCanExecuteChanged();
+                }
+            };
 
             this.UserOptions = new ObservableCollection<UserComboBoxElement>();
         }
@@ -128,28 +130,45 @@
             private set { this.SetProperty(ref _gateway, value); }
         }
 
-        public string Host
+        public IValidatedProperty<string> Host
         {
             get { return _host; }
-            set 
-            { 
-                SetProperty(ref _host, value); 
-                _saveCommand.EmitCanExecuteChanged();
-            }
+            set { SetProperty(ref _host, value); }
         }
 
-        public bool IsHostValid
+        protected override void OnPresenting(object activationParameter)
         {
-            get { return _isHostValid; }
-            private set { SetProperty(ref _isHostValid, value); }
-        }
+            Contract.Assert(null != activationParameter);
 
-        private void SaveCommandExecute(object o)
-        {
-            if (this.Validate())
+            AddGatewayViewModelArgs addArgs = activationParameter as AddGatewayViewModelArgs;
+            EditGatewayViewModelArgs editArgs = activationParameter as EditGatewayViewModelArgs;
+
+            if (editArgs != null)
             {
-                this.Gateway.HostName = this.Host;
-                this.Gateway.HostName = this.Host;
+                this.Gateway = editArgs.Gateway;
+                this.Host.Value = this.Gateway.HostName;
+                this.IsAddingGateway = false;
+            }
+            else if (addArgs != null)
+            {
+                this.Host.Value = string.Empty;
+                this.Gateway = new GatewayModel();
+                this.IsAddingGateway = true;
+            }
+
+            Update();
+        }
+
+        private bool SaveCommandCanExecute()
+        {
+            return this.Host.State.Status != ValidationResultStatus.Empty;
+        }
+
+        private void SaveCommandExecute()
+        {
+            if (this.Host.State.Status == ValidationResultStatus.Valid)
+            {
+                this.Gateway.HostName = this.Host.Value;
                 Guid gatewayId = Guid.Empty;
 
                 if (null != this.UserOptions[this.SelectedUserOptionsIndex].Credentials)
@@ -160,7 +179,6 @@
                 {
                     this.Gateway.CredentialsId = Guid.Empty;
                 }
-
 
                 if (this.IsAddingGateway)
                 {
@@ -183,50 +201,10 @@
             DismissModal(GatewayPromptResult.CreateDeleted());
         }
 
-        /// <summary>
-        /// This method performs all validation tests.
-        ///     Currently the validation is performed only on Save command
-        /// </summary>
-        /// <returns>true, if all validations pass</returns>
-        private bool Validate()
-        {
-            HostNameValidationRule rule = new HostNameValidationRule();
-            bool isValid = true;
-            if (!(this.IsHostValid = rule.Validate(this.Host).IsValid))
-            {
-                isValid = isValid && this.IsHostValid;
-            }
-
-            return isValid;
-        }
-
         private void Update()
         {
             this.LoadUsers();
             this.SelectUserId(this.Gateway.CredentialsId);           
-        }
-
-
-        protected override void OnPresenting(object activationParameter)
-        {
-            Contract.Assert(null != activationParameter);
-
-            AddGatewayViewModelArgs addArgs = activationParameter as AddGatewayViewModelArgs;
-            EditGatewayViewModelArgs editArgs = activationParameter as EditGatewayViewModelArgs;
-
-            if (editArgs != null)
-            {
-                this.Gateway = editArgs.Gateway;
-                this.Host = this.Gateway.HostName;
-                this.IsAddingGateway = false;
-            }
-            else if(addArgs != null)
-            {
-                this.Gateway = new GatewayModel();
-                this.IsAddingGateway = true;
-            }
-
-            Update();
         }
 
         private void LoadUsers()

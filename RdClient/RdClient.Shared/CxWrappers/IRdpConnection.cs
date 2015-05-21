@@ -18,6 +18,7 @@ namespace RdClient.Shared.CxWrappers
         void HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer);
         IRdpScreenSnapshot GetSnapshot();
         IRdpCertificate GetServerCertificate();
+        IRdpCertificate GetGatewayCertificate();
         void SendMouseEvent(MouseEventType type, float xPos, float yPos);
         void SendKeyEvent(int keyValue, bool scanCode, bool extended, bool keyUp);
         void SendTouchEvent(TouchEventType type, uint contactId, Point position, ulong frameTime);

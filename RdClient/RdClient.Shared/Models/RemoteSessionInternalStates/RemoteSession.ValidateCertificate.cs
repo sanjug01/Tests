@@ -63,7 +63,15 @@
 
                 _connection = connection;
                 _reason = reason;
-                _certificate = _connection.GetServerCertificate();
+                if(RdpDisconnectCode.ProxyInvalidCA == reason.Code)
+                {
+                    // gateway certificate validation
+                    _certificate = _connection.GetGatewayCertificate();
+                }
+                else
+                {
+                    _certificate = _connection.GetServerCertificate();
+                }
                 _renderingPanel = renderingPanel;
                 _userRejected = false;
             }

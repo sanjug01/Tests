@@ -527,6 +527,11 @@
                     throw new NotImplementedException();
                 }
 
+                IRdpCertificate IRdpConnection.GetGatewayCertificate()
+                {
+                    throw new NotImplementedException();
+                }
+
                 void IRdpConnection.SendMouseEvent(MouseEventType type, float xPos, float yPos)
                 {
                     throw new NotImplementedException();

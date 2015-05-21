@@ -38,6 +38,8 @@ namespace RdClient.Shared.CxWrappers
 
         public event EventHandler<RemoteAppWindowIconUpdatedArgs> RemoteAppWindowIconUpdated;
 
+        public event EventHandler<CheckGatewayCertificateTrustArgs> CheckGatewayCertificateTrust;
+
         public void EmitClientConnected(IRdpConnection sender, ClientConnectedArgs args)
         {
             if (ClientConnected != null)
@@ -172,6 +174,15 @@ namespace RdClient.Shared.CxWrappers
             {
                 RemoteAppWindowIconUpdated(sender, args);
             }
+        }
+
+        public void EmitCheckGatewayCertificateTrust(IRdpConnection sender, CheckGatewayCertificateTrustArgs args)
+        {
+            if(CheckGatewayCertificateTrust != null)
+            {
+                CheckGatewayCertificateTrust(sender, args);
+            }
+
         }
     }
 }
