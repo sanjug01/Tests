@@ -77,7 +77,7 @@
 					<TextBlock 
 						x:Uid="AboutView_RateAndReview" 
 						Text="(d) Rate and Review"
-						Style="{StaticResource CaptionTextBlockStyle}">
+						Style="{StaticResource BodyTextBlockStyle}">
 					</TextBlock>
 				</HyperlinkButton>
 				<StackPanel 
@@ -88,7 +88,7 @@
 						<TextBlock 
 							x:Uid="AboutView_TermsOfUse" 
 							Text="(d) Terms of use"
-							Style="{StaticResource CaptionTextBlockStyle}">
+							Style="{StaticResource BodyTextBlockStyle}">
 						</TextBlock>
 					</HyperlinkButton>
 					<Rectangle 
@@ -107,7 +107,7 @@
 						NavigateUri="https://www.google.com/search?q=microsoft+rdp+privacy+policy">
 						<TextBlock 
 							x:Uid="AboutView_PrivacyPolicy" 
-							Style="{StaticResource CaptionTextBlockStyle}"
+							Style="{StaticResource BodyTextBlockStyle}"
 							Text="(d) Privacy Policy">
 						</TextBlock>
 					</HyperlinkButton>
