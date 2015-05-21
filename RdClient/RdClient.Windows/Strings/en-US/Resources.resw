@@ -577,14 +577,6 @@
     <value>No gateway</value>
     <comment>Text shown on AddOrEditDesktop view if no gateway is stored for the desktop</comment>
   </data>
-  <data name="Common_Delete_String" xml:space="preserve">
-    <value>Remove</value>
-    <comment>Verb. Text on a button that is pressed to delete an item</comment>
-  </data>
-  <data name="Common_Edit_String" xml:space="preserve">
-    <value>Edit</value>
-    <comment>Verb. Text on a button that is pressed to edit an item</comment>
-  </data>
   <data name="Common_ListItemSeparator_String" xml:space="preserve">
     <value> , </value>
     <comment>Text used to separate items in a list</comment>
