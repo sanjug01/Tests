@@ -13,6 +13,8 @@
             private readonly IRdpConnection _connection;
             private readonly RdpDisconnectReason _reason;
             private readonly IRdpCertificate _certificate;
+            private readonly string _hostName;
+
             //
             // Rendering panel is not used by the state but it is passed to it by the Connecting state
             // that will want it back after user will have accepted the failed certificate.
@@ -36,7 +38,7 @@
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                 }
 
-                _session.EmitBadCertificate(new BadCertificateEventArgs(_reason, this));
+                _session.EmitBadCertificate(new BadCertificateEventArgs(_reason, _hostName, this));
             }
 
             public override void Complete(RemoteSession session)
@@ -54,7 +56,7 @@
                 _session = null;
             }
 
-            public ValidateCertificate(IRenderingPanel renderingPanel, IRdpConnection connection, RdpDisconnectReason reason, InternalState otherState)
+            public ValidateCertificate(IRenderingPanel renderingPanel, IRdpConnection connection, RdpDisconnectReason reason, string hostName, InternalState otherState)
                 : base(SessionState.Idle, otherState)
             {
                 Contract.Assert(null != connection);
@@ -63,6 +65,7 @@
 
                 _connection = connection;
                 _reason = reason;
+                _hostName = hostName;
                 if(RdpDisconnectCode.ProxyInvalidCA == reason.Code)
                 {
                     // gateway certificate validation
