@@ -143,10 +143,16 @@ namespace RdClient.Shared.Models.Viewport
         public void SetPan(double x, double y)
         {
             if (x + _viewportPanel.Width > _sessionPanel.Width)
-                x = _sessionPanel.Width - _viewportPanel.Width;
+                x = (_sessionPanel.Width - _viewportPanel.Width) / 2.0;
+            else
+                if (this.Offset.X < 0)
+                    x = 0;
 
             if (y + _viewportPanel.Height > _sessionPanel.Height)
-                y = _sessionPanel.Height - _viewportPanel.Height;
+                y = (_sessionPanel.Height - _viewportPanel.Height) / 2.0;
+            else
+                if (this.Offset.Y < 0)
+                    y = 0;
 
             _sessionPanel.Transform.TranslateX = -x;
             _sessionPanel.Transform.TranslateY = -y;
