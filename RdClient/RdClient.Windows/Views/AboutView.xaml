@@ -28,13 +28,13 @@
             <TextBlock
                 Grid.Row="0"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
-                FontSize="30"
+                Style="{ThemeResource SubtitleTextBlockStyle}"
                 x:Uid="AboutView_Title"
                 Text="(d) About" />
             <HyperlinkButton
                 Grid.Row="0"
-                Command="{Binding Close}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                Command="{Binding Close}" 
+                HorizontalAlignment="Right">
                 <TextBlock x:Uid="AboutView_Close" Text="(d) Close"/>
             </HyperlinkButton>
                 

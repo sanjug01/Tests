@@ -14,6 +14,7 @@
         <RichEditBox x:Uid="RichTextView_InfoBox"
                      x:Name="InfoBox"
                      PlaceholderText="(d) Loading document ....." 
+                     BorderThickness="0"
                      IsTabStop="False"
                      IsReadOnly="True"
                      IsSpellCheckEnabled="False"
