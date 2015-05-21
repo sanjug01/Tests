@@ -45,7 +45,6 @@
             settings._fileName = fileName;
             settings._modelSerializer = modelSerializer;
             settings._persistentStatus = PersistentStatus.Clean;
-
             return settings;
         }
 
@@ -69,7 +68,7 @@
         }
 
         [DataMember]
-        public bool SendFeeback
+        public bool SendFeedback
         {
             get
             {
@@ -99,7 +98,7 @@
         private void SetDefaults()
         {
             this.UseThumbnails = true;
-            this.SendFeeback = true;
+            this.SendFeedback = true;
             //
             // Telemetry is enabled by default; user has an option to opt-out on the settings page.
             //
