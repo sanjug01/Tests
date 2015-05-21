@@ -37,12 +37,12 @@ foreach ($node in $dataNodes)
     if ($resourceName.EndsWith("_String"))
     {
 		$possiblyUnusedNodes += $node
-		Write-Output "Needs manual investigation - may be used by TypeToLocalizedStringConverter"
+		Write-Output "$resourceName Needs manual investigation - may be used by TypeToLocalizedStringConverter"
     }
     else
     {
 		#Ignore tooltip, we just want the Uid
-		$toolTipIndex = $resourceName.LastIndexOf("[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip")
+		$toolTipIndex = $resourceName.LastIndexOf("ToolTipService.ToolTip")
 		if ($toolTipIndex -gt 0)
 		{
 			$resourceName = $resourceName.Substring(0, $toolTipIndex)
