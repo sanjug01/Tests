@@ -16,6 +16,7 @@ namespace RdClient.Shared.CxWrappers
             get
             {
                 return _screenPropertiesCx.Resolution;
+                //return new Size(1920, 1080);
             }
         }
     }

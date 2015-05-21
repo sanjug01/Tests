@@ -84,7 +84,9 @@ Windows::Foundation::Size ScreenProperties::Resolution::get()
 			__uuidof(ID2D1Factory), NULL, (void**)&d2dFactory);
 		d2dFactory->GetDesktopDpi(&dpiX, &dpiY);
 
-		return Windows::Foundation::Size((float) desc.DesktopCoordinates.right * 96.0f / dpiX, (float) desc.DesktopCoordinates.bottom * 96.0f / dpiY);
+		return Windows::Foundation::Size(
+			(float) desc.DesktopCoordinates.right * 96.0f / dpiX, 
+			(float) desc.DesktopCoordinates.bottom * 96.0f / dpiY);
 	}
 
 	return Windows::Foundation::Size(0, 0);

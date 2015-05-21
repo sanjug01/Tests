@@ -1,14 +1,15 @@
 ﻿using Windows.Foundation;
 using Windows.UI.Xaml.Media;
+using RdClient.Shared.Helpers;
 
 namespace RdClient.Shared.Models.Viewport
 {
     public class ViewportTransformWrapper : IViewportTransform
     {
-        private CompositeTransform _transform;
+        private SynchronizedTransform _transform;
         public ViewportTransformWrapper(CompositeTransform transform)
         {
-            _transform = transform;
+            _transform = new SynchronizedTransform(transform);
         }
 
         public double ScaleX
@@ -70,7 +71,7 @@ namespace RdClient.Shared.Models.Viewport
 
         public Point InverseTransformPoint(Point point)
         {
-            return _transform.Inverse.TransformPoint(point);
+            return _transform.InverseTransformPoint(point);
         }
     }
 }

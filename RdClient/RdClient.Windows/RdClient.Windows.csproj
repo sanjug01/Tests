@@ -157,7 +157,6 @@
     <Compile Include="DesignTime\FakeRemoteResourceViewModel.cs" />
     <Compile Include="DesignTime\FakeAddOrEditViewModel.cs" />
     <Compile Include="DesignTime\FakeWorkspaceViewModel.cs" />
-    <Compile Include="Helpers\SynchronizedTransform.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
     <Compile Include="Input\InputPaneInputPanelFactory.cs" />
     <Compile Include="LifeTimeManagement\ResumingArgs.cs" />
@@ -211,7 +210,6 @@
     <Compile Include="Factories\AppInitializer.cs" />
     <Compile Include="Helpers\CoreDispatcherDeferredExecution.cs" />
     <Compile Include="DesignTime\FakeDesktopViewModel.cs" />
-    <Compile Include="Helpers\PhysicalScreenSize.cs" />
     <Compile Include="Helpers\TypeNameDataTemplateSelector.cs" />
     <Compile Include="LifeTimeManagement\ActivationArgs.cs" />
     <Compile Include="LifeTimeManagement\LifeTimeManager.cs" />
