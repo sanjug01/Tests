@@ -1,8 +1,8 @@
-﻿using Windows.Foundation;
+﻿using System.ComponentModel;
 
 namespace RdClient.Shared.Models.Viewport
 {
-    public interface IViewportPanel
+    public interface IViewportPanel : INotifyPropertyChanged
     {
         double Width { get; set; }
         double Height { get; set; }

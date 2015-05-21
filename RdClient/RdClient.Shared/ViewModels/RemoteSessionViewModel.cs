@@ -52,6 +52,8 @@
 
         private readonly FullScreenModel _fullScreenModel = new FullScreenModel();
 
+        private readonly IScrollBarModel _scrollBarModel = new ScrollBarModel();
+
         private IPanKnobSite _panKnobSite;
         public IPanKnobSite PanKnobSite
         {
@@ -136,6 +138,11 @@
         public ICommand FullScreen
         {
             get { return _fullScreen; }
+        }
+
+        public IScrollBarModel ScrollBars
+        {
+            get { return _scrollBarModel; }
         }
 
         /// <summary>
@@ -281,9 +288,9 @@
         }
 
 
-        void ILifeTimeSite.SetLifeTimeManager(ILifeTimeManager lftManager)
+        void ILifeTimeSite.SetLifeTimeManager(ILifeTimeManager lifeTimeManager)
         {
-            _lifeTimeManager = lftManager;
+            _lifeTimeManager = lifeTimeManager;
         }
 
         private void OnCredentialsNeeded(object sender, CredentialsNeededEventArgs e)
@@ -400,6 +407,7 @@
 
                         this.PointerCapture = new PointerCapture(_pointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
                         this.PanKnobSite = new PanKnobSite(this.TimerFactory);
+                        this.ScrollBars.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
                         _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
@@ -434,6 +442,7 @@
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
 
                             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
+                            this.ScrollBars.Viewport = null;
 
                             //
                             // The connection bar and side bars are not available in any non-connected state.

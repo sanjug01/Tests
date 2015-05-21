@@ -142,6 +142,8 @@
                 get { return 2.0; }
             }
 
+            public event EventHandler Changed;
+
             event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
             {
                 add { }
@@ -158,7 +160,12 @@
                 throw new NotImplementedException();
             }
 
-            void IViewport.Set(double zoomFactor, Point anchorPoint)
+            void IViewport.SetZoom(double zoomFactor, Point anchorPoint)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IViewport.SetPan(double x, double y)
             {
                 throw new NotImplementedException();
             }

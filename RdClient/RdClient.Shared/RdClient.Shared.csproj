@@ -153,6 +153,7 @@
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Models\FullScreenModel.cs" />
+    <Compile Include="Models\IScrollBarModel.cs" />
     <Compile Include="Models\ScrambledString.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
     <Compile Include="Helpers\TaskExecutor.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Models\IRemoteSessionViewSite.cs" />
     <Compile Include="Models\IRenderingPanel.cs" />
     <Compile Include="Models\ISessionFactory.cs" />
+    <Compile Include="Models\ScrollBarModel.cs" />
     <Compile Include="Models\Viewport\IViewport.cs" />
     <Compile Include="Models\LocalWorkspaceModel.cs" />
     <Compile Include="Models\OnPremiseWorkspaceModel.cs" />
@@ -290,7 +292,6 @@
     <Compile Include="Models\Snapshotter.cs" />
     <Compile Include="Models\Viewport\IViewportPanel.cs" />
     <Compile Include="Models\Viewport\IViewportTransform.cs" />
-    <Compile Include="Models\Viewport\Panel.cs" />
     <Compile Include="Models\Viewport\Transform.cs" />
     <Compile Include="Models\Viewport\Viewport.cs" />
     <Compile Include="Models\Viewport\ViewportTransformWrapper.cs" />

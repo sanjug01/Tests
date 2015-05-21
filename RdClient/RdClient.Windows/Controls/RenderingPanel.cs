@@ -11,6 +11,8 @@
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Media;
+    using System.ComponentModel;
+
 
     /// <summary>
     /// Wrapper of SwapChainPanel that adds the IRenderingPanel interface.
@@ -36,6 +38,8 @@
 
         private ScaleTransform _mouseScaleTransform;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public ScaleTransform MouseScaleTransform
         {
             get { return _mouseScaleTransform; }
@@ -57,7 +61,6 @@
         public void SetViewport(IViewport viewport)
         {
             Contract.Assert(null != viewport);
-            Contract.Assert(null == _viewport);
 
             _viewport = viewport;
         }
@@ -164,6 +167,16 @@
             {
                 if (null != _ready)
                     _ready(this, EventArgs.Empty);
+                EmitPropertyChanged("Width");
+                EmitPropertyChanged("Height");
+            }
+        }
+
+        private void EmitPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 

@@ -16,12 +16,32 @@ namespace RdClient.Shared.Models.Viewport
         private double _minZoom;
         public double MinZoom { set { _minZoom = value; } }
 
+        public event EventHandler Changed;
+
         public Viewport(IViewportPanel sessionPanel, IViewportPanel viewportPanel)
         {
             _viewportPanel = viewportPanel;
+            _viewportPanel.PropertyChanged += OnViewportPropertyChanged;
             _sessionPanel = sessionPanel;
             _maxZoom = 4.0;
             _minZoom = 1.0;
+        }
+
+        private void OnViewportPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "Width" || e.PropertyName == "Height")
+            {
+                SetPan(this.Offset.X, this.Offset.Y);
+                EmitChanged();
+            }
+        }
+
+        private void EmitChanged()
+        {
+            if(Changed != null)
+            {
+                Changed(this, null);
+            }
         }
 
         public IViewportPanel SessionPanel
@@ -80,14 +100,6 @@ namespace RdClient.Shared.Models.Viewport
             Rect sessionRect = new Rect(new Point(_sessionPanel.Transform.TranslateX, _sessionPanel.Transform.TranslateY), new Size(_sessionPanel.Width, _sessionPanel.Height));
             Rect viewportRect = new Rect(new Point(0, 0), new Size(_viewportPanel.Width, _viewportPanel.Height));
 
-            Debug.WriteLine("translateX {0} translateY{1}", _sessionPanel.Transform.TranslateX, _sessionPanel.Transform.TranslateY);
-            Debug.WriteLine("dx {0} dy {1}", dx, dy);
-            Debug.WriteLine("session left {0} right {1} top {2} bottom {3}", sessionRect.Left, sessionRect.Right, sessionRect.Top, sessionRect.Bottom);
-            Debug.WriteLine("viewport left {0} right {1} top {2} bottom {3}", viewportRect.Left, viewportRect.Right, viewportRect.Top, viewportRect.Bottom);
-            Debug.WriteLine("clamped x: {0} clamped y: {1}", 
-                ClampIntervals(sessionRect.Left, sessionRect.Right, viewportRect.Left, viewportRect.Right, _sessionPanel.Transform.TranslateX + dx),
-                ClampIntervals(sessionRect.Top, sessionRect.Bottom, viewportRect.Top, viewportRect.Bottom, _sessionPanel.Transform.TranslateY + dy));
-
             if (viewportRect.Width < sessionRect.Width)
             {
                 _sessionPanel.Transform.TranslateX += ClampIntervals(sessionRect.Left, sessionRect.Right, viewportRect.Left, viewportRect.Right, dx);
@@ -105,8 +117,6 @@ namespace RdClient.Shared.Models.Viewport
             {
                 _sessionPanel.Transform.TranslateY = (viewportRect.Height - sessionRect.Height) / 2.0;
             }
-
-            Debug.WriteLine("translateX {0} translateY{1}", _sessionPanel.Transform.TranslateX, _sessionPanel.Transform.TranslateY);
         }
 
         private void Zoom(double zoomFactor, Point anchorPoint)
@@ -119,10 +129,27 @@ namespace RdClient.Shared.Models.Viewport
             Translate(oldAnchorPoint.X - newAnchorPoint.X, oldAnchorPoint.Y - newAnchorPoint.Y);
         }
 
-        public void Set(double zoomFactor, Point anchorPoint)
+        public void SetZoom(double zoomFactor, Point anchorPoint)
         {
             zoomFactor = ClampZoomFactor(zoomFactor);
             Zoom(zoomFactor, anchorPoint);
+            
+            if(Changed != null)
+            {
+                Changed(this, null);
+            }
+        }
+
+        public void SetPan(double x, double y)
+        {
+            if (x + _viewportPanel.Width > _sessionPanel.Width)
+                x = _sessionPanel.Width - _viewportPanel.Width;
+
+            if (y + _viewportPanel.Height > _sessionPanel.Height)
+                y = _sessionPanel.Height - _viewportPanel.Height;
+
+            _sessionPanel.Transform.TranslateX = -x;
+            _sessionPanel.Transform.TranslateY = -y;
         }
 
         public void PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor)
@@ -130,6 +157,11 @@ namespace RdClient.Shared.Models.Viewport
             double zoomFactor = ClampZoomFactor(_sessionPanel.Transform.ScaleX * scaleFactor);
             Zoom(zoomFactor, anchorPoint);
             Translate(dx, dy);
+
+            if(Changed != null)
+            {
+                Changed(this, null);
+            }
         }
 
     }

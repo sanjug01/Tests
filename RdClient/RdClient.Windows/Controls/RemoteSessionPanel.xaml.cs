@@ -13,11 +13,9 @@
     using Windows.Foundation;
     using Windows.UI.Core;
     using Windows.UI.Input;
-    using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
-    using Windows.UI.Xaml.Media;
 
 
     /// <summary>
@@ -44,9 +42,16 @@
             this.InitializeComponent();
 
             this.RenderingPanel.SizeChanged += this.OnRenderingPanelSizeChanged;
+            this.SizeChanged += OnSizeChanged;
 
             _viewLoaded = false;
             _renderingPanelSize = Size.Empty;
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            EmitPropertyChanged("Width");
+            EmitPropertyChanged("Height");
         }
 
         public object RemoteSessionViewSite
@@ -148,8 +153,7 @@
             if (!object.Equals(property, newValue))
             {
                 property = newValue;
-                if (null != _propertyChanged)
-                    _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                EmitPropertyChanged(propertyName);
             }
         }
 
@@ -226,11 +230,16 @@
 
         private void OnRenderingPanelSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //
-            // Set the Size property, which will emit an INotifyPropertyChanged event to the view model.
-            //
             this.Size = e.NewSize;
         }
+
+        private void EmitPropertyChanged(string propertyName)
+        {
+            if(_propertyChanged != null)
+            {
+                _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }            
 
         protected override void OnManipulationStarting(ManipulationStartingRoutedEventArgs e)
         {
@@ -333,6 +342,11 @@
             {
                 MakeCursorVisible();
             }
+        }
+
+        private void Canvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
         }
     }
 }
