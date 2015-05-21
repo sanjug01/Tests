@@ -54,10 +54,13 @@
                         x:Uid="Common_Button_AddNewItem" 
                         Content="Add New(d)" 
                         Command="{Binding AddGateway}" />
+                <!-- Edit button is displayed optionally -->
+                <!--
                 <Button Grid.Column="2" Style="{StaticResource DialogButtonStyle}" 
                         x:Uid="Common_Button_EditItem" 
                         Content="Edit(d)" 
                         Command="{Binding EditGateway}" />
+                -->
             </Grid>
         </Grid>
     </StackPanel>

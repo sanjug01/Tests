@@ -85,7 +85,9 @@
                     </ComboBox>
 
                     <Button x:Uid="Common_Button_AddUserAccount" Content="Add account(d)" 
-                                Command="{Binding Path=AddUser}" />
+                            Style="{StaticResource DialogButtonStyle}" 
+                            HorizontalAlignment="Left"
+                            Command="{Binding Path=AddUser}" />
                 </StackPanel>
 
                 <Grid>
