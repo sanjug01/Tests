@@ -96,46 +96,8 @@
                     </TextBox>
                 </StackPanel>
 
-                <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="20" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-
-                        <ComboBox x:Uid="AddOrEditDesktop-Credentials-ComboBox"
-                              Grid.Row="0"
-                              Header="User name(d)"
-                              HorizontalAlignment="Stretch"
-                              ItemsSource="{Binding Path=UserOptions}"
-                              SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" 
-                                Style="{StaticResource DialogButtonStyle}" 
-                                x:Uid="Common_Button_AddUserAccount" 
-                                Content="Add account(d)" 
-                                Command="{Binding AddUserCommand}" />
-                            <Button Grid.Column="2" 
-                                Style="{StaticResource DialogButtonStyle}" 
-                                x:Uid="Common_Button_EditItem" 
-                                Content="Edit(d)" 
-                                Command="{Binding EditUserCommand}" />
-                        </Grid>
-                    </Grid>
-                </StackPanel>
-
+                <controls:UserSelectorControl/>
+                
                 <Button Background="Transparent"
                                 Command="{Binding ShowDetailsCommand}"     
                                 Margin="-8,8,0,0" 

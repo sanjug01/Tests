@@ -1,0 +1,70 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.UserSelectorControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:RdClient.Controls"
+    xmlns:design="using:RdClient.DesignTime"    
+    xmlns:cv="using:RdClient.Shared.Converters"
+    xmlns:helpers="using:RdClient.Shared.Helpers"    
+    mc:Ignorable="d"
+    d:DesignHeight="768"
+    d:DesignWidth="480">
+
+    <d:UserControl.DataContext>
+        <design:FakeUsersCollectorBase />
+    </d:UserControl.DataContext>
+
+    <UserControl.Resources>
+        <cv:StringLengthToInvisibilityConverter x:Key="StringLengthToInvisibilityConverter" />
+        <cv:UserComboBoxElementToLocalizedStringConverter x:Key="UserComboBoxElementToLocalizedStringConverter">
+            <cv:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
+                <helpers:LocalizedString />
+            </cv:UserComboBoxElementToLocalizedStringConverter.LocalizedString>
+        </cv:UserComboBoxElementToLocalizedStringConverter>
+    </UserControl.Resources>
+
+    <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <ComboBox x:Uid="AddOrEditDesktop-Credentials-ComboBox"
+                              Grid.Row="0"
+                              Header="User name(d)"
+                              HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding Path=Users}"
+                              SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" 
+                                Style="{StaticResource DialogButtonStyle}" 
+                                x:Uid="Common_Button_AddUserAccount" 
+                                Content="Add account(d)" 
+                                Command="{Binding AddUser}" />
+                <!-- Edit button is displayed optionally -->
+                <!--
+                <Button Grid.Column="2" 
+                                Style="{StaticResource DialogButtonStyle}" 
+                                x:Uid="Common_Button_EditItem" 
+                                Content="Edit(d)" 
+                                Command="{Binding EditUser}" />
+                -->
+            </Grid>
+        </Grid>
+    </StackPanel>
+</UserControl>

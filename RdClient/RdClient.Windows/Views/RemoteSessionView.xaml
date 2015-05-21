@@ -35,7 +35,7 @@
         <cv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
     </UserControl.Resources>
 
-    <Grid Background="{ThemeResource SystemBaseMediumHighColor}">
+    <Grid Background="{ThemeResource SystemChromeDisabledHighColor}">
         <c:RemoteSessionPanel
             RemoteSessionViewSite="{Binding}"
             Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />

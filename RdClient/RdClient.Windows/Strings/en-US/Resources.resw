@@ -434,7 +434,7 @@
     <value>(r) Redirection</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
-  <data name="AddOrEditDesktop-GatewaysSectionTitle.Text" xml:space="preserve">
+  <data name="AddOrEditDesktop-Gateways-ComboBox.Header" xml:space="preserve">
     <value>(r) Gateway</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
@@ -602,7 +602,7 @@
     <comment>Text shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
   </data>
   <data name="SessionView-HomeButton.Label" xml:space="preserve">
-    <value>(r) Home</value>
+    <value>(r) Disconnect</value>
   </data>
   <data name="SessionView-MouseMode.Label" xml:space="preserve">
     <value>(r) Mouse-Mode</value>

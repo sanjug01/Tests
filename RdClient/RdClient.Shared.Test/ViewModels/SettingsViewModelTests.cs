@@ -154,7 +154,7 @@
                 return null;
             });
 
-            _vm.AddUserCommand.Execute(null);
+            _vm.AddUser.Execute(null);
 
             var newCreds = _testData.NewValidCredential().Model;
             var promptResult = CredentialPromptResult.CreateWithCredentials(newCreds, true);
@@ -170,14 +170,14 @@
         public void EditUserCommandDisabledWhenSelectedUserIsNull()
         {
             _vm.SelectedUser = null;
-            Assert.IsFalse(_vm.EditUserCommand.CanExecute(null));
+            Assert.IsFalse(_vm.EditUser.CanExecute(null));
         }
 
         [TestMethod]
         public void EditUserCommandEnabledWhenSelectedUserIsCredential()
         {
             _vm.SelectedUser = _vm.Users.First(u => u.UserComboBoxType == UserComboBoxType.Credentials);
-            Assert.IsTrue(_vm.EditUserCommand.CanExecute(null));
+            Assert.IsTrue(_vm.EditUser.CanExecute(null));
         }
 
         [TestMethod]
@@ -198,7 +198,7 @@
                 Assert.IsNotNull(completion);
                 return null;
             });
-            _vm.EditUserCommand.Execute(null);
+            _vm.EditUser.Execute(null);
 
             user.Credentials.Model.Username = _testData.NewRandomString();
             var promptResult = CredentialPromptResult.CreateWithCredentials(user.Credentials.Model, true);
@@ -220,7 +220,7 @@
                 Assert.IsNotNull(completion);
                 return null;
             });
-            _vm.EditUserCommand.Execute(null);
+            _vm.EditUser.Execute(null);
 
             user.Credentials.Model.Username = _testData.NewRandomString();
             var promptResult = CredentialPromptResult.CreateDeleted();
@@ -237,14 +237,14 @@
         public void DeleteUserCommandDisabledWhenSelectedUserIsNull()
         {
             _vm.SelectedUser = null;
-            Assert.IsFalse(_vm.DeleteUserCommand.CanExecute(null));
+            Assert.IsFalse(_vm.DeleteUser.CanExecute(null));
         }
 
         [TestMethod]
         public void DeleteUserCommandEnabledWhenSelectedUserIsCredential()
         {
             _vm.SelectedUser = _vm.Users.First(u => u.UserComboBoxType == UserComboBoxType.Credentials);
-            Assert.IsTrue(_vm.DeleteUserCommand.CanExecute(null));
+            Assert.IsTrue(_vm.DeleteUser.CanExecute(null));
         }
 
         [TestMethod]
@@ -254,7 +254,7 @@
             _vm.SelectedUser = user;
 
             Assert.IsTrue(_dataModel.Credentials.HasModel(user.Credentials.Id));//user should exist still
-            _vm.DeleteUserCommand.Execute(null);
+            _vm.DeleteUser.Execute(null);
             Assert.IsFalse(_dataModel.Credentials.HasModel(user.Credentials.Id));//user should have been deleted
 
             AssertUserOptionsCorrect();
@@ -271,7 +271,7 @@
                 return null;
             });
 
-            _vm.AddGatewayCommand.Execute(null);
+            _vm.AddGateway.Execute(null);
 
             Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);
             Guid newGatewayId = _dataModel.Gateways.AddNewModel(_testData.NewValidGatewayWithCredential(newCredId));
@@ -285,14 +285,14 @@
         public void EditGatewayCommandDisabledWhenSelectedGatewayIsNull()
         {
             _vm.SelectedGateway = null;
-            Assert.IsFalse(_vm.EditGatewayCommand.CanExecute(null));
+            Assert.IsFalse(_vm.EditGateway.CanExecute(null));
         }
 
         [TestMethod]
         public void EditGatewayCommandEnabledWhenGatewayIsValid()
         {
             _vm.SelectedGateway = _vm.Gateways.First(g => g.GatewayComboBoxType == GatewayComboBoxType.Gateway);
-            Assert.IsTrue(_vm.EditGatewayCommand.CanExecute(null));
+            Assert.IsTrue(_vm.EditGateway.CanExecute(null));
         }
 
         [TestMethod]
@@ -310,7 +310,7 @@
                 Assert.IsNotNull(completion);
                 return null;
             });
-            _vm.EditGatewayCommand.Execute(null);
+            _vm.EditGateway.Execute(null);
             
             Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);//EditGatewayView may add a user as well as a gateway
             gateway.Gateway.Model.CredentialsId = newCredId;
@@ -335,7 +335,7 @@
                 Assert.IsNotNull(completion);
                 return null;
             });
-            _vm.EditGatewayCommand.Execute(null);
+            _vm.EditGateway.Execute(null);
 
             Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);//EditGatewayView may add a user as well as a gateway
             gateway.Gateway.Model.CredentialsId = newCredId;
@@ -356,14 +356,14 @@
         public void DeleteGatewayCommandDisabledWhenSelectedGateayIsNull()
         {
             _vm.SelectedGateway = null;
-            Assert.IsFalse(_vm.DeleteGatewayCommand.CanExecute(null));
+            Assert.IsFalse(_vm.DeleteGateway.CanExecute(null));
         }
 
         [TestMethod]
         public void DeleteGatewayCommandEnabledWhenGatewayIsValid()
         {
             _vm.SelectedGateway = _vm.Gateways.First(g => g.GatewayComboBoxType == GatewayComboBoxType.Gateway);
-            Assert.IsTrue(_vm.DeleteGatewayCommand.CanExecute(null));
+            Assert.IsTrue(_vm.DeleteGateway.CanExecute(null));
         }
 
         [TestMethod]
@@ -373,7 +373,7 @@
             _vm.SelectedGateway = gateway;
 
             Assert.IsTrue(_dataModel.Gateways.HasModel(gateway.Gateway.Id));//gateway should exist at this point
-            _vm.DeleteGatewayCommand.Execute(null);
+            _vm.DeleteGateway.Execute(null);
             Assert.IsFalse(_dataModel.Gateways.HasModel(gateway.Gateway.Id));//gateway should have been deleted
 
             AssertUserOptionsCorrect();
