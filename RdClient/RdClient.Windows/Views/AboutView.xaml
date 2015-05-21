@@ -18,73 +18,102 @@
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*" />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			<StackPanel Grid.Row="0"
+				Orientation="Vertical"
+				Margin="{StaticResource DialogItemVerticalSpacing}">
+				<Grid
+					Margin="{StaticResource DialogItemVerticalSpacing}">
+					<TextBlock					
+						HorizontalAlignment="Left"
+						VerticalAlignment="Bottom"
+						Style="{StaticResource TitleTextBlockStyle}"
+						x:Uid="AboutView_Title"
+						Text="(d) About" />
+					<HyperlinkButton
+						Grid.Row="0"
+						Command="{Binding Close}" 
+						VerticalAlignment="Bottom"
+						HorizontalAlignment="Right">
+						<TextBlock 							
+							x:Uid="AboutView_Close" 
+							Style="{StaticResource BodyTextBlockStyle}"
+							TextLineBounds="TrimToBaseline"							
+							Text="(d) Close">						
+						</TextBlock>
+					</HyperlinkButton>
+				</Grid>
+				<StackPanel
+					Margin="{StaticResource DialogItemVerticalSpacing}">
+					<TextBlock 
+						Style="{StaticResource BodyTextBlockStyle}"
+						Text="{Binding AppName}">
+					</TextBlock>
+					<TextBlock 
+						Text="{Binding AppVersion}"
+						Style="{StaticResource BodyTextBlockStyle}">
+					</TextBlock>
+					<TextBlock 					
+						Text="{Binding Copyright}"
+						Style="{StaticResource BodyTextBlockStyle}">
+					</TextBlock>
+				</StackPanel>
+				<HyperlinkButton 
+                    x:Uid="AboutView_Link_ThirdPartyNotices"
+                    Command="{Binding ShowThirdPartyNoticesCommand}">
+					<TextBlock 
+						x:Uid="AboutView_ThirdPartyNotices" 
+						Text="(d) Third Party Notices">						
+					</TextBlock>
+				</HyperlinkButton>
+			</StackPanel>
+			<StackPanel Grid.Row="1">
+				<HyperlinkButton 				
+					x:Uid="AboutView_Link_RateAndReview"
+					NavigateUri="https://www.google.com/search?q=microsoft+rdp+client+rate+and+review">
+					<TextBlock 
+						x:Uid="AboutView_RateAndReview" 
+						Text="(d) Rate and Review"
+						Style="{StaticResource CaptionTextBlockStyle}">
+					</TextBlock>
+				</HyperlinkButton>
+				<StackPanel 
+					Orientation="Horizontal">
+					<HyperlinkButton
+						x:Uid="AboutView_Link_TermsOfUse"
+						Command="{Binding ShowEulaCommand}">
+						<TextBlock 
+							x:Uid="AboutView_TermsOfUse" 
+							Text="(d) Terms of use"
+							Style="{StaticResource CaptionTextBlockStyle}">
+						</TextBlock>
+					</HyperlinkButton>
+					<Rectangle 
+						Margin="{StaticResource DialogItemIndentation}"
+						VerticalAlignment="Center"
+						Height="15"
+						Width="1" 					
+						Fill="{ThemeResource SystemControlHyperlinkTextBrush}">
+					</Rectangle>
+					<!-- 
+					Should display a text instead of link.
+					Document not yet available
+					Command="{Binding ShowPrivacyCommand}"-->
+					<HyperlinkButton 
+						x:Uid="AboutView_Link_PrivacyPolicy"
+						NavigateUri="https://www.google.com/search?q=microsoft+rdp+privacy+policy">
+						<TextBlock 
+							x:Uid="AboutView_PrivacyPolicy" 
+							Style="{StaticResource CaptionTextBlockStyle}"
+							Text="(d) Privacy Policy">
+						</TextBlock>
+					</HyperlinkButton>
+				</StackPanel>
+			</StackPanel>
 
-            <TextBlock
-                Grid.Row="0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
-                FontSize="30"
-                x:Uid="AboutView_Title"
-                Text="(d) About" />
-            <HyperlinkButton
-                Grid.Row="0"
-                Command="{Binding Close}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                <TextBlock x:Uid="AboutView_Close" Text="(d) Close"/>
-            </HyperlinkButton>
-                
-            <StackPanel Margin="0,20,0,0" Grid.Row="1" Orientation="Vertical">
-                <TextBlock Text="{Binding AppName}" Margin="0,0,0,5"/>
-                <TextBlock Text="{Binding AppVersion}" Margin="0,0,0,5"/>
-                <TextBlock Text="{Binding Copyright}"/>
-                <HyperlinkButton Margin="0,20,0,0"
-                                 x:Uid="AboutView_Link_ThirdPartyNotices"
-                                 Command="{Binding ShowThirdPartyNoticesCommand}"
-                                 >
-                    <TextBlock x:Uid="AboutView_ThirdPartyNotices" Text="(d) Third Party Notices"/>
-                </HyperlinkButton>
-            </StackPanel>
-
-            <HyperlinkButton Grid.Row="2"
-                             x:Uid="AboutView_Link_RateAndReview"
-                             NavigateUri="https://www.google.com/search?q=microsoft+rdp+client+rate+and+review"
-                             >
-                <TextBlock x:Uid="AboutView_RateAndReview" Text="(d) Rate and Review" />
-            </HyperlinkButton>
-
-            <Grid Grid.Row="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <HyperlinkButton x:Uid="AboutView_Link_TermsOfUse"
-                                 Command="{Binding ShowEulaCommand}"
-                                 >
-                    <TextBlock x:Uid="AboutView_TermsOfUse" Text="(d) Terms of use"/>
-                </HyperlinkButton>
-
-                <Grid Grid.Column="1" Margin="10,8">
-                    <Rectangle Width="1" VerticalAlignment="Stretch" Fill="{ThemeResource SystemControlHyperlinkTextBrush}"/>
-                </Grid>
-
-                <!-- Should display a text instead of link. 
-                     Document not yet available
-                     Command="{Binding ShowPrivacyCommand}"
-                -->
-                <HyperlinkButton Grid.Column="2"
-                                 x:Uid="AboutView_Link_PrivacyPolicy"
-                                 NavigateUri="https://www.google.com/search?q=microsoft+rdp+privacy+policy"
-                                 >
-                    <TextBlock x:Uid="AboutView_PrivacyPolicy" Text="(d) Privacy Policy" />
-                </HyperlinkButton>
-            </Grid>
         </Grid>
     </ContentControl>
     
