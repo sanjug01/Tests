@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Controls"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:m="using:RdClient.Shared.Models"
     xmlns:cv="using:RdClient.Shared.Converters"    
     xmlns:input="using:RdClient.Input"
     xmlns:helpers="using:RdClient.Helpers"
@@ -26,6 +27,12 @@
             <vm:RemoteSessionViewModel.InputPanelFactory>
                 <input:InputPaneInputPanelFactory/>
             </vm:RemoteSessionViewModel.InputPanelFactory>
+            <vm:RemoteSessionViewModel.FullScreenModel>
+                <m:FullScreenModel />
+            </vm:RemoteSessionViewModel.FullScreenModel>
+            <vm:RemoteSessionViewModel.ScrollBarModel>
+                <m:ScrollBarModel />
+            </vm:RemoteSessionViewModel.ScrollBarModel>
         </vm:RemoteSessionViewModel>
     </UserControl.DataContext>
 

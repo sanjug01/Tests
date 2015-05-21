@@ -5,7 +5,7 @@ using Windows.UI.Xaml;
 
 namespace RdClient.Shared.Models
 {
-    public class FullScreenModel
+    public class FullScreenModel : IFullScreenModel
     {
         private bool _wasFullScreenMode;
 

@@ -50,9 +50,23 @@
         private readonly PointerPosition _pointerPosition = new PointerPosition();
         private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
 
-        private readonly FullScreenModel _fullScreenModel = new FullScreenModel();
+        private IFullScreenModel _fullScreenModel;
+        public IFullScreenModel FullScreenModel
+        {
+            set
+            {
+                _fullScreenModel = value;
+            }
+        }
 
-        private readonly IScrollBarModel _scrollBarModel = new ScrollBarModel();
+        private IScrollBarModel _scrollBarModel;
+        public IScrollBarModel ScrollBarModel
+        {
+            set
+            {
+                _scrollBarModel = value;
+            }
+        }
 
         private IPanKnobSite _panKnobSite;
         public IPanKnobSite PanKnobSite
