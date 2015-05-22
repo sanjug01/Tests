@@ -1,0 +1,51 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.GatewaySelectorControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:RdClient.Controls"
+    xmlns:design="using:RdClient.DesignTime"    
+    xmlns:cv="using:RdClient.Shared.Converters"
+    xmlns:helpers="using:RdClient.Shared.Helpers"    
+    mc:Ignorable="d"
+    d:DesignHeight="768"
+    d:DesignWidth="480">
+
+    <d:UserControl.DataContext>
+        <design:FakeUsersAndGatewaysCollectorBase />
+    </d:UserControl.DataContext>
+
+    <UserControl.Resources>
+        <cv:GatewayComboBoxElementToLocalizedStringConverter x:Key="GatewayComboBoxElementToLocalizedStringConverter">
+            <cv:GatewayComboBoxElementToLocalizedStringConverter.LocalizedString>
+                <helpers:LocalizedString />
+            </cv:GatewayComboBoxElementToLocalizedStringConverter.LocalizedString>
+        </cv:GatewayComboBoxElementToLocalizedStringConverter>
+    </UserControl.Resources>
+
+	<StackPanel Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
+		<ComboBox 
+			Margin="{StaticResource DialogItemVerticalSpacing}"								
+            HorizontalAlignment="Stretch"
+            x:Uid="AddOrEditDesktop-Gateways-ComboBox"
+            Header="Gateway(d)"
+            ItemsSource="{Binding Gateways}"
+            SelectedItem="{Binding SelectedGateway, Mode=TwoWay}">
+			<ComboBox.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Converter={StaticResource GatewayComboBoxElementToLocalizedStringConverter}}" />
+				</DataTemplate>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
+		<Grid>
+			<Button 
+				HorizontalAlignment="Right"
+				Style="{StaticResource DialogButtonStyle}" 
+				x:Uid="Common_Button_AddNewItem" 
+				Content="Add New(d)" 
+				Command="{Binding AddGateway}">				
+			</Button>
+		</Grid>
+	</StackPanel>
+</UserControl>

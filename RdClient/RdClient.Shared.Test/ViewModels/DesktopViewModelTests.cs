@@ -214,7 +214,7 @@ namespace RdClient.Shared.Test.ViewModels
         {
             _vm.Presenting(_sessionFactory);
             _vm.Desktop.CredentialsId = Guid.Empty;
-            _navService.Expect("NavigateToView", new List<object> { "RemoteSessionView", null }, 0);
+            _navService.Expect("PushModalView", new List<object> { "InSessionEditCredentialsView", null, null }, 0);
             _vm.ConnectCommand.Execute(null);
         }
 

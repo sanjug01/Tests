@@ -25,15 +25,38 @@
         </cv:GatewayComboBoxElementToLocalizedStringConverter>
     </UserControl.Resources>
 
-    <StackPanel>
-        <CheckBox Margin="0,0,0,40" 
-                  x:Uid="AddOrEditDesktop-ConnectToAdminSession" 
-                  Content="Connect to admin session(d)"
-                  IsChecked="{Binding Path=IsUseAdminSession, Mode=TwoWay}" />
+	<StackPanel Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
+		<!-- Friendly Name section -->
+		<StackPanel Margin="{StaticResource DialogItemVerticalSpacing}">
+			<StackPanel 
+				Orientation="Horizontal"
+				Margin="{StaticResource DialogHeaderVerticalSpacing}">
+				<TextBlock 
+					Style="{ThemeResource BodyTextBlockStyle}" 
+                    x:Uid="AddOrEditDesktop-FriendlyName" 
+					Text="Friendly name(d)">
+				</TextBlock>
+				<TextBlock					
+                    Margin="{StaticResource DialogItemIndentation}"
+					Style="{ThemeResource BodyTextBlockStyle}" 
+                    Foreground="{ThemeResource UnselectedForegroundBrush}"
+                    x:Uid="AddOrEditDesktop-FriendlyName_OptLabel" 
+                    Text="(optional) (d)">
+				</TextBlock>
+			</StackPanel>
+			<TextBox 
+				Name="txtFriendlyNameEntry"
+                x:Uid="AddOrEditDesktop-PcFriendlyNameTextbox"                            
+                InputScope="Text"
+                IsSpellCheckEnabled="False"
+                PlaceholderText="Connection friendly name (d)" 
+                Text="{Binding Path=FriendlyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+			</TextBox>
+		</StackPanel>
 
-        <!-- Display section - TODO: to enable when functional -->
+		<!-- Display section - TODO: to enable when functional -->
         <StackPanel Orientation="Vertical"
-                    Margin="0,0,0,40" 
+                    Margin="{StaticResource DialogItemVerticalSpacing}" 
                     Visibility="Collapsed">
             <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" 
                        Grid.Row="0"                   
@@ -46,69 +69,31 @@
         </StackPanel>
         
         <!-- Gateway section -->
-        <Grid Margin="0,0,0,40">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />                
-                <RowDefinition Height="20" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" 
-                       Grid.Row="0"                   
-                       x:Uid="AddOrEditDesktop-GatewaysSectionTitle" 
-                       Text="Gateway(d)"/>
-            <ComboBox Grid.Row="1"
-                      HorizontalAlignment="Stretch"
-                      x:Uid="AddOrEditDesktop-Gateways-ComboBox"
-                      ItemsSource="{Binding GatewayOptions}"
-                      SelectedItem="{Binding SelectedGateway, Mode=TwoWay}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource GatewayComboBoxElementToLocalizedStringConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-
-            <Grid Grid.Row="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Style="{StaticResource DialogButtonStyle}" 
-                        x:Uid="Common_Button_AddNewItem" 
-                        Content="Add New(d)" 
-                        Command="{Binding AddGatewayCommand}" />
-                <Button Grid.Column="2" Style="{StaticResource DialogButtonStyle}" 
-                        x:Uid="Common_Button_EditItem" 
-                        Content="Edit(d)" 
-                        Command="{Binding EditGatewayCommand}" />
-            </Grid>
-        </Grid>
+        <local:GatewaySelectorControl Margin="{StaticResource DialogSectionVerticalSpacing}"/>
         
         <!-- Redirection section -->
-        <StackPanel Orientation="Vertical"
-                    Margin="0,0,0,40">
-            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" 
-                       Grid.Row="0"                   
-                       x:Uid="AddOrEditDesktop-RedirectionSectionTitle" 
-                       Text="Redirection(d)"/>            
-            <ComboBox Margin="0,8"
-                      x:Uid="AddOrEditDesktop-SoundComboBox"
-                      Header="Sound(d)"
-                      HorizontalAlignment="Stretch"
-                      SelectedIndex="{Binding Path=AudioMode, Mode=TwoWay}">
-                <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnThisDevice" Content="Play on this device(d)" />
-                <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnRemotePc" Content="Play on remote PC(d)" />
-                <ComboBoxItem x:Uid="AddOrEditDesktop-Sound-DontPlaySounds" Content="Don't play sounds(d)" />
-            </ComboBox>
-
-            <CheckBox x:Uid="AddOrEditDesktop-SwapMouseButtons" 
-                      Content="Swap mouse buttons(d)" 
-                      Margin="0,8" 
-                      IsChecked="{Binding Path=IsSwapMouseButtons, Mode=TwoWay}" />
-        </StackPanel>    
-        
+		<StackPanel Orientation="Vertical">
+			<ComboBox
+				Margin="{StaticResource DialogItemVerticalSpacing}"
+                x:Uid="AddOrEditDesktop-SoundComboBox"
+                Header="Sound(d)"
+                HorizontalAlignment="Stretch"
+                SelectedIndex="{Binding Path=AudioMode, Mode=TwoWay}">
+				<ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnThisDevice" Content="Play on this device(d)" />
+				<ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnRemotePc" Content="Play on remote PC(d)" />
+				<ComboBoxItem x:Uid="AddOrEditDesktop-Sound-DontPlaySounds" Content="Don't play sounds(d)" />
+			</ComboBox>
+			<CheckBox
+				Margin="{StaticResource DialogItemVerticalSpacing}"
+                x:Uid="AddOrEditDesktop-ConnectToAdminSession" 
+                Content="Connect to admin session(d)"
+                IsChecked="{Binding Path=IsUseAdminSession, Mode=TwoWay}">				
+			</CheckBox>
+			<CheckBox 
+				x:Uid="AddOrEditDesktop-SwapMouseButtons" 
+                Content="Swap mouse buttons(d)" 
+                IsChecked="{Binding Path=IsSwapMouseButtons, Mode=TwoWay}">
+			</CheckBox>
+        </StackPanel>            
     </StackPanel>
 </UserControl>

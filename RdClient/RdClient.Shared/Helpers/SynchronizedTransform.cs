@@ -1,8 +1,9 @@
 ﻿using System.Threading;
+using Windows.Foundation;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media;
 
-namespace RdClient.Helpers
+namespace RdClient.Shared.Helpers
 {
     public class SynchronizedTransform
     {
@@ -132,6 +133,28 @@ namespace RdClient.Helpers
                 Interlocked.Exchange(ref _translateY, value);
                 _transform.TranslateY = value;
             }
+        }
+
+        public Point TransformPoint(Point point)
+        {
+            Point result = new Point(point.X, point.Y);
+            result.X *= ScaleX;
+            result.Y *= ScaleY;
+            result.X += TranslateX;
+            result.Y += TranslateY;
+
+            return result;           
+        }
+
+        public Point InverseTransformPoint(Point point)
+        {
+            Point result = new Point(point.X, point.Y);
+            result.X /= ScaleX;
+            result.Y /= ScaleY;
+            result.X -= TranslateX;
+            result.Y -= TranslateY;
+
+            return result;
         }
 
         public CompositeTransform Transform

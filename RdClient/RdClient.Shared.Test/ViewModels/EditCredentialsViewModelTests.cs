@@ -2,7 +2,6 @@
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Data;
-    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
@@ -294,22 +293,6 @@
             Assert.AreEqual(2, changes.Count);
             Assert.AreEqual("Prompt", changes[0].PropertyName);
             Assert.AreEqual("Prompt", changes[1].PropertyName);
-        }
-
-        [TestMethod]
-        public void EditCredentialsViewModel_ChangeDismissLabel_ChangeReported()
-        {
-            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
-
-            _nav.PushModalView(ViewName, _task);
-            _vm.PropertyChanged += (sender, e) => changes.Add(e);
-            _vm.DismissLabel = "dismiss";
-            _vm.DismissLabel += "label";
-
-            Assert.AreEqual("dismisslabel", _vm.DismissLabel);
-            Assert.AreEqual(2, changes.Count);
-            Assert.AreEqual("DismissLabel", changes[0].PropertyName);
-            Assert.AreEqual("DismissLabel", changes[1].PropertyName);
         }
 
         [TestMethod]

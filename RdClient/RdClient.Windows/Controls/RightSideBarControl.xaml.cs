@@ -1,12 +1,11 @@
-﻿// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
-
-namespace RdClient.Controls
+﻿namespace RdClient.Controls
 {
+    using System;
     using System.Diagnostics.Contracts;
-using System.Windows.Input;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
+    using System.Windows.Input;
+    using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Media.Animation;
 
     public sealed partial class RightSideBarControl : UserControl
     {
@@ -24,6 +23,9 @@ using Windows.UI.Xaml.Media.Animation;
             typeof(ICommand), typeof(RightSideBarControl),
             new PropertyMetadata(null, OnMouseModeChanged));
 
+        public static readonly DependencyProperty FullScreenProperty = DependencyProperty.Register("FullScreen",
+            typeof(ICommand), typeof(RightSideBarControl),
+            new PropertyMetadata(null, OnFullScreenChanged));
 
         public Windows.UI.Xaml.Visibility BarVisibility
         {
@@ -40,6 +42,11 @@ using Windows.UI.Xaml.Media.Animation;
         {
             get { return (ICommand)GetValue(MouseModeProperty); }
             set { SetValue(MouseModeProperty, value); }
+        }
+        public ICommand FullScreen
+        {
+            get { return (ICommand)GetValue(FullScreenProperty); }
+            set { SetValue(FullScreenProperty, value); }
         }
 
         public RightSideBarControl()
@@ -107,6 +114,16 @@ using Windows.UI.Xaml.Media.Animation;
         private static void OnNavigateHomeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             ((RightSideBarControl)sender).InternalOnNavigateHomeChanged(e);
+        }
+        
+        private static void OnFullScreenChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            ((RightSideBarControl)sender).InternalOnFullScreenChanged(e);
+        }
+
+        private void InternalOnFullScreenChanged(DependencyPropertyChangedEventArgs e)
+        {
+            this.FullScreenButton.Command = (ICommand)e.NewValue;
         }
 
         private void InternalOnNavigateHomeChanged(DependencyPropertyChangedEventArgs e)

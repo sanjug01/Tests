@@ -56,7 +56,6 @@
                 Contract.Assert(null != _session);
                 if (null != _connection)
                     _connection.Disconnect();
-                _session.InternalSetState(new RemoteSession.CancelledSession(this));
             }
 
             public override void Complete(RemoteSession session)
@@ -71,6 +70,7 @@
                     _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                     _session._syncEvents.StatusInfoReceived -= this.OnStatusInfoReceived;
+                    _session._syncEvents.CheckGatewayCertificateTrust -= this.OnCheckGatewayCertificateTrust;
                 }
                 _session = null;
             }
@@ -87,6 +87,7 @@
                     _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                     _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
+                    _session._syncEvents.CheckGatewayCertificateTrust += this.OnCheckGatewayCertificateTrust;
 
                     _connection.SetCredentials(_session._sessionSetup.SessionCredentials.Credentials,
                         !_session._sessionSetup.SessionCredentials.IsNewPassword);
@@ -107,6 +108,27 @@
                     _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                     _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
+                    _session._syncEvents.CheckGatewayCertificateTrust += this.OnCheckGatewayCertificateTrust;
+                }
+            }
+
+            private void OnCheckGatewayCertificateTrust(object sender, CheckGatewayCertificateTrustArgs e)
+            {
+                // (pre)validation of the gateway certificate, per RDPConnection request
+                IRdpCertificate certificate = e.Certificate;
+                Contract.Assert(null != certificate);
+                Contract.Assert(null != _session);
+                
+                if (_session._certificateTrust.IsCertificateTrusted(certificate)
+                    || _session._sessionSetup.DataModel.CertificateTrust.IsCertificateTrusted(certificate))
+                {
+                    // The certificate has been accepted already;
+                    e.TrustDelegate.Invoke(true);
+                }
+                else
+                {
+                    // The certificate has not been trusted yet
+                    e.TrustDelegate.Invoke(false);
                 }
             }
 
@@ -155,6 +177,11 @@
                         RequestValidGatewayCredentials(e.DisconnectReason);
                         break;
 
+                    case RdpDisconnectCode.ProxyInvalidCA:
+                        // Gateway certificate needs validation
+                        ValidateCertificate(connection.GetGatewayCertificate(), e.DisconnectReason);
+                        break;
+
                     case RdpDisconnectCode.CredSSPUnsupported:
                         // Set the internal state to "certificate validation needed"
                         // Should prompt that the server identity cannot be verified 
@@ -191,7 +218,7 @@
 
             private void OnStatusInfoReceived(object sender, StatusInfoReceivedArgs e)
             {
-                Debug.WriteLine("StatusInfoReceived|StatusCode={0}", e.StatusCode);
+                Debug.WriteLine("Connecting|StatusInfoReceived|StatusCode={0}", e.StatusCode);
             }
 
             private void ValidateCertificate(IRdpCertificate certificate, RdpDisconnectReason reason)

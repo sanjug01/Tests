@@ -70,7 +70,6 @@
             viewModel.UserName = _sessionCredentials.Credentials.Username;
             viewModel.Password = _sessionCredentials.Credentials.Password;
             viewModel.CanSaveCredentials = true;
-            viewModel.DismissLabel = "d:Connect";
             viewModel.Prompt = _prompt;
         }
 
@@ -166,14 +165,7 @@
 
         private bool IsNewUserNameValid(IEditCredentialsViewModel viewModel)
         {
-            bool valid = !string.IsNullOrWhiteSpace(viewModel.UserName);
-
-            if(valid)
-            {
-                valid = _userNameRule.Validate(viewModel.UserName).IsValid;
-            }
-
-            return valid;
+            return _userNameRule.Validate(viewModel.UserName).Status == ValidationResultStatus.Valid;
         }
 
         private bool IsNewPasswordValid(IEditCredentialsViewModel viewModel)

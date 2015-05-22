@@ -1,8 +1,7 @@
-﻿using System;
-using RdClient.Shared.Helpers;
+﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Pointer;
-using System.Diagnostics;
-using RdClient.Shared.Input.Recognizers;
+using RdClient.Shared.Models.Viewport;
+using System;
 
 namespace RdClient.Shared.Models.PanKnobModel
 {

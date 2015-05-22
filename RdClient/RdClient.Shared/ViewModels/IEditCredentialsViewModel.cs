@@ -10,8 +10,6 @@
         ICommand Confirm { get; }
         ICommand CancelConfirmation { get; }
 
-        string DismissLabel { get; set; }
-
         bool CanRevealPassword { get; set; }
 
         bool CanSaveCredentials { get; set; }

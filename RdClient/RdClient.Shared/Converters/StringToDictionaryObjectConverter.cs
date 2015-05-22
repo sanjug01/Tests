@@ -37,7 +37,7 @@
         public string DefaultObject
         {
             get { return _defaultObject; }
-            set { this.SetProperty<string>(ref _defaultObject, value); }
+            set { this.SetProperty(ref _defaultObject, value); }
         }
 
         protected override void DisposeManagedState()

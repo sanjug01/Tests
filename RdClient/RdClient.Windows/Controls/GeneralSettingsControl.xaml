@@ -14,27 +14,36 @@
         <design:FakeSettingsViewModel />
     </d:UserControl.DataContext>
 
-    <Grid>        
-        <StackPanel Orientation="Vertical">
-            <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                       x:Uid="Settings_General_ShowThumbnails" 
-                       Text="Show thumbnails for Desktops (d)" />
-                <ToggleSwitch HorizontalAlignment="Left" 
-                              IsOn="{Binding Path=GeneralSettings.UseThumbnails, Mode=TwoWay}"/>
-            </StackPanel>
-
-            <StackPanel Orientation="Vertical">
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                           x:Uid="Settings_General_Feedback" 
-                           Text="Help improve Remote Desktop (d)" />
-                <TextBlock Style="{ThemeResource CaptionTextBlockStyle}"
-                           Foreground="{ThemeResource UnselectedForegroundBrush}"
-                           x:Uid="Settings_General_FeedbackCaption" 
-                           Text="Send anonymous data to Microsoft (d)" />
-                <ToggleSwitch HorizontalAlignment="Left"
-                              IsOn="{Binding Path=GeneralSettings.SendFeedback, Mode=TwoWay}"/>
-            </StackPanel>
-        </StackPanel>
-    </Grid>
+	<StackPanel Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
+		<!--Show thumbnails section -->
+		<StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
+			<TextBlock 
+				Style="{ThemeResource BodyTextBlockStyle}" 
+                x:Uid="Settings_General_ShowThumbnails" 
+                Text="Show thumbnails for Desktops (d)">				
+			</TextBlock>
+			<ToggleSwitch 
+				HorizontalAlignment="Left" 
+                IsOn="{Binding Path=GeneralSettings.UseThumbnails, Mode=TwoWay}">				
+			</ToggleSwitch>
+		</StackPanel>
+		<!-- Enable Telemetry section -->
+		<StackPanel>
+			<TextBlock 
+				Style="{ThemeResource BodyTextBlockStyle}" 
+                x:Uid="Settings_General_Feedback" 
+                Text="Help improve Remote Desktop (d)">				
+			</TextBlock>
+			<TextBlock 
+				Style="{ThemeResource CaptionTextBlockStyle}"
+                Foreground="{ThemeResource UnselectedForegroundBrush}"
+                x:Uid="Settings_General_FeedbackCaption" 
+                Text="Send anonymous data to Microsoft (d)">				
+			</TextBlock>
+			<ToggleSwitch 
+				HorizontalAlignment="Left"
+                IsOn="{Binding Path=GeneralSettings.SendFeedback, Mode=TwoWay}">				
+			</ToggleSwitch>
+		</StackPanel>
+	</StackPanel>
 </UserControl>

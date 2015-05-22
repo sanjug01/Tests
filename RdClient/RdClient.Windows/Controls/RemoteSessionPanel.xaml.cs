@@ -4,6 +4,7 @@
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Input.Recognizers;
     using RdClient.Shared.Models;
+    using RdClient.Shared.Models.Viewport;
     using RdClient.Shared.Navigation;
     using System;
     using System.ComponentModel;
@@ -12,16 +13,16 @@
     using Windows.Foundation;
     using Windows.UI.Core;
     using Windows.UI.Input;
-    using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
+
 
     /// <summary>
     /// A panel shown in the remote session view (RemoteSessionView) that renders contents of the remote session
     /// and captures keyboard, mouse, pen and touch input.
     /// </summary>
-    public sealed partial class RemoteSessionPanel : UserControl, IRemoteSessionView
+    public sealed partial class RemoteSessionPanel : UserControl, IRemoteSessionView, IViewportPanel
     {
         public static readonly DependencyProperty RemoteSessionViewSiteProperty = DependencyProperty.Register("RemoteSessionViewSite",
             typeof(object),
@@ -41,10 +42,16 @@
             this.InitializeComponent();
 
             this.RenderingPanel.SizeChanged += this.OnRenderingPanelSizeChanged;
+            this.SizeChanged += OnSizeChanged;
 
             _viewLoaded = false;
             _renderingPanelSize = Size.Empty;
-            this.RenderingPanel.SetViewport(new RenderingPanelViewport(this, this.RenderingPanel, this.Transformation));
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            EmitPropertyChanged("Width");
+            EmitPropertyChanged("Height");
         }
 
         public object RemoteSessionViewSite
@@ -59,6 +66,38 @@
         {
             get { return _renderingPanelSize; }
             private set { this.SetProperty(ref _renderingPanelSize, value); }
+        }
+
+        double IViewportPanel.Width
+        {
+            get
+            {
+                return this.ActualWidth;
+            }
+            set
+            {
+                this.Width = value;
+            }
+        }
+
+        double IViewportPanel.Height
+        {
+            get
+            {
+                return this.ActualHeight;
+            }
+            set
+            {
+                this.Height = value;
+            }
+        }
+
+        public IViewportTransform Transform
+        {
+            get
+            {
+                return null;
+            }
         }
 
         event EventHandler IRemoteSessionView.Closed
@@ -114,8 +153,7 @@
             if (!object.Equals(property, newValue))
             {
                 property = newValue;
-                if (null != _propertyChanged)
-                    _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                EmitPropertyChanged(propertyName);
             }
         }
 
@@ -131,6 +169,10 @@
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             _viewLoaded = true;
+
+            this.RenderingPanel.SetViewport(new Viewport(this.RenderingPanel, this));
+            this.RenderingPanel.SetTransform(new ViewportTransformWrapper(this.RenderPanelTransform));
+
             _renderingPanelSize = this.RenderingPanel.RenderSize;
             //
             // Set self as the remote session view in the view model.
@@ -188,11 +230,16 @@
 
         private void OnRenderingPanelSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //
-            // Set the Size property, which will emit an INotifyPropertyChanged event to the view model.
-            //
             this.Size = e.NewSize;
         }
+
+        private void EmitPropertyChanged(string propertyName)
+        {
+            if(_propertyChanged != null)
+            {
+                _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }            
 
         protected override void OnManipulationStarting(ManipulationStartingRoutedEventArgs e)
         {
@@ -295,6 +342,11 @@
             {
                 MakeCursorVisible();
             }
+        }
+
+        private void Canvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
         }
     }
 }

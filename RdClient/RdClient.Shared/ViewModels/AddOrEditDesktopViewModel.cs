@@ -31,8 +31,6 @@
 
     public class AddOrEditDesktopViewModel : ViewModelBase, IAddOrEditDesktopViewModel, IDialogViewModel
     {
-        private string _host;
-        private bool _isHostValid;
         private bool _isAddingDesktop;
         private bool _isExpandedView;
         private string _friendlyName;
@@ -48,40 +46,47 @@
         private readonly RelayCommand _editUserCommand;
         private readonly RelayCommand _addGatewayCommand;
         private readonly RelayCommand _editGatewayCommand;
+        private readonly ValidatedProperty<string> _host;
         private DesktopModel _desktop;
 
-        private ObservableCollection<UserComboBoxElement> _users;
-        private ObservableCollection<GatewayComboBoxElement> _gateways;
+        private ReadOnlyObservableCollection<UserComboBoxElement> _users;
+        private ReadOnlyObservableCollection<GatewayComboBoxElement> _gateways;
         private UserComboBoxElement _selectedUser;
         private GatewayComboBoxElement _selectedGateway;
+        private Guid _selectedUserId;
 
         public AddOrEditDesktopViewModel()
         {
-            _saveCommand = new RelayCommand(SaveCommandExecute,
-                o =>
-                {
-                    return (string.IsNullOrEmpty(this.Host) == false);
-                });
+            _saveCommand = new RelayCommand(o => SaveCommandExecute(), o => SaveCommandCanExecute());
             _cancelCommand = new RelayCommand(CancelCommandExecute);
+
             _showDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = true; });
             _hideDetailsCommand = new RelayCommand((o) => { this.IsExpandedView = false; });
+
             _addUserCommand = new RelayCommand(AddUserCommandExecute);
-            _addGatewayCommand = new RelayCommand(AddGatewayCommandExecute);
             _editUserCommand = new RelayCommand(EditUserCommandExecute, EditUserCommandCanExecute);
+
+            _addGatewayCommand = new RelayCommand(AddGatewayCommandExecute);            
             _editGatewayCommand = new RelayCommand(EditGatewayCommandExecute, EditGatewayCommandCanExecute);
 
-            this.IsHostValid = true;
+            _host = new ValidatedProperty<string>(new HostnameValidationRule());
+            _host.PropertyChanged += (s, e) =>
+            {
+                if (s == _host && e.PropertyName == "State")
+                {
+                    _saveCommand.EmitCanExecuteChanged();
+                }
+            };
+
             this.IsExpandedView = false;
-            this.UserOptions = new ObservableCollection<UserComboBoxElement>();
-            this.GatewayOptions = new ObservableCollection<GatewayComboBoxElement>();
         }
 
-        public ObservableCollection<UserComboBoxElement> UserOptions
+        public ReadOnlyObservableCollection<UserComboBoxElement> Users
         {
             get { return _users; }
             private set { SetProperty(ref _users, value); }
         }
-        public ObservableCollection<GatewayComboBoxElement> GatewayOptions
+        public ReadOnlyObservableCollection<GatewayComboBoxElement> Gateways
         {
             get { return _gateways; }
             private set { SetProperty(ref _gateways, value); }
@@ -90,10 +95,10 @@
         public IPresentableView PresentableView { private get; set; }
         public ICommand DefaultAction { get { return _saveCommand; } }
         public ICommand Cancel { get { return _cancelCommand; } }
-        public ICommand AddUserCommand { get { return _addUserCommand; } }
-        public ICommand EditUserCommand { get { return _editUserCommand; } }
-        public ICommand AddGatewayCommand { get { return _addGatewayCommand; } }
-        public ICommand EditGatewayCommand { get { return _editGatewayCommand; } }
+        public ICommand AddUser { get { return _addUserCommand; } }
+        public ICommand EditUser { get { return _editUserCommand; } }
+        public ICommand AddGateway { get { return _addGatewayCommand; } }
+        public ICommand EditGateway { get { return _editGatewayCommand; } }
         public ICommand ShowDetailsCommand { get { return _showDetailsCommand; } }
         public ICommand HideDetailsCommand { get { return _hideDetailsCommand; } }
 
@@ -136,20 +141,9 @@
             private set { this.SetProperty(ref _desktop, value); }
         }
 
-        public string Host
+        public IValidatedProperty<string> Host
         {
             get { return _host; }
-            set 
-            { 
-                SetProperty(ref _host, value); 
-                _saveCommand.EmitCanExecuteChanged();
-            }
-        }
-
-        public bool IsHostValid
-        {
-            get { return _isHostValid; }
-            private set { SetProperty(ref _isHostValid, value); }
         }
 
         public bool IsExpandedView
@@ -182,11 +176,16 @@
             set { SetProperty(ref _audioMode, value); }
         }
 
-        private void SaveCommandExecute(object o)
+        private bool SaveCommandCanExecute()
         {
-            if (this.Validate())
+            return this.Host.State.Status != ValidationResultStatus.Empty;
+        }
+
+        private void SaveCommandExecute()
+        {
+            if (this.Host.State.Status == ValidationResultStatus.Valid)
             {
-                this.Desktop.HostName = this.Host;
+                this.Desktop.HostName = this.Host.Value;
                 this.Desktop.FriendlyName = this.FriendlyName;
                 this.Desktop.IsAdminSession = this.IsUseAdminSession;
                 this.Desktop.IsSwapMouseButtons = this.IsSwapMouseButtons;
@@ -226,35 +225,6 @@
             this.DismissModal(null);
         }
 
-        /// <summary>
-        /// This method performs all validation tests.
-        ///     Currently the validation is performed only on Save command
-        /// </summary>
-        /// <returns>true, if all validations pass</returns>
-        private bool Validate()
-        {
-            HostNameValidationRule rule = new HostNameValidationRule();
-            bool isValid = true;
-            if (!(this.IsHostValid = rule.Validate(this.Host).IsValid))
-            {
-                isValid = isValid && this.IsHostValid;
-            }
-
-            return isValid;
-        }
-
-        private void Update()
-        {
-            // load users list
-            this.LoadUsers();
-            this.SelectUserId(this.Desktop.CredentialsId);
-
-            // load gateways list
-            this.LoadGateways();
-            this.SelectGatewayId(this.Desktop.GatewayId);
-        }
-
-
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Assert(null != activationParameter);
@@ -265,7 +235,7 @@
             if (editArgs != null)
             {
                 this.Desktop = editArgs.Desktop;
-                this.Host = this.Desktop.HostName;
+                this.Host.Value = this.Desktop.HostName;
                 this.FriendlyName = this.Desktop.FriendlyName;
                 this.AudioMode = (int) this.Desktop.AudioMode;
                 this.IsSwapMouseButtons = this.Desktop.IsSwapMouseButtons;
@@ -276,6 +246,7 @@
             else if(addArgs != null)
             {
                 this.Desktop = new DesktopModel();
+                this.Host.Value = string.Empty;
                 this.FriendlyName = string.Empty;
                 this.AudioMode = (int)RdClient.Shared.Models.AudioMode.Local;
                 this.IsSwapMouseButtons = false;
@@ -284,13 +255,60 @@
                 this.IsAddingDesktop = true;
             }
             this.IsExpandedView = false;
-            Update();
+
+            // initialize users colection
+            UserComboBoxElement defaultUser = new UserComboBoxElement(UserComboBoxType.AskEveryTime);
+            JoinedObservableCollection<UserComboBoxElement> userCollection = JoinedObservableCollection<UserComboBoxElement>.Create();
+            userCollection.AddCollection(new ObservableCollection<UserComboBoxElement>() { defaultUser });
+            userCollection.AddCollection(
+                TransformingObservableCollection<IModelContainer<CredentialsModel>, UserComboBoxElement>.Create(
+                    this.ApplicationDataModel.Credentials.Models,
+                    c => new UserComboBoxElement(UserComboBoxType.Credentials, c),
+                    ucbe =>
+                    {
+                        if (this.SelectedUser == ucbe)
+                        {
+                            this.SelectedUser = null;
+                        }
+                    })
+                );
+
+            IOrderedObservableCollection<UserComboBoxElement> orderedUsers = OrderedObservableCollection<UserComboBoxElement>.Create(userCollection);
+            orderedUsers.Order = new UserComboBoxOrder();
+            this.Users = orderedUsers.Models;
+
+            this.SelectUserId(this.Desktop.CredentialsId);
+
+            // initialize gateways colection
+            GatewayComboBoxElement defaultGateway = new GatewayComboBoxElement(GatewayComboBoxType.None);
+            JoinedObservableCollection<GatewayComboBoxElement> gatewayCollection = JoinedObservableCollection<GatewayComboBoxElement>.Create();
+            gatewayCollection.AddCollection(new ObservableCollection<GatewayComboBoxElement>() { defaultGateway });
+            gatewayCollection.AddCollection(
+                TransformingObservableCollection<IModelContainer<GatewayModel>, GatewayComboBoxElement>.Create(
+                    this.ApplicationDataModel.Gateways.Models,
+                    g => new GatewayComboBoxElement(GatewayComboBoxType.Gateway, g),
+                    gcbe =>
+                    {
+                        if (this.SelectedGateway == gcbe)
+                        {
+                            this.SelectedGateway = null;
+                        }
+                    })
+                );
+
+            IOrderedObservableCollection<GatewayComboBoxElement> orderedGateways = OrderedObservableCollection<GatewayComboBoxElement>.Create(gatewayCollection);
+            orderedGateways.Order = new GatewayComboBoxOrder();
+            this.Gateways = orderedGateways.Models;
+
+            this.SelectGatewayId(this.Desktop.GatewayId);
         }
 
         private void AddGatewayCommandExecute(object o)
         {
             AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
-            ModalPresentationCompletion addGatewayCompleted = new ModalPresentationCompletion(AddGatewayPromptResultHandler);
+            ModalPresentationCompletion addGatewayCompleted = new ModalPresentationCompletion(AddGatewayPromptResultHandler);            
+            // save user selection
+            _selectedUserId = (null != this.SelectedUser && UserComboBoxType.Credentials == this.SelectedUser.UserComboBoxType) ? this.SelectedUser.Credentials.Id : Guid.Empty;
             NavigationService.PushAccessoryView("AddOrEditGatewayView", args, addGatewayCompleted);
         }
 
@@ -298,6 +316,8 @@
         {
             EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway.Model);
             ModalPresentationCompletion editGatewayCompleted = new ModalPresentationCompletion(EditGatewayPromptResultHandler);
+            // save user selection
+            _selectedUserId = (null != this.SelectedUser && UserComboBoxType.Credentials == this.SelectedUser.UserComboBoxType) ? this.SelectedUser.Credentials.Id : Guid.Empty;
             this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, editGatewayCompleted);
         }
 
@@ -325,42 +345,18 @@
             return this.SelectedUser?.Credentials?.Model != null;
         }
 
-        private void LoadUsers()
-        {
-            // load users list
-            this.UserOptions.Clear();
-            this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.AskEveryTime));
-
-            foreach (IModelContainer<CredentialsModel> credentials in this.ApplicationDataModel.Credentials.Models)
-            {
-                this.UserOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, credentials));
-            }
-        }
-
-        private void LoadGateways()
-        {
-            // load gateways list
-            this.GatewayOptions.Clear();
-            this.GatewayOptions.Add(new GatewayComboBoxElement(GatewayComboBoxType.None));
-
-            foreach (IModelContainer<GatewayModel> gateway in this.ApplicationDataModel.Gateways.Models)
-            {
-                this.GatewayOptions.Add(new GatewayComboBoxElement(GatewayComboBoxType.Gateway, gateway));
-            }
-        }
-
         /// <summary>
         /// change user selection without saving to the desktop instance.
         /// </summary>
         /// <param name="userId"> user id for the selected user </param>
         private void SelectUserId(Guid userId)
         {
-            var selected = this.UserOptions.FirstOrDefault(cbe =>
+            var selected = this.Users.FirstOrDefault(cbe =>
             {
                 return cbe.UserComboBoxType == UserComboBoxType.Credentials && cbe.Credentials?.Id == userId;
             });
 
-            this.SelectedUser = (null != selected) ? selected : this.UserOptions[0];
+            this.SelectedUser = (null != selected) ? selected : this.Users[0];
         }
 
         /// <summary>
@@ -369,12 +365,12 @@
         /// <param name="gatewayId"> gateway id for the selected gateway </param>
         private void SelectGatewayId(Guid gatewayId)
         {
-            var selected = this.GatewayOptions.FirstOrDefault(cbe =>
+            var selected = this.Gateways.FirstOrDefault(cbe =>
             {
                 return cbe.GatewayComboBoxType == GatewayComboBoxType.Gateway && cbe.Gateway?.Id == gatewayId;
             });
 
-            this.SelectedGateway = (null != selected) ? selected : this.GatewayOptions[0];
+            this.SelectedGateway = (null != selected) ? selected : this.Gateways[0];
         }
 
         private void AddCredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
@@ -384,13 +380,9 @@
             if (result != null && !result.UserCancelled)
             {
                 Guid credId = this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
-                LoadUsers();
                 this.SelectUserId(credId);
             }
-            else
-            {
-                this.Update();
-            }
+
         }
         private void EditCredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
         {
@@ -398,7 +390,6 @@
             if (result != null && !result.UserCancelled)
             {
                 Guid credId = this.SelectedUser.Credentials.Id;
-                LoadUsers();
                 this.SelectUserId(credId);
             }
         }
@@ -406,30 +397,28 @@
         private void AddGatewayPromptResultHandler(object sender, PresentationCompletionEventArgs args)
         {
             GatewayPromptResult result = args.Result as GatewayPromptResult;
-
             if (result != null && !result.UserCancelled)
             {
-                this.LoadGateways();
                 this.SelectGatewayId(result.GatewayId);
             }
 
-            // load users list, since users may have been added
-            this.LoadUsers();
-            this.SelectUserId(this.Desktop.CredentialsId);
+            // restore user selection in case user collection has been changed
+            this.SelectedUser = null;
+            this.SelectUserId(_selectedUserId);
         }
         private void EditGatewayPromptResultHandler(object sender, PresentationCompletionEventArgs args)
         {
+
             GatewayPromptResult result = args.Result as GatewayPromptResult;
             if (result != null && !result.UserCancelled)
             {
                 Guid gatewayId = this.SelectedGateway.Gateway.Id;
-                LoadGateways();
                 this.SelectGatewayId(gatewayId);
             }
 
-            // load users list, since users may have been added
-            this.LoadUsers();
-            this.SelectUserId(this.Desktop.CredentialsId);
+            // restore user selection in case user collection has been changed
+            this.SelectedUser = null;
+            this.SelectUserId(_selectedUserId);
         }
 
     }

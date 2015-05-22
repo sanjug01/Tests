@@ -33,9 +33,8 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <controls:ConnectionCenterTitleBar Grid.Column="0" />
-
-                <CommandBar Grid.Column="1">
+				<controls:ConnectionCenterTitleBar Grid.Column="0" />
+				<CommandBar Grid.Column="1">
                     <AppBarButton x:Uid="ConnectionCenter_Toolbar_Add"
                                   Command="{Binding AddDesktopCommand}"
                                   Margin="0,0,5,5"

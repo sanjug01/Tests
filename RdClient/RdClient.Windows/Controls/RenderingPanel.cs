@@ -1,9 +1,9 @@
 ﻿namespace RdClient.Controls
 {
     using RdClient.Shared.Helpers;
-    using RdClient.Shared.Input;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
+    using RdClient.Shared.Models.Viewport;
     using System;
     using System.Diagnostics.Contracts;
     using System.Threading;
@@ -11,14 +11,18 @@
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Media;
+    using System.ComponentModel;
+
 
     /// <summary>
     /// Wrapper of SwapChainPanel that adds the IRenderingPanel interface.
     /// </summary>
-    public sealed class RenderingPanel : SwapChainPanel, IRenderingPanel, IDisposable
+    public sealed class RenderingPanel : SwapChainPanel, IRenderingPanel, IDisposable, IViewportPanel
     {
         private readonly ReaderWriterLockSlim _monitor;
         private IViewport _viewport;
+        private IViewportTransform _transform;
+
         private EventHandler _ready;
         private EventHandler<IPointerEventBase> _pointerChanged;
 
@@ -33,6 +37,9 @@
         }
 
         private ScaleTransform _mouseScaleTransform;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public ScaleTransform MouseScaleTransform
         {
             get { return _mouseScaleTransform; }
@@ -54,9 +61,13 @@
         public void SetViewport(IViewport viewport)
         {
             Contract.Assert(null != viewport);
-            Contract.Assert(null == _viewport);
 
             _viewport = viewport;
+        }
+
+        public void SetTransform(IViewportTransform transform)
+        {
+            _transform = transform;
         }
 
         public void Dispose()
@@ -106,6 +117,38 @@
             }
         }
 
+        double IViewportPanel.Width
+        {
+            get
+            {
+                return this.ActualWidth * this.Transform.ScaleX;
+            }
+            set
+            {
+                this.Width = value;
+            }
+        }
+
+        double IViewportPanel.Height
+        {
+            get
+            {
+                return this.ActualHeight * this.Transform.ScaleY;
+            }
+            set
+            {
+                this.Height = value;
+            }
+        }
+
+        public IViewportTransform Transform
+        {
+            get
+            {
+                return _transform;
+            }
+        }
+
         void IRenderingPanel.ChangeMouseCursorShape(MouseCursorShape shape)
         {
             this.MouseCursor.Source = shape.ImageSource;
@@ -124,6 +167,16 @@
             {
                 if (null != _ready)
                     _ready(this, EventArgs.Empty);
+                EmitPropertyChanged("Width");
+                EmitPropertyChanged("Height");
+            }
+        }
+
+        private void EmitPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 

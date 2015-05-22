@@ -4,6 +4,7 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Test.Helpers;
+    using RdClient.Shared.ValidationRules;
     using RdClient.Shared.ViewModels;
     using System;
 
@@ -44,21 +45,21 @@
         public void UserValidForNonEmptyEmptyUsername()
         {
             _vm.User.Value = "Don Pedro";
-            Assert.IsTrue(_vm.User.State.IsValid);
+            Assert.IsTrue(_vm.User.State.Status == ValidationResultStatus.Valid);
         }
 
         [TestMethod]
         public void UserValidForUserWithNonAlphanumericCharacters()
         {
             _vm.User.Value = "!";
-            Assert.IsTrue(_vm.User.State.IsValid);
+            Assert.IsTrue(_vm.User.State.Status == ValidationResultStatus.Valid);
         }
 
         [TestMethod]
-        public void UserInvalidForEmptyUsername()
+        public void UserNotValidForEmptyUsername()
         {
             _vm.User.Value = "";
-            Assert.IsFalse(_vm.User.State.IsValid);
+            Assert.IsFalse(_vm.User.State.Status == ValidationResultStatus.Valid);
         }
 
         [TestMethod]

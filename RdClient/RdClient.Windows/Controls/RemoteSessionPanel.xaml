@@ -19,20 +19,20 @@
             <ScaleTransform x:Name="MouseScaleTransform" CenterX="0" CenterY="0"/>
             <TranslateTransform x:Name="MouseTransform" />
         </TransformGroup>
-        <cx:ScreenProperties x:Key="ScreenProperties"/>
+        <TransformGroup x:Key="RenderTransformGroup">
+            <CompositeTransform x:Name="RenderPanelTransform"
+                                        ScaleX="1.0" ScaleY="1.0"
+                                        TranslateX="0.0" TranslateY="0.0"/>
+        </TransformGroup>
+                        
+        <cx:ScreenProperties x:Key="ScreenProperties"/>        
     </UserControl.Resources>
 
     <Canvas Background="Gray">
         <c:RenderingPanel x:Name="RenderingPanel"
                           Width="{Binding Source={StaticResource ScreenProperties}, Path=Resolution.Width}" 
-                          Height="{Binding Source={StaticResource ScreenProperties}, Path=Resolution.Height}">
-            <SwapChainPanel.RenderTransform>
-                <TransformGroup>
-                    <CompositeTransform x:Name="Transformation"
-                                        ScaleX="1.0" ScaleY="1.0"
-                                        TranslateX="0.0" TranslateY="0.0"/>
-                </TransformGroup>
-            </SwapChainPanel.RenderTransform>
+                          Height="{Binding Source={StaticResource ScreenProperties}, Path=Resolution.Height}"
+                          RenderTransform="{StaticResource RenderTransformGroup}">
         </c:RenderingPanel>
         <Image x:Name="MouseCursor" CacheMode="BitmapCache" Stretch="None" Width="Auto" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"
                    RenderTransform="{StaticResource MouseTransformGroup}" />
