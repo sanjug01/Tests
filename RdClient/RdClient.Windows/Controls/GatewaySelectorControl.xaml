@@ -44,7 +44,7 @@
 				Style="{StaticResource DialogButtonStyle}" 
 				x:Uid="Common_Button_AddNewItem" 
 				Content="Add New(d)" 
-				Command="{Binding AddGatewayCommand}">				
+				Command="{Binding AddGateway}">				
 			</Button>
 		</Grid>
 	</StackPanel>

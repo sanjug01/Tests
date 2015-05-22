@@ -75,7 +75,7 @@
 				</controls:ErrorControl>
 			</StackPanel>
 			<!-- User name -->
-<controls:UserSelectorControl/>
+			<controls:UserSelectorControl Margin="{StaticResource DialogItemVerticalSpacing}"/>
 			<!-- Show/hide extra settings buttons -->
 			<HyperlinkButton
 				Margin="{StaticResource DialogSectionVerticalSpacing}"
