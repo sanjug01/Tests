@@ -15,15 +15,12 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using Windows.UI.Xaml;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite, ITelemetryClientSite
     {
-        private readonly RelayCommand _toggleSideBars;
         private readonly RelayCommand _invokeKeyboard;
         private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
-        private readonly RelayCommand _navigateHome;
-        private readonly RelayCommand _mouseMode;
-        private readonly RelayCommand _fullScreen;
 
         public ZoomPanModel ZoomPanModel
         {
@@ -47,28 +44,27 @@
         private IPointerCapture _pointerCapture;
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
-        private readonly ReadOnlyObservableCollection<object> _connectionBarItems;
-        private bool _isRightSideBarVisible;
+        private ReadOnlyObservableCollection<object> _connectionBarItems;
         private ITelemetryClient _telemetryClient;
         private ITelemetryStopwatch _TelemetrySessionDuration;
         private ITimerFactory _timerFactory;
         private ILifeTimeManager _lifeTimeManager;
 
-        private readonly PointerPosition _pointerPosition = new PointerPosition();
-        private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
-
-        public IFullScreenModel FullScreenModel
+        public PointerPosition PointerPosition
         {
             private get; set;
         }
 
-        private IScrollBarModel _scrollBarModel;
+        private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
+
         public IScrollBarModel ScrollBarModel
         {
-            set
-            {
-                _scrollBarModel = value;
-            }
+            get; set;
+        }
+
+        public RightSideBarViewModel RightSideBarViewModel
+        {
+            get; set;
         }
 
         private IPanKnobSite _panKnobSite;
@@ -131,37 +127,6 @@
             get { return _connectionBarItems; }
         }
 
-        public ICommand ToggleSideBars
-        {
-            get { return _toggleSideBars; }
-        }
-
-        public bool IsRightSideBarVisible
-        {
-            get { return _isRightSideBarVisible; }
-            set { this.SetProperty(ref _isRightSideBarVisible, value); }
-        }
-
-        public ICommand NavigateHome
-        {
-            get { return _navigateHome; }
-        }
-
-        public ICommand MouseMode
-        {
-            get { return _mouseMode; }
-        }
-
-        public ICommand FullScreen
-        {
-            get { return _fullScreen; }
-        }
-
-        public IScrollBarModel ScrollBars
-        {
-            get { return _scrollBarModel; }
-        }
-
         /// <summary>
         /// View model of the view shown in the belly band across the session view when input is needed from user.
         /// Setting the property to a non-null value shows the belly band.
@@ -174,24 +139,12 @@
 
         public RemoteSessionViewModel()
         {
-            _toggleSideBars = new RelayCommand(this.InternalToggleRightSideBar);
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
             _invokeKeyboardModel = new SymbolBarToggleButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
-            _navigateHome = new RelayCommand(this.InternalNavigateHome);
-            _mouseMode = new RelayCommand(this.InternalMouseMode);
-            _fullScreen = new RelayCommand(this.InternalFullScreen);
-            _isRightSideBarVisible = false;
             _sessionState = SessionState.Idle;
 
             this.ZoomPanModel = new ZoomPanModel();
 
-            ObservableCollection<object> items = new ObservableCollection<object>();
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = this.ZoomPanModel.ZoomInCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = _toggleSideBars });
-            items.Add(_invokeKeyboardModel);
-            
-            _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -199,6 +152,13 @@
             Contract.Assert(null == _activeSession);
             Contract.Assert(null != _keyboardCapture);
             Contract.Assert(null != _inputPanelFactory);
+
+            ObservableCollection<object> items = new ObservableCollection<object>();
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = this.ZoomPanModel.ZoomInCommand });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = this.RightSideBarViewModel.ToggleVisiblity });
+            items.Add(_invokeKeyboardModel);
+            _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
             base.OnPresenting(activationParameter);
 
@@ -262,7 +222,7 @@
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
         {
             this.BellyBandViewModel = null;
-            this.NavigateHome.Execute(null);
+            this.RightSideBarViewModel.Disconnect.Execute(null);
             backArgs.Handled = true;
         }
 
@@ -408,11 +368,7 @@
                             _activeSession.HostName,
                             () => _activeSession.Disconnect() );
                         this.IsConnectionBarVisible = false;
-
-                        break;
-                    case SessionState.Interrupted:
-                    case SessionState.Closed:
-                        _TelemetrySessionDuration.Stop("SessionDuration");
+                        this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
                         break;
 
                     case SessionState.Connected:
@@ -422,6 +378,8 @@
                         // Remove any belly-band view that may be shown (transitioning from reconnect or connecting state)
                         //
                         this.BellyBandViewModel = null;
+                        this.RightSideBarViewModel.RemoteSession = _activeSession;
+
                         //
                         // If the session has been interrupted but reconnected automatically, clear the IsInterrupted flag
                         // to remote any interruption UI.
@@ -429,12 +387,15 @@
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
 
-                        _pointerPosition.Reset(_activeSessionControl, this);
+                        this.PointerPosition.Reset(_activeSessionControl, this);
+                        _activeSessionControl.RenderingPanel.Viewport.Reset();
 
-                        this.PointerCapture = new PointerCapture(_pointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
+                        this.PointerCapture = new PointerCapture(this.PointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
+                        this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
+
                         this.PanKnobSite = new PanKnobSite(this.TimerFactory);
-                        this.ScrollBars.Viewport = _activeSessionControl.RenderingPanel.Viewport;
                         this.ZoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport);
+                        this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
                         _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
@@ -449,7 +410,7 @@
 
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
-                        this.FullScreenModel.EnterFullScreenCommand.Execute(null);
+                        this.RightSideBarViewModel.FullScreenModel.EnterFullScreenCommand.Execute(null);
                         this.IsConnectionBarVisible = true;
                         break;
 
@@ -458,11 +419,16 @@
                         // Remove the belly-band message
                         //
                         this.BellyBandViewModel = null;
+                        this.RightSideBarViewModel.RemoteSession = null;
+                        this.RightSideBarViewModel.PointerCapture = null;
+
                         //
                         // If changing state from Connected, remove all event handlers specific to the connected state.
                         //
                         if (SessionState.Connected == _sessionState)
                         {
+                            _TelemetrySessionDuration.Stop("SessionDuration");
+
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
                             _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
@@ -472,15 +438,13 @@
                             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
                             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= this.ZoomPanModel.OnConsumptionModeChanged;
 
-                            this.ScrollBars.Viewport = null;
-
                             //
                             // The connection bar and side bars are not available in any non-connected state.
                             //
                             this.IsConnectionBarVisible = false;
-                            this.IsRightSideBarVisible = false;
+                            this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
                             _panKnobSite.PanKnob.IsVisible = false;
-                            this.FullScreenModel.ExitFullScreenCommand.Execute(null);
+                            this.RightSideBarViewModel.FullScreenModel.ExitFullScreenCommand.Execute(null);
                         }
                         break;
                 }
@@ -508,11 +472,6 @@
             _activeSession.Resume();
         }
 
-        private void InternalToggleRightSideBar(object parameter)
-        {
-            this.IsRightSideBarVisible = !this.IsRightSideBarVisible;
-        }
-
         private void InternalInvokeKeyboard(object parameter)
         {
             Contract.Assert(null != _inputPanel);
@@ -532,25 +491,6 @@
         {
             IInputPanel panel = (IInputPanel)sender;
             _invokeKeyboardModel.IsChecked = panel.IsVisible;
-        }
-
-        private void InternalNavigateHome(object parameter)
-        {
-            this.IsRightSideBarVisible = false;
-            _activeSession.Disconnect();
-        }
-
-        private void InternalMouseMode(object parameter)
-        {
-            if(this.PointerCapture != null)
-            {
-                this.PointerCapture.OnMouseModeChanged(this, EventArgs.Empty);
-            }
-        }
-
-        private void InternalFullScreen(object parameter)
-        {
-            this.FullScreenModel.ToggleFullScreen();
         }
 
         private void OnDeviceCapabilitiesPropertyChanged(object sender, PropertyChangedEventArgs e)

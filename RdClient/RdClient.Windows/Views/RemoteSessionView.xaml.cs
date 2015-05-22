@@ -34,8 +34,8 @@ namespace RdClient.Views
 
         private void UserControl_SizeChanged(object sender, Windows.UI.Xaml.SizeChangedEventArgs e)
         {
-            ((RemoteSessionViewModel)DataContext).ScrollBars.HorizontalScrollBarWidth = this.HorizontalScrolbar.ActualHeight;
-            ((RemoteSessionViewModel)DataContext).ScrollBars.VerticalScrollBarWidth = this.VerticalScrolbar.ActualHeight;
+            ((RemoteSessionViewModel)DataContext).ScrollBarModel.HorizontalScrollBarWidth = this.HorizontalScrolbar.ActualHeight;
+            ((RemoteSessionViewModel)DataContext).ScrollBarModel.VerticalScrollBarWidth = this.VerticalScrolbar.ActualWidth;
         }
     }
 }

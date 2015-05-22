@@ -90,7 +90,9 @@ namespace RdClient.Shared.Models
         public void Reset(IViewport viewport)
         {
             _viewport = viewport;
-
+            _isZoomedIn = false;
+            _zoomInCommand.EmitCanExecuteChanged();
+            _zoomOutCommand.EmitCanExecuteChanged();
         }
     }
 }

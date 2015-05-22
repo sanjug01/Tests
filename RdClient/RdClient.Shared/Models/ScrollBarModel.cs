@@ -1,6 +1,7 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Models.Viewport;
 using System;
+using System.Diagnostics;
 using Windows.UI.Xaml;
 
 namespace RdClient.Shared.Models
@@ -122,7 +123,7 @@ namespace RdClient.Shared.Models
             {
                 return CheckViewport(() =>
                 {
-                    if (_viewport.Size.Height + _verticalScrollBarWidth < _viewport.SessionPanel.Width)
+                    if (_viewport.Size.Height + _verticalScrollBarWidth < _viewport.SessionPanel.Height)
                     {
                         return Visibility.Visible;
                     }
@@ -174,6 +175,12 @@ namespace RdClient.Shared.Models
             {
                 this.ValueHorziontal = _viewport.Offset.X;
                 this.ValueVertical = _viewport.Offset.Y;
+
+                Debug.WriteLine("ValueHorziontal {0} ValueVertical {1}", ValueHorziontal, ValueVertical);
+                Debug.WriteLine("ViewportWidth {0} ViewportHeight {1}", ViewportWidth, ViewportHeight);
+                Debug.WriteLine("MinimumVertical {0} MaximumVertical {1} MinimumHorizontal {2} MaximumHorizontal {3}",
+                    MinimumVertical, MaximumVertical, MinimumHorizontal, MaximumHorizontal);
+                Debug.WriteLine("VisibilityHorizontal {0} VisibilityVertical {1} VisibilityCorner {2}", VisibilityHorizontal, VisibilityVertical, VisibilityCorner);
 
                 EmitPropertyChanged("MinimumVertical");
                 EmitPropertyChanged("MaximumVertical");

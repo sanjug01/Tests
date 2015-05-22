@@ -343,10 +343,5 @@
                 MakeCursorVisible();
             }
         }
-
-        private void Canvas_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-
-        }
     }
 }
