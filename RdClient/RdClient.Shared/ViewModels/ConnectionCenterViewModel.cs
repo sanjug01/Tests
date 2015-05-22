@@ -1,9 +1,11 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -451,8 +453,9 @@
             this.NavigationService.PushAccessoryView("AboutView", null);
         }
 
-        private void ShowHelpCommandExecute(object o)
-        {
+        private async void ShowHelpCommandExecute(object o)
+        {            
+            await Windows.System.Launcher.LaunchUriAsync(new Uri(GlobalConstants.HelpDocumentUrl));
         }
 
         private void PushAdditionalCommandsDialog(object parameter)
