@@ -2,17 +2,32 @@
 {
     public class ValidationResult : IValidationResult
     {
-        private readonly bool _valid;
+        private readonly ValidationResultStatus _status;
         private readonly object _content;
 
-        public  ValidationResult(bool valid, object content = null)
+        private  ValidationResult(ValidationResultStatus status, object content = null)
         {
-            _valid = valid;
+            _status = status;
             _content = content;
         }
 
-        public bool IsValid { get { return _valid; } }
+        public static ValidationResult Valid()
+        {
+            return new ValidationResult(ValidationResultStatus.Valid);
+        }
 
-        public object ErrorContent { get { return _content; } }        
+        public static ValidationResult Invalid(object content = null)
+        {
+            return new ValidationResult(ValidationResultStatus.Invalid, content);
+        }
+
+        public static ValidationResult Empty()
+        {
+            return new ValidationResult(ValidationResultStatus.Empty);
+        }
+
+        public object ErrorContent { get { return _content; } }
+
+        public ValidationResultStatus Status { get { return _status; } }
     }
 }

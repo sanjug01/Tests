@@ -24,8 +24,18 @@
         public IValidationResult Validate(string value)
         {
             StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
-            bool valid = !_credCollection.Models.Any(c => c.Id != _credId && comparer.Equals(c.Model.Username, value));
-            return new ValidationResult(valid, UsernameValidationFailure.Duplicate);
+            if (string.IsNullOrEmpty(value))
+            {
+                return ValidationResult.Empty();
+            }
+            else if (_credCollection.Models.Any(c => c.Id != _credId && comparer.Equals(c.Model.Username, value)))
+            {
+                return ValidationResult.Invalid(UsernameValidationFailure.Duplicate);
+            }
+            else
+            {
+                return ValidationResult.Valid();
+            }
         }
     }
 }

@@ -4,7 +4,14 @@
     {
         public IValidationResult Validate(string value)
         {
-            return new ValidationResult(!string.IsNullOrEmpty(value), UsernameValidationFailure.InvalidFormat);
+            if (string.IsNullOrEmpty(value))
+            {
+                return ValidationResult.Empty();
+            }
+            else
+            {
+                return ValidationResult.Valid();
+            }            
         }
     }
 }

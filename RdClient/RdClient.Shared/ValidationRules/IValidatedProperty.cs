@@ -6,6 +6,5 @@
     {
         T Value { get; set; }
         IValidationResult State { get; }
-        bool ValidateNow();
     }
 }
