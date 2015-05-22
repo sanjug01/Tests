@@ -366,6 +366,11 @@
             {
                 return new Timer();
             }
+
+            public ITimer CreateDispatcherTimer()
+            {
+                return new Timer();
+            }
         }
 
         private interface IConnectionActivity

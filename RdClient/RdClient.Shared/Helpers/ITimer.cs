@@ -5,6 +5,7 @@ namespace RdClient.Shared.Helpers
     public interface ITimerFactory
     {
         ITimer CreateTimer();
+        ITimer CreateDispatcherTimer();
     }
 
     public interface ITimer

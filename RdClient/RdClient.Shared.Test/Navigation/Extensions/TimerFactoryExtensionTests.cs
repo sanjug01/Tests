@@ -13,11 +13,18 @@
     {
         private sealed class TestTimerFactory : ITimerFactory
         {
+            public ITimer CreateDispatcherTimer()
+            {
+                throw new NotImplementedException();
+            }
+
             [DebuggerNonUserCode] // exclude from code coverage
             ITimer ITimerFactory.CreateTimer()
             {
                 throw new NotImplementedException();
             }
+
+
         }
 
         private sealed class TestViewModel : MutableObject, IViewModel, ITimerFactorySite

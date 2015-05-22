@@ -42,6 +42,11 @@ using System.Collections.Generic;
             {
                 return this.Timer;
             }
+
+            ITimer ITimerFactory.CreateDispatcherTimer()
+            {
+                return this.Timer;
+            }
         }
 
         private sealed class Command

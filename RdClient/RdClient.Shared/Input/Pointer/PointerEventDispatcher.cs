@@ -42,7 +42,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public PointerEventDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition)
         {
-            _pointerMode = new PointerModeConsumer(timerFactory.CreateTimer(), new PointerModeControl(sessionControl, pointerPosition));
+            _pointerMode = new PointerModeConsumer(timerFactory.CreateDispatcherTimer(), new PointerModeControl(sessionControl, pointerPosition));
             _multiTouchMode = new MultiTouchConsumer(sessionControl, pointerPosition);
             _directMode = new DirectModeConsumer(new DirectModeControl(sessionControl, pointerPosition), pointerPosition);
             
