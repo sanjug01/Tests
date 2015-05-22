@@ -9,13 +9,14 @@
     using RdClient.Shared.Models.PanKnobModel;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
+    using RdClient.Shared.Telemetry;
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
-    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite
+    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite, ITelemetryClientSite
     {
         private readonly RelayCommand _toggleSideBars;
         private readonly RelayCommand _invokeKeyboard;
@@ -41,7 +42,8 @@
         private bool _isConnectionBarVisible;
         private readonly ReadOnlyObservableCollection<object> _connectionBarItems;
         private bool _isRightSideBarVisible;
-
+        private ITelemetryClient _telemetryClient;
+        private ITelemetryStopwatch _TelemetrySessionDuration;
         private ITimerFactory _timerFactory;
         private ILifeTimeManager _lifeTimeManager;
 
@@ -378,8 +380,14 @@
                         this.IsConnectionBarVisible = false;
 
                         break;
+                    case SessionState.Interrupted:
+                    case SessionState.Closed:
+                        _TelemetrySessionDuration.Stop("SessionDuration");
+                        break;
 
                     case SessionState.Connected:
+                        _TelemetrySessionDuration = _telemetryClient.StartStopwatch();
+
                         //
                         // Remove any belly-band view that may be shown (transitioning from reconnect or connecting state)
                         //
@@ -514,6 +522,11 @@
             {
                 _invokeKeyboard.EmitCanExecuteChanged();
             }
+        }
+
+        void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
+        {
+            _telemetryClient = telemetryClient;
         }
     }
 }
