@@ -52,7 +52,7 @@
 				</TextBlock>
             </Grid>
 			<!-- PC Name -->
-			<StackPanel Margin="{StaticResource DialogSectionVerticalSpacing}">
+			<StackPanel Margin="{StaticResource DialogItemVerticalSpacing}">
 				<TextBlock 
 					Margin="{StaticResource DialogHeaderVerticalSpacing}"
 					Style="{ThemeResource BodyTextBlockStyle}" 
@@ -75,7 +75,7 @@
 				</controls:ErrorControl>
 			</StackPanel>
 			<!-- User name -->
-			<StackPanel Margin="{StaticResource DialogSectionVerticalSpacing}">
+			<StackPanel Margin="{StaticResource DialogItemVerticalSpacing}">
                 <ComboBox 
 					Margin="{StaticResource DialogItemVerticalSpacing}"
 					x:Uid="AddOrEditDesktop-Credentials-ComboBox"
@@ -156,7 +156,6 @@
 				Margin="{StaticResource DialogSectionVerticalSpacing}"
                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">				
 			</controls:DesktopExtraSettingsControl>
-
 			<!-- Save/Add button -->
 			<Grid>
 				<!-- Save button shows either Save or Add -->
