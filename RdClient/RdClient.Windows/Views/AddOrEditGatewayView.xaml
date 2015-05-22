@@ -27,92 +27,92 @@
         </cv:UserComboBoxElementToLocalizedStringConverter>
     </controls:ModalUserControl.Resources>
 
-    <ContentControl Style="{StaticResource AccessoryViewStyle}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="12"/>
-            </Grid.RowDefinitions>
-
-            <Grid Grid.Row="0">
-                <TextBlock Margin="0,12,0,12" Style="{ThemeResource TitleTextBlockStyle}" 
-                               x:Uid="AddOrEditGateway-AddCaption" Text="Add Gateway(d)"
-                               Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                <TextBlock Margin="0,12,0,12" Style="{ThemeResource TitleTextBlockStyle}" 
-                               x:Uid="AddOrEditGateway-EditCaption" Text="Edit Gateway(d)"
-                               Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-            </Grid>
-
-            <Border Grid.Row="1" Height="1" Margin="0" />
-
-            <StackPanel Grid.Row="2">
-				<StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
-					<TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
-                                       x:Uid="AddOrEditGateway-ServerName" 
-                                       Text="Gateway server Name(d)"/>
-                    <controls:ErrorControl 
-						Margin="0,8"
-						DataContext="{Binding Host}">
-						<controls:ErrorControl.PresentedContent>												
-							<TextBox 
-								Name="txtHostEntry" 
-								x:Uid="AddOrEditGateway-ServerNameTextbox"
-								Background="Transparent"                                 
-								IsTextPredictionEnabled="False"
-								IsSpellCheckEnabled="False"
-								PlaceholderText="Host name or IP address(d)"
-								Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-							</TextBox>
-						</controls:ErrorControl.PresentedContent>
-					</controls:ErrorControl>
-                </StackPanel>
-
-                <StackPanel Orientation="Vertical"
-                            Margin="0,0,0,80">
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddOrEditGateway-Credentials" Text="User name(d)"/>
-                    <ComboBox Margin="0,8" 
-                          HorizontalAlignment="Stretch"
-                              x:Uid="AddOrEditGateway-Credentials-ComboBox"
+	<ContentControl Style="{StaticResource AccessoryViewStyle}">
+		<StackPanel>
+			<!-- Title -->
+			<Grid Margin="{StaticResource DialogItemVerticalSpacing}">
+				<TextBlock 
+					Style="{ThemeResource TitleTextBlockStyle}" 
+                    x:Uid="AddOrEditGateway-AddCaption" 
+					Text="Add Gateway(d)"
+                    Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource BooleanToVisibilityConverter}}">
+				</TextBlock>
+				<TextBlock 
+					Style="{ThemeResource TitleTextBlockStyle}" 
+                    x:Uid="AddOrEditGateway-EditCaption" 
+					Text="Edit Gateway(d)"
+                    Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+				</TextBlock>
+			</Grid>
+			<!-- Server name-->
+			<StackPanel Margin="{StaticResource DialogItemVerticalSpacing}">
+				<TextBlock 
+					Margin="{StaticResource DialogHeaderVerticalSpacing}"
+					Style="{ThemeResource BodyTextBlockStyle}" 
+                    x:Uid="AddOrEditGateway-ServerName" 
+                    Text="Gateway server Name(d)">					
+				</TextBlock>
+				<controls:ErrorControl DataContext="{Binding Host}">
+					<controls:ErrorControl.PresentedContent>
+						<TextBox 
+							Name="txtHostEntry" 
+							x:Uid="AddOrEditGateway-ServerNameTextbox"
+							Background="Transparent"                                 
+							IsTextPredictionEnabled="False"
+							IsSpellCheckEnabled="False"
+							PlaceholderText="Host name or IP address(d)"
+							Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+						</TextBox>
+					</controls:ErrorControl.PresentedContent>
+				</controls:ErrorControl>
+			</StackPanel>
+			<!-- Credentials -->
+			<StackPanel Margin="{StaticResource DialogTripleVerticalSpacing}">
+				<ComboBox 
+					Margin="{StaticResource DialogItemVerticalSpacing}"
+                    HorizontalAlignment="Stretch"
+					Header="Username (d)"
+                    x:Uid="AddOrEditDesktop-Credentials-ComboBox"
                               ItemsSource="{Binding Path=Users}"
                               SelectedItem="{Binding Path=SelectedUser, Mode=TwoWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+				<Button 
+						x:Uid="Common_Button_AddUserAccount" 
+						Style="{StaticResource DialogButtonStyle}"
+						HorizontalAlignment="Right"
+						Content="Add account(d)" 
+                        Command="{Binding Path=AddUser}" />
+			</StackPanel>
+			<!-- Cancel / Save buttons -->
+			<Grid Margin="{StaticResource DialogSectionVerticalSpacing}">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
 
-                    <Button x:Uid="Common_Button_AddUserAccount" Content="Add account(d)" 
-                            Style="{StaticResource DialogButtonStyle}" 
-                            HorizontalAlignment="Left"
-                            Command="{Binding Path=AddUser}" />
-                </StackPanel>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <Button x:Uid="Common_Button_Cancel" Content="Cancel(d)" 
+				<Button x:Uid="Common_Button_Cancel" Content="Cancel(d)" 
                             Grid.Column="0" Style="{StaticResource DialogButtonStyle}" 
                             Command="{Binding Path=Cancel}" />
-                    <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
+				<Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
                             Grid.Column="2" Style="{StaticResource DialogAccentedButtonStyle}" 
                             Command="{Binding Path=DefaultAction}" />
-                </Grid>
-                
-                <HyperlinkButton x:Uid="AddOrEditGateway-DeleteGatewayLink"
-                                 Margin="{StaticResource DialogDoubleSizeMargin}"
-                                 Command="{Binding Path=Delete}"
-                                 Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
-                    <TextBlock x:Uid="AddOrEditGateway-DeleteGatewayText" 
-                               Text="(d) Delete this gateway"/>
-                </HyperlinkButton>
-            </StackPanel>
-        </Grid>
-    </ContentControl>
+			</Grid>
+			<!-- Delete button -->
+			<HyperlinkButton 
+					x:Uid="AddOrEditGateway-DeleteGatewayLink"
+                    Command="{Binding Path=Delete}"
+                    Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+				<TextBlock 
+						x:Uid="AddOrEditGateway-DeleteGatewayText" 
+                        Text="(d) Delete this gateway">
+				</TextBlock>
+			</HyperlinkButton>
+		</StackPanel>
+	</ContentControl>
 </controls:ModalUserControl>

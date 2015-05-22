@@ -20,20 +20,16 @@
     </controls:ModalUserControl.DataContext>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" x:Uid="Settings_NavBar_Title" Text="Settings(d)" Style="{ThemeResource TitleTextBlockStyle}" />
-            <controls:GeneralSettingsControl Grid.Row="2"/>
-            <controls:UserSettingsControl Grid.Row="4"/>
-            <controls:GatewaySettingsControl Grid.Row="6"/>
-        </Grid>
+		<StackPanel>
+			<TextBlock 
+				Margin="{StaticResource DialogItemVerticalSpacing}"
+				x:Uid="Settings_NavBar_Title" 
+				Text="Settings(d)" 
+				Style="{ThemeResource TitleTextBlockStyle}">				
+			</TextBlock>
+			<controls:GeneralSettingsControl Margin="{StaticResource DialogItemVerticalSpacing}"/>
+			<controls:UserSettingsControl Margin="{StaticResource DialogSectionVerticalSpacing}"/>
+            <controls:GatewaySettingsControl/>
+        </StackPanel>
     </ContentControl>
 </controls:ModalUserControl>

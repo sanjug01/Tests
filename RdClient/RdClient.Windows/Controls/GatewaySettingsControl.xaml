@@ -25,33 +25,40 @@
 		<cv:IntIsGreaterThanZeroConverter x:Key="IntIsGreaterThanZeroConverter" />
 	</UserControl.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <ComboBox Grid.Row="0" HorizontalAlignment="Stretch" 
-                  x:Uid="Settings_Gateways_Combobox" 
-                  Header="Gateways(d)" 
-                  PlaceholderText="Select gateway server(d)"
-                  ItemsSource="{Binding Gateways}" 
-				  SelectedItem="{Binding SelectedGateway, Mode=TwoWay}"
-				  IsEnabled="{Binding Gateways.Count, Converter={StaticResource IntIsGreaterThanZeroConverter}}">
+	<StackPanel Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
+		<ComboBox
+			Margin="{StaticResource DialogItemVerticalSpacing}"
+			HorizontalAlignment="Stretch" 
+            x:Uid="Settings_Gateways_Combobox" 
+            Header="Gateways(d)" 
+            PlaceholderText="Select gateway server(d)"
+            ItemsSource="{Binding Gateways}" 
+			SelectedItem="{Binding SelectedGateway, Mode=TwoWay}"
+			IsEnabled="{Binding Gateways.Count, Converter={StaticResource IntIsGreaterThanZeroConverter}}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Gateway.Model.HostName}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <Grid Grid.Row="2">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Style="{StaticResource DialogButtonStyle}" x:Uid="Common_Button_AddNewItem" Content="Add New(d)" Command="{Binding AddGateway}" />
-            <Button Grid.Column="2" Style="{StaticResource DialogButtonStyle}" x:Uid="Common_Button_EditItem" Content="Edit(d)" Command="{Binding EditGateway}" />
+			<Button Grid.Column="0"
+					Style="{StaticResource DialogButtonStyle}" 
+					x:Uid="Common_Button_AddNewItem" 
+					Content="Add New(d)" 
+					Command="{Binding AddGateway}">				
+			</Button>
+			<Button Grid.Column="2" 
+					Style="{StaticResource DialogButtonStyle}" 
+					x:Uid="Common_Button_EditItem" 
+					Content="Edit(d)" 
+					Command="{Binding EditGateway}">				
+			</Button>
         </Grid>
-    </Grid>
+    </StackPanel>
 </UserControl>

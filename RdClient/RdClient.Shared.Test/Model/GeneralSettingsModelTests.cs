@@ -10,7 +10,7 @@
         public void GeneralSettings_DefaultValues()
         {
             GeneralSettings settings = new GeneralSettings();
-            Assert.IsTrue(settings.SendFeeback);
+            Assert.IsTrue(settings.SendFeedback);
             Assert.IsTrue(settings.UseThumbnails);
         }
     }
