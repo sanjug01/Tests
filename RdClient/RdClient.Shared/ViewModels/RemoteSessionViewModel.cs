@@ -25,6 +25,11 @@
         private readonly RelayCommand _mouseMode;
         private readonly RelayCommand _fullScreen;
 
+        public ZoomPanModel ZoomPanModel
+        {
+            private get; set;
+        }
+
         //
         // Device capabilities objecvt injected by the navigation service through IDeviceCapabilitiesSite.
         //
@@ -178,8 +183,11 @@
             _isRightSideBarVisible = false;
             _sessionState = SessionState.Idle;
 
-            ObservableCollection<object> items = new ObservableCollection<object>();
+            this.ZoomPanModel = new ZoomPanModel();
 
+            ObservableCollection<object> items = new ObservableCollection<object>();
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = this.ZoomPanModel.ZoomInCommand });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = _toggleSideBars });
             items.Add(_invokeKeyboardModel);
             
@@ -426,12 +434,14 @@
                         this.PointerCapture = new PointerCapture(_pointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
                         this.PanKnobSite = new PanKnobSite(this.TimerFactory);
                         this.ScrollBars.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+                        this.ZoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport);
 
                         _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
                         _panKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
 
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
+                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.ZoomPanModel.OnConsumptionModeChanged;
 
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
@@ -460,6 +470,8 @@
                             _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
 
                             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
+                            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= this.ZoomPanModel.OnConsumptionModeChanged;
+
                             this.ScrollBars.Viewport = null;
 
                             //
