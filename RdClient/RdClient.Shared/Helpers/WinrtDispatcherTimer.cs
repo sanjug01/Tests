@@ -23,6 +23,7 @@ namespace RdClient.Shared.Helpers
         {
             _monitor = new ReaderWriterLockSlim();
             _timer = new DispatcherTimer();
+            _timer.Tick += OnTick;
         }
 
         public void Start(Action callback, TimeSpan period, bool recurring)
@@ -34,7 +35,6 @@ namespace RdClient.Shared.Helpers
                 _recurring = recurring;
                 _callback = callback;
 
-                _timer.Tick += OnTick;
 
                 _timer.Start();
             }
@@ -57,7 +57,6 @@ namespace RdClient.Shared.Helpers
                 if (_timer != null)
                 {
                     _timer.Stop();
-                    _timer = null;
                 }
             }
         }
