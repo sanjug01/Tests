@@ -362,10 +362,10 @@
   <data name="Settings_NavBar_Title.Text" xml:space="preserve">
     <value>Settings</value>
     <comment>Noun. Main title of the global settings page</comment>
+  </data>
   <data name="Settings_Users_AddUser_Title.Text" xml:space="preserve">
     <value>Add an account</value>
     <comment>Title above add user button in the user settings section of the global settings page</comment>
-  </data>
   </data>
   <data name="Common_Button_DeleteItem.Content" xml:space="preserve">
     <value>Remove</value>
@@ -393,9 +393,6 @@
   </data>
   <data name="AddOrEditDesktop-AddCaption.Text" xml:space="preserve">
     <value>Add a Desktop</value>
-  </data>
-  <data name="AddOrEditDesktop-Credentials.Text" xml:space="preserve">
-    <value>(r)Username</value>
   </data>
   <data name="AddOrEditDesktop-Credentials-ComboBox.Header" xml:space="preserve">
     <value>(r)Username</value>
