@@ -14,7 +14,6 @@
         private RelayCommand _save;
         private IStorageFolder _storageFolder;
         private string _fileName;
-        [DataMember(Name = "IsTelemetryActive", IsRequired = false, EmitDefaultValue = false)]
         private bool _isTelemetryActive;
         private IModelSerializer _modelSerializer;
 
@@ -45,7 +44,6 @@
             settings._fileName = fileName;
             settings._modelSerializer = modelSerializer;
             settings._persistentStatus = PersistentStatus.Clean;
-
             return settings;
         }
 
@@ -82,6 +80,7 @@
             }
         }
 
+        [DataMember(Name = "IsTelemetryActive", IsRequired = false, EmitDefaultValue = false)]
         public bool IsTelemetryActive
         {
             get
