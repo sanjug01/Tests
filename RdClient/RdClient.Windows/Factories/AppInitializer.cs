@@ -43,6 +43,7 @@
             Contract.Assert(null != this.DeviceCapabilities);
 
             ITimerFactory timerFactory = new WinrtThreadPoolTimerFactory();
+            ITimerFactory dispatcherTimerFactory = new WinrtDispatcherTimerFactory();
             IDeferredExecution deferredExecution = new CoreDispatcherDeferredExecution() { Priority = CoreDispatcherPriority.Normal };
 
             ApplicationDataModel appDataModel = new ApplicationDataModel()
@@ -74,7 +75,7 @@
 
             _navigationService.Extensions.Add(this.CreateDataModelExtension(appDataModel));
             _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));
-            _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory));
+            _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory, dispatcherTimerFactory));
             _navigationService.Extensions.Add(new SessionFactoryExtension() { SessionFactory = sessionFactory });
             _navigationService.Extensions.Add(new DeviceCapabilitiesExtension() { DeviceCapabilities = this.DeviceCapabilities });
             _navigationService.Extensions.Add(new LifeTimeExtension() { LifeTimeManager = this.LifeTimeManager });

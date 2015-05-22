@@ -6,10 +6,10 @@ namespace RdClient.Shared.Models.Viewport
 {
     public class ViewportTransformWrapper : IViewportTransform
     {
-        private SynchronizedTransform _transform;
+        private CompositeTransform _transform;
         public ViewportTransformWrapper(CompositeTransform transform)
         {
-            _transform = new SynchronizedTransform(transform);
+            _transform = transform;
         }
 
         public double ScaleX
@@ -71,7 +71,7 @@ namespace RdClient.Shared.Models.Viewport
 
         public Point InverseTransformPoint(Point point)
         {
-            return _transform.InverseTransformPoint(point);
+            return _transform.Inverse.TransformPoint(point);
         }
     }
 }

@@ -55,8 +55,6 @@
             private get; set;
         }
 
-        private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
-
         public IScrollBarModel ScrollBarModel
         {
             get; set;
@@ -82,6 +80,7 @@
         }
 
         private object _bellyBandViewModel;
+        private ITimerFactory _dispatcherTimerFactory;
 
         public SessionState SessionState
         {
@@ -244,6 +243,11 @@
             _timerFactory = timerFactory;
         }
 
+        void ITimerFactorySite.SetDispatcherTimerFactory(ITimerFactory dispatcherTimerFactory)
+        {
+            _dispatcherTimerFactory = dispatcherTimerFactory;
+        }
+
         void IDeviceCapabilitiesSite.SetDeviceCapabilities(IDeviceCapabilities deviceCapabilities)
         {
             if (null != _deviceCapabilities)
@@ -390,7 +394,7 @@
                         this.PointerPosition.Reset(_activeSessionControl, this);
                         _activeSessionControl.RenderingPanel.Viewport.Reset();
 
-                        this.PointerCapture = new PointerCapture(this.PointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
+                        this.PointerCapture = new PointerCapture(this.PointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _dispatcherTimerFactory);
                         this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
 
                         this.PanKnobSite = new PanKnobSite(this.TimerFactory);
@@ -403,6 +407,7 @@
 
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.ZoomPanModel.OnConsumptionModeChanged;
+                        this.PointerCapture.ConsumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
 
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
