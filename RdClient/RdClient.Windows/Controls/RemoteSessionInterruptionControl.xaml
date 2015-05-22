@@ -10,45 +10,33 @@
     d:DesignWidth="640"
     d:DesignHeight="200">
 
-    <Grid HorizontalAlignment="Stretch"
-          Margin="40,0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="20"/>
-        </Grid.RowDefinitions>
+    <StackPanel Orientation="Vertical" 
+                HorizontalAlignment="Stretch">
 
-        <ProgressBar Grid.Row="0"
+        <ProgressBar Margin="{StaticResource DialogHeaderVerticalSpacing}"
                      IsIndeterminate="True"
                      HorizontalAlignment="Stretch" />
 
-        <TextBlock Grid.Row="2"
+        <TextBlock Margin="{StaticResource DialogHeaderVerticalSpacing}" 
                    HorizontalAlignment="Left"
                    Style="{ThemeResource BodyTextBlockStyle}"
                    Foreground="{ThemeResource UnselectedForegroundBrush}"                   
                    x:Uid="RemoteSessionInterruptionControl_Message"
                    Text="(d) Reconnecting to"/>
 
-        <TextBlock Grid.Row="4" 
+        <TextBlock Margin="{StaticResource DialogTripleVerticalSpacing}"
                    HorizontalAlignment="Left"
                    Style="{ThemeResource BodyTextBlockStyle}"
                    x:Uid="RemoteSessionInterruptionControl_ConnectToHost"
                    Text="{Binding Path=HostName}"/>
 
-        <TextBlock Grid.Row="6"
+        <TextBlock Margin="{StaticResource DialogItemVerticalSpacing}"
                    HorizontalAlignment="Left"
                    Style="{ThemeResource BodyTextBlockStyle}"
                    x:Uid="RemoteSessionInterruptionControl_Title"
                    Text="(d) Remote Connection Has Been Interrupted" />
-        
-        <Button Grid.Row="8"
+
+        <Button Margin="{StaticResource DialogItemVerticalSpacing}"
                 Style="{ThemeResource DialogButtonStyle}"
                 x:Name="CancelButton"
                 HorizontalAlignment="Right"
@@ -56,5 +44,5 @@
             <TextBlock x:Uid="RemoteSessionInterruptionControl_Cancel" 
                        Text="(d) Cancel"/>
         </Button>
-    </Grid>
+    </StackPanel>
 </UserControl>
