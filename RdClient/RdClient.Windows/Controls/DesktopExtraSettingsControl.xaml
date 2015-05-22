@@ -28,7 +28,7 @@
 	<StackPanel Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
 		<!-- Friendly Name section -->
 		<StackPanel 
-			Margin="{StaticResource DialogSectionVerticalSpacing}">
+			Margin="{StaticResource DialogItemVerticalSpacing}">
 			<StackPanel 
 				Orientation="Horizontal"
 				Margin="{StaticResource DialogHeaderVerticalSpacing}">
@@ -57,7 +57,7 @@
 
 		<!-- Display section - TODO: to enable when functional -->
         <StackPanel Orientation="Vertical"
-                    Margin="{StaticResource DialogSectionVerticalSpacing}" 
+                    Margin="{StaticResource DialogItemVerticalSpacing}" 
                     Visibility="Collapsed">
             <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" 
                        Grid.Row="0"                   
