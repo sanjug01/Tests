@@ -9,12 +9,12 @@
     d:DesignHeight="700"
     d:DesignWidth="1024"
     RequestedTheme="Dark">
-    
-    <Grid Background="{ThemeResource ConnectionCenterScrollViewBackgroundBrush}">
+
+    <Grid Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
         <RichEditBox x:Uid="RichTextView_InfoBox"
                      x:Name="InfoBox"
                      PlaceholderText="(d) Loading document ....." 
-                     BorderThickness="0"
+                     Background="Transparent"
                      IsTabStop="False"
                      IsReadOnly="True"
                      IsSpellCheckEnabled="False"
@@ -23,9 +23,8 @@
                      IsRightTapEnabled="False"
                      PreventKeyboardDisplayOnProgrammaticFocus="True"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                     Height="Auto"
-                     >
-            
+                     Height="Auto" 
+                     BorderThickness="0">
         </RichEditBox>
     </Grid>
 </UserControl>
