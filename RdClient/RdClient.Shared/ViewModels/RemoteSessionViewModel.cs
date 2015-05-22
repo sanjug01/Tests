@@ -352,7 +352,7 @@
                 // also, the completion object pased to the dialog will add the certificate to one of the certificate trust objects.
                 //
                 this.NavigationService.PushModalView("CertificateValidationView",
-                    new CertificateValidationViewModelArgs(session.HostName, validation.Certificate),
+                    new CertificateValidationViewModelArgs(e.HostName, validation.Certificate),
                     new CertificateValidationCompletion(validation, this.ApplicationDataModel.CertificateTrust, session.CertificateTrust));
             }
         }

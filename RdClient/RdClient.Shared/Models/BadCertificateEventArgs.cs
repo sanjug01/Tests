@@ -7,11 +7,17 @@
     public sealed class BadCertificateEventArgs : EventArgs
     {
         private readonly RdpDisconnectReason _reason;
+        private readonly string _hostName;
         private ICertificateValidation _validation;
 
         public RdpDisconnectReason DisconnectReason
         {
             get { return _reason; }
+        }
+
+        public string HostName
+        {
+            get { return _hostName; }
         }
 
         public ICertificateValidation ObtainValidation()
@@ -30,7 +36,7 @@
 
         public bool ValidationObtained { get { return null == _validation; } }
 
-        public BadCertificateEventArgs(RdpDisconnectReason reason, ICertificateValidation validation)
+        public BadCertificateEventArgs(RdpDisconnectReason reason, string hostName, ICertificateValidation validation)
         {
             Contract.Assert(null != reason);
             Contract.Assert(null != validation);
@@ -39,6 +45,7 @@
 
             _reason = reason;
             _validation = validation;
+            _hostName = hostName;
         }
     }
 }
