@@ -20,6 +20,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Windows.Foundation;
+    using Windows.UI.Xaml;
 
     [TestClass]
     public sealed class RemoteSessionViewModelTests
@@ -166,6 +167,11 @@
             }
 
             void IViewport.SetPan(double x, double y)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Reset()
             {
                 throw new NotImplementedException();
             }
@@ -357,6 +363,11 @@
             }
 
             ITimer ITimerFactory.CreateTimer()
+            {
+                return new Timer();
+            }
+
+            public ITimer CreateDispatcherTimer()
             {
                 return new Timer();
             }
@@ -724,7 +735,7 @@
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNotNull(_vm.BellyBandViewModel);
             Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
-            Assert.IsFalse(_vm.IsRightSideBarVisible);
+            Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
             Assert.IsNotNull(connection);
             Assert.AreEqual(1, connectCount);
 
@@ -922,7 +933,7 @@
 
             Assert.IsTrue(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
-            Assert.IsFalse(_vm.IsRightSideBarVisible);
+            Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
         }
 
         [TestMethod]
@@ -966,8 +977,8 @@
             //task.Dispose();
             task = null;
             _defex.ExecuteAll();
-            _vm.ToggleSideBars.Execute(null);
-            _vm.NavigateHome.Execute(null);
+            _vm.RightSideBarViewModel.ToggleVisiblity.Execute(null);
+            _vm.RightSideBarViewModel.Disconnect.Execute(null);
 
             Assert.IsNotNull(task);
             task.Wait();
@@ -1009,11 +1020,11 @@
             connectTask.Wait();
             //connectTask.Dispose();
             _defex.ExecuteAll();
-            Assert.IsTrue(_vm.ToggleSideBars.CanExecute(null));
-            _vm.ToggleSideBars.Execute(null);
+            Assert.IsTrue(_vm.RightSideBarViewModel.ToggleVisiblity.CanExecute(null));
+            _vm.RightSideBarViewModel.ToggleVisiblity.Execute(null);
 
-            Assert.IsTrue(_vm.IsRightSideBarVisible);
-            Assert.IsTrue(_vm.NavigateHome.CanExecute(true));
+            Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
+            Assert.IsTrue(_vm.RightSideBarViewModel.Disconnect.CanExecute(true));
         }
 
         [TestMethod]
@@ -1057,7 +1068,7 @@
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNotNull(_vm.BellyBandViewModel);
             Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
-            Assert.IsFalse(_vm.IsRightSideBarVisible);
+            Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
         }
     }
 }

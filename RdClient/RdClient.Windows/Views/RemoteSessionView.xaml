@@ -10,6 +10,7 @@
     xmlns:m="using:RdClient.Shared.Models"
     xmlns:cv="using:RdClient.Shared.Converters"    
     xmlns:input="using:RdClient.Input"
+    xmlns:pointer="using:RdClient.Shared.Input.Pointer"
     xmlns:helpers="using:RdClient.Helpers"
     mc:Ignorable="d"
     d:DesignHeight="300"
@@ -27,9 +28,16 @@
             <vm:RemoteSessionViewModel.InputPanelFactory>
                 <input:InputPaneInputPanelFactory/>
             </vm:RemoteSessionViewModel.InputPanelFactory>
-            <vm:RemoteSessionViewModel.FullScreenModel>
-                <m:FullScreenModel />
-            </vm:RemoteSessionViewModel.FullScreenModel>
+            <vm:RemoteSessionViewModel.RightSideBarViewModel>
+                <vm:RightSideBarViewModel>
+                    <vm:RightSideBarViewModel.FullScreenModel>
+                        <m:FullScreenModel />
+                    </vm:RightSideBarViewModel.FullScreenModel>
+                </vm:RightSideBarViewModel>
+            </vm:RemoteSessionViewModel.RightSideBarViewModel>
+            <vm:RemoteSessionViewModel.PointerPosition>
+                <pointer:PointerPosition />
+            </vm:RemoteSessionViewModel.PointerPosition>
             <vm:RemoteSessionViewModel.ScrollBarModel>
                 <m:ScrollBarModel />
             </vm:RemoteSessionViewModel.ScrollBarModel>
@@ -54,12 +62,6 @@
         </Grid.ColumnDefinitions>
 
         <Grid Background="{ThemeResource SystemChromeDisabledHighColor}" Grid.Row="0" Grid.Column="0">
-            <!--<Grid.RowDefinitions>
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>-->
             <c:RemoteSessionPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                 RemoteSessionViewSite="{Binding}"
                 Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
@@ -127,15 +129,15 @@
 
             <!-- Transparent overlay that dismisses the side bars -->
             <c:PointerPressDetector
-                Visibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                PointerPressDetected="{Binding ToggleSideBars}" />
+                Visibility="{Binding RightSideBarViewModel.Visibility}"
+                PointerPressDetected="{Binding RightSideBarViewModel.ToggleVisiblity}" />
 
             <!-- Right side bar -->
             <c:RightSideBarControl
-                BarVisibility="{Binding IsRightSideBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                NavigateHome="{Binding NavigateHome}"
-                MouseMode="{Binding MouseMode}"
-                FullScreen="{Binding FullScreen}"/>
+                BarVisibility="{Binding RightSideBarViewModel.Visibility}"
+                NavigateHome="{Binding RightSideBarViewModel.Disconnect}"
+                MouseMode="{Binding RightSideBarViewModel.MouseMode}"
+                FullScreen="{Binding RightSideBarViewModel.FullScreen}"/>
 
             <!--
             Belly-band container of in-session dialogs.
@@ -153,7 +155,7 @@
                     Background="{ThemeResource DialogBackgroundColor}">
 
                     <ContentControl
-                        Margin="0,20"
+                        Margin="{StaticResource BellyBandDefaultHorizontalSpacing}"
                         Content="{Binding BellyBandViewModel}"
                         HorizontalContentAlignment="Stretch">
 
@@ -218,30 +220,30 @@
         <ScrollBar Grid.Row="1" Grid.Column="0"
                    x:Name="HorizontalScrolbar" Orientation="Horizontal" 
     		       Width ="Auto"
-                   Minimum="{Binding ScrollBars.MinimumHorizontal}"
-                   Maximum="{Binding ScrollBars.MaximumHorizontal}"
-                   ViewportSize="{Binding ScrollBars.ViewportWidth}"
+                   Minimum="{Binding ScrollBarModel.MinimumHorizontal}"
+                   Maximum="{Binding ScrollBarModel.MaximumHorizontal}"
+                   ViewportSize="{Binding ScrollBarModel.ViewportWidth}"
                    IsEnabled="True"
                    IndicatorMode="MouseIndicator"
-                   Visibility="{Binding ScrollBars.VisibilityHorizontal}"
+                   Visibility="{Binding ScrollBarModel.VisibilityHorizontal}"
                    LargeChange="200"
                    SmallChange="20"
-                   Value="{Binding ScrollBars.ValueHorziontal, Mode=TwoWay}"/>
+                   Value="{Binding ScrollBarModel.ValueHorziontal, Mode=TwoWay}"/>
 
         <ScrollBar Grid.Row="0" Grid.Column="1"
                    x:Name="VerticalScrolbar" Orientation="Vertical" 
     		       Width ="Auto"
-                   Minimum="{Binding ScrollBars.MinimumVertical}"
-                   Maximum="{Binding ScrollBars.MaximumVertical}"
-                   ViewportSize="{Binding ScrollBars.ViewportHeight}"
+                   Minimum="{Binding ScrollBarModel.MinimumVertical}"
+                   Maximum="{Binding ScrollBarModel.MaximumVertical}"
+                   ViewportSize="{Binding ScrollBarModel.ViewportHeight}"
                    IsEnabled="True"
                    IndicatorMode="MouseIndicator"
-                   Visibility="{Binding ScrollBars.VisibilityVertical}"
+                   Visibility="{Binding ScrollBarModel.VisibilityVertical}"
                    LargeChange="200"
                    SmallChange="20"                   
-                   Value="{Binding ScrollBars.ValueVertical, Mode=TwoWay}"/>
+                   Value="{Binding ScrollBarModel.ValueVertical, Mode=TwoWay}"/>
         <Rectangle Grid.Row="1" Grid.Column="1" Fill="{ThemeResource SystemChromeDisabledHighColor}"
-                   Visibility="{Binding ScrollBars.VisibilityCorner}"/>
+                   Visibility="{Binding ScrollBarModel.VisibilityCorner}"/>
     </Grid>
 
 </UserControl>

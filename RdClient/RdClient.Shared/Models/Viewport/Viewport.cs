@@ -170,5 +170,17 @@ namespace RdClient.Shared.Models.Viewport
             }
         }
 
+        public void Reset()
+        {
+            _sessionPanel.Transform.ScaleX = 1.0;
+            _sessionPanel.Transform.ScaleY = 1.0;
+            _sessionPanel.Transform.TranslateX = 0.0;
+            _sessionPanel.Transform.TranslateY = 0.0;
+
+            if (Changed != null)
+            {
+                Changed(this, null);
+            }
+        }
     }
 }

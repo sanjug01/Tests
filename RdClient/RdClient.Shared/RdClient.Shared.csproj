@@ -153,7 +153,7 @@
     <Compile Include="Helpers\Rc4DataScrambler.cs" />
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
-    <Compile Include="Helpers\SynchronizedTransform.cs" />
+    <Compile Include="Helpers\WinrtDispatcherTimer.cs" />
     <Compile Include="Models\FullScreenModel.cs" />
     <Compile Include="Models\IFullScreenModel.cs" />
     <Compile Include="Models\IScrollBarModel.cs" />
@@ -401,6 +401,7 @@
     <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
+    <Compile Include="ViewModels\RightSideBarViewModel.cs" />
     <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
     <Compile Include="ViewModels\SymbolBarButtonModel.cs" />
     <Compile Include="ViewModels\SymbolBarToggleButtonModel.cs" />

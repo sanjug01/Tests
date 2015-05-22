@@ -8,52 +8,40 @@
     TabNavigation="Cycle"
     mc:Ignorable="d"
     d:DesignWidth="480"
-    d:DesignHeight="200">
+    d:DesignHeight="240">
     
-    <Grid HorizontalAlignment="Stretch"
-          Margin="40,0">
-       <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-           <RowDefinition Height="Auto"/>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="20"/>
-        </Grid.RowDefinitions>
+    <StackPanel Orientation="Vertical"
+                HorizontalAlignment="Stretch">
 
-        <ProgressBar Grid.Row="0"
+        <ProgressBar Margin="{StaticResource DialogHeaderVerticalSpacing}"
                      IsIndeterminate="True"
                      HorizontalAlignment="Stretch" />
 
-        <TextBlock Grid.Row="2" 
+        <TextBlock Margin="{StaticResource DialogHeaderVerticalSpacing}" 
                    HorizontalAlignment="Left"
                    Style="{ThemeResource BodyTextBlockStyle}"
                    Foreground="{ThemeResource UnselectedForegroundBrush}"
                    x:Uid="Connection_Pending_ConnectToMessage"
                    Text="(d) Connecting to "/>
 
-        <TextBlock Grid.Row="4" 
+        <TextBlock Margin="{StaticResource DialogTripleVerticalSpacing}" 
                    HorizontalAlignment="Left"
                    Style="{ThemeResource BodyTextBlockStyle}"
                    x:Uid="Connection_ConnectToHost"
                    Text="{Binding Path=HostName}"/>
 
-        <TextBlock Grid.Row="6"
-                HorizontalAlignment="Left"
-                       Style="{ThemeResource BodyTextBlockStyle}"
-                       x:Uid="Connection_Pending_Message"
-                       Text="(d) Initiating remote connection "/>
+        <TextBlock Margin="{StaticResource DialogItemVerticalSpacing}" 
+                   HorizontalAlignment="Left"
+                   Style="{ThemeResource BodyTextBlockStyle}"
+                   x:Uid="Connection_Pending_Message"
+                   Text="(d) Initiating remote connection "/>
 
-        <Button Grid.Row="8"
-                    Style="{ThemeResource DialogButtonStyle}"
-                    x:Name="CancelButton"
-                    x:Uid="Common_Button_Cancel"
-                    Content="(d) Cancel"
-                    HorizontalAlignment="Right"
-                    Command="{Binding Cancel}"/>
-    </Grid>
+        <Button Margin="{StaticResource DialogItemVerticalSpacing}" 
+                Style="{ThemeResource DialogButtonStyle}"
+                x:Name="CancelButton"
+                x:Uid="Common_Button_Cancel"
+                Content="(d) Cancel"
+                HorizontalAlignment="Right"
+                Command="{Binding Cancel}"/>
+    </StackPanel>
 </UserControl>
