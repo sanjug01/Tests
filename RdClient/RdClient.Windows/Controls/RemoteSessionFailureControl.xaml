@@ -5,13 +5,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:local="using:RdClient.Controls"
+    xmlns:design="using:RdClient.DesignTime"       
 	xmlns:sc="using:RdClient.Shared.Converters"
 	xmlns:helpers="using:RdClient.Shared.Helpers"
     TabNavigation="Cycle"
     mc:Ignorable="d"
-    d:DesignWidth="640"
-    d:DesignHeight="200">
-	
+    MaxWidth="480"
+    d:DesignHeight="160">
+
+    <d:UserControl.DataContext>
+        <design:FakeAddOrEditDesktopViewModel />
+    </d:UserControl.DataContext>
+    
 	<UserControl.Resources>
 		<sc:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter">
 			<sc:TypeToLocalizedStringConverter.LocalizedString>
@@ -20,46 +25,26 @@
 		</sc:TypeToLocalizedStringConverter>
 	</UserControl.Resources>
 
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+        <TextBlock Margin="{StaticResource BellyBandHeaderVerticalSpacing}"
+                   HorizontalAlignment="Left"                   
+                   Style="{ThemeResource SubtitleTextBlockStyle}"
+                   x:Uid="RemoteSessionFailureControl_Title"
+                   Text="(d) Session has failed"/>
 
-    <Grid HorizontalAlignment="Stretch"
-          Margin="40,0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="20"/>
-        </Grid.RowDefinitions>
-
-        <TextBlock Grid.Row="0"
-                   HorizontalAlignment="Left"
-                   Style="{ThemeResource BodyTextBlockStyle}"
-                   Foreground="{ThemeResource UnselectedForegroundBrush}"                   
-                   x:Uid="RemoteSessionFailureControl_Message"
-                   Text="(d) Connection failure"/>       
-
-        <TextBlock Grid.Row="2" 
+        <TextBlock Margin="{StaticResource DialogItemVerticalSpacing}"
                    HorizontalAlignment="Left"
                    Style="{ThemeResource BodyTextBlockStyle}"
                    x:Uid="RemoteSessionFailureControl_FailureDetails"
                    Text="{Binding Path=FailureCode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
 
-        <TextBlock Grid.Row="4"
-                   HorizontalAlignment="Left"
-                   Style="{ThemeResource BodyTextBlockStyle}"
-                   x:Uid="RemoteSessionFailureControl_Title"
-                   Text="(d) Session has failed"/>
-
-        <Button Grid.Row="6"
-                Style="{ThemeResource DialogButtonStyle}"
+        <Button Margin="{StaticResource DialogItemVerticalSpacing}"
+                Style="{ThemeResource DialogAccentedButtonStyle}"
                 x:Name="DismissButton"
                 HorizontalAlignment="Right"
                 Command="{Binding Dismiss}">
             <TextBlock x:Uid="RemoteSessionFailureControl_Dismiss" 
                        Text="(d) Close"/>
         </Button>
-    </Grid>
+    </StackPanel>    
 </UserControl>
