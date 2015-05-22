@@ -35,7 +35,7 @@
             <StackPanel Orientation="Vertical" Margin="12,20">
                 <AppBarButton x:Name="NavigateHomeButton" Icon="Home" x:Uid="SessionView-HomeButton" Label="Home (d)" />
                 <AppBarButton x:Name="FullScreenButton" Icon="FullScreen" x:Uid="SessionView-FullScreenButton" Label="Toggle Full-Screen (d)" />
-                <AppBarToggleButton x:Name="MouseModeButton" IsChecked="True" Icon="TouchPointer" x:Uid="SessionView-MouseMode" Label="Mouse-Mode (d)" />
+                <AppBarToggleButton x:Name="MouseModeButton" Icon="TouchPointer" x:Uid="SessionView-MouseMode" Label="Mouse-Mode (d)" />
             </StackPanel>
         </Grid>
     </Grid>
