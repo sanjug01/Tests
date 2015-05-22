@@ -23,10 +23,9 @@
 				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 			<StackPanel Grid.Row="0"
-				Orientation="Vertical"
 				Margin="{StaticResource DialogItemVerticalSpacing}">
-				<Grid
-					Margin="{StaticResource DialogItemVerticalSpacing}">
+				<!-- Title -->
+				<Grid Margin="{StaticResource DialogItemVerticalSpacing}">
 					<TextBlock					
 						HorizontalAlignment="Left"
 						VerticalAlignment="Bottom"
@@ -45,6 +44,7 @@
 						</TextBlock>
 					</HyperlinkButton>
 				</Grid>
+				<!-- App info -->
 				<StackPanel Margin="{StaticResource DialogItemVerticalSpacing}">
 					<TextBlock Text="{Binding AppName}" />
 					<TextBlock Text="{Binding AppVersion}" />
