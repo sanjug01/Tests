@@ -93,6 +93,12 @@
     <Compile Include="Controls\ConnectionCenterTitleBar.xaml.cs">
       <DependentUpon>ConnectionCenterTitleBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\GatewaySelectorControl.xaml.cs">
+      <DependentUpon>GatewaySelectorControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UserSelectorControl.xaml.cs">
+      <DependentUpon>UserSelectorControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DesktopsListControl.xaml.cs">
       <DependentUpon>DesktopsListControl.xaml</DependentUpon>
     </Compile>
@@ -151,11 +157,13 @@
       <DependentUpon>WorkspaceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Data\ApplicationDataLocalStorageFolder.cs" />
+    <Compile Include="DesignTime\FakeUsersAndGatewaysCollectorBase.cs" />
+    <Compile Include="DesignTime\FakeUsersCollectorBase.cs" />
     <Compile Include="DesignTime\FakeCertificateValidationViewModel.cs" />
     <Compile Include="DesignTime\FakeGatewayViewModel.cs" />
     <Compile Include="DesignTime\FakeEditCredentialsViewModel.cs" />
     <Compile Include="DesignTime\FakeRemoteResourceViewModel.cs" />
-    <Compile Include="DesignTime\FakeAddOrEditViewModel.cs" />
+    <Compile Include="DesignTime\FakeAddOrEditDesktopViewModel.cs" />
     <Compile Include="DesignTime\FakeWorkspaceViewModel.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
     <Compile Include="Input\InputPaneInputPanelFactory.cs" />
@@ -318,6 +326,14 @@
     <Page Include="Controls\ConnectionCenterTitleBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GatewaySelectorControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\UserSelectorControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\DesktopsListControl.xaml">
       <SubType>Designer</SubType>

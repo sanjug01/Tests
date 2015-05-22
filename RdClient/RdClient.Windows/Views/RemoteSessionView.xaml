@@ -43,7 +43,7 @@
         <cv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{ThemeResource SystemChromeDisabledHighColor}">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto"/>
@@ -52,10 +52,10 @@
             <ColumnDefinition />
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        
 
+        <Grid Background="{ThemeResource SystemChromeDisabledHighColor}">
 
-        <Grid Background="{ThemeResource SystemBaseMediumHighColor}" Grid.Row="0" Grid.Column="0">
+            <Grid Background="{ThemeResource SystemChromeDisabledHighColor}" Grid.Row="0" Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition />
             </Grid.RowDefinitions>

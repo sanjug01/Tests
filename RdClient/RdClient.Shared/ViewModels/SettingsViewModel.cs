@@ -38,12 +38,12 @@ namespace RdClient.Shared.ViewModels
         public ICommand Cancel { get { return _goBackCommand; } }
         //Implement IDialogViewModel. Do nothing when enter is pressed
         public ICommand DefaultAction { get { return new RelayCommand(o => { }); } }
-        public ICommand DeleteUserCommand { get { return _deleteUserCommand; } }
-        public ICommand EditUserCommand { get { return _editUserCommand; } }
-        public ICommand AddUserCommand { get { return _addUserCommand; } }
-        public ICommand DeleteGatewayCommand { get { return _deleteGatewayCommand; } }
-        public ICommand EditGatewayCommand { get { return _editGatewayCommand; } }
-        public ICommand AddGatewayCommand { get { return _addGatewayCommand; } }
+        public ICommand DeleteUser { get { return _deleteUserCommand; } }
+        public ICommand EditUser { get { return _editUserCommand; } }
+        public ICommand AddUser { get { return _addUserCommand; } }
+        public ICommand DeleteGateway { get { return _deleteGatewayCommand; } }
+        public ICommand EditGateway { get { return _editGatewayCommand; } }
+        public ICommand AddGateway { get { return _addGatewayCommand; } }
 
         public GeneralSettings GeneralSettings
         {
@@ -68,7 +68,7 @@ namespace RdClient.Shared.ViewModels
                     _deleteUserCommand.EmitCanExecuteChanged();
                     if (value != null && value.UserComboBoxType == UserComboBoxType.AddNew)
                     {
-                        this.AddUserCommand.Execute(null);
+                        this.AddUser.Execute(null);
                     }
                 }
             }
@@ -91,7 +91,7 @@ namespace RdClient.Shared.ViewModels
                     _deleteGatewayCommand.EmitCanExecuteChanged();
                     if (value != null && value.GatewayComboBoxType == GatewayComboBoxType.AddNew)
                     {
-                        this.AddGatewayCommand.Execute(null);
+                        this.AddGateway.Execute(null);
                     }
                 }
             }
@@ -168,7 +168,7 @@ namespace RdClient.Shared.ViewModels
                     GatewayPromptResult result = e.Result as GatewayPromptResult;
                     if (result.Deleted)
                     {
-                        this.DeleteGatewayCommand.Execute(null);
+                        this.DeleteGateway.Execute(null);
                     }
                 });
                 this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, editGatewayCompleted);
@@ -204,7 +204,7 @@ namespace RdClient.Shared.ViewModels
                     CredentialPromptResult result = e.Result as CredentialPromptResult;
                     if (result != null && result.Deleted)
                     {
-                        this.DeleteUserCommand.Execute(null);
+                        this.DeleteUser.Execute(null);
                     }
                 });
                 this.NavigationService.PushAccessoryView("AddUserView", args, editUserCompleted);

@@ -181,7 +181,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedUser = _addOrEditDesktopViewModel.UserOptions[1];
+            _addOrEditDesktopViewModel.SelectedUser = _addOrEditDesktopViewModel.Users[1];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
@@ -201,7 +201,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedUser = _addOrEditDesktopViewModel.UserOptions[0];
+            _addOrEditDesktopViewModel.SelectedUser = _addOrEditDesktopViewModel.Users[0];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
@@ -257,7 +257,7 @@
 
             _nav.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
 
-            _addOrEditDesktopViewModel.AddUserCommand.Execute(null);
+            _addOrEditDesktopViewModel.AddUser.Execute(null);
         }
 
         [TestMethod]
@@ -268,7 +268,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.IsFalse(_addOrEditDesktopViewModel.EditUserCommand.CanExecute(null));
+            Assert.IsFalse(_addOrEditDesktopViewModel.EditUser.CanExecute(null));
         }
 
         [TestMethod]
@@ -280,7 +280,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.IsTrue(_addOrEditDesktopViewModel.EditUserCommand.CanExecute(null));
+            Assert.IsTrue(_addOrEditDesktopViewModel.EditUser.CanExecute(null));
         }
 
         [TestMethod]
@@ -294,7 +294,7 @@
 
             _nav.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
 
-            _addOrEditDesktopViewModel.EditUserCommand.Execute(null);
+            _addOrEditDesktopViewModel.EditUser.Execute(null);
         }
 
         [TestMethod]
@@ -521,7 +521,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.GatewayOptions[1];
+            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.Gateways[1];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
@@ -541,7 +541,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.GatewayOptions[0];
+            _addOrEditDesktopViewModel.SelectedGateway = _addOrEditDesktopViewModel.Gateways[0];
 
             _addOrEditDesktopViewModel.DefaultAction.Execute(null);
 
@@ -597,7 +597,7 @@
 
             _nav.Expect("PushAccessoryView", new List<object> { "AddOrEditGatewayView", null, null }, null);
 
-            _addOrEditDesktopViewModel.AddGatewayCommand.Execute(null);
+            _addOrEditDesktopViewModel.AddGateway.Execute(null);
         }
 
         [TestMethod]
@@ -608,7 +608,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.IsFalse(_addOrEditDesktopViewModel.EditGatewayCommand.CanExecute(null));
+            Assert.IsFalse(_addOrEditDesktopViewModel.EditGateway.CanExecute(null));
         }
 
         [TestMethod]
@@ -620,7 +620,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            Assert.IsTrue(_addOrEditDesktopViewModel.EditGatewayCommand.CanExecute(null));
+            Assert.IsTrue(_addOrEditDesktopViewModel.EditGateway.CanExecute(null));
         }
 
         [TestMethod]
@@ -634,7 +634,7 @@
 
             _nav.Expect("PushAccessoryView", new List<object> { "AddOrEditGatewayView", null, null }, null);
 
-            _addOrEditDesktopViewModel.EditGatewayCommand.Execute(null);
+            _addOrEditDesktopViewModel.EditGateway.Execute(null);
         }
 
     }

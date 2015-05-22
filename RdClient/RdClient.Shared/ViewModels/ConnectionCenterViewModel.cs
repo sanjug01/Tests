@@ -40,13 +40,6 @@
         private RelayCommand _cancelAccessoryView;
 
         //
-        // App bar items
-        //
-        private readonly BarItemModel _editItem;
-        private readonly BarItemModel _deleteItem;
-        private const string EditItemStringId = "Common_Edit_String";
-        private const string DeleteItemStringId = "Common_Delete_String";
-        //
         // Session factory object set by the navigation service extension through
         // the ISessionFactorySite interface.
         //
@@ -122,9 +115,6 @@
             this.EditDesktopCommand = new RelayCommand(o => this.EditDesktopCommandExecute(o), o => (1 == this.SelectedCount) );
             this.DeleteDesktopCommand = new RelayCommand(o => this.DeleteDesktopCommandExecute(o), o => (this.SelectedCount >= 1) );
             this.AddWorkspaceCommand = new RelayCommand(o => AddWorkspaceExecute());
-
-            _editItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Edit, EditDesktopCommand, EditItemStringId, BarItemModel.ItemAlignment.Right);
-            _deleteItem = new SegoeGlyphBarButtonModel(SegoeGlyph.Delete, DeleteDesktopCommand, DeleteItemStringId, BarItemModel.ItemAlignment.Right);
 
             _accessoryViewVisibility = ViewVisibility.Create(false);
             _cancelAccessoryView = new RelayCommand(o => this.ExecuteCancelAccessoryView());
