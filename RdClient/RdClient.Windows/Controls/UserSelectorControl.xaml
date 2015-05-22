@@ -25,46 +25,28 @@
         </cv:UserComboBoxElementToLocalizedStringConverter>
     </UserControl.Resources>
 
-    <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="20" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <ComboBox x:Uid="AddOrEditDesktop-Credentials-ComboBox"
-                              Grid.Row="0"
-                              Header="User name(d)"
-                              HorizontalAlignment="Stretch"
-                              ItemsSource="{Binding Path=Users}"
-                              SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" 
-                                Style="{StaticResource DialogButtonStyle}" 
-                                x:Uid="Common_Button_AddUserAccount" 
-                                Content="Add account(d)" 
-                                Command="{Binding AddUser}" />
-                <!-- Edit button is displayed optionally -->
-                <!--
-                <Button Grid.Column="2" 
-                                Style="{StaticResource DialogButtonStyle}" 
-                                x:Uid="Common_Button_EditItem" 
-                                Content="Edit(d)" 
-                                Command="{Binding EditUser}" />
-                -->
-            </Grid>
-        </Grid>
-    </StackPanel>
+	<StackPanel Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
+		<ComboBox 
+			Margin="{StaticResource DialogItemVerticalSpacing}"
+			x:Uid="AddOrEditDesktop-Credentials-ComboBox"
+            Header="User name(d)"
+            HorizontalAlignment="Stretch"
+            ItemsSource="{Binding Path=Users}"
+            SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
+			<ComboBox.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
+				</DataTemplate>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
+		<Grid>
+			<Button 
+				HorizontalAlignment="Right"
+				Style="{StaticResource DialogButtonStyle}" 
+				x:Uid="Common_Button_AddUserAccount" 
+				Content="Add account(d)" 
+				Command="{Binding AddUser}">
+			</Button>
+		</Grid>
+	</StackPanel>
 </UserControl>
