@@ -92,6 +92,7 @@
             {
                 if (SetProperty(ref _isTelemetryActive, value))
                     this.PersistentStatus = Data.PersistentStatus.Modified;
+                this.IsTelemetryActive = _isTelemetryActive;
             }
         }
 
