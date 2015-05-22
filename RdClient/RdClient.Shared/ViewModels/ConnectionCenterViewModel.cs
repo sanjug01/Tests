@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
@@ -453,8 +454,8 @@
         }
 
         private async void ShowHelpCommandExecute(object o)
-        {
-            await Windows.System.Launcher.LaunchUriAsync(new Uri("http://www.bing.com/search?q=remote+desktop"));
+        {            
+            await Windows.System.Launcher.LaunchUriAsync(new Uri(GlobalConstants.HelpDocumentUrl));
         }
 
         private void PushAdditionalCommandsDialog(object parameter)
