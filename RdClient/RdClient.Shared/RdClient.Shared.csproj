@@ -153,6 +153,7 @@
     <Compile Include="Helpers\Rc4DataScrambler.cs" />
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
+    <Compile Include="Helpers\WinrtDispatcherTimer.cs" />
     <Compile Include="Models\FullScreenModel.cs" />
     <Compile Include="Models\IFullScreenModel.cs" />
     <Compile Include="Models\IScrollBarModel.cs" />

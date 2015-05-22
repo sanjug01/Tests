@@ -80,6 +80,7 @@
         }
 
         private object _bellyBandViewModel;
+        private ITimerFactory _dispatcherTimerFactory;
 
         public SessionState SessionState
         {
@@ -242,6 +243,11 @@
             _timerFactory = timerFactory;
         }
 
+        void ITimerFactorySite.SetDispatcherTimerFactory(ITimerFactory dispatcherTimerFactory)
+        {
+            _dispatcherTimerFactory = dispatcherTimerFactory;
+        }
+
         void IDeviceCapabilitiesSite.SetDeviceCapabilities(IDeviceCapabilities deviceCapabilities)
         {
             if (null != _deviceCapabilities)
@@ -388,7 +394,7 @@
                         this.PointerPosition.Reset(_activeSessionControl, this);
                         _activeSessionControl.RenderingPanel.Viewport.Reset();
 
-                        this.PointerCapture = new PointerCapture(this.PointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _timerFactory);
+                        this.PointerCapture = new PointerCapture(this.PointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _dispatcherTimerFactory);
                         this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
 
                         this.PanKnobSite = new PanKnobSite(this.TimerFactory);
