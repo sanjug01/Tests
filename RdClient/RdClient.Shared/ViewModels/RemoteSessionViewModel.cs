@@ -55,8 +55,6 @@
             private get; set;
         }
 
-        private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
-
         public IScrollBarModel ScrollBarModel
         {
             get; set;
@@ -403,6 +401,7 @@
 
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.ZoomPanModel.OnConsumptionModeChanged;
+                        this.PointerCapture.ConsumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
 
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
