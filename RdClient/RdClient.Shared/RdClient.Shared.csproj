@@ -299,6 +299,7 @@
     <Compile Include="Models\Viewport\Viewport.cs" />
     <Compile Include="Models\Viewport\ViewportTransformWrapper.cs" />
     <Compile Include="Models\WorkspaceModel.cs" />
+    <Compile Include="Models\ZoomPanMultiTouchModel.cs" />
     <Compile Include="Navigation\BackButtonHandler.cs" />
     <Compile Include="Navigation\BackCommandArgs.cs" />
     <Compile Include="Navigation\BackRequestedEventArgsWrapper.cs" />
