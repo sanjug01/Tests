@@ -61,22 +61,21 @@
         }
     }
 
-    public sealed class AddOrEditWorkspaceViewModel : DeferringViewModelBase, IDialogViewModel
+    public sealed class AddOrEditWorkspaceViewModel : DeferringViewModelBase, IDialogViewModel, IUsersCollector
     {
         private readonly RelayCommand _saveCommand;
         private readonly RelayCommand _cancelCommand;
         private readonly RelayCommand _addUserCommand;
         private string _feedUrl;
-        private ObservableCollection<UserComboBoxElement> _credOptions;
-        private UserComboBoxElement _selectedCredOption;
+        private ReadOnlyObservableCollection<UserComboBoxElement> _users;
+        private UserComboBoxElement _selectedUser;
         private OnPremiseWorkspaceModel _workspace;
         private bool _adding;
         private FeedUrlValidationRule _feedValidationRule;
 
         public AddOrEditWorkspaceViewModel()
         {
-            _credOptions = new ObservableCollection<UserComboBoxElement>();
-            _selectedCredOption = null;
+            _selectedUser = null;
             _saveCommand = new RelayCommand(SaveCommandExecute);
             _cancelCommand = new RelayCommand(CancelCommandExecute);
             _addUserCommand = new RelayCommand(LaunchAddUserView);
@@ -87,6 +86,9 @@
         public ICommand Cancel { get { return _cancelCommand; } }
 
         public ICommand AddUser { get { return _addUserCommand; } }
+        
+        // edit not supported, but may be in the future
+        public ICommand EditUser { get { throw new NotImplementedException(); } }
 
         public string FeedUrl 
         { 
@@ -103,15 +105,16 @@
             }
         }
 
-        public ObservableCollection<UserComboBoxElement> CredentialOptions
+        public ReadOnlyObservableCollection<UserComboBoxElement> Users
         {
-            get { return _credOptions; }
+            get { return _users; }
+            private set { SetProperty(ref _users, value); }
         }
 
-        public UserComboBoxElement SelectedCredentialOption
+        public UserComboBoxElement SelectedUser
         {
-            get { return _selectedCredOption; }
-            set { SetProperty(ref _selectedCredOption, value); }
+            get { return _selectedUser; }
+            set { SetProperty(ref _selectedUser, value); }
         }
 
         public OnPremiseWorkspaceModel Workspace
@@ -130,12 +133,24 @@
         {
             AddWorkspaceViewModelArgs addArgs = activationParameter as AddWorkspaceViewModelArgs;
             EditWorkspaceViewModelArgs editArgs = activationParameter as EditWorkspaceViewModelArgs;
-            LoadComboBoxItems();
+
+            // initialize users colection
+            this.Users = TransformingObservableCollection<IModelContainer<CredentialsModel>, UserComboBoxElement>.Create(
+                this.ApplicationDataModel.Credentials.Models,
+                c => new UserComboBoxElement(UserComboBoxType.Credentials, c),
+                ucbe =>
+                {
+                    if (this.SelectedUser == ucbe)
+                    {
+                        this.SelectedUser = null;
+                    }
+                });
+
             if (editArgs != null)
             {
                 this.Workspace = editArgs.Workspace;
                 this.FeedUrl = this.Workspace.FeedUrl;
-                this.SelectedCredentialOption = GetComboBoxItem(this.Workspace.Credential);
+                this.SelectedUser = GetComboBoxItem(this.Workspace.Credential);
                 this.Adding = false;
             }
             else if (addArgs != null)
@@ -165,37 +180,26 @@
             if (result != null && !result.UserCancelled)
             {
                 this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
-                LoadComboBoxItems();
-                this.SelectedCredentialOption = GetComboBoxItem(result.Credentials);
+                this.SelectedUser = GetComboBoxItem(result.Credentials);
             }
             else
             {
-                this.SelectedCredentialOption = null;
+                this.SelectedUser = null;
             }
         }
 
         private UserComboBoxElement GetComboBoxItem(CredentialsModel cred)
         {
-            return this.CredentialOptions.FirstOrDefault(cbe =>
+            return this.Users.FirstOrDefault(cbe =>
             {
                 return cbe.UserComboBoxType == UserComboBoxType.Credentials && cbe.Credentials?.Model == cred;
             });          
         }
 
-        private void LoadComboBoxItems()
-        {
-            List<UserComboBoxElement> comboBoxes = new List<UserComboBoxElement>();
-            foreach (IModelContainer<CredentialsModel> cred in this.ApplicationDataModel.Credentials.Models)
-            {
-                this.CredentialOptions.Add(new UserComboBoxElement(UserComboBoxType.Credentials, cred));
-            }
-            this.SelectedCredentialOption = null;
-        }
-
         private void SaveCommandExecute(object o)
         {
-            if (this.SelectedCredentialOption != null
-                && this.SelectedCredentialOption.Credentials != null
+            if (this.SelectedUser != null
+                && this.SelectedUser.Credentials != null
                 && _feedValidationRule.Validate(this.FeedUrl).Status == ValidationResultStatus.Valid)
             {
                 OnPremiseWorkspaceModel workspace = this.Workspace;
@@ -204,7 +208,7 @@
                     this.ApplicationDataModel.OnPremWorkspaces.AddNewModel(workspace);
                 }
                 workspace.FeedUrl = this.FeedUrl;
-                workspace.CredentialsId = this.SelectedCredentialOption.Credentials.Id;
+                workspace.CredentialsId = this.SelectedUser.Credentials.Id;
                 workspace.UnSubscribe(result =>
                 {
                     workspace.Subscribe();

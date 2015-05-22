@@ -9,6 +9,7 @@
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
+    using RdClient.Shared.Models.Viewport;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.Test.Data;
@@ -118,6 +119,14 @@
 
         private sealed class TestViewport : IViewport
         {
+            public IViewportPanel SessionPanel
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
             Point IViewport.Offset
             {
                 get { return new Point(100, 200); }
@@ -133,10 +142,17 @@
                 get { return 2.0; }
             }
 
+            public event EventHandler Changed;
+
             event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
             {
                 add { }
                 remove { }
+            }
+
+            public void Set(double zoomFactor, Point anchorPoint)
+            {
+                throw new NotImplementedException();
             }
 
             void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor)
@@ -144,12 +160,12 @@
                 throw new NotImplementedException();
             }
 
-            void IViewport.Set(double zoomFactor, Size offset)
+            void IViewport.SetZoom(double zoomFactor, Point anchorPoint)
             {
                 throw new NotImplementedException();
             }
 
-            Point IViewport.TransformPoint(Point point)
+            void IViewport.SetPan(double x, double y)
             {
                 throw new NotImplementedException();
             }
@@ -456,7 +472,7 @@
                 /// <param name="credentials">credentials</param>
                 /// <param name="fUsingSavedCreds">indicates if credentials are saved </param>
                 void IRdpConnection.SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)
-                {                
+                {
                 }
                 void IRdpConnection.SetGateway(GatewayModel gateway, CredentialsModel credentials)
                 {

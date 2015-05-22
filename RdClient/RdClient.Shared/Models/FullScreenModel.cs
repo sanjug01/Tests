@@ -1,12 +1,11 @@
 ﻿using RdClient.Shared.ViewModels;
-using Windows.Foundation;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
 namespace RdClient.Shared.Models
 {
-    public class FullScreenModel
+    public class FullScreenModel : IFullScreenModel
     {
         private bool _wasFullScreenMode;
 
@@ -36,6 +35,21 @@ namespace RdClient.Shared.Models
                 _enterFullScreenCommand.EmitCanExecuteChanged();
                 _exitFullScreenCommand.EmitCanExecuteChanged();
             }
+        }
+
+        public void ToggleFullScreen()
+        {
+            if(ApplicationView.GetForCurrentView().IsFullScreenMode)
+            {
+                _exitFullScreenCommand.Execute(null);
+            }
+            else
+            {
+                _enterFullScreenCommand.Execute(null);
+            }
+
+            _enterFullScreenCommand.EmitCanExecuteChanged();
+            _exitFullScreenCommand.EmitCanExecuteChanged();
         }
 
         public FullScreenModel()

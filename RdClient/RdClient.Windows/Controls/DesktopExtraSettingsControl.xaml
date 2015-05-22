@@ -70,42 +70,7 @@
         </StackPanel>
         
         <!-- Gateway section -->
-		<StackPanel Margin="{StaticResource DialogSectionVerticalSpacing}">
-			<TextBlock 
-				Style="{ThemeResource BodyTextBlockStyle}" 
-				Margin="{StaticResource DialogHeaderVerticalSpacing}"
-                Grid.Row="0"                   
-                x:Uid="AddOrEditDesktop-GatewaysSectionTitle" 
-                Text="Gateway(d)">				
-			</TextBlock>
-			<ComboBox 
-				Margin="{StaticResource DialogItemVerticalSpacing}"
-                HorizontalAlignment="Stretch"
-                x:Uid="AddOrEditDesktop-Gateways-ComboBox"
-                ItemsSource="{Binding GatewayOptions}"
-                SelectedItem="{Binding SelectedGateway, Mode=TwoWay}">
-				<ComboBox.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding Converter={StaticResource GatewayComboBoxElementToLocalizedStringConverter}}" />
-					</DataTemplate>
-				</ComboBox.ItemTemplate>
-			</ComboBox>
-			<Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Style="{StaticResource DialogButtonStyle}" 
-                        x:Uid="Common_Button_AddNewItem" 
-                        Content="Add New(d)" 
-                        Command="{Binding AddGatewayCommand}" />
-                <Button Grid.Column="2" Style="{StaticResource DialogButtonStyle}" 
-                        x:Uid="Common_Button_EditItem" 
-                        Content="Edit(d)" 
-                        Command="{Binding EditGatewayCommand}" />
-            </Grid>
-        </StackPanel>
+        <local:GatewaySelectorControl Margin="0,20,0,20"/>
         
         <!-- Redirection section -->
 		<StackPanel Orientation="Vertical">

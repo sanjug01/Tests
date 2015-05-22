@@ -73,8 +73,8 @@
                     HorizontalAlignment="Stretch"
 					Header="Username (d)"
                     x:Uid="AddOrEditDesktop-Credentials-ComboBox"
-                    ItemsSource="{Binding Path=UserOptions}"
-                    SelectedIndex="{Binding Path=SelectedUserOptionsIndex, Mode=TwoWay}">
+                              ItemsSource="{Binding Path=Users}"
+                              SelectedItem="{Binding Path=SelectedUser, Mode=TwoWay}">
 					<ComboBox.ItemTemplate>
 						<DataTemplate>
 							<TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />

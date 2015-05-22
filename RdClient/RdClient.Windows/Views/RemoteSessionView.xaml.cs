@@ -3,6 +3,7 @@
 namespace RdClient.Views
 {
     using RdClient.Shared.Navigation;
+    using RdClient.Shared.ViewModels;
     using Windows.UI.Xaml.Controls;
 
     public sealed partial class RemoteSessionView : UserControl, IPresentableView
@@ -29,6 +30,12 @@ namespace RdClient.Views
 
         void IPresentableView.Dismissing()
         {
+        }
+
+        private void UserControl_SizeChanged(object sender, Windows.UI.Xaml.SizeChangedEventArgs e)
+        {
+            ((RemoteSessionViewModel)DataContext).ScrollBars.HorizontalScrollBarWidth = this.HorizontalScrolbar.ActualHeight;
+            ((RemoteSessionViewModel)DataContext).ScrollBars.VerticalScrollBarWidth = this.VerticalScrolbar.ActualHeight;
         }
     }
 }

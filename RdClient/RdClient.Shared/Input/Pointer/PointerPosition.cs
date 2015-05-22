@@ -34,7 +34,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             get
             {
-                return _sessionControl.RenderingPanel.Viewport.TransformPoint(_viewportPosition);
+                return _sessionControl.RenderingPanel.Viewport.SessionPanel.Transform.InverseTransformPoint(_viewportPosition);
             }
         }
 

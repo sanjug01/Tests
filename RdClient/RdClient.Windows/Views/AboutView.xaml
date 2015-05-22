@@ -30,7 +30,7 @@
 					<TextBlock					
 						HorizontalAlignment="Left"
 						VerticalAlignment="Bottom"
-						Style="{StaticResource TitleTextBlockStyle}"
+						Style="{StaticResource SubtitleTextBlockStyle}"
 						x:Uid="AboutView_Title"
 						Text="(d) About" />
 					<HyperlinkButton
@@ -39,27 +39,16 @@
 						VerticalAlignment="Bottom"
 						HorizontalAlignment="Right">
 						<TextBlock 							
-							x:Uid="AboutView_Close" 
-							Style="{StaticResource BodyTextBlockStyle}"
+							x:Uid="AboutView_Close"
 							TextLineBounds="TrimToBaseline"							
 							Text="(d) Close">						
 						</TextBlock>
 					</HyperlinkButton>
 				</Grid>
-				<StackPanel
-					Margin="{StaticResource DialogItemVerticalSpacing}">
-					<TextBlock 
-						Style="{StaticResource BodyTextBlockStyle}"
-						Text="{Binding AppName}">
-					</TextBlock>
-					<TextBlock 
-						Text="{Binding AppVersion}"
-						Style="{StaticResource BodyTextBlockStyle}">
-					</TextBlock>
-					<TextBlock 					
-						Text="{Binding Copyright}"
-						Style="{StaticResource BodyTextBlockStyle}">
-					</TextBlock>
+				<StackPanel Margin="{StaticResource DialogItemVerticalSpacing}">
+					<TextBlock Text="{Binding AppName}" />
+					<TextBlock Text="{Binding AppVersion}" />
+					<TextBlock Text="{Binding Copyright}" />
 				</StackPanel>
 				<HyperlinkButton 
                     x:Uid="AboutView_Link_ThirdPartyNotices"
@@ -76,8 +65,7 @@
 					NavigateUri="https://www.google.com/search?q=microsoft+rdp+client+rate+and+review">
 					<TextBlock 
 						x:Uid="AboutView_RateAndReview" 
-						Text="(d) Rate and Review"
-						Style="{StaticResource BodyTextBlockStyle}">
+						Text="(d) Rate and Review">
 					</TextBlock>
 				</HyperlinkButton>
 				<StackPanel 
@@ -87,8 +75,7 @@
 						Command="{Binding ShowEulaCommand}">
 						<TextBlock 
 							x:Uid="AboutView_TermsOfUse" 
-							Text="(d) Terms of use"
-							Style="{StaticResource BodyTextBlockStyle}">
+							Text="(d) Terms of use">
 						</TextBlock>
 					</HyperlinkButton>
 					<Rectangle 
@@ -113,7 +100,6 @@
 					</HyperlinkButton>
 				</StackPanel>
 			</StackPanel>
-
         </Grid>
     </ContentControl>
     

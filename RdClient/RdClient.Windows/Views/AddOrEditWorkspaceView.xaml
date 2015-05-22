@@ -63,7 +63,7 @@
                 <ComboBox Margin="0,8" 
                           x:Uid="AddOrEditWorkspace-CredentialsComboBox"
                           HorizontalAlignment="Stretch"
-                          ItemsSource="{Binding CredentialOptions}" SelectedItem="{Binding SelectedCredentialOption, Mode=TwoWay}"
+                          ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
                           PlaceholderText="Select user or add new (d)">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>

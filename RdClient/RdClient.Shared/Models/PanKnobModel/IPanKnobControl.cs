@@ -1,4 +1,5 @@
-﻿using Windows.Foundation;
+﻿using RdClient.Shared.Models.Viewport;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Models.PanKnobModel
 {
