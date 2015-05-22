@@ -53,16 +53,14 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Background="{ThemeResource SystemChromeDisabledHighColor}">
-
-            <Grid Background="{ThemeResource SystemChromeDisabledHighColor}" Grid.Row="0" Grid.Column="0">
-            <Grid.RowDefinitions>
+        <Grid Background="{ThemeResource SystemChromeDisabledHighColor}" Grid.Row="0" Grid.Column="0">
+            <!--<Grid.RowDefinitions>
                 <RowDefinition />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <c:RemoteSessionPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+            </Grid.ColumnDefinitions>-->
+            <c:RemoteSessionPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                 RemoteSessionViewSite="{Binding}"
                 Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
 
@@ -242,7 +240,7 @@
                    LargeChange="200"
                    SmallChange="20"                   
                    Value="{Binding ScrollBars.ValueVertical, Mode=TwoWay}"/>
-        <Rectangle Grid.Row="1" Grid.Column="1" Fill="Black"
+        <Rectangle Grid.Row="1" Grid.Column="1" Fill="{ThemeResource SystemChromeDisabledHighColor}"
                    Visibility="{Binding ScrollBars.VisibilityCorner}"/>
     </Grid>
 

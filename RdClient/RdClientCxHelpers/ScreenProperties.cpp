@@ -60,13 +60,11 @@ ScreenProperties::ScreenProperties()
 
 Windows::Foundation::Size ScreenProperties::Resolution::get()
 {
-	// Obtain the underlying DXGI device of the Direct3D11.1 device.
 	ComPtr<IDXGIDevice> dxgiDevice;
 	ThrowIfFailed(
 		m_d3dDevice.As(&dxgiDevice)
 		);
 
-	// Identify the physical adapter (GPU or card) this device is running on.
 	ComPtr<IDXGIAdapter> dxgiAdapter;
 	ThrowIfFailed(
 		dxgiDevice->GetAdapter(&dxgiAdapter)
@@ -75,19 +73,26 @@ Windows::Foundation::Size ScreenProperties::Resolution::get()
 	IDXGIOutput * pOutput;
 	if (dxgiAdapter->EnumOutputs(0, &pOutput) != DXGI_ERROR_NOT_FOUND)
 	{
+		Windows::Foundation::Size size;
 		DXGI_OUTPUT_DESC desc;
-		pOutput->GetDesc(&desc);
+		ThrowIfFailed(
+			pOutput->GetDesc(&desc)
+			);
+		pOutput->Release();
 
 		FLOAT dpiX, dpiY;
 		ID2D1Factory* d2dFactory = NULL;
-		HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
-			__uuidof(ID2D1Factory), NULL, (void**)&d2dFactory);
+		ThrowIfFailed(
+			D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
+						__uuidof(ID2D1Factory), NULL, (void**)&d2dFactory)
+			);
 		d2dFactory->GetDesktopDpi(&dpiX, &dpiY);
 
-		return Windows::Foundation::Size(
-			(float) desc.DesktopCoordinates.right * 96.0f / dpiX, 
-			(float) desc.DesktopCoordinates.bottom * 96.0f / dpiY);
+		size.Width = (float)desc.DesktopCoordinates.right * 96.0f / dpiX;
+		size.Height = (float)desc.DesktopCoordinates.bottom * 96.0f / dpiY;
+
+		return size;
 	}
 
-	return Windows::Foundation::Size(0, 0);
+	return Windows::Foundation::Size(1024, 768);
 }

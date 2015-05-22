@@ -50,13 +50,9 @@
         private readonly PointerPosition _pointerPosition = new PointerPosition();
         private readonly ConsumptionModeTracker _consumptionMode = new ConsumptionModeTracker();
 
-        private IFullScreenModel _fullScreenModel;
         public IFullScreenModel FullScreenModel
         {
-            set
-            {
-                _fullScreenModel = value;
-            }
+            private get; set;
         }
 
         private IScrollBarModel _scrollBarModel;
@@ -435,7 +431,7 @@
 
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
-                        _fullScreenModel.EnterFullScreenCommand.Execute(null);
+                        this.FullScreenModel.EnterFullScreenCommand.Execute(null);
                         this.IsConnectionBarVisible = true;
                         break;
 
@@ -464,7 +460,7 @@
                             this.IsConnectionBarVisible = false;
                             this.IsRightSideBarVisible = false;
                             _panKnobSite.PanKnob.IsVisible = false;
-                            _fullScreenModel.ExitFullScreenCommand.Execute(null);
+                            this.FullScreenModel.ExitFullScreenCommand.Execute(null);
                         }
                         break;
                 }
@@ -534,7 +530,7 @@
 
         private void InternalFullScreen(object parameter)
         {
-            _fullScreenModel.ToggleFullScreen();
+            this.FullScreenModel.ToggleFullScreen();
         }
 
         private void OnDeviceCapabilitiesPropertyChanged(object sender, PropertyChangedEventArgs e)
