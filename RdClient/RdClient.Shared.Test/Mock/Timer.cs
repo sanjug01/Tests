@@ -6,6 +6,11 @@ namespace RdClient.Shared.Test.Mock
 {
     public class TimerFactory : MockBase, ITimerFactory
     {
+        public ITimer CreateDispatcherTimer()
+        {
+            return (ITimer)Invoke(new object[] { });
+        }
+
         public ITimer CreateTimer()
         {
             return (ITimer) Invoke(new object[] { });

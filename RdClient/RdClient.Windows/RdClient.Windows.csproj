@@ -165,6 +165,7 @@
     <Compile Include="DesignTime\FakeRemoteResourceViewModel.cs" />
     <Compile Include="DesignTime\FakeAddOrEditDesktopViewModel.cs" />
     <Compile Include="DesignTime\FakeWorkspaceViewModel.cs" />
+    <Compile Include="DesignTime\FakeRemoteSessionFailureViewModel.cs" />
     <Compile Include="Input\CoreWindowKeyboardCapture.cs" />
     <Compile Include="Input\InputPaneInputPanelFactory.cs" />
     <Compile Include="LifeTimeManagement\ResumingArgs.cs" />

@@ -155,7 +155,7 @@
                     Background="{ThemeResource DialogBackgroundColor}">
 
                     <ContentControl
-                        Margin="0,20"
+                        Margin="{StaticResource BellyBandDefaultHorizontalSpacing}"
                         Content="{Binding BellyBandViewModel}"
                         HorizontalContentAlignment="Stretch">
 
