@@ -616,10 +616,6 @@
     <value>Refresh</value>
     <comment>Verb. Text in a button or pop out menu that is pressed to refresh an item.</comment>
   </data>
-  <data name="CredentialPromptMode_EditCredentials_String" xml:space="preserve">
-    <value></value>
-    <comment>Text in the credential prompt dialog shown under title when editing existing credentials. This is deliberately empty as we don't show text in this case.</comment>
-  </data>
   <data name="CredentialPromptMode_EditCredentials_Title_String" xml:space="preserve">
     <value>Edit an account</value>
     <comment>Title shown in the credential prompt dialog when editing existing credentials</comment>
