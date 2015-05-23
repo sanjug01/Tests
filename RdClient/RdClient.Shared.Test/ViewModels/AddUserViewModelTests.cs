@@ -7,6 +7,8 @@
     using RdClient.Shared.ValidationRules;
     using RdClient.Shared.ViewModels;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     [TestClass]
     public class AddUserViewModelTests
@@ -160,8 +162,12 @@
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShowMessageFalseIffInEnterCredentialsMode()
+        public void AddUserViewModel_ShowOrHideMessageCorrectlyBasedOnMode()
         {
+            List<CredentialPromptMode> showsMessage = new List<CredentialPromptMode>();
+            showsMessage.Add(CredentialPromptMode.FreshCredentialsNeeded);
+            showsMessage.Add(CredentialPromptMode.InvalidCredentials);
+
             foreach (CredentialPromptMode mode in Enum.GetValues(typeof(CredentialPromptMode)))
             {
                 AddUserViewArgs args =
@@ -172,13 +178,13 @@
                 _vm = new AddUserViewModel();
                 ((IViewModel)_vm).Presenting(_nav, args, _context);
 
-                if (mode == CredentialPromptMode.EnterCredentials)
+                if (showsMessage.Any(m => mode.Equals(m)))
                 {
-                    Assert.IsFalse(_vm.ShowMessage);
+                    Assert.IsTrue(_vm.ShowMessage);                    
                 }
                 else
                 {
-                    Assert.IsTrue(_vm.ShowMessage);
+                    Assert.IsFalse(_vm.ShowMessage);
                 }
             }
         }
