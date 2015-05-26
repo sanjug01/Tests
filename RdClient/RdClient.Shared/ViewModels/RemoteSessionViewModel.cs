@@ -47,7 +47,10 @@
         private ReadOnlyObservableCollection<object> _connectionBarItems;
         private ITelemetryClient _telemetryClient;
         private ITelemetryStopwatch _TelemetrySessionDuration;
+
         private ITimerFactory _timerFactory;
+        private ITimerFactory _dispatcherTimerFactory;
+
         private ILifeTimeManager _lifeTimeManager;
 
         public PointerPosition PointerPosition
@@ -80,7 +83,6 @@
         }
 
         private object _bellyBandViewModel;
-        private ITimerFactory _dispatcherTimerFactory;
 
         public SessionState SessionState
         {
@@ -91,6 +93,11 @@
         public ITimerFactory TimerFactory
         {
             get { return _timerFactory; }
+        }
+
+        public ITimerFactory DispatcherTimerFactory
+        {
+            get { return _dispatcherTimerFactory; }
         }
 
         /// <summary>

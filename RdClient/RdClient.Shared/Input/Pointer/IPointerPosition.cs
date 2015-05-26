@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RdClient.Shared.Models;
+using RdClient.Shared.Navigation.Extensions;
+using System;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Pointer

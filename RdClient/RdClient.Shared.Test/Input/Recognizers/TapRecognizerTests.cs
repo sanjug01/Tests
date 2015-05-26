@@ -17,7 +17,7 @@ namespace RdClient.Shared.Test.Input.Recognizers
 
             bool tapped = false;
 
-            recognizer.TapEvent += (s, e) =>
+            recognizer.Tapped += (s, e) =>
             {
                 if(e.Type == TapEventType.Tap)
                 {
@@ -44,7 +44,7 @@ namespace RdClient.Shared.Test.Input.Recognizers
 
             bool doubleTapped = false;
 
-            recognizer.TapEvent += (s, e) =>
+            recognizer.Tapped += (s, e) =>
             {
                 if (e.Type == TapEventType.DoubleTap)
                 {
@@ -73,7 +73,7 @@ namespace RdClient.Shared.Test.Input.Recognizers
 
             List<TapEventType> events = new List<TapEventType>();
 
-            recognizer.TapEvent += (s, e) =>
+            recognizer.Tapped += (s, e) =>
             {
                 events.Add(e.Type);
             };
@@ -95,7 +95,7 @@ namespace RdClient.Shared.Test.Input.Recognizers
 
             List<TapEventType> events = new List<TapEventType>();
 
-            recognizer.TapEvent += (s, e) =>
+            recognizer.Tapped += (s, e) =>
             {
                 events.Add(e.Type);
             };
@@ -118,7 +118,7 @@ namespace RdClient.Shared.Test.Input.Recognizers
 
             List<TapEventType> events = new List<TapEventType>();
 
-            recognizer.TapEvent += (s, e) =>
+            recognizer.Tapped += (s, e) =>
             {
                 events.Add(e.Type);
             };

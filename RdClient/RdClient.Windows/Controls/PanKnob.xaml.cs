@@ -58,7 +58,7 @@ namespace RdClient.Controls
                         timer = site.TimerFactory.CreateTimer();
                     });
                 _tapRecognizer = new TapRecognizer(timer);
-                _tapRecognizer.TapEvent += OnTapEvent;
+                _tapRecognizer.Tapped += OnTapEvent;
             }
         }
 

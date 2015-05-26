@@ -35,7 +35,6 @@ namespace RdClient.Shared.Helpers
                 _recurring = recurring;
                 _callback = callback;
 
-
                 _timer.Start();
             }
         }

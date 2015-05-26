@@ -34,7 +34,7 @@
         private bool _viewLoaded;
         private Size _renderingPanelSize;
         private ZoomScrollRecognizer _zoomScrollRecognizer;
-        private GestureRecognizer _platformRecognizer;
+        private TapRecognizer _tapRecognizer;
         private CoreCursor _exitCursor;
 
         public RemoteSessionPanel()
@@ -180,39 +180,18 @@
             this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => site.SetRemoteSessionView(this));
 
             ITimer timer = null;
-            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = site.TimerFactory.CreateTimer());
+            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = site.DispatcherTimerFactory.CreateTimer());
             _zoomScrollRecognizer = new ZoomScrollRecognizer(timer);
             _zoomScrollRecognizer.ZoomScrollEvent += OnZoomScrollEvent;
-            _platformRecognizer = new GestureRecognizer();
-            _platformRecognizer.GestureSettings = GestureSettings.Tap | GestureSettings.Hold | GestureSettings.Drag;
-            _platformRecognizer.Tapped += OnTapped;
-            _platformRecognizer.Holding += OnHolding;
+
+            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = site.DispatcherTimerFactory.CreateTimer());
+            _tapRecognizer = new TapRecognizer(timer);
+            _tapRecognizer.Tapped += OnTapEvent;
         }
 
-        private void OnTapped(object sender, TappedEventArgs e)
+        private void OnTapEvent(object sender, ITapEvent e)
         {
-            IGestureRoutedEventProperties w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.Tapped, PointerEventType.TappedEventArgs, e, this));
-            this.RenderingPanel.EmitPointerEvent(w);
-        }
-
-        private void OnHolding(object sender, HoldingEventArgs e)
-        {
-            IGestureRoutedEventProperties w = null;
-
-            switch(e.HoldingState)
-            {
-                case HoldingState.Started:
-                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingStarted, PointerEventType.HoldingEventArgs, e, this));
-                    break;
-                case HoldingState.Completed:
-                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingCompleted, PointerEventType.HoldingEventArgs, e, this));
-                    break;
-                case HoldingState.Canceled:
-                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingCancelled, PointerEventType.HoldingEventArgs, e, this));
-                    break;
-            }
-
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.RenderingPanel.EmitPointerEvent(e);
         }
 
         private void OnZoomScrollEvent(object sender, IZoomScrollEvent e)
@@ -281,22 +260,25 @@
         protected override void OnPointerCanceled(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCancelled, PointerEventType.PointerRoutedEventArgs, e, this));
+            _tapRecognizer.Consume(w);
+
             this.RenderingPanel.EmitPointerEvent(w);
-            _platformRecognizer.CompleteGesture();
         }
 
         protected override void OnPointerReleased(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerReleased, PointerEventType.PointerRoutedEventArgs, e, this));
+            _tapRecognizer.Consume(w);
+
             this.RenderingPanel.EmitPointerEvent(w);
-            _platformRecognizer.ProcessUpEvent(e.GetCurrentPoint(this));
         }
 
         protected override void OnPointerPressed(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerPressed, PointerEventType.PointerRoutedEventArgs, e, this));
+            _tapRecognizer.Consume(w);
+
             this.RenderingPanel.EmitPointerEvent(w);
-            _platformRecognizer.ProcessDownEvent(e.GetCurrentPoint(this));
         }
 
         protected override void OnPointerWheelChanged(PointerRoutedEventArgs e)
