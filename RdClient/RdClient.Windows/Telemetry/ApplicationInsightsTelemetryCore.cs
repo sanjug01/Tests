@@ -44,7 +44,7 @@
         public void Duration(string eventName, TimeSpan duration)
         {
             if (null != _client)
-                _client.TrackMetric(eventName, duration.Milliseconds);
+                _client.TrackMetric(eventName, duration.TotalMilliseconds);
         }
     }
 }
