@@ -68,6 +68,10 @@
             //
             RadcClient radcClient = new RadcClient(new RadcEventSource(), new TaskExecutor());
             radcClient.StartGetCachedFeeds();
+
+            _navigationService = this.CreateNavigationService();
+
+            _navigationService.Presenter = this.ViewPresenter;
             //
             // Inject and enable telemetry if necessary.
             //
@@ -90,10 +94,6 @@
             }
 
             Contract.Assert(null != sessionFactory);
-
-            _navigationService = this.CreateNavigationService();
-
-            _navigationService.Presenter = this.ViewPresenter;
 
             _navigationService.Extensions.Add(this.CreateDataModelExtension(appDataModel));
             _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));
