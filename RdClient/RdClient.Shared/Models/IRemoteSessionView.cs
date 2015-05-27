@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.Models.Viewport;
     using System;
     using System.ComponentModel;
     using Windows.Foundation;
@@ -10,14 +11,14 @@
     /// In the production application all methods of the interface must be called,
     /// and all events are emitted on the UI thread.
     /// </summary>
-    public interface IRemoteSessionView : INotifyPropertyChanged
+    public interface IRemoteSessionView : IViewportPanel, INotifyPropertyChanged
     {
         /// <summary>
         /// Size of the rendering viewport. The property is observable, when the view geometry is changed
         /// by the OS or user, the object emits an INotifyPropertyChanged.PropertyChanged event on the UI thread.
         /// Registered event handlers may then examine the property and adjust rendering.
         /// </summary>
-        Size Size { get; }
+        Size RenderingPanelSize { get; }
 
         /// <summary>
         /// User has closed the view. The event may be emitted by auxilliary session views opened to render

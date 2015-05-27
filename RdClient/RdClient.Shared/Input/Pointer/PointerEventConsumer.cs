@@ -33,6 +33,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public void Reset()
         {
+            _timer.Stop();
             Tracker.Reset();
             _stateMachine.SetStart(PointerModeState.Idle);
         }

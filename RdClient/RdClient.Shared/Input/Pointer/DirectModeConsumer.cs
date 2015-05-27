@@ -1,5 +1,7 @@
 ﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.Input.Recognizers;
 using System;
+using System.Diagnostics;
 
 namespace RdClient.Shared.Input.Pointer
 {
@@ -16,7 +18,13 @@ namespace RdClient.Shared.Input.Pointer
             _pointerPosition = pointerPosition;
 
             _stateMachine = new StateMachine<DirectModeState, PointerStateMachineEvent>();
-            _stateMachineEvent = new PointerStateMachineEvent() { Input = null, Tracker = null, Timer = null, Control = control };
+            _stateMachineEvent = new PointerStateMachineEvent() {
+                Input = null,
+                Tracker = null,
+                Timer = null,
+                Control = control,
+                PointerPosition = pointerPosition
+            };
             DirectModeTransitions.AddTransitions(ref _stateMachine);
 
             Reset();
@@ -31,14 +39,14 @@ namespace RdClient.Shared.Input.Pointer
                 _pointerPosition.ViewportPosition = pointerEvent.Position;
             }
 
-            if(pointerEvent.Action == PointerEventAction.Tapped)
+            if (pointerEvent.Action == PointerEventAction.Tapped && ((ITapEvent)pointerEvent).Type == TapEventType.Tap)
             {
-                IGestureRoutedEventProperties grep = (IGestureRoutedEventProperties) pointerEvent;
-                int i;
-                for(i = 0; i < grep.Count; i++)
-                {
-                    _control.LeftClick(_pointerPosition.SessionPosition);
-                }                
+                _control.LeftClick(_pointerPosition.SessionPosition);
+            }
+            else if (pointerEvent.Action == PointerEventAction.Tapped && ((ITapEvent)pointerEvent).Type == TapEventType.DoubleTap)
+            {
+                _control.LeftClick(_pointerPosition.SessionPosition);
+                _control.LeftClick(_pointerPosition.SessionPosition);            
             }
             else
             {

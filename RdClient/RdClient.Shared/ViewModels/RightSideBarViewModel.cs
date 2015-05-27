@@ -11,7 +11,7 @@ using Windows.UI.Xaml;
 
 namespace RdClient.Shared.ViewModels
 {
-    public class RightSideBarViewModel : MutableObject
+    public class RightSideBarViewModel : MutableObject, IRightSideBarViewModel
     {
         public IRemoteSession RemoteSession
         {

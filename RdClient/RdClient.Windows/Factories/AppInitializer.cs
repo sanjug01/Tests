@@ -44,7 +44,6 @@
             Contract.Assert(null != this.DeviceCapabilities);
 
             ITimerFactory timerFactory = new WinrtThreadPoolTimerFactory();
-            ITimerFactory dispatcherTimerFactory = new WinrtDispatcherTimerFactory();
             IDeferredExecution deferredExecution = new CoreDispatcherDeferredExecution() { Priority = CoreDispatcherPriority.Normal };
             ISessionFactory sessionFactory;
 
@@ -67,7 +66,7 @@
             // All the resources for the workspaces are cached internally by RadcClient. Here we load them into our workspaces
             //
             RadcClient radcClient = new RadcClient(new RadcEventSource(), new TaskExecutor());
-            radcClient.StartGetCachedFeeds();
+            radcClient.StartGetCachedFeeds(); 
 
             _navigationService = this.CreateNavigationService();
 
@@ -97,7 +96,7 @@
 
             _navigationService.Extensions.Add(this.CreateDataModelExtension(appDataModel));
             _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));
-            _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory, dispatcherTimerFactory));
+            _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory));
             _navigationService.Extensions.Add(new SessionFactoryExtension() { SessionFactory = sessionFactory });
             _navigationService.Extensions.Add(new DeviceCapabilitiesExtension() { DeviceCapabilities = this.DeviceCapabilities });
             _navigationService.Extensions.Add(new LifeTimeExtension() { LifeTimeManager = this.LifeTimeManager });

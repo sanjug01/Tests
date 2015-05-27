@@ -46,7 +46,7 @@ namespace RdClient.Shared.Input.Recognizers
     public class TapRecognizer : ITapRecognizer
     {
         public event EventHandler<IPointerEventBase> ConsumedEvent;
-        public event EventHandler<ITapEvent> TapEvent;
+        public event EventHandler<ITapEvent> Tapped;
 
         private TapTimer _timer;
 
@@ -62,9 +62,9 @@ namespace RdClient.Shared.Input.Recognizers
 
         private void EmitTapEvent(TapEventType type)
         {
-            if(TapEvent != null)
+            if(Tapped != null)
             {
-                TapEvent(this, new TapEvent(PointerEventAction.Tapped, _position, type));
+                Tapped(this, new TapEvent(PointerEventAction.Tapped, _position, type));
             }
         }
 

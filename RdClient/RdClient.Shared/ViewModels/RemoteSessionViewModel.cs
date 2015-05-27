@@ -14,7 +14,6 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
-    using System.Windows.Input;
     using Windows.UI.Xaml;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite, ITelemetryClientSite
@@ -47,10 +46,12 @@
         private ReadOnlyObservableCollection<object> _connectionBarItems;
         private ITelemetryClient _telemetryClient;
         private ITelemetryStopwatch _TelemetrySessionDuration;
+
         private ITimerFactory _timerFactory;
+
         private ILifeTimeManager _lifeTimeManager;
 
-        public PointerPosition PointerPosition
+        public IPointerPosition PointerPosition
         {
             private get; set;
         }
@@ -60,7 +61,7 @@
             get; set;
         }
 
-        public RightSideBarViewModel RightSideBarViewModel
+        public IRightSideBarViewModel RightSideBarViewModel
         {
             get; set;
         }
@@ -79,8 +80,12 @@
             }
         }
 
+        IDeferredExecution IRemoteSessionViewSite.DeferredExecution
+        {
+            get { return this.Dispatcher; }
+        }
+
         private object _bellyBandViewModel;
-        private ITimerFactory _dispatcherTimerFactory;
 
         public SessionState SessionState
         {
@@ -243,11 +248,6 @@
             _timerFactory = timerFactory;
         }
 
-        void ITimerFactorySite.SetDispatcherTimerFactory(ITimerFactory dispatcherTimerFactory)
-        {
-            _dispatcherTimerFactory = dispatcherTimerFactory;
-        }
-
         void IDeviceCapabilitiesSite.SetDeviceCapabilities(IDeviceCapabilities deviceCapabilities)
         {
             if (null != _deviceCapabilities)
@@ -394,7 +394,13 @@
                         this.PointerPosition.Reset(_activeSessionControl, this);
                         _activeSessionControl.RenderingPanel.Viewport.Reset();
 
-                        this.PointerCapture = new PointerCapture(this.PointerPosition, _activeSessionControl, _activeSessionControl.RenderingPanel, _dispatcherTimerFactory);
+                        this.PointerCapture = new PointerCapture(
+                            this.PointerPosition, 
+                            _activeSessionControl, 
+                            _activeSessionControl.RenderingPanel, 
+                            _timerFactory,
+                            this.Dispatcher);
+
                         this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
 
                         this.PanKnobSite = new PanKnobSite(this.TimerFactory);

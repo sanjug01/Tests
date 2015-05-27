@@ -180,12 +180,15 @@
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\PointerEvent.cs" />
+    <Compile Include="Mock\PointerPosition.cs" />
     <Compile Include="Mock\PresentableStackedView.cs" />
     <Compile Include="Mock\PresentableViewWithStackedPresenter.cs" />
     <Compile Include="Mock\RadcClient.cs" />
     <Compile Include="Mock\RadcClientEvents.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
     <Compile Include="Mock\RenderingPanel.cs" />
+    <Compile Include="Mock\RightSideBarViewModel.cs" />
+    <Compile Include="Mock\TelemetryClient.cs" />
     <Compile Include="Mock\TestTelemetryClient.cs" />
     <Compile Include="Mock\Thumbnail.cs" />
     <Compile Include="Mock\LocalizedString.cs" />
@@ -202,8 +205,10 @@
     <Compile Include="Mock\Timer.cs" />
     <Compile Include="Mock\TestRdpCertificate.cs" />
     <Compile Include="Mock\ValidationRule.cs" />
+    <Compile Include="Mock\View.cs" />
     <Compile Include="Mock\ViewFactory.cs" />
     <Compile Include="Mock\ViewModel.cs" />
+    <Compile Include="Mock\Viewport.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\ApplicationDataModelTests.cs" />
     <Compile Include="Model\GeneralSettingsModelTests.cs" />
