@@ -12,8 +12,7 @@
         private readonly RelayCommand _cancelConfirmation;
 
         private string _resourceName;
-        private string _prompt;
-        private string _dismissLabel;
+        private CredentialPromptMode _promptMode;
         private bool _saveCredentials;
         private bool _canSaveCredentials;
         private bool _canRevealPassword;
@@ -55,10 +54,10 @@
             set { this.SetProperty(ref _resourceName, value); }
         }
 
-        public string Prompt
+        public CredentialPromptMode PromptMode
         {
-            get { return _prompt; }
-            set { this.SetProperty(ref _prompt, value); }
+            get { return _promptMode; }
+            set { this.SetProperty(ref _promptMode, value); }
         }
 
         public bool SaveCredentials

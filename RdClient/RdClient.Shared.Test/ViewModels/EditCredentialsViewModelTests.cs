@@ -286,13 +286,12 @@
 
             _nav.PushModalView(ViewName, _task);
             _vm.PropertyChanged += (sender, e) => changes.Add(e);
-            _vm.Prompt = "pro";
-            _vm.Prompt += "mpt";
+            var promptMode = CredentialPromptMode.FreshCredentialsNeeded;
+            _vm.PromptMode = promptMode;
 
-            Assert.AreEqual("prompt", _vm.Prompt);
-            Assert.AreEqual(2, changes.Count);
-            Assert.AreEqual("Prompt", changes[0].PropertyName);
-            Assert.AreEqual("Prompt", changes[1].PropertyName);
+            Assert.AreEqual(promptMode, _vm.PromptMode);
+            Assert.AreEqual(1, changes.Count);
+            Assert.AreEqual("PromptMode", changes[0].PropertyName);
         }
 
         [TestMethod]

@@ -100,7 +100,7 @@
         public void InSessionEditCredentialsTask_PresentNewCredentials_EmptyFields()
         {
             InSessionCredentialsTask task = new InSessionCredentialsTask(
-                _sc, _dataModel, "Prompt", null);
+                _sc, _dataModel, CredentialPromptMode.EnterCredentials, null);
             _nav.PushModalView(ViewName, task);
 
             Assert.IsTrue(string.IsNullOrEmpty(_vm.UserName));
@@ -114,7 +114,7 @@
         {
             _sc.Credentials.Username = "don";
             _sc.Credentials.Password = "pedro";
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, "Prompt", null);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, CredentialPromptMode.EnterCredentials, null);
             _nav.PushModalView(ViewName, task);
 
             Assert.AreEqual("don", _vm.UserName);
@@ -131,7 +131,7 @@
 
             _sc.Credentials.Username = "don";
             _sc.Credentials.Password = "pedro";
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, "Prompt", null);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, CredentialPromptMode.EnterCredentials, null);
             _nav.PushModalView(ViewName, task);
             _vm.UserName = "peter";
 
@@ -145,7 +145,7 @@
 
             _sc.Credentials.Username = "don";
             _sc.Credentials.Password = "pedro";
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, "Prompt", null);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, CredentialPromptMode.EnterCredentials, null);
             _nav.PushModalView(ViewName, task);
             _vm.UserName = "peter";
             _vm.UserName += "2";
@@ -156,7 +156,7 @@
         [TestMethod]
         public void InSessionEditCredentialsTask_PresentNewTypeSubmit_TypedValues()
         {
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, "Prompt", null);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, CredentialPromptMode.EnterCredentials, null);
             _nav.PushModalView(ViewName, task);
             _vm.UserName = "don";
             _vm.Password = "pedro";
@@ -173,7 +173,7 @@
             object state = new object();
             int submitCount = 0;
 
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, "Prompt", state);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, CredentialPromptMode.EnterCredentials, state);
             task.Submitted += (sender, e) =>
             {
                 ++submitCount;
@@ -195,7 +195,7 @@
 
             _sc.Credentials.Username = "don";
             _sc.Credentials.Password = "pedro";
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, "Prompt", null);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, CredentialPromptMode.EnterCredentials, null);
             _nav.PushModalView(ViewName, task);
             _vm.UserName = "peter";
             task.Submitted += (sender, e) => submitted.Add(e);
@@ -216,7 +216,7 @@
 
             _sc.Credentials.Username = "don";
             _sc.Credentials.Password = "pedro";
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, "Prompt", null);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, CredentialPromptMode.EnterCredentials, null);
             _nav.PushModalView(ViewName, task);
             _vm.UserName = "peter";
             _vm.SaveCredentials = true;
@@ -238,7 +238,7 @@
 
             _sc.Credentials.Username = "don";
             _sc.Credentials.Password = "pedro";
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, "Prompt", null);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, CredentialPromptMode.EnterCredentials, null);
             _nav.PushModalView(ViewName, task);
             _vm.UserName = "peter";
             _vm.Password = "joppa";
@@ -258,7 +258,7 @@
 
             _sc.Credentials.Username = "don";
             _sc.Credentials.Password = "pedro";
-            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, "Prompt", null);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(_sc, _dataModel, CredentialPromptMode.EnterCredentials, null);
             _nav.PushModalView(ViewName, task);
             _vm.UserName = "peter";
             _vm.Password = "joppa";
@@ -282,7 +282,7 @@
             SessionGateway sc = new SessionGateway();
             sc.Credentials.Username = "don";
             sc.Credentials.Password = "pedro";
-            InSessionCredentialsTask task = new InSessionCredentialsTask(sc, _dataModel, "Prompt", null);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(sc, _dataModel, CredentialPromptMode.EnterCredentials, null);
             task.Cancelled += (sender, e) => ++cancelledCount;
             _nav.PushModalView(ViewName, task);
             _vm.UserName = "doctor";
@@ -303,7 +303,7 @@
             SessionGateway sc = new SessionGateway();
             sc.Credentials.Username = "don";
             sc.Credentials.Password = "pedro";
-            InSessionCredentialsTask task = new InSessionCredentialsTask(sc, _dataModel, "Prompt", state);
+            InSessionCredentialsTask task = new InSessionCredentialsTask(sc, _dataModel, CredentialPromptMode.EnterCredentials, state);
             task.Cancelled += (sender, e) =>
             {
                 ++cancelledCount;

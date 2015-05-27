@@ -162,7 +162,7 @@
             if (Guid.Empty.Equals(this.Desktop.CredentialsId))
             {
                 InSessionCredentialsTask task = new InSessionCredentialsTask(sessionSetup.SessionCredentials,
-                    _dataModel, null, sessionSetup);
+                    _dataModel, CredentialPromptMode.EnterCredentials, sessionSetup);
 
                 task.Submitted += (sender, e) =>
                 {

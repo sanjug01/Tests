@@ -10,7 +10,7 @@
     {
         private readonly ISessionCredentials _sessionCredentials;
         private readonly ApplicationDataModel _dataModel;
-        private readonly string _prompt;
+        private readonly CredentialPromptMode _promptMode;
         private readonly IValidationRule<string> _userNameRule;
         private readonly object _state;
         private IModelContainer<CredentialsModel> _savedCredentials;
@@ -45,7 +45,7 @@
 
         public InSessionCredentialsTask(ISessionCredentials sessionCredentials,
             ApplicationDataModel dataModel,
-            string prompt,
+            CredentialPromptMode promptMode,
             object state)
         {
             Contract.Assert(null != sessionCredentials);
@@ -55,7 +55,7 @@
 
             _sessionCredentials = sessionCredentials;
             _dataModel = dataModel;
-            _prompt = prompt;
+            _promptMode = promptMode;
             _state = state;
             _userNameRule = new UsernameFormatValidationRule();
             _savedCredentials = FindSavedCredentials(sessionCredentials.Credentials.Username);
@@ -70,7 +70,7 @@
             viewModel.UserName = _sessionCredentials.Credentials.Username;
             viewModel.Password = _sessionCredentials.Credentials.Password;
             viewModel.CanSaveCredentials = true;
-            viewModel.Prompt = _prompt;
+            viewModel.PromptMode = _promptMode;
         }
 
         protected override void OnDismissing(IEditCredentialsViewModel viewModel, IEditCredentialsViewControl viewControl)
