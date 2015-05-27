@@ -23,7 +23,7 @@ namespace RdClient.Shared.Input.Pointer
         }
 
 
-        public PointerCapture(IPointerPosition pointerPosition, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory, IExecutionDeferrer deferrer)
+        public PointerCapture(IPointerPosition pointerPosition, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory, IDeferredExecution deferrer)
         {
             _sessionControl = sessionControl;
             _panel = panel;

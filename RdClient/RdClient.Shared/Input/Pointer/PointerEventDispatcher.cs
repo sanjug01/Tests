@@ -41,10 +41,10 @@ namespace RdClient.Shared.Input.Pointer
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-        public PointerEventDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, IExecutionDeferrer deferrer)
+        public PointerEventDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, IDeferredExecution dispatcher)
         {
             _pointerMode = new PointerModeConsumer(
-                new RdDispatcherTimer(timerFactory.CreateTimer(), deferrer), 
+                new RdDispatcherTimer(timerFactory.CreateTimer(), dispatcher), 
                 new PointerModeControl(sessionControl, pointerPosition));
             _multiTouchMode = new MultiTouchConsumer(sessionControl, pointerPosition);
             _directMode = new DirectModeConsumer(new DirectModeControl(sessionControl, pointerPosition), pointerPosition);

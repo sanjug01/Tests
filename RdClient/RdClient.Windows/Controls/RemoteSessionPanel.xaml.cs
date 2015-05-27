@@ -180,11 +180,11 @@
             this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => site.SetRemoteSessionView(this));
 
             ITimer timer = null;
-            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = new RdDispatcherTimer(site.TimerFactory.CreateTimer(), site.ExecutionDeferrer));
+            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = new RdDispatcherTimer(site.TimerFactory.CreateTimer(), site.DeferredExecution));
             _zoomScrollRecognizer = new ZoomScrollRecognizer(timer);
             _zoomScrollRecognizer.ZoomScrollEvent += OnZoomScrollEvent;
 
-            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = new RdDispatcherTimer(site.TimerFactory.CreateTimer(), site.ExecutionDeferrer));
+            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = new RdDispatcherTimer(site.TimerFactory.CreateTimer(), site.DeferredExecution));
             _tapRecognizer = new TapRecognizer(timer);
             _tapRecognizer.Tapped += OnTapEvent;
         }
