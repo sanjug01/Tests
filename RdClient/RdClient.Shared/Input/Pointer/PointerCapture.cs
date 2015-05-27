@@ -23,11 +23,11 @@ namespace RdClient.Shared.Input.Pointer
         }
 
 
-        public PointerCapture(IPointerPosition pointerPosition, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory)
+        public PointerCapture(IPointerPosition pointerPosition, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory, IExecutionDeferrer deferrer)
         {
             _sessionControl = sessionControl;
             _panel = panel;
-            PointerEventDispatcher dispatcher = new PointerEventDispatcher(timerFactory, sessionControl, pointerPosition);
+            PointerEventDispatcher dispatcher = new PointerEventDispatcher(timerFactory, sessionControl, pointerPosition, deferrer);
             _consumer = dispatcher;
             _consumptionMode = new ConsumptionModeTracker() { ConsumptionMode = ConsumptionModeType.Pointer };
             _consumptionMode.ConsumptionModeChanged += (s, o) => dispatcher.ConsumptionMode = o;

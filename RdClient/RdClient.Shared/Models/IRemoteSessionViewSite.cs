@@ -1,5 +1,6 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Models.PanKnobModel;
+using RdClient.Shared.Navigation.Extensions;
 
 namespace RdClient.Shared.Models
 {
@@ -7,7 +8,7 @@ namespace RdClient.Shared.Models
     {
         void SetRemoteSessionView(IRemoteSessionView sessionView);
         ITimerFactory TimerFactory { get; }
-        ITimerFactory DispatcherTimerFactory { get; }
+        IExecutionDeferrer ExecutionDeferrer { get; }
 
         IPanKnobSite PanKnobSite { get; }
     }

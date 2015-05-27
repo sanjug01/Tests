@@ -12,5 +12,7 @@ namespace RdClient.Shared.Input.Pointer
         event EventHandler<Point> PositionChanged;
         Point ViewportPosition { get; set; }
         Point SessionPosition { get; }
+
+        void Reset(IRemoteSessionControl sessionControl, IExecutionDeferrer executionDeferrer);
     }
 }

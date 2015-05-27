@@ -22,7 +22,7 @@
     /// A panel shown in the remote session view (RemoteSessionView) that renders contents of the remote session
     /// and captures keyboard, mouse, pen and touch input.
     /// </summary>
-    public sealed partial class RemoteSessionPanel : UserControl, IRemoteSessionView, IViewportPanel
+    public sealed partial class RemoteSessionPanel : UserControl, IRemoteSessionView
     {
         public static readonly DependencyProperty RemoteSessionViewSiteProperty = DependencyProperty.Register("RemoteSessionViewSite",
             typeof(object),
@@ -62,7 +62,7 @@
         //
         // IRemoteSessionView interface
         //
-        public Size Size
+        public Size RenderingPanelSize
         {
             get { return _renderingPanelSize; }
             private set { this.SetProperty(ref _renderingPanelSize, value); }
@@ -180,11 +180,11 @@
             this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => site.SetRemoteSessionView(this));
 
             ITimer timer = null;
-            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = site.DispatcherTimerFactory.CreateTimer());
+            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = new RdDispatcherTimer(site.TimerFactory.CreateTimer(), site.ExecutionDeferrer));
             _zoomScrollRecognizer = new ZoomScrollRecognizer(timer);
             _zoomScrollRecognizer.ZoomScrollEvent += OnZoomScrollEvent;
 
-            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = site.DispatcherTimerFactory.CreateTimer());
+            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = new RdDispatcherTimer(site.TimerFactory.CreateTimer(), site.ExecutionDeferrer));
             _tapRecognizer = new TapRecognizer(timer);
             _tapRecognizer.Tapped += OnTapEvent;
         }
@@ -209,7 +209,7 @@
 
         private void OnRenderingPanelSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            this.Size = e.NewSize;
+            this.RenderingPanelSize = e.NewSize;
         }
 
         private void EmitPropertyChanged(string propertyName)

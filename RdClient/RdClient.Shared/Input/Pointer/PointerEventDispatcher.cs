@@ -1,5 +1,6 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
+using RdClient.Shared.Navigation.Extensions;
 using System;
 using System.Collections.Generic;
 using Windows.Devices.Input;
@@ -40,9 +41,11 @@ namespace RdClient.Shared.Input.Pointer
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-        public PointerEventDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition)
+        public PointerEventDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, IExecutionDeferrer deferrer)
         {
-            _pointerMode = new PointerModeConsumer(timerFactory.CreateTimer(), new PointerModeControl(sessionControl, pointerPosition));
+            _pointerMode = new PointerModeConsumer(
+                new RdDispatcherTimer(timerFactory.CreateTimer(), deferrer), 
+                new PointerModeControl(sessionControl, pointerPosition));
             _multiTouchMode = new MultiTouchConsumer(sessionControl, pointerPosition);
             _directMode = new DirectModeConsumer(new DirectModeControl(sessionControl, pointerPosition), pointerPosition);
             
