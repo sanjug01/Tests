@@ -726,9 +726,9 @@
     <value>Choose what to add</value>
     <comment>Title shown on add resource view page that lets you select which type of resource to add</comment>
   </data>
-  <data name="AboutView_Close.Text" xml:space="preserve">
+  <data name="Common_Close.Text" xml:space="preserve">
     <value>Close</value>
-    <comment>Title of the hyperlink button that closes the about dialog.</comment>
+    <comment>Verb. Text shown on a button that closes a side panel view.</comment>
   </data>
   <data name="AboutView_Link_PrivacyPolicy.NavigateUri" xml:space="preserve">
     <value>http://www.bing.com/search?q=microsoft+rdp+privacy+policy</value>

@@ -43,7 +43,7 @@
             <HyperlinkButton
                 Grid.Row="0"
                 Command="{Binding Close}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                <TextBlock x:Uid="RichTextView_Close" Text="(d) Close"/>
+				<TextBlock x:Uid="Common_Close" Text="(d) Close"/>
             </HyperlinkButton>            
 
             <TextBlock Grid.Row="1"
