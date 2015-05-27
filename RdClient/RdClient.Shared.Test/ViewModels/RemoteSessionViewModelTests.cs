@@ -744,7 +744,7 @@
         public void RemoteSessionViewModel_PresentNewSession_CorrectInitialState()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             int connectCount = 0;
 
@@ -789,7 +789,7 @@
         public void RemoteSessionViewModel_PresentNewSessionWithTouch_CorrectInitialState()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             int connectCount = 0;
 
@@ -825,7 +825,7 @@
         public void RemoteSessionViewModel_PresentWithVisibleInputPanel_CorrectInitialState()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             int connectCount = 0;
 
@@ -862,7 +862,7 @@
         public void RemoteSessionViewModel_ShowInputPanel_PanelHides()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             int connectCount = 0;
 
@@ -900,7 +900,7 @@
         public void RemoteSessionViewModel_HideInputPanel_PanelHides()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             int connectCount = 0;
 
@@ -939,7 +939,7 @@
         public void RemoteSessionViewModel_EmitConnected_ConnectedState()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             Task connectTask = null;
 
@@ -974,7 +974,7 @@
         public void RemoteSessionViewModel_ConnectDisconnect_Disconnected()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             Task task = null;
             int cleanupCount = 0;
@@ -1029,7 +1029,7 @@
         public void RemoteSessionViewModel_ConnectShowSideBars_SideBarsShown()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             Task connectTask = null;
 
@@ -1065,7 +1065,7 @@
         public void RemoteSessionViewModel_RequestFreshPassword_PasswordRequested()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             Task connectTask = null;
             int credentialsRequestCount = 0;

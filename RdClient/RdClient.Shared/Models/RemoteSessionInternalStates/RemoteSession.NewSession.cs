@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.Telemetry;
     using System.Diagnostics.Contracts;
     using System.Threading;
 
@@ -10,8 +11,8 @@
             private readonly RemoteSessionSetup _sessionSetup;
             private RemoteSession _session;
 
-            public NewSession(RemoteSessionSetup sessionSetup, ReaderWriterLockSlim _monitor)
-                : base(SessionState.Idle, _monitor)
+            public NewSession(RemoteSessionSetup sessionSetup, ReaderWriterLockSlim _monitor, ITelemetryClient telemetryClient)
+                : base(SessionState.Idle, _monitor, telemetryClient)
             {
                 _sessionSetup = sessionSetup;
             }

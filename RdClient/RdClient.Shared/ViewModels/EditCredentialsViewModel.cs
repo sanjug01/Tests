@@ -13,7 +13,6 @@
 
         private string _resourceName;
         private string _prompt;
-        private string _dismissLabel;
         private bool _saveCredentials;
         private bool _canSaveCredentials;
         private bool _canRevealPassword;

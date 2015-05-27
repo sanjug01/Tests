@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.Telemetry;
     using System.Threading;
 
     partial class RemoteSession
@@ -10,7 +11,8 @@
             {
             }
 
-            public InactiveSession(ReaderWriterLockSlim _monitor) : base(SessionState.Idle, _monitor)
+            public InactiveSession(ReaderWriterLockSlim _monitor, ITelemetryClient telemetryClient)
+                : base(SessionState.Idle, _monitor, telemetryClient)
             {
             }
 
