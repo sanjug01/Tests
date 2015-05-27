@@ -11,7 +11,7 @@
     {
         private sealed class ConnectedSession : InternalState
         {
-            private static readonly uint ThumbnailHeight = 276;
+            private static readonly uint ThumbnailHeight = 296;
 
             private readonly IRdpConnection _connection;
             private readonly IThumbnailEncoder _thumbnailEncoder;
