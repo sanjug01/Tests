@@ -71,7 +71,14 @@ namespace RdClient.Shared.Models.Viewport
 
         public Point InverseTransformPoint(Point point)
         {
-            return _transform.Inverse.TransformPoint(point);
+            Point result = new Point(point.X, point.Y);
+
+            result.X *= 1.0 / _transform.ScaleX;
+            result.Y *= 1.0 / _transform.ScaleY;
+            result.X -= _transform.TranslateX;
+            result.Y -= _transform.TranslateY;
+
+            return result;
         }
     }
 }

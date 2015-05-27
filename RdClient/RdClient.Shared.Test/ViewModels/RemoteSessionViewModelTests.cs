@@ -258,9 +258,43 @@
             void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
             void IPresentableView.Dismissing() { }
 
-            Size IRemoteSessionView.Size
+            Size IRemoteSessionView.RenderingPanelSize
             {
                 get { throw new NotImplementedException(); }
+            }
+
+            public double Width
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+
+                set
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            public double Height
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+
+                set
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            public IViewportTransform Transform
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
             }
 
             event EventHandler IRemoteSessionView.Closed

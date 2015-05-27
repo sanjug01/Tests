@@ -5,6 +5,5 @@
     public interface ITimerFactorySite
     {
         void SetTimerFactory(ITimerFactory timerFactory);
-        void SetDispatcherTimerFactory(ITimerFactory dispatcherTimerFactory);
     }
 }

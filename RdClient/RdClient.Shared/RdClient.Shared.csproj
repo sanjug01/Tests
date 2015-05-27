@@ -151,9 +151,9 @@
     <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Helpers\PhysicalScreenSize.cs" />
     <Compile Include="Helpers\Rc4DataScrambler.cs" />
+    <Compile Include="Helpers\RdDispatcherTimer.cs" />
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
-    <Compile Include="Helpers\WinrtDispatcherTimer.cs" />
     <Compile Include="Models\FullScreenModel.cs" />
     <Compile Include="Models\IFullScreenModel.cs" />
     <Compile Include="Models\IScrollBarModel.cs" />
@@ -343,6 +343,7 @@
     <Compile Include="ValidationRules\ValidatedProperty.cs" />
     <Compile Include="ValidationRules\ValidationResult.cs" />
     <Compile Include="ViewModels\IGatewaysCollector.cs" />
+    <Compile Include="ViewModels\IRightSideBarViewModel.cs" />
     <Compile Include="ViewModels\IUsersCollector.cs" />
     <Compile Include="ViewModels\ICertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\IAddOrEditDEsktopViewModel.cs" />

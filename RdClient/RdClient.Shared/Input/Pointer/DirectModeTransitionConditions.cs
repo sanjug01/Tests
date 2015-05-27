@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.Input.Recognizers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public static bool Idle_Holding_Condition(PointerStateMachineEvent obj)
         {
-            return obj.Input.Action == PointerEventAction.HoldingStarted;
+            return obj.Input.Action == PointerEventAction.Tapped && ((ITapEvent) obj.Input).Type == TapEventType.HoldingStarted;
         }
 
         public static void Idle_Holding_Action(PointerStateMachineEvent obj)
@@ -88,12 +89,12 @@ namespace RdClient.Shared.Input.Pointer
 
         public static bool Holding_Idle_Condition(PointerStateMachineEvent obj)
         {
-            return obj.Input.Action == PointerEventAction.HoldingCompleted;
+            return obj.Input.Action == PointerEventAction.Tapped && ((ITapEvent)obj.Input).Type == TapEventType.HoldingCompleted;
         }
 
         public static void Holding_Idle_Action(PointerStateMachineEvent obj)
         {
-            obj.Control.RightClick(obj.Input.Position);
+            obj.Control.RightClick(obj.PointerPosition.SessionPosition);
         }
     }
 }

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdClient.Windows", "RdClient.Windows\RdClient.Windows.csproj", "{A89F0E52-1E86-4D53-81F5-11237460A6E7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8B29C07C-36FE-466C-9244-9932AC815C45} = {8B29C07C-36FE-466C-9244-9932AC815C45}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdClient.Shared", "RdClient.Shared\RdClient.Shared.csproj", "{FF57219C-0E7B-4CD5-9E02-287CEA2D0D83}"
 	ProjectSection(ProjectDependencies) = postProject
