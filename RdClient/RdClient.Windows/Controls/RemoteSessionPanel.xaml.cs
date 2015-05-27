@@ -312,10 +312,7 @@
 
         protected override void OnPointerEntered(PointerRoutedEventArgs e)
         {
-            if(e.Pointer.PointerDeviceType == Windows.Devices.Input.PointerDeviceType.Mouse)
-            {
-                MakeCursorInvisible();
-            }
+            MakeCursorInvisible();
         }
 
         protected override void OnPointerExited(PointerRoutedEventArgs e)
