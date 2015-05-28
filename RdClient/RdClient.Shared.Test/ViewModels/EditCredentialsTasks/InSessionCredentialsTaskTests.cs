@@ -9,6 +9,7 @@
     using RdClient.Shared.Test.Data;
     using RdClient.Shared.ViewModels;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
+    using System;
     using System.Collections.Generic;
 
     [TestClass]
@@ -318,6 +319,31 @@
             _vm.Cancel.Execute(null);
 
             Assert.AreEqual(1, cancelledCount);
+        }
+
+        [TestMethod]
+        public void ShowPromptFalseIfInEnterCredentialsMode()
+        {
+                InSessionCredentialsTask task = new InSessionCredentialsTask(new SessionCredentials(), _dataModel, CredentialPromptMode.EnterCredentials, null);
+                _nav.PushModalView(ViewName, task);
+                Assert.IsFalse(_vm.ShowPrompt);            
+        }
+
+        [TestMethod]
+        public void PromptModeSet()
+        {
+            var mode = CredentialPromptMode.FreshCredentialsNeeded;
+            InSessionCredentialsTask task = new InSessionCredentialsTask(new SessionCredentials(), _dataModel, mode, null);
+            _nav.PushModalView(ViewName, task);
+            Assert.AreEqual(mode, _vm.PromptMode);
+        }
+
+        [TestMethod]
+        public void ShowPromptTrueIfNotInEnterCredentialsMode()
+        {
+            InSessionCredentialsTask task = new InSessionCredentialsTask(new SessionCredentials(), _dataModel, CredentialPromptMode.InvalidCredentials, null);
+            _nav.PushModalView(ViewName, task);
+            Assert.IsTrue(_vm.ShowPrompt);
         }
     }
 }
