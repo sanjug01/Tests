@@ -27,9 +27,9 @@
 				Text="Settings(d)" 
 				Style="{ThemeResource TitleTextBlockStyle}">				
 			</TextBlock>
-			<controls:GeneralSettingsControl Margin="{StaticResource DialogItemVerticalSpacing}"/>
 			<controls:UserSettingsControl Margin="{StaticResource DialogSectionVerticalSpacing}"/>
-            <controls:GatewaySettingsControl/>
+            <controls:GatewaySettingsControl Margin="{StaticResource DialogSectionVerticalSpacing}"/>
+            <controls:GeneralSettingsControl Margin="{StaticResource DialogItemVerticalSpacing}"/>
         </StackPanel>
     </ContentControl>
 </controls:ModalUserControl>
