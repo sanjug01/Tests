@@ -53,8 +53,8 @@
             _usersCollection = dataModel.Credentials;
             _userComparer = new CredentialsEqualityComparer();
 
-            _ruleGateways = new NotDuplicateValidationRule<GatewayModel>(_gatewaysCollection, _gatewayComparer, HostnameValidationFailure.Duplicate);
-            _ruleUsers = new NotDuplicateValidationRule<CredentialsModel>(_usersCollection, _userComparer, HostnameValidationFailure.Duplicate);
+            _ruleGateways = new NotDuplicateValidationRule<GatewayModel>(_gatewaysCollection, _gatewayComparer, HostnameValidationFailure.DuplicateGateway);
+            _ruleUsers = new NotDuplicateValidationRule<CredentialsModel>(_usersCollection, _userComparer, HostnameValidationFailure.DuplicateGateway);
         }
 
         [TestMethod]
@@ -102,7 +102,7 @@
         {
             int randomIndex = _testData.RandomSource.Next(0, _gatewaysCollection.Models.Count);
             Guid id = _gatewaysCollection.Models[randomIndex].Id;
-            _ruleGateways = new NotDuplicateValidationRule<GatewayModel>(_gatewaysCollection, id, _gatewayComparer, HostnameValidationFailure.Duplicate);
+            _ruleGateways = new NotDuplicateValidationRule<GatewayModel>(_gatewaysCollection, id, _gatewayComparer, HostnameValidationFailure.DuplicateGateway);
             string itemName = _gatewaysCollection.GetModel(id).HostName;
 
             Assert.IsTrue(_ruleGateways.Validate(itemName).Status == ValidationResultStatus.Valid);
@@ -125,7 +125,7 @@
             int randomIndex = _testData.RandomSource.Next(0, _gatewaysCollection.Models.Count);
             Guid id = _gatewaysCollection.Models[randomIndex].Id;
             string otherItemName = _gatewaysCollection.Models[(randomIndex + 1) % _gatewaysCollection.Models.Count].Model.HostName;
-            _ruleGateways = new NotDuplicateValidationRule<GatewayModel>(_gatewaysCollection, id, _gatewayComparer, HostnameValidationFailure.Duplicate);
+            _ruleGateways = new NotDuplicateValidationRule<GatewayModel>(_gatewaysCollection, id, _gatewayComparer, HostnameValidationFailure.DuplicateGateway);
 
             Assert.IsTrue(_ruleGateways.Validate(otherItemName).Status == ValidationResultStatus.Invalid);
         }
@@ -136,7 +136,7 @@
             int randomIndex = _testData.RandomSource.Next(0, _usersCollection.Models.Count);
             Guid id = _usersCollection.Models[randomIndex].Id;
             string otherItemName = _usersCollection.Models[(randomIndex + 1) % _usersCollection.Models.Count].Model.Username;
-            _ruleUsers = new NotDuplicateValidationRule<CredentialsModel>(_usersCollection, id, _userComparer, HostnameValidationFailure.Duplicate);
+            _ruleUsers = new NotDuplicateValidationRule<CredentialsModel>(_usersCollection, id, _userComparer, HostnameValidationFailure.DuplicateGateway);
 
             Assert.IsTrue(_ruleUsers.Validate(otherItemName).Status == ValidationResultStatus.Invalid);
         }

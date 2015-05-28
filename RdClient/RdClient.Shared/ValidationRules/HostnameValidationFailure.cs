@@ -3,6 +3,6 @@
     public enum HostnameValidationFailure
     {
         InvalidCharacters,
-        Duplicate,
+        DuplicateGateway,
     }
 }

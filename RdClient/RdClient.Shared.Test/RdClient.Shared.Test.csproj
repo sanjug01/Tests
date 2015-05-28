@@ -235,7 +235,9 @@
     <Compile Include="RdTest\UAPSleep.cs" />
     <Compile Include="ValidationRules\CompositeValidationRuleTests.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
-    <Compile Include="ValidationRules\ModelEqualityComparerTests.cs" />
+    <Compile Include="ValidationRules\GatewayEqualityComparerTests.cs" />
+    <Compile Include="ValidationRules\CredentialsEqualityComparerTests.cs" />
+    <Compile Include="ValidationRules\NotDuplicateValidationRuleTests.cs" />
     <Compile Include="ValidationRules\NotDuplicateGenericValidationRuleTests.cs" />
     <Compile Include="ValidationRules\UsernameFormatValidationRuleTests.cs" />
     <Compile Include="ValidationRules\ValidatedPropertyTests.cs" />

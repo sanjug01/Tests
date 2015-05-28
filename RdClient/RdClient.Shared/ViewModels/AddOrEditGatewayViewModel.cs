@@ -81,8 +81,6 @@
         private ReadOnlyObservableCollection<UserComboBoxElement> _users;
         private UserComboBoxElement _selectedUser;
 
-        List<IValidationRule<string>> _validationRules;
-
         public AddOrEditGatewayViewModel()
         {
             _saveCommand = new RelayCommand(o => SaveCommandExecute(), o => SaveCommandCanExecute());
@@ -146,17 +144,19 @@
 
             // gateway id is needed for validation for the edit dialog.
             Guid gatewayId = (editArgs != null) ? editArgs.Gateway.Id : Guid.Empty;
-            _validationRules = new List<IValidationRule<string>>();
-            _validationRules.Add(new HostnameValidationRule());
-            _validationRules.Add(
+
+            List<IValidationRule<string>> validationRules;
+            validationRules = new List<IValidationRule<string>>();
+            validationRules.Add(new HostnameValidationRule());
+            validationRules.Add(
                 new NotDuplicateValidationRule<GatewayModel>(
                     this.ApplicationDataModel.Gateways, 
                     gatewayId,
                     new GatewayEqualityComparer(),
-                    HostnameValidationFailure.Duplicate
+                    HostnameValidationFailure.DuplicateGateway
                     )
                 );
-            _host = new ValidatedProperty<string>(new CompositeValidationRule<string>(_validationRules));
+            _host = new ValidatedProperty<string>(new CompositeValidationRule<string>(validationRules));
             _host.PropertyChanged += (s, e) =>
             {
                 if (s == _host && e.PropertyName == "State")
