@@ -3,23 +3,34 @@ using RdClient.Shared.Converters;
 using RdClient.Shared.Converters.ErrorLocalizers;
 using RdClient.Shared.CxWrappers.Errors;
 using RdClient.Shared.Helpers;
+using System.Collections.Generic;
 
 namespace RdClient.Shared.Test.Converters.ErrorLocalizers
 {
     public class TestStringTable : IStringTable
     {
-        public bool IsUnknown { get; set; }
+        public TestStringTable()
+        {
+            this.Unknowns = new HashSet<string>();
+        }
+
+        public HashSet<string> Unknowns { get; private set; }
 
         public string GetLocalizedString(string key)
         {
-            string result = key;
+            string result = "";
 
-            if(IsUnknown == false)
+            if(ItIsKnown(key))
             {
-                result += "loc";
+                result = key + "loc";
             }
 
             return result;
+        }
+
+        private bool ItIsKnown(string key)
+        {
+            return (!this.Unknowns.Contains(key));
         }
     }
 
@@ -62,11 +73,10 @@ namespace RdClient.Shared.Test.Converters.ErrorLocalizers
         [TestMethod]
         public void RdpDisconnectReasonLocalizer_LocalizeUnknown()
         {
-            _testStringTable.IsUnknown = true;
+            _testStringTable.Unknowns.Add("RdpDisconnectCode_VersionMismatch_String");
             RdpDisconnectReason error = new RdpDisconnectReason(RdpDisconnectCode.VersionMismatch, 23, 0);
             string localized = _rdpDisconnectReasonLocalizer.LocalizeError(error);
-
-            Assert.AreEqual("RdpDisconnectCode_UnknownError_String\n\nDisconnect_ErrorCode_String", localized);
+            Assert.AreEqual("RdpDisconnectCode_UnknownError_Stringloc\n\nDisconnect_ErrorCode_Stringloc", localized);
         }
     }
 }

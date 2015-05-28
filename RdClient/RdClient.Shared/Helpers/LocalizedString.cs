@@ -7,16 +7,7 @@ namespace RdClient.Shared.Helpers
     {
         public string GetLocalizedString(string key)
         {
-            string result = null;
-
-            result = ResourceLoader.GetForViewIndependentUse().GetString(key);
-
-            if(string.IsNullOrEmpty(result))
-            {
-                result = key;
-            }
-
-            return result;
+            return ResourceLoader.GetForViewIndependentUse().GetString(key) ?? string.Empty;
         }
     }
 }

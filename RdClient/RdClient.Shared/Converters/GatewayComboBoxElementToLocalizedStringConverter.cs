@@ -39,7 +39,7 @@ namespace RdClient.Shared.Converters
                 {
                     result = _localizedString.GetLocalizedString(_codeMap[comboBox.GatewayComboBoxType]);
                 }
-                else if (GatewayComboBoxType.Gateway== comboBox.GatewayComboBoxType && comboBox.Gateway != null)
+                else if (GatewayComboBoxType.Gateway == comboBox.GatewayComboBoxType && comboBox.Gateway != null)
                 {
                     result = comboBox.Gateway.Model.HostName;
                 }
