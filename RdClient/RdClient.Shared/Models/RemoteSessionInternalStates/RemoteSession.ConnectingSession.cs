@@ -55,6 +55,9 @@
             public override void Terminate(RemoteSession session)
             {
                 Contract.Assert(null != _session);
+
+                this.TelemetryClient.Event("Connecting:Cancelled");
+
                 if (null != _connection)
                     _connection.Disconnect();
             }
@@ -150,6 +153,10 @@
 
                 IRdpConnection connection = (IRdpConnection)sender;
                 Contract.Assert(object.ReferenceEquals(connection, _connection));
+                //
+                // Report the disconnect code to telemetry.
+                //
+                this.TelemetryClient.Event(string.Format("Connecting:{0}", e.DisconnectReason.Code));
 
                 switch (e.DisconnectReason.Code)
                 {
@@ -325,6 +332,8 @@
             {
                 InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
 
+                this.TelemetryClient.Event("Connecting:CredentialsCancelled");
+
                 task.Submitted -= this.NewPasswordSubmitted;
                 task.Cancelled -= this.NewPasswordCancelled;
                 //
@@ -398,6 +407,8 @@
             private void NewGatewayCredentialsCancelled(object sender, InSessionCredentialsTask.ResultEventArgs e)
             {
                 InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
+
+                this.TelemetryClient.Event("Connecting:GatewayCredentialsCancelled");
 
                 task.Submitted -= this.NewGatewayCredentialsCancelled;
                 task.Cancelled -= this.NewGatewayCredentialsCancelled;

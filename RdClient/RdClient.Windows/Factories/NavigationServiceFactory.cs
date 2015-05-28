@@ -4,11 +4,11 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
-    using RdClient.Shared.ViewModels;
+    using RdClient.Shared.Telemetry;
 
     class NavigationServiceFactory
     {
-        public INavigationService CreateNavigationService()
+        public INavigationService CreateNavigationService(ITelemetryClient telemetryClient)
         {
             IPresentableViewFactory viewFactory = new PresentableViewFactory<PresentableViewConstructor>();
             //
@@ -39,7 +39,7 @@
             //
             viewFactory.AddViewClass("RemoteSessionView", typeof(Views.RemoteSessionView), true);
 
-            DispatchedNavigationService navigationService = new DispatchedNavigationService();
+            DispatchedNavigationService navigationService = new DispatchedNavigationService(telemetryClient);
             navigationService.ViewFactory = viewFactory;
 
             return navigationService;

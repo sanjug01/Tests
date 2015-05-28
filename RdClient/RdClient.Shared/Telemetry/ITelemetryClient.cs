@@ -19,5 +19,12 @@
         /// </summary>
         /// <returns>The stopwatch object that can be stopped to report the duration to the telemetry back-end.</returns>
         ITelemetryStopwatch StartStopwatch();
+
+        /// <summary>
+        /// Report value of a metric.
+        /// </summary>
+        /// <param name="metricName">Name of the metric</param>
+        /// <param name="metricValue">Value of the metric</param>
+        void Metric(string metricName, double metricValue);
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace RdClient.Telemetry
 {
     using Microsoft.ApplicationInsights;
-    using System;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -41,10 +40,16 @@
                 _client.TrackEvent(eventName);
         }
 
-        public void Duration(string eventName, TimeSpan duration)
+        public void Metric(string metricName, double metricValue)
         {
             if (null != _client)
-                _client.TrackMetric(eventName, duration.TotalMilliseconds);
+                _client.TrackMetric(metricName, metricValue);
+        }
+
+        public void Duration(string eventName, long milliseconds)
+        {
+            if (null != _client)
+                _client.TrackMetric(eventName, milliseconds);
         }
     }
 }

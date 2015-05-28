@@ -120,7 +120,10 @@
                 {
                     if ((int)RdClientCx.ConnectionHealthState.Warn == e.ConnectionState)
                     {
+                        this.TelemetryClient.Event("Connected:PoorHealth");
+                        //
                         // similar to Autoreconnecting event
+                        //
                         _session.InternalSetState(new ReconnectingSession(_connection, this));
                     }
                 }
@@ -156,6 +159,7 @@
 
             private void OnClientAutoReconnecting(object sender, ClientAutoReconnectingArgs e)
             {
+                this.TelemetryClient.Event("Connected:Reconnecting");
                 e.ContinueDelegate(true);
                 _session.InternalSetState(new ReconnectingSession(_connection, this));
             }
