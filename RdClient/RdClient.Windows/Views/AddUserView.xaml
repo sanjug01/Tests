@@ -13,7 +13,7 @@
     d:DesignWidth="500">
 
     <controls:ModalUserControl.DataContext>
-        <vm:AddUserViewModel />
+        <vm:AddOrEditUserViewModel />
     </controls:ModalUserControl.DataContext>
 
     <controls:ModalUserControl.Resources>

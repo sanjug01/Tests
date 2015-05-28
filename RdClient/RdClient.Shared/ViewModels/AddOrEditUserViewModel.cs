@@ -75,7 +75,7 @@
         public CredentialPromptMode Mode { get { return _mode; } }
     }
 
-    public class AddUserViewModel : ViewModelBase, IDialogViewModel
+    public class AddOrEditUserViewModel : ViewModelBase, IDialogViewModel
     {
         private AddUserViewArgs _args;
         private bool _storeCredentials;
@@ -88,7 +88,7 @@
         private bool _showMessage;
         private bool _canDelete;
 
-        public AddUserViewModel()
+        public AddOrEditUserViewModel()
         {
             _okCommand = new RelayCommand(o => OkCommandHandler(), o => OkCommandIsEnabled());
             _cancelCommand = new RelayCommand(new Action<object>(CancelCommandHandler));
