@@ -411,7 +411,7 @@
                 navigation.Expect("PushAccessoryView", p =>
                 {
                     Assert.AreEqual("AddOrEditUserView", p[0] as string);
-                    Assert.IsTrue(p[1] is AddUserViewArgs);
+                    Assert.IsTrue(p[1] is AddOrEditUserViewArgs);
                     completion = p[2] as IPresentationCompletion;
                     Assert.IsNotNull(completion);
                     return null;

@@ -55,13 +55,13 @@
         public bool Deleted { get; private set; }
     }
 
-    public class AddUserViewArgs
+    public class AddOrEditUserViewArgs
     {
         private readonly CredentialPromptMode _mode;
         private readonly CredentialsModel _credentials;
         private readonly bool _showSave;
 
-        public AddUserViewArgs(CredentialsModel credentials, bool showSave, CredentialPromptMode mode = CredentialPromptMode.EnterCredentials)
+        public AddOrEditUserViewArgs(CredentialsModel credentials, bool showSave, CredentialPromptMode mode = CredentialPromptMode.EnterCredentials)
         {
             _credentials = credentials;
             _showSave = showSave;
@@ -77,7 +77,7 @@
 
     public class AddOrEditUserViewModel : ViewModelBase, IDialogViewModel
     {
-        private AddUserViewArgs _args;
+        private AddOrEditUserViewArgs _args;
         private bool _storeCredentials;
         private IValidatedProperty<string> _user;
         private string _password;
@@ -155,9 +155,9 @@
 
         protected override void OnPresenting(object activationParameter)
         {
-            Contract.Assert(activationParameter is AddUserViewArgs);
+            Contract.Assert(activationParameter is AddOrEditUserViewArgs);
 
-            _args = activationParameter as AddUserViewArgs;
+            _args = activationParameter as AddOrEditUserViewArgs;
 
             var usernameRule = new UsernameFormatValidationRule();
 

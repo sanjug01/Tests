@@ -16,7 +16,7 @@
         private TestData _testData;
         private Mock.ModalPresentationContext _context;
         private Mock.NavigationService _nav;
-        private AddUserViewArgs _args;
+        private AddOrEditUserViewArgs _args;
         private AddOrEditUserViewModel _vm;
 
         [TestInitialize]
@@ -25,7 +25,7 @@
             _testData = new TestData();
             _nav = new Mock.NavigationService();
             _context = new Mock.ModalPresentationContext();            
-            _args = new AddUserViewArgs(_testData.NewValidCredential().Model, true, CredentialPromptMode.FreshCredentialsNeeded);
+            _args = new AddOrEditUserViewArgs(_testData.NewValidCredential().Model, true, CredentialPromptMode.FreshCredentialsNeeded);
             _vm = new AddOrEditUserViewModel();
             ((IViewModel)_vm).Presenting(_nav, _args, _context);
         }
@@ -170,8 +170,8 @@
 
             foreach (CredentialPromptMode mode in Enum.GetValues(typeof(CredentialPromptMode)))
             {
-                AddUserViewArgs args =
-                    new AddUserViewArgs(
+                AddOrEditUserViewArgs args =
+                    new AddOrEditUserViewArgs(
                         _testData.NewValidCredential().Model,
                         true,
                         mode);
@@ -194,8 +194,8 @@
         {
             foreach (CredentialPromptMode mode in Enum.GetValues(typeof(CredentialPromptMode)))
             {
-                AddUserViewArgs args =
-                    new AddUserViewArgs(
+                AddOrEditUserViewArgs args =
+                    new AddOrEditUserViewArgs(
                         _testData.NewValidCredential().Model,
                         true,
                         mode);
@@ -229,8 +229,8 @@
         [TestMethod]
         public void CanDeleteTrueWhenEditingUser()
         {
-            AddUserViewArgs args =
-                new AddUserViewArgs(
+            AddOrEditUserViewArgs args =
+                new AddOrEditUserViewArgs(
                     _testData.NewValidCredential().Model,
                     true,
                     CredentialPromptMode.EditCredentials);
@@ -241,8 +241,8 @@
         [TestMethod]
         public void CanDeleteFalseWhenAddingUser()
         {
-            AddUserViewArgs args =
-                new AddUserViewArgs(
+            AddOrEditUserViewArgs args =
+                new AddOrEditUserViewArgs(
                     _testData.NewValidCredential().Model,
                     true,
                     CredentialPromptMode.EnterCredentials);
