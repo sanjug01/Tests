@@ -143,8 +143,8 @@
 
             _navService.Expect("PushAccessoryView", p =>
             {
-                Assert.AreEqual("AddUserView", p[0] as string);
-                var args = p[1] as AddUserViewArgs;
+                Assert.AreEqual("AddOrEditUserView", p[0] as string);
+                var args = p[1] as AddOrEditUserViewArgs;
                 Assert.AreEqual(CredentialPromptMode.EnterCredentials, args.Mode);
                 Assert.AreEqual("", args.Credentials.Username);
                 Assert.AreEqual("", args.Credentials.Password);
@@ -189,8 +189,8 @@
 
             _navService.Expect("PushAccessoryView", p =>
             {
-                Assert.AreEqual("AddUserView", p[0] as string);
-                var args = p[1] as AddUserViewArgs;
+                Assert.AreEqual("AddOrEditUserView", p[0] as string);
+                var args = p[1] as AddOrEditUserViewArgs;
                 Assert.AreEqual(CredentialPromptMode.EditCredentials, args.Mode);
                 Assert.AreEqual(_vm.SelectedUser.Credentials.Model, args.Credentials);
                 Assert.IsFalse(args.ShowSave);

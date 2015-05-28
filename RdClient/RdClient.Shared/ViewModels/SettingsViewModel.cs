@@ -198,7 +198,7 @@ namespace RdClient.Shared.ViewModels
         {
             if (UserCommandsEnabled())
             {
-                var args = new AddUserViewArgs(this.SelectedUser.Credentials.Model, false, CredentialPromptMode.EditCredentials);
+                var args = new AddOrEditUserViewArgs(this.SelectedUser.Credentials.Model, false, CredentialPromptMode.EditCredentials);
                 ModalPresentationCompletion editUserCompleted = new ModalPresentationCompletion((s, e) =>
                 {
                     CredentialPromptResult result = e.Result as CredentialPromptResult;
@@ -207,7 +207,7 @@ namespace RdClient.Shared.ViewModels
                         this.DeleteUser.Execute(null);
                     }
                 });
-                this.NavigationService.PushAccessoryView("AddUserView", args, editUserCompleted);
+                this.NavigationService.PushAccessoryView("AddOrEditUserView", args, editUserCompleted);
             }
         }
 
@@ -222,7 +222,7 @@ namespace RdClient.Shared.ViewModels
         private void AddUserCommandExecute()
         {
             var creds = new CredentialsModel() { Username = "", Password = "" };
-            var args = new AddUserViewArgs(creds, false, CredentialPromptMode.EnterCredentials);
+            var args = new AddOrEditUserViewArgs(creds, false, CredentialPromptMode.EnterCredentials);
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion((s, e) =>
             {
                 CredentialPromptResult result = e.Result as CredentialPromptResult;
@@ -231,7 +231,7 @@ namespace RdClient.Shared.ViewModels
                     this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);                    
                 }
             });
-            this.NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
+            this.NavigationService.PushAccessoryView("AddOrEditUserView", args, addUserCompleted);
         }
     }
 }

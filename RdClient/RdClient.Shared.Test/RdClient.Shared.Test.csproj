@@ -242,7 +242,7 @@
     <Compile Include="ValidationRules\ValidatedPropertyTests.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
-    <Compile Include="ViewModels\AddUserViewModelTests.cs" />
+    <Compile Include="ViewModels\AddOrEditUserViewModelTests.cs" />
     <Compile Include="ViewModels\DesktopIdentityValidationViewModelTests.cs" />
     <Compile Include="ViewModels\DesktopIdentityValidationCompletionTests.cs" />
     <Compile Include="ViewModels\CertificateValidationCompletionTests.cs" />

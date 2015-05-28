@@ -260,9 +260,9 @@
 
         private void LaunchAddUserView(object o)
         {
-            AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
+            AddOrEditUserViewArgs args = new AddOrEditUserViewArgs(new CredentialsModel(), false);
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
-            NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
+            NavigationService.PushAccessoryView("AddOrEditUserView", args, addUserCompleted);
         }
 
         private void CredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
