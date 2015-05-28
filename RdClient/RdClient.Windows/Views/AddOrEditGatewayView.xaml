@@ -67,27 +67,7 @@
 				</controls:ErrorControl>
 			</StackPanel>
 			<!-- Credentials -->
-			<StackPanel Margin="{StaticResource DialogTripleVerticalSpacing}">
-				<ComboBox 
-					Margin="{StaticResource DialogItemVerticalSpacing}"
-                    HorizontalAlignment="Stretch"
-					Header="Username (d)"
-                    x:Uid="AddOrEditDesktop-Credentials-ComboBox"
-                              ItemsSource="{Binding Path=Users}"
-                              SelectedItem="{Binding Path=SelectedUser, Mode=TwoWay}">
-					<ComboBox.ItemTemplate>
-						<DataTemplate>
-							<TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
-						</DataTemplate>
-					</ComboBox.ItemTemplate>
-				</ComboBox>
-				<Button 
-						x:Uid="Common_Button_AddUserAccount" 
-						Style="{StaticResource DialogButtonStyle}"
-						HorizontalAlignment="Right"
-						Content="Add account(d)" 
-                        Command="{Binding Path=AddUser}" />
-			</StackPanel>
+			<controls:UserSelectorControl Margin="{StaticResource DialogSectionVerticalSpacing}" />
 			<!-- Cancel / Save buttons -->
 			<Grid Margin="{StaticResource DialogSectionVerticalSpacing}">
 				<Grid.ColumnDefinitions>
