@@ -71,6 +71,7 @@
             viewModel.Password = _sessionCredentials.Credentials.Password;
             viewModel.CanSaveCredentials = true;
             viewModel.PromptMode = _promptMode;
+            viewModel.ShowPrompt = _promptMode != CredentialPromptMode.EnterCredentials;
         }
 
         protected override void OnDismissing(IEditCredentialsViewModel viewModel, IEditCredentialsViewControl viewControl)

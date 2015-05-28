@@ -20,6 +20,7 @@
         private string _password;
         private bool _canDismiss;
         private bool _confirmationVisible;
+        private bool _showPrompt;
         private EditCredentialsConfirmation _confirmationMessage;
         private IEditCredentialsTask _task;
         private object _taskToken;
@@ -76,6 +77,12 @@
         {
             get { return _canRevealPassword; }
             set { this.SetProperty(ref _canRevealPassword, value); }
+        }
+
+        public bool ShowPrompt
+        {
+            get { return _showPrompt; }
+            set { this.SetProperty(ref _showPrompt, value); }
         }
 
         public string UserName

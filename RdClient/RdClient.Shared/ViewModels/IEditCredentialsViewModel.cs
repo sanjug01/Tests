@@ -14,6 +14,8 @@
 
         bool CanSaveCredentials { get; set; }
 
+        bool ShowPrompt { get; set; }
+
         CredentialPromptMode PromptMode { get; set; }
 
         string ResourceName { get; set; }

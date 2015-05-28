@@ -20,6 +20,7 @@
         private string _userName;
         private string _password;
         private bool _canDismiss;
+        private bool _showPrompt;
         private EditCredentialsConfirmation _confirmationMessage;
 
         public ICommand Cancel
@@ -72,6 +73,12 @@
             set { this.SetProperty(ref _canRevealPassword, value); }
         }
 
+        public bool ShowPrompt
+        {
+            get { return _showPrompt; }
+            set { this.SetProperty(ref _showPrompt, value); }
+        }
+
         public string UserName
         {
             get { return _userName; }
@@ -122,6 +129,7 @@
             _canSaveCredentials = true;
             _resourceName = "d:Resource Name";
             _promptMode = CredentialPromptMode.InvalidCredentials;
+            _showPrompt = true;
         }
 
         protected override void OnPresenting(object activationParameter)
