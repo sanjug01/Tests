@@ -339,8 +339,6 @@
     <Compile Include="ValidationRules\IModelEqualityComparer.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
     <Compile Include="ValidationRules\NotDuplicateValidationRule.cs" />
-    <Compile Include="ValidationRules\NotDuplicateGatewayValidationRule.cs" />
-    <Compile Include="ValidationRules\NotDuplicateUsernameValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameFormatValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameValidationFailure.cs" />
     <Compile Include="ValidationRules\ValidatedProperty.cs" />

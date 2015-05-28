@@ -148,7 +148,14 @@
             Guid gatewayId = (editArgs != null) ? editArgs.Gateway.Id : Guid.Empty;
             _validationRules = new List<IValidationRule<string>>();
             _validationRules.Add(new HostnameValidationRule());
-            _validationRules.Add(new NotDuplicateGatewayValidationRule(this.ApplicationDataModel.Gateways, gatewayId));
+            _validationRules.Add(
+                new NotDuplicateValidationRule<GatewayModel>(
+                    this.ApplicationDataModel.Gateways, 
+                    gatewayId,
+                    new GatewayEqualityComparer(),
+                    HostnameValidationFailure.Duplicate
+                    )
+                );
             _host = new ValidatedProperty<string>(new CompositeValidationRule<string>(_validationRules));
             _host.PropertyChanged += (s, e) =>
             {
