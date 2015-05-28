@@ -238,7 +238,6 @@
     <Compile Include="ValidationRules\GatewayEqualityComparerTests.cs" />
     <Compile Include="ValidationRules\CredentialsEqualityComparerTests.cs" />
     <Compile Include="ValidationRules\NotDuplicateValidationRuleTests.cs" />
-    <Compile Include="ValidationRules\NotDuplicateGenericValidationRuleTests.cs" />
     <Compile Include="ValidationRules\UsernameFormatValidationRuleTests.cs" />
     <Compile Include="ValidationRules\ValidatedPropertyTests.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
