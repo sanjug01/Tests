@@ -5,6 +5,7 @@
     using RdClient.Shared.Navigation;
     using RdClient.Shared.ValidationRules;
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics.Contracts;
     using System.Linq;
@@ -19,13 +20,13 @@
 
     public class EditGatewayViewModelArgs
     {
-        private readonly GatewayModel _gateway;
+        private readonly IModelContainer<GatewayModel> _gateway;
 
-        public GatewayModel Gateway { get { return _gateway; } }
+        public IModelContainer<GatewayModel> Gateway { get { return _gateway; } }
 
-        public EditGatewayViewModelArgs(GatewayModel gateway)
+        public EditGatewayViewModelArgs(IModelContainer<GatewayModel> gatewayContainer)
         {
-            _gateway = gateway;
+            _gateway = gatewayContainer;
         }
     }
 
@@ -85,16 +86,7 @@
             _saveCommand = new RelayCommand(o => SaveCommandExecute(), o => SaveCommandCanExecute());
             _cancelCommand = new RelayCommand(CancelCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute, p => !this.IsAddingGateway);
-            _addUserCommand = new RelayCommand(LaunchAddUserView);
-
-            _host = new ValidatedProperty<string>(new HostnameValidationRule());
-            _host.PropertyChanged += (s, e) =>
-            {
-                if (s == _host && e.PropertyName == "State")
-                {
-                    _saveCommand.EmitCanExecuteChanged();
-                }
-            };            
+            _addUserCommand = new RelayCommand(LaunchAddUserView);       
         }
 
         public bool IsAddingGateway
@@ -150,9 +142,32 @@
             AddGatewayViewModelArgs addArgs = activationParameter as AddGatewayViewModelArgs;
             EditGatewayViewModelArgs editArgs = activationParameter as EditGatewayViewModelArgs;
 
+            // gateway id is needed for validation for the edit dialog.
+            Guid gatewayId = (editArgs != null) ? editArgs.Gateway.Id : Guid.Empty;
+
+            List<IValidationRule<string>> validationRules;
+            validationRules = new List<IValidationRule<string>>();
+            validationRules.Add(new HostnameValidationRule());
+            validationRules.Add(
+                new NotDuplicateValidationRule<GatewayModel>(
+                    this.ApplicationDataModel.Gateways, 
+                    gatewayId,
+                    new GatewayEqualityComparer(),
+                    HostnameValidationFailure.DuplicateGateway
+                    )
+                );
+            _host = new ValidatedProperty<string>(new CompositeValidationRule<string>(validationRules));
+            _host.PropertyChanged += (s, e) =>
+            {
+                if (s == _host && e.PropertyName == "State")
+                {
+                    _saveCommand.EmitCanExecuteChanged();
+                }
+            };
+
             if (editArgs != null)
             {
-                this.Gateway = editArgs.Gateway;
+                this.Gateway = editArgs.Gateway.Model;
                 this.Host.Value = this.Gateway.HostName;
                 this.IsAddingGateway = false;
             }

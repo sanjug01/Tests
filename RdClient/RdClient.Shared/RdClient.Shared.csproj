@@ -336,8 +336,9 @@
     <Compile Include="ValidationRules\HostnameValidationFailure.cs" />
     <Compile Include="ValidationRules\IValidatedProperty.cs" />
     <Compile Include="ValidationRules\IValidationResult.cs" />
+    <Compile Include="ValidationRules\IModelEqualityComparer.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
-    <Compile Include="ValidationRules\NotDuplicateUsernameValidationRule.cs" />
+    <Compile Include="ValidationRules\NotDuplicateValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameFormatValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameValidationFailure.cs" />
     <Compile Include="ValidationRules\ValidatedProperty.cs" />
