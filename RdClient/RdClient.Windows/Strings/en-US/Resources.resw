@@ -925,6 +925,10 @@
     <value>The hostname can't contain spaces, tabs or these characters:`~!#@$%^&amp;*()=+{}\\|;'\",&lt; &gt;/?</value>
     <comment>Text explaining that a hostname is invalid because it contains invalid characters</comment>
   </data>
+  <data name="HostnameValidationFailure_Duplicate_String" xml:space="preserve">
+    <value>(r) Host name already used</value>
+    <comment>Text explaining that a hostname is invalid because it is already used</comment>
+  </data>  
   <data name="InSessionEditCredentials-DismissButton.Content" xml:space="preserve">
     <value>Connect</value>
     <comment>Label of the "Connect" button in the in-session credentials editor dialog shown when credentials are missing or invalid</comment>
