@@ -2,6 +2,7 @@
 {
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
+    using RdClient.Shared.Telemetry;
     using System;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
@@ -10,10 +11,11 @@
     {
         private sealed class ConnectedSession : InternalState
         {
-            private static readonly uint ThumbnailHeight = 276;
+            private static readonly uint ThumbnailHeight = 296;
 
             private readonly IRdpConnection _connection;
             private readonly IThumbnailEncoder _thumbnailEncoder;
+            private ITelemetryStopwatch _totalTime;
             private Snapshotter _snapshotter;
             private RemoteSession _session;
 
@@ -32,19 +34,6 @@
                     _session._syncEvents.MouseCursorShapeChanged += this.OnMouseCursorShapeChanged;
                     _session._syncEvents.MultiTouchEnabledChanged += this.OnMultiTouchEnabledChanged;
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
-#if false
-                    _session._syncEvents.UserCredentialsRequest += (s, a) => { };
-                    _session._syncEvents.MouseCursorPositionChanged += (s, a) => { };
-                    _session._syncEvents.MultiTouchEnabledChanged += (s, a) => { };
-
-                    _session._syncEvents.LoginCompleted += (s, a) => { };
-                    _session._syncEvents.StatusInfoReceived += (s, a) => { };
-                    _session._syncEvents.FirstGraphicsUpdate += (s, a) => { };
-                    _session._syncEvents.RemoteAppWindowCreated += (s, a) => { };
-                    _session._syncEvents.RemoteAppWindowDeleted += (s, a) => { };
-                    _session._syncEvents.RemoteAppWindowTitleUpdated += (s, a) => { };
-                    _session._syncEvents.RemoteAppWindowIconUpdated += (s, a) => { };
-#endif
 
                     _snapshotter = new Snapshotter(_connection,
                         _session._syncEvents,
@@ -52,6 +41,9 @@
                         _session._timerFactory,
                         _session._sessionSetup.DataModel.Settings);
                     _snapshotter.Activate();
+
+                    Contract.Assert(null == _totalTime);
+                    _totalTime = this.TelemetryClient.StartStopwatch();
                 }
             }
 
@@ -75,6 +67,8 @@
 
                 using (LockWrite())
                 {
+                    Contract.Assert(null == _totalTime);
+
                     if (null != _snapshotter)
                     {
                         _thumbnailEncoder.ThumbnailUpdated -= this.OnThumbnailUpdated;
@@ -168,9 +162,11 @@
 
             private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
             {
+                Contract.Assert(null != _totalTime);
+
                 InternalState newState;
 
-                switch(e.DisconnectReason.Code)
+                switch (e.DisconnectReason.Code)
                 {
                     case RdpDisconnectCode.UserInitiated:
                         newState = new ClosedSession(_connection, this);
@@ -181,6 +177,8 @@
                         break;
                 }
 
+                _totalTime.Stop("TotalConnectedTime");
+                _totalTime = null;
                 _session.InternalSetState(newState);
             }
 

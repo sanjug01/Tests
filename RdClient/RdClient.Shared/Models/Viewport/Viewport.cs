@@ -172,6 +172,9 @@ namespace RdClient.Shared.Models.Viewport
 
         public void Reset()
         {
+            // I have a sneaky suspicion that calling _transform.Inverse will actually try to find an inverse matrix
+            // I am optimizng this away by getting an inverse which ignores rotation and thus makes things far simpler
+            // DT
             _sessionPanel.Transform.ScaleX = 1.0;
             _sessionPanel.Transform.ScaleY = 1.0;
             _sessionPanel.Transform.TranslateX = 0.0;

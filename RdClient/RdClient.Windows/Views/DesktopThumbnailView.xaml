@@ -9,7 +9,7 @@
     xmlns:design="using:RdClient.DesignTime"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d"
-    d:DesignHeight="144" Width="256">
+    d:DesignHeight="164" Width="296">
     
     <d:UserControl.DataContext>
         <design:FakeDesktopViewModel />
@@ -45,7 +45,7 @@
                 FlyoutBase.AttachedFlyout="{StaticResource ModifyConnectionMenuFlyout}"
                 IsRightTapEnabled="True"
                 RightTapped="ThumbnailButton_RightTapped">            
-            <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" Height="144" Width="256">
+            <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" Height="164" Width="296">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="42" />

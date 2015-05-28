@@ -13,18 +13,11 @@
     {
         private sealed class TestTimerFactory : ITimerFactory
         {
-            public ITimer CreateDispatcherTimer()
-            {
-                throw new NotImplementedException();
-            }
-
             [DebuggerNonUserCode] // exclude from code coverage
             ITimer ITimerFactory.CreateTimer()
             {
                 throw new NotImplementedException();
             }
-
-
         }
 
         private sealed class TestViewModel : MutableObject, IViewModel, ITimerFactorySite
@@ -60,12 +53,6 @@
             {
                 this.TimerFactory = timerFactory;
             }
-
-            [DebuggerNonUserCode] // exclude from code coverage
-            void ITimerFactorySite.SetDispatcherTimerFactory(ITimerFactory timerFactory)
-            {
-                throw new NotImplementedException();
-            }
         }
 
         private TestTimerFactory _factory;
@@ -75,7 +62,7 @@
         public void SetUpTest()
         {
             _factory = new TestTimerFactory();
-            _extension = new TimerFactoryExtension(_factory, _factory);
+            _extension = new TimerFactoryExtension(_factory);
         }
 
         [TestCleanup]

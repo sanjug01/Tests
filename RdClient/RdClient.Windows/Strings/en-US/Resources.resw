@@ -190,7 +190,7 @@
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_EncryptionFailed_String" xml:space="preserve">
-    <value>(r) Your session ended because there was a data encryption error. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>Your session ended because there was a data encryption error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_InitFipsFailed_String" xml:space="preserve">
@@ -420,11 +420,11 @@
     <comment>Showing optional in a different color for the FriendlyName label. Should have a separator space prefix</comment>
   </data>
   <data name="AddOrEditDesktop-LessDetailsLabel.Text" xml:space="preserve">
-    <value>Details</value>
+    <value>More</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-MoreDetailsLabel.Text" xml:space="preserve">
-    <value>Details</value>
+    <value>More</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-PcFriendlyNameTextbox.PlaceholderText" xml:space="preserve">
@@ -726,9 +726,9 @@
     <value>Choose what to add</value>
     <comment>Title shown on add resource view page that lets you select which type of resource to add</comment>
   </data>
-  <data name="AboutView_Close.Text" xml:space="preserve">
+  <data name="Common_Close.Text" xml:space="preserve">
     <value>Close</value>
-    <comment>Title of the hyperlink button that closes the about dialog.</comment>
+    <comment>Verb. Text shown on a button that closes a side panel view.</comment>
   </data>
   <data name="AboutView_Link_PrivacyPolicy.NavigateUri" xml:space="preserve">
     <value>http://www.bing.com/search?q=microsoft+rdp+privacy+policy</value>
@@ -922,11 +922,11 @@
     <comment>Text displayed next to checkbox that user can check to never show errors for this certificate again.</comment>
   </data>
   <data name="HostnameValidationFailure_InvalidCharacters_String" xml:space="preserve">
-    <value>(r) Can't contain `~!#@$%^&amp;*()=+{}\\|;'\",&lt; &gt;/?</value>
+    <value>The hostname can't contain spaces, tabs or these characters:`~!#@$%^&amp;*()=+{}\\|;'\",&lt; &gt;/?</value>
     <comment>Text explaining that a hostname is invalid because it contains invalid characters</comment>
   </data>
   <data name="InSessionEditCredentials-DismissButton.Content" xml:space="preserve">
-    <value>(r) Connect</value>
+    <value>Connect</value>
     <comment>Label of the "Connect" button in the in-session credentials editor dialog shown when credentials are missing or invalid</comment>
   </data>
   <data name="EditCredentialsConfirmation_OverridePassword_String" xml:space="preserve">

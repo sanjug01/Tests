@@ -3,6 +3,7 @@
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.ViewModels;
+    using RdClient.Shared.Telemetry;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
     using System.Diagnostics;
@@ -18,8 +19,8 @@
             private IRdpConnection _connection;
             private bool _cancelledCredentials;
 
-            public ConnectingSession(IRenderingPanel renderingPanel, ReaderWriterLockSlim monitor)
-                : base(SessionState.Connecting, monitor)
+            public ConnectingSession(IRenderingPanel renderingPanel, ReaderWriterLockSlim monitor, ITelemetryClient telemetryClient)
+                : base(SessionState.Connecting, monitor, telemetryClient)
             {
                 Contract.Assert(null != renderingPanel);
                 Contract.Assert(null != monitor);

@@ -10,6 +10,7 @@
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.Telemetry;
+    using RdClient.Telemetry;
     using System.Diagnostics.Contracts;
     using Windows.UI.Core;
 
@@ -43,8 +44,8 @@
             Contract.Assert(null != this.DeviceCapabilities);
 
             ITimerFactory timerFactory = new WinrtThreadPoolTimerFactory();
-            ITimerFactory dispatcherTimerFactory = new WinrtDispatcherTimerFactory();
             IDeferredExecution deferredExecution = new CoreDispatcherDeferredExecution() { Priority = CoreDispatcherPriority.Normal };
+            ISessionFactory sessionFactory;
 
             ApplicationDataModel appDataModel = new ApplicationDataModel()
             {
@@ -67,18 +68,9 @@
             RadcClient radcClient = new RadcClient(new RadcEventSource(), new TaskExecutor());
             radcClient.StartGetCachedFeeds(); 
 
-            ISessionFactory sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution, timerFactory);
-
             _navigationService = this.CreateNavigationService();
 
             _navigationService.Presenter = this.ViewPresenter;
-
-            _navigationService.Extensions.Add(this.CreateDataModelExtension(appDataModel));
-            _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));
-            _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory, dispatcherTimerFactory));
-            _navigationService.Extensions.Add(new SessionFactoryExtension() { SessionFactory = sessionFactory });
-            _navigationService.Extensions.Add(new DeviceCapabilitiesExtension() { DeviceCapabilities = this.DeviceCapabilities });
-            _navigationService.Extensions.Add(new LifeTimeExtension() { LifeTimeManager = this.LifeTimeManager });
             //
             // Inject and enable telemetry if necessary.
             //
@@ -86,7 +78,28 @@
             {
                 this.TelemetryClient.IsActive = appDataModel.Settings.IsTelemetryActive;
                 _navigationService.Extensions.Add(new TelemetryExtension() { Client = this.TelemetryClient });
+                //
+                // Create a session factory that uses the injected telemetry client.
+                //
+                sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution, timerFactory, this.TelemetryClient);
             }
+            else
+            {
+                //
+                // Create a session factory that uses the dummy telemetry client, because the session factory
+                // requires a functional telemetry client.
+                //
+                sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution, timerFactory, new DummyTelemetryClient());
+            }
+
+            Contract.Assert(null != sessionFactory);
+
+            _navigationService.Extensions.Add(this.CreateDataModelExtension(appDataModel));
+            _navigationService.Extensions.Add(this.CreateDeferredExecutionExtension(deferredExecution));
+            _navigationService.Extensions.Add(new TimerFactoryExtension(timerFactory));
+            _navigationService.Extensions.Add(new SessionFactoryExtension() { SessionFactory = sessionFactory });
+            _navigationService.Extensions.Add(new DeviceCapabilitiesExtension() { DeviceCapabilities = this.DeviceCapabilities });
+            _navigationService.Extensions.Add(new LifeTimeExtension() { LifeTimeManager = this.LifeTimeManager });
             //
             // Set up deferred execution of the app data's Save command. As soon as the command reports that it can be executed,
             // DeferredCommand will set a timer for the specified duration and when the timer will fire it will execute the command.
