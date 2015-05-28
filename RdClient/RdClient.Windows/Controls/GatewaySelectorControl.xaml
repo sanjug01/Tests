@@ -44,7 +44,7 @@
 			<TextBlock
 				x:Uid="GatewaySelector_AddGateway"
 				TextLineBounds="Tight"
-				Text="Add New(d)">				
+				Text="Add gateway(d)">				
 			</TextBlock>
 		</HyperlinkButton>
 	</Grid>
