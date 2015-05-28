@@ -2,14 +2,12 @@
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Data;
-    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.Test.Data;
     using RdClient.Shared.ViewModels;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
-    using System;
     using System.Collections.Generic;
 
     [TestClass]

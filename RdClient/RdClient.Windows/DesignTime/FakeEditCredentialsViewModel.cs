@@ -1,9 +1,8 @@
 ﻿namespace RdClient.DesignTime
 {
     using RdClient.Shared.ViewModels;
-    using System.Windows.Input;
-    using RdClient.Shared.Navigation;
     using System;
+    using System.Windows.Input;
 
     sealed class FakeEditCredentialsViewModel : ViewModelBase, IEditCredentialsViewModel
     {

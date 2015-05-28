@@ -2,8 +2,8 @@
 {
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
-    using RdClient.Shared.ViewModels;
     using RdClient.Shared.Telemetry;
+    using RdClient.Shared.ViewModels;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
     using System.Diagnostics;
