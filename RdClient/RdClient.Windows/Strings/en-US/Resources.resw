@@ -930,7 +930,7 @@
     <comment>Label of the "Connect" button in the in-session credentials editor dialog shown when credentials are missing or invalid</comment>
   </data>
   <data name="EditCredentialsConfirmation_OverridePassword_String" xml:space="preserve">
-    <value>(r) That user account is already saved. Are you sure you want to overwrite it?</value>
+    <value>You’ve saved that account before. Do you want to replace it?</value>
     <comment>Message displayed at prompt displayed when user has chosen to save credentials and there is already a saved user account with the same username</comment>
   </data>
   <data name="GatewaySelector_AddGateway.Text" xml:space="preserve">
