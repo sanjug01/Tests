@@ -58,6 +58,7 @@
             // will be saved unconditionally.
             //
             viewModel.CanSaveCredentials = false;
+            viewModel.ShowPrompt = false;
         }
 
         protected override bool Validate(IEditCredentialsViewModel viewModel)
