@@ -25,8 +25,7 @@
     </UserControl.Resources>
 
 	<Grid Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
-		<ComboBox 
-			Margin="{StaticResource DialogItemVerticalSpacing}"								
+		<ComboBox							
             HorizontalAlignment="Stretch"
             x:Uid="AddOrEditDesktop-Gateways-ComboBox"
             Header="Gateway(d)"
