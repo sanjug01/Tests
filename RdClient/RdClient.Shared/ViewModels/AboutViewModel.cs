@@ -40,7 +40,7 @@
 
         public string AppName
         {
-            get { return Package.Current.DisplayName; }
+            get { return Package.Current.Description; }
         }
 
         public string Copyright

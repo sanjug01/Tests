@@ -5,13 +5,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:local="using:RdClient.Controls"
+    xmlns:design="using:RdClient.DesignTime"       
 	xmlns:sc="using:RdClient.Shared.Converters"
 	xmlns:helpers="using:RdClient.Shared.Helpers"
     TabNavigation="Cycle"
     mc:Ignorable="d"
-    Width="480"
-    d:DesignHeight="200">
-	
+    MaxWidth="480"
+    d:DesignHeight="160">
+
+    <d:UserControl.DataContext>
+        <design:FakeAddOrEditDesktopViewModel />
+    </d:UserControl.DataContext>
+    
 	<UserControl.Resources>
 		<sc:TypeToLocalizedStringConverter x:Key="TypeToLocalizedStringConverter">
 			<sc:TypeToLocalizedStringConverter.LocalizedString>
@@ -19,25 +24,27 @@
 			</sc:TypeToLocalizedStringConverter.LocalizedString>
 		</sc:TypeToLocalizedStringConverter>
 	</UserControl.Resources>
-    
-    <Grid>
-        <StackPanel Orientation="Vertical">
-            <TextBlock Style="{ThemeResource BodyTextBlockStyle}"
-                       HorizontalAlignment="Center"
-                       x:Uid="RemoteSessionFailureControl_Title"
-                       Text="(d) Session has failed"/>
 
-            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}"
-                       Margin="0,10"
-                       HorizontalAlignment="Center"
-                       Text="{Binding Path=FailureCode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+        <TextBlock Margin="{StaticResource BellyBandHeaderVerticalSpacing}"
+                   HorizontalAlignment="Left"                   
+                   Style="{ThemeResource SubtitleTextBlockStyle}"
+                   x:Uid="RemoteSessionFailureControl_Title"
+                   Text="(d) Session has failed"/>
 
-            <Button Style="{ThemeResource DialogButtonStyle}"
-                    x:Name="DismissButton"
-                    HorizontalAlignment="Center"
-                    Command="{Binding Dismiss}">
-                <TextBlock x:Uid="RemoteSessionFailureControl_Dismiss" Text="(d) Close"/>
-            </Button>
-        </StackPanel>
-    </Grid>
+        <TextBlock Margin="{StaticResource DialogItemVerticalSpacing}"
+                   HorizontalAlignment="Left"
+                   Style="{ThemeResource BodyTextBlockStyle}"
+                   x:Uid="RemoteSessionFailureControl_FailureDetails"
+                   Text="{Binding Path=FailureCode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
+
+        <Button Margin="{StaticResource DialogItemVerticalSpacing}"
+                Style="{ThemeResource DialogAccentedButtonStyle}"
+                x:Name="DismissButton"
+                HorizontalAlignment="Right"
+                Command="{Binding Dismiss}">
+            <TextBlock x:Uid="RemoteSessionFailureControl_Dismiss" 
+                       Text="(d) Close"/>
+        </Button>
+    </StackPanel>    
 </UserControl>

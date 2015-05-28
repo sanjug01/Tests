@@ -9,6 +9,7 @@
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
+    using RdClient.Shared.Models.Viewport;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.Test.Data;
@@ -19,6 +20,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Windows.Foundation;
+    using Windows.UI.Xaml;
 
     [TestClass]
     public sealed class RemoteSessionViewModelTests
@@ -118,6 +120,14 @@
 
         private sealed class TestViewport : IViewport
         {
+            public IViewportPanel SessionPanel
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
             Point IViewport.Offset
             {
                 get { return new Point(100, 200); }
@@ -133,10 +143,17 @@
                 get { return 2.0; }
             }
 
+            public event EventHandler Changed;
+
             event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
             {
                 add { }
                 remove { }
+            }
+
+            public void Set(double zoomFactor, Point anchorPoint)
+            {
+                throw new NotImplementedException();
             }
 
             void IViewport.PanAndZoom(Point anchorPoint, double dx, double dy, double scaleFactor)
@@ -144,12 +161,17 @@
                 throw new NotImplementedException();
             }
 
-            void IViewport.Set(double zoomFactor, Size offset)
+            void IViewport.SetZoom(double zoomFactor, Point anchorPoint)
             {
                 throw new NotImplementedException();
             }
 
-            Point IViewport.TransformPoint(Point point)
+            void IViewport.SetPan(double x, double y)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Reset()
             {
                 throw new NotImplementedException();
             }
@@ -236,9 +258,43 @@
             void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
             void IPresentableView.Dismissing() { }
 
-            Size IRemoteSessionView.Size
+            Size IRemoteSessionView.RenderingPanelSize
             {
                 get { throw new NotImplementedException(); }
+            }
+
+            public double Width
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+
+                set
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            public double Height
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+
+                set
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            public IViewportTransform Transform
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
             }
 
             event EventHandler IRemoteSessionView.Closed
@@ -341,6 +397,11 @@
             }
 
             ITimer ITimerFactory.CreateTimer()
+            {
+                return new Timer();
+            }
+
+            public ITimer CreateDispatcherTimer()
             {
                 return new Timer();
             }
@@ -456,7 +517,7 @@
                 /// <param name="credentials">credentials</param>
                 /// <param name="fUsingSavedCreds">indicates if credentials are saved </param>
                 void IRdpConnection.SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)
-                {                
+                {
                 }
                 void IRdpConnection.SetGateway(GatewayModel gateway, CredentialsModel credentials)
                 {
@@ -683,7 +744,7 @@
         public void RemoteSessionViewModel_PresentNewSession_CorrectInitialState()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             int connectCount = 0;
 
@@ -708,7 +769,7 @@
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNotNull(_vm.BellyBandViewModel);
             Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
-            Assert.IsFalse(_vm.IsRightSideBarVisible);
+            Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
             Assert.IsNotNull(connection);
             Assert.AreEqual(1, connectCount);
 
@@ -728,7 +789,7 @@
         public void RemoteSessionViewModel_PresentNewSessionWithTouch_CorrectInitialState()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             int connectCount = 0;
 
@@ -764,7 +825,7 @@
         public void RemoteSessionViewModel_PresentWithVisibleInputPanel_CorrectInitialState()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             int connectCount = 0;
 
@@ -801,7 +862,7 @@
         public void RemoteSessionViewModel_ShowInputPanel_PanelHides()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             int connectCount = 0;
 
@@ -839,7 +900,7 @@
         public void RemoteSessionViewModel_HideInputPanel_PanelHides()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             int connectCount = 0;
 
@@ -878,7 +939,7 @@
         public void RemoteSessionViewModel_EmitConnected_ConnectedState()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             Task connectTask = null;
 
@@ -906,14 +967,14 @@
 
             Assert.IsTrue(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
-            Assert.IsFalse(_vm.IsRightSideBarVisible);
+            Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
         }
 
         [TestMethod]
         public void RemoteSessionViewModel_ConnectDisconnect_Disconnected()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             Task task = null;
             int cleanupCount = 0;
@@ -950,8 +1011,8 @@
             //task.Dispose();
             task = null;
             _defex.ExecuteAll();
-            _vm.ToggleSideBars.Execute(null);
-            _vm.NavigateHome.Execute(null);
+            _vm.RightSideBarViewModel.ToggleVisiblity.Execute(null);
+            _vm.RightSideBarViewModel.Disconnect.Execute(null);
 
             Assert.IsNotNull(task);
             task.Wait();
@@ -968,7 +1029,7 @@
         public void RemoteSessionViewModel_ConnectShowSideBars_SideBarsShown()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             Task connectTask = null;
 
@@ -993,18 +1054,18 @@
             connectTask.Wait();
             //connectTask.Dispose();
             _defex.ExecuteAll();
-            Assert.IsTrue(_vm.ToggleSideBars.CanExecute(null));
-            _vm.ToggleSideBars.Execute(null);
+            Assert.IsTrue(_vm.RightSideBarViewModel.ToggleVisiblity.CanExecute(null));
+            _vm.RightSideBarViewModel.ToggleVisiblity.Execute(null);
 
-            Assert.IsTrue(_vm.IsRightSideBarVisible);
-            Assert.IsTrue(_vm.NavigateHome.CanExecute(true));
+            Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
+            Assert.IsTrue(_vm.RightSideBarViewModel.Disconnect.CanExecute(true));
         }
 
         [TestMethod]
         public void RemoteSessionViewModel_RequestFreshPassword_PasswordRequested()
         {
             RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory);
+            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, new Mock.TestTelemetryClient());
             IRdpConnection connection = null;
             Task connectTask = null;
             int credentialsRequestCount = 0;
@@ -1041,7 +1102,7 @@
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNotNull(_vm.BellyBandViewModel);
             Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
-            Assert.IsFalse(_vm.IsRightSideBarVisible);
+            Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
         }
     }
 }

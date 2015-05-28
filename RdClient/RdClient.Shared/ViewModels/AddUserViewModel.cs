@@ -112,7 +112,8 @@
             {
                 if (SetProperty(ref _mode, value))
                 {
-                    this.ShowMessage = this.Mode != CredentialPromptMode.EnterCredentials;
+                    this.ShowMessage = this.Mode == CredentialPromptMode.InvalidCredentials
+                                        || this.Mode == CredentialPromptMode.FreshCredentialsNeeded;
                     // Delete only makes sense if editing existing credentials
                     this.CanDelete = this.Mode == CredentialPromptMode.EditCredentials;
                 }

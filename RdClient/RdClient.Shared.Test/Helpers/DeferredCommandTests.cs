@@ -41,7 +41,7 @@ using System.Collections.Generic;
             ITimer ITimerFactory.CreateTimer()
             {
                 return this.Timer;
-            }
+            }            
         }
 
         private sealed class Command

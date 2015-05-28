@@ -4,6 +4,7 @@
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Input.Recognizers;
     using RdClient.Shared.Models;
+    using RdClient.Shared.Models.Viewport;
     using RdClient.Shared.Navigation;
     using System;
     using System.ComponentModel;
@@ -12,10 +13,10 @@
     using Windows.Foundation;
     using Windows.UI.Core;
     using Windows.UI.Input;
-    using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
+
 
     /// <summary>
     /// A panel shown in the remote session view (RemoteSessionView) that renders contents of the remote session
@@ -33,7 +34,7 @@
         private bool _viewLoaded;
         private Size _renderingPanelSize;
         private ZoomScrollRecognizer _zoomScrollRecognizer;
-        private GestureRecognizer _platformRecognizer;
+        private TapRecognizer _tapRecognizer;
         private CoreCursor _exitCursor;
 
         public RemoteSessionPanel()
@@ -41,10 +42,16 @@
             this.InitializeComponent();
 
             this.RenderingPanel.SizeChanged += this.OnRenderingPanelSizeChanged;
+            this.SizeChanged += OnSizeChanged;
 
             _viewLoaded = false;
             _renderingPanelSize = Size.Empty;
-            this.RenderingPanel.SetViewport(new RenderingPanelViewport(this, this.RenderingPanel, this.Transformation));
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            EmitPropertyChanged("Width");
+            EmitPropertyChanged("Height");
         }
 
         public object RemoteSessionViewSite
@@ -55,10 +62,42 @@
         //
         // IRemoteSessionView interface
         //
-        public Size Size
+        public Size RenderingPanelSize
         {
             get { return _renderingPanelSize; }
             private set { this.SetProperty(ref _renderingPanelSize, value); }
+        }
+
+        double IViewportPanel.Width
+        {
+            get
+            {
+                return this.ActualWidth;
+            }
+            set
+            {
+                this.Width = value;
+            }
+        }
+
+        double IViewportPanel.Height
+        {
+            get
+            {
+                return this.ActualHeight;
+            }
+            set
+            {
+                this.Height = value;
+            }
+        }
+
+        public IViewportTransform Transform
+        {
+            get
+            {
+                return null;
+            }
         }
 
         event EventHandler IRemoteSessionView.Closed
@@ -114,8 +153,7 @@
             if (!object.Equals(property, newValue))
             {
                 property = newValue;
-                if (null != _propertyChanged)
-                    _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                EmitPropertyChanged(propertyName);
             }
         }
 
@@ -131,6 +169,10 @@
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             _viewLoaded = true;
+
+            this.RenderingPanel.SetViewport(new Viewport(this.RenderingPanel, this));
+            this.RenderingPanel.SetTransform(new ViewportTransformWrapper(this.RenderPanelTransform));
+
             _renderingPanelSize = this.RenderingPanel.RenderSize;
             //
             // Set self as the remote session view in the view model.
@@ -138,39 +180,18 @@
             this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => site.SetRemoteSessionView(this));
 
             ITimer timer = null;
-            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = site.TimerFactory.CreateTimer());
+            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = new RdDispatcherTimer(site.TimerFactory.CreateTimer(), site.DeferredExecution));
             _zoomScrollRecognizer = new ZoomScrollRecognizer(timer);
             _zoomScrollRecognizer.ZoomScrollEvent += OnZoomScrollEvent;
-            _platformRecognizer = new GestureRecognizer();
-            _platformRecognizer.GestureSettings = GestureSettings.Tap | GestureSettings.Hold | GestureSettings.Drag;
-            _platformRecognizer.Tapped += OnTapped;
-            _platformRecognizer.Holding += OnHolding;
+
+            this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = new RdDispatcherTimer(site.TimerFactory.CreateTimer(), site.DeferredExecution));
+            _tapRecognizer = new TapRecognizer(timer);
+            _tapRecognizer.Tapped += OnTapEvent;
         }
 
-        private void OnTapped(object sender, TappedEventArgs e)
+        private void OnTapEvent(object sender, ITapEvent e)
         {
-            IGestureRoutedEventProperties w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.Tapped, PointerEventType.TappedEventArgs, e, this));
-            this.RenderingPanel.EmitPointerEvent(w);
-        }
-
-        private void OnHolding(object sender, HoldingEventArgs e)
-        {
-            IGestureRoutedEventProperties w = null;
-
-            switch(e.HoldingState)
-            {
-                case HoldingState.Started:
-                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingStarted, PointerEventType.HoldingEventArgs, e, this));
-                    break;
-                case HoldingState.Completed:
-                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingCompleted, PointerEventType.HoldingEventArgs, e, this));
-                    break;
-                case HoldingState.Canceled:
-                    w = new GestureRoutedEventPropertiesWrapper(new PointerEvent(PointerEventAction.HoldingCancelled, PointerEventType.HoldingEventArgs, e, this));
-                    break;
-            }
-
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.RenderingPanel.EmitPointerEvent(e);
         }
 
         private void OnZoomScrollEvent(object sender, IZoomScrollEvent e)
@@ -188,11 +209,16 @@
 
         private void OnRenderingPanelSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            //
-            // Set the Size property, which will emit an INotifyPropertyChanged event to the view model.
-            //
-            this.Size = e.NewSize;
+            this.RenderingPanelSize = e.NewSize;
         }
+
+        private void EmitPropertyChanged(string propertyName)
+        {
+            if(_propertyChanged != null)
+            {
+                _propertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }            
 
         protected override void OnManipulationStarting(ManipulationStartingRoutedEventArgs e)
         {
@@ -234,22 +260,25 @@
         protected override void OnPointerCanceled(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCancelled, PointerEventType.PointerRoutedEventArgs, e, this));
+            _tapRecognizer.Consume(w);
+
             this.RenderingPanel.EmitPointerEvent(w);
-            _platformRecognizer.CompleteGesture();
         }
 
         protected override void OnPointerReleased(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerReleased, PointerEventType.PointerRoutedEventArgs, e, this));
+            _tapRecognizer.Consume(w);
+
             this.RenderingPanel.EmitPointerEvent(w);
-            _platformRecognizer.ProcessUpEvent(e.GetCurrentPoint(this));
         }
 
         protected override void OnPointerPressed(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerPressed, PointerEventType.PointerRoutedEventArgs, e, this));
+            _tapRecognizer.Consume(w);
+
             this.RenderingPanel.EmitPointerEvent(w);
-            _platformRecognizer.ProcessDownEvent(e.GetCurrentPoint(this));
         }
 
         protected override void OnPointerWheelChanged(PointerRoutedEventArgs e)

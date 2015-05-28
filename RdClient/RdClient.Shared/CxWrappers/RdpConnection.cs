@@ -107,7 +107,8 @@ namespace RdClient.Shared.CxWrappers
             int xRes = _rdpConnectionCx.SetGatewayHostName(gateway.HostName);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set connection's gateway.");
 
-            if (gateway.HasCredentials && null != gatewayCredentials)
+            // credetials could be assigned without being persisted.
+            if (null != gatewayCredentials && !string.IsNullOrEmpty(gatewayCredentials.Username))
             {
                 xRes = _rdpConnectionCx.SetGatewayCredentials(
                     gatewayCredentials.Username,
@@ -170,17 +171,21 @@ namespace RdClient.Shared.CxWrappers
         public void Suspend()
         {
             _instrument.Instrument("Suspend");
-
-            int xRes = _rdpConnectionCx.Suspend();
-            RdTrace.IfFailXResultThrow(xRes, "Failed to suspend.");
+            if (null != _rdpConnectionCx)
+            {
+                int xRes = _rdpConnectionCx.Suspend();
+                RdTrace.IfFailXResultThrow(xRes, "Failed to suspend.");
+            }
         }
 
         public void Resume()
         {
             _instrument.Instrument("Resume");
-
-            int xRes = _rdpConnectionCx.Resume();
-            RdTrace.IfFailXResultThrow(xRes, "Failed to resume.");
+            if (null != _rdpConnectionCx)
+            {
+                int xRes = _rdpConnectionCx.Resume();
+                RdTrace.IfFailXResultThrow(xRes, "Failed to resume.");
+            }
         }
 
         public void TerminateInstance()

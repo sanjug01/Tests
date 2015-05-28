@@ -5,7 +5,7 @@ namespace RdClient.Shared.Input.Recognizers
 {
     public interface ITapRecognizer : IPointerEventConsumer
     {
-        event EventHandler<ITapEvent> TapEvent;
+        event EventHandler<ITapEvent> Tapped;
 
     }
 }

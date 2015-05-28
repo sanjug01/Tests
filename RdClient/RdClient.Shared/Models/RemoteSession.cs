@@ -5,6 +5,7 @@
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Pointer;
+    using RdClient.Shared.Telemetry;
     using RdClient.Shared.ViewModels;
     using System;
     using System.Diagnostics.Contracts;
@@ -20,6 +21,7 @@
         private readonly ICertificateTrust _certificateTrust;
         private readonly ReaderWriterLockSlim _sessionMonitor;
         private readonly ITimerFactory _timerFactory;
+        private readonly ITelemetryClient _telemetryClient;
 
         /// <summary>
         /// indicates that server is trusted and no NLA warning should be presented
@@ -53,6 +55,7 @@
         {
             private readonly SessionState _sessionState;
             private readonly ReaderWriterLockSlim _monitor;
+            protected readonly ITelemetryClient TelemetryClient;
 
             public SessionState State { get { return _sessionState; } }
 
@@ -68,18 +71,6 @@
 
             public virtual void Complete(RemoteSession session) { }
 
-            protected InternalState(SessionState sessionState, ReaderWriterLockSlim monitor)
-            {
-                _sessionState = sessionState;
-                _monitor = monitor;
-            }
-
-            protected InternalState(SessionState sessionState, InternalState state)
-            {
-                _sessionState = sessionState;
-                _monitor = state._monitor;
-            }
-
             public IDisposable LockRead()
             {
                 return ReadWriteMonitor.Read(_monitor);
@@ -93,6 +84,21 @@
             public IDisposable LockWrite()
             {
                 return ReadWriteMonitor.Write(_monitor);
+            }
+
+            protected InternalState(SessionState sessionState, ReaderWriterLockSlim monitor, ITelemetryClient telemetryClient)
+            {
+                Contract.Assert(null != telemetryClient);
+                _sessionState = sessionState;
+                _monitor = monitor;
+                this.TelemetryClient = telemetryClient;
+            }
+
+            protected InternalState(SessionState sessionState, InternalState state)
+            {
+                _sessionState = sessionState;
+                _monitor = state._monitor;
+                this.TelemetryClient = state.TelemetryClient;
             }
         }
 
@@ -166,18 +172,21 @@
             }
         }
 
-        public RemoteSession(RemoteSessionSetup sessionSetup, IDeferredExecution deferredExecution, IRdpConnectionSource connectionSource, ITimerFactory timerFactory)
+        public RemoteSession(RemoteSessionSetup sessionSetup, IDeferredExecution deferredExecution, IRdpConnectionSource connectionSource,
+            ITimerFactory timerFactory, ITelemetryClient telemetryClient)
         {
             Contract.Requires(null != sessionSetup);
             Contract.Requires(null != deferredExecution);
             Contract.Requires(null != connectionSource);
             Contract.Requires(null != timerFactory);
+            Contract.Assert(null != telemetryClient);
             Contract.Ensures(null != _sessionSetup);
             Contract.Ensures(null != _deferredExecution);
             Contract.Ensures(null != _connectionSource);
             Contract.Ensures(null != _certificateTrust);
             Contract.Ensures(null != _state);
-            Contract.Ensures(null != timerFactory);
+            Contract.Ensures(null != _timerFactory);
+            Contract.Ensures(null != _telemetryClient);
 
             _sessionSetup = sessionSetup;
             _deferredExecution = deferredExecution;
@@ -186,11 +195,12 @@
             _certificateTrust = new CertificateTrust();
             _sessionMonitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
             _timerFactory = timerFactory;
+            _telemetryClient = telemetryClient;
             //
             // _internalState must never be null, so the initial state is assigned to a state object
             // that does not do anything.
             //
-            _internalState = new InactiveSession(_sessionMonitor);            
+            _internalState = new InactiveSession(_sessionMonitor, _telemetryClient);
         }
 
         protected override void DisposeManagedState()
@@ -291,7 +301,7 @@
             {
                 if (null == _connection)
                 {
-                    InternalSetState(new NewSession(_sessionSetup, _sessionMonitor));
+                    InternalSetState(new NewSession(_sessionSetup, _sessionMonitor, _telemetryClient));
                 }
                 else
                 {
@@ -520,7 +530,7 @@
             //
             using (ReadWriteMonitor.Write(_sessionMonitor))
             {
-                InternalSetState(new ConnectingSession(_renderingPanel, _sessionMonitor));
+                InternalSetState(new ConnectingSession(_renderingPanel, _sessionMonitor, _telemetryClient));
             }
         }
 

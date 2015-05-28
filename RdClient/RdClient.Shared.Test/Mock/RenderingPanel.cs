@@ -1,9 +1,8 @@
 ﻿using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models;
+using RdClient.Shared.Models.Viewport;
 using RdMock;
 using System;
-using RdClient.Shared.Input;
-using Windows.Foundation;
 
 namespace RdClient.Shared.Test.Mock
 {

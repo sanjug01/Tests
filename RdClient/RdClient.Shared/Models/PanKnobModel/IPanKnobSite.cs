@@ -1,5 +1,6 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Pointer;
+using RdClient.Shared.Models.Viewport;
 
 namespace RdClient.Shared.Models.PanKnobModel
 {

@@ -34,7 +34,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             get
             {
-                return _sessionControl.RenderingPanel.Viewport.TransformPoint(_viewportPosition);
+                return _sessionControl.RenderingPanel.Viewport.SessionPanel.Transform.InverseTransformPoint(_viewportPosition);
             }
         }
 
@@ -46,7 +46,7 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        public void Reset(IRemoteSessionControl sessionControl, IExecutionDeferrer deferrer)
+        void IPointerPosition.Reset(IRemoteSessionControl sessionControl, IExecutionDeferrer deferrer)
         {
             _sessionControl = sessionControl;
             _deferrer = deferrer;

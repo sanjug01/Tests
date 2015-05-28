@@ -14,6 +14,11 @@
         private readonly ReaderWriterLockSlim _monitor;
         private IDeferredExecution _dispatcher;
 
+        protected IDeferredExecution Dispatcher
+        {
+            get { return _dispatcher; }
+        }
+
         protected DeferringViewModelBase()
         {
             _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);

@@ -15,7 +15,6 @@
 
     public enum InternalDocType
     {
-        HelpDoc,
         EulaDoc,
         ThirdPartyNotices,
         PrivacyDoc // TODO: not yet available, currently a link
@@ -31,14 +30,7 @@
 
     public sealed class RichTextViewModel : AccessoryViewModelBase, IDeferredExecutionSite
     {
-        private const string EULA_URI = "ms-appx:///Strings/EULA.rtf";
-        private const string THIRD_PARTY_URI = "ms-appx:///Strings/ThirdPartyNotices.rtf";
-        // we don't have Privacy/Help documents yet
-        private const string PRIVACY_DOC_URI = "";      // TODO: doc not yet available, using link until then
-        private const string HELP_DOC_URI = "";         // TODO: is it doc or link?
-
         private readonly RelayCommand _closeCommand;
-        // private string _resourceFileUri;
         private string _infoText;
         private InternalDocType _docType;
         private bool _isLoading;
@@ -100,16 +92,13 @@
             switch (args.DocumentType)
             {
                 case InternalDocType.EulaDoc:
-                    this.ResourceUri = EULA_URI;
+                    this.ResourceUri = GlobalConstants.EulaUri;
                     break;
                 case InternalDocType.ThirdPartyNotices:
-                    this.ResourceUri = THIRD_PARTY_URI;
+                    this.ResourceUri = GlobalConstants.ThirdPartyUri;
                     break;
                 case InternalDocType.PrivacyDoc:                    
-                    this.ResourceUri = PRIVACY_DOC_URI;
-                    break;
-                case InternalDocType.HelpDoc:                    
-                    this.ResourceUri = HELP_DOC_URI;
+                    this.ResourceUri = GlobalConstants.PrivacyDocUri;
                     break;
             }
 
@@ -133,13 +122,11 @@
             }
             else
             {
-                // TODO: this should never happen
+                // this should never happen
                 // but until we finalize all internal documents will show the progress bar.
                 this.Document = "No document available";
-                // this.IsLoading = false;
             }           
         }
-
 
         private void OnStreamOpened(Task<StorageFile> task)
         {
@@ -176,7 +163,6 @@
                     this.IsLoading = false;
                 } ));
         }
-
 
         void IDeferredExecutionSite.SetDeferredExecution(IDeferredExecution defEx)
         {

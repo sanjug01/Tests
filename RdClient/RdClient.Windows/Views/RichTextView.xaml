@@ -38,12 +38,12 @@
             <!-- Document title, should be localized -->
             <TextBlock x:Uid="RichTextView_Title"
                        Grid.Row="0"
-                       Style="{ThemeResource TitleTextBlockStyle}"                        
+                       Style="{ThemeResource SubtitleTextBlockStyle}"                        
                        Text="{Binding DocumentType, Converter={StaticResource TypeToLocalizedStringConverter}}" />
             <HyperlinkButton
                 Grid.Row="0"
                 Command="{Binding Close}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                <TextBlock x:Uid="RichTextView_Close" Text="(d) Close"/>
+				<TextBlock x:Uid="Common_Close" Text="(d) Close"/>
             </HyperlinkButton>            
 
             <TextBlock Grid.Row="1"

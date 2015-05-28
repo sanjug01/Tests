@@ -16,6 +16,7 @@
                 // Set the session state to Failed
                 //
                 _connection.Cleanup();
+                this.TelemetryClient.Event(string.Format("ConnectionFailure:{0}",_reason.Code));
                 session.DeferEmitFailed(_reason.Code);
             }
 

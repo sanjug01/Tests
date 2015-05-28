@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -154,7 +154,7 @@
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_GenericLicenseError_String" xml:space="preserve">
-    <value>(r) We couldn't connect to the remote PC because of a licensing error. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>We couldn't connect to the remote PC because there was a licensing error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_InvalidLicense_String" xml:space="preserve">
@@ -170,7 +170,7 @@
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_GenericSecurityError_String" xml:space="preserve">
-    <value>(r) We couldn't connect to the remote PC because of a security error. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>We couldn't connect to the remote PC because there was a security error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_ServerNameLookupFailed_String" xml:space="preserve">
@@ -178,11 +178,11 @@
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_GenericNetworkError_String" xml:space="preserve">
-    <value>(r) We couldn't connect to the remote PC. This might be because of a network problem. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>We're having trouble connecting to that PC over your network. Check your network settings and try again. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_UnknownError_String" xml:space="preserve">
-    <value>(r) Your session ended because of an error. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>Something went wrong when we tried to connect. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_RemotingDisabled_String" xml:space="preserve">
@@ -190,7 +190,7 @@
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_EncryptionFailed_String" xml:space="preserve">
-    <value>(r) Your session ended because of a data encryption error. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>Your session ended because there was a data encryption error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_InitFipsFailed_String" xml:space="preserve">
@@ -198,8 +198,8 @@
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_LoopbackUnsupported_String" xml:space="preserve">
-    <value>That PC is the one you're currently using.</value>
-    <comment>Disconnection error located in the disconnect error dialog.</comment>
+    <value>That PC is the one you're currently using, and can't connect remotely to itself.</value>
+    <comment>Disconnection error located in the disconnect error dialog. This is Windows error message only.</comment>
   </data>
   <data name="RdpDisconnectCode_ConnectionTimeout_String" xml:space="preserve">
     <value>It's taking too long to establish a connection to the remote PC. If this keeps happening, ask your admin or tech support for help.</value>
@@ -214,7 +214,7 @@
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_GenericProtocolError_String" xml:space="preserve">
-    <value>(r) Your session ended because of a protocol error. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>Your session ended because there was a protocol error. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_DecompressionFailed_String" xml:space="preserve">
@@ -338,7 +338,7 @@
     <comment>Certificate error</comment>
   </data>
   <data name="ConnectionCenter_DayZero.Text" xml:space="preserve">
-    <value>To get started, add a remote desktop or remote resources like apps and desktops your administrator has set up for you.</value>
+    <value>To get started, add a remote desktop.</value>
   </data>
   <data name="ConnectionCenter_DayZeroTitle.Text" xml:space="preserve">
     <value>Connect to a desktop</value>
@@ -347,12 +347,8 @@
     <value>Desktops</value>
     <comment>The text that is the header for the desktops section</comment>
   </data>
-  <data name="ConnectionCenter_TitleHeader.Text" xml:space="preserve">
-    <value>Remote Desktop</value>
-    <comment>The text at the top of the screen on the connection center</comment>
-  </data>
   <data name="Menu-AddDesktop.Text" xml:space="preserve">
-    <value>Add a Desktop</value>
+    <value>Add a desktop</value>
     <comment>Option to add PC or Server</comment>
   </data>
   <data name="Common_Flyout_DeleteItem.Text" xml:space="preserve">
@@ -363,29 +359,13 @@
     <value>Edit</value>
     <comment>Verb. Text in a button or pop out menu that is pressed to edit an item.</comment>
   </data>
-  <data name="Settings_Gateways_Title.Text" xml:space="preserve">
-    <value>Gateways</value>
-    <comment>Noun. Title of the Gateways section in the global settings page</comment>
-  </data>
-  <data name="Settings_General_Title.Text" xml:space="preserve">
-    <value>(r) General</value>
-    <comment>Noun. Title of the General settings section in the global settings page</comment>
-  </data>
   <data name="Settings_NavBar_Title.Text" xml:space="preserve">
     <value>Settings</value>
     <comment>Noun. Main title of the global settings page</comment>
   </data>
-  <data name="Settings_Users_AddUser_Detail.Text" xml:space="preserve">
-    <value>(r) Add a username</value>
-    <comment>Text in User settings page that describes what add user does in more detail</comment>
-  </data>
   <data name="Settings_Users_AddUser_Title.Text" xml:space="preserve">
-    <value>Add a user</value>
+    <value>Add an account</value>
     <comment>Title above add user button in the user settings section of the global settings page</comment>
-  </data>
-  <data name="Settings_Users_Title.Text" xml:space="preserve">
-    <value>User accounts</value>
-    <comment>Title of the User settings section of the global settings page</comment>
   </data>
   <data name="Common_Button_DeleteItem.Content" xml:space="preserve">
     <value>Remove</value>
@@ -396,7 +376,7 @@
     <comment>Verb. Text in a button that is pressed to edit an item.</comment>
   </data>
   <data name="Common_Button_AddNewItem.Content" xml:space="preserve">
-    <value>Choose what to add</value>
+    <value>Add</value>
     <comment>Verb. Text in a button that is pressed to add a new item.</comment>
   </data>
   <data name="Settings_General_ShowThumbnails.Text" xml:space="preserve">
@@ -411,28 +391,14 @@
     <value>Send anonymous data to Microsoft</value>
     <comment>Text under the toggle switch that changes whether feedback permission is given</comment>
   </data>
-  <data name="Settings_NavBarItem_General.Content" xml:space="preserve">
-    <value>(r) General</value>
-    <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show General Settings</comment>
-  </data>
-  <data name="Settings_NavBarItem_Users.Content" xml:space="preserve">
-    <value>User accounts</value>
-    <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show User Settings</comment>
-  </data>
   <data name="AddOrEditDesktop-AddCaption.Text" xml:space="preserve">
-    <value>(r) Add a PC or Server</value>
-  </data>
-  <data name="AddOrEditDesktop-Credentials.Text" xml:space="preserve">
-    <value>Username</value>
+    <value>Add a desktop</value>
   </data>
   <data name="AddOrEditDesktop-Credentials-ComboBox.Header" xml:space="preserve">
-    <value>(r) User name</value>
+    <value>User account</value>
   </data>
   <data name="AddOrEditDesktop-EditCaption.Text" xml:space="preserve">
-    <value>Edit a PC or Server</value>
-  </data>
-  <data name="AddOrEditDesktop-PcName-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>(r) Invalid characters in host name</value>
+    <value>Edit a Desktop</value>
   </data>
   <data name="AddOrEditDesktop-PcName.Text" xml:space="preserve">
     <value>PC Name</value>
@@ -454,7 +420,7 @@
     <comment>Showing optional in a different color for the FriendlyName label. Should have a separator space prefix</comment>
   </data>
   <data name="AddOrEditDesktop-LessDetailsLabel.Text" xml:space="preserve">
-    <value>Less</value>
+    <value>More</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-MoreDetailsLabel.Text" xml:space="preserve">
@@ -466,23 +432,23 @@
     <comment>Placeholder text shown on AddOrEditDesktop view - extra settings when no friendly name has been entered</comment>
   </data>
   <data name="AddOrEditDesktop-RedirectionSectionTitle.Text" xml:space="preserve">
-    <value>(r) Redirection</value>
+    <value>Redirection</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
-  <data name="AddOrEditDesktop-GatewaysSectionTitle.Text" xml:space="preserve">
-    <value>(r) Gateway</value>
+  <data name="AddOrEditDesktop-Gateways-ComboBox.Header" xml:space="preserve">
+    <value>Gateway</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-DisplaySectionTitle.Text" xml:space="preserve">
-    <value>(r) Display</value>
+    <value>Display</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-FullScreenOption.Content" xml:space="preserve">
-    <value>(r)Start session full screen</value>
+    <value>Start session full screen</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-ScaleDisplayOption.Content" xml:space="preserve">
-    <value>(r)Scale display content</value>
+    <value>Scale my desktop to fit the window.</value>
     <comment>Text shown on AddOrEditDesktop view</comment>
   </data>
   <data name="AddOrEditDesktop-SoundComboBox.Header" xml:space="preserve">
@@ -506,15 +472,12 @@
     <comment>Text shown on AddOrEditDesktop view - extra settings</comment>
   </data>
   <data name="AddOrEditDesktop-SaveButton.Content" xml:space="preserve">
-    <value>(r) Save</value>
+    <value>Save</value>
     <comment>Text shown on AddOrEditDesktop view - save button</comment>
   </data>
   <data name="AddOrEditDesktop-AddButton.Content" xml:space="preserve">
-    <value>(r) Add</value>
+    <value>Add</value>
     <comment>Text shown on AddOrEditDesktop view - Add button</comment>
-  </data>
-  <data name="AddUser-AddCaption.Text" xml:space="preserve">
-    <value>Log in</value>
   </data>
   <data name="AddUser-Password.Text" xml:space="preserve">
     <value>Password</value>
@@ -533,9 +496,6 @@
     <value>jdoe@contoso.com</value>
     <comment>Placeholder text shown when there is no username entered in the username text box on the Add user view</comment>
   </data>
-  <data name="AddUser-Username-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>(r) Invalid characters in user name</value>
-  </data>
   <data name="AddUser-DeleteUserText.Text" xml:space="preserve">
     <value>Delete this account</value>
     <comment>Text shown on AddUser dialog - Delete account link </comment>
@@ -549,7 +509,7 @@
     <comment>Question asking user if they want to connect despite the invalid certificate</comment>
   </data>
   <data name="CertificateValidation-ConnectAnywayButton.Content" xml:space="preserve">
-    <value>(r) Connect anyway</value>
+    <value>Connect</value>
     <comment>Text for button that connects despite the invalid certificate</comment>
   </data>
   <data name="CertificateValidation-IssuerLabel.Text" xml:space="preserve">
@@ -602,15 +562,6 @@
   <data name="DeleteDesktopsView-Title-DeleteSingle.Text" xml:space="preserve">
     <value>Remove connection</value>
   </data>
-  <data name="MainPage-ShowApplicationBarLabel.Text" xml:space="preserve">
-    <value>Ahow the app bar</value>
-  </data>
-  <data name="AddOrEditDesktop-PcName-Error.Text" xml:space="preserve">
-    <value>(*)</value>
-  </data>
-  <data name="AddUser-Username-Error.Text" xml:space="preserve">
-    <value>(*)</value>
-  </data>
   <data name="AddOrEditDesktop_CredOption_Add_String" xml:space="preserve">
     <value>Add an account</value>
     <comment>Text shown on AddOrEditDesktop view if new credentials should be added and stored for the desktop</comment>
@@ -626,14 +577,6 @@
   <data name="AddOrEditDesktop_GatewayOption_None_String" xml:space="preserve">
     <value>No gateway</value>
     <comment>Text shown on AddOrEditDesktop view if no gateway is stored for the desktop</comment>
-  </data>
-  <data name="Common_Delete_String" xml:space="preserve">
-    <value>Remove</value>
-    <comment>Verb. Text on a button that is pressed to delete an item</comment>
-  </data>
-  <data name="Common_Edit_String" xml:space="preserve">
-    <value>Edit</value>
-    <comment>Verb. Text on a button that is pressed to edit an item</comment>
   </data>
   <data name="Common_ListItemSeparator_String" xml:space="preserve">
     <value> , </value>
@@ -659,31 +602,19 @@
     <value>The username and password that were used to connect to the remote PC didn't work. Try a different account.</value>
     <comment>Text shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
   </data>
-  <data name="Session_Reconnect_Title.Text" xml:space="preserve">
-    <value>Reconnecting</value>
-    <comment>Reconnecting dialog title</comment>
-  </data>
   <data name="SessionView-HomeButton.Label" xml:space="preserve">
-    <value>(r) Home</value>
+    <value>Disconnect</value>
   </data>
   <data name="SessionView-MouseMode.Label" xml:space="preserve">
-    <value>(r) Mouse-Mode</value>
-  </data>
-  <data name="Menu-AddWorkspace.Text" xml:space="preserve">
-    <value>(r) Add Workspace</value>
-    <comment>Option to add an on premise workspace</comment>
+    <value>Mouse pointer</value>
   </data>
   <data name="ConnectionCenter_AppLabel.Content" xml:space="preserve">
-    <value>(r) RemoteApps</value>
+    <value>RemoteApps</value>
     <comment>The text that is the header for the apps section</comment>
   </data>
   <data name="Common_Flyout_RefreshItem.Text" xml:space="preserve">
     <value>Refresh</value>
     <comment>Verb. Text in a button or pop out menu that is pressed to refresh an item.</comment>
-  </data>
-  <data name="CredentialPromptMode_EditCredentials_String" xml:space="preserve">
-    <value>Log in</value>
-    <comment>Text in the credential prompt dialog shown under title when editing existing credentials</comment>
   </data>
   <data name="CredentialPromptMode_EditCredentials_Title_String" xml:space="preserve">
     <value>Edit an account</value>
@@ -700,10 +631,6 @@
   <data name="CredentialPromptMode_InvalidCredentials_Title_String" xml:space="preserve">
     <value>Log in</value>
     <comment>Title shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
-  </data>
-  <data name="AddOrEditGateway-ServerName-Error.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>(r) Invalid characters in server name</value>
-    <comment>Text shown on AddOrEditGateway dialog - error hint</comment>
   </data>
   <data name="AddOrEditGateway-ServerName.Text" xml:space="preserve">
     <value>Server name</value>
@@ -725,18 +652,6 @@
     <value>Remove gateway:</value>
     <comment>Title of the delete gateway dialog</comment>
   </data>
-  <data name="Settings_Gateways_AddGateway_Detail.Text" xml:space="preserve">
-    <value>(r)Add a gateway</value>
-    <comment>Text in Gateway settings page that describes what add gateway does in more detail</comment>
-  </data>
-  <data name="Settings_Gateways_AddGateway_Title.Text" xml:space="preserve">
-    <value>Add a gateway</value>
-    <comment>Title above add gateway button in the gateway settings section of the global settings page</comment>
-  </data>
-  <data name="Settings_NavBarItem_Gateways.Content" xml:space="preserve">
-    <value>Gateways</value>
-    <comment>Noun. Text displayed by item on global settings navigation bar which is selected to show Gateways Settings</comment>
-  </data>
   <data name="AddOrEditGateway-AddCaption.Text" xml:space="preserve">
     <value>Add a Gateway</value>
     <comment>Title of the dialog to add new gateway </comment>
@@ -750,7 +665,7 @@
     <comment>Title of the dialog to edit existing gateway</comment>
   </data>
   <data name="DesktopIdentityValidation-AlwaysConnectButton.Content" xml:space="preserve">
-    <value>(r)Always connect</value>
+    <value>Always connect</value>
   </data>
   <data name="DesktopIdentityValidation-CancelButton.Content" xml:space="preserve">
     <value>Cancel</value>
@@ -768,11 +683,11 @@
     <value>This may be because the remote PC is running a version of Windows that is not configured to support server authentication.</value>
   </data>
   <data name="Connection_Pending_Message.Text" xml:space="preserve">
-    <value>(r) Initiating the remote connection</value>
+    <value>Connecting...</value>
     <comment>Message displayed in the connection view, while connecting to remote session.</comment>
   </data>
   <data name="Connection_Pending_ConnectToMessage.Text" xml:space="preserve">
-    <value>(r) Connecting to</value>
+    <value>Connecting to</value>
     <comment>Message displayed in the connection view, while connecting to remote session.</comment>
   </data>
   <data name="SelectResource_Azure_Description.Text" xml:space="preserve">
@@ -811,9 +726,9 @@
     <value>Choose what to add</value>
     <comment>Title shown on add resource view page that lets you select which type of resource to add</comment>
   </data>
-  <data name="AboutView_Close.Text" xml:space="preserve">
+  <data name="Common_Close.Text" xml:space="preserve">
     <value>Close</value>
-    <comment>Title of the hyperlink button that closes the about dialog.</comment>
+    <comment>Verb. Text shown on a button that closes a side panel view.</comment>
   </data>
   <data name="AboutView_Link_PrivacyPolicy.NavigateUri" xml:space="preserve">
     <value>http://www.bing.com/search?q=microsoft+rdp+privacy+policy</value>
@@ -851,10 +766,6 @@
     <value>About</value>
     <comment>Title of the About dialog; text shown at the top of the dialog in large font</comment>
   </data>
-  <data name="AdditionalToolbarCommandsView_News.Text" xml:space="preserve">
-    <value>What's new</value>
-    <comment>Text in the "What's new" button from additional commands</comment>
-  </data>
   <data name="AdditionalToolbarCommandsView_About.Text" xml:space="preserve">
     <value>About</value>
     <comment>Text in the "About" button that opens the About dialog</comment>
@@ -864,7 +775,7 @@
     <comment>Text in the "Help" button from additional commands</comment>
   </data>
   <data name="Settings_Gateways_Combobox.Header" xml:space="preserve">
-    <value>Gateways</value>
+    <value>Gateway</value>
     <comment>Header of the combobox in the settings page that lists all the saved gateways</comment>
   </data>
   <data name="Settings_Gateways_Combobox.PlaceholderText" xml:space="preserve">
@@ -951,71 +862,71 @@
     <comment>Title of the "Thrid party notices" document page</comment>
   </data>
   <data name="ConnectionCenter_Toolbar_About.Label" xml:space="preserve">
-    <value>(r) About</value>
+    <value>About</value>
     <comment>Label of the "About" button in the toolbar on the connection center page. The button shows the "about" side panel.</comment>
   </data>
   <data name="ConnectionCenter_Toolbar_About.ToolTipService.ToolTip" xml:space="preserve">
-    <value>(r) About</value>
+    <value>About Remote Desktop</value>
     <comment>Tooltip of the "about" button in the toolbar on the connection center page</comment>
   </data>
   <data name="ConnectionCenter_Toolbar_Add.Label" xml:space="preserve">
-    <value>(r) Add</value>
+    <value>Add</value>
     <comment>Label of the "Add" button in the toolbar on the connection center page. The button shows the selector of a type of a new resource, or the "add desktop" side panel.</comment>
   </data>
   <data name="ConnectionCenter_Toolbar_Add.ToolTipService.ToolTip" xml:space="preserve">
-    <value>(r) Add a new remote resource</value>
+    <value>Add a desktop</value>
     <comment>Tooltip of the "add" button in the toolbar on the connection center page</comment>
   </data>
   <data name="ConnectionCenter_Toolbar_Help.Label" xml:space="preserve">
-    <value>(r) Help</value>
+    <value>Help</value>
     <comment>Label of the "Help" button in the toolbar on the connection center page. The button navigates the default browser to the application help page</comment>
   </data>
   <data name="ConnectionCenter_Toolbar_Help.ToolTipService.ToolTip" xml:space="preserve">
-    <value>(r) Go to the application help page</value>
+    <value>Go to the help page</value>
     <comment>Tooltip of the "help" button in the toolbar on the connection center page</comment>
   </data>
   <data name="ConnectionCenter_Toolbar_Settings.Label" xml:space="preserve">
-    <value>(r)Settings</value>
+    <value>Settings</value>
     <comment>Label of the "Settings" button in the toolbar on the connection center page. The button shows the settings side panel.</comment>
   </data>
   <data name="ConnectionCenter_Toolbar_Settings.ToolTipService.ToolTip" xml:space="preserve">
-    <value>(r) Show the applications settings panel</value>
+    <value>Show the settings panel</value>
     <comment>Tooltip of the "settings" button in the toolbar on the connection center page</comment>
   </data>
   <data name="Common_Button_No.Content" xml:space="preserve">
-    <value>(r) No</value>
+    <value>No</value>
   </data>
   <data name="Common_Button_Yes.Content" xml:space="preserve">
-    <value>(r) Yes</value>
+    <value>Yes</value>
   </data>
   <data name="InSessionEditCredentials-Password.Header" xml:space="preserve">
-    <value>(r) Password</value>
+    <value>Password</value>
   </data>
   <data name="InSessionEditCredentials-Password.PlaceholderText" xml:space="preserve">
-    <value>(r) Enter password</value>
+    <value>Enter password</value>
   </data>
   <data name="InSessionEditCredentials-SaveUser.Content" xml:space="preserve">
-    <value>(r) Save user name and password</value>
+    <value>Remember me</value>
   </data>
   <data name="InSessionEditCredentials-Title.Text" xml:space="preserve">
-    <value>(r) Credentials required</value>
+    <value>Log in</value>
   </data>
   <data name="InSessionEditCredentials-UserName.Header" xml:space="preserve">
-    <value>(r) User name</value>
+    <value>Username</value>
   </data>
   <data name="InSessionEditCredentials-UserName.PlaceholderText" xml:space="preserve">
-    <value>(r) user or domain\user </value>
+    <value>User@contoso.com</value>
   </data>
   <data name="CertificateValidation-RememberChoiceCheckbox.Content" xml:space="preserve">
-    <value>(r) Remember my choice for this certificate</value>
+    <value>Don’t ask about this certificate again</value>
     <comment>Text displayed next to checkbox that user can check to never show errors for this certificate again.</comment>
   </data>
   <data name="HostnameValidationFailure_InvalidCharacters_String" xml:space="preserve">
-    <value>(r) Can't contain `~!#@$%^&amp;*()=+{}\\|;'\",&lt; &gt;/?</value>
+    <value>The hostname can't contain spaces, tabs or these characters:`~!#@$%^&amp;*()=+{}\\|;'\",&lt; &gt;/?</value>
     <comment>Text explaining that a hostname is invalid because it contains invalid characters</comment>
   </data>
   <data name="InSessionEditCredentials-DismissButton.Content" xml:space="preserve">
-    <value>(r) Connect</value>
+    <value>Connect</value>
     <comment>Label of the "Connect" button in the in-session credentials editor dialog shown when credentials are missing or invalid</comment>
   </data>
 </root>

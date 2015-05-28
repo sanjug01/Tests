@@ -34,6 +34,7 @@ namespace RdClient.Shared.Input.Pointer
     public class PointerStateMachineEvent
     {
         public IPointerEventBase Input { get; set; }
+        public IPointerPosition PointerPosition { get; set; }
         public IPointTracker Tracker { get; set; }
         public DoubleClickTimer Timer { get; set; }
         public IPointerControl Control { get; set; }

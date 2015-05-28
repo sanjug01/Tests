@@ -2,6 +2,7 @@
 {
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
+    using RdClient.Shared.Telemetry;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
     using System.Diagnostics;
@@ -17,8 +18,8 @@
             private IRdpConnection _connection;
             private bool _cancelledCredentials;
 
-            public ConnectingSession(IRenderingPanel renderingPanel, ReaderWriterLockSlim monitor)
-                : base(SessionState.Connecting, monitor)
+            public ConnectingSession(IRenderingPanel renderingPanel, ReaderWriterLockSlim monitor, ITelemetryClient telemetryClient)
+                : base(SessionState.Connecting, monitor, telemetryClient)
             {
                 Contract.Assert(null != renderingPanel);
                 Contract.Assert(null != monitor);
@@ -155,8 +156,8 @@
                     case RdpDisconnectCode.CertValidationFailed:
                         //
                         // Set the internal state to "certificate validation needed"
-                        //
-                        ValidateCertificate(connection.GetServerCertificate(), e.DisconnectReason);
+                        //                        
+                        ValidateCertificate(connection.GetServerCertificate(), e.DisconnectReason, _session._sessionSetup.HostName);
                         break;
 
                     case RdpDisconnectCode.PreAuthLogonFailed:
@@ -179,7 +180,8 @@
 
                     case RdpDisconnectCode.ProxyInvalidCA:
                         // Gateway certificate needs validation
-                        ValidateCertificate(connection.GetGatewayCertificate(), e.DisconnectReason);
+                        ValidateCertificate(connection.GetGatewayCertificate(), e.DisconnectReason, 
+                            _session._sessionSetup.SessionGateway.Gateway.HostName);
                         break;
 
                     case RdpDisconnectCode.CredSSPUnsupported:
@@ -221,7 +223,7 @@
                 Debug.WriteLine("Connecting|StatusInfoReceived|StatusCode={0}", e.StatusCode);
             }
 
-            private void ValidateCertificate(IRdpCertificate certificate, RdpDisconnectReason reason)
+            private void ValidateCertificate(IRdpCertificate certificate, RdpDisconnectReason reason, string serverName)
             {
                 Contract.Assert(null != certificate);
                 Contract.Assert(null != _session);
@@ -241,7 +243,7 @@
                     // Set the state to ValidateCertificate, that will emit a BadCertificate event from the session
                     // and handle the user's response to the event.
                     //
-                    _session.InternalSetState(new ValidateCertificate(_renderingPanel, _connection, reason, this));
+                    _session.InternalSetState(new ValidateCertificate(_renderingPanel, _connection, reason, serverName, this));
                 }
             }
 
