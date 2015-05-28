@@ -78,7 +78,7 @@
 			<controls:UserSelectorControl Margin="{StaticResource DialogItemVerticalSpacing}"/>
 			<!-- Show/hide extra settings buttons -->
 			<HyperlinkButton
-				Margin="{StaticResource DialogSectionVerticalSpacing}"
+				Margin="{StaticResource DialogItemVerticalSpacing}"
                 Command="{Binding ShowDetailsCommand}" 
                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
 				<StackPanel Orientation="Horizontal">

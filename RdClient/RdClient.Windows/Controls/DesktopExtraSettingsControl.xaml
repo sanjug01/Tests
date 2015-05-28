@@ -69,7 +69,7 @@
         </StackPanel>
         
         <!-- Gateway section -->
-        <local:GatewaySelectorControl Margin="{StaticResource DialogSectionVerticalSpacing}"/>
+		<local:GatewaySelectorControl Margin="{StaticResource DialogItemVerticalSpacing}"/>
         
         <!-- Redirection section -->
 		<StackPanel Orientation="Vertical">
