@@ -160,7 +160,7 @@ namespace RdClient.Shared.ViewModels
         {
             if (GatewayCommandsEnabled())
             {
-                var args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway.Model);
+                var args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway);
 
                 // edit can also indicate deletion of the selected Gateway
                 var editGatewayCompleted = new ModalPresentationCompletion((s, e) =>

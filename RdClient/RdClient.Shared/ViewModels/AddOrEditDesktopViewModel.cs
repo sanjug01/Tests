@@ -314,7 +314,7 @@
 
         private void EditGatewayCommandExecute(object o)
         {
-            EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway.Model);
+            EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway);
             ModalPresentationCompletion editGatewayCompleted = new ModalPresentationCompletion(EditGatewayPromptResultHandler);
             // save user selection
             _selectedUserId = (null != this.SelectedUser && UserComboBoxType.Credentials == this.SelectedUser.UserComboBoxType) ? this.SelectedUser.Credentials.Id : Guid.Empty;

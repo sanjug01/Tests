@@ -305,7 +305,7 @@
             {
                 Assert.AreEqual("AddOrEditGatewayView", p[0] as string);
                 var args = p[1] as EditGatewayViewModelArgs;
-                Assert.AreEqual(gateway.Gateway.Model, args.Gateway);
+                Assert.AreEqual(gateway.Gateway, args.Gateway);
                 completion = p[2] as IPresentationCompletion;
                 Assert.IsNotNull(completion);
                 return null;
