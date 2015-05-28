@@ -330,14 +330,14 @@
         {
             AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(AddCredentialPromptResultHandler);
-            NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
+            NavigationService.PushAccessoryView("AddOrEditUserView", args, addUserCompleted);
         }
 
         private void EditUserCommandExecute(object o)
         {
             AddUserViewArgs args = new AddUserViewArgs(this.SelectedUser.Credentials.Model, false, CredentialPromptMode.EditCredentials);            
             ModalPresentationCompletion editUserCompleted = new ModalPresentationCompletion(EditGatewayPromptResultHandler);
-            this.NavigationService.PushAccessoryView("AddUserView", args, editUserCompleted);
+            this.NavigationService.PushAccessoryView("AddOrEditUserView", args, editUserCompleted);
         }
 
         private bool EditUserCommandCanExecute(object o)

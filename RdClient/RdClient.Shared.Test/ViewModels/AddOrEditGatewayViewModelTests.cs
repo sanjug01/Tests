@@ -234,7 +234,7 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                navigation.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
+                navigation.Expect("PushAccessoryView", new List<object> { "AddOrEditUserView", null, null }, null);
 
                 // add User
                 _addOrEditGatewayVM.AddUser.Execute(null);
@@ -410,7 +410,7 @@
 
                 navigation.Expect("PushAccessoryView", p =>
                 {
-                    Assert.AreEqual("AddUserView", p[0] as string);
+                    Assert.AreEqual("AddOrEditUserView", p[0] as string);
                     Assert.IsTrue(p[1] is AddUserViewArgs);
                     completion = p[2] as IPresentationCompletion;
                     Assert.IsNotNull(completion);

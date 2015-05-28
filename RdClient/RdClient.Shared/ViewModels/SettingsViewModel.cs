@@ -207,7 +207,7 @@ namespace RdClient.Shared.ViewModels
                         this.DeleteUser.Execute(null);
                     }
                 });
-                this.NavigationService.PushAccessoryView("AddUserView", args, editUserCompleted);
+                this.NavigationService.PushAccessoryView("AddOrEditUserView", args, editUserCompleted);
             }
         }
 
@@ -231,7 +231,7 @@ namespace RdClient.Shared.ViewModels
                     this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);                    
                 }
             });
-            this.NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
+            this.NavigationService.PushAccessoryView("AddOrEditUserView", args, addUserCompleted);
         }
     }
 }
