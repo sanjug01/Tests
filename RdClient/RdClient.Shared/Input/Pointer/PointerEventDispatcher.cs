@@ -9,33 +9,16 @@ namespace RdClient.Shared.Input.Pointer
 {
     public class PointerEventDispatcher : IPointerEventConsumer
     {
-        private PointerDeviceType _lastPointerType;
+        private PointerDeviceDispatcher _deviceDispatcher;
+        private PointerVisibilityConsumer _visibilityConsumer;
 
-        private Dictionary<PointerDeviceType, IPointerEventConsumer> _consumers = new Dictionary<PointerDeviceType, IPointerEventConsumer>();
-
-        private IPointerEventConsumer _pointerMode;
-        private IPointerEventConsumer _directMode;
-        private IPointerEventConsumer _multiTouchMode;
-
-        private ConsumptionModeType _consumptionMode;
         public ConsumptionModeType ConsumptionMode
         {
             set
             {
-                _consumptionMode = value;
+                _deviceDispatcher.ConsumptionMode = value;
 
-                switch(_consumptionMode)
-                {
-                    case ConsumptionModeType.Pointer:
-                        _consumers[PointerDeviceType.Touch] = _pointerMode;
-                        break;
-                    case ConsumptionModeType.DirectTouch:
-                        _consumers[PointerDeviceType.Touch] = _directMode;
-                        break;
-                    case ConsumptionModeType.MultiTouch:
-                        _consumers[PointerDeviceType.Touch] = _multiTouchMode;
-                        break;
-                }
+                _visibilityConsumer.ConsumptionMode = value;
             }
         }
 
@@ -43,38 +26,23 @@ namespace RdClient.Shared.Input.Pointer
 
         public PointerEventDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, IDeferredExecution dispatcher)
         {
-            _pointerMode = new PointerModeConsumer(
-                new RdDispatcherTimer(timerFactory.CreateTimer(), dispatcher), 
-                new PointerModeControl(sessionControl, pointerPosition));
-            _multiTouchMode = new MultiTouchConsumer(sessionControl, pointerPosition);
-            _directMode = new DirectModeConsumer(new DirectModeControl(sessionControl, pointerPosition), pointerPosition);
-            
-            _consumers[PointerDeviceType.Mouse] = new MouseModeConsumer(sessionControl, pointerPosition);
-            _consumers[PointerDeviceType.Pen] = new MouseModeConsumer(sessionControl, pointerPosition);
-            _consumers[PointerDeviceType.Touch] = _pointerMode;
-
+            _deviceDispatcher = new PointerDeviceDispatcher(timerFactory, sessionControl, pointerPosition, dispatcher);
+            _visibilityConsumer = new PointerVisibilityConsumer(timerFactory, sessionControl, pointerPosition, dispatcher);
         }
 
         public void Consume(IPointerEventBase pointerEvent)
         {
-            if(pointerEvent is IPointerRoutedEventProperties)
+
+            if(pointerEvent.Action == PointerEventAction.PointerEntered || pointerEvent.Action== PointerEventAction.PointerExited)
             {
-                IPointerRoutedEventProperties prep = ((IPointerRoutedEventProperties)pointerEvent);
-
-                if(prep.DeviceType != _lastPointerType)
-                {
-                    Reset();
-                }
-
-                _lastPointerType = prep.DeviceType;
+                _visibilityConsumer.Consume(pointerEvent);
             }
-
-            if(_consumers.ContainsKey(_lastPointerType))
+            else
             {
-                _consumers[_lastPointerType].Consume(pointerEvent);
+                _deviceDispatcher.Consume(pointerEvent);
             }
-
-            if(ConsumedEvent != null)
+             
+            if (ConsumedEvent != null)
             {
                 ConsumedEvent(this, pointerEvent);
             }
@@ -82,10 +50,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public void Reset()
         {
-            if(_consumers.ContainsKey(_lastPointerType))
-            {
-                _consumers[_lastPointerType].Reset();
-            }
+            _deviceDispatcher.Reset();
         }
     }
 }

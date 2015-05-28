@@ -18,6 +18,11 @@ namespace RdClient.Shared.Test.Mock
             set;
         }
 
+        public void ChangeMouseVisibility(bool visibility)
+        {
+            Invoke(new object[] { visibility });
+        }
+
         public void ChangeMouseCursorShape(Shared.Input.Pointer.MouseCursorShape shape)
         {
             Invoke(new object[] { shape });

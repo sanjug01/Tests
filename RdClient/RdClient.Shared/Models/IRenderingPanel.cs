@@ -28,5 +28,7 @@
 
         void ChangeMouseCursorShape(MouseCursorShape shape);
         void MoveMouseCursor(Point point);
+        void ChangeMouseVisibility(bool visiblility);
+
     }
 }
