@@ -12,7 +12,7 @@
         EnterCredentials,
         EditCredentials,
         InvalidCredentials,
-        FreshCredentialsNeeded
+        FreshCredentialsNeeded,
     }
 
     public sealed class CredentialPromptResult

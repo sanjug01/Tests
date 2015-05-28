@@ -3,6 +3,7 @@
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Telemetry;
+    using RdClient.Shared.ViewModels;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
     using System.Diagnostics;
@@ -281,7 +282,7 @@
                 //
                 InSessionCredentialsTask task = new InSessionCredentialsTask(_session._sessionSetup.SessionCredentials,
                     _session._sessionSetup.DataModel,
-                    "d:Invalid user name or password",
+                    CredentialPromptMode.InvalidCredentials,
                     reason);
 
                 task.Submitted += this.NewPasswordSubmitted;
@@ -297,7 +298,7 @@
                 //
                 InSessionCredentialsTask task = new InSessionCredentialsTask(_session._sessionSetup.SessionCredentials,
                     _session._sessionSetup.DataModel,
-                    "d:Server has requested a new password to be typed in",
+                    CredentialPromptMode.FreshCredentialsNeeded,
                     reason);
 
                 task.Submitted += this.NewPasswordSubmitted;
@@ -356,7 +357,7 @@
                 InSessionCredentialsTask task = new InSessionCredentialsTask(
                     _session._sessionSetup.SessionGateway,
                     _session._sessionSetup.DataModel,
-                    "d:Invalid user name or password for the gateway",
+                    CredentialPromptMode.InvalidCredentials,
                     reason);
 
                 task.Submitted += this.NewGatewayCredentialsSubmitted;
@@ -373,7 +374,7 @@
                 InSessionCredentialsTask task = new InSessionCredentialsTask(
                     _session._sessionSetup.SessionGateway,
                     _session._sessionSetup.DataModel,
-                    "d:Gateway server has requested a new password to be typed in",
+                    CredentialPromptMode.FreshCredentialsNeeded,
                     reason);
 
                 task.Submitted += this.NewGatewayCredentialsSubmitted;

@@ -12,7 +12,7 @@
         private readonly RelayCommand _cancelConfirmation;
 
         private string _resourceName;
-        private string _prompt;
+        private CredentialPromptMode _promptMode;
         private bool _saveCredentials;
         private bool _canSaveCredentials;
         private bool _canRevealPassword;
@@ -20,6 +20,7 @@
         private string _password;
         private bool _canDismiss;
         private bool _confirmationVisible;
+        private bool _showPrompt;
         private EditCredentialsConfirmation _confirmationMessage;
         private IEditCredentialsTask _task;
         private object _taskToken;
@@ -54,10 +55,10 @@
             set { this.SetProperty(ref _resourceName, value); }
         }
 
-        public string Prompt
+        public CredentialPromptMode PromptMode
         {
-            get { return _prompt; }
-            set { this.SetProperty(ref _prompt, value); }
+            get { return _promptMode; }
+            set { this.SetProperty(ref _promptMode, value); }
         }
 
         public bool SaveCredentials
@@ -76,6 +77,12 @@
         {
             get { return _canRevealPassword; }
             set { this.SetProperty(ref _canRevealPassword, value); }
+        }
+
+        public bool ShowPrompt
+        {
+            get { return _showPrompt; }
+            set { this.SetProperty(ref _showPrompt, value); }
         }
 
         public string UserName
