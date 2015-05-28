@@ -933,4 +933,12 @@
     <value>(r) That user account is already saved. Are you sure you want to overwrite it?</value>
     <comment>Message displayed at prompt displayed when user has chosen to save credentials and there is already a saved user account with the same username</comment>
   </data>
+  <data name="GatewaySelector_AddGateway.Text" xml:space="preserve">
+    <value>Add gateway</value>
+    <comment>Verb. Text on button that adds a new gateway</comment>
+  </data>
+  <data name="UserSelecter_AddUser.Text" xml:space="preserve">
+    <value>Add account</value>
+    <comment>Text shown on button that adds a new user account</comment>
+  </data>
 </root>
