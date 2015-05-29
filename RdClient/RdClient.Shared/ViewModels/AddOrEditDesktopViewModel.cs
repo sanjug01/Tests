@@ -213,6 +213,10 @@
 
                 if (this.IsAddingDesktop)
                 {
+                    //
+                    // Mark the desktop as new so the tile in the connection center will show a "new" indicator.
+                    //
+                    this.Desktop.IsNew = true;
                     this.ApplicationDataModel.LocalWorkspace.Connections.AddNewModel(this.Desktop);
                 }
 
