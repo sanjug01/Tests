@@ -18,24 +18,21 @@ namespace RdClient.Shared.Input.Pointer
         private IPointerEventConsumer _multiTouchMode;
 
         private ConsumptionModeType _consumptionMode;
-        public ConsumptionModeType ConsumptionMode
-        {
-            set
-            {
-                _consumptionMode = value;
 
-                switch(_consumptionMode)
-                {
-                    case ConsumptionModeType.Pointer:
-                        _consumers[PointerDeviceType.Touch] = _pointerMode;
-                        break;
-                    case ConsumptionModeType.DirectTouch:
-                        _consumers[PointerDeviceType.Touch] = _directMode;
-                        break;
-                    case ConsumptionModeType.MultiTouch:
-                        _consumers[PointerDeviceType.Touch] = _multiTouchMode;
-                        break;
-                }
+        public void SetConsumptionMode (ConsumptionModeType consumptionMode)
+        {
+            _consumptionMode = consumptionMode;
+            switch(_consumptionMode)
+            {
+                case ConsumptionModeType.Pointer:
+                    _consumers[PointerDeviceType.Touch] = _pointerMode;
+                    break;
+                case ConsumptionModeType.DirectTouch:
+                    _consumers[PointerDeviceType.Touch] = _directMode;
+                    break;
+                case ConsumptionModeType.MultiTouch:
+                    _consumers[PointerDeviceType.Touch] = _multiTouchMode;
+                    break;
             }
         }
 

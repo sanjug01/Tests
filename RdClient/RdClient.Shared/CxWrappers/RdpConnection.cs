@@ -107,7 +107,8 @@ namespace RdClient.Shared.CxWrappers
             int xRes = _rdpConnectionCx.SetGatewayHostName(gateway.HostName);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set connection's gateway.");
 
-            if (gateway.HasCredentials && null != gatewayCredentials)
+            // credetials could be assigned without being persisted.
+            if (null != gatewayCredentials && !string.IsNullOrEmpty(gatewayCredentials.Username))
             {
                 xRes = _rdpConnectionCx.SetGatewayCredentials(
                     gatewayCredentials.Username,

@@ -189,6 +189,7 @@
     <Compile Include="Mock\RenderingPanel.cs" />
     <Compile Include="Mock\RightSideBarViewModel.cs" />
     <Compile Include="Mock\TelemetryClient.cs" />
+    <Compile Include="Mock\TestTelemetryClient.cs" />
     <Compile Include="Mock\Thumbnail.cs" />
     <Compile Include="Mock\LocalizedString.cs" />
     <Compile Include="Mock\NavigationService.cs" />
@@ -234,12 +235,14 @@
     <Compile Include="RdTest\UAPSleep.cs" />
     <Compile Include="ValidationRules\CompositeValidationRuleTests.cs" />
     <Compile Include="ValidationRules\HostNameValidationRuleTests.cs" />
-    <Compile Include="ValidationRules\NotDuplicateUsernameValidationRuleTests.cs" />
+    <Compile Include="ValidationRules\GatewayEqualityComparerTests.cs" />
+    <Compile Include="ValidationRules\CredentialsEqualityComparerTests.cs" />
+    <Compile Include="ValidationRules\NotDuplicateValidationRuleTests.cs" />
     <Compile Include="ValidationRules\UsernameFormatValidationRuleTests.cs" />
     <Compile Include="ValidationRules\ValidatedPropertyTests.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
-    <Compile Include="ViewModels\AddUserViewModelTests.cs" />
+    <Compile Include="ViewModels\AddOrEditUserViewModelTests.cs" />
     <Compile Include="ViewModels\DesktopIdentityValidationViewModelTests.cs" />
     <Compile Include="ViewModels\DesktopIdentityValidationCompletionTests.cs" />
     <Compile Include="ViewModels\CertificateValidationCompletionTests.cs" />

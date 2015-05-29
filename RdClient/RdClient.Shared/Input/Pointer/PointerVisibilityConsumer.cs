@@ -7,21 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Input;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
 
 namespace RdClient.Shared.Input.Pointer
 {
     class PointerVisibilityConsumer : IPointerEventConsumer
     {
-        private IRemoteSessionControl _sessionControl;
+        private readonly IRemoteSessionControl _sessionControl;
+        private ConsumptionModeType _consumptionMode;
+
+
         public event EventHandler<IPointerEventBase> ConsumedEvent;
-        ConsumptionModeType _consumptionMode;
-        public ConsumptionModeType ConsumptionMode
+        public void SetConsumptionMode(ConsumptionModeType consumptionMode)
         {
-            set
-            {
-                _consumptionMode = value;
-            }
+            _consumptionMode = consumptionMode;
         }
 
         public PointerVisibilityConsumer(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, IDeferredExecution dispatcher)
@@ -35,18 +35,18 @@ namespace RdClient.Shared.Input.Pointer
             if ((_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch)&&
                 (pointerEventArgs.DeviceType != PointerDeviceType.Mouse))
             {
-                _sessionControl.RenderingPanel.ChangeMouseVisibility(false);
+                _sessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
             }
             else
             {
                 
                 if (pointerEventArgs.Action == PointerEventAction.PointerEntered)
                 {
-                    _sessionControl.RenderingPanel.ChangeMouseVisibility(true);
+                    _sessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
                 }
                 else if (pointerEventArgs.Action == PointerEventAction.PointerExited && pointerEventArgs.DeviceType == PointerDeviceType.Mouse)
                 {
-                    _sessionControl.RenderingPanel.ChangeMouseVisibility(false);
+                    _sessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
                 }
             }
         }

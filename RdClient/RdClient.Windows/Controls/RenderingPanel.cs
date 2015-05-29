@@ -149,13 +149,13 @@
             }
         }
 
-        void IRenderingPanel.ChangeMouseVisibility(bool visibility)
+        void IRenderingPanel.ChangeMouseVisibility(Visibility visibility)
         {
-            if (visibility)
+            if (visibility == Visibility.Visible)
             {
                 if (Window.Current.CoreWindow.PointerCursor != null) { 
                     Window.Current.CoreWindow.PointerCursor = null;
-                    this.MouseCursor.Visibility = Visibility.Visible;
+                    this.MouseCursor.Visibility = visibility;
                 }
             }
             else
@@ -164,7 +164,7 @@
                 {
                     Window.Current.CoreWindow.PointerCursor = new CoreCursor(CoreCursorType.Arrow, 0);
                 }
-                this.MouseCursor.Visibility =  Visibility.Collapsed;
+                this.MouseCursor.Visibility = visibility;
             }
             
         }

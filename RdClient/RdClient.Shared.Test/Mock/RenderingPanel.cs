@@ -3,6 +3,7 @@ using RdClient.Shared.Models;
 using RdClient.Shared.Models.Viewport;
 using RdMock;
 using System;
+using Windows.UI.Xaml;
 
 namespace RdClient.Shared.Test.Mock
 {
@@ -18,7 +19,7 @@ namespace RdClient.Shared.Test.Mock
             set;
         }
 
-        public void ChangeMouseVisibility(bool visibility)
+        public void ChangeMouseVisibility(Visibility visibility)
         {
             Invoke(new object[] { visibility });
         }

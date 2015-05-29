@@ -3,9 +3,9 @@
     using RdClient.Controls;
     using RdClient.Shared.Navigation;
 
-    public sealed partial class AddUserView : ModalUserControl, IPresentableView
+    public sealed partial class AddOrEditUserView : ModalUserControl, IPresentableView
     {
-        public AddUserView()
+        public AddOrEditUserView()
         {
             this.InitializeComponent();
         }

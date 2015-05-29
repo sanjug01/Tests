@@ -2,6 +2,8 @@
 {
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
+    using RdClient.Shared.Telemetry;
+    using RdClient.Shared.ViewModels;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
     using System.Diagnostics;
@@ -17,8 +19,8 @@
             private IRdpConnection _connection;
             private bool _cancelledCredentials;
 
-            public ConnectingSession(IRenderingPanel renderingPanel, ReaderWriterLockSlim monitor)
-                : base(SessionState.Connecting, monitor)
+            public ConnectingSession(IRenderingPanel renderingPanel, ReaderWriterLockSlim monitor, ITelemetryClient telemetryClient)
+                : base(SessionState.Connecting, monitor, telemetryClient)
             {
                 Contract.Assert(null != renderingPanel);
                 Contract.Assert(null != monitor);
@@ -54,6 +56,9 @@
             public override void Terminate(RemoteSession session)
             {
                 Contract.Assert(null != _session);
+
+                this.TelemetryClient.Event("Connecting:Cancelled");
+
                 if (null != _connection)
                     _connection.Disconnect();
             }
@@ -149,6 +154,10 @@
 
                 IRdpConnection connection = (IRdpConnection)sender;
                 Contract.Assert(object.ReferenceEquals(connection, _connection));
+                //
+                // Report the disconnect code to telemetry.
+                //
+                this.TelemetryClient.Event(string.Format("Connecting:{0}", e.DisconnectReason.Code));
 
                 switch (e.DisconnectReason.Code)
                 {
@@ -273,7 +282,7 @@
                 //
                 InSessionCredentialsTask task = new InSessionCredentialsTask(_session._sessionSetup.SessionCredentials,
                     _session._sessionSetup.DataModel,
-                    "d:Invalid user name or password",
+                    CredentialPromptMode.InvalidCredentials,
                     reason);
 
                 task.Submitted += this.NewPasswordSubmitted;
@@ -289,7 +298,7 @@
                 //
                 InSessionCredentialsTask task = new InSessionCredentialsTask(_session._sessionSetup.SessionCredentials,
                     _session._sessionSetup.DataModel,
-                    "d:Server has requested a new password to be typed in",
+                    CredentialPromptMode.FreshCredentialsNeeded,
                     reason);
 
                 task.Submitted += this.NewPasswordSubmitted;
@@ -324,6 +333,8 @@
             {
                 InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
 
+                this.TelemetryClient.Event("Connecting:CredentialsCancelled");
+
                 task.Submitted -= this.NewPasswordSubmitted;
                 task.Cancelled -= this.NewPasswordCancelled;
                 //
@@ -346,7 +357,7 @@
                 InSessionCredentialsTask task = new InSessionCredentialsTask(
                     _session._sessionSetup.SessionGateway,
                     _session._sessionSetup.DataModel,
-                    "d:Invalid user name or password for the gateway",
+                    CredentialPromptMode.InvalidCredentials,
                     reason);
 
                 task.Submitted += this.NewGatewayCredentialsSubmitted;
@@ -363,7 +374,7 @@
                 InSessionCredentialsTask task = new InSessionCredentialsTask(
                     _session._sessionSetup.SessionGateway,
                     _session._sessionSetup.DataModel,
-                    "d:Gateway server has requested a new password to be typed in",
+                    CredentialPromptMode.FreshCredentialsNeeded,
                     reason);
 
                 task.Submitted += this.NewGatewayCredentialsSubmitted;
@@ -397,6 +408,8 @@
             private void NewGatewayCredentialsCancelled(object sender, InSessionCredentialsTask.ResultEventArgs e)
             {
                 InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
+
+                this.TelemetryClient.Event("Connecting:GatewayCredentialsCancelled");
 
                 task.Submitted -= this.NewGatewayCredentialsCancelled;
                 task.Cancelled -= this.NewGatewayCredentialsCancelled;

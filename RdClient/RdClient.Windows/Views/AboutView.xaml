@@ -38,7 +38,7 @@
 						VerticalAlignment="Bottom"
 						HorizontalAlignment="Right">
 						<TextBlock 							
-							x:Uid="AboutView_Close"
+							x:Uid="Common_Close"
 							TextLineBounds="TrimToBaseline"							
 							Text="(d) Close">						
 						</TextBlock>

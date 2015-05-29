@@ -51,6 +51,12 @@
                 Debug.WriteLine("DummyTelemetryClient|Event:{0}", eventName);
         }
 
+        void ITelemetryClient.Metric(string metricName, double metricValue)
+        {
+            if (_isActive)
+                Debug.WriteLine("DummyTelemetryClient|Metric:{0}={1}", metricName, metricValue);
+        }
+
         ITelemetryStopwatch ITelemetryClient.StartStopwatch()
         {
             throw new NotImplementedException();

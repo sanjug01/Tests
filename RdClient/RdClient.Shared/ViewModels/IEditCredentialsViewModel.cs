@@ -1,6 +1,5 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
-    using System;
     using System.Windows.Input;
 
     public interface IEditCredentialsViewModel
@@ -14,7 +13,9 @@
 
         bool CanSaveCredentials { get; set; }
 
-        string Prompt { get; set; }
+        bool ShowPrompt { get; set; }
+
+        CredentialPromptMode PromptMode { get; set; }
 
         string ResourceName { get; set; }
 

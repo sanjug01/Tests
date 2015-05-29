@@ -1,16 +1,13 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
     using RdClient.Shared.Data;
-    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
-    using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.ViewModels.EditCredentialsTasks;
     using System;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
-    using Windows.UI.Xaml.Media.Imaging;
 
     public class DesktopViewModel : Helpers.MutableObject, IDesktopViewModel
     {
@@ -162,7 +159,7 @@
             if (Guid.Empty.Equals(this.Desktop.CredentialsId))
             {
                 InSessionCredentialsTask task = new InSessionCredentialsTask(sessionSetup.SessionCredentials,
-                    _dataModel, null, sessionSetup);
+                    _dataModel, CredentialPromptMode.EnterCredentials, sessionSetup);
 
                 task.Submitted += (sender, e) =>
                 {

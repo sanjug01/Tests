@@ -201,7 +201,7 @@
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
             IRenderingPanel panel = this.RenderingPanel;
-            panel.ChangeMouseVisibility(false);
+            panel.ChangeMouseVisibility(Visibility.Collapsed);
             
             if (null != _closed)
                 _closed(this, EventArgs.Empty);

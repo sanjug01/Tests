@@ -19,6 +19,7 @@
         private ApplicationDataModel _dataModel;
         private TestAddOrEditGatewayViewModel _addOrEditGatewayVM;
         private GatewayModel _gateway;
+        IModelContainer<GatewayModel> _gatewayContainer;
         private CredentialsModel _credentials;
 
         class TestAddOrEditGatewayViewModel : AddOrEditGatewayViewModel
@@ -35,6 +36,7 @@
             _testData = new TestData();
             _addOrEditGatewayVM = new TestAddOrEditGatewayViewModel();
             _gateway = new GatewayModel() { HostName = _testData.NewRandomString() };
+            _gatewayContainer = ModelContainer<GatewayModel>.CreateForNewModel(_gateway) ;
             _credentials = new CredentialsModel() { Username = _testData.NewRandomString(), Password = _testData.NewRandomString() };
 
             _dataModel = new ApplicationDataModel()
@@ -59,7 +61,7 @@
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 EditGatewayViewModelArgs args =
-                    new EditGatewayViewModelArgs(_gateway);
+                    new EditGatewayViewModelArgs(_gatewayContainer);
 
                 ((IViewModel) _addOrEditGatewayVM).Presenting(navigation, args, null);
 
@@ -88,7 +90,7 @@
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
 
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
@@ -118,7 +120,7 @@
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
                 _dataModel.Gateways.AddNewModel(_gateway);
 
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
@@ -135,10 +137,10 @@
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 Guid credId = _dataModel.Credentials.AddNewModel(_credentials);
+                _dataModel.Gateways.AddNewModel(_gateway);
+                _gatewayContainer = _dataModel.Gateways.Models[0];
 
-                _dataModel.Gateways.AddNewModel(_gateway); 
-
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 _addOrEditGatewayVM.SelectedUser = _addOrEditGatewayVM.Users[1];
@@ -160,8 +162,9 @@
 
                 _gateway.CredentialsId = credId;
                 _dataModel.Gateways.AddNewModel(_gateway);
+                _gatewayContainer = _dataModel.Gateways.Models[0];
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 _addOrEditGatewayVM.SelectedUser = _addOrEditGatewayVM.Users[0];
@@ -181,7 +184,7 @@
             {
                 _dataModel.Gateways.AddNewModel(_gateway);
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 Assert.AreEqual(UserComboBoxType.AskEveryTime, _addOrEditGatewayVM.SelectedUser.UserComboBoxType);
@@ -196,7 +199,7 @@
                 _gateway.CredentialsId = _dataModel.Credentials.AddNewModel(_credentials);
                 _dataModel.Gateways.AddNewModel(_gateway);
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 Assert.AreEqual(_credentials.Username, _addOrEditGatewayVM.SelectedUser.Credentials.Model.Username);
@@ -213,7 +216,7 @@
                 _dataModel.Gateways.AddNewModel(_gateway);
                 _gateway.CredentialsId = _dataModel.Credentials.AddNewModel(_credentials);
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
                 Assert.AreEqual(_credentials.Username, _addOrEditGatewayVM.SelectedUser.Credentials.Model.Username);
@@ -228,10 +231,10 @@
             {
                 _dataModel.Gateways.AddNewModel(_gateway);
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                navigation.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
+                navigation.Expect("PushAccessoryView", new List<object> { "AddOrEditUserView", null, null }, null);
 
                 // add User
                 _addOrEditGatewayVM.AddUser.Execute(null);
@@ -293,7 +296,7 @@
 
                 _dataModel.Gateways.AddNewModel(_gateway);
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
 
                 _addOrEditGatewayVM.PresentableView = view;
 
@@ -315,7 +318,7 @@
             {
                 object saveParam = new object();
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
 
                 _addOrEditGatewayVM.PresentableView = view;
 
@@ -373,7 +376,7 @@
             {
                 object saveParam = new object();
 
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
 
                 _addOrEditGatewayVM.PresentableView = view;                
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
@@ -407,8 +410,8 @@
 
                 navigation.Expect("PushAccessoryView", p =>
                 {
-                    Assert.AreEqual("AddUserView", p[0] as string);
-                    Assert.IsTrue(p[1] is AddUserViewArgs);
+                    Assert.AreEqual("AddOrEditUserView", p[0] as string);
+                    Assert.IsTrue(p[1] is AddOrEditUserViewArgs);
                     completion = p[2] as IPresentationCompletion;
                     Assert.IsNotNull(completion);
                     return null;
@@ -452,7 +455,7 @@
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
                 object saveParam = new object();
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
                 Assert.IsTrue(_addOrEditGatewayVM.Delete.CanExecute(null));
             }
@@ -471,7 +474,7 @@
                     Assert.IsTrue(result.Deleted);
                     return null;
                 });
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gateway);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, context);
                 _addOrEditGatewayVM.Delete.Execute(null);
             }           
