@@ -123,7 +123,7 @@
 
         private void OkCommandHandler()
         {
-            this.User.Value.Trim();
+            this.User.Value = this.User.Value.Trim();
             if (this.User.State.Status == ValidationResultStatus.Valid)
             {
                 _creds.Model.Username = this.User.Value;
