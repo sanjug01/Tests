@@ -11,13 +11,13 @@
     using System.Linq;
 
     [TestClass]
-    public class AddUserViewModelTests
+    public class AddOrEditUserViewModelTests
     {
         private TestData _testData;
         private Mock.ModalPresentationContext _context;
         private Mock.NavigationService _nav;
-        private AddUserViewArgs _args;
-        private AddUserViewModel _vm;
+        private AddOrEditUserViewArgs _args;
+        private AddOrEditUserViewModel _vm;
 
         [TestInitialize]
         public void TestSetup()
@@ -25,8 +25,8 @@
             _testData = new TestData();
             _nav = new Mock.NavigationService();
             _context = new Mock.ModalPresentationContext();            
-            _args = new AddUserViewArgs(_testData.NewValidCredential().Model, true, CredentialPromptMode.FreshCredentialsNeeded);
-            _vm = new AddUserViewModel();
+            _args = new AddOrEditUserViewArgs(_testData.NewValidCredential().Model, true, CredentialPromptMode.FreshCredentialsNeeded);
+            _vm = new AddOrEditUserViewModel();
             ((IViewModel)_vm).Presenting(_nav, _args, _context);
         }
 
@@ -37,7 +37,7 @@
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShouldSetStoreCredentials()
+        public void ShouldSetStoreCredentials()
         {
             _vm.StoreCredentials = true;
             Assert.IsTrue(_vm.StoreCredentials);
@@ -97,7 +97,7 @@
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShouldCallOkHandler()
+        public void ShouldCallOkHandler()
         {
             CredentialsModel newCreds = _testData.NewValidCredential().Model;
             _vm.User.Value = newCreds.Username;
@@ -117,7 +117,7 @@
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShouldCallCancelHandler()
+        public void ShouldCallCancelHandler()
         {
             _context.Expect("Dismiss", parameters =>
             {
@@ -132,37 +132,37 @@
         }
 
         [TestMethod]
-        public void AddUserViewModel_ModeShouldMatchArgsMode()
+        public void ModeShouldMatchArgsMode()
         {
             Assert.AreEqual(_args.Mode, _vm.Mode);            
         }
 
         [TestMethod]
-        public void AddUserViewModel_PasswordSetByArgs()
+        public void PasswordSetByArgs()
         {
             Assert.AreEqual(_args.Credentials.Password, _vm.Password);    
         }
 
         [TestMethod]
-        public void AddUserViewModel_UsernameSetByArgs()
+        public void UsernameSetByArgs()
         {
             Assert.AreEqual(_args.Credentials.Username, _vm.User.Value);            
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShowSaveSetByArgs()
+        public void ShowSaveSetByArgs()
         {
             Assert.AreEqual(_args.ShowSave, _vm.ShowSave);            
         }
 
         [TestMethod]
-        public void AddUserViewModel_StoreCredentialsInitiallyFalse()
+        public void StoreCredentialsInitiallyFalse()
         {
             Assert.IsFalse(_vm.StoreCredentials);
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShowOrHideMessageCorrectlyBasedOnMode()
+        public void ShowOrHideMessageCorrectlyBasedOnMode()
         {
             List<CredentialPromptMode> showsMessage = new List<CredentialPromptMode>();
             showsMessage.Add(CredentialPromptMode.FreshCredentialsNeeded);
@@ -170,12 +170,12 @@
 
             foreach (CredentialPromptMode mode in Enum.GetValues(typeof(CredentialPromptMode)))
             {
-                AddUserViewArgs args =
-                    new AddUserViewArgs(
+                AddOrEditUserViewArgs args =
+                    new AddOrEditUserViewArgs(
                         _testData.NewValidCredential().Model,
                         true,
                         mode);
-                _vm = new AddUserViewModel();
+                _vm = new AddOrEditUserViewModel();
                 ((IViewModel)_vm).Presenting(_nav, args, _context);
 
                 if (showsMessage.Any(m => mode.Equals(m)))
@@ -190,16 +190,16 @@
         }
 
         [TestMethod]
-        public void AddUserViewModel_CanDeleteTrueIffEditCredentialsMode()
+        public void CanDeleteTrueIffEditCredentialsMode()
         {
             foreach (CredentialPromptMode mode in Enum.GetValues(typeof(CredentialPromptMode)))
             {
-                AddUserViewArgs args =
-                    new AddUserViewArgs(
+                AddOrEditUserViewArgs args =
+                    new AddOrEditUserViewArgs(
                         _testData.NewValidCredential().Model,
                         true,
                         mode);
-                _vm = new AddUserViewModel();
+                _vm = new AddOrEditUserViewModel();
                 ((IViewModel)_vm).Presenting(_nav, args, _context);
 
                 if (mode == CredentialPromptMode.EditCredentials)
@@ -214,7 +214,7 @@
         }
 
         [TestMethod]
-        public void AddUserViewModel_ShouldCallDeleteHandler()
+        public void ShouldCallDeleteHandler()
         {
             _context.Expect("Dismiss", parameters =>
             {
@@ -229,8 +229,8 @@
         [TestMethod]
         public void CanDeleteTrueWhenEditingUser()
         {
-            AddUserViewArgs args =
-                new AddUserViewArgs(
+            AddOrEditUserViewArgs args =
+                new AddOrEditUserViewArgs(
                     _testData.NewValidCredential().Model,
                     true,
                     CredentialPromptMode.EditCredentials);
@@ -241,8 +241,8 @@
         [TestMethod]
         public void CanDeleteFalseWhenAddingUser()
         {
-            AddUserViewArgs args =
-                new AddUserViewArgs(
+            AddOrEditUserViewArgs args =
+                new AddOrEditUserViewArgs(
                     _testData.NewValidCredential().Model,
                     true,
                     CredentialPromptMode.EnterCredentials);

@@ -16,7 +16,7 @@
             //
             viewFactory.AddViewClass("ConnectionCenterView", typeof(Views.ConnectionCenterView), true);
             viewFactory.AddViewClass("AddOrEditDesktopView", typeof(Views.AddOrEditDesktopView));
-            viewFactory.AddViewClass("AddUserView", typeof(Views.AddUserView));
+            viewFactory.AddViewClass("AddOrEditUserView", typeof(Views.AddOrEditUserView));
             viewFactory.AddViewClass("ErrorMessageView", typeof(Views.ErrorMessageView));
             viewFactory.AddViewClass("DeleteDesktopsView", typeof(Views.DeleteDesktopsView));
             viewFactory.AddViewClass("CertificateValidationView", typeof(Views.CertificateValidationView));

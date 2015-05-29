@@ -336,8 +336,9 @@
     <Compile Include="ValidationRules\HostnameValidationFailure.cs" />
     <Compile Include="ValidationRules\IValidatedProperty.cs" />
     <Compile Include="ValidationRules\IValidationResult.cs" />
+    <Compile Include="ValidationRules\IModelEqualityComparer.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
-    <Compile Include="ValidationRules\NotDuplicateUsernameValidationRule.cs" />
+    <Compile Include="ValidationRules\NotDuplicateValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameFormatValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameValidationFailure.cs" />
     <Compile Include="ValidationRules\ValidatedProperty.cs" />
@@ -366,7 +367,7 @@
     <Compile Include="Navigation\Extensions\DataModelExtension.cs" />
     <Compile Include="Navigation\INavigationExtension.cs" />
     <Compile Include="ValidationRules\CharacterOccurenceValidationRule.cs" />
-    <Compile Include="ViewModels\AddUserViewModel.cs" />
+    <Compile Include="ViewModels\AddOrEditUserViewModel.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\EditCredentialsTaskBase.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\InSessionCredentialsTask.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\NewCredentialsTask.cs" />
