@@ -84,9 +84,9 @@
                 //
                 // Report data model statistics telemetry
                 //
-                this.TelemetryClient.Metric("LocalConnectionsNumber", appDataModel.LocalWorkspace.Connections.Models.Count);
-                this.TelemetryClient.Metric("CredentialsNumber", appDataModel.Credentials.Models.Count);
-                this.TelemetryClient.Metric("GatewaysNumber", appDataModel.Gateways.Models.Count);
+                this.TelemetryClient.Metric("localDesktopCount", appDataModel.LocalWorkspace.Connections.Models.Count);
+                this.TelemetryClient.Metric("credentialsCount", appDataModel.Credentials.Models.Count);
+                this.TelemetryClient.Metric("gatewaysCount", appDataModel.Gateways.Models.Count);
             }
             else
             {
