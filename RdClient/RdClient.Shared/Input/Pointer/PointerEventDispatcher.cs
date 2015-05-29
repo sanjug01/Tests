@@ -12,14 +12,10 @@ namespace RdClient.Shared.Input.Pointer
         private PointerDeviceDispatcher _deviceDispatcher;
         private PointerVisibilityConsumer _visibilityConsumer;
 
-        public ConsumptionModeType ConsumptionMode
+        public void SetConsumptionMode(ConsumptionModeType consumptionMode)
         {
-            set
-            {
-                _deviceDispatcher.ConsumptionMode = value;
-
-                _visibilityConsumer.ConsumptionMode = value;
-            }
+            _deviceDispatcher.SetConsumptionMode(consumptionMode);
+            _visibilityConsumer.SetConsumptionMode(consumptionMode);
         }
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;

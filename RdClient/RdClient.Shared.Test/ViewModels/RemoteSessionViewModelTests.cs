@@ -231,7 +231,7 @@
                     throw new NotImplementedException();
                 }
 
-                void IRenderingPanel.ChangeMouseVisibility(bool visibility)
+                void IRenderingPanel.ChangeMouseVisibility(Visibility visibility)
                 {
                     throw new NotImplementedException();
                 }
