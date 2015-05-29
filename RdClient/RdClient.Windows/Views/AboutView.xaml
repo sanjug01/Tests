@@ -58,7 +58,15 @@
 						Text="(d) Third Party Notices">						
 					</TextBlock>
 				</HyperlinkButton>
-			</StackPanel>
+                <HyperlinkButton 
+                    x:Uid="AboutView_Link_RecommendedNewFeatures"
+                    NavigateUri="https://www.google.com/search?q=microsoft+rdp+client+recommended+new+features">
+                    <TextBlock 
+						x:Uid="AboutView_RecommendedNewFeatures" 
+						Text="(d) Recommended new features">
+                    </TextBlock>
+                </HyperlinkButton>
+            </StackPanel>
 			<StackPanel Grid.Row="1">
 				<HyperlinkButton 				
 					x:Uid="AboutView_Link_RateAndReview"
