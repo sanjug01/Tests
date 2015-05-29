@@ -190,14 +190,11 @@
         {
             Contract.Assert(activationParameter is AddOrEditUserViewArgs);
             var args = activationParameter as AddOrEditUserViewArgs;
-
             
-
             this.Mode = args.Mode;
             this.ShowMessage = args.ShowMessage;
             this.ShowSave = args.ShowSave;
-            this.StoreCredentials = args.Save;
-            
+            this.StoreCredentials = args.Save;            
             this.ShowMessage = args.ShowMessage;
             this.CanDelete = args.CanDelete;
             _creds = args.Credentials;
@@ -218,7 +215,7 @@
                     _okCommand.EmitCanExecuteChanged();
                 }
             };
-            this.User.Value = args.Credentials.Model.Username;
+            this.User.Value = _creds.Model.Username;
             this.Password = _creds.Model.Password;
         }
 
