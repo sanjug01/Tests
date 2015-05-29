@@ -154,6 +154,8 @@
     <Compile Include="Helpers\RdDispatcherTimer.cs" />
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
+    <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
+    <Compile Include="Input\Pointer\PointerVisibilityConsumer.cs" />
     <Compile Include="Models\FullScreenModel.cs" />
     <Compile Include="Models\IFullScreenModel.cs" />
     <Compile Include="Models\IScrollBarModel.cs" />
@@ -175,7 +177,7 @@
     <Compile Include="Input\Pointer\ManipulationRoutedEventArgsWrapper.cs" />
     <Compile Include="Input\Pointer\MouseModeConsumer.cs" />
     <Compile Include="Input\Pointer\MultiTouchConsumer.cs" />
-    <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
+    <Compile Include="Input\Pointer\PointerDeviceDispatcher.cs" />
     <Compile Include="Input\Pointer\DoubleClickTimer.cs" />
     <Compile Include="Input\Keyboard\IInputPanelFactory.cs" />
     <Compile Include="Input\Keyboard\IInputPanel.cs" />

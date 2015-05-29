@@ -9,6 +9,8 @@
         ManipulationCompleted,
         PointerPressed,
         PointerMoved,
+        PointerEntered,
+        PointerExited,
         PointerReleased,
         PointerCancelled,
         ZoomScrollStarted,

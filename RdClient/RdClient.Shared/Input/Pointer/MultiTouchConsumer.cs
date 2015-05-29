@@ -63,7 +63,7 @@ namespace RdClient.Shared.Input.Pointer
                     throw new InvalidOperationException("trying to convert unknown PointerEventAction");
             }
 
-            _sessionControl.SendTouchAction(touchType, pointerEvent.PointerId, _pointerPosition.ViewportPosition, delta);
+            _sessionControl.SendTouchAction(touchType, pointerEvent.PointerId, _pointerPosition.SessionPosition, delta);
         }
 
 
