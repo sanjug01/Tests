@@ -3,7 +3,6 @@
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Models;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
 
@@ -160,6 +159,66 @@
             Assert.AreEqual("Status", changes[1].PropertyName);
             Assert.AreEqual("IsAdminSession", changes[2].PropertyName);
             Assert.AreEqual("IsSwapMouseButtons", changes[3].PropertyName);
+        }
+
+        [TestMethod]
+        public void NewDesktopModel_CreatedNotNew()
+        {
+            DesktopModel model = new DesktopModel();
+
+            Assert.IsFalse(model.IsNew);
+        }
+
+        [TestMethod]
+        public void NewDesktopModel_SetNew_IsNew()
+        {
+            DesktopModel model = new DesktopModel();
+
+            model.IsNew = true;
+
+            Assert.IsTrue(model.IsNew);
+        }
+
+        [TestMethod]
+        public void DesktopModel_ChangeIsNew_ChangeReported()
+        {
+            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
+            DesktopModel model = new DesktopModel();
+            model.PropertyChanged += (sender, e) => changes.Add(e);
+
+            model.IsNew = true;
+            model.IsNew = false;
+
+            Assert.IsFalse(model.IsNew);
+            Assert.AreEqual(3, changes.Count);
+            Assert.AreEqual("IsNew", changes[0].PropertyName);
+            Assert.AreEqual("Status", changes[1].PropertyName);
+            Assert.AreEqual("IsNew", changes[2].PropertyName);
+        }
+
+        [TestMethod]
+        public void DesktopModel_CreateConnection_ClearsIsNew()
+        {
+            IList<PropertyChangedEventArgs> changes = new List<PropertyChangedEventArgs>();
+            DesktopModel model = new DesktopModel() { HostName = "narf" };
+            model.PropertyChanged += (sender, e) => changes.Add(e);
+
+            model.IsNew = true;
+
+            using (Mock.RdpConnectionFactory connectionFactory = new Mock.RdpConnectionFactory())
+            using (Mock.RenderingPanel renderingPanel = new Mock.RenderingPanel())
+            using (Mock.RdpEvents events = new Mock.RdpEvents())
+            using (Mock.RdpConnection connection = new Mock.RdpConnection(events))
+            {
+                connectionFactory.Expect("CreateDesktop", new object[] { string.Empty }, connection);
+
+                connection.Expect("SetStringProperty", new List<object>() { "Full Address", "narf" }, 0);
+                connection.Expect("SetBoolProperty", new List<object>() { "Administrative Session", default(bool) }, 0);
+                connection.Expect("SetIntProperty", new List<object>() { "AudioMode", (int)default(AudioMode) }, 0);
+
+                Assert.AreSame(connection, model.CreateConnection(connectionFactory, renderingPanel));
+                Assert.IsFalse(model.IsNew);
+            }
         }
     }
 }

@@ -255,7 +255,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _nav.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
+            _nav.Expect("PushAccessoryView", new List<object> { "AddOrEditUserView", null, null }, null);
 
             _addOrEditDesktopViewModel.AddUser.Execute(null);
         }
@@ -292,7 +292,7 @@
             EditDesktopViewModelArgs args = new EditDesktopViewModelArgs(_desktop);
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
-            _nav.Expect("PushAccessoryView", new List<object> { "AddUserView", null, null }, null);
+            _nav.Expect("PushAccessoryView", new List<object> { "AddOrEditUserView", null, null }, null);
 
             _addOrEditDesktopViewModel.EditUser.Execute(null);
         }

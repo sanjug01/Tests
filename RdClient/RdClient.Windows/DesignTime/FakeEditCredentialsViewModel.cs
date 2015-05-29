@@ -1,9 +1,8 @@
 ﻿namespace RdClient.DesignTime
 {
     using RdClient.Shared.ViewModels;
-    using System.Windows.Input;
-    using RdClient.Shared.Navigation;
     using System;
+    using System.Windows.Input;
 
     sealed class FakeEditCredentialsViewModel : ViewModelBase, IEditCredentialsViewModel
     {
@@ -13,13 +12,14 @@
         private readonly RelayCommand _cancelConfirmation;
 
         private string _resourceName;
-        private string _prompt;
+        private CredentialPromptMode _promptMode;
         private bool _saveCredentials;
         private bool _canSaveCredentials;
         private bool _canRevealPassword;
         private string _userName;
         private string _password;
         private bool _canDismiss;
+        private bool _showPrompt;
         private EditCredentialsConfirmation _confirmationMessage;
 
         public ICommand Cancel
@@ -48,10 +48,10 @@
             set { this.SetProperty(ref _resourceName, value); }
         }
 
-        public string Prompt
+        public CredentialPromptMode PromptMode
         {
-            get { return _prompt; }
-            set { this.SetProperty(ref _prompt, value); }
+            get { return _promptMode; }
+            set { this.SetProperty(ref _promptMode, value); }
         }
 
         public bool SaveCredentials
@@ -70,6 +70,12 @@
         {
             get { return _canRevealPassword; }
             set { this.SetProperty(ref _canRevealPassword, value); }
+        }
+
+        public bool ShowPrompt
+        {
+            get { return _showPrompt; }
+            set { this.SetProperty(ref _showPrompt, value); }
         }
 
         public string UserName
@@ -121,7 +127,8 @@
             _canRevealPassword = true;
             _canSaveCredentials = true;
             _resourceName = "d:Resource Name";
-            _prompt = "d:Prompt";
+            _promptMode = CredentialPromptMode.InvalidCredentials;
+            _showPrompt = true;
         }
 
         protected override void OnPresenting(object activationParameter)
