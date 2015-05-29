@@ -395,7 +395,7 @@
         }
 
         [TestMethod]
-        public void AddGateway_AddUser_AddsAndSelectsUser()
+        public void AddGateway_AddUser_ShowsAddOrEditUserViewAndSelectsUser()
         {
             IPresentationCompletion completion = null;
             using (Mock.NavigationService navigation = new Mock.NavigationService())
@@ -406,34 +406,27 @@
 
                 _addOrEditGatewayVM.PresentableView = view;
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
-                int cntUsers = _addOrEditGatewayVM.Users.Count;
 
                 navigation.Expect("PushAccessoryView", p =>
                 {
                     Assert.AreEqual("AddOrEditUserView", p[0] as string);
-                    Assert.IsTrue(p[1] is AddOrEditUserViewArgs);
+                    var addUserArgs = p[1] as AddOrEditUserViewArgs;
+                    Assert.AreEqual(CredentialPromptMode.EnterCredentials, addUserArgs.Mode);
                     completion = p[2] as IPresentationCompletion;
                     Assert.IsNotNull(completion);
                     return null;
                 });
-
-                // add user
                 _addOrEditGatewayVM.AddUser.Execute(null);
 
-                CredentialsModel creds =  _testData.NewValidCredential().Model;
+                //add user and call completion
+                CredentialsModel credModel =  _testData.NewValidCredential().Model;
+                Guid credId = _dataModel.Credentials.AddNewModel(credModel);
+                IModelContainer<CredentialsModel> creds = TemporaryModelContainer<CredentialsModel>.WrapModel(credId, credModel);
                 var promptResult = CredentialPromptResult.CreateWithCredentials(creds, true);
                 completion.Completed(null, promptResult);
 
-                // a new user should have been added
-                int newCntUsers = _addOrEditGatewayVM.Users.Count;
-                Assert.AreEqual(1, _dataModel.Credentials.Models.Count);
-                Assert.AreEqual(cntUsers + 1, newCntUsers);
-
-                IModelContainer<CredentialsModel> savedCredentials = _dataModel.Credentials.Models[0];            
-                Assert.AreEqual(creds, savedCredentials.Model);
-
                 // verify the new credentials are selected
-                Assert.AreEqual(creds, _addOrEditGatewayVM.SelectedUser.Credentials.Model);
+                Assert.AreEqual(creds.Model, _addOrEditGatewayVM.SelectedUser.Credentials.Model);
             }
         }
 

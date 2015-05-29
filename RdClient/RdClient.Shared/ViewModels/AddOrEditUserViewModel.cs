@@ -79,6 +79,8 @@
         public static AddOrEditUserViewArgs AddUser()
         {
             var creds = TemporaryModelContainer<CredentialsModel>.WrapModel<CredentialsModel>(Guid.Empty, new CredentialsModel());
+            creds.Model.Username = "";
+            creds.Model.Password = "";
             return new AddOrEditUserViewArgs(
                 credentials: creds,
                 mode: CredentialPromptMode.EnterCredentials,
@@ -230,7 +232,7 @@
             {
                 _creds.Model.Username = this.User.Value;
                 _creds.Model.Password = this.Password;
-                if (this.StoreCredentials)
+                if (this.StoreCredentials && !this.ApplicationDataModel.Credentials.HasModel(_creds.Id))
                 {
                     Guid id = this.ApplicationDataModel.Credentials.AddNewModel(_creds.Model);
                     _creds = TemporaryModelContainer<CredentialsModel>.WrapModel(id, _creds.Model);

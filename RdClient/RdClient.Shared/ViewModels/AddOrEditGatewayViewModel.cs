@@ -268,8 +268,7 @@
         private void CredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
         {
             CredentialPromptResult result = args.Result as CredentialPromptResult;
-
-            if (result != null && !result.UserCancelled)
+            if (result != null && result.Saved)
             {
                 this.SelectUserId(result.Credentials.Id);
             }
