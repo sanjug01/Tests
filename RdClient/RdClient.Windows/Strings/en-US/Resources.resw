@@ -945,4 +945,8 @@
     <value>Add account</value>
     <comment>Text shown on button that adds a new user account</comment>
   </data>
+  <data name="UsernameValidationFailure_Duplicate_String" xml:space="preserve">
+    <value>(r) That account already exists, you cannot overwrite it</value>
+    <comment>Text shown when the user attempts to add an account with a username that matches an already saved account</comment>
+  </data>
 </root>
