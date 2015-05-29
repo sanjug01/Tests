@@ -41,12 +41,12 @@ namespace RdClient.Shared.Input.Pointer
 
             if (pointerEvent.Action == PointerEventAction.Tapped && ((ITapEvent)pointerEvent).Type == TapEventType.Tap)
             {
-                _control.LeftClick(_pointerPosition.SessionPosition);
+                _control.LeftClick(_pointerPosition.ViewportPosition);
             }
             else if (pointerEvent.Action == PointerEventAction.Tapped && ((ITapEvent)pointerEvent).Type == TapEventType.DoubleTap)
             {
-                _control.LeftClick(_pointerPosition.SessionPosition);
-                _control.LeftClick(_pointerPosition.SessionPosition);            
+                _control.LeftClick(_pointerPosition.ViewportPosition);
+                _control.LeftClick(_pointerPosition.ViewportPosition);            
             }
             else
             {
