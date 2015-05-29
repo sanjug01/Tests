@@ -26,8 +26,8 @@
         public static AddOrEditUserViewArgs AddUser()
         {
             var creds = TemporaryModelContainer<CredentialsModel>.WrapModel<CredentialsModel>(Guid.Empty, new CredentialsModel());
-            creds.Model.Username = "";
-            creds.Model.Password = "";
+            creds.Model.Username = string.Empty;
+            creds.Model.Password = string.Empty;
             return new AddOrEditUserViewArgs(
                 credentials: creds,
                 mode: CredentialPromptMode.EnterCredentials,

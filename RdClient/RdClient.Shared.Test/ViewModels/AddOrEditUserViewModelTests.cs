@@ -177,6 +177,13 @@
         }
 
         [TestMethod]
+        public void OkCommandTrimsLeadingAndTrailingWhitespaceAndThenValidates()
+        {
+            _vm.User.Value = "   " + DuplicateUsername() + "        ";
+            _vm.DefaultAction.Execute(null);
+        }
+
+        [TestMethod]
         public void OkShouldCallCompletionHandlerAndSaveToDatamodel()
         {
             _args = AddOrEditUserViewArgs.AddUser();
