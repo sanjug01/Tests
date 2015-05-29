@@ -1,9 +1,11 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Data;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.ValidationRules;
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
@@ -17,9 +19,23 @@
 
     public sealed class CredentialPromptResult
     {
-        public static CredentialPromptResult CreateWithCredentials(CredentialsModel credentials, bool save)
+        private CredentialPromptResult()
         {
-            return new CredentialPromptResult(credentials, save);
+            this.UserCancelled = true;
+            this.Deleted = false;
+        }
+
+        private CredentialPromptResult(IModelContainer<CredentialsModel> credentials, bool saved)
+        {
+            this.Credentials = credentials;
+            this.Saved = saved;
+            this.UserCancelled = false;
+            this.Deleted = false;
+        }
+
+        public static CredentialPromptResult CreateWithCredentials(IModelContainer<CredentialsModel> credentials, bool saved)
+        {
+            return new CredentialPromptResult(credentials, saved);
         }
 
         public static CredentialPromptResult CreateCancelled()
@@ -32,23 +48,9 @@
             return new CredentialPromptResult() { Deleted = true };
         }
 
-        private CredentialPromptResult()
-        {
-            this.UserCancelled = true;
-            this.Deleted = false;
-        }
+        public IModelContainer<CredentialsModel> Credentials { get; private set; }
 
-        private CredentialPromptResult(CredentialsModel credentials, bool save)
-        {
-            this.Credentials = credentials;
-            this.Save = save;
-            this.UserCancelled = false;
-            this.Deleted = false;
-        }
-
-        public CredentialsModel Credentials { get; private set; }
-
-        public bool Save { get; private set; }
+        public bool Saved { get; private set; }
 
         public bool UserCancelled { get; private set; }
 
@@ -58,35 +60,73 @@
     public class AddOrEditUserViewArgs
     {
         private readonly CredentialPromptMode _mode;
-        private readonly CredentialsModel _credentials;
+        private readonly IModelContainer<CredentialsModel> _credentials;
         private readonly bool _showSave;
+        private readonly bool _save;
+        private readonly bool _canDelete;
+        private readonly bool _showMessage;
 
-        public AddOrEditUserViewArgs(CredentialsModel credentials, bool showSave, CredentialPromptMode mode = CredentialPromptMode.EnterCredentials)
+        private AddOrEditUserViewArgs(IModelContainer<CredentialsModel> credentials, CredentialPromptMode mode, bool save, bool showSave, bool canDelete, bool showMessage)
         {
             _credentials = credentials;
             _showSave = showSave;
+            _save = save;
             _mode = mode;
+            _canDelete = canDelete;
+            _showMessage = showMessage;
+        }
+
+        public static AddOrEditUserViewArgs AddUser()
+        {
+            var creds = TemporaryModelContainer<CredentialsModel>.WrapModel<CredentialsModel>(Guid.Empty, new CredentialsModel());
+            return new AddOrEditUserViewArgs(
+                credentials: creds,
+                mode: CredentialPromptMode.EnterCredentials,
+                save: true,
+                showSave: false,
+                canDelete: false,
+                showMessage: false);                
+        }
+
+        public static AddOrEditUserViewArgs EditUser(IModelContainer<CredentialsModel> creds)
+        {
+            return new AddOrEditUserViewArgs(
+                credentials: creds,
+                save: false,
+                showSave: false,
+                canDelete: true,
+                showMessage: false,
+                mode: CredentialPromptMode.EditCredentials);
         }
 
         public bool ShowSave { get { return _showSave; } }
 
-        public CredentialsModel Credentials { get { return _credentials; } }
+        public bool Save { get { return _save; } }
+
+        public bool CanDelete { get { return _canDelete; } }
+
+        public bool ShowMessage { get { return _showMessage; } }
+
+        public IModelContainer<CredentialsModel> Credentials { get { return _credentials; } }
 
         public CredentialPromptMode Mode { get { return _mode; } }
     }
 
     public class AddOrEditUserViewModel : ViewModelBase, IDialogViewModel
     {
-        private AddOrEditUserViewArgs _args;
-        private bool _storeCredentials;
-        private IValidatedProperty<string> _user;
-        private string _password;
         private readonly RelayCommand _okCommand;
         private readonly RelayCommand _cancelCommand;
         private readonly RelayCommand _deleteCommand;
+
         private CredentialPromptMode _mode;
+        private bool _showSave;
+        private bool _storeCredentials;
         private bool _showMessage;
         private bool _canDelete;
+        private IValidatedProperty<string> _user;
+        private string _password;
+        private IModelContainer<CredentialsModel> _creds;
+
 
         public AddOrEditUserViewModel()
         {
@@ -94,10 +134,6 @@
             _cancelCommand = new RelayCommand(new Action<object>(CancelCommandHandler));
             _deleteCommand = new RelayCommand(new Action<object>(DeleteCommandHandler), p => this.CanDelete );
         }
-
-        public IPresentableView PresentableView { private get; set; }
-
-        public bool ShowSave { get; private set; }
 
         public ICommand DefaultAction { get { return _okCommand; } }
 
@@ -108,16 +144,13 @@
         public CredentialPromptMode Mode
         {
             get { return _mode; }
-            private set
-            {
-                if (SetProperty(ref _mode, value))
-                {
-                    this.ShowMessage = this.Mode == CredentialPromptMode.InvalidCredentials
-                                        || this.Mode == CredentialPromptMode.FreshCredentialsNeeded;
-                    // Delete only makes sense if editing existing credentials
-                    this.CanDelete = this.Mode == CredentialPromptMode.EditCredentials;
-                }
-            }
+            private set { SetProperty(ref _mode, value); }
+        }
+
+        public bool ShowSave
+        {
+            get { return _showSave; }
+            private set { SetProperty(ref _showSave, value); }
         }
 
         public bool ShowMessage
@@ -156,17 +189,28 @@
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Assert(activationParameter is AddOrEditUserViewArgs);
+            var args = activationParameter as AddOrEditUserViewArgs;
 
-            _args = activationParameter as AddOrEditUserViewArgs;
+            
 
-            var usernameRule = new UsernameFormatValidationRule();
-
-            this.Mode = _args.Mode;
-            this.ShowSave = _args.ShowSave;
-            this.User = new ValidatedProperty<string>(usernameRule);
-            this.User.Value = _args.Credentials.Username;
-            this.Password = _args.Credentials.Password;            
-
+            this.Mode = args.Mode;
+            this.ShowMessage = args.ShowMessage;
+            this.ShowSave = args.ShowSave;
+            this.StoreCredentials = args.Save;
+            
+            this.ShowMessage = args.ShowMessage;
+            this.CanDelete = args.CanDelete;
+            _creds = args.Credentials;
+            
+            var usernameRules = new List<IValidationRule<string>>();
+            usernameRules.Add(new UsernameFormatValidationRule());
+            usernameRules.Add(
+                new NotDuplicateValidationRule<CredentialsModel>(
+                    this.ApplicationDataModel.Credentials,
+                    _creds.Id,
+                    new CredentialsEqualityComparer(),
+                    UsernameValidationFailure.Duplicate));
+            this.User = new ValidatedProperty<string>(new CompositeValidationRule<string>(usernameRules));
             this.User.PropertyChanged += (s, e) =>
             {
                 if (s == _user && e.PropertyName == "State")
@@ -174,6 +218,8 @@
                     _okCommand.EmitCanExecuteChanged();
                 }
             };
+            this.User.Value = args.Credentials.Model.Username;
+            this.Password = _creds.Model.Password;
         }
 
         private bool OkCommandIsEnabled()
@@ -185,9 +231,14 @@
         {
             if (this.User.State.Status == ValidationResultStatus.Valid)
             {
-                _args.Credentials.Username = this.User.Value;
-                _args.Credentials.Password = this.Password;
-                DismissModal(CredentialPromptResult.CreateWithCredentials(_args.Credentials, this.StoreCredentials));
+                _creds.Model.Username = this.User.Value;
+                _creds.Model.Password = this.Password;
+                if (this.StoreCredentials)
+                {
+                    Guid id = this.ApplicationDataModel.Credentials.AddNewModel(_creds.Model);
+                    _creds = TemporaryModelContainer<CredentialsModel>.WrapModel(id, _creds.Model);
+                }
+                DismissModal(CredentialPromptResult.CreateWithCredentials(_creds, this.StoreCredentials));
             }
         }
 
@@ -198,8 +249,11 @@
 
         private void DeleteCommandHandler(object o)
         {
-            // parent view should present the confirmation dialog and perform deletion
-            DismissModal(CredentialPromptResult.CreateDeleted());
+            if (this.CanDelete)
+            {
+                ApplicationDataModel.Credentials.RemoveModel(_creds.Id);
+                DismissModal(CredentialPromptResult.CreateDeleted());
+            }            
         }
     }
 }
