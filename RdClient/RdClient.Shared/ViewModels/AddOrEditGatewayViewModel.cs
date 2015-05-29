@@ -260,7 +260,7 @@
 
         private void LaunchAddUserView(object o)
         {
-            AddOrEditUserViewArgs args = new AddOrEditUserViewArgs(new CredentialsModel(), false);
+            AddOrEditUserViewArgs args = AddOrEditUserViewArgs.AddUser();
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
             NavigationService.PushAccessoryView("AddOrEditUserView", args, addUserCompleted);
         }
@@ -268,11 +268,9 @@
         private void CredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
         {
             CredentialPromptResult result = args.Result as CredentialPromptResult;
-
-            if (result != null && !result.UserCancelled)
+            if (result != null && result.Saved)
             {
-                Guid credId = this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
-                this.SelectUserId(credId);
+                this.SelectUserId(result.Credentials.Id);
             }
         }
 
