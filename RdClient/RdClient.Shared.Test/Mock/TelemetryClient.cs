@@ -8,14 +8,19 @@ namespace RdClient.Shared.Test.Mock
     {
         public bool IsActive { get; set; }
 
-        public void Event(string eventName)
+        void ITelemetryClient.Event(string eventName)
         {
             Invoke(new object[] { eventName });
         }
 
-        public ITelemetryStopwatch StartStopwatch()
+        void ITelemetryClient.Metric(string metricName, double metricValue)
         {
-            return (ITelemetryStopwatch) Invoke(new object[] { });
+            Invoke(new object[] { metricName, metricValue });
+        }
+
+        ITelemetryStopwatch ITelemetryClient.StartStopwatch()
+        {
+            return (ITelemetryStopwatch)Invoke(new object[] { });
         }
     }
 }

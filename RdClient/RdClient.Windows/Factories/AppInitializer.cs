@@ -66,10 +66,9 @@
             // All the resources for the workspaces are cached internally by RadcClient. Here we load them into our workspaces
             //
             RadcClient radcClient = new RadcClient(new RadcEventSource(), new TaskExecutor());
-            radcClient.StartGetCachedFeeds(); 
+            radcClient.StartGetCachedFeeds();
 
-            _navigationService = this.CreateNavigationService();
-
+            _navigationService = this.CreateNavigationService(this.TelemetryClient);
             _navigationService.Presenter = this.ViewPresenter;
             //
             // Inject and enable telemetry if necessary.
@@ -82,6 +81,12 @@
                 // Create a session factory that uses the injected telemetry client.
                 //
                 sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution, timerFactory, this.TelemetryClient);
+                //
+                // Report data model statistics telemetry
+                //
+                this.TelemetryClient.Metric("localDesktopCount", appDataModel.LocalWorkspace.Connections.Models.Count);
+                this.TelemetryClient.Metric("credentialsCount", appDataModel.Credentials.Models.Count);
+                this.TelemetryClient.Metric("gatewaysCount", appDataModel.Gateways.Models.Count);
             }
             else
             {
@@ -91,7 +96,6 @@
                 //
                 sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution, timerFactory, new DummyTelemetryClient());
             }
-
             Contract.Assert(null != sessionFactory);
 
             _navigationService.Extensions.Add(this.CreateDataModelExtension(appDataModel));
@@ -112,9 +116,9 @@
             _navigationService.NavigateToView(this.LandingPage, null);
         }
 
-        public INavigationService CreateNavigationService()
+        public INavigationService CreateNavigationService(ITelemetryClient telemetryClient)
         {
-            return _navigationServiceFactory.CreateNavigationService();
+            return _navigationServiceFactory.CreateNavigationService(telemetryClient);
         }
 
         public INavigationExtension CreateDataModelExtension(ApplicationDataModel appDataModel)

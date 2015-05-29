@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.Telemetry;
     using System.Diagnostics.Contracts;
 
     partial class RemoteSession
@@ -8,12 +9,14 @@
         private sealed class ReconnectingSession : InternalState
         {
             private readonly IRdpConnection _connection;
+            private ITelemetryStopwatch _reconnectTime;
             private RemoteSession _session;
             private bool _cancelled;
 
             public override void Activate(RemoteSession session)
             {
                 Contract.Assert(null == _session);
+                Contract.Assert(null == _reconnectTime);
 
                 using (LockWrite())
                 {
@@ -25,11 +28,14 @@
                     _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                     _session.DeferEmitInterrupted(this.Cancel);
                 }
+
+                _reconnectTime = this.TelemetryClient.StartStopwatch();
             }
 
             public override void Complete(RemoteSession session)
             {
                 Contract.Assert(object.ReferenceEquals(_session, session));
+                Contract.Assert(null == _reconnectTime);
 
                 using (LockWrite())
                 {
@@ -82,6 +88,8 @@
                 {
                     if ((int)RdClientCx.ConnectionHealthState.Connected == e.ConnectionState)
                     {
+                        _reconnectTime.Stop("ReconnectedTime");
+                        _reconnectTime = null;
                         // same as reconnecting complete
                         _session.InternalSetState(new ConnectedSession(_connection, this));
                     }
@@ -90,6 +98,8 @@
 
             private void OnClientAutoReconnectComplete(object sender, ClientAutoReconnectCompleteArgs e)
             {
+                _reconnectTime.Stop("ReconnectedTime");
+                _reconnectTime = null;
                 _session.InternalSetState(new ConnectedSession(_connection, this));
             }
 
@@ -100,6 +110,7 @@
 
             private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
             {
+                _reconnectTime = null;
                 //
                 // Set the session state to Failed
                 //
@@ -110,6 +121,9 @@
             {
                 using (LockWrite())
                 {
+                    _reconnectTime.Stop("ReconnectCancellationTime");
+                    _reconnectTime = null;
+                    this.TelemetryClient.Event("ReconnectCancelled");
                     _cancelled = true;
                     _connection.Disconnect();
                 }
