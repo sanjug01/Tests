@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.Telemetry;
 using RdClient.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace RdClient.Shared.Navigation
 
     public class NavigationService : INavigationService
     {
+        private readonly ITelemetryClient _telemetryClient;
         private readonly List<PresentedStackedView> _modalStack;
         private readonly List<PresentedStackedView> _accessoryStack;
         private NavigationExtensionList _extensions;
@@ -26,11 +28,12 @@ namespace RdClient.Shared.Navigation
         private readonly ICommand _backCommand;
         private readonly ICommand _dismissAccessoryViewsCommand;
 
-        public NavigationService()
+        public NavigationService(ITelemetryClient telemetryClient = null)
         {
             Contract.Ensures(null != _modalStack);
             Contract.Ensures(null != _accessoryStack);
 
+            _telemetryClient = telemetryClient;
             _modalStack = new List<PresentedStackedView>();
             _accessoryStack = new List<PresentedStackedView>();
             _dismissAccessoryViewsCommand = new RelayCommand(o => DismissAccessoryViewsCommandExecute());
@@ -79,6 +82,8 @@ namespace RdClient.Shared.Navigation
 
         public virtual void NavigateToView(string viewName, object activationParameter)
         {
+            TelemetryEvent(string.Format("NavigateToView:{0}", viewName));
+
             IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
 
             if (view == null)
@@ -104,6 +109,8 @@ namespace RdClient.Shared.Navigation
 
         public virtual void PushModalView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
+            TelemetryEvent(string.Format("PushModalView:{0}", viewName));
+
             Contract.Requires(viewName != null);
 
             IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
@@ -127,7 +134,7 @@ namespace RdClient.Shared.Navigation
                 _modalStack[_modalStack.Count - 1].View.CastAndCall<IStackedView>(sv => sv.Deactivate());
             }
 
-            PresentedStackedView presentedView = new PresentedModalView(this, view, presentationCompletion);
+            PresentedStackedView presentedView = new PresentedModalView(this, view, presentationCompletion, _telemetryClient);
             _modalStack.Add(presentedView);
             CallPresenting(view, activationParameter, presentedView);
 
@@ -150,6 +157,8 @@ namespace RdClient.Shared.Navigation
 
         void INavigationService.PushAccessoryView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
+            TelemetryEvent(string.Format("PushAccessoryView:{0}", viewName));
+
             IStackedViewPresenter accessoryPresenter = _currentView as IStackedViewPresenter;
 
             if(null == accessoryPresenter)
@@ -180,7 +189,7 @@ namespace RdClient.Shared.Navigation
                     _accessoryStack[_accessoryStack.Count - 1].View.CastAndCall<IStackedView>(sv => sv.Deactivate());
                 }
 
-                PresentedStackedView presentedView = new PresentedAccessoryView(this, view, presentationCompletion);
+                PresentedStackedView presentedView = new PresentedAccessoryView(this, view, presentationCompletion, _telemetryClient);
                 _accessoryStack.Add(presentedView);
                 CallPresenting(view, activationParameter, presentedView);
 
@@ -297,6 +306,8 @@ namespace RdClient.Shared.Navigation
             {
                 if (_modalStack.Count != 0)
                 {
+                    TelemetryEvent("NavigateBack:ModalView");
+
                     IPresentableView topModalView = _modalStack[_modalStack.Count - 1].View;
 
                     topModalView.ViewModel.NavigatingBack(args);
@@ -308,6 +319,8 @@ namespace RdClient.Shared.Navigation
                 }
                 else if (_accessoryStack.Count != 0)
                 {
+                    TelemetryEvent("NavigateBack:AccessoryView");
+
                     IPresentableView topAccessoryView = _accessoryStack[_accessoryStack.Count - 1].View;
 
                     topAccessoryView.ViewModel.NavigatingBack(args);
@@ -323,6 +336,7 @@ namespace RdClient.Shared.Navigation
                 }
                 else
                 {
+                    TelemetryEvent("NavigateBack:PresentedView");
                     _currentView.ViewModel.NavigatingBack(args);
                 }
             }
@@ -392,16 +406,24 @@ namespace RdClient.Shared.Navigation
             this.DismissAllAccessoryViews();
         }
 
+        private void TelemetryEvent(string eventName)
+        {
+            if (null != _telemetryClient)
+                _telemetryClient.Event(eventName);
+        }
+
         private abstract class PresentedStackedView : IStackedPresentationContext
         {
             private readonly INavigationService _navigationService;
             private readonly IPresentableView _view;
             private readonly IPresentationCompletion _completion;
+            private readonly ITelemetryStopwatch _presentationDuration;
             private object _result;
 
             public IPresentableView View { get { return _view; } }
 
-            protected PresentedStackedView(INavigationService navigationService, IPresentableView view, IPresentationCompletion completion)
+            protected PresentedStackedView(INavigationService navigationService, IPresentableView view, IPresentationCompletion completion,
+                ITelemetryClient telemetryClient)
             {
                 Contract.Requires(null != navigationService);
                 Contract.Requires(null != view);
@@ -410,7 +432,9 @@ namespace RdClient.Shared.Navigation
                 _navigationService = navigationService;
                 _view = view;
                 _completion = completion;
-            }
+                if (null != telemetryClient)
+                    _presentationDuration = telemetryClient.StartStopwatch();
+           }
 
             public bool HasView(IPresentableView view)
             {
@@ -419,6 +443,9 @@ namespace RdClient.Shared.Navigation
 
             public void ReportCompletion()
             {
+                if(null != _presentationDuration)
+                    _presentationDuration.Stop(string.Format("StackedViewPresentationTime:{0}", _view.GetType().Name));
+
                 if (null != _completion)
                     _completion.Completed(_view, _result);
             }
@@ -434,8 +461,9 @@ namespace RdClient.Shared.Navigation
 
         private sealed class PresentedModalView : PresentedStackedView
         {
-            public PresentedModalView(INavigationService navigationService, IPresentableView view, IPresentationCompletion completion)
-                : base(navigationService, view, completion)
+            public PresentedModalView(INavigationService navigationService, IPresentableView view, IPresentationCompletion completion,
+                ITelemetryClient telemetryClient)
+                : base(navigationService, view, completion, telemetryClient)
             {
             }
 
@@ -447,8 +475,9 @@ namespace RdClient.Shared.Navigation
 
         private sealed class PresentedAccessoryView : PresentedStackedView
         {
-            public PresentedAccessoryView(INavigationService navigationService, IPresentableView view, IPresentationCompletion completion)
-                : base(navigationService, view, completion)
+            public PresentedAccessoryView(INavigationService navigationService, IPresentableView view, IPresentationCompletion completion,
+                ITelemetryClient telemetryClient)
+                : base(navigationService, view, completion, telemetryClient)
             {
             }
 

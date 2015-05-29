@@ -4,6 +4,8 @@
     using RdClient.Shared.Models.Viewport;
     using System;
     using Windows.Foundation;
+    using Windows.UI.Xaml;
+
 
     /// <summary>
     /// Dummy interface that hides a rendering panel (SwapChainPanel) from the session infrastructure code.
@@ -28,5 +30,7 @@
 
         void ChangeMouseCursorShape(MouseCursorShape shape);
         void MoveMouseCursor(Point point);
+        void ChangeMouseVisibility(Visibility visibility);
+
     }
 }

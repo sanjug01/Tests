@@ -30,7 +30,7 @@ namespace RdClient.Shared.Input.Pointer
             PointerEventDispatcher dispatcher = new PointerEventDispatcher(timerFactory, sessionControl, pointerPosition, deferrer);
             _consumer = dispatcher;
             _consumptionMode = new ConsumptionModeTracker() { ConsumptionMode = ConsumptionModeType.Pointer };
-            _consumptionMode.ConsumptionModeChanged += (s, o) => dispatcher.ConsumptionMode = o;
+            _consumptionMode.ConsumptionModeChanged += (s, o) => dispatcher.SetConsumptionMode(o);
         }
 
         void IPointerCapture.OnPointerChanged(object sender, IPointerEventBase e)

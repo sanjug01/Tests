@@ -73,11 +73,11 @@ namespace RdClient.Shared.Models.Viewport
         {
             Point result = new Point(point.X, point.Y);
 
-            result.X *= 1.0 / _transform.ScaleX;
-            result.Y *= 1.0 / _transform.ScaleY;
             result.X -= _transform.TranslateX;
             result.Y -= _transform.TranslateY;
-
+            result.X *= 1.0 / _transform.ScaleX;
+            result.Y *= 1.0 / _transform.ScaleY;
+            
             return result;
         }
     }
