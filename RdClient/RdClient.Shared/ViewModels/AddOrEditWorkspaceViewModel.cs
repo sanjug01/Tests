@@ -168,9 +168,9 @@
 
         private void LaunchAddUserView(object o)
         {
-            AddUserViewArgs args = new AddUserViewArgs(new CredentialsModel(), false);
+            AddOrEditUserViewArgs args = AddOrEditUserViewArgs.AddUser();
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
-            NavigationService.PushAccessoryView("AddUserView", args, addUserCompleted);
+            NavigationService.PushAccessoryView("AddOrEditUserView", args, addUserCompleted);
         }
 
         private void CredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
@@ -179,8 +179,7 @@
 
             if (result != null && !result.UserCancelled)
             {
-                this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
-                this.SelectedUser = GetComboBoxItem(result.Credentials);
+                this.SelectedUser = GetComboBoxItem(result.Credentials.Model);
             }
             else
             {

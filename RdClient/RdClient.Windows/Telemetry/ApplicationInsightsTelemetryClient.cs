@@ -1,31 +1,33 @@
 ﻿namespace RdClient.Telemetry
 {
     using RdClient.Shared.Telemetry;
-    using System;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
 
     sealed class ApplicationInsightsTelemetryClient : ITelemetryClient
     {
         private readonly ApplicationInsightsTelemetryCore _core;
 
-        private sealed class Stopwatch : ITelemetryStopwatch
+        private sealed class TelemetryStopwatch : ITelemetryStopwatch
         {
-            private readonly DateTime _startTime;
+            private readonly Stopwatch _stopwatch;
             private ApplicationInsightsTelemetryCore _core;
 
-            public Stopwatch(ApplicationInsightsTelemetryCore core)
+            public TelemetryStopwatch(ApplicationInsightsTelemetryCore core)
             {
                 Contract.Requires(null != core);
                 Contract.Ensures(null != _core);
-                _startTime = DateTime.UtcNow;
                 _core = core;
+                _stopwatch = new Stopwatch();
+                _stopwatch.Start();
             }
 
             void ITelemetryStopwatch.Stop(string eventName)
             {
                 if (null != _core)
                 {
-                    _core.Duration(eventName, DateTime.UtcNow - _startTime);
+                    _stopwatch.Stop();
+                    _core.Duration(eventName, _stopwatch.ElapsedMilliseconds);
                     _core = null;
                 }
             }
@@ -65,9 +67,14 @@
             _core.Event(eventName);
         }
 
+        void ITelemetryClient.Metric(string metricName, double metricValue)
+        {
+            _core.Metric(metricName, metricValue);
+        }
+
         ITelemetryStopwatch ITelemetryClient.StartStopwatch()
         {
-            return new Stopwatch(_core);
+            return new TelemetryStopwatch(_core);
         }
     }
 }

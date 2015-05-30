@@ -137,30 +137,31 @@
         }
 
         [TestMethod]
-        public void AddUserShowsAddUserViewAddsUserToDatamodelAndUpdatesUsers()
+        public void AddUserShowsAddUserViewAndUpdatesUsers()
         {
             IPresentationCompletion completion = null;
 
             _navService.Expect("PushAccessoryView", p =>
             {
-                Assert.AreEqual("AddUserView", p[0] as string);
-                var args = p[1] as AddUserViewArgs;
+                Assert.AreEqual("AddOrEditUserView", p[0] as string);
+                var args = p[1] as AddOrEditUserViewArgs;
                 Assert.AreEqual(CredentialPromptMode.EnterCredentials, args.Mode);
-                Assert.AreEqual("", args.Credentials.Username);
-                Assert.AreEqual("", args.Credentials.Password);
-                Assert.IsFalse(args.ShowSave);
                 completion = p[2] as IPresentationCompletion;
-                Assert.IsNotNull(completion);
                 return null;
             });
 
             _vm.AddUser.Execute(null);
 
-            var newCreds = _testData.NewValidCredential().Model;
-            var promptResult = CredentialPromptResult.CreateWithCredentials(newCreds, true);
-            completion.Completed(null, promptResult);
-            //creds were added
-            Assert.IsTrue(_dataModel.Credentials.Models.Any(c => c.Model == newCreds));
+            //simulate add user by AddOrEditUserView
+            CredentialsModel credModel = _testData.NewValidCredential().Model;
+            Guid credId = _dataModel.Credentials.AddNewModel(credModel);
+            if (completion != null)//don't need this now, but may in the future
+            {
+                IModelContainer<CredentialsModel> newCreds = TemporaryModelContainer<CredentialsModel>.WrapModel(credId, credModel);
+                var promptResult = CredentialPromptResult.CreateWithCredentials(newCreds, true);
+                completion.Completed(null, promptResult);
+            }
+
             //users were updated
             AssertUserOptionsCorrect();
             Assert.IsNull(_vm.SelectedUser);
@@ -189,45 +190,34 @@
 
             _navService.Expect("PushAccessoryView", p =>
             {
-                Assert.AreEqual("AddUserView", p[0] as string);
-                var args = p[1] as AddUserViewArgs;
+                Assert.AreEqual("AddOrEditUserView", p[0] as string);
+                var args = p[1] as AddOrEditUserViewArgs;
                 Assert.AreEqual(CredentialPromptMode.EditCredentials, args.Mode);
-                Assert.AreEqual(_vm.SelectedUser.Credentials.Model, args.Credentials);
+                Assert.AreEqual(_vm.SelectedUser.Credentials.Model, args.Credentials.Model);
                 Assert.IsFalse(args.ShowSave);
                 completion = p[2] as IPresentationCompletion;
-                Assert.IsNotNull(completion);
                 return null;
             });
             _vm.EditUser.Execute(null);
 
             user.Credentials.Model.Username = _testData.NewRandomString();
-            var promptResult = CredentialPromptResult.CreateWithCredentials(user.Credentials.Model, true);
-            completion.Completed(null, promptResult);
+            if (completion != null) //Not needed any more, but may be used again in the future
+            {
+                var promptResult = CredentialPromptResult.CreateWithCredentials(user.Credentials, true);
+                completion.Completed(null, promptResult);
+            }
+
             AssertUserOptionsCorrect();
             Assert.AreEqual(user, _vm.SelectedUser);
         }
 
         [TestMethod]
-        public void EditUserCommandDeletesUserIfEditUserViewReturnsDeleteResult()
+        public void UsersUpdatedCorrectlyOnDelete()
         {
-            IPresentationCompletion completion = null;
             var user = _vm.Users.First(u => u.UserComboBoxType == UserComboBoxType.Credentials);
             _vm.SelectedUser = user;
-
-            _navService.Expect("PushAccessoryView", p =>
-            {
-                completion = p[2] as IPresentationCompletion;
-                Assert.IsNotNull(completion);
-                return null;
-            });
-            _vm.EditUser.Execute(null);
-
-            user.Credentials.Model.Username = _testData.NewRandomString();
-            var promptResult = CredentialPromptResult.CreateDeleted();
-
-            Assert.IsTrue(_dataModel.Credentials.HasModel(user.Credentials.Id));//user should exist still
-            completion.Completed(null, promptResult);
-            Assert.IsFalse(_dataModel.Credentials.HasModel(user.Credentials.Id));//user should have been deleted in the completion
+            
+            _dataModel.Credentials.RemoveModel(user.Credentials.Id);
 
             AssertUserOptionsCorrect();
             Assert.IsNull(_vm.SelectedUser);
@@ -248,7 +238,7 @@
         }
 
         [TestMethod]
-        public void DeleteUserCommandCallsAddUserViewAndUpdatesUsersWhenComplete()
+        public void DeleteUserCommandCallsDeletesSelectedUserAndUpdatesUsers()
         {
             var user = _vm.Users.First(u => u.UserComboBoxType == UserComboBoxType.Credentials);
             _vm.SelectedUser = user;
@@ -305,7 +295,7 @@
             {
                 Assert.AreEqual("AddOrEditGatewayView", p[0] as string);
                 var args = p[1] as EditGatewayViewModelArgs;
-                Assert.AreEqual(gateway.Gateway.Model, args.Gateway);
+                Assert.AreEqual(gateway.Gateway, args.Gateway);
                 completion = p[2] as IPresentationCompletion;
                 Assert.IsNotNull(completion);
                 return null;

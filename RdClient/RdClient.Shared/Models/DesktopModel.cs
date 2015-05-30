@@ -42,6 +42,9 @@
         [DataMember(Name = "IsTrusted", EmitDefaultValue = false)]
         private bool _isTrusted;
 
+        [DataMember(Name = "IsNew", EmitDefaultValue = false)]
+        private bool _isNew;
+
         public string HostName
         {
             get { return _hostName; }
@@ -130,6 +133,15 @@
             set { this.SetProperty(ref _isTrusted, value); }
         }
 
+        /// <summary>
+        /// Indicator of a new desktop - one that has been added but has not yet been launched.
+        /// </summary>
+        public bool IsNew
+        {
+            get { return _isNew; }
+            set { this.SetProperty(ref _isNew, value); }
+        }
+
         public DesktopModel()
         {
             _credentialsId = Guid.Empty;
@@ -138,10 +150,15 @@
 
         public override IRdpConnection CreateConnection(IRdpConnectionFactory connectionFactory, IRenderingPanel renderingPanel)
         {
-            IRdpConnection connection = connectionFactory.CreateDesktop("");
+            IRdpConnection connection = connectionFactory.CreateDesktop(string.Empty);
             IRdpProperties properties = connection as IRdpProperties;
             Contract.Assert(null != properties);
-            RdpPropertyApplier.ApplyDesktop(properties, this);            
+            RdpPropertyApplier.ApplyDesktop(properties, this);
+            //
+            // Clear the "IsNew" flag when user connects to the remote desktop.
+            //
+            this.IsNew = false;
+
             return connection;
         }
     }

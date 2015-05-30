@@ -24,9 +24,8 @@
         </cv:GatewayComboBoxElementToLocalizedStringConverter>
     </UserControl.Resources>
 
-	<StackPanel Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
-		<ComboBox 
-			Margin="{StaticResource DialogItemVerticalSpacing}"								
+	<Grid Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
+		<ComboBox							
             HorizontalAlignment="Stretch"
             x:Uid="AddOrEditDesktop-Gateways-ComboBox"
             Header="Gateway(d)"
@@ -38,14 +37,15 @@
 				</DataTemplate>
 			</ComboBox.ItemTemplate>
 		</ComboBox>
-		<Grid>
-			<Button 
-				HorizontalAlignment="Right"
-				Style="{StaticResource DialogButtonStyle}" 
-				x:Uid="Common_Button_AddNewItem" 
-				Content="Add New(d)" 
-				Command="{Binding AddGateway}">				
-			</Button>
-		</Grid>
-	</StackPanel>
+		<HyperlinkButton 
+			VerticalAlignment="Top"
+			HorizontalAlignment="Right"				
+			Command="{Binding AddGateway}">
+			<TextBlock
+				x:Uid="GatewaySelector_AddGateway"
+				TextLineBounds="Tight"
+				Text="Add gateway(d)">				
+			</TextBlock>
+		</HyperlinkButton>
+	</Grid>
 </UserControl>

@@ -25,9 +25,8 @@
         </cv:UserComboBoxElementToLocalizedStringConverter>
     </UserControl.Resources>
 
-	<StackPanel Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
-		<ComboBox 
-			Margin="{StaticResource DialogItemVerticalSpacing}"
+	<Grid Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
+		<ComboBox
 			x:Uid="AddOrEditDesktop-Credentials-ComboBox"
             Header="User name(d)"
             HorizontalAlignment="Stretch"
@@ -39,14 +38,15 @@
 				</DataTemplate>
 			</ComboBox.ItemTemplate>
 		</ComboBox>
-		<Grid>
-			<Button 
-				HorizontalAlignment="Right"
-				Style="{StaticResource DialogButtonStyle}" 
-				x:Uid="Common_Button_AddUserAccount" 
-				Content="Add account(d)" 
-				Command="{Binding AddUser}">
-			</Button>
-		</Grid>
-	</StackPanel>
+		<HyperlinkButton 
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Command="{Binding AddUser}">
+			<TextBlock 
+				x:Uid="UserSelecter_AddUser"
+				TextLineBounds="Tight"
+				Text="Add account(d)">				
+			</TextBlock>
+		</HyperlinkButton>
+	</Grid>
 </UserControl>

@@ -44,8 +44,9 @@
                 Command="{Binding ConnectCommand}"
                 FlyoutBase.AttachedFlyout="{StaticResource ModifyConnectionMenuFlyout}"
                 IsRightTapEnabled="True"
-                RightTapped="ThumbnailButton_RightTapped">            
-            <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" Height="164" Width="296">
+                RightTapped="ThumbnailButton_RightTapped">
+            <Grid>
+                <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" Height="164" Width="296">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="42" />
@@ -85,6 +86,15 @@
 					IsChecked="{Binding Path=IsSelected, Mode=TwoWay}"				 
 					Visibility="{Binding SelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">					
 				</CheckBox>
+            </Grid>
+                
+                <!--
+                "New desktop" indicator; the grid provides a container in which some additional indication may be placed.
+                -->
+                <Grid Visibility="{Binding Desktop.IsNew, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Border BorderBrush="{ThemeResource SystemControlHighlightAccentBrush}"
+                            BorderThickness="{ThemeResource ButtonBorderThemeThickness}"/>
+                </Grid>
             </Grid>
         </Button>
     </StackPanel>

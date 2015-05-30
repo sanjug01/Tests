@@ -1,14 +1,15 @@
-﻿using System;
-using Windows.ApplicationModel.Core;
-using Windows.UI.Core;
-
-namespace RdClient.Shared.Navigation
+﻿namespace RdClient.Shared.Navigation
 {
+    using RdClient.Shared.Telemetry;
+    using System;
+    using Windows.ApplicationModel.Core;
+    using Windows.UI.Core;
+
     public class DispatchedNavigationService : NavigationService
     {
         private readonly CoreDispatcher _dispatcher;
 
-        public DispatchedNavigationService()
+        public DispatchedNavigationService(ITelemetryClient telemetryClient) : base(telemetryClient)
         {
             _dispatcher = CoreApplication.MainView.CoreWindow.Dispatcher;
         }

@@ -731,7 +731,7 @@
     <comment>Verb. Text shown on a button that closes a side panel view.</comment>
   </data>
   <data name="AboutView_Link_PrivacyPolicy.NavigateUri" xml:space="preserve">
-    <value>http://www.bing.com/search?q=microsoft+rdp+privacy+policy</value>
+    <value>http://go.microsoft.com/fwlink/?LinkID=615119&amp;clcid=0x409</value>
     <comment>Hyperlink for the "Privacy policy" hyperlink button in the About dialog</comment>
   </data>
   <data name="AboutView_Link_RateAndReview.NavigateUri" xml:space="preserve">
@@ -925,8 +925,28 @@
     <value>The hostname can't contain spaces, tabs or these characters:`~!#@$%^&amp;*()=+{}\\|;'\",&lt; &gt;/?</value>
     <comment>Text explaining that a hostname is invalid because it contains invalid characters</comment>
   </data>
+  <data name="HostnameValidationFailure_DuplicateGateway_String" xml:space="preserve">
+    <value>(r) Gateway name already used</value>
+    <comment>Text explaining that a gateway name is invalid because it is already used</comment>
+  </data>
   <data name="InSessionEditCredentials-DismissButton.Content" xml:space="preserve">
     <value>Connect</value>
     <comment>Label of the "Connect" button in the in-session credentials editor dialog shown when credentials are missing or invalid</comment>
+  </data>
+  <data name="EditCredentialsConfirmation_OverridePassword_String" xml:space="preserve">
+    <value>You’ve saved that account before. Do you want to replace it?</value>
+    <comment>Message displayed at prompt displayed when user has chosen to save credentials and there is already a saved user account with the same username</comment>
+  </data>
+  <data name="GatewaySelector_AddGateway.Text" xml:space="preserve">
+    <value>Add gateway</value>
+    <comment>Verb. Text on button that adds a new gateway</comment>
+  </data>
+  <data name="UserSelecter_AddUser.Text" xml:space="preserve">
+    <value>Add account</value>
+    <comment>Text shown on button that adds a new user account</comment>
+  </data>
+  <data name="UsernameValidationFailure_Duplicate_String" xml:space="preserve">
+    <value>(r) That account already exists, you cannot overwrite it</value>
+    <comment>Text shown when the user attempts to add an account with a username that matches an already saved account</comment>
   </data>
 </root>

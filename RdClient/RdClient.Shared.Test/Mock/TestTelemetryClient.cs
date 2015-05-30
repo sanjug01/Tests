@@ -29,6 +29,13 @@
             //
         }
 
+        void ITelemetryClient.Metric(string metricName, double metricValue)
+        {
+            //
+            // Do nothing.
+            //
+        }
+
         ITelemetryStopwatch ITelemetryClient.StartStopwatch()
         {
             return new Stopwatch();

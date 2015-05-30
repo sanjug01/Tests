@@ -154,6 +154,8 @@
     <Compile Include="Helpers\RdDispatcherTimer.cs" />
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
+    <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
+    <Compile Include="Input\Pointer\PointerVisibilityConsumer.cs" />
     <Compile Include="Models\FullScreenModel.cs" />
     <Compile Include="Models\IFullScreenModel.cs" />
     <Compile Include="Models\IScrollBarModel.cs" />
@@ -175,7 +177,7 @@
     <Compile Include="Input\Pointer\ManipulationRoutedEventArgsWrapper.cs" />
     <Compile Include="Input\Pointer\MouseModeConsumer.cs" />
     <Compile Include="Input\Pointer\MultiTouchConsumer.cs" />
-    <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
+    <Compile Include="Input\Pointer\PointerDeviceDispatcher.cs" />
     <Compile Include="Input\Pointer\DoubleClickTimer.cs" />
     <Compile Include="Input\Keyboard\IInputPanelFactory.cs" />
     <Compile Include="Input\Keyboard\IInputPanel.cs" />
@@ -336,12 +338,16 @@
     <Compile Include="ValidationRules\HostnameValidationFailure.cs" />
     <Compile Include="ValidationRules\IValidatedProperty.cs" />
     <Compile Include="ValidationRules\IValidationResult.cs" />
+    <Compile Include="ValidationRules\IModelEqualityComparer.cs" />
     <Compile Include="ValidationRules\IValidationRule.cs" />
-    <Compile Include="ValidationRules\NotDuplicateUsernameValidationRule.cs" />
+    <Compile Include="ValidationRules\NotDuplicateValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameFormatValidationRule.cs" />
     <Compile Include="ValidationRules\UsernameValidationFailure.cs" />
     <Compile Include="ValidationRules\ValidatedProperty.cs" />
     <Compile Include="ValidationRules\ValidationResult.cs" />
+    <Compile Include="ViewModels\AddOrEditViewArgs.cs" />
+    <Compile Include="ViewModels\CredentialPromptMode.cs" />
+    <Compile Include="ViewModels\CredentialPromptResult.cs" />
     <Compile Include="ViewModels\IGatewaysCollector.cs" />
     <Compile Include="ViewModels\IRightSideBarViewModel.cs" />
     <Compile Include="ViewModels\IUsersCollector.cs" />
@@ -366,7 +372,7 @@
     <Compile Include="Navigation\Extensions\DataModelExtension.cs" />
     <Compile Include="Navigation\INavigationExtension.cs" />
     <Compile Include="ValidationRules\CharacterOccurenceValidationRule.cs" />
-    <Compile Include="ViewModels\AddUserViewModel.cs" />
+    <Compile Include="ViewModels\AddOrEditUserViewModel.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\EditCredentialsTaskBase.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\InSessionCredentialsTask.cs" />
     <Compile Include="ViewModels\EditCredentialsTasks\NewCredentialsTask.cs" />
