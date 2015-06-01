@@ -24,7 +24,8 @@
 
             void ITelemetryStopwatch.Stop(string eventName)
             {
-                if ((null != _core) && _core.IsActive)
+                Contract.Assert(null != _core);
+                if (_core.IsActive)
                 {
                     _stopwatch.Stop();
                     _core.Duration(eventName, _stopwatch.ElapsedMilliseconds);
