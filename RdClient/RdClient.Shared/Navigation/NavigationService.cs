@@ -408,7 +408,7 @@ namespace RdClient.Shared.Navigation
 
         private void TelemetryEvent(string eventName)
         {
-            if ((null != _telemetryClient) && (_telemetryClient.IsActive))
+            if (null != _telemetryClient)
                 _telemetryClient.Event(eventName);
         }
 

@@ -87,8 +87,6 @@
             {
                 if (SetProperty(ref _sendFeedback, value))
                     this.PersistentStatus = Data.PersistentStatus.Modified;
-                if(null != _TelemetryClient)
-                    _TelemetryClient.IsActive = value;
             }
         }
 
