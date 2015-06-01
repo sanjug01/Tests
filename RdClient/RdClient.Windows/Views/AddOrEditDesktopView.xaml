@@ -83,31 +83,25 @@
                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
 				<StackPanel Orientation="Horizontal">
 					<TextBlock 
-						Text="{StaticResource MoreDetailsIcon}"
-						Style="{ThemeResource BodyTextBlockStyle}"
-						FontFamily="{StaticResource IconFont}"
-						VerticalAlignment="Center">
-					</TextBlock>
-					<TextBlock 
 						x:Uid="AddOrEditDesktop-MoreDetailsLabel"
 						Margin="{StaticResource DialogItemIndentation}"
 						Style="{StaticResource BodyTextBlockStyle}" 
 						VerticalAlignment="Center"
                         Text="More details (d)">
 					</TextBlock>
+					<TextBlock 
+						Text="{StaticResource MoreDetailsIcon}"
+						Style="{ThemeResource BodyTextBlockStyle}"
+						FontFamily="{StaticResource IconFont}"
+						VerticalAlignment="Center">
+					</TextBlock>					
 				</StackPanel>
 			</HyperlinkButton>
 			<HyperlinkButton
                 Command="{Binding HideDetailsCommand}"                            
                 Margin="{StaticResource DialogItemVerticalSpacing}" 
                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}" >
-                <StackPanel Orientation="Horizontal">
-					<TextBlock 
-						Text="{StaticResource LessDetailsIcon}"
-						Style="{ThemeResource BodyTextBlockStyle}"
-						FontFamily="{StaticResource IconFont}"
-						VerticalAlignment="Center">
-					</TextBlock>
+				<StackPanel Orientation="Horizontal">
 					<TextBlock 
 						x:Uid="AddOrEditDesktop-LessDetailsLabel"
 						Margin="{StaticResource DialogItemIndentation}"
@@ -115,6 +109,12 @@
 						VerticalAlignment="Center"                                       
                         Text="Less details (d)">						
 					</TextBlock>
+					<TextBlock 
+						Text="{StaticResource LessDetailsIcon}"
+						Style="{ThemeResource BodyTextBlockStyle}"
+						FontFamily="{StaticResource IconFont}"
+						VerticalAlignment="Center">
+					</TextBlock>					
                 </StackPanel>
             </HyperlinkButton>
 			<!-- extra settings section -->

@@ -109,18 +109,18 @@
 							Command="{Binding ShowDetails}">
 							<StackPanel Orientation="Horizontal">
 								<TextBlock 
-									Text="{StaticResource MoreDetailsIcon}"
-									Style="{ThemeResource BodyTextBlockStyle}"
-									FontFamily="{StaticResource IconFont}"
-									VerticalAlignment="Center">
-								</TextBlock>
-								<TextBlock 
 									Margin="{StaticResource DialogItemIndentation}"
 									Style="{StaticResource BodyTextBlockStyle}" 
 									VerticalAlignment="Center"
 									x:Uid="CertificateValidation-MoreDetailsLabel"
 									Text="Details (d)">
 								</TextBlock>
+								<TextBlock 
+									Text="{StaticResource MoreDetailsIcon}"
+									Style="{ThemeResource BodyTextBlockStyle}"
+									FontFamily="{StaticResource IconFont}"
+									VerticalAlignment="Center">
+								</TextBlock>								
 							</StackPanel>
 						</HyperlinkButton>
 						<HyperlinkButton 
@@ -129,18 +129,18 @@
 							Command="{Binding HideDetails}">
 							<StackPanel Orientation="Horizontal">
 								<TextBlock 
-									Text="{StaticResource LessDetailsIcon}"
-									Style="{ThemeResource BodyTextBlockStyle}"
-									FontFamily="{StaticResource IconFont}"
-									VerticalAlignment="Center">
-								</TextBlock>
-								<TextBlock 
 									Margin="{StaticResource DialogItemIndentation}"
 									Style="{StaticResource BodyTextBlockStyle}" 
 									VerticalAlignment="Center"
 									x:Uid="CertificateValidation-LessDetailsLabel"
 									Text="Details (d)">
 								</TextBlock>
+								<TextBlock 
+									Text="{StaticResource LessDetailsIcon}"
+									Style="{ThemeResource BodyTextBlockStyle}"
+									FontFamily="{StaticResource IconFont}"
+									VerticalAlignment="Center">
+								</TextBlock>								
 							</StackPanel>
 						</HyperlinkButton>
 
