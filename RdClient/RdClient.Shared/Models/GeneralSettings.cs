@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.Data;
+    using RdClient.Shared.Telemetry;
     using RdClient.Shared.ViewModels;
     using System.Diagnostics.Contracts;
     using System.IO;
@@ -16,9 +17,18 @@
         private string _fileName;
         private bool _isTelemetryActive;
         private IModelSerializer _modelSerializer;
-
         private bool _useThumbnails;
         private bool _sendFeedback;
+        private ITelemetryClient _TelemetryClient;
+
+        public ITelemetryClient GeneralSettingSendFeedback
+        {
+            set
+            {
+                _TelemetryClient = value;
+            }
+        }
+
 
         public static GeneralSettings Load(IStorageFolder storageFolder, string fileName, IModelSerializer modelSerializer)
         {
@@ -77,6 +87,8 @@
             {
                 if (SetProperty(ref _sendFeedback, value))
                     this.PersistentStatus = Data.PersistentStatus.Modified;
+                if(null != _TelemetryClient)
+                    _TelemetryClient.IsActive = value;
             }
         }
 

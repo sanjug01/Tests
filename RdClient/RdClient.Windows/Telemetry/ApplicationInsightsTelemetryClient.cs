@@ -24,7 +24,7 @@
 
             void ITelemetryStopwatch.Stop(string eventName)
             {
-                if (null != _core)
+                if ((null != _core) && _core.IsActive)
                 {
                     _stopwatch.Stop();
                     _core.Duration(eventName, _stopwatch.ElapsedMilliseconds);
@@ -48,14 +48,16 @@
 
             set
             {
-                if(value != _core.IsActive)
+                if (value != _core.IsActive)
                 {
                     if (value)
                     {
                         _core.Activate();
+                        _core.Metric("SendUsage", 1);
                     }
                     else
                     {
+                        _core.Metric("SendUsage", 0);
                         _core.Deactivate();
                     }
                 }
@@ -64,12 +66,14 @@
 
         void ITelemetryClient.Event(string eventName)
         {
-            _core.Event(eventName);
+            if((null != _core) && _core.IsActive)
+                _core.Event(eventName);
         }
 
         void ITelemetryClient.Metric(string metricName, double metricValue)
         {
-            _core.Metric(metricName, metricValue);
+            if((null != _core) && _core.IsActive)
+                _core.Metric(metricName, metricValue);
         }
 
         ITelemetryStopwatch ITelemetryClient.StartStopwatch()
