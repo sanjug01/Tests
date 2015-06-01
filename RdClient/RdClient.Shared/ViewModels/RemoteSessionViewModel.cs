@@ -16,7 +16,7 @@
     using System.Diagnostics.Contracts;
     using Windows.UI.Xaml;
 
-    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite, ITelemetryClientSite
+    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite
     {
         private readonly RelayCommand _invokeKeyboard;
         private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
@@ -44,8 +44,6 @@
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
         private ReadOnlyObservableCollection<object> _connectionBarItems;
-        private ITelemetryClient _telemetryClient;
-        private ITelemetryStopwatch _TelemetrySessionDuration;
 
         private ITimerFactory _timerFactory;
 
@@ -376,7 +374,6 @@
                         break;
 
                     case SessionState.Connected:
-                        _TelemetrySessionDuration = _telemetryClient.StartStopwatch();
 
                         //
                         // Remove any belly-band view that may be shown (transitioning from reconnect or connecting state)
@@ -438,7 +435,6 @@
                         //
                         if (SessionState.Connected == _sessionState)
                         {
-                            _TelemetrySessionDuration.Stop("SessionDuration");
 
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
@@ -510,11 +506,6 @@
             {
                 _invokeKeyboard.EmitCanExecuteChanged();
             }
-        }
-
-        void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
-        {
-            _telemetryClient = telemetryClient;
         }
     }
 }

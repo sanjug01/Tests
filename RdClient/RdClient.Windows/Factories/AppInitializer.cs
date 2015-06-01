@@ -75,7 +75,8 @@
             //
             if (null != this.TelemetryClient)
             {
-                this.TelemetryClient.IsActive = appDataModel.Settings.IsTelemetryActive;
+                this.TelemetryClient.IsActive = appDataModel.Settings.SendFeedback;
+
                 _navigationService.Extensions.Add(new TelemetryExtension() { Client = this.TelemetryClient });
                 //
                 // Create a session factory that uses the injected telemetry client.
@@ -84,9 +85,12 @@
                 //
                 // Report data model statistics telemetry
                 //
-                this.TelemetryClient.Metric("localDesktopCount", appDataModel.LocalWorkspace.Connections.Models.Count);
-                this.TelemetryClient.Metric("credentialsCount", appDataModel.Credentials.Models.Count);
-                this.TelemetryClient.Metric("gatewaysCount", appDataModel.Gateways.Models.Count);
+                if(this.TelemetryClient.IsActive)
+                {
+                    this.TelemetryClient.Metric("localDesktopCount", appDataModel.LocalWorkspace.Connections.Models.Count);
+                    this.TelemetryClient.Metric("credentialsCount", appDataModel.Credentials.Models.Count);
+                    this.TelemetryClient.Metric("gatewaysCount", appDataModel.Gateways.Models.Count);
+                }
             }
             else
             {

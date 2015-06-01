@@ -181,7 +181,7 @@
                         break;
                 }
 
-                _totalTime.Stop("TotalConnectedTime");
+                _totalTime.Stop("SessionDuration");
                 _totalTime = null;
                 _session.InternalSetState(newState);
             }
