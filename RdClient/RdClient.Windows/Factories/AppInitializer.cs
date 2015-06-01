@@ -75,7 +75,6 @@
             //
             if (null != this.TelemetryClient)
             {
-                appDataModel.Settings.GeneralSettingSendFeedback = this.TelemetryClient;
                 this.TelemetryClient.IsActive = appDataModel.Settings.SendFeedback;
 
                 _navigationService.Extensions.Add(new TelemetryExtension() { Client = this.TelemetryClient });
