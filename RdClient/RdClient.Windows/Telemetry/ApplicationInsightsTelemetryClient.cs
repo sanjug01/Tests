@@ -66,11 +66,13 @@
 
         void ITelemetryClient.Event(string eventName)
         {
+            if(_core.IsActive)
                 _core.Event(eventName);
         }
 
         void ITelemetryClient.Metric(string metricName, double metricValue)
         {
+            if (_core.IsActive)
                 _core.Metric(metricName, metricValue);
         }
 
