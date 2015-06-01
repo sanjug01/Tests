@@ -20,7 +20,6 @@
         private bool _useThumbnails;
         private bool _sendFeedback;
 
-
         public static GeneralSettings Load(IStorageFolder storageFolder, string fileName, IModelSerializer modelSerializer)
         {
             Contract.Assert(null != storageFolder);
