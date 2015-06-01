@@ -14,12 +14,6 @@
     {
         event EventHandler Ready;
 
-        /// <summary>
-        /// The event always emitted on a worker thread that captures input on the rendering panel.
-        /// </summary>
-        /// <remarks>The rendering panel starts capturing input when the first event handler is registered,
-        /// and stops the capture when the last handler has been removed.</remarks>
-        event EventHandler<IPointerEventBase> PointerChanged;
 
         /// <summary>
         /// Object that manages the viewport in which a part of the rendering panel is shown.

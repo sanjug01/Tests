@@ -11,8 +11,6 @@ namespace RdClient.Shared.Test.Mock
     {
         public event EventHandler Ready;
 
-        public event EventHandler<IPointerEventBase> PointerChanged;
-
         public IViewport Viewport
         {
             get;

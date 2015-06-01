@@ -29,7 +29,7 @@ namespace RdClient.Shared.Input.Pointer
         public void Consume(IPointerEventBase pointerEvent)
         {
 
-            if(pointerEvent.Action == PointerEventAction.PointerEntered || pointerEvent.Action== PointerEventAction.PointerExited)
+            if(pointerEvent.Action == PointerEventAction.PointerEntered || pointerEvent.Action == PointerEventAction.PointerExited)
             {
                 _visibilityConsumer.Consume(pointerEvent);
             }
