@@ -108,14 +108,14 @@
 							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
 							Command="{Binding ShowDetails}">
 							<StackPanel Orientation="Horizontal">
-								<TextBlock 
-									Margin="{StaticResource DialogItemIndentation}"
+								<TextBlock 									
 									Style="{StaticResource BodyTextBlockStyle}" 
 									VerticalAlignment="Center"
 									x:Uid="CertificateValidation-MoreDetailsLabel"
 									Text="Details (d)">
 								</TextBlock>
 								<TextBlock 
+									Margin="{StaticResource DialogItemIndentation}"
 									Text="{StaticResource MoreDetailsIcon}"
 									Style="{ThemeResource BodyTextBlockStyle}"
 									FontFamily="{StaticResource IconFont}"
@@ -128,14 +128,14 @@
 							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"
 							Command="{Binding HideDetails}">
 							<StackPanel Orientation="Horizontal">
-								<TextBlock 
-									Margin="{StaticResource DialogItemIndentation}"
+								<TextBlock 									
 									Style="{StaticResource BodyTextBlockStyle}" 
 									VerticalAlignment="Center"
 									x:Uid="CertificateValidation-LessDetailsLabel"
 									Text="Details (d)">
 								</TextBlock>
-								<TextBlock 
+								<TextBlock 			
+									Margin="{StaticResource DialogItemIndentation}"
 									Text="{StaticResource LessDetailsIcon}"
 									Style="{ThemeResource BodyTextBlockStyle}"
 									FontFamily="{StaticResource IconFont}"
