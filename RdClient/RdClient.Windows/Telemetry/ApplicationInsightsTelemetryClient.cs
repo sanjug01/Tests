@@ -24,7 +24,6 @@
 
             void ITelemetryStopwatch.Stop(string eventName)
             {
-                Contract.Assert(null != _core);
                 if (_core.IsActive)
                 {
                     _stopwatch.Stop();
@@ -67,13 +66,11 @@
 
         void ITelemetryClient.Event(string eventName)
         {
-            if((null != _core) && _core.IsActive)
                 _core.Event(eventName);
         }
 
         void ITelemetryClient.Metric(string metricName, double metricValue)
         {
-            if((null != _core) && _core.IsActive)
                 _core.Metric(metricName, metricValue);
         }
 
