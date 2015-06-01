@@ -9,8 +9,11 @@
     using RdClient.Shared.Navigation;
     using System;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Windows.Foundation;
     using Windows.UI.Core;
     using Windows.UI.Xaml;
@@ -36,7 +39,7 @@
         private bool _viewLoaded;
         private ZoomScrollRecognizer _zoomScrollRecognizer;
         private TapRecognizer _tapRecognizer;
-        private CoreCursor _exitCursor;
+        private RenderingPanel _renderingPanel;
 
         public event EventHandler<IPointerEventBase> PointerChanged;    
 
@@ -107,24 +110,24 @@
             ScreenProperties screen = new ScreenProperties();
             Size resolution = screen.Resolution;
 
-            RenderingPanel renderingPanel = new RenderingPanel();
-
             TransformGroup transformGroup = new TransformGroup();
             transformGroup.Children.Add(this.RenderPanelTransform);
 
-            renderingPanel.RenderTransform = transformGroup;
-            renderingPanel.MouseCursor = this.MouseCursor;
-            renderingPanel.MouseTransform = this.MouseTransform;
-            renderingPanel.MouseScaleTransform = this.MouseScaleTransform;
-            renderingPanel.Width = resolution.Width;
-            renderingPanel.Height = resolution.Height;
+            _renderingPanel = new RenderingPanel();
+            _renderingPanel.RenderTransform = transformGroup;
+            _renderingPanel.MouseCursor = this.MouseCursor;
+            _renderingPanel.MouseTransform = this.MouseTransform;
+            _renderingPanel.MouseScaleTransform = this.MouseScaleTransform;
+            _renderingPanel.Width = resolution.Width;
+            _renderingPanel.Height = resolution.Height;
 
-            renderingPanel.SetViewport(new Viewport(renderingPanel, this));
-            renderingPanel.SetTransform(new ViewportTransformWrapper(this.RenderPanelTransform));
+            _renderingPanel.SetViewport(new Viewport(_renderingPanel, this));
+            _renderingPanel.SetTransform(new ViewportTransformWrapper(this.RenderPanelTransform));
 
-            this.Canvas.Children.Add(renderingPanel);
+            this.Canvas.Children.Insert(0, _renderingPanel);
+            this.UpdateLayout();
 
-            return renderingPanel;
+            return _renderingPanel;
         }
 
         void IRemoteSessionView.RecycleRenderingPanel(IRenderingPanel renderingPanel)
@@ -289,7 +292,6 @@
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerPressed, PointerEventType.PointerRoutedEventArgs, e, this));
             this.EmitPointerEvent(w);
         }
-
 
         protected override void OnPointerMoved(PointerRoutedEventArgs e)
         {

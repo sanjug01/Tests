@@ -9,6 +9,7 @@ using System.ComponentModel;
 using Windows.Foundation;
 using RdMock;
 using RdClient.Shared.Models.Viewport;
+using RdClient.Shared.Input.Pointer;
 
 namespace RdClient.Shared.Test.Mock
 {
@@ -40,6 +41,8 @@ namespace RdClient.Shared.Test.Mock
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<IPointerEventBase> PointerChanged;
+
         public void EmitPropertyChanged(string propertyName)
         {
             if(PropertyChanged != null)

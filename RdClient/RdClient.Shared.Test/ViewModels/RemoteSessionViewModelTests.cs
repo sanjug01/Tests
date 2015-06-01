@@ -201,6 +201,8 @@
             private readonly IViewModel _vm;
             private readonly IRenderingPanel _renderingPanel;
 
+            public event EventHandler<IPointerEventBase> PointerChanged;
+
             private sealed class TestRenderingPanel : IRenderingPanel
             {
                 private EventHandler _ready;
@@ -261,11 +263,6 @@
             void IPresentableView.Activating(object activationParameter) { }
             void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
             void IPresentableView.Dismissing() { }
-
-            Size IRemoteSessionView.RenderingPanelSize
-            {
-                get { throw new NotImplementedException(); }
-            }
 
             public double Width
             {
