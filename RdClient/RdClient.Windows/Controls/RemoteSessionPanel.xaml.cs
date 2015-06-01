@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Controls
 {
+    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Input.Recognizers;
@@ -110,9 +111,14 @@
             Contract.Assert(_viewLoaded);
             Contract.Ensures(null != Contract.Result<IRenderingPanel>());
 
+            ScreenProperties screen = new ScreenProperties();
+            Size resolution = screen.Resolution;
+
             this.RenderingPanel.MouseCursor = this.MouseCursor;
             this.RenderingPanel.MouseTransform = this.MouseTransform;
             this.RenderingPanel.MouseScaleTransform = this.MouseScaleTransform;
+            this.RenderingPanel.Width = resolution.Width;
+            this.RenderingPanel.Height = resolution.Height;
 
             return this.RenderingPanel;
         }
