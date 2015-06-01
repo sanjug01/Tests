@@ -93,7 +93,7 @@
 
                 if(null != x && null != y)
                 {
-                    result = string.CompareOrdinal(x, y);
+                    result = string.Compare(x, y, StringComparison.OrdinalIgnoreCase);
                 }
                 else if(null != x)
                 {

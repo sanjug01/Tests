@@ -332,16 +332,15 @@
 
         private void AddUserCommandExecute(object o)
         {
-            AddOrEditUserViewArgs args = new AddOrEditUserViewArgs(new CredentialsModel(), false);
-            ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(AddCredentialPromptResultHandler);
+            AddOrEditUserViewArgs args = AddOrEditUserViewArgs.AddUser();
+            ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
             NavigationService.PushAccessoryView("AddOrEditUserView", args, addUserCompleted);
         }
 
         private void EditUserCommandExecute(object o)
         {
-            AddOrEditUserViewArgs args = new AddOrEditUserViewArgs(this.SelectedUser.Credentials.Model, false, CredentialPromptMode.EditCredentials);            
-            ModalPresentationCompletion editUserCompleted = new ModalPresentationCompletion(EditGatewayPromptResultHandler);
-            this.NavigationService.PushAccessoryView("AddOrEditUserView", args, editUserCompleted);
+            AddOrEditUserViewArgs args = AddOrEditUserViewArgs.EditUser(this.SelectedUser.Credentials);
+            this.NavigationService.PushAccessoryView("AddOrEditUserView", args);
         }
 
         private bool EditUserCommandCanExecute(object o)
@@ -377,26 +376,15 @@
             this.SelectedGateway = (null != selected) ? selected : this.Gateways[0];
         }
 
-        private void AddCredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
+        private void CredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
         {
             CredentialPromptResult result = args.Result as CredentialPromptResult;
-
-            if (result != null && !result.UserCancelled)
+            if (result?.Saved == true)
             {
-                Guid credId = this.ApplicationDataModel.Credentials.AddNewModel(result.Credentials);
-                this.SelectUserId(credId);
+                this.SelectUserId(result.Credentials.Id);
             }
 
-        }
-        private void EditCredentialPromptResultHandler(object sender, PresentationCompletionEventArgs args)
-        {
-            CredentialPromptResult result = args.Result as CredentialPromptResult;
-            if (result != null && !result.UserCancelled)
-            {
-                Guid credId = this.SelectedUser.Credentials.Id;
-                this.SelectUserId(credId);
-            }
-        }
+        }        
 
         private void AddGatewayPromptResultHandler(object sender, PresentationCompletionEventArgs args)
         {
