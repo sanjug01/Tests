@@ -60,7 +60,7 @@ namespace RdClient.Shared.Input.Pointer
                     touchType = TouchEventType.Up;
                     break;
                 default:
-                    throw new InvalidOperationException("trying to convert unknown PointerEventAction");
+                    return;
             }
 
             _sessionControl.SendTouchAction(touchType, pointerEvent.PointerId, _pointerPosition.SessionPosition, delta);

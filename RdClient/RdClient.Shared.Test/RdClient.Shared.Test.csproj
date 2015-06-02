@@ -182,6 +182,7 @@
     <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\PointerEvent.cs" />
     <Compile Include="Mock\PointerPosition.cs" />
+    <Compile Include="Mock\PointerRoutedEventArgsWrapper.cs" />
     <Compile Include="Mock\PresentableStackedView.cs" />
     <Compile Include="Mock\PresentableViewWithStackedPresenter.cs" />
     <Compile Include="Mock\RadcClient.cs" />

@@ -27,7 +27,7 @@ namespace RdClient.Shared.Input.Pointer
         }
 
         public void Consume(IPointerEventBase pointerEvent)
-        {        
+        {   
             _visibilityConsumer.Consume(pointerEvent);
             _deviceDispatcher.Consume(pointerEvent);
              

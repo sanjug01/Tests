@@ -8,15 +8,15 @@ namespace RdClient.Shared.CxWrappers
 
         public ScreenProperties()
         {
-            //_screenPropertiesCx = new RdClientCxHelpers.ScreenProperties();
+            _screenPropertiesCx = new RdClientCxHelpers.ScreenProperties();
         }
 
         public Size Resolution
         {
             get
             {
-             //   return _screenPropertiesCx.Resolution;
-                return new Size(1366, 768);
+                return _screenPropertiesCx.Resolution;
+                //return new Size(1366, 768);
             }
         }
     }
