@@ -5,6 +5,7 @@
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Input.Keyboard;
     using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
@@ -29,6 +30,7 @@
         public IRdpConnectionSource ConnectionSource { private get; set; }
         public IDeviceCapabilities DeviceCapabilities { private get; set; }
         public ITelemetryClient TelemetryClient { private get; set; }
+        public IInputPanelFactory InputPanelFactory { private get; set; }
 
         internal void CreateBackButtonHandler(SystemNavigationManager systemNavigationManager)
         {
@@ -104,6 +106,12 @@
             _navigationService.Extensions.Add(new SessionFactoryExtension() { SessionFactory = sessionFactory });
             _navigationService.Extensions.Add(new DeviceCapabilitiesExtension() { DeviceCapabilities = this.DeviceCapabilities });
             _navigationService.Extensions.Add(new LifeTimeExtension() { LifeTimeManager = this.LifeTimeManager });
+            //
+            // If an input panel factory has been injected in the app initializer, create an extension that will
+            // inject it in view models; otherwise, the input panel factory is injected elsewhere.
+            //
+            if (null != this.InputPanelFactory)
+                _navigationService.Extensions.Add(new InputPanelFactoryExtension(this.InputPanelFactory));
             //
             // Set up deferred execution of the app data's Save command. As soon as the command reports that it can be executed,
             // DeferredCommand will set a timer for the specified duration and when the timer will fire it will execute the command.
