@@ -444,6 +444,12 @@
 	<Thickness x:Key="DialogHeaderVerticalSpacing">0,0,0,8</Thickness>
 	<Thickness x:Key="DialogItemIndentation">12,0,12,0</Thickness>
 	<GridLength x:Key="DialogButtonSpacing">12</GridLength>
+	
+	<Style x:Key="UsernameInputTextboxStyle" TargetType="TextBox">
+		<Setter Property="MaxLength" Value="104" />
+		<Setter Property="IsSpellCheckEnabled" Value="False" />
+		<Setter Property="IsTextPredictionEnabled" Value="False" />
+	</Style>
 
 
     <!-- 

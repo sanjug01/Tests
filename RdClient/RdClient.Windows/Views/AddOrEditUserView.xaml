@@ -64,10 +64,9 @@
 						<controls:ErrorControl.PresentedContent>
 							<TextBox 
 								x:Uid="AddUser-UsernameTextbox"
+								Style="{StaticResource UsernameInputTextboxStyle}"
 								Background="Transparent"
 								PlaceholderText="Username (d)"
-								IsSpellCheckEnabled="False"
-								IsTextPredictionEnabled="False"
 								Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 							</TextBox>
 						</controls:ErrorControl.PresentedContent>
