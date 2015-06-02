@@ -13,6 +13,10 @@
     using Windows.UI.Xaml.Media;
     using System.ComponentModel;
     using Windows.UI.Core;
+    using System.Diagnostics;
+    using RdClient.Shared.ViewModels;
+
+
 
     /// <summary>
     /// Wrapper of SwapChainPanel that adds the IRenderingPanel interface.
@@ -133,7 +137,9 @@
         {
             if (visibility == Visibility.Visible)
             {
-                if (Window.Current.CoreWindow.PointerCursor != null) { 
+                if (Window.Current.CoreWindow.PointerCursor != null)
+                {
+
                     Window.Current.CoreWindow.PointerCursor = null;
                     this.MouseCursor.Visibility = visibility;
                 }
@@ -146,7 +152,6 @@
                 }
                 this.MouseCursor.Visibility = visibility;
             }
-            
         }
 
         void IRenderingPanel.ChangeMouseCursorShape(MouseCursorShape shape)

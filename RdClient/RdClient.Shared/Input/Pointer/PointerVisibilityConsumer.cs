@@ -12,9 +12,9 @@ using Windows.UI.Xaml.Input;
 
 namespace RdClient.Shared.Input.Pointer
 {
-    class PointerVisibilityConsumer : IPointerEventConsumer
+    public class PointerVisibilityConsumer : IPointerEventConsumer
     {
-        private readonly IRemoteSessionControl _sessionControl;
+        private readonly IRenderingPanel _renderingPanel;
         private ConsumptionModeType _consumptionMode;
 
 
@@ -24,32 +24,31 @@ namespace RdClient.Shared.Input.Pointer
             _consumptionMode = consumptionMode;
         }
 
-        public PointerVisibilityConsumer(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, IDeferredExecution dispatcher)
+        public PointerVisibilityConsumer( IRenderingPanel renderingPanel)
         {
-            _sessionControl = sessionControl;
+            _renderingPanel = renderingPanel;
         }
         public void Consume(IPointerEventBase pointerEvent)
         {
-            if (pointerEvent is IPointerRoutedEventProperties)
+            if(pointerEvent is IPointerRoutedEventProperties)
             {
-                PointerRoutedEventArgsWrapper pointerEventArgs = (PointerRoutedEventArgsWrapper)pointerEvent;
-
+                IPointerRoutedEventProperties pointerEventArgs = (IPointerRoutedEventProperties)pointerEvent;
                 //When in touch mode pointer should not show up
                 if ((_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch) &&
                     (pointerEventArgs.DeviceType != PointerDeviceType.Mouse))
                 {
-                    _sessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+                    _renderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
                 }
                 else
                 {
 
                     if (pointerEventArgs.Action == PointerEventAction.PointerEntered)
                     {
-                        _sessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
+                        _renderingPanel.ChangeMouseVisibility(Visibility.Visible);
                     }
                     else if (pointerEventArgs.Action == PointerEventAction.PointerExited && pointerEventArgs.DeviceType == PointerDeviceType.Mouse)
                     {
-                        _sessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+                        _renderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
                     }
                 }
             }
