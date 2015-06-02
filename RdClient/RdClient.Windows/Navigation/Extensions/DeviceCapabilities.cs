@@ -2,7 +2,6 @@
 {
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
-    using System.Diagnostics;
     using Windows.Devices.Input;
     using Windows.UI.Core;
     using Windows.UI.ViewManagement;
@@ -71,8 +70,6 @@
             // TODO:    after getting all information from OSG, use the current state to figure out
             //          if the input panel may be shown now.
             //
-            TouchCapabilities tc = new TouchCapabilities();
-            Debug.WriteLine("TouchCapabilities|TouchPresent={0}", tc.TouchPresent);
             return UserInteractionMode.Touch == _userInteractionMode && _touchCapabilities.TouchPresent > 0;
         }
     }
