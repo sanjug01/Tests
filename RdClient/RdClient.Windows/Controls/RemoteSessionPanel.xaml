@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Controls"
-    xmlns:cx="using:RdClient.Shared.CxWrappers"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
@@ -19,21 +18,16 @@
             <ScaleTransform x:Name="MouseScaleTransform" CenterX="0" CenterY="0"/>
             <TranslateTransform x:Name="MouseTransform" />
         </TransformGroup>
-        <TransformGroup x:Key="RenderTransformGroup">
+        <!--<TransformGroup x:Key="RenderTransformGroup">-->
             <CompositeTransform x:Name="RenderPanelTransform"
                                         ScaleX="1.0" ScaleY="1.0"
                                         TranslateX="0.0" TranslateY="0.0"/>
-        </TransformGroup>
-                        
-        <cx:ScreenProperties x:Key="ScreenProperties"/>        
+        <!--</TransformGroup>-->                        
     </UserControl.Resources>
 
-    <Canvas Background="Gray">
-        <c:RenderingPanel x:Name="RenderingPanel"
-                          Width="{Binding Source={StaticResource ScreenProperties}, Path=Resolution.Width}" 
-                          Height="{Binding Source={StaticResource ScreenProperties}, Path=Resolution.Height}"
-                          RenderTransform="{StaticResource RenderTransformGroup}">
-        </c:RenderingPanel>
+    <Canvas Background="Gray" x:Name="Canvas">
+        <!--<c:RenderingPanel x:Name="RenderingPanel"
+                          RenderTransform="{StaticResource RenderTransformGroup}" />-->
         <Image x:Name="MouseCursor" CacheMode="BitmapCache" Stretch="None" Width="Auto" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"
                    RenderTransform="{StaticResource MouseTransformGroup}" />
     </Canvas>

@@ -34,7 +34,6 @@
             return new RdpConnection(rdpConnectionCx, rdpConnectionStoreCx, new RdpEventSource());
         }
 
-
         IRdpConnection IRdpConnectionFactory.CreateApplication(string rdpFile)
         {
             int xRes;

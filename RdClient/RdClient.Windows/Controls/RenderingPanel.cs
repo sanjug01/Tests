@@ -28,7 +28,6 @@
         private IViewportTransform _transform;
 
         private EventHandler _ready;
-        private EventHandler<IPointerEventBase> _pointerChanged;
 
         public Image MouseCursor { private get; set; }
         private Point _hotspot = new Point(0,0);
@@ -90,25 +89,6 @@
                     value(this, EventArgs.Empty);
             }
             remove { _ready -= value; }
-        }
-
-        event EventHandler<IPointerEventBase> IRenderingPanel.PointerChanged
-        {
-            add
-            {
-                using (ReadWriteMonitor.UpgradeableRead(_monitor))
-                {
-                    _pointerChanged += value;
-                }
-            }
-
-            remove
-            {
-                using (ReadWriteMonitor.UpgradeableRead(_monitor))
-                {
-                    _pointerChanged -= value;
-                }
-            }
         }
 
         IViewport IRenderingPanel.Viewport
@@ -202,15 +182,6 @@
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        public void EmitPointerEvent(IPointerEventBase e)
-        {
-            using (ReadWriteMonitor.UpgradeableRead(_monitor))
-            {
-                if (null != _pointerChanged)
-                    _pointerChanged(this, e);
             }
         }
 
