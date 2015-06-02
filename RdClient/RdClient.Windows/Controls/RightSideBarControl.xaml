@@ -8,11 +8,18 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-    
-    <Grid>
 
-        <!-- Right hand side bar -->
-        <Grid x:Name="RightSideBar" Width="Auto" HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="{ThemeResource SystemControlBackgroundAltHighBrush}" Opacity="{ThemeResource ConnectionOverlayOpacity}" Visibility="Visible">
+	<Grid>
+		<!-- Right hand side bar -->
+        <Grid 
+			x:Name="RightSideBar" 
+			Width="Auto" 
+			HorizontalAlignment="Right" 
+			VerticalAlignment="Stretch" 
+			Background="{ThemeResource SystemControlBackgroundChromeBlackHighBrush}" 
+			Opacity="{ThemeResource ConnectionOverlayOpacity}" 
+			Visibility="Visible"
+			RequestedTheme="Dark">
             <Grid.Resources>
                 <Storyboard x:Name="ShowRightSideBarStoryboard">
                     <DoubleAnimation x:Name="ShowRightSideBarAnimation"
@@ -48,6 +55,7 @@
 						</Image>
 						<TextBlock
 							x:Uid="SessionView-HomeButtonLabel"
+							Foreground="{ThemeResource SystemControlForegroundChromeWhiteBrush}"
 							HorizontalAlignment="Center"
 							Style="{StaticResource CaptionTextBlockStyle}"
 							TextWrapping="Wrap"
@@ -71,6 +79,7 @@
 						</Image>
 						<TextBlock
 							x:Uid="SessionView-FullScreenButtonLabel"
+							Foreground="{ThemeResource SystemControlForegroundChromeWhiteBrush}"
 							HorizontalAlignment="Center"
 							Style="{StaticResource CaptionTextBlockStyle}"
 							TextWrapping="Wrap"
@@ -93,6 +102,7 @@
 						</Image>
 						<TextBlock
 							x:Uid="SessionView-MouseModeLabel"
+							Foreground="{ThemeResource SystemControlForegroundChromeWhiteBrush}"
 							HorizontalAlignment="Center"
 							Style="{StaticResource CaptionTextBlockStyle}"
 							TextWrapping="Wrap"

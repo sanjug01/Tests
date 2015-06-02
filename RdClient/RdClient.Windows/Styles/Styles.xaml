@@ -28,7 +28,7 @@
             <SolidColorBrush x:Key="UnselectedForegroundBrush" Color="{ThemeResource SystemBaseMediumLowColor}" />
             <SolidColorBrush x:Key="UnselectedBorderBrush" Color="Transparent" />
 
-            <x:Double x:Key="ConnectionOverlayOpacity">0.6</x:Double>
+            <x:Double x:Key="ConnectionOverlayOpacity">0.8</x:Double>
 
             <SolidColorBrush x:Key="DialogBackgroundColor" Color="{ThemeResource SystemAltHighColor}" />
             <SolidColorBrush x:Key="AccentedButtonBackgroundColor" Color="{ThemeResource SystemAccentColor}" />
