@@ -191,6 +191,8 @@
 
             _lifeTimeManager.Suspending += OnAppSuspending;
             _lifeTimeManager.Resuming += OnAppResuming;
+
+            _invokeKeyboard.EmitCanExecuteChanged();
         }
 
         protected override void OnDismissed()
