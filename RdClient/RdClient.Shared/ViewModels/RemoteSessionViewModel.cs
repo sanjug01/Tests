@@ -463,7 +463,7 @@
 
         private void OnRightSideBarPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Visibility" && sender is IRightSideBarViewModel)
+            if (e.PropertyName.Equals("Visibility") && sender is IRightSideBarViewModel)
             {
                 Visibility visibility = ((IRightSideBarViewModel)sender).Visibility;
                 if(visibility == Visibility.Visible)
