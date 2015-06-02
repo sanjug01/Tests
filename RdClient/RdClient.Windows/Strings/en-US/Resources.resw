@@ -949,4 +949,12 @@
     <value>(r) That account already exists, you cannot overwrite it</value>
     <comment>Text shown when the user attempts to add an account with a username that matches an already saved account</comment>
   </data>
+  <data name="AddOrEditDesktop-HelpButton.Content" xml:space="preserve">
+    <value>(r) Get help connecting</value>
+    <comment>Text shown on hyperlink that leads to page describing how to connect to your PC using RDP</comment>
+  </data>
+  <data name="AddOrEditDesktop-HelpButton.NavigateUri" xml:space="preserve">
+    <value>http://go.microsoft.com/fwlink/?LinkID=533682&amp;amp;clcid=0x409</value>
+    <comment>URI for webpage the describes how to connect to your PC using RDP.</comment>
+  </data>
 </root>
