@@ -33,9 +33,69 @@
             </Grid.RenderTransform>
 
             <StackPanel Orientation="Vertical" Margin="12,20">
-                <AppBarButton x:Name="NavigateHomeButton" Icon="Home" x:Uid="SessionView-HomeButton" Label="Home (d)" />
-                <AppBarButton x:Name="FullScreenButton" Icon="FullScreen" x:Uid="SessionView-FullScreenButton" Label="Toggle Full-Screen (d)" />
-                <AppBarToggleButton x:Name="MouseModeButton" Icon="TouchPointer" x:Uid="SessionView-MouseMode" Label="Mouse-Mode (d)" />
+				<Button
+					x:Name="NavigateHomeButton" 
+					Width="80"
+					Background="Transparent">
+					<StackPanel Orientation="Vertical">
+						<Image							
+							HorizontalAlignment="Center"
+							Width="40"
+							Height="40"
+							Source="ms-appx:///Assets/disconnect_icon.png"
+							Stretch="UniformToFill">
+						</Image>
+						<TextBlock
+							HorizontalAlignment="Center"
+							Style="{StaticResource CaptionTextBlockStyle}"
+							TextWrapping="Wrap"
+							Text="Disconnect (d)">							
+						</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button
+					x:Name="FullScreenButton"
+					Width="80"
+					Background="Transparent">
+					<StackPanel Orientation="Vertical">
+						<Image 
+							HorizontalAlignment="Center"
+							Width="40"
+							Height="40"							
+							Source="ms-appx:///Assets/fullscreen_icon.png"
+							Stretch="UniformToFill">
+						</Image>
+						<TextBlock
+							HorizontalAlignment="Center"
+							Style="{StaticResource CaptionTextBlockStyle}"
+							TextWrapping="Wrap"
+							Text="Toggle Full-Screen (d)">
+						</TextBlock>
+					</StackPanel>
+				</Button>
+				<ToggleButton
+					x:Name="MouseModeButton"
+					Width="80"
+					Background="Transparent">
+					<StackPanel Orientation="Vertical">
+						<Image 
+							HorizontalAlignment="Center"
+							Width="40"
+							Height="40"							
+							Source="ms-appx:///Assets/touch_icon.png"
+							Stretch="UniformToFill">
+						</Image>
+						<TextBlock
+							HorizontalAlignment="Center"
+							Style="{StaticResource CaptionTextBlockStyle}"
+							TextWrapping="Wrap"
+							Text="Mouse-Mode (d)">
+						</TextBlock>
+					</StackPanel>
+				</ToggleButton>
+				<AppBarButton Icon="Cancel"  x:Uid="SessionView-HomeButton" Label="Home (d)" />
+                <AppBarButton Icon="FullScreen" x:Uid="SessionView-FullScreenButton" Label="Toggle Full-Screen (d)" />
+                <AppBarToggleButton Icon="TouchPointer" x:Uid="SessionView-MouseMode" Label="Mouse-Mode (d)" />
             </StackPanel>
         </Grid>
     </Grid>
