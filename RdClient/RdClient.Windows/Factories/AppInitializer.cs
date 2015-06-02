@@ -5,6 +5,7 @@
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Input.Keyboard;
     using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
@@ -29,6 +30,7 @@
         public IRdpConnectionSource ConnectionSource { private get; set; }
         public IDeviceCapabilities DeviceCapabilities { private get; set; }
         public ITelemetryClient TelemetryClient { private get; set; }
+        public IInputPanelFactory InputPanelFactory { private get; set; }
 
         internal void CreateBackButtonHandler(SystemNavigationManager systemNavigationManager)
         {
@@ -75,7 +77,8 @@
             //
             if (null != this.TelemetryClient)
             {
-                this.TelemetryClient.IsActive = appDataModel.Settings.IsTelemetryActive;
+                this.TelemetryClient.IsActive = appDataModel.Settings.SendFeedback;
+
                 _navigationService.Extensions.Add(new TelemetryExtension() { Client = this.TelemetryClient });
                 //
                 // Create a session factory that uses the injected telemetry client.
@@ -84,9 +87,12 @@
                 //
                 // Report data model statistics telemetry
                 //
-                this.TelemetryClient.Metric("localDesktopCount", appDataModel.LocalWorkspace.Connections.Models.Count);
-                this.TelemetryClient.Metric("credentialsCount", appDataModel.Credentials.Models.Count);
-                this.TelemetryClient.Metric("gatewaysCount", appDataModel.Gateways.Models.Count);
+                if(this.TelemetryClient.IsActive)
+                {
+                    this.TelemetryClient.Metric("localDesktopCount", appDataModel.LocalWorkspace.Connections.Models.Count);
+                    this.TelemetryClient.Metric("credentialsCount", appDataModel.Credentials.Models.Count);
+                    this.TelemetryClient.Metric("gatewaysCount", appDataModel.Gateways.Models.Count);
+                }
             }
             else
             {
@@ -104,6 +110,12 @@
             _navigationService.Extensions.Add(new SessionFactoryExtension() { SessionFactory = sessionFactory });
             _navigationService.Extensions.Add(new DeviceCapabilitiesExtension() { DeviceCapabilities = this.DeviceCapabilities });
             _navigationService.Extensions.Add(new LifeTimeExtension() { LifeTimeManager = this.LifeTimeManager });
+            //
+            // If an input panel factory has been injected in the app initializer, create an extension that will
+            // inject it in view models; otherwise, the input panel factory is injected elsewhere.
+            //
+            if (null != this.InputPanelFactory)
+                _navigationService.Extensions.Add(new InputPanelFactoryExtension(this.InputPanelFactory));
             //
             // Set up deferred execution of the app data's Save command. As soon as the command reports that it can be executed,
             // DeferredCommand will set a timer for the specified duration and when the timer will fire it will execute the command.

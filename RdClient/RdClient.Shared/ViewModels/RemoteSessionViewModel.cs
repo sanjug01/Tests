@@ -9,17 +9,21 @@
     using RdClient.Shared.Models.PanKnobModel;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
-    using RdClient.Shared.Telemetry;
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using Windows.UI.Xaml;
 
-    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite, ITelemetryClientSite
+    public sealed class RemoteSessionViewModel : DeferringViewModelBase,
+        IRemoteSessionViewSite,
+        ITimerFactorySite,
+        IDeviceCapabilitiesSite,
+        ILifeTimeSite,
+        IInputPanelFactorySite
     {
         private readonly RelayCommand _invokeKeyboard;
-        private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
+        private readonly SymbolBarButtonModel _invokeKeyboardModel;
 
         public ZoomPanModel ZoomPanModel
         {
@@ -44,8 +48,6 @@
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
         private ReadOnlyObservableCollection<object> _connectionBarItems;
-        private ITelemetryClient _telemetryClient;
-        private ITelemetryStopwatch _TelemetrySessionDuration;
 
         private ITimerFactory _timerFactory;
 
@@ -106,14 +108,6 @@
             set { _keyboardCapture = value; }
         }
 
-        /// <summary>
-        /// Property into that a factory of input panels is injected in XAML.
-        /// </summary>
-        public IInputPanelFactory InputPanelFactory
-        {
-            set { _inputPanelFactory = value; }
-        }
-
         public IPointerCapture PointerCapture
         {
             get { return _pointerCapture; }
@@ -144,7 +138,7 @@
         public RemoteSessionViewModel()
         {
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
-            _invokeKeyboardModel = new SymbolBarToggleButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
+            _invokeKeyboardModel = new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
             _sessionState = SessionState.Idle;
 
             this.ZoomPanModel = new ZoomPanModel();
@@ -165,6 +159,8 @@
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
             base.OnPresenting(activationParameter);
+
+            _inputPanel = _inputPanelFactory.GetInputPanel();
 
             Contract.Assert(null != activationParameter, "Cannot navigate to remote session without activation parameter");
             Contract.Assert(activationParameter is IRemoteSession, "Remote session view model activation parameter is not IRemoteSession");
@@ -213,6 +209,7 @@
             _activeSessionControl = null;
             _activeSession = null;
             _sessionView = null;
+            _inputPanel = null;
 
             //
             // TODO:    restore the belly band view model from the session state.
@@ -253,8 +250,6 @@
             if (null != _deviceCapabilities)
             {
                 _deviceCapabilities.PropertyChanged -= this.OnDeviceCapabilitiesPropertyChanged;
-                _inputPanel.IsVisibleChanged -= this.OnInputPanelIsVisibleChanged;
-                _inputPanel = null;
             }
 
             _deviceCapabilities = deviceCapabilities;
@@ -262,10 +257,6 @@
             if (null != _deviceCapabilities)
             {
                 _deviceCapabilities.PropertyChanged += this.OnDeviceCapabilitiesPropertyChanged;
-
-                _inputPanel = _inputPanelFactory.GetInputPanel();
-                _inputPanel.IsVisibleChanged += this.OnInputPanelIsVisibleChanged;
-                _invokeKeyboardModel.IsChecked = _inputPanel.IsVisible;
             }
 
             _invokeKeyboard.EmitCanExecuteChanged();
@@ -376,7 +367,6 @@
                         break;
 
                     case SessionState.Connected:
-                        _TelemetrySessionDuration = _telemetryClient.StartStopwatch();
 
                         //
                         // Remove any belly-band view that may be shown (transitioning from reconnect or connecting state)
@@ -441,7 +431,6 @@
                         //
                         if (SessionState.Connected == _sessionState)
                         {
-                            _TelemetrySessionDuration.Stop("SessionDuration");
 
                             _keyboardCapture.Stop();
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
@@ -522,12 +511,6 @@
             return null != _inputPanel && null != _deviceCapabilities && _deviceCapabilities.CanShowInputPanel;
         }
 
-        private void OnInputPanelIsVisibleChanged(object sender, EventArgs e)
-        {
-            IInputPanel panel = (IInputPanel)sender;
-            _invokeKeyboardModel.IsChecked = panel.IsVisible;
-        }
-
         private void OnDeviceCapabilitiesPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if(e.PropertyName.Equals("CanShowInputPanel"))
@@ -536,9 +519,9 @@
             }
         }
 
-        void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
+        void IInputPanelFactorySite.SetInputPanelFactory(IInputPanelFactory inputPanelFactory)
         {
-            _telemetryClient = telemetryClient;
+            _inputPanelFactory = inputPanelFactory;
         }
     }
 }

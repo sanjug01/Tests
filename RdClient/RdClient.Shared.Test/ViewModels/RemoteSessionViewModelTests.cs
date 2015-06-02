@@ -698,8 +698,8 @@
             _vm = new RemoteSessionViewModel()
             {
                 KeyboardCapture = new TestKeyboardCapture(),
-                InputPanelFactory = _inputPanelFactory
             };
+            _vm.CastAndCall<IInputPanelFactorySite>(site => site.SetInputPanelFactory(_inputPanelFactory));
 
             _dataModel = new ApplicationDataModel()
             {

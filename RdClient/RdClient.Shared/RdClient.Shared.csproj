@@ -308,6 +308,8 @@
     <Compile Include="Navigation\Contracts\INavigationExtensionContract.cs" />
     <Compile Include="Navigation\Contracts\IPresentationCompletionContract.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionException.cs" />
+    <Compile Include="Navigation\Extensions\IInputPanelFactorySite.cs" />
+    <Compile Include="Navigation\Extensions\InputPanelFactoryExtension.cs" />
     <Compile Include="Navigation\Extensions\ITelemetryClientSite.cs" />
     <Compile Include="Navigation\Extensions\LifeTimeExtension.cs" />
     <Compile Include="Navigation\Extensions\DeferredExecutionExtension.cs" />
