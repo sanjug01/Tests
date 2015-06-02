@@ -602,11 +602,13 @@
     <value>The username and password that were used to connect to the remote PC didn't work. Try a different account.</value>
     <comment>Text shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
   </data>
-  <data name="SessionView-HomeButton.Label" xml:space="preserve">
+  <data name="SessionView-HomeButtonLabel.Text" xml:space="preserve">
     <value>Disconnect</value>
+    <comment>Label on in session right side bar button that disconnects the session and returns to the connection center</comment>
   </data>
-  <data name="SessionView-MouseMode.Label" xml:space="preserve">
+  <data name="SessionView-MouseModeLabel.Text" xml:space="preserve">
     <value>Mouse pointer</value>
+    <comment>Label on in session right side bar button that toggles touch mode between direct touch remoting and touch pointer mode</comment>
   </data>
   <data name="ConnectionCenter_AppLabel.Content" xml:space="preserve">
     <value>RemoteApps</value>
@@ -948,5 +950,9 @@
   <data name="UsernameValidationFailure_Duplicate_String" xml:space="preserve">
     <value>(r) That account already exists, you cannot overwrite it</value>
     <comment>Text shown when the user attempts to add an account with a username that matches an already saved account</comment>
+  </data>
+  <data name="SessionView-FullScreenButtonLabel.Text" xml:space="preserve">
+    <value>Full-screen</value>
+    <comment>Label on in session right side bar button that toggles full-screen mode</comment>
   </data>
 </root>

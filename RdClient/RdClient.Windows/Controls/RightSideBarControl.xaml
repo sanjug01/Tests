@@ -12,7 +12,7 @@
     <Grid>
 
         <!-- Right hand side bar -->
-        <Grid x:Name="RightSideBar" Width="Auto" HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="{ThemeResource SystemControlBackgroundAltHighBrush}" Opacity="{ThemeResource ConnectionOverlayOpacity}" Visibility="Collapsed">
+        <Grid x:Name="RightSideBar" Width="Auto" HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="{ThemeResource SystemControlBackgroundAltHighBrush}" Opacity="{ThemeResource ConnectionOverlayOpacity}" Visibility="Visible">
             <Grid.Resources>
                 <Storyboard x:Name="ShowRightSideBarStoryboard">
                     <DoubleAnimation x:Name="ShowRightSideBarAnimation"
@@ -34,7 +34,8 @@
 
             <StackPanel Orientation="Vertical" Margin="12,20">
 				<Button
-					x:Name="NavigateHomeButton" 
+					x:Name="NavigateHomeButton"					
+					HorizontalAlignment="Center"
 					Width="80"
 					Background="Transparent">
 					<StackPanel Orientation="Vertical">
@@ -46,6 +47,7 @@
 							Stretch="UniformToFill">
 						</Image>
 						<TextBlock
+							x:Uid="SessionView-HomeButtonLabel"
 							HorizontalAlignment="Center"
 							Style="{StaticResource CaptionTextBlockStyle}"
 							TextWrapping="Wrap"
@@ -53,9 +55,11 @@
 						</TextBlock>
 					</StackPanel>
 				</Button>
-				<Button
+				<ToggleButton
 					x:Name="FullScreenButton"
+					HorizontalAlignment="Center"
 					Width="80"
+					IsChecked="True"
 					Background="Transparent">
 					<StackPanel Orientation="Vertical">
 						<Image 
@@ -66,15 +70,17 @@
 							Stretch="UniformToFill">
 						</Image>
 						<TextBlock
+							x:Uid="SessionView-FullScreenButtonLabel"
 							HorizontalAlignment="Center"
 							Style="{StaticResource CaptionTextBlockStyle}"
 							TextWrapping="Wrap"
-							Text="Toggle Full-Screen (d)">
+							Text="Full-Screen (d)">
 						</TextBlock>
 					</StackPanel>
-				</Button>
+				</ToggleButton>
 				<ToggleButton
 					x:Name="MouseModeButton"
+					HorizontalAlignment="Center"
 					Width="80"
 					Background="Transparent">
 					<StackPanel Orientation="Vertical">
@@ -86,6 +92,7 @@
 							Stretch="UniformToFill">
 						</Image>
 						<TextBlock
+							x:Uid="SessionView-MouseModeLabel"
 							HorizontalAlignment="Center"
 							Style="{StaticResource CaptionTextBlockStyle}"
 							TextWrapping="Wrap"
@@ -93,9 +100,6 @@
 						</TextBlock>
 					</StackPanel>
 				</ToggleButton>
-				<AppBarButton Icon="Cancel"  x:Uid="SessionView-HomeButton" Label="Home (d)" />
-                <AppBarButton Icon="FullScreen" x:Uid="SessionView-FullScreenButton" Label="Toggle Full-Screen (d)" />
-                <AppBarToggleButton Icon="TouchPointer" x:Uid="SessionView-MouseMode" Label="Mouse-Mode (d)" />
             </StackPanel>
         </Grid>
     </Grid>
