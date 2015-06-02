@@ -69,6 +69,7 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <views:ViewPresenter x:Name="ViewPresenter"/>        
+        <controls:TouchKeyboardActivator x:Name="TouchKeyboardActivator" Opacity="0" />
+        <views:ViewPresenter x:Name="ViewPresenter"/>
     </Grid>
 </Page>
