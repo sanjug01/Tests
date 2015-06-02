@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models.Viewport;
     using System;
     using System.ComponentModel;
@@ -14,11 +15,11 @@
     public interface IRemoteSessionView : IViewportPanel, INotifyPropertyChanged
     {
         /// <summary>
-        /// Size of the rendering viewport. The property is observable, when the view geometry is changed
-        /// by the OS or user, the object emits an INotifyPropertyChanged.PropertyChanged event on the UI thread.
-        /// Registered event handlers may then examine the property and adjust rendering.
+        /// The event always emitted on a worker thread that captures input on the rendering panel.
         /// </summary>
-        Size RenderingPanelSize { get; }
+        /// <remarks>The rendering panel starts capturing input when the first event handler is registered,
+        /// and stops the capture when the last handler has been removed.</remarks>
+        event EventHandler<IPointerEventBase> PointerChanged;
 
         /// <summary>
         /// User has closed the view. The event may be emitted by auxilliary session views opened to render

@@ -345,6 +345,11 @@
 
         private void OnSessionClosed(object sender, EventArgs e)
         {
+            if(_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
+            {
+                _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+            }
+
             this.NavigationService.NavigateToView("ConnectionCenterView", null);
         }
 
@@ -407,7 +412,7 @@
 
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
-                        _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
+                        _sessionView.PointerChanged += this.PointerCapture.OnPointerChanged;
 
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
@@ -433,7 +438,7 @@
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
                             _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
                             _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
-                            _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
+                            _sessionView.PointerChanged -= this.PointerCapture.OnPointerChanged;
 
                             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
                             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= this.ZoomPanModel.OnConsumptionModeChanged;
