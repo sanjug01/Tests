@@ -70,7 +70,7 @@
             // TODO:    after getting all information from OSG, use the current state to figure out
             //          if the input panel may be shown now.
             //
-            return UserInteractionMode.Touch == _userInteractionMode;
+            return UserInteractionMode.Touch == _userInteractionMode && _touchCapabilities.TouchPresent > 0;
         }
     }
 }
