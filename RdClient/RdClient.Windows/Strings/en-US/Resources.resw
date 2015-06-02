@@ -952,7 +952,7 @@
     <comment>Text shown when the user attempts to add an account with a username that matches an already saved account</comment>
   </data>
   <data name="SessionView-FullScreenButtonLabel.Text" xml:space="preserve">
-    <value>Full-screen</value>
+    <value>(r) Full-screen</value>
     <comment>Label on in session right side bar button that toggles full-screen mode</comment>
   </data>
 </root>
