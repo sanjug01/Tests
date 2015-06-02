@@ -2,11 +2,8 @@
 using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
 namespace RdClient.Shared.ViewModels
@@ -135,10 +132,18 @@ namespace RdClient.Shared.ViewModels
             if(this.Visibility == Visibility.Visible)
             {
                 this.Visibility = Visibility.Collapsed;
+                if (this.FullScreenModel.UserInteractionMode == UserInteractionMode.Touch)
+                {
+                    this.FullScreenModel.EnterFullScreenCommand.Execute(null);
+                }
             }
             else
             {
                 this.Visibility = Visibility.Visible;
+                if (this.FullScreenModel.UserInteractionMode == UserInteractionMode.Touch)
+                {
+                    this.FullScreenModel.ExitFullScreenCommand.Execute(null);
+                }
             }
         }
     }
