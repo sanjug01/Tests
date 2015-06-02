@@ -67,7 +67,6 @@
 
                 using (LockWrite())
                 {
-                    Contract.Assert(null == _totalTime);
 
                     if (null != _snapshotter)
                     {

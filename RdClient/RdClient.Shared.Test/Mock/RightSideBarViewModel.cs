@@ -4,6 +4,7 @@ using RdClient.Shared.ViewModels;
 using System;
 using System.Windows.Input;
 using Windows.UI.Xaml;
+using System.ComponentModel;
 
 namespace RdClient.Shared.Test.Mock
 {
@@ -28,5 +29,7 @@ namespace RdClient.Shared.Test.Mock
         public ICommand ToggleVisiblity { get; set; }
 
         public Visibility Visibility { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

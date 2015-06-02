@@ -233,11 +233,17 @@
                     throw new NotImplementedException();
                 }
 
-                void IRenderingPanel.ChangeMouseVisibility(Visibility visibility)
+                 void IRenderingPanel.MoveMouseCursor(Point point)
                 {
                     throw new NotImplementedException();
                 }
-                void IRenderingPanel.MoveMouseCursor(Point point)
+
+                public void OnMouseVisibilityChanged(object sender, PropertyChangedEventArgs e)
+                {
+                    throw new NotImplementedException();
+                }
+
+                public void ChangeMouseVisibility(Visibility visibility)
                 {
                     throw new NotImplementedException();
                 }
