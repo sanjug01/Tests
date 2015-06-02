@@ -3,6 +3,7 @@ using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
+
 namespace RdClient.Shared.Models
 {
     public class FullScreenModel : IFullScreenModel
@@ -50,6 +51,14 @@ namespace RdClient.Shared.Models
 
             _enterFullScreenCommand.EmitCanExecuteChanged();
             _exitFullScreenCommand.EmitCanExecuteChanged();
+        }
+
+        public UserInteractionMode UserInteractionMode
+        {
+            get
+            {
+                return UIViewSettings.GetForCurrentView().UserInteractionMode;
+            }
         }
 
         public FullScreenModel()

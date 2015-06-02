@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.ViewModels;
+using Windows.UI.ViewManagement;
 
 namespace RdClient.Shared.Models
 {
@@ -6,6 +7,8 @@ namespace RdClient.Shared.Models
     {
         RelayCommand EnterFullScreenCommand { get; }
         RelayCommand ExitFullScreenCommand { get; }
+
+        UserInteractionMode UserInteractionMode { get; }
 
         void ToggleFullScreen();
     }
