@@ -23,7 +23,7 @@ namespace RdClient.Shared.Input.Pointer
         public PointerEventDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, IDeferredExecution dispatcher)
         {
             _deviceDispatcher = new PointerDeviceDispatcher(timerFactory, sessionControl, pointerPosition, dispatcher);
-            _visibilityConsumer = new PointerVisibilityConsumer(timerFactory, sessionControl, pointerPosition, dispatcher);
+            _visibilityConsumer = new PointerVisibilityConsumer( sessionControl.RenderingPanel);
         }
 
         public void Consume(IPointerEventBase pointerEvent)

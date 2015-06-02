@@ -175,6 +175,7 @@
     <Compile Include="Input\Keyboard\TestSink.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyBaseTests.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactoryTests.cs" />
+    <Compile Include="Input\Pointer\PointerVisibilityConsumerTests.cs" />
     <Compile Include="Input\Recognizers\TapRecognizerTests.cs" />
     <Compile Include="Mock\DummyDataScrambler.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Mock\RadcClient.cs" />
     <Compile Include="Mock\RadcClientEvents.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
+    <Compile Include="Mock\RemoteSessionControl.cs" />
     <Compile Include="Mock\RenderingPanel.cs" />
     <Compile Include="Mock\RightSideBarViewModel.cs" />
     <Compile Include="Mock\TelemetryClient.cs" />

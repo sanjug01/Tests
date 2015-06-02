@@ -177,7 +177,7 @@
 
             _activeSession = newSession;
             this.SessionState = _activeSession.State.State;
-
+            
             _activeSession.CredentialsNeeded += this.OnCredentialsNeeded;
             _activeSession.Closed += this.OnSessionClosed;
             _activeSession.Failed += this.OnSessionFailed;
@@ -394,6 +394,8 @@
                         this.PointerPosition.Reset(_activeSessionControl, this);
                         _activeSessionControl.RenderingPanel.Viewport.Reset();
 
+                        this.RightSideBarViewModel.PropertyChanged += OnRightSideBarPropertyChanged;
+
                         this.PointerCapture = new PointerCapture(
                             this.PointerPosition, 
                             _activeSessionControl, 
@@ -419,6 +421,7 @@
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
                         _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
 
+                        _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
                         this.RightSideBarViewModel.FullScreenModel.EnterFullScreenCommand.Execute(null);
@@ -461,6 +464,27 @@
                 }
 
                 this.SessionState = _activeSession.State.State;
+            }
+        }
+
+        private void OnRightSideBarPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Visibility" && sender is IRightSideBarViewModel)
+            {
+                Visibility visibility = ((IRightSideBarViewModel)sender).Visibility;
+                if(visibility == Visibility.Visible)
+                {
+                    visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    visibility = Visibility.Visible;
+                }
+                if(_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
+                {
+                    _activeSessionControl.RenderingPanel.ChangeMouseVisibility(visibility);
+                }
+                
             }
         }
 

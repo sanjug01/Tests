@@ -3,6 +3,7 @@ using RdClient.Shared.Models;
 using RdClient.Shared.Models.Viewport;
 using RdMock;
 using System;
+using System.ComponentModel;
 using Windows.UI.Xaml;
 
 namespace RdClient.Shared.Test.Mock
@@ -19,9 +20,9 @@ namespace RdClient.Shared.Test.Mock
             set;
         }
 
-        public void ChangeMouseVisibility(Visibility visibility)
+        public void OnMouseVisibilityChanged(object sender, PropertyChangedEventArgs e)
         {
-            Invoke(new object[] { visibility });
+            Invoke(new object[] { sender, e });
         }
 
         public void ChangeMouseCursorShape(Shared.Input.Pointer.MouseCursorShape shape)
@@ -37,6 +38,11 @@ namespace RdClient.Shared.Test.Mock
         public void EmitRead()
         {
             Ready(this, EventArgs.Empty);
+        }
+
+        public void ChangeMouseVisibility(Visibility visibility)
+        {
+            Invoke(new object[] { visibility });
         }
     }
 }
