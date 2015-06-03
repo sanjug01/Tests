@@ -247,6 +247,11 @@
                 {
                     throw new NotImplementedException();
                 }
+
+                public void ScaleMouseCursor(double scale)
+                {
+                    throw new NotImplementedException();
+                }
             }
 
             public TestView(IViewModel vm)

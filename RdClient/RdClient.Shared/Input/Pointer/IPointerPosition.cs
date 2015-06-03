@@ -13,6 +13,6 @@ namespace RdClient.Shared.Input.Pointer
         Point ViewportPosition { get; set; }
         Point SessionPosition { get; }
 
-        void Reset(IRemoteSessionControl sessionControl, IExecutionDeferrer executionDeferrer);
+        void Reset(IRenderingPanel renderingPanel, IExecutionDeferrer executionDeferrer);
     }
 }
