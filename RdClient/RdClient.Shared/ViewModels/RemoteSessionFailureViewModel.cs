@@ -5,7 +5,7 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
-    public sealed class RemoteSessionFailureViewModel
+    public sealed class RemoteSessionFailureViewModel : IBellyBandViewModel
     {
         private readonly RdpDisconnectCode _failureCode;
         private readonly ICommand _dismiss;
@@ -26,6 +26,11 @@
 
             _failureCode = failureCode;
             _dismiss = new RelayCommand(param => dismissAction());
+        }
+
+        void IBellyBandViewModel.Terminate()
+        {
+            this.Dismiss?.Execute(null);
         }
     }
 }

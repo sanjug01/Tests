@@ -5,8 +5,9 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using System;
 
-    public sealed class RemoteSessionInterruptionViewModel : MutableObject
+    public sealed class RemoteSessionInterruptionViewModel : MutableObject, IBellyBandViewModel
     {
         private readonly RelayCommand _cancel;
         private readonly IRemoteSession _session;
@@ -64,6 +65,14 @@
 
                 IRemoteSessionState state = (IRemoteSessionState)sender;
                 this.ReconnectAttempt = state.ReconnectAttempt;
+            }
+        }
+
+        void IBellyBandViewModel.Terminate()
+        {
+            if(this.CanCancelReconnect(null))
+            {
+                this.CancelReconnect(null);
             }
         }
     }
