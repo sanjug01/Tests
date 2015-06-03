@@ -949,7 +949,7 @@
     <value>(r) That account already exists, you cannot overwrite it</value>
     <comment>Text shown when the user attempts to add an account with a username that matches an already saved account</comment>
   </data>
-  <data name="AddOrEditDesktop-HelpButton.Content" xml:space="preserve">
+  <data name="AddOrEditDesktop-HelpButtonLabel.Text" xml:space="preserve">
     <value>(r) Get help connecting</value>
     <comment>Text shown on hyperlink that leads to page describing how to connect to your PC using RDP</comment>
   </data>
