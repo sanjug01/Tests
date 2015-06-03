@@ -453,8 +453,33 @@
     -->
     <Thickness x:Key="BellyBandDefaultHorizontalSpacing">24,0,24,0</Thickness>
     <Thickness x:Key="BellyBandHeaderVerticalSpacing">0,19,0,4</Thickness>
-    
-    <!-- 
+
+	<!-- 
+    ======================================================================================
+    InSession RightSideBar
+    ======================================================================================
+    -->
+
+	<Style x:Key="RightSideBarButtonStyle" TargetType="ButtonBase">
+		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="Width" Value="80" />
+		<Setter Property="Background" Value="Transparent" />
+	</Style>
+
+	<Style x:Key="RightSideBarButtonIconStyle" TargetType="Image">
+		<Setter Property="Width" Value="40" />
+		<Setter Property="Height" Value="40" />
+		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="Stretch" Value="Uniform" />
+	</Style>
+
+	<Style x:Key="RightSideBarButtonTextStyle" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
+		<Setter Property="HorizontalAlignment" Value="Center" />
+		<Setter Property="TextWrapping" Value="Wrap" />
+		<Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundChromeWhiteBrush}" />
+	</Style>
+
+	<!-- 
     ======================================================================================
     ======================================================================================
     -->

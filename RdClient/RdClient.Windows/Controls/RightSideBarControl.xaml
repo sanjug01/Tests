@@ -41,71 +41,47 @@
 
             <StackPanel Orientation="Vertical" Margin="12,20">
 				<Button
-					x:Name="NavigateHomeButton"					
-					HorizontalAlignment="Center"
-					Width="80"
-					Background="Transparent">
+					x:Name="NavigateHomeButton"
+					Style="{StaticResource RightSideBarButtonStyle}">
 					<StackPanel Orientation="Vertical">
 						<Image							
-							HorizontalAlignment="Center"
-							Width="40"
-							Height="40"
-							Source="ms-appx:///Assets/disconnect_icon.png"
-							Stretch="UniformToFill">
+							Style="{StaticResource RightSideBarButtonIconStyle}"
+							Source="ms-appx:///Assets/disconnect_icon.png">
 						</Image>
 						<TextBlock
 							x:Uid="SessionView-HomeButtonLabel"
-							Foreground="{ThemeResource SystemControlForegroundChromeWhiteBrush}"
-							HorizontalAlignment="Center"
-							Style="{StaticResource CaptionTextBlockStyle}"
-							TextWrapping="Wrap"
+							Style="{StaticResource RightSideBarButtonTextStyle}"
 							Text="Disconnect (d)">							
 						</TextBlock>
 					</StackPanel>
 				</Button>
 				<ToggleButton
 					x:Name="FullScreenButton"
-					HorizontalAlignment="Center"
-					Width="80"
-					IsChecked="True"
-					Background="Transparent">
+					Style="{StaticResource RightSideBarButtonStyle}"
+					IsChecked="True">
 					<StackPanel Orientation="Vertical">
 						<Image 
-							HorizontalAlignment="Center"
-							Width="40"
-							Height="40"							
-							Source="ms-appx:///Assets/fullscreen_icon.png"
-							Stretch="UniformToFill">
+							Style="{StaticResource RightSideBarButtonIconStyle}"			
+							Source="ms-appx:///Assets/fullscreen_icon.png">
 						</Image>
 						<TextBlock
 							x:Uid="SessionView-FullScreenButtonLabel"
-							Foreground="{ThemeResource SystemControlForegroundChromeWhiteBrush}"
-							HorizontalAlignment="Center"
-							Style="{StaticResource CaptionTextBlockStyle}"
-							TextWrapping="Wrap"
+							Style="{StaticResource RightSideBarButtonTextStyle}"
 							Text="Full-Screen (d)">
 						</TextBlock>
 					</StackPanel>
 				</ToggleButton>
 				<ToggleButton
 					x:Name="MouseModeButton"
-					HorizontalAlignment="Center"
-					Width="80"
-					Background="Transparent">
+					Style="{StaticResource RightSideBarButtonStyle}">
 					<StackPanel Orientation="Vertical">
 						<Image 
-							HorizontalAlignment="Center"
-							Width="40"
-							Height="40"							
-							Source="ms-appx:///Assets/touch_icon.png"
-							Stretch="UniformToFill">
+							Style="{StaticResource RightSideBarButtonIconStyle}"							
+							Source="ms-appx:///Assets/touch_icon.png">
 						</Image>
 						<TextBlock
 							x:Uid="SessionView-MouseModeLabel"
-							Foreground="{ThemeResource SystemControlForegroundChromeWhiteBrush}"
-							HorizontalAlignment="Center"
-							Style="{StaticResource CaptionTextBlockStyle}"
-							TextWrapping="Wrap"
+							Style="{StaticResource RightSideBarButtonTextStyle}"
 							Text="Mouse-Mode (d)">
 						</TextBlock>
 					</StackPanel>
