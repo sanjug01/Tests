@@ -3,6 +3,8 @@
     using RdClient.Shared.Telemetry;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
+    using System;
+    using System.Collections.Generic;
 
     sealed class ApplicationInsightsTelemetryClient : ITelemetryClient
     {
@@ -79,6 +81,12 @@
         ITelemetryStopwatch ITelemetryClient.StartStopwatch()
         {
             return new TelemetryStopwatch(_core);
+        }
+
+        public void Metric(string metricName, IDictionary<string, string> properties)
+        {
+            if (_core.IsActive)
+                _core.Metric(metricName, properties);
         }
     }
 }

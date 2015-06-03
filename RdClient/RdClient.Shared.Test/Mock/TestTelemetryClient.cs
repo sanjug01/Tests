@@ -1,5 +1,7 @@
 ﻿namespace RdClient.Shared.Test.Mock
 {
+    using System;
+    using System.Collections.Generic;
     using RdClient.Shared.Telemetry;
 
     sealed class TestTelemetryClient : ITelemetryClient
@@ -39,6 +41,13 @@
         ITelemetryStopwatch ITelemetryClient.StartStopwatch()
         {
             return new Stopwatch();
+        }
+
+        public void Metric(string metricName, IDictionary<string, string> properties)
+        {
+            //
+            // Do nothing.
+            //
         }
     }
 }

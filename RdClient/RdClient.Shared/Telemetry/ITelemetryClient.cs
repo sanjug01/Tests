@@ -1,4 +1,6 @@
-﻿namespace RdClient.Shared.Telemetry
+﻿using System.Collections.Generic;
+
+namespace RdClient.Shared.Telemetry
 {
     /// <summary>
     /// Abstraction of a telemetry client - application facility that sends telemetry data to a telemetry back-end.
@@ -26,5 +28,12 @@
         /// <param name="metricName">Name of the metric</param>
         /// <param name="metricValue">Value of the metric</param>
         void Metric(string metricName, double metricValue);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="metricName">Name of the metric</param>
+        /// <param name="properties">properties of the metric</param>
+        void Metric(string metricName, IDictionary<string, string> properties);
     }
 }

@@ -1,12 +1,18 @@
 ﻿using RdClient.Shared.Telemetry;
 using RdMock;
 using System;
+using System.Collections.Generic;
 
 namespace RdClient.Shared.Test.Mock
 {
     public class TelemetryClient : MockBase, ITelemetryClient
     {
         public bool IsActive { get; set; }
+
+        public void Metric(string metricName, IDictionary<string, string> properties)
+        {
+            Invoke(new object[] { metricName, properties });
+        }
 
         void ITelemetryClient.Event(string eventName)
         {

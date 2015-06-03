@@ -178,6 +178,7 @@
     <Compile Include="Telemetry\ApplicationInsightsTelemetryCore.cs" />
     <Compile Include="Telemetry\DummyTelemetryClient.cs" />
     <Compile Include="Navigation\ModalFocusTracker.cs" />
+    <Compile Include="Telemetry\TelemetryCPU.cs" />
     <Compile Include="Views\RichTextView.xaml.cs">
       <DependentUpon>RichTextView.xaml</DependentUpon>
     </Compile>
