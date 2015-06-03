@@ -11,16 +11,10 @@
 
 	<Grid>
 		<!-- Right hand side bar -->
-        <Grid 
+		<Grid 
 			x:Name="RightSideBar" 
-			Width="Auto" 
-			HorizontalAlignment="Right" 
-			VerticalAlignment="Stretch" 
-			Background="{ThemeResource SystemControlBackgroundChromeBlackHighBrush}" 
-			Opacity="{ThemeResource ConnectionOverlayOpacity}" 
-			Visibility="Visible"
-			RequestedTheme="Dark">
-            <Grid.Resources>
+			Style="{StaticResource RightSideBarStyle}">		
+			<Grid.Resources>
                 <Storyboard x:Name="ShowRightSideBarStoryboard">
                     <DoubleAnimation x:Name="ShowRightSideBarAnimation"
                                      Storyboard.TargetName="RightSideBarTransform"
