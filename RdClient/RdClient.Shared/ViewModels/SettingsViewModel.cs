@@ -6,10 +6,12 @@ using System.ComponentModel;
 using System.Windows.Input;
 using System;
 using System.Collections.Generic;
+using RdClient.Shared.Navigation.Extensions;
+using RdClient.Shared.Telemetry;
 
 namespace RdClient.Shared.ViewModels
 {
-    public sealed class SettingsViewModel : ViewModelBase, ISettingsViewModel, IDialogViewModel 
+    public sealed class SettingsViewModel : ViewModelBase, ISettingsViewModel, IDialogViewModel, ITelemetryClientSite 
     {
         private readonly RelayCommand _goBackCommand;
         private readonly RelayCommand _deleteUserCommand;
@@ -23,6 +25,7 @@ namespace RdClient.Shared.ViewModels
         private UserComboBoxElement _selectedUser;
         private ReadOnlyObservableCollection<GatewayComboBoxElement> _gateways;
         private GatewayComboBoxElement _selectedGateway;
+        ITelemetryClient _telemetryClient;
 
         public SettingsViewModel()
         {
@@ -137,6 +140,9 @@ namespace RdClient.Shared.ViewModels
                 }
             }
 
+            if(null != _telemetryClient)
+                _telemetryClient.IsActive = this.GeneralSettings.SendFeedback;
+
             base.OnDismissed();
         }
 
@@ -216,6 +222,11 @@ namespace RdClient.Shared.ViewModels
             var creds = new CredentialsModel() { Username = "", Password = "" };
             var args = AddOrEditUserViewArgs.AddUser();
             this.NavigationService.PushAccessoryView("AddOrEditUserView", args);
+        }
+
+        void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
+        {
+            _telemetryClient = telemetryClient;
         }
     }
 }

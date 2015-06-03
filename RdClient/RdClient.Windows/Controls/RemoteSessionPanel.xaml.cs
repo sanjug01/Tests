@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Controls
 {
+    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Input.Recognizers;
@@ -8,13 +9,18 @@
     using RdClient.Shared.Navigation;
     using System;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Windows.Foundation;
     using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
+    using Windows.UI.Xaml.Media;
+
 
 
     /// <summary>
@@ -31,20 +37,19 @@
         private EventHandler _closed;
         private PropertyChangedEventHandler _propertyChanged;
         private bool _viewLoaded;
-        private Size _renderingPanelSize;
         private ZoomScrollRecognizer _zoomScrollRecognizer;
         private TapRecognizer _tapRecognizer;
-        private CoreCursor _exitCursor;
+        private RenderingPanel _renderingPanel;
+
+        public event EventHandler<IPointerEventBase> PointerChanged;    
 
         public RemoteSessionPanel()
         {
             this.InitializeComponent();
 
-            this.RenderingPanel.SizeChanged += this.OnRenderingPanelSizeChanged;
             this.SizeChanged += OnSizeChanged;
 
             _viewLoaded = false;
-            _renderingPanelSize = Size.Empty;
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
@@ -57,14 +62,6 @@
         {
             get { return GetValue(RemoteSessionViewSiteProperty); }
             set { SetValue(RemoteSessionViewSiteProperty, value); }
-        }
-        //
-        // IRemoteSessionView interface
-        //
-        public Size RenderingPanelSize
-        {
-            get { return _renderingPanelSize; }
-            private set { this.SetProperty(ref _renderingPanelSize, value); }
         }
 
         double IViewportPanel.Width
@@ -110,20 +107,33 @@
             Contract.Assert(_viewLoaded);
             Contract.Ensures(null != Contract.Result<IRenderingPanel>());
 
-            this.RenderingPanel.MouseCursor = this.MouseCursor;
-            this.RenderingPanel.MouseTransform = this.MouseTransform;
-            this.RenderingPanel.MouseScaleTransform = this.MouseScaleTransform;
+            ScreenProperties screen = new ScreenProperties();
+            Size resolution = screen.Resolution;
 
-            return this.RenderingPanel;
+            TransformGroup transformGroup = new TransformGroup();
+            transformGroup.Children.Add(this.RenderPanelTransform);
+
+            _renderingPanel = new RenderingPanel();
+            _renderingPanel.RenderTransform = transformGroup;
+            _renderingPanel.MouseCursor = this.MouseCursor;
+            _renderingPanel.MouseTransform = this.MouseTransform;
+            _renderingPanel.MouseScaleTransform = this.MouseScaleTransform;
+            _renderingPanel.Width = resolution.Width;
+            _renderingPanel.Height = resolution.Height;
+
+            _renderingPanel.SetViewport(new Viewport(_renderingPanel, this));
+            _renderingPanel.SetTransform(new ViewportTransformWrapper(this.RenderPanelTransform));
+
+            this.Canvas.Children.Insert(0, _renderingPanel);
+            this.UpdateLayout();
+
+            return _renderingPanel;
         }
 
         void IRemoteSessionView.RecycleRenderingPanel(IRenderingPanel renderingPanel)
         {
             if (null == renderingPanel)
                 throw new ArgumentNullException("renderingPanel");
-
-            if (!object.ReferenceEquals(renderingPanel, this.RenderingPanel))
-                throw new ArgumentException("Invalid rendering panel passed for recycling", "renderingPanel");
 
             //
             // TODO: recycle the swap chain panel somehow
@@ -169,10 +179,6 @@
         {
             _viewLoaded = true;
 
-            this.RenderingPanel.SetViewport(new Viewport(this.RenderingPanel, this));
-            this.RenderingPanel.SetTransform(new ViewportTransformWrapper(this.RenderPanelTransform));
-
-            _renderingPanelSize = this.RenderingPanel.RenderSize;
             //
             // Set self as the remote session view in the view model.
             //
@@ -188,29 +194,29 @@
             _tapRecognizer.Tapped += OnTapEvent;
         }
 
-        private void OnTapEvent(object sender, ITapEvent e)
-        {
-            this.RenderingPanel.EmitPointerEvent(e);
-        }
-
-        private void OnZoomScrollEvent(object sender, IZoomScrollEvent e)
-        {
-            this.RenderingPanel.EmitPointerEvent(e);
-        }
-
         private void OnUnloaded(object sender, RoutedEventArgs e)
         {
-            IRenderingPanel panel = this.RenderingPanel;
-            panel.ChangeMouseVisibility(Visibility.Collapsed);
-            
             if (null != _closed)
                 _closed(this, EventArgs.Empty);
         }
 
-        private void OnRenderingPanelSizeChanged(object sender, SizeChangedEventArgs e)
+        private void EmitPointerEvent(IPointerEventBase e)
         {
-            this.RenderingPanelSize = e.NewSize;
+            if(PointerChanged != null)
+            {
+                PointerChanged(this, e);
+            }
         }
+
+        private void OnTapEvent(object sender, ITapEvent e)
+        {
+            this.EmitPointerEvent(e);
+        }
+
+        private void OnZoomScrollEvent(object sender, IZoomScrollEvent e)
+        {
+            this.EmitPointerEvent(e);
+        }        
 
         private void EmitPropertyChanged(string propertyName)
         {
@@ -224,14 +230,14 @@
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarting, PointerEventType.ManipulationStartingRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.EmitPointerEvent(w);
         }
 
         protected override void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarted, PointerEventType.ManipulationStartedRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.EmitPointerEvent(w);
         }
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
@@ -240,21 +246,21 @@
 
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationInertiaStarting, PointerEventType.ManipulationInertiaStartingRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.EmitPointerEvent(w);
         }
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationDelta, PointerEventType.ManipulationDeltaRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.EmitPointerEvent(w);
         }
 
         protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationCompleted, PointerEventType.ManipulationCompletedRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.EmitPointerEvent(w);
         }
 
         protected override void OnPointerCanceled(PointerRoutedEventArgs e)
@@ -262,7 +268,7 @@
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerCancelled, PointerEventType.PointerRoutedEventArgs, e, this));
             _tapRecognizer.Consume(w);
 
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.EmitPointerEvent(w);
         }
 
         protected override void OnPointerReleased(PointerRoutedEventArgs e)
@@ -270,7 +276,7 @@
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerReleased, PointerEventType.PointerRoutedEventArgs, e, this));
             _tapRecognizer.Consume(w);
 
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.EmitPointerEvent(w);
         }
 
         protected override void OnPointerPressed(PointerRoutedEventArgs e)
@@ -278,33 +284,32 @@
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerPressed, PointerEventType.PointerRoutedEventArgs, e, this));
             _tapRecognizer.Consume(w);
 
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.EmitPointerEvent(w);
         }
 
         protected override void OnPointerWheelChanged(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerPressed, PointerEventType.PointerRoutedEventArgs, e, this));
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.EmitPointerEvent(w);
         }
-
 
         protected override void OnPointerMoved(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerMoved, PointerEventType.PointerRoutedEventArgs, e, this));
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.EmitPointerEvent(w);
         }
 
 
         protected override void OnPointerEntered(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerEntered, PointerEventType.PointerRoutedEventArgs, e, this));
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.EmitPointerEvent(w);
         }
 
         protected override void OnPointerExited(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerExited, PointerEventType.PointerRoutedEventArgs, e, this));
-            this.RenderingPanel.EmitPointerEvent(w);
+            this.EmitPointerEvent(w);
         }
     }
 }

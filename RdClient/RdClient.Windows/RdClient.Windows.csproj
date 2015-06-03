@@ -96,6 +96,9 @@
     <Compile Include="Controls\GatewaySelectorControl.xaml.cs">
       <DependentUpon>GatewaySelectorControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TouchKeyboardActivator.xaml.cs">
+      <DependentUpon>TouchKeyboardActivator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UserSelectorControl.xaml.cs">
       <DependentUpon>UserSelectorControl.xaml</DependentUpon>
     </Compile>
@@ -339,6 +342,10 @@
     <Page Include="Controls\GatewaySelectorControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\TouchKeyboardActivator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\UserSelectorControl.xaml">
       <Generator>MSBuild:Compile</Generator>

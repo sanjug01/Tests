@@ -49,7 +49,7 @@
         public void Duration(string eventName, long milliseconds)
         {
             if (null != _client)
-                _client.TrackMetric(eventName, milliseconds);
+                _client.TrackMetric(eventName, milliseconds / 60000);
         }
     }
 }

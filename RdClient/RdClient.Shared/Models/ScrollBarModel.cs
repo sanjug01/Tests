@@ -176,11 +176,11 @@ namespace RdClient.Shared.Models
                 this.ValueHorziontal = _viewport.Offset.X;
                 this.ValueVertical = _viewport.Offset.Y;
 
-                Debug.WriteLine("ValueHorziontal {0} ValueVertical {1}", ValueHorziontal, ValueVertical);
-                Debug.WriteLine("ViewportWidth {0} ViewportHeight {1}", ViewportWidth, ViewportHeight);
-                Debug.WriteLine("MinimumVertical {0} MaximumVertical {1} MinimumHorizontal {2} MaximumHorizontal {3}",
-                    MinimumVertical, MaximumVertical, MinimumHorizontal, MaximumHorizontal);
-                Debug.WriteLine("VisibilityHorizontal {0} VisibilityVertical {1} VisibilityCorner {2}", VisibilityHorizontal, VisibilityVertical, VisibilityCorner);
+                //Debug.WriteLine("ValueHorziontal {0} ValueVertical {1}", ValueHorziontal, ValueVertical);
+                //Debug.WriteLine("ViewportWidth {0} ViewportHeight {1}", ViewportWidth, ViewportHeight);
+                //Debug.WriteLine("MinimumVertical {0} MaximumVertical {1} MinimumHorizontal {2} MaximumHorizontal {3}",
+                //    MinimumVertical, MaximumVertical, MinimumHorizontal, MaximumHorizontal);
+                //Debug.WriteLine("VisibilityHorizontal {0} VisibilityVertical {1} VisibilityCorner {2}", VisibilityHorizontal, VisibilityVertical, VisibilityCorner);
 
                 EmitPropertyChanged("MinimumVertical");
                 EmitPropertyChanged("MaximumVertical");
