@@ -436,8 +436,10 @@
     
     <x:Double x:Key="DialogMinWidth">360</x:Double>
     <x:Double x:Key="DialogMaxWidth">540</x:Double>
-		
+
+	<Thickness x:Key="DialogHyperlinkVerticalSpacing">0,0,0,20</Thickness>
 	<Thickness x:Key="DialogItemVerticalSpacing">0,0,0,24</Thickness>
+	<Thickness x:Key="DialogItemExtraVerticalSpacing">0,0,0,36</Thickness>
 	<Thickness x:Key="DialogSectionVerticalSpacing">0,0,0,48</Thickness>
 	<Thickness x:Key="DialogTripleVerticalSpacing">0,0,0,72</Thickness>
 	<Thickness x:Key="DialogItemHalfVerticalSpacing">0,0,0,12</Thickness>

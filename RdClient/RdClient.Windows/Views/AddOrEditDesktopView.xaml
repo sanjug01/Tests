@@ -75,7 +75,14 @@
 				</controls:ErrorControl>
 			</StackPanel>
 			<!-- User name -->
-			<controls:UserSelectorControl Margin="{StaticResource DialogItemVerticalSpacing}"/>
+			<controls:UserSelectorControl Margin="{StaticResource DialogItemExtraVerticalSpacing}"/>
+			<!-- Help button -->
+			<HyperlinkButton
+				x:Uid="AddOrEditDesktop-HelpButton"
+				Margin="{StaticResource DialogHyperlinkVerticalSpacing}"
+				NavigateUri="http://go.microsoft.com/fwlink/?LinkID=533682&amp;clcid=0x409"
+				Content="Get help connecting (d)">
+			</HyperlinkButton>
 			<!-- Show/hide extra settings buttons -->
 			<HyperlinkButton
 				Margin="{StaticResource DialogItemVerticalSpacing}"
@@ -123,13 +130,6 @@
                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}">				
 			</controls:DesktopExtraSettingsControl>
 			<Grid>
-				<!-- Help button -->
-				<HyperlinkButton
-					x:Uid="AddOrEditDesktop-HelpButton"
-					HorizontalAlignment="Left"
-					Content="Get help connecting (d)"
-					NavigateUri="http://go.microsoft.com/fwlink/?LinkID=533682&amp;clcid=0x409">
-				</HyperlinkButton>
 				<!-- Save button -->
 				<Button 
 					x:Uid="AddOrEditDesktop-SaveButton" 
