@@ -388,7 +388,7 @@
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
 
-                        this.PointerPosition.Reset(_activeSessionControl, this);
+                        this.PointerPosition.Reset(_activeSessionControl.RenderingPanel, this);
                         _activeSessionControl.RenderingPanel.Viewport.Reset();
 
                         this.RightSideBarViewModel.PropertyChanged += OnRightSideBarPropertyChanged;

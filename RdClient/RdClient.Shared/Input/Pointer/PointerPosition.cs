@@ -7,7 +7,7 @@ namespace RdClient.Shared.Input.Pointer
 {
     public class PointerPosition : IPointerPosition
     {
-        private IRemoteSessionControl _sessionControl;
+        private IRenderingPanel _renderingPanel;
         private IExecutionDeferrer _deferrer;
 
         public event EventHandler<Point> PositionChanged;
@@ -19,12 +19,12 @@ namespace RdClient.Shared.Input.Pointer
             set
             {
                 Point mP = new Point(
-                    Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Width, Math.Max(0, value.X)),
-                    Math.Min(_sessionControl.RenderingPanel.Viewport.Size.Height, Math.Max(0, value.Y)));
+                    Math.Min(_renderingPanel.Viewport.Size.Width, Math.Max(0, value.X)),
+                    Math.Min(_renderingPanel.Viewport.Size.Height, Math.Max(0, value.Y)));
 
                 _viewportPosition = mP;
                 _deferrer.DeferToUI(() => {
-                    _sessionControl.RenderingPanel.MoveMouseCursor(_viewportPosition);
+                    _renderingPanel.MoveMouseCursor(_viewportPosition);
                     EmitPositionChanged(_viewportPosition);
                 });
             }
@@ -34,7 +34,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             get
             {
-                return _sessionControl.RenderingPanel.Viewport.SessionPanel.Transform.InverseTransformPoint(_viewportPosition);
+                return _renderingPanel.Viewport.SessionPanel.Transform.InverseTransformPoint(_viewportPosition);
             }
         }
 
@@ -46,10 +46,19 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        void IPointerPosition.Reset(IRemoteSessionControl sessionControl, IExecutionDeferrer deferrer)
+        void IPointerPosition.Reset(IRenderingPanel sessionControl, IExecutionDeferrer deferrer)
         {
-            _sessionControl = sessionControl;
+            _renderingPanel = sessionControl;
             _deferrer = deferrer;
+
+            _renderingPanel.Viewport.Changed -= OnViewportChanged;
+
+            _renderingPanel.Viewport.Changed += OnViewportChanged;
+        }
+
+        private void OnViewportChanged(object sender, EventArgs e)
+        {
+            _renderingPanel.ScaleMouseCursor(_renderingPanel.Viewport.ZoomFactor);
         }
     }
 }

@@ -42,5 +42,10 @@ namespace RdClient.Shared.Test.Mock
         {
             Invoke(new object[] { visibility });
         }
+
+        public void ScaleMouseCursor(double scale)
+        {
+            Invoke(new object[] { scale });
+        }
     }
 }
