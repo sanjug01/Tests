@@ -75,17 +75,13 @@
 				</controls:ErrorControl>
 			</StackPanel>
 			<!-- User name -->
-			<controls:UserSelectorControl Margin="{StaticResource DialogItemVerticalSpacing}"/>
+			<controls:UserSelectorControl Margin="{StaticResource DialogItemExtraVerticalSpacing}"/>
 			<!-- Help button -->
 			<HyperlinkButton
-					x:Uid="AddOrEditDesktop-HelpButton"
-					Margin="{StaticResource DialogItemVerticalSpacing}"
-					NavigateUri="http://go.microsoft.com/fwlink/?LinkID=533682&amp;clcid=0x409">
-				<TextBlock 
-					x:Uid="AddOrEditDesktop-HelpButtonLabel"
-					Style="{StaticResource BodyTextBlockStyle}"
-					Text="Get help connecting (d)">					
-				</TextBlock>
+				x:Uid="AddOrEditDesktop-HelpButton"
+				Margin="{StaticResource DialogHyperlinkVerticalSpacing}"
+				NavigateUri="http://go.microsoft.com/fwlink/?LinkID=533682&amp;clcid=0x409"
+				Content="Get help connecting (d)">
 			</HyperlinkButton>
 			<!-- Show/hide extra settings buttons -->
 			<HyperlinkButton
