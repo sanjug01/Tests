@@ -928,7 +928,7 @@
     <comment>Text explaining that a hostname is invalid because it contains invalid characters</comment>
   </data>
   <data name="HostnameValidationFailure_DuplicateGateway_String" xml:space="preserve">
-    <value>(r) Gateway name already used</value>
+    <value>You're already using that gateway</value>
     <comment>Text explaining that a gateway name is invalid because it is already used</comment>
   </data>
   <data name="InSessionEditCredentials-DismissButton.Content" xml:space="preserve">
@@ -948,11 +948,11 @@
     <comment>Text shown on button that adds a new user account</comment>
   </data>
   <data name="UsernameValidationFailure_Duplicate_String" xml:space="preserve">
-    <value>(r) That account already exists, you cannot overwrite it</value>
+    <value>That account is already set up.</value>
     <comment>Text shown when the user attempts to add an account with a username that matches an already saved account</comment>
   </data>
   <data name="AddOrEditDesktop-HelpButton.Content" xml:space="preserve">
-    <value>(r) Get help connecting</value>
+    <value>Need help connecting?</value>
     <comment>Text shown on hyperlink that leads to page describing how to connect to your PC using RDP</comment>
   </data>
   <data name="AddOrEditDesktop-HelpButton.NavigateUri" xml:space="preserve">
