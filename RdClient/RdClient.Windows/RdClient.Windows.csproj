@@ -274,8 +274,13 @@
     <Compile Include="Views\ViewPresenter.xaml.cs">
       <DependentUpon>ViewPresenter.xaml</DependentUpon>
     </Compile>
+    <Content Include="Assets\disconnect_icon.png" />
+    <Content Include="Assets\fullscreen_icon.png" />
+    <Content Include="Assets\guide_icon.png" />
+    <Content Include="Assets\normalscreen_icon.png" />
     <Content Include="Assets\Square310x310Logo.scale-100.png" />
     <Content Include="Assets\Square71x71Logo.scale-100.png" />
+    <Content Include="Assets\touch_icon.png" />
     <Content Include="Assets\WideLogo.scale-100.png" />
     <Content Include="Strings\en-US\EULA.rtf" />
     <Content Include="Strings\en-US\ThirdPartyNotices.rtf" />
