@@ -106,7 +106,7 @@
             Contract.Assert(_viewLoaded);
             Contract.Ensures(null != Contract.Result<IRenderingPanel>());
 
-            ScreenProperties screen = new ScreenProperties();
+            ScreenProperties screen = (ScreenProperties)Application.Current.Resources["ScreenProperties"];
             Size resolution = screen.Resolution;
 
             this.RenderingPanel.MouseCursor = this.MouseCursor;

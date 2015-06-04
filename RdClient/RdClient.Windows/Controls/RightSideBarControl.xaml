@@ -4,12 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RdClient.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:cv="using:RdClient.Shared.Converters"    
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-	<Grid>
+    <Grid>
 		<!-- Right hand side bar -->
 		<Grid 
 			x:Name="RightSideBar" 
@@ -65,10 +66,10 @@
 						</TextBlock>
 					</StackPanel>
 				</ToggleButton>
-				<ToggleButton
+                <ToggleButton
 					x:Name="MouseModeButton"
 					Style="{StaticResource RightSideBarButtonStyle}">
-					<StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Vertical">
 						<Image 
 							Style="{StaticResource RightSideBarButtonIconStyle}"							
 							Source="ms-appx:///Assets/touch_icon.png">
@@ -76,7 +77,7 @@
 						<TextBlock
 							x:Uid="SessionView-MouseModeLabel"
 							Style="{StaticResource RightSideBarButtonTextStyle}"
-							Text="Mouse-Mode (d)">
+							Text="Touch (d)">
 						</TextBlock>
 					</StackPanel>
 				</ToggleButton>
