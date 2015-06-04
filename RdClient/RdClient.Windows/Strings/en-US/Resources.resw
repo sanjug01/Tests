@@ -741,7 +741,7 @@
     <comment>Hyperlink for the "Rate and Review" hyperlink button in the About dialog</comment>
   </data>
   <data name="AboutView_Link_RecommendedNewFeatures.NavigateUri" xml:space="preserve">
-    <value>http://www.bing.com/search?q=microsoft+rdp+client+recommended+new+features</value>
+    <value>http://go.microsoft.com/fwlink/?LinkID=615346&amp;clcid=0x409</value>
     <comment>Hyperlink for the "Recommended New Features" hyperlink button in the About dialog</comment>
   </data>
   <data name="AboutView_PrivacyPolicy.Text" xml:space="preserve">
@@ -753,7 +753,7 @@
     <comment>Title of the "Rate and Review" hyperlink button in the About dialog</comment>
   </data>
   <data name="AboutView_RecommendedNewFeatures.Text" xml:space="preserve">
-    <value>Recommended new features</value>
+    <value>Recommend new features</value>
     <comment>Title of the "Recommended New Features" hyperlink button in the About dialog</comment>
   </data>
   <data name="AboutView_TermsOfUse.Text" xml:space="preserve">
