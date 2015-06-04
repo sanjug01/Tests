@@ -1,8 +1,11 @@
 ﻿namespace RdClient.Controls
 {
+    using RdClient.Navigation.Extensions;
+    using RdClient.Shared.Models;
     using System;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Media.Animation;
@@ -105,6 +108,17 @@
                     this.HideRightSideBarAnimation.From = 0.0;
                     this.HideRightSideBarAnimation.To = this.RightSideBar.ActualWidth;
                     break;
+            }
+
+            // Binding Visibility to {Binding Source={StaticResource DeviceCapabilities}, Path=TouchPresent, Converter={StaticResource BooleanToVisibilityConverter}}
+            // does not work for some reason :(
+            if (((IDeviceCapabilities)Application.Current.Resources["DeviceCapabilities"]).TouchPresent)
+            {
+                this.MouseModeButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                this.MouseModeButton.Visibility = Visibility.Collapsed;
             }
 
             Contract.Assert(null != _activeStoryboard);

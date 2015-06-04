@@ -28,14 +28,12 @@
         <fac:AppInitializer
             x:Key="AppInitializer"
             LifeTimeManager="{StaticResource LifeTimeManager}"
-            LandingPage="ConnectionCenterView">
+            LandingPage="ConnectionCenterView"
+            DeviceCapabilities="{StaticResource DeviceCapabilities}">
             <fac:AppInitializer.ConnectionSource>
                 <models:SingleSwapChainPanelRdpConnectionSource/>
                 <!-- <models:BadCertificateConnectionSource/> -->
             </fac:AppInitializer.ConnectionSource>
-            <fac:AppInitializer.DeviceCapabilities>
-                <navextimp:DeviceCapabilities />
-            </fac:AppInitializer.DeviceCapabilities>
             <fac:AppInitializer.TelemetryClient>
                 <telemetry:ApplicationInsightsTelemetryClient/>
             </fac:AppInitializer.TelemetryClient>
