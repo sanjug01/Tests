@@ -39,8 +39,8 @@ ScreenProperties::ScreenProperties()
 			creationFlags,              // optionally set debug and Direct2D compatibility flags
 			featureLevels,              // list of feature levels this app can support
 			ARRAYSIZE(featureLevels),   // number of entries in above list
-			D3D11_SDK_VERSION,          // always set this to D3D11_SDK_VERSION for Metro style apps
-			&m_d3dDevice,                    // returns the Direct3D device created
+			D3D11_SDK_VERSION,          // always set this to D3D11_SDK_VERSION for Windows Store apps
+			&m_d3dDevice,               // returns the Direct3D device created
 			&m_featureLevel,            // returns feature level of device created
 			&context                    // returns the device immediate context
 			)
