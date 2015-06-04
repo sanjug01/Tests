@@ -8,6 +8,7 @@
     xmlns:cv="using:RdClient.Shared.Converters"
     xmlns:navextimp="using:RdClient.Navigation.Extensions"
     xmlns:helpers="using:RdClient.Shared.Helpers"
+    xmlns:cx="using:RdClient.Shared.CxWrappers"
     xmlns:winmodel="using:RdClient.Models"
     xmlns:lifetime="using:RdClient.LifeTimeManagement">
 
@@ -31,6 +32,7 @@
             
             <navextimp:DeviceCapabilities x:Key="DeviceCapabilities" />
             <model:FullScreenModel x:Key="FullScreenModel"/>
+            <cx:ScreenProperties x:Key="ScreenProperties"/>
         </ResourceDictionary>
     </Application.Resources>   
 </Application>

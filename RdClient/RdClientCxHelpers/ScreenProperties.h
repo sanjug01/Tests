@@ -15,6 +15,8 @@ namespace RdClientCxHelpers
 	{
 	public:
 		ScreenProperties();
+		~ScreenProperties();
+
 		property Windows::Foundation::Size Resolution
 		{
 			Windows::Foundation::Size get();
@@ -23,5 +25,6 @@ namespace RdClientCxHelpers
 	private:
 		D3D_FEATURE_LEVEL							    m_featureLevel;
 		Microsoft::WRL::ComPtr<ID3D11Device1>           m_d3dDevice;
+		Microsoft::WRL::ComPtr<ID2D1Factory>            m_d2dFactory;
 	};
 }
