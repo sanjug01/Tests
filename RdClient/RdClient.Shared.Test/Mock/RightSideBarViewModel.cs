@@ -10,6 +10,8 @@ namespace RdClient.Shared.Test.Mock
 {
     public class RightSideBarViewModel : IRightSideBarViewModel
     {
+        public IDeviceCapabilities DeviceCapabilities { get; set; }
+
         public ICommand Disconnect { get; set; }
 
         public ICommand FullScreen { get; set; }

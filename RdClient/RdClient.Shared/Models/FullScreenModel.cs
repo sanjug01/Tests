@@ -61,6 +61,14 @@ namespace RdClient.Shared.Models
             }
         }
 
+        public bool IsFullScreenMode
+        {
+            get
+            {
+                return ApplicationView.GetForCurrentView().IsFullScreenMode;
+            }
+        }
+
         public FullScreenModel()
         {
             _wasFullScreenMode = ApplicationView.GetForCurrentView().IsFullScreenMode;

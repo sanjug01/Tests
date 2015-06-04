@@ -10,6 +10,13 @@ namespace RdClient.Shared.ViewModels
 {
     public class RightSideBarViewModel : MutableObject, IRightSideBarViewModel
     {
+        public IDeviceCapabilities DeviceCapabilities
+        {
+            private get; set;
+        }
+            
+
+
         public IRemoteSession RemoteSession
         {
             private get; set;

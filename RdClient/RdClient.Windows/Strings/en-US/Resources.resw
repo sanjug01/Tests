@@ -607,7 +607,7 @@
     <comment>Label on in session right side bar button that disconnects the session and returns to the connection center</comment>
   </data>
   <data name="SessionView-MouseModeLabel.Text" xml:space="preserve">
-    <value>Mouse pointer</value>
+    <value>(r) Touch</value>
     <comment>Label on in session right side bar button that toggles touch mode between direct touch remoting and touch pointer mode</comment>
   </data>
   <data name="ConnectionCenter_AppLabel.Content" xml:space="preserve">
