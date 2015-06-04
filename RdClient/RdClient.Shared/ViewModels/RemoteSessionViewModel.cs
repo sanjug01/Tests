@@ -278,6 +278,9 @@
 
         private void OnSessionFailed(object sender, SessionFailureEventArgs e)
         {
+            
+            //Restore the local mouse
+            this._activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
             //
             // Show the failure UI
             //
