@@ -48,7 +48,7 @@ ScreenProperties::ScreenProperties()
 
 	ThrowIfFailed(
 		D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
-			__uuidof(ID2D1Factory), NULL, (void**)&m_d2dFactory)
+			__uuidof(ID2D1Factory), (void**)&m_d2dFactory)
 		);
 }	
 
