@@ -25,11 +25,7 @@
                 <input:CoreWindowKeyboardCapture/>
             </vm:RemoteSessionViewModel.KeyboardCapture>
             <vm:RemoteSessionViewModel.RightSideBarViewModel>
-                <vm:RightSideBarViewModel>
-                    <vm:RightSideBarViewModel.FullScreenModel>
-                        <m:FullScreenModel />
-                    </vm:RightSideBarViewModel.FullScreenModel>
-                </vm:RightSideBarViewModel>
+                <vm:RightSideBarViewModel DeviceCapabilities="{StaticResource DeviceCapabilities}" FullScreenModel="{StaticResource FullScreenModel}" />
             </vm:RemoteSessionViewModel.RightSideBarViewModel>
             <vm:RemoteSessionViewModel.PointerPosition>
                 <pointer:PointerPosition />

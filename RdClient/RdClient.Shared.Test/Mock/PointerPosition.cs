@@ -23,9 +23,9 @@ namespace RdClient.Shared.Test.Mock
             }
         }
 
-        public void Reset(IRemoteSessionControl sessionControl, IExecutionDeferrer executionDeferrer)
+        public void Reset(IRenderingPanel renderingPanel, IExecutionDeferrer executionDeferrer)
         {
-            Invoke(new object[] { sessionControl, executionDeferrer });
+            Invoke(new object[] { renderingPanel, executionDeferrer });
         }
     }
 }

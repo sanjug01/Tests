@@ -98,11 +98,11 @@
         private void SetDefaults()
         {
             this.UseThumbnails = true;
-            this.SendFeedback = true;
+            this.SendFeedback = false;
             //
             // Telemetry is enabled by default; user has an option to opt-out on the settings page.
             //
-            this.IsTelemetryActive = true;
+            this.IsTelemetryActive = false;
         }
 
         ICommand IPersistentObject.Save

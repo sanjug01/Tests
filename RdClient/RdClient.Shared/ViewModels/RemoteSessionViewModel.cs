@@ -87,7 +87,7 @@
             get { return this.Dispatcher; }
         }
 
-        private object _bellyBandViewModel;
+        private IBellyBandViewModel _bellyBandViewModel;
 
         public SessionState SessionState
         {
@@ -129,7 +129,7 @@
         /// View model of the view shown in the belly band across the session view when input is needed from user.
         /// Setting the property to a non-null value shows the belly band.
         /// </summary>
-        public object BellyBandViewModel
+        public IBellyBandViewModel BellyBandViewModel
         {
             get { return _bellyBandViewModel; }
             private set { this.SetProperty(ref _bellyBandViewModel, value); }
@@ -224,6 +224,7 @@
 
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
         {
+            this.BellyBandViewModel?.Terminate();
             this.BellyBandViewModel = null;
             this.RightSideBarViewModel.Disconnect.Execute(null);
             backArgs.Handled = true;
@@ -388,7 +389,7 @@
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
 
-                        this.PointerPosition.Reset(_activeSessionControl, this);
+                        this.PointerPosition.Reset(_activeSessionControl.RenderingPanel, this);
                         _activeSessionControl.RenderingPanel.Viewport.Reset();
 
                         this.RightSideBarViewModel.PropertyChanged += OnRightSideBarPropertyChanged;

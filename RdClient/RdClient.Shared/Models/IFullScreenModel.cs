@@ -11,5 +11,6 @@ namespace RdClient.Shared.Models
         UserInteractionMode UserInteractionMode { get; }
 
         void ToggleFullScreen();
+        bool IsFullScreenMode { get; }
     }
 }

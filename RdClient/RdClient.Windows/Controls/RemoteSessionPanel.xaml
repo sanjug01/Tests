@@ -18,16 +18,16 @@
             <ScaleTransform x:Name="MouseScaleTransform" CenterX="0" CenterY="0"/>
             <TranslateTransform x:Name="MouseTransform" />
         </TransformGroup>
-        <!--<TransformGroup x:Key="RenderTransformGroup">-->
+        <TransformGroup x:Key="RenderTransformGroup">
             <CompositeTransform x:Name="RenderPanelTransform"
                                         ScaleX="1.0" ScaleY="1.0"
                                         TranslateX="0.0" TranslateY="0.0"/>
-        <!--</TransformGroup>-->                        
+        </TransformGroup>                        
     </UserControl.Resources>
 
     <Canvas Background="Gray" x:Name="Canvas">
-        <!--<c:RenderingPanel x:Name="RenderingPanel"
-                          RenderTransform="{StaticResource RenderTransformGroup}" />-->
+        <c:RenderingPanel x:Name="RenderingPanel"
+                          RenderTransform="{StaticResource RenderTransformGroup}" />
         <Image x:Name="MouseCursor" CacheMode="BitmapCache" Stretch="None" Width="Auto" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"
                    RenderTransform="{StaticResource MouseTransformGroup}" />
     </Canvas>

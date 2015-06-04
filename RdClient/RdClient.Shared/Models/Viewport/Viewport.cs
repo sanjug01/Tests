@@ -25,6 +25,7 @@ namespace RdClient.Shared.Models.Viewport
             _sessionPanel = sessionPanel;
             _maxZoom = 4.0;
             _minZoom = 1.0;
+            _zoomFactor = 1.0;
         }
 
         private void OnViewportPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -179,7 +180,7 @@ namespace RdClient.Shared.Models.Viewport
             _sessionPanel.Transform.ScaleY = 1.0;
             _sessionPanel.Transform.TranslateX = 0.0;
             _sessionPanel.Transform.TranslateY = 0.0;
-
+            _zoomFactor = 1.0;
             if (Changed != null)
             {
                 Changed(this, null);

@@ -350,6 +350,7 @@
     <Compile Include="ViewModels\AddOrEditViewArgs.cs" />
     <Compile Include="ViewModels\CredentialPromptMode.cs" />
     <Compile Include="ViewModels\CredentialPromptResult.cs" />
+    <Compile Include="ViewModels\IBellyBandViewModel.cs" />
     <Compile Include="ViewModels\IGatewaysCollector.cs" />
     <Compile Include="ViewModels\IRightSideBarViewModel.cs" />
     <Compile Include="ViewModels\IUsersCollector.cs" />

@@ -39,7 +39,6 @@
         private bool _viewLoaded;
         private ZoomScrollRecognizer _zoomScrollRecognizer;
         private TapRecognizer _tapRecognizer;
-        private RenderingPanel _renderingPanel;
 
         public event EventHandler<IPointerEventBase> PointerChanged;    
 
@@ -107,27 +106,29 @@
             Contract.Assert(_viewLoaded);
             Contract.Ensures(null != Contract.Result<IRenderingPanel>());
 
-            ScreenProperties screen = new ScreenProperties();
+            ScreenProperties screen = (ScreenProperties)Application.Current.Resources["ScreenProperties"];
             Size resolution = screen.Resolution;
 
-            TransformGroup transformGroup = new TransformGroup();
-            transformGroup.Children.Add(this.RenderPanelTransform);
+            this.RenderingPanel.MouseCursor = this.MouseCursor;
+            this.RenderingPanel.MouseTransform = this.MouseTransform;
+            this.RenderingPanel.MouseScaleTransform = this.MouseScaleTransform;
+            this.RenderingPanel.Width = resolution.Width;
+            this.RenderingPanel.Height = resolution.Height;
 
-            _renderingPanel = new RenderingPanel();
-            _renderingPanel.RenderTransform = transformGroup;
-            _renderingPanel.MouseCursor = this.MouseCursor;
-            _renderingPanel.MouseTransform = this.MouseTransform;
-            _renderingPanel.MouseScaleTransform = this.MouseScaleTransform;
-            _renderingPanel.Width = resolution.Width;
-            _renderingPanel.Height = resolution.Height;
+            this.RenderingPanel.SetViewport(new Viewport(this.RenderingPanel, this));
+            this.RenderingPanel.SetTransform(new ViewportTransformWrapper(this.RenderPanelTransform));
 
-            _renderingPanel.SetViewport(new Viewport(_renderingPanel, this));
-            _renderingPanel.SetTransform(new ViewportTransformWrapper(this.RenderPanelTransform));
+            this.RenderingPanel.Width = resolution.Width;
+            this.RenderingPanel.Height = resolution.Height;
 
-            this.Canvas.Children.Insert(0, _renderingPanel);
+            this.RenderPanelTransform.ScaleX = 1.0;
+            this.RenderPanelTransform.ScaleY = 1.0;
+            this.RenderPanelTransform.TranslateX = 0.0;
+            this.RenderPanelTransform.TranslateY = 0.0;
+
             this.UpdateLayout();
 
-            return _renderingPanel;
+            return this.RenderingPanel;
         }
 
         void IRemoteSessionView.RecycleRenderingPanel(IRenderingPanel renderingPanel)

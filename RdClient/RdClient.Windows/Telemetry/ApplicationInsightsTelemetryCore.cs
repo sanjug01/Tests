@@ -13,7 +13,7 @@
 
         public ApplicationInsightsTelemetryCore()
         {
-            _client = new TelemetryClient();
+            //_client = new TelemetryClient();
         }
 
         public bool IsActive

@@ -25,6 +25,7 @@
         void ChangeMouseCursorShape(MouseCursorShape shape);
         void MoveMouseCursor(Point point);
         void ChangeMouseVisibility(Visibility visibility);
+        void ScaleMouseCursor(double scale);
 
     }
 }

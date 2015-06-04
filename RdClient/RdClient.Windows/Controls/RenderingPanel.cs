@@ -133,6 +133,12 @@
             }
         }
 
+        void IRenderingPanel.ScaleMouseCursor(double scale)
+        {
+            this.MouseScaleTransform.ScaleX = scale;
+            this.MouseScaleTransform.ScaleY = scale;
+        }
+
         void IRenderingPanel.ChangeMouseVisibility(Visibility visibility)
         {
             if (visibility == Visibility.Visible)

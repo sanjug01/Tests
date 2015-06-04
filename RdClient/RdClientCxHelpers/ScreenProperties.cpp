@@ -14,11 +14,6 @@ ScreenProperties::ScreenProperties()
 	// It is recommended usage, and is required for compatibility with Direct2D.
 	UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
-#if defined(_DEBUG)
-	// If the project is in a debug build, enable debugging via SDK Layers with this flag.
-	creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
-
 	// This array defines the set of DirectX hardware feature levels this app will support.
 	// Note the ordering should be preserved.
 	// Don't forget to declare your application's minimum required feature level in its
@@ -56,7 +51,17 @@ ScreenProperties::ScreenProperties()
 	ThrowIfFailed(
 		device.As(&m_d3dDevice)
 		);
-}
+
+	ComPtr<ID2D1Factory> d2dFactory;
+	ThrowIfFailed(
+		D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
+			__uuidof(ID2D1Factory), NULL, (void**)&d2dFactory)
+		);
+
+	ThrowIfFailed(
+		d2dFactory.As(&m_d2dFactory)
+		);
+}	
 
 Windows::Foundation::Size ScreenProperties::Resolution::get()
 {
@@ -70,6 +75,11 @@ Windows::Foundation::Size ScreenProperties::Resolution::get()
 		dxgiDevice->GetAdapter(&dxgiAdapter)
 		);
 
+	ComPtr<ID2D1Factory> d2dFactory;
+	ThrowIfFailed(
+		m_d2dFactory.As(&d2dFactory)
+		);
+
 	IDXGIOutput * pOutput;
 	if (dxgiAdapter->EnumOutputs(0, &pOutput) != DXGI_ERROR_NOT_FOUND)
 	{
@@ -81,11 +91,6 @@ Windows::Foundation::Size ScreenProperties::Resolution::get()
 		pOutput->Release();
 
 		FLOAT dpiX, dpiY;
-		ID2D1Factory* d2dFactory = NULL;
-		ThrowIfFailed(
-			D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
-						__uuidof(ID2D1Factory), NULL, (void**)&d2dFactory)
-			);
 		d2dFactory->GetDesktopDpi(&dpiX, &dpiY);
 
 		size.Width = (float)desc.DesktopCoordinates.right * 96.0f / dpiX;
