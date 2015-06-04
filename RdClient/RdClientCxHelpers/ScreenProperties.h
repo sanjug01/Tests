@@ -15,7 +15,6 @@ namespace RdClientCxHelpers
 	{
 	public:
 		ScreenProperties();
-		~ScreenProperties();
 
 		property Windows::Foundation::Size Resolution
 		{
