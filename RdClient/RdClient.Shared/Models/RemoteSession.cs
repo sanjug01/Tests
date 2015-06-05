@@ -131,7 +131,7 @@
             {
                 using(ReadWriteMonitor.Read(_monitor))
                 {
-                    if (null != _session._connection)
+                    if (null != _session._connection && _session._internalState.State == SessionState.Connected)
                         action();
                 }
             }
