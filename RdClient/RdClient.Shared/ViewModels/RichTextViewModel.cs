@@ -1,12 +1,8 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
-    using System.Reflection;
     using System.Windows.Input;
-    using Windows.ApplicationModel;
-    using Windows.UI.Xaml;
     using Windows.Storage;
     using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.Helpers;
