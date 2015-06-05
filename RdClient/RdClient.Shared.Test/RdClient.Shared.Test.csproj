@@ -243,6 +243,7 @@
     <Compile Include="ValidationRules\NotDuplicateValidationRuleTests.cs" />
     <Compile Include="ValidationRules\UsernameFormatValidationRuleTests.cs" />
     <Compile Include="ValidationRules\ValidatedPropertyTests.cs" />
+    <Compile Include="ViewModels\RichTextViewModelTests.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
     <Compile Include="ViewModels\AddOrEditUserViewArgsTests.cs" />
@@ -270,6 +271,7 @@
     <Compile Include="ViewModels\RelayCommandTests.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModelTests.cs" />
     <Compile Include="ViewModels\SegoeGlyphBarButtonModelTests.cs" />
+    <Compile Include="ViewModels\AboutViewModelTests.cs" />
     <Compile Include="ViewModels\SettingsViewModelTests.cs" />
     <Compile Include="ViewModels\DesktopViewModelTests.cs" />
     <Compile Include="ViewModels\ConnectionCenterViewModelTests.cs" />
