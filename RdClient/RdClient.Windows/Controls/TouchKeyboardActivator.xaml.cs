@@ -2,8 +2,6 @@
 {
     using RdClient.Shared.Input.Keyboard;
     using System;
-    using System.Diagnostics;
-    using Windows.Foundation;
     using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
@@ -12,6 +10,7 @@
     {
         private readonly InputPane _inputPane;
         private EventHandler _isVisibleChanged;
+        private bool _isVisible;
 
         public TouchKeyboardActivator()
         {
@@ -19,17 +18,12 @@
             this.HiddenTextBox.TextChanged += this.OnTextChanged;
             _inputPane = InputPane.GetForCurrentView();
             _inputPane.Showing += this.OnInputPaneShowing;
-            _inputPane.Showing += this.OnInputPaneHiding;
+            _inputPane.Hiding += this.OnInputPaneHiding;
         }
 
         bool IInputPanel.IsVisible
         {
-            get
-            {
-                Rect rect = InputPane.GetForCurrentView().OccludedRect;
-                Debug.WriteLine("InputPane={0},{1}-{2},{3}", rect.Left, rect.Top, rect.Width, rect.Height);
-                return 0 != rect.Height && 0 != rect.Width;
-            }
+            get { return _isVisible; }
         }
 
         event EventHandler IInputPanel.IsVisibleChanged
@@ -40,12 +34,17 @@
 
         void IInputPanel.Hide()
         {
+            this.DummyButton.Focus(FocusState.Programmatic);
             _inputPane.TryHide();
         }
 
         void IInputPanel.Show()
         {
-            this.HiddenTextBox.Focus(FocusState.Keyboard);
+            //
+            // Set focus to the hidden text box in the pointer mode, which may under the right circumstances
+            // invoke the touch keyboard.
+            //
+            this.HiddenTextBox.Focus(FocusState.Pointer);
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
@@ -64,11 +63,13 @@
 
         private void OnInputPaneShowing(InputPane sender, InputPaneVisibilityEventArgs e)
         {
+            _isVisible = true;
             EmitIsVisibleChanged();
         }
 
         private void OnInputPaneHiding(InputPane sender, InputPaneVisibilityEventArgs e)
         {
+            _isVisible = false;
             EmitIsVisibleChanged();
         }
     }

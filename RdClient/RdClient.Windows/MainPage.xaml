@@ -18,6 +18,7 @@
     xmlns:fac="using:RdClient.Factories"
     xmlns:controls="using:RdClient.Controls"
     xmlns:telemetry="using:RdClient.Telemetry"
+    TabNavigation="Once"
     mc:Ignorable="d">
 
     <Page.DataContext>        

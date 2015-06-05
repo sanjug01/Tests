@@ -8,15 +8,19 @@
     mc:Ignorable="d"
     d:DesignHeight="60"
     d:DesignWidth="100"
-    TabNavigation="Cycle">
+    TabNavigation="Once">
     
     <Grid>
+        <!-- Dummy disfunctional button that prevents the text box from gaining input focus automatically -->
+        <Button x:Name="DummyButton" Opacity="0" TabIndex="1" />
+        <!-- Hidden text box that gets input focus to show the touch keyboard -->
         <TextBox x:Name="HiddenTextBox"
                  Opacity="0"
                  IsTextPredictionEnabled="False"
                  IsSpellCheckEnabled="False"
                  BorderThickness="0"
                  BorderBrush="Transparent"
-                 InputScope="Text" />
+                 InputScope="Text"
+                 TabIndex="2"/>
     </Grid>
 </UserControl>
