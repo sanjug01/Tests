@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Telemetry
 {
     using Microsoft.ApplicationInsights;
+    using Microsoft.ApplicationInsights.DataContracts;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -39,6 +40,15 @@
             if (null != _client)
             {
                 _client.TrackEvent(eventName);
+                _client.Flush();
+            }
+        }
+
+        public void Event(EventTelemetry eventTelemetry)
+        {
+            if(null != _client)
+            {
+                _client.TrackEvent(eventTelemetry);
                 _client.Flush();
             }
         }
