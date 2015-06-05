@@ -13,7 +13,7 @@
 
         public ApplicationInsightsTelemetryCore()
         {
-            //_client = new TelemetryClient();
+            _client = new TelemetryClient();
         }
 
         public bool IsActive
@@ -37,19 +37,28 @@
         public void Event(string eventName)
         {
             if (null != _client)
+            {
                 _client.TrackEvent(eventName);
+                _client.Flush();
+            }
         }
 
         public void Metric(string metricName, double metricValue)
         {
             if (null != _client)
+            {
                 _client.TrackMetric(metricName, metricValue);
+                _client.Flush();
+            }
         }
 
         public void Duration(string eventName, long milliseconds)
         {
             if (null != _client)
+            {
                 _client.TrackMetric(eventName, milliseconds / 60000);
+                _client.Flush();
+            }
         }
     }
 }

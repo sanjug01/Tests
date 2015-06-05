@@ -30,7 +30,6 @@ ScreenProperties::ScreenProperties()
 	};
 
 	// Create the DX11 API device object, and get a corresponding context.
-	ComPtr<ID3D11Device> device;
 	ComPtr<ID3D11DeviceContext> context;
 	ThrowIfFailed(
 		D3D11CreateDevice(
@@ -40,26 +39,16 @@ ScreenProperties::ScreenProperties()
 			creationFlags,              // optionally set debug and Direct2D compatibility flags
 			featureLevels,              // list of feature levels this app can support
 			ARRAYSIZE(featureLevels),   // number of entries in above list
-			D3D11_SDK_VERSION,          // always set this to D3D11_SDK_VERSION for Metro style apps
-			&device,                    // returns the Direct3D device created
+			D3D11_SDK_VERSION,          // always set this to D3D11_SDK_VERSION for Windows Store apps
+			&m_d3dDevice,               // returns the Direct3D device created
 			&m_featureLevel,            // returns feature level of device created
 			&context                    // returns the device immediate context
 			)
 		);
 
-	// Get the DirectX11.1 device by QI off the DirectX11 one.
-	ThrowIfFailed(
-		device.As(&m_d3dDevice)
-		);
-
-	ComPtr<ID2D1Factory> d2dFactory;
 	ThrowIfFailed(
 		D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
-			__uuidof(ID2D1Factory), NULL, (void**)&d2dFactory)
-		);
-
-	ThrowIfFailed(
-		d2dFactory.As(&m_d2dFactory)
+			__uuidof(ID2D1Factory), (void**)&m_d2dFactory)
 		);
 }	
 
@@ -75,11 +64,6 @@ Windows::Foundation::Size ScreenProperties::Resolution::get()
 		dxgiDevice->GetAdapter(&dxgiAdapter)
 		);
 
-	ComPtr<ID2D1Factory> d2dFactory;
-	ThrowIfFailed(
-		m_d2dFactory.As(&d2dFactory)
-		);
-
 	IDXGIOutput * pOutput;
 	if (dxgiAdapter->EnumOutputs(0, &pOutput) != DXGI_ERROR_NOT_FOUND)
 	{
@@ -91,7 +75,7 @@ Windows::Foundation::Size ScreenProperties::Resolution::get()
 		pOutput->Release();
 
 		FLOAT dpiX, dpiY;
-		d2dFactory->GetDesktopDpi(&dpiX, &dpiY);
+		m_d2dFactory->GetDesktopDpi(&dpiX, &dpiY);
 
 		size.Width = (float)desc.DesktopCoordinates.right * 96.0f / dpiX;
 		size.Height = (float)desc.DesktopCoordinates.bottom * 96.0f / dpiY;
