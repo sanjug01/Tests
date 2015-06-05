@@ -1,17 +1,8 @@
 ﻿namespace RdClient.Shared.Test.ViewModels
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-    using RdClient.Shared.Data;
-    using RdClient.Shared.Helpers;
-    using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
-    using RdClient.Shared.Navigation.Extensions;
-    using RdClient.Shared.Test.Data;
-    using RdClient.Shared.Test.Helpers;
     using RdClient.Shared.ViewModels;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     [TestClass]
     public class RichTextViewModelTests
