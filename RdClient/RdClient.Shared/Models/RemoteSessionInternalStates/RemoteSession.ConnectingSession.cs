@@ -15,15 +15,13 @@
         private sealed class ConnectingSession : InternalState
         {
             private readonly IRenderingPanel _renderingPanel;
-            private RemoteSession _session;
             private IRdpConnection _connection;
             private bool _cancelledCredentials;
 
-            public ConnectingSession(IRenderingPanel renderingPanel, ReaderWriterLockSlim monitor, ITelemetryClient telemetryClient)
-                : base(SessionState.Connecting, monitor, telemetryClient)
+            public ConnectingSession(IRenderingPanel renderingPanel, InternalState otherState)
+                : base(SessionState.Connecting, otherState)
             {
                 Contract.Assert(null != renderingPanel);
-                Contract.Assert(null != monitor);
 
                 _renderingPanel = renderingPanel;
                 _cancelledCredentials = false;
@@ -40,80 +38,67 @@
                 _cancelledCredentials = false;
             }
 
-            public override void Activate(RemoteSession session)
+            protected override void Activated()
             {
-                Contract.Assert(null == _session);
-
-                _session = session;
                 _renderingPanel.Ready += this.OnRenderingPanelReady;
             }
 
-            public override void Deactivate(RemoteSession session)
+            protected override void Terminate()
             {
-                Contract.Assert(null != _session);
-            }
-
-            public override void Terminate(RemoteSession session)
-            {
-                Contract.Assert(null != _session);
-
                 this.TelemetryClient.Event("Connecting:Cancelled");
 
                 if (null != _connection)
                     _connection.Disconnect();
             }
 
-            public override void Complete(RemoteSession session)
+            protected override void Completed()
             {
-                Contract.Assert(null != _session);
-                Contract.Assert(object.ReferenceEquals(_session, session));
-
                 _renderingPanel.Ready -= this.OnRenderingPanelReady;
+
                 if (null != _connection)
                 {
-                    _session._syncEvents.ClientConnected -= this.OnClientConnected;
-                    _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
-                    _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
-                    _session._syncEvents.StatusInfoReceived -= this.OnStatusInfoReceived;
-                    _session._syncEvents.CheckGatewayCertificateTrust -= this.OnCheckGatewayCertificateTrust;
+                    this.Session._syncEvents.ClientConnected -= this.OnClientConnected;
+                    this.Session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
+                    this.Session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
+                    this.Session._syncEvents.StatusInfoReceived -= this.OnStatusInfoReceived;
+                    this.Session._syncEvents.CheckGatewayCertificateTrust -= this.OnCheckGatewayCertificateTrust;
                 }
-                _session = null;
             }
 
             private void OnRenderingPanelReady(object sender, EventArgs e)
             {
                 if (null == _connection)
                 {
-                    _connection = _session.InternalCreateConnection(_renderingPanel);
+                    _connection = this.Session.InternalCreateConnection(_renderingPanel);
                     Contract.Assert(null != _connection);
-                    Contract.Assert(null != _session._syncEvents);
+                    Contract.Assert(null != this.Session._syncEvents);
 
-                    _session._syncEvents.ClientConnected += this.OnClientConnected;
-                    _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
-                    _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
-                    _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
-                    _session._syncEvents.CheckGatewayCertificateTrust += this.OnCheckGatewayCertificateTrust;
+                    this.Session._syncEvents.ClientConnected += this.OnClientConnected;
+                    this.Session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                    this.Session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+                    this.Session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
+                    this.Session._syncEvents.CheckGatewayCertificateTrust += this.OnCheckGatewayCertificateTrust;
 
-                    _connection.SetCredentials(_session._sessionSetup.SessionCredentials.Credentials,
-                        !_session._sessionSetup.SessionCredentials.IsNewPassword);
+                    _connection.SetCredentials(this.Session._sessionSetup.SessionCredentials.Credentials,
+                        !this.Session._sessionSetup.SessionCredentials.IsNewPassword);
 
                     // pass gateway, if necessary
-                    if (_session._sessionSetup.SessionGateway.HasGateway)
+                    if (this.Session._sessionSetup.SessionGateway.HasGateway)
                     {
                         _connection.SetGateway(
-                            _session._sessionSetup.SessionGateway.Gateway,
-                            _session._sessionSetup.SessionGateway.Credentials);
+                            this.Session._sessionSetup.SessionGateway.Gateway,
+                            this.Session._sessionSetup.SessionGateway.Credentials);
                     }
 
                     _connection.Connect();
                 }
                 else
                 {
-                    _session._syncEvents.ClientConnected += this.OnClientConnected;
-                    _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
-                    _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
-                    _session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
-                    _session._syncEvents.CheckGatewayCertificateTrust += this.OnCheckGatewayCertificateTrust;
+                    this.Session._syncEvents.ClientConnected += this.OnClientConnected;
+                    this.Session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                    this.Session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+                    this.Session._syncEvents.StatusInfoReceived += this.OnStatusInfoReceived;
+                    this.Session._syncEvents.CheckGatewayCertificateTrust += this.OnCheckGatewayCertificateTrust;
                 }
             }
 
@@ -122,10 +107,9 @@
                 // (pre)validation of the gateway certificate, per RDPConnection request
                 IRdpCertificate certificate = e.Certificate;
                 Contract.Assert(null != certificate);
-                Contract.Assert(null != _session);
                 
-                if (_session._certificateTrust.IsCertificateTrusted(certificate)
-                    || _session._sessionSetup.DataModel.CertificateTrust.IsCertificateTrusted(certificate))
+                if (this.Session._certificateTrust.IsCertificateTrusted(certificate)
+                    || this.Session._sessionSetup.DataModel.CertificateTrust.IsCertificateTrusted(certificate))
                 {
                     // The certificate has been accepted already;
                     e.TrustDelegate.Invoke(true);
@@ -144,7 +128,7 @@
                     //
                     // Set the internal sesion state to Connected.
                     //
-                    _session.InternalSetState(new ConnectedSession(_connection, this));
+                    ChangeState(new ConnectedSession(_connection, this));
                 }
             }
 
@@ -165,7 +149,7 @@
                         //
                         // Set the internal state to "certificate validation needed"
                         //                        
-                        ValidateCertificate(connection.GetServerCertificate(), e.DisconnectReason, _session._sessionSetup.HostName);
+                        ValidateCertificate(connection.GetServerCertificate(), e.DisconnectReason, this.Session._sessionSetup.HostName);
                         break;
 
                     case RdpDisconnectCode.PreAuthLogonFailed:
@@ -188,14 +172,14 @@
 
                     case RdpDisconnectCode.ProxyInvalidCA:
                         // Gateway certificate needs validation
-                        ValidateCertificate(connection.GetGatewayCertificate(), e.DisconnectReason, 
-                            _session._sessionSetup.SessionGateway.Gateway.HostName);
+                        ValidateCertificate(connection.GetGatewayCertificate(), e.DisconnectReason,
+                            this.Session._sessionSetup.SessionGateway.Gateway.HostName);
                         break;
 
                     case RdpDisconnectCode.CredSSPUnsupported:
                         // Set the internal state to "certificate validation needed"
                         // Should prompt that the server identity cannot be verified 
-                        ValidateServerIdentity(_session._sessionSetup.HostName , e.DisconnectReason);
+                        ValidateServerIdentity(this.Session._sessionSetup.HostName , e.DisconnectReason);
                         break;
                     default:
                         connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
@@ -204,7 +188,6 @@
             }
             private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
             {
-                Contract.Assert(null != _session);
                 Contract.Assert(sender is IRdpConnection);
                 Contract.Assert(object.ReferenceEquals(sender, _connection));
                 Contract.Ensures(null == _connection);
@@ -215,14 +198,14 @@
                     // If user has disconnected (unlikely), or the credentials prompt was cancelled,
                     // go to the Closed state, so the session view will navigate to the connection center page.
                     //
-                    _session.InternalSetState(new ClosedSession(_connection, this));
+                    ChangeState(new ClosedSession(_connection, this));
                 }
                 else
                 {
                     //
                     // For all other failures go to the Failed state so the sessoin view will show the error UI.
                     //
-                    _session.InternalSetState(new FailedSession(_connection, e.DisconnectReason, this));
+                    ChangeState(new FailedSession(_connection, e.DisconnectReason, this));
                 }
             }
 
@@ -234,11 +217,10 @@
             private void ValidateCertificate(IRdpCertificate certificate, RdpDisconnectReason reason, string serverName)
             {
                 Contract.Assert(null != certificate);
-                Contract.Assert(null != _session);
                 Contract.Assert(null != _connection);
 
-                if (_session._certificateTrust.IsCertificateTrusted(certificate)
-                    || _session._sessionSetup.DataModel.CertificateTrust.IsCertificateTrusted(certificate))
+                if (this.Session._certificateTrust.IsCertificateTrusted(certificate)
+                    || this.Session._sessionSetup.DataModel.CertificateTrust.IsCertificateTrusted(certificate))
                 {
                     //
                     // The certificate has been accepted already;
@@ -251,27 +233,26 @@
                     // Set the state to ValidateCertificate, that will emit a BadCertificate event from the session
                     // and handle the user's response to the event.
                     //
-                    _session.InternalSetState(new ValidateCertificate(_renderingPanel, _connection, reason, serverName, this));
+                    ChangeState(new ValidateCertificate(_renderingPanel, _connection, reason, serverName, this));
                 }
             }
 
             private void ValidateServerIdentity(String hostName, RdpDisconnectReason reason)
             {
-                Contract.Assert(null != _session);
-                Contract.Assert(null != _session._sessionSetup);
+                Contract.Assert(null != this.Session._sessionSetup);
                 Contract.Assert(null != _connection);
 
                 if(
-                    _session._isServerTrusted || 
-                    ( null != (_session._sessionSetup.Connection as DesktopModel)
-                    && (_session._sessionSetup.Connection as DesktopModel).IsTrusted )
+                    this.Session._isServerTrusted || 
+                    ( null != (this.Session._sessionSetup.Connection as DesktopModel)
+                    && (this.Session._sessionSetup.Connection as DesktopModel).IsTrusted )
                   )
                 {
                     _connection.HandleAsyncDisconnectResult(reason, true);
                 }
                 else
                 {
-                    _session.InternalSetState(new ValidateServerIdentity(_connection, reason, this));
+                    ChangeState(new ValidateServerIdentity(_connection, reason, this));
                 }
             }
 
@@ -280,15 +261,15 @@
                 //
                 // Emit an event with a credentials editor task.
                 //
-                InSessionCredentialsTask task = new InSessionCredentialsTask(_session._sessionSetup.SessionCredentials,
-                    _session._sessionSetup.DataModel,
+                InSessionCredentialsTask task = new InSessionCredentialsTask(this.Session._sessionSetup.SessionCredentials,
+                    this.Session._sessionSetup.DataModel,
                     CredentialPromptMode.InvalidCredentials,
                     reason);
 
                 task.Submitted += this.NewPasswordSubmitted;
                 task.Cancelled += this.NewPasswordCancelled;
 
-                _session.DeferEmitCredentialsNeeded(task);
+                this.Session.DeferEmitCredentialsNeeded(task);
             }
 
             private void RequestNewPassword(RdpDisconnectReason reason)
@@ -296,15 +277,15 @@
                 //
                 // Emit an event with a credentials editor task.
                 //
-                InSessionCredentialsTask task = new InSessionCredentialsTask(_session._sessionSetup.SessionCredentials,
-                    _session._sessionSetup.DataModel,
+                InSessionCredentialsTask task = new InSessionCredentialsTask(this.Session._sessionSetup.SessionCredentials,
+                    this.Session._sessionSetup.DataModel,
                     CredentialPromptMode.FreshCredentialsNeeded,
                     reason);
 
                 task.Submitted += this.NewPasswordSubmitted;
                 task.Cancelled += this.NewPasswordCancelled;
 
-                _session.DeferEmitCredentialsNeeded(task);
+                this.Session.DeferEmitCredentialsNeeded(task);
             }
 
             private void NewPasswordSubmitted(object sender, InSessionCredentialsTask.SubmittedEventArgs e)
@@ -315,7 +296,7 @@
                 task.Cancelled -= this.NewPasswordCancelled;
 
                 if (e.SaveCredentials)
-                    _session._sessionSetup.SaveCredentials();
+                    this.Session._sessionSetup.SaveCredentials();
                 //
                 // Go ahead and try to re-connect with new credentials.
                 // Stay in the same state, update the session credentials and call HandleAsyncDisconnectResult
@@ -323,8 +304,8 @@
                 //
                 using (LockWrite())
                 {
-                    _connection.SetCredentials(_session._sessionSetup.SessionCredentials.Credentials,
-                        !_session._sessionSetup.SessionCredentials.IsNewPassword);
+                    _connection.SetCredentials(this.Session._sessionSetup.SessionCredentials.Credentials,
+                        !this.Session._sessionSetup.SessionCredentials.IsNewPassword);
                     _connection.HandleAsyncDisconnectResult((RdpDisconnectReason)e.State, true);
                 }
             }
@@ -355,15 +336,15 @@
                 // Emit an event with a credentials editor task.
                 //
                 InSessionCredentialsTask task = new InSessionCredentialsTask(
-                    _session._sessionSetup.SessionGateway,
-                    _session._sessionSetup.DataModel,
+                    this.Session._sessionSetup.SessionGateway,
+                    this.Session._sessionSetup.DataModel,
                     CredentialPromptMode.InvalidCredentials,
                     reason);
 
                 task.Submitted += this.NewGatewayCredentialsSubmitted;
                 task.Cancelled += this.NewGatewayCredentialsCancelled;
 
-                _session.DeferEmitCredentialsNeeded(task);
+                this.Session.DeferEmitCredentialsNeeded(task);
             }
 
             private void RequestNewGatewayCredentials(RdpDisconnectReason reason)
@@ -372,15 +353,15 @@
                 // Emit an event with a credentials editor task.
                 //
                 InSessionCredentialsTask task = new InSessionCredentialsTask(
-                    _session._sessionSetup.SessionGateway,
-                    _session._sessionSetup.DataModel,
+                    this.Session._sessionSetup.SessionGateway,
+                    this.Session._sessionSetup.DataModel,
                     CredentialPromptMode.FreshCredentialsNeeded,
                     reason);
 
                 task.Submitted += this.NewGatewayCredentialsSubmitted;
                 task.Cancelled += this.NewGatewayCredentialsCancelled;
 
-                _session.DeferEmitCredentialsNeeded(task);
+                this.Session.DeferEmitCredentialsNeeded(task);
             }
 
             private void NewGatewayCredentialsSubmitted(object sender, InSessionCredentialsTask.SubmittedEventArgs e)
@@ -391,7 +372,7 @@
                 task.Cancelled -= this.NewGatewayCredentialsCancelled;
 
                 if (e.SaveCredentials)
-                    _session._sessionSetup.SaveGatewayCredentials();
+                    this.Session._sessionSetup.SaveGatewayCredentials();
                 //
                 // Go ahead and try to re-connect with new gateway credentials.
                 // Stay in the same state, update the session credentials and call HandleAsyncDisconnectResult
@@ -399,8 +380,8 @@
                 //
                 using (LockWrite())
                 {
-                    _connection.SetGateway(_session._sessionSetup.SessionGateway.Gateway,
-                        _session._sessionSetup.SessionGateway.Credentials);
+                    _connection.SetGateway(this.Session._sessionSetup.SessionGateway.Gateway,
+                        this.Session._sessionSetup.SessionGateway.Credentials);
                     _connection.HandleAsyncDisconnectResult((RdpDisconnectReason)e.State, true);
                 }
             }
