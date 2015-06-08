@@ -36,12 +36,10 @@
             {
                 switch (e.VirtualKey)
                 {
+                    // both Esc and Enter invoke the default Cancel action.
                     case VirtualKey.Escape:
-                        this.CancelButton.Invoke(e);
-                        break;
-
                     case VirtualKey.Enter:
-                        this.AcceptButton.Invoke(e);
+                        this.CancelButton.Invoke(e);
                         break;
                 }
             }
