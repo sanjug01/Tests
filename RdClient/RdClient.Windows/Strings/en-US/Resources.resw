@@ -497,7 +497,7 @@
     <comment>Placeholder text shown when there is no username entered in the username text box on the Add user view</comment>
   </data>
   <data name="AddUser-DeleteUserText.Text" xml:space="preserve">
-    <value>Delete this account</value>
+    <value>Remove this account</value>
     <comment>Text shown on AddUser dialog - Delete account link </comment>
   </data>
   <data name="CertificateValidation-Caption.Text" xml:space="preserve">
