@@ -26,5 +26,7 @@
         /// <param name="metricName">Name of the metric</param>
         /// <param name="metricValue">Value of the metric</param>
         void Metric(string metricName, double metricValue);
+
+        ITelemetryEvent MakeEvent(string eventName);
     }
 }

@@ -335,6 +335,7 @@
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="Navigation\ViewVisibility.cs" />
     <Compile Include="Telemetry\ITelemetryClient.cs" />
+    <Compile Include="Telemetry\ITelemetryEvent.cs" />
     <Compile Include="Telemetry\ITelemetryStopwatch.cs" />
     <Compile Include="ValidationRules\CompositeValidationRule.cs" />
     <Compile Include="ValidationRules\HostnameValidationFailure.cs" />
