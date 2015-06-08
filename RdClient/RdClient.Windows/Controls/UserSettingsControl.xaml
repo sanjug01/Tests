@@ -27,10 +27,10 @@
 
 	<StackPanel Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
 		<ComboBox 
-			Margin="{StaticResource DialogItemVerticalSpacing}"
-			HorizontalAlignment="Stretch" 
             x:Uid="Settings_Users_Combobox" 
             Header="User accounts (d)" 
+            Style="{StaticResource DialogComboBoxStyle}"            
+            Margin="{StaticResource DialogItemVerticalSpacing}"
             PlaceholderText="Select user (d)"
             ItemsSource="{Binding Users}" 
 			SelectedItem="{Binding SelectedUser, Mode=TwoWay}"

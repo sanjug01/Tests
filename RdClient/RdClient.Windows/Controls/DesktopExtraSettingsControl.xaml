@@ -46,7 +46,8 @@
 			</StackPanel>
 			<TextBox 
 				Name="txtFriendlyNameEntry"
-                x:Uid="AddOrEditDesktop-PcFriendlyNameTextbox"                            
+                x:Uid="AddOrEditDesktop-PcFriendlyNameTextbox"
+                Background="Transparent"
                 InputScope="Text"
                 IsSpellCheckEnabled="False"
                 PlaceholderText="Connection friendly name (d)" 
@@ -74,10 +75,10 @@
         <!-- Redirection section -->
 		<StackPanel Orientation="Vertical">
 			<ComboBox
-				Margin="{StaticResource DialogItemVerticalSpacing}"
                 x:Uid="AddOrEditDesktop-SoundComboBox"
                 Header="Sound(d)"
-                HorizontalAlignment="Stretch"
+                Style="{StaticResource DialogComboBoxStyle}"                
+                Margin="{StaticResource DialogItemVerticalSpacing}"
                 SelectedIndex="{Binding Path=AudioMode, Mode=TwoWay}">
 				<ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnThisDevice" Content="Play on this device(d)" />
 				<ComboBoxItem x:Uid="AddOrEditDesktop-Sound-PlayOnRemotePc" Content="Play on remote PC(d)" />
