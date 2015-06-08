@@ -26,9 +26,9 @@
 
 	<Grid Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
 		<ComboBox							
-            HorizontalAlignment="Stretch"
             x:Uid="AddOrEditDesktop-Gateways-ComboBox"
             Header="Gateway(d)"
+            Style="{StaticResource DialogComboBoxStyle}"            
             ItemsSource="{Binding Gateways}"
             SelectedItem="{Binding SelectedGateway, Mode=TwoWay}">
 			<ComboBox.ItemTemplate>

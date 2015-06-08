@@ -29,7 +29,7 @@
 		<ComboBox
 			x:Uid="AddOrEditDesktop-Credentials-ComboBox"
             Header="User name(d)"
-            HorizontalAlignment="Stretch"
+            Style="{StaticResource DialogComboBoxStyle}"
             ItemsSource="{Binding Path=Users}"
             SelectedItem="{Binding SelectedUser, Mode=TwoWay}">
 			<ComboBox.ItemTemplate>
