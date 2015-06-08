@@ -16,11 +16,11 @@
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
 
-            <SolidColorBrush x:Key="PointerOverBackgroundBrush" Color="{ThemeResource ListHoverColor}" />
+            <SolidColorBrush x:Key="PointerOverBackgroundBrush" Color="{ThemeResource SystemControlForegroundBaseHighBrush}" />
             <SolidColorBrush x:Key="PointerOverForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
-            <SolidColorBrush x:Key="PressedBackgroundBrush" Color="{ThemeResource ListPressColor}" />
+            <SolidColorBrush x:Key="PressedBackgroundBrush" Color="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
             <SolidColorBrush x:Key="PressedForegroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
-            <SolidColorBrush x:Key="PressedBorderBrush" Color="{ThemeResource ListPressColor}" />
+            <SolidColorBrush x:Key="PressedBorderBrush" Color="{ThemeResource ListBoxBorderThemeBrush}" />
             <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="Transparent" />
             <SolidColorBrush x:Key="SelectedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
             <SolidColorBrush x:Key="SelectedBorderBrush" Color="Transparent" />
@@ -45,11 +45,11 @@
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
 
-            <SolidColorBrush x:Key="PointerOverBackgroundBrush" Color="{ThemeResource ListHoverColor}" />
+            <SolidColorBrush x:Key="PointerOverBackgroundBrush" Color="{ThemeResource SystemControlForegroundBaseHighBrush}" />
             <SolidColorBrush x:Key="PointerOverForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
-            <SolidColorBrush x:Key="PressedBackgroundBrush" Color="{ThemeResource ListPressColor}" />
+            <SolidColorBrush x:Key="PressedBackgroundBrush" Color="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
             <SolidColorBrush x:Key="PressedForegroundBrush" Color="{ThemeResource SystemChromeHighColor}" />
-            <SolidColorBrush x:Key="PressedBorderBrush" Color="{ThemeResource ListPressColor}" />
+            <SolidColorBrush x:Key="PressedBorderBrush" Color="{ThemeResource ListBoxBorderThemeBrush}" />
             <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="Transparent" />
             <SolidColorBrush x:Key="SelectedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
             <SolidColorBrush x:Key="SelectedBorderBrush" Color="Transparent" />

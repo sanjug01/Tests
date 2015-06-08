@@ -251,6 +251,7 @@
             // that does not do anything.
             //
             _internalState = new InactiveSession(_sessionMonitor, _telemetryClient, telemetryClient.MakeEvent("SessionLaunch"));
+            _internalState.Activate(this);
         }
 
         protected override void DisposeManagedState()
