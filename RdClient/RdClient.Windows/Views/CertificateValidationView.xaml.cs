@@ -3,6 +3,7 @@
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Navigation;
     using Windows.System;
+    using Windows.UI.Core;
     using Windows.UI.Xaml.Controls;
 
     public sealed partial class CertificateValidationView : Page, IPresentableView
@@ -29,17 +30,20 @@
             Dispatcher.AcceleratorKeyActivated -= this.OnAcceleratorKeyActivated;
         }
 
-        private void OnAcceleratorKeyActivated(Windows.UI.Core.CoreDispatcher sender, Windows.UI.Core.AcceleratorKeyEventArgs e)
+        private void OnAcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs e)
         {
-            switch (e.VirtualKey)
+            if (CoreAcceleratorKeyEventType.KeyDown == e.EventType)
             {
-                case VirtualKey.Escape:
-                    this.CancelButton.Invoke(e);
-                    break;
+                switch (e.VirtualKey)
+                {
+                    case VirtualKey.Escape:
+                        this.CancelButton.Invoke(e);
+                        break;
 
-                case VirtualKey.Enter:
-                    this.AcceptButton.Invoke(e);
-                    break;
+                    case VirtualKey.Enter:
+                        this.AcceptButton.Invoke(e);
+                        break;
+                }
             }
         }
     }
