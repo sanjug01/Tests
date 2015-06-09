@@ -17,7 +17,10 @@ namespace RdClient.Shared.Models.PanKnobModel
         {
             set
             {
-                _stateMachineEvent.Control.Viewport = value;
+                if (null != _stateMachineEvent.Control)
+                {
+                    _stateMachineEvent.Control.Viewport = value;
+                }
             }
         }
 
@@ -69,11 +72,13 @@ namespace RdClient.Shared.Models.PanKnobModel
         {
             if(consumptionMode == ConsumptionModeType.DirectTouch || consumptionMode == ConsumptionModeType.MultiTouch)
             {
-                _panKnob.IsVisible = true;
+                if(null!=_panKnob)
+                    _panKnob.IsVisible = true;
             }
             else
             {
-                _panKnob.IsVisible = false;
+                if(null!=_panKnob)
+                    _panKnob.IsVisible = false;
             }
         }
     }

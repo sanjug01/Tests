@@ -14,6 +14,7 @@
     using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.Test.Data;
     using RdClient.Shared.ViewModels;
+    using RdClient.Shared.Models.PanKnobModel;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -21,6 +22,7 @@
     using System.Threading.Tasks;
     using Windows.Foundation;
     using Windows.UI.Xaml;
+    using Windows.UI.ViewManagement;
 
     public sealed partial class RemoteSessionViewModelTests
     {
@@ -34,6 +36,74 @@
         private TestConnectionSource _connectionSource;
         private TestLifeTimeManager _lftManager;
         private TestViewFactory _viewFactory;
+
+        private sealed class TestPointerPosition : IPointerPosition
+        {
+            public Point SessionPosition { get; set; }
+
+            public Point ViewportPosition { get; set; }
+
+            public event EventHandler<Point> PositionChanged;
+            public void EmitPositionChanged(Point point)
+            {
+                if (PositionChanged != null)
+                {
+                    PositionChanged(this, point);
+                }
+            }
+
+            public void Reset(IRenderingPanel renderingPanel, IExecutionDeferrer executionDeferrer)
+            {
+                // no action
+            }
+        }
+
+        private sealed class TestScrollBarModel : IScrollBarModel
+        {
+            public double HorizontalScrollBarWidth { set; private get; }
+            public double VerticalScrollBarWidth { set; private get; }
+            public double MaximumHorizontal { private set; get; }
+            public double MaximumVertical { private set; get; }
+            public double MinimumHorizontal { private set; get; }
+            public double MinimumVertical { private set; get; }
+            public double ValueHorziontal { set; get; }
+            public double ValueVertical { set; get; }
+            public IViewport Viewport { private get; set; }
+
+            public double ViewportHeight { get { return 100; } }
+            public double ViewportWidth { get { return 100; } }
+
+            public Visibility VisibilityCorner { get { return Visibility.Visible; } }
+            public Visibility VisibilityHorizontal { get { return Visibility.Collapsed; } }
+            public Visibility VisibilityVertical { get { return Visibility.Visible; } }
+        }
+
+        private sealed class TestPanKnob : IPanKnob
+        {
+            public bool IsVisible { get; set; }
+            public Point Position { get; set; }
+            public Size Size { get; private set; }
+        }
+
+        private sealed class TestFullScreenModel : IFullScreenModel
+        {
+            public TestFullScreenModel()
+            {
+                EnterFullScreenCommand = new RelayCommand(o => { });
+                ExitFullScreenCommand = new RelayCommand(o => { });
+            }
+
+            public RelayCommand EnterFullScreenCommand { get; private set; }
+            public RelayCommand ExitFullScreenCommand { get; private set; }
+            public bool IsFullScreenMode { get; private set; }
+
+            public UserInteractionMode UserInteractionMode { get; private set; }
+
+            public void ToggleFullScreen()
+            {
+                // noop
+            }
+        }
 
         private sealed class TestKeyboardCapture : IKeyboardCapture
         {
@@ -172,7 +242,7 @@
 
             public void Reset()
             {
-                throw new NotImplementedException();
+                // noop - this is actually used implicitly
             }
         }
 
@@ -244,7 +314,7 @@
 
                 public void ChangeMouseVisibility(Visibility visibility)
                 {
-                    throw new NotImplementedException();
+                    // noop
                 }
 
                 public void ScaleMouseCursor(double scale)
