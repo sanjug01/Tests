@@ -836,7 +836,7 @@
     <comment>"Cancel" button in the remote connection interruption dialog; the button cancels the auto-reconnect process</comment>
   </data>
   <data name="RemoteSessionInterruptionControl_Title.Text" xml:space="preserve">
-    <value>The remote connection was intterupted.</value>
+    <value>The remote connection was interrupted.</value>
     <comment>Title of the belly-band message shown in the session view when the connection got interrupted and is reconnecting</comment>
   </data>
   <data name="RemoteSessionInterruptionControl_Message.Text" xml:space="preserve">
