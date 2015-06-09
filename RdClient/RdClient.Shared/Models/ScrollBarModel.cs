@@ -1,13 +1,26 @@
 ﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models.Viewport;
 using System;
 using System.Diagnostics;
+using Windows.Devices.Input;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace RdClient.Shared.Models
 {
     public class ScrollBarModel : MutableObject, IScrollBarModel
     {
+        private Visibility _visibility = Visibility.Visible;
+
+        public void SetScrollbarVisibility(Visibility visibility)
+        {
+            _visibility = visibility;
+            EmitPropertyChanged("VisibilityHorizontal");
+            EmitPropertyChanged("VisibilityVertical");
+            EmitPropertyChanged("VisibilityCorner");
+        }
+
         public double MinimumHorizontal
         {
             get
@@ -105,7 +118,8 @@ namespace RdClient.Shared.Models
             {
                 return CheckViewport(() =>
                 {
-                    if (_viewport.Size.Width  + _horizontalScrollBarWidth < _viewport.SessionPanel.Width)
+                    if (_visibility == Visibility.Visible
+                        && _viewport.Size.Width + _horizontalScrollBarWidth < _viewport.SessionPanel.Width)
                     {
                         return Visibility.Visible;
                     }
@@ -123,7 +137,8 @@ namespace RdClient.Shared.Models
             {
                 return CheckViewport(() =>
                 {
-                    if (_viewport.Size.Height + _verticalScrollBarWidth < _viewport.SessionPanel.Height)
+                    if (_visibility == Visibility.Visible
+                        && _viewport.Size.Height + _verticalScrollBarWidth < _viewport.SessionPanel.Height)
                     {
                         return Visibility.Visible;
                     }
@@ -140,7 +155,9 @@ namespace RdClient.Shared.Models
         {
             get
             {
-                if(this.VisibilityHorizontal == Visibility.Visible || this.VisibilityVertical == Visibility.Visible)
+                if (_visibility == Visibility.Visible
+                    && this.IndicatorMode == ScrollingIndicatorMode.MouseIndicator
+                    && (this.VisibilityHorizontal == Visibility.Visible || this.VisibilityVertical == Visibility.Visible))
                 {
                     return Visibility.Visible;
                 }
@@ -210,6 +227,37 @@ namespace RdClient.Shared.Models
             }
 
             return result;
+        }
+
+        private ScrollingIndicatorMode _indicatorMode = ScrollingIndicatorMode.None;
+        public ScrollingIndicatorMode IndicatorMode
+        {
+            get
+            {
+                return _indicatorMode;
+            }
+            private set
+            {
+                EmitPropertyChanged("VisibilityCorner");
+
+                SetProperty(ref _indicatorMode, value);
+            }
+        }
+
+        public void OnPointerChanged(object sender, IPointerEventBase e)
+        {
+            if (e is IPointerRoutedEventProperties)
+            {
+                IPointerRoutedEventProperties iprep = (IPointerRoutedEventProperties)e;
+                if (iprep.DeviceType == PointerDeviceType.Mouse)
+                {
+                    this.IndicatorMode = ScrollingIndicatorMode.MouseIndicator;
+                }
+                else if (iprep.DeviceType == PointerDeviceType.Touch)
+                {
+                    this.IndicatorMode = ScrollingIndicatorMode.TouchIndicator;
+                }
+            }
         }
     }
 }

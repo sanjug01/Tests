@@ -1,10 +1,14 @@
-﻿using RdClient.Shared.Models.Viewport;
+﻿using RdClient.Shared.Input.Pointer;
+using RdClient.Shared.Models.Viewport;
 using Windows.UI.Xaml;
 
 namespace RdClient.Shared.Models
 {
     public interface IScrollBarModel
     {
+        void OnPointerChanged(object sender, IPointerEventBase e);
+        void SetScrollbarVisibility(Visibility visibility);
+
         double MaximumHorizontal { get; }
         double MaximumVertical { get; }
         double MinimumHorizontal { get; }

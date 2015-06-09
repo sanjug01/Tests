@@ -421,6 +421,7 @@
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
                         _sessionView.PointerChanged += this.PointerCapture.OnPointerChanged;
+                        _sessionView.PointerChanged += this.ScrollBarModel.OnPointerChanged;
 
                         _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
                         EmitPropertyChanged("IsRenderingPanelActive");
@@ -487,7 +488,10 @@
                 {
                     visibility = Visibility.Visible;
                 }
-                if(_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
+
+                this.ScrollBarModel.SetScrollbarVisibility(visibility);
+
+                if (_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
                 {
                     _activeSessionControl.RenderingPanel.ChangeMouseVisibility(visibility);
                 }
