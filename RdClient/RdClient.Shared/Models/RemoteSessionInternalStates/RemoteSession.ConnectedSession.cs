@@ -149,9 +149,9 @@
 
                     default:
                         //
-                        // Try to reconnect, go through the reconnect UI.
+                        // Let the connection handle the reconnect; auto reconnect events may be emitted separately
                         //
-                        _connection.HandleAsyncDisconnectResult(e.DisconnectReason, true);
+                        _connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
                         break;
                 }
             }
