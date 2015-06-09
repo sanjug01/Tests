@@ -243,6 +243,7 @@
     <Compile Include="ValidationRules\NotDuplicateValidationRuleTests.cs" />
     <Compile Include="ValidationRules\UsernameFormatValidationRuleTests.cs" />
     <Compile Include="ValidationRules\ValidatedPropertyTests.cs" />
+    <Compile Include="ViewModels\RemoteSessionViewModelTestsHelpers.cs" />
     <Compile Include="ViewModels\RichTextViewModelTests.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
