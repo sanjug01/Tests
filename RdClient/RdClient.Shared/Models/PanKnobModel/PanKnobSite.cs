@@ -72,13 +72,17 @@ namespace RdClient.Shared.Models.PanKnobModel
         {
             if(consumptionMode == ConsumptionModeType.DirectTouch || consumptionMode == ConsumptionModeType.MultiTouch)
             {
-                if(null!=_panKnob)
+                if (null != _panKnob)
+                {
                     _panKnob.IsVisible = true;
+                }
             }
             else
             {
-                if(null!=_panKnob)
+                if (null != _panKnob)
+                {
                     _panKnob.IsVisible = false;
+                }
             }
         }
     }
