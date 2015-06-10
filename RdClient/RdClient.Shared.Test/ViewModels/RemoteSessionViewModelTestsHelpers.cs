@@ -76,6 +76,16 @@
             public Visibility VisibilityCorner { get { return Visibility.Visible; } }
             public Visibility VisibilityHorizontal { get { return Visibility.Collapsed; } }
             public Visibility VisibilityVertical { get { return Visibility.Visible; } }
+
+            public void OnPointerChanged(object sender, IPointerEventBase e)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void SetScrollbarVisibility(Visibility visibility)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private sealed class TestPanKnob : IPanKnob
