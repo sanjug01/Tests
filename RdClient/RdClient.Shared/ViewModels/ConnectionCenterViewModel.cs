@@ -382,7 +382,7 @@
 
         private void UpdateShowSectionLabels()
         {
-            this.ShowSectionLabels = this.HasDesktops || this.HasApps;
+            //this.ShowSectionLabels = this.HasDesktops || this.HasApps;
         }
 
         private void DesktopSelection_PropertyChanged(object sender, PropertyChangedEventArgs e)
