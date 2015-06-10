@@ -607,7 +607,7 @@
     <comment>Label on in session right side bar button that disconnects the session and returns to the connection center</comment>
   </data>
   <data name="SessionView-MouseModeLabel.Text" xml:space="preserve">
-    <value>(r) Touch</value>
+    <value>Touch</value>
     <comment>Label on in session right side bar button that toggles touch mode between direct touch remoting and touch pointer mode</comment>
   </data>
   <data name="ConnectionCenter_AppLabel.Content" xml:space="preserve">
@@ -960,7 +960,7 @@
     <comment>URI for webpage the describes how to connect to your PC using RDP.</comment>
   </data>
   <data name="SessionView-FullScreenButtonLabel.Text" xml:space="preserve">
-    <value>(r) Full-screen</value>
+    <value>Full-screen</value>
     <comment>Label on in session right side bar button that toggles full-screen mode</comment>
   </data>
 </root>
