@@ -27,6 +27,9 @@
             <vm:RemoteSessionViewModel.RightSideBarViewModel>
                 <vm:RightSideBarViewModel DeviceCapabilities="{StaticResource DeviceCapabilities}" FullScreenModel="{StaticResource FullScreenModel}" />
             </vm:RemoteSessionViewModel.RightSideBarViewModel>
+            <vm:RemoteSessionViewModel.ConnectionBarViewModel>
+                <vm:ConnectionBarViewModel />
+            </vm:RemoteSessionViewModel.ConnectionBarViewModel>
             <vm:RemoteSessionViewModel.PointerPosition>
                 <pointer:PointerPosition />
             </vm:RemoteSessionViewModel.PointerPosition>
@@ -36,11 +39,13 @@
         </vm:RemoteSessionViewModel>
     </UserControl.DataContext>
 
+       
     <UserControl.Resources>
         <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <cv:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
         <cv:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
         <cv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
+        
     </UserControl.Resources>
 
     <Grid Background="{ThemeResource SystemChromeDisabledHighColor}">
@@ -59,66 +64,8 @@
                 Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
 
             <!-- Connection Bar -->
-            <ItemsControl
-                Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                HorizontalAlignment="Center" VerticalAlignment="Top"
-                Opacity="{ThemeResource ConnectionOverlayOpacity}"
-                ItemsSource="{Binding ConnectionBarItems}">
-
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-
-                <ItemsControl.ItemTemplateSelector>
-                    <helpers:TypeNameDataTemplateSelector>
-                        <helpers:TypeNameDataTemplateSelector.Templates>
-
-                            <DataTemplate x:Key="SymbolBarButtonModel">
-                                <Button
-                                    Style="{ThemeResource RemoteSessionSymbolBarButton}"
-                                    Margin="4,0"
-                                    Command="{Binding Command}"
-                                    CommandParameter="{Binding CommandParameter}"
-                                    Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
-                            </DataTemplate>
-
-                            <DataTemplate x:Key="SymbolBarToggleButtonModel">
-                                <ToggleButton
-                                    Style="{StaticResource RemoteSessionSymbolBarButton}"
-                                    Margin="4,0"
-                                    Command="{Binding Command}"
-                                    CommandParameter="{Binding CommandParameter}"
-                                    IsChecked="{Binding IsChecked}"
-                                    IsThreeState="False"
-                                    Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
-                            </DataTemplate>
-                        
-                            <DataTemplate x:Key="SymbolBarSliderButtonModel">
-                                <Button 
-                                    Style="{StaticResource RemoteSessionSymbolBarButton}"
-                                    Margin="4,0"
-                                    Command="{Binding Command}"
-                                    CommandParameter="{Binding CommandParameter}"
-                                    Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}">
-                                    <Button.Flyout>
-                                        <Flyout>
-                                            <Slider Orientation="Vertical" Height="100" Value="{Binding Value, Mode=TwoWay}"/>
-                                        </Flyout>
-                                    </Button.Flyout>
-                                </Button>
-                            </DataTemplate>
-
-                        
-                        </helpers:TypeNameDataTemplateSelector.Templates>
-                    </helpers:TypeNameDataTemplateSelector>
-                </ItemsControl.ItemTemplateSelector>
-            </ItemsControl>
-
+            <c:ConnectionBar DataContext="{Binding ConnectionBarViewModel}"/>
+           
             <!-- Transparent overlay that dismisses the side bars -->
             <c:PointerPressDetector
                 Visibility="{Binding RightSideBarViewModel.Visibility}"

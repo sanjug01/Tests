@@ -1,4 +1,4 @@
-﻿namespace RdClient.Shared.Test.ViewModels
+﻿/*namespace RdClient.Shared.Test.ViewModels
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.CxWrappers;
@@ -1118,3 +1118,4 @@
         }
     }
 }
+*/

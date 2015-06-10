@@ -47,7 +47,6 @@
         private IPointerCapture _pointerCapture;
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
-        private ReadOnlyObservableCollection<object> _connectionBarItems;
 
         private ITimerFactory _timerFactory;
 
@@ -67,6 +66,11 @@
         {
             get; set;
         }
+
+        public ConnectionBarViewModel ConnectionBarViewModel{
+            get;
+            set;
+         }
 
         private IPanKnobSite _panKnobSite;
         public IPanKnobSite PanKnobSite
@@ -114,17 +118,6 @@
             set { this.SetProperty(ref _pointerCapture, value); }
         }
 
-        public bool IsConnectionBarVisible
-        {
-            get { return _isConnectionBarVisible; }
-            private set { this.SetProperty(ref _isConnectionBarVisible, value); }
-        }
-
-        public ReadOnlyObservableCollection<object> ConnectionBarItems
-        {
-            get { return _connectionBarItems; }
-        }
-
         /// <summary>
         /// View model of the view shown in the belly band across the session view when input is needed from user.
         /// Setting the property to a non-null value shows the belly band.
@@ -142,7 +135,7 @@
             _sessionState = SessionState.Idle;
 
             this.ZoomPanModel = new ZoomPanModel();
-
+            
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -156,7 +149,7 @@
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = this.RightSideBarViewModel.ToggleVisiblity });
             items.Add(_invokeKeyboardModel);
-            _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
+            this.ConnectionBarViewModel.ConnectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
             base.OnPresenting(activationParameter);
 
@@ -271,6 +264,11 @@
             _lifeTimeManager = lifeTimeManager;
         }
 
+        void SetConnectionBarVisiblity(bool visibility)
+        {
+            this.ConnectionBarViewModel.IsConnectionBarVisible = visibility;
+        }
+
         private void OnCredentialsNeeded(object sender, CredentialsNeededEventArgs e)
         {
             this.NavigationService.PushModalView("InSessionEditCredentialsView", e.Task);
@@ -296,7 +294,7 @@
         private void OnSessionInterrupted(object sender, SessionInterruptedEventArgs e)
         {
             this.BellyBandViewModel = new RemoteSessionInterruptionViewModel(_activeSession, e.ObtainContinuation());
-            this.IsConnectionBarVisible = true;
+            this.SetConnectionBarVisiblity(true);
         }
 
         private void OnBadCertificate(object sender, BadCertificateEventArgs e)
@@ -373,7 +371,7 @@
                         this.BellyBandViewModel = new RemoteSessionConnectingViewModel(
                             _activeSession.HostName,
                             () => _activeSession.Disconnect() );
-                        this.IsConnectionBarVisible = false;
+                        this.SetConnectionBarVisiblity(false);
                         this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
                         break;
 
@@ -426,7 +424,7 @@
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
                         this.RightSideBarViewModel.FullScreenModel.EnterFullScreenCommand.Execute(null);
-                        this.IsConnectionBarVisible = true;
+                        this.SetConnectionBarVisiblity(true);
                         break;
 
                     default:
@@ -455,7 +453,7 @@
                             //
                             // The connection bar and side bars are not available in any non-connected state.
                             //
-                            this.IsConnectionBarVisible = false;
+                            this.SetConnectionBarVisiblity(false);
                             this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
                             _panKnobSite.PanKnob.IsVisible = false;
                             this.RightSideBarViewModel.FullScreenModel.ExitFullScreenCommand.Execute(null);

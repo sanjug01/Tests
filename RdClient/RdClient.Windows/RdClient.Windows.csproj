@@ -90,6 +90,9 @@
     <Compile Include="Controls\AppsListControl.xaml.cs">
       <DependentUpon>AppsListControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ConnectionBar.xaml.cs">
+      <DependentUpon>ConnectionBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ConnectionCenterTitleBar.xaml.cs">
       <DependentUpon>ConnectionCenterTitleBar.xaml</DependentUpon>
     </Compile>
@@ -332,6 +335,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\AppsListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ConnectionBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
