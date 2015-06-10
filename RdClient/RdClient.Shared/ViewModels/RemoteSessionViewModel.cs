@@ -421,6 +421,7 @@
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
                         _sessionView.PointerChanged += this.PointerCapture.OnPointerChanged;
+                        _sessionView.PointerChanged += this.ScrollBarModel.OnPointerChanged;
 
                         _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
                         EmitPropertyChanged("IsRenderingPanelActive");
@@ -457,7 +458,14 @@
                             //
                             this.IsConnectionBarVisible = false;
                             this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
-                            _panKnobSite.PanKnob.IsVisible = false;
+
+                            // significant side effects on _panKnobSite.PanKnob setter, which is called implicitly outside the view model,
+                            // potentially on a different thread
+                            // TODO: Bug 2782808 fix code to avoid these side effects
+                            if (null != _panKnobSite.PanKnob)
+                            {
+                                _panKnobSite.PanKnob.IsVisible = false;
+                            }
                             this.RightSideBarViewModel.FullScreenModel.ExitFullScreenCommand.Execute(null);
                         }
                         break;
@@ -480,7 +488,10 @@
                 {
                     visibility = Visibility.Visible;
                 }
-                if(_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
+
+                this.ScrollBarModel.SetScrollbarVisibility(visibility);
+
+                if (_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
                 {
                     _activeSessionControl.RenderingPanel.ChangeMouseVisibility(visibility);
                 }
