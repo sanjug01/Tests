@@ -278,7 +278,7 @@
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_SSLHandshakeFailed_String" xml:space="preserve">
-    <value>Your password may have expired. Try connecting again. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>Your password did not work or may have expired. Try connecting again. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_AccountDisabled_String" xml:space="preserve">
