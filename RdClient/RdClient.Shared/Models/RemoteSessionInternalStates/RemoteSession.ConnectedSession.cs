@@ -19,6 +19,8 @@
             protected override void Activated()
             {
                 _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailUpdated;
+
+                this.Session._hasConnected = true;
                 this.Session._state.SetReconnectAttempt(0);
                 this.Session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                 this.Session._syncEvents.ConnectionHealthStateChanged += this.OnConnectionHealthStateChanged;

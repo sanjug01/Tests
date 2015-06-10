@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.CxWrappers;
+    using RdClientCx;
     using System.Diagnostics.Contracts;
 
     partial class RemoteSession
@@ -13,6 +14,10 @@
             {
                 _connection.Cleanup();
                 this.Session.DeferEmitClosed();
+                this.SessionTelemetry.AddMetric("userInitiated", 1.0);
+                this.SessionTelemetry.AddMetric("disconnectReason", (double)RdpDisconnectCode.UserInitiated);
+                this.SessionTelemetry.AddMetric("success", this.Session._hasConnected ? 1.0 : 0.0);
+                this.SessionTelemetry.Report();
                 ChangeState(new InactiveSession(this));
             }
 

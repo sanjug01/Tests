@@ -104,6 +104,23 @@
             private set { this.SetProperty(ref _credentials, value); }
         }
 
+        public string GetCredentialsTelemetryTag(Guid credentialsId)
+        {
+            string tag;
+
+            if (Guid.Empty.Equals(credentialsId))
+            {
+                tag = "None";
+            }
+            else
+            {
+                CredentialsModel creds = _credentials.GetModel(credentialsId);
+                tag = string.IsNullOrEmpty(creds.Password) ? "userName" : "userNamePwd";
+            }
+
+            return tag;
+        }
+
         public void Compose()
         {
             Contract.Assert(null != _rootFolder);

@@ -322,5 +322,52 @@
 
             Assert.AreNotEqual(0, gateways);
         }
+
+        [TestMethod]
+        public void ApplicationDataModel_EmptyCredId_NoneTag()
+        {
+            ApplicationDataModel adm = new ApplicationDataModel()
+            {
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
+            };
+            IPersistentObject po = adm;
+            adm.Compose();
+
+            Assert.AreEqual("None", adm.GetCredentialsTelemetryTag(Guid.Empty));
+        }
+
+        [TestMethod]
+        public void ApplicationDataModel_CredsUserOnly_UserNameTag()
+        {
+            ApplicationDataModel adm = new ApplicationDataModel()
+            {
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
+            };
+            IPersistentObject po = adm;
+            adm.Compose();
+            Guid id = adm.Credentials.AddNewModel(new CredentialsModel() { Username = "user" });
+
+            Assert.AreEqual("userName", adm.GetCredentialsTelemetryTag(id));
+        }
+
+        [TestMethod]
+        public void ApplicationDataModel_CredsUserPassword_UserPasswordNameTag()
+        {
+            ApplicationDataModel adm = new ApplicationDataModel()
+            {
+                RootFolder = new MemoryStorageFolder(),
+                ModelSerializer = new SerializableModelSerializer(),
+                DataScrambler = new Mock.DummyDataScrambler()
+            };
+            IPersistentObject po = adm;
+            adm.Compose();
+            Guid id = adm.Credentials.AddNewModel(new CredentialsModel() { Username = "user", Password = "password" });
+
+            Assert.AreEqual("userNamePwd", adm.GetCredentialsTelemetryTag(id));
+        }
     }
 }

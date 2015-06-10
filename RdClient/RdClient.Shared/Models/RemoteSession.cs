@@ -46,6 +46,8 @@
         // Access to this state must be protected with a lock.
         //
         private InternalState _internalState;
+        private bool _hasConnected;
+        private bool _networkTypeReported;
 
         /// <summary>
         /// Base class for the current internal state of the session. State classes are nested in RemoteSession because nested
@@ -247,10 +249,14 @@
             _timerFactory = timerFactory;
             _telemetryClient = telemetryClient;
             //
+            // Use the connection model to create a session telemetry event that the session will update and report upon completion.
+            //
+            ITelemetryEvent sessionTelemetry = sessionSetup.Connection.CreateSessionTelemetry(sessionSetup.DataModel, _telemetryClient, "SessionLaunch");
+            //
             // _internalState must never be null, so the initial state is assigned to a state object
             // that does not do anything.
             //
-            _internalState = new InactiveSession(_sessionMonitor, _telemetryClient, telemetryClient.MakeEvent("SessionLaunch"));
+            _internalState = new InactiveSession(_sessionMonitor, _telemetryClient, sessionTelemetry);
             _internalState.Activate(this);
         }
 
