@@ -11,6 +11,11 @@
     {
         [DataMember(Name = "EncodedThumbnail", IsRequired = false, EmitDefaultValue = false)]
         private byte[] _encodedThumbnail;
+        //
+        // Cached value for "sourceType" tags in telemetry elents produced for this model.
+        // The value is produced by the GetTelemetrySourceType overridable and cached in this field.
+        //
+        private string _telemetrySourceType;
 
         protected RemoteConnectionModel()
         {
@@ -26,6 +31,16 @@
             set { this.SetProperty(ref _encodedThumbnail, value); }
         }
 
+        public string TelemetrySourceType
+        {
+            get
+            {
+                if (null == _telemetrySourceType)
+                    _telemetrySourceType = this.GetTelemetrySourceType();
+                return _telemetrySourceType;
+            }
+        }
+
         /// <summary>
         /// Create an RDP connection object specific to the connection model.
         /// </summary>
@@ -35,12 +50,13 @@
         public abstract IRdpConnection CreateConnection(IRdpConnectionFactory connectionFactory, IRenderingPanel renderingPanel);
 
         /// <summary>
-        /// Create a telemetry event object and populate it with information about the connection model.
+        /// Populate a telemetry event with initial session information.
         /// </summary>
-        /// <param name="telemetryClient">Telemetry client object used to create the session telemetry event.</param>
-        /// <param name="telemetryEventName">Name of the telemetry event.</param>
-        /// <returns>Telemetry event object that will be retained by the session and reported after the session will have disconnected.</returns>
-        public abstract ITelemetryEvent CreateSessionTelemetry(ApplicationDataModel dataModel, ITelemetryClient telemetryClient, string telemetryEventName);
+        /// <param name="dataModel">Application data model object.</param>
+        /// <param name="telemetryEvent">Telemetry event to be populated with metrics and tags.</param>
+        public abstract void InitializeSessionTelemetry(ApplicationDataModel dataModel, ITelemetryEvent telemetryEvent);
+
+        protected abstract string GetTelemetrySourceType();
 
         protected static string GetHostAddressTypeTag(string hostString)
         {

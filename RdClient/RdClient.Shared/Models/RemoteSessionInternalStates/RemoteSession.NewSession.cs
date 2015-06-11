@@ -1,8 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
-    using RdClient.Shared.Telemetry;
     using System.Diagnostics.Contracts;
-    using System.Threading;
 
     partial class RemoteSession
     {
