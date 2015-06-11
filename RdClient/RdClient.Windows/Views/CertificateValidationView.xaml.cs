@@ -36,10 +36,12 @@
             {
                 switch (e.VirtualKey)
                 {
-                    // both Esc and Enter invoke the default Cancel action.
+                    // Esc invokes the Cancel action.
                     case VirtualKey.Escape:
-                    case VirtualKey.Enter:
                         this.CancelButton.Invoke(e);
+                        break;
+                    // Enter should be ignored, an explicit user action is required for validation
+                    case VirtualKey.Enter:
                         break;
                 }
             }
