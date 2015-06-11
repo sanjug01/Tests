@@ -128,6 +128,7 @@ namespace RdClient.Shared.ViewModels
         private void InternalFullScreen(object parameter)
         {
             this.Visibility = Visibility.Collapsed;
+            this.FullScreenModel.ToggleFullScreen();
         }
 
         private void ToggleFullScreen(bool fullScreen)

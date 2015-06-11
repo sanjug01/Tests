@@ -50,10 +50,9 @@
 						</TextBlock>
 					</StackPanel>
 				</Button>
-				<ToggleButton
+				<Button
 					x:Name="FullScreenButton"
-					Style="{StaticResource RightSideBarButtonStyle}"
-					IsChecked="True">
+					Style="{StaticResource RightSideBarButtonStyle}">
 					<StackPanel Orientation="Vertical">
 						<Image 
 							Style="{StaticResource RightSideBarButtonIconStyle}"			
@@ -65,8 +64,8 @@
 							Text="Full-Screen (d)">
 						</TextBlock>
 					</StackPanel>
-				</ToggleButton>
-                <ToggleButton
+				</Button>
+                <Button
 					x:Name="MouseModeButton"
 					Style="{StaticResource RightSideBarButtonStyle}">
                     <StackPanel Orientation="Vertical">
@@ -80,7 +79,7 @@
 							Text="Touch (d)">
 						</TextBlock>
 					</StackPanel>
-				</ToggleButton>
+				</Button>
             </StackPanel>
         </Grid>
     </Grid>
