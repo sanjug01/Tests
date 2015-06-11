@@ -397,6 +397,12 @@
         <Setter Property="Foreground" Value="{ThemeResource SystemControlHyperlinkTextBrush}"/>
     </Style>
 
+    <Style x:Key="DialogTextValidationErrorStyle" TargetType="TextBlock">
+        <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+        <Setter Property="MaxWidth" Value="400" />
+        <Setter Property="MaxLines" Value="3" />
+    </Style>    
+    
     <Style x:Key="DialogComboBoxStyle" TargetType="ComboBox">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
