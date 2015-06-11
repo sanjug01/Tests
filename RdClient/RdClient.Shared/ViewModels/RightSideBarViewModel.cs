@@ -92,6 +92,7 @@ namespace RdClient.Shared.ViewModels
             set
             {
                 SetProperty(ref _visibility, value);
+                ToggleFullScreen(value == Visibility.Collapsed);
             }
         }
 
@@ -127,18 +128,12 @@ namespace RdClient.Shared.ViewModels
         private void InternalFullScreen(object parameter)
         {
             this.Visibility = Visibility.Collapsed;
-
-            if (this.FullScreenModel != null)
-            {
-                this.FullScreenModel.ToggleFullScreen();
-            }
         }
 
-        private void InternalToggleVisibility(object parameter)
+        private void ToggleFullScreen(bool fullScreen)
         {
-            if(this.Visibility == Visibility.Visible)
+            if (fullScreen)
             {
-                this.Visibility = Visibility.Collapsed;
                 if (this.FullScreenModel.UserInteractionMode == UserInteractionMode.Touch)
                 {
                     this.FullScreenModel.EnterFullScreenCommand.Execute(null);
@@ -146,11 +141,23 @@ namespace RdClient.Shared.ViewModels
             }
             else
             {
-                this.Visibility = Visibility.Visible;
                 if (this.FullScreenModel.UserInteractionMode == UserInteractionMode.Touch)
                 {
                     this.FullScreenModel.ExitFullScreenCommand.Execute(null);
                 }
+            }
+
+        }
+
+        private void InternalToggleVisibility(object parameter)
+        {
+            if(this.Visibility == Visibility.Visible)
+            {
+                this.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                this.Visibility = Visibility.Visible;
             }
         }
     }
