@@ -7,12 +7,12 @@
     {
         private sealed class InactiveSession : InternalState
         {
-            public override void Activate(RemoteSession session)
+            protected override void Activated()
             {
             }
 
-            public InactiveSession(ReaderWriterLockSlim _monitor, ITelemetryClient telemetryClient)
-                : base(SessionState.Idle, _monitor, telemetryClient)
+            public InactiveSession(ReaderWriterLockSlim _monitor, ITelemetryClient telemetryClient, ITelemetryEvent sessionTelemetry)
+                : base(SessionState.Idle, _monitor, telemetryClient, sessionTelemetry)
             {
             }
 

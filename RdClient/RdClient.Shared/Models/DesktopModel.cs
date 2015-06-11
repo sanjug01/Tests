@@ -2,6 +2,7 @@
 {
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Utils;
+    using RdClient.Shared.Telemetry;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
@@ -160,6 +161,28 @@
             this.IsNew = false;
 
             return connection;
+        }
+
+        public override ITelemetryEvent CreateSessionTelemetry(ApplicationDataModel dataModel, ITelemetryClient telemetryClient, string telemetryEventName)
+        {
+            ITelemetryEvent telemetryEvent = telemetryClient.MakeEvent(telemetryEventName);
+
+            if(Guid.Empty.Equals(_gatewayId))
+            {
+                telemetryEvent.AddTag("sourceType", "localDesktop");
+            }
+            else
+            {
+                GatewayModel gateway = dataModel.Gateways.GetModel(_gatewayId);
+
+                telemetryEvent.AddTag("sourceType", "localDesktopWithGateway");
+                telemetryEvent.AddTag("gwyCreds", dataModel.GetCredentialsTelemetryTag(gateway.CredentialsId));
+            }
+
+            telemetryEvent.AddTag("hostAddressType", GetHostAddressTypeTag(_hostName));
+            telemetryEvent.AddTag("hostCreds", dataModel.GetCredentialsTelemetryTag(_credentialsId));
+
+            return telemetryEvent;
         }
     }
 }

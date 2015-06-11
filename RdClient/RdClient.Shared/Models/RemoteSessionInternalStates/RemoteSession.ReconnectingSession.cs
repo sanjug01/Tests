@@ -10,45 +10,40 @@
         {
             private readonly IRdpConnection _connection;
             private ITelemetryStopwatch _reconnectTime;
-            private RemoteSession _session;
             private bool _cancelled;
 
-            public override void Activate(RemoteSession session)
+            protected override void Activated()
             {
-                Contract.Assert(null == _session);
                 Contract.Assert(null == _reconnectTime);
 
                 using (LockWrite())
                 {
-                    _session = session;
-                    _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
-                    _session._syncEvents.ConnectionHealthStateChanged += this.OnConnectionHealthStateChanged; ;
-                    _session._syncEvents.ClientAutoReconnectComplete += this.OnClientAutoReconnectComplete;
-                    _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
-                    _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
-                    _session.DeferEmitInterrupted(this.Cancel);
+                    this.Session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
+                    this.Session._syncEvents.ConnectionHealthStateChanged += this.OnConnectionHealthStateChanged; ;
+                    this.Session._syncEvents.ClientAutoReconnectComplete += this.OnClientAutoReconnectComplete;
+                    this.Session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                    this.Session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+                    this.Session.DeferEmitInterrupted(this.Cancel);
                 }
 
                 _reconnectTime = this.TelemetryClient.StartStopwatch();
             }
 
-            public override void Complete(RemoteSession session)
+            protected override void Completed()
             {
-                Contract.Assert(object.ReferenceEquals(_session, session));
                 Contract.Assert(null == _reconnectTime);
 
                 using (LockWrite())
                 {
-                    _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
-                    _session._syncEvents.ClientAutoReconnectComplete -= this.OnClientAutoReconnectComplete;
-                    _session._syncEvents.ConnectionHealthStateChanged -= this.OnConnectionHealthStateChanged;
-                    _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
-                    _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
-                    _session = null;
+                    this.Session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
+                    this.Session._syncEvents.ClientAutoReconnectComplete -= this.OnClientAutoReconnectComplete;
+                    this.Session._syncEvents.ConnectionHealthStateChanged -= this.OnConnectionHealthStateChanged;
+                    this.Session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
+                    this.Session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                 }
             }
 
-            public override void Terminate(RemoteSession session)
+            protected override void Terminate()
             {
                 _cancelled = true;
                 _connection.Disconnect();
@@ -78,7 +73,7 @@
                     // Update the attempt number; the update is dispatched to the UI thread.
                     //
                     if(!_cancelled)
-                        _session._state.SetReconnectAttempt(e.AttemptCount);
+                        this.Session._state.SetReconnectAttempt(e.AttemptCount);
                 }
             }
 
@@ -91,7 +86,7 @@
                         _reconnectTime.Stop("ReconnectedTime");
                         _reconnectTime = null;
                         // same as reconnecting complete
-                        _session.InternalSetState(new ConnectedSession(_connection, this));
+                        ChangeState(new ConnectedSession(_connection, this));
                     }
                 }
             }
@@ -100,7 +95,7 @@
             {
                 _reconnectTime.Stop("ReconnectedTime");
                 _reconnectTime = null;
-                _session.InternalSetState(new ConnectedSession(_connection, this));
+                ChangeState(new ConnectedSession(_connection, this));
             }
 
             private void OnClientAsyncDisconnect(object sender, ClientAsyncDisconnectArgs e)
@@ -114,7 +109,7 @@
                 //
                 // Set the session state to Failed
                 //
-                _session.InternalSetState(new FailedSession(_connection, e.DisconnectReason, this));
+                ChangeState(new FailedSession(_connection, e.DisconnectReason, this));
             }
 
             private void Cancel()

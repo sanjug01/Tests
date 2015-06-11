@@ -3,6 +3,7 @@
     using RdClient.Shared.CxWrappers;
     using System;
     using System.Runtime.Serialization;
+    using RdClient.Shared.Telemetry;
 
     [DataContract(IsReference = true)]
     public sealed class RemoteResourceModel : RemoteConnectionModel
@@ -83,6 +84,11 @@
                 throw new InvalidOperationException("Unexpected resource type");
             }
             return connection;
+        }
+
+        public override ITelemetryEvent CreateSessionTelemetry(ApplicationDataModel dataModel, ITelemetryClient telemetryClient, string telemetryEventName)
+        {
+            throw new NotImplementedException();
         }
     }
 }
