@@ -1,6 +1,5 @@
 ﻿using RdClient.Shared.Models.Viewport;
 using System.Collections.ObjectModel;
-using Windows.UI.Xaml.Input;
 
 namespace RdClient.Shared.ViewModels
 {
