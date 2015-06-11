@@ -62,6 +62,8 @@
             protected readonly ITelemetryEvent SessionTelemetry;
             protected readonly ITelemetryEvent SessionDuration;
 
+            protected const string SessionDurationStopwatchName = "minutes";
+
             public SessionState State { get { return _sessionState; } }
 
             protected RemoteSession Session { get { return _session; } }

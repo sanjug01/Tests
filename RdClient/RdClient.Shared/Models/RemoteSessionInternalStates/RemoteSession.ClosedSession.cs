@@ -18,6 +18,13 @@
                 this.SessionTelemetry.AddMetric("disconnectReason", (double)RdpDisconnectCode.UserInitiated);
                 this.SessionTelemetry.AddMetric("success", this.Session._hasConnected ? 1.0 : 0.0);
                 this.SessionTelemetry.Report();
+
+                if (this.Session._hasConnected)
+                {
+                    this.SessionDuration.PauseStopwatch(SessionDurationStopwatchName);
+                    this.SessionDuration.Report();
+                }
+
                 ChangeState(new InactiveSession(this));
             }
 

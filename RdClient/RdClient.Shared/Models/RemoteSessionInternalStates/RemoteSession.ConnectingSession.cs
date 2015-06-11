@@ -47,37 +47,7 @@
 
                 if (!this.Session._networkTypeReported)
                 {
-                    //
-                    // Collect network information and cram it into
-                    //
-                    ConnectionProfileFilter filter = new ConnectionProfileFilter() { IsConnected = true };
-                    IReadOnlyList<ConnectionProfile> profiles = NetworkInformation.FindConnectionProfilesAsync(filter).AsTask().Result;
-                    StringBuilder sb = null;
-
-                    foreach (ConnectionProfile profile in profiles)
-                    {
-                        if (null == sb)
-                            sb = new StringBuilder();
-                        else
-                            sb.Append(',');
-                        sb.Append(GetIanaInterfaceTypeString(profile.NetworkAdapter.IanaInterfaceType));
-
-                        if (profile.IsWwanConnectionProfile)
-                        {
-                            WwanDataClass dataClass = profile.WwanConnectionProfileDetails.GetCurrentDataClass();
-
-                            foreach (WwanDataClass wwdc in Enum.GetValues(typeof(WwanDataClass)))
-                            {
-                                if (WwanDataClass.None != wwdc && wwdc == (dataClass & wwdc))
-                                {
-                                    sb.Append(':');
-                                    sb.Append(wwdc);
-                                }
-                            }
-                        }
-                    }
-
-                    this.SessionTelemetry.AddTag("networkType", null != sb ? sb.ToString() : "unknown");
+                    CollectNetworkTelemetry();
                     this.Session._networkTypeReported = true;
                 }
             }
@@ -732,6 +702,41 @@
                     _cancelledCredentials = true;
                     _connection.HandleAsyncDisconnectResult((RdpDisconnectReason)e.State, false);
                 }
+            }
+
+            private void CollectNetworkTelemetry()
+            {
+                //
+                // Collect network information and cram it into
+                //
+                ConnectionProfileFilter filter = new ConnectionProfileFilter() { IsConnected = true };
+                IReadOnlyList<ConnectionProfile> profiles = NetworkInformation.FindConnectionProfilesAsync(filter).AsTask().Result;
+                StringBuilder sb = null;
+
+                foreach (ConnectionProfile profile in profiles)
+                {
+                    if (null == sb)
+                        sb = new StringBuilder();
+                    else
+                        sb.Append(',');
+                    sb.Append(GetIanaInterfaceTypeString(profile.NetworkAdapter.IanaInterfaceType));
+
+                    if (profile.IsWwanConnectionProfile)
+                    {
+                        WwanDataClass dataClass = profile.WwanConnectionProfileDetails.GetCurrentDataClass();
+
+                        foreach (WwanDataClass wwdc in Enum.GetValues(typeof(WwanDataClass)))
+                        {
+                            if (WwanDataClass.None != wwdc && wwdc == (dataClass & wwdc))
+                            {
+                                sb.Append(':');
+                                sb.Append(wwdc);
+                            }
+                        }
+                    }
+                }
+
+                this.SessionTelemetry.AddTag("networkType", null != sb ? sb.ToString() : "unknown");
             }
         }
     }
