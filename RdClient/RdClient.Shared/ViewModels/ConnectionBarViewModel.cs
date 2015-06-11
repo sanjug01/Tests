@@ -17,10 +17,9 @@ namespace RdClient.Shared.ViewModels
             set { this.SetProperty(ref _connectionBarPosition, value); }
         }
         
-        public void MoveConnectionBar(ManipulationDeltaRoutedEventArgs e, double connectionBarWidth)
+        public void MoveConnectionBar(double dx, double connectionBarWidth)
         {
 
-            double dx = e.Delta.Translation.X;
             double viewPortWidth = _viewport.Size.Width;
 
             double maxLeft = -((viewPortWidth / 2) - (connectionBarWidth / 2));
@@ -45,7 +44,11 @@ namespace RdClient.Shared.ViewModels
             IsConnectionBarVisible = true;
         }
 
-        public IViewport Viewport { set { _viewport = value; } }
+        public IViewport Viewport {
+            set {
+                _viewport = value;
+            }
+        }
         
         public bool IsConnectionBarVisible
         {

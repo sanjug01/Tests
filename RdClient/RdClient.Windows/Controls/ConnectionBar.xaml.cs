@@ -20,7 +20,7 @@ namespace RdClient.Controls
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
-            ViewModel.MoveConnectionBar(e, this.ItemsControl.ActualWidth);            
+            ViewModel.MoveConnectionBar(e.Delta.Translation.X, this.ItemsControl.ActualWidth);            
         }
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
