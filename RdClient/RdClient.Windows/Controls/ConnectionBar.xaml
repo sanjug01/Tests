@@ -12,7 +12,8 @@
     xmlns:input="using:RdClient.Input"
     xmlns:pointer="using:RdClient.Shared.Input.Pointer"
     xmlns:helpers="using:RdClient.Helpers"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    ManipulationMode="All">
 
 
     <UserControl.Resources>
@@ -87,7 +88,8 @@
         </ItemsControl>
 
         <Grid.RenderTransform>
-            <TranslateTransform x:Name="ConnectionBarTransform"></TranslateTransform>
+            <TranslateTransform x:Name="ConnectionBarTransform" X="{Binding ConnectionBarPosition}">
+            </TranslateTransform>
         </Grid.RenderTransform>
     </Grid>
 </UserControl>

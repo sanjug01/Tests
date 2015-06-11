@@ -1,4 +1,4 @@
-﻿/*namespace RdClient.Shared.Test.ViewModels
+﻿namespace RdClient.Shared.Test.ViewModels
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.CxWrappers;
@@ -778,19 +778,19 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             _defex.ExecuteAll();
 
-            Assert.IsFalse(_vm.IsConnectionBarVisible);
+            Assert.IsFalse(_vm.ConnectionBarViewModel.IsConnectionBarVisible);
             Assert.IsNotNull(_vm.BellyBandViewModel);
             Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
             Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
             Assert.IsNotNull(connection);
             Assert.AreEqual(1, connectCount);
 
-            SymbolBarButtonModel ellipsis = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
+            SymbolBarButtonModel ellipsis = (SymbolBarButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
                 o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.AllApps);
             Assert.IsNotNull(ellipsis.Command);
             Assert.IsTrue(ellipsis.Command.CanExecute(null));
 
-            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarItems.First(
+            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
                 o => o is SymbolBarToggleButtonModel && ((SymbolBarToggleButtonModel)o).Glyph == SegoeGlyph.Keyboard);
             Assert.IsNotNull(keyboard.Command);
             Assert.IsFalse(keyboard.Command.CanExecute(null));
@@ -826,7 +826,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             _defex.ExecuteAll();
 
-            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarItems.First(
+            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
                 o => o is SymbolBarToggleButtonModel && ((SymbolBarToggleButtonModel)o).Glyph == SegoeGlyph.Keyboard);
             Assert.IsNotNull(keyboard.Command);
             Assert.IsTrue(keyboard.Command.CanExecute(null));
@@ -863,7 +863,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             _defex.ExecuteAll();
 
-            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarItems.First(
+            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
                 o => o is SymbolBarToggleButtonModel && ((SymbolBarToggleButtonModel)o).Glyph == SegoeGlyph.Keyboard);
             Assert.IsNotNull(keyboard.Command);
             Assert.IsTrue(keyboard.Command.CanExecute(null));
@@ -899,7 +899,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             _defex.ExecuteAll();
 
-            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarItems.First(
+            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
                 o => o is SymbolBarToggleButtonModel && ((SymbolBarToggleButtonModel)o).Glyph == SegoeGlyph.Keyboard);
             Assert.IsNotNull(keyboard.Command);
             Assert.IsTrue(keyboard.Command.CanExecute(null));
@@ -938,7 +938,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             _defex.ExecuteAll();
 
-            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarItems.First(
+            SymbolBarToggleButtonModel keyboard = (SymbolBarToggleButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
                 o => o is SymbolBarToggleButtonModel && ((SymbolBarToggleButtonModel)o).Glyph == SegoeGlyph.Keyboard);
             Assert.IsNotNull(keyboard.Command);
             Assert.IsTrue(keyboard.Command.CanExecute(null));
@@ -977,7 +977,7 @@
             //connectTask.Dispose();
             _defex.ExecuteAll();
 
-            Assert.IsTrue(_vm.IsConnectionBarVisible);
+            Assert.IsTrue(_vm.ConnectionBarViewModel.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
             Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
         }
@@ -1032,7 +1032,7 @@
             task = null;
             _defex.ExecuteAll();
 
-            Assert.IsFalse(_vm.IsConnectionBarVisible);
+            Assert.IsFalse(_vm.ConnectionBarViewModel.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
             Assert.AreEqual(1, cleanupCount);
         }
@@ -1111,11 +1111,10 @@
             _defex.ExecuteAll();
 
             Assert.AreEqual(1, credentialsRequestCount);
-            Assert.IsFalse(_vm.IsConnectionBarVisible);
+            Assert.IsFalse(_vm.ConnectionBarViewModel.IsConnectionBarVisible);
             Assert.IsNotNull(_vm.BellyBandViewModel);
             Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
             Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
         }
     }
 }
-*/

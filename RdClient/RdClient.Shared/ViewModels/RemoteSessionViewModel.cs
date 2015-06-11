@@ -46,7 +46,6 @@
         private IInputPanelFactory _inputPanelFactory;
         private IPointerCapture _pointerCapture;
         private SessionState _sessionState;
-        private bool _isConnectionBarVisible;
 
         private ITimerFactory _timerFactory;
 
@@ -409,6 +408,8 @@
                         this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
                         _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+
+                        this.ConnectionBarViewModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
                         _panKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
 
