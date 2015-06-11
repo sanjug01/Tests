@@ -84,7 +84,7 @@
 
             public void SetScrollbarVisibility(Visibility visibility)
             {
-                throw new NotImplementedException();
+                // noop
             }
         }
 
