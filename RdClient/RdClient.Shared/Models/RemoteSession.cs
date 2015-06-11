@@ -100,7 +100,7 @@
             {
                 using (LockWrite())
                 {
-                    Contract.Assert(object.ReferenceEquals(_session, session));
+                    Contract.Assert(null == _session || object.ReferenceEquals(_session, session));
                     Deactivated();
                 }
             }
