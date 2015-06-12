@@ -10,12 +10,25 @@ namespace RdClient.Shared.ViewModels
 {
     public class RightSideBarViewModel : MutableObject, IRightSideBarViewModel
     {
+        private IDeviceCapabilities _deviceCapabilities;
         public IDeviceCapabilities DeviceCapabilities
         {
-            private get; set;
-        }
-            
+            private get
+            {
+                return _deviceCapabilities;
+            }
+            set
+            {
+                _deviceCapabilities = value;
 
+                if(_deviceCapabilities != null)
+                {
+                    _deviceCapabilities.PropertyChanged += OnUserInteractionModeChange;
+
+                    OnUserInteractionModeChange(this, EventArgs.Empty);
+                }
+            }
+        }
 
         public IRemoteSession RemoteSession
         {
@@ -23,8 +36,53 @@ namespace RdClient.Shared.ViewModels
         }
 
         public IFullScreenModel FullScreenModel
+        { get; set; }
+
+        private void OnUserInteractionModeChange(object sender, EventArgs e)
         {
-            get; set;
+            if(this.DeviceCapabilities.CanShowInputPanel)
+            {
+                this.FullScreenButtonVisibility = Visibility.Collapsed;
+            }
+            else
+            {
+                this.FullScreenButtonVisibility = Visibility.Visible;
+            }
+
+            if(this.DeviceCapabilities.TouchPresent)
+            {
+                this.MouseModeButtonVisibility = Visibility.Visible;
+            }
+            else
+            {
+                this.MouseModeButtonVisibility = Visibility.Collapsed;
+            }
+        }
+
+        private Visibility _fullScreenButtonVisibility;
+        public Visibility FullScreenButtonVisibility
+        {
+            get
+            {
+                return _fullScreenButtonVisibility;
+            }
+            set
+            {
+                SetProperty(ref _fullScreenButtonVisibility, value);
+            }
+        }
+
+        private Visibility _mouseModeButtonVisibility;
+        public Visibility MouseModeButtonVisibility
+        {
+            get
+            {
+                return _mouseModeButtonVisibility;
+            }
+            set
+            {
+                SetProperty(ref _mouseModeButtonVisibility, value);
+            }
         }
 
         public IPointerCapture PointerCapture

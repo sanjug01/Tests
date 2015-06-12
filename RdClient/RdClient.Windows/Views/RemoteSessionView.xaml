@@ -25,7 +25,9 @@
                 <input:CoreWindowKeyboardCapture/>
             </vm:RemoteSessionViewModel.KeyboardCapture>
             <vm:RemoteSessionViewModel.RightSideBarViewModel>
-                <vm:RightSideBarViewModel DeviceCapabilities="{StaticResource DeviceCapabilities}" FullScreenModel="{StaticResource FullScreenModel}" />
+                <vm:RightSideBarViewModel 
+                    DeviceCapabilities="{StaticResource DeviceCapabilities}" 
+                    FullScreenModel="{StaticResource FullScreenModel}" />
             </vm:RemoteSessionViewModel.RightSideBarViewModel>
             <vm:RemoteSessionViewModel.PointerPosition>
                 <pointer:PointerPosition />
@@ -126,10 +128,8 @@
 
             <!-- Right side bar -->
             <c:RightSideBarControl
-                BarVisibility="{Binding RightSideBarViewModel.Visibility}"
-                NavigateHome="{Binding RightSideBarViewModel.Disconnect}"
-                MouseMode="{Binding RightSideBarViewModel.MouseMode}"
-                FullScreen="{Binding RightSideBarViewModel.FullScreen}"/>
+                DataContext="{Binding RightSideBarViewModel}"
+                BarVisibility="{Binding Visibility}" />
 
             <!--
             Belly-band container of in-session dialogs.
