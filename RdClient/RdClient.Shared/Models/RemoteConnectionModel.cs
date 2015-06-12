@@ -12,7 +12,7 @@
         [DataMember(Name = "EncodedThumbnail", IsRequired = false, EmitDefaultValue = false)]
         private byte[] _encodedThumbnail;
         //
-        // Cached value for "sourceType" tags in telemetry elents produced for this model.
+        // Cached value for "sourceType" tags in telemetry events produced for this model.
         // The value is produced by the GetTelemetrySourceType overridable and cached in this field.
         //
         private string _telemetrySourceType;
