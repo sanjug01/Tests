@@ -84,17 +84,6 @@
                     break;
             }
 
-            // Binding Visibility to {Binding Source={StaticResource DeviceCapabilities}, Path=TouchPresent, Converter={StaticResource BooleanToVisibilityConverter}}
-            // does not work for some reason :(
-            //if (((IDeviceCapabilities)Application.Current.Resources["DeviceCapabilities"]).TouchPresent)
-            //{
-            //    this.MouseModeButton.Visibility = Visibility.Visible;
-            //}
-            //else
-            //{
-            //    this.MouseModeButton.Visibility = Visibility.Collapsed;
-            //}
-
             Contract.Assert(null != _activeStoryboard);
             _activeStoryboard.Begin();
         }

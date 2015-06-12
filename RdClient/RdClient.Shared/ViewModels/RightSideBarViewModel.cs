@@ -36,7 +36,9 @@ namespace RdClient.Shared.ViewModels
         }
 
         public IFullScreenModel FullScreenModel
-        { get; set; }
+        {
+            get; set;
+        }
 
         private void OnUserInteractionModeChange(object sender, EventArgs e)
         {
