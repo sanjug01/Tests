@@ -47,7 +47,7 @@
         {
             SharedVisualState state = SharedVisualState.DefaultLayout;
 
-            if (size.Width <= 480.0)
+            if (size.Width <= 416.0)
                 state = SharedVisualState.NarrowLayout;
 
             return state;
