@@ -11,11 +11,6 @@
     {
         [DataMember(Name = "EncodedThumbnail", IsRequired = false, EmitDefaultValue = false)]
         private byte[] _encodedThumbnail;
-        //
-        // Cached value for "sourceType" tags in telemetry events produced for this model.
-        // The value is produced by the GetTelemetrySourceType overridable and cached in this field.
-        //
-        private string _telemetrySourceType;
 
         protected RemoteConnectionModel()
         {
@@ -33,12 +28,7 @@
 
         public string TelemetrySourceType
         {
-            get
-            {
-                if (null == _telemetrySourceType)
-                    _telemetrySourceType = this.GetTelemetrySourceType();
-                return _telemetrySourceType;
-            }
+            get { return this.GetTelemetrySourceType(); }
         }
 
         /// <summary>
