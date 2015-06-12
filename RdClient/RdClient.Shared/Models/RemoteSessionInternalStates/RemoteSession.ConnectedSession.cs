@@ -20,7 +20,6 @@
             {
                 _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailUpdated;
 
-                this.Session._hasConnected = true;
                 this.Session._state.SetReconnectAttempt(0);
                 this.Session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
                 this.Session._syncEvents.ConnectionHealthStateChanged += this.OnConnectionHealthStateChanged;
@@ -38,6 +37,12 @@
 
                 Contract.Assert(null == _totalTime);
                 _totalTime = this.TelemetryClient.StartStopwatch();
+
+                if(!this.Session._hasConnected)
+                {
+                    this.SessionDuration.StartStopwatch(SessionDurationStopwatchName);
+                    this.Session._hasConnected = true;
+                }
             }
 
             private void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs e)

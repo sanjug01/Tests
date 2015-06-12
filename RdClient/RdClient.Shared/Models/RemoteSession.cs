@@ -60,6 +60,9 @@
             private RemoteSession _session;
             protected readonly ITelemetryClient TelemetryClient;
             protected readonly ITelemetryEvent SessionTelemetry;
+            protected readonly ITelemetryEvent SessionDuration;
+
+            protected const string SessionDurationStopwatchName = "minutes";
 
             public SessionState State { get { return _sessionState; } }
 
@@ -97,7 +100,7 @@
             {
                 using (LockWrite())
                 {
-                    Contract.Assert(object.ReferenceEquals(_session, session));
+                    Contract.Assert(null == _session || object.ReferenceEquals(_session, session));
                     Deactivated();
                 }
             }
@@ -134,7 +137,7 @@
             }
 
             protected InternalState(SessionState sessionState, ReaderWriterLockSlim monitor,
-                ITelemetryClient telemetryClient, ITelemetryEvent sessionTelemetry)
+                ITelemetryClient telemetryClient, ITelemetryEvent sessionTelemetry, ITelemetryEvent sessionDuration)
             {
                 Contract.Assert(null != telemetryClient);
                 Contract.Assert(null != sessionTelemetry);
@@ -143,6 +146,7 @@
                 _monitor = monitor;
                 this.TelemetryClient = telemetryClient;
                 this.SessionTelemetry = sessionTelemetry;
+                this.SessionDuration = sessionDuration;
             }
 
             protected InternalState(SessionState sessionState, InternalState state)
@@ -151,6 +155,7 @@
                 _monitor = state._monitor;
                 this.TelemetryClient = state.TelemetryClient;
                 this.SessionTelemetry = state.SessionTelemetry;
+                this.SessionDuration = state.SessionDuration;
             }
         }
 
@@ -249,14 +254,10 @@
             _timerFactory = timerFactory;
             _telemetryClient = telemetryClient;
             //
-            // Use the connection model to create a session telemetry event that the session will update and report upon completion.
-            //
-            ITelemetryEvent sessionTelemetry = sessionSetup.Connection.CreateSessionTelemetry(sessionSetup.DataModel, _telemetryClient, "SessionLaunch");
-            //
             // _internalState must never be null, so the initial state is assigned to a state object
             // that does not do anything.
             //
-            _internalState = new InactiveSession(_sessionMonitor, _telemetryClient, sessionTelemetry);
+            _internalState = InactiveSession.Create(_sessionMonitor, _sessionSetup, _telemetryClient);
             _internalState.Activate(this);
         }
 

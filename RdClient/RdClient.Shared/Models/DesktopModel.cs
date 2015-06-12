@@ -163,26 +163,23 @@
             return connection;
         }
 
-        public override ITelemetryEvent CreateSessionTelemetry(ApplicationDataModel dataModel, ITelemetryClient telemetryClient, string telemetryEventName)
+        public override void InitializeSessionTelemetry(ApplicationDataModel dataModel, ITelemetryEvent telemetryEvent)
         {
-            ITelemetryEvent telemetryEvent = telemetryClient.MakeEvent(telemetryEventName);
+            telemetryEvent.AddTag("sourceType", this.TelemetrySourceType);
 
-            if(Guid.Empty.Equals(_gatewayId))
-            {
-                telemetryEvent.AddTag("sourceType", "localDesktop");
-            }
-            else
+            if (!Guid.Empty.Equals(_gatewayId))
             {
                 GatewayModel gateway = dataModel.Gateways.GetModel(_gatewayId);
-
-                telemetryEvent.AddTag("sourceType", "localDesktopWithGateway");
                 telemetryEvent.AddTag("gwyCreds", dataModel.GetCredentialsTelemetryTag(gateway.CredentialsId));
             }
 
             telemetryEvent.AddTag("hostAddressType", GetHostAddressTypeTag(_hostName));
             telemetryEvent.AddTag("hostCreds", dataModel.GetCredentialsTelemetryTag(_credentialsId));
+        }
 
-            return telemetryEvent;
+        protected override string GetTelemetrySourceType()
+        {
+            return Guid.Empty.Equals(_gatewayId) ? "localDesktop" : "localDesktopWithGateway";
         }
     }
 }

@@ -69,7 +69,10 @@
 
                 public long AccumulatedTime
                 {
-                    get { return _accumulatedMilliseconds; }
+                    //
+                    // Get the duration rounded to the nearest minute.
+                    //
+                    get { return ( _accumulatedMilliseconds / 1000 + 30 ) / 60; }
                 }
             }
 

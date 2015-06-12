@@ -24,6 +24,12 @@
                 this.SessionTelemetry.AddTag("disconnectExtendedCode", _reason.ULegacyExtendedCode.ToString("X8"));
                 this.SessionTelemetry.AddMetric("success", this.Session._hasConnected ? 1.0 : 0.0);
                 this.SessionTelemetry.Report();
+
+                if (this.Session._hasConnected)
+                {
+                    this.SessionDuration.PauseStopwatch(SessionDurationStopwatchName);
+                    this.SessionDuration.Report();
+                }
             }
 
             public FailedSession(IRdpConnection connection, RdpDisconnectReason reason, InternalState otherState)
