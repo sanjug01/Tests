@@ -270,6 +270,7 @@
             _tapRecognizer.Consume(w);
 
             this.EmitPointerEvent(w);
+            e.Handled = true;
         }
 
         protected override void OnPointerReleased(PointerRoutedEventArgs e)
@@ -278,6 +279,7 @@
             _tapRecognizer.Consume(w);
 
             this.EmitPointerEvent(w);
+            e.Handled = true;
         }
 
         protected override void OnPointerPressed(PointerRoutedEventArgs e)
@@ -286,18 +288,21 @@
             _tapRecognizer.Consume(w);
 
             this.EmitPointerEvent(w);
+            e.Handled = true;
         }
 
         protected override void OnPointerWheelChanged(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerPressed, PointerEventType.PointerRoutedEventArgs, e, this));
             this.EmitPointerEvent(w);
+            e.Handled = true;
         }
 
         protected override void OnPointerMoved(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerMoved, PointerEventType.PointerRoutedEventArgs, e, this));
             this.EmitPointerEvent(w);
+            e.Handled = true;
         }
 
 
@@ -305,12 +310,14 @@
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerEntered, PointerEventType.PointerRoutedEventArgs, e, this));
             this.EmitPointerEvent(w);
+            e.Handled = true;
         }
 
         protected override void OnPointerExited(PointerRoutedEventArgs e)
         {
             IPointerEventBase w = new PointerRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.PointerExited, PointerEventType.PointerRoutedEventArgs, e, this));
             this.EmitPointerEvent(w);
+            e.Handled = true;
         }
     }
 }

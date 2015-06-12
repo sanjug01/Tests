@@ -8,15 +8,14 @@
     xmlns:c="using:RdClient.Controls"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:m="using:RdClient.Shared.Models"
-    xmlns:cv="using:RdClient.Shared.Converters"    
+    xmlns:cv="using:RdClient.Shared.Converters"
     xmlns:input="using:RdClient.Input"
     xmlns:pointer="using:RdClient.Shared.Input.Pointer"
     xmlns:helpers="using:RdClient.Helpers"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="800"
-    RequestedTheme="Dark"
-    SizeChanged="UserControl_SizeChanged">
+    RequestedTheme="Dark">
 
     <UserControl.DataContext>
         <vm:RemoteSessionViewModel>
@@ -25,8 +24,8 @@
                 <input:CoreWindowKeyboardCapture/>
             </vm:RemoteSessionViewModel.KeyboardCapture>
             <vm:RemoteSessionViewModel.RightSideBarViewModel>
-                <vm:RightSideBarViewModel 
-                    DeviceCapabilities="{StaticResource DeviceCapabilities}" 
+                <vm:RightSideBarViewModel
+                    DeviceCapabilities="{StaticResource DeviceCapabilities}"
                     FullScreenModel="{StaticResource FullScreenModel}" />
             </vm:RemoteSessionViewModel.RightSideBarViewModel>
             <vm:RemoteSessionViewModel.PointerPosition>
@@ -45,197 +44,200 @@
         <cv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
     </UserControl.Resources>
 
-    <Grid Background="{ThemeResource SystemChromeDisabledHighColor}">
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
+    <Canvas x:Name="SessionPanelContainer" Background="{ThemeResource SystemChromeDisabledHighColor}">
+        <Grid x:Name="SessionPanel">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-        <Grid Background="{ThemeResource SystemChromeDisabledHighColor}" Grid.Row="0" Grid.Column="0">
-            <c:RemoteSessionPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                RemoteSessionViewSite="{Binding}"
-                Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
+            <Grid Background="{ThemeResource SystemChromeDisabledHighColor}" Grid.Row="0" Grid.Column="0">
 
-            <!-- Connection Bar -->
-            <ItemsControl
-                Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                HorizontalAlignment="Center" VerticalAlignment="Top"
-                Opacity="{ThemeResource ConnectionOverlayOpacity}"
-                ItemsSource="{Binding ConnectionBarItems}">
+                <c:RemoteSessionPanel
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    RemoteSessionViewSite="{Binding}"
+                    Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
 
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+                <!-- Connection Bar -->
+                <ItemsControl
+                    Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    HorizontalAlignment="Center" VerticalAlignment="Top"
+                    Opacity="{ThemeResource ConnectionOverlayOpacity}"
+                    ItemsSource="{Binding ConnectionBarItems}">
 
-                <ItemsControl.ItemTemplateSelector>
-                    <helpers:TypeNameDataTemplateSelector>
-                        <helpers:TypeNameDataTemplateSelector.Templates>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
 
-                            <DataTemplate x:Key="SymbolBarButtonModel">
-                                <Button
-                                    Style="{ThemeResource RemoteSessionSymbolBarButton}"
-                                    Margin="4,0"
-                                    Command="{Binding Command}"
-                                    CommandParameter="{Binding CommandParameter}"
-                                    Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
-                            </DataTemplate>
+                    <ItemsControl.ItemTemplateSelector>
+                        <helpers:TypeNameDataTemplateSelector>
+                            <helpers:TypeNameDataTemplateSelector.Templates>
 
-                            <DataTemplate x:Key="SymbolBarToggleButtonModel">
-                                <ToggleButton
-                                    Style="{StaticResource RemoteSessionSymbolBarButton}"
-                                    Margin="4,0"
-                                    Command="{Binding Command}"
-                                    CommandParameter="{Binding CommandParameter}"
-                                    IsChecked="{Binding IsChecked}"
-                                    IsThreeState="False"
-                                    Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
-                            </DataTemplate>
-                        
-                            <DataTemplate x:Key="SymbolBarSliderButtonModel">
-                                <Button 
-                                    Style="{StaticResource RemoteSessionSymbolBarButton}"
-                                    Margin="4,0"
-                                    Command="{Binding Command}"
-                                    CommandParameter="{Binding CommandParameter}"
-                                    Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}">
-                                    <Button.Flyout>
-                                        <Flyout>
-                                            <Slider Orientation="Vertical" Height="100" Value="{Binding Value, Mode=TwoWay}"/>
-                                        </Flyout>
-                                    </Button.Flyout>
-                                </Button>
-                            </DataTemplate>
+                                <DataTemplate x:Key="SymbolBarButtonModel">
+                                    <Button
+                                        Style="{ThemeResource RemoteSessionSymbolBarButton}"
+                                        Margin="4,0"
+                                        Command="{Binding Command}"
+                                        CommandParameter="{Binding CommandParameter}"
+                                        Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
+                                </DataTemplate>
 
-                        
-                        </helpers:TypeNameDataTemplateSelector.Templates>
-                    </helpers:TypeNameDataTemplateSelector>
-                </ItemsControl.ItemTemplateSelector>
-            </ItemsControl>
+                                <DataTemplate x:Key="SymbolBarToggleButtonModel">
+                                    <ToggleButton
+                                        Style="{StaticResource RemoteSessionSymbolBarButton}"
+                                        Margin="4,0"
+                                        Command="{Binding Command}"
+                                        CommandParameter="{Binding CommandParameter}"
+                                        IsChecked="{Binding IsChecked}"
+                                        IsThreeState="False"
+                                        Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
+                                </DataTemplate>
 
-            <!-- Transparent overlay that dismisses the side bars -->
-            <c:PointerPressDetector
-                Visibility="{Binding RightSideBarViewModel.Visibility}"
-                PointerPressDetected="{Binding RightSideBarViewModel.ToggleVisiblity}" />
+                                <DataTemplate x:Key="SymbolBarSliderButtonModel">
+                                    <Button
+                                        Style="{StaticResource RemoteSessionSymbolBarButton}"
+                                        Margin="4,0"
+                                        Command="{Binding Command}"
+                                        CommandParameter="{Binding CommandParameter}"
+                                        Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}">
+                                        <Button.Flyout>
+                                            <Flyout>
+                                                <Slider Orientation="Vertical" Height="100" Value="{Binding Value, Mode=TwoWay}"/>
+                                            </Flyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                </DataTemplate>
+                            </helpers:TypeNameDataTemplateSelector.Templates>
+                        </helpers:TypeNameDataTemplateSelector>
+                    </ItemsControl.ItemTemplateSelector>
+                </ItemsControl>
 
-            <!-- Right side bar -->
-            <c:RightSideBarControl
-                DataContext="{Binding RightSideBarViewModel}"
-                BarVisibility="{Binding Visibility}" />
+                <!-- Transparent overlay that dismisses the side bars -->
+                <c:PointerPressDetector
+                    Visibility="{Binding RightSideBarViewModel.Visibility}"
+                    PointerPressDetected="{Binding RightSideBarViewModel.ToggleVisiblity}" />
 
-            <!--
-            Belly-band container of in-session dialogs.
-            The band is visible when the BellyBandViewModel property of the remote session view model
-            is not null.
-            -->
-            <Grid Visibility="{Binding BellyBandViewModel, Converter={StaticResource NotNullToVisibilityConverter}}"
-                  Background="Transparent">
+                    <!-- Right side bar -->
+                    <c:RightSideBarControl
+                        DataContext="{Binding RightSideBarViewModel}"
+                        BarVisibility="{Binding Visibility}" />
+
                 <!--
-                Inner Grid - the belly-band itself
+                Belly-band container of in-session dialogs.
+                The band is visible when the BellyBandViewModel property of the remote session view model
+                is not null.
                 -->
-                <Grid
-                    VerticalAlignment="Center"
-                    Height="Auto"
-                    Background="{ThemeResource DialogBackgroundColor}">
+                <Grid Visibility="{Binding BellyBandViewModel, Converter={StaticResource NotNullToVisibilityConverter}}"
+                      Background="Transparent">
+                    <!--
+                    Inner Grid - the belly-band itself
+                    -->
+                    <Grid
+                        VerticalAlignment="Center"
+                        Height="Auto"
+                        Background="{ThemeResource DialogBackgroundColor}">
 
-                    <ContentControl
-                        Margin="{StaticResource BellyBandDefaultHorizontalSpacing}"
-                        Content="{Binding BellyBandViewModel}"
-                        HorizontalContentAlignment="Stretch">
+                        <ContentControl
+                            Margin="{StaticResource BellyBandDefaultHorizontalSpacing}"
+                            Content="{Binding BellyBandViewModel}"
+                            HorizontalContentAlignment="Stretch">
 
-                            <ContentControl.ContentTransitions>
-                                <TransitionCollection>
-                                    <ContentThemeTransition />
-                                </TransitionCollection>
-                            </ContentControl.ContentTransitions>
+                                <ContentControl.ContentTransitions>
+                                    <TransitionCollection>
+                                        <ContentThemeTransition />
+                                    </TransitionCollection>
+                                </ContentControl.ContentTransitions>
 
-                        <ContentControl.ContentTemplateSelector>
-                            <helpers:TypeNameDataTemplateSelector>
+                            <ContentControl.ContentTemplateSelector>
+                                <helpers:TypeNameDataTemplateSelector>
 
-                                <helpers:TypeNameDataTemplateSelector.Templates>
+                                    <helpers:TypeNameDataTemplateSelector.Templates>
 
-                                    <!--
-                                    For the RemoteSessionFailureViewModel view model class show RemoteSessionFailureControl.
-                                    The control will take the RemoteSessionFailureViewModel as its main binding.
-                                    -->
-                                    <DataTemplate x:Key="RemoteSessionFailureViewModel">
-                                        <c:RemoteSessionFailureControl />
-                                    </DataTemplate>
+                                        <!--
+                                        For the RemoteSessionFailureViewModel view model class show RemoteSessionFailureControl.
+                                        The control will take the RemoteSessionFailureViewModel as its main binding.
+                                        -->
+                                        <DataTemplate x:Key="RemoteSessionFailureViewModel">
+                                            <c:RemoteSessionFailureControl />
+                                        </DataTemplate>
 
-                                    <!--
-                                    RemoteSessionInterruptionViewModel - the session got interrupted and is reconnecting.
-                                    -->
-                                    <DataTemplate x:Key="RemoteSessionInterruptionViewModel">
-                                        <c:RemoteSessionInterruptionControl />
-                                    </DataTemplate>
+                                        <!--
+                                        RemoteSessionInterruptionViewModel - the session got interrupted and is reconnecting.
+                                        -->
+                                        <DataTemplate x:Key="RemoteSessionInterruptionViewModel">
+                                            <c:RemoteSessionInterruptionControl />
+                                        </DataTemplate>
 
-                                    <DataTemplate x:Key="RemoteSessionConnectingViewModel">
-                                        <c:RemoteSessionConnectingControl />
-                                    </DataTemplate>
+                                        <DataTemplate x:Key="RemoteSessionConnectingViewModel">
+                                            <c:RemoteSessionConnectingControl />
+                                        </DataTemplate>
 
-                                </helpers:TypeNameDataTemplateSelector.Templates>
+                                    </helpers:TypeNameDataTemplateSelector.Templates>
 
-                                <helpers:TypeNameDataTemplateSelector.DefaultTemplate>
-                                    <DataTemplate>
-                                        <!-- Template of an unknown belly-band view model -->
-                                        <Grid Background="Red">
-                                            <Grid Background="White" Margin="5">
-                                                <TextBlock Margin="20,20"
-                                                           FontSize="20"
-                                                           FontWeight="Bold"
-                                                           Foreground="Red"
-                                                           Text="Unknown belly-band view"/>
+                                    <helpers:TypeNameDataTemplateSelector.DefaultTemplate>
+                                        <DataTemplate>
+                                            <!-- Template of an unknown belly-band view model -->
+                                            <Grid Background="Red">
+                                                <Grid Background="White" Margin="5">
+                                                    <TextBlock Margin="20,20"
+                                                               FontSize="20"
+                                                               FontWeight="Bold"
+                                                               Foreground="Red"
+                                                               Text="Unknown belly-band view"/>
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                    </DataTemplate>
-                                </helpers:TypeNameDataTemplateSelector.DefaultTemplate>
+                                        </DataTemplate>
+                                    </helpers:TypeNameDataTemplateSelector.DefaultTemplate>
 
-                            </helpers:TypeNameDataTemplateSelector>
-                        </ContentControl.ContentTemplateSelector>
-                    </ContentControl>
+                                </helpers:TypeNameDataTemplateSelector>
+                            </ContentControl.ContentTemplateSelector>
+                        </ContentControl>
 
+                    </Grid>
                 </Grid>
+
+                <c:PanKnob x:Name="PanKnob"
+                           PanKnobSite="{Binding PanKnobSite}"/>
             </Grid>
 
-            <c:PanKnob x:Name="PanKnob"
-                       PanKnobSite="{Binding PanKnobSite}"/>
+            <ScrollBar Grid.Row="1" Grid.Column="0"
+                       x:Name="HorizontalScrolbar" Orientation="Horizontal"
+    		           Width ="Auto"
+                       Minimum="{Binding ScrollBarModel.MinimumHorizontal}"
+                       Maximum="{Binding ScrollBarModel.MaximumHorizontal}"
+                       ViewportSize="{Binding ScrollBarModel.ViewportWidth}"
+                       IsEnabled="True"
+                       IndicatorMode="{Binding ScrollBarModel.IndicatorMode}"
+                       Visibility="{Binding ScrollBarModel.VisibilityHorizontal}"
+                       LargeChange="200"
+                       SmallChange="20"
+                       Value="{Binding ScrollBarModel.ValueHorziontal, Mode=TwoWay}"/>
+
+            <ScrollBar Grid.Row="0" Grid.Column="1"
+                       x:Name="VerticalScrolbar" Orientation="Vertical"
+    		           Width ="Auto"
+                       Minimum="{Binding ScrollBarModel.MinimumVertical}"
+                       Maximum="{Binding ScrollBarModel.MaximumVertical}"
+                       ViewportSize="{Binding ScrollBarModel.ViewportHeight}"
+                       IsEnabled="True"
+                       IndicatorMode="{Binding ScrollBarModel.IndicatorMode}"
+                       Visibility="{Binding ScrollBarModel.VisibilityVertical}"
+                       LargeChange="200"
+                       SmallChange="20"
+                       Value="{Binding ScrollBarModel.ValueVertical, Mode=TwoWay}"/>
+            <Rectangle Grid.Row="1" Grid.Column="1" Fill="{ThemeResource SystemChromeDisabledHighColor}"
+                       Visibility="{Binding ScrollBarModel.VisibilityCorner}"/>
         </Grid>
-
-        <ScrollBar Grid.Row="1" Grid.Column="0"
-                   x:Name="HorizontalScrolbar" Orientation="Horizontal" 
-    		       Width ="Auto"
-                   Minimum="{Binding ScrollBarModel.MinimumHorizontal}"
-                   Maximum="{Binding ScrollBarModel.MaximumHorizontal}"
-                   ViewportSize="{Binding ScrollBarModel.ViewportWidth}"
-                   IsEnabled="True"
-                   IndicatorMode="{Binding ScrollBarModel.IndicatorMode}"
-                   Visibility="{Binding ScrollBarModel.VisibilityHorizontal}"
-                   LargeChange="200"
-                   SmallChange="20"
-                   Value="{Binding ScrollBarModel.ValueHorziontal, Mode=TwoWay}"/>
-
-        <ScrollBar Grid.Row="0" Grid.Column="1"
-                   x:Name="VerticalScrolbar" Orientation="Vertical" 
-    		       Width ="Auto"
-                   Minimum="{Binding ScrollBarModel.MinimumVertical}"
-                   Maximum="{Binding ScrollBarModel.MaximumVertical}"
-                   ViewportSize="{Binding ScrollBarModel.ViewportHeight}"
-                   IsEnabled="True"
-                   IndicatorMode="{Binding ScrollBarModel.IndicatorMode}"
-                   Visibility="{Binding ScrollBarModel.VisibilityVertical}"
-                   LargeChange="200"
-                   SmallChange="20"                   
-                   Value="{Binding ScrollBarModel.ValueVertical, Mode=TwoWay}"/>
-        <Rectangle Grid.Row="1" Grid.Column="1" Fill="{ThemeResource SystemChromeDisabledHighColor}"
-                   Visibility="{Binding ScrollBarModel.VisibilityCorner}"/>
-    </Grid>
+    </Canvas>
 
 </UserControl>

@@ -1,9 +1,9 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.Telemetry;
     using System;
     using System.Runtime.Serialization;
-    using RdClient.Shared.Telemetry;
 
     [DataContract(IsReference = true)]
     public sealed class RemoteResourceModel : RemoteConnectionModel
@@ -86,7 +86,12 @@
             return connection;
         }
 
-        public override ITelemetryEvent CreateSessionTelemetry(ApplicationDataModel dataModel, ITelemetryClient telemetryClient, string telemetryEventName)
+        public override void InitializeSessionTelemetry(ApplicationDataModel dataModel, ITelemetryEvent telemetryEvent)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string GetTelemetrySourceType()
         {
             throw new NotImplementedException();
         }

@@ -11,8 +11,25 @@
             {
             }
 
-            public InactiveSession(ReaderWriterLockSlim _monitor, ITelemetryClient telemetryClient, ITelemetryEvent sessionTelemetry)
-                : base(SessionState.Idle, _monitor, telemetryClient, sessionTelemetry)
+            public static InternalState Create(ReaderWriterLockSlim monitor, RemoteSessionSetup sessionSetup, ITelemetryClient telemetryClient)
+            {
+                //
+                // Use the connection model to create a session telemetry event that the session will update and report upon completion.
+                //
+                ITelemetryEvent sessionTelemetry = telemetryClient.MakeEvent("SessionLaunch");
+                ITelemetryEvent sessionDuration = telemetryClient.MakeEvent("SessionDuration");
+
+                sessionSetup.Connection.InitializeSessionTelemetry(sessionSetup.DataModel, sessionTelemetry);
+                sessionDuration.AddTag("sourceType", sessionSetup.Connection.TelemetrySourceType);
+
+                return new InactiveSession(monitor, telemetryClient, sessionTelemetry, sessionDuration);
+            }
+
+            private InactiveSession(ReaderWriterLockSlim monitor,
+                ITelemetryClient telemetryClient,
+                ITelemetryEvent sessionTelemetry,
+                ITelemetryEvent sessionDuration)
+                : base(SessionState.Idle, monitor, telemetryClient, sessionTelemetry, sessionDuration)
             {
             }
 
