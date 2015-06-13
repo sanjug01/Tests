@@ -250,7 +250,9 @@
         -->
         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <controls:ItsLonelyHereControl />
-            <controls:DesktopsListControl Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <controls:DesktopsListControl
+                ViewItemsSource="{Binding DesktopViewModelsSource}"
+                Visibility="{Binding Path=ShowDesktops, Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <controls:AppsListControl Visibility="{Binding Path=ShowApps, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         </Grid>
 

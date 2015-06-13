@@ -60,6 +60,11 @@
             get { return _desktopViewModels; }
         }
 
+        public IViewItemsSource DesktopViewModelsSource
+        {
+            get { return null; }
+        }
+
         public ReadOnlyObservableCollection<IWorkspaceViewModel> WorkspaceViewModels
         {
             get { return _workspaceViewModels; }

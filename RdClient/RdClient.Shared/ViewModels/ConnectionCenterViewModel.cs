@@ -26,6 +26,7 @@
         private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
         private ReadOnlyObservableCollection<IWorkspaceViewModel> _workspaceViewModels;
 
+        private readonly ViewItemsSource _desktopViewModelsSource;
         private readonly ICommand _showSettings;
         private readonly ICommand _showAbout;
         private readonly ICommand _showHelp;
@@ -111,6 +112,7 @@
         public ConnectionCenterViewModel()
         {
             this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);
+            _desktopViewModelsSource = new ViewItemsSource();
             _showSettings = new RelayCommand(this.GoToSettingsCommandExecute);
             _showAbout = new RelayCommand(this.ShowAboutCommandExecute);
             _showHelp = new RelayCommand(this.ShowHelpCommandExecute);
@@ -128,6 +130,11 @@
         {
             get { return _desktopViewModels; }
             private set { SetProperty(ref _desktopViewModels, value); }
+        }
+
+        public IViewItemsSource DesktopViewModelsSource
+        {
+            get { return _desktopViewModelsSource; }
         }
 
         public ReadOnlyObservableCollection<IWorkspaceViewModel> WorkspaceViewModels
@@ -353,7 +360,7 @@
 
         private void AddDesktopExecute(object o)
         {
-            NavigationService.PushAccessoryView("AddOrEditDesktopView", new AddDesktopViewModelArgs());
+            NavigationService.PushAccessoryView("AddOrEditDesktopView", new AddDesktopViewModelArgs(_desktopViewModelsSource));
         }
 
         private void OnDesktopViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)

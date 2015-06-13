@@ -10,14 +10,7 @@
     using System.Linq;
     using System.Windows.Input;
 
-    public class AddDesktopViewModelArgs
-    {
-        public AddDesktopViewModelArgs()
-        {
-        }    
-    }
-
-    public class EditDesktopViewModelArgs
+    public sealed class EditDesktopViewModelArgs
     {
         private readonly DesktopModel _desktop;
 
@@ -31,7 +24,7 @@
 
     public class AddOrEditDesktopViewModel : ViewModelBase, IAddOrEditDesktopViewModel, IDialogViewModel
     {
-        private bool _isAddingDesktop;
+        private AddDesktopViewModelArgs _addDesktopArgs;
         private bool _isExpandedView;
         private string _friendlyName;
         private bool _isSwapMouseButtons;
@@ -104,11 +97,7 @@
 
         public bool IsAddingDesktop
         {
-            get { return _isAddingDesktop; }
-            private set
-            {
-                this.SetProperty(ref _isAddingDesktop, value, "IsAddingDesktop");
-            }
+            get { return null != _addDesktopArgs; }
         }
         
         public UserComboBoxElement SelectedUser
@@ -211,13 +200,14 @@
                     this.Desktop.GatewayId = Guid.Empty;
                 }
 
-                if (this.IsAddingDesktop)
+                if (null != _addDesktopArgs)
                 {
                     //
                     // Mark the desktop as new so the tile in the connection center will show a "new" indicator.
                     //
                     this.Desktop.IsNew = true;
                     this.ApplicationDataModel.LocalWorkspace.Connections.AddNewModel(this.Desktop);
+                    _addDesktopArgs.EmitDesktopAdded(this.Desktop);
                 }
 
                 this.DismissModal(null);
@@ -233,10 +223,9 @@
         {
             Contract.Assert(null != activationParameter);
 
-            AddDesktopViewModelArgs addArgs = activationParameter as AddDesktopViewModelArgs;
-            EditDesktopViewModelArgs editArgs = activationParameter as EditDesktopViewModelArgs;
+            EditDesktopViewModelArgs editArgs;
 
-            if (editArgs != null)
+            if (null != (editArgs = activationParameter as EditDesktopViewModelArgs))
             {
                 this.Desktop = editArgs.Desktop;
                 this.Host.Value = this.Desktop.HostName;
@@ -244,10 +233,8 @@
                 this.AudioMode = (int) this.Desktop.AudioMode;
                 this.IsSwapMouseButtons = this.Desktop.IsSwapMouseButtons;
                 this.IsUseAdminSession = this.Desktop.IsAdminSession;
-
-                this.IsAddingDesktop = false;
             }
-            else if(addArgs != null)
+            else if(null != (_addDesktopArgs = activationParameter as AddDesktopViewModelArgs))
             {
                 this.Desktop = new DesktopModel();
                 this.Host.Value = string.Empty;
@@ -255,9 +242,13 @@
                 this.AudioMode = (int)RdClient.Shared.Models.AudioMode.Local;
                 this.IsSwapMouseButtons = false;
                 this.IsUseAdminSession = false;
-
-                this.IsAddingDesktop = true;
             }
+            else
+            {
+                Contract.Assert(false, "Unknown parameter type");
+            }
+
+            EmitPropertyChanged("IsAddingDesktop");
             this.IsExpandedView = false;
 
             // initialize users colection
@@ -305,6 +296,11 @@
             this.Gateways = orderedGateways.Models;
 
             this.SelectGatewayId(this.Desktop.GatewayId);
+        }
+
+        protected override void OnDismissed()
+        {
+            _addDesktopArgs = null;
         }
 
         private void AddGatewayCommandExecute(object o)

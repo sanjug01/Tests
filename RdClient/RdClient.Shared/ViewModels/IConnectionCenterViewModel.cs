@@ -8,6 +8,7 @@
     {
         RelayCommand AddDesktopCommand { get; }
         ReadOnlyObservableCollection<IDesktopViewModel> DesktopViewModels { get; }
+        IViewItemsSource DesktopViewModelsSource { get; }
         ReadOnlyObservableCollection<IWorkspaceViewModel> WorkspaceViewModels { get; }
 
         bool HasDesktops { get; }

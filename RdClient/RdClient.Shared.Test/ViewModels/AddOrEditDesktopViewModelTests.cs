@@ -77,8 +77,7 @@
         [TestMethod]
         public void AddDesktop_CanSaveIfHostNameNotEmpty()
         {
-            AddDesktopViewModelArgs args =
-                new AddDesktopViewModelArgs();
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
 
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
             _addOrEditDesktopViewModel.Host.Value = "MyPC";
@@ -89,8 +88,7 @@
         [TestMethod]
         public void AddDesktop_ShowHideExtraSettings()
         {
-            AddDesktopViewModelArgs args =
-                new AddDesktopViewModelArgs();
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
 
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
 
@@ -147,8 +145,7 @@
         [TestMethod]
         public void EditDesktop_CannotSaveIfHostNameIsEmpty()
         {
-            AddDesktopViewModelArgs args =
-                new AddDesktopViewModelArgs();
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
 
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
             _addOrEditDesktopViewModel.Host.Value = String.Empty;
@@ -302,7 +299,7 @@
         {
             DesktopModel expectedDesktop = _testData.NewValidDesktop(Guid.Empty).Model;
 
-            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs();
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
 
             _addOrEditDesktopViewModel.PresentableView = _view;
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
@@ -322,8 +319,7 @@
         {
             DesktopModel expectedDesktop = _testData.NewValidDesktop(Guid.Empty).Model;
 
-            AddDesktopViewModelArgs args =
-                new AddDesktopViewModelArgs();
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
 
             _addOrEditDesktopViewModel.PresentableView = _view;
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
@@ -346,7 +342,7 @@
         {
             DesktopModel expectedDesktop = _testData.NewValidDesktop(Guid.Empty).Model;
 
-            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs();
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
 
             _addOrEditDesktopViewModel.PresentableView = _view;
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
@@ -373,8 +369,7 @@
         {
             DesktopModel expectedDesktop = _testData.NewValidDesktop(Guid.Empty).Model;
 
-            AddDesktopViewModelArgs args =
-                new AddDesktopViewModelArgs();
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
 
             _addOrEditDesktopViewModel.PresentableView = _view;
 
@@ -461,7 +456,7 @@
             string invalidHostName = "+MyPC";
             string validHostName = "MyPC";
 
-            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs();
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
 
             _addOrEditDesktopViewModel.PresentableView = _view;
             ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
