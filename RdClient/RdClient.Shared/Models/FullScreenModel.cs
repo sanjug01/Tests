@@ -1,4 +1,6 @@
 ﻿using RdClient.Shared.ViewModels;
+using System;
+using System.Diagnostics;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -9,6 +11,25 @@ namespace RdClient.Shared.Models
     public class FullScreenModel : IFullScreenModel
     {
         private bool _wasFullScreenMode;
+
+        public event EventHandler FullScreenChange;
+        private void EmitFullScreenChange()
+        {
+            if(FullScreenChange != null)
+            {
+                FullScreenChange(this, EventArgs.Empty);
+            }
+        }
+
+        public event EventHandler UserInteractionModeChange;
+        private void EmitUserInteractionModeChange()
+        {
+            if(UserInteractionModeChange != null)
+            {
+                UserInteractionModeChange(this, EventArgs.Empty);
+            }
+        }
+
 
         private readonly RelayCommand _enterFullScreenCommand;
         public RelayCommand EnterFullScreenCommand
