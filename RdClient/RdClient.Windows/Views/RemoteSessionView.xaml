@@ -8,7 +8,7 @@
     xmlns:c="using:RdClient.Controls"
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:m="using:RdClient.Shared.Models"
-    xmlns:cv="using:RdClient.Shared.Converters"    
+    xmlns:cv="using:RdClient.Shared.Converters"
     xmlns:input="using:RdClient.Input"
     xmlns:pointer="using:RdClient.Shared.Input.Pointer"
     xmlns:helpers="using:RdClient.Helpers"
@@ -24,7 +24,9 @@
                 <input:CoreWindowKeyboardCapture/>
             </vm:RemoteSessionViewModel.KeyboardCapture>
             <vm:RemoteSessionViewModel.RightSideBarViewModel>
-                <vm:RightSideBarViewModel DeviceCapabilities="{StaticResource DeviceCapabilities}" FullScreenModel="{StaticResource FullScreenModel}" />
+                <vm:RightSideBarViewModel
+                    DeviceCapabilities="{StaticResource DeviceCapabilities}"
+                    FullScreenModel="{StaticResource FullScreenModel}" />
             </vm:RemoteSessionViewModel.RightSideBarViewModel>
             <vm:RemoteSessionViewModel.PointerPosition>
                 <pointer:PointerPosition />
@@ -54,7 +56,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid Background="{ThemeResource SystemChromeDisabledHighColor}" Grid.Row="0" Grid.Column="0">
-            
+
                 <c:RemoteSessionPanel
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
@@ -99,9 +101,9 @@
                                         Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
                                         Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
                                 </DataTemplate>
-                        
+
                                 <DataTemplate x:Key="SymbolBarSliderButtonModel">
-                                    <Button 
+                                    <Button
                                         Style="{StaticResource RemoteSessionSymbolBarButton}"
                                         Margin="4,0"
                                         Command="{Binding Command}"
@@ -115,8 +117,6 @@
                                         </Button.Flyout>
                                     </Button>
                                 </DataTemplate>
-
-                        
                             </helpers:TypeNameDataTemplateSelector.Templates>
                         </helpers:TypeNameDataTemplateSelector>
                     </ItemsControl.ItemTemplateSelector>
@@ -127,12 +127,10 @@
                     Visibility="{Binding RightSideBarViewModel.Visibility}"
                     PointerPressDetected="{Binding RightSideBarViewModel.ToggleVisiblity}" />
 
-                <!-- Right side bar -->
-                <c:RightSideBarControl
-                    BarVisibility="{Binding RightSideBarViewModel.Visibility}"
-                    NavigateHome="{Binding RightSideBarViewModel.Disconnect}"
-                    MouseMode="{Binding RightSideBarViewModel.MouseMode}"
-                    FullScreen="{Binding RightSideBarViewModel.FullScreen}"/>
+                    <!-- Right side bar -->
+                    <c:RightSideBarControl
+                        DataContext="{Binding RightSideBarViewModel}"
+                        BarVisibility="{Binding Visibility}" />
 
                 <!--
                 Belly-band container of in-session dialogs.
@@ -213,7 +211,7 @@
             </Grid>
 
             <ScrollBar Grid.Row="1" Grid.Column="0"
-                       x:Name="HorizontalScrolbar" Orientation="Horizontal" 
+                       x:Name="HorizontalScrolbar" Orientation="Horizontal"
     		           Width ="Auto"
                        Minimum="{Binding ScrollBarModel.MinimumHorizontal}"
                        Maximum="{Binding ScrollBarModel.MaximumHorizontal}"
@@ -226,7 +224,7 @@
                        Value="{Binding ScrollBarModel.ValueHorziontal, Mode=TwoWay}"/>
 
             <ScrollBar Grid.Row="0" Grid.Column="1"
-                       x:Name="VerticalScrolbar" Orientation="Vertical" 
+                       x:Name="VerticalScrolbar" Orientation="Vertical"
     		           Width ="Auto"
                        Minimum="{Binding ScrollBarModel.MinimumVertical}"
                        Maximum="{Binding ScrollBarModel.MaximumVertical}"
@@ -235,7 +233,7 @@
                        IndicatorMode="{Binding ScrollBarModel.IndicatorMode}"
                        Visibility="{Binding ScrollBarModel.VisibilityVertical}"
                        LargeChange="200"
-                       SmallChange="20"                   
+                       SmallChange="20"
                        Value="{Binding ScrollBarModel.ValueVertical, Mode=TwoWay}"/>
             <Rectangle Grid.Row="1" Grid.Column="1" Fill="{ThemeResource SystemChromeDisabledHighColor}"
                        Visibility="{Binding ScrollBarModel.VisibilityCorner}"/>

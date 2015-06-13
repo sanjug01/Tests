@@ -109,6 +109,9 @@
 
             public UserInteractionMode UserInteractionMode { get; private set; }
 
+            public event EventHandler FullScreenChange;
+            public event EventHandler UserInteractionModeChange;
+
             public void ToggleFullScreen()
             {
                 // noop

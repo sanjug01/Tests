@@ -40,7 +40,10 @@
 
         bool IDeviceCapabilities.TouchPresent
         {
-            get { return _touchCapabilities.TouchPresent > 0; }
+            get
+            {
+                return _touchCapabilities.TouchPresent > 0;
+            }
         }
 
         bool IDeviceCapabilities.CanShowInputPanel
