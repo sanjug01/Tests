@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Controls
 {
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.ViewModels;
     using Windows.Foundation;
@@ -27,12 +28,29 @@
         {
             if(object.ReferenceEquals(itemsSource, this.ViewItemsSource))
             {
+                this.UpdateLayout();
                 UIElement container = this.DesktopItemsControl.ContainerFromItem(item) as UIElement;
 
-                if(null != container)
+                if (null != container)
                 {
-                    Point pt = container.TransformToVisual(this.Scroller).TransformPoint(new Point(0, 0));
-                    this.Scroller.ChangeView(pt.X, pt.Y, null);
+                    //
+                    // Converge the top left corner of the new item with the offset of the scroller
+                    // and scroll the scroller to the converged offset, which will bring the new item
+                    // into the view.
+                    //
+                    Point ptOrigin = new Point(this.Scroller.HorizontalOffset, this.Scroller.VerticalOffset);
+                    Point ptDestination = container.TransformToVisual(this.Scroller).TransformPoint(ptOrigin);
+                    this.Scroller.ChangeView(ptDestination.X, ptDestination.Y, null);
+                    //
+                    // TODO: highlight the new item temporarily.
+                    //
+
+                    //
+                    // Set input focus to the new item
+                    //
+                    Control cc = container.FindFirstTabControl();
+                    if (null != cc)
+                        cc.Focus(FocusState.Programmatic);
                 }
             }
         }

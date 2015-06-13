@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Navigation
 {
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Navigation;
     using System.Diagnostics.Contracts;
     using Windows.System;
@@ -7,7 +8,6 @@
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Controls.Primitives;
-    using Windows.UI.Xaml.Media;
 
     sealed class ModalFocusTracker
     {
@@ -97,7 +97,7 @@
         private bool FocusFirstTabControl()
         {
             bool focused = false;
-            Control control = FindFirstTabControl(_view);
+            Control control = _view.FindFirstTabControl();
 
             if (null != control)
             {
@@ -106,48 +106,6 @@
             }
 
             return focused;
-        }
-
-        private Control FindFirstTabControl(DependencyObject parent)
-        {
-            Contract.Assert(null != parent);
-
-            Control firstTabControl = null;
-            int childrenNumber = VisualTreeHelper.GetChildrenCount(parent);
-
-            for (int i = 0; null == firstTabControl && i < childrenNumber; ++i)
-            {
-                UIElement element = GetActiveElement(VisualTreeHelper.GetChild(parent, i));
-
-                if (null != element)
-                {
-                    //
-                    // Look in the element's children first.
-                    //
-                    firstTabControl = FindFirstTabControl(element) ?? GetTabControl(element);
-                }
-            }
-
-            if (null == firstTabControl)
-            {
-                firstTabControl = GetTabControl(GetActiveElement(parent));
-            }
-
-            return firstTabControl;
-        }
-
-        private UIElement GetActiveElement(DependencyObject obj)
-        {
-            UIElement element = obj as UIElement;
-
-            return (null != element && Visibility.Visible == element.Visibility && element.IsHitTestVisible) ? element : null;
-        }
-
-        private Control GetTabControl(UIElement element)
-        {
-            Control control = element as Control;
-
-            return (null != control && control.IsEnabled && control.IsTabStop) ? control : null;
         }
     }
 }

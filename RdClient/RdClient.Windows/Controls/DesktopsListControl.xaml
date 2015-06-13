@@ -38,7 +38,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <views:DesktopThumbnailView Margin="0,0,4,4" />
+                            <views:DesktopThumbnailView x:Name="DesktopThumbnail" Margin="0,0,4,4" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

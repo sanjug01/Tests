@@ -360,7 +360,26 @@
 
         private void AddDesktopExecute(object o)
         {
-            NavigationService.PushAccessoryView("AddOrEditDesktopView", new AddDesktopViewModelArgs(_desktopViewModelsSource));
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(_desktopViewModelsSource);
+
+            args.DesktopAdded += (sender, e) =>
+            {
+                //
+                // Find the new view model in the observable collection of desktop view models,
+                // that is based on the desktop model reported in DesktopAdded, and tell the view
+                // to select the item that shows the new desktop.
+                //
+                foreach(DesktopViewModel dvm in this.DesktopViewModels)
+                {
+                    if(object.ReferenceEquals(dvm.Desktop, e.Desktop))
+                    {
+                        e.ItemsSource.SelectItem(dvm);
+                        break;
+                    }
+                }
+            };
+
+            NavigationService.PushAccessoryView("AddOrEditDesktopView", args);
         }
 
         private void OnDesktopViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
