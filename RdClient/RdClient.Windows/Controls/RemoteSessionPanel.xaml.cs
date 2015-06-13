@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Controls
 {
+    using RdClient.Helpers;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Pointer;

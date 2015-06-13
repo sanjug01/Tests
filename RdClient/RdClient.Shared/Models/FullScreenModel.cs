@@ -1,15 +1,15 @@
-﻿using RdClient.Shared.ViewModels;
+﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.ViewModels;
 using System;
-using System.Diagnostics;
-using Windows.UI.Core;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
 
 
 namespace RdClient.Shared.Models
 {
     public class FullScreenModel : IFullScreenModel
     {
+        private IFullScreen _fullScreen;
+
         private bool _wasFullScreenMode;
 
         public event EventHandler FullScreenChange;
@@ -49,19 +49,9 @@ namespace RdClient.Shared.Models
             }
         }
 
-        public void OnSizeChanged(CoreWindow sender, WindowSizeChangedEventArgs e)
-        {
-            if(_wasFullScreenMode != ApplicationView.GetForCurrentView().IsFullScreenMode)
-            {
-                _wasFullScreenMode = !_wasFullScreenMode;
-                _enterFullScreenCommand.EmitCanExecuteChanged();
-                _exitFullScreenCommand.EmitCanExecuteChanged();
-            }
-        }
-
         public void ToggleFullScreen()
         {
-            if(ApplicationView.GetForCurrentView().IsFullScreenMode)
+            if(_fullScreen.IsFullScreenMode)
             {
                 _exitFullScreenCommand.Execute(null);
             }
@@ -78,7 +68,7 @@ namespace RdClient.Shared.Models
         {
             get
             {
-                return UIViewSettings.GetForCurrentView().UserInteractionMode;
+                return _fullScreen.UserInteractionMode;
             }
         }
 
@@ -86,33 +76,34 @@ namespace RdClient.Shared.Models
         {
             get
             {
-                return ApplicationView.GetForCurrentView().IsFullScreenMode;
+                return _fullScreen.IsFullScreenMode;
             }
         }
 
         public FullScreenModel()
         {
-            _wasFullScreenMode = ApplicationView.GetForCurrentView().IsFullScreenMode;
+            _fullScreen = new FullScreen();
+            _fullScreen.UserInteractionModeChange += (s, o) => EmitUserInteractionModeChange();
+            _fullScreen.IsFullScreenModeChange += (s, o) => EmitFullScreenChange();
 
-            Window.Current.CoreWindow.SizeChanged += OnSizeChanged;
+            _wasFullScreenMode = ApplicationView.GetForCurrentView().IsFullScreenMode;
 
             _enterFullScreenCommand = new RelayCommand(
                 o =>
                 {
-                    ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
+                    _fullScreen.EnterFullScreen();
                 },
                 o => 
                 {
-                    return ApplicationView.GetForCurrentView().IsFullScreenMode == false;
+                    return _fullScreen.IsFullScreenMode == false;
                 });
 
             _exitFullScreenCommand = new RelayCommand(
-                o => ApplicationView.GetForCurrentView().ExitFullScreenMode(),
+                o => _fullScreen.ExitFullScreen(),
                 o =>
                 {
-                    return ApplicationView.GetForCurrentView().IsFullScreenMode == true;
+                    return _fullScreen.IsFullScreenMode == true;
                 });
-
         }
     }
 }

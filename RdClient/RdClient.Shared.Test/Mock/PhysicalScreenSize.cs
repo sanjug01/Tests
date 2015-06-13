@@ -1,17 +1,14 @@
 ﻿using RdMock;
 using System;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Test.Mock
 {
-    public class PhysicalScreenSize : MockBase, IPhysicalScreenSize
+    public class WindowSize : MockBase, IWindowSize
     {
-        public PhysicalScreenSize(ScreenSize size)
+        public Size Size
         {
-        }
-
-        public ScreenSize GetScreenSize()
-        {
-            return (ScreenSize)Invoke(new object[] { });
+            get; set;
         }
     }
 }

@@ -30,7 +30,7 @@
                 </cv:TypeToLocalizedStringConverter.LocalizedString>
             </cv:TypeToLocalizedStringConverter>
             
-            <navextimp:DeviceCapabilities x:Key="DeviceCapabilities" />
+            <helpers:DeviceCapabilities x:Key="DeviceCapabilities" />
             <model:FullScreenModel x:Key="FullScreenModel"/>
             <cx:ScreenProperties x:Key="ScreenProperties"/>
         </ResourceDictionary>
