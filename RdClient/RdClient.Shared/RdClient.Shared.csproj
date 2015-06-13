@@ -417,6 +417,7 @@
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
     <Compile Include="ViewModels\RightSideBarViewModel.cs" />
     <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
+    <Compile Include="ViewModels\SessionSizeViewModel.cs" />
     <Compile Include="ViewModels\SymbolBarButtonModel.cs" />
     <Compile Include="ViewModels\SymbolBarToggleButtonModel.cs" />
     <Compile Include="ViewModels\UserComboBoxElement.cs" />

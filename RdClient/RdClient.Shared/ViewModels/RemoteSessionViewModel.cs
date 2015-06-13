@@ -13,6 +13,7 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
+    using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase,
@@ -426,7 +427,12 @@
                         _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
-                        this.RightSideBarViewModel.FullScreenModel.EnterFullScreenCommand.Execute(null);
+
+                        if (this.RightSideBarViewModel.FullScreenModel.UserInteractionMode == UserInteractionMode.Mouse)
+                        {
+                            this.RightSideBarViewModel.FullScreenModel.EnterFullScreenCommand.Execute(null);
+                        }
+
                         this.IsConnectionBarVisible = true;
                         break;
 
@@ -466,7 +472,11 @@
                             {
                                 _panKnobSite.PanKnob.IsVisible = false;
                             }
-                            this.RightSideBarViewModel.FullScreenModel.ExitFullScreenCommand.Execute(null);
+
+                            if(this.RightSideBarViewModel.FullScreenModel.IsFullScreenMode)
+                            {
+                                this.RightSideBarViewModel.FullScreenModel.ExitFullScreenCommand.Execute(null);
+                            }
                         }
                         break;
                 }

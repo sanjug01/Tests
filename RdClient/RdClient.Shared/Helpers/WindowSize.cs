@@ -1,11 +1,7 @@
-﻿using System;
-using RdClient.Shared;
-using Windows.Foundation;
-using Windows.Graphics.Display;
-using Windows.UI.Core;
+﻿using Windows.Foundation;
 using Windows.UI.Xaml;
 
-namespace RdClient.Helpers
+namespace RdClient.Shared.Helpers
 {
     public class WindowSize : IWindowSize
     {
