@@ -10,7 +10,7 @@ namespace RdClient.Controls
     public sealed partial class ConnectionBar : UserControl
     {
 
-        private const double _decelration = 0.05;
+        private const double _deceleration = 0.05;
         private Pointer _pointer;
 
         private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
@@ -35,7 +35,7 @@ namespace RdClient.Controls
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
         {
-            e.TranslationBehavior.DesiredDeceleration = _decelration;
+            e.TranslationBehavior.DesiredDeceleration = _deceleration;
         }
 
         public ConnectionBar()
