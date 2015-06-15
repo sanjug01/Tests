@@ -146,19 +146,7 @@
             set
             {
                 _fullScreenModel = value;
-                if(_fullScreenModel != null)
-                {
-                    _fullScreenModel.UserInteractionModeChange += OnUserInteractionModeChange;
-                }
             }
-        }
-
-        private void OnUserInteractionModeChange(object sender, EventArgs e)
-        {
-            //if(_fullScreenModel.UserInteractionMode == UserInteractionMode.Touch && _fullScreenModel.IsFullScreenMode == true)
-            //{
-                _fullScreenModel.ExitFullScreenCommand.Execute(null);
-            //}
         }
 
         public RemoteSessionViewModel()
