@@ -32,8 +32,7 @@
 			BorderBrush="{ThemeResource rdErrorBrush}" 
 			BorderThickness="{StaticResource ErrorBorderThickness}">
 			<FlyoutBase.AttachedFlyout>
-				<Flyout 
-					Placement="Bottom">
+				<Flyout Placement="Bottom">
 					<Flyout.FlyoutPresenterStyle>
 						<Style TargetType="FlyoutPresenter">
 							<Setter Property="Background" Value="{ThemeResource rdErrorBrush}" />
@@ -43,8 +42,9 @@
 					</Flyout.FlyoutPresenterStyle>
 					<Grid
 						Background="{ThemeResource rdErrorBrush}">
-						<TextBlock
-							Text="{Binding State.ErrorContent, FallbackValue='Please enter a valid value (d)', Converter={StaticResource TypeToLocalizedStringConverter}}">
+						<TextBlock  
+							Text="{Binding State.ErrorContent, FallbackValue='Please enter a valid value (d)', Converter={StaticResource TypeToLocalizedStringConverter}}"
+                            Style="{StaticResource DialogTextValidationErrorStyle}">
 						</TextBlock>
 					</Grid>
 				</Flyout>

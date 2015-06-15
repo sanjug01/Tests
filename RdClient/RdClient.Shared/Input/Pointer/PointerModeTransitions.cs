@@ -62,11 +62,6 @@ namespace RdClient.Shared.Input.Pointer
                 PointerModeTransitionConditions.LeftDown_Idle_Action);
 
             stateMachine.AddTransition(
-                PointerModeState.RightDown, PointerModeState.Scroll,
-                PointerModeTransitionConditions.RightDown_Scroll_Condition,
-                PointerModeTransitionConditions.RightDown_Scroll_Action);
-
-            stateMachine.AddTransition(
                 PointerModeState.RightDown, PointerModeState.ZoomPan,
                 PointerModeTransitionConditions.RightDown_ZoomPan_Condition,
                 PointerModeTransitionConditions.RightDown_ZoomPan_Action);
@@ -75,16 +70,6 @@ namespace RdClient.Shared.Input.Pointer
                 PointerModeState.RightDown, PointerModeState.Idle,
                 PointerModeTransitionConditions.RightDown_Idle_Condition,
                 PointerModeTransitionConditions.RightDown_Idle_Action);
-
-            stateMachine.AddTransition(
-                PointerModeState.Scroll, PointerModeState.Scroll,
-                PointerModeTransitionConditions.Scroll_Scroll_Condition,
-                PointerModeTransitionConditions.Scroll_Scroll_Action);
-
-            stateMachine.AddTransition(
-                PointerModeState.Scroll, PointerModeState.Idle,
-                PointerModeTransitionConditions.Scroll_Idle_Condition,
-                PointerModeTransitionConditions.Scroll_Idle_Action);
 
             stateMachine.AddTransition(
                 PointerModeState.ZoomPan, PointerModeState.ZoomPan,

@@ -278,7 +278,7 @@
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_SSLHandshakeFailed_String" xml:space="preserve">
-    <value>Your password may have expired. Try connecting again. If this keeps happening, ask your admin or tech support for help.</value>
+    <value>Your password may have expired or the remote PC might not accept blank passwords. Try connecting again. If this keeps happening, ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
   <data name="RdpDisconnectCode_AccountDisabled_String" xml:space="preserve">
@@ -607,7 +607,7 @@
     <comment>Label on in session right side bar button that disconnects the session and returns to the connection center</comment>
   </data>
   <data name="SessionView-MouseModeLabel.Text" xml:space="preserve">
-    <value>(r) Touch</value>
+    <value>Touch</value>
     <comment>Label on in session right side bar button that toggles touch mode between direct touch remoting and touch pointer mode</comment>
   </data>
   <data name="ConnectionCenter_AppLabel.Content" xml:space="preserve">
@@ -836,7 +836,7 @@
     <comment>"Cancel" button in the remote connection interruption dialog; the button cancels the auto-reconnect process</comment>
   </data>
   <data name="RemoteSessionInterruptionControl_Title.Text" xml:space="preserve">
-    <value>The remote connection was intterupted.</value>
+    <value>The remote connection was interrupted.</value>
     <comment>Title of the belly-band message shown in the session view when the connection got interrupted and is reconnecting</comment>
   </data>
   <data name="RemoteSessionInterruptionControl_Message.Text" xml:space="preserve">
@@ -960,7 +960,7 @@
     <comment>URI for webpage the describes how to connect to your PC using RDP.</comment>
   </data>
   <data name="SessionView-FullScreenButtonLabel.Text" xml:space="preserve">
-    <value>(r) Full-screen</value>
+    <value>Full-screen</value>
     <comment>Label on in session right side bar button that toggles full-screen mode</comment>
   </data>
 </root>

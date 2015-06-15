@@ -10,12 +10,25 @@ namespace RdClient.Shared.ViewModels
 {
     public class RightSideBarViewModel : MutableObject, IRightSideBarViewModel
     {
+        private IDeviceCapabilities _deviceCapabilities;
         public IDeviceCapabilities DeviceCapabilities
         {
-            private get; set;
-        }
-            
+            private get
+            {
+                return _deviceCapabilities;
+            }
+            set
+            {
+                _deviceCapabilities = value;
 
+                if(_deviceCapabilities != null)
+                {
+                    _deviceCapabilities.PropertyChanged += OnUserInteractionModeChange;
+
+                    OnUserInteractionModeChange(this, EventArgs.Empty);
+                }
+            }
+        }
 
         public IRemoteSession RemoteSession
         {
@@ -25,6 +38,53 @@ namespace RdClient.Shared.ViewModels
         public IFullScreenModel FullScreenModel
         {
             get; set;
+        }
+
+        private void OnUserInteractionModeChange(object sender, EventArgs e)
+        {
+            if(this.DeviceCapabilities.CanShowInputPanel)
+            {
+                this.FullScreenButtonVisibility = Visibility.Collapsed;
+            }
+            else
+            {
+                this.FullScreenButtonVisibility = Visibility.Visible;
+            }
+
+            if(this.DeviceCapabilities.TouchPresent)
+            {
+                this.MouseModeButtonVisibility = Visibility.Visible;
+            }
+            else
+            {
+                this.MouseModeButtonVisibility = Visibility.Collapsed;
+            }
+        }
+
+        private Visibility _fullScreenButtonVisibility;
+        public Visibility FullScreenButtonVisibility
+        {
+            get
+            {
+                return _fullScreenButtonVisibility;
+            }
+            set
+            {
+                SetProperty(ref _fullScreenButtonVisibility, value);
+            }
+        }
+
+        private Visibility _mouseModeButtonVisibility;
+        public Visibility MouseModeButtonVisibility
+        {
+            get
+            {
+                return _mouseModeButtonVisibility;
+            }
+            set
+            {
+                SetProperty(ref _mouseModeButtonVisibility, value);
+            }
         }
 
         public IPointerCapture PointerCapture
@@ -92,6 +152,7 @@ namespace RdClient.Shared.ViewModels
             set
             {
                 SetProperty(ref _visibility, value);
+                ToggleFullScreen(value == Visibility.Collapsed);
             }
         }
 
@@ -127,18 +188,13 @@ namespace RdClient.Shared.ViewModels
         private void InternalFullScreen(object parameter)
         {
             this.Visibility = Visibility.Collapsed;
-
-            if (this.FullScreenModel != null)
-            {
-                this.FullScreenModel.ToggleFullScreen();
-            }
+            this.FullScreenModel.ToggleFullScreen();
         }
 
-        private void InternalToggleVisibility(object parameter)
+        private void ToggleFullScreen(bool fullScreen)
         {
-            if(this.Visibility == Visibility.Visible)
+            if (fullScreen)
             {
-                this.Visibility = Visibility.Collapsed;
                 if (this.FullScreenModel.UserInteractionMode == UserInteractionMode.Touch)
                 {
                     this.FullScreenModel.EnterFullScreenCommand.Execute(null);
@@ -146,11 +202,23 @@ namespace RdClient.Shared.ViewModels
             }
             else
             {
-                this.Visibility = Visibility.Visible;
                 if (this.FullScreenModel.UserInteractionMode == UserInteractionMode.Touch)
                 {
                     this.FullScreenModel.ExitFullScreenCommand.Execute(null);
                 }
+            }
+
+        }
+
+        private void InternalToggleVisibility(object parameter)
+        {
+            if(this.Visibility == Visibility.Visible)
+            {
+                this.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                this.Visibility = Visibility.Visible;
             }
         }
     }

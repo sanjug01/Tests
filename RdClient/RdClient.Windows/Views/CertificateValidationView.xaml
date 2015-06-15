@@ -224,7 +224,7 @@
 						<ColumnDefinition Width="*" />
 					</Grid.ColumnDefinitions>
 					<Button Grid.Column="0"
-                            Style="{StaticResource DialogAccentedButtonStyle}"
+                            Style="{StaticResource DialogButtonStyle}"
                             x:Uid="Common_Button_Cancel" 
                             x:Name="CancelButton"
                             Content="Cancel (d)" 

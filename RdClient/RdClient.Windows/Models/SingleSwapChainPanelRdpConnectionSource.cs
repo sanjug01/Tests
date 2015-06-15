@@ -3,7 +3,6 @@
     using RdClient.CxWrappers.Utils;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Models;
-    using System;
     using System.Diagnostics.Contracts;
     using Windows.UI.Xaml.Controls;
 

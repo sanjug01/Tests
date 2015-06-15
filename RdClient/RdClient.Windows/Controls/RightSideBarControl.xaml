@@ -9,6 +9,10 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
+    
+    <UserControl.Resources>
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
 
     <Grid>
 		<!-- Right hand side bar -->
@@ -36,8 +40,9 @@
 
             <StackPanel Orientation="Vertical" Margin="12,20">
 				<Button
-					x:Name="NavigateHomeButton"
-					Style="{StaticResource RightSideBarButtonStyle}">
+					x:Name="DisconnectButton"
+					Style="{StaticResource RightSideBarButtonStyle}"
+                    Command="{Binding Disconnect}">
 					<StackPanel Orientation="Vertical">
 						<Image							
 							Style="{StaticResource RightSideBarButtonIconStyle}"
@@ -50,10 +55,11 @@
 						</TextBlock>
 					</StackPanel>
 				</Button>
-				<ToggleButton
+				<Button
 					x:Name="FullScreenButton"
 					Style="{StaticResource RightSideBarButtonStyle}"
-					IsChecked="True">
+                    Command="{Binding FullScreen}"
+                    Visibility="{Binding FullScreenButtonVisibility}">
 					<StackPanel Orientation="Vertical">
 						<Image 
 							Style="{StaticResource RightSideBarButtonIconStyle}"			
@@ -65,10 +71,12 @@
 							Text="Full-Screen (d)">
 						</TextBlock>
 					</StackPanel>
-				</ToggleButton>
-                <ToggleButton
+				</Button>
+                <Button
 					x:Name="MouseModeButton"
-					Style="{StaticResource RightSideBarButtonStyle}">
+					Style="{StaticResource RightSideBarButtonStyle}"
+                    Command="{Binding MouseMode}"
+                    Visibility="{Binding MouseModeButtonVisibility}" >
                     <StackPanel Orientation="Vertical">
 						<Image 
 							Style="{StaticResource RightSideBarButtonIconStyle}"							
@@ -80,7 +88,7 @@
 							Text="Touch (d)">
 						</TextBlock>
 					</StackPanel>
-				</ToggleButton>
+				</Button>
             </StackPanel>
         </Grid>
     </Grid>

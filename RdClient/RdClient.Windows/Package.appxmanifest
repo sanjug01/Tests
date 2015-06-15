@@ -16,7 +16,7 @@
   <Properties>
     <DisplayName>Remote Desktop Preview</DisplayName>
     <PublisherDisplayName>Microsoft Corporation</PublisherDisplayName>
-    <Description>Microsoft Remote Desktop</Description>
+    <Description>Microsoft Remote Desktop Preview</Description>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

@@ -13,39 +13,28 @@
             private readonly IRdpConnection _connection;
             private readonly RdpDisconnectReason _reason;
 
-            private RemoteSession _session;
             private bool _userRejected;
 
-            public override void Activate(RemoteSession session)
+            protected override void Activated()
             {
-                Contract.Assert(null == _session);
-                Contract.Ensures(null != _session);
-
-                _session = session;
-
                 using(LockWrite())
                 {
-                    _session._syncEvents.ClientConnected += this.OnClientConnected;
-                    _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
-                    _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+                    this.Session._syncEvents.ClientConnected += this.OnClientConnected;
+                    this.Session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                    this.Session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                 }
 
-                _session.EmitBadServerIdentity(new BadServerIdentityEventArgs(_reason, this));
+                this.Session.EmitBadServerIdentity(new BadServerIdentityEventArgs(_reason, this));
             }
 
-            public override void Complete(RemoteSession session)
+            protected override void Completed()
             {
-                Contract.Assert(object.ReferenceEquals(_session, session));
-                Contract.Ensures(null == _session);
-
                 using (LockWrite())
                 {
-                    _session._syncEvents.ClientConnected -= this.OnClientConnected;
-                    _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
-                    _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
+                    this.Session._syncEvents.ClientConnected -= this.OnClientConnected;
+                    this.Session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
+                    this.Session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                 }
-
-                _session = null;
             }
 
             public ValidateServerIdentity(IRdpConnection connection, RdpDisconnectReason reason, InternalState otherState)
@@ -62,8 +51,8 @@
 
             void IValidation.Accept()
             {
-                Contract.Assert(null != _session);
-                _session._isServerTrusted = true;
+                Contract.Assert(null != this.Session);
+                this.Session._isServerTrusted = true;
 
                 using (LockUpgradeableRead())
                     _connection.HandleAsyncDisconnectResult(_reason, true);
@@ -82,10 +71,10 @@
             {
                 get
                 {
-                    if (null != _session && null != _session._sessionSetup)
+                    if (null != this.Session && null != this.Session._sessionSetup)
                     {
                         // hostname is stored in _session._sessionSetup.
-                        return _session._sessionSetup.Connection as DesktopModel;
+                        return this.Session._sessionSetup.Connection as DesktopModel;
                     }
                     else
                     {
@@ -96,7 +85,7 @@
 
             private void OnClientConnected(object sender, ClientConnectedArgs e)
             {
-                _session.InternalSetState(new ConnectedSession(_connection, this));
+                ChangeState(new ConnectedSession(_connection, this));
             }
 
             private void OnClientAsyncDisconnect(object sender, ClientAsyncDisconnectArgs e)
@@ -107,12 +96,12 @@
 
             private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
             {
-                Contract.Assert(null != _session);
+                Contract.Assert(null != this.Session);
 
                 if (_userRejected)
-                    _session.InternalSetState(new ClosedSession(_connection, this));
+                    ChangeState(new ClosedSession(_connection, this));
                 else
-                    _session.InternalSetState(new FailedSession(_connection, e.DisconnectReason, this));
+                    ChangeState(new FailedSession(_connection, e.DisconnectReason, this));
             }
         }
     }

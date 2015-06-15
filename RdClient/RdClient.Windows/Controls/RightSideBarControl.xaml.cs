@@ -1,11 +1,7 @@
 ﻿namespace RdClient.Controls
 {
-    using RdClient.Navigation.Extensions;
     using RdClient.Shared.Models;
-    using System;
     using System.Diagnostics.Contracts;
-    using System.Windows.Input;
-    using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Media.Animation;
@@ -18,38 +14,16 @@
             typeof(Windows.UI.Xaml.Visibility), typeof(RightSideBarControl),
             new PropertyMetadata(Windows.UI.Xaml.Visibility.Collapsed, OnRightSideBarVisibilityChanged));
 
-        public static readonly DependencyProperty NavigateHomeProperty = DependencyProperty.Register("NavigateHome",
-            typeof(ICommand), typeof(RightSideBarControl),
-            new PropertyMetadata(null, OnNavigateHomeChanged));
-
-        public static readonly DependencyProperty MouseModeProperty = DependencyProperty.Register("MouseMode",
-            typeof(ICommand), typeof(RightSideBarControl),
-            new PropertyMetadata(null, OnMouseModeChanged));
-
-        public static readonly DependencyProperty FullScreenProperty = DependencyProperty.Register("FullScreen",
-            typeof(ICommand), typeof(RightSideBarControl),
-            new PropertyMetadata(null, OnFullScreenChanged));
-
         public Windows.UI.Xaml.Visibility BarVisibility
         {
-            get { return (Windows.UI.Xaml.Visibility)GetValue(BarVisibilityProperty); }
-            set { SetValue(BarVisibilityProperty, value); }
-        }
-
-        public ICommand NavigateHome
-        {
-            get { return (ICommand)GetValue(NavigateHomeProperty); }
-            set { SetValue(NavigateHomeProperty, value); }
-        }
-        public ICommand MouseMode
-        {
-            get { return (ICommand)GetValue(MouseModeProperty); }
-            set { SetValue(MouseModeProperty, value); }
-        }
-        public ICommand FullScreen
-        {
-            get { return (ICommand)GetValue(FullScreenProperty); }
-            set { SetValue(FullScreenProperty, value); }
+            get
+            {
+                return (Visibility)GetValue(BarVisibilityProperty);
+            }
+            set
+            {
+                SetValue(BarVisibilityProperty, value);
+            }
         }
 
         public RightSideBarControl()
@@ -110,49 +84,8 @@
                     break;
             }
 
-            // Binding Visibility to {Binding Source={StaticResource DeviceCapabilities}, Path=TouchPresent, Converter={StaticResource BooleanToVisibilityConverter}}
-            // does not work for some reason :(
-            if (((IDeviceCapabilities)Application.Current.Resources["DeviceCapabilities"]).TouchPresent)
-            {
-                this.MouseModeButton.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                this.MouseModeButton.Visibility = Visibility.Collapsed;
-            }
-
             Contract.Assert(null != _activeStoryboard);
             _activeStoryboard.Begin();
-        }
-
-        private static void OnNavigateHomeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            ((RightSideBarControl)sender).InternalOnNavigateHomeChanged(e);
-        }
-        
-        private static void OnFullScreenChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            ((RightSideBarControl)sender).InternalOnFullScreenChanged(e);
-        }
-
-        private void InternalOnFullScreenChanged(DependencyPropertyChangedEventArgs e)
-        {
-            this.FullScreenButton.Command = (ICommand)e.NewValue;
-        }
-
-        private void InternalOnNavigateHomeChanged(DependencyPropertyChangedEventArgs e)
-        {
-            this.NavigateHomeButton.Command = (ICommand)e.NewValue;
-        }
-
-        private static void OnMouseModeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            ((RightSideBarControl)sender).InternalMouseModeChanged(e);
-        }
-
-        private void InternalMouseModeChanged(DependencyPropertyChangedEventArgs e)
-        {
-            this.MouseModeButton.Command = (ICommand)e.NewValue;
         }
     }
 }
