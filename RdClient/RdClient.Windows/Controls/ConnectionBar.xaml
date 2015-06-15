@@ -15,7 +15,6 @@
     mc:Ignorable="d"
     ManipulationMode="All">
 
-
     <UserControl.Resources>
         <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <cv:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
@@ -27,10 +26,9 @@
         <!-- Connection Bar -->
         <ItemsControl
                 x:Name="ItemsControl"
-                Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                 HorizontalAlignment="Center" VerticalAlignment="Top"
-                Opacity="{ThemeResource ConnectionOverlayOpacity}"
-                ItemsSource="{Binding ConnectionBarItems}">
+                ItemsSource="{Binding ConnectionBarItems}"
+               >
  
 
             <ItemsControl.ItemsPanel>
@@ -50,7 +48,8 @@
                                     Command="{Binding Command}"
                                     CommandParameter="{Binding CommandParameter}"
                                     Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
+                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"
+                                    ManipulationMode="All"/>
                         </DataTemplate>
 
                         <DataTemplate x:Key="SymbolBarToggleButtonModel">
@@ -62,7 +61,8 @@
                                     IsChecked="{Binding IsChecked}"
                                     IsThreeState="False"
                                     Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
+                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"
+                                    ManipulationMode="All"/>
                         </DataTemplate>
 
                         <DataTemplate x:Key="SymbolBarSliderButtonModel">
@@ -72,7 +72,8 @@
                                     Command="{Binding Command}"
                                     CommandParameter="{Binding CommandParameter}"
                                     Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}">
+                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"
+                                    ManipulationMode="All">
                                 <Button.Flyout>
                                     <Flyout>
                                         <Slider Orientation="Vertical" Height="100" Value="{Binding Value, Mode=TwoWay}"/>
