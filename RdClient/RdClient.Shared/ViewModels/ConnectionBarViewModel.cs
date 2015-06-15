@@ -8,8 +8,6 @@ namespace RdClient.Shared.ViewModels
 
         private IViewport _viewport;
         private ReadOnlyObservableCollection<object> _connectionBarItems;
-        private bool _isConnectionBarVisible;
-
         private double _connectionBarPosition;
         public double ConnectionBarPosition{
             get { return _connectionBarPosition;  }
@@ -40,19 +38,12 @@ namespace RdClient.Shared.ViewModels
 
         public ConnectionBarViewModel()
         {
-            IsConnectionBarVisible = true;
         }
 
         public IViewport Viewport {
             set {
                 _viewport = value;
             }
-        }
-        
-        public bool IsConnectionBarVisible
-        {
-            get { return _isConnectionBarVisible; }
-            set { this.SetProperty(ref _isConnectionBarVisible, value); }
         }
 
         public ReadOnlyObservableCollection<object> ConnectionBarItems

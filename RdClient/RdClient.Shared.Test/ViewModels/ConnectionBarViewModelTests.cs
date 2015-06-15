@@ -30,13 +30,6 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void ConnectionBarViewModel_Default_Is_Visible()
-        {
-            Assert.AreEqual(true, _vvm.IsConnectionBarVisible);
-        }
-
-
-        [TestMethod]
         public void ConnectionBarViewModel_Default_Position_Is_Center()
         {
             Assert.AreEqual(0, _vvm.ConnectionBarPosition);

@@ -28,7 +28,8 @@
                 KeyboardCapture = new TestKeyboardCapture(),
                 RightSideBarViewModel = new RightSideBarViewModel() { FullScreenModel = new TestFullScreenModel() },
                 PointerPosition = new TestPointerPosition(),
-                ScrollBarModel = new TestScrollBarModel()
+                ScrollBarModel = new TestScrollBarModel(),
+                ConnectionBarViewModel = new ConnectionBarViewModel()
             };
             _vm.CastAndCall<IInputPanelFactorySite>(site => site.SetInputPanelFactory(_inputPanelFactory));
 
@@ -108,7 +109,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             _defex.ExecuteAll();
 
-            Assert.IsFalse(_vm.ConnectionBarViewModel.IsConnectionBarVisible);
+            Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNotNull(_vm.BellyBandViewModel);
             Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
             Assert.AreEqual(Visibility.Collapsed, _vm.RightSideBarViewModel.Visibility);
@@ -116,7 +117,7 @@
             Assert.AreEqual(1, connectCount);
 
             SymbolBarButtonModel ellipsis = (SymbolBarButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
-                o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.AllApps);
+                o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.More);
             Assert.IsNotNull(ellipsis.Command);
             Assert.IsTrue(ellipsis.Command.CanExecute(null));
 
@@ -310,7 +311,7 @@
             //connectTask.Dispose();
             _defex.ExecuteAll();
 
-            Assert.IsTrue(_vm.ConnectionBarViewModel.IsConnectionBarVisible);
+            Assert.IsTrue(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
             Assert.AreEqual(Visibility.Collapsed, _vm.RightSideBarViewModel.Visibility);
         }
@@ -365,7 +366,7 @@
             task = null;
             _defex.ExecuteAll();
 
-            Assert.IsFalse(_vm.ConnectionBarViewModel.IsConnectionBarVisible);
+            Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
             Assert.AreEqual(1, cleanupCount);
         }
@@ -444,7 +445,7 @@
             _defex.ExecuteAll();
 
             Assert.AreEqual(1, credentialsRequestCount);
-            Assert.IsFalse(_vm.ConnectionBarViewModel.IsConnectionBarVisible);
+            Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNotNull(_vm.BellyBandViewModel);
             Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
         }
