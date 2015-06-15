@@ -69,7 +69,7 @@
                     Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
 
                 <!-- Connection Bar -->
-                <c:ConnectionBar DataContext="{Binding ConnectionBarViewModel}"/>
+                <c:ConnectionBar DataContext="{Binding ConnectionBarViewModel}" Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
                 <!-- Transparent overlay that dismisses the side bars -->
                 <c:PointerPressDetector

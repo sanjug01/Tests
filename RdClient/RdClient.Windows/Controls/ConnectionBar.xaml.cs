@@ -1,13 +1,7 @@
 ﻿using RdClient.Shared.ViewModels;
-using System.Diagnostics;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Controls.Primitives;
-using System.Collections.ObjectModel;
-using System.Diagnostics.Contracts;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 

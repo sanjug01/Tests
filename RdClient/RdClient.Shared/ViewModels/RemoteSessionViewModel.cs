@@ -46,6 +46,7 @@
         private IInputPanelFactory _inputPanelFactory;
         private IPointerCapture _pointerCapture;
         private SessionState _sessionState;
+        private bool _isConnectionBarVisible;
 
         private ITimerFactory _timerFactory;
 
@@ -67,8 +68,7 @@
         }
 
         public ConnectionBarViewModel ConnectionBarViewModel{
-            get;
-            set;
+            get;  set;
          }
 
         private IPanKnobSite _panKnobSite;
@@ -117,6 +117,11 @@
             set { this.SetProperty(ref _pointerCapture, value); }
         }
 
+        public bool IsConnectionBarVisible
+        {
+            get { return _isConnectionBarVisible; }
+            private set { this.SetProperty(ref _isConnectionBarVisible, value); }
+        }
         /// <summary>
         /// View model of the view shown in the belly band across the session view when input is needed from user.
         /// Setting the property to a non-null value shows the belly band.
@@ -263,11 +268,6 @@
             _lifeTimeManager = lifeTimeManager;
         }
 
-        void SetConnectionBarVisiblity(bool visibility)
-        {
-            this.ConnectionBarViewModel.IsConnectionBarVisible = visibility;
-        }
-
         private void OnCredentialsNeeded(object sender, CredentialsNeededEventArgs e)
         {
             this.NavigationService.PushModalView("InSessionEditCredentialsView", e.Task);
@@ -293,7 +293,7 @@
         private void OnSessionInterrupted(object sender, SessionInterruptedEventArgs e)
         {
             this.BellyBandViewModel = new RemoteSessionInterruptionViewModel(_activeSession, e.ObtainContinuation());
-            this.SetConnectionBarVisiblity(true);
+            this.IsConnectionBarVisible = true;
         }
 
         private void OnBadCertificate(object sender, BadCertificateEventArgs e)
@@ -370,7 +370,7 @@
                         this.BellyBandViewModel = new RemoteSessionConnectingViewModel(
                             _activeSession.HostName,
                             () => _activeSession.Disconnect() );
-                        this.SetConnectionBarVisiblity(false);
+                        this.IsConnectionBarVisible = false;
                         this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
                         break;
 
@@ -426,7 +426,7 @@
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
                         this.RightSideBarViewModel.FullScreenModel.EnterFullScreenCommand.Execute(null);
-                        this.SetConnectionBarVisiblity(true);
+                        this.IsConnectionBarVisible = true;
                         break;
 
                     default:
@@ -455,7 +455,7 @@
                             //
                             // The connection bar and side bars are not available in any non-connected state.
                             //
-                            this.SetConnectionBarVisiblity(false);
+                            this.IsConnectionBarVisible = false;
                             this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
 
                             // significant side effects on _panKnobSite.PanKnob setter, which is called implicitly outside the view model,
