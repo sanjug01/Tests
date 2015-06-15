@@ -18,14 +18,13 @@
     RequestedTheme="Dark">
 
     <UserControl.DataContext>
-        <vm:RemoteSessionViewModel>
+        <vm:RemoteSessionViewModel FullScreenModel="{StaticResource FullScreenModel}">
             <!-- Inject the keyboard capture based on CoreWindow and CoreDispatcher -->
             <vm:RemoteSessionViewModel.KeyboardCapture>
                 <input:CoreWindowKeyboardCapture/>
             </vm:RemoteSessionViewModel.KeyboardCapture>
             <vm:RemoteSessionViewModel.RightSideBarViewModel>
                 <vm:RightSideBarViewModel
-                    DeviceCapabilities="{StaticResource DeviceCapabilities}"
                     FullScreenModel="{StaticResource FullScreenModel}" />
             </vm:RemoteSessionViewModel.RightSideBarViewModel>
             <vm:RemoteSessionViewModel.PointerPosition>

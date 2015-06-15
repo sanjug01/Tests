@@ -10,54 +10,41 @@ namespace RdClient.Shared.ViewModels
 {
     public class RightSideBarViewModel : MutableObject, IRightSideBarViewModel
     {
-        private IDeviceCapabilities _deviceCapabilities;
-        public IDeviceCapabilities DeviceCapabilities
-        {
-            private get
-            {
-                return _deviceCapabilities;
-            }
-            set
-            {
-                _deviceCapabilities = value;
-
-                if(_deviceCapabilities != null)
-                {
-                    _deviceCapabilities.PropertyChanged += OnUserInteractionModeChange;
-
-                    OnUserInteractionModeChange(this, EventArgs.Empty);
-                }
-            }
-        }
-
         public IRemoteSession RemoteSession
         {
             private get; set;
         }
 
+        private IFullScreenModel _fullScreenModel;
         public IFullScreenModel FullScreenModel
         {
-            get; set;
+            get
+            {
+                return _fullScreenModel;
+            }
+            set
+            {
+                _fullScreenModel = value;
+
+                if(_fullScreenModel != null)
+                {
+                    _fullScreenModel.UserInteractionModeChange += OnUserInteractionModeChange;
+                    OnUserInteractionModeChange(this, EventArgs.Empty);
+                }
+            }
         }
 
         private void OnUserInteractionModeChange(object sender, EventArgs e)
         {
-            if(this.DeviceCapabilities.CanShowInputPanel)
-            {
-                this.FullScreenButtonVisibility = Visibility.Collapsed;
-            }
-            else
+            if(this.FullScreenModel.UserInteractionMode == UserInteractionMode.Mouse)
             {
                 this.FullScreenButtonVisibility = Visibility.Visible;
-            }
-
-            if(this.DeviceCapabilities.TouchPresent)
-            {
-                this.MouseModeButtonVisibility = Visibility.Visible;
+                this.MouseModeButtonVisibility = Visibility.Collapsed;
             }
             else
             {
-                this.MouseModeButtonVisibility = Visibility.Collapsed;
+                this.FullScreenButtonVisibility = Visibility.Collapsed;
+                this.MouseModeButtonVisibility = Visibility.Visible;
             }
         }
 

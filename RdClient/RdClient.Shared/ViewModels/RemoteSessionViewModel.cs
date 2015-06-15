@@ -136,6 +136,31 @@
             private set { this.SetProperty(ref _bellyBandViewModel, value); }
         }
 
+        private IFullScreenModel _fullScreenModel;
+        public IFullScreenModel FullScreenModel
+        {
+            private get
+            {
+                return _fullScreenModel;
+            }
+            set
+            {
+                _fullScreenModel = value;
+                if(_fullScreenModel != null)
+                {
+                    _fullScreenModel.UserInteractionModeChange += OnUserInteractionModeChange;
+                }
+            }
+        }
+
+        private void OnUserInteractionModeChange(object sender, EventArgs e)
+        {
+            //if(_fullScreenModel.UserInteractionMode == UserInteractionMode.Touch && _fullScreenModel.IsFullScreenMode == true)
+            //{
+                _fullScreenModel.ExitFullScreenCommand.Execute(null);
+            //}
+        }
+
         public RemoteSessionViewModel()
         {
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
@@ -430,7 +455,7 @@
 
                         if (this.RightSideBarViewModel.FullScreenModel.UserInteractionMode == UserInteractionMode.Mouse)
                         {
-                            this.RightSideBarViewModel.FullScreenModel.EnterFullScreenCommand.Execute(null);
+                            this.FullScreenModel.EnterFullScreenCommand.Execute(null);
                         }
 
                         this.IsConnectionBarVisible = true;
@@ -475,7 +500,7 @@
 
                             if(this.RightSideBarViewModel.FullScreenModel.IsFullScreenMode)
                             {
-                                this.RightSideBarViewModel.FullScreenModel.ExitFullScreenCommand.Execute(null);
+                                this.FullScreenModel.ExitFullScreenCommand.Execute(null);
                             }
                         }
                         break;
