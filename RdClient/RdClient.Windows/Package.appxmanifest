@@ -7,8 +7,8 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="2d129dd4-8a88-4e6f-a1b9-d55effc0921d"
-    Publisher="O=Microsoft Corporation"
+    Name="Microsoft.RemoteDesktop.Preview"
+    Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="2d129dd4-8a88-4e6f-a1b9-d55effc0921d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
