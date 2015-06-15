@@ -164,6 +164,7 @@
     <Compile Include="Helpers\StateMachineTests.cs" />
     <Compile Include="Helpers\TestData.cs" />
     <Compile Include="Helpers\TestListTrace.cs" />
+    <Compile Include="Helpers\ViewItemsSourceTests.cs" />
     <Compile Include="Helpers\WinrtThreadPoolTimerTests.cs" />
     <Compile Include="Input\Keyboard\CharacterKeyTests.cs" />
     <Compile Include="Input\Keyboard\ExtendedKeyTests.cs" />
