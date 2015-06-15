@@ -32,6 +32,8 @@ namespace RdClient.Shared.Test.ViewModels
 
             private sealed class Session : IRemoteSession
             {
+                private EventHandler<MouseCursorShapeChangedArgs> _mouseCursorShapeChanged;
+
                 string IRemoteSession.HostName
                 {
                     get { throw new NotImplementedException(); }
@@ -98,7 +100,11 @@ namespace RdClient.Shared.Test.ViewModels
                     }
                 }
 
-                public event EventHandler<MouseCursorShapeChangedArgs> MouseCursorShapeChanged;
+                public event EventHandler<MouseCursorShapeChangedArgs> MouseCursorShapeChanged
+                {
+                    add { _mouseCursorShapeChanged += value; }
+                    remove { _mouseCursorShapeChanged -= value; }
+                }
 
                 IRemoteSessionControl IRemoteSession.Activate(IRemoteSessionView sessionView)
                 {

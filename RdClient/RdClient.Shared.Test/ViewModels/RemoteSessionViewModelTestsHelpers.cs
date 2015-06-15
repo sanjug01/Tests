@@ -3,26 +3,24 @@
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
-    using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Keyboard;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.LifeTimeManagement;
     using RdClient.Shared.Models;
+    using RdClient.Shared.Models.PanKnobModel;
     using RdClient.Shared.Models.Viewport;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.Navigation.Extensions;
-    using RdClient.Shared.Test.Data;
     using RdClient.Shared.ViewModels;
-    using RdClient.Shared.Models.PanKnobModel;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using System.Threading.Tasks;
     using Windows.Foundation;
-    using Windows.UI.Xaml;
     using Windows.UI.ViewManagement;
+    using Windows.UI.Xaml;
 
     public sealed partial class RemoteSessionViewModelTests
     {
@@ -97,6 +95,9 @@
 
         private sealed class TestFullScreenModel : IFullScreenModel
         {
+            private EventHandler _fullScreenChange;
+            private EventHandler _userInteractionModeChange;
+
             public TestFullScreenModel()
             {
                 EnterFullScreenCommand = new RelayCommand(o => { });
@@ -109,8 +110,17 @@
 
             public UserInteractionMode UserInteractionMode { get; private set; }
 
-            public event EventHandler FullScreenChange;
-            public event EventHandler UserInteractionModeChange;
+            public event EventHandler FullScreenChange
+            {
+                add { _fullScreenChange += value; }
+                remove { _fullScreenChange -= value; }
+            }
+
+            public event EventHandler UserInteractionModeChange
+            {
+                add { _userInteractionModeChange += value; }
+                remove { _userInteractionModeChange -= value; }
+            }
 
             public void ToggleFullScreen()
             {
@@ -202,6 +212,8 @@
 
         private sealed class TestViewport : IViewport
         {
+            private EventHandler _changed;
+
             public IViewportPanel SessionPanel
             {
                 get
@@ -225,7 +237,11 @@
                 get { return 2.0; }
             }
 
-            public event EventHandler Changed;
+            public event EventHandler Changed
+            {
+                add { _changed += value; }
+                remove { _changed -= value; }
+            }
 
             event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
             {
@@ -282,14 +298,24 @@
         {
             private readonly IViewModel _vm;
             private readonly IRenderingPanel _renderingPanel;
+            private EventHandler<IPointerEventBase> _pointerChanged;
 
-            public event EventHandler<IPointerEventBase> PointerChanged;
+            public event EventHandler<IPointerEventBase> PointerChanged
+            {
+                add { _pointerChanged += value; }
+                remove { _pointerChanged -= value; }
+            }
 
             private sealed class TestRenderingPanel : IRenderingPanel
             {
                 private EventHandler _ready;
+                private EventHandler<IPointerEventBase> _pointerChanged;
 
-                public event EventHandler<IPointerEventBase> PointerChanged;
+                public event EventHandler<IPointerEventBase> PointerChanged
+                {
+                    add { _pointerChanged += value; }
+                    remove { _pointerChanged -= value; }
+                }
 
                 event EventHandler IRenderingPanel.Ready
                 {

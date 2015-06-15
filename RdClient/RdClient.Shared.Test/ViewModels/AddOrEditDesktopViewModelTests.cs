@@ -18,6 +18,7 @@
         private TestData _testData;
         private ApplicationDataModel _dataModel;
         private TestAddOrEditDesktopViewModel _addOrEditDesktopViewModel;
+        private AddDesktopViewModelArgs _addArgs;
         private Mock.NavigationService _nav;
         private Mock.PresentableView _view;
         private CredentialsModel _credentials;
@@ -37,6 +38,7 @@
         {
             _testData = new TestData();
             _addOrEditDesktopViewModel = new TestAddOrEditDesktopViewModel();
+            _addArgs = new AddDesktopViewModelArgs(null);
 
             _dataModel = new ApplicationDataModel()
             {
@@ -299,10 +301,8 @@
         {
             DesktopModel expectedDesktop = _testData.NewValidDesktop(Guid.Empty).Model;
 
-            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
-
             _addOrEditDesktopViewModel.PresentableView = _view;
-            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
+            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, _addArgs, null);
             _addOrEditDesktopViewModel.Host.Value = expectedDesktop.HostName;
 
             Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "no desktop should be added until save command is executed");
@@ -319,10 +319,8 @@
         {
             DesktopModel expectedDesktop = _testData.NewValidDesktop(Guid.Empty).Model;
 
-            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
-
             _addOrEditDesktopViewModel.PresentableView = _view;
-            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
+            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, _addArgs, null);
             _addOrEditDesktopViewModel.Host.Value = expectedDesktop.HostName;
 
             Assert.AreEqual(0, _dataModel.LocalWorkspace.Connections.Models.Count, "no desktop should be added until save command is executed");
@@ -342,10 +340,8 @@
         {
             DesktopModel expectedDesktop = _testData.NewValidDesktop(Guid.Empty).Model;
 
-            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
-
             _addOrEditDesktopViewModel.PresentableView = _view;
-            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
+            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, _addArgs, null);
             _addOrEditDesktopViewModel.Host.Value = expectedDesktop.HostName;
             _addOrEditDesktopViewModel.FriendlyName = "FriendlyPc";
             _addOrEditDesktopViewModel.AudioMode = (int)AudioMode.NoSound;
@@ -369,11 +365,9 @@
         {
             DesktopModel expectedDesktop = _testData.NewValidDesktop(Guid.Empty).Model;
 
-            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
-
             _addOrEditDesktopViewModel.PresentableView = _view;
 
-            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
+            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, _addArgs, null);
 
             _addOrEditDesktopViewModel.Host.Value = expectedDesktop.HostName;
             _addOrEditDesktopViewModel.Cancel.Execute(null);
@@ -456,10 +450,8 @@
             string invalidHostName = "+MyPC";
             string validHostName = "MyPC";
 
-            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
-
             _addOrEditDesktopViewModel.PresentableView = _view;
-            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, args, null);
+            ((IViewModel)_addOrEditDesktopViewModel).Presenting(_nav, _addArgs, null);
 
             _addOrEditDesktopViewModel.Host.Value = invalidHostName;
             Assert.IsTrue(_addOrEditDesktopViewModel.Host.State.Status == ValidationResultStatus.Invalid);

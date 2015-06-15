@@ -10,6 +10,8 @@ namespace RdClient.Shared.Test.Mock
 {
     public class RightSideBarViewModel : IRightSideBarViewModel
     {
+        private PropertyChangedEventHandler _propertyChanged;
+
         public IDeviceCapabilities DeviceCapabilities { get; set; }
 
         public ICommand Disconnect { get; set; }
@@ -32,6 +34,10 @@ namespace RdClient.Shared.Test.Mock
 
         public Visibility Visibility { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add { _propertyChanged += value; }
+            remove { _propertyChanged -= value; }
+        }
     }
 }

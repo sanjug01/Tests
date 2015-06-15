@@ -1,24 +1,23 @@
-﻿using RdClient.Shared.Helpers;
-using RdClient.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Devices.Input;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Input;
-
-namespace RdClient.Shared.Input.Pointer
+﻿namespace RdClient.Shared.Input.Pointer
 {
+    using RdClient.Shared.Models;
+    using System;
+    using Windows.Devices.Input;
+    using Windows.UI.Xaml;
+
     public class PointerVisibilityConsumer : IPointerEventConsumer
     {
         private readonly IRenderingPanel _renderingPanel;
         private ConsumptionModeType _consumptionMode;
+        private EventHandler<IPointerEventBase> _consumedEvent;
 
 
-        public event EventHandler<IPointerEventBase> ConsumedEvent;
+        public event EventHandler<IPointerEventBase> ConsumedEvent
+        {
+            add { _consumedEvent += value; }
+            remove { _consumedEvent -= value; }
+        }
+
         public void SetConsumptionMode(ConsumptionModeType consumptionMode)
         {
             _consumptionMode = consumptionMode;
@@ -28,6 +27,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             _renderingPanel = renderingPanel;
         }
+
         public void Consume(IPointerEventBase pointerEvent)
         {
             if(pointerEvent is IPointerRoutedEventProperties)
