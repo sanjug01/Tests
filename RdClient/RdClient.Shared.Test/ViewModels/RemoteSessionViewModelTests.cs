@@ -232,7 +232,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             _defex.ExecuteAll();
 
-            SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
+            SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
                 o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.Keyboard);
 
             Assert.IsNotNull(keyboard.Command);
@@ -272,7 +272,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             _defex.ExecuteAll();
 
-            SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
+            SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
                 o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.Keyboard);
 
             Assert.IsNotNull(keyboard.Command);

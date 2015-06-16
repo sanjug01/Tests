@@ -6,17 +6,17 @@ namespace RdClient.Shared.ViewModels
     public class ConnectionBarViewModel : ViewModelBase
     {
 
-        private double _connectionBarPosition;
-        private ReadOnlyObservableCollection<object> _connectionBarItems;
-        public double ConnectionBarPosition{
-            get { return _connectionBarPosition;  }
-            set { this.SetProperty(ref _connectionBarPosition, value); }
+        private double _position;
+        private ReadOnlyObservableCollection<object> _items;
+        public double Position{
+            get { return _position;  }
+            set { this.SetProperty(ref _position, value); }
         }
 
-        public ReadOnlyObservableCollection<object> ConnectionBarItems
+        public ReadOnlyObservableCollection<object> Items
         {
-            get { return _connectionBarItems; }
-            set { this.SetProperty(ref _connectionBarItems, value); }
+            get { return _items; }
+            set { this.SetProperty(ref _items, value); }
         }
         
         public void MoveConnectionBar(double dx, double connectionBarWidth, double containerWidth)
@@ -25,17 +25,17 @@ namespace RdClient.Shared.ViewModels
             double maxLeft = -((containerWidth / 2) - (connectionBarWidth / 2));
             double maxRight = ((containerWidth / 2) - (connectionBarWidth / 2));
             
-            if (ConnectionBarPosition + dx < maxLeft)
+            if (Position + dx < maxLeft)
             {
-                ConnectionBarPosition = maxLeft;
+                Position = maxLeft;
             }
-            else if (ConnectionBarPosition + dx > maxRight)
+            else if (Position + dx > maxRight)
             {
-                ConnectionBarPosition = maxRight;
+                Position = maxRight;
             }
             else
             {
-                ConnectionBarPosition += dx;
+                Position += dx;
             }
         }
 

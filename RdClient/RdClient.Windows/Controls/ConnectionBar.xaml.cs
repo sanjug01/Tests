@@ -47,7 +47,7 @@ namespace RdClient.Controls
         }
         private void OnItemsSourceChanged(ReadOnlyObservableCollection<object> oldSource, ReadOnlyObservableCollection<object> newSource)
         {
-            ViewModel.ConnectionBarItems = newSource;
+            ViewModel.Items = newSource;
         }
 
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource",

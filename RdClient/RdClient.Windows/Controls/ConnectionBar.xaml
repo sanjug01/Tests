@@ -26,12 +26,10 @@
         <Grid.DataContext>
             <vm:ConnectionBarViewModel></vm:ConnectionBarViewModel>
         </Grid.DataContext>
-        <!-- Connection Bar -->
         <ItemsControl
                 x:Name="ItemsControl"
                 HorizontalAlignment="Center" VerticalAlignment="Top"
-                ItemsSource="{Binding ConnectionBarItems}"
-               >
+                ItemsSource="{Binding Items}">
  
 
             <ItemsControl.ItemsPanel>
@@ -92,7 +90,7 @@
         </ItemsControl>
 
         <Grid.RenderTransform>
-            <TranslateTransform x:Name="ConnectionBarTransform" X="{Binding ConnectionBarPosition}">
+            <TranslateTransform x:Name="ConnectionBarTransform" X="{Binding Position}">
             </TranslateTransform>
         </Grid.RenderTransform>
     </Grid>
