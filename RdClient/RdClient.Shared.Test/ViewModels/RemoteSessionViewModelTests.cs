@@ -116,13 +116,13 @@
             Assert.IsNotNull(connection);
             Assert.AreEqual(1, connectCount);
 
-            SymbolBarButtonModel ellipsis = (SymbolBarButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
+            SymbolBarButtonModel ellipsis = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
                 o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.More);
             Assert.IsNotNull(ellipsis.Command);
             Assert.IsTrue(ellipsis.Command.CanExecute(null));
 
             // keyboard button is no longer a toggle button.
-            SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
+            SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
                 o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.Keyboard);
 
             Assert.IsNotNull(keyboard.Command);
@@ -158,7 +158,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             _defex.ExecuteAll();
 
-            SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
+            SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
                 o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.Keyboard);
 
             Assert.IsNotNull(keyboard.Command);
@@ -195,7 +195,7 @@
             ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
             _defex.ExecuteAll();
 
-            SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarViewModel.ConnectionBarItems.First(
+            SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
                 o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.Keyboard);
 
             Assert.IsNotNull(keyboard.Command);
