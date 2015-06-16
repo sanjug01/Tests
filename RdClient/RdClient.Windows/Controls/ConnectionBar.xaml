@@ -22,7 +22,10 @@
         <cv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
     </UserControl.Resources>
 
-    <Grid>
+    <Grid x:Name="Root">
+        <Grid.DataContext>
+            <vm:ConnectionBarViewModel></vm:ConnectionBarViewModel>
+        </Grid.DataContext>
         <!-- Connection Bar -->
         <ItemsControl
                 x:Name="ItemsControl"

@@ -47,6 +47,7 @@
         private IPointerCapture _pointerCapture;
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
+        private ReadOnlyObservableCollection<object> _connectionBarItems;
 
         private ITimerFactory _timerFactory;
 
@@ -122,6 +123,11 @@
             get { return _isConnectionBarVisible; }
             private set { this.SetProperty(ref _isConnectionBarVisible, value); }
         }
+
+        public ReadOnlyObservableCollection<object> ConnectionBarItems
+        {
+            get { return _connectionBarItems; }
+        }
         /// <summary>
         /// View model of the view shown in the belly band across the session view when input is needed from user.
         /// Setting the property to a non-null value shows the belly band.
@@ -153,7 +159,7 @@
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = this.RightSideBarViewModel.ToggleVisiblity });
             items.Add(_invokeKeyboardModel);
-            this.ConnectionBarViewModel.ConnectionBarItems = new ReadOnlyObservableCollection<object>(items);
+            _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
             base.OnPresenting(activationParameter);
 
@@ -408,8 +414,6 @@
                         this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
                         _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
-
-                        this.ConnectionBarViewModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
                         _panKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
 

@@ -2,6 +2,10 @@
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml;
+using System.Diagnostics.Contracts;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -18,10 +22,6 @@ namespace RdClient.Controls
             _pointer = e.Pointer;
         }
 
-        private ConnectionBarViewModel ViewModel
-        {
-            get { return DataContext as ConnectionBarViewModel; }
-        }
         protected override void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
         {
             ((ButtonBase)e.OriginalSource).ReleasePointerCaptures();
@@ -30,12 +30,47 @@ namespace RdClient.Controls
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
-            ViewModel.MoveConnectionBar(e.Delta.Translation.X, this.ItemsControl.ActualWidth);
+            ViewModel.MoveConnectionBar(e.Delta.Translation.X, this.ItemsControl.ActualWidth, ((FrameworkElement)this.Parent).ActualWidth);
         }
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
         {
             e.TranslationBehavior.DesiredDeceleration = _deceleration;
+        }
+
+        private static void OnItemsSourceChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            Contract.Assert(sender is ConnectionBar);
+            Contract.Assert(null == e.NewValue || e.NewValue is ReadOnlyObservableCollection<object>);
+
+            ((ConnectionBar)sender).OnItemsSourceChanged((ReadOnlyObservableCollection<object>)e.OldValue, (ReadOnlyObservableCollection<object>)e.NewValue);
+        }
+        private void OnItemsSourceChanged(ReadOnlyObservableCollection<object> oldSource, ReadOnlyObservableCollection<object> newSource)
+        {
+            ViewModel.ConnectionBarItems = newSource;
+        }
+
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource",
+        typeof(object),
+        typeof(ConnectionBar),
+        new PropertyMetadata(null, OnItemsSourceChanged));
+
+        public ReadOnlyObservableCollection<object> ItemsSource
+        {
+            get {
+                return (ReadOnlyObservableCollection<object>)GetValue(ItemsSourceProperty); 
+            }
+            set
+            {
+                SetValue(ItemsSourceProperty, value);
+            }
+        }
+        public ConnectionBarViewModel ViewModel
+        {
+            get
+            {
+                return this.Root.DataContext as ConnectionBarViewModel;
+            }
         }
 
         public ConnectionBar()

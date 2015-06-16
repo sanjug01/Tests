@@ -16,7 +16,7 @@
     d:DesignHeight="300"
     d:DesignWidth="800"
     RequestedTheme="Dark">
-
+    
     <UserControl.DataContext>
         <vm:RemoteSessionViewModel>
             <!-- Inject the keyboard capture based on CoreWindow and CoreDispatcher -->
@@ -28,9 +28,6 @@
                     DeviceCapabilities="{StaticResource DeviceCapabilities}"
                     FullScreenModel="{StaticResource FullScreenModel}" />
             </vm:RemoteSessionViewModel.RightSideBarViewModel>
-            <vm:RemoteSessionViewModel.ConnectionBarViewModel>
-                <vm:ConnectionBarViewModel />
-            </vm:RemoteSessionViewModel.ConnectionBarViewModel>
             <vm:RemoteSessionViewModel.PointerPosition>
                 <pointer:PointerPosition />
             </vm:RemoteSessionViewModel.PointerPosition>
@@ -40,13 +37,11 @@
         </vm:RemoteSessionViewModel>
     </UserControl.DataContext>
 
-
     <UserControl.Resources>
         <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <cv:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
         <cv:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
         <cv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
-
     </UserControl.Resources>
 
     <Canvas x:Name="SessionPanelContainer" Background="{ThemeResource SystemChromeDisabledHighColor}">
@@ -69,7 +64,9 @@
                     Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
 
                 <!-- Connection Bar -->
-                <c:ConnectionBar DataContext="{Binding ConnectionBarViewModel}" Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <c:ConnectionBar 
+                    ItemsSource ="{Binding ConnectionBarItems}" 
+                    Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
                 <!-- Transparent overlay that dismisses the side bars -->
                 <c:PointerPressDetector

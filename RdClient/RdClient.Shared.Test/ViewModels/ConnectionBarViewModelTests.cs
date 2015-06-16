@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿/*using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using RdClient.Shared.ViewModels;
 using Windows.Foundation;
 
@@ -70,3 +70,4 @@ namespace RdClient.Shared.Test.ViewModels
         }
     }
 }
+*/
