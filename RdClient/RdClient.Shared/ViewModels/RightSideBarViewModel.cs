@@ -38,10 +38,12 @@ namespace RdClient.Shared.ViewModels
         {
             if(this.FullScreenModel.UserInteractionMode == UserInteractionMode.Mouse)
             {
+                this.FullScreenButtonVisibility = Visibility.Visible;
                 this.MouseModeButtonVisibility = Visibility.Collapsed;
             }
             else
             {
+                this.FullScreenButtonVisibility = Visibility.Collapsed;
                 this.MouseModeButtonVisibility = Visibility.Visible;
             }
         }

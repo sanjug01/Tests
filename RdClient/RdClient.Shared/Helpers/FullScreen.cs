@@ -7,12 +7,12 @@ namespace RdClient.Shared.Helpers
 {
     public class FullScreen : IFullScreen
     {
-        public event EventHandler UserInteractionModeChange;
+        public event EventHandler UserInteractionModeChanged;
         private void EmitUserInteractionModeChange()
         {
-            if(UserInteractionModeChange != null)
+            if(UserInteractionModeChanged != null)
             {
-                UserInteractionModeChange(this, EventArgs.Empty);
+                UserInteractionModeChanged(this, EventArgs.Empty);
             }
         }
 
@@ -25,12 +25,12 @@ namespace RdClient.Shared.Helpers
             }
         }
 
-        public event EventHandler IsFullScreenModeChange;
+        public event EventHandler IsFullScreenModeChanged;
         private void EmitIsFullScreenModeChange()
         {
-            if(IsFullScreenModeChange != null)
+            if(IsFullScreenModeChanged != null)
             {
-                IsFullScreenModeChange(this, EventArgs.Empty);
+                IsFullScreenModeChanged(this, EventArgs.Empty);
             }
         }
 

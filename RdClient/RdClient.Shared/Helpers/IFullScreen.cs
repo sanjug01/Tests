@@ -8,8 +8,8 @@ namespace RdClient.Shared.Helpers
         bool IsFullScreenMode { get; }
         UserInteractionMode UserInteractionMode { get; }
 
-        event EventHandler IsFullScreenModeChange;
-        event EventHandler UserInteractionModeChange;
+        event EventHandler IsFullScreenModeChanged;
+        event EventHandler UserInteractionModeChanged;
 
         void EnterFullScreen();
         void ExitFullScreen();

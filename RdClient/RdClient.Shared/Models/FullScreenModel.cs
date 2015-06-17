@@ -14,8 +14,8 @@ namespace RdClient.Shared.Models
             set
             {
                 _fullScreen = new FullScreen();
-                _fullScreen.UserInteractionModeChange += (s, o) => EmitUserInteractionModeChange();
-                _fullScreen.IsFullScreenModeChange += (s, o) => EmitFullScreenChange();
+                _fullScreen.UserInteractionModeChanged += (s, o) => EmitUserInteractionModeChange();
+                _fullScreen.IsFullScreenModeChanged += (s, o) => EmitFullScreenChange();
 
                 _enterFullScreenCommand = new RelayCommand(
                     o =>
