@@ -29,6 +29,7 @@
                 RightSideBarViewModel = new RightSideBarViewModel() { FullScreenModel = new TestFullScreenModel() },
                 PointerPosition = new TestPointerPosition(),
                 ScrollBarModel = new TestScrollBarModel(),
+                FullScreenModel = new TestFullScreenModel(),
             };
             _vm.CastAndCall<IInputPanelFactorySite>(site => site.SetInputPanelFactory(_inputPanelFactory));
 
