@@ -963,12 +963,4 @@
     <value>Full-screen</value>
     <comment>Label on in session right side bar button that toggles full-screen mode</comment>
   </data>
-  <data name="RichTextView_InfoBox.PlaceholderText" xml:space="preserve">
-    <value>(r) Loading document ...</value>
-    <comment>Placeholder text if a rtf document is empty (should never happen).</comment>
-  </data>
-  <data name="RichTextView_Loading.Text" xml:space="preserve">
-    <value>(r) Loading ...</value>
-    <comment>Label showing that a rtf file is loading - may be shown for a short time.</comment>
-  </data>
 </root>
