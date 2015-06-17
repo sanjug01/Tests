@@ -105,7 +105,6 @@
         {
             get
             {
-                Debug.WriteLine("{0}", this.ActualWidth * this.Transform.ScaleX);
                 return this.ActualWidth * this.Transform.ScaleX;
             }
             set
