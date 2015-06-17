@@ -420,12 +420,14 @@
                         this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
 
                         this.PanKnobSite = new PanKnobSite(this.TimerFactory);
+
                         this.ZoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport);
                         this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
-                        _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+                        this.PanKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+                        this.PanKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
+                        this.PanKnobSite.Reset();
 
-                        _panKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
 
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.ZoomPanModel.OnConsumptionModeChanged;

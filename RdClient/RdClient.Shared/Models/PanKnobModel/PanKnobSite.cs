@@ -2,6 +2,7 @@
 using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models.Viewport;
 using System;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Models.PanKnobModel
 {
@@ -13,10 +14,16 @@ namespace RdClient.Shared.Models.PanKnobModel
         private IStateMachine<PanKnobState, PanKnobStateMachineEvent> _stateMachine;
         private PanKnobStateMachineEvent _stateMachineEvent;
 
+        private IViewport _viewport;
         public IViewport Viewport
         {
+            private get
+            {
+                return _viewport;
+            }
             set
             {
+                _viewport = value;
                 if (null != _stateMachineEvent.Control)
                 {
                     _stateMachineEvent.Control.Viewport = value;
@@ -66,6 +73,10 @@ namespace RdClient.Shared.Models.PanKnobModel
         void IPointerEventConsumer.Reset()
         {
             _stateMachine.SetStart(PanKnobState.Idle);
+
+            Point center = new Point(0,0);
+
+            ((IPanKnobSite)this).PanKnob.Position = center;
         }
 
         void IPanKnobSite.OnConsumptionModeChanged(object sender, ConsumptionModeType consumptionMode)
