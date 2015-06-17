@@ -349,7 +349,6 @@
     <Compile Include="ValidationRules\ValidatedProperty.cs" />
     <Compile Include="ValidationRules\ValidationResult.cs" />
     <Compile Include="ViewModels\AddOrEditViewArgs.cs" />
-    <Compile Include="ViewModels\ConnectionBarViewModel.cs" />
     <Compile Include="ViewModels\CredentialPromptMode.cs" />
     <Compile Include="ViewModels\CredentialPromptResult.cs" />
     <Compile Include="ViewModels\IBellyBandViewModel.cs" />

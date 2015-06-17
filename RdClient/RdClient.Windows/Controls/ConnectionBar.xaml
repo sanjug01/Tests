@@ -22,14 +22,10 @@
         <cv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
     </UserControl.Resources>
 
-    <Grid x:Name="Root">
-        <Grid.DataContext>
-            <vm:ConnectionBarViewModel></vm:ConnectionBarViewModel>
-        </Grid.DataContext>
+    <Grid>
         <ItemsControl
                 x:Name="ItemsControl"
-                HorizontalAlignment="Center" VerticalAlignment="Top"
-                ItemsSource="{Binding Items}">
+                HorizontalAlignment="Center" VerticalAlignment="Top">
  
 
             <ItemsControl.ItemsPanel>
@@ -90,7 +86,7 @@
         </ItemsControl>
 
         <Grid.RenderTransform>
-            <TranslateTransform x:Name="ConnectionBarTransform" X="{Binding Position}">
+            <TranslateTransform x:Name="ConnectionBarTransform">
             </TranslateTransform>
         </Grid.RenderTransform>
     </Grid>

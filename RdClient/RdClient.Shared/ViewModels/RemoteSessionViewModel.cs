@@ -68,10 +68,6 @@
             get; set;
         }
 
-        public ConnectionBarViewModel ConnectionBarViewModel{
-            get;  set;
-         }
-
         private IPanKnobSite _panKnobSite;
         public IPanKnobSite PanKnobSite
         {

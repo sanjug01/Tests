@@ -1,11 +1,9 @@
-﻿using RdClient.Shared.ViewModels;
-using Windows.UI.Xaml.Controls;
+﻿using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml;
 using System.Diagnostics.Contracts;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -30,7 +28,26 @@ namespace RdClient.Controls
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
-            ViewModel.MoveConnectionBar(e.Delta.Translation.X, this.ItemsControl.ActualWidth, ((FrameworkElement)this.Parent).ActualWidth);
+            double containerWidth = ((FrameworkElement)this.Parent).ActualWidth;
+            double connectionBarWidth = this.ItemsControl.ActualWidth;
+            double maxLeft = -((containerWidth / 2) - (connectionBarWidth / 2));
+            double maxRight = ((containerWidth / 2) - (connectionBarWidth / 2));
+            double position = this.ConnectionBarTransform.X;
+            double dx = e.Delta.Translation.X;
+
+            if (position + dx < maxLeft)
+            {
+                position = maxLeft;
+            }
+            else if (position + dx > maxRight)
+            {
+                position = maxRight;
+            }
+            else
+            {
+                position += dx;
+            }
+            this.ConnectionBarTransform.X = position;
         }
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
@@ -47,7 +64,7 @@ namespace RdClient.Controls
         }
         private void OnItemsSourceChanged(ReadOnlyObservableCollection<object> oldSource, ReadOnlyObservableCollection<object> newSource)
         {
-            ViewModel.Items = newSource;
+            this.ItemsControl.ItemsSource = newSource;
         }
 
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource",
@@ -63,13 +80,6 @@ namespace RdClient.Controls
             set
             {
                 SetValue(ItemsSourceProperty, value);
-            }
-        }
-        public ConnectionBarViewModel ViewModel
-        {
-            get
-            {
-                return this.Root.DataContext as ConnectionBarViewModel;
             }
         }
 
