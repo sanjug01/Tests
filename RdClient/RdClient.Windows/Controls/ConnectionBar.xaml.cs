@@ -15,6 +15,7 @@ namespace RdClient.Controls
 
         private const double _deceleration = 0.05;
         private Pointer _pointer;
+        private FrameworkElement _container;
 
         private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
         {
@@ -29,7 +30,7 @@ namespace RdClient.Controls
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
-            this.MoveConnectionBar(((FrameworkElement)this.Parent).ActualWidth, e.Delta.Translation.X);
+            this.MoveConnectionBar(_container.ActualWidth, e.Delta.Translation.X);
         }
 
         private void MoveConnectionBar(double containerWidth, double dx)
@@ -76,13 +77,13 @@ namespace RdClient.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            ((FrameworkElement)this.Parent).SizeChanged += this.ContainerSizeChanged;
+            this._container = ((FrameworkElement)this.Parent);
+            _container.SizeChanged += this.ContainerSizeChanged;
         }
 
         private void OnUnLoaded(object sender, RoutedEventArgs e)
         {
-            ((FrameworkElement)this.Parent).SizeChanged -= this.ContainerSizeChanged;
-
+           _container.SizeChanged -= this.ContainerSizeChanged;
         }
 
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource",
