@@ -125,7 +125,6 @@
         {
             get { return _connectionBarItems; }
         }
-
         /// <summary>
         /// View model of the view shown in the belly band across the session view when input is needed from user.
         /// Setting the property to a non-null value shows the belly band.
@@ -156,7 +155,7 @@
             _sessionState = SessionState.Idle;
 
             this.ZoomPanModel = new ZoomPanModel();
-
+            
         }
 
         protected override void OnPresenting(object activationParameter)
