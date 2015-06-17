@@ -13,7 +13,9 @@
     xmlns:pointer="using:RdClient.Shared.Input.Pointer"
     xmlns:helpers="using:RdClient.Helpers"
     mc:Ignorable="d"
-    ManipulationMode="All">
+    ManipulationMode="All"
+    Loaded="OnLoaded"
+    Unloaded="OnUnLoaded">
 
     <UserControl.Resources>
         <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

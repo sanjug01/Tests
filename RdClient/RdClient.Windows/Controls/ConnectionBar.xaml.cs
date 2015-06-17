@@ -4,6 +4,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml;
 using System.Diagnostics.Contracts;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -28,13 +29,16 @@ namespace RdClient.Controls
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
-            double containerWidth = ((FrameworkElement)this.Parent).ActualWidth;
+            this.MoveConnectionBar(((FrameworkElement)this.Parent).ActualWidth, e.Delta.Translation.X);
+        }
+
+        private void MoveConnectionBar(double containerWidth, double dx)
+        {
             double connectionBarWidth = this.ItemsControl.ActualWidth;
             double maxLeft = -((containerWidth / 2) - (connectionBarWidth / 2));
             double maxRight = ((containerWidth / 2) - (connectionBarWidth / 2));
             double position = this.ConnectionBarTransform.X;
-            double dx = e.Delta.Translation.X;
-
+            
             if (position + dx < maxLeft)
             {
                 position = maxLeft;
@@ -49,7 +53,6 @@ namespace RdClient.Controls
             }
             this.ConnectionBarTransform.X = position;
         }
-
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
         {
             e.TranslationBehavior.DesiredDeceleration = _deceleration;
@@ -65,6 +68,21 @@ namespace RdClient.Controls
         private void OnItemsSourceChanged(ReadOnlyObservableCollection<object> oldSource, ReadOnlyObservableCollection<object> newSource)
         {
             this.ItemsControl.ItemsSource = newSource;
+        }
+        private void ContainerSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.MoveConnectionBar(e.NewSize.Width, 0.0);
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ((FrameworkElement)this.Parent).SizeChanged += this.ContainerSizeChanged;
+        }
+
+        private void OnUnLoaded(object sender, RoutedEventArgs e)
+        {
+            ((FrameworkElement)this.Parent).SizeChanged -= this.ContainerSizeChanged;
+
         }
 
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource",
@@ -82,7 +100,7 @@ namespace RdClient.Controls
                 SetValue(ItemsSourceProperty, value);
             }
         }
-
+   
         public ConnectionBar()
         {
             this.InitializeComponent();
