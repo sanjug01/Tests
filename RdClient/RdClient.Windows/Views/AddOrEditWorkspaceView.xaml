@@ -25,58 +25,40 @@
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="32"/>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="16"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="32"/>
-                <RowDefinition Height="Auto"/>                    
-            </Grid.RowDefinitions>        
-            <Grid Grid.Row="0">
-                <TextBlock Grid.Column="0" 
-                           x:Uid="AddOrEditWorkspace-Caption"
-                           Style="{ThemeResource TitleTextBlockStyle}" Text="Add Remote Resources (d)"/>
+        <StackPanel>
+            <!-- Title -->
+            <Grid Margin="{StaticResource DialogItemVerticalSpacing}">
+                <TextBlock 
+                    Style="{ThemeResource TitleTextBlockStyle}"                     
+                    x:Uid="AddOrEditWorkspace-Caption"
+                    Text="Add Remote Resources (d)"/>
             </Grid>
-            <StackPanel Grid.Row="2">
-                <StackPanel Orientation="Horizontal">
+            
+            <!-- Feed Name -->
+            <StackPanel Margin="{StaticResource DialogItemVerticalSpacing}">
+                <StackPanel Orientation="Horizontal"
+                            Margin="{StaticResource DialogHeaderVerticalSpacing}">
                     <TextBlock x:Uid="AddOrEditWorkspace-FeedLabel" 
-                               Style="{ThemeResource BodyTextBlockStyle}" Text="Web feed URL (d)"/>
+                               Style="{ThemeResource BodyTextBlockStyle}" 
+                               Text="Web feed URL (d)"/>
                     <TextBlock x:Uid="AddOrEditWorkspace-FeedExtraLabel" 
-                               Style="{ThemeResource BodyTextBlockStyle}" Text="(or email address) (d)"
-                               Foreground="{ThemeResource UnselectedForegroundBrush}"
-                               Margin="8,0,0,0" />
+                               Margin="{StaticResource DialogItemIndentation}"
+                               Style="{ThemeResource BodyTextBlockStyle}" 
+                               Text="(or email address) (d)"
+                               Foreground="{ThemeResource UnselectedForegroundBrush}"/>
                 </StackPanel>
                 <TextBox x:Uid="AddOrEditWorkspace-Feed"
-                         Margin="0,8" 
+                         Margin="{StaticResource DialogHeaderVerticalSpacing}"
                          PlaceholderText="https://webfeed.contoso_example.com (d)"
                          InputScope="Uri"
                          Text="{Binding Path=FeedUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
 
-            <StackPanel Grid.Row="4"
-                        Margin="0,0,0,80">
-                <TextBlock Style="{ThemeResource BodyTextBlockStyle }" 
-                           x:Uid="AddOrEditWorkspace-Credentials" Text="User name(d)"/>
-                <ComboBox Margin="0,8" 
-                          x:Uid="AddOrEditWorkspace-CredentialsComboBox"
-                          Style="{StaticResource DialogComboBoxStyle}"
-                          ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
-                          PlaceholderText="Select user or add new (d)">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Converter={StaticResource UserComboBoxElementToLocalizedStringConverter}}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-                <Button x:Uid="Common_Button_AddUserAccount" 
-                        Content="Add account(d)" 
-                        Command="{Binding Path=AddUser}" />
-            </StackPanel>
+            <!-- User name -->
+            <controls:UserSelectorControl Margin="{StaticResource DialogItemExtraVerticalSpacing}"/>
 
-            <Grid Grid.Row="6">
+            <!-- Cancel / Save buttons -->
+            <Grid Margin="{StaticResource DialogSectionVerticalSpacing}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
@@ -84,18 +66,19 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0"
-                    Style="{StaticResource DialogButtonStyle}"
-                    Command="{Binding Path=Cancel}"
-                    x:Uid="Common_Button_Cancel"
-                    Content="Cancel(d)"
+                        Style="{StaticResource DialogButtonStyle}"
+                        Command="{Binding Path=Cancel}"
+                        x:Uid="Common_Button_Cancel"
+                        Content="Cancel(d)"
                     />
                 <Button Grid.Column="2"
-                    Style="{StaticResource DialogAccentedButtonStyle}"
-                    Command="{Binding Path=DefaultAction}"
-                    x:Uid="AddOrEditWorkspace-SaveButton"
-                    Content="Find feed(d)"
+                        Style="{StaticResource DialogAccentedButtonStyle}"
+                        Command="{Binding Path=DefaultAction}"
+                        x:Uid="AddOrEditWorkspace-SaveButton"
+                        Content="Find feed(d)"
                     />
-            </Grid>
-        </Grid>
+            </Grid> 
+            
+        </StackPanel>
     </ContentControl>
 </controls:ModalUserControl>

@@ -1,16 +1,40 @@
-﻿using RdClient.Shared.ViewModels;
+﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.ViewModels;
 using System;
-using System.Diagnostics;
-using Windows.UI.Core;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
 
 
 namespace RdClient.Shared.Models
 {
     public class FullScreenModel : IFullScreenModel
     {
-        private bool _wasFullScreenMode;
+        private IFullScreen _fullScreen;
+        public IFullScreen FullScreen
+        {
+            set
+            {
+                _fullScreen = new FullScreen();
+                _fullScreen.UserInteractionModeChanged += (s, o) => EmitUserInteractionModeChange();
+                _fullScreen.IsFullScreenModeChanged += (s, o) => EmitFullScreenChange();
+
+                _enterFullScreenCommand = new RelayCommand(
+                    o =>
+                    {
+                        _fullScreen.EnterFullScreen();
+                    },
+                    o =>
+                    {
+                        return _fullScreen.IsFullScreenMode == false;
+                    });
+
+                _exitFullScreenCommand = new RelayCommand(
+                    o => _fullScreen.ExitFullScreen(),
+                    o =>
+                    {
+                        return _fullScreen.IsFullScreenMode == true;
+                    });
+            }
+        }
 
         public event EventHandler FullScreenChange;
         private void EmitFullScreenChange()
@@ -31,7 +55,7 @@ namespace RdClient.Shared.Models
         }
 
 
-        private readonly RelayCommand _enterFullScreenCommand;
+        private RelayCommand _enterFullScreenCommand;
         public RelayCommand EnterFullScreenCommand
         {
             get
@@ -40,7 +64,7 @@ namespace RdClient.Shared.Models
             }
         }
 
-        public readonly RelayCommand _exitFullScreenCommand;
+        public RelayCommand _exitFullScreenCommand;
         public RelayCommand ExitFullScreenCommand
         {
             get
@@ -49,19 +73,9 @@ namespace RdClient.Shared.Models
             }
         }
 
-        public void OnSizeChanged(CoreWindow sender, WindowSizeChangedEventArgs e)
-        {
-            if(_wasFullScreenMode != ApplicationView.GetForCurrentView().IsFullScreenMode)
-            {
-                _wasFullScreenMode = !_wasFullScreenMode;
-                _enterFullScreenCommand.EmitCanExecuteChanged();
-                _exitFullScreenCommand.EmitCanExecuteChanged();
-            }
-        }
-
         public void ToggleFullScreen()
         {
-            if(ApplicationView.GetForCurrentView().IsFullScreenMode)
+            if(_fullScreen.IsFullScreenMode)
             {
                 _exitFullScreenCommand.Execute(null);
             }
@@ -78,7 +92,7 @@ namespace RdClient.Shared.Models
         {
             get
             {
-                return UIViewSettings.GetForCurrentView().UserInteractionMode;
+                return _fullScreen.UserInteractionMode;
             }
         }
 
@@ -86,33 +100,8 @@ namespace RdClient.Shared.Models
         {
             get
             {
-                return ApplicationView.GetForCurrentView().IsFullScreenMode;
+                return _fullScreen.IsFullScreenMode;
             }
-        }
-
-        public FullScreenModel()
-        {
-            _wasFullScreenMode = ApplicationView.GetForCurrentView().IsFullScreenMode;
-
-            Window.Current.CoreWindow.SizeChanged += OnSizeChanged;
-
-            _enterFullScreenCommand = new RelayCommand(
-                o =>
-                {
-                    ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
-                },
-                o => 
-                {
-                    return ApplicationView.GetForCurrentView().IsFullScreenMode == false;
-                });
-
-            _exitFullScreenCommand = new RelayCommand(
-                o => ApplicationView.GetForCurrentView().ExitFullScreenMode(),
-                o =>
-                {
-                    return ApplicationView.GetForCurrentView().IsFullScreenMode == true;
-                });
-
         }
     }
 }

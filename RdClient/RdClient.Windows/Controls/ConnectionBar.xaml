@@ -1,0 +1,95 @@
+﻿<UserControl
+    x:Class="RdClient.Controls.ConnectionBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:RdClient.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:c="using:RdClient.Controls"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:m="using:RdClient.Shared.Models"
+    xmlns:cv="using:RdClient.Shared.Converters"    
+    xmlns:input="using:RdClient.Input"
+    xmlns:pointer="using:RdClient.Shared.Input.Pointer"
+    xmlns:helpers="using:RdClient.Helpers"
+    mc:Ignorable="d"
+    ManipulationMode="All"
+    Loaded="OnLoaded"
+    Unloaded="OnUnLoaded">
+
+    <UserControl.Resources>
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <cv:EnumMemberToSymbolStringConverter x:Key="enumToSymbolString"/>
+        <cv:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
+        <cv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
+    </UserControl.Resources>
+
+    <Grid>
+        <ItemsControl
+                x:Name="ItemsControl"
+                HorizontalAlignment="Center" VerticalAlignment="Top">
+ 
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplateSelector>
+                <helpers:TypeNameDataTemplateSelector>
+                    <helpers:TypeNameDataTemplateSelector.Templates>
+
+                        <DataTemplate x:Key="SymbolBarButtonModel">
+                            <Button
+                                    Style="{ThemeResource RemoteSessionSymbolBarButton}"
+                                    Margin="4,0"
+                                    Command="{Binding Command}"
+                                    CommandParameter="{Binding CommandParameter}"
+                                    Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"
+                                    ManipulationMode="All"/>
+                        </DataTemplate>
+
+                        <DataTemplate x:Key="SymbolBarToggleButtonModel">
+                            <ToggleButton
+                                    Style="{StaticResource RemoteSessionSymbolBarButton}"
+                                    Margin="4,0"
+                                    Command="{Binding Command}"
+                                    CommandParameter="{Binding CommandParameter}"
+                                    IsChecked="{Binding IsChecked}"
+                                    IsThreeState="False"
+                                    Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"
+                                    ManipulationMode="All"/>
+                        </DataTemplate>
+
+                        <DataTemplate x:Key="SymbolBarSliderButtonModel">
+                            <Button 
+                                    Style="{StaticResource RemoteSessionSymbolBarButton}"
+                                    Margin="4,0"
+                                    Command="{Binding Command}"
+                                    CommandParameter="{Binding CommandParameter}"
+                                    Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"
+                                    ManipulationMode="All">
+                                <Button.Flyout>
+                                    <Flyout>
+                                        <Slider Orientation="Vertical" Height="100" Value="{Binding Value, Mode=TwoWay}"/>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
+                        </DataTemplate>
+
+
+                    </helpers:TypeNameDataTemplateSelector.Templates>
+                </helpers:TypeNameDataTemplateSelector>
+            </ItemsControl.ItemTemplateSelector>
+        </ItemsControl>
+
+        <Grid.RenderTransform>
+            <TranslateTransform x:Name="ConnectionBarTransform">
+            </TranslateTransform>
+        </Grid.RenderTransform>
+    </Grid>
+</UserControl>

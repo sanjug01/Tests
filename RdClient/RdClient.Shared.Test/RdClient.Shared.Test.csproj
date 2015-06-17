@@ -197,7 +197,7 @@
     <Compile Include="Mock\Thumbnail.cs" />
     <Compile Include="Mock\LocalizedString.cs" />
     <Compile Include="Mock\NavigationService.cs" />
-    <Compile Include="Mock\PhysicalScreenSize.cs" />
+    <Compile Include="Mock\WindowSize.cs" />
     <Compile Include="Mock\PresentableView.cs" />
     <Compile Include="Mock\PresentableViewConstructor.cs" />
     <Compile Include="Mock\RdpCertificate.cs" />
@@ -307,7 +307,7 @@
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

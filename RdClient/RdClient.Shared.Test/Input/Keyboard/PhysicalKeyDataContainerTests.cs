@@ -33,7 +33,7 @@
             bool called = false;
 
             PhysicalKeyDataContainer container = new PhysicalKeyDataContainer() { KeyData = new KeyData() };
-            container.DoIf<IPhysicalScreenSize>(pss =>
+            container.DoIf<IWindowSize>(pss =>
             {
                 called = true;
             });

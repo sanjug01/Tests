@@ -28,7 +28,7 @@
                 KeyboardCapture = new TestKeyboardCapture(),
                 RightSideBarViewModel = new RightSideBarViewModel() { FullScreenModel = new TestFullScreenModel() },
                 PointerPosition = new TestPointerPosition(),
-                ScrollBarModel = new TestScrollBarModel()
+                ScrollBarModel = new TestScrollBarModel(),
             };
             _vm.CastAndCall<IInputPanelFactorySite>(site => site.SetInputPanelFactory(_inputPanelFactory));
 
@@ -123,6 +123,7 @@
             // keyboard button is no longer a toggle button.
             SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
                 o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.Keyboard);
+
             Assert.IsNotNull(keyboard.Command);
             Assert.IsFalse(keyboard.Command.CanExecute(null));
         }
@@ -158,6 +159,7 @@
 
             SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
                 o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.Keyboard);
+
             Assert.IsNotNull(keyboard.Command);
             // Assert.IsTrue(keyboard.Command.CanExecute(null));
         }
@@ -194,6 +196,7 @@
 
             SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
                 o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.Keyboard);
+
             Assert.IsNotNull(keyboard.Command);
             // Assert.IsTrue(keyboard.Command.CanExecute(null));
         }
@@ -230,6 +233,7 @@
 
             SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
                 o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.Keyboard);
+
             Assert.IsNotNull(keyboard.Command);
             Assert.IsTrue(keyboard.Command.CanExecute(null));
 
@@ -269,6 +273,7 @@
 
             SymbolBarButtonModel keyboard = (SymbolBarButtonModel)_vm.ConnectionBarItems.First(
                 o => o is SymbolBarButtonModel && ((SymbolBarButtonModel)o).Glyph == SegoeGlyph.Keyboard);
+
             Assert.IsNotNull(keyboard.Command);
             Assert.IsTrue(keyboard.Command.CanExecute(null));
 

@@ -415,23 +415,26 @@ namespace RdClient.Shared.Test.ViewModels
         }
 
         [TestMethod]
-        public void ShowSectionLabelsIsTrueWhenHasDesktopsIsTrue()
+        // Bug:3172446: by design, no longer showing labels
+        public void ShowSectionLabelsIsNOTTrueWhenHasDesktopsIsTrue()
         {
             RemoveAllModels(_dataModel.OnPremWorkspaces);
-            Assert.IsTrue(_vm.ShowSectionLabels);
+            Assert.IsFalse(_vm.ShowSectionLabels);
         }
 
         [TestMethod]
-        public void ShowSectionLabelsIsTrueWhenHasAppsIsTrue()
+        // Bug:3172446: by design, no longer showing labels
+        public void ShowSectionLabelsIsNOTTrueWhenHasAppsIsTrue()
         {
             RemoveAllModels(_dataModel.OnPremWorkspaces);
-            Assert.IsTrue(_vm.ShowSectionLabels);
+            Assert.IsFalse(_vm.ShowSectionLabels);
         }
 
         [TestMethod]
-        public void ShowSectionLabelsIsTrueWhenHasAppsIsTrueAndHasDesktopsIsTrue()
+        // Bug:3172446: by design, no longer showing labels
+        public void ShowSectionLabelsIsNOTTrueWhenHasAppsIsTrueAndHasDesktopsIsTrue()
         {
-            Assert.IsTrue(_vm.ShowSectionLabels);
+            Assert.IsFalse(_vm.ShowSectionLabels);
         }
 
         [TestMethod]

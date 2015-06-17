@@ -2,6 +2,7 @@
 using RdClient.Shared.CxWrappers.Utils;
 using RdClient.Shared.Models;
 using System.Collections.Generic;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Test.CxWrappers
 {
@@ -54,16 +55,17 @@ namespace RdClient.Shared.Test.CxWrappers
         [TestMethod]
         public void ApplyScreenSize()
         {
-            ScreenSize size = new ScreenSize() { Width = 23, Height = 42 };
+            Size size = new Size() { Width = 23, Height = 42 };
 
             using(Mock.RdpProperties properties = new Mock.RdpProperties())
-            using (Mock.PhysicalScreenSize physicalSize = new Mock.PhysicalScreenSize(size))
+            using (Mock.WindowSize windowSize = new Mock.WindowSize())
             {
-                physicalSize.Expect("GetScreenSize", new List<object>() { }, size);
+                windowSize.Size = size;
+                windowSize.Expect("GetScreenSize", new List<object>() { }, size);
                 properties.Expect("SetIntProperty", new List<object>() { "PhysicalDesktopWidth", 23 }, 0);
                 properties.Expect("SetIntProperty", new List<object>() { "PhysicalDesktopHeight", 42 }, 0);
 
-                RdpPropertyApplier.ApplyScreenSize(properties, physicalSize);
+                RdpPropertyApplier.ApplyScreenSize(properties, windowSize);
             }
         }
     }

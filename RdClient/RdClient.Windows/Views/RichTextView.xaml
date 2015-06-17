@@ -46,14 +46,7 @@
 				<TextBlock x:Uid="Common_Close" Text="(d) Close"/>
             </HyperlinkButton>            
 
-            <TextBlock Grid.Row="1"
-                       x:Uid="RichTextView_Loading"
-                       Style="{ThemeResource BodyTextBlockStyle}"                        
-                       Text="(d) Loading..." 
-                       Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
-            <ProgressBar Margin="0,15"
-                         Grid.Row="1"
+            <ProgressBar Grid.Row="1"
                          IsIndeterminate="True"
                          HorizontalAlignment="Stretch" 
                          Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>

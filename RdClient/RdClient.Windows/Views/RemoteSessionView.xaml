@@ -16,16 +16,15 @@
     d:DesignHeight="300"
     d:DesignWidth="800"
     RequestedTheme="Dark">
-
+    
     <UserControl.DataContext>
-        <vm:RemoteSessionViewModel>
+        <vm:RemoteSessionViewModel FullScreenModel="{StaticResource FullScreenModel}">
             <!-- Inject the keyboard capture based on CoreWindow and CoreDispatcher -->
             <vm:RemoteSessionViewModel.KeyboardCapture>
                 <input:CoreWindowKeyboardCapture/>
             </vm:RemoteSessionViewModel.KeyboardCapture>
             <vm:RemoteSessionViewModel.RightSideBarViewModel>
                 <vm:RightSideBarViewModel
-                    DeviceCapabilities="{StaticResource DeviceCapabilities}"
                     FullScreenModel="{StaticResource FullScreenModel}" />
             </vm:RemoteSessionViewModel.RightSideBarViewModel>
             <vm:RemoteSessionViewModel.PointerPosition>
@@ -64,63 +63,9 @@
                     Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
 
                 <!-- Connection Bar -->
-                <ItemsControl
-                    Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    HorizontalAlignment="Center" VerticalAlignment="Top"
-                    Opacity="{ThemeResource ConnectionOverlayOpacity}"
-                    ItemsSource="{Binding ConnectionBarItems}">
-
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-
-                    <ItemsControl.ItemTemplateSelector>
-                        <helpers:TypeNameDataTemplateSelector>
-                            <helpers:TypeNameDataTemplateSelector.Templates>
-
-                                <DataTemplate x:Key="SymbolBarButtonModel">
-                                    <Button
-                                        Style="{ThemeResource RemoteSessionSymbolBarButton}"
-                                        Margin="4,0"
-                                        Command="{Binding Command}"
-                                        CommandParameter="{Binding CommandParameter}"
-                                        Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
-                                </DataTemplate>
-
-                                <DataTemplate x:Key="SymbolBarToggleButtonModel">
-                                    <ToggleButton
-                                        Style="{StaticResource RemoteSessionSymbolBarButton}"
-                                        Margin="4,0"
-                                        Command="{Binding Command}"
-                                        CommandParameter="{Binding CommandParameter}"
-                                        IsChecked="{Binding IsChecked}"
-                                        IsThreeState="False"
-                                        Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"/>
-                                </DataTemplate>
-
-                                <DataTemplate x:Key="SymbolBarSliderButtonModel">
-                                    <Button
-                                        Style="{StaticResource RemoteSessionSymbolBarButton}"
-                                        Margin="4,0"
-                                        Command="{Binding Command}"
-                                        CommandParameter="{Binding CommandParameter}"
-                                        Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}">
-                                        <Button.Flyout>
-                                            <Flyout>
-                                                <Slider Orientation="Vertical" Height="100" Value="{Binding Value, Mode=TwoWay}"/>
-                                            </Flyout>
-                                        </Button.Flyout>
-                                    </Button>
-                                </DataTemplate>
-                            </helpers:TypeNameDataTemplateSelector.Templates>
-                        </helpers:TypeNameDataTemplateSelector>
-                    </ItemsControl.ItemTemplateSelector>
-                </ItemsControl>
+                <c:ConnectionBar 
+                    ItemsSource ="{Binding ConnectionBarItems}" 
+                    Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
                 <!-- Transparent overlay that dismisses the side bars -->
                 <c:PointerPressDetector
