@@ -196,7 +196,7 @@
     <Compile Include="Input\Pointer\MouseCursorShape.cs" />
     <Compile Include="Input\Pointer\PointerCapture.cs" />
     <Compile Include="Input\Pointer\PointerEvent.cs" />
-    <Compile Include="Input\Pointer\PointerEventConsumer.cs" />
+    <Compile Include="Input\Pointer\PointerModeConsumer.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
     <Compile Include="Helpers\ReadWriteMonitor.cs" />
     <Compile Include="Helpers\StateMachine.cs" />
