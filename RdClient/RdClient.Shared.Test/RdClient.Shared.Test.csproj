@@ -196,7 +196,7 @@
     <Compile Include="Mock\Thumbnail.cs" />
     <Compile Include="Mock\LocalizedString.cs" />
     <Compile Include="Mock\NavigationService.cs" />
-    <Compile Include="Mock\PhysicalScreenSize.cs" />
+    <Compile Include="Mock\WindowSize.cs" />
     <Compile Include="Mock\PresentableView.cs" />
     <Compile Include="Mock\PresentableViewConstructor.cs" />
     <Compile Include="Mock\RdpCertificate.cs" />

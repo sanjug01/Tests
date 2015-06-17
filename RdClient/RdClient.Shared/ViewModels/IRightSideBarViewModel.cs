@@ -11,7 +11,6 @@ namespace RdClient.Shared.ViewModels
         ICommand Disconnect { get; }
         ICommand FullScreen { get; }
         IFullScreenModel FullScreenModel { get; set; }
-        IDeviceCapabilities DeviceCapabilities { set; }
 
         bool IsFullScreenChecked { get; set; }
         bool IsMouseModeChecked { get; set; }

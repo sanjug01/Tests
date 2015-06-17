@@ -1,6 +1,5 @@
-﻿namespace RdClient.Navigation.Extensions
+﻿namespace RdClient.Shared.Helpers
 {
-    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using Windows.Devices.Input;
     using Windows.UI.Core;
@@ -11,7 +10,7 @@
     /// <summary>
     /// IDeviceCapabilities based on WinRT device capabilities classes.
     /// </summary>
-    sealed class DeviceCapabilities : MutableObject, IDeviceCapabilities
+    public sealed class DeviceCapabilities : MutableObject, IDeviceCapabilities
     {
         private readonly CoreWindow _window;
         private readonly TouchCapabilities _touchCapabilities;

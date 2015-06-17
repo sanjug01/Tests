@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Controls
 {
+    using RdClient.Helpers;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Pointer;
@@ -7,6 +8,7 @@
     using RdClient.Shared.Models;
     using RdClient.Shared.Models.Viewport;
     using RdClient.Shared.Navigation;
+    using RdClient.Shared.ViewModels;
     using System;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -106,20 +108,19 @@
             Contract.Assert(_viewLoaded);
             Contract.Ensures(null != Contract.Result<IRenderingPanel>());
 
-            ScreenProperties screen = (ScreenProperties)Application.Current.Resources["ScreenProperties"];
-            Size resolution = screen.Resolution;
+
+            SessionSizeViewModel ssvm = (SessionSizeViewModel)this.Resources["SessionSizeViewModel"];
+            Size size = ssvm.Size;
 
             this.RenderingPanel.MouseCursor = this.MouseCursor;
             this.RenderingPanel.MouseTransform = this.MouseTransform;
             this.RenderingPanel.MouseScaleTransform = this.MouseScaleTransform;
-            this.RenderingPanel.Width = resolution.Width;
-            this.RenderingPanel.Height = resolution.Height;
 
             this.RenderingPanel.SetViewport(new Viewport(this.RenderingPanel, this));
             this.RenderingPanel.SetTransform(new ViewportTransformWrapper(this.RenderPanelTransform));
 
-            this.RenderingPanel.Width = resolution.Width;
-            this.RenderingPanel.Height = resolution.Height;
+            this.RenderingPanel.Width = size.Width;
+            this.RenderingPanel.Height = size.Height;
 
             this.RenderPanelTransform.ScaleX = 1.0;
             this.RenderPanelTransform.ScaleY = 1.0;

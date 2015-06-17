@@ -3,6 +3,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RdClient.Controls"
+    xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:m="using:RdClient.Shared.Models"
+    xmlns:h="using:RdClient.Shared.Helpers"
+    xmlns:cx="using:RdClient.Shared.CxWrappers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:RdClient.Controls"
@@ -23,6 +27,14 @@
                                         ScaleX="1.0" ScaleY="1.0"
                                         TranslateX="0.0" TranslateY="0.0"/>
         </TransformGroup>                        
+        <vm:SessionSizeViewModel x:Key="SessionSizeViewModel" FullScreenModel="{StaticResource FullScreenModel}">
+            <vm:SessionSizeViewModel.WindowSize>
+                <h:WindowSize />
+            </vm:SessionSizeViewModel.WindowSize>
+            <vm:SessionSizeViewModel.ScreenProperties>
+                <cx:ScreenProperties />
+            </vm:SessionSizeViewModel.ScreenProperties>
+        </vm:SessionSizeViewModel>
     </UserControl.Resources>
 
     <Canvas Background="Gray" x:Name="Canvas">
