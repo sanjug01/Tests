@@ -426,10 +426,10 @@
 
                         this.PanKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
                         this.PanKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
+                        _activeSessionControl.RenderingPanel.Viewport.Changed += this.PanKnobSite.OnViewportChanged;
                         this.PanKnobSite.Reset();
 
-
-                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
+                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.PanKnobSite.OnConsumptionModeChanged;
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.ZoomPanModel.OnConsumptionModeChanged;
                         this.PointerCapture.ConsumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
 

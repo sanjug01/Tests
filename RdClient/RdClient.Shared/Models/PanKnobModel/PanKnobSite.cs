@@ -8,6 +8,7 @@ namespace RdClient.Shared.Models.PanKnobModel
 {
     public class PanKnobSite : IPanKnobSite
     {
+        private ConsumptionModeType _consumptionMode;
         private ITimerFactory _timerFactory;
         ITimerFactory IPanKnobSite.TimerFactory { get { return _timerFactory; } }
 
@@ -63,7 +64,7 @@ namespace RdClient.Shared.Models.PanKnobModel
             {
                 _stateMachineEvent.Input = pointerEvent;
                 _stateMachine.Consume(_stateMachineEvent);
-                if(ConsumedEvent != null)
+                if (ConsumedEvent != null)
                 {
                     ConsumedEvent(this, pointerEvent);
                 }
@@ -74,14 +75,25 @@ namespace RdClient.Shared.Models.PanKnobModel
         {
             _stateMachine.SetStart(PanKnobState.Idle);
 
-            Point center = new Point(0,0);
+            Point center = new Point(0, 0);           
 
             ((IPanKnobSite)this).PanKnob.Position = center;
         }
 
         void IPanKnobSite.OnConsumptionModeChanged(object sender, ConsumptionModeType consumptionMode)
         {
-            if(consumptionMode == ConsumptionModeType.DirectTouch || consumptionMode == ConsumptionModeType.MultiTouch)
+            _consumptionMode = consumptionMode;
+            if (false == (_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch))
+            {
+                if (null != _panKnob)
+                {
+                    _panKnob.IsVisible = false;
+                }
+            }
+        }
+        void IPanKnobSite.OnViewportChanged(object sender, EventArgs e)
+        {
+            if(this.Viewport.ZoomFactor > 1.0 && (_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch))
             {
                 if (null != _panKnob)
                 {

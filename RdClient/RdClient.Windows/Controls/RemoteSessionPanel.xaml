@@ -40,7 +40,9 @@
     <Canvas Background="Gray" x:Name="Canvas">
         <c:RenderingPanel x:Name="RenderingPanel"
                           RenderTransform="{StaticResource RenderTransformGroup}" />
-        <Image x:Name="MouseCursor" CacheMode="BitmapCache" VerticalAlignment="Top" HorizontalAlignment="Left"
+        <Image x:Name="MouseCursor" 
+               CacheMode="BitmapCache"                
+               VerticalAlignment="Top" HorizontalAlignment="Left"
                    RenderTransform="{StaticResource MouseTransformGroup}" />
     </Canvas>
 </UserControl>
