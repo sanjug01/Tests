@@ -137,6 +137,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="app.config" />
     <None Include="RdClient.Windows.Test_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
