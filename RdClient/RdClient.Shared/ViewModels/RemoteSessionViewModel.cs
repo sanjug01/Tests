@@ -588,7 +588,7 @@
                 if(null != _telemetryClient)
                 {
                     ITelemetryEvent te = _telemetryClient.MakeEvent("ShowTouchKeyboard");
-                    te.AddMetric("duration", _presentationStopwatch.Elapsed.TotalSeconds);
+                    te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
                     te.Report();
                 }
                 _inputPanel.Hide();
@@ -598,7 +598,7 @@
                 if (null != _telemetryClient)
                 {
                     ITelemetryEvent te = _telemetryClient.MakeEvent("HideTouchKeyboard");
-                    te.AddMetric("duration", _presentationStopwatch.Elapsed.TotalSeconds);
+                    te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
                     te.Report();
                 }
                 _inputPanel.Show();
@@ -640,7 +640,7 @@
             if(null != _telemetryClient)
             {
                 ITelemetryEvent te = _telemetryClient.MakeEvent("EnterFullScreen");
-                te.AddMetric("duration", _presentationStopwatch.Elapsed.TotalSeconds);
+                te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
                 _enterFullScreenCount += 1.0;
                 te.AddMetric("count", _enterFullScreenCount);
                 te.Report();
@@ -652,7 +652,7 @@
             if (null != _telemetryClient)
             {
                 ITelemetryEvent te = _telemetryClient.MakeEvent("ExitFullScreen");
-                te.AddMetric("duration", _presentationStopwatch.Elapsed.TotalSeconds);
+                te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
                 _exitFullScreenCount += 1.0;
                 te.AddMetric("count", _exitFullScreenCount);
                 te.Report();
