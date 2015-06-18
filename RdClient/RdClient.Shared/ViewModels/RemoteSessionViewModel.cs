@@ -200,6 +200,13 @@
 
             base.OnPresenting(activationParameter);
 
+            if (null != _telemetryClient)
+            {
+                ITelemetryEvent te = _telemetryClient.MakeEvent("InputPanelAvailability");
+                te.AddTag("canShow", _deviceCapabilities.CanShowInputPanel ? "true" : "false");
+                te.Report();
+            }
+
             _inputPanel = _inputPanelFactory.GetInputPanel();
 
             Contract.Assert(null != activationParameter, "Cannot navigate to remote session without activation parameter");
@@ -605,6 +612,13 @@
         {
             if(e.PropertyName.Equals("CanShowInputPanel"))
             {
+                if(null != _telemetryClient)
+                {
+                    ITelemetryEvent te = _telemetryClient.MakeEvent("InputPanelAvailabilityChanged");
+                    te.AddTag("canShow", ((IDeviceCapabilities)sender).CanShowInputPanel ? "true" : "false");
+                    te.Report();
+                }
+
                 _invokeKeyboard.EmitCanExecuteChanged();
             }
         }
