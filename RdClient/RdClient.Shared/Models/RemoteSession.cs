@@ -58,6 +58,7 @@
             private readonly SessionState _sessionState;
             private readonly ReaderWriterLockSlim _monitor;
             private RemoteSession _session;
+            protected readonly IDeviceCapabilities DeviceCapabilities;
             protected readonly ITelemetryClient TelemetryClient;
             protected readonly ITelemetryEvent SessionTelemetry;
             protected readonly ITelemetryEvent SessionDuration;
@@ -137,6 +138,7 @@
             }
 
             protected InternalState(SessionState sessionState, ReaderWriterLockSlim monitor,
+                IDeviceCapabilities deviceCapabilities,
                 ITelemetryClient telemetryClient, ITelemetryEvent sessionTelemetry, ITelemetryEvent sessionDuration)
             {
                 Contract.Assert(null != telemetryClient);
@@ -144,6 +146,7 @@
 
                 _sessionState = sessionState;
                 _monitor = monitor;
+                this.DeviceCapabilities = deviceCapabilities;
                 this.TelemetryClient = telemetryClient;
                 this.SessionTelemetry = sessionTelemetry;
                 this.SessionDuration = sessionDuration;
@@ -153,6 +156,7 @@
             {
                 _sessionState = sessionState;
                 _monitor = state._monitor;
+                this.DeviceCapabilities = state.DeviceCapabilities;
                 this.TelemetryClient = state.TelemetryClient;
                 this.SessionTelemetry = state.SessionTelemetry;
                 this.SessionDuration = state.SessionDuration;
@@ -230,12 +234,13 @@
         }
 
         public RemoteSession(RemoteSessionSetup sessionSetup, IDeferredExecution deferredExecution, IRdpConnectionSource connectionSource,
-            ITimerFactory timerFactory, ITelemetryClient telemetryClient)
+            ITimerFactory timerFactory, IDeviceCapabilities deviceCapabilities, ITelemetryClient telemetryClient)
         {
             Contract.Requires(null != sessionSetup);
             Contract.Requires(null != deferredExecution);
             Contract.Requires(null != connectionSource);
             Contract.Requires(null != timerFactory);
+            Contract.Assert(null != deviceCapabilities);
             Contract.Assert(null != telemetryClient);
             Contract.Ensures(null != _sessionSetup);
             Contract.Ensures(null != _deferredExecution);
@@ -257,7 +262,7 @@
             // _internalState must never be null, so the initial state is assigned to a state object
             // that does not do anything.
             //
-            _internalState = InactiveSession.Create(_sessionMonitor, _sessionSetup, _telemetryClient);
+            _internalState = InactiveSession.Create(_sessionMonitor, deviceCapabilities, _sessionSetup, _telemetryClient);
             _internalState.Activate(this);
         }
 

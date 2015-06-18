@@ -11,7 +11,7 @@
             {
             }
 
-            public static InternalState Create(ReaderWriterLockSlim monitor, RemoteSessionSetup sessionSetup, ITelemetryClient telemetryClient)
+            public static InternalState Create(ReaderWriterLockSlim monitor, IDeviceCapabilities deviceCapabilities, RemoteSessionSetup sessionSetup, ITelemetryClient telemetryClient)
             {
                 //
                 // Use the connection model to create a session telemetry event that the session will update and report upon completion.
@@ -22,15 +22,17 @@
                 sessionSetup.Connection.InitializeSessionTelemetry(sessionSetup.DataModel, sessionTelemetry);
                 sessionDuration.AddTag("sourceType", sessionSetup.Connection.TelemetrySourceType);
 
-                return new InactiveSession(monitor, telemetryClient, sessionTelemetry, sessionDuration);
+                return new InactiveSession(monitor, deviceCapabilities, telemetryClient, sessionTelemetry, sessionDuration);
             }
 
             private InactiveSession(ReaderWriterLockSlim monitor,
+                IDeviceCapabilities deviceCapabilities,
                 ITelemetryClient telemetryClient,
                 ITelemetryEvent sessionTelemetry,
                 ITelemetryEvent sessionDuration)
-                : base(SessionState.Idle, monitor, telemetryClient, sessionTelemetry, sessionDuration)
+                : base(SessionState.Idle, monitor, deviceCapabilities, telemetryClient, sessionTelemetry, sessionDuration)
             {
+                this.SessionTelemetry.AddTag("userInteractionMode", this.DeviceCapabilities.UserInteractionModeLabel);
             }
 
             public InactiveSession(InternalState otherState) : base(SessionState.Idle, otherState)
