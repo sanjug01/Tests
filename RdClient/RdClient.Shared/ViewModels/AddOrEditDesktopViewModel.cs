@@ -45,7 +45,9 @@
         private ReadOnlyObservableCollection<UserComboBoxElement> _users;
         private ReadOnlyObservableCollection<GatewayComboBoxElement> _gateways;
         private UserComboBoxElement _selectedUser;
+        private UserComboBoxElement _savedSelectedUser;
         private GatewayComboBoxElement _selectedGateway;
+        private GatewayComboBoxElement _savedSelectedGateway;
         private Guid _selectedUserId;
 
         public AddOrEditDesktopViewModel()
@@ -306,9 +308,10 @@
         private void AddGatewayCommandExecute(object o)
         {
             AddGatewayViewModelArgs args = new AddGatewayViewModelArgs();
-            ModalPresentationCompletion addGatewayCompleted = new ModalPresentationCompletion(AddGatewayPromptResultHandler);            
+            ModalPresentationCompletion addGatewayCompleted = new ModalPresentationCompletion(AddGatewayPromptResultHandler);
+            this.SaveGatewaySelection();
             // save user selection
-            _selectedUserId = (null != this.SelectedUser && UserComboBoxType.Credentials == this.SelectedUser.UserComboBoxType) ? this.SelectedUser.Credentials.Id : Guid.Empty;
+            this.SaveUserSelection();
             NavigationService.PushAccessoryView("AddOrEditGatewayView", args, addGatewayCompleted);
         }
 
@@ -317,7 +320,7 @@
             EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway);
             ModalPresentationCompletion editGatewayCompleted = new ModalPresentationCompletion(EditGatewayPromptResultHandler);
             // save user selection
-            _selectedUserId = (null != this.SelectedUser && UserComboBoxType.Credentials == this.SelectedUser.UserComboBoxType) ? this.SelectedUser.Credentials.Id : Guid.Empty;
+            this.SaveUserSelection();
             this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, editGatewayCompleted);
         }
 
@@ -330,6 +333,7 @@
         {
             AddOrEditUserViewArgs args = AddOrEditUserViewArgs.AddUser();
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
+            this.SaveUserSelection();
             NavigationService.PushAccessoryView("AddOrEditUserView", args, addUserCompleted);
         }
 
@@ -379,6 +383,10 @@
             {
                 this.SelectUserId(result.Credentials.Id);
             }
+            else
+            {
+                this.RestoreUserSelection();
+            }
 
         }        
 
@@ -389,10 +397,13 @@
             {
                 this.SelectGatewayId(result.GatewayId);
             }
+            else
+            {
+                this.RestoreGatewaySelection();
+            }
 
             // restore user selection in case user collection has been changed
-            this.SelectedUser = null;
-            this.SelectUserId(_selectedUserId);
+            this.RestoreUserSelection();
         }
         private void EditGatewayPromptResultHandler(object sender, PresentationCompletionEventArgs args)
         {
@@ -405,9 +416,37 @@
             }
 
             // restore user selection in case user collection has been changed
-            this.SelectedUser = null;
-            this.SelectUserId(_selectedUserId);
+            this.RestoreUserSelection();
         }
 
+        /// <summary>
+        /// backups the user selection
+        /// required for Bug:3238284 - the observable collection does not work well with the ComboBox selection changed event
+        /// </summary>
+        private void SaveUserSelection()
+        {
+            _savedSelectedUser = _selectedUser;
+            this.SelectedUser = null;
+        }
+
+        private void RestoreUserSelection()
+        {
+            this.SelectedUser = _savedSelectedUser;
+        }
+
+        /// <summary>
+        /// backups the gateway selection
+        /// required for Bug:3238284 - the observable collection does not work well with the ComboBox selection changed event
+        /// </summary>
+        private void SaveGatewaySelection()
+        {
+            _savedSelectedGateway = _selectedGateway;
+            this.SelectedGateway = null;
+        }
+
+        private void RestoreGatewaySelection()
+        {
+            this.SelectedGateway = _savedSelectedGateway;
+        }
     }
 }
