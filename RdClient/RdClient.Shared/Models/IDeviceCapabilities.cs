@@ -26,6 +26,6 @@
         /// Human-readable name of the current user interaction mode (may be "Mouse" or "Touch",
         /// more values may be available later as the platform evolves).
         /// </summary>
-        string UserInteractionMode { get; }
+        string UserInteractionModeLabel { get; }
     }
 }

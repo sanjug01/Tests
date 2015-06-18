@@ -32,7 +32,7 @@
                 ITelemetryEvent sessionDuration)
                 : base(SessionState.Idle, monitor, deviceCapabilities, telemetryClient, sessionTelemetry, sessionDuration)
             {
-                this.SessionTelemetry.AddTag("userInteractionMode", this.DeviceCapabilities.UserInteractionMode);
+                this.SessionTelemetry.AddTag("userInteractionMode", this.DeviceCapabilities.UserInteractionModeLabel);
             }
 
             public InactiveSession(InternalState otherState) : base(SessionState.Idle, otherState)

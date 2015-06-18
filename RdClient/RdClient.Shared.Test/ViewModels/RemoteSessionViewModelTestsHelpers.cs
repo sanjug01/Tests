@@ -575,7 +575,7 @@
 
             uint IDeviceCapabilities.TouchPoints { get { return _touchPoints; } }
             bool IDeviceCapabilities.TouchPresent { get { return _touchPresent; } }
-            string IDeviceCapabilities.UserInteractionMode { get { return "Mouse"; } }
+            string IDeviceCapabilities.UserInteractionModeLabel { get { return "Mouse"; } }
             bool IDeviceCapabilities.CanShowInputPanel { get { return _canShowInputPanel; } }
             event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged { add { } remove { } }
         }

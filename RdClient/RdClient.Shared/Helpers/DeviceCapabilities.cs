@@ -49,7 +49,7 @@
         {
             get { return _canShowInputPanel; }
         }
-        string IDeviceCapabilities.UserInteractionMode
+        string IDeviceCapabilities.UserInteractionModeLabel
         {
             get { return _userInteractionMode.ToString(); }
         }
