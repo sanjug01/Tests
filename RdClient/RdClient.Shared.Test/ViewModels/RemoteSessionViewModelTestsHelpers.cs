@@ -18,6 +18,7 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Windows.Input;
     using Windows.Foundation;
     using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
@@ -97,6 +98,8 @@
         {
             private EventHandler _fullScreenChange;
             private EventHandler _userInteractionModeChange;
+            private EventHandler _enteringFullScreen;
+            private EventHandler _exitingFullScreen;
 
             public TestFullScreenModel()
             {
@@ -104,11 +107,23 @@
                 ExitFullScreenCommand = new RelayCommand(o => { });
             }
 
-            public RelayCommand EnterFullScreenCommand { get; private set; }
-            public RelayCommand ExitFullScreenCommand { get; private set; }
+            public ICommand EnterFullScreenCommand { get; private set; }
+            public ICommand ExitFullScreenCommand { get; private set; }
             public bool IsFullScreenMode { get; private set; }
 
             public UserInteractionMode UserInteractionMode { get; private set; }
+
+            event EventHandler IFullScreenModel.EnteringFullScreen
+            {
+                add { _enteringFullScreen += value; }
+                remove { _enteringFullScreen -= value; }
+            }
+
+            event EventHandler IFullScreenModel.ExitingFullScreen
+            {
+                add { _exitingFullScreen += value; }
+                remove { _exitingFullScreen -= value; }
+            }
 
             public event EventHandler FullScreenChange
             {

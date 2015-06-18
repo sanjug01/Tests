@@ -1,6 +1,7 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.ViewModels;
 using System;
+using System.Windows.Input;
 using Windows.UI.ViewManagement;
 
 
@@ -8,7 +9,23 @@ namespace RdClient.Shared.Models
 {
     public class FullScreenModel : IFullScreenModel
     {
+        private RelayCommand _enterFullScreenCommand;
+        private RelayCommand _exitFullScreenCommand;
         private IFullScreen _fullScreen;
+        private EventHandler _enteringFullScreen, _exitingFullScreen;
+
+        event EventHandler IFullScreenModel.EnteringFullScreen
+        {
+            add { _enteringFullScreen += value; }
+            remove { _enteringFullScreen -= value; }
+        }
+
+        event EventHandler IFullScreenModel.ExitingFullScreen
+        {
+            add { _exitingFullScreen += value; }
+            remove { _exitingFullScreen -= value; }
+        }
+
         public IFullScreen FullScreen
         {
             set
@@ -20,6 +37,8 @@ namespace RdClient.Shared.Models
                 _enterFullScreenCommand = new RelayCommand(
                     o =>
                     {
+                        if (null != _enteringFullScreen)
+                            _enteringFullScreen(this, EventArgs.Empty);
                         _fullScreen.EnterFullScreen();
                     },
                     o =>
@@ -28,7 +47,12 @@ namespace RdClient.Shared.Models
                     });
 
                 _exitFullScreenCommand = new RelayCommand(
-                    o => _fullScreen.ExitFullScreen(),
+                    o =>
+                    {
+                        if (null != _exitingFullScreen)
+                            _exitingFullScreen(this, EventArgs.Empty);
+                        _fullScreen.ExitFullScreen();
+                    },
                     o =>
                     {
                         return _fullScreen.IsFullScreenMode == true;
@@ -55,8 +79,7 @@ namespace RdClient.Shared.Models
         }
 
 
-        private RelayCommand _enterFullScreenCommand;
-        public RelayCommand EnterFullScreenCommand
+        public ICommand EnterFullScreenCommand
         {
             get
             {
@@ -64,8 +87,7 @@ namespace RdClient.Shared.Models
             }
         }
 
-        public RelayCommand _exitFullScreenCommand;
-        public RelayCommand ExitFullScreenCommand
+        public ICommand ExitFullScreenCommand
         {
             get
             {
