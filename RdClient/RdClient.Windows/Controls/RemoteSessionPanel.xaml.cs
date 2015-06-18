@@ -56,7 +56,7 @@
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
             EmitPropertyChanged("Width");
-            EmitPropertyChanged("Height");
+            EmitPropertyChanged("Height");           
         }
 
         public object RemoteSessionViewSite
@@ -233,6 +233,7 @@
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarting, PointerEventType.ManipulationStartingRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
             this.EmitPointerEvent(w);
+            e.Handled = true;
         }
 
         protected override void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
@@ -240,6 +241,7 @@
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarted, PointerEventType.ManipulationStartedRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
             this.EmitPointerEvent(w);
+            e.Handled = true;
         }
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
@@ -249,6 +251,7 @@
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationInertiaStarting, PointerEventType.ManipulationInertiaStartingRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
             this.EmitPointerEvent(w);
+            e.Handled = true;
         }
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
@@ -256,6 +259,7 @@
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationDelta, PointerEventType.ManipulationDeltaRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
             this.EmitPointerEvent(w);
+            e.Handled = true;
         }
 
         protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs e)
@@ -263,6 +267,7 @@
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationCompleted, PointerEventType.ManipulationCompletedRoutedEventArgs, e, this));
             _zoomScrollRecognizer.Consume(w);
             this.EmitPointerEvent(w);
+            e.Handled = true;
         }
 
         protected override void OnPointerCanceled(PointerRoutedEventArgs e)

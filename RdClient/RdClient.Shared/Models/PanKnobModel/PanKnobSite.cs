@@ -91,6 +91,7 @@ namespace RdClient.Shared.Models.PanKnobModel
                 }
             }
         }
+
         void IPanKnobSite.OnViewportChanged(object sender, EventArgs e)
         {
             if(this.Viewport.ZoomFactor > 1.0 && (_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch))
@@ -106,6 +107,21 @@ namespace RdClient.Shared.Models.PanKnobModel
                 {
                     _panKnob.IsVisible = false;
                 }
+            }
+
+            // make sure the PanKnob doesn't fall outside the viewport when displaying the on screen keyboard
+            Point current = _panKnob.Position;
+            if(_panKnob.IsVisible)
+            {
+                if (current.Y < -(_viewport.Size.Height / 2) + (_panKnob.Size.Height / 2))
+                {
+                    current.Y = -(_viewport.Size.Height / 2) + (_panKnob.Size.Height / 2);
+                }
+                else if (current.Y + _panKnob.Size.Height / 2 > _viewport.Size.Height / 2)
+                {
+                    current.Y = _viewport.Size.Height / 2 - (_panKnob.Size.Height / 2);
+                }
+                _panKnob.Position = current;
             }
         }
     }
