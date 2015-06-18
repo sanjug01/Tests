@@ -575,9 +575,25 @@
             Contract.Assert(null != _inputPanel);
 
             if (_inputPanel.IsVisible)
+            {
+                if(null != _telemetryClient)
+                {
+                    ITelemetryEvent te = _telemetryClient.MakeEvent("ShowTouchKeyboard");
+                    te.AddMetric("duration", _presentationStopwatch.Elapsed.TotalSeconds);
+                    te.Report();
+                }
                 _inputPanel.Hide();
+            }
             else
+            {
+                if (null != _telemetryClient)
+                {
+                    ITelemetryEvent te = _telemetryClient.MakeEvent("HideTouchKeyboard");
+                    te.AddMetric("duration", _presentationStopwatch.Elapsed.TotalSeconds);
+                    te.Report();
+                }
                 _inputPanel.Show();
+            }
         }
 
         private bool InternalCanInvokeKeyboard(object parameter)
