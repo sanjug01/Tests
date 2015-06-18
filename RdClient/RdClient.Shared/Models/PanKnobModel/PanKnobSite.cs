@@ -75,8 +75,9 @@ namespace RdClient.Shared.Models.PanKnobModel
         {
             _stateMachine.SetStart(PanKnobState.Idle);
 
-            Point center = new Point(0, 0);
-            this.SetPanKnobPosition(center);
+            Point center = new Point(0, 0);           
+
+            ((IPanKnobSite)this).PanKnob.Position = center;
         }
 
         void IPanKnobSite.OnConsumptionModeChanged(object sender, ConsumptionModeType consumptionMode)
@@ -84,7 +85,10 @@ namespace RdClient.Shared.Models.PanKnobModel
             _consumptionMode = consumptionMode;
             if (false == (_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch))
             {
-                this.ShowPanKnob(false);
+                if (null != _panKnob)
+                {
+                    _panKnob.IsVisible = false;
+                }
             }
         }
 
@@ -92,27 +96,17 @@ namespace RdClient.Shared.Models.PanKnobModel
         {
             if(this.Viewport.ZoomFactor > 1.0 && (_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch))
             {
-                this.ShowPanKnob(true);
+                if (null != _panKnob)
+                {
+                    _panKnob.IsVisible = true;
+                }
             }
             else
             {
-                this.ShowPanKnob(false);
-            }
-        }
-
-        private void SetPanKnobPosition(Point position)
-        {
-            if (null != _panKnob)
-            {
-                ((IPanKnobSite)this).PanKnob.Position = position;
-            }
-        }
-
-        private void ShowPanKnob(bool show)
-        {
-            if (null != _panKnob)
-            {
-                _panKnob.IsVisible = show;
+                if (null != _panKnob)
+                {
+                    _panKnob.IsVisible = false;
+                }
             }
 
             // make sure the PanKnob doesn't fall outside the viewport when displaying the on screen keyboard
