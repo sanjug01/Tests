@@ -80,6 +80,7 @@
         private GatewayModel _gateway;
         private ReadOnlyObservableCollection<UserComboBoxElement> _users;
         private UserComboBoxElement _selectedUser;
+        private UserComboBoxElement _savedSelectedUser;
 
         public AddOrEditGatewayViewModel()
         {
@@ -262,6 +263,7 @@
         {
             AddOrEditUserViewArgs args = AddOrEditUserViewArgs.AddUser();
             ModalPresentationCompletion addUserCompleted = new ModalPresentationCompletion(CredentialPromptResultHandler);
+            this.SaveUserSelection();
             NavigationService.PushAccessoryView("AddOrEditUserView", args, addUserCompleted);
         }
 
@@ -272,6 +274,25 @@
             {
                 this.SelectUserId(result.Credentials.Id);
             }
+            else
+            {
+                this.RestoreUserSelection();
+            }
+        }
+
+        /// <summary>
+        /// backups the user selection
+        /// required for Bug:3238284 - the observable collection does not work well with the ComboBox selection changed event
+        /// </summary>
+        private void SaveUserSelection()
+        {
+            _savedSelectedUser = _selectedUser;
+            this.SelectedUser = null;
+        }
+
+        private void RestoreUserSelection()
+        {
+            this.SelectedUser = _savedSelectedUser;
         }
 
     }
