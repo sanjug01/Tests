@@ -2,8 +2,6 @@
 {
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
-    using RdClient.Shared.Data;
-    using System;
     using System.Diagnostics.Contracts;
 
     partial class RemoteSession
@@ -21,39 +19,28 @@
             //
             private readonly IRenderingPanel _renderingPanel;
 
-            private RemoteSession _session;
             private bool _userRejected;
 
-            public override void Activate(RemoteSession session)
+            protected override void Activated()
             {
-                Contract.Assert(null == _session);
-                Contract.Ensures(null != _session);
-
-                _session = session;
-
                 using(LockWrite())
                 {
-                    _session._syncEvents.ClientConnected += this.OnClientConnected;
-                    _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
-                    _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+                    this.Session._syncEvents.ClientConnected += this.OnClientConnected;
+                    this.Session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                    this.Session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
                 }
 
-                _session.EmitBadCertificate(new BadCertificateEventArgs(_reason, _hostName, this));
+                this.Session.EmitBadCertificate(new BadCertificateEventArgs(_reason, _hostName, this));
             }
 
-            public override void Complete(RemoteSession session)
+            protected override void Completed()
             {
-                Contract.Assert(object.ReferenceEquals(_session, session));
-                Contract.Ensures(null == _session);
-
                 using (LockWrite())
                 {
-                    _session._syncEvents.ClientConnected -= this.OnClientConnected;
-                    _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
-                    _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
+                    this.Session._syncEvents.ClientConnected -= this.OnClientConnected;
+                    this.Session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
+                    this.Session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
                 }
-
-                _session = null;
             }
 
             public ValidateCertificate(IRenderingPanel renderingPanel, IRdpConnection connection, RdpDisconnectReason reason, string hostName, InternalState otherState)
@@ -93,7 +80,7 @@
                     // Switch back to the Connecting state and give it back the rendering panel
                     // and connection.
                     //
-                    _session.InternalSetState(new ConnectingSession(_renderingPanel, _connection, this));
+                    ChangeState(new ConnectingSession(_renderingPanel, _connection, this));
                 }
             }
 
@@ -108,7 +95,7 @@
 
             private void OnClientConnected(object sender, ClientConnectedArgs e)
             {
-                _session.InternalSetState(new ConnectedSession(_connection, this));
+                ChangeState(new ConnectedSession(_connection, this));
             }
 
             private void OnClientAsyncDisconnect(object sender, ClientAsyncDisconnectArgs e)
@@ -119,12 +106,10 @@
 
             private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
             {
-                Contract.Assert(null != _session);
-
                 if(_userRejected)
-                    _session.InternalSetState(new ClosedSession(_connection, this));
+                    ChangeState(new ClosedSession(_connection, this));
                 else
-                    _session.InternalSetState(new FailedSession(_connection, e.DisconnectReason, this));
+                    ChangeState(new FailedSession(_connection, e.DisconnectReason, this));
             }
         }
     }

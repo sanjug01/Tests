@@ -3,8 +3,6 @@
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
     using RdClient.Shared.Telemetry;
-    using System;
-    using System.Diagnostics;
     using System.Diagnostics.Contracts;
 
     partial class RemoteSession
@@ -17,83 +15,49 @@
             private readonly IThumbnailEncoder _thumbnailEncoder;
             private ITelemetryStopwatch _totalTime;
             private Snapshotter _snapshotter;
-            private RemoteSession _session;
 
-            public override void Activate(RemoteSession session)
+            protected override void Activated()
             {
-                Contract.Assert(null == _session);
+                _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailUpdated;
 
-                using (LockWrite())
+                this.Session._state.SetReconnectAttempt(0);
+                this.Session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
+                this.Session._syncEvents.ConnectionHealthStateChanged += this.OnConnectionHealthStateChanged;
+                this.Session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
+                this.Session._syncEvents.MouseCursorShapeChanged += this.OnMouseCursorShapeChanged;
+                this.Session._syncEvents.MultiTouchEnabledChanged += this.OnMultiTouchEnabledChanged;
+                this.Session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
+
+                _snapshotter = new Snapshotter(_connection,
+                    this.Session._syncEvents,
+                    _thumbnailEncoder,
+                    this.Session._timerFactory,
+                    this.Session._sessionSetup.DataModel.Settings);
+                _snapshotter.Activate();
+
+                Contract.Assert(null == _totalTime);
+                _totalTime = this.TelemetryClient.StartStopwatch();
+
+                if(!this.Session._hasConnected)
                 {
-                    _thumbnailEncoder.ThumbnailUpdated += this.OnThumbnailUpdated;
-                    _session = session;
-                    _session._state.SetReconnectAttempt(0);
-                    _session._syncEvents.ClientAsyncDisconnect += this.OnClientAsyncDisconnect;
-                    _session._syncEvents.ConnectionHealthStateChanged += this.OnConnectionHealthStateChanged;
-                    _session._syncEvents.ClientAutoReconnecting += this.OnClientAutoReconnecting;
-                    _session._syncEvents.MouseCursorShapeChanged += this.OnMouseCursorShapeChanged;
-                    _session._syncEvents.MultiTouchEnabledChanged += this.OnMultiTouchEnabledChanged;
-                    _session._syncEvents.ClientDisconnected += this.OnClientDisconnected;
-
-                    _snapshotter = new Snapshotter(_connection,
-                        _session._syncEvents,
-                        _thumbnailEncoder,
-                        _session._timerFactory,
-                        _session._sessionSetup.DataModel.Settings);
-                    _snapshotter.Activate();
-
-                    Contract.Assert(null == _totalTime);
-                    _totalTime = this.TelemetryClient.StartStopwatch();
+                    this.SessionDuration.StartStopwatch(SessionDurationStopwatchName);
+                    this.Session._hasConnected = true;
                 }
             }
 
             private void OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs e)
             {
-                _session.DeferEmitMultiTouchEnabledChanged(e);
+                this.Session.DeferEmitMultiTouchEnabledChanged(e);
             }
 
             private void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs e)
             {
-                _session.DeferEmitMouseCursorShapeChanged(e);
+                this.Session.DeferEmitMouseCursorShapeChanged(e);
             }
 
-            public override void Deactivate(RemoteSession session)
+            protected override void Completed()
             {
-            }
-
-            public override void Complete(RemoteSession session)
-            {
-                Contract.Assert(object.ReferenceEquals(_session, session));
-
-                using (LockWrite())
-                {
-                    Contract.Assert(null == _totalTime);
-
-                    if (null != _snapshotter)
-                    {
-                        _thumbnailEncoder.ThumbnailUpdated -= this.OnThumbnailUpdated;
-                        //
-                        // Deactivate the snapshotter so it unsubscribes from all connection events.
-                        //
-                        _snapshotter.Deactivate();
-                        _snapshotter = null;
-                    }
-                    //
-                    // Stop tracking the session events;
-                    //
-                    _session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
-                    _session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
-                    _session._syncEvents.ConnectionHealthStateChanged -= this.OnConnectionHealthStateChanged;
-                    _session._syncEvents.MouseCursorShapeChanged -= this.OnMouseCursorShapeChanged;
-                    _session._syncEvents.MultiTouchEnabledChanged -= this.OnMultiTouchEnabledChanged;
-                    _session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
-                    _session = null;
-                }
-            }
-
-            public override void Terminate(RemoteSession session)
-            {
-                using (LockWrite())
+                if (null != _snapshotter)
                 {
                     _thumbnailEncoder.ThumbnailUpdated -= this.OnThumbnailUpdated;
                     //
@@ -102,6 +66,25 @@
                     _snapshotter.Deactivate();
                     _snapshotter = null;
                 }
+                //
+                // Stop tracking the session events;
+                //
+                this.Session._syncEvents.ClientDisconnected -= this.OnClientDisconnected;
+                this.Session._syncEvents.ClientAutoReconnecting -= this.OnClientAutoReconnecting;
+                this.Session._syncEvents.ConnectionHealthStateChanged -= this.OnConnectionHealthStateChanged;
+                this.Session._syncEvents.MouseCursorShapeChanged -= this.OnMouseCursorShapeChanged;
+                this.Session._syncEvents.MultiTouchEnabledChanged -= this.OnMultiTouchEnabledChanged;
+                this.Session._syncEvents.ClientAsyncDisconnect -= this.OnClientAsyncDisconnect;
+            }
+
+            protected override void Terminate()
+            {
+                _thumbnailEncoder.ThumbnailUpdated -= this.OnThumbnailUpdated;
+                //
+                // Deactivate the snapshotter so it unsubscribes from all connection events.
+                //
+                _snapshotter.Deactivate();
+                _snapshotter = null;
 
                 _connection.Disconnect();
             }
@@ -124,7 +107,7 @@
                         //
                         // similar to Autoreconnecting event
                         //
-                        _session.InternalSetState(new ReconnectingSession(_connection, this));
+                        this.Session.InternalSetState(new ReconnectingSession(_connection, this));
                     }
                 }
             }
@@ -150,9 +133,9 @@
 
                     default:
                         //
-                        // Try to reconnect, go through the reconnect UI.
+                        // Let the connection handle the reconnect; auto reconnect events may be emitted separately
                         //
-                        _connection.HandleAsyncDisconnectResult(e.DisconnectReason, true);
+                        _connection.HandleAsyncDisconnectResult(e.DisconnectReason, false);
                         break;
                 }
             }
@@ -161,7 +144,7 @@
             {
                 this.TelemetryClient.Event("Connected:Reconnecting");
                 e.ContinueDelegate(true);
-                _session.InternalSetState(new ReconnectingSession(_connection, this));
+                ChangeState(new ReconnectingSession(_connection, this));
             }
 
             private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
@@ -183,12 +166,12 @@
 
                 _totalTime.Stop("SessionDuration");
                 _totalTime = null;
-                _session.InternalSetState(newState);
+                ChangeState(newState);
             }
 
             private void OnThumbnailUpdated(object sender, ThumbnailUpdatedEventArgs e)
             {
-                _session.InternalDeferUpdateSnapshot(e.EncodedImageBytes);
+                this.Session.InternalDeferUpdateSnapshot(e.EncodedImageBytes);
             }
         }
     }

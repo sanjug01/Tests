@@ -1,40 +1,23 @@
 ﻿namespace RdClient.Shared.Models
 {
-    using RdClient.Shared.Telemetry;
     using System.Diagnostics.Contracts;
-    using System.Threading;
 
     partial class RemoteSession
     {
         private sealed class NewSession : InternalState
         {
             private readonly RemoteSessionSetup _sessionSetup;
-            private RemoteSession _session;
 
-            public NewSession(RemoteSessionSetup sessionSetup, ReaderWriterLockSlim _monitor, ITelemetryClient telemetryClient)
-                : base(SessionState.Idle, _monitor, telemetryClient)
+            public NewSession(RemoteSessionSetup sessionSetup, InternalState otherState)
+                : base(SessionState.Idle, otherState)
             {
                 _sessionSetup = sessionSetup;
             }
 
-            public override void Activate(RemoteSession session)
+            protected override void Activated()
             {
-                Contract.Assert(null == _session);
                 Contract.Assert(null != _sessionSetup.SessionCredentials);
-
-                _session = session;
-                _session.InternalStartSession(_sessionSetup);
-            }
-
-            public override void Deactivate(RemoteSession session)
-            {
-                Contract.Assert(null == _session);
-            }
-
-            public override void Complete(RemoteSession session)
-            {
-                Contract.Assert(object.ReferenceEquals(_session, session));
-                _session = null;
+                this.Session.InternalStartSession(_sessionSetup);
             }
         }
     }

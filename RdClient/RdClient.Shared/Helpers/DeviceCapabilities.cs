@@ -1,6 +1,5 @@
-﻿namespace RdClient.Navigation.Extensions
+﻿namespace RdClient.Shared.Helpers
 {
-    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using Windows.Devices.Input;
     using Windows.UI.Core;
@@ -11,7 +10,7 @@
     /// <summary>
     /// IDeviceCapabilities based on WinRT device capabilities classes.
     /// </summary>
-    sealed class DeviceCapabilities : MutableObject, IDeviceCapabilities
+    public sealed class DeviceCapabilities : MutableObject, IDeviceCapabilities
     {
         private readonly CoreWindow _window;
         private readonly TouchCapabilities _touchCapabilities;
@@ -40,12 +39,19 @@
 
         bool IDeviceCapabilities.TouchPresent
         {
-            get { return _touchCapabilities.TouchPresent > 0; }
+            get
+            {
+                return _touchCapabilities.TouchPresent > 0;
+            }
         }
 
         bool IDeviceCapabilities.CanShowInputPanel
         {
             get { return _canShowInputPanel; }
+        }
+        string IDeviceCapabilities.UserInteractionModeLabel
+        {
+            get { return _userInteractionMode.ToString(); }
         }
 
         private bool CanShowInputPanel
@@ -61,6 +67,7 @@
             {
                 _userInteractionMode = mode;
                 this.CanShowInputPanel = CheckIfCanShowInputPanel();
+                EmitPropertyChanged("UserInteractionMode");
             }
         }
 
@@ -70,7 +77,7 @@
             // TODO:    after getting all information from OSG, use the current state to figure out
             //          if the input panel may be shown now.
             //
-            return false;
+            return UserInteractionMode.Touch == _userInteractionMode && _touchCapabilities.TouchPresent > 0;
         }
     }
 }

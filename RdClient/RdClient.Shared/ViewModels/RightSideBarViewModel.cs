@@ -2,11 +2,8 @@
 using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
 namespace RdClient.Shared.ViewModels
@@ -18,9 +15,63 @@ namespace RdClient.Shared.ViewModels
             private get; set;
         }
 
+        private IFullScreenModel _fullScreenModel;
         public IFullScreenModel FullScreenModel
         {
-            get; set;
+            get
+            {
+                return _fullScreenModel;
+            }
+            set
+            {
+                _fullScreenModel = value;
+
+                if(_fullScreenModel != null)
+                {
+                    _fullScreenModel.UserInteractionModeChange += OnUserInteractionModeChange;
+                    OnUserInteractionModeChange(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        private void OnUserInteractionModeChange(object sender, EventArgs e)
+        {
+            if(this.FullScreenModel.UserInteractionMode == UserInteractionMode.Mouse)
+            {
+                this.FullScreenButtonVisibility = Visibility.Visible;
+                this.MouseModeButtonVisibility = Visibility.Collapsed;
+            }
+            else
+            {
+                this.FullScreenButtonVisibility = Visibility.Collapsed;
+                this.MouseModeButtonVisibility = Visibility.Visible;
+            }
+        }
+
+        private Visibility _fullScreenButtonVisibility;
+        public Visibility FullScreenButtonVisibility
+        {
+            get
+            {
+                return _fullScreenButtonVisibility;
+            }
+            set
+            {
+                SetProperty(ref _fullScreenButtonVisibility, value);
+            }
+        }
+
+        private Visibility _mouseModeButtonVisibility;
+        public Visibility MouseModeButtonVisibility
+        {
+            get
+            {
+                return _mouseModeButtonVisibility;
+            }
+            set
+            {
+                SetProperty(ref _mouseModeButtonVisibility, value);
+            }
         }
 
         public IPointerCapture PointerCapture
@@ -123,11 +174,7 @@ namespace RdClient.Shared.ViewModels
         private void InternalFullScreen(object parameter)
         {
             this.Visibility = Visibility.Collapsed;
-
-            if (this.FullScreenModel != null)
-            {
-                this.FullScreenModel.ToggleFullScreen();
-            }
+            this.FullScreenModel.ToggleFullScreen();
         }
 
         private void InternalToggleVisibility(object parameter)

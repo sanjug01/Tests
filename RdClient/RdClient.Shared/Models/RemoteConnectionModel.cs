@@ -2,8 +2,8 @@
 {
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
-    using System.ComponentModel;
-    using System.Diagnostics.Contracts;
+    using RdClient.Shared.Telemetry;
+    using System;
     using System.Runtime.Serialization;
 
     [DataContract(IsReference=true)]
@@ -26,6 +26,11 @@
             set { this.SetProperty(ref _encodedThumbnail, value); }
         }
 
+        public string TelemetrySourceType
+        {
+            get { return this.GetTelemetrySourceType(); }
+        }
+
         /// <summary>
         /// Create an RDP connection object specific to the connection model.
         /// </summary>
@@ -33,5 +38,44 @@
         /// to properly create and initialize a new RDP connection.</param>
         /// <returns>An RDP connection attached to the rendering panel.</returns>
         public abstract IRdpConnection CreateConnection(IRdpConnectionFactory connectionFactory, IRenderingPanel renderingPanel);
+
+        /// <summary>
+        /// Populate a telemetry event with initial session information.
+        /// </summary>
+        /// <param name="dataModel">Application data model object.</param>
+        /// <param name="telemetryEvent">Telemetry event to be populated with metrics and tags.</param>
+        public abstract void InitializeSessionTelemetry(ApplicationDataModel dataModel, ITelemetryEvent telemetryEvent);
+
+        protected abstract string GetTelemetrySourceType();
+
+        protected static string GetHostAddressTypeTag(string hostString)
+        {
+            string tag = "unknown";
+
+            switch(Uri.CheckHostName(hostString))
+            {
+                case UriHostNameType.IPv4:
+                    tag = "ipv4";
+                    break;
+
+                case UriHostNameType.IPv6:
+                    tag = "ipv6";
+                    break;
+
+                case UriHostNameType.Dns:
+                    tag = GetDomainNameTypeTag(hostString.Trim());
+                    break;
+            }
+
+            return tag;
+        }
+
+        private static string GetDomainNameTypeTag(string domainName)
+        {
+            //
+            // Just looking for a dot is probably too primitive but it should cover most of the cases.
+            //
+            return domainName.IndexOf('.') >= 0 ? "fqdn" : "shortname";
+        }
     }
 }

@@ -27,10 +27,10 @@
 
 	<StackPanel Background="{ThemeResource ConnectionCenterBarBackgroundBrush}">
 		<ComboBox
-			Margin="{StaticResource DialogItemVerticalSpacing}"
-			HorizontalAlignment="Stretch" 
             x:Uid="Settings_Gateways_Combobox" 
             Header="Gateways(d)" 
+            Style="{StaticResource DialogComboBoxStyle}"            
+            Margin="{StaticResource DialogItemVerticalSpacing}"
             PlaceholderText="Select gateway server(d)"
             ItemsSource="{Binding Gateways}" 
 			SelectedItem="{Binding SelectedGateway, Mode=TwoWay}"

@@ -30,6 +30,7 @@ namespace RdClient.Shared.Models
         public RelayCommand ZoomOutCommand { get { return _zoomOutCommand; } }
 
         private bool _isZoomedIn = false;
+        public bool IsZoomedIn { get { return _isZoomedIn; } }
 
 
         private ConsumptionModeType _consumptionMode;
@@ -90,9 +91,22 @@ namespace RdClient.Shared.Models
         public void Reset(IViewport viewport)
         {
             _viewport = viewport;
-            _isZoomedIn = false;
+            _viewport.Changed += OnViewportChanged;
             _zoomInCommand.EmitCanExecuteChanged();
             _zoomOutCommand.EmitCanExecuteChanged();
+        }
+
+        private void OnViewportChanged(object sender, EventArgs e)
+        {
+            if (_viewport.ZoomFactor > 1.0)
+            {
+                _isZoomedIn = true;
+            }
+            else
+            {
+                _isZoomedIn = false;
+
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.Models;
+using Windows.Foundation;
 
 namespace RdClient.Shared.CxWrappers.Utils
 {
@@ -13,11 +14,11 @@ namespace RdClient.Shared.CxWrappers.Utils
             properties.SetIntProperty("AudioMode", (int) desktop.AudioMode);            
         }
 
-        public static void ApplyScreenSize(IRdpProperties properties, IPhysicalScreenSize screenSize)
+        public static void ApplyScreenSize(IRdpProperties properties, IWindowSize windowSize)
         {
-            ScreenSize size = screenSize.GetScreenSize();
-            properties.SetIntProperty("PhysicalDesktopWidth", size.Width);
-            properties.SetIntProperty("PhysicalDesktopHeight", size.Height);
+            Size size = windowSize.Size;
+            properties.SetIntProperty("PhysicalDesktopWidth", (int) size.Width);
+            properties.SetIntProperty("PhysicalDesktopHeight", (int) size.Height);
         }
     }
 }

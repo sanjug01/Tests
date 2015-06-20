@@ -1,6 +1,7 @@
 ﻿namespace RdClient
 {
     using RdClient.Factories;
+    using RdClient.Shared.Input.Keyboard;
     using System.Diagnostics.Contracts;
     using Windows.Foundation;
     using Windows.UI.Core;
@@ -8,7 +9,7 @@
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Navigation;
 
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : Page, IInputPanelFactory
     {
         private enum SharedVisualState
         {
@@ -26,6 +27,7 @@
             Contract.Assert(null != initializer);
 
             initializer.ViewPresenter = this.ViewPresenter;
+            initializer.InputPanelFactory = this;
             initializer.Initialize();
         }
 
@@ -45,7 +47,7 @@
         {
             SharedVisualState state = SharedVisualState.DefaultLayout;
 
-            if (size.Width <= 640.0)
+            if (size.Width <= 416.0)
                 state = SharedVisualState.NarrowLayout;
 
             return state;
@@ -54,6 +56,11 @@
         private void OnSharedVisualStateChanging(object sender, VisualStateChangedEventArgs e)
         {
             VisualStateManager.GoToState(this.ViewPresenter, e.NewState.Name, true);
+        }
+
+        IInputPanel IInputPanelFactory.GetInputPanel()
+        {
+            return this.TouchKeyboardActivator;
         }
     }
 }

@@ -1,8 +1,7 @@
 ﻿namespace RdClient.Telemetry
 {
     using Microsoft.ApplicationInsights;
-    using System.Collections;
-    using System.Collections.Generic;
+    using Microsoft.ApplicationInsights.DataContracts;
     using System.Diagnostics.Contracts;
 
     /// <summary>
@@ -39,25 +38,37 @@
         public void Event(string eventName)
         {
             if (null != _client)
+            {
                 _client.TrackEvent(eventName);
+                _client.Flush();
+            }
+        }
+
+        public void Event(EventTelemetry eventTelemetry)
+        {
+            if(null != _client)
+            {
+                _client.TrackEvent(eventTelemetry);
+                _client.Flush();
+            }
         }
 
         public void Metric(string metricName, double metricValue)
         {
             if (null != _client)
+            {
                 _client.TrackMetric(metricName, metricValue);
-        }
-
-        public void Metric(string metricName, IDictionary<string, string> properties)
-        {
-            if (null != _client)
-                _client.TrackEvent(metricName, properties);
+                _client.Flush();
+            }
         }
 
         public void Duration(string eventName, long milliseconds)
         {
             if (null != _client)
+            {
                 _client.TrackMetric(eventName, milliseconds / 60000);
+                _client.Flush();
+            }
         }
     }
 }

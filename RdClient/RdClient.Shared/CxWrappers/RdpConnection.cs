@@ -277,8 +277,9 @@ namespace RdClient.Shared.CxWrappers
 
             int width, height;
             byte[] bytes;
-            int xRes = _rdpConnectionCx.GetSnapshot(out width, out height, out bytes);            
-            if (xRes == 0)
+            int xRes = _rdpConnectionCx.GetSnapshot(out width, out height, out bytes);
+
+            if (xRes == 0 && null != bytes)
             {                
                 return new RdpScreenSnapshot(width, height, bytes);                
             }

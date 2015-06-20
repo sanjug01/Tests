@@ -164,6 +164,7 @@
     <Compile Include="Helpers\StateMachineTests.cs" />
     <Compile Include="Helpers\TestData.cs" />
     <Compile Include="Helpers\TestListTrace.cs" />
+    <Compile Include="Helpers\ViewItemsSourceTests.cs" />
     <Compile Include="Helpers\WinrtThreadPoolTimerTests.cs" />
     <Compile Include="Input\Keyboard\CharacterKeyTests.cs" />
     <Compile Include="Input\Keyboard\ExtendedKeyTests.cs" />
@@ -175,17 +176,20 @@
     <Compile Include="Input\Keyboard\TestSink.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyBaseTests.cs" />
     <Compile Include="Input\Keyboard\VirtualKeyFactoryTests.cs" />
+    <Compile Include="Input\Pointer\PointerVisibilityConsumerTests.cs" />
     <Compile Include="Input\Recognizers\TapRecognizerTests.cs" />
     <Compile Include="Mock\DummyDataScrambler.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\PointerEvent.cs" />
     <Compile Include="Mock\PointerPosition.cs" />
+    <Compile Include="Mock\PointerRoutedEventArgsWrapper.cs" />
     <Compile Include="Mock\PresentableStackedView.cs" />
     <Compile Include="Mock\PresentableViewWithStackedPresenter.cs" />
     <Compile Include="Mock\RadcClient.cs" />
     <Compile Include="Mock\RadcClientEvents.cs" />
     <Compile Include="Mock\RdpScreenSnapshot.cs" />
+    <Compile Include="Mock\RemoteSessionControl.cs" />
     <Compile Include="Mock\RenderingPanel.cs" />
     <Compile Include="Mock\RightSideBarViewModel.cs" />
     <Compile Include="Mock\TelemetryClient.cs" />
@@ -193,7 +197,7 @@
     <Compile Include="Mock\Thumbnail.cs" />
     <Compile Include="Mock\LocalizedString.cs" />
     <Compile Include="Mock\NavigationService.cs" />
-    <Compile Include="Mock\PhysicalScreenSize.cs" />
+    <Compile Include="Mock\WindowSize.cs" />
     <Compile Include="Mock\PresentableView.cs" />
     <Compile Include="Mock\PresentableViewConstructor.cs" />
     <Compile Include="Mock\RdpCertificate.cs" />
@@ -240,6 +244,8 @@
     <Compile Include="ValidationRules\NotDuplicateValidationRuleTests.cs" />
     <Compile Include="ValidationRules\UsernameFormatValidationRuleTests.cs" />
     <Compile Include="ValidationRules\ValidatedPropertyTests.cs" />
+    <Compile Include="ViewModels\RemoteSessionViewModelTestsHelpers.cs" />
+    <Compile Include="ViewModels\RichTextViewModelTests.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
     <Compile Include="ViewModels\AddOrEditGatewayViewModelTests.cs" />
     <Compile Include="ViewModels\AddOrEditUserViewArgsTests.cs" />
@@ -267,6 +273,7 @@
     <Compile Include="ViewModels\RelayCommandTests.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModelTests.cs" />
     <Compile Include="ViewModels\SegoeGlyphBarButtonModelTests.cs" />
+    <Compile Include="ViewModels\AboutViewModelTests.cs" />
     <Compile Include="ViewModels\SettingsViewModelTests.cs" />
     <Compile Include="ViewModels\DesktopViewModelTests.cs" />
     <Compile Include="ViewModels\ConnectionCenterViewModelTests.cs" />
@@ -300,7 +307,7 @@
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

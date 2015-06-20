@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.CxWrappers;
+    using RdClient.Shared.Telemetry;
     using System;
     using System.Runtime.Serialization;
 
@@ -83,6 +84,16 @@
                 throw new InvalidOperationException("Unexpected resource type");
             }
             return connection;
+        }
+
+        public override void InitializeSessionTelemetry(ApplicationDataModel dataModel, ITelemetryEvent telemetryEvent)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string GetTelemetrySourceType()
+        {
+            throw new NotImplementedException();
         }
     }
 }

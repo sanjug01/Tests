@@ -15,8 +15,15 @@
     {
         class TModel1 : IPersistentStatus
         {
+            private PropertyChangedEventHandler _propertyChanged;
+
             PersistentStatus IPersistentStatus.Status { get { throw new NotImplementedException(); } }
-            public event PropertyChangedEventHandler PropertyChanged;
+
+            public event PropertyChangedEventHandler PropertyChanged
+            {
+                add { _propertyChanged += value; }
+                remove { _propertyChanged -= value; }
+            }
 
             void IPersistentStatus.SetClean() { throw new NotImplementedException(); }
 

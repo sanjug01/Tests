@@ -18,6 +18,7 @@
     xmlns:fac="using:RdClient.Factories"
     xmlns:controls="using:RdClient.Controls"
     xmlns:telemetry="using:RdClient.Telemetry"
+    TabNavigation="Once"
     mc:Ignorable="d">
 
     <Page.DataContext>        
@@ -28,14 +29,12 @@
         <fac:AppInitializer
             x:Key="AppInitializer"
             LifeTimeManager="{StaticResource LifeTimeManager}"
-            LandingPage="ConnectionCenterView">
+            LandingPage="ConnectionCenterView"
+            DeviceCapabilities="{StaticResource DeviceCapabilities}">
             <fac:AppInitializer.ConnectionSource>
                 <models:SingleSwapChainPanelRdpConnectionSource/>
                 <!-- <models:BadCertificateConnectionSource/> -->
             </fac:AppInitializer.ConnectionSource>
-            <fac:AppInitializer.DeviceCapabilities>
-                <navextimp:DeviceCapabilities />
-            </fac:AppInitializer.DeviceCapabilities>
             <fac:AppInitializer.TelemetryClient>
                 <telemetry:ApplicationInsightsTelemetryClient/>
             </fac:AppInitializer.TelemetryClient>
@@ -69,6 +68,12 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <views:ViewPresenter x:Name="ViewPresenter"/>        
+        <controls:TouchKeyboardActivator
+            x:Name="TouchKeyboardActivator"
+            TabIndex="1"
+            Opacity="0" />
+        <views:ViewPresenter
+            x:Name="ViewPresenter"
+            TabIndex="0"/>
     </Grid>
 </Page>

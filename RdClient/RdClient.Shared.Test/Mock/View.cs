@@ -9,11 +9,14 @@ using System.ComponentModel;
 using Windows.Foundation;
 using RdMock;
 using RdClient.Shared.Models.Viewport;
+using RdClient.Shared.Input.Pointer;
 
 namespace RdClient.Shared.Test.Mock
 {
     public class View : MockBase, IPresentableView, IRemoteSessionView
     {
+        private EventHandler<IPointerEventBase> _pointerChanged;
+
         public Size RenderingPanelSize { get; set; }
 
         public IViewModel ViewModel { get; set; }
@@ -40,6 +43,12 @@ namespace RdClient.Shared.Test.Mock
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<IPointerEventBase> PointerChanged
+        {
+            add { _pointerChanged += value; }
+            remove { _pointerChanged -= value; }
+        }
+
         public void EmitPropertyChanged(string propertyName)
         {
             if(PropertyChanged != null)

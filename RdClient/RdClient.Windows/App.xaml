@@ -6,7 +6,9 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:model="using:RdClient.Shared.Models"
     xmlns:cv="using:RdClient.Shared.Converters"
+    xmlns:navextimp="using:RdClient.Navigation.Extensions"
     xmlns:helpers="using:RdClient.Shared.Helpers"
+    xmlns:cx="using:RdClient.Shared.CxWrappers"
     xmlns:winmodel="using:RdClient.Models"
     xmlns:lifetime="using:RdClient.LifeTimeManagement">
 
@@ -27,6 +29,14 @@
                     <helpers:LocalizedString />
                 </cv:TypeToLocalizedStringConverter.LocalizedString>
             </cv:TypeToLocalizedStringConverter>
+            
+            <helpers:DeviceCapabilities x:Key="DeviceCapabilities" />
+            <model:FullScreenModel x:Key="FullScreenModel">
+                <model:FullScreenModel.FullScreen>
+                    <helpers:FullScreen />
+                </model:FullScreenModel.FullScreen>
+            </model:FullScreenModel>
+            <cx:ScreenProperties x:Key="ScreenProperties"/>
         </ResourceDictionary>
     </Application.Resources>   
 </Application>

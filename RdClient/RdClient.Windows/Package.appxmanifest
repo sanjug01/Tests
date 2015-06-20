@@ -1,66 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
-<Package
-  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
-  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  IgnorableNamespaces="uap mp">
-
-  <Identity
-    Name="2d129dd4-8a88-4e6f-a1b9-d55effc0921d"
-    Publisher="O=Microsoft Corporation"
-    Version="1.0.0.0" />
-
-  <mp:PhoneIdentity PhoneProductId="2d129dd4-8a88-4e6f-a1b9-d55effc0921d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
-
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+  <Identity Name="Microsoft.MicrosoftRemoteDesktopPreview" Version="8.0.0.0" Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US" />
+  <mp:PhoneIdentity PhoneProductId="2d129dd4-8a88-4e6f-a1b9-d55effc0921d" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>Remote Desktop Preview</DisplayName>
+    <DisplayName>Microsoft Remote Desktop Preview</DisplayName>
     <PublisherDisplayName>Microsoft Corporation</PublisherDisplayName>
-    <Description>Microsoft Remote Desktop</Description>
+    <Description>Microsoft Remote Desktop Preview</Description>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
-
   <Dependencies>
     <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10069.0" MaxVersionTested="10.0.10069.0" />
   </Dependencies>
-
   <Resources>
-    <Resource Language="x-generate"/>
+    <Resource Language="x-generate" />
   </Resources>
-
   <Applications>
-    <Application Id="App"
-      Executable="$targetnametoken$.exe"
-      EntryPoint="RdClient.Windows.App">
-      <uap:VisualElements 
-        DisplayName="Remote Desktop Preview" 
-        Square150x150Logo="Assets\Logo.png" 
-        Square44x44Logo="Assets\SmallLogo.png"
-        Description="Microsoft Remote Desktop Preview" 
-        BackgroundColor="#D24726">
-
-        <uap:DefaultTile 
-          ShortName="Remote Desktop Preview" 
-          Wide310x150Logo="Assets\WideLogo.png" 
-          Square310x310Logo="Assets\Square310x310Logo.png" 
-          Square71x71Logo="Assets\Square71x71Logo.png">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="RdClient.Windows.App">
+      <uap:VisualElements DisplayName="Remote Desktop Preview" Square150x150Logo="Assets\Logo.png" Square44x44Logo="Assets\SmallLogo.png" Description="Microsoft Remote Desktop Preview" BackgroundColor="#D24726">
+        <uap:DefaultTile ShortName="Remote Desktop Preview" Wide310x150Logo="Assets\WideLogo.png" Square310x310Logo="Assets\Square310x310Logo.png" Square71x71Logo="Assets\Square71x71Logo.png">
           <uap:ShowNameOnTiles>
-            <uap:ShowOn Tile="wide310x150Logo"/>
-            <uap:ShowOn Tile="square150x150Logo"/>
-            <uap:ShowOn Tile="square310x310Logo"/>
+            <uap:ShowOn Tile="wide310x150Logo" />
+            <uap:ShowOn Tile="square150x150Logo" />
+            <uap:ShowOn Tile="square310x310Logo" />
           </uap:ShowNameOnTiles>
         </uap:DefaultTile>
-
-        <uap:SplashScreen BackgroundColor="#D24726" Image="Assets\SplashScreen.png"/>
-
+        <uap:SplashScreen BackgroundColor="#D24726" Image="Assets\SplashScreen.png" />
         <uap:InitialRotationPreference>
-          <uap:Rotation Preference="portrait"/>
+          <uap:Rotation Preference="landscape" />
+          <uap:Rotation Preference="landscapeFlipped" />
         </uap:InitialRotationPreference>
       </uap:VisualElements>
-
     </Application>
   </Applications>
-
   <Capabilities>
     <Capability Name="internetClientServer" />
     <Capability Name="privateNetworkClientServer" />

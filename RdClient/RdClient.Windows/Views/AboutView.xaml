@@ -99,7 +99,8 @@
 					Command="{Binding ShowPrivacyCommand}"-->
 					<HyperlinkButton 
 						x:Uid="AboutView_Link_PrivacyPolicy"
-						NavigateUri="https://www.google.com/search?q=microsoft+rdp+privacy+policy">
+						NavigateUri="https://www.google.com/search?q=microsoft+rdp+privacy+policy"
+                        Command="{Binding ShowPrivacyCommand}">
 						<TextBlock 
 							x:Uid="AboutView_PrivacyPolicy" 
 							Style="{StaticResource BodyTextBlockStyle}"

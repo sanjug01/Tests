@@ -4,16 +4,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:RdClient.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:cv="using:RdClient.Shared.Converters"    
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
     
-    <Grid>
+    <UserControl.Resources>
+        <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
 
-        <!-- Right hand side bar -->
-        <Grid x:Name="RightSideBar" Width="Auto" HorizontalAlignment="Right" VerticalAlignment="Stretch" Background="{ThemeResource SystemControlBackgroundAltHighBrush}" Opacity="{ThemeResource ConnectionOverlayOpacity}" Visibility="Collapsed">
-            <Grid.Resources>
+    <Grid>
+		<!-- Right hand side bar -->
+		<Grid 
+			x:Name="RightSideBar" 
+			Style="{StaticResource RightSideBarStyle}">		
+			<Grid.Resources>
                 <Storyboard x:Name="ShowRightSideBarStoryboard">
                     <DoubleAnimation x:Name="ShowRightSideBarAnimation"
                                      Storyboard.TargetName="RightSideBarTransform"
@@ -33,9 +39,56 @@
             </Grid.RenderTransform>
 
             <StackPanel Orientation="Vertical" Margin="12,20">
-                <AppBarButton x:Name="NavigateHomeButton" Icon="Home" x:Uid="SessionView-HomeButton" Label="Home (d)" />
-                <AppBarButton x:Name="FullScreenButton" Icon="FullScreen" x:Uid="SessionView-FullScreenButton" Label="Toggle Full-Screen (d)" />
-                <AppBarToggleButton x:Name="MouseModeButton" Icon="TouchPointer" x:Uid="SessionView-MouseMode" Label="Mouse-Mode (d)" />
+				<Button
+					x:Name="DisconnectButton"
+					Style="{StaticResource RightSideBarButtonStyle}"
+                    Command="{Binding Disconnect}">
+					<StackPanel Orientation="Vertical">
+						<Image							
+							Style="{StaticResource RightSideBarButtonIconStyle}"
+							Source="ms-appx:///Assets/disconnect_icon.png">
+						</Image>
+						<TextBlock
+							x:Uid="SessionView-HomeButtonLabel"
+							Style="{StaticResource RightSideBarButtonTextStyle}"
+							Text="Disconnect (d)">							
+						</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button
+					x:Name="FullScreenButton"
+					Style="{StaticResource RightSideBarButtonStyle}"
+                    Command="{Binding FullScreen}"
+                    Visibility="{Binding FullScreenButtonVisibility}">
+					<StackPanel Orientation="Vertical">
+						<Image 
+							Style="{StaticResource RightSideBarButtonIconStyle}"			
+							Source="ms-appx:///Assets/fullscreen_icon.png">
+						</Image>
+						<TextBlock
+							x:Uid="SessionView-FullScreenButtonLabel"
+							Style="{StaticResource RightSideBarButtonTextStyle}"
+							Text="Full-Screen (d)">
+						</TextBlock>
+					</StackPanel>
+				</Button>
+                <Button
+					x:Name="MouseModeButton"
+					Style="{StaticResource RightSideBarButtonStyle}"
+                    Command="{Binding MouseMode}"
+                    Visibility="{Binding MouseModeButtonVisibility}" >
+                    <StackPanel Orientation="Vertical">
+						<Image 
+							Style="{StaticResource RightSideBarButtonIconStyle}"							
+							Source="ms-appx:///Assets/touch_icon.png">
+						</Image>
+						<TextBlock
+							x:Uid="SessionView-MouseModeLabel"
+							Style="{StaticResource RightSideBarButtonTextStyle}"
+							Text="Touch (d)">
+						</TextBlock>
+					</StackPanel>
+				</Button>
             </StackPanel>
         </Grid>
     </Grid>

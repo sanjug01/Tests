@@ -1,14 +1,14 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using Windows.Foundation;
-
-namespace RdClient.Shared.Models.Viewport
+﻿namespace RdClient.Shared.Models.Viewport
 {
+    using System;
+    using System.ComponentModel;
+    using Windows.Foundation;
+
     public class Viewport : IViewport
     {
         private IViewportPanel _viewportPanel;
         private IViewportPanel _sessionPanel;
+        private PropertyChangedEventHandler _propertyChanged;
 
         private double _maxZoom;
         public double MaxZoom { set { _maxZoom = value; } }
@@ -25,6 +25,7 @@ namespace RdClient.Shared.Models.Viewport
             _sessionPanel = sessionPanel;
             _maxZoom = 4.0;
             _minZoom = 1.0;
+            _zoomFactor = 1.0;
         }
 
         private void OnViewportPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -70,7 +71,11 @@ namespace RdClient.Shared.Models.Viewport
 
         private double _zoomFactor;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add { _propertyChanged += value; }
+            remove { _propertyChanged -= value; }
+        }
 
         public double ZoomFactor
         {
@@ -179,7 +184,7 @@ namespace RdClient.Shared.Models.Viewport
             _sessionPanel.Transform.ScaleY = 1.0;
             _sessionPanel.Transform.TranslateX = 0.0;
             _sessionPanel.Transform.TranslateY = 0.0;
-
+            _zoomFactor = 1.0;
             if (Changed != null)
             {
                 Changed(this, null);

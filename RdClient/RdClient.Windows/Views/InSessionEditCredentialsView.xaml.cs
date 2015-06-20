@@ -57,15 +57,18 @@ namespace RdClient.Views
 
         private void OnAcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs e)
         {
-            switch (e.VirtualKey)
+            if (CoreAcceleratorKeyEventType.KeyDown == e.EventType)
             {
-                case VirtualKey.Escape:
-                    this.Cancel.Invoke(e);
-                    break;
+                switch (e.VirtualKey)
+                {
+                    case VirtualKey.Escape:
+                        this.Cancel.Invoke(e);
+                        break;
 
-                case VirtualKey.Enter:
-                    this.Submit.Invoke(e);
-                    break;
+                    case VirtualKey.Enter:
+                        this.Submit.Invoke(e);
+                        break;
+                }
             }
         }
     }

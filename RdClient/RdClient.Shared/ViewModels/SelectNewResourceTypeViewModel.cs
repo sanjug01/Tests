@@ -32,7 +32,7 @@
 
         private void ExecuteAddDesktop(object parameter)
         {
-            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs();
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(null);
             DismissSelfAndPushAccessoryView("AddOrEditDesktopView", args);
         }
 

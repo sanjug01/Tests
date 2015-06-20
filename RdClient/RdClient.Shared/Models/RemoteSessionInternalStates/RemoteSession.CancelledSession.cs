@@ -4,10 +4,10 @@
     {
         private sealed class CancelledSession : InternalState
         {
-            public override void Activate(RemoteSession session)
+            protected override void Activated()
             {
-                session.EmitClosed();
-                session.InternalSetState(new InactiveSession(this));
+                this.Session.EmitClosed();
+                this.Session.InternalSetState(new InactiveSession(this));
             }
 
             public CancelledSession(InternalState otherState) : base(SessionState.Closed, otherState)

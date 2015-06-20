@@ -4,11 +4,16 @@ using RdClient.Shared.ViewModels;
 using System;
 using System.Windows.Input;
 using Windows.UI.Xaml;
+using System.ComponentModel;
 
 namespace RdClient.Shared.Test.Mock
 {
     public class RightSideBarViewModel : IRightSideBarViewModel
     {
+        private PropertyChangedEventHandler _propertyChanged;
+
+        public IDeviceCapabilities DeviceCapabilities { get; set; }
+
         public ICommand Disconnect { get; set; }
 
         public ICommand FullScreen { get; set; }
@@ -28,5 +33,11 @@ namespace RdClient.Shared.Test.Mock
         public ICommand ToggleVisiblity { get; set; }
 
         public Visibility Visibility { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged
+        {
+            add { _propertyChanged += value; }
+            remove { _propertyChanged -= value; }
+        }
     }
 }

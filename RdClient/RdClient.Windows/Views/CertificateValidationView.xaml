@@ -108,19 +108,19 @@
 							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
 							Command="{Binding ShowDetails}">
 							<StackPanel Orientation="Horizontal">
-								<TextBlock 
-									Text="{StaticResource MoreDetailsIcon}"
-									Style="{ThemeResource BodyTextBlockStyle}"
-									FontFamily="{StaticResource IconFont}"
-									VerticalAlignment="Center">
-								</TextBlock>
-								<TextBlock 
-									Margin="{StaticResource DialogItemIndentation}"
+								<TextBlock 									
 									Style="{StaticResource BodyTextBlockStyle}" 
 									VerticalAlignment="Center"
 									x:Uid="CertificateValidation-MoreDetailsLabel"
 									Text="Details (d)">
 								</TextBlock>
+								<TextBlock 
+									Margin="{StaticResource DialogItemIndentation}"
+									Text="{StaticResource MoreDetailsIcon}"
+									Style="{ThemeResource BodyTextBlockStyle}"
+									FontFamily="{StaticResource IconFont}"
+									VerticalAlignment="Center">
+								</TextBlock>								
 							</StackPanel>
 						</HyperlinkButton>
 						<HyperlinkButton 
@@ -128,19 +128,19 @@
 							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"
 							Command="{Binding HideDetails}">
 							<StackPanel Orientation="Horizontal">
-								<TextBlock 
-									Text="{StaticResource LessDetailsIcon}"
-									Style="{ThemeResource BodyTextBlockStyle}"
-									FontFamily="{StaticResource IconFont}"
-									VerticalAlignment="Center">
-								</TextBlock>
-								<TextBlock 
-									Margin="{StaticResource DialogItemIndentation}"
+								<TextBlock 									
 									Style="{StaticResource BodyTextBlockStyle}" 
 									VerticalAlignment="Center"
 									x:Uid="CertificateValidation-LessDetailsLabel"
 									Text="Details (d)">
 								</TextBlock>
+								<TextBlock 			
+									Margin="{StaticResource DialogItemIndentation}"
+									Text="{StaticResource LessDetailsIcon}"
+									Style="{ThemeResource BodyTextBlockStyle}"
+									FontFamily="{StaticResource IconFont}"
+									VerticalAlignment="Center">
+								</TextBlock>								
 							</StackPanel>
 						</HyperlinkButton>
 
@@ -224,18 +224,24 @@
 						<ColumnDefinition Width="*" />
 					</Grid.ColumnDefinitions>
 					<Button Grid.Column="0"
-						Style="{StaticResource DialogButtonStyle}"
-						x:Uid="Common_Button_Cancel" 
-						Content="Cancel (d)" 
-						HorizontalAlignment="Stretch"
-						Command="{Binding Cancel}">
+                            Style="{StaticResource DialogButtonStyle}"
+                            x:Uid="Common_Button_Cancel" 
+                            x:Name="CancelButton"
+                            Content="Cancel (d)" 
+                            IsTabStop="True"
+                            TabIndex="0"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding Cancel}">
 					</Button>
 					<Button Grid.Column="2"
-						Style="{StaticResource DialogAccentedButtonStyle}"
-						x:Uid="CertificateValidation-ConnectAnywayButton" 
-						Content="Connect anyway (d)" 
-						HorizontalAlignment="Stretch"
-						Command="{Binding AcceptCertificate}">
+                            Style="{StaticResource DialogButtonStyle}"
+                            x:Uid="CertificateValidation-ConnectAnywayButton"
+                            x:Name="AcceptButton"
+                            Content="Connect anyway (d)" 
+                            IsTabStop="True"
+                            TabIndex="1"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding AcceptCertificate}">
 					</Button>
 				</Grid>
 			</Grid>

@@ -1,5 +1,7 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Navigation.Extensions;
+    using RdClient.Shared.Telemetry;
     using System;
     using System.Collections.Generic;
     using System.Reflection;
@@ -7,7 +9,7 @@
     using Windows.ApplicationModel;
     using Windows.UI.Xaml;
 
-    public sealed class AboutViewModel : AccessoryViewModelBase
+    public sealed class AboutViewModel : AccessoryViewModelBase, ITelemetryClientSite
     {
         private string _appVersion;
         private string _copyright;
@@ -15,6 +17,7 @@
         private readonly ICommand _showEulaCommand;
         private readonly ICommand _showThirdPartyDocCommand;
         private readonly ICommand _showPrivacyCommand;
+        private ITelemetryClient _telemetryClient;
 
         public AboutViewModel()
         {
@@ -89,18 +92,24 @@
         {
             RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.EulaDoc);
             NavigationService.PushAccessoryView("RichTextView", args);
+            _telemetryClient.Event("viewedLicense");
         }
 
         private void ShowThirdPartyDocExecute(object o)
         {
             RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.ThirdPartyNotices);
             NavigationService.PushAccessoryView("RichTextView", args);
+            _telemetryClient.Event("viewedThirdPartyDoc");
         }
 
         private void ShowPrivacyDocExecute(object o)
         {
-            RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.PrivacyDoc);
-            NavigationService.PushAccessoryView("RichTextView", args);
+            _telemetryClient.Event("viewedPrivacy");
+        }
+
+        void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
+        {
+            _telemetryClient = telemetryClient;
         }
     }
 }

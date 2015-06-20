@@ -13,6 +13,10 @@
     using Windows.UI.Xaml.Media;
     using System.ComponentModel;
     using Windows.UI.Core;
+    using System.Diagnostics;
+    using RdClient.Shared.ViewModels;
+
+
 
     /// <summary>
     /// Wrapper of SwapChainPanel that adds the IRenderingPanel interface.
@@ -24,7 +28,6 @@
         private IViewportTransform _transform;
 
         private EventHandler _ready;
-        private EventHandler<IPointerEventBase> _pointerChanged;
 
         public Image MouseCursor { private get; set; }
         private Point _hotspot = new Point(0,0);
@@ -88,25 +91,6 @@
             remove { _ready -= value; }
         }
 
-        event EventHandler<IPointerEventBase> IRenderingPanel.PointerChanged
-        {
-            add
-            {
-                using (ReadWriteMonitor.UpgradeableRead(_monitor))
-                {
-                    _pointerChanged += value;
-                }
-            }
-
-            remove
-            {
-                using (ReadWriteMonitor.UpgradeableRead(_monitor))
-                {
-                    _pointerChanged -= value;
-                }
-            }
-        }
-
         IViewport IRenderingPanel.Viewport
         {
             get
@@ -149,11 +133,19 @@
             }
         }
 
+        void IRenderingPanel.ScaleMouseCursor(double scale)
+        {
+            this.MouseScaleTransform.ScaleX = scale;
+            this.MouseScaleTransform.ScaleY = scale;
+        }
+
         void IRenderingPanel.ChangeMouseVisibility(Visibility visibility)
         {
             if (visibility == Visibility.Visible)
             {
-                if (Window.Current.CoreWindow.PointerCursor != null) { 
+                if (Window.Current.CoreWindow.PointerCursor != null)
+                {
+
                     Window.Current.CoreWindow.PointerCursor = null;
                     this.MouseCursor.Visibility = visibility;
                 }
@@ -166,7 +158,6 @@
                 }
                 this.MouseCursor.Visibility = visibility;
             }
-            
         }
 
         void IRenderingPanel.ChangeMouseCursorShape(MouseCursorShape shape)
@@ -197,15 +188,6 @@
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        public void EmitPointerEvent(IPointerEventBase e)
-        {
-            using (ReadWriteMonitor.UpgradeableRead(_monitor))
-            {
-                if (null != _pointerChanged)
-                    _pointerChanged(this, e);
             }
         }
 

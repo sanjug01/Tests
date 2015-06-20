@@ -75,7 +75,14 @@
 				</controls:ErrorControl>
 			</StackPanel>
 			<!-- User name -->
-			<controls:UserSelectorControl Margin="{StaticResource DialogItemVerticalSpacing}"/>
+			<controls:UserSelectorControl Margin="{StaticResource DialogItemExtraVerticalSpacing}"/>
+			<!-- Help button -->
+			<HyperlinkButton
+				x:Uid="AddOrEditDesktop-HelpButton"
+				Margin="{StaticResource DialogHyperlinkVerticalSpacing}"
+				NavigateUri="http://go.microsoft.com/fwlink/?LinkID=533682&amp;clcid=0x409"
+				Content="Get help connecting (d)">
+			</HyperlinkButton>
 			<!-- Show/hide extra settings buttons -->
 			<HyperlinkButton
 				Margin="{StaticResource DialogItemVerticalSpacing}"
@@ -83,38 +90,38 @@
                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
 				<StackPanel Orientation="Horizontal">
 					<TextBlock 
-						Text="{StaticResource MoreDetailsIcon}"
-						Style="{ThemeResource BodyTextBlockStyle}"
-						FontFamily="{StaticResource IconFont}"
-						VerticalAlignment="Center">
-					</TextBlock>
-					<TextBlock 
-						x:Uid="AddOrEditDesktop-MoreDetailsLabel"
-						Margin="{StaticResource DialogItemIndentation}"
+						x:Uid="AddOrEditDesktop-MoreDetailsLabel"						
 						Style="{StaticResource BodyTextBlockStyle}" 
 						VerticalAlignment="Center"
                         Text="More details (d)">
 					</TextBlock>
+					<TextBlock 
+						Margin="{StaticResource DialogItemIndentation}"
+						Text="{StaticResource MoreDetailsIcon}"
+						Style="{ThemeResource BodyTextBlockStyle}"
+						FontFamily="{StaticResource IconFont}"
+						VerticalAlignment="Center">
+					</TextBlock>					
 				</StackPanel>
 			</HyperlinkButton>
 			<HyperlinkButton
                 Command="{Binding HideDetailsCommand}"                            
                 Margin="{StaticResource DialogItemVerticalSpacing}" 
                 Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}" >
-                <StackPanel Orientation="Horizontal">
+				<StackPanel Orientation="Horizontal">
 					<TextBlock 
-						Text="{StaticResource LessDetailsIcon}"
-						Style="{ThemeResource BodyTextBlockStyle}"
-						FontFamily="{StaticResource IconFont}"
-						VerticalAlignment="Center">
-					</TextBlock>
-					<TextBlock 
-						x:Uid="AddOrEditDesktop-LessDetailsLabel"
-						Margin="{StaticResource DialogItemIndentation}"
+						x:Uid="AddOrEditDesktop-LessDetailsLabel"						
 						Style="{StaticResource BodyTextBlockStyle}" 
 						VerticalAlignment="Center"                                       
                         Text="Less details (d)">						
 					</TextBlock>
+					<TextBlock 
+						Margin="{StaticResource DialogItemIndentation}"
+						Text="{StaticResource LessDetailsIcon}"
+						Style="{ThemeResource BodyTextBlockStyle}"
+						FontFamily="{StaticResource IconFont}"
+						VerticalAlignment="Center">
+					</TextBlock>					
                 </StackPanel>
             </HyperlinkButton>
 			<!-- extra settings section -->

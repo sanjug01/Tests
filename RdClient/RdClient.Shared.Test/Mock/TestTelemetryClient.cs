@@ -1,7 +1,5 @@
 ﻿namespace RdClient.Shared.Test.Mock
 {
-    using System;
-    using System.Collections.Generic;
     using RdClient.Shared.Telemetry;
 
     sealed class TestTelemetryClient : ITelemetryClient
@@ -15,6 +13,40 @@
                 //
                 // Do nothing.
                 //
+            }
+        }
+
+        private sealed class TelemetryEvent : ITelemetryEvent
+        {
+            private readonly string _eventName;
+
+            public TelemetryEvent(string eventName)
+            {
+                _eventName = eventName;
+            }
+
+            void ITelemetryEvent.AddMetric(string metricName, double value)
+            {
+            }
+
+            void ITelemetryEvent.StartStopwatch(string metricName)
+            {
+            }
+
+            void ITelemetryEvent.PauseStopwatch(string metricName)
+            {
+            }
+
+            void ITelemetryEvent.ResumeStopwatch(string metricName)
+            {
+            }
+
+            void ITelemetryEvent.AddTag(string tagName, string value)
+            {
+            }
+
+            void ITelemetryEvent.Report()
+            {
             }
         }
 
@@ -43,11 +75,9 @@
             return new Stopwatch();
         }
 
-        public void Metric(string metricName, IDictionary<string, string> properties)
+        ITelemetryEvent ITelemetryClient.MakeEvent(string eventName)
         {
-            //
-            // Do nothing.
-            //
+            return new TelemetryEvent(eventName);
         }
     }
 }

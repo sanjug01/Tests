@@ -13,13 +13,26 @@
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.Diagnostics.Contracts;
+    using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
 
-    public sealed class RemoteSessionViewModel : DeferringViewModelBase, IRemoteSessionViewSite, ITimerFactorySite, IDeviceCapabilitiesSite, ILifeTimeSite
+    public sealed class RemoteSessionViewModel : DeferringViewModelBase,
+        IRemoteSessionViewSite,
+        ITimerFactorySite,
+        IDeviceCapabilitiesSite,
+        ILifeTimeSite,
+        IInputPanelFactorySite,
+        ITelemetryClientSite
     {
+        private readonly Stopwatch _presentationStopwatch;
         private readonly RelayCommand _invokeKeyboard;
-        private readonly SymbolBarToggleButtonModel _invokeKeyboardModel;
+        private readonly SymbolBarButtonModel _invokeKeyboardModel;
+
+        private double
+            _enterFullScreenCount,
+            _exitFullScreenCount;
 
         public ZoomPanModel ZoomPanModel
         {
@@ -40,6 +53,7 @@
         private IRemoteSessionControl _activeSessionControl;
         private IKeyboardCapture _keyboardCapture;
         private IInputPanelFactory _inputPanelFactory;
+        private ITelemetryClient _telemetryClient;
         private IPointerCapture _pointerCapture;
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
@@ -83,7 +97,7 @@
             get { return this.Dispatcher; }
         }
 
-        private object _bellyBandViewModel;
+        private IBellyBandViewModel _bellyBandViewModel;
 
         public SessionState SessionState
         {
@@ -104,14 +118,6 @@
             set { _keyboardCapture = value; }
         }
 
-        /// <summary>
-        /// Property into that a factory of input panels is injected in XAML.
-        /// </summary>
-        public IInputPanelFactory InputPanelFactory
-        {
-            set { _inputPanelFactory = value; }
-        }
-
         public IPointerCapture PointerCapture
         {
             get { return _pointerCapture; }
@@ -128,25 +134,51 @@
         {
             get { return _connectionBarItems; }
         }
-
         /// <summary>
         /// View model of the view shown in the belly band across the session view when input is needed from user.
         /// Setting the property to a non-null value shows the belly band.
         /// </summary>
-        public object BellyBandViewModel
+        public IBellyBandViewModel BellyBandViewModel
         {
             get { return _bellyBandViewModel; }
             private set { this.SetProperty(ref _bellyBandViewModel, value); }
         }
 
+        private IFullScreenModel _fullScreenModel;
+        public IFullScreenModel FullScreenModel
+        {
+            private get
+            {
+                return _fullScreenModel;
+            }
+            set
+            {
+                if (!object.ReferenceEquals(_fullScreenModel, value))
+                {
+                    if(null != _fullScreenModel)
+                    {
+                        _fullScreenModel.EnteringFullScreen -= this.OnEnteringFullScreen;
+                        _fullScreenModel.ExitingFullScreen -= this.OnExitingFullScreen;
+                    }
+                    _fullScreenModel = value;
+                    if (null != _fullScreenModel)
+                    {
+                        _fullScreenModel.EnteringFullScreen += this.OnEnteringFullScreen;
+                        _fullScreenModel.ExitingFullScreen += this.OnExitingFullScreen;
+                    }
+                }
+            }
+        }
+
         public RemoteSessionViewModel()
         {
+            _presentationStopwatch = new Stopwatch();
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
-            _invokeKeyboardModel = new SymbolBarToggleButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
+            _invokeKeyboardModel = new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
             _sessionState = SessionState.Idle;
 
             this.ZoomPanModel = new ZoomPanModel();
-
+            
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -154,6 +186,10 @@
             Contract.Assert(null == _activeSession);
             Contract.Assert(null != _keyboardCapture);
             Contract.Assert(null != _inputPanelFactory);
+
+            _presentationStopwatch.Start();
+            _enterFullScreenCount = 0.0;
+            _exitFullScreenCount = 0.0;
 
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = this.ZoomPanModel.ZoomInCommand });
@@ -163,6 +199,15 @@
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
             base.OnPresenting(activationParameter);
+
+            if (null != _telemetryClient)
+            {
+                ITelemetryEvent te = _telemetryClient.MakeEvent("InputPanelAvailability");
+                te.AddTag("canShow", _deviceCapabilities.CanShowInputPanel ? "true" : "false");
+                te.Report();
+            }
+
+            _inputPanel = _inputPanelFactory.GetInputPanel();
 
             Contract.Assert(null != activationParameter, "Cannot navigate to remote session without activation parameter");
             Contract.Assert(activationParameter is IRemoteSession, "Remote session view model activation parameter is not IRemoteSession");
@@ -175,7 +220,7 @@
 
             _activeSession = newSession;
             this.SessionState = _activeSession.State.State;
-
+            
             _activeSession.CredentialsNeeded += this.OnCredentialsNeeded;
             _activeSession.Closed += this.OnSessionClosed;
             _activeSession.Failed += this.OnSessionFailed;
@@ -193,6 +238,8 @@
 
             _lifeTimeManager.Suspending += OnAppSuspending;
             _lifeTimeManager.Resuming += OnAppResuming;
+
+            _invokeKeyboard.EmitCanExecuteChanged();
         }
 
         protected override void OnDismissed()
@@ -211,6 +258,7 @@
             _activeSessionControl = null;
             _activeSession = null;
             _sessionView = null;
+            _inputPanel = null;
 
             //
             // TODO:    restore the belly band view model from the session state.
@@ -218,11 +266,15 @@
             //
             this.BellyBandViewModel = null;
 
+            _presentationStopwatch.Stop();
+            _presentationStopwatch.Reset();
+
             base.OnDismissed();
         }
 
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
         {
+            this.BellyBandViewModel?.Terminate();
             this.BellyBandViewModel = null;
             this.RightSideBarViewModel.Disconnect.Execute(null);
             backArgs.Handled = true;
@@ -251,8 +303,6 @@
             if (null != _deviceCapabilities)
             {
                 _deviceCapabilities.PropertyChanged -= this.OnDeviceCapabilitiesPropertyChanged;
-                _inputPanel.IsVisibleChanged -= this.OnInputPanelIsVisibleChanged;
-                _inputPanel = null;
             }
 
             _deviceCapabilities = deviceCapabilities;
@@ -260,10 +310,6 @@
             if (null != _deviceCapabilities)
             {
                 _deviceCapabilities.PropertyChanged += this.OnDeviceCapabilitiesPropertyChanged;
-
-                _inputPanel = _inputPanelFactory.GetInputPanel();
-                _inputPanel.IsVisibleChanged += this.OnInputPanelIsVisibleChanged;
-                _invokeKeyboardModel.IsChecked = _inputPanel.IsVisible;
             }
 
             _invokeKeyboard.EmitCanExecuteChanged();
@@ -282,6 +328,9 @@
 
         private void OnSessionFailed(object sender, SessionFailureEventArgs e)
         {
+            
+            //Restore the local mouse
+            this._activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
             //
             // Show the failure UI
             //
@@ -352,6 +401,11 @@
 
         private void OnSessionClosed(object sender, EventArgs e)
         {
+            if(_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
+            {
+                _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+            }
+
             this.NavigationService.NavigateToView("ConnectionCenterView", null);
         }
 
@@ -388,8 +442,10 @@
                         _keyboardCapture.Keystroke += this.OnKeystroke;
                         _keyboardCapture.Start();
 
-                        this.PointerPosition.Reset(_activeSessionControl, this);
+                        this.PointerPosition.Reset(_activeSessionControl.RenderingPanel, this);
                         _activeSessionControl.RenderingPanel.Viewport.Reset();
+
+                        this.RightSideBarViewModel.PropertyChanged += OnRightSideBarPropertyChanged;
 
                         this.PointerCapture = new PointerCapture(
                             this.PointerPosition, 
@@ -401,24 +457,33 @@
                         this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
 
                         this.PanKnobSite = new PanKnobSite(this.TimerFactory);
+
                         this.ZoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport);
                         this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
-                        _panKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+                        this.PanKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+                        this.PanKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
+                        _activeSessionControl.RenderingPanel.Viewport.Changed += this.PanKnobSite.OnViewportChanged;
+                        this.PanKnobSite.Reset();
 
-                        _panKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
-
-                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += _panKnobSite.OnConsumptionModeChanged;
+                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.PanKnobSite.OnConsumptionModeChanged;
                         this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.ZoomPanModel.OnConsumptionModeChanged;
                         this.PointerCapture.ConsumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
 
                         _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
                         _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
-                        _activeSessionControl.RenderingPanel.PointerChanged += this.PointerCapture.OnPointerChanged;
+                        _sessionView.PointerChanged += this.PointerCapture.OnPointerChanged;
+                        _sessionView.PointerChanged += this.ScrollBarModel.OnPointerChanged;
 
+                        _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
-                        this.RightSideBarViewModel.FullScreenModel.EnterFullScreenCommand.Execute(null);
+
+                        if (this.RightSideBarViewModel.FullScreenModel.UserInteractionMode == UserInteractionMode.Mouse)
+                        {
+                            this.FullScreenModel.EnterFullScreenCommand.Execute(null);
+                        }
+
                         this.IsConnectionBarVisible = true;
                         break;
 
@@ -440,7 +505,7 @@
                             _keyboardCapture.Keystroke -= this.OnKeystroke;
                             _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
                             _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
-                            _activeSessionControl.RenderingPanel.PointerChanged -= this.PointerCapture.OnPointerChanged;
+                            _sessionView.PointerChanged -= this.PointerCapture.OnPointerChanged;
 
                             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
                             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= this.ZoomPanModel.OnConsumptionModeChanged;
@@ -450,13 +515,48 @@
                             //
                             this.IsConnectionBarVisible = false;
                             this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
-                            _panKnobSite.PanKnob.IsVisible = false;
-                            this.RightSideBarViewModel.FullScreenModel.ExitFullScreenCommand.Execute(null);
+
+                            // significant side effects on _panKnobSite.PanKnob setter, which is called implicitly outside the view model,
+                            // potentially on a different thread
+                            // TODO: Bug 2782808 fix code to avoid these side effects
+                            if (null != _panKnobSite.PanKnob)
+                            {
+                                _panKnobSite.PanKnob.IsVisible = false;
+                            }
+
+                            if(this.RightSideBarViewModel.FullScreenModel.IsFullScreenMode)
+                            {
+                                this.FullScreenModel.ExitFullScreenCommand.Execute(null);
+                            }
                         }
                         break;
                 }
 
                 this.SessionState = _activeSession.State.State;
+            }
+        }
+
+        private void OnRightSideBarPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName.Equals("Visibility") && sender is IRightSideBarViewModel)
+            {
+                Visibility visibility = ((IRightSideBarViewModel)sender).Visibility;
+                if(visibility == Visibility.Visible)
+                {
+                    visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    visibility = Visibility.Visible;
+                }
+
+                this.ScrollBarModel.SetScrollbarVisibility(visibility);
+
+                if (_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
+                {
+                    _activeSessionControl.RenderingPanel.ChangeMouseVisibility(visibility);
+                }
+                
             }
         }
 
@@ -484,9 +584,25 @@
             Contract.Assert(null != _inputPanel);
 
             if (_inputPanel.IsVisible)
+            {
+                if(null != _telemetryClient)
+                {
+                    ITelemetryEvent te = _telemetryClient.MakeEvent("ShowTouchKeyboard");
+                    te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
+                    te.Report();
+                }
                 _inputPanel.Hide();
+            }
             else
+            {
+                if (null != _telemetryClient)
+                {
+                    ITelemetryEvent te = _telemetryClient.MakeEvent("HideTouchKeyboard");
+                    te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
+                    te.Report();
+                }
                 _inputPanel.Show();
+            }
         }
 
         private bool InternalCanInvokeKeyboard(object parameter)
@@ -494,17 +610,52 @@
             return null != _inputPanel && null != _deviceCapabilities && _deviceCapabilities.CanShowInputPanel;
         }
 
-        private void OnInputPanelIsVisibleChanged(object sender, EventArgs e)
-        {
-            IInputPanel panel = (IInputPanel)sender;
-            _invokeKeyboardModel.IsChecked = panel.IsVisible;
-        }
-
         private void OnDeviceCapabilitiesPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if(e.PropertyName.Equals("CanShowInputPanel"))
             {
+                if(null != _telemetryClient)
+                {
+                    ITelemetryEvent te = _telemetryClient.MakeEvent("InputPanelAvailabilityChanged");
+                    te.AddTag("canShow", ((IDeviceCapabilities)sender).CanShowInputPanel ? "true" : "false");
+                    te.Report();
+                }
+
                 _invokeKeyboard.EmitCanExecuteChanged();
+            }
+        }
+
+        void IInputPanelFactorySite.SetInputPanelFactory(IInputPanelFactory inputPanelFactory)
+        {
+            _inputPanelFactory = inputPanelFactory;
+        }
+
+        void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
+        {
+            _telemetryClient = telemetryClient;
+        }
+
+        private void OnEnteringFullScreen(object sender, EventArgs e)
+        {
+            if(null != _telemetryClient)
+            {
+                ITelemetryEvent te = _telemetryClient.MakeEvent("EnterFullScreen");
+                te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
+                _enterFullScreenCount += 1.0;
+                te.AddMetric("count", _enterFullScreenCount);
+                te.Report();
+            }
+        }
+
+        private void OnExitingFullScreen(object sender, EventArgs e)
+        {
+            if (null != _telemetryClient)
+            {
+                ITelemetryEvent te = _telemetryClient.MakeEvent("ExitFullScreen");
+                te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
+                _exitFullScreenCount += 1.0;
+                te.AddMetric("count", _exitFullScreenCount);
+                te.Report();
             }
         }
     }

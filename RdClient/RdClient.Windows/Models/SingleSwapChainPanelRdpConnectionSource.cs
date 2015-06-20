@@ -3,7 +3,6 @@
     using RdClient.CxWrappers.Utils;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Models;
-    using System;
     using System.Diagnostics.Contracts;
     using Windows.UI.Xaml.Controls;
 
@@ -15,9 +14,6 @@
     /// </summary>
     sealed class SingleSwapChainPanelRdpConnectionSource : IRdpConnectionSource
     {
-        private IRdpConnectionFactory _factory;
-        private IRenderingPanel _renderingPanel;
-
         IRdpConnection IRdpConnectionSource.CreateConnection(RemoteConnectionModel model, IRenderingPanel renderingPanel)
         {
             Contract.Assert(null != model);
@@ -25,26 +21,9 @@
             Contract.Assert(renderingPanel is SwapChainPanel);
             Contract.Ensures(null != Contract.Result<IRdpConnection>());
 
-            if(null == _factory)
-            {
-                //
-                // Create the connection factory singleton and assign it the swap chain panel.
-                //
-                _renderingPanel = renderingPanel;
-                _factory = new RdpConnectionFactory() { SwapChainPanel = (SwapChainPanel)renderingPanel };
-            }
-            else
-            {
-                //
-                // Verify that the same swap chain panel is reused for all RDP connections.
-                //
-                if (!object.ReferenceEquals(_renderingPanel, renderingPanel))
-                    throw new ArgumentException("Unexpected rendering panel", "renderingPanel");
-            }
-            //
-            // Create and set up the RDP connection.
-            //
-            return model.CreateConnection(_factory, _renderingPanel);
+            IRdpConnectionFactory factory = new RdpConnectionFactory() { SwapChainPanel = (SwapChainPanel)renderingPanel };
+
+            return model.CreateConnection(factory, renderingPanel);
         }
     }
 }

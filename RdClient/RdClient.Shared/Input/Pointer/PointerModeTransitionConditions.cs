@@ -224,63 +224,10 @@ namespace RdClient.Shared.Input.Pointer
             GoTo_Idle_Action(e);
         }
 
-        public static bool RightDown_Scroll_Condition(PointerStateMachineEvent e)
-        {
-            return 
-                e.Input.Action == PointerEventAction.ZoomScrollStarted &&
-                (
-                    ((IZoomScrollEvent)e.Input).Type == ZoomScrollType.Scroll ||
-                    ((IZoomScrollEvent)e.Input).Type == ZoomScrollType.HScroll);
-        }
-
-        public static void RightDown_Scroll_Action(PointerStateMachineEvent e)
-        {
-            if(((IZoomScrollEvent) e.Input).Type == ZoomScrollType.Scroll)
-            {
-                e.Control.Scroll(((IZoomScrollEvent)e.Input).Delta.Translation.Y);
-            }
-            else if (((IZoomScrollEvent)e.Input).Type == ZoomScrollType.HScroll)
-            {
-                e.Control.HScroll(((IZoomScrollEvent)e.Input).Delta.Translation.X);
-            }
-        }
-
-        public static bool Scroll_Scroll_Condition(PointerStateMachineEvent e)
-        {
-            return
-                e.Input.Action == PointerEventAction.ZoomScrollUpdating &&
-                (
-                    ((IZoomScrollEvent)e.Input).Type == ZoomScrollType.Scroll ||
-                    ((IZoomScrollEvent)e.Input).Type == ZoomScrollType.HScroll);
-        }
-
-        public static void Scroll_Scroll_Action(PointerStateMachineEvent e)
-        {
-            if (((IZoomScrollEvent)e.Input).Type == ZoomScrollType.Scroll)
-            {
-                e.Control.Scroll(((IZoomScrollEvent)e.Input).Delta.Translation.Y);
-            }
-            else if (((IZoomScrollEvent)e.Input).Type == ZoomScrollType.HScroll)
-            {
-                e.Control.HScroll(((IZoomScrollEvent)e.Input).Delta.Translation.X);
-            }
-        }
-
-        public static bool Scroll_Idle_Condition(PointerStateMachineEvent e)
-        {
-            return e.Input.Action == PointerEventAction.ManipulationCompleted;
-        }
-
-        public static void Scroll_Idle_Action(PointerStateMachineEvent e)
-        {
-            GoTo_Idle_Action(e);
-        }
-
         public static bool RightDown_ZoomPan_Condition(PointerStateMachineEvent e)
         {
             return
-                e.Input.Action == PointerEventAction.ZoomScrollStarted &&
-                ((IZoomScrollEvent)e.Input).Type == ZoomScrollType.ZoomPan;
+                e.Input.Action == PointerEventAction.ZoomScrollStarted;
         }
 
         public static void RightDown_ZoomPan_Action(PointerStateMachineEvent e)
@@ -291,8 +238,7 @@ namespace RdClient.Shared.Input.Pointer
         public static bool ZoomPan_ZoomPan_Condition(PointerStateMachineEvent e)
         {
             return
-                e.Input.Action == PointerEventAction.ZoomScrollUpdating &&
-                ((IZoomScrollEvent)e.Input).Type == ZoomScrollType.ZoomPan;
+                e.Input.Action == PointerEventAction.ZoomScrollUpdating;
         }
 
         public static void ZoomPan_ZoomPan_Action(PointerStateMachineEvent e)

@@ -1,52 +1,55 @@
-﻿using RdClient.Shared.Helpers;
-using RdClient.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.Devices.Input;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Input;
-
-namespace RdClient.Shared.Input.Pointer
+﻿namespace RdClient.Shared.Input.Pointer
 {
-    class PointerVisibilityConsumer : IPointerEventConsumer
+    using RdClient.Shared.Models;
+    using System;
+    using Windows.Devices.Input;
+    using Windows.UI.Xaml;
+
+    public class PointerVisibilityConsumer : IPointerEventConsumer
     {
-        private readonly IRemoteSessionControl _sessionControl;
+        private readonly IRenderingPanel _renderingPanel;
         private ConsumptionModeType _consumptionMode;
+        private EventHandler<IPointerEventBase> _consumedEvent;
 
 
-        public event EventHandler<IPointerEventBase> ConsumedEvent;
+        public event EventHandler<IPointerEventBase> ConsumedEvent
+        {
+            add { _consumedEvent += value; }
+            remove { _consumedEvent -= value; }
+        }
+
         public void SetConsumptionMode(ConsumptionModeType consumptionMode)
         {
             _consumptionMode = consumptionMode;
         }
 
-        public PointerVisibilityConsumer(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, IDeferredExecution dispatcher)
+        public PointerVisibilityConsumer( IRenderingPanel renderingPanel)
         {
-            _sessionControl = sessionControl;
+            _renderingPanel = renderingPanel;
         }
+
         public void Consume(IPointerEventBase pointerEvent)
         {
-            PointerRoutedEventArgsWrapper pointerEventArgs = (PointerRoutedEventArgsWrapper)pointerEvent;
-            //When in touch mode pointer should not show up
-            if ((_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch)&&
-                (pointerEventArgs.DeviceType != PointerDeviceType.Mouse))
+            if(pointerEvent is IPointerRoutedEventProperties)
             {
-                _sessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
-            }
-            else
-            {
-                
-                if (pointerEventArgs.Action == PointerEventAction.PointerEntered)
+                IPointerRoutedEventProperties pointerEventArgs = (IPointerRoutedEventProperties)pointerEvent;
+                //When in touch mode pointer should not show up
+                if ((_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch) &&
+                    (pointerEventArgs.DeviceType != PointerDeviceType.Mouse))
                 {
-                    _sessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
+                    _renderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
                 }
-                else if (pointerEventArgs.Action == PointerEventAction.PointerExited && pointerEventArgs.DeviceType == PointerDeviceType.Mouse)
+                else
                 {
-                    _sessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+
+                    if (pointerEventArgs.Action == PointerEventAction.PointerEntered)
+                    {
+                        _renderingPanel.ChangeMouseVisibility(Visibility.Visible);
+                    }
+                    else if (pointerEventArgs.Action == PointerEventAction.PointerExited && pointerEventArgs.DeviceType == PointerDeviceType.Mouse)
+                    {
+                        _renderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+                    }
                 }
             }
         }

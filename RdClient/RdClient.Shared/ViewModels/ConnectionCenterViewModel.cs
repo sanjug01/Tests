@@ -26,6 +26,7 @@
         private ReadOnlyObservableCollection<IDesktopViewModel> _desktopViewModels;
         private ReadOnlyObservableCollection<IWorkspaceViewModel> _workspaceViewModels;
 
+        private readonly ViewItemsSource _desktopViewModelsSource;
         private readonly ICommand _showSettings;
         private readonly ICommand _showAbout;
         private readonly ICommand _showHelp;
@@ -111,6 +112,7 @@
         public ConnectionCenterViewModel()
         {
             this.AddDesktopCommand = new RelayCommand(AddDesktopExecute);
+            _desktopViewModelsSource = new ViewItemsSource();
             _showSettings = new RelayCommand(this.GoToSettingsCommandExecute);
             _showAbout = new RelayCommand(this.ShowAboutCommandExecute);
             _showHelp = new RelayCommand(this.ShowHelpCommandExecute);
@@ -128,6 +130,11 @@
         {
             get { return _desktopViewModels; }
             private set { SetProperty(ref _desktopViewModels, value); }
+        }
+
+        public IViewItemsSource DesktopViewModelsSource
+        {
+            get { return _desktopViewModelsSource; }
         }
 
         public ReadOnlyObservableCollection<IWorkspaceViewModel> WorkspaceViewModels
@@ -353,7 +360,26 @@
 
         private void AddDesktopExecute(object o)
         {
-            NavigationService.PushAccessoryView("AddOrEditDesktopView", new AddDesktopViewModelArgs());
+            AddDesktopViewModelArgs args = new AddDesktopViewModelArgs(_desktopViewModelsSource);
+
+            args.DesktopAdded += (sender, e) =>
+            {
+                //
+                // Find the new view model in the observable collection of desktop view models,
+                // that is based on the desktop model reported in DesktopAdded, and tell the view
+                // to select the item that shows the new desktop.
+                //
+                foreach(DesktopViewModel dvm in this.DesktopViewModels)
+                {
+                    if(object.ReferenceEquals(dvm.Desktop, e.Desktop))
+                    {
+                        e.ItemsSource.SelectItem(dvm);
+                        break;
+                    }
+                }
+            };
+
+            NavigationService.PushAccessoryView("AddOrEditDesktopView", args);
         }
 
         private void OnDesktopViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -382,7 +408,7 @@
 
         private void UpdateShowSectionLabels()
         {
-            this.ShowSectionLabels = this.HasDesktops || this.HasApps;
+            //this.ShowSectionLabels = this.HasDesktops || this.HasApps;
         }
 
         private void DesktopSelection_PropertyChanged(object sender, PropertyChangedEventArgs e)

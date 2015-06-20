@@ -67,6 +67,7 @@
             // Just dismiss self. This will pull the top-most accessory view from the stack.
             //
             DismissModal(null);
+            backArgs.Handled = true;
         }
     }
 }

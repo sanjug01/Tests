@@ -29,94 +29,83 @@
     </controls:ModalUserControl.Resources>
 
     <ContentControl Style="{StaticResource AccessoryViewStyle}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="12"/>
-            </Grid.RowDefinitions>
+        <StackPanel>
+            <!-- Title -->
+            <StackPanel Margin="{StaticResource DialogItemVerticalSpacing}">
+                <TextBlock Style="{ThemeResource TitleTextBlockStyle}"
+                           Text="{Binding Path=Mode, FallbackValue='Enter Credentials (d)', Converter={StaticResource TypeToLocalizedStringConverter}, ConverterParameter=Title}"/>
+                <TextBlock Style="{ThemeResource BodyTextBlockStyle}" 
+                           Margin="0,12,0,0"
+                           Visibility="{Binding Path=ShowMessage, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                           Text="{Binding Path=Mode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
+            </StackPanel>
 
-            <Grid Grid.Row="0">
-                <TextBlock Margin="0,12,0,12" Style="{ThemeResource TitleTextBlockStyle}"                             
-                               Text="{Binding Path=Mode, FallbackValue='Enter Credentials (d)', Converter={StaticResource TypeToLocalizedStringConverter}, ConverterParameter=Title}"/>
-            </Grid>
 
-            <Grid Grid.Row="1">
-                <TextBlock Margin="0,12,0,12" Style="{ThemeResource BodyTextBlockStyle}" 
-                                Visibility="{Binding Path=ShowMessage, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                                Text="{Binding Path=Mode, Converter={StaticResource TypeToLocalizedStringConverter}}"/>
-            </Grid>
-
-            <Border Grid.Row="2" Height="1" Margin="0" />
-
-            <StackPanel Grid.Row="3">
-				<StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
-					<TextBlock 
-						Style="{ThemeResource BodyTextBlockStyle}"
-                        x:Uid="AddUser-User" 
-                        Text="User (d)">
-					</TextBlock>
-					<controls:ErrorControl 
-						Margin="0,8" 
-						DataContext="{Binding Path=User}" >
-						<controls:ErrorControl.PresentedContent>
-							<TextBox 
+            <!-- User name-->            
+            <StackPanel Margin="{StaticResource DialogItemVerticalSpacing}">
+                <TextBlock Margin="{StaticResource DialogHeaderVerticalSpacing}"
+                           Style="{ThemeResource BodyTextBlockStyle}"
+                           x:Uid="AddUser-User" 
+                           Text="User (d)">
+                </TextBlock>
+                <controls:ErrorControl DataContext="{Binding Path=User}" >
+                    <controls:ErrorControl.PresentedContent>
+                        <TextBox 
 								x:Uid="AddUser-UsernameTextbox"
+								Style="{StaticResource UsernameInputTextboxStyle}"
 								Background="Transparent"
 								PlaceholderText="Username (d)"
-								IsSpellCheckEnabled="False"
-								IsTextPredictionEnabled="False"
 								Text="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-							</TextBox>
-						</controls:ErrorControl.PresentedContent>
-					</controls:ErrorControl>
-                </StackPanel>
+                        </TextBox>
+                    </controls:ErrorControl.PresentedContent>
+                </controls:ErrorControl>
+            </StackPanel>
 
-                <StackPanel Style="{StaticResource DialogSectionStackPanelStyle}">
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle }" x:Uid="AddUser-Password" Text="Password (d)"/>
-                    <Grid Style="{StaticResource rdEntryFieldGridStyle}">
-                    <PasswordBox 
-                        x:Uid="AddUser-PasswordTextbox"
-                        Background="Transparent"
-                        Margin="0,8" 
-                        PlaceholderText="Password (d)"
-                        Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">                        
-                    </PasswordBox>
-                    </Grid>
-                </StackPanel>
-                
-                <CheckBox 
-                        Name="chkStoreCredentials"
-                        x:Uid="AddUser-StoreCredentials-Checkbox"
-                        Content="Store Credentials (d)" VerticalAlignment="Stretch"
-                        IsChecked="{Binding Path=StoreCredentials, Mode=TwoWay}"
-                        Visibility="{Binding Path=ShowSave, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <!-- Password -->
+            <StackPanel Margin="{StaticResource DialogSectionVerticalSpacing}">
+                <TextBlock Margin="{StaticResource DialogHeaderVerticalSpacing}"
+                           Style="{ThemeResource BodyTextBlockStyle }" 
+                           x:Uid="AddUser-Password" 
+                           Text="Password (d)"/>
+                <PasswordBox x:Uid="AddUser-PasswordTextbox"                             
+                             Background="Transparent"
+                             PlaceholderText="Password (d)"
+                             Password="{Binding Path=Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">                    
+                </PasswordBox>
+                <CheckBox Name="chkStoreCredentials"
+                          Margin="{StaticResource DialogOptionalItemVerticalSpacing}"
+                          x:Uid="AddUser-StoreCredentials-Checkbox"
+                          Content="Store Credentials (d)" 
+                          VerticalAlignment="Stretch"
+                          IsChecked="{Binding Path=StoreCredentials, Mode=TwoWay}"
+                          Visibility="{Binding Path=ShowSave, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </StackPanel>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
 
-                    <Button x:Uid="Common_Button_Cancel" Content="Cancel(d)" 
+            <!-- Cancel / Save buttons -->
+            <Grid Margin="{StaticResource DialogSectionVerticalSpacing}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button x:Uid="Common_Button_Cancel" Content="Cancel(d)" 
                             Grid.Column="0" Style="{StaticResource DialogButtonStyle}" 
                             Command="{Binding Path=Cancel}" />
-                    <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
+                <Button x:Uid="Common_Button_SaveItem" Content="Save(d)" 
                             Grid.Column="2" Style="{StaticResource DialogAccentedButtonStyle}" 
                             Command="{Binding Path=DefaultAction}" />
-                </Grid>                
+            </Grid>
 
-                <HyperlinkButton x:Uid="AddUser-DeleteUserLink"
-                                 Margin="{StaticResource DialogDoubleSizeMargin}"
-                                 Command="{Binding Path=Delete}"
-								 Visibility="{Binding Path=CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock x:Uid="AddUser-DeleteUserText" 
-                               Text="(d) Delete this account"/>
-                </HyperlinkButton>                
-            </StackPanel>
-        </Grid>
+            <!-- Delete button -->
+            <HyperlinkButton x:Uid="AddUser-DeleteUserLink"
+                             Command="{Binding Path=Delete}"
+                             Visibility="{Binding Path=CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock x:Uid="AddUser-DeleteUserText" 
+                           Text="(d) Delete this account"/>
+            </HyperlinkButton>
+
+        </StackPanel>                
     </ContentControl>
 </controls:ModalUserControl>

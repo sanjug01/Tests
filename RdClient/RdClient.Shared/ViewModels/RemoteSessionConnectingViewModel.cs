@@ -4,7 +4,7 @@
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
 
-    public sealed class RemoteSessionConnectingViewModel
+    public sealed class RemoteSessionConnectingViewModel : IBellyBandViewModel
     {
         private readonly RelayCommand _cancel;
         private Action _cancelAction;
@@ -40,6 +40,14 @@
         private bool CanCancelConnection(object parameter)
         {
             return null != _cancelAction;
+        }
+
+        void IBellyBandViewModel.Terminate()
+        {
+            if(this.CanCancelConnection(null))
+            {
+                this.CancelConnection(null);
+            }
         }
     }
 }
