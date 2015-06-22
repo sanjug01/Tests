@@ -1,7 +1,6 @@
 ﻿using RdClient.Shared.Telemetry;
 using RdMock;
 using System;
-using System.Collections.Generic;
 
 namespace RdClient.Shared.Test.Mock
 {

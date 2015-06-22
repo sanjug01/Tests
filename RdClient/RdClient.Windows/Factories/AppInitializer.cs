@@ -12,7 +12,6 @@
     using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.Telemetry;
     using RdClient.Telemetry;
-    using System.Collections.Generic;
     using System.Diagnostics.Contracts;
     using Windows.UI.Core;
 
