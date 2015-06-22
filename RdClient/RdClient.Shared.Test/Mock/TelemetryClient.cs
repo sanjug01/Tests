@@ -9,11 +9,6 @@ namespace RdClient.Shared.Test.Mock
     {
         public bool IsActive { get; set; }
 
-        public void Metric(string metricName, IDictionary<string, string> properties)
-        {
-            Invoke(new object[] { metricName, properties });
-        }
-
         void ITelemetryClient.Event(string eventName)
         {
             Invoke(new object[] { eventName });

@@ -111,10 +111,5 @@
         {
             Debug.WriteLine("DummyTelemetryClient|TurnOff");
         }
-
-        public void Metric(string metricName, IDictionary<string, string> properties)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
