@@ -1,7 +1,6 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Pointer;
 using System;
-using System.Diagnostics;
 using Windows.Foundation;
 
 namespace RdClient.Shared.Input.Recognizers
@@ -97,7 +96,10 @@ namespace RdClient.Shared.Input.Recognizers
                         _holding = false;
                     }
 
-                    _fingersDown--;
+                    if(_fingersDown > 0)
+                    {
+                        _fingersDown--;
+                    }
                     break;
                 case PointerEventAction.PointerCancelled:
                     if (_holding)
