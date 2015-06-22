@@ -38,12 +38,10 @@ namespace RdClient.Shared.ViewModels
         {
             if(this.FullScreenModel.UserInteractionMode == UserInteractionMode.Mouse)
             {
-                this.FullScreenButtonVisibility = Visibility.Visible;
                 this.MouseModeButtonVisibility = Visibility.Collapsed;
             }
             else
             {
-                this.FullScreenButtonVisibility = Visibility.Collapsed;
                 this.MouseModeButtonVisibility = Visibility.Visible;
             }
         }
@@ -148,6 +146,8 @@ namespace RdClient.Shared.ViewModels
             _mouseModeCommand = new RelayCommand(InternalMouseMode);
             _fullScreenCommand = new RelayCommand(InternalFullScreen);
             _toggleVisibility = new RelayCommand(InternalToggleVisibility);
+
+            this.FullScreenButtonVisibility = Visibility.Visible;
         }
 
         private void InternalDisconnect(object parameter)
