@@ -93,9 +93,6 @@
                     this.TelemetryClient.Metric("localDesktopCount", appDataModel.LocalWorkspace.Connections.Models.Count);
                     this.TelemetryClient.Metric("credentialsCount", appDataModel.Credentials.Models.Count);
                     this.TelemetryClient.Metric("gatewaysCount", appDataModel.Gateways.Models.Count);
-                    ITelemetryEvent cpuabi = this.TelemetryClient.MakeEvent("DailyDeviceInfo");
-                    cpuabi.AddTag("dailyDeviceInfo", ClientCPU.GetPlatform());
-                    cpuabi.Report();
                 }
             }
             else
