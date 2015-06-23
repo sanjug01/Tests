@@ -25,10 +25,8 @@ namespace RdClient.Shared.Helpers
         public const double PanKnobWidth = 60.0;
         public const double PanKnobHeight = 60.0;
 
-        public const string HelpDocumentUrl = @"http://www.bing.com/search?q=remote+desktop";
+        public const string HelpDocumentUrl = @"http://go.microsoft.com/fwlink/?LinkID=616713&clcid=0x409";
         public const string EulaUri = "ms-appx:///Strings/EULA.rtf";
         public const string ThirdPartyUri = "ms-appx:///Strings/ThirdPartyNotices.rtf";
-        // we don't have Privacy/Help documents yet
-        public const string PrivacyDocUri = "";      // TODO: doc not yet available, using link until then
     }
 }

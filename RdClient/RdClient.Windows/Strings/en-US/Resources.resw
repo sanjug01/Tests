@@ -737,7 +737,7 @@
     <comment>Hyperlink for the "Privacy policy" hyperlink button in the About dialog</comment>
   </data>
   <data name="AboutView_Link_RateAndReview.NavigateUri" xml:space="preserve">
-    <value>http://www.bing.com/search?q=microsoft+rdp+client+rate+and+review</value>
+    <value>http://go.microsoft.com/fwlink/?LinkID=616709&amp;clcid=0x409</value>
     <comment>Hyperlink for the "Rate and Review" hyperlink button in the About dialog</comment>
   </data>
   <data name="AboutView_Link_RecommendedNewFeatures.NavigateUri" xml:space="preserve">
