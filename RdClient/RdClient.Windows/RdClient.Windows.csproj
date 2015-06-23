@@ -21,7 +21,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
-    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x86|arm</AppxBundlePlatforms>
     <ApplicationInsightsResourceId>/subscriptions/1432b34c-c3b7-448d-bb4b-90cda6c2423a/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/RdClient.Windows</ApplicationInsightsResourceId>
     <PackageCertificateThumbprint>191EF584DB98DEABBD0667A4E1D9F0E0FE7A7C1B</PackageCertificateThumbprint>
     <PackageCertificateKeyFile>RdClient.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
@@ -51,6 +51,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <TERMSRV_BUILDARCH>x86chk</TERMSRV_BUILDARCH>
