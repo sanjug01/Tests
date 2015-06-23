@@ -39,7 +39,6 @@
         private EventHandler _closed;
         private PropertyChangedEventHandler _propertyChanged;
         private bool _viewLoaded;
-        private ZoomScrollRecognizer _zoomScrollRecognizer;
         private TapRecognizer _tapRecognizer;
 
         public event EventHandler<IPointerEventBase> PointerChanged;    
@@ -188,8 +187,6 @@
 
             ITimer timer = null;
             this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = new RdDispatcherTimer(site.TimerFactory.CreateTimer(), site.DeferredExecution));
-            _zoomScrollRecognizer = new ZoomScrollRecognizer(timer);
-            _zoomScrollRecognizer.ZoomScrollEvent += OnZoomScrollEvent;
 
             this.RemoteSessionViewSite.CastAndCall<IRemoteSessionViewSite>(site => timer = new RdDispatcherTimer(site.TimerFactory.CreateTimer(), site.DeferredExecution));
             _tapRecognizer = new TapRecognizer(timer);
@@ -215,11 +212,6 @@
             this.EmitPointerEvent(e);
         }
 
-        private void OnZoomScrollEvent(object sender, IZoomScrollEvent e)
-        {
-            this.EmitPointerEvent(e);
-        }        
-
         private void EmitPropertyChanged(string propertyName)
         {
             if(_propertyChanged != null)
@@ -231,7 +223,6 @@
         protected override void OnManipulationStarting(ManipulationStartingRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarting, PointerEventType.ManipulationStartingRoutedEventArgs, e, this));
-            _zoomScrollRecognizer.Consume(w);
             this.EmitPointerEvent(w);
             e.Handled = true;
         }
@@ -239,7 +230,6 @@
         protected override void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationStarted, PointerEventType.ManipulationStartedRoutedEventArgs, e, this));
-            _zoomScrollRecognizer.Consume(w);
             this.EmitPointerEvent(w);
             e.Handled = true;
         }
@@ -249,7 +239,6 @@
             e.TranslationBehavior.DesiredDeceleration = GlobalConstants.DesiredDeceleration;
 
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationInertiaStarting, PointerEventType.ManipulationInertiaStartingRoutedEventArgs, e, this));
-            _zoomScrollRecognizer.Consume(w);
             this.EmitPointerEvent(w);
             e.Handled = true;
         }
@@ -257,7 +246,6 @@
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationDelta, PointerEventType.ManipulationDeltaRoutedEventArgs, e, this));
-            _zoomScrollRecognizer.Consume(w);
             this.EmitPointerEvent(w);
             e.Handled = true;
         }
@@ -265,7 +253,6 @@
         protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs e)
         {
             IManipulationRoutedEventProperties w = new ManipulationRoutedEventArgsWrapper(new PointerEvent(PointerEventAction.ManipulationCompleted, PointerEventType.ManipulationCompletedRoutedEventArgs, e, this));
-            _zoomScrollRecognizer.Consume(w);
             this.EmitPointerEvent(w);
             e.Handled = true;
         }
