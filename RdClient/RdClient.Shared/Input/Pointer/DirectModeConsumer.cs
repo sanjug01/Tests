@@ -1,7 +1,6 @@
 ﻿using RdClient.Shared.Helpers;
 using RdClient.Shared.Input.Recognizers;
 using System;
-using System.Diagnostics;
 
 namespace RdClient.Shared.Input.Pointer
 {

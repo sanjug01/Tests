@@ -70,6 +70,11 @@
         private void OnInputPaneHiding(InputPane sender, InputPaneVisibilityEventArgs e)
         {
             _isVisible = false;
+            //
+            // User may hide the keyboard by tapping its "close" button, in which case input focus must go
+            // away from the edit box.
+            //
+            this.DummyButton.Focus(FocusState.Programmatic);
             EmitIsVisibleChanged();
         }
     }

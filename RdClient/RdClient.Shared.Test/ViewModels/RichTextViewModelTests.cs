@@ -18,7 +18,7 @@
 
             _vm = new RichTextViewModel();
             _context = new Mock.ModalPresentationContext();
-            RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.PrivacyDoc);
+            RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.ThirdPartyNotices);
             ((IViewModel)_vm).Presenting(_navService, args, _context); 
         }
 

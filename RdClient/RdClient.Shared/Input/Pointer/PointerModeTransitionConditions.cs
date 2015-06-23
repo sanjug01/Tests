@@ -227,23 +227,25 @@ namespace RdClient.Shared.Input.Pointer
         public static bool RightDown_ZoomPan_Condition(PointerStateMachineEvent e)
         {
             return
-                e.Input.Action == PointerEventAction.ZoomScrollStarted;
+                e.Input.Action == PointerEventAction.ManipulationDelta &&
+                (RdMath.Distance(((IManipulationRoutedEventProperties)e.Input).Delta.Translation) > 0.0 ||
+                 ((IManipulationRoutedEventProperties)e.Input).Delta.Scale > 1.0);
         }
 
         public static void RightDown_ZoomPan_Action(PointerStateMachineEvent e)
         {
-            e.Control.ZoomPan(e.Tracker.Center, ((IZoomScrollEvent)e.Input).Delta.Translation, ((IZoomScrollEvent)e.Input).Delta.Scale);
+            e.Control.ZoomPan(e.Tracker.Center, ((IManipulationRoutedEventProperties)e.Input).Delta.Translation, ((IManipulationRoutedEventProperties)e.Input).Delta.Scale);
         }
 
         public static bool ZoomPan_ZoomPan_Condition(PointerStateMachineEvent e)
         {
             return
-                e.Input.Action == PointerEventAction.ZoomScrollUpdating;
+                e.Input.Action == PointerEventAction.ManipulationDelta;
         }
 
         public static void ZoomPan_ZoomPan_Action(PointerStateMachineEvent e)
         {
-            e.Control.ZoomPan(e.Tracker.Center, ((IZoomScrollEvent)e.Input).Delta.Translation, ((IZoomScrollEvent)e.Input).Delta.Scale);
+            e.Control.ZoomPan(e.Tracker.Center, ((IManipulationRoutedEventProperties)e.Input).Delta.Translation, ((IManipulationRoutedEventProperties)e.Input).Delta.Scale);
         }
 
         public static bool ZoomPan_Idle_Condition(PointerStateMachineEvent e)

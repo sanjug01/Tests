@@ -479,10 +479,7 @@
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
 
-                        if (this.RightSideBarViewModel.FullScreenModel.UserInteractionMode == UserInteractionMode.Mouse)
-                        {
-                            this.FullScreenModel.EnterFullScreenCommand.Execute(null);
-                        }
+                        this.FullScreenModel.EnterFullScreenCommand.Execute(null);
 
                         this.IsConnectionBarVisible = true;
                         break;

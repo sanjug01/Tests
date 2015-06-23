@@ -13,8 +13,8 @@
     {
         EulaDoc,
         ThirdPartyNotices,
-        PrivacyDoc // TODO: not yet available, currently a link
     }
+
     public class RichTextViewModelArgs
     {
         public InternalDocType DocumentType { private set; get; }
@@ -92,9 +92,6 @@
                     break;
                 case InternalDocType.ThirdPartyNotices:
                     this.ResourceUri = GlobalConstants.ThirdPartyUri;
-                    break;
-                case InternalDocType.PrivacyDoc:                    
-                    this.ResourceUri = GlobalConstants.PrivacyDocUri;
                     break;
             }
 

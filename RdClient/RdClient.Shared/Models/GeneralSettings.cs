@@ -98,7 +98,11 @@
         private void SetDefaults()
         {
             this.UseThumbnails = true;
+#if DEBUG
+            this.SendFeedback = false;
+#else
             this.SendFeedback = true;
+#endif
             //
             // Telemetry is enabled by default; user has an option to opt-out on the settings page.
             //
