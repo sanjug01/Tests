@@ -46,7 +46,7 @@
 
             _timerFactory = new TestTimerFactory();
             _connectionSource = new TestConnectionSource();
-            ((ITimerFactorySite)_vm).SetTimerFactory(_timerFactory);
+            _vm.TimerFactory = _timerFactory;
             _viewFactory = new TestViewFactory(_vm);
 
             _defex = new TestDeferredExecution();

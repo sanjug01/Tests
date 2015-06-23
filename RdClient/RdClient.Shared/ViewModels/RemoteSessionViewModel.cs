@@ -20,7 +20,6 @@
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase,
         IRemoteSessionViewSite,
-        ITimerFactorySite,
         IDeviceCapabilitiesSite,
         ILifeTimeSite,
         IInputPanelFactorySite,
@@ -58,8 +57,6 @@
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
         private ReadOnlyObservableCollection<object> _connectionBarItems;
-
-        private ITimerFactory _timerFactory;
 
         private ILifeTimeManager _lifeTimeManager;
 
@@ -107,7 +104,7 @@
 
         public ITimerFactory TimerFactory
         {
-            get { return _timerFactory; }
+            get; set;
         }
 
         /// <summary>
@@ -293,11 +290,6 @@
             }
         }
 
-        void ITimerFactorySite.SetTimerFactory(ITimerFactory timerFactory)
-        {
-            _timerFactory = timerFactory;
-        }
-
         void IDeviceCapabilitiesSite.SetDeviceCapabilities(IDeviceCapabilities deviceCapabilities)
         {
             if (null != _deviceCapabilities)
@@ -451,12 +443,10 @@
                             this.PointerPosition, 
                             _activeSessionControl, 
                             _activeSessionControl.RenderingPanel, 
-                            _timerFactory,
+                            this.TimerFactory,
                             this.Dispatcher);
 
                         this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
-
-                        this.PanKnobSite = new PanKnobSite(this.TimerFactory);
 
                         this.ZoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport);
                         this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
