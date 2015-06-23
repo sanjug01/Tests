@@ -61,7 +61,6 @@ namespace RdClient.Shared.Test.CxWrappers
             using (Mock.WindowSize windowSize = new Mock.WindowSize())
             {
                 windowSize.Size = size;
-                windowSize.Expect("GetScreenSize", new List<object>() { }, size);
                 properties.Expect("SetIntProperty", new List<object>() { "PhysicalDesktopWidth", 23 }, 0);
                 properties.Expect("SetIntProperty", new List<object>() { "PhysicalDesktopHeight", 42 }, 0);
 

@@ -50,13 +50,13 @@
 
             using (LockWrite())
             {
-                if ((int)RdClientCx.ConnectionHealthState.Warn == e.ConnectionState)
-                {
-                    _isConnectionAvailable = false;
-                }
-                else if ((int)RdClientCx.ConnectionHealthState.Connected == e.ConnectionState)
+                if ((int)RdClientCx.ConnectionHealthState.Connected == e.ConnectionState)
                 {
                     _isConnectionAvailable = true;
+                }
+                else
+                {
+                    _isConnectionAvailable = false;
                 }
             }
         }

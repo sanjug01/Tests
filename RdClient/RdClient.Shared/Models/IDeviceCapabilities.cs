@@ -21,5 +21,11 @@
         /// One of the scenarios in which value of the property may change is when the user attaches or detaches a USB
         /// keyboard.</remarks>
         bool CanShowInputPanel { get; }
+
+        /// <summary>
+        /// Human-readable name of the current user interaction mode (may be "Mouse" or "Touch",
+        /// more values may be available later as the platform evolves).
+        /// </summary>
+        string UserInteractionModeLabel { get; }
     }
 }

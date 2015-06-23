@@ -51,6 +51,9 @@ namespace RdClient.Shared.Input.Pointer
             _renderingPanel = sessionControl;
             _deferrer = deferrer;
 
+            Point center = new Point(sessionControl.Viewport.SessionPanel.Width / 2.0, sessionControl.Viewport.SessionPanel.Height / 2.0);
+            ((IPointerPosition)this).ViewportPosition = center;
+
             _renderingPanel.Viewport.Changed -= OnViewportChanged;
 
             _renderingPanel.Viewport.Changed += OnViewportChanged;

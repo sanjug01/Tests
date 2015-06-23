@@ -49,6 +49,10 @@
         {
             get { return _canShowInputPanel; }
         }
+        string IDeviceCapabilities.UserInteractionModeLabel
+        {
+            get { return _userInteractionMode.ToString(); }
+        }
 
         private bool CanShowInputPanel
         {
@@ -63,6 +67,7 @@
             {
                 _userInteractionMode = mode;
                 this.CanShowInputPanel = CheckIfCanShowInputPanel();
+                EmitPropertyChanged("UserInteractionMode");
             }
         }
 

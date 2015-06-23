@@ -2,21 +2,29 @@
 using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models.Viewport;
 using System;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Models.PanKnobModel
 {
     public class PanKnobSite : IPanKnobSite
     {
+        private ConsumptionModeType _consumptionMode;
         private ITimerFactory _timerFactory;
         ITimerFactory IPanKnobSite.TimerFactory { get { return _timerFactory; } }
 
         private IStateMachine<PanKnobState, PanKnobStateMachineEvent> _stateMachine;
         private PanKnobStateMachineEvent _stateMachineEvent;
 
+        private IViewport _viewport;
         public IViewport Viewport
         {
+            private get
+            {
+                return _viewport;
+            }
             set
             {
+                _viewport = value;
                 if (null != _stateMachineEvent.Control)
                 {
                     _stateMachineEvent.Control.Viewport = value;
@@ -56,7 +64,7 @@ namespace RdClient.Shared.Models.PanKnobModel
             {
                 _stateMachineEvent.Input = pointerEvent;
                 _stateMachine.Consume(_stateMachineEvent);
-                if(ConsumedEvent != null)
+                if (ConsumedEvent != null)
                 {
                     ConsumedEvent(this, pointerEvent);
                 }
@@ -66,11 +74,27 @@ namespace RdClient.Shared.Models.PanKnobModel
         void IPointerEventConsumer.Reset()
         {
             _stateMachine.SetStart(PanKnobState.Idle);
+
+            Point center = new Point(0, 0);           
+
+            ((IPanKnobSite)this).PanKnob.Position = center;
         }
 
         void IPanKnobSite.OnConsumptionModeChanged(object sender, ConsumptionModeType consumptionMode)
         {
-            if(consumptionMode == ConsumptionModeType.DirectTouch || consumptionMode == ConsumptionModeType.MultiTouch)
+            _consumptionMode = consumptionMode;
+            if (false == (_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch))
+            {
+                if (null != _panKnob)
+                {
+                    _panKnob.IsVisible = false;
+                }
+            }
+        }
+
+        void IPanKnobSite.OnViewportChanged(object sender, EventArgs e)
+        {
+            if(this.Viewport.ZoomFactor > 1.0 && (_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch))
             {
                 if (null != _panKnob)
                 {
@@ -83,6 +107,21 @@ namespace RdClient.Shared.Models.PanKnobModel
                 {
                     _panKnob.IsVisible = false;
                 }
+            }
+
+            // make sure the PanKnob doesn't fall outside the viewport when displaying the on screen keyboard
+            Point current = _panKnob.Position;
+            if(_panKnob.IsVisible)
+            {
+                if (current.Y < -(_viewport.Size.Height / 2) + (_panKnob.Size.Height / 2))
+                {
+                    current.Y = -(_viewport.Size.Height / 2) + (_panKnob.Size.Height / 2);
+                }
+                else if (current.Y + _panKnob.Size.Height / 2 > _viewport.Size.Height / 2)
+                {
+                    current.Y = _viewport.Size.Height / 2 - (_panKnob.Size.Height / 2);
+                }
+                _panKnob.Position = current;
             }
         }
     }

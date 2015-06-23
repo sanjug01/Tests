@@ -30,6 +30,7 @@ namespace RdClient.Shared.Models
         public RelayCommand ZoomOutCommand { get { return _zoomOutCommand; } }
 
         private bool _isZoomedIn = false;
+        public bool IsZoomedIn { get { return _isZoomedIn; } }
 
 
         private ConsumptionModeType _consumptionMode;

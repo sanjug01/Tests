@@ -83,7 +83,8 @@
                 //
                 // Create a session factory that uses the injected telemetry client.
                 //
-                sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution, timerFactory, this.TelemetryClient);
+                sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution, timerFactory,
+                    this.DeviceCapabilities, this.TelemetryClient);
                 //
                 // Report data model statistics telemetry
                 //
@@ -100,7 +101,8 @@
                 // Create a session factory that uses the dummy telemetry client, because the session factory
                 // requires a functional telemetry client.
                 //
-                sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution, timerFactory, new DummyTelemetryClient());
+                sessionFactory = new SessionFactory(this.ConnectionSource, deferredExecution, timerFactory,
+                    this.DeviceCapabilities, new DummyTelemetryClient());
             }
             Contract.Assert(null != sessionFactory);
 
