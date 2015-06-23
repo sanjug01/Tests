@@ -9,7 +9,7 @@ namespace RdClient.Shared.Helpers
     public static class GlobalConstants
     {
         public const ulong MaxDoubleTapUS = 300000; // microseconds      
-        public const double DesiredDeceleration = 0.002;
+        public const double DesiredDeceleration = 0.006;
         public const double MouseAcceleration = 1.4;
 
         public const double TouchPanDeltaThreshold = 2.0; // min for panning

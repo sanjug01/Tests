@@ -162,12 +162,11 @@ namespace RdClient.Shared.ViewModels
 
         private void InternalMouseMode(object parameter)
         {
-            this.Visibility = Visibility.Collapsed;
-
             if (this.PointerCapture != null)
             {
                 this.PointerCapture.OnMouseModeChanged(this, EventArgs.Empty);
             }
+            this.Visibility = Visibility.Collapsed;
         }
 
 
