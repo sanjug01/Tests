@@ -540,21 +540,28 @@
         {
             if (e.PropertyName.Equals("Visibility") && sender is IRightSideBarViewModel)
             {
-                Visibility visibility = ((IRightSideBarViewModel)sender).Visibility;
-                if(visibility == Visibility.Visible)
+                Visibility barVisibility = ((IRightSideBarViewModel)sender).Visibility;
+                Visibility mouseVisibility = Visibility.Collapsed;
+                if(barVisibility == Visibility.Visible)
                 {
-                    visibility = Visibility.Collapsed;
+                    mouseVisibility = Visibility.Collapsed;
                 }
                 else
                 {
-                    visibility = Visibility.Visible;
+                    mouseVisibility = Visibility.Visible;
                 }
 
-                this.ScrollBarModel.SetScrollbarVisibility(visibility);
+                if(this.PointerCapture.ConsumptionMode.ConsumptionMode != ConsumptionModeType.Pointer)
+                {
+                    mouseVisibility = Visibility.Collapsed;
+                }
+
+
+                this.ScrollBarModel.SetScrollbarVisibility(mouseVisibility);
 
                 if (_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
                 {
-                    _activeSessionControl.RenderingPanel.ChangeMouseVisibility(visibility);
+                    _activeSessionControl.RenderingPanel.ChangeMouseVisibility(mouseVisibility);
                 }
                 
             }
