@@ -12,13 +12,14 @@
     xmlns:input="using:RdClient.Input"
     xmlns:pointer="using:RdClient.Shared.Input.Pointer"
     xmlns:helpers="using:RdClient.Helpers"
+    xmlns:panknob="using:RdClient.Shared.Models.PanKnobModel"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="800"
     RequestedTheme="Dark">
     
     <UserControl.DataContext>
-        <vm:RemoteSessionViewModel FullScreenModel="{StaticResource FullScreenModel}">
+        <vm:RemoteSessionViewModel FullScreenModel="{StaticResource FullScreenModel}" TimerFactory="{StaticResource TimerFactory}">
             <!-- Inject the keyboard capture based on CoreWindow and CoreDispatcher -->
             <vm:RemoteSessionViewModel.KeyboardCapture>
                 <input:CoreWindowKeyboardCapture/>
@@ -33,6 +34,9 @@
             <vm:RemoteSessionViewModel.ScrollBarModel>
                 <m:ScrollBarModel />
             </vm:RemoteSessionViewModel.ScrollBarModel>
+            <vm:RemoteSessionViewModel.PanKnobSite>
+                <panknob:PanKnobSite TimerFactory="{StaticResource TimerFactory}"/>
+            </vm:RemoteSessionViewModel.PanKnobSite>
         </vm:RemoteSessionViewModel>
     </UserControl.DataContext>
 
@@ -150,7 +154,6 @@
 
                     </Grid>
                 </Grid>
-
                 <c:PanKnob x:Name="PanKnob"
                            PanKnobSite="{Binding PanKnobSite}"/>
             </Grid>

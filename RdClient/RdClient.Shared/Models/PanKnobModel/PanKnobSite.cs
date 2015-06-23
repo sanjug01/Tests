@@ -3,14 +3,13 @@ using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models.Viewport;
 using System;
 using Windows.Foundation;
+using Windows.UI.Xaml;
 
 namespace RdClient.Shared.Models.PanKnobModel
 {
     public class PanKnobSite : IPanKnobSite
     {
         private ConsumptionModeType _consumptionMode;
-        private ITimerFactory _timerFactory;
-        ITimerFactory IPanKnobSite.TimerFactory { get { return _timerFactory; } }
 
         private IStateMachine<PanKnobState, PanKnobStateMachineEvent> _stateMachine;
         private PanKnobStateMachineEvent _stateMachineEvent;
@@ -32,10 +31,10 @@ namespace RdClient.Shared.Models.PanKnobModel
             }
         }
 
-        public PanKnobSite(ITimerFactory timerFactory)
-        {
-            _timerFactory = timerFactory;
+        public ITimerFactory TimerFactory { get; set; }
 
+        public PanKnobSite()
+        {
             _stateMachine = new StateMachine<PanKnobState, PanKnobStateMachineEvent>();
             PanKnobTransitions.AddTransitions(ref _stateMachine);
             _stateMachine.SetStart(PanKnobState.Idle);
@@ -85,28 +84,22 @@ namespace RdClient.Shared.Models.PanKnobModel
             _consumptionMode = consumptionMode;
             if (false == (_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch))
             {
-                if (null != _panKnob)
-                {
-                    _panKnob.IsVisible = false;
-                }
+                _panKnob.IsVisible = false;
             }
         }
 
         void IPanKnobSite.OnViewportChanged(object sender, EventArgs e)
         {
-            if(this.Viewport.ZoomFactor > 1.0 && (_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch))
+            if((this.Viewport.Size.Width < this.Viewport.SessionPanel.Width ||
+                    this.Viewport.Size.Height < this.Viewport.SessionPanel.Height) &&
+                (_consumptionMode == ConsumptionModeType.DirectTouch || 
+                    _consumptionMode == ConsumptionModeType.MultiTouch))
             {
-                if (null != _panKnob)
-                {
-                    _panKnob.IsVisible = true;
-                }
+                _panKnob.IsVisible = true;
             }
             else
             {
-                if (null != _panKnob)
-                {
-                    _panKnob.IsVisible = false;
-                }
+                _panKnob.IsVisible = false;
             }
 
             // make sure the PanKnob doesn't fall outside the viewport when displaying the on screen keyboard
