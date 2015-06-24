@@ -48,7 +48,6 @@
         private UserComboBoxElement _savedSelectedUser;
         private GatewayComboBoxElement _selectedGateway;
         private GatewayComboBoxElement _savedSelectedGateway;
-        private Guid _selectedUserId;
 
         public AddOrEditDesktopViewModel()
         {
