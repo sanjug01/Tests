@@ -606,7 +606,7 @@
     <value>Disconnect</value>
     <comment>Label on in session right side bar button that disconnects the session and returns to the connection center</comment>
   </data>
-  <data name="SessionView-MouseModeLabel.Text" xml:space="preserve">
+  <data name="SessionView-TouchModeLabel.Text" xml:space="preserve">
     <value>Touch</value>
     <comment>Label on in session right side bar button that toggles touch mode between direct touch remoting and touch pointer mode</comment>
   </data>
@@ -962,5 +962,9 @@
   <data name="SessionView-FullScreenButtonLabel.Text" xml:space="preserve">
     <value>Full-screen</value>
     <comment>Label on in session right side bar button that toggles full-screen mode</comment>
+  </data>
+  <data name="SessionView-MouseModeLabel.Text" xml:space="preserve">
+    <value>(r) Mouse</value>
+    <comment>Label on in session right side bar button that toggles touch mode between direct touch remoting and touch pointer mode</comment>
   </data>
 </root>

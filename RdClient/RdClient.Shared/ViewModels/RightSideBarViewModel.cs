@@ -3,16 +3,39 @@ using RdClient.Shared.Input.Pointer;
 using RdClient.Shared.Models;
 using System;
 using System.Windows.Input;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
 namespace RdClient.Shared.ViewModels
 {
     public class RightSideBarViewModel : MutableObject, IRightSideBarViewModel
     {
+        private InputMode _inputMode;
+
         public IRemoteSession RemoteSession
         {
             private get; set;
+        }
+
+        private IPointerCapture _pointerCapture;
+        public IPointerCapture PointerCapture
+        {
+            private get
+            {
+                return _pointerCapture;
+            }
+            set
+            {
+                _pointerCapture = value;
+                if(_pointerCapture != null)
+                {
+                    this.InternalMouseMode(null);
+                }
+            }
+        }
+
+        public IDeviceCapabilities DeviceCapabilities
+        {
+            get; set;
         }
 
         private IFullScreenModel _fullScreenModel;
@@ -25,101 +48,89 @@ namespace RdClient.Shared.ViewModels
             set
             {
                 _fullScreenModel = value;
+                _fullScreenModel.FullScreenChange += OnFullScreenChange;
 
-                if(_fullScreenModel != null)
-                {
-                    _fullScreenModel.UserInteractionModeChange += OnUserInteractionModeChange;
-                    OnUserInteractionModeChange(this, EventArgs.Empty);
-                }
+                OnFullScreenChange(this, EventArgs.Empty);
             }
         }
 
-        private void OnUserInteractionModeChange(object sender, EventArgs e)
+        private void OnFullScreenChange(object sender, EventArgs e)
         {
-            if(this.FullScreenModel.UserInteractionMode == UserInteractionMode.Mouse)
+            if (_fullScreenModel.IsFullScreenMode)
             {
-                this.FullScreenButtonVisibility = Visibility.Visible;
-                this.MouseModeButtonVisibility = Visibility.Collapsed;
+                _fullScreenButtonModel.CanExecute = false;
+                _normalScreenButtonModel.CanExecute = true;
             }
             else
             {
-                this.FullScreenButtonVisibility = Visibility.Collapsed;
-                this.MouseModeButtonVisibility = Visibility.Visible;
+                _fullScreenButtonModel.CanExecute = true;
+                _normalScreenButtonModel.CanExecute = false;
             }
         }
 
-        private Visibility _fullScreenButtonVisibility;
-        public Visibility FullScreenButtonVisibility
+        private BarButtonModel _disconnectButtonModel;
+        public BarButtonModel DisconnectButtonModel
         {
             get
             {
-                return _fullScreenButtonVisibility;
+                return _disconnectButtonModel;
             }
             set
             {
-                SetProperty(ref _fullScreenButtonVisibility, value);
+                SetProperty(ref _disconnectButtonModel, value);
             }
         }
 
-        private Visibility _mouseModeButtonVisibility;
-        public Visibility MouseModeButtonVisibility
+
+        private BarButtonModel _fullScreenButtonModel;
+        public BarButtonModel FullScreenButtonModel
+        { 
+            get
+            {
+                return _fullScreenButtonModel;
+            }
+            set
+            {
+                SetProperty(ref _fullScreenButtonModel, value);
+            }
+        }
+
+        private BarButtonModel _normalScreenButtonModel;
+        public BarButtonModel NormalScreenButtonModel
         {
             get
             {
-                return _mouseModeButtonVisibility;
+                return _normalScreenButtonModel;
             }
             set
             {
-                SetProperty(ref _mouseModeButtonVisibility, value);
+                SetProperty(ref _normalScreenButtonModel, value);
             }
         }
 
-        public IPointerCapture PointerCapture
-        {
-            private get; set;
-        }
-
-        private readonly ICommand _disconnectCommand;
-        public ICommand Disconnect
-        {
-            get { return _disconnectCommand; }
-        }
-
-        private readonly ICommand _fullScreenCommand;
-        public ICommand FullScreen
-        {
-            get { return _fullScreenCommand; }
-        }
-
-        private bool _isFullScreenChecked;
-        public bool IsFullScreenChecked
+        private BarButtonModel _touchButtonModel;
+        public BarButtonModel TouchButtonModel
         {
             get
             {
-                return _isFullScreenChecked;
+                return _touchButtonModel;
             }
             set
             {
-                SetProperty(ref _isFullScreenChecked, value);
+                SetProperty(ref _touchButtonModel, value);
             }
         }
 
-        private readonly ICommand _mouseModeCommand;
-        public ICommand MouseMode
-        {
-            get { return _mouseModeCommand; }
-        }
-
-        private bool _isMouseModeChecked;
-        public bool IsMouseModeChecked
+        private BarButtonModel _mouseButtonModel;
+        public BarButtonModel MouseButtonModel
         {
             get
             {
-                return _isMouseModeChecked;
+                return _mouseButtonModel;
             }
             set
             {
-                SetProperty(ref _isMouseModeChecked, value);
+                SetProperty(ref _mouseButtonModel, value);
             }
         }
 
@@ -144,9 +155,12 @@ namespace RdClient.Shared.ViewModels
 
         public RightSideBarViewModel()
         {
-            _disconnectCommand = new RelayCommand(InternalDisconnect);
-            _mouseModeCommand = new RelayCommand(InternalMouseMode);
-            _fullScreenCommand = new RelayCommand(InternalFullScreen);
+            _disconnectButtonModel = new BarButtonModel() { Command = new RelayCommand(InternalDisconnect) };
+            _fullScreenButtonModel = new BarButtonModel() { Command = new RelayCommand(InternalFullScreen) };
+            _normalScreenButtonModel = new BarButtonModel() { Command = new RelayCommand(InternalNormalScreen) };        
+            _touchButtonModel = new BarButtonModel() { Command = new RelayCommand(InternalTouchMode) };
+            _mouseButtonModel = new BarButtonModel() { Command = new RelayCommand(InternalMouseMode) };
+
             _toggleVisibility = new RelayCommand(InternalToggleVisibility);
         }
 
@@ -162,18 +176,32 @@ namespace RdClient.Shared.ViewModels
 
         private void InternalMouseMode(object parameter)
         {
-            if (this.PointerCapture != null)
-            {
-                this.PointerCapture.OnMouseModeChanged(this, EventArgs.Empty);
-            }
+            this.PointerCapture.ChangeInputMode(InputMode.Mouse);
+            _inputMode = InputMode.Mouse;
+            _mouseButtonModel.CanExecute = false;
+            _touchButtonModel.CanExecute = true && this.DeviceCapabilities.TouchPresent;
             this.Visibility = Visibility.Collapsed;
         }
 
+        private void InternalTouchMode(object parameter)
+        {
+            this.PointerCapture.ChangeInputMode(InputMode.Touch);
+            _inputMode = InputMode.Touch;
+            _mouseButtonModel.CanExecute = true && this.DeviceCapabilities.TouchPresent;
+            _touchButtonModel.CanExecute = false;
+            this.Visibility = Visibility.Collapsed;
+        }
 
         private void InternalFullScreen(object parameter)
         {
             this.Visibility = Visibility.Collapsed;
-            this.FullScreenModel.ToggleFullScreen();
+            this.FullScreenModel.EnterFullScreenCommand.Execute(null);
+        }
+
+        private void InternalNormalScreen(object parameter)
+        {
+            this.Visibility = Visibility.Collapsed;
+            this.FullScreenModel.ExitFullScreenCommand.Execute(null);
         }
 
         private void InternalToggleVisibility(object parameter)

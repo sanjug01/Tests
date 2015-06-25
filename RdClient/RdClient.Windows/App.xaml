@@ -16,6 +16,7 @@
         <ResourceDictionary>            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/Styles.xaml" />
+                <ResourceDictionary Source="Styles/IconResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <lifetime:LifeTimeManager x:Key="LifeTimeManager">
@@ -31,6 +32,7 @@
             </cv:TypeToLocalizedStringConverter>
             
             <helpers:DeviceCapabilities x:Key="DeviceCapabilities" />
+            
             <model:FullScreenModel x:Key="FullScreenModel">
                 <model:FullScreenModel.FullScreen>
                     <helpers:FullScreen />

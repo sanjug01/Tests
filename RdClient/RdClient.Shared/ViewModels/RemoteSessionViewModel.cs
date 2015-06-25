@@ -191,7 +191,7 @@
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = this.ZoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = this.RightSideBarViewModel.ToggleVisiblity });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = new RelayCommand((o) => { this.RightSideBarViewModel.Visibility = Visibility.Visible; }) });
             items.Add(_invokeKeyboardModel);
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
@@ -273,7 +273,11 @@
         {
             this.BellyBandViewModel?.Terminate();
             this.BellyBandViewModel = null;
-            this.RightSideBarViewModel.Disconnect.Execute(null);
+            if(_activeSession != null)
+            {
+                _activeSession.Disconnect();
+            }
+
             backArgs.Handled = true;
         }
 

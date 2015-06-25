@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Models;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Windows.Input;

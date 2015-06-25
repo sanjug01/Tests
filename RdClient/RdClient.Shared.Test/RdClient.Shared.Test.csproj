@@ -115,7 +115,6 @@
     <SDKReference Include="TestPlatform.Universal, Version=$(UnitTestPlatformVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\BarItemsAlignmentFilteringConverterTests.cs" />
     <Compile Include="Converters\BooleanToPasswordRevealModeConverterTests.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverterTests.cs" />
     <Compile Include="Converters\ByteArrayToStringConverterTests.cs" />
@@ -205,7 +204,6 @@
     <Compile Include="Mock\RdpConnectionFactory.cs" />
     <Compile Include="Mock\RdpEvents.cs" />
     <Compile Include="Mock\RdpProperties.cs" />
-    <Compile Include="Mock\TestBarItemModel.cs" />
     <Compile Include="Mock\Timer.cs" />
     <Compile Include="Mock\TestRdpCertificate.cs" />
     <Compile Include="Mock\ValidationRule.cs" />
@@ -256,7 +254,6 @@
     <Compile Include="ViewModels\CertificateValidationViewModelTests.cs" />
     <Compile Include="ViewModels\DeleteDesktopsViewModelTests.cs" />
     <Compile Include="ViewModels\BarButtonModelTests.cs" />
-    <Compile Include="ViewModels\BarItemModelTests.cs" />
     <Compile Include="Navigation\NavigationServiceTests.cs" />
     <Compile Include="Navigation\PresentableViewConstructorTests.cs" />
     <Compile Include="Navigation\PresentableViewFactoryTests.cs" />
@@ -272,7 +269,6 @@
     <Compile Include="ViewModels\RemoteSessionViewModelTests.cs" />
     <Compile Include="ViewModels\RelayCommandTests.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModelTests.cs" />
-    <Compile Include="ViewModels\SegoeGlyphBarButtonModelTests.cs" />
     <Compile Include="ViewModels\AboutViewModelTests.cs" />
     <Compile Include="ViewModels\SettingsViewModelTests.cs" />
     <Compile Include="ViewModels\DesktopViewModelTests.cs" />

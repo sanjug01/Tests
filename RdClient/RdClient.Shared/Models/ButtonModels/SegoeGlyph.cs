@@ -1,4 +1,4 @@
-﻿namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.Models
 {
     using System.Windows.Input;
 
@@ -28,21 +28,5 @@
         ExitFullScreen = 0xE73F,
         GlobalNavButton = 0xE700,
         AllApps = 0xE71D,
-    }
-
-    /// <summary>
-    /// Model of an application bar button showing a Segoe UI symbol.
-    /// </summary>
-    public sealed class SegoeGlyphBarButtonModel : BarButtonModel
-    {
-        private readonly SegoeGlyph _glyph;
-
-        public SegoeGlyph Glyph { get { return _glyph; } }
-
-        public SegoeGlyphBarButtonModel(SegoeGlyph glyph, ICommand command, string label, ItemAlignment alignment = ItemAlignment.Left)
-            : base(command, label, alignment)
-        {
-            _glyph = glyph;
-        }
     }
 }
