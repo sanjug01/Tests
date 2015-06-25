@@ -40,7 +40,8 @@
 		<HyperlinkButton 
 			VerticalAlignment="Top"
 			HorizontalAlignment="Right"				
-			Command="{Binding AddGateway}">
+			Command="{Binding AddGateway}"
+            Background="Transparent" Height="40" Margin="0,-8,0,0">
 			<TextBlock
 				x:Uid="GatewaySelector_AddGateway"
 				TextLineBounds="Tight"

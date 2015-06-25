@@ -81,13 +81,15 @@
 				x:Uid="AddOrEditDesktop-HelpButton"
 				Margin="{StaticResource DialogHyperlinkVerticalSpacing}"
 				NavigateUri="http://go.microsoft.com/fwlink/?LinkID=533682&amp;clcid=0x409"
-				Content="Get help connecting (d)">
+				Content="Get help connecting (d)"
+                 Background="Transparent">
 			</HyperlinkButton>
 			<!-- Show/hide extra settings buttons -->
 			<HyperlinkButton
 				Margin="{StaticResource DialogItemVerticalSpacing}"
                 Command="{Binding ShowDetailsCommand}" 
-                Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                 Background="Transparent">
 				<StackPanel Orientation="Horizontal">
 					<TextBlock 
 						x:Uid="AddOrEditDesktop-MoreDetailsLabel"						
@@ -107,7 +109,8 @@
 			<HyperlinkButton
                 Command="{Binding HideDetailsCommand}"                            
                 Margin="{StaticResource DialogItemVerticalSpacing}" 
-                Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                 Background="Transparent">
 				<StackPanel Orientation="Horizontal">
 					<TextBlock 
 						x:Uid="AddOrEditDesktop-LessDetailsLabel"						

@@ -41,7 +41,8 @@
 		<HyperlinkButton 
 			HorizontalAlignment="Right"
 			VerticalAlignment="Top"
-			Command="{Binding AddUser}">
+			Command="{Binding AddUser}"
+            Background="Transparent" Height="40" Margin="0,-8,0,0">
 			<TextBlock 
 				x:Uid="UserSelecter_AddUser"
 				TextLineBounds="Tight"

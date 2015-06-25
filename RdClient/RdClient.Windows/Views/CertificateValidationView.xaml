@@ -106,7 +106,7 @@
 						<!-- Show/hide details buttons -->
 						<HyperlinkButton
 							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
-							Command="{Binding ShowDetails}">
+							Command="{Binding ShowDetails}" Background="Transparent"  Height="40" Margin="0,-8,0,0">
 							<StackPanel Orientation="Horizontal">
 								<TextBlock 									
 									Style="{StaticResource BodyTextBlockStyle}" 
@@ -126,7 +126,8 @@
 						<HyperlinkButton 
 							Margin="{StaticResource DialogItemVerticalSpacing}"
 							Visibility="{Binding Path=IsExpandedView, Converter={StaticResource BooleanToVisibilityConverter}}"
-							Command="{Binding HideDetails}">
+							Command="{Binding HideDetails}"
+                             Background="Transparent"  Height="40">
 							<StackPanel Orientation="Horizontal">
 								<TextBlock 									
 									Style="{StaticResource BodyTextBlockStyle}" 
