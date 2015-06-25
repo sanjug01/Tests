@@ -59,6 +59,7 @@ namespace RdClient.Shared.Input.Pointer
                         break;
                     case PointerEventAction.PointerReleased:
                     case PointerEventAction.PointerCancelled:
+                    case PointerEventAction.PointerExited:
                         Tracker.Untrack(pp.PointerId);
                         break;
                 }
