@@ -41,7 +41,7 @@
 			VerticalAlignment="Top"
 			HorizontalAlignment="Right"				
 			Command="{Binding AddGateway}"
-            Style="{StaticResource linkButtonWithMargin}">
+            Style="{StaticResource DialogLinkWithMargin}">
             <TextBlock
             x:Uid="GatewaySelector_AddGateway"
 				TextLineBounds="Tight"

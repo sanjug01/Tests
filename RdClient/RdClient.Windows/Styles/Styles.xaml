@@ -467,6 +467,24 @@
 
     <!-- 
     ======================================================================================
+    Dialog HyperLinkButton Styles
+    ======================================================================================
+    -->
+
+    <Style x:Key="DialogLinkBasic" TargetType="HyperlinkButton" >
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Height" Value="40" />
+
+    </Style>
+
+    <Style x:Key="DialogLinkWithMargin" TargetType="HyperlinkButton" >
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Margin" Value="0,-8,0,0" />
+    </Style>
+
+    <!-- 
+    ======================================================================================
     Belly band 
     ======================================================================================
     -->
@@ -516,22 +534,6 @@
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <!-- 
-    ======================================================================================
-    HyperLinkButton Styles
-    ======================================================================================
-    -->
 
-    <Style x:Key="linkButtonBase" TargetType="HyperlinkButton" >
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Height" Value="40" />
-
-    </Style>
-
-    <Style x:Key="linkButtonWithMargin" TargetType="HyperlinkButton" >
-        <Setter Property="Height" Value="40" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Margin" Value="0,-8,0,0" />
-    </Style>
 </ResourceDictionary>
 

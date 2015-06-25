@@ -42,7 +42,7 @@
 			HorizontalAlignment="Right"
 			VerticalAlignment="Top"
 			Command="{Binding AddUser}"
-            Style="{StaticResource linkButtonWithMargin}">
+            Style="{StaticResource DialogLinkWithMargin}">
 			<TextBlock 
 				x:Uid="UserSelecter_AddUser"
 				TextLineBounds="Tight"
