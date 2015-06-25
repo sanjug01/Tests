@@ -45,6 +45,7 @@
             // invoke the touch keyboard.
             //
             this.HiddenTextBox.Focus(FocusState.Pointer);
+            _inputPane.TryShow();
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
