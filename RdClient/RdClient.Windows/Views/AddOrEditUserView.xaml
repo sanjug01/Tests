@@ -102,8 +102,7 @@
             <HyperlinkButton x:Uid="AddUser-DeleteUserLink"
                              Command="{Binding Path=Delete}"
                              Visibility="{Binding Path=CanDelete, Converter={StaticResource BooleanToVisibilityConverter}}"
-                              Background="Transparent"
-                              Height="40" Margin="0,-8,0,0">
+                              Style="{StaticResource linkButtonWithMargin}">
                 <TextBlock x:Uid="AddUser-DeleteUserText" 
                            Text="(d) Delete this account"/>
             </HyperlinkButton>
