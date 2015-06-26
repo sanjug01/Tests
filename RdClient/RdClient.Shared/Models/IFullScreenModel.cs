@@ -18,12 +18,11 @@ namespace RdClient.Shared.Models
         /// </summary>
         event EventHandler ExitingFullScreen;
 
-        ICommand EnterFullScreenCommand { get; }
-        ICommand ExitFullScreenCommand { get; }
+        void EnterFullScreen();
+        void ExitFullScreen();
 
         UserInteractionMode UserInteractionMode { get; }
 
-        void ToggleFullScreen();
         bool IsFullScreenMode { get; }
     }
 }

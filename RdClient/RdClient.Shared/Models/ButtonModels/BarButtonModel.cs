@@ -53,9 +53,16 @@
             get { return _commandParameter; }
             set
             {
-                if (SetProperty(ref _commandParameter, value) && null != _command)
+                if (SetProperty(ref _commandParameter, value))
                 {
-                    this.CanExecute = _command.CanExecute(_commandParameter);
+                    if (null != _command)
+                    {
+                        this.CanExecute = _command.CanExecute(_commandParameter);
+                    }
+                    else
+                    {
+                        this.CanExecute = false;
+                    }
                 }
             }
         }

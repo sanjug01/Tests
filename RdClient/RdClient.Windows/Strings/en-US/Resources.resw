@@ -964,7 +964,7 @@
     <comment>Label on in session right side bar button that toggles full-screen mode</comment>
   </data>
   <data name="SessionView-MouseModeLabel.Text" xml:space="preserve">
-    <value>(r) Mouse</value>
+    <value>Mouse</value>
     <comment>Label on in session right side bar button that toggles touch mode between direct touch remoting and touch pointer mode</comment>
   </data>
 </root>

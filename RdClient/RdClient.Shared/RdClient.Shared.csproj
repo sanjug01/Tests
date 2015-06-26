@@ -403,7 +403,6 @@
     <Compile Include="Models\ButtonModels\BarButtonModel.cs" />
     <Compile Include="Models\ButtonModels\BarItemModel.cs" />
     <Compile Include="ViewModels\ConnectionCenterViewModel.cs" />
-    <Compile Include="ViewModels\IApplicationBarViewModel.cs" />
     <Compile Include="Navigation\IPresentableViewConstructor.cs" />
     <Compile Include="Navigation\PresentableViewConstructor.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModel.cs" />

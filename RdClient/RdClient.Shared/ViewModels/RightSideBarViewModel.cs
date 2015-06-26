@@ -9,8 +9,6 @@ namespace RdClient.Shared.ViewModels
 {
     public class RightSideBarViewModel : MutableObject, IRightSideBarViewModel
     {
-        private InputMode _inputMode;
-
         public IRemoteSession RemoteSession
         {
             private get; set;
@@ -48,7 +46,12 @@ namespace RdClient.Shared.ViewModels
             set
             {
                 _fullScreenModel = value;
-                _fullScreenModel.FullScreenChange += OnFullScreenChange;
+
+                if(_fullScreenModel != null)
+                {
+                    _fullScreenModel.FullScreenChange -= OnFullScreenChange;
+                    _fullScreenModel.FullScreenChange += OnFullScreenChange;
+                }
 
                 OnFullScreenChange(this, EventArgs.Empty);
             }
@@ -75,10 +78,6 @@ namespace RdClient.Shared.ViewModels
             {
                 return _disconnectButtonModel;
             }
-            set
-            {
-                SetProperty(ref _disconnectButtonModel, value);
-            }
         }
 
 
@@ -89,10 +88,6 @@ namespace RdClient.Shared.ViewModels
             {
                 return _fullScreenButtonModel;
             }
-            set
-            {
-                SetProperty(ref _fullScreenButtonModel, value);
-            }
         }
 
         private BarButtonModel _normalScreenButtonModel;
@@ -101,10 +96,6 @@ namespace RdClient.Shared.ViewModels
             get
             {
                 return _normalScreenButtonModel;
-            }
-            set
-            {
-                SetProperty(ref _normalScreenButtonModel, value);
             }
         }
 
@@ -115,10 +106,6 @@ namespace RdClient.Shared.ViewModels
             {
                 return _touchButtonModel;
             }
-            set
-            {
-                SetProperty(ref _touchButtonModel, value);
-            }
         }
 
         private BarButtonModel _mouseButtonModel;
@@ -127,10 +114,6 @@ namespace RdClient.Shared.ViewModels
             get
             {
                 return _mouseButtonModel;
-            }
-            set
-            {
-                SetProperty(ref _mouseButtonModel, value);
             }
         }
 
@@ -177,7 +160,6 @@ namespace RdClient.Shared.ViewModels
         private void InternalMouseMode(object parameter)
         {
             this.PointerCapture.ChangeInputMode(InputMode.Mouse);
-            _inputMode = InputMode.Mouse;
             _mouseButtonModel.CanExecute = false;
             _touchButtonModel.CanExecute = true && this.DeviceCapabilities.TouchPresent;
             this.Visibility = Visibility.Collapsed;
@@ -186,7 +168,6 @@ namespace RdClient.Shared.ViewModels
         private void InternalTouchMode(object parameter)
         {
             this.PointerCapture.ChangeInputMode(InputMode.Touch);
-            _inputMode = InputMode.Touch;
             _mouseButtonModel.CanExecute = true && this.DeviceCapabilities.TouchPresent;
             _touchButtonModel.CanExecute = false;
             this.Visibility = Visibility.Collapsed;
@@ -195,13 +176,13 @@ namespace RdClient.Shared.ViewModels
         private void InternalFullScreen(object parameter)
         {
             this.Visibility = Visibility.Collapsed;
-            this.FullScreenModel.EnterFullScreenCommand.Execute(null);
+            this.FullScreenModel.EnterFullScreen();
         }
 
         private void InternalNormalScreen(object parameter)
         {
             this.Visibility = Visibility.Collapsed;
-            this.FullScreenModel.ExitFullScreenCommand.Execute(null);
+            this.FullScreenModel.ExitFullScreen();
         }
 
         private void InternalToggleVisibility(object parameter)

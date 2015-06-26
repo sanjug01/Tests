@@ -16,7 +16,6 @@
         <ResourceDictionary>            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/Styles.xaml" />
-                <ResourceDictionary Source="Styles/IconResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <lifetime:LifeTimeManager x:Key="LifeTimeManager">
