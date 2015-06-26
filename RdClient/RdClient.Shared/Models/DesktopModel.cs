@@ -155,6 +155,9 @@
             IRdpProperties properties = connection as IRdpProperties;
             Contract.Assert(null != properties);
             RdpPropertyApplier.ApplyDesktop(properties, this);
+
+            connection.SetLeftHandedMouseMode(this.IsSwapMouseButtons);
+
             //
             // Clear the "IsNew" flag when user connects to the remote desktop.
             //
