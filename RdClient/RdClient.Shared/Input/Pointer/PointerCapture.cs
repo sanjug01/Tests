@@ -51,29 +51,23 @@ namespace RdClient.Shared.Input.Pointer
             this._panel.ChangeMouseCursorShape(cursor);
         }
 
-        void IPointerCapture.OnMouseModeChanged(object sender, EventArgs e)
+        void IPointerCapture.ChangeInputMode(InputMode inputMode)
         {
-            if (_multiTouchEnabled)
+            switch (inputMode)
             {
-                if (_consumptionMode.ConsumptionMode == ConsumptionModeType.MultiTouch)
-                {
+                case InputMode.Mouse:
                     _consumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
-                }
-                else
-                {
-                    _consumptionMode.ConsumptionMode = ConsumptionModeType.MultiTouch;
-                }
-            }
-            else
-            {
-                if (_consumptionMode.ConsumptionMode == ConsumptionModeType.DirectTouch)
-                {
-                    _consumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
-                }
-                else
-                {
-                    _consumptionMode.ConsumptionMode = ConsumptionModeType.DirectTouch;
-                }
+                    break;
+                case InputMode.Touch:
+                    if(_multiTouchEnabled)
+                    {
+                        _consumptionMode.ConsumptionMode = ConsumptionModeType.MultiTouch;
+                    }
+                    else
+                    {
+                        _consumptionMode.ConsumptionMode = ConsumptionModeType.DirectTouch;
+                    }
+                    break;
             }
         }
 

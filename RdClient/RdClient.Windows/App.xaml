@@ -31,6 +31,7 @@
             </cv:TypeToLocalizedStringConverter>
             
             <helpers:DeviceCapabilities x:Key="DeviceCapabilities" />
+            
             <model:FullScreenModel x:Key="FullScreenModel">
                 <model:FullScreenModel.FullScreen>
                     <helpers:FullScreen />

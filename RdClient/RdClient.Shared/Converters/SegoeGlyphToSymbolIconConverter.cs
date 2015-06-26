@@ -1,6 +1,6 @@
 ﻿namespace RdClient.Shared.Converters
 {
-    using RdClient.Shared.ViewModels;
+    using RdClient.Shared.Models;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.Contracts;

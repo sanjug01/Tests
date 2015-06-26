@@ -191,7 +191,7 @@
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = this.ZoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = this.RightSideBarViewModel.ToggleVisiblity });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = new RelayCommand(RightSideBarVisibilityToggle) });
             items.Add(_invokeKeyboardModel);
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
@@ -239,6 +239,18 @@
             _invokeKeyboard.EmitCanExecuteChanged();
         }
 
+        private void RightSideBarVisibilityToggle(object parameter)
+        {
+            if(this.RightSideBarViewModel.Visibility == Visibility.Visible)
+            {
+                this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                this.RightSideBarViewModel.Visibility = Visibility.Visible;
+            }
+        }
+
         protected override void OnDismissed()
         {
             _lifeTimeManager.Resuming -= OnAppResuming;
@@ -273,7 +285,11 @@
         {
             this.BellyBandViewModel?.Terminate();
             this.BellyBandViewModel = null;
-            this.RightSideBarViewModel.Disconnect.Execute(null);
+            if(_activeSession != null)
+            {
+                _activeSession.Disconnect();
+            }
+
             backArgs.Handled = true;
         }
 
@@ -469,7 +485,7 @@
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
 
-                        this.FullScreenModel.EnterFullScreenCommand.Execute(null);
+                        this.FullScreenModel.EnterFullScreen();
 
                         this.IsConnectionBarVisible = true;
                         break;
@@ -513,7 +529,7 @@
 
                             if(this.RightSideBarViewModel.FullScreenModel.IsFullScreenMode)
                             {
-                                this.FullScreenModel.ExitFullScreenCommand.Execute(null);
+                                this.FullScreenModel.ExitFullScreen();
                             }
                         }
                         break;

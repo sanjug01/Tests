@@ -26,7 +26,8 @@
             </vm:RemoteSessionViewModel.KeyboardCapture>
             <vm:RemoteSessionViewModel.RightSideBarViewModel>
                 <vm:RightSideBarViewModel
-                    FullScreenModel="{StaticResource FullScreenModel}" />
+                    FullScreenModel="{StaticResource FullScreenModel}"
+                    DeviceCapabilities="{StaticResource DeviceCapabilities}"/>
             </vm:RemoteSessionViewModel.RightSideBarViewModel>
             <vm:RemoteSessionViewModel.PointerPosition>
                 <pointer:PointerPosition />

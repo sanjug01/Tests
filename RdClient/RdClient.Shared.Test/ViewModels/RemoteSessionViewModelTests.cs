@@ -357,8 +357,8 @@
             //task.Dispose();
             task = null;
             _defex.ExecuteAll();
-            _vm.RightSideBarViewModel.ToggleVisiblity.Execute(null);
-            _vm.RightSideBarViewModel.Disconnect.Execute(null);
+            //_vm.RightSideBarViewModel.ToggleVisiblity.Execute(null);
+            //_vm.RightSideBarViewModel.Disconnect.Execute(null);
 
             Assert.IsNotNull(task);
             task.Wait();
@@ -400,11 +400,11 @@
             connectTask.Wait();
             //connectTask.Dispose();
             _defex.ExecuteAll();
-            Assert.IsTrue(_vm.RightSideBarViewModel.ToggleVisiblity.CanExecute(null));
-            _vm.RightSideBarViewModel.ToggleVisiblity.Execute(null);
+            //Assert.IsTrue(_vm.RightSideBarViewModel.ToggleVisiblity.CanExecute(null));
+            //_vm.RightSideBarViewModel.ToggleVisiblity.Execute(null);
 
             Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
-            Assert.IsTrue(_vm.RightSideBarViewModel.Disconnect.CanExecute(true));
+            //Assert.IsTrue(_vm.RightSideBarViewModel.Disconnect.CanExecute(true));
         }
 
         [TestMethod]

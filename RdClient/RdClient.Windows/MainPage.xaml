@@ -42,8 +42,6 @@
 
         <cv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
         <cv:SegoeGlyphToSymbolIconConverter x:Key="segoeToSymbolIcon"/>
-        <cv:BarItemsAlignmentFilteringConverter x:Key="leftAlignedFilter" Alignment="Left" />
-        <cv:BarItemsAlignmentFilteringConverter x:Key="rightAlignedFilter" Alignment="Right" />
         <cv:ResourceIdToLocalizedStringConverter x:Key="ResourceIdToLocalizedStringConverter">
             <cv:ResourceIdToLocalizedStringConverter.LocalizedString>
                 <sh:LocalizedString/>

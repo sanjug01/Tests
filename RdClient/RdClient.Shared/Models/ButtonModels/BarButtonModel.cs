@@ -1,26 +1,26 @@
-﻿namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.Models
 {
-    using RdClient.Shared.Helpers;
     using System;
     using System.Windows.Input;
 
-    public class SymbolBarButtonModel : MutableObject, ISymbolBarItemModel
+    public class BarButtonModel : BarItemModel
     {
-        private SegoeGlyph _glyph;
         private ICommand _command;
-        private object _commandParameter;
         private bool _canExecute;
+        private object _commandParameter;
 
-        public SymbolBarButtonModel()
-        {
-            _glyph = SegoeGlyph.Home;
-            _canExecute = false;
-        }
+        private string _labelStringId;
 
-        public SegoeGlyph Glyph
+        public string LabelStringId
         {
-            get { return _glyph; }
-            set { SetProperty(ref _glyph, value); }
+            get
+            {
+                return _labelStringId;
+            }
+            set
+            {
+                _labelStringId = value;
+            }
         }
 
         public ICommand Command
@@ -30,7 +30,7 @@
             {
                 ICommand oldCommand = _command;
 
-                if(SetProperty<ICommand>(ref _command, value))
+                if (SetProperty<ICommand>(ref _command, value))
                 {
                     if (null != oldCommand)
                         oldCommand.CanExecuteChanged -= this.OnCanExecuteCommandChanged;
@@ -53,9 +53,16 @@
             get { return _commandParameter; }
             set
             {
-                if(SetProperty(ref _commandParameter, value) && null != _command)
+                if (SetProperty(ref _commandParameter, value))
                 {
-                    this.CanExecute = _command.CanExecute(_commandParameter);
+                    if (null != _command)
+                    {
+                        this.CanExecute = _command.CanExecute(_commandParameter);
+                    }
+                    else
+                    {
+                        this.CanExecute = false;
+                    }
                 }
             }
         }
@@ -63,7 +70,10 @@
         public bool CanExecute
         {
             get { return _canExecute; }
-            set { SetProperty(ref _canExecute, value); }
+            set
+            {
+                SetProperty(ref _canExecute, value);
+            }
         }
 
         private void OnCanExecuteCommandChanged(object sender, EventArgs e)

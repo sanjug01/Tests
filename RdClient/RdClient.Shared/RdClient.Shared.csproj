@@ -53,7 +53,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Converters\BarItemsAlignmentFilteringConverter.cs" />
     <Compile Include="Converters\BooleanToPasswordRevealModeConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BytesToBitmapConverter.cs" />
@@ -305,7 +304,7 @@
     <Compile Include="Models\Viewport\Viewport.cs" />
     <Compile Include="Models\Viewport\ViewportTransformWrapper.cs" />
     <Compile Include="Models\WorkspaceModel.cs" />
-    <Compile Include="Models\ZoomPanMultiTouchModel.cs" />
+    <Compile Include="Models\ZoomPanModel.cs" />
     <Compile Include="Navigation\BackButtonHandler.cs" />
     <Compile Include="Navigation\BackCommandArgs.cs" />
     <Compile Include="Navigation\BackRequestedEventArgsWrapper.cs" />
@@ -363,7 +362,6 @@
     <Compile Include="ViewModels\IUsersCollector.cs" />
     <Compile Include="ViewModels\ICertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\IAddOrEditDEsktopViewModel.cs" />
-    <Compile Include="ViewModels\ISymbolBarButtonModel.cs" />
     <Compile Include="ViewModels\IViewItemsSource.cs" />
     <Compile Include="ViewModels\RichTextViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
@@ -402,10 +400,9 @@
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="Navigation\Extensions\IDataModelSite.cs" />
     <Compile Include="ValidationRules\HostnameValidationRule.cs" />
-    <Compile Include="ViewModels\BarButtonModel.cs" />
-    <Compile Include="ViewModels\BarItemModel.cs" />
+    <Compile Include="Models\ButtonModels\BarButtonModel.cs" />
+    <Compile Include="Models\ButtonModels\BarItemModel.cs" />
     <Compile Include="ViewModels\ConnectionCenterViewModel.cs" />
-    <Compile Include="ViewModels\IApplicationBarViewModel.cs" />
     <Compile Include="Navigation\IPresentableViewConstructor.cs" />
     <Compile Include="Navigation\PresentableViewConstructor.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModel.cs" />
@@ -422,13 +419,12 @@
     <Compile Include="ViewModels\RightSideBarViewModel.cs" />
     <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
     <Compile Include="ViewModels\SessionSizeViewModel.cs" />
-    <Compile Include="ViewModels\SymbolBarButtonModel.cs" />
-    <Compile Include="ViewModels\SymbolBarToggleButtonModel.cs" />
+    <Compile Include="Models\ButtonModels\SymbolBarButtonModel.cs" />
     <Compile Include="ViewModels\UserComboBoxElement.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
-    <Compile Include="ViewModels\SegoeGlyphBarButtonModel.cs" />
-    <Compile Include="ViewModels\SeparatorBarItemModel.cs" />
+    <Compile Include="Models\ButtonModels\SegoeGlyph.cs" />
+    <Compile Include="Models\ButtonModels\SeparatorBarItemModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Navigation\INavigationService.cs" />
