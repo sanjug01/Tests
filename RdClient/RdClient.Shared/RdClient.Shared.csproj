@@ -449,17 +449,16 @@
     <Compile Include="Input\Pointer\DirectModeControl.cs" />
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Microsoft.VCLibs12.AppLocal, Version=12.0">
-      <Name>Microsoft Visual C++ 2013 AppLocal Runtime Package for Windows UAP</Name>
-    </SDKReference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\RdClientCxHelpers\RdClientCxHelpers.vcxproj">
       <Project>{8b29c07c-36fe-466c-9244-9932ac815c45}</Project>
       <Name>RdClientCxHelpers</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <SDKReference Include="Microsoft.VCLibs.120, Version=14.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Universal</Name>
+    </SDKReference>
+  </ItemGroup>
   <!--<Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />-->
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
