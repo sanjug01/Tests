@@ -31,7 +31,6 @@
         public void Deactivate()
         {
             Contract.Assert(null != _client);
-            _client.Flush();
             _client = null;
         }
 
@@ -40,7 +39,6 @@
             if (null != _client)
             {
                 _client.TrackEvent(eventName);
-                _client.Flush();
             }
         }
 
@@ -49,7 +47,6 @@
             if(null != _client)
             {
                 _client.TrackEvent(eventTelemetry);
-                _client.Flush();
             }
         }
 
@@ -58,7 +55,6 @@
             if (null != _client)
             {
                 _client.TrackMetric(metricName, metricValue);
-                _client.Flush();
             }
         }
 
@@ -67,7 +63,6 @@
             if (null != _client)
             {
                 _client.TrackMetric(eventName, milliseconds / 60000);
-                _client.Flush();
             }
         }
     }
