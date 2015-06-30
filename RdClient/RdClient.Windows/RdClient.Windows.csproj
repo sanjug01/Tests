@@ -51,6 +51,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <TERMSRV_BUILDARCH>x86chk</TERMSRV_BUILDARCH>
@@ -67,7 +68,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <TERMSRV_BUILDARCH>x86fre</TERMSRV_BUILDARCH>
@@ -235,6 +236,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Content Include="Properties\default.rd.xml" />
     <Content Include="Assets\Day0.png" />
     <Content Include="Assets\desktop_placeholder.png" />
     <Content Include="ApplicationInsights.config" />
@@ -284,6 +286,31 @@
     <Content Include="Assets\fullscreen_icon.png" />
     <Content Include="Assets\guide_icon.png" />
     <Content Include="Assets\normalscreen_icon.png" />
+    <Content Include="Assets\RemoteDesktopAppList.scale-100.png" />
+    <Content Include="Assets\RemoteDesktopAppList.scale-125.png" />
+    <Content Include="Assets\RemoteDesktopAppList.scale-150.png" />
+    <Content Include="Assets\RemoteDesktopAppList.scale-200.png" />
+    <Content Include="Assets\RemoteDesktopAppList.scale-400.png" />
+    <Content Include="Assets\RemoteDesktopLargeTile.scale-100.png" />
+    <Content Include="Assets\RemoteDesktopLargeTile.scale-125.png" />
+    <Content Include="Assets\RemoteDesktopLargeTile.scale-150.png" />
+    <Content Include="Assets\RemoteDesktopLargeTile.scale-200.png" />
+    <Content Include="Assets\RemoteDesktopLargeTile.scale-400.png" />
+    <Content Include="Assets\RemoteDesktopMedTile.scale-100.png" />
+    <Content Include="Assets\RemoteDesktopMedTile.scale-125.png" />
+    <Content Include="Assets\RemoteDesktopMedTile.scale-150.png" />
+    <Content Include="Assets\RemoteDesktopMedTile.scale-200.png" />
+    <Content Include="Assets\RemoteDesktopMedTile.scale-400.png" />
+    <Content Include="Assets\RemoteDesktopSmallTile.scale-100.png" />
+    <Content Include="Assets\RemoteDesktopSmallTile.scale-125.png" />
+    <Content Include="Assets\RemoteDesktopSmallTile.scale-150.png" />
+    <Content Include="Assets\RemoteDesktopSmallTile.scale-200.png" />
+    <Content Include="Assets\RemoteDesktopSmallTile.scale-400.png" />
+    <Content Include="Assets\RemoteDesktopWideTile.scale-100.png" />
+    <Content Include="Assets\RemoteDesktopWideTile.scale-125.png" />
+    <Content Include="Assets\RemoteDesktopWideTile.scale-150.png" />
+    <Content Include="Assets\RemoteDesktopWideTile.scale-200.png" />
+    <Content Include="Assets\RemoteDesktopWideTile.scale-400.png" />
     <Content Include="Assets\Square310x310Logo.scale-100.png" />
     <Content Include="Assets\Square71x71Logo.scale-100.png" />
     <Content Include="Assets\touch_icon.png" />
@@ -538,7 +565,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.ApplicationInsights, Version=1.0.0.4220, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.1.0.0\lib\portable-win81+wpa81\Microsoft.ApplicationInsights.dll</HintPath>
+      <HintPath>..\packages\Microsoft.ApplicationInsights.1.0.1-beta\lib\portable-win81+wpa81\Microsoft.ApplicationInsights.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ApplicationInsights.Extensibility.Windows, Version=1.0.0.4225, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -588,12 +615,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Microsoft.VCLibs12.AppLocal, Version=12.0">
-      <Name>Microsoft Visual C++ 2013 AppLocal Runtime Package for Windows UAP</Name>
-    </SDKReference>
+    <Folder Include="Navigation\Extensions\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Navigation\Extensions\" />
+    <SDKReference Include="Microsoft.VCLibs.120, Version=14.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Universal</Name>
+    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

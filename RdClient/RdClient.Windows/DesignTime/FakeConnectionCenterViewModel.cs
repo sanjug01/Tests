@@ -1,6 +1,7 @@
 ﻿namespace RdClient.DesignTime
 {
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.ViewModels;
     using System.Collections.ObjectModel;
@@ -42,9 +43,7 @@
             _toolbarItemsSource = new ObservableCollection<BarItemModel>();
             _toolbarItems = new ReadOnlyObservableCollection<BarItemModel>(_toolbarItemsSource);
 
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => { }), "Home"));
             _toolbarItemsSource.Add(new SeparatorBarItemModel());
-            _toolbarItemsSource.Add(new SegoeGlyphBarButtonModel(SegoeGlyph.Home, new RelayCommand(o => { }), "Home"));
 
             _accessoryViewVisibility = ViewVisibility.Create(false);
             _cancelAccessoryView = new RelayCommand(o => { });

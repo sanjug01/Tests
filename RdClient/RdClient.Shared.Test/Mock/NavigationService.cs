@@ -48,11 +48,6 @@ namespace RdClient.Shared.Test.Mock
             set {  }
         }
 
-        public Shared.ViewModels.IApplicationBarViewModel AppBarViewModel
-        {
-            set {  }
-        }
-
         public NavigationExtensionList Extensions { get; set; }
 
 

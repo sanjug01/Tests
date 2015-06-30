@@ -1,5 +1,5 @@
 param([switch]$Clean, [switch]$CopyAll, [string]$Platform="all")
-$SDXROOT = "e:\sdx\clouddv"
+$SDXROOT = "c:\sdx\clouddv"
 
 Function BcxPlatform($platform)
 {

@@ -45,6 +45,7 @@
             // invoke the touch keyboard.
             //
             this.HiddenTextBox.Focus(FocusState.Pointer);
+            _inputPane.TryShow();
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
@@ -70,6 +71,11 @@
         private void OnInputPaneHiding(InputPane sender, InputPaneVisibilityEventArgs e)
         {
             _isVisible = false;
+            //
+            // User may hide the keyboard by tapping its "close" button, in which case input focus must go
+            // away from the edit box.
+            //
+            this.DummyButton.Focus(FocusState.Programmatic);
             EmitIsVisibleChanged();
         }
     }

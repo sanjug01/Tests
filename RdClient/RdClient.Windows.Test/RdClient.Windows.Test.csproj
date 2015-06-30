@@ -19,6 +19,7 @@
     <PackageCertificateKeyFile>RdClient.Windows.Test_TemporaryKey.pfx</PackageCertificateKeyFile>
     <UnitTestPlatformVersion Condition="'$(UnitTestPlatformVersion)' == ''">14.0</UnitTestPlatformVersion>
     <EnableCoreRuntime>false</EnableCoreRuntime>
+    <EnableDotNetNativeCompatibleProfile>false</EnableDotNetNativeCompatibleProfile>
   </PropertyGroup>
   <PropertyGroup>
     <AppXPackage>True</AppXPackage>
@@ -141,7 +142,6 @@
     <None Include="RdClient.Windows.Test_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\Logo.scale-240.png" />
     <Content Include="Assets\SmallLogo.scale-240.png" />
     <Content Include="Assets\SplashScreen.scale-240.png" />

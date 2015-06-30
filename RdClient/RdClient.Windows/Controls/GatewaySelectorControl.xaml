@@ -37,12 +37,13 @@
 				</DataTemplate>
 			</ComboBox.ItemTemplate>
 		</ComboBox>
-		<HyperlinkButton 
+        <HyperlinkButton 
 			VerticalAlignment="Top"
 			HorizontalAlignment="Right"				
-			Command="{Binding AddGateway}">
-			<TextBlock
-				x:Uid="GatewaySelector_AddGateway"
+			Command="{Binding AddGateway}"
+            Style="{StaticResource DialogLinkWithMargin}">
+            <TextBlock
+            x:Uid="GatewaySelector_AddGateway"
 				TextLineBounds="Tight"
 				Text="Add gateway(d)">				
 			</TextBlock>

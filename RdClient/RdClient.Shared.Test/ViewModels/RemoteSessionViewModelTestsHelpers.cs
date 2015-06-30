@@ -141,6 +141,16 @@
             {
                 // noop
             }
+
+            public void EnterFullScreen()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void ExitFullScreen()
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private sealed class TestKeyboardCapture : IKeyboardCapture

@@ -36,7 +36,8 @@
 						Grid.Row="0"
 						Command="{Binding Close}" 
 						VerticalAlignment="Bottom"
-						HorizontalAlignment="Right">
+						HorizontalAlignment="Right" 
+                        Style="{StaticResource DialogLinkWithMargin}">
 						<TextBlock 							
 							x:Uid="Common_Close"
 							TextLineBounds="TrimToBaseline"							
@@ -52,7 +53,8 @@
 				</StackPanel>
 				<HyperlinkButton 
                     x:Uid="AboutView_Link_ThirdPartyNotices"
-                    Command="{Binding ShowThirdPartyNoticesCommand}">
+                    Command="{Binding ShowThirdPartyNoticesCommand}"
+                     Style="{StaticResource DialogLinkWithMargin}">
 					<TextBlock 
 						x:Uid="AboutView_ThirdPartyNotices" 
 						Text="(d) Third Party Notices">						
@@ -60,7 +62,8 @@
 				</HyperlinkButton>
                 <HyperlinkButton 
                     x:Uid="AboutView_Link_RecommendedNewFeatures"
-                    NavigateUri="https://www.google.com/search?q=microsoft+rdp+client+recommended+new+features">
+                    NavigateUri="https://www.google.com/search?q=microsoft+rdp+client+recommended+new+features"
+                    Style="{StaticResource DialogLinkWithMargin}">
                     <TextBlock 
 						x:Uid="AboutView_RecommendedNewFeatures" 
 						Text="(d) Recommended new features">
@@ -70,7 +73,8 @@
 			<StackPanel Grid.Row="1">
 				<HyperlinkButton 				
 					x:Uid="AboutView_Link_RateAndReview"
-					NavigateUri="https://www.google.com/search?q=microsoft+rdp+client+rate+and+review">
+					NavigateUri="https://www.google.com/search?q=microsoft+rdp+client+rate+and+review"
+                     Style="{StaticResource DialogLinkWithMargin}">
 					<TextBlock 
 						x:Uid="AboutView_RateAndReview" 
 						Text="(d) Rate and Review">
@@ -80,7 +84,8 @@
 					Orientation="Horizontal">
 					<HyperlinkButton
 						x:Uid="AboutView_Link_TermsOfUse"
-						Command="{Binding ShowEulaCommand}">
+						Command="{Binding ShowEulaCommand}"
+                        Style="{StaticResource DialogLinkWithMargin}">
 						<TextBlock 
 							x:Uid="AboutView_TermsOfUse" 
 							Text="(d) Terms of use">
@@ -100,7 +105,8 @@
 					<HyperlinkButton 
 						x:Uid="AboutView_Link_PrivacyPolicy"
 						NavigateUri="https://www.google.com/search?q=microsoft+rdp+privacy+policy"
-                        Command="{Binding ShowPrivacyCommand}">
+                        Command="{Binding ShowPrivacyCommand}"
+                        Style="{StaticResource DialogLinkWithMargin}">
 						<TextBlock 
 							x:Uid="AboutView_PrivacyPolicy" 
 							Style="{StaticResource BodyTextBlockStyle}"

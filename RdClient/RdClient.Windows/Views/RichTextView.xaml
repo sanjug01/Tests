@@ -42,7 +42,8 @@
                        Text="{Binding DocumentType, Converter={StaticResource TypeToLocalizedStringConverter}}" />
             <HyperlinkButton
                 Grid.Row="0"
-                Command="{Binding Close}" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                Command="{Binding Close}" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                Style="{StaticResource DialogLinkWithMargin}">
 				<TextBlock x:Uid="Common_Close" Text="(d) Close"/>
             </HyperlinkButton>            
 

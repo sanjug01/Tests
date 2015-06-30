@@ -53,7 +53,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Converters\BarItemsAlignmentFilteringConverter.cs" />
     <Compile Include="Converters\BooleanToPasswordRevealModeConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\BytesToBitmapConverter.cs" />
@@ -196,7 +195,7 @@
     <Compile Include="Input\Pointer\MouseCursorShape.cs" />
     <Compile Include="Input\Pointer\PointerCapture.cs" />
     <Compile Include="Input\Pointer\PointerEvent.cs" />
-    <Compile Include="Input\Pointer\PointerEventConsumer.cs" />
+    <Compile Include="Input\Pointer\PointerModeConsumer.cs" />
     <Compile Include="Helpers\RdClientException.cs" />
     <Compile Include="Helpers\ReadWriteMonitor.cs" />
     <Compile Include="Helpers\StateMachine.cs" />
@@ -305,7 +304,7 @@
     <Compile Include="Models\Viewport\Viewport.cs" />
     <Compile Include="Models\Viewport\ViewportTransformWrapper.cs" />
     <Compile Include="Models\WorkspaceModel.cs" />
-    <Compile Include="Models\ZoomPanMultiTouchModel.cs" />
+    <Compile Include="Models\ZoomPanModel.cs" />
     <Compile Include="Navigation\BackButtonHandler.cs" />
     <Compile Include="Navigation\BackCommandArgs.cs" />
     <Compile Include="Navigation\BackRequestedEventArgsWrapper.cs" />
@@ -363,7 +362,6 @@
     <Compile Include="ViewModels\IUsersCollector.cs" />
     <Compile Include="ViewModels\ICertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\IAddOrEditDEsktopViewModel.cs" />
-    <Compile Include="ViewModels\ISymbolBarButtonModel.cs" />
     <Compile Include="ViewModels\IViewItemsSource.cs" />
     <Compile Include="ViewModels\RichTextViewModel.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
@@ -402,10 +400,9 @@
     <Compile Include="ViewModels\ISettingsViewModel.cs" />
     <Compile Include="Navigation\Extensions\IDataModelSite.cs" />
     <Compile Include="ValidationRules\HostnameValidationRule.cs" />
-    <Compile Include="ViewModels\BarButtonModel.cs" />
-    <Compile Include="ViewModels\BarItemModel.cs" />
+    <Compile Include="Models\ButtonModels\BarButtonModel.cs" />
+    <Compile Include="Models\ButtonModels\BarItemModel.cs" />
     <Compile Include="ViewModels\ConnectionCenterViewModel.cs" />
-    <Compile Include="ViewModels\IApplicationBarViewModel.cs" />
     <Compile Include="Navigation\IPresentableViewConstructor.cs" />
     <Compile Include="Navigation\PresentableViewConstructor.cs" />
     <Compile Include="ViewModels\AddOrEditDesktopViewModel.cs" />
@@ -422,13 +419,12 @@
     <Compile Include="ViewModels\RightSideBarViewModel.cs" />
     <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
     <Compile Include="ViewModels\SessionSizeViewModel.cs" />
-    <Compile Include="ViewModels\SymbolBarButtonModel.cs" />
-    <Compile Include="ViewModels\SymbolBarToggleButtonModel.cs" />
+    <Compile Include="Models\ButtonModels\SymbolBarButtonModel.cs" />
     <Compile Include="ViewModels\UserComboBoxElement.cs" />
     <Compile Include="ViewModels\WorkspaceViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
-    <Compile Include="ViewModels\SegoeGlyphBarButtonModel.cs" />
-    <Compile Include="ViewModels\SeparatorBarItemModel.cs" />
+    <Compile Include="Models\ButtonModels\SegoeGlyph.cs" />
+    <Compile Include="Models\ButtonModels\SeparatorBarItemModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Navigation\INavigationService.cs" />
@@ -453,17 +449,16 @@
     <Compile Include="Input\Pointer\DirectModeControl.cs" />
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="Microsoft.VCLibs12.AppLocal, Version=12.0">
-      <Name>Microsoft Visual C++ 2013 AppLocal Runtime Package for Windows UAP</Name>
-    </SDKReference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\RdClientCxHelpers\RdClientCxHelpers.vcxproj">
       <Project>{8b29c07c-36fe-466c-9244-9932ac815c45}</Project>
       <Name>RdClientCxHelpers</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <SDKReference Include="Microsoft.VCLibs.120, Version=14.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Universal</Name>
+    </SDKReference>
+  </ItemGroup>
   <!--<Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />-->
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

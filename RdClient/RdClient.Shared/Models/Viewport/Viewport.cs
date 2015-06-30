@@ -90,38 +90,13 @@
             return Math.Min(_maxZoom, Math.Max(_minZoom, zoomFactor));
         }
 
-        public static double ClampIntervals(double left1, double right1, double left2, double right2, double d)
-        {
-            if (left1 + d > left2)
-                return left2 - left1;
-            else if (right1 + d < right2)
-                return right2 - right1;
-            else
-                return d;            
-        }
-
         private void Translate(double dx, double dy)
         {
-            Rect sessionRect = new Rect(new Point(_sessionPanel.Transform.TranslateX, _sessionPanel.Transform.TranslateY), new Size(_sessionPanel.Width, _sessionPanel.Height));
-            Rect viewportRect = new Rect(new Point(0, 0), new Size(_viewportPanel.Width, _viewportPanel.Height));
+            double moveX = _sessionPanel.Transform.TranslateX + dx;
+            double moveY = _sessionPanel.Transform.TranslateY + dy;
 
-            if (viewportRect.Width < sessionRect.Width)
-            {
-                _sessionPanel.Transform.TranslateX += ClampIntervals(sessionRect.Left, sessionRect.Right, viewportRect.Left, viewportRect.Right, dx);
-            }
-            else if (viewportRect.Width > sessionRect.Width)
-            {
-                _sessionPanel.Transform.TranslateX = (viewportRect.Width - sessionRect.Width) / 2.0;
-            }
-
-            if(viewportRect.Height < sessionRect.Height)
-            {
-                _sessionPanel.Transform.TranslateY += ClampIntervals(sessionRect.Top, sessionRect.Bottom, viewportRect.Top, viewportRect.Bottom, dy);
-            }
-            else if(viewportRect.Height > sessionRect.Height)
-            {
-                _sessionPanel.Transform.TranslateY = (viewportRect.Height - sessionRect.Height) / 2.0;
-            }
+            _sessionPanel.Transform.TranslateX = moveX;
+            _sessionPanel.Transform.TranslateY = moveY;
         }
 
         private void Zoom(double zoomFactor, Point anchorPoint)
@@ -147,17 +122,26 @@
 
         public void SetPan(double x, double y)
         {
-            if (x + _viewportPanel.Width > _sessionPanel.Width)
-                x = (_sessionPanel.Width - _viewportPanel.Width) / 2.0;
-            else
-                if (this.Offset.X < 0)
-                    x = 0;
+            double xWiggleRoom = _sessionPanel.Width - _viewportPanel.Width;
+            double yWiggleRoom = _sessionPanel.Height - _viewportPanel.Height;
 
-            if (y + _viewportPanel.Height > _sessionPanel.Height)
-                y = (_sessionPanel.Height - _viewportPanel.Height) / 2.0;
+            if(xWiggleRoom < 0)
+            {
+                x = (_sessionPanel.Width - _viewportPanel.Width) / 2.0;
+            }
             else
-                if (this.Offset.Y < 0)
-                    y = 0;
+            {
+                x = Math.Min(xWiggleRoom, Math.Max(0, x));
+            }
+
+            if(yWiggleRoom < 0)
+            {
+                y = (_sessionPanel.Height - _viewportPanel.Height) / 2.0;
+            }
+            else
+            {
+                y = Math.Min(yWiggleRoom, Math.Max(0, y));
+            }
 
             _sessionPanel.Transform.TranslateX = -x;
             _sessionPanel.Transform.TranslateY = -y;

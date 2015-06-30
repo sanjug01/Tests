@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Shared.Test.ViewModels
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+    using RdClient.Shared.Models;
     using RdClient.Shared.ViewModels;
     using System.Windows.Input;
 
@@ -16,7 +17,11 @@
 
         private class TestModel : BarButtonModel
         {
-            public TestModel(ICommand command, string label) : base(command, label) { }
+            public TestModel(ICommand command, string label)
+            {
+                this.Command = command;
+                this.LabelStringId = label;
+            }
         }
 
         [TestInitialize]
@@ -44,7 +49,6 @@
         public void NewBarButtonModel_CannotExecute()
         {
             Assert.IsFalse(_model.Command.CanExecute(null));
-            Assert.IsFalse(_model.IsVisible);
         }
 
         [TestMethod]
@@ -53,7 +57,6 @@
             _canExecuteCommand = true;
             _command.EmitCanExecuteChanged();
             Assert.IsTrue(_model.Command.CanExecute(null));
-            Assert.IsTrue(_model.IsVisible);
         }
 
         [TestMethod]
@@ -62,12 +65,10 @@
             _canExecuteCommand = true;
             _command.EmitCanExecuteChanged();
             Assert.IsTrue(_model.Command.CanExecute(null));
-            Assert.IsTrue(_model.IsVisible);
 
             _canExecuteCommand = false;
             _command.EmitCanExecuteChanged();
             Assert.IsFalse(_model.Command.CanExecute(null));
-            Assert.IsFalse(_model.IsVisible);
         }
 
         [TestMethod]

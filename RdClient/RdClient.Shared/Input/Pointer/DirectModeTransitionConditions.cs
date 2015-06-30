@@ -15,6 +15,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             return 
                 obj.Input.Action == PointerEventAction.ManipulationStarted && 
+                (obj.Input as IManipulationRoutedEventProperties).IsInertial == false &&
                 RdMath.Distance((obj.Input as IManipulationRoutedEventProperties).Delta.Translation) > GlobalConstants.TouchMoveThreshold;
         }
 
@@ -36,6 +37,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             return 
                 obj.Input.Action == PointerEventAction.ManipulationDelta &&
+                (obj.Input as IManipulationRoutedEventProperties).IsInertial == false &&
                 RdMath.Distance((obj.Input as IManipulationRoutedEventProperties).Delta.Translation) > GlobalConstants.TouchMoveThreshold;
         }
 
@@ -57,6 +59,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             return
                 obj.Input.Action == PointerEventAction.ManipulationDelta &&
+                (obj.Input as IManipulationRoutedEventProperties).IsInertial == false &&
                 RdMath.Distance((obj.Input as IManipulationRoutedEventProperties).Delta.Translation) > GlobalConstants.TouchMoveThreshold;
         }
 
@@ -69,6 +72,7 @@ namespace RdClient.Shared.Input.Pointer
         {
             return
                 obj.Input.Action == PointerEventAction.ManipulationDelta &&
+                (obj.Input as IManipulationRoutedEventProperties).IsInertial == false &&
                 RdMath.Distance((obj.Input as IManipulationRoutedEventProperties).Delta.Translation) > GlobalConstants.TouchMoveThreshold;
         }
 

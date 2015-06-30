@@ -31,12 +31,15 @@
             </cv:TypeToLocalizedStringConverter>
             
             <helpers:DeviceCapabilities x:Key="DeviceCapabilities" />
+            
             <model:FullScreenModel x:Key="FullScreenModel">
                 <model:FullScreenModel.FullScreen>
                     <helpers:FullScreen />
                 </model:FullScreenModel.FullScreen>
             </model:FullScreenModel>
             <cx:ScreenProperties x:Key="ScreenProperties"/>
+            
+            <helpers:WinrtThreadPoolTimerFactory x:Key="TimerFactory" />
         </ResourceDictionary>
     </Application.Resources>   
 </Application>

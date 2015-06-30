@@ -87,7 +87,8 @@
 			<HyperlinkButton 
 					x:Uid="AddOrEditGateway-DeleteGatewayLink"
                     Command="{Binding Path=Delete}"
-                    Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=IsAddingGateway, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                    Style="{StaticResource DialogLinkWithMargin}">
 				<TextBlock 
 						x:Uid="AddOrEditGateway-DeleteGatewayText" 
                         Text="(d) Delete this gateway">

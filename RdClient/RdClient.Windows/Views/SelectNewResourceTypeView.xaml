@@ -66,8 +66,8 @@
                     </StackPanel>
                 </Button>
             </Grid>
-            
-            <HyperlinkButton x:Uid="SelectResource_LearnMoreLink" Margin="30,20" Content="(d) Learn more" />
+
+            <HyperlinkButton  Style="{StaticResource DialogLinkBasic}" x:Uid="SelectResource_LearnMoreLink" Margin="30,20" Content="(d) Learn more" />
         </StackPanel>
     </ContentControl>
 </controls:ModalUserControl>

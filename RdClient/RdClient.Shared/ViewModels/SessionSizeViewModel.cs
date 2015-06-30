@@ -11,14 +11,7 @@ namespace RdClient.Shared.ViewModels
         {
             get
             {
-                if(this.FullScreenModel.UserInteractionMode == UserInteractionMode.Mouse)
-                {
-                    return this.ScreenProperties.Resolution;
-                }
-                else
-                {
-                    return this.WindowSize.Size;
-                }
+                return this.ScreenProperties.Resolution;
             }
         }
 

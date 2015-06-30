@@ -20,7 +20,6 @@
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase,
         IRemoteSessionViewSite,
-        ITimerFactorySite,
         IDeviceCapabilitiesSite,
         ILifeTimeSite,
         IInputPanelFactorySite,
@@ -58,8 +57,6 @@
         private SessionState _sessionState;
         private bool _isConnectionBarVisible;
         private ReadOnlyObservableCollection<object> _connectionBarItems;
-
-        private ITimerFactory _timerFactory;
 
         private ILifeTimeManager _lifeTimeManager;
 
@@ -107,7 +104,7 @@
 
         public ITimerFactory TimerFactory
         {
-            get { return _timerFactory; }
+            get; set;
         }
 
         /// <summary>
@@ -194,7 +191,7 @@
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = this.ZoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = this.RightSideBarViewModel.ToggleVisiblity });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = new RelayCommand(RightSideBarVisibilityToggle) });
             items.Add(_invokeKeyboardModel);
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
@@ -242,6 +239,18 @@
             _invokeKeyboard.EmitCanExecuteChanged();
         }
 
+        private void RightSideBarVisibilityToggle(object parameter)
+        {
+            if(this.RightSideBarViewModel.Visibility == Visibility.Visible)
+            {
+                this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                this.RightSideBarViewModel.Visibility = Visibility.Visible;
+            }
+        }
+
         protected override void OnDismissed()
         {
             _lifeTimeManager.Resuming -= OnAppResuming;
@@ -276,7 +285,11 @@
         {
             this.BellyBandViewModel?.Terminate();
             this.BellyBandViewModel = null;
-            this.RightSideBarViewModel.Disconnect.Execute(null);
+            if(_activeSession != null)
+            {
+                _activeSession.Disconnect();
+            }
+
             backArgs.Handled = true;
         }
 
@@ -291,11 +304,6 @@
                 Contract.Assert(null == _activeSessionControl);
                 _activeSessionControl = _activeSession.Activate(_sessionView);
             }
-        }
-
-        void ITimerFactorySite.SetTimerFactory(ITimerFactory timerFactory)
-        {
-            _timerFactory = timerFactory;
         }
 
         void IDeviceCapabilitiesSite.SetDeviceCapabilities(IDeviceCapabilities deviceCapabilities)
@@ -451,12 +459,10 @@
                             this.PointerPosition, 
                             _activeSessionControl, 
                             _activeSessionControl.RenderingPanel, 
-                            _timerFactory,
+                            this.TimerFactory,
                             this.Dispatcher);
 
                         this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
-
-                        this.PanKnobSite = new PanKnobSite(this.TimerFactory);
 
                         this.ZoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport);
                         this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
@@ -479,10 +485,7 @@
                         EmitPropertyChanged("IsRenderingPanelActive");
                         EmitPropertyChanged("IsConnecting");
 
-                        if (this.RightSideBarViewModel.FullScreenModel.UserInteractionMode == UserInteractionMode.Mouse)
-                        {
-                            this.FullScreenModel.EnterFullScreenCommand.Execute(null);
-                        }
+                        this.FullScreenModel.EnterFullScreen();
 
                         this.IsConnectionBarVisible = true;
                         break;
@@ -526,7 +529,7 @@
 
                             if(this.RightSideBarViewModel.FullScreenModel.IsFullScreenMode)
                             {
-                                this.FullScreenModel.ExitFullScreenCommand.Execute(null);
+                                this.FullScreenModel.ExitFullScreen();
                             }
                         }
                         break;
@@ -540,21 +543,28 @@
         {
             if (e.PropertyName.Equals("Visibility") && sender is IRightSideBarViewModel)
             {
-                Visibility visibility = ((IRightSideBarViewModel)sender).Visibility;
-                if(visibility == Visibility.Visible)
+                Visibility barVisibility = ((IRightSideBarViewModel)sender).Visibility;
+                Visibility mouseVisibility = Visibility.Collapsed;
+                if(barVisibility == Visibility.Visible)
                 {
-                    visibility = Visibility.Collapsed;
+                    mouseVisibility = Visibility.Collapsed;
                 }
                 else
                 {
-                    visibility = Visibility.Visible;
+                    mouseVisibility = Visibility.Visible;
                 }
 
-                this.ScrollBarModel.SetScrollbarVisibility(visibility);
+                if(this.PointerCapture.ConsumptionMode.ConsumptionMode != ConsumptionModeType.Pointer)
+                {
+                    mouseVisibility = Visibility.Collapsed;
+                }
+
+
+                this.ScrollBarModel.SetScrollbarVisibility(mouseVisibility);
 
                 if (_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
                 {
-                    _activeSessionControl.RenderingPanel.ChangeMouseVisibility(visibility);
+                    _activeSessionControl.RenderingPanel.ChangeMouseVisibility(mouseVisibility);
                 }
                 
             }

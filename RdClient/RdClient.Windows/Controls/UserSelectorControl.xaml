@@ -41,7 +41,8 @@
 		<HyperlinkButton 
 			HorizontalAlignment="Right"
 			VerticalAlignment="Top"
-			Command="{Binding AddUser}">
+			Command="{Binding AddUser}"
+            Style="{StaticResource DialogLinkWithMargin}">
 			<TextBlock 
 				x:Uid="UserSelecter_AddUser"
 				TextLineBounds="Tight"
