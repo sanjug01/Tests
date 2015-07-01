@@ -9,8 +9,5 @@
     {
         ICommand Cancel { get; }
         GeneralSettings GeneralSettings { get; }
-
-        ICommand DeleteUser { get; }
-        ICommand DeleteGateway { get; }
     }
 }

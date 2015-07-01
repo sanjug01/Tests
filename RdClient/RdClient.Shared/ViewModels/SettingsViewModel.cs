@@ -14,10 +14,8 @@ namespace RdClient.Shared.ViewModels
     public sealed class SettingsViewModel : ViewModelBase, ISettingsViewModel, IDialogViewModel, ITelemetryClientSite 
     {
         private readonly RelayCommand _goBackCommand;
-        private readonly RelayCommand _deleteUserCommand;
         private readonly RelayCommand _editUserCommand;
-        private readonly RelayCommand _addUserCommand;
-        private readonly RelayCommand _deleteGatewayCommand;
+        private readonly RelayCommand _addUserCommand;        
         private readonly RelayCommand _editGatewayCommand;
         private readonly RelayCommand _addGatewayCommand;
         private GeneralSettings _generalSettings;
@@ -30,10 +28,8 @@ namespace RdClient.Shared.ViewModels
         public SettingsViewModel()
         {
             _goBackCommand = new RelayCommand(o => this.GoBackCommandExecute());
-            _deleteUserCommand = new RelayCommand(o => this.DeleteUserCommandExecute(), o => { return this.UserCommandsEnabled(); });
             _editUserCommand = new RelayCommand(o => this.EditUserCommandExecute(), o => { return this.UserCommandsEnabled(); });
             _addUserCommand = new RelayCommand(o => this.AddUserCommandExecute());
-            _deleteGatewayCommand = new RelayCommand(o => this.DeleteGatewayCommandExecute(), o => { return this.GatewayCommandsEnabled(); });
             _editGatewayCommand = new RelayCommand(o => this.EditGatewayCommandExecute(), o => { return this.GatewayCommandsEnabled(); });
             _addGatewayCommand = new RelayCommand(o => this.AddGatewayCommandExecute());
         }
@@ -41,10 +37,8 @@ namespace RdClient.Shared.ViewModels
         public ICommand Cancel { get { return _goBackCommand; } }
         //Implement IDialogViewModel. Do nothing when enter is pressed
         public ICommand DefaultAction { get { return new RelayCommand(o => { }); } }
-        public ICommand DeleteUser { get { return _deleteUserCommand; } }
         public ICommand EditUser { get { return _editUserCommand; } }
         public ICommand AddUser { get { return _addUserCommand; } }
-        public ICommand DeleteGateway { get { return _deleteGatewayCommand; } }
         public ICommand EditGateway { get { return _editGatewayCommand; } }
         public ICommand AddGateway { get { return _addGatewayCommand; } }
 
@@ -68,7 +62,6 @@ namespace RdClient.Shared.ViewModels
                 if (SetProperty(ref _selectedUser, value))
                 {
                     _editUserCommand.EmitCanExecuteChanged();
-                    _deleteUserCommand.EmitCanExecuteChanged();
                     if (value != null && value.UserComboBoxType == UserComboBoxType.AddNew)
                     {
                         this.AddUser.Execute(null);
@@ -91,7 +84,6 @@ namespace RdClient.Shared.ViewModels
                 if (SetProperty(ref _selectedGateway, value))
                 {
                     _editGatewayCommand.EmitCanExecuteChanged();
-                    _deleteGatewayCommand.EmitCanExecuteChanged();
                     if (value != null && value.GatewayComboBoxType == GatewayComboBoxType.AddNew)
                     {
                         this.AddGateway.Execute(null);
@@ -167,25 +159,7 @@ namespace RdClient.Shared.ViewModels
             if (GatewayCommandsEnabled())
             {
                 var args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway);
-
-                // edit can also indicate deletion of the selected Gateway
-                var editGatewayCompleted = new ModalPresentationCompletion((s, e) =>
-                {
-                    GatewayPromptResult result = e.Result as GatewayPromptResult;
-                    if (null != result && result.Deleted)
-                    {
-                        this.DeleteGateway.Execute(null);
-                    }
-                });
-                this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, editGatewayCompleted);
-            }
-        }
-
-        private void DeleteGatewayCommandExecute()
-        {
-            if (GatewayCommandsEnabled())
-            {
-                this.ApplicationDataModel.Gateways.RemoveModel(this.SelectedGateway.Gateway.Id);
+                this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args);
             }
         }
 
@@ -209,13 +183,6 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        private void DeleteUserCommandExecute()
-        {
-            if (UserCommandsEnabled())
-            {
-                this.ApplicationDataModel.Credentials.RemoveModel(this.SelectedUser.Credentials.Id);                
-            }
-        }
 
         private void AddUserCommandExecute()
         {
