@@ -25,6 +25,7 @@
     <ApplicationInsightsResourceId>/subscriptions/1432b34c-c3b7-448d-bb4b-90cda6c2423a/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/RdClient.Windows</ApplicationInsightsResourceId>
     <PackageCertificateThumbprint>191EF584DB98DEABBD0667A4E1D9F0E0FE7A7C1B</PackageCertificateThumbprint>
     <PackageCertificateKeyFile>RdClient.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <AppxBundle>Never</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <TERMSRV_BUILDARCH>armchk</TERMSRV_BUILDARCH>
