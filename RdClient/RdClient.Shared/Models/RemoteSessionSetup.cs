@@ -125,6 +125,10 @@
                             gatewayCredentials.Model.Password = String.Empty;
                         }
                     }
+                    else
+                    {
+                        throw new System.Exception("couldn't setup gateway credentials");
+                    }
 
                     _sessionGateway = new SessionGateway(gatewayModel, gatewayCredentials);
                 }

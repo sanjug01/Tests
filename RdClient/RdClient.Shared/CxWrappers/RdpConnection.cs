@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using Windows.Foundation;
 using Windows.Security.Cryptography.Certificates;
 using RdClient.Shared.Helpers;
+using System;
 
 namespace RdClient.Shared.CxWrappers
 {
@@ -103,6 +104,9 @@ namespace RdClient.Shared.CxWrappers
 
         public void SetGateway(GatewayModel gateway, CredentialsModel gatewayCredentials)
         {
+            Contract.Assert(String.IsNullOrEmpty(gatewayCredentials.Username) == false);
+            Contract.Assert(gatewayCredentials.Password != null);
+
             _instrument.Instrument("SetGateway");
             int xRes = _rdpConnectionCx.SetGatewayHostName(gateway.HostName);
             RdTrace.IfFailXResultThrow(xRes, "Failed to set connection's gateway.");
