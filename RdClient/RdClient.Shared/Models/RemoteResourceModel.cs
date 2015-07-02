@@ -6,29 +6,33 @@
     using System.Runtime.Serialization;
 
     [DataContract(IsReference = true)]
-    public sealed class RemoteResourceModel : RemoteConnectionModel
+    public sealed class RemoteResourceModel : RemoteConnectionModel, ICredentialsIdModel
     {
         private readonly string _resourceId;
         private readonly RemoteResourceType _resourceType;
         private readonly string _friendlyName;
         private readonly string _rdpFile;
         private readonly byte[] _iconBytes;
-        private Guid _credId;
+        private Guid _credentialsId;
 
-        public RemoteResourceModel(string strResourceId, RemoteResourceType resourceType, string strResourceFriendlyName, string strRdpFile, byte[] spIcon, uint iconWidth, Guid credId)
+        public RemoteResourceModel(string strResourceId, RemoteResourceType resourceType, string strResourceFriendlyName, string strRdpFile, byte[] spIcon, uint iconWidth, Guid credentialsId)
         {
             _resourceId = strResourceId;
             _resourceType = resourceType;
             _friendlyName = strResourceFriendlyName;
             _rdpFile = strRdpFile;
             _iconBytes = spIcon;
-            this.CredentialId = credId;
+            this.CredentialsId = credentialsId;
         }
 
-        public Guid CredentialId
+        public Guid CredentialsId
         {
-            get { return _credId; }
-            set { SetProperty(ref _credId, value); }
+            get { return _credentialsId; }
+            set { SetProperty(ref _credentialsId, value); }
+        }
+        public bool HasCredentials
+        {
+            get { return !Guid.Empty.Equals(_credentialsId); }
         }
 
         public string ResourceId 
