@@ -1119,7 +1119,7 @@ Ask your admin or tech support for help.</value>
     <comment>Label on in session right side bar button that toggles touch mode between direct touch remoting and touch pointer mode</comment>
   </data>
   <data name="AddOrEditDesktop_CredOption_UseSession" xml:space="preserve">
-    <value>Use desktop credentials</value>
+    <value>Use desktop user account</value>
     <comment>Text shown on gateway credential combobox by default.</comment>
   </data>
 </root>
