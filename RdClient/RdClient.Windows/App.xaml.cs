@@ -1,10 +1,13 @@
 ﻿namespace RdClient
 {
+    using Microsoft.ApplicationInsights;
+    using Microsoft.ApplicationInsights.Extensibility;
     using RdClient.LifeTimeManagement;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.LifeTimeManagement;
     using System.Diagnostics.Contracts;
+    using System.Threading.Tasks;
     using Windows.ApplicationModel;
     using Windows.ApplicationModel.Activation;
     using Windows.UI.Xaml;
@@ -19,7 +22,12 @@
             this.InitializeComponent();
             this.Suspending += this.OnSuspending;
             this.Resuming += this.OnResuming;
-
+#if !DEBUG
+            WindowsAppInitializer.InitializeAsync("iKey").ContinueWith(t =>
+            {
+                TelemetryConfiguration.Active.TelemetryChannel.EndpointAddress = "https://vortex.data.microsoft.com/collect/v1";
+            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+#endif
             RdTrace.TraceNrm("Initializing Tracer");
         }
 
