@@ -637,7 +637,7 @@
                 InSessionCredentialsTask task = new InSessionCredentialsTask(
                     this.Session._sessionSetup.SessionGateway,
                     this.Session._sessionSetup.DataModel,
-                    CredentialPromptMode.InvalidCredentials,
+                    CredentialPromptMode.InvalidGatewayCredentials,
                     reason);
 
                 task.Submitted += this.NewGatewayCredentialsSubmitted;
@@ -654,7 +654,7 @@
                 InSessionCredentialsTask task = new InSessionCredentialsTask(
                     this.Session._sessionSetup.SessionGateway,
                     this.Session._sessionSetup.DataModel,
-                    CredentialPromptMode.FreshCredentialsNeeded,
+                    CredentialPromptMode.FreshGatewayCredentialsNeeded,
                     reason);
 
                 task.Submitted += this.NewGatewayCredentialsSubmitted;

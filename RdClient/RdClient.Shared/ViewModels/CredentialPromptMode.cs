@@ -5,6 +5,8 @@
         EnterCredentials,
         EditCredentials,
         InvalidCredentials,
+        InvalidGatewayCredentials,
         FreshCredentialsNeeded,
+        FreshGatewayCredentialsNeeded,
     }
 }

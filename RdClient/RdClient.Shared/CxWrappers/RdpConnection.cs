@@ -113,7 +113,7 @@ namespace RdClient.Shared.CxWrappers
                 xRes = _rdpConnectionCx.SetGatewayCredentials(
                     gatewayCredentials.Username,
                     string.Empty, // Empty domain strings
-                    gatewayCredentials.Password);
+                    gatewayCredentials.Password.EmptyIfNull());
                 RdTrace.IfFailXResultThrow(xRes, "Failed to set gateway credentials.");
             }
         }

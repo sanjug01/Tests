@@ -598,9 +598,17 @@
     <value>The remote PC requires you to enter your account info everytime. Enter your usename and password and try again.</value>
     <comment>Text shown in the credential prompt dialog when fresh credentials are required.</comment>
   </data>
+  <data name="CredentialPromptMode_FreshGatewayCredentialsNeeded_String" xml:space="preserve">
+    <value>The gateway requires you to enter your account info everytime. Enter the gateway usename and password and try again.</value>
+    <comment>Text shown in the credential prompt dialog when fresh gateway credentials are required.</comment>
+  </data>
   <data name="CredentialPromptMode_InvalidCredentials_String" xml:space="preserve">
     <value>The username and password that were used to connect to the remote PC didn't work. Try a different account.</value>
     <comment>Text shown in the credential prompt dialog when a connection attempt failed because the credentials were invalid.</comment>
+  </data>
+  <data name="CredentialPromptMode_InvalidGatewayCredentials_String" xml:space="preserve">
+    <value>The username and password that were used to connect through the gateway didn't work. Try a different account.</value>
+    <comment>Text shown in the credential prompt dialog when a connection attempt failed because the gateway credentials were invalid.</comment>
   </data>
   <data name="SessionView-HomeButtonLabel.Text" xml:space="preserve">
     <value>Disconnect</value>
