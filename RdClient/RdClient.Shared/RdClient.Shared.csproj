@@ -160,6 +160,7 @@
     <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
     <Compile Include="Input\Pointer\PointerVisibilityConsumer.cs" />
     <Compile Include="Models\FullScreenModel.cs" />
+    <Compile Include="Models\ICredentialsIdModel.cs" />
     <Compile Include="Models\IFullScreenModel.cs" />
     <Compile Include="Models\IScrollBarModel.cs" />
     <Compile Include="Models\ScrambledString.cs" />

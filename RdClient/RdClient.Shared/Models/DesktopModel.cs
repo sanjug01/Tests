@@ -17,7 +17,7 @@
     }        
 
     [DataContract(IsReference = true)]
-    public sealed class DesktopModel : RemoteConnectionModel
+    public sealed class DesktopModel : RemoteConnectionModel, ICredentialsIdModel
     {
         [DataMember(Name = "HostName", EmitDefaultValue = false)]
         private string _hostName;

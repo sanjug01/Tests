@@ -93,7 +93,7 @@
                 SetProperty(ref _credId, value);
                 foreach (RemoteResourceModel resource in this.Resources ?? Enumerable.Empty<RemoteResourceModel>())
                 {
-                    resource.CredentialId = value;
+                    resource.CredentialsId = value;
                 }                
             }
         }

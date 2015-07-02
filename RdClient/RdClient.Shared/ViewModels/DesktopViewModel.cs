@@ -163,7 +163,7 @@
 
                 task.Submitted += (sender, e) =>
                 {
-                    RemoteSessionSetup setup = (RemoteSessionSetup)e.State;
+                    RemoteSessionSetup setup = new RemoteSessionSetup((RemoteSessionSetup)e.State);
                     IRemoteSession session = _sessionFactory.CreateSession(setup);
 
                     if (e.SaveCredentials)

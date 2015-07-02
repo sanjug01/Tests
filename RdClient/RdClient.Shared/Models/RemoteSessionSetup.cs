@@ -7,10 +7,10 @@
 
     public sealed class RemoteSessionSetup
     {
-        private readonly ApplicationDataModel _dataModel;
-        private readonly RemoteConnectionModel _connection;
-        private readonly SessionCredentials _sessionCredentials;
-        private readonly SessionGateway _sessionGateway;
+        private ApplicationDataModel _dataModel;
+        private RemoteConnectionModel _connection;
+        private SessionCredentials _sessionCredentials;
+        private SessionGateway _sessionGateway;
 
         public ApplicationDataModel DataModel
         {
@@ -72,53 +72,83 @@
             }
         }
 
-        public RemoteSessionSetup(ApplicationDataModel dataModel, RemoteConnectionModel connection)
+        private void InitSessionCredentials(SessionCredentials credentials)
         {
-            Contract.Requires(null != dataModel);
-            Contract.Requires(null != connection);
-            Contract.Ensures(null != _sessionCredentials);
-
-            _dataModel = dataModel;
-            _connection = connection;
-
-            if(_connection is DesktopModel)
+            if(null != credentials)
             {
-                DesktopModel dtm = (DesktopModel)_connection;
-                if (dtm.HasCredentials)
+                _sessionCredentials = credentials;
+            }
+            else
+            {
+                ICredentialsIdModel cim = (ICredentialsIdModel)_connection;
+                if(cim.HasCredentials)
                 {
-                    _sessionCredentials = new SessionCredentials(_dataModel.Credentials.Models.First(c => dtm.CredentialsId == c.Id));
+                    _sessionCredentials = new SessionCredentials(_dataModel.Credentials.Models.First(c => cim.CredentialsId == c.Id));
                 }
                 else
                 {
                     _sessionCredentials = new SessionCredentials();
                 }
+            }
+        }
 
-                if(dtm.HasGateway)
+        private void InitGateway(SessionGateway gateway)
+        {
+            Contract.Assert(_sessionCredentials != null);
+
+            if(_connection is DesktopModel)
+            {
+                if(((DesktopModel)_connection).HasGateway)
                 {
-                    IModelContainer<GatewayModel> gateway = _dataModel.Gateways.Models.First(c => dtm.GatewayId == c.Id);
+                    IModelContainer<GatewayModel> gatewayModel = null;
                     IModelContainer<CredentialsModel> gatewayCredentials = null;
-                    if (gateway.Model.HasCredentials)
+
+                    if (gateway != null)
                     {
-                        gatewayCredentials = 
-                            _dataModel.Credentials.Models.First(c => gateway.Model.CredentialsId == c.Id);
+                        gatewayModel = ModelContainer<GatewayModel>.CreateForNewModel(gateway.Gateway);
+                    }
+                    else
+                    {
+                        DesktopModel dm = (DesktopModel)_connection;
+                        gatewayModel = _dataModel.Gateways.Models.First(c => dm.GatewayId == c.Id);
                     }
 
-                    _sessionGateway = new SessionGateway(gateway, gatewayCredentials);
+                    if (gatewayModel.Model.HasCredentials)
+                    {
+                        gatewayCredentials = _dataModel.Credentials.Models.First(c => gatewayModel.Model.CredentialsId == c.Id);
+                    }
+                    else if (_sessionCredentials != null)
+                    {
+                        gatewayCredentials = ModelContainer<CredentialsModel>.CreateForNewModel(_sessionCredentials.Credentials);
+                        if (String.IsNullOrEmpty(gatewayCredentials.Model.Password))
+                        {
+                            gatewayCredentials.Model.Password = String.Empty;
+                        }
+                    }
+
+                    _sessionGateway = new SessionGateway(gatewayModel, gatewayCredentials);
                 }
                 else
                 {
                     _sessionGateway = new SessionGateway();
                 }
             }
-            else if(_connection is RemoteResourceModel)
-            {
-                RemoteResourceModel remoteResource = _connection as RemoteResourceModel;
-                _sessionCredentials = new SessionCredentials(_dataModel.Credentials.Models.First(c => remoteResource.CredentialId == c.Id));
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+        }
+
+        public RemoteSessionSetup(ApplicationDataModel dataModel, RemoteConnectionModel connection)
+        {
+            _dataModel = dataModel;
+            _connection = connection;
+            InitSessionCredentials(null);
+            InitGateway(null);
+        }
+
+        public RemoteSessionSetup(RemoteSessionSetup setup)
+        {
+            _dataModel = setup.DataModel;
+            _connection = setup.Connection;
+            InitSessionCredentials(setup.SessionCredentials);
+            InitGateway(setup.SessionGateway);
         }
     }
 }

@@ -112,7 +112,7 @@
             _credentials = new CredentialsModel();
 
             savedGateway.Model.CopyTo(_gateway);
-            if (_gateway.HasCredentials && null != savedCredentials)
+            if (null != savedCredentials)
             {
                 savedCredentials.Model.CopyTo(_credentials);
                 _credentials.PropertyChanged += this.OnCredentialsPropertyChanged;
