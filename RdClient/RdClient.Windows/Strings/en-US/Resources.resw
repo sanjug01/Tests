@@ -293,6 +293,149 @@
     <value>We couldn't reconnect to the remote PC.Try connecting again.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
   </data>
+  <data name="RdpDisconnectCode_ProxyBadUri_String" xml:space="preserve">
+    <value>We couldn't connect to the remote PC because the gateway server name is incorrect.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyCertNameMismatch_String" xml:space="preserve">
+    <value>The certificate of the gateway can't be verified because the gateway name is incorrect. It's not safe to connect to this gateway. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyCertDateInvalid_String" xml:space="preserve">
+    <value>The certificate of the gateway can't be verified because it has expired or is not yet valid. It's not safe to connect to this gateway. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyCertRevocationCheckFailed_String" xml:space="preserve">
+    <value>The certificate of the gateway can't be verified because we are unable to determine the revocation status. It's not safe to connect to this gateway. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyAuthSupportError_String" xml:space="preserve">
+    <value>We couldn't connect to the gateway because an alternate logon method is required. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyNeedCredentials_String" xml:space="preserve">
+    <value>We couldn't connect to the gateway because your credentials were incorrect or smart card authentication is required. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyOutgoingAuthError_String" xml:space="preserve">
+    <value>"Your device couldn't connect to the remote PC because your web proxy server requires authentication. Ask your admin or tech support if you want to allow unauthenticated traffic to a gateway through your web proxy server." </value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyPasswordExpired_String" xml:space="preserve">
+    <value>We couldn't connect to the gateway because your password has expired. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyMaxConnectionsReached_String" xml:space="preserve">
+    <value>We couldn't connect to the gateway because the maximum number of allowed connections has been exceeded. Try again later.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyNoCertAvailable_String" xml:space="preserve">
+    <value>We couldn't connect to the remote PC because the gateway does not have an authentication certificate. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyUntrustedServer_String" xml:space="preserve">
+    <value>We couldn't connect to the remote PC because the gateway that you are using is not authorized by your admin. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyInvalidServerCert_String" xml:space="preserve">
+    <value>We couldn't connect to the remote PC because your device did not meet the Network Access Protection requirements set by your admin. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyUnavailable_String" xml:space="preserve">
+    <value>We couldn't connect to the remote PC because the gateway is unavailable. Try again later.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyInvalidCA" xml:space="preserve">
+    <value>The certificate of the gateway can't be verified because it's not from a trusted certifying authority. It's not safe to connect to this gateway. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyInvalidCert" xml:space="preserve">
+    <value>The certificate of the gateway can't be verified because it contains invalid data. It's not safe to connect to this gateway. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyLogonFailed_String" xml:space="preserve">
+    <value>We couldn't connect to the remote PC because the gateway user name or password is incorrect.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyRAPAccessDenied_String" xml:space="preserve">
+    <value>We couldn't connect to the remote PC for one of the following reasons:
+
+1. Your user account is not authorized to access the gateway.
+2. You might have specified the remote PC in NetBIOS format, but the gateway is expecting an FQDN or IP address format.
+
+Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyNAPAccessDenied_String" xml:space="preserve">
+    <value>We couldn't connect to the remote PC for one of the following reasons:
+
+1. Your user account is not authorized to access the gateway.
+2. Your device is not authorized to access the gateway.
+3. You are using an incompatible authentication method.
+
+Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyQuarantineAccessDenied_String" xml:space="preserve">
+    <value>We couldn't connect to the remote PC because your device didn't pass the Network Access Protection requirements set by your admin. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyUnsupportedAuthenticationMethod_String" xml:space="preserve">
+    <value>We couldn't connect to the remote PC because the gateway expects an authentication method different from the one used. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxySDRNotSupportedByTS_String" xml:space="preserve">
+    <value>We couldn't connect to the remote PC because the gateway and the remote PC are unable to exchange device redirection policies. Ask your admin or tech support for help. </value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyReauthNAPFailed_String" xml:space="preserve">
+    <value>The gateway connection ended because periodic user authorization failed and your device no longer meets the Network Access Protection requirements set by your admin. Ask your admin or tech support for help. </value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyResourceCapacityReached_String" xml:space="preserve">
+    <value>We couldn't connect because the maximum number of allowed connections has been exceeded. Try again later.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyCertRevoked_String" xml:space="preserve">
+    <value>The certificate of the gateway can't be verified because it was identified as untrusted. It's not safe to connect to this gateway. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyTSHostNotFound_String" xml:space="preserve">
+    <value>We couldn't connect to the remote PC. Make sure the PC is turned on and connected to the network, and that remote access is enabled. If this keeps happening, ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyResourceAccessDenied_String" xml:space="preserve">
+    <value>Your device can't connect to the remote resource because you don't have permission. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyResourceCreationPending_String" xml:space="preserve">
+    <value>We're getting things ready. Try again in a few minutes.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyResourceNotAvailable_String" xml:space="preserve">
+    <value>There are no remote resources available. Try again in a few minutes.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyDemoResourceNotAvailable_String" xml:space="preserve">
+    <value>There are too many users connected to Azure RemoteApp. Try again in a few minutes.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyAccountTrialExpired_String" xml:space="preserve">
+    <value>Your trial period for Azure RemoteApp has expired. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyAccountDisabled_String" xml:space="preserve">
+    <value>You no longer have access to Azure RemoteApp. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxyUnknownError_String" xml:space="preserve">
+    <value>We couldn't connect to the gateway because of an error. If this keeps happening, ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>
+  <data name="RdpDisconnectCode_ProxySmartCardErrorGeneric_String" xml:space="preserve">
+    <value>We couldn't connect to the gateway because your device doesn't support smart card authentication. Ask your admin or tech support for help.</value>
+    <comment>Disconnection error located in the disconnect error dialog.</comment>
+  </data>  
   <data name="Disconnect_ErrorCode_String" xml:space="preserve">
     <value>Inquiring minds may find this error code helpful: ‪0x{0}‬ </value>
     <comment>Disconnection error located in the disconnect error dialog. {Locked="‪0x{0}‬"}</comment>
