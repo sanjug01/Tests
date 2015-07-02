@@ -435,7 +435,7 @@ Ask your admin or tech support for help.</value>
   <data name="RdpDisconnectCode_ProxySmartCardErrorGeneric_String" xml:space="preserve">
     <value>We couldn't connect to the gateway because your device doesn't support smart card authentication. Ask your admin or tech support for help.</value>
     <comment>Disconnection error located in the disconnect error dialog.</comment>
-  </data>  
+  </data>
   <data name="Disconnect_ErrorCode_String" xml:space="preserve">
     <value>Inquiring minds may find this error code helpful: ‪0x{0}‬ </value>
     <comment>Disconnection error located in the disconnect error dialog. {Locked="‪0x{0}‬"}</comment>
@@ -1117,5 +1117,9 @@ Ask your admin or tech support for help.</value>
   <data name="SessionView-MouseModeLabel.Text" xml:space="preserve">
     <value>Mouse</value>
     <comment>Label on in session right side bar button that toggles touch mode between direct touch remoting and touch pointer mode</comment>
+  </data>
+  <data name="AddOrEditDesktop_CredOption_UseSession" xml:space="preserve">
+    <value>Use desktop credentials</value>
+    <comment>Text shown on gateway credential combobox by default.</comment>
   </data>
 </root>

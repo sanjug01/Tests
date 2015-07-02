@@ -11,7 +11,8 @@
     {
         AddNew = 0,
         AskEveryTime = 1,
-        Credentials = 2
+        ReuseSession = 2,
+        Credentials = 3
     }
 
     public sealed class UserComboBoxOrder : IComparer<UserComboBoxElement>

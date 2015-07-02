@@ -180,7 +180,7 @@
             }
 
             // initialize users colection
-            UserComboBoxElement defaultUser = new UserComboBoxElement(UserComboBoxType.AskEveryTime);
+            UserComboBoxElement defaultUser = new UserComboBoxElement(UserComboBoxType.ReuseSession);
             JoinedObservableCollection<UserComboBoxElement> userCollection = JoinedObservableCollection<UserComboBoxElement>.Create();
             userCollection.AddCollection(new ObservableCollection<UserComboBoxElement>() { defaultUser });
             userCollection.AddCollection(

@@ -17,6 +17,7 @@ namespace RdClient.Shared.Converters
             _codeMap = new Dictionary<UserComboBoxType, string>();
             _codeMap[UserComboBoxType.AddNew] = "AddOrEditDesktop_CredOption_Add_String";
             _codeMap[UserComboBoxType.AskEveryTime] = "AddOrEditDesktop_CredOption_Ask_String";
+            _codeMap[UserComboBoxType.ReuseSession] = "AddOrEditDesktop_CredOption_UseSession";
         }
 
         public IStringTable LocalizedString { set { _localizedString = value; } }
