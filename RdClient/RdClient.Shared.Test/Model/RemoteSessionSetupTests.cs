@@ -56,7 +56,7 @@
         }
 
         [TestMethod]
-        public void NewRemoteSessionSetup_Initialized()
+        public void RemoteSessionSetup_New_Initialized()
         {
             RemoteSessionSetup rss = new RemoteSessionSetup(_dataModel, _connection);
             Assert.IsNotNull(rss.DataModel);
@@ -69,6 +69,7 @@
             RemoteSessionSetup rssCopy = new RemoteSessionSetup(rss);
 
             Assert.IsNotNull(rssCopy.DataModel);
+            Assert.AreEqual(rss.HostName, rssCopy.HostName);
         }
     }
 }
