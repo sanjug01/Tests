@@ -460,6 +460,7 @@
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             using (Mock.ModalPresentationContext context = new Mock.ModalPresentationContext())
             {
+                _dataModel.Gateways.AddNewModel(_gateway);
                 context.Expect("Dismiss", parameters =>
                 {
                     GatewayPromptResult result = parameters[0] as GatewayPromptResult;
@@ -467,7 +468,7 @@
                     Assert.IsTrue(result.Deleted);
                     return null;
                 });
-                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
+                EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_dataModel.Gateways.Models[0]);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, context);
                 _addOrEditGatewayVM.Delete.Execute(null);
             }           

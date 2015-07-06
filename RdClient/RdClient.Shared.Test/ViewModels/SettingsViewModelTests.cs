@@ -207,7 +207,7 @@
                 completion.Completed(null, promptResult);
             }
 
-            AssertUserOptionsCorrect();
+            AssertUserOptionsCorrect(false);
             Assert.AreEqual(user, _vm.SelectedUser);
         }
 
@@ -261,7 +261,6 @@
         [TestMethod]
         public void EditGatewayCommandShowsAddOrEditGatewayViewWithCorrectParameters()
         {
-            IPresentationCompletion completion = null;
             var gateway = _vm.Gateways.First(g => g.GatewayComboBoxType == GatewayComboBoxType.Gateway);
             _vm.SelectedGateway = gateway;
             _navService.Expect("PushAccessoryView", p =>
@@ -276,31 +275,80 @@
             Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);//EditGatewayView may add a user as well as a gateway
             gateway.Gateway.Model.CredentialsId = newCredId;
             gateway.Gateway.Model.HostName = _testData.NewRandomString();
-            var promptResult = GatewayPromptResult.CreateWithGateway(Guid.Empty);
-            completion.Completed(null, promptResult);
 
             AssertUserOptionsCorrect();
-            AssertGatewayOptionsCorrect();
-            Assert.AreEqual(gateway, _vm.SelectedGateway);
+            AssertGatewayOptionsCorrect(false);
+
         }
 
-
-        private void AssertUserOptionsCorrect()
+        private void AssertUserOptionsCorrect(bool verifyOrder = true)
         {
             //Add user option - no longer used
             //Remaining options match datamodel users
             Assert.AreEqual(_dataModel.Credentials.Models.Count, _vm.Users.Count);
+
+            // users are ordered, verify collection equivalence
             var loadedUsers = _vm.Users.Where(u => u.UserComboBoxType == UserComboBoxType.Credentials).Select(u => u.Credentials).ToList();
-            CollectionAssert.AreEqual(_dataModel.Credentials.Models, loadedUsers);
+            CollectionAssert.AreEquivalent(_dataModel.Credentials.Models, loadedUsers);
+
+            // verify order
+            if (verifyOrder)
+            {
+                for (int i = 0; i < loadedUsers.Count; i++)
+                {
+                    Assert.AreEqual(i, GetUserOrderInUsersCollection(loadedUsers[i].Model));
+                }
+            }
         }
 
-        private void AssertGatewayOptionsCorrect()
+        private void AssertGatewayOptionsCorrect(bool verifyOrder = true)
         {
             //Add gateway option - no longer used
             //Remaining options match datamodel users
             Assert.AreEqual(_dataModel.Gateways.Models.Count, _vm.Gateways.Count);
+
+            // gateways are ordered, verify collection equivalence
             var loadedGateways = _vm.Gateways.Where(g => g.GatewayComboBoxType == GatewayComboBoxType.Gateway).Select(g => g.Gateway).ToList();
-            CollectionAssert.AreEqual(_dataModel.Gateways.Models, loadedGateways);
+            CollectionAssert.AreEquivalent(_dataModel.Gateways.Models, loadedGateways);
+
+            // verify order
+            if (verifyOrder)
+            {
+                for (int i = 0; i < loadedGateways.Count; i++)
+                {
+                    Assert.AreEqual(i, GetGatewayOrderInGatewayCollection(loadedGateways[i].Model));
+                }
+            }
+        }
+
+        private int GetUserOrderInUsersCollection(CredentialsModel model)
+        {
+            int position = 0;
+            for(int i = 0; i < _dataModel.Credentials.Models.Count; i++)
+            {
+                // ordered by username
+                if(0 < model.Username.CompareTo(_dataModel.Credentials.Models[i].Model.Username))
+                {
+                    position++;
+                }
+            }
+
+            return position;
+        }
+
+        private int GetGatewayOrderInGatewayCollection(GatewayModel model)
+        {
+            int position = 0;
+            for (int i = 0; i < _dataModel.Gateways.Models.Count; i++)
+            {
+                // ordered by hostname
+                if (0 < model.HostName.CompareTo(_dataModel.Gateways.Models[i].Model.HostName))
+                {
+                    position++;
+                }
+            }
+
+            return position;
         }
     }
 }
