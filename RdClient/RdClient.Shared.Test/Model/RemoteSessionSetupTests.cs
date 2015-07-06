@@ -9,8 +9,12 @@
     using RdClient.Shared.Telemetry;
     using RdClient.Shared.Test.Data;
 
-    class TestRemoteConnectionModel : RemoteConnectionModel
+    class TestRemoteConnectionModel : RemoteConnectionModel, ICredentialsIdModel
     {
+        public Guid CredentialsId { get; set; }
+
+        public bool HasCredentials { get; set; }
+
         public override IRdpConnection CreateConnection(IRdpConnectionFactory connectionFactory, IRenderingPanel renderingPanel)
         {
             throw new NotImplementedException();
