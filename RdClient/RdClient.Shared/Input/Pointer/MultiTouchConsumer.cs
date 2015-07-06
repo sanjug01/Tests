@@ -24,14 +24,6 @@ namespace RdClient.Shared.Input.Pointer
             // the time-stamp delta is relative to the first touch ever
             ulong delta = pointerEvent.Timestamp - _masterTouch.Timestamp;
 
-            // don't send duplicate position updates
-            if (pointerEvent.Action == PointerEventAction.PointerMoved &&
-                _lastTouch != null && 
-                _lastTouch.Position == pointerEvent.Position)
-            {
-                return;
-            }
-
             // if the position to the up event is not the same as the last recorded position, 
             // update the position before sending the up event
             if ((pointerEvent.Action == PointerEventAction.PointerReleased ||
