@@ -261,7 +261,6 @@
         [TestMethod]
         public void EditGatewayCommandShowsAddOrEditGatewayViewWithCorrectParameters()
         {
-            IPresentationCompletion completion = null;
             var gateway = _vm.Gateways.First(g => g.GatewayComboBoxType == GatewayComboBoxType.Gateway);
             _vm.SelectedGateway = gateway;
             _navService.Expect("PushAccessoryView", p =>
@@ -276,13 +275,10 @@
             Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);//EditGatewayView may add a user as well as a gateway
             gateway.Gateway.Model.CredentialsId = newCredId;
             gateway.Gateway.Model.HostName = _testData.NewRandomString();
-            var promptResult = GatewayPromptResult.CreateWithGateway(Guid.Empty);
-            completion.Completed(null, promptResult);
 
             AssertUserOptionsCorrect();
-            // note that the order is broken for the edited element
             AssertGatewayOptionsCorrect(false);
-            Assert.AreEqual(gateway, _vm.SelectedGateway);
+
         }
 
         private void AssertUserOptionsCorrect(bool verifyOrder = true)
