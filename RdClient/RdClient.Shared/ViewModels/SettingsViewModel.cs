@@ -96,27 +96,36 @@ namespace RdClient.Shared.ViewModels
         {
             this.GeneralSettings = this.ApplicationDataModel.Settings;
 
-            this.Gateways = TransformingObservableCollection<IModelContainer<GatewayModel>, GatewayComboBoxElement>.Create(
-                this.ApplicationDataModel.Gateways.Models,
-                g => new GatewayComboBoxElement(GatewayComboBoxType.Gateway, g),
-                gcbe =>
-                {
-                    if (this.SelectedGateway == gcbe)
+            IOrderedObservableCollection<GatewayComboBoxElement> orderedGateways = OrderedObservableCollection<GatewayComboBoxElement>.Create(
+                TransformingObservableCollection<IModelContainer<GatewayModel>, GatewayComboBoxElement>.Create(
+                    this.ApplicationDataModel.Gateways.Models,
+                    g => new GatewayComboBoxElement(GatewayComboBoxType.Gateway, g),
+                    gcbe =>
                     {
-                        this.SelectedGateway = null;
-                    }
-                });
+                        if (this.SelectedGateway == gcbe)
+                        {
+                            this.SelectedGateway = null;
+                        }
+                    })
+                );
+            orderedGateways.Order = new GatewayComboBoxOrder();
+            this.Gateways = orderedGateways.Models;
 
-            this.Users = TransformingObservableCollection<IModelContainer<CredentialsModel>, UserComboBoxElement>.Create(
-                this.ApplicationDataModel.Credentials.Models,
-                c => new UserComboBoxElement(UserComboBoxType.Credentials, c),
-                ucbe =>
-                {
-                    if (this.SelectedUser == ucbe)
+            IOrderedObservableCollection<UserComboBoxElement> orderedUsers = OrderedObservableCollection<UserComboBoxElement>.Create(
+                TransformingObservableCollection<IModelContainer<CredentialsModel>, UserComboBoxElement>.Create(
+                    this.ApplicationDataModel.Credentials.Models,
+                    c => new UserComboBoxElement(UserComboBoxType.Credentials, c),
+                    ucbe =>
                     {
-                        this.SelectedUser = null;
-                    }
-                });
+                        if (this.SelectedUser == ucbe)
+                        {
+                            this.SelectedUser = null;
+                        }
+                    })
+                );
+            orderedUsers.Order = new UserComboBoxOrder();
+            this.Users = orderedUsers.Models;
+
         }
 
         protected override void OnDismissed()

@@ -290,8 +290,10 @@
             //Add user option - no longer used
             //Remaining options match datamodel users
             Assert.AreEqual(_dataModel.Credentials.Models.Count, _vm.Users.Count);
+
+            // users are ordered, verify collection equivalence
             var loadedUsers = _vm.Users.Where(u => u.UserComboBoxType == UserComboBoxType.Credentials).Select(u => u.Credentials).ToList();
-            CollectionAssert.AreEqual(_dataModel.Credentials.Models, loadedUsers);
+            CollectionAssert.AreEquivalent(_dataModel.Credentials.Models, loadedUsers);
         }
 
         private void AssertGatewayOptionsCorrect()
@@ -299,8 +301,10 @@
             //Add gateway option - no longer used
             //Remaining options match datamodel users
             Assert.AreEqual(_dataModel.Gateways.Models.Count, _vm.Gateways.Count);
+
+            // gateways are ordered, verify collection equivalence
             var loadedGateways = _vm.Gateways.Where(g => g.GatewayComboBoxType == GatewayComboBoxType.Gateway).Select(g => g.Gateway).ToList();
-            CollectionAssert.AreEqual(_dataModel.Gateways.Models, loadedGateways);
+            CollectionAssert.AreEquivalent(_dataModel.Gateways.Models, loadedGateways);
         }
     }
 }

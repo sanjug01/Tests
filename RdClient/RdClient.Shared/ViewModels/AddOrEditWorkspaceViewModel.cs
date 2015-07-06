@@ -135,16 +135,20 @@
             EditWorkspaceViewModelArgs editArgs = activationParameter as EditWorkspaceViewModelArgs;
 
             // initialize users colection
-            this.Users = TransformingObservableCollection<IModelContainer<CredentialsModel>, UserComboBoxElement>.Create(
-                this.ApplicationDataModel.Credentials.Models,
-                c => new UserComboBoxElement(UserComboBoxType.Credentials, c),
-                ucbe =>
-                {
-                    if (this.SelectedUser == ucbe)
+            IOrderedObservableCollection<UserComboBoxElement> orderedUsers = OrderedObservableCollection<UserComboBoxElement>.Create(
+                TransformingObservableCollection<IModelContainer<CredentialsModel>, UserComboBoxElement>.Create(
+                    this.ApplicationDataModel.Credentials.Models,
+                    c => new UserComboBoxElement(UserComboBoxType.Credentials, c),
+                    ucbe =>
                     {
-                        this.SelectedUser = null;
-                    }
-                });
+                        if (this.SelectedUser == ucbe)
+                        {
+                            this.SelectedUser = null;
+                        }
+                    })
+                );
+            orderedUsers.Order = new UserComboBoxOrder();
+            this.Users = orderedUsers.Models;
 
             if (editArgs != null)
             {
