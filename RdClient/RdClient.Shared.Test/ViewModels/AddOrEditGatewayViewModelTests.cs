@@ -178,7 +178,7 @@
         }
 
         [TestMethod]
-        public void EditGateway_ShouldSelectAskAlways()
+        public void EditGateway_ShouldSelectReuseSession()
         {
             using (Mock.NavigationService navigation = new Mock.NavigationService())
             {
@@ -187,7 +187,7 @@
                 EditGatewayViewModelArgs args = new EditGatewayViewModelArgs(_gatewayContainer);
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(UserComboBoxType.AskEveryTime, _addOrEditGatewayVM.SelectedUser.UserComboBoxType);
+                Assert.AreEqual(UserComboBoxType.ReuseSession, _addOrEditGatewayVM.SelectedUser.UserComboBoxType);
             }
         }
 
