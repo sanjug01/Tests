@@ -34,7 +34,7 @@
                 if (null == _appVersion)
                 {
                     PackageVersion pv = Package.Current.Id.Version;
-                    _appVersion = string.Format("{0}.{1}.{2}.{3}", pv.Major, pv.Minor, pv.Revision, pv.Build);
+                    _appVersion = string.Format("{0}.{1}.{2}", pv.Major, pv.Minor, pv.Revision);
                 }
 
                 return _appVersion;
