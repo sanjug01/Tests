@@ -72,8 +72,9 @@
             RemoteSessionSetup rss = new RemoteSessionSetup(_dataModel, _connection);
             RemoteSessionSetup rssCopy = new RemoteSessionSetup(rss);
 
-            Assert.IsNotNull(rssCopy.DataModel);
-            Assert.AreEqual(rss.HostName, rssCopy.HostName);
+            Assert.AreEqual(rss.DataModel, rssCopy.DataModel);
+            Assert.AreEqual(rss.Connection, rssCopy.Connection);
+            Assert.AreEqual(rss.HostName, "");
         }
     }
 }

@@ -40,8 +40,10 @@
 
                 if (_connection is DesktopModel)
                     hostName = ((DesktopModel)_connection).HostName;
-                else
+                else if (_connection is RemoteResourceModel)
                     hostName = ((RemoteResourceModel)_connection).FriendlyName;
+                else
+                    hostName = "";
 
                 return hostName;
             }
