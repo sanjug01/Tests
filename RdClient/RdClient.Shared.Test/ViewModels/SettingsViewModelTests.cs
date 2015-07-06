@@ -207,7 +207,7 @@
                 completion.Completed(null, promptResult);
             }
 
-            AssertUserOptionsCorrect();
+            AssertUserOptionsCorrect(false);
             Assert.AreEqual(user, _vm.SelectedUser);
         }
 
@@ -280,12 +280,12 @@
             completion.Completed(null, promptResult);
 
             AssertUserOptionsCorrect();
-            AssertGatewayOptionsCorrect();
+            // note that the order is broken for the edited element
+            AssertGatewayOptionsCorrect(false);
             Assert.AreEqual(gateway, _vm.SelectedGateway);
         }
 
-
-        private void AssertUserOptionsCorrect()
+        private void AssertUserOptionsCorrect(bool verifyOrder = true)
         {
             //Add user option - no longer used
             //Remaining options match datamodel users
@@ -294,9 +294,18 @@
             // users are ordered, verify collection equivalence
             var loadedUsers = _vm.Users.Where(u => u.UserComboBoxType == UserComboBoxType.Credentials).Select(u => u.Credentials).ToList();
             CollectionAssert.AreEquivalent(_dataModel.Credentials.Models, loadedUsers);
+
+            // verify order
+            if (verifyOrder)
+            {
+                for (int i = 0; i < loadedUsers.Count; i++)
+                {
+                    Assert.AreEqual(i, GetUserOrderInUsersCollection(loadedUsers[i].Model));
+                }
+            }
         }
 
-        private void AssertGatewayOptionsCorrect()
+        private void AssertGatewayOptionsCorrect(bool verifyOrder = true)
         {
             //Add gateway option - no longer used
             //Remaining options match datamodel users
@@ -305,6 +314,45 @@
             // gateways are ordered, verify collection equivalence
             var loadedGateways = _vm.Gateways.Where(g => g.GatewayComboBoxType == GatewayComboBoxType.Gateway).Select(g => g.Gateway).ToList();
             CollectionAssert.AreEquivalent(_dataModel.Gateways.Models, loadedGateways);
+
+            // verify order
+            if (verifyOrder)
+            {
+                for (int i = 0; i < loadedGateways.Count; i++)
+                {
+                    Assert.AreEqual(i, GetGatewayOrderInGatewayCollection(loadedGateways[i].Model));
+                }
+            }
+        }
+
+        private int GetUserOrderInUsersCollection(CredentialsModel model)
+        {
+            int position = 0;
+            for(int i = 0; i < _dataModel.Credentials.Models.Count; i++)
+            {
+                // ordered by username
+                if(0 < model.Username.CompareTo(_dataModel.Credentials.Models[i].Model.Username))
+                {
+                    position++;
+                }
+            }
+
+            return position;
+        }
+
+        private int GetGatewayOrderInGatewayCollection(GatewayModel model)
+        {
+            int position = 0;
+            for (int i = 0; i < _dataModel.Gateways.Models.Count; i++)
+            {
+                // ordered by hostname
+                if (0 < model.HostName.CompareTo(_dataModel.Gateways.Models[i].Model.HostName))
+                {
+                    position++;
+                }
+            }
+
+            return position;
         }
     }
 }
