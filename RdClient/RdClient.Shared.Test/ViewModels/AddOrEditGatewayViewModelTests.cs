@@ -65,7 +65,7 @@
 
                 ((IViewModel) _addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(_gateway, _addOrEditGatewayVM.Gateway);
+                Assert.AreEqual(_gateway.HostName, _addOrEditGatewayVM.Host.Value);
             }
         }
 
@@ -94,7 +94,7 @@
 
                 ((IViewModel)_addOrEditGatewayVM).Presenting(navigation, args, null);
 
-                Assert.AreEqual(_gateway, _addOrEditGatewayVM.Gateway);
+                Assert.AreEqual(_gateway.HostName, _addOrEditGatewayVM.Host.Value);
                 Assert.IsFalse(_addOrEditGatewayVM.IsAddingGateway);
             }
         }

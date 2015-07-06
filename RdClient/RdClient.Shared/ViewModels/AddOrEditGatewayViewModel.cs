@@ -77,7 +77,7 @@
         private readonly RelayCommand _deleteCommand;
         private readonly RelayCommand _addUserCommand;
 
-        private GatewayModel _gateway;
+        private IModelContainer<GatewayModel> _gateway;
         private ReadOnlyObservableCollection<UserComboBoxElement> _users;
         private UserComboBoxElement _selectedUser;
         private UserComboBoxElement _savedSelectedUser;
@@ -124,11 +124,6 @@
         // edit not supported, but may be in the future
         public ICommand EditUser { get { throw new NotImplementedException(); } }
 
-        public GatewayModel Gateway
-        {
-            get { return _gateway; }
-            private set { this.SetProperty(ref _gateway, value); }
-        }
 
         public IValidatedProperty<string> Host
         {
@@ -168,14 +163,14 @@
 
             if (editArgs != null)
             {
-                this.Gateway = editArgs.Gateway.Model;
-                this.Host.Value = this.Gateway.HostName;
+                _gateway = editArgs.Gateway;
+                this.Host.Value = this._gateway.Model.HostName;
                 this.IsAddingGateway = false;
             }
             else if (addArgs != null)
             {
+                _gateway = TemporaryModelContainer<GatewayModel>.WrapModel<GatewayModel>(Guid.Empty, new GatewayModel());
                 this.Host.Value = string.Empty;
-                this.Gateway = new GatewayModel();
                 this.IsAddingGateway = true;
             }
 
@@ -199,7 +194,7 @@
             orderedUsers.Order = new UserComboBoxOrder();
             this.Users = orderedUsers.Models;
 
-            this.SelectUserId(this.Gateway.CredentialsId);
+            this.SelectUserId(_gateway.Model.CredentialsId);
         }
 
         private bool SaveCommandCanExecute()
@@ -211,23 +206,24 @@
         {
             if (this.Host.State.Status == ValidationResultStatus.Valid)
             {
-                this.Gateway.HostName = this.Host.Value;
+                _gateway.Model.HostName = this.Host.Value;
                 Guid gatewayId = Guid.Empty;
 
                 if (null != this.SelectedUser
                     && UserComboBoxType.Credentials == this.SelectedUser.UserComboBoxType)
                 {
-                    this.Gateway.CredentialsId = this.SelectedUser.Credentials.Id;
+                    _gateway.Model.CredentialsId = this.SelectedUser.Credentials.Id;
                 }
                 else
                 {
-                    this.Gateway.CredentialsId = Guid.Empty;
+                    _gateway.Model.CredentialsId = Guid.Empty;
                 }
 
                 if (this.IsAddingGateway)
                 {
                     // returning gatewayId only if it is a new gateway
-                    gatewayId = this.ApplicationDataModel.Gateways.AddNewModel(this.Gateway);
+                    gatewayId = this.ApplicationDataModel.Gateways.AddNewModel(_gateway.Model);
+                    _gateway = TemporaryModelContainer<GatewayModel>.WrapModel(gatewayId, _gateway.Model);
                 }
 
                 DismissModal(GatewayPromptResult.CreateWithGateway(gatewayId));
@@ -241,8 +237,11 @@
 
         private void DeleteCommandExecute(object o)
         {
-            // parent view should present the confirmation dialog and perform deletion
-            DismissModal(GatewayPromptResult.CreateDeleted());
+            if (!this.IsAddingGateway)
+            {
+                ApplicationDataModel.Gateways.RemoveModel(_gateway.Id);
+                DismissModal(GatewayPromptResult.CreateDeleted());
+            }            
         }
 
         /// <summary>

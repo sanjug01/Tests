@@ -23,16 +23,6 @@ namespace RdClient.DesignTime
             get { return new RelayCommand(o => { }, o => true); }
         }
 
-        public ICommand DeleteGateway
-        {
-            get { return new RelayCommand(o => { }, o => false); }
-        }
-
-        public ICommand DeleteUser
-        {
-            get { return new RelayCommand(o => { }, o => true); }
-        }
-
         public GeneralSettings GeneralSettings
         {
             get { return _general; }
