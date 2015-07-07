@@ -45,7 +45,8 @@
                 IsRightTapEnabled="True"
                 RightTapped="ThumbnailButton_RightTapped">
             <Grid>
-                <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" Height="164" Width="296">
+                <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" 
+                      Height="164" Width="296">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="42" />

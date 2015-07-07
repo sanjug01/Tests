@@ -11,6 +11,12 @@
         {
             this.InitializeComponent();
             this.VisualStates.CurrentStateChanging += this.OnVisualStateChanging;
+            this.SizeChanged += OnSizeChanged;
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("SizeChanged :" + e.NewSize);
         }
 
         IViewModel IPresentableView.ViewModel { get { return this.DataContext as IViewModel; } }
