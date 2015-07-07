@@ -1,8 +1,7 @@
 ﻿using Windows.Foundation;
-using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.Devices.Input;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace RdClient.Views
 {
@@ -21,7 +20,7 @@ namespace RdClient.Views
             Point pos = e.GetPosition(element);
             FlyoutTranslateTransform.X = pos.X;
             FlyoutTranslateTransform.Y = pos.Y;
-            Flyout.ShowAttachedFlyout(this.FlyoutButton);
+            FlyoutBase.ShowAttachedFlyout(FlyoutButton);
             
             e.Handled = true;
         }
