@@ -1,7 +1,7 @@
-﻿using Windows.UI.Input;
+﻿using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.Devices.Input;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace RdClient.Views
 {
@@ -15,7 +15,13 @@ namespace RdClient.Views
         private void ThumbnailButton_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
         {
             var element = sender as FrameworkElement;
-            Flyout.ShowAttachedFlyout(element);
+
+            // update the position of the flyout
+            Point pos = e.GetPosition(element);
+            FlyoutTranslateTransform.X = pos.X;
+            FlyoutTranslateTransform.Y = pos.Y;
+            FlyoutBase.ShowAttachedFlyout(FlyoutButton);
+            
             e.Handled = true;
         }
     }

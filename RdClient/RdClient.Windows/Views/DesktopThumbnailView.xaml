@@ -42,7 +42,6 @@
         <Button Style="{StaticResource FlatButtonStyle}"
                 x:Name="ThumbnailButton"
                 Command="{Binding ConnectCommand}"
-                FlyoutBase.AttachedFlyout="{StaticResource ModifyConnectionMenuFlyout}"
                 IsRightTapEnabled="True"
                 RightTapped="ThumbnailButton_RightTapped">
             <Grid>
@@ -51,8 +50,8 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="42" />
                 </Grid.RowDefinitions>
-            
-                <Image Source="ms-appx:///Assets/desktop_placeholder.png"
+
+                    <Image Source="ms-appx:///Assets/desktop_placeholder.png"
                        Visibility="{Binding Desktop.EncodedThumbnail, Converter={StaticResource NullToVisibleConverter}}"
                        Stretch="None"
                        HorizontalAlignment="Center"
@@ -95,6 +94,20 @@
                     <Border BorderBrush="{ThemeResource SystemControlHighlightAccentBrush}"
                             BorderThickness="{ThemeResource ButtonBorderThemeThickness}"/>
                 </Grid>
+
+                <!-- Invisible button for moving the attached flyout around -->
+                <Button x:Name="FlyoutButton"
+                        IsTabStop="False"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Width="0" Height="0"             
+                        Visibility="Collapsed"
+                        FlyoutBase.AttachedFlyout="{StaticResource ModifyConnectionMenuFlyout}">
+                    <Button.RenderTransform>
+                        <TranslateTransform x:Name="FlyoutTranslateTransform"/>
+                    </Button.RenderTransform>
+                </Button>
+
             </Grid>
         </Button>
     </StackPanel>
