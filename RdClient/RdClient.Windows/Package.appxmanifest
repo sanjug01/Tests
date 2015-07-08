@@ -6,7 +6,7 @@
     <DisplayName>Microsoft Remote Desktop Preview</DisplayName>
     <PublisherDisplayName>Microsoft Corporation</PublisherDisplayName>
     <Description>Microsoft Remote Desktop Preview</Description>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <Logo>Assets\RemoteDesktopStore.png</Logo>
   </Properties>
   <Dependencies>
     <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10069.0" MaxVersionTested="10.0.10069.0" />
