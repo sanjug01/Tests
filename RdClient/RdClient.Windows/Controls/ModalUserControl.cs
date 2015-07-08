@@ -9,6 +9,15 @@
     {
         private ModalFocusTracker _focusTracker;
 
+        /// <summary>
+        /// indicates if the user control is activated.
+        /// this is an internal state, currently depending on _focusTracker
+        /// </summary>
+        private bool IsActivated
+        {
+            get { return null != _focusTracker; }
+        }
+
         public IViewModel ViewModel
         {
             get { return this.DataContext as IViewModel; }
@@ -39,8 +48,12 @@
         /// </summary>
         public void Deactivate()
         {
-            _focusTracker.Uninstall();
-            _focusTracker = null;
+            // Bug 2537012: avoid double deactivation which may occur on both DismissStackedView and self Dismiss
+            if (this.IsActivated)
+            {
+                _focusTracker.Uninstall();
+                _focusTracker = null;
+            }
         }
     }
 }
