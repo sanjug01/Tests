@@ -514,6 +514,12 @@
             _deferredExecution.Defer(() => EmitClosed());
         }
 
+        private void CleanupConnection()
+        {
+            _connection.Cleanup();
+            _deferredExecution.Defer(() => _connection.TerminateInstance());
+        }
+
         private void EmitBadCertificate(BadCertificateEventArgs e)
         {
             Contract.Assert(null != e);

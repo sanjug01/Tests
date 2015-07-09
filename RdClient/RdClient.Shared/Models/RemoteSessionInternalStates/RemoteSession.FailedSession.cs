@@ -15,7 +15,7 @@
                 //
                 // Set the session state to Failed
                 //
-                _connection.Cleanup();
+                this.Session.CleanupConnection();
                 this.Session.DeferEmitFailed(_reason.Code);
                 this.SessionLaunch.userInitiated = false;
                 this.SessionLaunch.disconnectReason = (int)_reason.Code;

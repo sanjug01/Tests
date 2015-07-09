@@ -12,7 +12,7 @@
 
             protected override void Activated()
             {
-                _connection.Cleanup();
+                this.Session.CleanupConnection();
                 this.Session.DeferEmitClosed();
 
                 this.SessionLaunch.userInitiated = true;
