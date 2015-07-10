@@ -84,10 +84,6 @@ namespace RdClient.Shared.ViewModels
                 if (SetProperty(ref _selectedGateway, value))
                 {
                     _editGatewayCommand.EmitCanExecuteChanged();
-                    if (value != null && value.GatewayComboBoxType == GatewayComboBoxType.AddNew)
-                    {
-                        this.AddGateway.Execute(null);
-                    }
                 }
             }
         }

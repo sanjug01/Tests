@@ -8,9 +8,8 @@
 
     public enum GatewayComboBoxType
     {
-        AddNew = 0,
-        None = 1,
-        Gateway = 2
+        None = 0,
+        Gateway = 1
     }
 
     public sealed class GatewayComboBoxOrder : IComparer<GatewayComboBoxElement>
