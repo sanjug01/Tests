@@ -1,4 +1,5 @@
-﻿using RdClient.Shared.Models;
+﻿using RdClient.Shared.Helpers;
+using RdClient.Shared.Models;
 using Windows.Foundation;
 
 namespace RdClient.Shared.CxWrappers.Utils

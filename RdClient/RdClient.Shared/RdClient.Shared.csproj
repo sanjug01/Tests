@@ -134,6 +134,7 @@
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
     <Compile Include="Helpers\DataProtectionProviderDataScrambler.cs" />
     <Compile Include="Helpers\DataStorageExtensions.cs" />
+    <Compile Include="Helpers\Debouncer.cs" />
     <Compile Include="Helpers\DeferredCommand.cs" />
     <Compile Include="Helpers\DeviceCapabilities.cs" />
     <Compile Include="Helpers\DisposableObject.cs" />

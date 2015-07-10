@@ -12,5 +12,6 @@ namespace RdClient.Shared.Helpers
         void Start(Action callback, TimeSpan period, bool recurring);
 
         void Stop();
+
     }
 }

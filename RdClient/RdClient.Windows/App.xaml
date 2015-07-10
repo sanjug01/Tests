@@ -36,6 +36,9 @@
                 <model:FullScreenModel.FullScreen>
                     <helpers:FullScreen />
                 </model:FullScreenModel.FullScreen>
+                <model:FullScreenModel.TimerFactory>
+                    <helpers:WinrtThreadPoolTimerFactory />
+                </model:FullScreenModel.TimerFactory>
             </model:FullScreenModel>
             <cx:ScreenProperties x:Key="ScreenProperties"/>
             

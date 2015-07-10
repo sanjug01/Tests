@@ -1,4 +1,5 @@
 ﻿using RdClient.Shared.CxWrappers;
+using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
 using Windows.Foundation;
 using Windows.UI.ViewManagement;
