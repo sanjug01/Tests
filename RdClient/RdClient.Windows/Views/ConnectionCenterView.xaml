@@ -9,6 +9,8 @@
     xmlns:System="using:System"    
     xmlns:design="using:RdClient.DesignTime"
     xmlns:vm="using:RdClient.Shared.ViewModels"
+    xmlns:h="using:RdClient.Shared.Helpers"
+    xmlns:cx="using:RdClient.Shared.CxWrappers"    
     xmlns:controls="using:RdClient.Controls"
     mc:Ignorable="d"
     RequestedTheme="Dark">
@@ -100,6 +102,14 @@
             </CommandBar>
         </DataTemplate>
 
+        <vm:TileSizeViewModel x:Key="TileSizeViewModel">
+            <vm:TileSizeViewModel.WindowSize>
+                <h:WindowSize />
+            </vm:TileSizeViewModel.WindowSize>
+            <vm:TileSizeViewModel.ScreenProperties>
+                <cx:ScreenProperties />
+            </vm:TileSizeViewModel.ScreenProperties>
+        </vm:TileSizeViewModel>        
     </Page.Resources>
 
     <!--

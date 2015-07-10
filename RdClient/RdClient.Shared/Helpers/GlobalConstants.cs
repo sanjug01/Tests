@@ -28,5 +28,9 @@ namespace RdClient.Shared.Helpers
         public const string HelpDocumentUrl = @"http://go.microsoft.com/fwlink/?LinkID=616713&clcid=0x409";
         public const string EulaUri = "ms-appx:///Strings/EULA.rtf";
         public const string ThirdPartyUri = "ms-appx:///Strings/ThirdPartyNotices.rtf";
+
+        // TODO: use 640 for better debugging
+        // change back to 416 before submitting ..
+        public const double NarrowLayoutMaxWidth = 640; // officially 416
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Views
 {
     using RdClient.Shared.Navigation;
+    using RdClient.Shared.ViewModels;
     using System.Diagnostics.Contracts;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
@@ -11,12 +12,6 @@
         {
             this.InitializeComponent();
             this.VisualStates.CurrentStateChanging += this.OnVisualStateChanging;
-            this.SizeChanged += OnSizeChanged;
-        }
-
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("SizeChanged :" + e.NewSize);
         }
 
         IViewModel IPresentableView.ViewModel { get { return this.DataContext as IViewModel; } }
@@ -37,7 +32,10 @@
 
         private void OnVisualStateChanging(object sender, VisualStateChangedEventArgs e)
         {
+            TileSizeViewModel ssvm = (TileSizeViewModel)this.Resources["TileSizeViewModel"];
+            System.Diagnostics.Debug.WriteLine("Tile size:" + ssvm.TileSize);
             VisualStateManager.GoToState(this.AccessoryViewPresenter, e.NewState.Name, true);
+            System.Diagnostics.Debug.WriteLine("New visual state:" + e.NewState.Name + " tile size:" + ssvm.TileSize);
         }
     }
 }

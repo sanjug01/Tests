@@ -24,6 +24,7 @@
         private bool _isSelected;
         private bool _selectionEnabled;
         private Size _tileSize;
+        private Size _screenSize;
 
         public static IDesktopViewModel Create(IModelContainer<RemoteConnectionModel> desktopContainer,
             ApplicationDataModel dataModel,
@@ -148,7 +149,12 @@
 
         public Size ScreenSize
         {
-            set { UpdateTileSize(value); }
+            private get { return _screenSize; }
+            set
+            {
+                _screenSize = value;
+                UpdateTileSize();
+            }
         }
 
         void IRemoteConnectionViewModel.Presenting(ISessionFactory sessionFactory)
@@ -224,7 +230,8 @@
                 tc.ReportEvent(new Telemetry.Events.RemovedDesktop(_dataModel.LocalWorkspace.Connections.Models.Count)));
         }
 
-        private void UpdateTileSize(Size screenSize)
+        // updates the tiles' sizes based on screen resolution and phone/tablet mode
+        private void UpdateTileSize()
         {
             throw new NotImplementedException();
         }
