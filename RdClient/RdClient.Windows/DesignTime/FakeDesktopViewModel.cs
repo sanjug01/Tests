@@ -3,10 +3,12 @@ using RdClient.Shared.ViewModels;
 using System.ComponentModel;
 using System.Windows.Input;
 using Windows.UI.Xaml.Media.Imaging;
+using System;
+using Windows.Foundation;
 
 namespace RdClient.DesignTime
 {
-    public sealed class FakeDesktopViewModel : IDesktopViewModel
+    public sealed class FakeDesktopViewModel : IDesktopViewModel, ISizeableTile
     {
         private CredentialsModel _cred = new CredentialsModel() { Password = "1234AbCd", Username = "exampleUser" };
         private DesktopModel _desktop = new DesktopModel() { HostName = "ExampleHostname" };
@@ -51,6 +53,15 @@ namespace RdClient.DesignTime
         }
 
         public bool SelectionEnabled { get; set; }
+
+        // default size for most screens: Height="164" Width="296"
+        Size _size = new Size(296,164);
+        Size ISizeableTile.TileSize
+        {
+            get { return _size; }
+        }
+
+        public Size ScreenSize { set; private get; }
 
         void IRemoteConnectionViewModel.Presenting(ISessionFactory sessionFactory)
         {

@@ -411,6 +411,7 @@
     <Compile Include="ViewModels\CredentialPromptResult.cs" />
     <Compile Include="ViewModels\FocusStealingRelayCommand.cs" />
     <Compile Include="ViewModels\IBellyBandViewModel.cs" />
+    <Compile Include="ViewModels\ISizeableTile.cs" />
     <Compile Include="ViewModels\IGatewaysCollector.cs" />
     <Compile Include="ViewModels\IItemsView.cs" />
     <Compile Include="ViewModels\InSessionMenusViewModel.cs" />

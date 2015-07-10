@@ -8,8 +8,9 @@
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using Windows.Foundation;
 
-    public class DesktopViewModel : Helpers.MutableObject, IDesktopViewModel
+    public class DesktopViewModel : Helpers.MutableObject, IDesktopViewModel, ISizeableTile
     {
         private readonly Telemetry.ITelemetryClient _telemetryClient;
         private readonly RelayCommand _editCommand;
@@ -22,6 +23,7 @@
         private ISessionFactory _sessionFactory;
         private bool _isSelected;
         private bool _selectionEnabled;
+        private Size _tileSize;
 
         public static IDesktopViewModel Create(IModelContainer<RemoteConnectionModel> desktopContainer,
             ApplicationDataModel dataModel,
@@ -46,6 +48,9 @@
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
             _navigationService = navigationService;
+
+            // default non-dynamic size: Height = "164" Width = "296"
+            _tileSize = new Size(296, 164);
 
             _desktop = (DesktopModel)desktopContainer.Model;
             _desktopId = desktopContainer.Id;
@@ -135,6 +140,17 @@
             get { return _deleteCommand; }
         }
 
+        public Size TileSize
+        {
+            get { return _tileSize; }
+            private set { SetProperty(ref _tileSize, value); }
+        }
+
+        public Size ScreenSize
+        {
+            set { UpdateTileSize(value); }
+        }
+
         void IRemoteConnectionViewModel.Presenting(ISessionFactory sessionFactory)
         {
             Contract.Assert(null != sessionFactory);
@@ -206,6 +222,11 @@
 
             _telemetryClient.CastAndCall<Telemetry.ITelemetryClient>(tc =>
                 tc.ReportEvent(new Telemetry.Events.RemovedDesktop(_dataModel.LocalWorkspace.Connections.Models.Count)));
+        }
+
+        private void UpdateTileSize(Size screenSize)
+        {
+            throw new NotImplementedException();
         }
     }
 }

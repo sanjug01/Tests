@@ -265,5 +265,36 @@ namespace RdClient.Shared.Test.ViewModels
             _vm.SelectionEnabled = false;
             Assert.IsFalse(_vm.IsSelected);
         }
+
+        // verify values for the tile sizes for all the examples in the spec
+        [TestMethod]
+        public void TestDynamicTileSizes()
+        {
+            ISizeableTile desktopSizeableTile = _vm as ISizeableTile;
+
+            // small screens
+            // example1: 360x640
+            desktopSizeableTile.ScreenSize = new Windows.Foundation.Size(360, 640);
+            Assert.AreEqual(164.0, desktopSizeableTile.TileSize.Width);
+            Assert.AreEqual(92.0, desktopSizeableTile.TileSize.Width);
+
+            // example2: 320x569
+            desktopSizeableTile.ScreenSize = new Windows.Foundation.Size(320, 569);
+            Assert.AreEqual(144.0, desktopSizeableTile.TileSize.Width);
+            Assert.AreEqual(80.0, desktopSizeableTile.TileSize.Width);
+
+            // large screens, max dimension below 1366
+            // example3: 1024x640
+            desktopSizeableTile.ScreenSize = new Windows.Foundation.Size(1024, 640);
+            Assert.AreEqual(236.0, desktopSizeableTile.TileSize.Width);
+            Assert.AreEqual(132.0, desktopSizeableTile.TileSize.Width);
+
+            // large screens, max dimension greater than 1365
+            // example4: 1366x768
+            desktopSizeableTile.ScreenSize = new Windows.Foundation.Size(1366, 768);
+            Assert.AreEqual(256.0, desktopSizeableTile.TileSize.Width);
+            Assert.AreEqual(144.0, desktopSizeableTile.TileSize.Width);
+
+        }
     }
 }
