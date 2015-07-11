@@ -10,7 +10,7 @@
     using System.Windows.Input;
     using Windows.Foundation;
 
-    public class DesktopViewModel : Helpers.MutableObject, IDesktopViewModel, ISizeableTile
+    public class DesktopViewModel : Helpers.MutableObject, IDesktopViewModel
     {
         private readonly Telemetry.ITelemetryClient _telemetryClient;
         private readonly RelayCommand _editCommand;
@@ -24,7 +24,6 @@
         private bool _isSelected;
         private bool _selectionEnabled;
         private Size _tileSize;
-        private Size _screenSize;
 
         public static IDesktopViewModel Create(IModelContainer<RemoteConnectionModel> desktopContainer,
             ApplicationDataModel dataModel,
@@ -126,6 +125,12 @@
             }
         }
 
+        public Size TileSize
+        {
+            get { return _tileSize; }
+            set { SetProperty(ref _tileSize, value); }            
+        }
+
         public ICommand EditCommand
         {
             get { return _editCommand; }
@@ -141,21 +146,6 @@
             get { return _deleteCommand; }
         }
 
-        public Size TileSize
-        {
-            get { return _tileSize; }
-            private set { SetProperty(ref _tileSize, value); }
-        }
-
-        public Size ScreenSize
-        {
-            private get { return _screenSize; }
-            set
-            {
-                _screenSize = value;
-                UpdateTileSize();
-            }
-        }
 
         void IRemoteConnectionViewModel.Presenting(ISessionFactory sessionFactory)
         {

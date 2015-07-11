@@ -1,6 +1,7 @@
 ﻿namespace RdClient.Views
 {
     using RdClient.Shared.Navigation;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.ViewModels;
     using System.Diagnostics.Contracts;
     using Windows.UI.Xaml;
@@ -16,7 +17,11 @@
 
         IViewModel IPresentableView.ViewModel { get { return this.DataContext as IViewModel; } }
         void IPresentableView.Activating(object activationParameter) { }
-        void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
+        void IPresentableView.Presenting(INavigationService navigationService, object activationParameter)
+        {
+            this.UpdateTileSizes();
+        }
+
         void IPresentableView.Dismissing() { }
 
         void IStackedViewPresenter.PushView(IPresentableView view, bool animated)
@@ -32,10 +37,17 @@
 
         private void OnVisualStateChanging(object sender, VisualStateChangedEventArgs e)
         {
-            TileSizeViewModel ssvm = (TileSizeViewModel)this.Resources["TileSizeViewModel"];
-            System.Diagnostics.Debug.WriteLine("Tile size:" + ssvm.TileSize);
+            // the change of the visual state triggers change in size for all tiles.
+            this.UpdateTileSizes();
+
             VisualStateManager.GoToState(this.AccessoryViewPresenter, e.NewState.Name, true);
-            System.Diagnostics.Debug.WriteLine("New visual state:" + e.NewState.Name + " tile size:" + ssvm.TileSize);
+        }
+
+        private void UpdateTileSizes()
+        {
+            TileSizeHelper ssvm = (TileSizeHelper)this.Resources["TileSizeViewModel"];
+            (this.DataContext as IConnectionCenterViewModel).DesktopTileSize = ssvm.TileSize;
+            this.UpdateLayout();
         }
     }
 }

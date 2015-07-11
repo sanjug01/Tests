@@ -45,9 +45,10 @@
                 IsRightTapEnabled="True"
                 RightTapped="ThumbnailButton_RightTapped">
             <Grid>
-                <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" 
-                      Height="{Binding TileSize.Height}" 
-                      Width="{Binding TileSize.Width}" >
+                <Grid x:Name="TileGrid"
+                      Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" 
+                      Width="{Binding TileSize.Width}" 
+                      Height="{Binding TileSize.Height}" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="42" />
