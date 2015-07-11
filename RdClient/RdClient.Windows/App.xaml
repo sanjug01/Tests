@@ -6,7 +6,7 @@
     xmlns:vm="using:RdClient.Shared.ViewModels"
     xmlns:model="using:RdClient.Shared.Models"
     xmlns:cv="using:RdClient.Shared.Converters"
-    xmlns:navextimp="using:RdClient.Navigation.Extensions"
+    xmlns:navextimp="using:RdClient.Shared.Navigation.Extensions"
     xmlns:helpers="using:RdClient.Shared.Helpers"
     xmlns:cx="using:RdClient.Shared.CxWrappers"
     xmlns:winmodel="using:RdClient.Models"
@@ -39,9 +39,10 @@
                 <model:FullScreenModel.TimerFactory>
                     <helpers:WinrtThreadPoolTimerFactory />
                 </model:FullScreenModel.TimerFactory>
-            </model:FullScreenModel>
-            <cx:ScreenProperties x:Key="ScreenProperties"/>
-            
+                <model:FullScreenModel.WindowSize>
+                    <helpers:WindowSize />
+                </model:FullScreenModel.WindowSize>
+            </model:FullScreenModel>            
             <helpers:WinrtThreadPoolTimerFactory x:Key="TimerFactory" />
         </ResourceDictionary>
     </Application.Resources>   

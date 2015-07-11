@@ -175,9 +175,9 @@
             _sessionState = SessionState.Idle;
 
             this.ZoomPanModel = new ZoomPanModel();
-            
         }
 
+        private EventHandler _enteredFullScreenHandler;
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Assert(null == _activeSession);
@@ -188,6 +188,8 @@
             _enterFullScreenCount = 0.0;
             _exitFullScreenCount = 0.0;
 
+            base.OnPresenting(activationParameter);
+
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = this.ZoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
@@ -195,14 +197,22 @@
             items.Add(_invokeKeyboardModel);
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
-            base.OnPresenting(activationParameter);
-
             if (null != _telemetryClient)
             {
                 ITelemetryEvent te = _telemetryClient.MakeEvent("InputPanelAvailability");
                 te.AddTag("canShow", _deviceCapabilities.CanShowInputPanel ? "true" : "false");
                 te.Report();
             }
+
+            _enteredFullScreenHandler = (s, o) => this.DeferToUI(() => CompleteActivation(activationParameter));
+            this.FullScreenModel.EnteredFullScreen += _enteredFullScreenHandler;
+            this.FullScreenModel.EnterFullScreen();
+        }
+
+        private void CompleteActivation(object activationParameter)
+        {
+
+            this.FullScreenModel.EnteredFullScreen -= _enteredFullScreenHandler;
 
             _inputPanel = _inputPanelFactory.GetInputPanel();
 
@@ -217,7 +227,7 @@
 
             _activeSession = newSession;
             this.SessionState = _activeSession.State.State;
-            
+
             _activeSession.CredentialsNeeded += this.OnCredentialsNeeded;
             _activeSession.Closed += this.OnSessionClosed;
             _activeSession.Failed += this.OnSessionFailed;
@@ -417,6 +427,101 @@
             this.NavigationService.NavigateToView("ConnectionCenterView", null);
         }
 
+        private void ConnectingAction()
+        {
+            Contract.Assert(null == this.BellyBandViewModel);
+            this.BellyBandViewModel = new RemoteSessionConnectingViewModel(
+                _activeSession.HostName,
+                () => _activeSession.Disconnect());
+            this.IsConnectionBarVisible = false;
+            this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
+        }
+
+        private void ConnectedAction()
+        {
+
+            //
+            // Remove any belly-band view that may be shown (transitioning from reconnect or connecting state)
+            //
+            this.BellyBandViewModel = null;
+            this.RightSideBarViewModel.RemoteSession = _activeSession;
+
+            //
+            // If the session has been interrupted but reconnected automatically, clear the IsInterrupted flag
+            // to remote any interruption UI.
+            //
+            _keyboardCapture.Keystroke += this.OnKeystroke;
+            _keyboardCapture.Start();
+
+            this.PointerPosition.Reset(_activeSessionControl.RenderingPanel, this);
+            _activeSessionControl.RenderingPanel.Viewport.Reset();
+
+            this.RightSideBarViewModel.PropertyChanged += OnRightSideBarPropertyChanged;
+
+            this.PointerCapture = new PointerCapture(
+                this.PointerPosition,
+                _activeSessionControl,
+                _activeSessionControl.RenderingPanel,
+                this.TimerFactory,
+                this.Dispatcher);
+
+            this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
+
+            this.ZoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport);
+            this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+
+            this.PanKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
+            this.PanKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
+            _activeSessionControl.RenderingPanel.Viewport.Changed += this.PanKnobSite.OnViewportChanged;
+            this.PanKnobSite.Reset();
+
+            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.PanKnobSite.OnConsumptionModeChanged;
+            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.ZoomPanModel.OnConsumptionModeChanged;
+            this.PointerCapture.ConsumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
+
+            _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
+            _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
+            _sessionView.PointerChanged += this.PointerCapture.OnPointerChanged;
+            _sessionView.PointerChanged += this.ScrollBarModel.OnPointerChanged;
+
+            _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
+            EmitPropertyChanged("IsRenderingPanelActive");
+            EmitPropertyChanged("IsConnecting");
+
+            this.IsConnectionBarVisible = true;
+        }
+
+        private void DisconnectedAction()
+        {
+            _keyboardCapture.Stop();
+            _keyboardCapture.Keystroke -= this.OnKeystroke;
+            _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
+            _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
+            _sessionView.PointerChanged -= this.PointerCapture.OnPointerChanged;
+
+            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
+            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= this.ZoomPanModel.OnConsumptionModeChanged;
+
+            //
+            // The connection bar and side bars are not available in any non-connected state.
+            //
+            this.IsConnectionBarVisible = false;
+            this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
+
+            // significant side effects on _panKnobSite.PanKnob setter, which is called implicitly outside the view model,
+            // potentially on a different thread
+            // TODO: Bug 2782808 fix code to avoid these side effects
+            if (null != _panKnobSite.PanKnob)
+            {
+                _panKnobSite.PanKnob.IsVisible = false;
+            }
+
+            if (this.RightSideBarViewModel.FullScreenModel.IsFullScreenMode)
+            {
+                this.FullScreenModel.ExitFullScreen();
+            }
+        }
+
         private void OnSessionStatePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if(e.PropertyName.Equals("State"))
@@ -427,67 +532,11 @@
                 switch(_activeSession.State.State)
                 {
                     case SessionState.Connecting:
-                        Contract.Assert(null == this.BellyBandViewModel);
-                        this.BellyBandViewModel = new RemoteSessionConnectingViewModel(
-                            _activeSession.HostName,
-                            () => _activeSession.Disconnect() );
-                        this.IsConnectionBarVisible = false;
-                        this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
+                        ConnectingAction();
                         break;
 
                     case SessionState.Connected:
-
-                        //
-                        // Remove any belly-band view that may be shown (transitioning from reconnect or connecting state)
-                        //
-                        this.BellyBandViewModel = null;
-                        this.RightSideBarViewModel.RemoteSession = _activeSession;
-
-                        //
-                        // If the session has been interrupted but reconnected automatically, clear the IsInterrupted flag
-                        // to remote any interruption UI.
-                        //
-                        _keyboardCapture.Keystroke += this.OnKeystroke;
-                        _keyboardCapture.Start();
-
-                        this.PointerPosition.Reset(_activeSessionControl.RenderingPanel, this);
-                        _activeSessionControl.RenderingPanel.Viewport.Reset();
-
-                        this.RightSideBarViewModel.PropertyChanged += OnRightSideBarPropertyChanged;
-
-                        this.PointerCapture = new PointerCapture(
-                            this.PointerPosition, 
-                            _activeSessionControl, 
-                            _activeSessionControl.RenderingPanel, 
-                            this.TimerFactory,
-                            this.Dispatcher);
-
-                        this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
-
-                        this.ZoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport);
-                        this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
-
-                        this.PanKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
-                        this.PanKnobSite.OnConsumptionModeChanged(this, _pointerCapture.ConsumptionMode.ConsumptionMode);
-                        _activeSessionControl.RenderingPanel.Viewport.Changed += this.PanKnobSite.OnViewportChanged;
-                        this.PanKnobSite.Reset();
-
-                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.PanKnobSite.OnConsumptionModeChanged;
-                        this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.ZoomPanModel.OnConsumptionModeChanged;
-                        this.PointerCapture.ConsumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
-
-                        _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
-                        _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
-                        _sessionView.PointerChanged += this.PointerCapture.OnPointerChanged;
-                        _sessionView.PointerChanged += this.ScrollBarModel.OnPointerChanged;
-
-                        _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
-                        EmitPropertyChanged("IsRenderingPanelActive");
-                        EmitPropertyChanged("IsConnecting");
-
-                        this.FullScreenModel.EnterFullScreen();
-
-                        this.IsConnectionBarVisible = true;
+                        ConnectedAction();
                         break;
 
                     default:
@@ -503,34 +552,7 @@
                         //
                         if (SessionState.Connected == _sessionState)
                         {
-
-                            _keyboardCapture.Stop();
-                            _keyboardCapture.Keystroke -= this.OnKeystroke;
-                            _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
-                            _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
-                            _sessionView.PointerChanged -= this.PointerCapture.OnPointerChanged;
-
-                            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
-                            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= this.ZoomPanModel.OnConsumptionModeChanged;
-
-                            //
-                            // The connection bar and side bars are not available in any non-connected state.
-                            //
-                            this.IsConnectionBarVisible = false;
-                            this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
-
-                            // significant side effects on _panKnobSite.PanKnob setter, which is called implicitly outside the view model,
-                            // potentially on a different thread
-                            // TODO: Bug 2782808 fix code to avoid these side effects
-                            if (null != _panKnobSite.PanKnob)
-                            {
-                                _panKnobSite.PanKnob.IsVisible = false;
-                            }
-
-                            if(this.RightSideBarViewModel.FullScreenModel.IsFullScreenMode)
-                            {
-                                this.FullScreenModel.ExitFullScreen();
-                            }
+                            DisconnectedAction();
                         }
                         break;
                 }

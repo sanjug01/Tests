@@ -7,10 +7,23 @@ namespace RdClient.Shared.Models
 {
     public class FullScreenModel : IFullScreenModel
     {
+        private bool _changing;
         private IFullScreen _fullScreen;
         private EventHandler _enteringFullScreen, _exitingFullScreen, _enteredFullScreen, _exitedFullScreen;
 
+        public FullScreenModel()
+        {
+            _changing = false;
+        }
+
         public ITimerFactory TimerFactory { get; set; }
+        public IWindowSize WindowSize
+        {
+            set
+            {
+                value.SizeChanged += (s, o) => FullScreenDebouncer();
+            }
+        }
 
         event EventHandler IFullScreenModel.EnteringFullScreen
         {
@@ -37,6 +50,21 @@ namespace RdClient.Shared.Models
         }
 
 
+        private void FullScreenDebouncer()
+        {
+            if(_changing)
+            {
+                if(_fullScreen.IsFullScreenMode)
+                {
+                    EmitEnteredFullScreen();
+                }
+                else
+                {
+                    EmitExitedFullScreen();
+                }
+            }
+        }
+
         private Debouncer _enterFullScreenDebouncer;
         private void EmitEnteredFullScreen()
         {
@@ -44,7 +72,7 @@ namespace RdClient.Shared.Models
             {
                 if(_enterFullScreenDebouncer == null)
                 {
-                    _enterFullScreenDebouncer = new Debouncer(_EmitEnteredFullScreen, this.TimerFactory.CreateTimer(), TimeSpan.FromMilliseconds(300));
+                    _enterFullScreenDebouncer = new Debouncer(_EmitEnteredFullScreen, this.TimerFactory.CreateTimer(), TimeSpan.FromMilliseconds(100));
                 }
 
                 _enterFullScreenDebouncer.Call();
@@ -59,6 +87,7 @@ namespace RdClient.Shared.Models
             }
 
             _enterFullScreenDebouncer = null;
+            _changing = false;
         }
 
         private Debouncer _exitFullScreenDebouncer;
@@ -68,7 +97,7 @@ namespace RdClient.Shared.Models
             {
                 if(_exitFullScreenDebouncer == null)
                 {
-                    _exitFullScreenDebouncer = new Debouncer(_EmitExitedFullScreen, this.TimerFactory.CreateTimer(), TimeSpan.FromMilliseconds(300));
+                    _exitFullScreenDebouncer = new Debouncer(_EmitExitedFullScreen, this.TimerFactory.CreateTimer(), TimeSpan.FromMilliseconds(100));
                 }
 
                 _exitFullScreenDebouncer.Call();
@@ -79,10 +108,11 @@ namespace RdClient.Shared.Models
         {
             if(_exitedFullScreen != null)
             {
-                _exitedFullScreen = null;
+                _exitedFullScreen(this, EventArgs.Empty);
             }
 
             _exitFullScreenDebouncer = null;
+            _changing = false;
         }
 
         public IFullScreen FullScreen
@@ -99,6 +129,7 @@ namespace RdClient.Shared.Models
         {
             if (null != _enteringFullScreen)
                 _enteringFullScreen(this, EventArgs.Empty);
+            _changing = true;
             _fullScreen.EnterFullScreen();
         }
 
@@ -106,6 +137,7 @@ namespace RdClient.Shared.Models
         {
             if (null != _exitingFullScreen)
                 _exitingFullScreen(this, EventArgs.Empty);
+            _changing = true;
             _fullScreen.ExitFullScreen();
         }
 
@@ -115,15 +147,6 @@ namespace RdClient.Shared.Models
             if(FullScreenChange != null)
             {
                 FullScreenChange(this, EventArgs.Empty);
-            }
-
-            if(_fullScreen.IsFullScreenMode == true)
-            {
-                EmitEnteredFullScreen();
-            }
-            else
-            {
-                EmitExitedFullScreen();
             }
         }
 

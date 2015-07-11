@@ -94,7 +94,6 @@
     <Compile Include="CxWrappers\IRdpConnectionFactory.cs" />
     <Compile Include="CxWrappers\IRdpEventHandlers.cs" />
     <Compile Include="CxWrappers\IRdpProperties.cs" />
-    <Compile Include="CxWrappers\IScreenProperties.cs" />
     <Compile Include="CxWrappers\MouseEventTypes.cs" />
     <Compile Include="CxWrappers\RadcClient.cs" />
     <Compile Include="CxWrappers\RadcEventSource.cs" />
@@ -109,7 +108,6 @@
     <Compile Include="CxWrappers\RdpUtils.cs" />
     <Compile Include="CxWrappers\RdTrace.cs" />
     <Compile Include="CxWrappers\RemoteResourceType.cs" />
-    <Compile Include="CxWrappers\ScreenProperties.cs" />
     <Compile Include="CxWrappers\TouchEventType.cs" />
     <Compile Include="Data\CertificateTrust.cs" />
     <Compile Include="Data\FilteringObservableCollection.cs" />
@@ -449,12 +447,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Input\Pointer\DirectModeControl.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RdClientCxHelpers\RdClientCxHelpers.vcxproj">
-      <Project>{8b29c07c-36fe-466c-9244-9932ac815c45}</Project>
-      <Name>RdClientCxHelpers</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="Microsoft.VCLibs.120, Version=14.0">

@@ -27,13 +27,10 @@
                                         ScaleX="1.0" ScaleY="1.0"
                                         TranslateX="0.0" TranslateY="0.0"/>
         </TransformGroup>                        
-        <vm:SessionSizeViewModel x:Key="SessionSizeViewModel" FullScreenModel="{StaticResource FullScreenModel}">
+        <vm:SessionSizeViewModel x:Key="SessionSizeViewModel">
             <vm:SessionSizeViewModel.WindowSize>
                 <h:WindowSize />
             </vm:SessionSizeViewModel.WindowSize>
-            <vm:SessionSizeViewModel.ScreenProperties>
-                <cx:ScreenProperties />
-            </vm:SessionSizeViewModel.ScreenProperties>
         </vm:SessionSizeViewModel>
     </UserControl.Resources>
 
