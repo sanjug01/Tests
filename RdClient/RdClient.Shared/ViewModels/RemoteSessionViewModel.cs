@@ -341,6 +341,7 @@
         {
             _telemetryClient = telemetryClient;
             this.ZoomPanModel.SetTelemetryClient(telemetryClient);
+            this.RightSideBarViewModel.SetTelemetryClient(telemetryClient);
         }
 
         void ILifeTimeSite.SetLifeTimeManager(ILifeTimeManager lifeTimeManager)

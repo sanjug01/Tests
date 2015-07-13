@@ -1,20 +1,32 @@
-﻿using RdClient.Shared.Helpers;
-using RdClient.Shared.Input.Pointer;
-using RdClient.Shared.Models;
-using System;
-using System.Windows.Input;
-using Windows.UI.Xaml;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.Input.Pointer;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation.Extensions;
+    using RdClient.Shared.Telemetry;
+    using System;
+    using System.Windows.Input;
+    using Windows.UI.Xaml;
+
     public class RightSideBarViewModel : MutableObject, IRightSideBarViewModel
     {
+        private IPointerCapture _pointerCapture;
+        private IFullScreenModel _fullScreenModel;
+        private ITelemetryClient _telemetryClient;
+        private BarButtonModel _disconnectButtonModel;
+        private BarButtonModel _fullScreenButtonModel;
+        private BarButtonModel _normalScreenButtonModel;
+        private BarButtonModel _touchButtonModel;
+        private BarButtonModel _mouseButtonModel;
+        private ICommand _toggleVisibility;
+        private Visibility _visibility;
+
         public IRemoteSession RemoteSession
         {
             private get; set;
         }
 
-        private IPointerCapture _pointerCapture;
         public IPointerCapture PointerCapture
         {
             private get
@@ -36,7 +48,6 @@ namespace RdClient.Shared.ViewModels
             get; set;
         }
 
-        private IFullScreenModel _fullScreenModel;
         public IFullScreenModel FullScreenModel
         {
             get
@@ -57,6 +68,11 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
+        void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
+        {
+            _telemetryClient = telemetryClient;
+        }
+
         private void OnFullScreenChange(object sender, EventArgs e)
         {
             if (_fullScreenModel.IsFullScreenMode)
@@ -71,7 +87,6 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        private BarButtonModel _disconnectButtonModel;
         public BarButtonModel DisconnectButtonModel
         {
             get
@@ -81,7 +96,6 @@ namespace RdClient.Shared.ViewModels
         }
 
 
-        private BarButtonModel _fullScreenButtonModel;
         public BarButtonModel FullScreenButtonModel
         { 
             get
@@ -90,7 +104,6 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        private BarButtonModel _normalScreenButtonModel;
         public BarButtonModel NormalScreenButtonModel
         {
             get
@@ -99,7 +112,6 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        private BarButtonModel _touchButtonModel;
         public BarButtonModel TouchButtonModel
         {
             get
@@ -108,7 +120,6 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        private BarButtonModel _mouseButtonModel;
         public BarButtonModel MouseButtonModel
         {
             get
@@ -117,13 +128,11 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-        private ICommand _toggleVisibility;
         public ICommand ToggleVisiblity
         {
             get { return _toggleVisibility; }
         }    
 
-        private Visibility _visibility;
         public Visibility Visibility
         {
             get
@@ -163,6 +172,14 @@ namespace RdClient.Shared.ViewModels
             _mouseButtonModel.CanExecute = false;
             _touchButtonModel.CanExecute = true && this.DeviceCapabilities.TouchPresent;
             this.Visibility = Visibility.Collapsed;
+
+            if (null != _telemetryClient)
+            {
+                ITelemetryEvent te = _telemetryClient.MakeEvent("UserAction");
+                te.AddTag("action", "SetMouseMode");
+                te.AddTag("source", "RightSideBar");
+                te.Report();
+            }
         }
 
         private void InternalTouchMode(object parameter)
@@ -171,6 +188,14 @@ namespace RdClient.Shared.ViewModels
             _mouseButtonModel.CanExecute = true && this.DeviceCapabilities.TouchPresent;
             _touchButtonModel.CanExecute = false;
             this.Visibility = Visibility.Collapsed;
+
+            if (null != _telemetryClient)
+            {
+                ITelemetryEvent te = _telemetryClient.MakeEvent("UserAction");
+                te.AddTag("action", "SetTouchMode");
+                te.AddTag("source", "RightSideBar");
+                te.Report();
+            }
         }
 
         private void InternalFullScreen(object parameter)

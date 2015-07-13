@@ -1,12 +1,12 @@
-﻿using System.Windows.Input;
-using RdClient.Shared.Input.Pointer;
-using RdClient.Shared.Models;
-using Windows.UI.Xaml;
-using System.ComponentModel;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
-    public interface IRightSideBarViewModel : INotifyPropertyChanged
+    using RdClient.Shared.Input.Pointer;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation.Extensions;
+    using System.ComponentModel;
+    using Windows.UI.Xaml;
+
+    public interface IRightSideBarViewModel : INotifyPropertyChanged, ITelemetryClientSite
     {
         IFullScreenModel FullScreenModel { get; set; }
         IDeviceCapabilities DeviceCapabilities { get; set; }
