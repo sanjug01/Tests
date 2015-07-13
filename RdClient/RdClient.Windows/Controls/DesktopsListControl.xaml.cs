@@ -16,6 +16,14 @@
         public DesktopsListControl()
         {
             this.InitializeComponent();
+            this.SizeChanged += OnSizeChanged;
+
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Rect finalRect = new Rect(0, 0, e.NewSize.Width, e.NewSize.Height);
+            this.Arrange(finalRect);
         }
 
         public IViewItemsSource ViewItemsSource

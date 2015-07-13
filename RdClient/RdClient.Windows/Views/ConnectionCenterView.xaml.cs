@@ -4,6 +4,7 @@
     using RdClient.Shared.Helpers;
     using RdClient.Shared.ViewModels;
     using System.Diagnostics.Contracts;
+    using Windows.Foundation;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
@@ -13,6 +14,13 @@
         {
             this.InitializeComponent();
             this.VisualStates.CurrentStateChanging += this.OnVisualStateChanging;
+            this.SizeChanged += OnSizeChanged;
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.UpdateTileSizes();
+
         }
 
         IViewModel IPresentableView.ViewModel { get { return this.DataContext as IViewModel; } }

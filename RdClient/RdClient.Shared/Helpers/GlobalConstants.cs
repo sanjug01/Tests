@@ -29,6 +29,8 @@ namespace RdClient.Shared.Helpers
         public const string EulaUri = "ms-appx:///Strings/EULA.rtf";
         public const string ThirdPartyUri = "ms-appx:///Strings/ThirdPartyNotices.rtf";
 
-        public const double NarrowLayoutMaxWidth = 416; 
+        // TODO: use 640 for better debugging
+        // change back to 416 before submitting ..
+        public const double NarrowLayoutMaxWidth = 640; // officially 416
     }
 }
