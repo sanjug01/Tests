@@ -1,4 +1,5 @@
-﻿using RdMock;
+﻿using RdClient.Shared.Helpers;
+using RdMock;
 using System;
 using Windows.Foundation;
 
@@ -10,5 +11,7 @@ namespace RdClient.Shared.Test.Mock
         {
             get; set;
         }
+
+        public event EventHandler<WindowSizeChangedEventArgs> SizeChanged;
     }
 }

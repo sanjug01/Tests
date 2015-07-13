@@ -79,21 +79,39 @@ namespace RdClient.Shared.Models.PanKnobModel
             ((IPanKnobSite)this).PanKnob.Position = center;
         }
 
+        private bool IsZoomed
+        {
+            get
+            {
+                return this.Viewport.Size.Width < this.Viewport.SessionPanel.Width ||
+                    this.Viewport.Size.Height < this.Viewport.SessionPanel.Height;
+            }
+        }
+
+        private bool IsTouchMode
+        {
+            get
+            {
+                return _consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch;
+            }
+        }
+
         void IPanKnobSite.OnConsumptionModeChanged(object sender, ConsumptionModeType consumptionMode)
         {
             _consumptionMode = consumptionMode;
-            if (false == (_consumptionMode == ConsumptionModeType.DirectTouch || _consumptionMode == ConsumptionModeType.MultiTouch))
+            if (this.IsTouchMode == false)
             {
                 _panKnob.IsVisible = false;
+            }
+            else if(this.IsTouchMode == true && this.IsZoomed == true)
+            {
+                _panKnob.IsVisible = true;
             }
         }
 
         void IPanKnobSite.OnViewportChanged(object sender, EventArgs e)
         {
-            if((this.Viewport.Size.Width < this.Viewport.SessionPanel.Width ||
-                    this.Viewport.Size.Height < this.Viewport.SessionPanel.Height) &&
-                (_consumptionMode == ConsumptionModeType.DirectTouch || 
-                    _consumptionMode == ConsumptionModeType.MultiTouch))
+            if(this.IsZoomed && this.IsTouchMode)
             {
                 _panKnob.IsVisible = true;
             }

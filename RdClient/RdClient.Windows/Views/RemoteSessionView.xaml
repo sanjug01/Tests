@@ -82,6 +82,10 @@
                     DataContext="{Binding RightSideBarViewModel}"
                     BarVisibility="{Binding Visibility}" />
 
+                <!-- PanKnob -->
+                <c:PanKnob x:Name="PanKnob"
+                           PanKnobSite="{Binding PanKnobSite}"/>
+
                 <!--
                 Belly-band container of in-session dialogs.
                 The band is visible when the BellyBandViewModel property of the remote session view model
@@ -155,8 +159,6 @@
 
                     </Grid>
                 </Grid>
-                <c:PanKnob x:Name="PanKnob"
-                           PanKnobSite="{Binding PanKnobSite}"/>
             </Grid>
 
             <ScrollBar Grid.Row="1" Grid.Column="0"
