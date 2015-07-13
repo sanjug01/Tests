@@ -101,6 +101,9 @@
             private EventHandler _enteringFullScreen;
             private EventHandler _exitingFullScreen;
 
+            public event EventHandler EnteredFullScreen;
+            public event EventHandler ExitedFullScreen;
+
             public TestFullScreenModel()
             {
                 EnterFullScreenCommand = new RelayCommand(o => { });
@@ -144,12 +147,10 @@
 
             public void EnterFullScreen()
             {
-                throw new NotImplementedException();
             }
 
             public void ExitFullScreen()
             {
-                throw new NotImplementedException();
             }
         }
 

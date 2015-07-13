@@ -1,5 +1,4 @@
 ﻿using System;
-using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 
@@ -35,6 +34,8 @@ namespace RdClient.Shared.Helpers
         }
 
         private bool _previousIsFullScreenMode;
+        private IWindowSize _windowSize;
+
         public bool IsFullScreenMode
         {
             get
@@ -70,10 +71,11 @@ namespace RdClient.Shared.Helpers
 
         public FullScreen()
         {
+            _windowSize = new WindowSize();
             _previousIsFullScreenMode = this.IsFullScreenMode;
             _previousUserInteractionMode = this.UserInteractionMode;
 
-            Window.Current.CoreWindow.SizeChanged += OnSizeChanged;
+            _windowSize.SizeChanged += OnSizeChanged;
         }
     }
 }
