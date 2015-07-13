@@ -137,6 +137,13 @@
                 _session.InternalSetState(newState);
             }
 
+            protected ITelemetryEvent MakeTelemetryEvent(string eventName)
+            {
+                ITelemetryEvent te = this.TelemetryClient.MakeEvent(eventName);
+                te.AddTag("state", _sessionState.ToString());
+                return te;
+            }
+
             protected InternalState(SessionState sessionState, ReaderWriterLockSlim monitor,
                 IDeviceCapabilities deviceCapabilities,
                 ITelemetryClient telemetryClient, ITelemetryEvent sessionTelemetry, ITelemetryEvent sessionDuration)

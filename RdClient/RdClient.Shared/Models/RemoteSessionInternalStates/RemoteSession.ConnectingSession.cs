@@ -54,7 +54,9 @@
 
             protected override void Terminate()
             {
-                this.TelemetryClient.Event("Connecting:Cancelled");
+                ITelemetryEvent te = this.MakeTelemetryEvent("UserAction");
+                te.AddTag("action", "Cancel");
+                te.Report();
 
                 if (null != _connection)
                     _connection.Disconnect();
@@ -437,10 +439,6 @@
 
                 IRdpConnection connection = (IRdpConnection)sender;
                 Contract.Assert(object.ReferenceEquals(connection, _connection));
-                //
-                // Report the disconnect code to telemetry.
-                //
-                this.TelemetryClient.Event(string.Format("Connecting:{0}", e.DisconnectReason.Code));
 
                 switch (e.DisconnectReason.Code)
                 {
@@ -612,8 +610,9 @@
             private void NewPasswordCancelled(object sender, InSessionCredentialsTask.ResultEventArgs e)
             {
                 InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
-
-                this.TelemetryClient.Event("Connecting:CredentialsCancelled");
+                ITelemetryEvent te = this.MakeTelemetryEvent("UserAction");
+                te.AddTag("action", "CancelCredentials");
+                te.Report();
 
                 task.Submitted -= this.NewPasswordSubmitted;
                 task.Cancelled -= this.NewPasswordCancelled;
@@ -688,8 +687,9 @@
             private void NewGatewayCredentialsCancelled(object sender, InSessionCredentialsTask.ResultEventArgs e)
             {
                 InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
-
-                this.TelemetryClient.Event("Connecting:GatewayCredentialsCancelled");
+                ITelemetryEvent te = this.MakeTelemetryEvent("UserAction");
+                te.AddTag("action", "CancelGatewayCredentials");
+                te.Report();
 
                 task.Submitted -= this.NewGatewayCredentialsCancelled;
                 task.Cancelled -= this.NewGatewayCredentialsCancelled;
