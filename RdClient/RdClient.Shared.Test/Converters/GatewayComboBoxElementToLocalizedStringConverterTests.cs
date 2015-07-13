@@ -31,13 +31,6 @@ namespace RdClient.Shared.Test.Converters
         }
 
         [TestMethod]
-        public void ConvertAddNewComboBoxDoesNotReturnHostname()
-        {
-            _comboBoxElement = new GatewayComboBoxElement(GatewayComboBoxType.AddNew, _gateway);
-            Assert.AreNotEqual(_gateway.Model.HostName, _converter.Convert(_comboBoxElement, null, null, null));
-        }
-
-        [TestMethod]
         public void ConvertNoGatewayComboBoxDoesNotReturnHostname()
         {
             _comboBoxElement = new GatewayComboBoxElement(GatewayComboBoxType.None, _gateway);
