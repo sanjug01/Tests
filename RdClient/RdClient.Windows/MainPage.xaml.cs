@@ -26,6 +26,7 @@
             AppInitializer initializer = (this.Resources["AppInitializer"] as AppInitializer);
             Contract.Assert(null != initializer);
 
+            this.TouchKeyboardActivator.TelemetryClient = initializer.TelemetryClient;
             initializer.ViewPresenter = this.ViewPresenter;
             initializer.InputPanelFactory = this;
             initializer.Initialize();

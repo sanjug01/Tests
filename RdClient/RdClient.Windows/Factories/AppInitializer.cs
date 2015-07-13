@@ -29,7 +29,7 @@
         public ILifeTimeManager LifeTimeManager { private get; set; }
         public IRdpConnectionSource ConnectionSource { private get; set; }
         public IDeviceCapabilities DeviceCapabilities { private get; set; }
-        public ITelemetryClient TelemetryClient { private get; set; }
+        public ITelemetryClient TelemetryClient { get; set; }
         public IInputPanelFactory InputPanelFactory { private get; set; }
 
         internal void CreateBackButtonHandler(SystemNavigationManager systemNavigationManager)
