@@ -507,19 +507,7 @@
             //
             this.IsConnectionBarVisible = false;
             this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
-
-            // significant side effects on _panKnobSite.PanKnob setter, which is called implicitly outside the view model,
-            // potentially on a different thread
-            // TODO: Bug 2782808 fix code to avoid these side effects
-            if (null != _panKnobSite.PanKnob)
-            {
-                _panKnobSite.PanKnob.IsVisible = false;
-            }
-
-            if (this.RightSideBarViewModel.FullScreenModel.IsFullScreenMode)
-            {
-                this.FullScreenModel.ExitFullScreen();
-            }
+            _panKnobSite.PanKnob.IsVisible = false;
         }
 
         private void OnSessionStatePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -537,6 +525,14 @@
 
                     case SessionState.Connected:
                         ConnectedAction();
+                        break;
+
+                    case SessionState.Failed:
+                        this.FullScreenModel.ExitFullScreen();
+                        break;
+
+                    case SessionState.Closed:
+                        this.FullScreenModel.ExitFullScreen();
                         break;
 
                     default:
