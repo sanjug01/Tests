@@ -15,7 +15,6 @@
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
-    using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
 
     public sealed class RemoteSessionViewModel : DeferringViewModelBase,
@@ -175,7 +174,6 @@
             _sessionState = SessionState.Idle;
 
             this.ZoomPanModel = new ZoomPanModel();
-            
         }
 
         protected override void OnPresenting(object activationParameter)
@@ -323,6 +321,16 @@
             _invokeKeyboard.EmitCanExecuteChanged();
         }
 
+        void IInputPanelFactorySite.SetInputPanelFactory(IInputPanelFactory inputPanelFactory)
+        {
+            _inputPanelFactory = inputPanelFactory;
+        }
+
+        void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
+        {
+            _telemetryClient = telemetryClient;
+            this.ZoomPanModel.SetTelemetryClient(telemetryClient);
+        }
 
         void ILifeTimeSite.SetLifeTimeManager(ILifeTimeManager lifeTimeManager)
         {
@@ -633,16 +641,6 @@
 
                 _invokeKeyboard.EmitCanExecuteChanged();
             }
-        }
-
-        void IInputPanelFactorySite.SetInputPanelFactory(IInputPanelFactory inputPanelFactory)
-        {
-            _inputPanelFactory = inputPanelFactory;
-        }
-
-        void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
-        {
-            _telemetryClient = telemetryClient;
         }
 
         private void OnEnteringFullScreen(object sender, EventArgs e)

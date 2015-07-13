@@ -1,13 +1,12 @@
-﻿using RdClient.Shared.Helpers;
-using RdClient.Shared.Input.Pointer;
-using RdClient.Shared.Models.Viewport;
-using RdClient.Shared.Navigation.Extensions;
-using RdClient.Shared.ViewModels;
-using System;
-using Windows.Foundation;
-
-namespace RdClient.Shared.Models
+﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.Input.Pointer;
+    using RdClient.Shared.Models.Viewport;
+    using RdClient.Shared.Telemetry;
+    using RdClient.Shared.ViewModels;
+    using System;
+    using Windows.Foundation;
+
     public enum PanDirection
     {
         Left,
@@ -19,21 +18,24 @@ namespace RdClient.Shared.Models
 
     public class ZoomPanModel
     {
+        private readonly RelayCommand _zoomInCommand;
+        private readonly RelayCommand _zoomOutCommand;
+        private ITelemetryClient _telemetryClient;
         private IViewport _viewport;
         private Point _viewportCenter;
+        private bool _isZoomedIn = false;
+        private ConsumptionModeType _consumptionMode;
 
 
-        private readonly RelayCommand _zoomInCommand;
         public RelayCommand ZoomInCommand { get { return _zoomInCommand; } }
 
-        private readonly RelayCommand _zoomOutCommand;
         public RelayCommand ZoomOutCommand { get { return _zoomOutCommand; } }
-
-        private bool _isZoomedIn = false;
         public bool IsZoomedIn { get { return _isZoomedIn; } }
 
-
-        private ConsumptionModeType _consumptionMode;
+        public void SetTelemetryClient(ITelemetryClient telemetryClient)
+        {
+            _telemetryClient = telemetryClient;
+        }
 
         private void ZoomInHandler(object parameter)
         {
@@ -43,6 +45,14 @@ namespace RdClient.Shared.Models
                 _isZoomedIn = true;
                 _zoomInCommand.EmitCanExecuteChanged();
                 _zoomOutCommand.EmitCanExecuteChanged();
+
+                if (null != _telemetryClient)
+                {
+                    ITelemetryEvent te = _telemetryClient.MakeEvent("Zoom");
+                    te.AddTag("action", "ZoomIn");
+                    te.AddTag("source", "ConnectionBar");
+                    te.Report();
+                }
             }
         }
 
@@ -54,6 +64,14 @@ namespace RdClient.Shared.Models
                 _isZoomedIn = false;
                 _zoomInCommand.EmitCanExecuteChanged();
                 _zoomOutCommand.EmitCanExecuteChanged();
+
+                if(null != _telemetryClient)
+                {
+                    ITelemetryEvent te = _telemetryClient.MakeEvent("Zoom");
+                    te.AddTag("action", "ZoomOut");
+                    te.AddTag("source", "ConnectionBar");
+                    te.Report();
+                }
             }
         }
 
@@ -86,7 +104,6 @@ namespace RdClient.Shared.Models
                     return _isZoomedIn == true && _consumptionMode != ConsumptionModeType.Pointer;
                 });
         }
-
 
         public void Reset(IViewport viewport)
         {
