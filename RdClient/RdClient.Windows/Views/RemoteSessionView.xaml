@@ -49,6 +49,30 @@
     </UserControl.Resources>
 
     <Canvas x:Name="SessionPanelContainer" Background="{ThemeResource SystemChromeDisabledHighColor}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStates">
+                <VisualState x:Name="DefaultLayout">
+                    <Storyboard>
+                        <!-- BellyBand margin : Margin="{StaticResource BellyBandDefaultHorizontalSpacing}" -->
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BellyBandContent" 
+                                                       Storyboard.TargetProperty="Margin">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource BellyBandDefaultHorizontalSpacing}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:Name="NarrowLayout">
+                    <Storyboard>
+                        <!-- BellyBand margin : Margin="{StaticResource BellyBandNarrowHorizontalSpacing}" -->
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BellyBandContent" 
+                                                       Storyboard.TargetProperty="Margin">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource BellyBandNarrowHorizontalSpacing}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
         <Grid x:Name="SessionPanel">
             <Grid.RowDefinitions>
                 <RowDefinition />
@@ -57,7 +81,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+            </Grid.ColumnDefinitions>            
 
             <Grid Background="{ThemeResource SystemChromeDisabledHighColor}" Grid.Row="0" Grid.Column="0">
 
@@ -102,6 +126,7 @@
                         Background="{ThemeResource DialogBackgroundColor}">
 
                         <ContentControl
+                            x:Name="BellyBandContent"
                             Margin="{StaticResource BellyBandDefaultHorizontalSpacing}"
                             Content="{Binding BellyBandViewModel}"
                             HorizontalContentAlignment="Stretch">
