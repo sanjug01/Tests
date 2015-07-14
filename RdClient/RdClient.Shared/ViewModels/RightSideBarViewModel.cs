@@ -6,6 +6,7 @@
     using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.Telemetry;
     using System;
+    using System.Diagnostics;
     using System.Windows.Input;
     using Windows.UI.Xaml;
 
@@ -137,6 +138,7 @@
         {
             get
             {
+                Debug.WriteLine("VISIBILITY={0}", _visibility);
                 return _visibility;
             }
             set
@@ -153,6 +155,7 @@
             _touchButtonModel = new BarButtonModel() { Command = new RelayCommand(InternalTouchMode) };
             _mouseButtonModel = new BarButtonModel() { Command = new RelayCommand(InternalMouseMode) };
 
+            _visibility = Visibility.Collapsed;
             _toggleVisibility = new RelayCommand(InternalToggleVisibility);
         }
 
