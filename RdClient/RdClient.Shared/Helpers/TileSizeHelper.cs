@@ -6,42 +6,68 @@ namespace RdClient.Shared.Helpers
 {
     public class TileSizeHelper
     {
-        private const double DesiredAspectRatio = 0.5625;
+        private const double MediumViewSizeLimit = 1366d;
 
+        // constants to calculate tile size
+        private const double DesiredAspectRatio = 9d / 16d;
+        private const double MinViewSizeOffset = 32d;
+        private const double MinViewSizeScaleFactor = 2d;
+        private const double MediumViewSizeOffset = 72d;
+        private const double MediumViewSizeScaleFactor = 4d;
+        private const double LargeViewSizeOffset = 80d;
+        private const double LargeViewSizeScaleFactor = 5f;
+        private const double RoundingBase = 4d;
+
+        /// <summary>
+        /// apply proprietary algorithm to calculate the tile size based on the actual window size
+        /// generic formula is :
+        ///    tileWidth = (mainViewDimension - sizeOffset) / ScaleFactor 
+        ///    tileHeight = tileWidth * AspectRatio
+        /// the final values are rounded down
+        /// </summary>
+        /// <param name="windowSize">actual window size</param>
+        /// <returns>tile size</returns>
         public static Size GetTileSize(Size windowSize)
         {
-            double screenDimension = 0;
-            double tileWidth, tileHeight;
-            if (windowSize.Width < GlobalConstants.NarrowLayoutMaxWidth)
-            {
-                // phone or narrow layout
-                screenDimension = Math.Min(windowSize.Width, windowSize.Height); // min dimension
+            double mainDimension = 0d;
 
-                tileWidth = RoundSize((screenDimension - 32) / 2.0);
-                tileHeight = RoundSize(tileWidth * DesiredAspectRatio);
-            }
-            else if (windowSize.Width <= 1365.0 && windowSize.Height <= 1365.0)
+            double width, height;
+            if (windowSize.Width < GlobalConstants.NarrowLayoutWidthLimit)
             {
-                // medium screens, max dimension <= 1365
-                screenDimension = Math.Max(windowSize.Width, windowSize.Height); // max dimension
-                tileWidth = RoundSize((screenDimension - 72) / 4.0);
-                tileHeight = RoundSize(tileWidth * DesiredAspectRatio);
+                // phone or narrow layout, use min dimension
+                mainDimension = Math.Min(windowSize.Width, windowSize.Height); 
+                width = RoundSize((mainDimension - MinViewSizeOffset) / MinViewSizeScaleFactor);
+                height = RoundSize(width * DesiredAspectRatio);
+            }
+            else if (windowSize.Width < MediumViewSizeLimit && windowSize.Height < MediumViewSizeLimit)
+            {
+                // medium screens, both dimensions < 1366
+                //        use max dimension
+                mainDimension = Math.Max(windowSize.Width, windowSize.Height);
+                width = RoundSize((mainDimension - MediumViewSizeOffset) / MediumViewSizeScaleFactor);
+                height = RoundSize(width * DesiredAspectRatio);
             }
             else
             {
-                // large screens, max dimensions > 1365
-                screenDimension = Math.Max(windowSize.Width, windowSize.Height); // max dimension
-                tileWidth = RoundSize((screenDimension - 80) / 5.0);
-                tileHeight = RoundSize(tileWidth * DesiredAspectRatio);
+                // large screens, at least one dimension > 1365
+                //       use max dimension
+                mainDimension = Math.Max(windowSize.Width, windowSize.Height);
+                width = RoundSize((mainDimension - LargeViewSizeOffset) / LargeViewSizeScaleFactor);
+                height = RoundSize(width * DesiredAspectRatio);
             }
 
-            return new Size(tileWidth, tileHeight);
+            return new Size(width, height);
         }
 
-
+        /// <summary>
+        /// apply rounding down to the nearest multiple of 4
+        /// This is commonly required for all final sizes
+        /// </summary>
+        /// <param name="value">calculated size</param>
+        /// <returns>rounded value of the calculated size</returns>
         private static double RoundSize(double value)
         {
-            return (4 * Math.Floor(value / 4.0));
+            return (RoundingBase * Math.Floor(value / RoundingBase));
         }
     }
 }

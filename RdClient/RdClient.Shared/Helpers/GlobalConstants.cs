@@ -29,6 +29,8 @@ namespace RdClient.Shared.Helpers
         public const string EulaUri = "ms-appx:///Strings/EULA.rtf";
         public const string ThirdPartyUri = "ms-appx:///Strings/ThirdPartyNotices.rtf";
 
-        public const double NarrowLayoutMaxWidth = 416; 
+        // const that defines the width limit 
+        // that triggers switch between the narrow/phone and the default layout
+        public const double NarrowLayoutWidthLimit = 416; 
     }
 }
