@@ -5,6 +5,7 @@ using System;
 using System.Windows.Input;
 using Windows.UI.Xaml;
 using System.ComponentModel;
+using RdClient.Shared.Telemetry;
 
 namespace RdClient.Shared.Test.Mock
 {
@@ -38,6 +39,11 @@ namespace RdClient.Shared.Test.Mock
         {
             add { _propertyChanged += value; }
             remove { _propertyChanged -= value; }
+        }
+
+        public void SetTelemetryClient(ITelemetryClient telemetryClient)
+        {
+            throw new NotImplementedException();
         }
     }
 }
