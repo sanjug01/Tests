@@ -3,8 +3,6 @@ using RdClient.Shared.ViewModels;
 using System.ComponentModel;
 using System.Windows.Input;
 using Windows.UI.Xaml.Media.Imaging;
-using System;
-using Windows.Foundation;
 
 namespace RdClient.DesignTime
 {

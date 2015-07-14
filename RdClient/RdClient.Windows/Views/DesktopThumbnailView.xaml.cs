@@ -7,17 +7,21 @@ namespace RdClient.Views
 {
     public sealed partial class DesktopThumbnailView : UserControl
     {
+        // size offsets for the margin, 
+        // when converting from itemWidth and itemHeight to grid size
+        private const double _widthOffset = 4;
+        private const double _heightOffset = 4;
 
         public DesktopThumbnailView()
         {
             this.InitializeComponent();
-            this.SizeChanged += DesktopThumbnailView_SizeChanged;
+            this.SizeChanged += OnSizeChanged;
         }
 
-        private void DesktopThumbnailView_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            this.TileGrid.Width = e.NewSize.Width - 4;
-            this.TileGrid.Height = e.NewSize.Height - 4;
+            this.TileGrid.Width = e.NewSize.Width - _widthOffset;
+            this.TileGrid.Height = e.NewSize.Height - _heightOffset;
         }
 
         private void ThumbnailButton_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)

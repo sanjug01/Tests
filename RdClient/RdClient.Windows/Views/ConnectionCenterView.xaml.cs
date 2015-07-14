@@ -43,6 +43,7 @@
         private void OnVisualStateChanging(object sender, VisualStateChangedEventArgs e)
         {
             VisualStateManager.GoToState(this.AccessoryViewPresenter, e.NewState.Name, true);
+            VisualStateManager.GoToState(this.DesktopsList, e.NewState.Name, true);
         }
 
         private void UpdateTileSizes(Size newWindowsSize)

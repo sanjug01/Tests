@@ -8,7 +8,6 @@
     using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
-    using Windows.Foundation;
 
     public class DesktopViewModel : Helpers.MutableObject, IDesktopViewModel
     {
@@ -208,12 +207,6 @@
 
             _telemetryClient.CastAndCall<Telemetry.ITelemetryClient>(tc =>
                 tc.ReportEvent(new Telemetry.Events.RemovedDesktop(_dataModel.LocalWorkspace.Connections.Models.Count)));
-        }
-
-        // updates the tiles' sizes based on screen resolution and phone/tablet mode
-        private void UpdateTileSize()
-        {
-            throw new NotImplementedException();
         }
     }
 }

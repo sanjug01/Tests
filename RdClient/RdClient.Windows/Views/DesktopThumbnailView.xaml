@@ -39,7 +39,31 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel> 
+    <StackPanel>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStates">
+                <VisualState x:Name="DefaultLayout">
+                    <Storyboard>
+                        <!-- DesktopName text: Style="{ThemeResource BodyTextBlockStyle}" -->
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DesktopName" 
+                                                       Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource BodyTextBlockStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>                        
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:Name="NarrowLayout">
+                    <Storyboard>
+                        <!-- DesktopName text: Style="{ThemeResource BodyTextBlockStyle}" -->
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DesktopName" 
+                                                       Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource CaptionTextBlockStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
         <Button Style="{StaticResource FlatButtonStyle}"
                 x:Name="ThumbnailButton"
                 Command="{Binding ConnectCommand}"
@@ -72,6 +96,7 @@
                     <Grid Grid.Row="1" 
 					Background="{ThemeResource ConnectionCenterHostnameBackgroundColor}">
 					<TextBlock 
+                        x:Name="DesktopName"
 						Text="{Binding Desktop.DisplayName}" 
                         Style="{ThemeResource BodyTextBlockStyle}" 
 						Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"

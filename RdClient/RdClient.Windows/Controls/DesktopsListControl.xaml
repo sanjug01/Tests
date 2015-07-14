@@ -16,8 +16,21 @@
     </d:UserControl.DataContext>
 
     <Grid Background="{ThemeResource ConnectionCenterScrollViewBackgroundBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStates">
+                <VisualState x:Name="DefaultLayout">
+                    <Storyboard>
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:Name="NarrowLayout">
+                    <Storyboard>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <ScrollViewer x:Name="Scroller" Grid.Row="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
-            <Grid>
+            <Grid x:Name="DesktopsGrid">
                 <Grid.RowDefinitions>
 					<RowDefinition Height="{StaticResource ConnectionCenterMargin}" />
                     <RowDefinition Height="*" />

@@ -9,8 +9,6 @@
     xmlns:System="using:System"    
     xmlns:design="using:RdClient.DesignTime"
     xmlns:vm="using:RdClient.Shared.ViewModels"
-    xmlns:h="using:RdClient.Shared.Helpers"
-    xmlns:cx="using:RdClient.Shared.CxWrappers"    
     xmlns:controls="using:RdClient.Controls"
     mc:Ignorable="d"
     RequestedTheme="Dark">
