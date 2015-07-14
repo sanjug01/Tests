@@ -539,13 +539,21 @@
 
                     case SessionState.Failed:
                         this.FullScreenModel.ExitFullScreen();
+                        this.RightSideBarViewModel.RemoteSession = null;
+                        this.RightSideBarViewModel.PointerCapture = null;
+
+                        //
+                        // If changing state from Connected, remove all event handlers specific to the connected state.
+                        //
+                        if (SessionState.Connected == _sessionState)
+                        {
+                            DisconnectedAction();
+                        }
                         break;
 
                     case SessionState.Closed:
-                        this.FullScreenModel.ExitFullScreen();
-                        break;
-
                     default:
+                        this.FullScreenModel.ExitFullScreen();
                         //
                         // Remove the belly-band message
                         //
