@@ -54,14 +54,6 @@ namespace RdClient.DesignTime
 
         public bool SelectionEnabled { get; set; }
 
-        // recommended non dynamic values
-        Size _tileSize = new Size(296, 194);
-        public Size TileSize
-        {
-            get{ return _tileSize; }
-            set { }
-        }
-
         void IRemoteConnectionViewModel.Presenting(ISessionFactory sessionFactory)
         {
         }

@@ -9,7 +9,8 @@
     xmlns:design="using:RdClient.DesignTime"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d"
-    d:DesignHeight="164" Width="296">
+    d:DesignWidth="296"
+    d:DesignHeight="164" >
     
     <d:UserControl.DataContext>
         <design:FakeDesktopViewModel />
@@ -44,11 +45,12 @@
                 Command="{Binding ConnectCommand}"
                 IsRightTapEnabled="True"
                 RightTapped="ThumbnailButton_RightTapped">
-            <Grid>
-                <Grid x:Name="TileGrid"
-                      Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" 
-                      Width="{Binding TileSize.Width}" 
-                      Height="{Binding TileSize.Height}" >
+            <Grid  x:Name="TileGrid"
+                   Width="296"
+                   Height="164"
+                   >
+                
+                <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="42" />

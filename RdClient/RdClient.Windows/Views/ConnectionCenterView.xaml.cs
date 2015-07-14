@@ -16,19 +16,16 @@
             this.VisualStates.CurrentStateChanging += this.OnVisualStateChanging;
             this.SizeChanged += OnSizeChanged;
         }
-
+        
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            this.UpdateTileSizes();
+            this.UpdateTileSizes(e.NewSize);
 
         }
 
         IViewModel IPresentableView.ViewModel { get { return this.DataContext as IViewModel; } }
         void IPresentableView.Activating(object activationParameter) { }
-        void IPresentableView.Presenting(INavigationService navigationService, object activationParameter)
-        {
-            this.UpdateTileSizes();
-        }
+        void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
 
         void IPresentableView.Dismissing() { }
 
@@ -45,17 +42,13 @@
 
         private void OnVisualStateChanging(object sender, VisualStateChangedEventArgs e)
         {
-            // the change of the visual state triggers change in size for all tiles.
-            this.UpdateTileSizes();
-
             VisualStateManager.GoToState(this.AccessoryViewPresenter, e.NewState.Name, true);
         }
 
-        private void UpdateTileSizes()
+        private void UpdateTileSizes(Size newWindowsSize)
         {
-            TileSizeHelper ssvm = (TileSizeHelper)this.Resources["TileSizeViewModel"];
-            (this.DataContext as IConnectionCenterViewModel).DesktopTileSize = ssvm.TileSize;
-            this.UpdateLayout();
+            Size newTileSize = TileSizeHelper.GetTileSize(newWindowsSize);
+            (this.DataContext as IConnectionCenterViewModel).DesktopTileSize = newTileSize;
         }
     }
 }

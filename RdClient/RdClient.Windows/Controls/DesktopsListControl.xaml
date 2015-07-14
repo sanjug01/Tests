@@ -33,7 +33,9 @@
 					ItemsSource="{Binding DesktopViewModels}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapGrid Orientation="Horizontal" />
+                            <WrapGrid Orientation="Horizontal"
+                                      ItemHeight="{Binding DesktopTileSize.Height}"
+                                      ItemWidth="{Binding DesktopTileSize.Width}"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>

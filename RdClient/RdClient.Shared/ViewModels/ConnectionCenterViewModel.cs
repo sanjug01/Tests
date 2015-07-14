@@ -271,10 +271,6 @@
             set
             {
                 SetProperty(ref _desktopTileSize, value);
-                foreach (DesktopViewModel vm in _desktopViewModels)
-                {
-                    vm.TileSize = value;
-                }
             }
         }
 

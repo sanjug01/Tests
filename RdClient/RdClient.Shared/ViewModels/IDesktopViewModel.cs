@@ -9,7 +9,6 @@
         DesktopModel Desktop { get; }
 
         CredentialsModel Credentials { get; }
-
-        Size TileSize { get; set; }
+        
     }
 }

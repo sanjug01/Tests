@@ -23,7 +23,6 @@
         private ISessionFactory _sessionFactory;
         private bool _isSelected;
         private bool _selectionEnabled;
-        private Size _tileSize;
 
         public static IDesktopViewModel Create(IModelContainer<RemoteConnectionModel> desktopContainer,
             ApplicationDataModel dataModel,
@@ -48,9 +47,6 @@
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
             _navigationService = navigationService;
-
-            // default non-dynamic size: Height = "164" Width = "296"
-            _tileSize = new Size(296, 164);
 
             _desktop = (DesktopModel)desktopContainer.Model;
             _desktopId = desktopContainer.Id;
@@ -123,12 +119,6 @@
                     SetProperty(ref _isSelected, value);
                 }
             }
-        }
-
-        public Size TileSize
-        {
-            get { return _tileSize; }
-            set { SetProperty(ref _tileSize, value); }            
         }
 
         public ICommand EditCommand

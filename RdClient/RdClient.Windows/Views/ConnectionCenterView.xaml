@@ -102,11 +102,6 @@
             </CommandBar>
         </DataTemplate>
 
-        <h:TileSizeHelper x:Key="TileSizeViewModel">
-            <h:TileSizeHelper.WindowSize>
-                <h:WindowSize />
-            </h:TileSizeHelper.WindowSize>
-        </h:TileSizeHelper>        
     </Page.Resources>
 
     <!--
