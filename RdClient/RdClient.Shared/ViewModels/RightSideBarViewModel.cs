@@ -136,15 +136,8 @@
 
         public Visibility Visibility
         {
-            get
-            {
-                Debug.WriteLine("VISIBILITY={0}", _visibility);
-                return _visibility;
-            }
-            set
-            {
-                SetProperty(ref _visibility, value);
-            }
+            get { return _visibility; }
+            set { SetProperty(ref _visibility, value); }
         }
 
         public RightSideBarViewModel()

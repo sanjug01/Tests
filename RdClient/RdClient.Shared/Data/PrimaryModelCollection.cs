@@ -90,7 +90,6 @@
 
                 if (id.Equals(container.Id))
                 {
-                    container.PropertyChanged -= this.OnModelContainerPropertyChanged;
                     model = container.Model;
                     break;
                 }
@@ -177,7 +176,13 @@
                         if (null != stream)
                         {
                             _modelSerializer.WriteModel(modelContainer.Model, stream);
+                            //
+                            // Suppress change notifications so the container doesn't get marked as modified because
+                            // its modified status has changed.
+                            //
+                            modelContainer.PropertyChanged -= this.OnModelContainerPropertyChanged;
                             modelContainer.SetClean();
+                            modelContainer.PropertyChanged += this.OnModelContainerPropertyChanged;
                             _modifiedModelIds.Remove(modelContainer.Id);
                             ++changeCount;
                         }
