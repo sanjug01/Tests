@@ -82,7 +82,7 @@
                     
                     <Image Source="ms-appx:///Assets/desktop_placeholder.png"
                            Visibility="{Binding Desktop.EncodedThumbnail, Converter={StaticResource NullToVisibleConverter}}"
-                           Stretch="None"
+                           Stretch="UniformToFill"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
             

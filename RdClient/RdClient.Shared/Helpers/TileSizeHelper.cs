@@ -17,6 +17,7 @@ namespace RdClient.Shared.Helpers
         private const double LargeViewSizeOffset = 80d;
         private const double LargeViewSizeScaleFactor = 5f;
         private const double RoundingBase = 4d;
+        private const double MinWidthLimit = 144d;
 
         /// <summary>
         /// apply proprietary algorithm to calculate the tile size based on the actual window size
@@ -36,7 +37,7 @@ namespace RdClient.Shared.Helpers
             {
                 // phone or narrow layout, use min dimension
                 mainDimension = Math.Min(windowSize.Width, windowSize.Height); 
-                width = RoundSize((mainDimension - MinViewSizeOffset) / MinViewSizeScaleFactor);
+                width = Math.Max(RoundSize((mainDimension - MinViewSizeOffset) / MinViewSizeScaleFactor), MinWidthLimit);
                 height = RoundSize(width * DesiredAspectRatio);
             }
             else if (windowSize.Width < MediumViewSizeLimit && windowSize.Height < MediumViewSizeLimit)
@@ -44,7 +45,7 @@ namespace RdClient.Shared.Helpers
                 // medium screens, both dimensions < 1366
                 //        use max dimension
                 mainDimension = Math.Max(windowSize.Width, windowSize.Height);
-                width = RoundSize((mainDimension - MediumViewSizeOffset) / MediumViewSizeScaleFactor);
+                width = Math.Max(RoundSize((mainDimension - MediumViewSizeOffset) / MediumViewSizeScaleFactor), MinWidthLimit);
                 height = RoundSize(width * DesiredAspectRatio);
             }
             else
@@ -52,7 +53,7 @@ namespace RdClient.Shared.Helpers
                 // large screens, at least one dimension > 1365
                 //       use max dimension
                 mainDimension = Math.Max(windowSize.Width, windowSize.Height);
-                width = RoundSize((mainDimension - LargeViewSizeOffset) / LargeViewSizeScaleFactor);
+                width = Math.Max(RoundSize((mainDimension - LargeViewSizeOffset) / LargeViewSizeScaleFactor), MinWidthLimit);
                 height = RoundSize(width * DesiredAspectRatio);
             }
 
