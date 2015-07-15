@@ -39,7 +39,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel>
+    <Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStates">
                 <VisualState x:Name="DefaultLayout">
@@ -63,16 +63,15 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        
+       
         <Button Style="{StaticResource FlatButtonStyle}"
                 x:Name="ThumbnailButton"
                 Command="{Binding ConnectCommand}"
                 IsRightTapEnabled="True"
                 RightTapped="ThumbnailButton_RightTapped">
-            <Grid  x:Name="TileGrid"
-                   Width="296"
-                   Height="164"
-                   >
+
+            <!-- The TileGrid has the TileSize size and fills up the whole button-->
+            <Grid x:Name="TileGrid" Width="296" Height="164">
                 
                 <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" >
                     <Grid.RowDefinitions>
@@ -80,6 +79,7 @@
                         <RowDefinition Height="42" />
                     </Grid.RowDefinitions>
 
+                    
                     <Image Source="ms-appx:///Assets/desktop_placeholder.png"
                            Visibility="{Binding Desktop.EncodedThumbnail, Converter={StaticResource NullToVisibleConverter}}"
                            Stretch="None"
@@ -118,15 +118,7 @@
 				    </CheckBox>
                     -->
                 </Grid>
-                
-                <!--
-                "New desktop" indicator; the grid provides a container in which some additional indication may be placed.
-                -->
-                <Grid Visibility="{Binding Desktop.IsNew, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Border BorderBrush="{ThemeResource SystemControlHighlightAccentBrush}"
-                            BorderThickness="{ThemeResource ButtonBorderThemeThickness}"/>
-                </Grid>
-
+                               
                 <!-- Invisible button for moving the attached flyout around -->
                 <Button x:Name="FlyoutButton"
                         IsTabStop="False"
@@ -142,5 +134,13 @@
 
             </Grid>
         </Button>
-    </StackPanel>
+        
+        <!--
+        "New desktop" indicator; the grid provides a container in which some additional indication may be placed.
+        -->
+        <Border Visibility="{Binding Desktop.IsNew, Converter={StaticResource BooleanToVisibilityConverter}}"            
+                Margin="{ThemeResource ButtonBorderThemeThickness}"
+                BorderBrush="{ThemeResource SystemControlHighlightAccentBrush}"
+                BorderThickness="{ThemeResource ButtonBorderThemeThickness}"/>            
+    </Grid>
 </UserControl>
