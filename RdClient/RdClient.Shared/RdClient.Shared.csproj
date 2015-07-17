@@ -127,6 +127,7 @@
     <Compile Include="Data\TemporaryModelContainer.cs" />
     <Compile Include="Data\TransformingObservableCollection.cs" />
     <Compile Include="Data\TrustedCertificate.cs" />
+    <Compile Include="Helpers\ArrayRound.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
     <Compile Include="Helpers\IanaInterfaceType.cs" />
     <Compile Include="Helpers\ContractAssertionException.cs" />
