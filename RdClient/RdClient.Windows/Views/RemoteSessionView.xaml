@@ -91,24 +91,24 @@
                     RemoteSessionViewSite="{Binding}"
                     Opacity="{Binding SessionState, Converter={StaticResource SessionStateToOpacityConverter}}" />
 
-                <!-- Connection Bar -->
-                <c:ConnectionBar 
-                    ItemsSource ="{Binding ConnectionBarItems}" 
-                    Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <!-- PanKnob -->
+                <c:PanKnob x:Name="PanKnob"
+                           PanKnobSite="{Binding PanKnobSite}"/>
 
                 <!-- Transparent overlay that dismisses the side bars -->
                 <c:PointerPressDetector
                     Visibility="{Binding RightSideBarViewModel.Visibility}"
                     PointerPressDetected="{Binding RightSideBarViewModel.ToggleVisiblity}" />
 
+                <!-- Connection Bar -->
+                <c:ConnectionBar 
+                    ItemsSource ="{Binding ConnectionBarItems}" 
+                    Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
                 <!-- Right side bar -->
                 <c:RightSideBarControl
                     DataContext="{Binding RightSideBarViewModel}"
                     BarVisibility="{Binding Visibility}" />
-
-                <!-- PanKnob -->
-                <c:PanKnob x:Name="PanKnob"
-                           PanKnobSite="{Binding PanKnobSite}"/>
 
                 <!--
                 Belly-band container of in-session dialogs.
