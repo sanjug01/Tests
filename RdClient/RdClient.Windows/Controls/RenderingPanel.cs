@@ -49,9 +49,16 @@
             set { _mouseScaleTransform = value; }
         }
 
+        public IScaleFactor ScaleFactor
+        {
+            get;
+            private set;
+        }
+
         public RenderingPanel()
         {
             _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+            this.ScaleFactor = new ScaleFactor();
 
             this.SizeChanged += this.OnSizeChanged;
         }

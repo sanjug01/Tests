@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models.Viewport;
     using System;
@@ -21,6 +22,7 @@
         /// <remarks>Technically, the viewport is the grid that hosts the rendering panel (swap chain panel);
         /// the rendering panel may be scaled up so the viewport will become smaller than the panel.</remarks>
         IViewport Viewport { get; }
+        IScaleFactor ScaleFactor { get; }
 
         void ChangeMouseCursorShape(MouseCursorShape shape);
         void MoveMouseCursor(Point point);

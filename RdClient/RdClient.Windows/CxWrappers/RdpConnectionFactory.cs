@@ -10,8 +10,6 @@
     {
         public SwapChainPanel SwapChainPanel { private get; set; }
 
-        public ConnectionInformation ConnectionInformation { private get; set; }
-
         IRdpConnection IRdpConnectionFactory.CreateDesktop(string rdpFile)
         {
             int xRes;

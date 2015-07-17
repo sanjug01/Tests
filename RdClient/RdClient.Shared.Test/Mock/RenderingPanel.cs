@@ -5,6 +5,7 @@ using RdMock;
 using System;
 using System.ComponentModel;
 using Windows.UI.Xaml;
+using RdClient.Shared.Helpers;
 
 namespace RdClient.Shared.Test.Mock
 {
@@ -16,6 +17,12 @@ namespace RdClient.Shared.Test.Mock
         {
             get;
             set;
+        }
+
+        public IScaleFactor ScaleFactor
+        {
+            get;
+            set;            
         }
 
         public void OnMouseVisibilityChanged(object sender, PropertyChangedEventArgs e)

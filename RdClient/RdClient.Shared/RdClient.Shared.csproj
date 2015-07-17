@@ -128,6 +128,7 @@
     <Compile Include="Data\TransformingObservableCollection.cs" />
     <Compile Include="Data\TrustedCertificate.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
+    <Compile Include="Helpers\IanaInterfaceType.cs" />
     <Compile Include="Helpers\ContractAssertionException.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
     <Compile Include="Helpers\DataProtectionProviderDataScrambler.cs" />
@@ -144,12 +145,14 @@
     <Compile Include="Helpers\IDeferredExecution.cs" />
     <Compile Include="Helpers\IFullScreen.cs" />
     <Compile Include="Helpers\ILocalizedString.cs" />
+    <Compile Include="Helpers\IScaleFactor.cs" />
     <Compile Include="Helpers\IWindowSize.cs" />
     <Compile Include="Helpers\IStateMachine.cs" />
     <Compile Include="Helpers\ListTrace.cs" />
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\ITimer.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
+    <Compile Include="Helpers\ScaleFactor.cs" />
     <Compile Include="Helpers\WindowSize.cs" />
     <Compile Include="Helpers\Rc4DataScrambler.cs" />
     <Compile Include="Helpers\RdDispatcherTimer.cs" />

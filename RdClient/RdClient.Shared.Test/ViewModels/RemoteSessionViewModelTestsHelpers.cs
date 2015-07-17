@@ -362,6 +362,14 @@
                     get { return new TestViewport(); }
                 }
 
+                public IScaleFactor ScaleFactor
+                {
+                    get
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
+
                 void IRenderingPanel.ChangeMouseCursorShape(Shared.Input.Pointer.MouseCursorShape shape)
                 {
                     throw new NotImplementedException();
