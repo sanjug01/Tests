@@ -31,5 +31,10 @@ namespace RdClient.Shared.Helpers
             _timer.Stop();
             _timer.Start(_action, _period, false);
         }
+
+        public void Cancel()
+        {
+            _timer.Stop();
+        }
     }
 }

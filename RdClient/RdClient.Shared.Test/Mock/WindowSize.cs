@@ -12,6 +12,7 @@ namespace RdClient.Shared.Test.Mock
             get; set;
         }
 
+        public event EventHandler<WindowActivatedEventArgs> Activated;
         public event EventHandler<WindowSizeChangedEventArgs> SizeChanged;
     }
 }
