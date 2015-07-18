@@ -131,7 +131,6 @@
     <Compile Include="Converters\ResourceIdToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverterTests.cs" />
     <Compile Include="Converters\StringLengthToVisbilityConverter.cs" />
-    <Compile Include="Converters\StringToDictionaryObjectConverterTests.cs" />
     <Compile Include="Converters\TypeToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverterTests.cs" />
     <Compile Include="CxWrappers\RdpEventArgsTests.cs" />
