@@ -1,16 +1,14 @@
 ﻿using RdClient.Shared.Helpers;
-using RdClient.Shared.Navigation;
 using RdClient.Shared.Input.Pointer;
+using RdClient.Shared.Input.Recognizers;
 using RdClient.Shared.Models.PanKnobModel;
+using RdClient.Shared.Navigation;
 using System.Diagnostics.Contracts;
 using Windows.Foundation;
 using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using System;
-using RdClient.Shared.Input.Recognizers;
-using System.Diagnostics;
 
 namespace RdClient.Controls
 {
@@ -40,8 +38,8 @@ namespace RdClient.Controls
             set
             {
                 _panKnobSite = value;
-                _panKnobSite.PanKnob = this;
 
+                _panKnobSite.PanKnob = this;
 
                 ITimer timer = null;
                 _panKnobSite.CastAndCall<IPanKnobSite>(

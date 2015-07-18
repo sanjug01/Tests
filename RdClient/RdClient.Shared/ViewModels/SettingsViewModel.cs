@@ -140,6 +140,12 @@ namespace RdClient.Shared.ViewModels
             if(null != _telemetryClient)
                 _telemetryClient.IsActive = this.GeneralSettings.SendFeedback;
 
+            this.GeneralSettings = null;
+            this.Users = null;
+            this.SelectedUser = null;
+            this.Gateways = null;
+            this.SelectedGateway = null;
+
             base.OnDismissed();
         }
 

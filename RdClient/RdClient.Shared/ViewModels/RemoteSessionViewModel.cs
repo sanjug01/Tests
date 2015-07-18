@@ -283,6 +283,7 @@
             // TFS:     2679737
             //
             this.BellyBandViewModel = null;
+            this.PointerCapture = null;
 
             _presentationStopwatch.Stop();
             _presentationStopwatch.Reset();

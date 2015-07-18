@@ -99,6 +99,13 @@
             this.StartLoadingResourceFile();
         }
 
+        protected override void OnDismissed()
+        {
+            this.Document = null;
+
+            base.OnDismissed();
+        }
+
         private void StartLoadingResourceFile()
         {
             if (!string.IsNullOrEmpty(this.ResourceUri))

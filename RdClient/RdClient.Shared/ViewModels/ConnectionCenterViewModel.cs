@@ -336,6 +336,11 @@
             {
                 dvm.Dismissed();
             }
+
+            this.DesktopViewModels = null;
+            this.WorkspaceViewModels = null;
+
+            base.OnDismissed();
         }
 
         private IDesktopViewModel CreateDesktopViewModel(IModelContainer<RemoteConnectionModel> container)

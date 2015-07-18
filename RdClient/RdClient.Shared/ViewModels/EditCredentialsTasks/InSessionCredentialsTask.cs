@@ -107,6 +107,8 @@
             {
                 this.Submitted(this, new SubmittedEventArgs(viewModel.SaveCredentials, _state));
             }
+
+            base.OnDismissed(viewModel);
         }
 
         protected override void OnCancelled(IEditCredentialsViewModel viewModel)
