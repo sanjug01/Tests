@@ -18,7 +18,14 @@ namespace RdClient.Shared.Helpers
 
     public class WindowActivatedEventArgs
     {
-        public WindowActivation WindowActivation { get; set; }
+        private readonly WindowActivation _windowActivation;
+
+        public WindowActivation WindowActivation { get; }
+
+        public WindowActivatedEventArgs(WindowActivation windowActivation)
+        {
+            _windowActivation = windowActivation;
+        }
     }
 
     public class WindowSize : IWindowSize
@@ -33,11 +40,11 @@ namespace RdClient.Shared.Helpers
             {
                 if(o.WindowActivationState == Windows.UI.Core.CoreWindowActivationState.Deactivated)
                 {
-                    EmitActivated(new WindowActivatedEventArgs() { WindowActivation = WindowActivation.Deactivated });
+                    EmitActivated(new WindowActivatedEventArgs(WindowActivation.Deactivated));
                 }
                 else
                 {
-                    EmitActivated(new WindowActivatedEventArgs() { WindowActivation = WindowActivation.Activated });
+                    EmitActivated(new WindowActivatedEventArgs(WindowActivation.Activated));
                 }
             };
         }
