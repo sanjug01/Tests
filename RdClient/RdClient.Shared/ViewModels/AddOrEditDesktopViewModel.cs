@@ -302,6 +302,10 @@
         protected override void OnDismissed()
         {
             _addDesktopArgs = null;
+            this.Users = null;
+            this.Gateways = null;
+            this.SelectedUser = null;
+            this.SelectedGateway = null;
         }
 
         private void AddGatewayCommandExecute(object o)
