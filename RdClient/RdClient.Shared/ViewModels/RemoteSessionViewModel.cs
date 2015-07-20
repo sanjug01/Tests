@@ -595,13 +595,12 @@
                     mouseVisibility = Visibility.Visible;
                 }
 
-                if(this.PointerCapture.ConsumptionMode.ConsumptionMode != ConsumptionModeType.Pointer)
+                this.ScrollBarModel.SetScrollbarVisibility(mouseVisibility);
+
+                if (this.PointerCapture.ConsumptionMode.ConsumptionMode != ConsumptionModeType.Pointer)
                 {
                     mouseVisibility = Visibility.Collapsed;
                 }
-
-
-                this.ScrollBarModel.SetScrollbarVisibility(mouseVisibility);
 
                 if (_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
                 {
