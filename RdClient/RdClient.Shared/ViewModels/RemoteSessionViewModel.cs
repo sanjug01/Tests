@@ -550,14 +550,17 @@
                             DisconnectedAction();
                         }
                         break;
-
-                    case SessionState.Closed:
                     default:
-                        this.FullScreenModel.ExitFullScreen();
+                        if(SessionState.Closed == _activeSession.State.State)
+                        {
+                            this.FullScreenModel.ExitFullScreen();
+                        }
+
                         //
                         // Remove the belly-band message
                         //
                         this.BellyBandViewModel = null;
+
                         this.RightSideBarViewModel.RemoteSession = null;
                         this.RightSideBarViewModel.PointerCapture = null;
 
