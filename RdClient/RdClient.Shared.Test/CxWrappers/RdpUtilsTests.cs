@@ -24,6 +24,8 @@ namespace RdClient.Shared.Test.CxWrappers
 
                 properties.Expect("SetBoolProperty", new List<object>() { "Administrative Session", default(bool) }, 0);
                 properties.Expect("SetIntProperty", new List<object>() { "AudioMode", (int)default(AudioMode) }, 0);
+                properties.Expect("SetBoolProperty", new List<object> { "High Resolution Mouse", true }, 0);
+
                 RdpPropertyApplier.ApplyDesktop(properties, desktop);
             }
         }
@@ -47,6 +49,7 @@ namespace RdClient.Shared.Test.CxWrappers
                 // non-default extra settings - will be applied
                 properties.Expect("SetBoolProperty", new List<object>() { "Administrative Session", true }, 0);
                 properties.Expect("SetIntProperty", new List<object>() { "AudioMode", (int) AudioMode.Remote }, 0);
+                properties.Expect("SetBoolProperty", new List<object> { "High Resolution Mouse", true }, 0);
 
                 RdpPropertyApplier.ApplyDesktop(properties, desktop);
             }
