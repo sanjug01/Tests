@@ -355,8 +355,7 @@
         }
 
         private void OnSessionFailed(object sender, SessionFailureEventArgs e)
-        {
-            
+        {            
             //Restore the local mouse
             this._activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
             //
@@ -373,6 +372,9 @@
 
         private void OnSessionInterrupted(object sender, SessionInterruptedEventArgs e)
         {
+            //Restore the local mouse
+            this._activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+
             this.BellyBandViewModel = new RemoteSessionInterruptionViewModel(_activeSession, e.ObtainContinuation());
             this.IsConnectionBarVisible = true;
         }
