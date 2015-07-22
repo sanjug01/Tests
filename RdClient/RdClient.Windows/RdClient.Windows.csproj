@@ -236,6 +236,31 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Content Include="Assets\AppNameAppList.scale-100.png" />
+    <Content Include="Assets\AppNameAppList.scale-125.png" />
+    <Content Include="Assets\AppNameAppList.scale-150.png" />
+    <Content Include="Assets\AppNameAppList.scale-200.png" />
+    <Content Include="Assets\AppNameAppList.scale-400.png" />
+    <Content Include="Assets\AppNameLargeTile.scale-100.png" />
+    <Content Include="Assets\AppNameLargeTile.scale-125.png" />
+    <Content Include="Assets\AppNameLargeTile.scale-150.png" />
+    <Content Include="Assets\AppNameLargeTile.scale-200.png" />
+    <Content Include="Assets\AppNameLargeTile.scale-400.png" />
+    <Content Include="Assets\AppNameMedTile.scale-100.png" />
+    <Content Include="Assets\AppNameMedTile.scale-125.png" />
+    <Content Include="Assets\AppNameMedTile.scale-150.png" />
+    <Content Include="Assets\AppNameMedTile.scale-200.png" />
+    <Content Include="Assets\AppNameMedTile.scale-400.png" />
+    <Content Include="Assets\AppNameSmallTile.scale-100.png" />
+    <Content Include="Assets\AppNameSmallTile.scale-125.png" />
+    <Content Include="Assets\AppNameSmallTile.scale-150.png" />
+    <Content Include="Assets\AppNameSmallTile.scale-200.png" />
+    <Content Include="Assets\AppNameSmallTile.scale-400.png" />
+    <Content Include="Assets\AppNameWideTile.scale-100.png" />
+    <Content Include="Assets\AppNameWideTile.scale-125.png" />
+    <Content Include="Assets\AppNameWideTile.scale-150.png" />
+    <Content Include="Assets\AppNameWideTile.scale-200.png" />
+    <Content Include="Assets\AppNameWideTile.scale-400.png" />
     <Content Include="Assets\RemoteDesktopStore.scale-100.png" />
     <Content Include="Assets\RemoteDesktopStore.scale-125.png" />
     <Content Include="Assets\RemoteDesktopStore.scale-150.png" />
@@ -287,31 +312,6 @@
     <Compile Include="Views\ViewPresenter.xaml.cs">
       <DependentUpon>ViewPresenter.xaml</DependentUpon>
     </Compile>
-    <Content Include="Assets\RemoteDesktopAppList.scale-100.png" />
-    <Content Include="Assets\RemoteDesktopAppList.scale-125.png" />
-    <Content Include="Assets\RemoteDesktopAppList.scale-150.png" />
-    <Content Include="Assets\RemoteDesktopAppList.scale-200.png" />
-    <Content Include="Assets\RemoteDesktopAppList.scale-400.png" />
-    <Content Include="Assets\RemoteDesktopLargeTile.scale-100.png" />
-    <Content Include="Assets\RemoteDesktopLargeTile.scale-125.png" />
-    <Content Include="Assets\RemoteDesktopLargeTile.scale-150.png" />
-    <Content Include="Assets\RemoteDesktopLargeTile.scale-200.png" />
-    <Content Include="Assets\RemoteDesktopLargeTile.scale-400.png" />
-    <Content Include="Assets\RemoteDesktopMedTile.scale-100.png" />
-    <Content Include="Assets\RemoteDesktopMedTile.scale-125.png" />
-    <Content Include="Assets\RemoteDesktopMedTile.scale-150.png" />
-    <Content Include="Assets\RemoteDesktopMedTile.scale-200.png" />
-    <Content Include="Assets\RemoteDesktopMedTile.scale-400.png" />
-    <Content Include="Assets\RemoteDesktopSmallTile.scale-100.png" />
-    <Content Include="Assets\RemoteDesktopSmallTile.scale-125.png" />
-    <Content Include="Assets\RemoteDesktopSmallTile.scale-150.png" />
-    <Content Include="Assets\RemoteDesktopSmallTile.scale-200.png" />
-    <Content Include="Assets\RemoteDesktopSmallTile.scale-400.png" />
-    <Content Include="Assets\RemoteDesktopWideTile.scale-100.png" />
-    <Content Include="Assets\RemoteDesktopWideTile.scale-125.png" />
-    <Content Include="Assets\RemoteDesktopWideTile.scale-150.png" />
-    <Content Include="Assets\RemoteDesktopWideTile.scale-200.png" />
-    <Content Include="Assets\RemoteDesktopWideTile.scale-400.png" />
     <Content Include="Strings\en-US\EULA.rtf" />
     <Content Include="Strings\en-US\ThirdPartyNotices.rtf" />
     <None Include="RdClient.Windows_TemporaryKey.pfx" />

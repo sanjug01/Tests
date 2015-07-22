@@ -16,8 +16,8 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="RdClient.Windows.App">
-      <uap:VisualElements DisplayName="Remote Desktop Preview" Square150x150Logo="Assets\RemoteDesktopMedTile.png" Square44x44Logo="Assets\SmallLogo.png" Description="Microsoft Remote Desktop Preview" BackgroundColor="#D14827">
-        <uap:DefaultTile ShortName="Remote Desktop Preview" Wide310x150Logo="Assets\RemoteDesktopWideTile.png" Square310x310Logo="Assets\RemoteDesktopLargeTile.png" Square71x71Logo="Assets\RemoteDesktopSmallTile.png">
+      <uap:VisualElements DisplayName="Remote Desktop Preview" Square150x150Logo="Assets\AppNameMedTile.png" Square44x44Logo="Assets\SmallLogo.png" Description="Microsoft Remote Desktop Preview" BackgroundColor="#D14827">
+        <uap:DefaultTile ShortName="Remote Desktop Preview" Wide310x150Logo="Assets\AppNameWideTile.png" Square310x310Logo="Assets\AppNameLargeTile.png" Square71x71Logo="Assets\AppNameSmallTile.png">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="wide310x150Logo" />
             <uap:ShowOn Tile="square150x150Logo" />
@@ -25,10 +25,6 @@
           </uap:ShowNameOnTiles>
         </uap:DefaultTile>
         <uap:SplashScreen BackgroundColor="#D14827" Image="Assets\SplashScreen.png" />
-        <uap:InitialRotationPreference>
-          <uap:Rotation Preference="landscape" />
-          <uap:Rotation Preference="landscapeFlipped" />
-        </uap:InitialRotationPreference>
       </uap:VisualElements>
     </Application>
   </Applications>
