@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.Input.Keyboard;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models.Viewport;
     using RdClient.Shared.Telemetry;
@@ -20,7 +21,7 @@
     {
         private readonly RelayCommand _zoomInCommand;
         private readonly RelayCommand _zoomOutCommand;
-        private ITelemetryClient _telemetryClient;
+        private readonly ITelemetryClient _telemetryClient;
         private IViewport _viewport;
         private Point _viewportCenter;
         private bool _isZoomedIn = false;
@@ -31,11 +32,6 @@
 
         public RelayCommand ZoomOutCommand { get { return _zoomOutCommand; } }
         public bool IsZoomedIn { get { return _isZoomedIn; } }
-
-        public void SetTelemetryClient(ITelemetryClient telemetryClient)
-        {
-            _telemetryClient = telemetryClient;
-        }
 
         private void ZoomInHandler(object parameter)
         {
@@ -83,12 +79,27 @@
         }
 
 
-        public ZoomPanModel()
+        public ZoomPanModel(IInputPanelFactory inputPaneFactory, ITelemetryClient telemetryClient)
         {
+            _telemetryClient = telemetryClient;
+
             _zoomInCommand = new RelayCommand(
                 o =>
                 {
                     ZoomInHandler(o);
+                    //
+                    // Hide the input panel if it is shown.
+                    // Among other things, hiding the touch keyboard takes the input focus away from the rendering panel
+                    // and any controls that may be shown on top of it, which helps to fight unpleasant effects of having
+                    // input focus in a button while eating up keyboard events that navigate between controls.
+                    //
+                    if (null != inputPaneFactory)
+                    {
+                        IInputPanel inputPanel = inputPaneFactory.GetInputPanel();
+
+                        if (null != inputPanel)
+                            inputPanel.Hide();
+                    }
                 }, 
                 o =>
                 {
@@ -98,6 +109,19 @@
                 o =>
                 {
                     ZoomOutHandler(o);
+                    //
+                    // Hide the input panel if it is shown
+                    // Among other things, hiding the touch keyboard takes the input focus away from the rendering panel
+                    // and any controls that may be shown on top of it, which helps to fight unpleasant effects of having
+                    // input focus in a button while eating up keyboard events that navigate between controls.
+                    //
+                    if (null != inputPaneFactory)
+                    {
+                        IInputPanel inputPanel = inputPaneFactory.GetInputPanel();
+
+                        if (null != inputPanel)
+                            inputPanel.Hide();
+                    }
                 }, 
                 o =>
                 {
