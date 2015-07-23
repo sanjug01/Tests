@@ -27,15 +27,49 @@
         private readonly Stopwatch _presentationStopwatch;
         private readonly RelayCommand _invokeKeyboard;
         private readonly SymbolBarButtonModel _invokeKeyboardModel;
+        private readonly FocusControllerProxy _inputFocusController;
+        private IFullScreenModel _fullScreenModel;
         private EventHandler _enteredFullScreenHandler;
 
         private double
             _enterFullScreenCount,
             _exitFullScreenCount;
 
+        /// <summary>
+        /// Proxy object that delegates calls of the IInputFocusController interface to an injected instance of the interface.
+        /// The proxy is needed because the view model needs the controller object before it gets attached to a view that provides
+        /// the actual implementation of IInputFocusController.
+        /// The class creates a read-only instance of FocusControllerProxy and updates its controller when the view injects it.
+        /// </summary>
+        private sealed class FocusControllerProxy : IInputFocusController
+        {
+            private IInputFocusController _controller;
+
+            public IInputFocusController Controller
+            {
+                get { return _controller; }
+                set { _controller = value; }
+            }
+
+            void IInputFocusController.SetDefault()
+            {
+                if (null != _controller)
+                    _controller.SetDefault();
+            }
+        }
+
         public ZoomPanModel ZoomPanModel
         {
             private get; set;
+        }
+
+        /// <summary>
+        /// The property gets set by a XAML binding.
+        /// </summary>
+        public IInputFocusController InputFocusController
+        {
+            get { return _inputFocusController.Controller; }
+            set { _inputFocusController.Controller = value; }
         }
 
         //
@@ -141,7 +175,6 @@
             private set { this.SetProperty(ref _bellyBandViewModel, value); }
         }
 
-        private IFullScreenModel _fullScreenModel;
         public IFullScreenModel FullScreenModel
         {
             private get
@@ -172,6 +205,7 @@
             _presentationStopwatch = new Stopwatch();
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
             _invokeKeyboardModel = new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
+            _inputFocusController = new FocusControllerProxy();
             _sessionState = SessionState.Idle;
         }
 
@@ -187,12 +221,12 @@
 
             base.OnPresenting(activationParameter);
 
-            this.ZoomPanModel = new ZoomPanModel(_inputPanelFactory, _telemetryClient);
+            this.ZoomPanModel = new ZoomPanModel(_inputFocusController, _telemetryClient);
 
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = this.ZoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = new RelayCommand(RightSideBarVisibilityToggle) });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = new FocusStealingRelayCommand(_inputFocusController, RightSideBarVisibilityToggle) });
             items.Add(_invokeKeyboardModel);
             _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
 

@@ -101,8 +101,8 @@
             private EventHandler _enteringFullScreen;
             private EventHandler _exitingFullScreen;
 
-            public event EventHandler EnteredFullScreen;
-            public event EventHandler ExitedFullScreen;
+            public event EventHandler EnteredFullScreen { add { } remove { } }
+            public event EventHandler ExitedFullScreen { add { } remove { } }
 
             public TestFullScreenModel()
             {

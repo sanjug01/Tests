@@ -40,6 +40,6 @@
         <Image x:Name="MouseCursor" 
                CacheMode="BitmapCache"                
                VerticalAlignment="Top" HorizontalAlignment="Left"
-                   RenderTransform="{StaticResource MouseTransformGroup}" />
+               RenderTransform="{StaticResource MouseTransformGroup}" />
     </Canvas>
 </UserControl>

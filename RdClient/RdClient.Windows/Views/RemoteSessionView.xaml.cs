@@ -2,15 +2,17 @@
 
 namespace RdClient.Views
 {
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.ViewModels;
     using Windows.UI.Core;
     using Windows.UI.ViewManagement;
+    using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
 
-    public sealed partial class RemoteSessionView : UserControl, IPresentableView
+    public sealed partial class RemoteSessionView : UserControl, IPresentableView, IInputFocusController
     {
         private readonly InputPane _inputPane;
         private readonly CoreWindow _coreWindow;
@@ -28,6 +30,14 @@ namespace RdClient.Views
 
             this.SizeChanged += OnSizeChanged;
         }
+        /// <summary>
+        /// Property for binding with x:Bind in XAML.
+        /// </summary>
+        public IInputFocusController InputFocusController
+        {
+            get { return this; }
+        }
+
         //
         // IPresentableView interface
         //
@@ -46,6 +56,11 @@ namespace RdClient.Views
 
         void IPresentableView.Dismissing()
         {
+        }
+
+        void IInputFocusController.SetDefault()
+        {
+            this.RemoteSessionPanel.Focus(FocusState.Programmatic);
         }
 
         protected override void OnKeyDown(KeyRoutedEventArgs e)
@@ -99,7 +114,7 @@ namespace RdClient.Views
             this.SessionPanel.Height = this.SessionPanelContainer.ActualHeight;
         }
 
-        private void OnCoreWindowActivated(CoreWindow sender, WindowActivatedEventArgs e)
+        private void OnCoreWindowActivated(CoreWindow sender, Windows.UI.Core.WindowActivatedEventArgs e)
         {
             switch(e.WindowActivationState)
             {

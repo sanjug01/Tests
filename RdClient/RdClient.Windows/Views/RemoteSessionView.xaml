@@ -1,4 +1,5 @@
 ﻿<UserControl
+    x:Name="RootControl"
     x:Class="RdClient.Views.RemoteSessionView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -19,7 +20,11 @@
     RequestedTheme="Dark">
     
     <UserControl.DataContext>
-        <vm:RemoteSessionViewModel FullScreenModel="{StaticResource FullScreenModel}" TimerFactory="{StaticResource TimerFactory}">
+        <vm:RemoteSessionViewModel
+            FullScreenModel="{StaticResource FullScreenModel}" 
+            TimerFactory="{StaticResource TimerFactory}"
+            InputFocusController="{x:Bind InputFocusController}">
+            
             <!-- Inject the keyboard capture based on CoreWindow and CoreDispatcher -->
             <vm:RemoteSessionViewModel.KeyboardCapture>
                 <input:CoreWindowKeyboardCapture/>
@@ -86,6 +91,7 @@
             <Grid Background="{ThemeResource SystemChromeDisabledHighColor}" Grid.Row="0" Grid.Column="0">
 
                 <c:RemoteSessionPanel
+                    x:Name="RemoteSessionPanel"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     RemoteSessionViewSite="{Binding}"

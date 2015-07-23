@@ -1,6 +1,6 @@
 ﻿namespace RdClient.Shared.Models
 {
-    using RdClient.Shared.Input.Keyboard;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models.Viewport;
     using RdClient.Shared.Telemetry;
@@ -79,54 +79,18 @@
         }
 
 
-        public ZoomPanModel(IInputPanelFactory inputPaneFactory, ITelemetryClient telemetryClient)
+        public ZoomPanModel(IInputFocusController inputFocusController, ITelemetryClient telemetryClient)
         {
             _telemetryClient = telemetryClient;
 
-            _zoomInCommand = new RelayCommand(
-                o =>
-                {
-                    ZoomInHandler(o);
-                    //
-                    // Hide the input panel if it is shown.
-                    // Among other things, hiding the touch keyboard takes the input focus away from the rendering panel
-                    // and any controls that may be shown on top of it, which helps to fight unpleasant effects of having
-                    // input focus in a button while eating up keyboard events that navigate between controls.
-                    //
-                    if (null != inputPaneFactory)
-                    {
-                        IInputPanel inputPanel = inputPaneFactory.GetInputPanel();
-
-                        if (null != inputPanel)
-                            inputPanel.Hide();
-                    }
-                }, 
-                o =>
-                {
-                    return _isZoomedIn == false && _consumptionMode != ConsumptionModeType.Pointer;
-                });
-            _zoomOutCommand = new RelayCommand(
-                o =>
-                {
-                    ZoomOutHandler(o);
-                    //
-                    // Hide the input panel if it is shown
-                    // Among other things, hiding the touch keyboard takes the input focus away from the rendering panel
-                    // and any controls that may be shown on top of it, which helps to fight unpleasant effects of having
-                    // input focus in a button while eating up keyboard events that navigate between controls.
-                    //
-                    if (null != inputPaneFactory)
-                    {
-                        IInputPanel inputPanel = inputPaneFactory.GetInputPanel();
-
-                        if (null != inputPanel)
-                            inputPanel.Hide();
-                    }
-                }, 
-                o =>
-                {
-                    return _isZoomedIn == true && _consumptionMode != ConsumptionModeType.Pointer;
-                });
+            _zoomInCommand = new FocusStealingRelayCommand(
+                inputFocusController,
+                o => ZoomInHandler(o),
+                o => _isZoomedIn == false && _consumptionMode != ConsumptionModeType.Pointer);
+            _zoomOutCommand = new FocusStealingRelayCommand(
+                inputFocusController,
+                o => ZoomOutHandler(o),
+                o => _isZoomedIn == true && _consumptionMode != ConsumptionModeType.Pointer);
         }
 
         public void Reset(IViewport viewport)
@@ -139,15 +103,7 @@
 
         private void OnViewportChanged(object sender, EventArgs e)
         {
-            if (_viewport.ZoomFactor > 1.0)
-            {
-                _isZoomedIn = true;
-            }
-            else
-            {
-                _isZoomedIn = false;
-
-            }
+            _isZoomedIn = _viewport.ZoomFactor > 1.0;
         }
     }
 }
