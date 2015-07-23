@@ -27,6 +27,7 @@
         private readonly Stopwatch _presentationStopwatch;
         private readonly RelayCommand _invokeKeyboard;
         private readonly SymbolBarButtonModel _invokeKeyboardModel;
+        private EventHandler _enteredFullScreenHandler;
 
         private double
             _enterFullScreenCount,
@@ -172,11 +173,8 @@
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
             _invokeKeyboardModel = new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
             _sessionState = SessionState.Idle;
-
-            this.ZoomPanModel = new ZoomPanModel();
         }
 
-        private EventHandler _enteredFullScreenHandler;
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Assert(null == _activeSession);
@@ -188,6 +186,8 @@
             _exitFullScreenCount = 0.0;
 
             base.OnPresenting(activationParameter);
+
+            this.ZoomPanModel = new ZoomPanModel(_inputPanelFactory, _telemetryClient);
 
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = this.ZoomPanModel.ZoomInCommand });
@@ -258,6 +258,9 @@
             {
                 this.RightSideBarViewModel.Visibility = Visibility.Visible;
             }
+
+            if(null != _inputPanel)
+                _inputPanel.Hide();
         }
 
         protected override void OnDismissed()
@@ -286,6 +289,8 @@
 
             _presentationStopwatch.Stop();
             _presentationStopwatch.Reset();
+
+            this.ZoomPanModel = null;
 
             base.OnDismissed();
         }
@@ -340,7 +345,6 @@
         void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
         {
             _telemetryClient = telemetryClient;
-            this.ZoomPanModel.SetTelemetryClient(telemetryClient);
             this.RightSideBarViewModel.SetTelemetryClient(telemetryClient);
         }
 

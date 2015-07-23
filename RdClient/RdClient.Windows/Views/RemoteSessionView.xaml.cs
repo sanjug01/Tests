@@ -8,6 +8,7 @@ namespace RdClient.Views
     using Windows.UI.Core;
     using Windows.UI.ViewManagement;
     using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Input;
 
     public sealed partial class RemoteSessionView : UserControl, IPresentableView
     {
@@ -45,6 +46,36 @@ namespace RdClient.Views
 
         void IPresentableView.Dismissing()
         {
+        }
+
+        protected override void OnKeyDown(KeyRoutedEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Windows.System.VirtualKey.Tab:
+                case Windows.System.VirtualKey.Enter:
+                    e.Handled = true;
+                    break;
+
+                default:
+                    base.OnKeyDown(e);
+                    break;
+            }
+        }
+
+        protected override void OnKeyUp(KeyRoutedEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Windows.System.VirtualKey.Tab:
+                case Windows.System.VirtualKey.Enter:
+                    e.Handled = true;
+                    break;
+
+                default:
+                    base.OnKeyUp(e);
+                    break;
+            }
         }
 
         private void OnSizeChanged(object sender, Windows.UI.Xaml.SizeChangedEventArgs e)
