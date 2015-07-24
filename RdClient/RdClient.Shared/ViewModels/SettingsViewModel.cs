@@ -1,16 +1,13 @@
-﻿using RdClient.Shared.Data;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Input;
-using System;
-using System.Collections.Generic;
-using RdClient.Shared.Navigation.Extensions;
-using RdClient.Shared.Telemetry;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Data;
+    using RdClient.Shared.Models;
+    using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
+    using RdClient.Shared.Telemetry;
+    using System.Collections.ObjectModel;
+    using System.Windows.Input;
+
     public sealed class SettingsViewModel : ViewModelBase, ISettingsViewModel, IDialogViewModel, ITelemetryClientSite 
     {
         private readonly RelayCommand _goBackCommand;
@@ -23,7 +20,8 @@ namespace RdClient.Shared.ViewModels
         private UserComboBoxElement _selectedUser;
         private ReadOnlyObservableCollection<GatewayComboBoxElement> _gateways;
         private GatewayComboBoxElement _selectedGateway;
-        ITelemetryClient _telemetryClient;
+        private bool _oldSendFeedback;
+        private ITelemetryClient _telemetryClient;
 
         public SettingsViewModel()
         {
@@ -46,6 +44,11 @@ namespace RdClient.Shared.ViewModels
         {
             get { return _generalSettings; }
             private set { SetProperty(ref _generalSettings, value); }
+        }
+
+        void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
+        {
+            _telemetryClient = telemetryClient;
         }
 
         public ReadOnlyObservableCollection<UserComboBoxElement> Users
@@ -91,6 +94,7 @@ namespace RdClient.Shared.ViewModels
         protected override void OnPresenting(object activationParameter)
         {
             this.GeneralSettings = this.ApplicationDataModel.Settings;
+            _oldSendFeedback = this.GeneralSettings.SendFeedback;
 
             IOrderedObservableCollection<GatewayComboBoxElement> orderedGateways = OrderedObservableCollection<GatewayComboBoxElement>.Create(
                 TransformingObservableCollection<IModelContainer<GatewayModel>, GatewayComboBoxElement>.Create(
@@ -137,8 +141,21 @@ namespace RdClient.Shared.ViewModels
                 }
             }
 
-            if(null != _telemetryClient)
+            if (null != _telemetryClient)
+            {
+                if(this.GeneralSettings.SendFeedback != _oldSendFeedback)
+                {
+                    //
+                    // Activate telemetry for sending the event.
+                    //
+                    _telemetryClient.IsActive = true;
+                    ITelemetryEvent te = _telemetryClient.MakeEvent("SendUsage");
+                    te.AddMetric("sendTelemetry", this.GeneralSettings.SendFeedback ? 1 : 0);
+                    te.Report();
+                }
+
                 _telemetryClient.IsActive = this.GeneralSettings.SendFeedback;
+            }
 
             base.OnDismissed();
         }
@@ -188,17 +205,11 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
-
         private void AddUserCommandExecute()
         {
             var creds = new CredentialsModel() { Username = "", Password = "" };
             var args = AddOrEditUserViewArgs.AddUser();
             this.NavigationService.PushAccessoryView("AddOrEditUserView", args);
-        }
-
-        void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
-        {
-            _telemetryClient = telemetryClient;
         }
     }
 }
