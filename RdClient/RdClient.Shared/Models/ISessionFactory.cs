@@ -15,5 +15,6 @@
         /// <remarks>CreateSession is called when user clicks a connection tile in the connection center view; the created session is then passed
         /// down to the session view, that obtains a session view object from its view, and activates the session.</remarks>
         IRemoteSession CreateSession(RemoteSessionSetup sessionSetup);
+
     }
 }

@@ -36,5 +36,6 @@
 
             return new RemoteSession(sessionSetup, _deferredExecution, _connectionSource, _timerFactory, _deviceCapabilities, _telemetryClient);
         }
+
     }
 }

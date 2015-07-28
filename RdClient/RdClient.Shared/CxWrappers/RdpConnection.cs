@@ -6,6 +6,7 @@ using Windows.Security.Cryptography.Certificates;
 using RdClient.Shared.Helpers;
 using System;
 
+
 namespace RdClient.Shared.CxWrappers
 {
     
@@ -56,39 +57,7 @@ namespace RdClient.Shared.CxWrappers
         // also, there is a race condition which makes disconnect events to be called multiple times
         ~RdpConnection()
         {
-            if(_rdpConnectionCx != null)
-            {
-                _rdpConnectionCx.OnClientConnected -= OnClientConnectedHandler;
-                _rdpConnectionCx.OnClientAsyncDisconnect -= OnClientAsyncDisconnectHandler;
-                _rdpConnectionCx.OnClientDisconnected -= OnClientDisconnectedHandler;
-                _rdpConnectionCx.OnUserCredentialsRequest -= OnUserCredentialsRequestHandler;
-                _rdpConnectionCx.OnCheckGatewayCertificateTrust -= OnCheckGatewayCertificateTrust;
-                _rdpConnectionCx.OnMouseCursorShapeChanged -= OnMouseCursorShapeChanged;
-                _rdpConnectionCx.OnMouseCursorPositionChanged -= OnMouseCursorPositionChanged;
-                _rdpConnectionCx.OnMultiTouchEnabledChanged -= OnMultiTouchEnabledChanged;
-                _rdpConnectionCx.OnConnectionHealthStateChanged -= OnConnectionHealthStateChangedHandler;
-                _rdpConnectionCx.OnClientAutoReconnecting -= OnClientAutoReconnectingHandler;
-                _rdpConnectionCx.OnClientAutoReconnectComplete -= OnClientAutoReconnectCompleteHandler;
-                _rdpConnectionCx.OnLoginCompleted -= OnLoginCompletedHandler;
-                _rdpConnectionCx.OnStatusInfoReceived -= OnStatusInfoReceivedHandler;
-                _rdpConnectionCx.OnFirstGraphicsUpdateReceived -= OnFirstGraphicsUpdateHandler;
-                _rdpConnectionCx.OnRemoteAppWindowCreated -= OnRemoteAppWindowCreatedHandler;
-                _rdpConnectionCx.OnRemoteAppWindowDeleted -= OnRemoteAppWindowDeletedHandler;
-                _rdpConnectionCx.OnRemoteAppWindowTitleUpdated -= OnRemoteAppWindowTitleUpdatedHandler;
-                _rdpConnectionCx.OnRemoteAppWindowIconUpdated -= OnRemoteAppWindowIconUpdatedHandler;
-
-                // remove from connection store
-                // RdClientCx.RdpConnectionStore rdpConnectionStore;
-                // int xRes;
-
-                // xRes = RdClientCx.RdpConnectionStore.GetConnectionStore(out rdpConnectionStore);
-                // RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
-                _rdpConnectionStoreCx.RemoveConnection(_rdpConnectionCx);
-
-                TerminateInstance();
-
-                _rdpConnectionCx = null;   
-            }         
+            this.Cleanup();
         }
 
         public void SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)
@@ -160,6 +129,7 @@ namespace RdClient.Shared.CxWrappers
                 _rdpConnectionCx.OnRemoteAppWindowTitleUpdated -= OnRemoteAppWindowTitleUpdatedHandler;
                 _rdpConnectionCx.OnRemoteAppWindowIconUpdated -= OnRemoteAppWindowIconUpdatedHandler;
 
+                this.TerminateInstance();
                 _rdpConnectionCx = null;
             }
         }
