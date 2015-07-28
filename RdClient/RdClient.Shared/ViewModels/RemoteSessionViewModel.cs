@@ -164,6 +164,7 @@
         public ReadOnlyObservableCollection<object> ConnectionBarItems
         {
             get { return _connectionBarItems; }
+            private set { SetProperty(ref _connectionBarItems, value); }
         }
         /// <summary>
         /// View model of the view shown in the belly band across the session view when input is needed from user.
@@ -228,7 +229,7 @@
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = new FocusStealingRelayCommand(_inputFocusController, RightSideBarVisibilityToggle) });
             items.Add(_invokeKeyboardModel);
-            _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
+            this.ConnectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
             if (null != _telemetryClient)
             {
@@ -322,8 +323,9 @@
             this.BellyBandViewModel = null;
 
             _presentationStopwatch.Stop();
-            _presentationStopwatch.Reset();
+            _presentationStopwatch.Reset();            
 
+            this.ZoomPanModel.Dispose();
             this.ZoomPanModel = null;
 
             base.OnDismissed();
@@ -517,7 +519,7 @@
 
             this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
 
-            this.ZoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport);
+            this.ZoomPanModel.Initialize(_activeSessionControl.RenderingPanel.Viewport);
             this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
             this.PanKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;

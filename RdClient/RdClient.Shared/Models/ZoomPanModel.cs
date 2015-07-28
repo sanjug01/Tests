@@ -17,7 +17,7 @@
         Stopped
     }
 
-    public class ZoomPanModel
+    public class ZoomPanModel : IDisposable
     {
         private readonly RelayCommand _zoomInCommand;
         private readonly RelayCommand _zoomOutCommand;
@@ -93,12 +93,17 @@
                 o => _isZoomedIn == true && _consumptionMode != ConsumptionModeType.Pointer);
         }
 
-        public void Reset(IViewport viewport)
+        public void Initialize(IViewport viewport)
         {
             _viewport = viewport;
             _viewport.Changed += OnViewportChanged;
             _zoomInCommand.EmitCanExecuteChanged();
             _zoomOutCommand.EmitCanExecuteChanged();
+        }
+        public void Dispose()
+        {
+            _viewport.Changed -= OnViewportChanged;
+            _viewport = null;
         }
 
         private void OnViewportChanged(object sender, EventArgs e)
