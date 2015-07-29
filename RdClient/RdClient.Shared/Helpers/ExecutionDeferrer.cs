@@ -7,9 +7,9 @@ namespace RdClient.Shared.Helpers
     public class ExecutionDeferrer : ISynchronizedDeferrer
     {
         private readonly ReaderWriterLockSlim _monitor;
-        private readonly IExeucutionDeferrer _dispatcher;
+        private readonly IDeferredExecution _dispatcher;
 
-        public ExecutionDeferrer(IExeucutionDeferrer dispatcher, ReaderWriterLockSlim monitor = null)
+        public ExecutionDeferrer(IDeferredExecution dispatcher, ReaderWriterLockSlim monitor = null)
         {
             _dispatcher = dispatcher;
             _monitor = (_monitor == null) ? new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion) : monitor;

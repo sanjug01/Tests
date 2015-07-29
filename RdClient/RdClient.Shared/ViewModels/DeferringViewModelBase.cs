@@ -21,7 +21,14 @@
 
         public void DeferToUI(Action action)
         {
-            this.ExecutionDeferrer.DeferToUI(action);
+            if(this.ExecutionDeferrer == null)
+            {
+                throw new DeferredExecutionException("Synchronized Deferrer not initialized.");
+            }
+            else
+            {
+                this.ExecutionDeferrer.DeferToUI(action);
+            }
         }
 
         public bool TryDeferToUI(Action action)
@@ -35,7 +42,7 @@
             _monitor.Dispose();
         }
 
-        void IDeferredExecutionSite.SetDeferredExecution(IExeucutionDeferrer dispatcher)
+        void IDeferredExecutionSite.SetDeferredExecution(IDeferredExecution dispatcher)
         {
             this.ExecutionDeferrer = new ExecutionDeferrer(dispatcher);
         }

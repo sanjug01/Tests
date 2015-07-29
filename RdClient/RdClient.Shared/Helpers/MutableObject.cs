@@ -9,7 +9,7 @@
 
     public abstract class MutableObject : DisposableObject, INotifyPropertyChanged
     {
-        private IExecutionDeferrer _executionDeferrer;
+        private ISynchronizedDeferrer _executionDeferrer;
         private readonly ReaderWriterLockSlim _monitor;
         private PropertyChangedEventHandler _propertyChanged;
 
@@ -31,7 +31,7 @@
             }
         }
 
-        public IExecutionDeferrer ExecutionDeferrer
+        public ISynchronizedDeferrer ExecutionDeferrer
         {
             protected get { return _executionDeferrer; }
             set { _executionDeferrer = value; }
@@ -66,7 +66,7 @@
         protected void EmitPropertyChanged(string propertyName)
         {
             Action emitPropertyChangedAction = () => EmitPropertyChanged(new PropertyChangedEventArgs(propertyName));
-            IExecutionDeferrer deferrer = this.ExecutionDeferrer;
+            ISynchronizedDeferrer deferrer = this.ExecutionDeferrer;
             if (deferrer != null)
             {
                 deferrer.TryDeferToUI(emitPropertyChangedAction);

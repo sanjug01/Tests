@@ -20,7 +20,7 @@
         private readonly RelayCommand _deleteCommand;
         private readonly RelayCommand _refreshCommand;
         private readonly IModelContainer<OnPremiseWorkspaceModel> _workspace;        
-        private readonly IExecutionDeferrer _dispatcher;
+        private readonly ISynchronizedDeferrer _dispatcher;
         private readonly INavigationService _navigationService;
         private readonly ISessionFactory _sessionFactory;
         private readonly ApplicationDataModel _dataModel;
@@ -30,7 +30,7 @@
         public WorkspaceViewModel(
             IModelContainer<OnPremiseWorkspaceModel> workspace,
             ApplicationDataModel dataModel,
-            IExecutionDeferrer dispatcher,
+            ISynchronizedDeferrer dispatcher,
             INavigationService navigationService,
             ISessionFactory sessionFactory)
         {

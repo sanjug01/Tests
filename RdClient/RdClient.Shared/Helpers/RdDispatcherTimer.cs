@@ -1,14 +1,15 @@
-﻿using System;
+﻿using RdClient.Shared.Navigation.Extensions;
+using System;
 
 namespace RdClient.Shared.Helpers
 {
     public class RdDispatcherTimer : ITimer
     {
         private readonly ITimer _timer;
-        private readonly IDeferredExecution _dispatcher;
+        private readonly ISynchronizedDeferrer _dispatcher;
         private Action _callback;
 
-        public RdDispatcherTimer(ITimer timer, IDeferredExecution dispatcher)
+        public RdDispatcherTimer(ITimer timer, ISynchronizedDeferrer dispatcher)
         {
             _timer = timer;
             _dispatcher = dispatcher;
@@ -28,7 +29,7 @@ namespace RdClient.Shared.Helpers
 
         private void InternalCallback()
         {
-            _dispatcher.Defer(_callback);
+            _dispatcher.DeferToUI(_callback);
         }
     }
 }

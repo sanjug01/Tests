@@ -51,7 +51,7 @@
                 }
             }
 
-            public void Reset(IRenderingPanel renderingPanel, IExecutionDeferrer executionDeferrer)
+            public void Reset(IRenderingPanel renderingPanel, ISynchronizedDeferrer executionDeferrer)
             {
                 // no action
             }
