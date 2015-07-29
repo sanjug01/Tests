@@ -11,12 +11,18 @@ using RdClient.Shared.Helpers;
 using RdClientCx;
 using System.Threading;
 
+
 namespace RdClient.Shared.CxWrappers
 {
+
     public class ClipboardManager: IClipboardManager
     {
         private IDeferredExecution _deferredExecution;
         private IClipboardNotifier _notifier;
+
+        static int XRESULT_SUCCESS = 0;
+        static int XRESULT_FAIL = -1;
+
         public ClipboardManager(IDeferredExecution deferredExecution)
         {
             _deferredExecution = deferredExecution;
@@ -46,7 +52,7 @@ namespace RdClient.Shared.CxWrappers
             rdpConnectionStoreCx.SetClipboardManager(manager);
          }
 
-        void IClipboardManager.OnRemoteClipboardUpdated(String clipData, int size)
+        int IClipboardManager.OnRemoteClipboardUpdated(String clipData, int size)
         {
             Debug.WriteLine(clipData);
             Debug.WriteLine(size);
@@ -58,11 +64,13 @@ namespace RdClient.Shared.CxWrappers
                     dataPackage.SetText(clipData);
                     Clipboard.SetContent(dataPackage);
                 });
+            return XRESULT_SUCCESS;
          }
 
-        void IClipboardManager.RegisterClipboard(IClipboardNotifier notifer)
+        int IClipboardManager.RegisterClipboard(IClipboardNotifier notifer)
         {
             _notifier = notifer;
+            return XRESULT_SUCCESS;
         }
 
 
@@ -73,11 +81,13 @@ namespace RdClient.Shared.CxWrappers
         }
 
 
-        String IClipboardManager.GetClipboardData()
+        int IClipboardManager.GetClipboardData( out String clipData)
         {
             AutoResetEvent are = new AutoResetEvent(false);
-            String clipData = "";
+            String clipDataBuffer = "";
             ClipboardManager that = this;
+
+            int xRes = XRESULT_SUCCESS;
             _deferredExecution.Defer(
               async () =>
               {
@@ -86,11 +96,12 @@ namespace RdClient.Shared.CxWrappers
                   {
                       try
                       {
-                          clipData = await dataPackageView.GetTextAsync();
+                          clipDataBuffer = await dataPackageView.GetTextAsync();
                           are.Set();
                       }
                       catch (Exception ex)
                       {
+                          xRes = XRESULT_FAIL;
                           //RdTrace.IfFailXResultThrow("Error retrieving Text format from Clipboard: " + ex.Message);
 
                       }
@@ -98,7 +109,8 @@ namespace RdClient.Shared.CxWrappers
               });
 
             are.WaitOne();
-            return clipData;
+            clipData = clipDataBuffer;
+            return xRes;
         }
     }
 }
