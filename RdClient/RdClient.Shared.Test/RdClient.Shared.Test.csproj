@@ -179,6 +179,7 @@
     <Compile Include="Input\Recognizers\TapRecognizerTests.cs" />
     <Compile Include="Mock\DummyDataScrambler.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
+    <Compile Include="Mock\FullScreen.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\PointerEvent.cs" />
     <Compile Include="Mock\PointerPosition.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Mock\Viewport.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\ApplicationDataModelTests.cs" />
+    <Compile Include="Model\FullScreenModelTests.cs" />
     <Compile Include="Model\GeneralSettingsModelTests.cs" />
     <Compile Include="Model\CredentialsModelTests.cs" />
     <Compile Include="Model\GatewayModelTests.cs" />

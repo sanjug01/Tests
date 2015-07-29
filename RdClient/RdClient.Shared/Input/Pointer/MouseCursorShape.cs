@@ -41,9 +41,9 @@ namespace RdClient.Shared.Input.Pointer
                     // WriteByte writes a byte to the current position in the stream and advances
                     // the position within the stream by one byte.
                     //
-                    stream.WriteByte((byte)((buffer[i + 3] * alpha) / 255));
-                    stream.WriteByte((byte)((buffer[i + 2] * alpha) / 255));
-                    stream.WriteByte((byte)((buffer[i + 1] * alpha) / 255));
+                    stream.WriteByte((byte)(buffer[i + 3]));
+                    stream.WriteByte((byte)(buffer[i + 2]));
+                    stream.WriteByte((byte)(buffer[i + 1]));
                     stream.WriteByte(alpha);
                 };
             }
