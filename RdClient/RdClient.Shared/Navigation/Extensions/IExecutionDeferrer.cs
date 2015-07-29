@@ -2,7 +2,8 @@
 
 namespace RdClient.Shared.Navigation.Extensions
 {
-    public interface IExecutionDeferrer
+    // Wraps IDeferredExecution so that calls to Defer are synchronized with a thread lock
+    public interface ISynchronizedDeferrer
     {
         bool TryDeferToUI(Action action);
 
