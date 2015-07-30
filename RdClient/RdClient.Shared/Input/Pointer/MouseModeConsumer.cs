@@ -12,7 +12,6 @@ namespace RdClient.Shared.Input.Pointer
         private bool _rightMouseButtonWasPressed;
         private bool _leftMouseButtonWasPressed;
 
-        private IPointerRoutedEventProperties _tracked;
         private IRemoteSessionControl _sessionControl;
         private IPointerPosition _pointerPosition;
 

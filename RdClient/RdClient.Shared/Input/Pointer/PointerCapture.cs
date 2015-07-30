@@ -54,7 +54,6 @@ namespace RdClient.Shared.Input.Pointer
                     _inputDeviceTracker);
 
             PointerEventDispatcher pointerEventDispatcher = new PointerEventDispatcher(
-                timerFactory,
                 pointerDeviceDispatcher,
                 pointerVisibilityConsumer);
 

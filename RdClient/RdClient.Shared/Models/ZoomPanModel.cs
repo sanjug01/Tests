@@ -102,8 +102,11 @@
         }
         public void Dispose()
         {
-            _viewport.Changed -= OnViewportChanged;
-            _viewport = null;
+            if(_viewport != null)
+            {
+                _viewport.Changed -= OnViewportChanged;
+                _viewport = null;
+            }
         }
 
         private void OnViewportChanged(object sender, EventArgs e)

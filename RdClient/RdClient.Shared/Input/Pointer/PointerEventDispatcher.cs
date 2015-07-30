@@ -16,7 +16,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-        public PointerEventDispatcher(ITimerFactory timerFactory, PointerDeviceDispatcher deviceDispatcher, PointerVisibilityConsumer pointerVisibilityConsumer)
+        public PointerEventDispatcher(PointerDeviceDispatcher deviceDispatcher, PointerVisibilityConsumer pointerVisibilityConsumer)
         {
             _deviceDispatcher = deviceDispatcher;
             _visibilityConsumer = pointerVisibilityConsumer;
