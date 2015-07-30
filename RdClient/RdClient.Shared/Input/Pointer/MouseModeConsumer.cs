@@ -9,6 +9,9 @@ namespace RdClient.Shared.Input.Pointer
     {
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
+        private bool _rightMouseButtonWasPressed;
+        private bool _leftMouseButtonWasPressed;
+
         private IPointerRoutedEventProperties _tracked;
         private IRemoteSessionControl _sessionControl;
         private IPointerPosition _pointerPosition;
@@ -17,6 +20,8 @@ namespace RdClient.Shared.Input.Pointer
         {
             _sessionControl = sessionControl;
             _pointerPosition = pointerPosition;
+            _rightMouseButtonWasPressed = false;
+            _leftMouseButtonWasPressed = false;
         }
 
         private bool IsLeftMouseButtonPressed(IPointerRoutedEventProperties prep)
@@ -46,26 +51,27 @@ namespace RdClient.Shared.Input.Pointer
         private void MouseRecognizer(IPointerRoutedEventProperties prep)
         {
             _pointerPosition.ViewportPosition = prep.Position;
+            int mouseWheelDelta = prep.MouseWheelDelta;
 
-            if(IsLeftMouseButtonPressed(_tracked) == false && IsLeftMouseButtonPressed(prep) == true)
+            if(_leftMouseButtonWasPressed == false && prep.LeftButton == true)
             {
                 _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftPress, _pointerPosition.SessionPosition));
             }
-            else if (IsLeftMouseButtonPressed(_tracked) == true && IsLeftMouseButtonPressed(prep) == false)
+            else if (_leftMouseButtonWasPressed == true && prep.LeftButton == false)
             {
                 _sessionControl.SendMouseAction(new MouseAction(MouseEventType.LeftRelease, _pointerPosition.SessionPosition));
             }
-            else if (IsRightMouseButtonPressed(_tracked) == false && IsRightMouseButtonPressed(prep) == true)
+            else if (_rightMouseButtonWasPressed == false && prep.RightButton == true)
             {
                 _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightPress, _pointerPosition.SessionPosition));
             }
-            else if (IsRightMouseButtonPressed(_tracked) == true && IsRightMouseButtonPressed(prep) == false)
+            else if (_rightMouseButtonWasPressed == true && prep.RightButton == false)
             {
                 _sessionControl.SendMouseAction(new MouseAction(MouseEventType.RightRelease, _pointerPosition.SessionPosition));
             }
-            else if (Math.Abs(prep.MouseWheelDelta) > 0)
+            else if (mouseWheelDelta < 0 || mouseWheelDelta >  0)
             {
-                _sessionControl.SendMouseWheel(prep.MouseWheelDelta, prep.IsHorizontalWheel);
+                _sessionControl.SendMouseWheel(mouseWheelDelta, prep.IsHorizontalWheel);
             }
             else
             {
@@ -77,8 +83,10 @@ namespace RdClient.Shared.Input.Pointer
         {   
             if(pointerEvent is IPointerRoutedEventProperties)
             {
-                MouseRecognizer((IPointerRoutedEventProperties) pointerEvent);
-                _tracked = new PointerRoutedEventArgsCopy((IPointerRoutedEventProperties)pointerEvent);
+                IPointerRoutedEventProperties prep = (IPointerRoutedEventProperties)pointerEvent;
+                MouseRecognizer(prep);
+                _leftMouseButtonWasPressed = (prep).LeftButton;
+                _rightMouseButtonWasPressed = (prep).RightButton;
             }
                      
             if(ConsumedEvent != null)
@@ -89,7 +97,8 @@ namespace RdClient.Shared.Input.Pointer
 
         void IPointerEventConsumer.Reset()
         {
-            _tracked = null;
+            _rightMouseButtonWasPressed = false;
+            _leftMouseButtonWasPressed = false;
         }
     }
 }
