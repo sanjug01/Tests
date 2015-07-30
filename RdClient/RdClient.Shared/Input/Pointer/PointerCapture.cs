@@ -21,28 +21,22 @@ namespace RdClient.Shared.Input.Pointer
             get { return _consumptionMode; }
         }
 
-        //_pointerMode = new PointerModeConsumer(
-        //        new RdDispatcherTimer(timerFactory.CreateTimer(), dispatcher), 
-        //        new PointerModeControl(sessionControl, pointerPosition));
-        //    _multiTouchMode = new MultiTouchConsumer(sessionControl, pointerPosition);
-        //_directMode = new DirectModeConsumer(new DirectModeControl(sessionControl, pointerPosition), pointerPosition);
-            
-        //    _consumers[PointerDeviceType.Mouse] = new MouseModeConsumer(sessionControl, pointerPosition);
-        //_consumers[PointerDeviceType.Pen] = new MouseModeConsumer(sessionControl, pointerPosition);
-        //_consumers[PointerDeviceType.Touch] = _pointerMode;
-
         public PointerCapture(IPointerPosition pointerPosition, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory, IDeferredExecution deferrer)
         {
             _sessionControl = sessionControl;
             _panel = panel;
 
             MouseModeConsumer mouseModeConsumer = new MouseModeConsumer(sessionControl, pointerPosition);
+
             DirectModeControl directModeControl = new DirectModeControl(sessionControl, pointerPosition);
             DirectModeConsumer directModeConsumer = new DirectModeConsumer(directModeControl, pointerPosition);
+
             MultiTouchConsumer multiTouchConsumer = new MultiTouchConsumer(sessionControl, pointerPosition);
-            PointerModeControl pointerModeControl = new PointerModeControl(sessionControl, pointerPosition);
+
             RdDispatcherTimer rdDispatcherTimer = new RdDispatcherTimer(timerFactory.CreateTimer(), deferrer);
+            PointerModeControl pointerModeControl = new PointerModeControl(sessionControl, pointerPosition);
             PointerModeConsumer pointerModeConsumer = new PointerModeConsumer(rdDispatcherTimer, pointerModeControl);
+
             PointerVisibilityConsumer pointerVisibilityConsumer = new PointerVisibilityConsumer(sessionControl.RenderingPanel);
 
             PointerDeviceDispatcher pointerDeviceDispatcher = new PointerDeviceDispatcher(
