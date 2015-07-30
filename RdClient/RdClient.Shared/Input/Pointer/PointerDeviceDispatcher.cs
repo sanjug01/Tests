@@ -1,7 +1,4 @@
-﻿using RdClient.Shared.Helpers;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Windows.Devices.Input;
 
@@ -38,16 +35,14 @@ namespace RdClient.Shared.Input.Pointer
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-        public PointerDeviceDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, IDeferredExecution dispatcher)
+        public PointerDeviceDispatcher(PointerModeConsumer pointerModeConsumer, MultiTouchConsumer multiTouchConsumer, DirectModeConsumer directModeConsumer, MouseModeConsumer mouseModeConsumer)
         {
-            _pointerMode = new PointerModeConsumer(
-                new RdDispatcherTimer(timerFactory.CreateTimer(), dispatcher), 
-                new PointerModeControl(sessionControl, pointerPosition));
-            _multiTouchMode = new MultiTouchConsumer(sessionControl, pointerPosition);
-            _directMode = new DirectModeConsumer(new DirectModeControl(sessionControl, pointerPosition), pointerPosition);
-            
-            _consumers[PointerDeviceType.Mouse] = new MouseModeConsumer(sessionControl, pointerPosition);
-            _consumers[PointerDeviceType.Pen] = new MouseModeConsumer(sessionControl, pointerPosition);
+            _pointerMode = pointerModeConsumer;
+            _multiTouchMode = multiTouchConsumer;
+            _directMode = directModeConsumer;
+
+            _consumers[PointerDeviceType.Mouse] = mouseModeConsumer;
+            _consumers[PointerDeviceType.Pen] = mouseModeConsumer;
             _consumers[PointerDeviceType.Touch] = _pointerMode;
 
         }
@@ -61,7 +56,7 @@ namespace RdClient.Shared.Input.Pointer
                 if(_lastPointerType != prep.DeviceType)
                 {
                     Reset();
-                    _lastPointerType = prep.DeviceType;
+                    _lastPointerType = prep.DeviceType;                    
                 }
             }
 

@@ -1,5 +1,4 @@
 ﻿using RdClient.Shared.CxWrappers;
-using System;
 
 namespace RdClient.Shared.Input.Pointer
 {
@@ -10,11 +9,18 @@ namespace RdClient.Shared.Input.Pointer
         Mouse
     }
 
+    public enum InputDeviceType
+    {
+        Touch,
+        Mouse,
+        Pen
+    }
+
     // this interface implements the callbacks from IRemoteSessionControl
     // typically the implementation will also initiate the setup of the pointer input infrastructure
     public interface IPointerCapture
     {
-        IConsumptionMode ConsumptionMode { get; }
+        IConsumptionModeTracker ConsumptionMode { get; }
 
         void ChangeInputMode(InputMode inputMode);
         void OnPointerChanged(object sender, IPointerEventBase e);

@@ -9,10 +9,15 @@ namespace RdClient.Shared.Input.Pointer
         MultiTouch
     }
 
-    public interface IConsumptionMode
+    public interface IConsumptionModeTracker
     {
         ConsumptionModeType ConsumptionMode { get; set; }
-
         event EventHandler<ConsumptionModeType> ConsumptionModeChanged;
+    }
+
+    public interface IInputDeviceTracker
+    {
+        InputDeviceType InputDevice { get; set; }
+        event EventHandler<InputDeviceType> InputDeviceChanged;
     }
 }

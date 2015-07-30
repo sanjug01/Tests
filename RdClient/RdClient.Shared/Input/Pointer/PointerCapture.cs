@@ -1,8 +1,6 @@
 ﻿using RdClient.Shared.CxWrappers;
 using RdClient.Shared.Helpers;
 using RdClient.Shared.Models;
-using RdClient.Shared.Navigation.Extensions;
-using System;
 using System.Diagnostics.Contracts;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media;
@@ -17,18 +15,34 @@ namespace RdClient.Shared.Input.Pointer
         private bool _multiTouchEnabled;
         private MouseCursorShapes _mouseCursorShapes;
 
-        private IConsumptionMode _consumptionMode;
-        public IConsumptionMode ConsumptionMode
+        private IConsumptionModeTracker _consumptionMode;
+        public IConsumptionModeTracker ConsumptionMode
         {
             get { return _consumptionMode; }
         }
 
+        //_pointerMode = new PointerModeConsumer(
+        //        new RdDispatcherTimer(timerFactory.CreateTimer(), dispatcher), 
+        //        new PointerModeControl(sessionControl, pointerPosition));
+        //    _multiTouchMode = new MultiTouchConsumer(sessionControl, pointerPosition);
+        //_directMode = new DirectModeConsumer(new DirectModeControl(sessionControl, pointerPosition), pointerPosition);
+            
+        //    _consumers[PointerDeviceType.Mouse] = new MouseModeConsumer(sessionControl, pointerPosition);
+        //_consumers[PointerDeviceType.Pen] = new MouseModeConsumer(sessionControl, pointerPosition);
+        //_consumers[PointerDeviceType.Touch] = _pointerMode;
 
         public PointerCapture(IPointerPosition pointerPosition, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory, IDeferredExecution deferrer)
         {
             _sessionControl = sessionControl;
             _panel = panel;
-            PointerEventDispatcher dispatcher = new PointerEventDispatcher(timerFactory, sessionControl, pointerPosition, deferrer);
+            PointerEventDispatcher dispatcher = new PointerEventDispatcher(
+                timerFactory,
+                new PointerDeviceDispatcher(
+                    new PointerModeConsumer(new RdDispatcherTimer(timerFactory.CreateTimer(), deferrer), new PointerModeControl(sessionControl, pointerPosition)),
+                    new MultiTouchConsumer(sessionControl, pointerPosition),
+                    new DirectModeConsumer(new DirectModeControl(sessionControl, pointerPosition), pointerPosition),
+                    new MouseModeConsumer(sessionControl, pointerPosition)),
+                new PointerVisibilityConsumer(sessionControl.RenderingPanel));
             _consumer = dispatcher;
             _consumptionMode = new ConsumptionModeTracker() { ConsumptionMode = ConsumptionModeType.Pointer };
             _consumptionMode.ConsumptionModeChanged += (s, o) => dispatcher.SetConsumptionMode(o);
