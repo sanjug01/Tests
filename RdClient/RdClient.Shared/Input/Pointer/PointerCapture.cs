@@ -15,6 +15,7 @@ namespace RdClient.Shared.Input.Pointer
         private IRenderingPanel _panel;
         private IPointerEventConsumer _consumer;
         private bool _multiTouchEnabled;
+        private MouseCursorShapes _mouseCursorShapes;
 
         private IConsumptionMode _consumptionMode;
         public IConsumptionMode ConsumptionMode
@@ -31,6 +32,7 @@ namespace RdClient.Shared.Input.Pointer
             _consumer = dispatcher;
             _consumptionMode = new ConsumptionModeTracker() { ConsumptionMode = ConsumptionModeType.Pointer };
             _consumptionMode.ConsumptionModeChanged += (s, o) => dispatcher.SetConsumptionMode(o);
+            _mouseCursorShapes = new MouseCursorShapes(new CursorEncoder());
         }
 
         void IPointerCapture.OnPointerChanged(object sender, IPointerEventBase e)
@@ -46,9 +48,9 @@ namespace RdClient.Shared.Input.Pointer
         void IPointerCapture.OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args)
         {
             Contract.Requires(null != args.Buffer);
-            ImageSource image = MouseCursorShape.ByteArrayToBitmap(args.Buffer, args.Width, args.Height);
-            MouseCursorShape cursor = new MouseCursorShape(new Point(args.XHotspot, args.YHotspot), image);
-            this._panel.ChangeMouseCursorShape(cursor);
+            ImageSource shape = _mouseCursorShapes.GetImageSource(args.Buffer, args.Width, args.Height);
+            Point hotspot = new Point(args.XHotspot, args.YHotspot);
+            this._panel.ChangeMouseCursorShape(shape, hotspot);
         }
 
         void IPointerCapture.ChangeInputMode(InputMode inputMode)

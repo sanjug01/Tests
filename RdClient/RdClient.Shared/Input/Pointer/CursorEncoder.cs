@@ -1,21 +1,13 @@
 ﻿using System.Diagnostics.Contracts;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace RdClient.Shared.Input.Pointer
 {
-    public class MouseCursorShape
+    public class CursorEncoder : ICursorEncoder
     {
-        private readonly Point _hotspot;
-        public Point Hotspot { get { return _hotspot; } }
-
-        private readonly ImageSource _cursorImage;
-
-        public ImageSource ImageSource { get { return _cursorImage; } }
-
-        public static ImageSource ByteArrayToBitmap(byte[] buffer, int width, int height)
+        public ImageSource ByteArrayToBitmap(byte[] buffer, int width, int height)
         {
             Contract.Assert(null != buffer);
 
@@ -49,12 +41,6 @@ namespace RdClient.Shared.Input.Pointer
             }
 
             return bitmap;
-        }
-
-        public MouseCursorShape(Point hotspot, ImageSource cursorImage)
-        {
-            _hotspot = hotspot;
-            _cursorImage = cursorImage;
         }
     }
 }

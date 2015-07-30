@@ -22,6 +22,7 @@
     using Windows.Foundation;
     using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Media;
 
     public sealed partial class RemoteSessionViewModelTests
     {
@@ -370,7 +371,7 @@
                     }
                 }
 
-                void IRenderingPanel.ChangeMouseCursorShape(Shared.Input.Pointer.MouseCursorShape shape)
+                void IRenderingPanel.ChangeMouseCursorShape(ImageSource shape, Point hotspot)
                 {
                     throw new NotImplementedException();
                 }
