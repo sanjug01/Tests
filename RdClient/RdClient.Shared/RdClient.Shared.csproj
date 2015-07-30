@@ -153,6 +153,7 @@
     <Compile Include="Helpers\ListTrace.cs" />
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\ITimer.cs" />
+    <Compile Include="Helpers\MemoizeCodeBlock.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Helpers\ScaleFactor.cs" />
     <Compile Include="Helpers\WindowSize.cs" />

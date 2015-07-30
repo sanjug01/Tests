@@ -11,7 +11,7 @@ namespace RdClient.Shared.Input.Pointer
     {
         private PointerDeviceType _lastPointerType;
 
-        private Dictionary<PointerDeviceType, IPointerEventConsumer> _consumers = new Dictionary<PointerDeviceType, IPointerEventConsumer>();
+        private IDictionary<PointerDeviceType, IPointerEventConsumer> _consumers = new Dictionary<PointerDeviceType, IPointerEventConsumer>();
 
         private IPointerEventConsumer _pointerMode;
         private IPointerEventConsumer _directMode;
@@ -58,12 +58,11 @@ namespace RdClient.Shared.Input.Pointer
             {
                 IPointerRoutedEventProperties prep = ((IPointerRoutedEventProperties)pointerEvent);
 
-                if(prep.DeviceType != _lastPointerType)
+                if(_lastPointerType != prep.DeviceType)
                 {
                     Reset();
+                    _lastPointerType = prep.DeviceType;
                 }
-
-                _lastPointerType = prep.DeviceType;
             }
 
             if(_consumers.ContainsKey(_lastPointerType))
