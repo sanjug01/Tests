@@ -129,7 +129,10 @@ namespace RdClient.Shared.CxWrappers
                 _rdpConnectionCx.OnRemoteAppWindowTitleUpdated -= OnRemoteAppWindowTitleUpdatedHandler;
                 _rdpConnectionCx.OnRemoteAppWindowIconUpdated -= OnRemoteAppWindowIconUpdatedHandler;
 
-                this.TerminateInstance();
+                //TODO: Need to terminate properly so that all xplat objects get cleaned up, 
+                //this currently effects clipboard and possibly other things too
+
+               // this.TerminateInstance();
                 _rdpConnectionCx = null;
             }
         }
