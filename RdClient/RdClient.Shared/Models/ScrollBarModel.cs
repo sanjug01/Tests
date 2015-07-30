@@ -232,9 +232,8 @@ namespace RdClient.Shared.Models
             }
             private set
             {
-                EmitPropertyChanged("VisibilityCorner");
-
                 SetProperty(ref _indicatorMode, value);
+                EmitPropertyChanged("VisibilityCorner");
             }
         }
 
