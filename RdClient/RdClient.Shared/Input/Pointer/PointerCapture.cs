@@ -35,14 +35,27 @@ namespace RdClient.Shared.Input.Pointer
         {
             _sessionControl = sessionControl;
             _panel = panel;
+
+            MouseModeConsumer mouseModeConsumer = new MouseModeConsumer(sessionControl, pointerPosition);
+            DirectModeControl directModeControl = new DirectModeControl(sessionControl, pointerPosition);
+            DirectModeConsumer directModeConsumer = new DirectModeConsumer(directModeControl, pointerPosition);
+            MultiTouchConsumer multiTouchConsumer = new MultiTouchConsumer(sessionControl, pointerPosition);
+            PointerModeControl pointerModeControl = new PointerModeControl(sessionControl, pointerPosition);
+            RdDispatcherTimer rdDispatcherTimer = new RdDispatcherTimer(timerFactory.CreateTimer(), deferrer);
+            PointerModeConsumer pointerModeConsumer = new PointerModeConsumer(rdDispatcherTimer, pointerModeControl);
+            PointerVisibilityConsumer pointerVisibilityConsumer = new PointerVisibilityConsumer(sessionControl.RenderingPanel);
+
+            PointerDeviceDispatcher pointerDeviceDispatcher = new PointerDeviceDispatcher(
+                    pointerModeConsumer,
+                    multiTouchConsumer,
+                    directModeConsumer,
+                    mouseModeConsumer);
+
             PointerEventDispatcher dispatcher = new PointerEventDispatcher(
                 timerFactory,
-                new PointerDeviceDispatcher(
-                    new PointerModeConsumer(new RdDispatcherTimer(timerFactory.CreateTimer(), deferrer), new PointerModeControl(sessionControl, pointerPosition)),
-                    new MultiTouchConsumer(sessionControl, pointerPosition),
-                    new DirectModeConsumer(new DirectModeControl(sessionControl, pointerPosition), pointerPosition),
-                    new MouseModeConsumer(sessionControl, pointerPosition)),
-                new PointerVisibilityConsumer(sessionControl.RenderingPanel));
+                pointerDeviceDispatcher,
+                pointerVisibilityConsumer);
+
             _consumer = dispatcher;
             _consumptionMode = new ConsumptionModeTracker() { ConsumptionMode = ConsumptionModeType.Pointer };
             _consumptionMode.ConsumptionModeChanged += (s, o) => dispatcher.SetConsumptionMode(o);
