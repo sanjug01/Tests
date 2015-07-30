@@ -15,6 +15,7 @@ namespace RdClient.Shared.Input.Pointer
         private IPointerEventConsumer _multiTouchMode;
 
         private ConsumptionModeType _consumptionMode;
+        private IInputDeviceTracker _inputDeviceTracker;
 
         public void SetConsumptionMode (ConsumptionModeType consumptionMode)
         {
@@ -35,11 +36,17 @@ namespace RdClient.Shared.Input.Pointer
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-        public PointerDeviceDispatcher(PointerModeConsumer pointerModeConsumer, MultiTouchConsumer multiTouchConsumer, DirectModeConsumer directModeConsumer, MouseModeConsumer mouseModeConsumer)
+        public PointerDeviceDispatcher(
+            PointerModeConsumer pointerModeConsumer, 
+            MultiTouchConsumer multiTouchConsumer, 
+            DirectModeConsumer directModeConsumer, 
+            MouseModeConsumer mouseModeConsumer,
+            IInputDeviceTracker inputDeviceTracker)
         {
             _pointerMode = pointerModeConsumer;
             _multiTouchMode = multiTouchConsumer;
             _directMode = directModeConsumer;
+            _inputDeviceTracker = inputDeviceTracker;
 
             _consumers[PointerDeviceType.Mouse] = mouseModeConsumer;
             _consumers[PointerDeviceType.Pen] = mouseModeConsumer;
@@ -56,7 +63,8 @@ namespace RdClient.Shared.Input.Pointer
                 if(_lastPointerType != prep.DeviceType)
                 {
                     Reset();
-                    _lastPointerType = prep.DeviceType;                    
+                    _lastPointerType = prep.DeviceType;
+                    _inputDeviceTracker.InputDevice = _lastPointerType;
                 }
             }
 

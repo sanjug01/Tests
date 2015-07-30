@@ -529,12 +529,12 @@
 
             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.PanKnobSite.OnConsumptionModeChanged;
             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.ZoomPanModel.OnConsumptionModeChanged;
+            this.PointerCapture.InputDevice.InputDeviceChanged += this.ScrollBarModel.OnInputDeviceChanged;
             this.PointerCapture.ConsumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
 
             _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
             _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
             _sessionView.PointerChanged += this.PointerCapture.OnPointerChanged;
-            _sessionView.PointerChanged += this.ScrollBarModel.OnPointerChanged;
 
             _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
             EmitPropertyChanged("IsRenderingPanelActive");
@@ -553,6 +553,7 @@
 
             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= this.ZoomPanModel.OnConsumptionModeChanged;
+            this.PointerCapture.InputDevice.InputDeviceChanged -= this.ScrollBarModel.OnInputDeviceChanged;
 
             //
             // The connection bar and side bars are not available in any non-connected state.

@@ -164,6 +164,7 @@
     <Compile Include="Helpers\ViewItemsSource.cs" />
     <Compile Include="Input\Pointer\CursorEncoder.cs" />
     <Compile Include="Input\Pointer\ICursorEncoder.cs" />
+    <Compile Include="Input\Pointer\InputDeviceTracker.cs" />
     <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
     <Compile Include="Input\Pointer\PointerVisibilityConsumer.cs" />
     <Compile Include="Models\FullScreenModel.cs" />

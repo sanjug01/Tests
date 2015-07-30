@@ -1,4 +1,5 @@
 ﻿using System;
+using Windows.Devices.Input;
 
 namespace RdClient.Shared.Input.Pointer
 {
@@ -17,7 +18,7 @@ namespace RdClient.Shared.Input.Pointer
 
     public interface IInputDeviceTracker
     {
-        InputDeviceType InputDevice { get; set; }
-        event EventHandler<InputDeviceType> InputDeviceChanged;
+        PointerDeviceType InputDevice { get; set; }
+        event EventHandler<PointerDeviceType> InputDeviceChanged;
     }
 }

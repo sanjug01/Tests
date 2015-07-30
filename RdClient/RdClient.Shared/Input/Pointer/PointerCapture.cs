@@ -21,6 +21,12 @@ namespace RdClient.Shared.Input.Pointer
             get { return _consumptionMode; }
         }
 
+        private IInputDeviceTracker _inputDeviceTracker;
+        public IInputDeviceTracker InputDevice
+        {
+            get { return _inputDeviceTracker; }
+        }
+
         public PointerCapture(IPointerPosition pointerPosition, IRemoteSessionControl sessionControl, IRenderingPanel panel, ITimerFactory timerFactory, IDeferredExecution deferrer)
         {
             _sessionControl = sessionControl;
@@ -39,20 +45,22 @@ namespace RdClient.Shared.Input.Pointer
 
             PointerVisibilityConsumer pointerVisibilityConsumer = new PointerVisibilityConsumer(sessionControl.RenderingPanel);
 
+            _inputDeviceTracker = new InputDeviceTracker();
             PointerDeviceDispatcher pointerDeviceDispatcher = new PointerDeviceDispatcher(
                     pointerModeConsumer,
                     multiTouchConsumer,
                     directModeConsumer,
-                    mouseModeConsumer);
+                    mouseModeConsumer,
+                    _inputDeviceTracker);
 
-            PointerEventDispatcher dispatcher = new PointerEventDispatcher(
+            PointerEventDispatcher pointerEventDispatcher = new PointerEventDispatcher(
                 timerFactory,
                 pointerDeviceDispatcher,
                 pointerVisibilityConsumer);
 
-            _consumer = dispatcher;
+            _consumer = pointerEventDispatcher;
             _consumptionMode = new ConsumptionModeTracker() { ConsumptionMode = ConsumptionModeType.Pointer };
-            _consumptionMode.ConsumptionModeChanged += (s, o) => dispatcher.SetConsumptionMode(o);
+            _consumptionMode.ConsumptionModeChanged += (s, o) => pointerEventDispatcher.SetConsumptionMode(o);
             _mouseCursorShapes = new MouseCursorShapes(new CursorEncoder());
         }
 

@@ -2,7 +2,7 @@
 
 namespace RdClient.Shared.Input.Pointer
 {
-    public class ConsumptionModeTracker : IConsumptionModeTracker, IInputDeviceTracker
+    public class ConsumptionModeTracker : IConsumptionModeTracker
     {
         private ConsumptionModeType _consumptionMode;
         public ConsumptionModeType ConsumptionMode
@@ -28,30 +28,5 @@ namespace RdClient.Shared.Input.Pointer
         }
 
         public event EventHandler<ConsumptionModeType> ConsumptionModeChanged;
-
-        private InputDeviceType _inputDeviceType;
-        public InputDeviceType InputDevice
-        {
-            get
-            {
-                return _inputDeviceType;
-            }
-
-            set
-            {
-                _inputDeviceType = value;
-                EmitInputDeviceChanged(_inputDeviceType);
-            }
-        }
-
-        private void EmitInputDeviceChanged(InputDeviceType newDevice)
-        {
-            if (ConsumptionModeChanged != null)
-            {
-                InputDeviceChanged(this, newDevice);
-            }
-        }
-
-        public event EventHandler<InputDeviceType> InputDeviceChanged;
     }
 }
