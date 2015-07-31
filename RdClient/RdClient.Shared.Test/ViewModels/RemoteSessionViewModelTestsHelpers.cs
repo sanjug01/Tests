@@ -22,6 +22,8 @@
     using Windows.Foundation;
     using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Media;
+    using Windows.Devices.Input;
 
     public sealed partial class RemoteSessionViewModelTests
     {
@@ -76,14 +78,16 @@
             public Visibility VisibilityHorizontal { get { return Visibility.Collapsed; } }
             public Visibility VisibilityVertical { get { return Visibility.Visible; } }
 
-            public void OnPointerChanged(object sender, IPointerEventBase e)
-            {
-                throw new NotImplementedException();
-            }
+
 
             public void SetScrollbarVisibility(Visibility visibility)
             {
                 // noop
+            }
+
+            public void OnInputDeviceChanged(object sender, PointerDeviceType e)
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -370,7 +374,7 @@
                     }
                 }
 
-                void IRenderingPanel.ChangeMouseCursorShape(Shared.Input.Pointer.MouseCursorShape shape)
+                void IRenderingPanel.ChangeMouseCursorShape(ImageSource shape, Point hotspot)
                 {
                     throw new NotImplementedException();
                 }

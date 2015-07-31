@@ -126,6 +126,7 @@
     <Compile Include="Data\TemporaryModelContainer.cs" />
     <Compile Include="Data\TransformingObservableCollection.cs" />
     <Compile Include="Data\TrustedCertificate.cs" />
+    <Compile Include="Helpers\ArrayComparer.cs" />
     <Compile Include="Helpers\ArrayRound.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
     <Compile Include="Helpers\IanaInterfaceType.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Helpers\ListTrace.cs" />
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\ITimer.cs" />
+    <Compile Include="Helpers\MemoizeCodeBlock.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Helpers\ScaleFactor.cs" />
     <Compile Include="Helpers\WindowSize.cs" />
@@ -160,6 +162,9 @@
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\ViewItemsSource.cs" />
+    <Compile Include="Input\Pointer\CursorEncoder.cs" />
+    <Compile Include="Input\Pointer\ICursorEncoder.cs" />
+    <Compile Include="Input\Pointer\InputDeviceTracker.cs" />
     <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
     <Compile Include="Input\Pointer\PointerVisibilityConsumer.cs" />
     <Compile Include="Models\FullScreenModel.cs" />
@@ -196,7 +201,7 @@
     <Compile Include="Input\Recognizers\ITapRecognizer.cs" />
     <Compile Include="Input\Recognizers\IZoomScrollEvent.cs" />
     <Compile Include="Input\Pointer\MouseAction.cs" />
-    <Compile Include="Input\Pointer\MouseCursorShape.cs" />
+    <Compile Include="Input\Pointer\MouseCursorShapes.cs" />
     <Compile Include="Input\Pointer\PointerCapture.cs" />
     <Compile Include="Input\Pointer\PointerEvent.cs" />
     <Compile Include="Input\Pointer\PointerModeConsumer.cs" />

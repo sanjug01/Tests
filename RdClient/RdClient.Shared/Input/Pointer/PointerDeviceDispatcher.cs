@@ -1,7 +1,4 @@
-﻿using RdClient.Shared.Helpers;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Windows.Devices.Input;
 
@@ -11,13 +8,14 @@ namespace RdClient.Shared.Input.Pointer
     {
         private PointerDeviceType _lastPointerType;
 
-        private Dictionary<PointerDeviceType, IPointerEventConsumer> _consumers = new Dictionary<PointerDeviceType, IPointerEventConsumer>();
+        private IDictionary<PointerDeviceType, IPointerEventConsumer> _consumers = new Dictionary<PointerDeviceType, IPointerEventConsumer>();
 
         private IPointerEventConsumer _pointerMode;
         private IPointerEventConsumer _directMode;
         private IPointerEventConsumer _multiTouchMode;
 
         private ConsumptionModeType _consumptionMode;
+        private IInputDeviceTracker _inputDeviceTracker;
 
         public void SetConsumptionMode (ConsumptionModeType consumptionMode)
         {
@@ -38,16 +36,20 @@ namespace RdClient.Shared.Input.Pointer
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-        public PointerDeviceDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, IDeferredExecution dispatcher)
+        public PointerDeviceDispatcher(
+            PointerModeConsumer pointerModeConsumer, 
+            MultiTouchConsumer multiTouchConsumer, 
+            DirectModeConsumer directModeConsumer, 
+            MouseModeConsumer mouseModeConsumer,
+            IInputDeviceTracker inputDeviceTracker)
         {
-            _pointerMode = new PointerModeConsumer(
-                new RdDispatcherTimer(timerFactory.CreateTimer(), dispatcher), 
-                new PointerModeControl(sessionControl, pointerPosition));
-            _multiTouchMode = new MultiTouchConsumer(sessionControl, pointerPosition);
-            _directMode = new DirectModeConsumer(new DirectModeControl(sessionControl, pointerPosition), pointerPosition);
-            
-            _consumers[PointerDeviceType.Mouse] = new MouseModeConsumer(sessionControl, pointerPosition);
-            _consumers[PointerDeviceType.Pen] = new MouseModeConsumer(sessionControl, pointerPosition);
+            _pointerMode = pointerModeConsumer;
+            _multiTouchMode = multiTouchConsumer;
+            _directMode = directModeConsumer;
+            _inputDeviceTracker = inputDeviceTracker;
+
+            _consumers[PointerDeviceType.Mouse] = mouseModeConsumer;
+            _consumers[PointerDeviceType.Pen] = mouseModeConsumer;
             _consumers[PointerDeviceType.Touch] = _pointerMode;
 
         }
@@ -58,12 +60,12 @@ namespace RdClient.Shared.Input.Pointer
             {
                 IPointerRoutedEventProperties prep = ((IPointerRoutedEventProperties)pointerEvent);
 
-                if(prep.DeviceType != _lastPointerType)
+                if(_lastPointerType != prep.DeviceType)
                 {
                     Reset();
+                    _lastPointerType = prep.DeviceType;
+                    _inputDeviceTracker.InputDevice = _lastPointerType;
                 }
-
-                _lastPointerType = prep.DeviceType;
             }
 
             if(_consumers.ContainsKey(_lastPointerType))
