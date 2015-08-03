@@ -368,6 +368,7 @@
     <Compile Include="ViewModels\IBellyBandViewModel.cs" />
     <Compile Include="ViewModels\IGatewaysCollector.cs" />
     <Compile Include="ViewModels\IItemsView.cs" />
+    <Compile Include="ViewModels\InSessionMenusViewModel.cs" />
     <Compile Include="ViewModels\IRightSideBarViewModel.cs" />
     <Compile Include="ViewModels\IUsersCollector.cs" />
     <Compile Include="ViewModels\ICertificateValidationViewModel.cs" />

@@ -32,6 +32,7 @@
             viewFactory.AddViewClass("AdditionalToolbarCommandsView", typeof(Views.AdditionalToolbarCommandsView));
             viewFactory.AddViewClass("AboutView", typeof(Views.AboutView));
             viewFactory.AddViewClass("RichTextView", typeof(Views.RichTextView));
+            viewFactory.AddViewClass("InSessionMenusView", typeof(Views.InSessionMenusView));
 
             //
             // Remote session view must be a singleton, because it creates the swap chain panel passed

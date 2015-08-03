@@ -188,6 +188,9 @@
     <Compile Include="Telemetry\ApplicationInsightsTelemetryCore.cs" />
     <Compile Include="Telemetry\DummyTelemetryClient.cs" />
     <Compile Include="Navigation\ModalFocusTracker.cs" />
+    <Compile Include="Views\InSessionMenusView.xaml.cs">
+      <DependentUpon>InSessionMenusView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RichTextView.xaml.cs">
       <DependentUpon>RichTextView.xaml</DependentUpon>
     </Compile>
@@ -453,6 +456,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\WorkspaceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\InSessionMenusView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
