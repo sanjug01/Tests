@@ -219,6 +219,7 @@
     <Compile Include="Model\CredentialsModelTests.cs" />
     <Compile Include="Model\GatewayModelTests.cs" />
     <Compile Include="Model\DesktopModelTests.cs" />
+    <Compile Include="Model\InSessionMenusModelTests.cs" />
     <Compile Include="Model\RemoteSessionSetupTests.cs" />
     <Compile Include="Model\SessionGatewayTests.cs" />
     <Compile Include="Model\SessionCredentialsTests.cs" />

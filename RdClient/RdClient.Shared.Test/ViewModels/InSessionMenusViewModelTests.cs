@@ -79,6 +79,8 @@
 
                 _ivm.Presenting(_nav, model, context);
                 _vm.Disconnect.Execute(null);
+
+                Assert.IsFalse(_vm.Disconnect.CanExecute(null));
             }
         }
     }
