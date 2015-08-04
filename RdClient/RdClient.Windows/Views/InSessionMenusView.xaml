@@ -19,19 +19,205 @@
     
     <UserControl.Resources>
         <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        
+        <DataTemplate x:Key="DefaultTemplate">
+            <Grid>
+
+                <Grid Width="360" HorizontalAlignment="Left" Background="Bisque">
+                </Grid>
+
+                <Grid Width="Auto" HorizontalAlignment="Right" Background="Yellow">
+                    <StackPanel Orientation="Vertical" Margin="12,20">
+
+                        <Button x:Name="DisconnectButton"
+					        Style="{StaticResource RightSideBarButtonStyle}"
+                            Command="{Binding Disconnect}">
+                            
+                            <StackPanel Orientation="Vertical">
+                                <Canvas Width="40.000" Height="40.000">
+
+                                    <!-- disconnect/<Group>/<Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 19.996,22.214 L 13.615,28.594 L 11.395,26.396 L 17.796,19.995 L 11.394,13.593 L 13.616,11.406 L 19.996,17.805 L 26.395,11.406 L 28.605,13.594 L 22.204,19.995 L 28.605,26.396 L 26.396,28.594 L 19.996,22.214 Z"/>
+
+                                    <!-- disconnect/<Compound Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 20.000,0.000 C 8.954,0.000 0.000,8.954 0.000,20.000 C 0.000,31.046 8.954,40.000 20.000,40.000 C 31.046,40.000 40.000,31.046 40.000,20.000 C 40.000,8.954 31.046,0.000 20.000,0.000 L 20.000,0.000 Z M 20.000,2.000 C 29.925,2.000 38.000,10.075 38.000,20.000 C 38.000,29.925 29.925,38.000 20.000,38.000 C 10.075,38.000 2.000,29.925 2.000,20.000 C 2.000,10.075 10.075,2.000 20.000,2.000"/>
+
+                                    <!-- disconnect/<Rectangle> -->
+                                    <Path Opacity="0.0" Fill="#ff221e1f" Data="F1 M 40.000,40.000 L 0.000,40.000 L 0.000,0.000 L 40.000,0.000 L 40.000,40.000 Z"/>
+
+                                </Canvas>
+                                <TextBlock x:Uid="SessionView-HomeButtonLabel"
+							               Style="{StaticResource RightSideBarButtonTextStyle}"
+							               Text="Disconnect (d)"/>
+
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="FullScreenButton"
+					            Style="{StaticResource RightSideBarButtonStyle}">
+                            
+                            <StackPanel Orientation="Vertical">
+                                <Canvas Width="40.000" Height="40.000">
+                                    <!-- full screen new/<Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 9.808,28.778 L 9.808,23.121 L 7.686,25.243 L 7.686,32.314 L 14.757,32.314 L 16.879,30.192 L 11.222,30.192 L 19.000,22.414 L 18.293,21.707 L 17.586,21.000 L 9.808,28.778 Z"/>
+
+                                    <!-- full screen new/<Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 30.192,11.222 L 30.192,16.879 L 32.314,14.757 L 32.314,7.686 L 25.243,7.686 L 23.121,9.808 L 28.778,9.808 L 21.000,17.586 L 21.707,18.293 L 22.414,19.000 L 30.192,11.222 Z"/>
+
+                                    <!-- full screen new/<Compound Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 20.000,0.000 C 8.954,0.000 0.000,8.954 0.000,20.000 C 0.000,31.046 8.954,40.000 20.000,40.000 C 31.046,40.000 40.000,31.046 40.000,20.000 C 40.000,8.954 31.046,0.000 20.000,0.000 L 20.000,0.000 Z M 20.000,2.000 C 29.925,2.000 38.000,10.075 38.000,20.000 C 38.000,29.925 29.925,38.000 20.000,38.000 C 10.075,38.000 2.000,29.925 2.000,20.000 C 2.000,10.075 10.075,2.000 20.000,2.000"/>
+
+                                    <!-- full screen new/<Rectangle> -->
+                                    <Path Opacity="0.0" Fill="#ff221e1f" Data="F1 M 40.000,40.000 L 0.000,40.000 L 0.000,0.000 L 40.000,0.000 L 40.000,40.000 Z"/>
+                                </Canvas>
+                                <TextBlock x:Uid="SessionView-FullScreenButtonLabel"
+    						               Style="{StaticResource RightSideBarButtonTextStyle}"
+							               Text="Full-Screen (d)" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="NormalScreenButton"
+					            Style="{StaticResource RightSideBarButtonStyle}">
+                            
+                            <StackPanel Orientation="Vertical">
+                                <Canvas Width="40.000" Height="40.000">
+
+                                    <!-- normal screen new/<Group>/<Path> -->
+                                    <Path StrokeThickness="2.1" Stroke="#ffffffff" StrokeMiterLimit="1.0" Data="F1 M 31.733,8.267 L 8.267,31.734"/>
+
+                                    <!-- normal screen new/<Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 16.879,24.536 L 16.879,30.192 L 19.000,28.071 L 19.000,21.000 L 11.929,21.000 L 9.808,23.121 L 15.464,23.121 L 7.686,30.899 L 8.393,31.607 L 9.101,32.314 L 16.879,24.536 Z"/>
+
+                                    <!-- normal screen new/<Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 23.121,15.464 L 23.121,9.808 L 21.000,11.929 L 21.000,19.000 L 28.071,19.000 L 30.192,16.879 L 24.536,16.879 L 32.314,9.101 L 31.607,8.393 L 30.899,7.686 L 23.121,15.464 Z"/>
+
+                                    <!-- normal screen new/<Compound Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 20.000,0.000 C 8.954,0.000 0.000,8.954 0.000,20.000 C 0.000,31.046 8.954,40.000 20.000,40.000 C 31.046,40.000 40.000,31.046 40.000,20.000 C 40.000,8.954 31.046,0.000 20.000,0.000 L 20.000,0.000 Z M 20.000,2.000 C 29.925,2.000 38.000,10.075 38.000,20.000 C 38.000,29.925 29.925,38.000 20.000,38.000 C 10.075,38.000 2.000,29.925 2.000,20.000 C 2.000,10.075 10.075,2.000 20.000,2.000"/>
+
+                                    <!-- normal screen new/<Rectangle> -->
+                                    <Path Opacity="0.0" Fill="#ff221e1f" Data="F1 M 40.000,40.000 L 0.000,40.000 L 0.000,0.000 L 40.000,0.000 L 40.000,40.000 Z"/>
+
+                                </Canvas>
+                                <TextBlock x:Uid="SessionView-FullScreenButtonLabel"
+						                   Style="{StaticResource RightSideBarButtonTextStyle}"
+    						               Text="Full-Screen (d)"/>
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="NarrowTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Background="Bisque">
+                </Grid>
+
+                <Grid Grid.Row="1" Height="Auto" VerticalAlignment="Top" Background="Yellow">
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="20,12">
+
+                        <Button x:Name="DisconnectButton"
+					        Style="{StaticResource RightSideBarButtonStyle}"
+                            Command="{Binding Disconnect}">
+
+                            <StackPanel Orientation="Vertical">
+                                <Canvas Width="40.000" Height="40.000">
+
+                                    <!-- disconnect/<Group>/<Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 19.996,22.214 L 13.615,28.594 L 11.395,26.396 L 17.796,19.995 L 11.394,13.593 L 13.616,11.406 L 19.996,17.805 L 26.395,11.406 L 28.605,13.594 L 22.204,19.995 L 28.605,26.396 L 26.396,28.594 L 19.996,22.214 Z"/>
+
+                                    <!-- disconnect/<Compound Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 20.000,0.000 C 8.954,0.000 0.000,8.954 0.000,20.000 C 0.000,31.046 8.954,40.000 20.000,40.000 C 31.046,40.000 40.000,31.046 40.000,20.000 C 40.000,8.954 31.046,0.000 20.000,0.000 L 20.000,0.000 Z M 20.000,2.000 C 29.925,2.000 38.000,10.075 38.000,20.000 C 38.000,29.925 29.925,38.000 20.000,38.000 C 10.075,38.000 2.000,29.925 2.000,20.000 C 2.000,10.075 10.075,2.000 20.000,2.000"/>
+
+                                    <!-- disconnect/<Rectangle> -->
+                                    <Path Opacity="0.0" Fill="#ff221e1f" Data="F1 M 40.000,40.000 L 0.000,40.000 L 0.000,0.000 L 40.000,0.000 L 40.000,40.000 Z"/>
+
+                                </Canvas>
+                                <TextBlock x:Uid="SessionView-HomeButtonLabel"
+							               Style="{StaticResource RightSideBarButtonTextStyle}"
+							               Text="Disconnect (d)"/>
+
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="FullScreenButton"
+					            Style="{StaticResource RightSideBarButtonStyle}">
+
+                            <StackPanel Orientation="Vertical">
+                                <Canvas Width="40.000" Height="40.000">
+                                    <!-- full screen new/<Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 9.808,28.778 L 9.808,23.121 L 7.686,25.243 L 7.686,32.314 L 14.757,32.314 L 16.879,30.192 L 11.222,30.192 L 19.000,22.414 L 18.293,21.707 L 17.586,21.000 L 9.808,28.778 Z"/>
+
+                                    <!-- full screen new/<Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 30.192,11.222 L 30.192,16.879 L 32.314,14.757 L 32.314,7.686 L 25.243,7.686 L 23.121,9.808 L 28.778,9.808 L 21.000,17.586 L 21.707,18.293 L 22.414,19.000 L 30.192,11.222 Z"/>
+
+                                    <!-- full screen new/<Compound Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 20.000,0.000 C 8.954,0.000 0.000,8.954 0.000,20.000 C 0.000,31.046 8.954,40.000 20.000,40.000 C 31.046,40.000 40.000,31.046 40.000,20.000 C 40.000,8.954 31.046,0.000 20.000,0.000 L 20.000,0.000 Z M 20.000,2.000 C 29.925,2.000 38.000,10.075 38.000,20.000 C 38.000,29.925 29.925,38.000 20.000,38.000 C 10.075,38.000 2.000,29.925 2.000,20.000 C 2.000,10.075 10.075,2.000 20.000,2.000"/>
+
+                                    <!-- full screen new/<Rectangle> -->
+                                    <Path Opacity="0.0" Fill="#ff221e1f" Data="F1 M 40.000,40.000 L 0.000,40.000 L 0.000,0.000 L 40.000,0.000 L 40.000,40.000 Z"/>
+                                </Canvas>
+                                <TextBlock x:Uid="SessionView-FullScreenButtonLabel"
+    						               Style="{StaticResource RightSideBarButtonTextStyle}"
+							               Text="Full-Screen (d)" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="NormalScreenButton"
+					            Style="{StaticResource RightSideBarButtonStyle}">
+
+                            <StackPanel Orientation="Vertical">
+                                <Canvas Width="40.000" Height="40.000">
+
+                                    <!-- normal screen new/<Group>/<Path> -->
+                                    <Path StrokeThickness="2.1" Stroke="#ffffffff" StrokeMiterLimit="1.0" Data="F1 M 31.733,8.267 L 8.267,31.734"/>
+
+                                    <!-- normal screen new/<Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 16.879,24.536 L 16.879,30.192 L 19.000,28.071 L 19.000,21.000 L 11.929,21.000 L 9.808,23.121 L 15.464,23.121 L 7.686,30.899 L 8.393,31.607 L 9.101,32.314 L 16.879,24.536 Z"/>
+
+                                    <!-- normal screen new/<Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 23.121,15.464 L 23.121,9.808 L 21.000,11.929 L 21.000,19.000 L 28.071,19.000 L 30.192,16.879 L 24.536,16.879 L 32.314,9.101 L 31.607,8.393 L 30.899,7.686 L 23.121,15.464 Z"/>
+
+                                    <!-- normal screen new/<Compound Path> -->
+                                    <Path Fill="#ffffffff" Data="F1 M 20.000,0.000 C 8.954,0.000 0.000,8.954 0.000,20.000 C 0.000,31.046 8.954,40.000 20.000,40.000 C 31.046,40.000 40.000,31.046 40.000,20.000 C 40.000,8.954 31.046,0.000 20.000,0.000 L 20.000,0.000 Z M 20.000,2.000 C 29.925,2.000 38.000,10.075 38.000,20.000 C 38.000,29.925 29.925,38.000 20.000,38.000 C 10.075,38.000 2.000,29.925 2.000,20.000 C 2.000,10.075 10.075,2.000 20.000,2.000"/>
+
+                                    <!-- normal screen new/<Rectangle> -->
+                                    <Path Opacity="0.0" Fill="#ff221e1f" Data="F1 M 40.000,40.000 L 0.000,40.000 L 0.000,0.000 L 40.000,0.000 L 40.000,40.000 Z"/>
+
+                                </Canvas>
+                                <TextBlock x:Uid="SessionView-FullScreenButtonLabel"
+						                   Style="{StaticResource RightSideBarButtonTextStyle}"
+    						               Text="Full-Screen (d)"/>
+                            </StackPanel>
+                        </Button>
+
+                    </StackPanel>
+                </Grid>
+                
+            </Grid>
+        </DataTemplate>
+
     </UserControl.Resources>
     
     <Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStates">
                 <VisualState x:Name="DefaultLayout">
-                    <Storyboard>
-                    </Storyboard>
+                    <VisualState.Setters>
+                        <Setter Target="MainContent.ContentTemplate" Value="{StaticResource DefaultTemlate}"/>
+                    </VisualState.Setters>
                 </VisualState>
 
                 <VisualState x:Name="NarrowLayout">
-                    <Storyboard>
-                    </Storyboard>
+                    <VisualState.Setters>
+                        <Setter Target="MainContent.ContentTemplate" Value="{StaticResource NarrowTemplate}"/>
+                    </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
@@ -39,94 +225,10 @@
         <!-- Pointer press detector that detects user interation outside of the menu panels and dismisses the view -->
         <controls:PointerPressDetector PointerPressDetected="{Binding Cancel}" />
         
-        <Grid Width="360" HorizontalAlignment="Left" Background="Bisque">
-        </Grid>
-        
-        <Grid Width="Auto" HorizontalAlignment="Right" Background="Yellow">
-            <StackPanel Orientation="Vertical" Margin="12,20">
-                
-                <Button
-					x:Name="DisconnectButton"
-					Style="{StaticResource RightSideBarButtonStyle}"
-                    Command="{Binding Disconnect}">
-                    <StackPanel Orientation="Vertical">
-                        <Canvas Width="40.000" Height="40.000">
-
-                            <!-- disconnect/<Group>/<Path> -->
-                            <Path Fill="#ffffffff" Data="F1 M 19.996,22.214 L 13.615,28.594 L 11.395,26.396 L 17.796,19.995 L 11.394,13.593 L 13.616,11.406 L 19.996,17.805 L 26.395,11.406 L 28.605,13.594 L 22.204,19.995 L 28.605,26.396 L 26.396,28.594 L 19.996,22.214 Z"/>
-
-                            <!-- disconnect/<Compound Path> -->
-                            <Path Fill="#ffffffff" Data="F1 M 20.000,0.000 C 8.954,0.000 0.000,8.954 0.000,20.000 C 0.000,31.046 8.954,40.000 20.000,40.000 C 31.046,40.000 40.000,31.046 40.000,20.000 C 40.000,8.954 31.046,0.000 20.000,0.000 L 20.000,0.000 Z M 20.000,2.000 C 29.925,2.000 38.000,10.075 38.000,20.000 C 38.000,29.925 29.925,38.000 20.000,38.000 C 10.075,38.000 2.000,29.925 2.000,20.000 C 2.000,10.075 10.075,2.000 20.000,2.000"/>
-
-                            <!-- disconnect/<Rectangle> -->
-                            <Path Opacity="0.0" Fill="#ff221e1f" Data="F1 M 40.000,40.000 L 0.000,40.000 L 0.000,0.000 L 40.000,0.000 L 40.000,40.000 Z"/>
-
-                        </Canvas>
-                        <TextBlock
-							x:Uid="SessionView-HomeButtonLabel"
-							Style="{StaticResource RightSideBarButtonTextStyle}"
-							Text="Disconnect (d)">
-                        </TextBlock>
-                        
-                    </StackPanel>
-                </Button>
-
-                <Button
-					x:Name="FullScreenButton"
-					Style="{StaticResource RightSideBarButtonStyle}">
-                    <StackPanel Orientation="Vertical">
-                        <Canvas Width="40.000" Height="40.000">
-                            <!-- full screen new/<Path> -->
-                            <Path Fill="#ffffffff" Data="F1 M 9.808,28.778 L 9.808,23.121 L 7.686,25.243 L 7.686,32.314 L 14.757,32.314 L 16.879,30.192 L 11.222,30.192 L 19.000,22.414 L 18.293,21.707 L 17.586,21.000 L 9.808,28.778 Z"/>
-
-                            <!-- full screen new/<Path> -->
-                            <Path Fill="#ffffffff" Data="F1 M 30.192,11.222 L 30.192,16.879 L 32.314,14.757 L 32.314,7.686 L 25.243,7.686 L 23.121,9.808 L 28.778,9.808 L 21.000,17.586 L 21.707,18.293 L 22.414,19.000 L 30.192,11.222 Z"/>
-
-                            <!-- full screen new/<Compound Path> -->
-                            <Path Fill="#ffffffff" Data="F1 M 20.000,0.000 C 8.954,0.000 0.000,8.954 0.000,20.000 C 0.000,31.046 8.954,40.000 20.000,40.000 C 31.046,40.000 40.000,31.046 40.000,20.000 C 40.000,8.954 31.046,0.000 20.000,0.000 L 20.000,0.000 Z M 20.000,2.000 C 29.925,2.000 38.000,10.075 38.000,20.000 C 38.000,29.925 29.925,38.000 20.000,38.000 C 10.075,38.000 2.000,29.925 2.000,20.000 C 2.000,10.075 10.075,2.000 20.000,2.000"/>
-
-                            <!-- full screen new/<Rectangle> -->
-                            <Path Opacity="0.0" Fill="#ff221e1f" Data="F1 M 40.000,40.000 L 0.000,40.000 L 0.000,0.000 L 40.000,0.000 L 40.000,40.000 Z"/>
-                        </Canvas>
-                        <TextBlock
-							x:Uid="SessionView-FullScreenButtonLabel"
-							Style="{StaticResource RightSideBarButtonTextStyle}"
-							Text="Full-Screen (d)">
-                        </TextBlock>
-                    </StackPanel>
-                </Button>
-
-                <Button
-					x:Name="NormalScreenButton"
-					Style="{StaticResource RightSideBarButtonStyle}">
-                    <StackPanel Orientation="Vertical">
-                        <Canvas Width="40.000" Height="40.000">
-
-                            <!-- normal screen new/<Group>/<Path> -->
-                            <Path StrokeThickness="2.1" Stroke="#ffffffff" StrokeMiterLimit="1.0" Data="F1 M 31.733,8.267 L 8.267,31.734"/>
-
-                            <!-- normal screen new/<Path> -->
-                            <Path Fill="#ffffffff" Data="F1 M 16.879,24.536 L 16.879,30.192 L 19.000,28.071 L 19.000,21.000 L 11.929,21.000 L 9.808,23.121 L 15.464,23.121 L 7.686,30.899 L 8.393,31.607 L 9.101,32.314 L 16.879,24.536 Z"/>
-
-                            <!-- normal screen new/<Path> -->
-                            <Path Fill="#ffffffff" Data="F1 M 23.121,15.464 L 23.121,9.808 L 21.000,11.929 L 21.000,19.000 L 28.071,19.000 L 30.192,16.879 L 24.536,16.879 L 32.314,9.101 L 31.607,8.393 L 30.899,7.686 L 23.121,15.464 Z"/>
-
-                            <!-- normal screen new/<Compound Path> -->
-                            <Path Fill="#ffffffff" Data="F1 M 20.000,0.000 C 8.954,0.000 0.000,8.954 0.000,20.000 C 0.000,31.046 8.954,40.000 20.000,40.000 C 31.046,40.000 40.000,31.046 40.000,20.000 C 40.000,8.954 31.046,0.000 20.000,0.000 L 20.000,0.000 Z M 20.000,2.000 C 29.925,2.000 38.000,10.075 38.000,20.000 C 38.000,29.925 29.925,38.000 20.000,38.000 C 10.075,38.000 2.000,29.925 2.000,20.000 C 2.000,10.075 10.075,2.000 20.000,2.000"/>
-
-                            <!-- normal screen new/<Rectangle> -->
-                            <Path Opacity="0.0" Fill="#ff221e1f" Data="F1 M 40.000,40.000 L 0.000,40.000 L 0.000,0.000 L 40.000,0.000 L 40.000,40.000 Z"/>
-
-                        </Canvas>
-                        <TextBlock
-							x:Uid="SessionView-FullScreenButtonLabel"
-							Style="{StaticResource RightSideBarButtonTextStyle}"
-							Text="Full-Screen (d)">
-                        </TextBlock>
-                    </StackPanel>
-                </Button>
-
-            </StackPanel>
-        </Grid>
+        <ContentControl
+            x:Name="MainContent"
+            VerticalContentAlignment="Stretch"
+            HorizontalContentAlignment="Stretch"
+            ContentTemplate="{StaticResource DefaultTemplate}"/>
     </Grid>
 </UserControl>
