@@ -170,6 +170,7 @@
     <Compile Include="Models\FullScreenModel.cs" />
     <Compile Include="Models\ICredentialsIdModel.cs" />
     <Compile Include="Models\IFullScreenModel.cs" />
+    <Compile Include="Models\IInSessionMenus.cs" />
     <Compile Include="Models\IScrollBarModel.cs" />
     <Compile Include="Models\ScrambledString.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
@@ -368,6 +369,7 @@
     <Compile Include="ViewModels\IBellyBandViewModel.cs" />
     <Compile Include="ViewModels\IGatewaysCollector.cs" />
     <Compile Include="ViewModels\IItemsView.cs" />
+    <Compile Include="ViewModels\InSessionMenusViewModel.cs" />
     <Compile Include="ViewModels\IRightSideBarViewModel.cs" />
     <Compile Include="ViewModels\IUsersCollector.cs" />
     <Compile Include="ViewModels\ICertificateValidationViewModel.cs" />
