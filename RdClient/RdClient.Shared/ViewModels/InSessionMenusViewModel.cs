@@ -1,7 +1,9 @@
-﻿using System.Windows.Input;
-
-namespace RdClient.Shared.ViewModels
+﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Models;
+    using System.Diagnostics.Contracts;
+    using System.Windows.Input;
+
     /// <summary>
     /// View model of the modal dialog shown over the remote session view when the "ellipsis"
     /// button's been clicked in the connection bar.
@@ -10,11 +12,13 @@ namespace RdClient.Shared.ViewModels
     {
         private readonly RelayCommand _cancel;
         private readonly RelayCommand _disconnect;
+        private bool _canDisconnect;
+        private IInSessionMenus _model;
 
         public InSessionMenusViewModel()
         {
             _cancel = new RelayCommand(this.OnCancel);
-            _disconnect = new RelayCommand(this.OnDisconnect, this.CanDisconnect);
+            _disconnect = new RelayCommand(this.OnDisconnect, o => this.CanDisconnect);
         }
 
         public ICommand Cancel
@@ -29,11 +33,18 @@ namespace RdClient.Shared.ViewModels
 
         protected override void OnPresenting(object activationParameter)
         {
+            Contract.Assert(null == _model);
+            Contract.Assert(activationParameter is IInSessionMenus);
+
+            _model = (IInSessionMenus)activationParameter;
+            this.CanDisconnect = true;
+
             base.OnPresenting(activationParameter);
         }
 
         protected override void OnDismissed()
         {
+            _model = null;
             base.OnDismissed();
         }
 
@@ -44,11 +55,22 @@ namespace RdClient.Shared.ViewModels
 
         private void OnDisconnect(object parameter)
         {
+            Contract.Assert(null != _model);
+            _model.Disconnect();
+            this.CanDisconnect = false;
         }
 
-        private bool CanDisconnect(object parameter)
+        private bool CanDisconnect
         {
-            return true;
+            get { return _canDisconnect; }
+            set
+            {
+                if(value != _canDisconnect)
+                {
+                    _canDisconnect = value;
+                    _disconnect.EmitCanExecuteChanged();
+                }
+            }
         }
     }
 }
