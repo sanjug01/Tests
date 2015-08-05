@@ -5,6 +5,8 @@
     using RdClient.Shared.Navigation;
     using RdClient.Shared.ViewModels;
     using System.Collections.Generic;
+    using System;
+    using System.Windows.Input;
 
     [TestClass]
     public sealed class InSessionMenusViewModelTests
@@ -16,6 +18,22 @@
         private sealed class MockModel : RdMock.MockBase, IInSessionMenus
         {
             void IInSessionMenus.Disconnect() { Invoke(new object[] { }); }
+
+            ICommand IInSessionMenus.EnterFullScreen
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            ICommand IInSessionMenus.ExitFullScreen
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
         }
 
         private sealed class MockStackedContext : RdMock.MockBase, IStackedPresentationContext
@@ -49,6 +67,10 @@
                 Assert.IsNotNull(_vm.Disconnect);
                 Assert.IsTrue(_vm.Cancel.CanExecute(null));
                 Assert.IsTrue(_vm.Disconnect.CanExecute(null));
+                Assert.IsNotNull(_vm.EnterFullScreen);
+                Assert.IsFalse(_vm.EnterFullScreen.CanExecute);
+                Assert.IsNotNull(_vm.ExitFullScreen);
+                Assert.IsFalse(_vm.ExitFullScreen.CanExecute);
             }
         }
 

@@ -129,6 +129,7 @@
     <Compile Include="Helpers\ArrayComparer.cs" />
     <Compile Include="Helpers\ArrayRound.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
+    <Compile Include="Helpers\CommandBinding.cs" />
     <Compile Include="Helpers\IanaInterfaceType.cs" />
     <Compile Include="Helpers\ContractAssertionException.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />

@@ -54,6 +54,8 @@
                         </Button>
 
                         <Button x:Name="FullScreenButton"
+                                Command="{Binding EnterFullScreen.Command}"
+                                Visibility="{Binding EnterFullScreen.CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
 					            Style="{StaticResource RightSideBarButtonStyle}">
                             
                             <StackPanel Orientation="Vertical">
@@ -77,6 +79,8 @@
                         </Button>
 
                         <Button x:Name="NormalScreenButton"
+                                Command="{Binding ExitFullScreen.Command}"
+                                Visibility="{Binding ExitFullScreen.CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
 					            Style="{StaticResource RightSideBarButtonStyle}">
                             
                             <StackPanel Orientation="Vertical">
@@ -147,6 +151,8 @@
                         </Button>
 
                         <Button x:Name="FullScreenButton"
+                                Command="{Binding EnterFullScreen.Command}"
+                                Visibility="{Binding EnterFullScreen.CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
 					            Style="{StaticResource RightSideBarButtonStyle}">
 
                             <StackPanel Orientation="Vertical">
@@ -170,6 +176,8 @@
                         </Button>
 
                         <Button x:Name="NormalScreenButton"
+                                Command="{Binding ExitFullScreen.Command}"
+                                Visibility="{Binding ExitFullScreen.CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
 					            Style="{StaticResource RightSideBarButtonStyle}">
 
                             <StackPanel Orientation="Vertical">
@@ -210,7 +218,7 @@
             <VisualStateGroup x:Name="VisualStates">
                 <VisualState x:Name="DefaultLayout">
                     <VisualState.Setters>
-                        <Setter Target="MainContent.ContentTemplate" Value="{StaticResource DefaultTemlate}"/>
+                        <Setter Target="MainContent.ContentTemplate" Value="{StaticResource DefaultTemplate}"/>
                     </VisualState.Setters>
                 </VisualState>
 
