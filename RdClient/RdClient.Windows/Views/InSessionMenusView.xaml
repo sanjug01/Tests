@@ -23,10 +23,10 @@
         <DataTemplate x:Key="DefaultTemplate">
             <Grid>
 
-                <Grid Width="360" HorizontalAlignment="Left" Background="Bisque">
+                <Grid Width="360" HorizontalAlignment="Left" Background="Bisque" Visibility="Collapsed">
                 </Grid>
 
-                <Grid Width="Auto" HorizontalAlignment="Right" Background="Yellow">
+                <Grid Width="Auto" HorizontalAlignment="Right" Style="{StaticResource RightSideBarStyle}">
                     <StackPanel Orientation="Vertical" Margin="12,20">
 
                         <Button x:Name="DisconnectButton"
@@ -120,10 +120,10 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Background="Bisque">
+                <Grid Grid.Row="0" Background="Bisque" Visibility="Collapsed">
                 </Grid>
 
-                <Grid Grid.Row="1" Height="Auto" VerticalAlignment="Top" Background="Yellow">
+                <Grid Grid.Row="1" Height="Auto" VerticalAlignment="Top" Style="{StaticResource RightSideBarStyle}">
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="20,12">
 
                         <Button x:Name="DisconnectButton"
