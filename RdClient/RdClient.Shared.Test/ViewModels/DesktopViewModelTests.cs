@@ -152,7 +152,7 @@ namespace RdClient.Shared.Test.ViewModels
 
             _dataModel.LocalWorkspace.Connections.AddNewModel(_desktop);
 
-            _vm = DesktopViewModel.Create(_dataModel.LocalWorkspace.Connections.Models[0], _dataModel, _navService);
+            _vm = DesktopViewModel.Create(_dataModel.LocalWorkspace.Connections.Models[0], _dataModel, _navService, null);
             _sessionFactory = new TestSessionFactory();
         }
 
