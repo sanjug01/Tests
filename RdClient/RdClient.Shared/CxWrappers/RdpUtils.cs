@@ -17,15 +17,15 @@ namespace RdClient.Shared.CxWrappers.Utils
 
         public static void ApplyScreenSize(IRdpProperties properties, IWindowSize windowSize)
         {
-            //Size size = windowSize.Size;
-            //properties.SetIntProperty("PhysicalDesktopWidth", (int) size.Width);
-            //properties.SetIntProperty("PhysicalDesktopHeight", (int) size.Height);
+            Size size = windowSize.Size;
+            properties.SetIntProperty("PhysicalDesktopWidth", (int)size.Width);
+            properties.SetIntProperty("PhysicalDesktopHeight", (int)size.Height);
         }
 
         public static void ApplyScaleFactor(IRdpProperties properties, IScaleFactor scaleFactor)
         {
-            properties.SetIntProperty("DesktopScaleFactor", scaleFactor.DesktopScaleFactor);
-            properties.SetIntProperty("DeviceScaleFactor", scaleFactor.DeviceScaleFactor);
+            //properties.SetIntProperty("DesktopScaleFactor", scaleFactor.DesktopScaleFactor);
+            //properties.SetIntProperty("DeviceScaleFactor", scaleFactor.DeviceScaleFactor);
         }
     }
 }
