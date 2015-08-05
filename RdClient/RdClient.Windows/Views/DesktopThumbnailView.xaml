@@ -79,13 +79,32 @@
                         <RowDefinition Height="42" />
                     </Grid.RowDefinitions>
 
-                    
+                   <Grid x:Uid="DesktopThumbnailView_DefaultIcon">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0.2*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="0.2*" />                            
+                        </Grid.RowDefinitions>
+                  
+                        <!-- use an icon vector for better scaling 
+                            converted from svg/ai file to xaml using Microsoft Expression Design 4
+                       -->
+                        <Path Grid.Row="1" 
+                              Stretch="Uniform"                               
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Fill="{ThemeResource SystemControlForegroundBaseHighBrush}"
+                              Data="F1 M 117.659,124.125L 18.6187,124.125L 18.6187,18.6187L 201.704,18.6187L 201.704,62.0627C 208.121,62.2987 214.353,63.2454 220.323,64.8454L 220.323,6.43069C 220.323,2.89737 217.347,3.05176e-005 213.723,3.05176e-005L 6.59467,3.05176e-005C 2.976,3.05176e-005 0,2.89737 0,6.43069L 0,136.247C 0,139.775 2.976,142.665 6.59467,142.665L 106.04,142.665L 106.04,166.612C 106.04,170.805 98.1373,175.176 93.8213,175.176L 79.6453,175.176C 64.02,175.176 53.2867,180.417 53.2867,188.036C 53.2867,191.843 52.3053,192.316 67.936,192.316L 75.748,192.316C 87.4693,192.316 91.3733,186.109 103.107,186.109L 125.163,186.109C 118.573,174.145 114.816,160.4 114.816,145.768C 114.816,138.284 115.816,131.035 117.659,124.125 Z M 222.649,108.531L 197.049,134.908L 222.649,161.284L 231.184,152.489L 214.116,134.908L 231.184,117.325M 169.121,142.144L 186.188,159.732L 169.121,177.321L 177.655,186.109L 203.256,159.732L 177.655,133.356M 198.601,204.728C 166.091,204.728 139.641,178.279 139.641,145.768C 139.641,113.259 166.091,86.8094 198.601,86.8094C 231.111,86.8094 257.56,113.259 257.56,145.768C 257.56,178.279 231.111,204.728 198.601,204.728 Z M 198.601,74.396C 159.187,74.396 127.229,106.355 127.229,145.768C 127.229,185.188 159.187,217.14 198.601,217.14C 238.02,217.14 269.973,185.188 269.973,145.768C 269.973,106.355 238.02,74.396 198.601,74.396 Z "/>
+                    </Grid>
+
+                    <!--                     
                     <Image Source="ms-appx:///Assets/desktop_placeholder.png"
                            Visibility="{Binding Desktop.EncodedThumbnail, Converter={StaticResource NullToVisibleConverter}}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center" />
-            
+                    -->
+                    
                     <Image Grid.RowSpan="2"
                            Source="{Binding Desktop.EncodedThumbnail, Converter={StaticResource BytesToBitmapConverter}}"
                            Visibility="{Binding Desktop.EncodedThumbnail, Converter={StaticResource NotNullToVisibleConverter}}"
@@ -105,7 +124,7 @@
 						TextLineBounds="Tight"
 						TextWrapping="NoWrap"
 						TextTrimming="None"
-						Margin="10,0,0,0">						
+						Margin="10,0,0,2">						
 					</TextBlock>
                 </Grid>
                     <!--

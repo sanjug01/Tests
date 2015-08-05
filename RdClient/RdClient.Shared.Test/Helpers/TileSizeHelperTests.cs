@@ -9,24 +9,6 @@ namespace RdClient.Shared.Test.Helpers
     [TestClass]
     public class TileSizeHelperTests
     {
-        class TestWindowSize : IWindowSize
-        {
-            public TestWindowSize(Size size)
-            {
-                this.Size = size;
-            }
-
-            public Size Size { get; private set; }
-
-        }
-
-
-        [TestInitialize]
-        public void TestSetup()
-        {
-        }
-
-
 
         [TestMethod]
         public void TestDynamicTileSizes_ForNarrowLayout()
