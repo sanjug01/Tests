@@ -3,6 +3,7 @@
     using RdClient.Shared.Data;
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
+    using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.ValidationRules;
     using System;
     using System.Collections.ObjectModel;
@@ -22,8 +23,9 @@
         }
     }
 
-    public class AddOrEditDesktopViewModel : ViewModelBase, IAddOrEditDesktopViewModel, IDialogViewModel
+    public class AddOrEditDesktopViewModel : ViewModelBase, IAddOrEditDesktopViewModel, IDialogViewModel, ITelemetryClientSite
     {
+        private Telemetry.ITelemetryClient _telemetryClient;
         private AddDesktopViewModelArgs _addDesktopArgs;
         private bool _isExpandedView;
         private string _friendlyName;
@@ -209,6 +211,13 @@
                     this.Desktop.IsNew = true;
                     this.ApplicationDataModel.LocalWorkspace.Connections.AddNewModel(this.Desktop);
                     _addDesktopArgs.EmitDesktopAdded(this.Desktop);
+
+                    _telemetryClient.CastAndCall<Telemetry.ITelemetryClient>(tc =>
+                    {
+                        Telemetry.ITelemetryEvent te = tc.MakeEvent("AddedDesktop");
+                        te.AddMetric("desktops", this.ApplicationDataModel.LocalWorkspace.Connections.Models.Count);
+                        te.Report();
+                    });
                 }
 
                 this.DismissModal(null);
@@ -306,6 +315,11 @@
             this.Gateways = null;
             this.SelectedUser = null;
             this.SelectedGateway = null;
+        }
+
+        void ITelemetryClientSite.SetTelemetryClient(Telemetry.ITelemetryClient telemetryClient)
+        {
+            _telemetryClient = telemetryClient;
         }
 
         private void AddGatewayCommandExecute(object o)
