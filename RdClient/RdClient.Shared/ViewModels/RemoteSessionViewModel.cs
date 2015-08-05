@@ -559,11 +559,12 @@
         {
             _keyboardCapture.Stop();
             _keyboardCapture.Keystroke -= this.OnKeystroke;
+            _activeSessionControl.RenderingPanel.Viewport.Changed -= this.PanKnobSite.OnViewportChanged;
             _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
             _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
             _sessionView.PointerChanged -= this.PointerCapture.OnPointerChanged;
 
-            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
+            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= this.PanKnobSite.OnConsumptionModeChanged;
             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= this.ZoomPanModel.OnConsumptionModeChanged;
             this.PointerCapture.InputDevice.InputDeviceChanged -= this.ScrollBarModel.OnInputDeviceChanged;
 
@@ -572,7 +573,8 @@
             //
             this.IsConnectionBarVisible = false;
             this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
-            _panKnobSite.PanKnob.IsVisible = false;
+            
+            this.PanKnobSite.PanKnob.IsVisible = false;
         }
 
         private void OnSessionStatePropertyChanged(object sender, PropertyChangedEventArgs e)
