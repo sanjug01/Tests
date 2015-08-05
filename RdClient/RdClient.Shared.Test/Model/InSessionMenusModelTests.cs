@@ -3,6 +3,7 @@
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using System;
     using System.Collections.Generic;
@@ -292,13 +293,44 @@
             }
         }
 
+        private sealed class TestDeferredExecution : IDeferredExecution
+        {
+            public readonly IList<Action> Actions = new List<Action>();
+
+            public void ExecuteDeferred()
+            {
+                foreach (Action action in this.Actions)
+                    action();
+                this.Actions.Clear();
+            }
+
+            void IDeferredExecution.Defer(Action action)
+            {
+                this.Actions.Add(action);
+            }
+        }
+
+        private TestDeferredExecution _dispatcher;
+
+        [TestInitialize]
+        public void SetUpTest()
+        {
+            _dispatcher = new TestDeferredExecution();
+        }
+
+        [TestCleanup]
+        public void TearDownTest()
+        {
+            _dispatcher = null;
+        }
+
         [TestMethod]
         public void InSessionMenusModel_Disconnect_CallsSession()
         {
             using (TestSession session = new TestSession())
             {
                 session.Expect("Disconnect", new List<object>() { }, null);
-                IInSessionMenus model = new InSessionMenusModel(session, new TestFullScreenModel());
+                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session, new TestFullScreenModel());
 
                 model.Disconnect();
             }
@@ -311,7 +343,7 @@
             using (TestFullScreenModel fullScreenModel = new TestFullScreenModel())
             {
                 fullScreenModel.Expect("EnterFullScreen", new List<object>(), null);
-                IInSessionMenus model = new InSessionMenusModel(session, fullScreenModel);
+                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session, fullScreenModel);
 
                 model.EnterFullScreen.Execute(null);
             }
@@ -324,7 +356,7 @@
             using (TestFullScreenModel fullScreenModel = new TestFullScreenModel())
             {
                 fullScreenModel.Expect("ExitFullScreen", new List<object>(), null);
-                IInSessionMenus model = new InSessionMenusModel(session, fullScreenModel);
+                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session, fullScreenModel);
 
                 model.ExitFullScreen.Execute(null);
             }
