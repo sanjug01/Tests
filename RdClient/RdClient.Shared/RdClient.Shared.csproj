@@ -75,7 +75,6 @@
     <Compile Include="Converters\ByteArrayToStringConverter.cs" />
     <Compile Include="Converters\GatewayComboBoxElementToLocalizedStringConverter.cs" />
     <Compile Include="Converters\StringLengthToVisibilityConverter.cs" />
-    <Compile Include="Converters\StringToDictionaryObjectConverter.cs" />
     <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverter.cs" />
     <Compile Include="CxWrappers\Errors\AdalError.cs" />
     <Compile Include="CxWrappers\Errors\AutoReconnectError.cs" />
@@ -127,6 +126,7 @@
     <Compile Include="Data\TemporaryModelContainer.cs" />
     <Compile Include="Data\TransformingObservableCollection.cs" />
     <Compile Include="Data\TrustedCertificate.cs" />
+    <Compile Include="Helpers\ArrayComparer.cs" />
     <Compile Include="Helpers\ArrayRound.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
     <Compile Include="Helpers\IanaInterfaceType.cs" />
@@ -145,6 +145,7 @@
     <Compile Include="Helpers\IDataScrambler.cs" />
     <Compile Include="Helpers\IDeferredExecution.cs" />
     <Compile Include="Helpers\IFullScreen.cs" />
+    <Compile Include="Helpers\IInputFocusController.cs" />
     <Compile Include="Helpers\ILocalizedString.cs" />
     <Compile Include="Helpers\IScaleFactor.cs" />
     <Compile Include="Helpers\IWindowSize.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Helpers\ListTrace.cs" />
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\ITimer.cs" />
+    <Compile Include="Helpers\MemoizeCodeBlock.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Helpers\ScaleFactor.cs" />
     <Compile Include="Helpers\WindowSize.cs" />
@@ -160,11 +162,15 @@
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\ViewItemsSource.cs" />
+    <Compile Include="Input\Pointer\CursorEncoder.cs" />
+    <Compile Include="Input\Pointer\ICursorEncoder.cs" />
+    <Compile Include="Input\Pointer\InputDeviceTracker.cs" />
     <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
     <Compile Include="Input\Pointer\PointerVisibilityConsumer.cs" />
     <Compile Include="Models\FullScreenModel.cs" />
     <Compile Include="Models\ICredentialsIdModel.cs" />
     <Compile Include="Models\IFullScreenModel.cs" />
+    <Compile Include="Models\IInSessionMenus.cs" />
     <Compile Include="Models\IScrollBarModel.cs" />
     <Compile Include="Models\ScrambledString.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
@@ -196,7 +202,7 @@
     <Compile Include="Input\Recognizers\ITapRecognizer.cs" />
     <Compile Include="Input\Recognizers\IZoomScrollEvent.cs" />
     <Compile Include="Input\Pointer\MouseAction.cs" />
-    <Compile Include="Input\Pointer\MouseCursorShape.cs" />
+    <Compile Include="Input\Pointer\MouseCursorShapes.cs" />
     <Compile Include="Input\Pointer\PointerCapture.cs" />
     <Compile Include="Input\Pointer\PointerEvent.cs" />
     <Compile Include="Input\Pointer\PointerModeConsumer.cs" />
@@ -359,9 +365,11 @@
     <Compile Include="ViewModels\AddOrEditViewArgs.cs" />
     <Compile Include="ViewModels\CredentialPromptMode.cs" />
     <Compile Include="ViewModels\CredentialPromptResult.cs" />
+    <Compile Include="ViewModels\FocusStealingRelayCommand.cs" />
     <Compile Include="ViewModels\IBellyBandViewModel.cs" />
     <Compile Include="ViewModels\IGatewaysCollector.cs" />
     <Compile Include="ViewModels\IItemsView.cs" />
+    <Compile Include="ViewModels\InSessionMenusViewModel.cs" />
     <Compile Include="ViewModels\IRightSideBarViewModel.cs" />
     <Compile Include="ViewModels\IUsersCollector.cs" />
     <Compile Include="ViewModels\ICertificateValidationViewModel.cs" />

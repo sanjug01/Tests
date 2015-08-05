@@ -5,9 +5,16 @@ using Windows.UI.ViewManagement;
 
 namespace RdClient.Shared.Models
 {
+    enum FullScreenChanging
+    {
+        Entering,
+        Exiting,
+        Idle
+    }
+
     public class FullScreenModel : IFullScreenModel
     {
-        private bool _changing;
+        private FullScreenChanging _changing;
         private IFullScreen _fullScreen;
         private Debouncer _enterFullScreenDebouncer;
         private Debouncer _exitFullScreenDebouncer;
@@ -46,8 +53,10 @@ namespace RdClient.Shared.Models
             set
             {
                 value.SizeChanged += (s, o) => FullScreenDebouncer();
+                value.Activated += OnWindowActivationChanged;
             }
         }
+
         public UserInteractionMode UserInteractionMode
         {
             get
@@ -76,23 +85,25 @@ namespace RdClient.Shared.Models
 
         public FullScreenModel()
         {
-            _changing = false;
+            _changing = FullScreenChanging.Idle;
         }
 
         public void EnterFullScreen()
         {
             if (null != _enteringFullScreen)
                 _enteringFullScreen(this, EventArgs.Empty);
-            _changing = true;
+            _changing = FullScreenChanging.Entering;
             _fullScreen.EnterFullScreen();
+            FullScreenDebouncer();
         }
 
         public void ExitFullScreen()
         {
             if (null != _exitingFullScreen)
                 _exitingFullScreen(this, EventArgs.Empty);
-            _changing = true;
+            _changing = FullScreenChanging.Exiting;
             _fullScreen.ExitFullScreen();
+            FullScreenDebouncer();
         }
 
         private void EmitFullScreenChange()
@@ -111,18 +122,49 @@ namespace RdClient.Shared.Models
             }
         }
 
+        private void OnWindowActivationChanged(object sender, WindowActivatedEventArgs e)
+        {
+            switch(_changing)
+            {
+                case FullScreenChanging.Entering:
+                    if(e.WindowActivation == WindowActivation.Deactivated)
+                    {
+                        if (_enterFullScreenDebouncer != null)
+                        {
+                            _enterFullScreenDebouncer.Cancel();
+                        }
+                    }
+                    else if(e.WindowActivation == WindowActivation.Activated)
+                    {
+                        EnterFullScreen();
+                    }
+                    break;
+                case FullScreenChanging.Exiting:
+                    if (e.WindowActivation == WindowActivation.Deactivated)
+                    {
+                        if (_exitFullScreenDebouncer != null)
+                        {
+                            _exitFullScreenDebouncer.Cancel();
+                        }
+                    }
+                    else if (e.WindowActivation == WindowActivation.Activated)
+                    {
+                        ExitFullScreen();
+                    }
+                    break;
+            }
+        }
+
         private void FullScreenDebouncer()
         {
-            if (_changing)
+            switch(_changing)
             {
-                if (_fullScreen.IsFullScreenMode)
-                {
+                case FullScreenChanging.Entering:
                     EmitEnteredFullScreen();
-                }
-                else
-                {
+                    break;
+                case FullScreenChanging.Exiting:
                     EmitExitedFullScreen();
-                }
+                    break;
             }
         }
 
@@ -147,7 +189,7 @@ namespace RdClient.Shared.Models
             }
 
             _enterFullScreenDebouncer = null;
-            _changing = false;
+            _changing = FullScreenChanging.Idle;
         }
 
         private void EmitExitedFullScreen()
@@ -171,7 +213,7 @@ namespace RdClient.Shared.Models
             }
 
             _exitFullScreenDebouncer = null;
-            _changing = false;
+            _changing = FullScreenChanging.Idle;
         }
     }
 }

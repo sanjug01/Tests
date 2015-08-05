@@ -167,10 +167,10 @@
             }
         }
 
-        void IRenderingPanel.ChangeMouseCursorShape(MouseCursorShape shape)
+        void IRenderingPanel.ChangeMouseCursorShape(ImageSource shape, Point hotspot)
         {
-            this.MouseCursor.Source = shape.ImageSource;
-            _hotspot = shape.Hotspot;
+            this.MouseCursor.Source = shape;
+            _hotspot = hotspot;
         }
 
         void IRenderingPanel.MoveMouseCursor(Point point)

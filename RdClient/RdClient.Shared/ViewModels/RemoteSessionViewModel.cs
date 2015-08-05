@@ -27,14 +27,49 @@
         private readonly Stopwatch _presentationStopwatch;
         private readonly RelayCommand _invokeKeyboard;
         private readonly SymbolBarButtonModel _invokeKeyboardModel;
+        private readonly FocusControllerProxy _inputFocusController;
+        private IFullScreenModel _fullScreenModel;
+        private EventHandler _enteredFullScreenHandler;
 
         private double
             _enterFullScreenCount,
             _exitFullScreenCount;
 
+        /// <summary>
+        /// Proxy object that delegates calls of the IInputFocusController interface to an injected instance of the interface.
+        /// The proxy is needed because the view model needs the controller object before it gets attached to a view that provides
+        /// the actual implementation of IInputFocusController.
+        /// The class creates a read-only instance of FocusControllerProxy and updates its controller when the view injects it.
+        /// </summary>
+        private sealed class FocusControllerProxy : IInputFocusController
+        {
+            private IInputFocusController _controller;
+
+            public IInputFocusController Controller
+            {
+                get { return _controller; }
+                set { _controller = value; }
+            }
+
+            void IInputFocusController.SetDefault()
+            {
+                if (null != _controller)
+                    _controller.SetDefault();
+            }
+        }
+
         public ZoomPanModel ZoomPanModel
         {
             private get; set;
+        }
+
+        /// <summary>
+        /// The property gets set by a XAML binding.
+        /// </summary>
+        public IInputFocusController InputFocusController
+        {
+            get { return _inputFocusController.Controller; }
+            set { _inputFocusController.Controller = value; }
         }
 
         //
@@ -129,6 +164,7 @@
         public ReadOnlyObservableCollection<object> ConnectionBarItems
         {
             get { return _connectionBarItems; }
+            private set { SetProperty(ref _connectionBarItems, value); }
         }
         /// <summary>
         /// View model of the view shown in the belly band across the session view when input is needed from user.
@@ -140,7 +176,6 @@
             private set { this.SetProperty(ref _bellyBandViewModel, value); }
         }
 
-        private IFullScreenModel _fullScreenModel;
         public IFullScreenModel FullScreenModel
         {
             private get
@@ -171,12 +206,10 @@
             _presentationStopwatch = new Stopwatch();
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
             _invokeKeyboardModel = new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
+            _inputFocusController = new FocusControllerProxy();
             _sessionState = SessionState.Idle;
-
-            this.ZoomPanModel = new ZoomPanModel();
         }
 
-        private EventHandler _enteredFullScreenHandler;
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Assert(null == _activeSession);
@@ -189,12 +222,14 @@
 
             base.OnPresenting(activationParameter);
 
+            this.ZoomPanModel = new ZoomPanModel(_inputFocusController, _telemetryClient);
+
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = this.ZoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = new RelayCommand(RightSideBarVisibilityToggle) });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = new FocusStealingRelayCommand(_inputFocusController, RightSideBarVisibilityToggle) });
             items.Add(_invokeKeyboardModel);
-            _connectionBarItems = new ReadOnlyObservableCollection<object>(items);
+            this.ConnectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
             if (null != _telemetryClient)
             {
@@ -258,6 +293,9 @@
             {
                 this.RightSideBarViewModel.Visibility = Visibility.Visible;
             }
+
+            if(null != _inputPanel)
+                _inputPanel.Hide();
         }
 
         protected override void OnDismissed()
@@ -286,7 +324,10 @@
             this.PointerCapture = null;
 
             _presentationStopwatch.Stop();
-            _presentationStopwatch.Reset();
+            _presentationStopwatch.Reset();            
+
+            this.ZoomPanModel.Dispose();
+            this.ZoomPanModel = null;
 
             base.OnDismissed();
         }
@@ -341,7 +382,6 @@
         void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
         {
             _telemetryClient = telemetryClient;
-            this.ZoomPanModel.SetTelemetryClient(telemetryClient);
             this.RightSideBarViewModel.SetTelemetryClient(telemetryClient);
         }
 
@@ -356,8 +396,7 @@
         }
 
         private void OnSessionFailed(object sender, SessionFailureEventArgs e)
-        {
-            
+        {            
             //Restore the local mouse
             this._activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
             //
@@ -374,6 +413,9 @@
 
         private void OnSessionInterrupted(object sender, SessionInterruptedEventArgs e)
         {
+            //Restore the local mouse
+            this._activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+
             this.BellyBandViewModel = new RemoteSessionInterruptionViewModel(_activeSession, e.ObtainContinuation());
             this.IsConnectionBarVisible = true;
         }
@@ -478,7 +520,7 @@
 
             this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
 
-            this.ZoomPanModel.Reset(_activeSessionControl.RenderingPanel.Viewport);
+            this.ZoomPanModel.Initialize(_activeSessionControl.RenderingPanel.Viewport);
             this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
 
             this.PanKnobSite.Viewport = _activeSessionControl.RenderingPanel.Viewport;
@@ -488,12 +530,12 @@
 
             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.PanKnobSite.OnConsumptionModeChanged;
             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged += this.ZoomPanModel.OnConsumptionModeChanged;
+            this.PointerCapture.InputDevice.InputDeviceChanged += this.ScrollBarModel.OnInputDeviceChanged;
             this.PointerCapture.ConsumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
 
             _activeSession.MouseCursorShapeChanged += this.PointerCapture.OnMouseCursorShapeChanged;
             _activeSession.MultiTouchEnabledChanged += this.PointerCapture.OnMultiTouchEnabledChanged;
             _sessionView.PointerChanged += this.PointerCapture.OnPointerChanged;
-            _sessionView.PointerChanged += this.ScrollBarModel.OnPointerChanged;
 
             _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
             EmitPropertyChanged("IsRenderingPanelActive");
@@ -506,19 +548,22 @@
         {
             _keyboardCapture.Stop();
             _keyboardCapture.Keystroke -= this.OnKeystroke;
+            _activeSessionControl.RenderingPanel.Viewport.Changed -= this.PanKnobSite.OnViewportChanged;
             _activeSession.MouseCursorShapeChanged -= this.PointerCapture.OnMouseCursorShapeChanged;
             _activeSession.MultiTouchEnabledChanged -= this.PointerCapture.OnMultiTouchEnabledChanged;
             _sessionView.PointerChanged -= this.PointerCapture.OnPointerChanged;
 
-            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= _panKnobSite.OnConsumptionModeChanged;
+            this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= this.PanKnobSite.OnConsumptionModeChanged;
             this.PointerCapture.ConsumptionMode.ConsumptionModeChanged -= this.ZoomPanModel.OnConsumptionModeChanged;
+            this.PointerCapture.InputDevice.InputDeviceChanged -= this.ScrollBarModel.OnInputDeviceChanged;
 
             //
             // The connection bar and side bars are not available in any non-connected state.
             //
             this.IsConnectionBarVisible = false;
             this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
-            _panKnobSite.PanKnob.IsVisible = false;
+            
+            this.PanKnobSite.PanKnob.IsVisible = false;
         }
 
         private void OnSessionStatePropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -551,14 +596,17 @@
                             DisconnectedAction();
                         }
                         break;
-
-                    case SessionState.Closed:
                     default:
-                        this.FullScreenModel.ExitFullScreen();
+                        if(SessionState.Closed == _activeSession.State.State)
+                        {
+                            this.FullScreenModel.ExitFullScreen();
+                        }
+
                         //
                         // Remove the belly-band message
                         //
                         this.BellyBandViewModel = null;
+
                         this.RightSideBarViewModel.RemoteSession = null;
                         this.RightSideBarViewModel.PointerCapture = null;
 
@@ -591,13 +639,12 @@
                     mouseVisibility = Visibility.Visible;
                 }
 
-                if(this.PointerCapture.ConsumptionMode.ConsumptionMode != ConsumptionModeType.Pointer)
+                this.ScrollBarModel.SetScrollbarVisibility(mouseVisibility);
+
+                if (this.PointerCapture.ConsumptionMode.ConsumptionMode != ConsumptionModeType.Pointer)
                 {
                     mouseVisibility = Visibility.Collapsed;
                 }
-
-
-                this.ScrollBarModel.SetScrollbarVisibility(mouseVisibility);
 
                 if (_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
                 {

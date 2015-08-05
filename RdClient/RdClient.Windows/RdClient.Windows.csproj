@@ -21,7 +21,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x86|arm</AppxBundlePlatforms>
     <ApplicationInsightsResourceId>/subscriptions/1432b34c-c3b7-448d-bb4b-90cda6c2423a/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/RdClient.Windows</ApplicationInsightsResourceId>
     <PackageCertificateThumbprint>191EF584DB98DEABBD0667A4E1D9F0E0FE7A7C1B</PackageCertificateThumbprint>
     <PackageCertificateKeyFile>RdClient.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
@@ -78,12 +78,13 @@
     <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
     <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -151,7 +152,6 @@
       <DependentUpon>RemoteSessionPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RenderingPanel.cs" />
-    <Compile Include="Controls\RenderingPanelViewport.cs" />
     <Compile Include="Controls\RightSideBarControl.xaml.cs">
       <DependentUpon>RightSideBarControl.xaml</DependentUpon>
     </Compile>
@@ -189,6 +189,9 @@
     <Compile Include="Telemetry\ApplicationInsightsTelemetryCore.cs" />
     <Compile Include="Telemetry\DummyTelemetryClient.cs" />
     <Compile Include="Navigation\ModalFocusTracker.cs" />
+    <Compile Include="Views\InSessionMenusView.xaml.cs">
+      <DependentUpon>InSessionMenusView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RichTextView.xaml.cs">
       <DependentUpon>RichTextView.xaml</DependentUpon>
     </Compile>
@@ -237,6 +240,31 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Content Include="Assets\AppNameAppList.scale-100.png" />
+    <Content Include="Assets\AppNameAppList.scale-125.png" />
+    <Content Include="Assets\AppNameAppList.scale-150.png" />
+    <Content Include="Assets\AppNameAppList.scale-200.png" />
+    <Content Include="Assets\AppNameAppList.scale-400.png" />
+    <Content Include="Assets\AppNameLargeTile.scale-100.png" />
+    <Content Include="Assets\AppNameLargeTile.scale-125.png" />
+    <Content Include="Assets\AppNameLargeTile.scale-150.png" />
+    <Content Include="Assets\AppNameLargeTile.scale-200.png" />
+    <Content Include="Assets\AppNameLargeTile.scale-400.png" />
+    <Content Include="Assets\AppNameMedTile.scale-100.png" />
+    <Content Include="Assets\AppNameMedTile.scale-125.png" />
+    <Content Include="Assets\AppNameMedTile.scale-150.png" />
+    <Content Include="Assets\AppNameMedTile.scale-200.png" />
+    <Content Include="Assets\AppNameMedTile.scale-400.png" />
+    <Content Include="Assets\AppNameSmallTile.scale-100.png" />
+    <Content Include="Assets\AppNameSmallTile.scale-125.png" />
+    <Content Include="Assets\AppNameSmallTile.scale-150.png" />
+    <Content Include="Assets\AppNameSmallTile.scale-200.png" />
+    <Content Include="Assets\AppNameSmallTile.scale-400.png" />
+    <Content Include="Assets\AppNameWideTile.scale-100.png" />
+    <Content Include="Assets\AppNameWideTile.scale-125.png" />
+    <Content Include="Assets\AppNameWideTile.scale-150.png" />
+    <Content Include="Assets\AppNameWideTile.scale-200.png" />
+    <Content Include="Assets\AppNameWideTile.scale-400.png" />
     <Content Include="Assets\RemoteDesktopStore.scale-100.png" />
     <Content Include="Assets\RemoteDesktopStore.scale-125.png" />
     <Content Include="Assets\RemoteDesktopStore.scale-150.png" />
@@ -288,31 +316,6 @@
     <Compile Include="Views\ViewPresenter.xaml.cs">
       <DependentUpon>ViewPresenter.xaml</DependentUpon>
     </Compile>
-    <Content Include="Assets\RemoteDesktopAppList.scale-100.png" />
-    <Content Include="Assets\RemoteDesktopAppList.scale-125.png" />
-    <Content Include="Assets\RemoteDesktopAppList.scale-150.png" />
-    <Content Include="Assets\RemoteDesktopAppList.scale-200.png" />
-    <Content Include="Assets\RemoteDesktopAppList.scale-400.png" />
-    <Content Include="Assets\RemoteDesktopLargeTile.scale-100.png" />
-    <Content Include="Assets\RemoteDesktopLargeTile.scale-125.png" />
-    <Content Include="Assets\RemoteDesktopLargeTile.scale-150.png" />
-    <Content Include="Assets\RemoteDesktopLargeTile.scale-200.png" />
-    <Content Include="Assets\RemoteDesktopLargeTile.scale-400.png" />
-    <Content Include="Assets\RemoteDesktopMedTile.scale-100.png" />
-    <Content Include="Assets\RemoteDesktopMedTile.scale-125.png" />
-    <Content Include="Assets\RemoteDesktopMedTile.scale-150.png" />
-    <Content Include="Assets\RemoteDesktopMedTile.scale-200.png" />
-    <Content Include="Assets\RemoteDesktopMedTile.scale-400.png" />
-    <Content Include="Assets\RemoteDesktopSmallTile.scale-100.png" />
-    <Content Include="Assets\RemoteDesktopSmallTile.scale-125.png" />
-    <Content Include="Assets\RemoteDesktopSmallTile.scale-150.png" />
-    <Content Include="Assets\RemoteDesktopSmallTile.scale-200.png" />
-    <Content Include="Assets\RemoteDesktopSmallTile.scale-400.png" />
-    <Content Include="Assets\RemoteDesktopWideTile.scale-100.png" />
-    <Content Include="Assets\RemoteDesktopWideTile.scale-125.png" />
-    <Content Include="Assets\RemoteDesktopWideTile.scale-150.png" />
-    <Content Include="Assets\RemoteDesktopWideTile.scale-200.png" />
-    <Content Include="Assets\RemoteDesktopWideTile.scale-400.png" />
     <Content Include="Strings\en-US\EULA.rtf" />
     <Content Include="Strings\en-US\ThirdPartyNotices.rtf" />
     <None Include="RdClient.Windows_TemporaryKey.pfx" />
@@ -457,6 +460,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\InSessionMenusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\RichTextView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -559,16 +566,16 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.ApplicationInsights, Version=1.0.0.4220, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.1.0.1-beta\lib\portable-win81+wpa81\Microsoft.ApplicationInsights.dll</HintPath>
+    <Reference Include="Microsoft.ApplicationInsights, Version=1.1.0.1899, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.1.1.0\lib\portable-win81+wpa81\Microsoft.ApplicationInsights.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.ApplicationInsights.Extensibility.Windows, Version=1.0.0.4225, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsApps.1.0.0\lib\win81\Microsoft.ApplicationInsights.Extensibility.Windows.dll</HintPath>
+    <Reference Include="Microsoft.ApplicationInsights.Extensibility.Windows, Version=1.1.0.1906, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsApps.1.1.0\lib\win81\Microsoft.ApplicationInsights.Extensibility.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.ApplicationInsights.PersistenceChannel, Version=1.0.0.4223, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.ApplicationInsights.PersistenceChannel.1.0.0\lib\portable-win81+wpa81\Microsoft.ApplicationInsights.PersistenceChannel.dll</HintPath>
+    <Reference Include="Microsoft.ApplicationInsights.PersistenceChannel, Version=1.1.0.1903, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PersistenceChannel.1.1.0\lib\portable-win81+wpa81\Microsoft.ApplicationInsights.PersistenceChannel.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">

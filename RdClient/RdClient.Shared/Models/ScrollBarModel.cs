@@ -232,25 +232,20 @@ namespace RdClient.Shared.Models
             }
             private set
             {
-                EmitPropertyChanged("VisibilityCorner");
-
                 SetProperty(ref _indicatorMode, value);
+                EmitPropertyChanged("VisibilityCorner");
             }
         }
 
-        public void OnPointerChanged(object sender, IPointerEventBase e)
+        public void OnInputDeviceChanged(object sender, PointerDeviceType e)
         {
-            if (e is IPointerRoutedEventProperties)
+            if(e == PointerDeviceType.Mouse)
             {
-                IPointerRoutedEventProperties iprep = (IPointerRoutedEventProperties)e;
-                if (iprep.DeviceType == PointerDeviceType.Mouse)
-                {
-                    this.IndicatorMode = ScrollingIndicatorMode.MouseIndicator;
-                }
-                else if (iprep.DeviceType == PointerDeviceType.Touch)
-                {
-                    this.IndicatorMode = ScrollingIndicatorMode.TouchIndicator;
-                }
+                this.IndicatorMode = ScrollingIndicatorMode.MouseIndicator;
+            }
+            else if(e == PointerDeviceType.Touch)
+            {
+                this.IndicatorMode = ScrollingIndicatorMode.TouchIndicator;
             }
         }
     }

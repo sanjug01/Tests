@@ -1,11 +1,12 @@
 ﻿namespace RdClient.Shared.Models
 {
     using RdClient.Shared.Helpers;
-    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models.Viewport;
     using System;
     using Windows.Foundation;
     using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Media;
+
 
 
     /// <summary>
@@ -24,7 +25,7 @@
         IViewport Viewport { get; }
         IScaleFactor ScaleFactor { get; }
 
-        void ChangeMouseCursorShape(MouseCursorShape shape);
+        void ChangeMouseCursorShape(ImageSource shape, Point hotspot);
         void MoveMouseCursor(Point point);
         void ChangeMouseVisibility(Visibility visibility);
         void ScaleMouseCursor(double scale);
