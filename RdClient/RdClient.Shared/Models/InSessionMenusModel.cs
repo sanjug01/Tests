@@ -30,7 +30,7 @@
                 parameter => _fullScreenModel.ExitFullScreen(),
                 parameter => _fullScreenModel.IsFullScreenMode);
             _fullScreenModel.EnteredFullScreen += this.OnFullScreenChanged;
-            _fullScreenModel.EnteredFullScreen += this.OnFullScreenChanged;
+            _fullScreenModel.ExitedFullScreen += this.OnFullScreenChanged;
         }
 
         void IInSessionMenus.Disconnect()
