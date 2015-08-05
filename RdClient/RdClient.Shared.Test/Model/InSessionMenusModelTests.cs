@@ -212,7 +212,7 @@
                 }
             }
 
-            bool IFullScreenModel.IsFullScreenMode
+            public bool IsFullScreenMode
             {
                 get { return _isFullScreenMode; }
             }
@@ -359,6 +359,43 @@
                 IInSessionMenus model = new InSessionMenusModel(_dispatcher, session, fullScreenModel);
 
                 model.ExitFullScreen.Execute(null);
+            }
+        }
+
+        [TestMethod]
+        public void InSessionMenusModel_EnterFullScreen_CommandsUpdated()
+        {
+            using (TestSession session = new TestSession())
+            using (TestFullScreenModel fullScreenModel = new TestFullScreenModel())
+            {
+                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session, fullScreenModel);
+                Assert.IsFalse(fullScreenModel.IsFullScreenMode);
+                fullScreenModel.SetFullScreenMode(true);
+                Assert.IsFalse(model.ExitFullScreen.CanExecute(null));
+                _dispatcher.ExecuteDeferred();
+
+                Assert.IsFalse(model.EnterFullScreen.CanExecute(null));
+                Assert.IsTrue(model.ExitFullScreen.CanExecute(null));
+            }
+        }
+
+        [TestMethod]
+        public void InSessionMenusModel_ExitFullScreen_CommandsUpdated()
+        {
+            using (TestSession session = new TestSession())
+            using (TestFullScreenModel fullScreenModel = new TestFullScreenModel())
+            {
+                fullScreenModel.SetFullScreenMode(true);
+                _dispatcher.ExecuteDeferred();
+
+                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session, fullScreenModel);
+                Assert.IsTrue(fullScreenModel.IsFullScreenMode);
+                fullScreenModel.SetFullScreenMode(false);
+                Assert.IsFalse(model.EnterFullScreen.CanExecute(null));
+                _dispatcher.ExecuteDeferred();
+
+                Assert.IsTrue(model.EnterFullScreen.CanExecute(null));
+                Assert.IsFalse(model.ExitFullScreen.CanExecute(null));
             }
         }
     }
