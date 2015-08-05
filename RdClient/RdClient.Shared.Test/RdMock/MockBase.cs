@@ -60,7 +60,8 @@ namespace RdMock
             Justification = "Intended for test"), 
         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly",
             Justification = "Intended for test")]
-        public void Dispose()
+
+        public virtual void Dispose()
         {
             if (_expectedCalls.Count > 0)
             {

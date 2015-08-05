@@ -17,22 +17,35 @@
 
         private sealed class MockModel : RdMock.MockBase, IInSessionMenus
         {
+            private bool _invokeDispose;
+
+            public readonly RelayCommand EnterFullScreenCommand;
+            public readonly RelayCommand ExitFullScreenCommand;
+
+            public MockModel(bool invokeDispose = false)
+            {
+                _invokeDispose = invokeDispose;
+                this.EnterFullScreenCommand = new RelayCommand(p => { });
+                this.ExitFullScreenCommand = new RelayCommand(p => { });
+            }
+
+            public override void Dispose()
+            {
+                if(_invokeDispose)
+                    Invoke(new object[] { });
+                base.Dispose();
+            }
+
             void IInSessionMenus.Disconnect() { Invoke(new object[] { }); }
 
             ICommand IInSessionMenus.EnterFullScreen
             {
-                get
-                {
-                    throw new NotImplementedException();
-                }
+                get { return this.EnterFullScreenCommand; }
             }
 
             ICommand IInSessionMenus.ExitFullScreen
             {
-                get
-                {
-                    throw new NotImplementedException();
-                }
+                get { return this.ExitFullScreenCommand; }
             }
         }
 
@@ -68,9 +81,24 @@
                 Assert.IsTrue(_vm.Cancel.CanExecute(null));
                 Assert.IsTrue(_vm.Disconnect.CanExecute(null));
                 Assert.IsNotNull(_vm.EnterFullScreen);
-                Assert.IsFalse(_vm.EnterFullScreen.CanExecute);
+                Assert.AreSame(_vm.EnterFullScreen.Command, model.EnterFullScreenCommand);
                 Assert.IsNotNull(_vm.ExitFullScreen);
-                Assert.IsFalse(_vm.ExitFullScreen.CanExecute);
+                Assert.AreSame(_vm.ExitFullScreen.Command, model.ExitFullScreenCommand);
+                Assert.AreSame(model.EnterFullScreenCommand, _vm.EnterFullScreen.Command);
+                Assert.AreSame(model.ExitFullScreenCommand, _vm.ExitFullScreen.Command);
+            }
+        }
+
+        [TestMethod]
+        public void NewInSessionViewModel_PresentDismiss_ModelDisposed()
+        {
+            using (MockStackedContext context = new MockStackedContext())
+            {
+                MockModel model = new MockModel(true);
+                model.Expect("Dispose", new List<object>() { }, null);
+
+                _ivm.Presenting(_nav, model, context);
+                _ivm.Dismissing();
             }
         }
 

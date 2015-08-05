@@ -202,6 +202,15 @@
                 }
             }
 
+            public void SetUserInteractionMode(UserInteractionMode mode)
+            {
+                if(mode != _userInteractionMode)
+                {
+                    _userInteractionMode = mode;
+                    EmitUserInteractionModeChange();
+                }
+            }
+
             bool IFullScreenModel.IsFullScreenMode
             {
                 get { return _isFullScreenMode; }
@@ -275,6 +284,12 @@
                 if (null != _fullScreenChange)
                     _fullScreenChange(this, EventArgs.Empty);
             }
+
+            private void EmitUserInteractionModeChange()
+            {
+                if (null != _userInteractionModeChange)
+                    _userInteractionModeChange(this, EventArgs.Empty);
+            }
         }
 
         [TestMethod]
@@ -286,6 +301,32 @@
                 IInSessionMenus model = new InSessionMenusModel(session, new TestFullScreenModel());
 
                 model.Disconnect();
+            }
+        }
+
+        [TestMethod]
+        public void InSessionMenusModel_EnterFullScreen_CallsFullScreenModel()
+        {
+            using (TestSession session = new TestSession())
+            using (TestFullScreenModel fullScreenModel = new TestFullScreenModel())
+            {
+                fullScreenModel.Expect("EnterFullScreen", new List<object>(), null);
+                IInSessionMenus model = new InSessionMenusModel(session, fullScreenModel);
+
+                model.EnterFullScreen.Execute(null);
+            }
+        }
+
+        [TestMethod]
+        public void InSessionMenusModel_ExitFullScreen_CallsFullScreenModel()
+        {
+            using (TestSession session = new TestSession())
+            using (TestFullScreenModel fullScreenModel = new TestFullScreenModel())
+            {
+                fullScreenModel.Expect("ExitFullScreen", new List<object>(), null);
+                IInSessionMenus model = new InSessionMenusModel(session, fullScreenModel);
+
+                model.ExitFullScreen.Execute(null);
             }
         }
     }
