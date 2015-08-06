@@ -21,12 +21,16 @@
 
             public readonly RelayCommand EnterFullScreenCommand;
             public readonly RelayCommand ExitFullScreenCommand;
+            public readonly RelayCommand TouchModeCommand;
+            public readonly RelayCommand PointerModeCommand;
 
             public MockModel(bool invokeDispose = false)
             {
                 _invokeDispose = invokeDispose;
                 this.EnterFullScreenCommand = new RelayCommand(p => { });
                 this.ExitFullScreenCommand = new RelayCommand(p => { });
+                this.TouchModeCommand = new RelayCommand(p => { });
+                this.PointerModeCommand = new RelayCommand(p => { });
             }
 
             public override void Dispose()
@@ -50,18 +54,12 @@
 
             ICommand IInSessionMenus.TouchMode
             {
-                get
-                {
-                    throw new NotImplementedException();
-                }
+                get { return this.TouchModeCommand; }
             }
 
             ICommand IInSessionMenus.PointerMode
             {
-                get
-                {
-                    throw new NotImplementedException();
-                }
+                get { return this.PointerModeCommand; }
             }
         }
 
