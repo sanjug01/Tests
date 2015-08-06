@@ -92,14 +92,6 @@
                               Data="{StaticResource DesktopTileDefaultIconData}" />
                     </Grid>
 
-                    <!--                                        
-                    <Image Source="ms-appx:///Assets/desktop_placeholder.png"
-                           Visibility="{Binding Desktop.EncodedThumbnail, Converter={StaticResource NullToVisibleConverter}}"
-                           Stretch="UniformToFill"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center" />
-                    -->
-
                     <Image Grid.RowSpan="2"
                            Source="{Binding Desktop.EncodedThumbnail, Converter={StaticResource BytesToBitmapConverter}}"
                            Visibility="{Binding Desktop.EncodedThumbnail, Converter={StaticResource NotNullToVisibleConverter}}"
