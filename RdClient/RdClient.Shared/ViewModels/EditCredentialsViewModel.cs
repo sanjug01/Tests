@@ -181,11 +181,12 @@
         protected override void OnDismissed()
         {
             Contract.Assert(null != _task);
-            _task = null;
-            _taskToken = null;
             this.ResourceName = null;
             this.UserName = null;
             this.Password = null;
+            _task = null;
+            _taskToken = null;
+
 
             base.OnDismissed();
         }
