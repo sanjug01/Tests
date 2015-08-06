@@ -300,7 +300,11 @@
 
         private void ShowMenusDialog(object parameter)
         {
-            InSessionMenusModel model = new InSessionMenusModel(this.Dispatcher, _activeSession, _fullScreenModel);
+            InSessionMenusModel model = new InSessionMenusModel(this.Dispatcher,
+                _activeSession,
+                _fullScreenModel,
+                _pointerCapture,
+                _deviceCapabilities);
             //
             // Hide the inpiut panel first to free up some screen space, ane because it is useless when the menu overlays are shown.
             //

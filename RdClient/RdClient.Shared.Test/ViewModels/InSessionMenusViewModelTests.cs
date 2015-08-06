@@ -47,6 +47,22 @@
             {
                 get { return this.ExitFullScreenCommand; }
             }
+
+            ICommand IInSessionMenus.TouchMode
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            ICommand IInSessionMenus.PointerMode
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
         }
 
         private sealed class MockStackedContext : RdMock.MockBase, IStackedPresentationContext

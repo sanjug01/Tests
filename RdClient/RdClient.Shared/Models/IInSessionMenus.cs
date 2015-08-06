@@ -14,8 +14,24 @@
         /// </summary>
         void Disconnect();
 
+        /// <summary>
+        /// Command switches the application window to full screen size.
+        /// </summary>
         ICommand EnterFullScreen { get; }
 
+        /// <summary>
+        /// Command switchws the application window to normal (non-full screen) size.
+        /// </summary>
         ICommand ExitFullScreen { get; }
+
+        /// <summary>
+        /// Command switches the in-session input mode to "Touch" - local pointer and touch events are forwarded to the server.
+        /// </summary>
+        ICommand TouchMode { get; }
+
+        /// <summary>
+        /// Command switches the in-session input mode to "Pointer" - local pointer interactions move the remote mouse.
+        /// </summary>
+        ICommand PointerMode { get; }
     }
 }

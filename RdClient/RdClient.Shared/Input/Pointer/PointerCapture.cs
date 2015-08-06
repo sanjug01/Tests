@@ -12,6 +12,7 @@ namespace RdClient.Shared.Input.Pointer
         private IRemoteSessionControl _sessionControl;
         private IRenderingPanel _panel;
         private IPointerEventConsumer _consumer;
+        private InputMode _inputMode;
         private bool _multiTouchEnabled;
         private MouseCursorShapes _mouseCursorShapes;
 
@@ -58,6 +59,7 @@ namespace RdClient.Shared.Input.Pointer
                 pointerVisibilityConsumer);
 
             _consumer = pointerEventDispatcher;
+            _inputMode = InputMode.Mouse;
             _consumptionMode = new ConsumptionModeTracker() { ConsumptionMode = ConsumptionModeType.Pointer };
             _consumptionMode.ConsumptionModeChanged += (s, o) => pointerEventDispatcher.SetConsumptionMode(o);
             _mouseCursorShapes = new MouseCursorShapes(new CursorEncoder());
@@ -81,23 +83,28 @@ namespace RdClient.Shared.Input.Pointer
             this._panel.ChangeMouseCursorShape(shape, hotspot);
         }
 
-        void IPointerCapture.ChangeInputMode(InputMode inputMode)
+        InputMode IPointerCapture.InputMode
         {
-            switch (inputMode)
+            get { return _inputMode; }
+
+            set
             {
-                case InputMode.Mouse:
-                    _consumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
-                    break;
-                case InputMode.Touch:
-                    if(_multiTouchEnabled)
+                if(value != _inputMode)
+                {
+                    _inputMode = value;
+
+                    switch (_inputMode)
                     {
-                        _consumptionMode.ConsumptionMode = ConsumptionModeType.MultiTouch;
+                        case InputMode.Mouse:
+                            _consumptionMode.ConsumptionMode = ConsumptionModeType.Pointer;
+                            break;
+
+                        case InputMode.Touch:
+                            _consumptionMode.ConsumptionMode =_multiTouchEnabled ?
+                                ConsumptionModeType.MultiTouch : ConsumptionModeType.DirectTouch;
+                            break;
                     }
-                    else
-                    {
-                        _consumptionMode.ConsumptionMode = ConsumptionModeType.DirectTouch;
-                    }
-                    break;
+                }
             }
         }
 

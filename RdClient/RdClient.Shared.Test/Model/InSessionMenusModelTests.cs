@@ -4,10 +4,12 @@
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Data;
     using RdClient.Shared.Helpers;
+    using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Models;
     using System;
     using System.Collections.Generic;
     using Windows.UI.ViewManagement;
+    using System.ComponentModel;
 
     [TestClass]
     public sealed class InSessionMenusModelTests
@@ -293,6 +295,38 @@
             }
         }
 
+        private sealed class TestPointerCapture : RdMock.MockBase, IPointerCapture
+        {
+            private InputMode _inputMode;
+
+            IConsumptionModeTracker IPointerCapture.ConsumptionMode
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            IInputDeviceTracker IPointerCapture.InputDevice
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            InputMode IPointerCapture.InputMode
+            {
+                get { return _inputMode; }
+                set { _inputMode = value; }
+            }
+
+            void IPointerCapture.OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args) { }
+            void IPointerCapture.OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args) { }
+            void IPointerCapture.OnMultiTouchEnabledChanged(object sender, MultiTouchEnabledChangedArgs args) { }
+            void IPointerCapture.OnPointerChanged(object sender, IPointerEventBase e) { }
+        }
+
         private sealed class TestDeferredExecution : IDeferredExecution
         {
             public readonly IList<Action> Actions = new List<Action>();
@@ -307,6 +341,50 @@
             void IDeferredExecution.Defer(Action action)
             {
                 this.Actions.Add(action);
+            }
+        }
+
+        private sealed class TestDeviceCapabilities : IDeviceCapabilities
+        {
+            private bool _touchPresent;
+
+            public bool TouchPresent
+            {
+                set { _touchPresent = value; }
+            }
+            bool IDeviceCapabilities.CanShowInputPanel
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            uint IDeviceCapabilities.TouchPoints
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            bool IDeviceCapabilities.TouchPresent
+            {
+                get { return _touchPresent; }
+            }
+
+            string IDeviceCapabilities.UserInteractionModeLabel
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+            {
+                add { }
+                remove { }
             }
         }
 
@@ -330,7 +408,8 @@
             using (TestSession session = new TestSession())
             {
                 session.Expect("Disconnect", new List<object>() { }, null);
-                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session, new TestFullScreenModel());
+                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session,
+                    new TestFullScreenModel(), new TestPointerCapture(), new TestDeviceCapabilities());
 
                 model.Disconnect();
             }
@@ -341,9 +420,11 @@
         {
             using (TestSession session = new TestSession())
             using (TestFullScreenModel fullScreenModel = new TestFullScreenModel())
+            using (TestPointerCapture pointerCapture = new TestPointerCapture())
             {
                 fullScreenModel.Expect("EnterFullScreen", new List<object>(), null);
-                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session, fullScreenModel);
+                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session,
+                    fullScreenModel, pointerCapture, new TestDeviceCapabilities());
 
                 model.EnterFullScreen.Execute(null);
             }
@@ -354,9 +435,11 @@
         {
             using (TestSession session = new TestSession())
             using (TestFullScreenModel fullScreenModel = new TestFullScreenModel())
+            using (TestPointerCapture pointerCapture = new TestPointerCapture())
             {
                 fullScreenModel.Expect("ExitFullScreen", new List<object>(), null);
-                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session, fullScreenModel);
+                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session,
+                    fullScreenModel, pointerCapture, new TestDeviceCapabilities());
 
                 model.ExitFullScreen.Execute(null);
             }
@@ -367,13 +450,20 @@
         {
             using (TestSession session = new TestSession())
             using (TestFullScreenModel fullScreenModel = new TestFullScreenModel())
+            using (TestPointerCapture pointerCapture = new TestPointerCapture())
             {
-                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session, fullScreenModel);
+                int commandsUpdated = 0;
+
+                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session,
+                    fullScreenModel, pointerCapture, new TestDeviceCapabilities());
                 Assert.IsFalse(fullScreenModel.IsFullScreenMode);
+                model.EnterFullScreen.CanExecuteChanged += (sender, e) => ++commandsUpdated;
+                model.ExitFullScreen.CanExecuteChanged += (sender, e) => ++commandsUpdated;
                 fullScreenModel.SetFullScreenMode(true);
-                Assert.IsFalse(model.ExitFullScreen.CanExecute(null));
+                Assert.AreEqual(0, commandsUpdated);
                 _dispatcher.ExecuteDeferred();
 
+                Assert.AreEqual(2, commandsUpdated);
                 Assert.IsFalse(model.EnterFullScreen.CanExecute(null));
                 Assert.IsTrue(model.ExitFullScreen.CanExecute(null));
             }
@@ -384,16 +474,23 @@
         {
             using (TestSession session = new TestSession())
             using (TestFullScreenModel fullScreenModel = new TestFullScreenModel())
+            using (TestPointerCapture pointerCapture = new TestPointerCapture())
             {
+                int commandsUpdated = 0;
+
                 fullScreenModel.SetFullScreenMode(true);
                 _dispatcher.ExecuteDeferred();
 
-                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session, fullScreenModel);
+                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session,
+                    fullScreenModel, pointerCapture, new TestDeviceCapabilities());
                 Assert.IsTrue(fullScreenModel.IsFullScreenMode);
+                model.EnterFullScreen.CanExecuteChanged += (sender, e) => ++commandsUpdated;
+                model.ExitFullScreen.CanExecuteChanged += (sender, e) => ++commandsUpdated;
                 fullScreenModel.SetFullScreenMode(false);
-                Assert.IsFalse(model.EnterFullScreen.CanExecute(null));
+                Assert.AreEqual(0, commandsUpdated);
                 _dispatcher.ExecuteDeferred();
 
+                Assert.AreEqual(2, commandsUpdated);
                 Assert.IsTrue(model.EnterFullScreen.CanExecute(null));
                 Assert.IsFalse(model.ExitFullScreen.CanExecute(null));
             }
