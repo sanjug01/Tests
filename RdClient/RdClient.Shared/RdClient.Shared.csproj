@@ -368,6 +368,7 @@
     <Compile Include="Navigation\IStackedViewPresenter.cs" />
     <Compile Include="Navigation\IViewVisibility.cs" />
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
+    <Compile Include="Navigation\PresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="Navigation\ViewVisibility.cs" />
     <Compile Include="Telemetry\ITelemetryClient.cs" />
