@@ -160,3 +160,4 @@ $RECYCLE.BIN/
 .DS_Store
 *.vcxitems
 *.filters
+RdClient/.vs/config/applicationhost.config

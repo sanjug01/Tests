@@ -6,7 +6,7 @@
   IgnorableNamespaces="uap mp">
 
   <Identity Name="f19adbad-b7aa-41d0-b4f4-51498ac655a4"
-            Publisher="CN=ziar"
+            Publisher="CN=Microsoft"
             Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="f19adbad-b7aa-41d0-b4f4-51498ac655a4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
@@ -18,7 +18,7 @@
   </Properties>
 
   <Dependencies>
-    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10069.0" MaxVersionTested="10.0.10069.0" />
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10240.0" MaxVersionTested="10.0.10240.0" />
   </Dependencies>
 
   <Resources>
