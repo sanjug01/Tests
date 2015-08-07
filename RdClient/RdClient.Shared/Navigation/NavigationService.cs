@@ -391,12 +391,11 @@ namespace RdClient.Shared.Navigation
                 stack = _modalStack;
             }
 
-            // Need to dismiss one by one instead of just dismissing bottom view on stack
-            // because views may dismiss themselves when other views are dismissed (via completions). 
-            // This can lead to crash if using DismissStackedView because it doesn't call completions until after all the views have been dismissed (Bug 2537012)
-            while (stack.Count > 0)
+            // Dismiss the botton of the stack will dismiss the whole stack
+            //    double de-activation is avoided per fix for bug# 2537012
+            if (stack.Count > 0)
             {
-                DismissStackedView(stack, stack[stack.Count - 1].View, presenter);
+                DismissStackedView(stack, stack[0].View, presenter);
             }
         }
 

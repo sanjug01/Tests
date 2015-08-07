@@ -22,6 +22,8 @@
     using Windows.Foundation;
     using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Media;
+    using Windows.Devices.Input;
 
     public sealed partial class RemoteSessionViewModelTests
     {
@@ -76,14 +78,16 @@
             public Visibility VisibilityHorizontal { get { return Visibility.Collapsed; } }
             public Visibility VisibilityVertical { get { return Visibility.Visible; } }
 
-            public void OnPointerChanged(object sender, IPointerEventBase e)
-            {
-                throw new NotImplementedException();
-            }
+
 
             public void SetScrollbarVisibility(Visibility visibility)
             {
                 // noop
+            }
+
+            public void OnInputDeviceChanged(object sender, PointerDeviceType e)
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -100,6 +104,9 @@
             private EventHandler _userInteractionModeChange;
             private EventHandler _enteringFullScreen;
             private EventHandler _exitingFullScreen;
+
+            public event EventHandler EnteredFullScreen { add { } remove { } }
+            public event EventHandler ExitedFullScreen { add { } remove { } }
 
             public TestFullScreenModel()
             {
@@ -144,12 +151,10 @@
 
             public void EnterFullScreen()
             {
-                throw new NotImplementedException();
             }
 
             public void ExitFullScreen()
             {
-                throw new NotImplementedException();
             }
         }
 
@@ -361,7 +366,15 @@
                     get { return new TestViewport(); }
                 }
 
-                void IRenderingPanel.ChangeMouseCursorShape(Shared.Input.Pointer.MouseCursorShape shape)
+                public IScaleFactor ScaleFactor
+                {
+                    get
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
+
+                void IRenderingPanel.ChangeMouseCursorShape(ImageSource shape, Point hotspot)
                 {
                     throw new NotImplementedException();
                 }

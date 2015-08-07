@@ -4,20 +4,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.23103.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdClient.Windows", "RdClient.Windows\RdClient.Windows.csproj", "{A89F0E52-1E86-4D53-81F5-11237460A6E7}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8B29C07C-36FE-466C-9244-9932AC815C45} = {8B29C07C-36FE-466C-9244-9932AC815C45}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdClient.Shared", "RdClient.Shared\RdClient.Shared.csproj", "{FF57219C-0E7B-4CD5-9E02-287CEA2D0D83}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8B29C07C-36FE-466C-9244-9932AC815C45} = {8B29C07C-36FE-466C-9244-9932AC815C45}
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdClient.Shared.Test", "RdClient.Shared.Test\RdClient.Shared.Test.csproj", "{9F4E7B07-FD91-4EE0-B177-F29A88B68F68}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RdClient.Windows.Test", "RdClient.Windows.Test\RdClient.Windows.Test.csproj", "{504A48C8-C8EF-4DA7-B8B2-3DD664C93657}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RdClientCxHelpers", "RdClientCxHelpers\RdClientCxHelpers.vcxproj", "{8B29C07C-36FE-466C-9244-9932AC815C45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,24 +109,6 @@ Global
 		{504A48C8-C8EF-4DA7-B8B2-3DD664C93657}.Release|x64.Build.0 = Release|x64
 		{504A48C8-C8EF-4DA7-B8B2-3DD664C93657}.Release|x64.Deploy.0 = Release|x64
 		{504A48C8-C8EF-4DA7-B8B2-3DD664C93657}.Release|x86.ActiveCfg = Release|x86
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|ARM.ActiveCfg = Debug|ARM
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|ARM.Build.0 = Debug|ARM
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|x64.ActiveCfg = Debug|x64
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|x64.Build.0 = Debug|x64
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|x86.ActiveCfg = Debug|Win32
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Debug|x86.Build.0 = Debug|Win32
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Release|Any CPU.ActiveCfg = Release|Win32
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Release|ARM.ActiveCfg = Release|ARM
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Release|ARM.Build.0 = Release|ARM
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Release|x64.ActiveCfg = Release|x64
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Release|x64.Build.0 = Release|x64
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Release|x86.ActiveCfg = Release|Win32
-		{8B29C07C-36FE-466C-9244-9932AC815C45}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

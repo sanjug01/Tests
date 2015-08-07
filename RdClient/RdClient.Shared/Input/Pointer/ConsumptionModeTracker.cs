@@ -2,7 +2,7 @@
 
 namespace RdClient.Shared.Input.Pointer
 {
-    public class ConsumptionModeTracker : IConsumptionMode
+    public class ConsumptionModeTracker : IConsumptionModeTracker
     {
         private ConsumptionModeType _consumptionMode;
         public ConsumptionModeType ConsumptionMode

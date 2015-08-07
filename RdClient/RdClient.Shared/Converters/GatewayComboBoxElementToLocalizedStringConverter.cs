@@ -15,7 +15,6 @@ namespace RdClient.Shared.Converters
         static GatewayComboBoxElementToLocalizedStringConverter()
         {
             _codeMap = new Dictionary<GatewayComboBoxType, string>();
-            _codeMap[GatewayComboBoxType.AddNew] = "AddOrEditDesktop_GatewayOption_Add_String";
             _codeMap[GatewayComboBoxType.None] = "AddOrEditDesktop_GatewayOption_None_String";
         }
 

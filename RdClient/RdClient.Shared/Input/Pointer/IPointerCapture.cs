@@ -1,5 +1,4 @@
 ﻿using RdClient.Shared.CxWrappers;
-using System;
 
 namespace RdClient.Shared.Input.Pointer
 {
@@ -14,7 +13,8 @@ namespace RdClient.Shared.Input.Pointer
     // typically the implementation will also initiate the setup of the pointer input infrastructure
     public interface IPointerCapture
     {
-        IConsumptionMode ConsumptionMode { get; }
+        IConsumptionModeTracker ConsumptionMode { get; }
+        IInputDeviceTracker InputDevice { get; }
 
         void ChangeInputMode(InputMode inputMode);
         void OnPointerChanged(object sender, IPointerEventBase e);

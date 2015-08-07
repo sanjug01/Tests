@@ -18,7 +18,8 @@
     <Grid>
         <!-- Right hand side bar -->
         <Grid 
-			x:Name="RightSideBar" 
+			x:Name="RightSideBar"
+            Visibility="Collapsed"
 			Style="{StaticResource RightSideBarStyle}">
             <Grid.Resources>
                 <Storyboard x:Name="ShowRightSideBarStoryboard">

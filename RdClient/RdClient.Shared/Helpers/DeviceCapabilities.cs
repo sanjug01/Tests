@@ -2,7 +2,6 @@
 {
     using RdClient.Shared.Models;
     using Windows.Devices.Input;
-    using Windows.UI.Core;
     using Windows.UI.ViewManagement;
 
 
@@ -12,7 +11,7 @@
     /// </summary>
     public sealed class DeviceCapabilities : MutableObject, IDeviceCapabilities
     {
-        private readonly CoreWindow _window;
+        private readonly IWindowSize _window;
         private readonly TouchCapabilities _touchCapabilities;
         private bool _canShowInputPanel;
         private UserInteractionMode _userInteractionMode;
@@ -23,7 +22,7 @@
             // Subscribe for size changes of the core window; when the input mode changes (touch to mouse, mouse to touch)
             // size change is reported.
             //
-            _window = CoreWindow.GetForCurrentThread();
+            _window = new WindowSize();
             _window.SizeChanged += this.OnWindowSizeChanged;
 
             _touchCapabilities = new TouchCapabilities();
@@ -59,7 +58,7 @@
             set { SetProperty(ref _canShowInputPanel, value); }
         }
 
-        private void OnWindowSizeChanged(CoreWindow sender, WindowSizeChangedEventArgs e)
+        private void OnWindowSizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
             UserInteractionMode mode = UIViewSettings.GetForCurrentView().UserInteractionMode;
 

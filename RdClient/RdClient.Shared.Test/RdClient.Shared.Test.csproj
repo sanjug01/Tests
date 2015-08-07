@@ -110,7 +110,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!--A reference to the entire .Net Framework and Windows SDK are automatically included-->
+    <None Include="project.json" />
     <SDKReference Include="MSTestFramework.Universal, Version=$(UnitTestPlatformVersion)" />
     <SDKReference Include="TestPlatform.Universal, Version=$(UnitTestPlatformVersion)" />
   </ItemGroup>
@@ -131,7 +131,6 @@
     <Compile Include="Converters\ResourceIdToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\StringLengthToInvisibilityConverterTests.cs" />
     <Compile Include="Converters\StringLengthToVisbilityConverter.cs" />
-    <Compile Include="Converters\StringToDictionaryObjectConverterTests.cs" />
     <Compile Include="Converters\TypeToLocalizedStringConverterTests.cs" />
     <Compile Include="Converters\UserComboBoxElementToLocalizedStringConverterTests.cs" />
     <Compile Include="CxWrappers\RdpEventArgsTests.cs" />
@@ -151,6 +150,7 @@
     <Compile Include="Data\TestModel.cs" />
     <Compile Include="Data\TestModelSerializer.cs" />
     <Compile Include="Data\TransformingObservableCollectionTests.cs" />
+    <Compile Include="Helpers\ArrayRoundTests.cs" />
     <Compile Include="Helpers\DataProtectionProviderDataScramblerTests.cs" />
     <Compile Include="Helpers\DeferredCommandTests.cs" />
     <Compile Include="Helpers\ExtensionsTests.cs" />
@@ -179,6 +179,7 @@
     <Compile Include="Input\Recognizers\TapRecognizerTests.cs" />
     <Compile Include="Mock\DummyDataScrambler.cs" />
     <Compile Include="Mock\ExecutionDeferrer.cs" />
+    <Compile Include="Mock\FullScreen.cs" />
     <Compile Include="Mock\ModalPresentationContext.cs" />
     <Compile Include="Mock\PointerEvent.cs" />
     <Compile Include="Mock\PointerPosition.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Mock\Viewport.cs" />
     <Compile Include="Mock\ViewPresenter.cs" />
     <Compile Include="Model\ApplicationDataModelTests.cs" />
+    <Compile Include="Model\FullScreenModelTests.cs" />
     <Compile Include="Model\GeneralSettingsModelTests.cs" />
     <Compile Include="Model\CredentialsModelTests.cs" />
     <Compile Include="Model\GatewayModelTests.cs" />
@@ -243,6 +245,7 @@
     <Compile Include="ValidationRules\NotDuplicateValidationRuleTests.cs" />
     <Compile Include="ValidationRules\UsernameFormatValidationRuleTests.cs" />
     <Compile Include="ValidationRules\ValidatedPropertyTests.cs" />
+    <Compile Include="ViewModels\InSessionMenusViewModelTests.cs" />
     <Compile Include="ViewModels\RemoteSessionViewModelTestsHelpers.cs" />
     <Compile Include="ViewModels\RichTextViewModelTests.cs" />
     <Compile Include="ViewModels\AccessoryViewModelBaseTests.cs" />
@@ -300,10 +303,9 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <None Include="project.json" />
-  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

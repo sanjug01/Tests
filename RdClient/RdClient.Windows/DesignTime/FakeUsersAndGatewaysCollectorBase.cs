@@ -17,7 +17,6 @@ namespace RdClient.DesignTime
         {
             // load test data for the gateways collection
             _gateways = new ObservableCollection<GatewayComboBoxElement>();
-            _gateways.Add(new GatewayComboBoxElement(GatewayComboBoxType.AddNew));
             for (int i = 0; i < 5; i++)
             {
                 var gateway = new GatewayModel() { HostName = "gateway" + i };

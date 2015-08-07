@@ -185,11 +185,9 @@
                     if (value)
                     {
                         _core.Activate();
-                        _core.Metric("SendUsage", 1);
                     }
                     else
                     {
-                        _core.Metric("SendUsage", 0);
                         _core.Deactivate();
                     }
                 }

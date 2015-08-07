@@ -2,7 +2,6 @@
 {
     using RdClient.Shared.CxWrappers;
     using RdClient.Shared.CxWrappers.Errors;
-    using RdClient.Shared.Telemetry;
     using System.Diagnostics.Contracts;
 
     partial class RemoteSession
@@ -13,7 +12,6 @@
 
             private readonly IRdpConnection _connection;
             private readonly IThumbnailEncoder _thumbnailEncoder;
-            private ITelemetryStopwatch _totalTime;
             private Snapshotter _snapshotter;
 
             protected override void Activated()
@@ -34,9 +32,6 @@
                     this.Session._timerFactory,
                     this.Session._sessionSetup.DataModel.Settings);
                 _snapshotter.Activate();
-
-                Contract.Assert(null == _totalTime);
-                _totalTime = this.TelemetryClient.StartStopwatch();
 
                 if(!this.Session._hasConnected)
                 {
@@ -103,7 +98,6 @@
                 {
                     if ((int)RdClientCx.ConnectionHealthState.Warn == e.ConnectionState)
                     {
-                        this.TelemetryClient.Event("Connected:PoorHealth");
                         //
                         // similar to Autoreconnecting event
                         //
@@ -142,15 +136,12 @@
 
             private void OnClientAutoReconnecting(object sender, ClientAutoReconnectingArgs e)
             {
-                this.TelemetryClient.Event("Connected:Reconnecting");
                 e.ContinueDelegate(true);
                 ChangeState(new ReconnectingSession(_connection, this));
             }
 
             private void OnClientDisconnected(object sender, ClientDisconnectedArgs e)
             {
-                Contract.Assert(null != _totalTime);
-
                 InternalState newState;
 
                 switch (e.DisconnectReason.Code)
@@ -164,8 +155,6 @@
                         break;
                 }
 
-                _totalTime.Stop("SessionDuration");
-                _totalTime = null;
                 ChangeState(newState);
             }
 

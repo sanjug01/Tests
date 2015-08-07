@@ -49,9 +49,16 @@
             set { _mouseScaleTransform = value; }
         }
 
+        public IScaleFactor ScaleFactor
+        {
+            get;
+            private set;
+        }
+
         public RenderingPanel()
         {
             _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+            this.ScaleFactor = new ScaleFactor();
 
             this.SizeChanged += this.OnSizeChanged;
         }
@@ -160,10 +167,10 @@
             }
         }
 
-        void IRenderingPanel.ChangeMouseCursorShape(MouseCursorShape shape)
+        void IRenderingPanel.ChangeMouseCursorShape(ImageSource shape, Point hotspot)
         {
-            this.MouseCursor.Source = shape.ImageSource;
-            _hotspot = shape.Hotspot;
+            this.MouseCursor.Source = shape;
+            _hotspot = hotspot;
         }
 
         void IRenderingPanel.MoveMouseCursor(Point point)

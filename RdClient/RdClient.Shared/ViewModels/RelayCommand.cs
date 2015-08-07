@@ -35,7 +35,7 @@ namespace RdClient.Shared.ViewModels
             return (_canExecute == null) ? true : _canExecute(parameter);
         }
 
-        public void Execute(object parameter)
+        public virtual void Execute(object parameter)
         {
             ThrowIfDisposed();
             _execute(parameter);
