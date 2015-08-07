@@ -17,17 +17,11 @@
         private readonly RelayCommand _addGatewayCommand;
         private GeneralSettings _generalSettings;
         private ReadOnlyObservableCollection<UserComboBoxElement> _users;
-        private ReadOnlyObservableCollection<UserComboBoxElement> _usersUnhooked;
-
         private UserComboBoxElement _selectedUser;
         private ReadOnlyObservableCollection<GatewayComboBoxElement> _gateways;
-        private ReadOnlyObservableCollection<GatewayComboBoxElement> _gatewaysUnhooked;
-
         private GatewayComboBoxElement _selectedGateway;
         private bool _oldSendFeedback;
-        private ITelemetryClient _telemetryClient;
-
-        private IPresentationCompletion _collectionReHooker;
+        private ITelemetryClient _telemetryClient;        
 
         public SettingsViewModel()
         {
@@ -36,7 +30,6 @@
             _addUserCommand = new RelayCommand(o => this.AddUserCommandExecute());
             _editGatewayCommand = new RelayCommand(o => this.EditGatewayCommandExecute(), o => { return this.GatewayCommandsEnabled(); });            
             _addGatewayCommand = new RelayCommand(o => this.AddGatewayCommandExecute());
-            _collectionReHooker = new PresentationCompletion((v, p) => ReHookCollections());
         }
 
         public ICommand Cancel { get { return _goBackCommand; } }
@@ -189,36 +182,23 @@
             return this.SelectedGateway?.Gateway?.Model != null;
         }
 
-        private void UnhookCollections()
-        {
-            _usersUnhooked = _users;
-            this.Users = null;
-
-            _gatewaysUnhooked = _gateways;
-            this.Gateways = null;
-        }
-
-        private void ReHookCollections()
-        {
-            this.Users = _usersUnhooked;
-            this.Gateways = _gatewaysUnhooked;
-        }
-
         private void EditGatewayCommandExecute()
         {
             if (GatewayCommandsEnabled())
             {
-                this.UnhookCollections();
                 var args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway);
-                this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, _collectionReHooker);
+                ReadOnlyObservableCollection<GatewayComboBoxElement> gatewaysUnhooked = this.Gateways;
+                this.Gateways = null;
+                this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, new PresentationCompletion((v, p) => { this.Gateways = gatewaysUnhooked; }));
             }
         }
 
         private void AddGatewayCommandExecute()
         {
-            this.UnhookCollections();
             var args = new AddGatewayViewModelArgs();
-            this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, _collectionReHooker);
+            ReadOnlyObservableCollection<GatewayComboBoxElement> gatewaysUnhooked = this.Gateways;
+            this.Gateways = null;
+            this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, new PresentationCompletion((v, p) => { this.Gateways = gatewaysUnhooked; }));
         }
 
         private bool UserCommandsEnabled()
@@ -230,18 +210,20 @@
         {
             if (UserCommandsEnabled())
             {
-                this.UnhookCollections();
                 var args = AddOrEditUserViewArgs.EditUser(this.SelectedUser.Credentials);
-                this.NavigationService.PushAccessoryView("AddOrEditUserView", args, _collectionReHooker);
+                ReadOnlyObservableCollection<UserComboBoxElement> usersUnhooked = this.Users;
+                this.Users = null;
+                this.NavigationService.PushAccessoryView("AddOrEditUserView", args, new PresentationCompletion((v, p) => { this.Users = usersUnhooked; }));
             }
         }
 
         private void AddUserCommandExecute()
         {
-            this.UnhookCollections();
             var creds = new CredentialsModel() { Username = "", Password = "" };
             var args = AddOrEditUserViewArgs.AddUser();
-            this.NavigationService.PushAccessoryView("AddOrEditUserView", args, _collectionReHooker);
+            ReadOnlyObservableCollection<UserComboBoxElement> usersUnhooked = this.Users;
+            this.Users = null;
+            this.NavigationService.PushAccessoryView("AddOrEditUserView", args, new PresentationCompletion((v, p) => { this.Users = usersUnhooked; }));
         }
     }
 }
