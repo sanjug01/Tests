@@ -402,7 +402,7 @@
             //
             // Show the failure UI
             //
-            this.BellyBandViewModel = new RemoteSessionFailureViewModel(e.DisconnectCode,()=>
+            this.BellyBandViewModel = new RemoteSessionFailureViewModel(()=>
             {
                 Contract.Assert(SessionState.Failed == _activeSession.State.State);
 

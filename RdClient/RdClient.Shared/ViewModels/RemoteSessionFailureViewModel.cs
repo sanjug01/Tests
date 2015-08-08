@@ -7,24 +7,17 @@
 
     public sealed class RemoteSessionFailureViewModel : IBellyBandViewModel
     {
-        private readonly RdpDisconnectCode _failureCode;
         private readonly ICommand _dismiss;
-
-        public RdpDisconnectCode FailureCode
-        {
-            get { return _failureCode; }
-        }
 
         public ICommand Dismiss
         {
             get { return _dismiss; }
         }
 
-        public RemoteSessionFailureViewModel(RdpDisconnectCode failureCode, Action dismissAction)
+        public RemoteSessionFailureViewModel(Action dismissAction)
         {
             Contract.Requires(null != dismissAction);
 
-            _failureCode = failureCode;
             _dismiss = new RelayCommand(param => dismissAction());
         }
 
