@@ -478,12 +478,12 @@
         
         private void EmitFailed(RdpDisconnectCode disconnectCode)
         {
-            EmitHelper<SessionFailureEventArgs>(new SessionFailureEventArgs(disconnectCode), _failed);
+            EmitHelper<SessionFailureEventArgs>(new SessionFailureEventArgs(), _failed);
         }
 
         private void DeferEmitFailed(RdpDisconnectCode disconnectCode)
         {
-            DeferEmitHelper<SessionFailureEventArgs>(new SessionFailureEventArgs(disconnectCode), _failed);
+            DeferEmitHelper<SessionFailureEventArgs>(new SessionFailureEventArgs(), _failed);
         }
 
         private void EmitInterrupted(Action cancelDelegate)
