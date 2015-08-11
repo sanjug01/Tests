@@ -137,6 +137,16 @@
             _pointerCapture.InputMode = InputMode.Touch;
             _touchMode.EmitCanExecuteChanged();
             _pointerMode.EmitCanExecuteChanged();
+
+            if (null != _telemetryClient)
+            {
+                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction()
+                {
+                    action = Telemetry.Events.UserAction.Action.SetTouchMode,
+                    source = Telemetry.Events.UserAction.Source.RightSideBar,
+                    duration = Math.Round(_sessionViewStopwatch.Elapsed.TotalSeconds)
+                });
+            }
         }
 
         private void SetPointerMode(object parameter)
@@ -144,6 +154,16 @@
             _pointerCapture.InputMode = InputMode.Mouse;
             _touchMode.EmitCanExecuteChanged();
             _pointerMode.EmitCanExecuteChanged();
+
+            if (null != _telemetryClient)
+            {
+                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction()
+                {
+                    action = Telemetry.Events.UserAction.Action.SetMouseMode,
+                    source = Telemetry.Events.UserAction.Source.RightSideBar,
+                    duration = Math.Round(_sessionViewStopwatch.Elapsed.TotalSeconds)
+                });
+            }
         }
 
         private bool CanSetTouchMode(object parameter)

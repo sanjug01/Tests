@@ -111,7 +111,8 @@
                 {
                     this.TelemetryClient.ReportEvent(new Telemetry.Events.UserAction()
                     {
-                        action = "CancelReconnect",
+                        action = Telemetry.Events.UserAction.Action.CancelConnectingSession,
+                        source = Telemetry.Events.UserAction.Source.ReconnectingSessionState,
                         duration = Math.Round(_stopwatch.Elapsed.TotalSeconds)
                     });
                     _cancelled = true;

@@ -2,8 +2,24 @@
 {
     public sealed class UserAction
     {
-        public string action;
-        public string source;
+        public enum Action
+        {
+            CancelConnectingSession,
+            SetMouseMode,
+            SetTouchMode,
+            CancelCredentials,
+            CancelGatewayCredentials
+        }
+
+        public enum Source
+        {
+            RightSideBar,
+            ConnectingSessionState,
+            ReconnectingSessionState
+        }
+
+        public Action action;
+        public Source source;
         public double duration;
     }
 }

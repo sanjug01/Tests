@@ -6,7 +6,6 @@
     using RdClient.Shared.Navigation.Extensions;
     using RdClient.Shared.Telemetry;
     using System;
-    using System.Diagnostics;
     using System.Windows.Input;
     using Windows.UI.Xaml;
 
@@ -39,7 +38,7 @@
                 _pointerCapture = value;
                 if(_pointerCapture != null)
                 {
-                    this.InternalMouseMode(null);
+                    this.InternalMouseMode();
                 }
             }
         }
@@ -153,8 +152,8 @@
             _disconnectButtonModel = new BarButtonModel() { Command = new RelayCommand(InternalDisconnect) };
             _fullScreenButtonModel = new BarButtonModel() { Command = new RelayCommand(InternalFullScreen) };
             _normalScreenButtonModel = new BarButtonModel() { Command = new RelayCommand(InternalNormalScreen) };        
-            _touchButtonModel = new BarButtonModel() { Command = new RelayCommand(InternalTouchMode) };
-            _mouseButtonModel = new BarButtonModel() { Command = new RelayCommand(InternalMouseMode) };
+            _touchButtonModel = new BarButtonModel() { Command = new RelayCommand(this.OnSetTouchMode) };
+            _mouseButtonModel = new BarButtonModel() { Command = new RelayCommand(this.OnSetMouseMode) };
 
             _visibility = Visibility.Collapsed;
             _toggleVisibility = new RelayCommand(InternalToggleVisibility);
@@ -170,26 +169,48 @@
             }
         }
 
-        private void InternalMouseMode(object parameter)
+        private void OnSetMouseMode(object parameter)
+        {
+            InternalMouseMode();
+
+            if (null != _telemetryClient)
+            {
+                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction()
+                {
+                    action = Telemetry.Events.UserAction.Action.SetMouseMode,
+                    source = Telemetry.Events.UserAction.Source.RightSideBar
+                });
+            }
+        }
+
+        private void InternalMouseMode()
         {
             this.PointerCapture.InputMode = InputMode.Mouse;
             _mouseButtonModel.CanExecute = false;
             _touchButtonModel.CanExecute = true && this.DeviceCapabilities.TouchPresent;
             this.Visibility = Visibility.Collapsed;
-
-            if (null != _telemetryClient)
-                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction() { action = "SetMouseMode", source = "RightSideBar" });
         }
 
-        private void InternalTouchMode(object parameter)
+        private void OnSetTouchMode(object parameter)
+        {
+            InternalTouchMode();
+
+            if (null != _telemetryClient)
+            {
+                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction()
+                {
+                    action = Telemetry.Events.UserAction.Action.SetTouchMode,
+                    source = Telemetry.Events.UserAction.Source.RightSideBar
+                });
+            }
+        }
+
+        private void InternalTouchMode()
         {
             this.PointerCapture.InputMode = InputMode.Touch;
             _mouseButtonModel.CanExecute = true && this.DeviceCapabilities.TouchPresent;
             _touchButtonModel.CanExecute = false;
             this.Visibility = Visibility.Collapsed;
-
-            if (null != _telemetryClient)
-                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction() { action = "SetTouchMode", source = "RightSideBar" });
         }
 
         private void InternalFullScreen(object parameter)
