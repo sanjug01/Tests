@@ -28,6 +28,7 @@
         private readonly RelayCommand _invokeKeyboard;
         private readonly SymbolBarButtonModel _invokeKeyboardModel;
         private readonly FocusControllerProxy _inputFocusController;
+        private Telemetry.Events.SessionInput _sessionInputTelemetry;
         private IFullScreenModel _fullScreenModel;
         private EventHandler _enteredFullScreenHandler;
 
@@ -206,6 +207,7 @@
 
             base.OnPresenting(activationParameter);
 
+            _sessionInputTelemetry = new Telemetry.Events.SessionInput();
             this.ZoomPanModel = new ZoomPanModel(_inputFocusController, _telemetryClient);
 
             ObservableCollection<object> items = new ObservableCollection<object>();
@@ -280,7 +282,7 @@
 
         private void ShowMenusDialog(object parameter)
         {
-            InSessionMenusModel model = new InSessionMenusModel(this.Dispatcher,
+            IInSessionMenus model = new InSessionMenusModel(this.Dispatcher,
                 _activeSession,
                 _fullScreenModel,
                 _pointerCapture,
@@ -293,7 +295,31 @@
             if (null != _inputPanel)
                 _inputPanel.Hide();
 
-            this.NavigationService.PushModalView("InSessionMenusView", model, null);
+            EventHandler onEnteredFullScreen = (sender, e) =>
+            {
+                //
+                // Increment the counter of entering full screen by user
+                //
+                _sessionInputTelemetry.EnterFullScreen(_presentationStopwatch);
+            };
+            EventHandler onExitedFullScreen = (sender, e) =>
+            {
+                //
+                // Increment the counter of exiting full screen by user
+                //
+                _sessionInputTelemetry.ExitFullScreen(_presentationStopwatch);
+            };
+            _sessionInputTelemetry.ShowSessionMenus();
+
+            model.EnteredFullScreen += onEnteredFullScreen;
+            model.ExitedFullScreen += onExitedFullScreen;
+
+            this.NavigationService.PushModalView("InSessionMenusView", model,
+                new ModalPresentationCompletion((sender, e) =>
+                {
+                    model.EnteredFullScreen -= onEnteredFullScreen;
+                    model.ExitedFullScreen -= onExitedFullScreen;
+                }));
         }
 
         protected override void OnDismissed()
@@ -326,6 +352,10 @@
 
             this.ZoomPanModel.Dispose();
             this.ZoomPanModel = null;
+
+            if(null != _telemetryClient)
+                _telemetryClient.ReportEvent(_sessionInputTelemetry);
+            _sessionInputTelemetry = null;
 
             base.OnDismissed();
         }

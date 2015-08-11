@@ -385,6 +385,7 @@
     <Compile Include="Telemetry\Events\RemovedDesktop.cs" />
     <Compile Include="Telemetry\Events\SendUsage.cs" />
     <Compile Include="Telemetry\Events\SessionDuration.cs" />
+    <Compile Include="Telemetry\Events\SessionInput.cs" />
     <Compile Include="Telemetry\Events\SessionLaunch.cs" />
     <Compile Include="Telemetry\Events\ShowTouchKeyboard.cs" />
     <Compile Include="Telemetry\Events\UserAction.cs" />

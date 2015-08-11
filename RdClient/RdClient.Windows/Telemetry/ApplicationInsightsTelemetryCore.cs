@@ -47,11 +47,14 @@
 
                 foreach(FieldInfo fi in ti.DeclaredFields)
                 {
-                    object v = fi.GetValue(eventData);
-
-                    if(null != v)
+                    if (fi.IsPublic)
                     {
-                        AddValue(et, fi.Name, fi.FieldType, v);
+                        object v = fi.GetValue(eventData);
+
+                        if (null != v)
+                        {
+                            AddValue(et, fi.Name, fi.FieldType, v);
+                        }
                     }
                 }
 
