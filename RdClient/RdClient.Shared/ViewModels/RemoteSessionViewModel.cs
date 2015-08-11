@@ -24,7 +24,7 @@
         IInputPanelFactorySite,
         ITelemetryClientSite
     {
-        private readonly Stopwatch _presentationStopwatch;
+        private readonly IStopwatch _presentationStopwatch;
         private readonly RelayCommand _invokeKeyboard;
         private readonly SymbolBarButtonModel _invokeKeyboardModel;
         private readonly FocusControllerProxy _inputFocusController;
@@ -182,24 +182,14 @@
             {
                 if (!object.ReferenceEquals(_fullScreenModel, value))
                 {
-                    if(null != _fullScreenModel)
-                    {
-                        _fullScreenModel.EnteringFullScreen -= this.OnEnteringFullScreen;
-                        _fullScreenModel.ExitingFullScreen -= this.OnExitingFullScreen;
-                    }
                     _fullScreenModel = value;
-                    if (null != _fullScreenModel)
-                    {
-                        _fullScreenModel.EnteringFullScreen += this.OnEnteringFullScreen;
-                        _fullScreenModel.ExitingFullScreen += this.OnExitingFullScreen;
-                    }
                 }
             }
         }
 
         public RemoteSessionViewModel()
         {
-            _presentationStopwatch = new Stopwatch();
+            _presentationStopwatch = new TelemetryStopwatch();
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
             _invokeKeyboardModel = new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
             _inputFocusController = new FocusControllerProxy();
@@ -294,7 +284,9 @@
                 _activeSession,
                 _fullScreenModel,
                 _pointerCapture,
-                _deviceCapabilities);
+                _deviceCapabilities,
+                _telemetryClient,
+                _presentationStopwatch);
             //
             // Hide the inpiut panel first to free up some screen space, ane because it is useless when the menu overlays are shown.
             //
@@ -711,18 +703,6 @@
 
                 _invokeKeyboard.EmitCanExecuteChanged();
             }
-        }
-
-        private void OnEnteringFullScreen(object sender, EventArgs e)
-        {
-            if(null != _telemetryClient)
-                _telemetryClient.ReportEvent(new Telemetry.Events.EnterFullScreen() { duration = Math.Round(_presentationStopwatch.Elapsed.TotalSeconds) });
-        }
-
-        private void OnExitingFullScreen(object sender, EventArgs e)
-        {
-            if (null != _telemetryClient)
-                _telemetryClient.ReportEvent(new Telemetry.Events.ExitFullScreen() { duration = Math.Round(_presentationStopwatch.Elapsed.TotalSeconds) });
         }
     }
 }

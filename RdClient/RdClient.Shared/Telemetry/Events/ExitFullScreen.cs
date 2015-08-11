@@ -2,6 +2,11 @@
 {
     public sealed class ExitFullScreen
     {
-        public double duration;
+        public ExitFullScreen(IStopwatch stopwatch)
+        {
+            this.duration = stopwatch.Elapsed.TotalSeconds;
+        }
+
+        public readonly double duration;
     }
 }

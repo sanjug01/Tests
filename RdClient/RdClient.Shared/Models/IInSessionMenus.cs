@@ -9,6 +9,9 @@
     /// </summary>
     public interface IInSessionMenus : IDisposable
     {
+        event EventHandler EnteredFullScreen;
+        event EventHandler ExitedFullScreen;
+
         /// <summary>
         /// Disconnect the current session. Methot is called when user clicks the "Disconnect" button in the right side bar.
         /// </summary>

@@ -392,7 +392,9 @@
     <Compile Include="Telemetry\Events\ViewedPrivacy.cs" />
     <Compile Include="Telemetry\Events\ViewedThirdPartyDoc.cs" />
     <Compile Include="Telemetry\Events\Zoom.cs" />
+    <Compile Include="Telemetry\IStopwatch.cs" />
     <Compile Include="Telemetry\ITelemetryClient.cs" />
+    <Compile Include="Telemetry\TelemetryStopwatch.cs" />
     <Compile Include="ValidationRules\CompositeValidationRule.cs" />
     <Compile Include="ValidationRules\HostnameValidationFailure.cs" />
     <Compile Include="ValidationRules\IValidatedProperty.cs" />

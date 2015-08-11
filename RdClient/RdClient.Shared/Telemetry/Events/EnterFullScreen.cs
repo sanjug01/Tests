@@ -2,6 +2,11 @@
 {
     public sealed class EnterFullScreen
     {
-        public double duration;
+        public EnterFullScreen(IStopwatch stopwatch)
+        {
+            this.duration = stopwatch.Elapsed.TotalSeconds;
+        }
+
+        public readonly double duration;
     }
 }
