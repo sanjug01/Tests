@@ -55,17 +55,25 @@
             {
                 return _fullScreenModel;
             }
+
             set
             {
-                _fullScreenModel = value;
-
-                if(_fullScreenModel != null)
+                if (!object.ReferenceEquals(_fullScreenModel, value))
                 {
-                    _fullScreenModel.FullScreenChange -= OnFullScreenChange;
-                    _fullScreenModel.FullScreenChange += OnFullScreenChange;
-                }
+                    if (null != _fullScreenModel)
+                    {
+                        _fullScreenModel.FullScreenChange -= OnFullScreenChange;
+                    }
 
-                OnFullScreenChange(this, EventArgs.Empty);
+                    _fullScreenModel = value;
+
+                    if (_fullScreenModel != null)
+                    {
+                        _fullScreenModel.FullScreenChange += OnFullScreenChange;
+                    }
+
+                    OnFullScreenChange(this, EventArgs.Empty);
+                }
             }
         }
 
@@ -164,7 +172,7 @@
 
         private void InternalMouseMode(object parameter)
         {
-            this.PointerCapture.ChangeInputMode(InputMode.Mouse);
+            this.PointerCapture.InputMode = InputMode.Mouse;
             _mouseButtonModel.CanExecute = false;
             _touchButtonModel.CanExecute = true && this.DeviceCapabilities.TouchPresent;
             this.Visibility = Visibility.Collapsed;
@@ -180,7 +188,7 @@
 
         private void InternalTouchMode(object parameter)
         {
-            this.PointerCapture.ChangeInputMode(InputMode.Touch);
+            this.PointerCapture.InputMode = InputMode.Touch;
             _mouseButtonModel.CanExecute = true && this.DeviceCapabilities.TouchPresent;
             _touchButtonModel.CanExecute = false;
             this.Visibility = Visibility.Collapsed;
