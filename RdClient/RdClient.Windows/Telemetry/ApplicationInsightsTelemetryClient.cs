@@ -12,31 +12,6 @@
     {
         private readonly ApplicationInsightsTelemetryCore _core;
 
-        private sealed class TelemetryStopwatch : ITelemetryStopwatch
-        {
-            private readonly Stopwatch _stopwatch;
-            private ApplicationInsightsTelemetryCore _core;
-
-            public TelemetryStopwatch(ApplicationInsightsTelemetryCore core)
-            {
-                Contract.Requires(null != core);
-                Contract.Ensures(null != _core);
-                _core = core;
-                _stopwatch = new Stopwatch();
-                _stopwatch.Start();
-            }
-
-            void ITelemetryStopwatch.Stop(string eventName)
-            {
-                if (_core.IsActive)
-                {
-                    _stopwatch.Stop();
-                    _core.Duration(eventName, _stopwatch.ElapsedMilliseconds);
-                    _core = null;
-                }
-            }
-        }
-
         private sealed class TelemetryEvent : DisposableObject, ITelemetryEvent
         {
             private readonly ReaderWriterLockSlim _monitor;
@@ -194,21 +169,10 @@
             }
         }
 
-        void ITelemetryClient.Event(string eventName)
-        {
-            if(_core.IsActive)
-                _core.Event(eventName);
-        }
-
-        void ITelemetryClient.Metric(string metricName, double metricValue)
+        void ITelemetryClient.ReportEvent(object eventData)
         {
             if (_core.IsActive)
-                _core.Metric(metricName, metricValue);
-        }
-
-        ITelemetryStopwatch ITelemetryClient.StartStopwatch()
-        {
-            return new TelemetryStopwatch(_core);
+                _core.ReportEvent(eventData);
         }
 
         ITelemetryEvent ITelemetryClient.MakeEvent(string eventName)

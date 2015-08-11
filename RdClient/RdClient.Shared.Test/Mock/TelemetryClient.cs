@@ -1,6 +1,5 @@
 ﻿using RdClient.Shared.Telemetry;
 using RdMock;
-using System;
 
 namespace RdClient.Shared.Test.Mock
 {
@@ -8,19 +7,9 @@ namespace RdClient.Shared.Test.Mock
     {
         public bool IsActive { get; set; }
 
-        void ITelemetryClient.Event(string eventName)
+        void ITelemetryClient.ReportEvent(object eventData)
         {
-            Invoke(new object[] { eventName });
-        }
-
-        void ITelemetryClient.Metric(string metricName, double metricValue)
-        {
-            Invoke(new object[] { metricName, metricValue });
-        }
-
-        ITelemetryStopwatch ITelemetryClient.StartStopwatch()
-        {
-            return (ITelemetryStopwatch)Invoke(new object[] { });
+            Invoke(new object[] { eventData });
         }
 
         ITelemetryEvent ITelemetryClient.MakeEvent(string eventName)

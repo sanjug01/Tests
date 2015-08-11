@@ -6,16 +6,6 @@
     {
         private bool _isActive;
 
-        private sealed class Stopwatch : ITelemetryStopwatch
-        {
-            void ITelemetryStopwatch.Stop(string eventName)
-            {
-                //
-                // Do nothing.
-                //
-            }
-        }
-
         private sealed class TelemetryEvent : ITelemetryEvent
         {
             private readonly string _eventName;
@@ -56,23 +46,8 @@
             set { _isActive = value; }
         }
 
-        void ITelemetryClient.Event(string eventName)
+        void ITelemetryClient.ReportEvent(object eventData)
         {
-            //
-            // Do nothing.
-            //
-        }
-
-        void ITelemetryClient.Metric(string metricName, double metricValue)
-        {
-            //
-            // Do nothing.
-            //
-        }
-
-        ITelemetryStopwatch ITelemetryClient.StartStopwatch()
-        {
-            return new Stopwatch();
         }
 
         ITelemetryEvent ITelemetryClient.MakeEvent(string eventName)

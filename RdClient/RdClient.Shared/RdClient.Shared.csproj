@@ -371,6 +371,10 @@
     <Compile Include="Navigation\PresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="Navigation\ViewVisibility.cs" />
+    <Compile Include="Telemetry\Events\NavigateToView.cs" />
+    <Compile Include="Telemetry\Events\ViewedLicense.cs" />
+    <Compile Include="Telemetry\Events\ViewedPrivacy.cs" />
+    <Compile Include="Telemetry\Events\ViewedThirdPartyDoc.cs" />
     <Compile Include="Telemetry\ITelemetryClient.cs" />
     <Compile Include="Telemetry\ITelemetryEvent.cs" />
     <Compile Include="Telemetry\ITelemetryStopwatch.cs" />
@@ -494,6 +498,7 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="project.json" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,8 +1,8 @@
 ﻿namespace RdClient.Telemetry
 {
     using RdClient.Shared.Telemetry;
-    using System.Diagnostics;
     using System;
+    using System.Diagnostics;
 
     sealed class DummyTelemetryClient : ITelemetryClient
     {
@@ -79,21 +79,10 @@
             }
         }
 
-        void ITelemetryClient.Event(string eventName)
-        {
-            if(_isActive)
-                Debug.WriteLine("DummyTelemetryClient|Event:{0}", eventName);
-        }
-
-        void ITelemetryClient.Metric(string metricName, double metricValue)
+        void ITelemetryClient.ReportEvent(object eventData)
         {
             if (_isActive)
-                Debug.WriteLine("DummyTelemetryClient|Metric:{0}={1}", metricName, metricValue);
-        }
-
-        ITelemetryStopwatch ITelemetryClient.StartStopwatch()
-        {
-            throw new NotImplementedException();
+                Debug.WriteLine("DummyTelemetryClient|ReportEvent{0}", eventData);
         }
 
         ITelemetryEvent ITelemetryClient.MakeEvent(string eventName)

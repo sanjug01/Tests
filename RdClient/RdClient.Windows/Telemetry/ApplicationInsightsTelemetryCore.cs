@@ -2,13 +2,15 @@
 {
     using Microsoft.ApplicationInsights;
     using Microsoft.ApplicationInsights.DataContracts;
+    using System;
     using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     /// <summary>
     /// Core of the Application Insights telemetry client. The core may be safely passed to
     /// child objects created by the implementation of ITelemetryClient.
     /// </summary>
-    sealed class ApplicationInsightsTelemetryCore
+    sealed internal class ApplicationInsightsTelemetryCore
     {
         private TelemetryClient _client;
 
@@ -32,6 +34,37 @@
         {
             Contract.Assert(null != _client);
             _client = null;
+        }
+
+        public void ReportEvent(object eventData)
+        {
+            TelemetryClient c = _client;
+
+            if(null != c)
+            {
+                TypeInfo ti = eventData.GetType().GetTypeInfo();
+                EventTelemetry et = new EventTelemetry(ti.Name);
+
+                foreach (PropertyInfo pi in ti.DeclaredProperties)
+                {
+                    if (pi.CanRead)
+                    {
+                        Type pt = pi.PropertyType;
+                        object v = pi.GetValue(eventData);
+
+                        if (pt.Equals(typeof(int)) || pt.Equals(typeof(long)) || pt.Equals(typeof(double)) || pt.Equals(typeof(float)) || pt.Equals(typeof(bool)))
+                        {
+                            et.Metrics[pi.Name] = Convert.ToDouble(v);
+                        }
+                        else
+                        {
+                            et.Properties[pi.Name] = v.ToString();
+                        }
+                    }
+                }
+
+                c.TrackEvent(et);
+            }
         }
 
         public void Event(string eventName)

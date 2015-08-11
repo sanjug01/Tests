@@ -92,19 +92,19 @@
         {
             RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.EulaDoc);
             NavigationService.PushAccessoryView("RichTextView", args);
-            _telemetryClient.Event("viewedLicense");
+            _telemetryClient.ReportEvent(Telemetry.Events.ViewedLicense.Instance);
         }
 
         private void ShowThirdPartyDocExecute(object o)
         {
             RichTextViewModelArgs args = new RichTextViewModelArgs(InternalDocType.ThirdPartyNotices);
             NavigationService.PushAccessoryView("RichTextView", args);
-            _telemetryClient.Event("viewedThirdPartyDoc");
+            _telemetryClient.ReportEvent(Telemetry.Events.ViewedThirdPartyDoc.Instance);
         }
 
         private void ShowPrivacyDocExecute(object o)
         {
-            _telemetryClient.Event("viewedPrivacy");
+            _telemetryClient.ReportEvent(Telemetry.Events.ViewedPrivacy.Instance);
         }
 
         void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
