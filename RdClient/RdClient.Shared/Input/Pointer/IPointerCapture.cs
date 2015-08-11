@@ -16,7 +16,8 @@ namespace RdClient.Shared.Input.Pointer
         IConsumptionModeTracker ConsumptionMode { get; }
         IInputDeviceTracker InputDevice { get; }
 
-        void ChangeInputMode(InputMode inputMode);
+        InputMode InputMode { get; set; }
+
         void OnPointerChanged(object sender, IPointerEventBase e);
         void OnMouseCursorPositionChanged(object sender, MouseCursorPositionChangedArgs args);
         void OnMouseCursorShapeChanged(object sender, MouseCursorShapeChangedArgs args);

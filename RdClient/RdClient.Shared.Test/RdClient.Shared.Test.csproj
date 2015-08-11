@@ -137,6 +137,7 @@
     <Compile Include="Data\TestModelSerializer.cs" />
     <Compile Include="Data\TransformingObservableCollectionTests.cs" />
     <Compile Include="Helpers\ArrayRoundTests.cs" />
+    <Compile Include="Helpers\CommandBindingTests.cs" />
     <Compile Include="Helpers\DataProtectionProviderDataScramblerTests.cs" />
     <Compile Include="Helpers\DeferredCommandTests.cs" />
     <Compile Include="Helpers\ExtensionsTests.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="Model\CredentialsModelTests.cs" />
     <Compile Include="Model\GatewayModelTests.cs" />
     <Compile Include="Model\DesktopModelTests.cs" />
+    <Compile Include="Model\InSessionMenusModelTests.cs" />
     <Compile Include="Model\RemoteSessionSetupTests.cs" />
     <Compile Include="Model\SessionGatewayTests.cs" />
     <Compile Include="Model\SessionCredentialsTests.cs" />

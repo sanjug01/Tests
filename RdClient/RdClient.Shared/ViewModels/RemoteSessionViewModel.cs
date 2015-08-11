@@ -221,7 +221,7 @@
             ObservableCollection<object> items = new ObservableCollection<object>();
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomIn, Command = this.ZoomPanModel.ZoomInCommand });
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.ZoomOut, Command = this.ZoomPanModel.ZoomOutCommand });
-            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = new FocusStealingRelayCommand(_inputFocusController, RightSideBarVisibilityToggle) });
+            items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = new FocusStealingRelayCommand(_inputFocusController, this.ShowMenusDialog) });
             items.Add(_invokeKeyboardModel);
             this.ConnectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
@@ -286,6 +286,22 @@
 
             if(null != _inputPanel)
                 _inputPanel.Hide();
+        }
+
+        private void ShowMenusDialog(object parameter)
+        {
+            InSessionMenusModel model = new InSessionMenusModel(this.Dispatcher,
+                _activeSession,
+                _fullScreenModel,
+                _pointerCapture,
+                _deviceCapabilities);
+            //
+            // Hide the inpiut panel first to free up some screen space, ane because it is useless when the menu overlays are shown.
+            //
+            if (null != _inputPanel)
+                _inputPanel.Hide();
+
+            this.NavigationService.PushModalView("InSessionMenusView", model, null);
         }
 
         protected override void OnDismissed()

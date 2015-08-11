@@ -152,6 +152,7 @@
     <Compile Include="Helpers\ArrayComparer.cs" />
     <Compile Include="Helpers\ArrayRound.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
+    <Compile Include="Helpers\CommandBinding.cs" />
     <Compile Include="Helpers\IanaInterfaceType.cs" />
     <Compile Include="Helpers\ContractAssertionException.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="Models\ICredentialsIdModel.cs" />
     <Compile Include="Models\IFullScreenModel.cs" />
     <Compile Include="Models\IInSessionMenus.cs" />
+    <Compile Include="Models\InSessionMenusModel.cs" />
     <Compile Include="Models\IScrollBarModel.cs" />
     <Compile Include="Models\ScrambledString.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />

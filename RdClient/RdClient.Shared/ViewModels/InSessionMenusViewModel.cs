@@ -1,5 +1,6 @@
 ﻿namespace RdClient.Shared.ViewModels
 {
+    using RdClient.Shared.Helpers;
     using RdClient.Shared.Models;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
@@ -12,6 +13,10 @@
     {
         private readonly RelayCommand _cancel;
         private readonly RelayCommand _disconnect;
+        private readonly CommandBinding _enterFullScreen;
+        private readonly CommandBinding _exitFullScreen;
+        private readonly CommandBinding _setTouchMode;
+        private readonly CommandBinding _setPointerMode;
         private bool _canDisconnect;
         private IInSessionMenus _model;
 
@@ -19,6 +24,10 @@
         {
             _cancel = new RelayCommand(this.OnCancel);
             _disconnect = new RelayCommand(this.OnDisconnect, o => this.CanDisconnect);
+            _enterFullScreen = new CommandBinding();
+            _exitFullScreen = new CommandBinding();
+            _setTouchMode = new CommandBinding();
+            _setPointerMode = new CommandBinding();
         }
 
         public ICommand Cancel
@@ -31,6 +40,26 @@
             get { return _disconnect; }
         }
 
+        public CommandBinding EnterFullScreen
+        {
+            get { return _enterFullScreen; }
+        }
+
+        public CommandBinding ExitFullScreen
+        {
+            get { return _exitFullScreen; }
+        }
+
+        public CommandBinding SetTouchMode
+        {
+            get { return _setTouchMode; }
+        }
+
+        public CommandBinding SetPointerMode
+        {
+            get { return _setPointerMode; }
+        }
+
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Assert(null == _model);
@@ -38,12 +67,21 @@
 
             _model = (IInSessionMenus)activationParameter;
             this.CanDisconnect = true;
+            _enterFullScreen.Command = _model.EnterFullScreen;
+            _exitFullScreen.Command = _model.ExitFullScreen;
+            _setTouchMode.Command = _model.TouchMode;
+            _setPointerMode.Command = _model.PointerMode;
 
             base.OnPresenting(activationParameter);
         }
 
         protected override void OnDismissed()
         {
+            _enterFullScreen.Command = null;
+            _exitFullScreen.Command = null;
+            _setTouchMode.Command = null;
+            _setPointerMode.Command = null;
+            _model.Dispose();
             _model = null;
             base.OnDismissed();
         }
