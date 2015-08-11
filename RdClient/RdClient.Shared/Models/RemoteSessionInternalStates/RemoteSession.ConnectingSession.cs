@@ -56,9 +56,7 @@
 
             protected override void Terminate()
             {
-                ITelemetryEvent te = this.MakeTelemetryEvent("UserAction");
-                te.AddTag("action", "Cancel");
-                te.Report();
+                this.TelemetryClient.ReportEvent(new Telemetry.Events.UserAction() { action = "Cancel" });
 
                 if (null != _connection)
                     _connection.Disconnect();
@@ -330,9 +328,8 @@
             private void NewPasswordCancelled(object sender, InSessionCredentialsTask.ResultEventArgs e)
             {
                 InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
-                ITelemetryEvent te = this.MakeTelemetryEvent("UserAction");
-                te.AddTag("action", "CancelCredentials");
-                te.Report();
+
+                this.TelemetryClient.ReportEvent(new Telemetry.Events.UserAction() { action = "CancelCredentials" });
 
                 task.Submitted -= this.NewPasswordSubmitted;
                 task.Cancelled -= this.NewPasswordCancelled;
@@ -407,9 +404,8 @@
             private void NewGatewayCredentialsCancelled(object sender, InSessionCredentialsTask.ResultEventArgs e)
             {
                 InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
-                ITelemetryEvent te = this.MakeTelemetryEvent("UserAction");
-                te.AddTag("action", "CancelGatewayCredentials");
-                te.Report();
+
+                this.TelemetryClient.ReportEvent(new Telemetry.Events.UserAction() { action = "CancelGatewayCredentials" });
 
                 task.Submitted -= this.NewGatewayCredentialsCancelled;
                 task.Cancelled -= this.NewGatewayCredentialsCancelled;
@@ -456,7 +452,7 @@
                     }
                 }
 
-                this.SessionTelemetry.AddTag("networkType", null != sb ? sb.ToString() : "unknown");
+                this.SessionLaunch.networkType = null != sb ? sb.ToString() : "unknown";
             }
         }
     }

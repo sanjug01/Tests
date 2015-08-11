@@ -149,9 +149,7 @@
                     // Activate telemetry for sending the event.
                     //
                     _telemetryClient.IsActive = true;
-                    ITelemetryEvent te = _telemetryClient.MakeEvent("SendUsage");
-                    te.AddMetric("sendTelemetry", this.GeneralSettings.SendFeedback ? 1 : 0);
-                    te.Report();
+                    _telemetryClient.ReportEvent(new Telemetry.Events.SendUsage() { sendTelemetry = this.GeneralSettings.SendFeedback });
                 }
 
                 _telemetryClient.IsActive = this.GeneralSettings.SendFeedback;

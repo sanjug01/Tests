@@ -110,11 +110,7 @@ namespace RdClient.Shared.Navigation
         public virtual void PushModalView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
             if (null != _telemetryClient)
-            {
-                ITelemetryEvent telemetryEvent = _telemetryClient.MakeEvent("PushModalView");
-                telemetryEvent.AddTag("view", viewName);
-                telemetryEvent.Report();
-            }
+                _telemetryClient.ReportEvent(new Telemetry.Events.PushModalView() { view = viewName });
 
             Contract.Requires(viewName != null);
 
@@ -163,11 +159,7 @@ namespace RdClient.Shared.Navigation
         void INavigationService.PushAccessoryView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
             if (null != _telemetryClient)
-            {
-                ITelemetryEvent telemetryEvent = _telemetryClient.MakeEvent("PushAccessoryView");
-                telemetryEvent.AddTag("view", viewName);
-                telemetryEvent.Report();
-            }
+                _telemetryClient.ReportEvent(new Telemetry.Events.PushAccessoryView() { view = viewName });
 
             IStackedViewPresenter accessoryPresenter = _currentView as IStackedViewPresenter;
 
@@ -202,7 +194,6 @@ namespace RdClient.Shared.Navigation
                 PresentedStackedView presentedView = new PresentedAccessoryView(this, view, presentationCompletion, _telemetryClient);
                 _accessoryStack.Add(presentedView);
                 CallPresenting(view, activationParameter, presentedView);
-
                 accessoryPresenter.PushView(view, true);
                 //
                 // Tell the view that it is now the top of the stack.

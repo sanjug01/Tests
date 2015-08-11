@@ -20,7 +20,7 @@
             throw new NotImplementedException();
         }
 
-        public override void InitializeSessionTelemetry(ApplicationDataModel dataModel, ITelemetryEvent telemetryEvent)
+        public override void InitializeSessionTelemetry(ApplicationDataModel dataModel, Telemetry.Events.SessionLaunch sessionLaunch)
         {
             throw new NotImplementedException();
         }

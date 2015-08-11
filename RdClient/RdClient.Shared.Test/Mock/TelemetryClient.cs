@@ -11,10 +11,5 @@ namespace RdClient.Shared.Test.Mock
         {
             Invoke(new object[] { eventData });
         }
-
-        ITelemetryEvent ITelemetryClient.MakeEvent(string eventName)
-        {
-            return (ITelemetryEvent)Invoke(new object[] { eventName });
-        }
     }
 }

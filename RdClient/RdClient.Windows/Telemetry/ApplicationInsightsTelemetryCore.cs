@@ -45,20 +45,25 @@
                 TypeInfo ti = eventData.GetType().GetTypeInfo();
                 EventTelemetry et = new EventTelemetry(ti.Name);
 
+                foreach(FieldInfo fi in ti.DeclaredFields)
+                {
+                    object v = fi.GetValue(eventData);
+
+                    if(null != v)
+                    {
+                        AddValue(et, fi.Name, fi.FieldType, v);
+                    }
+                }
+
                 foreach (PropertyInfo pi in ti.DeclaredProperties)
                 {
                     if (pi.CanRead)
                     {
-                        Type pt = pi.PropertyType;
                         object v = pi.GetValue(eventData);
 
-                        if (pt.Equals(typeof(int)) || pt.Equals(typeof(long)) || pt.Equals(typeof(double)) || pt.Equals(typeof(float)) || pt.Equals(typeof(bool)))
+                        if (null != v)
                         {
-                            et.Metrics[pi.Name] = Convert.ToDouble(v);
-                        }
-                        else
-                        {
-                            et.Properties[pi.Name] = v.ToString();
+                            AddValue(et, pi.Name, pi.PropertyType, v);
                         }
                     }
                 }
@@ -67,35 +72,15 @@
             }
         }
 
-        public void Event(string eventName)
+        private void AddValue(EventTelemetry et, string name, Type type, object value)
         {
-            if (null != _client)
+            if (type.Equals(typeof(int)) || type.Equals(typeof(long)) || type.Equals(typeof(double)) || type.Equals(typeof(float)) || type.Equals(typeof(bool)))
             {
-                _client.TrackEvent(eventName);
+                et.Metrics[name] = Convert.ToDouble(value);
             }
-        }
-
-        public void Event(EventTelemetry eventTelemetry)
-        {
-            if(null != _client)
+            else
             {
-                _client.TrackEvent(eventTelemetry);
-            }
-        }
-
-        public void Metric(string metricName, double metricValue)
-        {
-            if (null != _client)
-            {
-                _client.TrackMetric(metricName, metricValue);
-            }
-        }
-
-        public void Duration(string eventName, long milliseconds)
-        {
-            if (null != _client)
-            {
-                _client.TrackMetric(eventName, milliseconds / 60000);
+                et.Properties[name] = value.ToString();
             }
         }
     }

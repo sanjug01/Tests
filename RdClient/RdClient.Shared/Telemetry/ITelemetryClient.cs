@@ -14,7 +14,5 @@
         /// </summary>
         /// <param name="eventData">Object that represents a telemetry event.</param>
         void ReportEvent(object eventData);
-
-        ITelemetryEvent MakeEvent(string eventName);
     }
 }

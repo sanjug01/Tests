@@ -170,12 +170,7 @@
             this.Visibility = Visibility.Collapsed;
 
             if (null != _telemetryClient)
-            {
-                ITelemetryEvent te = _telemetryClient.MakeEvent("UserAction");
-                te.AddTag("action", "SetMouseMode");
-                te.AddTag("source", "RightSideBar");
-                te.Report();
-            }
+                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction() { action = "SetMouseMode", source = "RightSideBar" });
         }
 
         private void InternalTouchMode(object parameter)
@@ -186,12 +181,7 @@
             this.Visibility = Visibility.Collapsed;
 
             if (null != _telemetryClient)
-            {
-                ITelemetryEvent te = _telemetryClient.MakeEvent("UserAction");
-                te.AddTag("action", "SetTouchMode");
-                te.AddTag("source", "RightSideBar");
-                te.Report();
-            }
+                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction() { action = "SetTouchMode", source = "RightSideBar" });
         }
 
         private void InternalFullScreen(object parameter)

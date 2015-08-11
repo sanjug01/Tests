@@ -44,7 +44,7 @@
         /// </summary>
         /// <param name="dataModel">Application data model object.</param>
         /// <param name="telemetryEvent">Telemetry event to be populated with metrics and tags.</param>
-        public abstract void InitializeSessionTelemetry(ApplicationDataModel dataModel, ITelemetryEvent telemetryEvent);
+        public abstract void InitializeSessionTelemetry(ApplicationDataModel dataModel, Telemetry.Events.SessionLaunch sessionLaunch);
 
         protected abstract string GetTelemetrySourceType();
 

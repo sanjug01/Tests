@@ -109,11 +109,11 @@
             {
                 using (LockWrite())
                 {
-                    ITelemetryEvent te = this.MakeTelemetryEvent("UserAction");
-                    te.AddTag("action", "CancelReconnect");
-                    te.AddMetric("duration", Math.Round(_stopwatch.Elapsed.TotalSeconds));
-                    te.Report();
-
+                    this.TelemetryClient.ReportEvent(new Telemetry.Events.UserAction()
+                    {
+                        action = "CancelReconnect",
+                        duration = Math.Round(_stopwatch.Elapsed.TotalSeconds)
+                    });
                     _cancelled = true;
                     _connection.Disconnect();
                 }

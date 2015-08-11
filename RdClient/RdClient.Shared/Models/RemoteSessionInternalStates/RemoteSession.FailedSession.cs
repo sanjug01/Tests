@@ -17,17 +17,17 @@
                 //
                 _connection.Cleanup();
                 this.Session.DeferEmitFailed(_reason.Code);
-                this.SessionTelemetry.AddMetric("userInitiated", 0.0);
-                this.SessionTelemetry.AddMetric("disconnectReason", (double)_reason.Code);
-                this.SessionTelemetry.AddTag("disconnectCode", _reason.ULegacyCode.ToString("X8"));
-                this.SessionTelemetry.AddTag("disconnectExtendedCode", _reason.ULegacyExtendedCode.ToString("X8"));
-                this.SessionTelemetry.AddMetric("success", this.Session._hasConnected ? 1.0 : 0.0);
-                this.SessionTelemetry.Report();
+                this.SessionLaunch.userInitiated = false;
+                this.SessionLaunch.disconnectReason = (int)_reason.Code;
+                this.SessionLaunch.disconnectCode = _reason.ULegacyCode.ToString("X8");
+                this.SessionLaunch.disconnectExtendedCode = _reason.ULegacyExtendedCode.ToString("X8");
+                this.SessionLaunch.success = this.Session._hasConnected;
+                this.TelemetryClient.ReportEvent(this.SessionLaunch);
 
                 if (this.Session._hasConnected)
                 {
-                    this.SessionDuration.PauseStopwatch(SessionDurationStopwatchName);
-                    this.SessionDuration.Report();
+                    this.SessionDuration.Stop();
+                    this.TelemetryClient.ReportEvent(this.SessionDuration);
                 }
             }
 

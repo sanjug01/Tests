@@ -31,10 +31,6 @@
         private IFullScreenModel _fullScreenModel;
         private EventHandler _enteredFullScreenHandler;
 
-        private double
-            _enterFullScreenCount,
-            _exitFullScreenCount;
-
         /// <summary>
         /// Proxy object that delegates calls of the IInputFocusController interface to an injected instance of the interface.
         /// The proxy is needed because the view model needs the controller object before it gets attached to a view that provides
@@ -217,8 +213,6 @@
             Contract.Assert(null != _inputPanelFactory);
 
             _presentationStopwatch.Start();
-            _enterFullScreenCount = 0.0;
-            _exitFullScreenCount = 0.0;
 
             base.OnPresenting(activationParameter);
 
@@ -232,11 +226,7 @@
             this.ConnectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
             if (null != _telemetryClient)
-            {
-                ITelemetryEvent te = _telemetryClient.MakeEvent("InputPanelAvailability");
-                te.AddTag("canShow", _deviceCapabilities.CanShowInputPanel ? "true" : "false");
-                te.Report();
-            }
+                _telemetryClient.ReportEvent(new Telemetry.Events.InputPanelAvailability() { canShow = _deviceCapabilities.CanShowInputPanel });
 
             _enteredFullScreenHandler = (s, o) => this.DeferToUI(() => CompleteActivation(activationParameter));
             this.FullScreenModel.EnteredFullScreen += _enteredFullScreenHandler;
@@ -679,22 +669,14 @@
 
             if (_inputPanel.IsVisible)
             {
-                if(null != _telemetryClient)
-                {
-                    ITelemetryEvent te = _telemetryClient.MakeEvent("ShowTouchKeyboard");
-                    te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
-                    te.Report();
-                }
+                if (null != _telemetryClient)
+                    _telemetryClient.ReportEvent(new Telemetry.Events.ShowTouchKeyboard() { duration = Math.Round(_presentationStopwatch.Elapsed.TotalSeconds) });
                 _inputPanel.Hide();
             }
             else
             {
                 if (null != _telemetryClient)
-                {
-                    ITelemetryEvent te = _telemetryClient.MakeEvent("HideTouchKeyboard");
-                    te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
-                    te.Report();
-                }
+                    _telemetryClient.ReportEvent(new Telemetry.Events.HideTouchKeyboard() { duration = Math.Round(_presentationStopwatch.Elapsed.TotalSeconds) });
                 _inputPanel.Show();
             }
         }
@@ -708,12 +690,8 @@
         {
             if(e.PropertyName.Equals("CanShowInputPanel"))
             {
-                if(null != _telemetryClient)
-                {
-                    ITelemetryEvent te = _telemetryClient.MakeEvent("InputPanelAvailabilityChanged");
-                    te.AddTag("canShow", ((IDeviceCapabilities)sender).CanShowInputPanel ? "true" : "false");
-                    te.Report();
-                }
+                if (null != _telemetryClient)
+                    _telemetryClient.ReportEvent(new Telemetry.Events.InputPanelAvailability() { canShow = ((IDeviceCapabilities)sender).CanShowInputPanel });
 
                 _invokeKeyboard.EmitCanExecuteChanged();
             }
@@ -722,25 +700,13 @@
         private void OnEnteringFullScreen(object sender, EventArgs e)
         {
             if(null != _telemetryClient)
-            {
-                ITelemetryEvent te = _telemetryClient.MakeEvent("EnterFullScreen");
-                te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
-                _enterFullScreenCount += 1.0;
-                te.AddMetric("count", _enterFullScreenCount);
-                te.Report();
-            }
+                _telemetryClient.ReportEvent(new Telemetry.Events.EnterFullScreen() { duration = Math.Round(_presentationStopwatch.Elapsed.TotalSeconds) });
         }
 
         private void OnExitingFullScreen(object sender, EventArgs e)
         {
             if (null != _telemetryClient)
-            {
-                ITelemetryEvent te = _telemetryClient.MakeEvent("ExitFullScreen");
-                te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
-                _exitFullScreenCount += 1.0;
-                te.AddMetric("count", _exitFullScreenCount);
-                te.Report();
-            }
+                _telemetryClient.ReportEvent(new Telemetry.Events.ExitFullScreen() { duration = Math.Round(_presentationStopwatch.Elapsed.TotalSeconds) });
         }
     }
 }
