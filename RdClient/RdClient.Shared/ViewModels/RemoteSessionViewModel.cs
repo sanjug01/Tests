@@ -314,12 +314,11 @@
             model.EnteredFullScreen += onEnteredFullScreen;
             model.ExitedFullScreen += onExitedFullScreen;
 
-            this.NavigationService.PushModalView("InSessionMenusView", model,
-                new ModalPresentationCompletion((sender, e) =>
-                {
-                    model.EnteredFullScreen -= onEnteredFullScreen;
-                    model.ExitedFullScreen -= onExitedFullScreen;
-                }));
+            this.NavigationService.PushModalView("InSessionMenusView", model, new ModalPresentationCompletion((sender, e) =>
+            {
+                model.EnteredFullScreen -= onEnteredFullScreen;
+                model.ExitedFullScreen -= onExitedFullScreen;
+            }));
         }
 
         protected override void OnDismissed()
