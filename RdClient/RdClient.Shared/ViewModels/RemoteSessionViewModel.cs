@@ -265,21 +265,6 @@
             _invokeKeyboard.EmitCanExecuteChanged();
         }
 
-        private void RightSideBarVisibilityToggle(object parameter)
-        {
-            if(this.RightSideBarViewModel.Visibility == Visibility.Visible)
-            {
-                this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                this.RightSideBarViewModel.Visibility = Visibility.Visible;
-            }
-
-            if(null != _inputPanel)
-                _inputPanel.Hide();
-        }
-
         private void ShowMenusDialog(object parameter)
         {
             IInSessionMenus model = new InSessionMenusModel(this.Dispatcher,
@@ -314,10 +299,18 @@
             model.EnteredFullScreen += onEnteredFullScreen;
             model.ExitedFullScreen += onExitedFullScreen;
 
+            this.ScrollBarModel.SetScrollbarVisibility(Visibility.Collapsed);
+            _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+
             this.NavigationService.PushModalView("InSessionMenusView", model, new ModalPresentationCompletion((sender, e) =>
             {
                 model.EnteredFullScreen -= onEnteredFullScreen;
                 model.ExitedFullScreen -= onExitedFullScreen;
+
+                this.ScrollBarModel.SetScrollbarVisibility(Visibility.Visible);
+
+                if (this.PointerCapture.ConsumptionMode.ConsumptionMode == ConsumptionModeType.Pointer)
+                    _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
             }));
         }
 
@@ -409,7 +402,6 @@
         void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
         {
             _telemetryClient = telemetryClient;
-            this.RightSideBarViewModel.SetTelemetryClient(telemetryClient);
         }
 
         void ILifeTimeSite.SetLifeTimeManager(ILifeTimeManager lifeTimeManager)
@@ -514,7 +506,6 @@
                 _activeSession.HostName,
                 () => _activeSession.Disconnect());
             this.IsConnectionBarVisible = false;
-            this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
         }
 
         private void ConnectedAction()
@@ -536,7 +527,7 @@
             this.PointerPosition.Reset(_activeSessionControl.RenderingPanel, this);
             _activeSessionControl.RenderingPanel.Viewport.Reset();
 
-            this.RightSideBarViewModel.PropertyChanged += OnRightSideBarPropertyChanged;
+            //this.RightSideBarViewModel.PropertyChanged += OnRightSideBarPropertyChanged;
 
             this.PointerCapture = new PointerCapture(
                 this.PointerPosition,
@@ -544,8 +535,6 @@
                 _activeSessionControl.RenderingPanel,
                 this.TimerFactory,
                 this.Dispatcher);
-
-            this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
 
             this.ZoomPanModel.Initialize(_activeSessionControl.RenderingPanel.Viewport);
             this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
@@ -588,7 +577,10 @@
             // The connection bar and side bars are not available in any non-connected state.
             //
             this.IsConnectionBarVisible = false;
-            this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
+
+            //
+            // TODO: dismiss the menus
+            //
             
             this.PanKnobSite.PanKnob.IsVisible = false;
         }
