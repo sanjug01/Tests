@@ -416,7 +416,6 @@
     <Compile Include="ViewModels\IGatewaysCollector.cs" />
     <Compile Include="ViewModels\IItemsView.cs" />
     <Compile Include="ViewModels\InSessionMenusViewModel.cs" />
-    <Compile Include="ViewModels\IRightSideBarViewModel.cs" />
     <Compile Include="ViewModels\IUsersCollector.cs" />
     <Compile Include="ViewModels\ICertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\IAddOrEditDEsktopViewModel.cs" />
@@ -474,7 +473,6 @@
     <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
-    <Compile Include="ViewModels\RightSideBarViewModel.cs" />
     <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
     <Compile Include="ViewModels\SessionSizeViewModel.cs" />
     <Compile Include="Models\ButtonModels\SymbolBarButtonModel.cs" />
