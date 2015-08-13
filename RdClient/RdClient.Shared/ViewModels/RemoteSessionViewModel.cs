@@ -101,11 +101,6 @@
             get; set;
         }
 
-        public IRightSideBarViewModel RightSideBarViewModel
-        {
-            get; set;
-        }
-
         private IPanKnobSite _panKnobSite;
         public IPanKnobSite PanKnobSite
         {
@@ -517,7 +512,6 @@
             // Remove any belly-band view that may be shown (transitioning from reconnect or connecting state)
             //
             this.BellyBandViewModel = null;
-            this.RightSideBarViewModel.RemoteSession = _activeSession;
 
             //
             // If the session has been interrupted but reconnected automatically, clear the IsInterrupted flag
@@ -605,8 +599,6 @@
 
                     case SessionState.Failed:
                         this.FullScreenModel.ExitFullScreen();
-                        this.RightSideBarViewModel.RemoteSession = null;
-                        this.RightSideBarViewModel.PointerCapture = null;
 
                         //
                         // If changing state from Connected, remove all event handlers specific to the connected state.
@@ -626,9 +618,6 @@
                         // Remove the belly-band message
                         //
                         this.BellyBandViewModel = null;
-
-                        this.RightSideBarViewModel.RemoteSession = null;
-                        this.RightSideBarViewModel.PointerCapture = null;
 
                         //
                         // If changing state from Connected, remove all event handlers specific to the connected state.
