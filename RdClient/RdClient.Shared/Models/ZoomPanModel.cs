@@ -43,7 +43,7 @@
                 _zoomOutCommand.EmitCanExecuteChanged();
 
                 if (null != _telemetryClient)
-                    _telemetryClient.ReportEvent(new Telemetry.Events.Zoom() { action = "ZoomIn", source = "ConnectionBar" });
+                    _telemetryClient.ReportEvent(new Telemetry.Events.Zoom(Telemetry.Events.Zoom.ZoomAction.ZoomIn, Telemetry.Events.Zoom.Source.ConnectionBar));
             }
         }
 
@@ -56,8 +56,8 @@
                 _zoomInCommand.EmitCanExecuteChanged();
                 _zoomOutCommand.EmitCanExecuteChanged();
 
-                if(null != _telemetryClient)
-                    _telemetryClient.ReportEvent(new Telemetry.Events.Zoom() { action = "ZoomOut", source = "ConnectionBar" });
+                if (null != _telemetryClient)
+                    _telemetryClient.ReportEvent(new Telemetry.Events.Zoom(Telemetry.Events.Zoom.ZoomAction.ZoomOut, Telemetry.Events.Zoom.Source.ConnectionBar));
             }
         }
 

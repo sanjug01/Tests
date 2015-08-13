@@ -140,12 +140,10 @@
 
             if (null != _telemetryClient)
             {
-                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction()
-                {
-                    action = Telemetry.Events.UserAction.Action.SetTouchMode,
-                    source = Telemetry.Events.UserAction.Source.RightSideBar,
-                    duration = Math.Round(_sessionViewStopwatch.Elapsed.TotalSeconds)
-                });
+                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction(
+                    Telemetry.Events.UserAction.ActionType.SetTouchMode,
+                    Telemetry.Events.UserAction.Source.RightSideBar,
+                    Math.Round(_sessionViewStopwatch.Elapsed.TotalSeconds)));
             }
         }
 
@@ -157,12 +155,10 @@
 
             if (null != _telemetryClient)
             {
-                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction()
-                {
-                    action = Telemetry.Events.UserAction.Action.SetMouseMode,
-                    source = Telemetry.Events.UserAction.Source.RightSideBar,
-                    duration = Math.Round(_sessionViewStopwatch.Elapsed.TotalSeconds)
-                });
+                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction(
+                    Telemetry.Events.UserAction.ActionType.SetMouseMode,
+                    Telemetry.Events.UserAction.Source.RightSideBar,
+                    Math.Round(_sessionViewStopwatch.Elapsed.TotalSeconds)));
             }
         }
 

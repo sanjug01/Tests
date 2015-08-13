@@ -56,11 +56,10 @@
 
             protected override void Terminate()
             {
-                this.TelemetryClient.ReportEvent(new Telemetry.Events.UserAction()
-                {
-                    action = Telemetry.Events.UserAction.Action.CancelConnectingSession,
-                    source = Telemetry.Events.UserAction.Source.ConnectingSessionState
-                });
+                this.TelemetryClient.ReportEvent(new Telemetry.Events.UserAction(
+                    Telemetry.Events.UserAction.ActionType.CancelConnectingSession,
+                    Telemetry.Events.UserAction.Source.ConnectingSessionState,
+                    0));
 
                 if (null != _connection)
                     _connection.Disconnect();
@@ -333,11 +332,10 @@
             {
                 InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
 
-                this.TelemetryClient.ReportEvent(new Telemetry.Events.UserAction()
-                {
-                    action = Telemetry.Events.UserAction.Action.CancelCredentials,
-                    source = Telemetry.Events.UserAction.Source.ConnectingSessionState
-                });
+                this.TelemetryClient.ReportEvent(new Telemetry.Events.UserAction(
+                    Telemetry.Events.UserAction.ActionType.CancelCredentials,
+                    Telemetry.Events.UserAction.Source.ConnectingSessionState,
+                    0));
 
                 task.Submitted -= this.NewPasswordSubmitted;
                 task.Cancelled -= this.NewPasswordCancelled;
@@ -413,11 +411,10 @@
             {
                 InSessionCredentialsTask task = (InSessionCredentialsTask)sender;
 
-                this.TelemetryClient.ReportEvent(new Telemetry.Events.UserAction()
-                {
-                    action = Telemetry.Events.UserAction.Action.CancelGatewayCredentials,
-                    source = Telemetry.Events.UserAction.Source.ConnectingSessionState
-                });
+                this.TelemetryClient.ReportEvent(new Telemetry.Events.UserAction(
+                    Telemetry.Events.UserAction.ActionType.CancelGatewayCredentials,
+                    Telemetry.Events.UserAction.Source.ConnectingSessionState,
+                    0));
 
                 task.Submitted -= this.NewGatewayCredentialsCancelled;
                 task.Cancelled -= this.NewGatewayCredentialsCancelled;

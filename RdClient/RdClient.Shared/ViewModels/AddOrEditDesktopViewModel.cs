@@ -213,7 +213,7 @@
                     _addDesktopArgs.EmitDesktopAdded(this.Desktop);
 
                     _telemetryClient.CastAndCall<Telemetry.ITelemetryClient>(tc =>
-                        tc.ReportEvent(new Telemetry.Events.AddedDesktop() { desktops = this.ApplicationDataModel.LocalWorkspace.Connections.Models.Count }));
+                        tc.ReportEvent(new Telemetry.Events.AddedDesktop(this.ApplicationDataModel.LocalWorkspace.Connections.Models.Count)));
                 }
 
                 this.DismissModal(null);

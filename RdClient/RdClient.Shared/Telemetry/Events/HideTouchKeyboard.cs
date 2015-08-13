@@ -2,6 +2,14 @@
 {
     public sealed class HideTouchKeyboard
     {
-        public double duration;
+        public HideTouchKeyboard(double mark)
+        {
+            this.timeMark = mark;
+        }
+
+        /// <summary>
+        /// Time mark relative to the beginning of the session.
+        /// </summary>
+        public readonly double timeMark;
     }
 }

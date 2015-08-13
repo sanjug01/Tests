@@ -379,9 +379,7 @@
     <Compile Include="Telemetry\Events\HideTouchKeyboard.cs" />
     <Compile Include="Telemetry\Events\InputPanelAvailability.cs" />
     <Compile Include="Telemetry\Events\LaunchConfiguration.cs" />
-    <Compile Include="Telemetry\Events\NavigateToView.cs" />
-    <Compile Include="Telemetry\Events\PushAccessoryView.cs" />
-    <Compile Include="Telemetry\Events\PushModalView.cs" />
+    <Compile Include="Telemetry\Events\Navigation.cs" />
     <Compile Include="Telemetry\Events\RemovedDesktop.cs" />
     <Compile Include="Telemetry\Events\SendUsage.cs" />
     <Compile Include="Telemetry\Events\SessionDuration.cs" />

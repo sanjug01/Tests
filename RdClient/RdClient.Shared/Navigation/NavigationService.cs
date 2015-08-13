@@ -82,7 +82,7 @@ namespace RdClient.Shared.Navigation
         public virtual void NavigateToView(string viewName, object activationParameter)
         {
             if (null != _telemetryClient)
-                _telemetryClient.ReportEvent(new Telemetry.Events.NavigateToView(viewName));
+                _telemetryClient.ReportEvent(new Telemetry.Events.Navigation(viewName, Telemetry.Events.Navigation.NavigationType.Present));
 
             IPresentableView view = _viewFactory.CreateView(viewName, activationParameter);
 
@@ -110,7 +110,7 @@ namespace RdClient.Shared.Navigation
         public virtual void PushModalView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
             if (null != _telemetryClient)
-                _telemetryClient.ReportEvent(new Telemetry.Events.PushModalView() { view = viewName });
+                _telemetryClient.ReportEvent(new Telemetry.Events.Navigation(viewName, Telemetry.Events.Navigation.NavigationType.Modal));
 
             Contract.Requires(viewName != null);
 
@@ -159,7 +159,7 @@ namespace RdClient.Shared.Navigation
         void INavigationService.PushAccessoryView(string viewName, object activationParameter, IPresentationCompletion presentationCompletion)
         {
             if (null != _telemetryClient)
-                _telemetryClient.ReportEvent(new Telemetry.Events.PushAccessoryView() { view = viewName });
+                _telemetryClient.ReportEvent(new Telemetry.Events.Navigation(viewName, Telemetry.Events.Navigation.NavigationType.Accessory));
 
             IStackedViewPresenter accessoryPresenter = _currentView as IStackedViewPresenter;
 

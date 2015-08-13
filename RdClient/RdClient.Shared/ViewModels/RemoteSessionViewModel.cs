@@ -212,9 +212,6 @@
             items.Add(_invokeKeyboardModel);
             this.ConnectionBarItems = new ReadOnlyObservableCollection<object>(items);
 
-            if (null != _telemetryClient)
-                _telemetryClient.ReportEvent(new Telemetry.Events.InputPanelAvailability() { canShow = _deviceCapabilities.CanShowInputPanel });
-
             _enteredFullScreenHandler = (s, o) => this.DeferToUI(() => CompleteActivation(activationParameter));
             this.FullScreenModel.EnteredFullScreen += _enteredFullScreenHandler;
             this.FullScreenModel.EnterFullScreen();
@@ -658,13 +655,13 @@
             if (_inputPanel.IsVisible)
             {
                 if (null != _telemetryClient)
-                    _telemetryClient.ReportEvent(new Telemetry.Events.ShowTouchKeyboard() { duration = Math.Round(_presentationStopwatch.Elapsed.TotalSeconds) });
+                    _telemetryClient.ReportEvent(new Telemetry.Events.ShowTouchKeyboard(Math.Round(_presentationStopwatch.Elapsed.TotalSeconds)));
                 _inputPanel.Hide();
             }
             else
             {
                 if (null != _telemetryClient)
-                    _telemetryClient.ReportEvent(new Telemetry.Events.HideTouchKeyboard() { duration = Math.Round(_presentationStopwatch.Elapsed.TotalSeconds) });
+                    _telemetryClient.ReportEvent(new Telemetry.Events.HideTouchKeyboard(Math.Round(_presentationStopwatch.Elapsed.TotalSeconds)));
                 _inputPanel.Show();
             }
         }
@@ -679,7 +676,7 @@
             if(e.PropertyName.Equals("CanShowInputPanel"))
             {
                 if (null != _telemetryClient)
-                    _telemetryClient.ReportEvent(new Telemetry.Events.InputPanelAvailability() { canShow = ((IDeviceCapabilities)sender).CanShowInputPanel });
+                    _telemetryClient.ReportEvent(new Telemetry.Events.InputPanelAvailability(((IDeviceCapabilities)sender).CanShowInputPanel));
 
                 _invokeKeyboard.EmitCanExecuteChanged();
             }
