@@ -10,7 +10,7 @@ using Windows.UI.Core;
 using RdClient.Shared.Helpers;
 using RdClientCx;
 using System.Threading;
-
+using RdClient.Shared.Navigation.Extensions;
 
 namespace RdClient.Shared.CxWrappers
 {
@@ -26,13 +26,41 @@ namespace RdClient.Shared.CxWrappers
         public ClipboardManager(IDeferredExecution deferredExecution)
         {
             _deferredExecution = deferredExecution;
-
             _deferredExecution.Defer(
               () =>
               {
                   Clipboard.ContentChanged += new EventHandler<object>(OnLocalClipboardChanged);
               });
 
+        }
+        int IClipboardManager.GetClipboardFormats(out String[] formatsList, out int count)
+        {
+            AutoResetEvent are = new AutoResetEvent(false);
+            IReadOnlyList<String> list = null;
+            bool hasText = false;
+            count = 0;
+            formatsList = null;
+           _deferredExecution.Defer(
+             () =>
+             {
+                 DataPackageView dataPackageView = Clipboard.GetContent();
+                 if (dataPackageView.Contains(StandardDataFormats.Text))
+                 {
+                     hasText = true;
+                 }
+
+                 are.Set();
+             });
+            
+            are.WaitOne();
+            if (hasText)
+            {
+                count = 1;
+                formatsList = new String[1];
+                formatsList[0] = "Text";
+            }
+            
+            return XRESULT_SUCCESS;
         }
 
         private void OnLocalClipboardChanged(Object sender, Object e)
@@ -47,15 +75,23 @@ namespace RdClient.Shared.CxWrappers
             RdpConnectionStore rdpConnectionStoreCx;
             int xRes = RdpConnectionStore.GetConnectionStore(out rdpConnectionStoreCx);
             RdTrace.IfFailXResultThrow(xRes, "Unable to retrieve the connection store.");
-
             ClipboardManager manager = new ClipboardManager(deferredExecution);
             rdpConnectionStoreCx.SetClipboardManager(manager);
          }
 
-        int IClipboardManager.OnRemoteClipboardUpdated(String clipData, int size)
+        int IClipboardManager.ClearClipboard()
+        {
+            _deferredExecution.Defer(
+               () =>
+               {
+                   Clipboard.Clear();
+               });
+            return XRESULT_SUCCESS;
+        }
+
+        int IClipboardManager.OnRemoteClipboardUpdated(String clipData)
         {
             Debug.WriteLine(clipData);
-            Debug.WriteLine(size);
 
             _deferredExecution.Defer(
                 () =>
