@@ -527,8 +527,6 @@
             this.PointerPosition.Reset(_activeSessionControl.RenderingPanel, this);
             _activeSessionControl.RenderingPanel.Viewport.Reset();
 
-            //this.RightSideBarViewModel.PropertyChanged += OnRightSideBarPropertyChanged;
-
             this.PointerCapture = new PointerCapture(
                 this.PointerPosition,
                 _activeSessionControl,
@@ -643,42 +641,11 @@
             }
         }
 
-        private void OnRightSideBarPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName.Equals("Visibility") && sender is IRightSideBarViewModel)
-            {
-                Visibility barVisibility = ((IRightSideBarViewModel)sender).Visibility;
-                Visibility mouseVisibility = Visibility.Collapsed;
-                if(barVisibility == Visibility.Visible)
-                {
-                    mouseVisibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    mouseVisibility = Visibility.Visible;
-                }
-
-                this.ScrollBarModel.SetScrollbarVisibility(mouseVisibility);
-
-                if (this.PointerCapture.ConsumptionMode.ConsumptionMode != ConsumptionModeType.Pointer)
-                {
-                    mouseVisibility = Visibility.Collapsed;
-                }
-
-                if (_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
-                {
-                    _activeSessionControl.RenderingPanel.ChangeMouseVisibility(mouseVisibility);
-                }
-                
-            }
-        }
-
         private void OnKeystroke(object sender, KeystrokeEventArgs e)
         {
             Contract.Assert(null != _activeSessionControl);
             _activeSessionControl.SendKeystroke(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
         }
-
 
         private void OnAppSuspending(object sender, SuspendEventArgs e)
         {
