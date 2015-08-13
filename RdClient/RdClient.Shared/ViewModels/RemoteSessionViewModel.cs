@@ -309,7 +309,9 @@
 
                 this.ScrollBarModel.SetScrollbarVisibility(Visibility.Visible);
 
-                if (this.PointerCapture.ConsumptionMode.ConsumptionMode == ConsumptionModeType.Pointer)
+                if(this.SessionState != SessionState.Connected)
+                    _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+                else if (this.PointerCapture.ConsumptionMode.ConsumptionMode == ConsumptionModeType.Pointer)
                     _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
             }));
         }
@@ -579,6 +581,7 @@
             //
             // TODO: dismiss the menus
             //
+            _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
             
             this.PanKnobSite.PanKnob.IsVisible = false;
         }
