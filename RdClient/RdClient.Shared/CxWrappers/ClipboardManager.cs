@@ -36,7 +36,6 @@ namespace RdClient.Shared.CxWrappers
         int IClipboardManager.GetClipboardFormats(out String[] formatsList, out int count)
         {
             AutoResetEvent are = new AutoResetEvent(false);
-            IReadOnlyList<String> list = null;
             bool hasText = false;
             count = 0;
             formatsList = null;
@@ -138,7 +137,7 @@ namespace RdClient.Shared.CxWrappers
                       catch (Exception ex)
                       {
                           xRes = XRESULT_FAIL;
-                          //RdTrace.IfFailXResultThrow("Error retrieving Text format from Clipboard: " + ex.Message);
+                          RdTrace.IfFailXResultThrow(xRes, "Error retrieving Text format from Clipboard: " + ex.Message);
 
                       }
                   }
