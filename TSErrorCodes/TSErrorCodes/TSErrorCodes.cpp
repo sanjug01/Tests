@@ -4,6 +4,7 @@
 #include <cerrno>
 #include <iostream>
 #include <string>
+#include <fstream>
 
 #include <algorithm>
 #include <functional>
@@ -348,7 +349,7 @@ void PrintSQLTable(std::ostream& output, ErrorMapper& errorMapper)
 	errorMapper.CollectErrorMessages(
 		[&](const UINT code, const std::string& main, const std::string& aux) 
 	{
-		output << "INSERT INTO disc_codes (code, reason) VALUES(" << std::hex << code << ", " << main << " " << aux << ");" << std::endl;
+		output << "INSERT INTO disc_codes (code, reason) VALUES('" << std::hex << code << "', 'Main: " << main << ", Aux: " << aux << "');" << std::endl;
 	});
 }
 
@@ -368,7 +369,7 @@ char* getCmdOption(char ** begin, char ** end, const std::string & option)
 	{
 		return *itr;
 	}
-	return 0;
+	return NULL;
 }
 
 bool cmdOptionExists(char** begin, char** end, const std::string& option)
@@ -382,27 +383,36 @@ void PrintUsage(std::ostream& output, std::string cmd)
 	output << "\t" << cmd << " --sql" << std::endl;
 	output << "\t" << cmd << " --csv" << std::endl;
 	output << "\t" << cmd << " 0xCode" << std::endl;
+	output << "\t" << cmd << " --output <fname>" << std::endl;
 }
 
 int main(int argc, char * argv[])
 {
 	ErrorMapper errorMapper;
+	std::ostream& soutput = std::cout;
+	std::fstream foutput;
+	char* fname = getCmdOption(argv, argv + argc, "--output");
 
-	if (cmdOptionExists(argv, argv + argc, "--help"))
+	if (argc > 1 && fname != NULL)
+	{
+		foutput.open(fname, std::fstream::out);
+	}
+
+	if (argc < 2 || cmdOptionExists(argv, argv + argc, "--help"))
 	{
 		PrintUsage(std::cout, argv[0]);
 	}
 	else if (cmdOptionExists(argv, argv + argc, "--sql"))
 	{
-		PrintSQLTable(std::cout, errorMapper);
+		PrintSQLTable(fname ? foutput : std::cout, errorMapper);
 	}
 	else if (cmdOptionExists(argv, argv + argc, "--csv"))
 	{
-		PrintCSVTable(std::cout, errorMapper);
+		PrintCSVTable(fname ? foutput : std::cout, errorMapper);
 	}
 	else
 	{
-		short error = std::strtol(argv[1], 0, 16);
+		short error = static_cast<short>(std::strtol(argv[1], 0, 16));
 
 		if (error == 0)
 		{
@@ -410,8 +420,13 @@ int main(int argc, char * argv[])
 		}
 		else
 		{
-			std::cout << "Error code: 0x" << std::hex << error << " Main: " << errorMapper.GetMainDesc(error) << " Aux: " << errorMapper.GetAuxDesc(error) << std::endl;
+			std::cout << "Description for error code: 0x" << std::hex << error << " Main: " << errorMapper.GetMainDesc(error) << " Aux: " << errorMapper.GetAuxDesc(error) << std::endl;
 		}
+	}
+
+	if (fname != NULL)
+	{
+		foutput.close();
 	}
 
     return 0;
