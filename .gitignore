@@ -161,3 +161,4 @@ $RECYCLE.BIN/
 *.vcxitems
 *.filters
 RdClient/.vs/config/applicationhost.config
+TSErrorCodes/TSErrorCodes/.TSErrorCodes.cpp.swp
