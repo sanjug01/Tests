@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cerrno>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <fstream>
 
@@ -345,11 +346,11 @@ public:
 
 void PrintSQLTable(std::ostream& output, ErrorMapper& errorMapper)
 {
-	output << "CREATE TABLE disc_codes (code int, reason text);" << std::endl;
+	output << "CREATE TABLE disc_codes (code text, main text, aux text);" << std::endl;
 	errorMapper.CollectErrorMessages(
 		[&](const UINT code, const std::string& main, const std::string& aux) 
 	{
-		output << "INSERT INTO disc_codes (code, reason) VALUES('" << std::hex << code << "', 'Main: " << main << ", Aux: " << aux << "');" << std::endl;
+		output << "INSERT INTO disc_codes (code, main, aux) VALUES('" << std::hex << std::setfill('0') << std::setw(8) << code << "', '" << main << "', '" << aux << "');" << std::endl;
 	});
 }
 
@@ -412,7 +413,7 @@ int main(int argc, char * argv[])
 	}
 	else
 	{
-		short error = static_cast<short>(std::strtol(argv[1], 0, 16));
+		short error = static_cast<short>(std::strtol(argv[1], 0, 0));
 
 		if (error == 0)
 		{
