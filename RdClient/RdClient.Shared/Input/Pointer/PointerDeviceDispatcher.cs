@@ -38,7 +38,7 @@ namespace RdClient.Shared.Input.Pointer
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-        public PointerDeviceDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, ISynchronizedDeferrer dispatcher)
+        public PointerDeviceDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, IDeferredExecution dispatcher)
         {
             _pointerMode = new PointerModeConsumer(
                 new RdDispatcherTimer(timerFactory.CreateTimer(), dispatcher), 

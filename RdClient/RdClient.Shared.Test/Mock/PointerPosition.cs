@@ -23,7 +23,7 @@ namespace RdClient.Shared.Test.Mock
             }
         }
 
-        public void Reset(IRenderingPanel renderingPanel, ISynchronizedDeferrer executionDeferrer)
+        public void Reset(IRenderingPanel renderingPanel, IExecutionDeferrer executionDeferrer)
         {
             Invoke(new object[] { renderingPanel, executionDeferrer });
         }

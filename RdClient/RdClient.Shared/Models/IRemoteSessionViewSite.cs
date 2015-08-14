@@ -8,7 +8,7 @@ namespace RdClient.Shared.Models
     {
         void SetRemoteSessionView(IRemoteSessionView sessionView);
         ITimerFactory TimerFactory { get; }
-        ISynchronizedDeferrer Dispatcher { get; }
+        IDeferredExecution Dispatcher { get; }
 
         IPanKnobSite PanKnobSite { get; }
     }

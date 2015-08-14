@@ -24,7 +24,7 @@ namespace RdClient.Shared.ViewModels
         public RemoteResourceViewModel(
             RemoteResourceModel remoteResource,
             ApplicationDataModel dataModel,
-            ISynchronizedDeferrer dispatcher,
+            IExecutionDeferrer dispatcher,
             INavigationService navigationService,
             ISessionFactory sessionFactory)
         {

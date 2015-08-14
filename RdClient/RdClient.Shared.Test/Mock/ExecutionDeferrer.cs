@@ -4,7 +4,7 @@ using System;
 
 namespace RdClient.Shared.Test.Mock
 {
-    public class ExecutionDeferrer : MockBase, ISynchronizedDeferrer
+    public class ExecutionDeferrer : MockBase, IExecutionDeferrer
     {
         public bool TryDeferToUI(Action action)
         {

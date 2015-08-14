@@ -123,9 +123,9 @@
             }
         }
 
-        ISynchronizedDeferrer IRemoteSessionViewSite.Dispatcher
+        IDeferredExecution IRemoteSessionViewSite.Dispatcher
         {
-            get { return this.ExecutionDeferrer; }
+            get { return this.Dispatcher; }
         }
 
         private IBellyBandViewModel _bellyBandViewModel;
@@ -513,7 +513,7 @@
                 _activeSessionControl,
                 _activeSessionControl.RenderingPanel,
                 this.TimerFactory,
-                this.ExecutionDeferrer);
+                this.Dispatcher);
 
             this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
 

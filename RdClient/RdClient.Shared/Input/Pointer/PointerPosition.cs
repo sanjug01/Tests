@@ -8,7 +8,7 @@ namespace RdClient.Shared.Input.Pointer
     public class PointerPosition : IPointerPosition
     {
         private IRenderingPanel _renderingPanel;
-        private ISynchronizedDeferrer _deferrer;
+        private IExecutionDeferrer _deferrer;
 
         public event EventHandler<Point> PositionChanged;
 
@@ -46,7 +46,7 @@ namespace RdClient.Shared.Input.Pointer
             }
         }
 
-        void IPointerPosition.Reset(IRenderingPanel sessionControl, ISynchronizedDeferrer deferrer)
+        void IPointerPosition.Reset(IRenderingPanel sessionControl, IExecutionDeferrer deferrer)
         {
             _renderingPanel = sessionControl;
             _deferrer = deferrer;

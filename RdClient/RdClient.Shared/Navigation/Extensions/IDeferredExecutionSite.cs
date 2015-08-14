@@ -9,6 +9,6 @@
     /// </summary>
     public interface IDeferredExecutionSite
     {
-        void SetDeferredExecution(IDeferredExecution dispatcher);
+        void SetDeferredExecution(IDeferredExecution defEx);
     }
 }
