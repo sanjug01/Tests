@@ -1,10 +1,9 @@
-﻿using RdClient.Shared.Helpers;
-using System;
-using Windows.UI.ViewManagement;
-
-
-namespace RdClient.Shared.Models
+﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.Helpers;
+    using System;
+    using Windows.UI.ViewManagement;
+
     enum FullScreenChanging
     {
         Entering,

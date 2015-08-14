@@ -2,11 +2,13 @@
 {
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Pointer;
+    using Telemetry;
     using RdClient.Shared.ViewModels;
     using System;
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using System.Diagnostics;
 
     /// <summary>
     /// Model injected in the view model of the in-session menus view.
@@ -18,10 +20,15 @@
         private readonly IFullScreenModel _fullScreenModel;
         private readonly IPointerCapture _pointerCapture;
         private readonly IDeviceCapabilities _deviceCapabilities;
+        private readonly ITelemetryClient _telemetryClient;
+        private readonly IStopwatch _sessionViewStopwatch;
         private readonly RelayCommand _enterFullScreen;
         private readonly RelayCommand _exitFullScreen;
         private readonly RelayCommand _touchMode;
         private readonly RelayCommand _pointerMode;
+        private EventHandler
+            _enteredFullScreen,
+            _exitedFullScreen;
         private bool _disposed;
 
         /// <summary>
@@ -35,31 +42,33 @@
             IRemoteSession session,
             IFullScreenModel fullScreenModel,
             IPointerCapture pointerCapture,
-            IDeviceCapabilities deviceCapabilities)
+            IDeviceCapabilities deviceCapabilities,
+            ITelemetryClient telemetryClient,
+            IStopwatch sessionViewStopwatch)
         {
             Contract.Assert(null != dispatcher);
             Contract.Assert(null != session);
             Contract.Assert(null != fullScreenModel);
             Contract.Assert(null != pointerCapture);
             Contract.Assert(null != deviceCapabilities);
+            Contract.Assert(null != sessionViewStopwatch);
             Contract.Ensures(null != _dispatcher);
             Contract.Ensures(null != _session);
             Contract.Ensures(null != _fullScreenModel);
             Contract.Ensures(null != _pointerCapture);
             Contract.Ensures(null != _deviceCapabilities);
+            Contract.Ensures(null != _sessionViewStopwatch);
 
             _dispatcher = dispatcher;
             _session = session;
             _fullScreenModel = fullScreenModel;
             _pointerCapture = pointerCapture;
             _deviceCapabilities = deviceCapabilities;
+            _telemetryClient = telemetryClient;
+            _sessionViewStopwatch = sessionViewStopwatch;
 
-            _enterFullScreen = new RelayCommand(
-                parameter => _fullScreenModel.EnterFullScreen(),
-                parameter => !_fullScreenModel.IsFullScreenMode);
-            _exitFullScreen = new RelayCommand(
-                parameter => _fullScreenModel.ExitFullScreen(),
-                parameter => _fullScreenModel.IsFullScreenMode);
+            _enterFullScreen = new RelayCommand(this.EnterFullScreen, parameter => !_fullScreenModel.IsFullScreenMode);
+            _exitFullScreen = new RelayCommand(this.ExitFullScreen, parameter => _fullScreenModel.IsFullScreenMode);
 
             _touchMode = new RelayCommand(this.SetTouchMode, this.CanSetTouchMode);
             _pointerMode = new RelayCommand(this.SetPointerMode, this.CanSetPointerMode);
@@ -69,6 +78,19 @@
             _deviceCapabilities.PropertyChanged += this.OnDeviceCapabilitiesChanged;
             _disposed = false;
         }
+
+        event EventHandler IInSessionMenus.EnteredFullScreen
+        {
+            add { _enteredFullScreen += value; }
+            remove { _enteredFullScreen -= value; }
+        }
+
+        event EventHandler IInSessionMenus.ExitedFullScreen
+        {
+            add { _exitedFullScreen += value; }
+            remove { _exitedFullScreen -= value; }
+        }
+
 
         void IInSessionMenus.Disconnect()
         {
@@ -115,6 +137,14 @@
             _pointerCapture.InputMode = InputMode.Touch;
             _touchMode.EmitCanExecuteChanged();
             _pointerMode.EmitCanExecuteChanged();
+
+            if (null != _telemetryClient)
+            {
+                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction(
+                    Telemetry.Events.UserAction.ActionType.SetTouchMode,
+                    Telemetry.Events.UserAction.Source.RightSideBar,
+                    Math.Round(_sessionViewStopwatch.Elapsed.TotalSeconds)));
+            }
         }
 
         private void SetPointerMode(object parameter)
@@ -122,6 +152,14 @@
             _pointerCapture.InputMode = InputMode.Mouse;
             _touchMode.EmitCanExecuteChanged();
             _pointerMode.EmitCanExecuteChanged();
+
+            if (null != _telemetryClient)
+            {
+                _telemetryClient.ReportEvent(new Telemetry.Events.UserAction(
+                    Telemetry.Events.UserAction.ActionType.SetMouseMode,
+                    Telemetry.Events.UserAction.Source.RightSideBar,
+                    Math.Round(_sessionViewStopwatch.Elapsed.TotalSeconds)));
+            }
         }
 
         private bool CanSetTouchMode(object parameter)
@@ -132,6 +170,26 @@
         private bool CanSetPointerMode(object parameter)
         {
             return InputMode.Mouse != _pointerCapture.InputMode && _deviceCapabilities.TouchPresent;
+        }
+
+        private void EnterFullScreen(object parameter)
+        {
+            _fullScreenModel.EnterFullScreen();
+            if (null != _enteredFullScreen)
+                _enteredFullScreen(this, EventArgs.Empty);
+
+            if(null != _telemetryClient)
+                _telemetryClient.ReportEvent(new Telemetry.Events.EnterFullScreen(_sessionViewStopwatch));
+        }
+
+        private void ExitFullScreen(object parameter)
+        {
+            _fullScreenModel.ExitFullScreen();
+            if (null != _exitedFullScreen)
+                _exitedFullScreen(this, EventArgs.Empty);
+
+            if (null != _telemetryClient)
+                _telemetryClient.ReportEvent(new Telemetry.Events.ExitFullScreen(_sessionViewStopwatch));
         }
     }
 }

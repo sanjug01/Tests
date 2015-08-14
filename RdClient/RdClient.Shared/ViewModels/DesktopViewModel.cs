@@ -205,11 +205,7 @@
             _dataModel.LocalWorkspace.Connections.RemoveModel(this.DesktopId);
 
             _telemetryClient.CastAndCall<Telemetry.ITelemetryClient>(tc =>
-            {
-                Telemetry.ITelemetryEvent te = tc.MakeEvent("RemovedDesktop");
-                te.AddMetric("desktops", _dataModel.LocalWorkspace.Connections.Models.Count);
-                te.Report();
-            });
+                tc.ReportEvent(new Telemetry.Events.RemovedDesktop(_dataModel.LocalWorkspace.Connections.Models.Count)));
         }
     }
 }

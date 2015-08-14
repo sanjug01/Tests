@@ -16,23 +16,22 @@
                 //
                 // Use the connection model to create a session telemetry event that the session will update and report upon completion.
                 //
-                ITelemetryEvent sessionTelemetry = telemetryClient.MakeEvent("SessionLaunch");
-                ITelemetryEvent sessionDuration = telemetryClient.MakeEvent("SessionDuration");
+                Telemetry.Events.SessionLaunch sessionLaunch = new Telemetry.Events.SessionLaunch();
+                Telemetry.Events.SessionDuration sessionDuration = new Telemetry.Events.SessionDuration(sessionSetup.Connection.TelemetrySourceType);
 
-                sessionSetup.Connection.InitializeSessionTelemetry(sessionSetup.DataModel, sessionTelemetry);
-                sessionDuration.AddTag("sourceType", sessionSetup.Connection.TelemetrySourceType);
+                sessionSetup.Connection.InitializeSessionTelemetry(sessionSetup.DataModel, sessionLaunch);
 
-                return new InactiveSession(monitor, deviceCapabilities, telemetryClient, sessionTelemetry, sessionDuration);
+                return new InactiveSession(monitor, deviceCapabilities, telemetryClient, sessionLaunch, sessionDuration);
             }
 
             private InactiveSession(ReaderWriterLockSlim monitor,
                 IDeviceCapabilities deviceCapabilities,
                 ITelemetryClient telemetryClient,
-                ITelemetryEvent sessionTelemetry,
-                ITelemetryEvent sessionDuration)
-                : base(SessionState.Idle, monitor, deviceCapabilities, telemetryClient, sessionTelemetry, sessionDuration)
+                Telemetry.Events.SessionLaunch sessionLaunch,
+                Telemetry.Events.SessionDuration sessionDuration)
+                : base(SessionState.Idle, monitor, deviceCapabilities, telemetryClient, sessionLaunch, sessionDuration)
             {
-                this.SessionTelemetry.AddTag("userInteractionMode", this.DeviceCapabilities.UserInteractionModeLabel);
+                this.SessionLaunch.userInteractionMode = this.DeviceCapabilities.UserInteractionModeLabel;
             }
 
             public InactiveSession(InternalState otherState) : base(SessionState.Idle, otherState)

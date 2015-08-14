@@ -1,7 +1,6 @@
 ﻿namespace RdClient.Controls
 {
     using RdClient.Shared.Input.Keyboard;
-    using RdClient.Shared.Telemetry;
     using System;
     using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
@@ -10,7 +9,6 @@
     public sealed partial class TouchKeyboardActivator : UserControl, IInputPanel
     {
         private readonly InputPane _inputPane;
-        private ITelemetryClient _telemetryClient;
         private EventHandler _isVisibleChanged;
         private bool _isVisible;
 
@@ -21,12 +19,6 @@
             _inputPane = InputPane.GetForCurrentView();
             _inputPane.Showing += this.OnInputPaneShowing;
             _inputPane.Hiding += this.OnInputPaneHiding;
-        }
-
-        public ITelemetryClient TelemetryClient
-        {
-            get { return _telemetryClient; }
-            set { _telemetryClient = value; }
         }
 
         bool IInputPanel.IsVisible
@@ -44,7 +36,6 @@
         {
             this.DummyButton.Focus(FocusState.Programmatic);
             _inputPane.TryHide();
-            ReportTelemetryEvent("action", "hide");
         }
 
         void IInputPanel.Show()
@@ -55,7 +46,6 @@
             //
             this.HiddenTextBox.Focus(FocusState.Pointer);
             _inputPane.TryShow();
-            ReportTelemetryEvent("action", "show");
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
@@ -76,7 +66,6 @@
         {
             _isVisible = true;
             EmitIsVisibleChanged();
-            ReportTelemetryEvent("event", "showing");
         }
 
         private void OnInputPaneHiding(InputPane sender, InputPaneVisibilityEventArgs e)
@@ -88,18 +77,6 @@
             //
             this.DummyButton.Focus(FocusState.Programmatic);
             EmitIsVisibleChanged();
-            ReportTelemetryEvent("event", "hiding");
-        }
-
-        private void ReportTelemetryEvent( string eventType, string value )
-        {
-
-            if (null != _telemetryClient)
-            {
-                ITelemetryEvent te = _telemetryClient.MakeEvent("TouchKeyboard");
-                te.AddTag(eventType, value);
-                te.Report();
-            }
         }
     }
 }

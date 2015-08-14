@@ -24,16 +24,13 @@
         IInputPanelFactorySite,
         ITelemetryClientSite
     {
-        private readonly Stopwatch _presentationStopwatch;
+        private readonly IStopwatch _presentationStopwatch;
         private readonly RelayCommand _invokeKeyboard;
         private readonly SymbolBarButtonModel _invokeKeyboardModel;
         private readonly FocusControllerProxy _inputFocusController;
+        private Telemetry.Events.SessionInput _sessionInputTelemetry;
         private IFullScreenModel _fullScreenModel;
         private EventHandler _enteredFullScreenHandler;
-
-        private double
-            _enterFullScreenCount,
-            _exitFullScreenCount;
 
         /// <summary>
         /// Proxy object that delegates calls of the IInputFocusController interface to an injected instance of the interface.
@@ -100,11 +97,6 @@
         }
 
         public IScrollBarModel ScrollBarModel
-        {
-            get; set;
-        }
-
-        public IRightSideBarViewModel RightSideBarViewModel
         {
             get; set;
         }
@@ -186,24 +178,14 @@
             {
                 if (!object.ReferenceEquals(_fullScreenModel, value))
                 {
-                    if(null != _fullScreenModel)
-                    {
-                        _fullScreenModel.EnteringFullScreen -= this.OnEnteringFullScreen;
-                        _fullScreenModel.ExitingFullScreen -= this.OnExitingFullScreen;
-                    }
                     _fullScreenModel = value;
-                    if (null != _fullScreenModel)
-                    {
-                        _fullScreenModel.EnteringFullScreen += this.OnEnteringFullScreen;
-                        _fullScreenModel.ExitingFullScreen += this.OnExitingFullScreen;
-                    }
                 }
             }
         }
 
         public RemoteSessionViewModel()
         {
-            _presentationStopwatch = new Stopwatch();
+            _presentationStopwatch = new TelemetryStopwatch();
             _invokeKeyboard = new RelayCommand(this.InternalInvokeKeyboard, this.InternalCanInvokeKeyboard);
             _invokeKeyboardModel = new SymbolBarButtonModel() { Glyph = SegoeGlyph.Keyboard, Command = _invokeKeyboard };
             _inputFocusController = new FocusControllerProxy();
@@ -217,11 +199,10 @@
             Contract.Assert(null != _inputPanelFactory);
 
             _presentationStopwatch.Start();
-            _enterFullScreenCount = 0.0;
-            _exitFullScreenCount = 0.0;
 
             base.OnPresenting(activationParameter);
 
+            _sessionInputTelemetry = new Telemetry.Events.SessionInput();
             this.ZoomPanModel = new ZoomPanModel(_inputFocusController, _telemetryClient);
 
             ObservableCollection<object> items = new ObservableCollection<object>();
@@ -230,13 +211,6 @@
             items.Add(new SymbolBarButtonModel() { Glyph = SegoeGlyph.More, Command = new FocusStealingRelayCommand(_inputFocusController, this.ShowMenusDialog) });
             items.Add(_invokeKeyboardModel);
             this.ConnectionBarItems = new ReadOnlyObservableCollection<object>(items);
-
-            if (null != _telemetryClient)
-            {
-                ITelemetryEvent te = _telemetryClient.MakeEvent("InputPanelAvailability");
-                te.AddTag("canShow", _deviceCapabilities.CanShowInputPanel ? "true" : "false");
-                te.Report();
-            }
 
             _enteredFullScreenHandler = (s, o) => this.DeferToUI(() => CompleteActivation(activationParameter));
             this.FullScreenModel.EnteredFullScreen += _enteredFullScreenHandler;
@@ -283,35 +257,55 @@
             _invokeKeyboard.EmitCanExecuteChanged();
         }
 
-        private void RightSideBarVisibilityToggle(object parameter)
-        {
-            if(this.RightSideBarViewModel.Visibility == Visibility.Visible)
-            {
-                this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                this.RightSideBarViewModel.Visibility = Visibility.Visible;
-            }
-
-            if(null != _inputPanel)
-                _inputPanel.Hide();
-        }
-
         private void ShowMenusDialog(object parameter)
         {
-            InSessionMenusModel model = new InSessionMenusModel(this.Dispatcher,
+            IInSessionMenus model = new InSessionMenusModel(this.Dispatcher,
                 _activeSession,
                 _fullScreenModel,
                 _pointerCapture,
-                _deviceCapabilities);
+                _deviceCapabilities,
+                _telemetryClient,
+                _presentationStopwatch);
             //
             // Hide the inpiut panel first to free up some screen space, ane because it is useless when the menu overlays are shown.
             //
             if (null != _inputPanel)
                 _inputPanel.Hide();
 
-            this.NavigationService.PushModalView("InSessionMenusView", model, null);
+            EventHandler onEnteredFullScreen = (sender, e) =>
+            {
+                //
+                // Increment the counter of entering full screen by user
+                //
+                _sessionInputTelemetry.EnterFullScreen(_presentationStopwatch);
+            };
+            EventHandler onExitedFullScreen = (sender, e) =>
+            {
+                //
+                // Increment the counter of exiting full screen by user
+                //
+                _sessionInputTelemetry.ExitFullScreen(_presentationStopwatch);
+            };
+            _sessionInputTelemetry.ShowSessionMenus();
+
+            model.EnteredFullScreen += onEnteredFullScreen;
+            model.ExitedFullScreen += onExitedFullScreen;
+
+            this.ScrollBarModel.SetScrollbarVisibility(Visibility.Collapsed);
+            _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+
+            this.NavigationService.PushModalView("InSessionMenusView", model, new ModalPresentationCompletion((sender, e) =>
+            {
+                model.EnteredFullScreen -= onEnteredFullScreen;
+                model.ExitedFullScreen -= onExitedFullScreen;
+
+                this.ScrollBarModel.SetScrollbarVisibility(Visibility.Visible);
+
+                if(this.SessionState != SessionState.Connected)
+                    _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+                else if (this.PointerCapture.ConsumptionMode.ConsumptionMode == ConsumptionModeType.Pointer)
+                    _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
+            }));
         }
 
         protected override void OnDismissed()
@@ -344,6 +338,10 @@
 
             this.ZoomPanModel.Dispose();
             this.ZoomPanModel = null;
+
+            if(null != _telemetryClient)
+                _telemetryClient.ReportEvent(_sessionInputTelemetry);
+            _sessionInputTelemetry = null;
 
             base.OnDismissed();
         }
@@ -398,7 +396,6 @@
         void ITelemetryClientSite.SetTelemetryClient(ITelemetryClient telemetryClient)
         {
             _telemetryClient = telemetryClient;
-            this.RightSideBarViewModel.SetTelemetryClient(telemetryClient);
         }
 
         void ILifeTimeSite.SetLifeTimeManager(ILifeTimeManager lifeTimeManager)
@@ -503,7 +500,6 @@
                 _activeSession.HostName,
                 () => _activeSession.Disconnect());
             this.IsConnectionBarVisible = false;
-            this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
         }
 
         private void ConnectedAction()
@@ -513,7 +509,6 @@
             // Remove any belly-band view that may be shown (transitioning from reconnect or connecting state)
             //
             this.BellyBandViewModel = null;
-            this.RightSideBarViewModel.RemoteSession = _activeSession;
 
             //
             // If the session has been interrupted but reconnected automatically, clear the IsInterrupted flag
@@ -525,16 +520,12 @@
             this.PointerPosition.Reset(_activeSessionControl.RenderingPanel, this);
             _activeSessionControl.RenderingPanel.Viewport.Reset();
 
-            this.RightSideBarViewModel.PropertyChanged += OnRightSideBarPropertyChanged;
-
             this.PointerCapture = new PointerCapture(
                 this.PointerPosition,
                 _activeSessionControl,
                 _activeSessionControl.RenderingPanel,
                 this.TimerFactory,
                 this.Dispatcher);
-
-            this.RightSideBarViewModel.PointerCapture = this.PointerCapture;
 
             this.ZoomPanModel.Initialize(_activeSessionControl.RenderingPanel.Viewport);
             this.ScrollBarModel.Viewport = _activeSessionControl.RenderingPanel.Viewport;
@@ -577,7 +568,11 @@
             // The connection bar and side bars are not available in any non-connected state.
             //
             this.IsConnectionBarVisible = false;
-            this.RightSideBarViewModel.Visibility = Visibility.Collapsed;
+
+            //
+            // TODO: dismiss the menus
+            //
+            _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
             
             this.PanKnobSite.PanKnob.IsVisible = false;
         }
@@ -601,8 +596,6 @@
 
                     case SessionState.Failed:
                         this.FullScreenModel.ExitFullScreen();
-                        this.RightSideBarViewModel.RemoteSession = null;
-                        this.RightSideBarViewModel.PointerCapture = null;
 
                         //
                         // If changing state from Connected, remove all event handlers specific to the connected state.
@@ -623,9 +616,6 @@
                         //
                         this.BellyBandViewModel = null;
 
-                        this.RightSideBarViewModel.RemoteSession = null;
-                        this.RightSideBarViewModel.PointerCapture = null;
-
                         //
                         // If changing state from Connected, remove all event handlers specific to the connected state.
                         //
@@ -640,42 +630,11 @@
             }
         }
 
-        private void OnRightSideBarPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName.Equals("Visibility") && sender is IRightSideBarViewModel)
-            {
-                Visibility barVisibility = ((IRightSideBarViewModel)sender).Visibility;
-                Visibility mouseVisibility = Visibility.Collapsed;
-                if(barVisibility == Visibility.Visible)
-                {
-                    mouseVisibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    mouseVisibility = Visibility.Visible;
-                }
-
-                this.ScrollBarModel.SetScrollbarVisibility(mouseVisibility);
-
-                if (this.PointerCapture.ConsumptionMode.ConsumptionMode != ConsumptionModeType.Pointer)
-                {
-                    mouseVisibility = Visibility.Collapsed;
-                }
-
-                if (_activeSessionControl != null && _activeSessionControl.RenderingPanel != null)
-                {
-                    _activeSessionControl.RenderingPanel.ChangeMouseVisibility(mouseVisibility);
-                }
-                
-            }
-        }
-
         private void OnKeystroke(object sender, KeystrokeEventArgs e)
         {
             Contract.Assert(null != _activeSessionControl);
             _activeSessionControl.SendKeystroke(e.KeyCode, e.IsScanCode, e.IsExtendedKey, e.IsKeyReleased);
         }
-
 
         private void OnAppSuspending(object sender, SuspendEventArgs e)
         {
@@ -695,22 +654,14 @@
 
             if (_inputPanel.IsVisible)
             {
-                if(null != _telemetryClient)
-                {
-                    ITelemetryEvent te = _telemetryClient.MakeEvent("ShowTouchKeyboard");
-                    te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
-                    te.Report();
-                }
+                if (null != _telemetryClient)
+                    _telemetryClient.ReportEvent(new Telemetry.Events.ShowTouchKeyboard(Math.Round(_presentationStopwatch.Elapsed.TotalSeconds)));
                 _inputPanel.Hide();
             }
             else
             {
                 if (null != _telemetryClient)
-                {
-                    ITelemetryEvent te = _telemetryClient.MakeEvent("HideTouchKeyboard");
-                    te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
-                    te.Report();
-                }
+                    _telemetryClient.ReportEvent(new Telemetry.Events.HideTouchKeyboard(Math.Round(_presentationStopwatch.Elapsed.TotalSeconds)));
                 _inputPanel.Show();
             }
         }
@@ -724,38 +675,10 @@
         {
             if(e.PropertyName.Equals("CanShowInputPanel"))
             {
-                if(null != _telemetryClient)
-                {
-                    ITelemetryEvent te = _telemetryClient.MakeEvent("InputPanelAvailabilityChanged");
-                    te.AddTag("canShow", ((IDeviceCapabilities)sender).CanShowInputPanel ? "true" : "false");
-                    te.Report();
-                }
+                if (null != _telemetryClient)
+                    _telemetryClient.ReportEvent(new Telemetry.Events.InputPanelAvailability(((IDeviceCapabilities)sender).CanShowInputPanel));
 
                 _invokeKeyboard.EmitCanExecuteChanged();
-            }
-        }
-
-        private void OnEnteringFullScreen(object sender, EventArgs e)
-        {
-            if(null != _telemetryClient)
-            {
-                ITelemetryEvent te = _telemetryClient.MakeEvent("EnterFullScreen");
-                te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
-                _enterFullScreenCount += 1.0;
-                te.AddMetric("count", _enterFullScreenCount);
-                te.Report();
-            }
-        }
-
-        private void OnExitingFullScreen(object sender, EventArgs e)
-        {
-            if (null != _telemetryClient)
-            {
-                ITelemetryEvent te = _telemetryClient.MakeEvent("ExitFullScreen");
-                te.AddMetric("duration", Math.Round(_presentationStopwatch.Elapsed.TotalSeconds));
-                _exitFullScreenCount += 1.0;
-                te.AddMetric("count", _exitFullScreenCount);
-                te.Report();
             }
         }
     }

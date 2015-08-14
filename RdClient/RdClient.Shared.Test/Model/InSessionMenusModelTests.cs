@@ -10,6 +10,7 @@
     using System.Collections.Generic;
     using Windows.UI.ViewManagement;
     using System.ComponentModel;
+    using Telemetry;
 
     [TestClass]
     public sealed class InSessionMenusModelTests
@@ -389,17 +390,20 @@
         }
 
         private TestDeferredExecution _dispatcher;
+        private IStopwatch _stopwatch;
 
         [TestInitialize]
         public void SetUpTest()
         {
             _dispatcher = new TestDeferredExecution();
+            _stopwatch = new TelemetryStopwatch();
         }
 
         [TestCleanup]
         public void TearDownTest()
         {
             _dispatcher = null;
+            _stopwatch = null;
         }
 
         [TestMethod]
@@ -409,7 +413,7 @@
             {
                 session.Expect("Disconnect", new List<object>() { }, null);
                 IInSessionMenus model = new InSessionMenusModel(_dispatcher, session,
-                    new TestFullScreenModel(), new TestPointerCapture(), new TestDeviceCapabilities());
+                    new TestFullScreenModel(), new TestPointerCapture(), new TestDeviceCapabilities(), null, _stopwatch);
 
                 model.Disconnect();
             }
@@ -424,7 +428,8 @@
             {
                 fullScreenModel.Expect("EnterFullScreen", new List<object>(), null);
                 IInSessionMenus model = new InSessionMenusModel(_dispatcher, session,
-                    fullScreenModel, pointerCapture, new TestDeviceCapabilities());
+                    fullScreenModel, pointerCapture, new TestDeviceCapabilities(),
+                    null, _stopwatch);
 
                 model.EnterFullScreen.Execute(null);
             }
@@ -439,7 +444,8 @@
             {
                 fullScreenModel.Expect("ExitFullScreen", new List<object>(), null);
                 IInSessionMenus model = new InSessionMenusModel(_dispatcher, session,
-                    fullScreenModel, pointerCapture, new TestDeviceCapabilities());
+                    fullScreenModel, pointerCapture, new TestDeviceCapabilities(),
+                    null, _stopwatch);
 
                 model.ExitFullScreen.Execute(null);
             }
@@ -455,7 +461,8 @@
                 int commandsUpdated = 0;
 
                 IInSessionMenus model = new InSessionMenusModel(_dispatcher, session,
-                    fullScreenModel, pointerCapture, new TestDeviceCapabilities());
+                    fullScreenModel, pointerCapture, new TestDeviceCapabilities(),
+                    null, _stopwatch);
                 Assert.IsFalse(fullScreenModel.IsFullScreenMode);
                 model.EnterFullScreen.CanExecuteChanged += (sender, e) => ++commandsUpdated;
                 model.ExitFullScreen.CanExecuteChanged += (sender, e) => ++commandsUpdated;
@@ -466,6 +473,33 @@
                 Assert.AreEqual(2, commandsUpdated);
                 Assert.IsFalse(model.EnterFullScreen.CanExecute(null));
                 Assert.IsTrue(model.ExitFullScreen.CanExecute(null));
+            }
+        }
+
+        [TestMethod]
+        public void InSessionMenusModel_EnterFullScreen_EventEmitted()
+        {
+            using (TestSession session = new TestSession())
+            using (TestFullScreenModel fullScreenModel = new TestFullScreenModel())
+            using (TestPointerCapture pointerCapture = new TestPointerCapture())
+            {
+                int eventsEmitted = 0;
+
+                fullScreenModel.Expect("EnterFullScreen", new List<object>() { }, null);
+
+                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session,
+                    fullScreenModel, pointerCapture, new TestDeviceCapabilities(),
+                    null, _stopwatch);
+                model.EnteredFullScreen += (sender, e) =>
+                {
+                    ++eventsEmitted;
+                    Assert.AreSame(model, sender);
+                };
+                model.ExitedFullScreen += (sender, e) => Assert.Fail();
+
+                model.EnterFullScreen.Execute(null);
+
+                Assert.AreEqual(1, eventsEmitted);
             }
         }
 
@@ -482,7 +516,8 @@
                 _dispatcher.ExecuteDeferred();
 
                 IInSessionMenus model = new InSessionMenusModel(_dispatcher, session,
-                    fullScreenModel, pointerCapture, new TestDeviceCapabilities());
+                    fullScreenModel, pointerCapture, new TestDeviceCapabilities(),
+                    null, _stopwatch);
                 Assert.IsTrue(fullScreenModel.IsFullScreenMode);
                 model.EnterFullScreen.CanExecuteChanged += (sender, e) => ++commandsUpdated;
                 model.ExitFullScreen.CanExecuteChanged += (sender, e) => ++commandsUpdated;
@@ -493,6 +528,37 @@
                 Assert.AreEqual(2, commandsUpdated);
                 Assert.IsTrue(model.EnterFullScreen.CanExecute(null));
                 Assert.IsFalse(model.ExitFullScreen.CanExecute(null));
+            }
+        }
+
+        [TestMethod]
+        public void InSessionMenusModel_ExitFullScreen_EventEmitted()
+        {
+            using (TestSession session = new TestSession())
+            using (TestFullScreenModel fullScreenModel = new TestFullScreenModel())
+            using (TestPointerCapture pointerCapture = new TestPointerCapture())
+            {
+                int eventsEmitted = 0;
+
+                fullScreenModel.Expect("ExitFullScreen", new List<object>() { }, null);
+
+                fullScreenModel.SetFullScreenMode(true);
+                _dispatcher.ExecuteDeferred();
+
+                IInSessionMenus model = new InSessionMenusModel(_dispatcher, session,
+                    fullScreenModel, pointerCapture, new TestDeviceCapabilities(),
+                    null, _stopwatch);
+                model.EnteredFullScreen += (sender, e) => Assert.Fail();
+                model.ExitedFullScreen += (sender, e) =>
+                {
+                    ++eventsEmitted;
+                    Assert.AreSame(model, sender);
+                };
+                Assert.IsTrue(fullScreenModel.IsFullScreenMode);
+
+                model.ExitFullScreen.Execute(null);
+
+                Assert.AreEqual(1, eventsEmitted);
             }
         }
     }

@@ -14,15 +14,16 @@
             {
                 _connection.Cleanup();
                 this.Session.DeferEmitClosed();
-                this.SessionTelemetry.AddMetric("userInitiated", 1.0);
-                this.SessionTelemetry.AddMetric("disconnectReason", (double)RdpDisconnectCode.UserInitiated);
-                this.SessionTelemetry.AddMetric("success", this.Session._hasConnected ? 1.0 : 0.0);
-                this.SessionTelemetry.Report();
+
+                this.SessionLaunch.userInitiated = true;
+                this.SessionLaunch.disconnectReason = (int)RdpDisconnectCode.UserInitiated;
+                this.SessionLaunch.success = this.Session._hasConnected;
+                this.TelemetryClient.ReportEvent(this.SessionLaunch);
 
                 if (this.Session._hasConnected)
                 {
-                    this.SessionDuration.PauseStopwatch(SessionDurationStopwatchName);
-                    this.SessionDuration.Report();
+                    this.SessionDuration.Stop();
+                    this.TelemetryClient.ReportEvent(this.SessionDuration);
                 }
 
                 ChangeState(new InactiveSession(this));

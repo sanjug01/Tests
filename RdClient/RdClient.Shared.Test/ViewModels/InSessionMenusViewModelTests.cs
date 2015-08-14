@@ -33,6 +33,9 @@
                 this.PointerModeCommand = new RelayCommand(p => { });
             }
 
+            public event EventHandler EnteredFullScreen { add { } remove { } }
+            public event EventHandler ExitedFullScreen { add { } remove { } }
+
             public override void Dispose()
             {
                 if(_invokeDispose)

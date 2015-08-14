@@ -26,7 +26,6 @@
             _vm = new RemoteSessionViewModel()
             {
                 KeyboardCapture = new TestKeyboardCapture(),
-                RightSideBarViewModel = new RightSideBarViewModel() { FullScreenModel = new TestFullScreenModel() },
                 PointerPosition = new TestPointerPosition(),
                 ScrollBarModel = new TestScrollBarModel(),
                 FullScreenModel = new TestFullScreenModel(),
@@ -112,7 +111,6 @@
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNotNull(_vm.BellyBandViewModel);
             Assert.IsInstanceOfType(_vm.BellyBandViewModel, typeof(RemoteSessionConnectingViewModel));
-            Assert.AreEqual(Visibility.Collapsed, _vm.RightSideBarViewModel.Visibility);
             Assert.IsNotNull(connection);
             Assert.AreEqual(1, connectCount);
 
@@ -313,7 +311,6 @@
 
             Assert.IsTrue(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
-            Assert.AreEqual(Visibility.Collapsed, _vm.RightSideBarViewModel.Visibility);
         }
 
         [TestMethod]
@@ -369,42 +366,6 @@
             Assert.IsFalse(_vm.IsConnectionBarVisible);
             Assert.IsNull(_vm.BellyBandViewModel);
             Assert.AreEqual(1, cleanupCount);
-        }
-
-        [TestMethod]
-        public void RemoteSessionViewModel_ConnectShowSideBars_SideBarsShown()
-        {
-            RemoteSessionSetup setup = new RemoteSessionSetup(_dataModel, _dataModel.LocalWorkspace.Connections.Models[0].Model);
-            IRemoteSession session = new RemoteSession(setup, _defex, _connectionSource, _timerFactory, _devCaps, new Mock.TestTelemetryClient());
-            IRdpConnection connection = null;
-            Task connectTask = null;
-
-            _connectionSource.ConnectionCreated += (sender, e) =>
-            {
-                connection = e.Connection;
-                Assert.IsNotNull(connection.Events);
-                IConnectionActivity activity = (IConnectionActivity)connection;
-                //
-                // Subscribe for connection activity events;
-                //
-                activity.Connect += (s, a) =>
-                {
-                    Assert.AreSame(s, activity);
-                    connectTask = activity.AsyncConnect();
-                };
-            };
-
-            _nav.NavigateToView("RemoteSessionView", session);
-            ((IRemoteSessionViewSite)_vm).SetRemoteSessionView(_viewFactory.View);
-            Assert.IsNotNull(connectTask);
-            connectTask.Wait();
-            //connectTask.Dispose();
-            _defex.ExecuteAll();
-            //Assert.IsTrue(_vm.RightSideBarViewModel.ToggleVisiblity.CanExecute(null));
-            //_vm.RightSideBarViewModel.ToggleVisiblity.Execute(null);
-
-            Assert.AreEqual(Visibility.Visible, _vm.RightSideBarViewModel.Visibility);
-            //Assert.IsTrue(_vm.RightSideBarViewModel.Disconnect.CanExecute(true));
         }
 
         [TestMethod]

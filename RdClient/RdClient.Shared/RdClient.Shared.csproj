@@ -373,9 +373,27 @@
     <Compile Include="Navigation\PresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="Navigation\ViewVisibility.cs" />
+    <Compile Include="Telemetry\Events\AddedDesktop.cs" />
+    <Compile Include="Telemetry\Events\EnterFullScreen.cs" />
+    <Compile Include="Telemetry\Events\ExitFullScreen.cs" />
+    <Compile Include="Telemetry\Events\HideTouchKeyboard.cs" />
+    <Compile Include="Telemetry\Events\InputPanelAvailability.cs" />
+    <Compile Include="Telemetry\Events\LaunchConfiguration.cs" />
+    <Compile Include="Telemetry\Events\Navigation.cs" />
+    <Compile Include="Telemetry\Events\RemovedDesktop.cs" />
+    <Compile Include="Telemetry\Events\SendUsage.cs" />
+    <Compile Include="Telemetry\Events\SessionDuration.cs" />
+    <Compile Include="Telemetry\Events\SessionInput.cs" />
+    <Compile Include="Telemetry\Events\SessionLaunch.cs" />
+    <Compile Include="Telemetry\Events\ShowTouchKeyboard.cs" />
+    <Compile Include="Telemetry\Events\UserAction.cs" />
+    <Compile Include="Telemetry\Events\ViewedLicense.cs" />
+    <Compile Include="Telemetry\Events\ViewedPrivacy.cs" />
+    <Compile Include="Telemetry\Events\ViewedThirdPartyDoc.cs" />
+    <Compile Include="Telemetry\Events\Zoom.cs" />
+    <Compile Include="Telemetry\IStopwatch.cs" />
     <Compile Include="Telemetry\ITelemetryClient.cs" />
-    <Compile Include="Telemetry\ITelemetryEvent.cs" />
-    <Compile Include="Telemetry\ITelemetryStopwatch.cs" />
+    <Compile Include="Telemetry\TelemetryStopwatch.cs" />
     <Compile Include="ValidationRules\CompositeValidationRule.cs" />
     <Compile Include="ValidationRules\HostnameValidationFailure.cs" />
     <Compile Include="ValidationRules\IValidatedProperty.cs" />
@@ -396,7 +414,6 @@
     <Compile Include="ViewModels\IGatewaysCollector.cs" />
     <Compile Include="ViewModels\IItemsView.cs" />
     <Compile Include="ViewModels\InSessionMenusViewModel.cs" />
-    <Compile Include="ViewModels\IRightSideBarViewModel.cs" />
     <Compile Include="ViewModels\IUsersCollector.cs" />
     <Compile Include="ViewModels\ICertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\IAddOrEditDEsktopViewModel.cs" />
@@ -454,7 +471,6 @@
     <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
-    <Compile Include="ViewModels\RightSideBarViewModel.cs" />
     <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
     <Compile Include="ViewModels\SessionSizeViewModel.cs" />
     <Compile Include="Models\ButtonModels\SymbolBarButtonModel.cs" />
@@ -496,6 +512,7 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="project.json" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -166,18 +166,18 @@
             return connection;
         }
 
-        public override void InitializeSessionTelemetry(ApplicationDataModel dataModel, ITelemetryEvent telemetryEvent)
+        public override void InitializeSessionTelemetry(ApplicationDataModel dataModel, Telemetry.Events.SessionLaunch sessionLaunch)
         {
-            telemetryEvent.AddTag("sourceType", this.TelemetrySourceType);
+            sessionLaunch.sourceType = this.TelemetrySourceType;
 
             if (!Guid.Empty.Equals(_gatewayId))
             {
                 GatewayModel gateway = dataModel.Gateways.GetModel(_gatewayId);
-                telemetryEvent.AddTag("gwyCreds", dataModel.GetCredentialsTelemetryTag(gateway.CredentialsId));
+                sessionLaunch.gwyCreds = dataModel.GetCredentialsTelemetryTag(gateway.CredentialsId);
             }
 
-            telemetryEvent.AddTag("hostAddressType", GetHostAddressTypeTag(_hostName));
-            telemetryEvent.AddTag("hostCreds", dataModel.GetCredentialsTelemetryTag(_credentialsId));
+            sessionLaunch.hostAddressType = GetHostAddressTypeTag(_hostName);
+            sessionLaunch.hostCreds = dataModel.GetCredentialsTelemetryTag(_credentialsId);
         }
 
         protected override string GetTelemetrySourceType()

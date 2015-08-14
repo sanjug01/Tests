@@ -2,13 +2,15 @@
 {
     using Microsoft.ApplicationInsights;
     using Microsoft.ApplicationInsights.DataContracts;
+    using System;
     using System.Diagnostics.Contracts;
+    using System.Reflection;
 
     /// <summary>
     /// Core of the Application Insights telemetry client. The core may be safely passed to
     /// child objects created by the implementation of ITelemetryClient.
     /// </summary>
-    sealed class ApplicationInsightsTelemetryCore
+    sealed internal class ApplicationInsightsTelemetryCore
     {
         private TelemetryClient _client;
 
@@ -34,35 +36,54 @@
             _client = null;
         }
 
-        public void Event(string eventName)
+        public void ReportEvent(object eventData)
         {
-            if (null != _client)
+            TelemetryClient c = _client;
+
+            if(null != c)
             {
-                _client.TrackEvent(eventName);
+                TypeInfo ti = eventData.GetType().GetTypeInfo();
+                EventTelemetry et = new EventTelemetry(ti.Name);
+
+                foreach(FieldInfo fi in ti.DeclaredFields)
+                {
+                    if (fi.IsPublic)
+                    {
+                        object v = fi.GetValue(eventData);
+
+                        if (null != v)
+                        {
+                            AddValue(et, fi.Name, fi.FieldType, v);
+                        }
+                    }
+                }
+
+                foreach (PropertyInfo pi in ti.DeclaredProperties)
+                {
+                    if (pi.CanRead)
+                    {
+                        object v = pi.GetValue(eventData);
+
+                        if (null != v)
+                        {
+                            AddValue(et, pi.Name, pi.PropertyType, v);
+                        }
+                    }
+                }
+
+                c.TrackEvent(et);
             }
         }
 
-        public void Event(EventTelemetry eventTelemetry)
+        private void AddValue(EventTelemetry et, string name, Type type, object value)
         {
-            if(null != _client)
+            if (type.Equals(typeof(int)) || type.Equals(typeof(long)) || type.Equals(typeof(double)) || type.Equals(typeof(float)) || type.Equals(typeof(bool)))
             {
-                _client.TrackEvent(eventTelemetry);
+                et.Metrics[name] = Convert.ToDouble(value);
             }
-        }
-
-        public void Metric(string metricName, double metricValue)
-        {
-            if (null != _client)
+            else
             {
-                _client.TrackMetric(metricName, metricValue);
-            }
-        }
-
-        public void Duration(string eventName, long milliseconds)
-        {
-            if (null != _client)
-            {
-                _client.TrackMetric(eventName, milliseconds / 60000);
+                et.Properties[name] = value.ToString();
             }
         }
     }
