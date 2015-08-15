@@ -1,9 +1,5 @@
 ﻿using RdClient.Shared.Helpers;
-using RdClient.Shared.Models;
-using RdClient.Shared.Navigation.Extensions;
 using System;
-using System.Collections.Generic;
-using Windows.Devices.Input;
 
 namespace RdClient.Shared.Input.Pointer
 {
@@ -20,10 +16,10 @@ namespace RdClient.Shared.Input.Pointer
 
         public event EventHandler<IPointerEventBase> ConsumedEvent;
 
-        public PointerEventDispatcher(ITimerFactory timerFactory, IRemoteSessionControl sessionControl, IPointerPosition pointerPosition, IDeferredExecution dispatcher)
+        public PointerEventDispatcher(PointerDeviceDispatcher deviceDispatcher, PointerVisibilityConsumer pointerVisibilityConsumer)
         {
-            _deviceDispatcher = new PointerDeviceDispatcher(timerFactory, sessionControl, pointerPosition, dispatcher);
-            _visibilityConsumer = new PointerVisibilityConsumer( sessionControl.RenderingPanel);
+            _deviceDispatcher = deviceDispatcher;
+            _visibilityConsumer = pointerVisibilityConsumer;
         }
 
         public void Consume(IPointerEventBase pointerEvent)

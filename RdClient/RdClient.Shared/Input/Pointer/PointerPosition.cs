@@ -57,11 +57,12 @@ namespace RdClient.Shared.Input.Pointer
             _renderingPanel.Viewport.Changed -= OnViewportChanged;
 
             _renderingPanel.Viewport.Changed += OnViewportChanged;
+            _renderingPanel.ScaleMouseCursor(_renderingPanel.Viewport.ZoomFactor * (100.0 / _renderingPanel.ScaleFactor.DesktopScaleFactor));
         }
 
         private void OnViewportChanged(object sender, EventArgs e)
         {
-            _renderingPanel.ScaleMouseCursor(_renderingPanel.Viewport.ZoomFactor);
+            _renderingPanel.ScaleMouseCursor(_renderingPanel.Viewport.ZoomFactor * (100.0 / _renderingPanel.ScaleFactor.DesktopScaleFactor));
         }
     }
 }

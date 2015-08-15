@@ -181,8 +181,14 @@
         protected override void OnDismissed()
         {
             Contract.Assert(null != _task);
+            this.ResourceName = null;
+            this.UserName = null;
+            this.Password = null;
             _task = null;
             _taskToken = null;
+
+
+            base.OnDismissed();
         }
 
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)

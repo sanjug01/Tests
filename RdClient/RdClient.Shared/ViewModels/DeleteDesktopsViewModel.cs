@@ -50,8 +50,11 @@
             private set
             {
                 SetProperty(ref _selectedDesktops, value, "SelectedDesktops");
-                this.EmitPropertyChanged("DesktopsCount");
-                this.EmitPropertyChanged("IsSingleSelection");
+                if(value != null)
+                {
+                    this.EmitPropertyChanged("DesktopsCount");
+                    this.EmitPropertyChanged("IsSingleSelection");
+                }
             }
         }
 
@@ -106,6 +109,13 @@
                 count = this.SelectedDesktops.Count;
             }
             this.DesktopsCount = count; 
+        }
+
+        protected override void OnDismissed()
+        {
+            this.SelectedDesktops = null;
+
+            base.OnDismissed();
         }
     }
 }

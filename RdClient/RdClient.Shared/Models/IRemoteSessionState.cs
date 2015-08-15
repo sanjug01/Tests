@@ -39,7 +39,6 @@
     public interface IRemoteSessionState : INotifyPropertyChanged
     {
         SessionState State { get; }
-        RdpDisconnectCode DisconnectCode { get; }
         int ReconnectAttempt { get; }
     }
 }

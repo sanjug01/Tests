@@ -60,8 +60,8 @@
             private RemoteSession _session;
             protected readonly IDeviceCapabilities DeviceCapabilities;
             protected readonly ITelemetryClient TelemetryClient;
-            protected readonly ITelemetryEvent SessionTelemetry;
-            protected readonly ITelemetryEvent SessionDuration;
+            protected readonly Telemetry.Events.SessionLaunch SessionLaunch;
+            protected readonly Telemetry.Events.SessionDuration SessionDuration;
 
             protected const string SessionDurationStopwatchName = "minutes";
 
@@ -137,25 +137,25 @@
                 _session.InternalSetState(newState);
             }
 
-            protected ITelemetryEvent MakeTelemetryEvent(string eventName)
+            protected Telemetry.Events.SessionLaunch MakeTelemetryEvent(string eventName)
             {
-                ITelemetryEvent te = this.TelemetryClient.MakeEvent(eventName);
-                te.AddTag("state", _sessionState.ToString());
-                return te;
+                return new Telemetry.Events.SessionLaunch() { state = _sessionState.ToString() };
             }
 
             protected InternalState(SessionState sessionState, ReaderWriterLockSlim monitor,
                 IDeviceCapabilities deviceCapabilities,
-                ITelemetryClient telemetryClient, ITelemetryEvent sessionTelemetry, ITelemetryEvent sessionDuration)
+                ITelemetryClient telemetryClient,
+                Telemetry.Events.SessionLaunch sessionLaunch,
+                Telemetry.Events.SessionDuration sessionDuration)
             {
                 Contract.Assert(null != telemetryClient);
-                Contract.Assert(null != sessionTelemetry);
+                Contract.Assert(null != sessionLaunch);
 
                 _sessionState = sessionState;
                 _monitor = monitor;
                 this.DeviceCapabilities = deviceCapabilities;
                 this.TelemetryClient = telemetryClient;
-                this.SessionTelemetry = sessionTelemetry;
+                this.SessionLaunch = sessionLaunch;
                 this.SessionDuration = sessionDuration;
             }
 
@@ -165,7 +165,7 @@
                 _monitor = state._monitor;
                 this.DeviceCapabilities = state.DeviceCapabilities;
                 this.TelemetryClient = state.TelemetryClient;
-                this.SessionTelemetry = state.SessionTelemetry;
+                this.SessionLaunch = state.SessionLaunch;
                 this.SessionDuration = state.SessionDuration;
             }
         }
@@ -478,12 +478,12 @@
         
         private void EmitFailed(RdpDisconnectCode disconnectCode)
         {
-            EmitHelper<SessionFailureEventArgs>(new SessionFailureEventArgs(disconnectCode), _failed);
+            EmitHelper<SessionFailureEventArgs>(new SessionFailureEventArgs(), _failed);
         }
 
         private void DeferEmitFailed(RdpDisconnectCode disconnectCode)
         {
-            DeferEmitHelper<SessionFailureEventArgs>(new SessionFailureEventArgs(disconnectCode), _failed);
+            DeferEmitHelper<SessionFailureEventArgs>(new SessionFailureEventArgs(), _failed);
         }
 
         private void EmitInterrupted(Action cancelDelegate)

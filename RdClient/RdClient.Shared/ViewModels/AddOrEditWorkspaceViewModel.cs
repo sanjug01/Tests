@@ -170,6 +170,16 @@
             _feedValidationRule = new FeedUrlValidationRule(this.Workspace, this.ApplicationDataModel.OnPremWorkspaces);
         }
 
+        protected override void OnDismissed()
+        {
+            this.FeedUrl = null;
+            this.Users = null;
+            this.SelectedUser = null;
+            this.Workspace = null;
+
+            base.OnDismissed();
+        }
+
         private void LaunchAddUserView(object o)
         {
             AddOrEditUserViewArgs args = AddOrEditUserViewArgs.AddUser();

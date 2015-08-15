@@ -21,14 +21,14 @@
         private ReadOnlyObservableCollection<GatewayComboBoxElement> _gateways;
         private GatewayComboBoxElement _selectedGateway;
         private bool _oldSendFeedback;
-        private ITelemetryClient _telemetryClient;
+        private ITelemetryClient _telemetryClient;        
 
         public SettingsViewModel()
         {
             _goBackCommand = new RelayCommand(o => this.GoBackCommandExecute());
             _editUserCommand = new RelayCommand(o => this.EditUserCommandExecute(), o => { return this.UserCommandsEnabled(); });
             _addUserCommand = new RelayCommand(o => this.AddUserCommandExecute());
-            _editGatewayCommand = new RelayCommand(o => this.EditGatewayCommandExecute(), o => { return this.GatewayCommandsEnabled(); });
+            _editGatewayCommand = new RelayCommand(o => this.EditGatewayCommandExecute(), o => { return this.GatewayCommandsEnabled(); });            
             _addGatewayCommand = new RelayCommand(o => this.AddGatewayCommandExecute());
         }
 
@@ -149,13 +149,17 @@
                     // Activate telemetry for sending the event.
                     //
                     _telemetryClient.IsActive = true;
-                    ITelemetryEvent te = _telemetryClient.MakeEvent("SendUsage");
-                    te.AddMetric("sendTelemetry", this.GeneralSettings.SendFeedback ? 1 : 0);
-                    te.Report();
+                    _telemetryClient.ReportEvent(new Telemetry.Events.SendUsage(this.GeneralSettings.SendFeedback));
                 }
 
                 _telemetryClient.IsActive = this.GeneralSettings.SendFeedback;
             }
+
+            this.GeneralSettings = null;
+            this.Users = null;
+            this.SelectedUser = null;
+            this.Gateways = null;
+            this.SelectedGateway = null;
 
             base.OnDismissed();
         }
@@ -181,14 +185,18 @@
             if (GatewayCommandsEnabled())
             {
                 var args = new EditGatewayViewModelArgs(this.SelectedGateway.Gateway);
-                this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args);
+                ReadOnlyObservableCollection<GatewayComboBoxElement> gatewaysUnhooked = this.Gateways;
+                this.Gateways = null;
+                this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, new PresentationCompletion((v, p) => { this.Gateways = gatewaysUnhooked; }));
             }
         }
 
         private void AddGatewayCommandExecute()
         {
             var args = new AddGatewayViewModelArgs();
-            this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args);
+            ReadOnlyObservableCollection<GatewayComboBoxElement> gatewaysUnhooked = this.Gateways;
+            this.Gateways = null;
+            this.NavigationService.PushAccessoryView("AddOrEditGatewayView", args, new PresentationCompletion((v, p) => { this.Gateways = gatewaysUnhooked; }));
         }
 
         private bool UserCommandsEnabled()
@@ -201,7 +209,9 @@
             if (UserCommandsEnabled())
             {
                 var args = AddOrEditUserViewArgs.EditUser(this.SelectedUser.Credentials);
-                this.NavigationService.PushAccessoryView("AddOrEditUserView", args);
+                ReadOnlyObservableCollection<UserComboBoxElement> usersUnhooked = this.Users;
+                this.Users = null;
+                this.NavigationService.PushAccessoryView("AddOrEditUserView", args, new PresentationCompletion((v, p) => { this.Users = usersUnhooked; }));
             }
         }
 
@@ -209,7 +219,9 @@
         {
             var creds = new CredentialsModel() { Username = "", Password = "" };
             var args = AddOrEditUserViewArgs.AddUser();
-            this.NavigationService.PushAccessoryView("AddOrEditUserView", args);
+            ReadOnlyObservableCollection<UserComboBoxElement> usersUnhooked = this.Users;
+            this.Users = null;
+            this.NavigationService.PushAccessoryView("AddOrEditUserView", args, new PresentationCompletion((v, p) => { this.Users = usersUnhooked; }));
         }
     }
 }

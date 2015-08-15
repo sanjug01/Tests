@@ -94,6 +94,14 @@ namespace RdClient.Shared.ViewModels
             this.IsExpandedView = false;
         }
 
+        protected override void OnDismissed()
+        {
+            this.Host = null;
+            this.Certificate = null;
+
+            base.OnDismissed();
+        }
+
         protected override void OnNavigatingBack(Navigation.IBackCommandArgs backArgs)
         {
             this.Cancel.Execute(null);

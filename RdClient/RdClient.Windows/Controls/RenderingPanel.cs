@@ -150,27 +150,20 @@
         {
             if (visibility == Visibility.Visible)
             {
-                if (Window.Current.CoreWindow.PointerCursor != null)
-                {
-
-                    Window.Current.CoreWindow.PointerCursor = null;
-                    this.MouseCursor.Visibility = visibility;
-                }
+                Window.Current.CoreWindow.PointerCursor = null;
+                this.MouseCursor.Visibility = visibility;
             }
             else
             {
-                if (Window.Current.CoreWindow.PointerCursor == null)
-                {
-                    Window.Current.CoreWindow.PointerCursor = new CoreCursor(CoreCursorType.Arrow, 0);
-                }
+                Window.Current.CoreWindow.PointerCursor = new CoreCursor(CoreCursorType.Arrow, 0);
                 this.MouseCursor.Visibility = visibility;
             }
         }
 
-        void IRenderingPanel.ChangeMouseCursorShape(MouseCursorShape shape)
+        void IRenderingPanel.ChangeMouseCursorShape(ImageSource shape, Point hotspot)
         {
-            this.MouseCursor.Source = shape.ImageSource;
-            _hotspot = shape.Hotspot;
+            this.MouseCursor.Source = shape;
+            _hotspot = hotspot;
         }
 
         void IRenderingPanel.MoveMouseCursor(Point point)

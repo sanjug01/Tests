@@ -182,7 +182,6 @@
             _vm.RememberChoice = false;
             _vm.AcceptCertificate.Execute(null);
 
-            Assert.AreSame(_vm.Certificate, _certificate);
             Assert.AreEqual(0, _permanentTrust.Trusted.Count);
             Assert.AreEqual(1, _sessionTrust.Trusted.Count);
             Assert.AreSame(_certificate, _sessionTrust.Trusted[0]);
@@ -201,7 +200,6 @@
             _vm.RememberChoice = true;
             _vm.AcceptCertificate.Execute(null);
 
-            Assert.AreSame(_vm.Certificate, _certificate);
             Assert.AreEqual(1, _permanentTrust.Trusted.Count);
             Assert.AreSame(_certificate, _permanentTrust.Trusted[0]);
             Assert.AreEqual(0, _sessionTrust.Trusted.Count);
@@ -219,7 +217,6 @@
             _nav.PushModalView(ViewName, _args, completion);
             _vm.Cancel.Execute(null);
 
-            Assert.AreSame(_vm.Certificate, _certificate);
             Assert.AreEqual(0, _permanentTrust.Trusted.Count);
             Assert.AreEqual(0, _sessionTrust.Trusted.Count);
             Assert.AreEqual(1, rejectedCount);
@@ -236,7 +233,6 @@
             _nav.PushModalView(ViewName, _args, completion);
             _vm.CastAndCall<IViewModel>(vm => vm.NavigatingBack(new BackCommandArgs()));
 
-            Assert.AreSame(_vm.Certificate, _certificate);
             Assert.AreEqual(0, _permanentTrust.Trusted.Count);
             Assert.AreEqual(0, _sessionTrust.Trusted.Count);
             Assert.AreEqual(1, rejectedCount);

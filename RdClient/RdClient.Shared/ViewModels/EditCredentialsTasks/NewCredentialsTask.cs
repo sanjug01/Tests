@@ -106,6 +106,8 @@
             // Add the model to the data model collection and call the delegate.
             //
             _credentialsAdded(_dataModel.Credentials.AddNewModel(_credentials));
+
+            base.OnDismissed(viewModel);
         }
 
         protected override void OnCancelled(IEditCredentialsViewModel viewModel)

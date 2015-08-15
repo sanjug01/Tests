@@ -17,7 +17,7 @@
         Stopped
     }
 
-    public class ZoomPanModel
+    public class ZoomPanModel : IDisposable
     {
         private readonly RelayCommand _zoomInCommand;
         private readonly RelayCommand _zoomOutCommand;
@@ -43,12 +43,7 @@
                 _zoomOutCommand.EmitCanExecuteChanged();
 
                 if (null != _telemetryClient)
-                {
-                    ITelemetryEvent te = _telemetryClient.MakeEvent("Zoom");
-                    te.AddTag("action", "ZoomIn");
-                    te.AddTag("source", "ConnectionBar");
-                    te.Report();
-                }
+                    _telemetryClient.ReportEvent(new Telemetry.Events.Zoom(Telemetry.Events.Zoom.ZoomAction.ZoomIn, Telemetry.Events.Zoom.Source.ConnectionBar));
             }
         }
 
@@ -61,13 +56,8 @@
                 _zoomInCommand.EmitCanExecuteChanged();
                 _zoomOutCommand.EmitCanExecuteChanged();
 
-                if(null != _telemetryClient)
-                {
-                    ITelemetryEvent te = _telemetryClient.MakeEvent("Zoom");
-                    te.AddTag("action", "ZoomOut");
-                    te.AddTag("source", "ConnectionBar");
-                    te.Report();
-                }
+                if (null != _telemetryClient)
+                    _telemetryClient.ReportEvent(new Telemetry.Events.Zoom(Telemetry.Events.Zoom.ZoomAction.ZoomOut, Telemetry.Events.Zoom.Source.ConnectionBar));
             }
         }
 
@@ -93,12 +83,20 @@
                 o => _isZoomedIn == true && _consumptionMode != ConsumptionModeType.Pointer);
         }
 
-        public void Reset(IViewport viewport)
+        public void Initialize(IViewport viewport)
         {
             _viewport = viewport;
             _viewport.Changed += OnViewportChanged;
             _zoomInCommand.EmitCanExecuteChanged();
             _zoomOutCommand.EmitCanExecuteChanged();
+        }
+        public void Dispose()
+        {
+            if(_viewport != null)
+            {
+                _viewport.Changed -= OnViewportChanged;
+                _viewport = null;
+            }
         }
 
         private void OnViewportChanged(object sender, EventArgs e)

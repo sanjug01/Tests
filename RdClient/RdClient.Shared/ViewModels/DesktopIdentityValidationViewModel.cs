@@ -64,6 +64,13 @@ namespace RdClient.Shared.ViewModels
             this.Host = args.Host;
         }
 
+        protected override void OnDismissed()
+        {
+            this.Host = null;
+
+            base.OnDismissed();
+        }
+
         protected override void OnNavigatingBack(Navigation.IBackCommandArgs backArgs)
         {
             this.CancelCommand.Execute(null);

@@ -124,6 +124,7 @@
     <Compile Include="CxWrappers\RdpCertificate.cs" />
     <Compile Include="CxWrappers\IRdpScreenSnapshot.cs" />
     <Compile Include="CxWrappers\RdpConnection.cs" />
+    <Compile Include="CxWrappers\RdpConnectionFactory.cs" />
     <Compile Include="CxWrappers\RdpEventSource.cs" />
     <Compile Include="CxWrappers\RdpTypeConverter.cs" />
     <Compile Include="CxWrappers\RdpScreenSnapshot.cs" />
@@ -149,8 +150,10 @@
     <Compile Include="Data\TemporaryModelContainer.cs" />
     <Compile Include="Data\TransformingObservableCollection.cs" />
     <Compile Include="Data\TrustedCertificate.cs" />
+    <Compile Include="Helpers\ArrayComparer.cs" />
     <Compile Include="Helpers\ArrayRound.cs" />
     <Compile Include="Helpers\CertificateErrorHelper.cs" />
+    <Compile Include="Helpers\CommandBinding.cs" />
     <Compile Include="Helpers\IanaInterfaceType.cs" />
     <Compile Include="Helpers\ContractAssertionException.cs" />
     <Compile Include="Helpers\Contracts\IDeferredExecutionContract.cs" />
@@ -175,6 +178,7 @@
     <Compile Include="Helpers\ListTrace.cs" />
     <Compile Include="Helpers\LocalizedString.cs" />
     <Compile Include="Helpers\ITimer.cs" />
+    <Compile Include="Helpers\MemoizeCodeBlock.cs" />
     <Compile Include="Helpers\MutableObject.cs" />
     <Compile Include="Helpers\ScaleFactor.cs" />
     <Compile Include="Helpers\WindowSize.cs" />
@@ -183,11 +187,16 @@
     <Compile Include="Helpers\RdMath.cs" />
     <Compile Include="Helpers\RdpEventsSyncProxy.cs" />
     <Compile Include="Helpers\ViewItemsSource.cs" />
+    <Compile Include="Input\Pointer\CursorEncoder.cs" />
+    <Compile Include="Input\Pointer\ICursorEncoder.cs" />
+    <Compile Include="Input\Pointer\InputDeviceTracker.cs" />
     <Compile Include="Input\Pointer\PointerEventDispatcher.cs" />
     <Compile Include="Input\Pointer\PointerVisibilityConsumer.cs" />
     <Compile Include="Models\FullScreenModel.cs" />
     <Compile Include="Models\ICredentialsIdModel.cs" />
     <Compile Include="Models\IFullScreenModel.cs" />
+    <Compile Include="Models\IInSessionMenus.cs" />
+    <Compile Include="Models\InSessionMenusModel.cs" />
     <Compile Include="Models\IScrollBarModel.cs" />
     <Compile Include="Models\ScrambledString.cs" />
     <Compile Include="Helpers\SynchronousCompletion.cs" />
@@ -219,7 +228,7 @@
     <Compile Include="Input\Recognizers\ITapRecognizer.cs" />
     <Compile Include="Input\Recognizers\IZoomScrollEvent.cs" />
     <Compile Include="Input\Pointer\MouseAction.cs" />
-    <Compile Include="Input\Pointer\MouseCursorShape.cs" />
+    <Compile Include="Input\Pointer\MouseCursorShapes.cs" />
     <Compile Include="Input\Pointer\PointerCapture.cs" />
     <Compile Include="Input\Pointer\PointerEvent.cs" />
     <Compile Include="Input\Pointer\PointerModeConsumer.cs" />
@@ -362,11 +371,30 @@
     <Compile Include="Navigation\IStackedViewPresenter.cs" />
     <Compile Include="Navigation\IViewVisibility.cs" />
     <Compile Include="Navigation\ModalPresentationCompletion.cs" />
+    <Compile Include="Navigation\PresentationCompletion.cs" />
     <Compile Include="Navigation\PresentationCompletionEventArgs.cs" />
     <Compile Include="Navigation\ViewVisibility.cs" />
+    <Compile Include="Telemetry\Events\AddedDesktop.cs" />
+    <Compile Include="Telemetry\Events\EnterFullScreen.cs" />
+    <Compile Include="Telemetry\Events\ExitFullScreen.cs" />
+    <Compile Include="Telemetry\Events\HideTouchKeyboard.cs" />
+    <Compile Include="Telemetry\Events\InputPanelAvailability.cs" />
+    <Compile Include="Telemetry\Events\LaunchConfiguration.cs" />
+    <Compile Include="Telemetry\Events\Navigation.cs" />
+    <Compile Include="Telemetry\Events\RemovedDesktop.cs" />
+    <Compile Include="Telemetry\Events\SendUsage.cs" />
+    <Compile Include="Telemetry\Events\SessionDuration.cs" />
+    <Compile Include="Telemetry\Events\SessionInput.cs" />
+    <Compile Include="Telemetry\Events\SessionLaunch.cs" />
+    <Compile Include="Telemetry\Events\ShowTouchKeyboard.cs" />
+    <Compile Include="Telemetry\Events\UserAction.cs" />
+    <Compile Include="Telemetry\Events\ViewedLicense.cs" />
+    <Compile Include="Telemetry\Events\ViewedPrivacy.cs" />
+    <Compile Include="Telemetry\Events\ViewedThirdPartyDoc.cs" />
+    <Compile Include="Telemetry\Events\Zoom.cs" />
+    <Compile Include="Telemetry\IStopwatch.cs" />
     <Compile Include="Telemetry\ITelemetryClient.cs" />
-    <Compile Include="Telemetry\ITelemetryEvent.cs" />
-    <Compile Include="Telemetry\ITelemetryStopwatch.cs" />
+    <Compile Include="Telemetry\TelemetryStopwatch.cs" />
     <Compile Include="ValidationRules\CompositeValidationRule.cs" />
     <Compile Include="ValidationRules\HostnameValidationFailure.cs" />
     <Compile Include="ValidationRules\IValidatedProperty.cs" />
@@ -386,7 +414,7 @@
     <Compile Include="ViewModels\IBellyBandViewModel.cs" />
     <Compile Include="ViewModels\IGatewaysCollector.cs" />
     <Compile Include="ViewModels\IItemsView.cs" />
-    <Compile Include="ViewModels\IRightSideBarViewModel.cs" />
+    <Compile Include="ViewModels\InSessionMenusViewModel.cs" />
     <Compile Include="ViewModels\IUsersCollector.cs" />
     <Compile Include="ViewModels\ICertificateValidationViewModel.cs" />
     <Compile Include="ViewModels\IAddOrEditDEsktopViewModel.cs" />
@@ -444,7 +472,6 @@
     <Compile Include="ViewModels\RemoteSessionViewModel.cs" />
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
-    <Compile Include="ViewModels\RightSideBarViewModel.cs" />
     <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
     <Compile Include="ViewModels\SessionSizeViewModel.cs" />
     <Compile Include="Models\ButtonModels\SymbolBarButtonModel.cs" />
@@ -462,6 +489,7 @@
     <Compile Include="Navigation\NavigationService.cs" />
     <Compile Include="Navigation\PresentableViewFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Input\Pointer\DirectModeControl.cs" />
     <Compile Include="ViewModels\DeferringViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -472,9 +500,6 @@
       <HintPath Condition="'$(Platform)' == 'x86'">..\..\RdClientCx\WinRTClientBin\$(Configuration)\Win32\RdClientCx.winmd</HintPath>
       <HintPath Condition="'$(Platform)' == 'ARM'">..\..\RdClientCx\WinRTClientBin\$(Configuration)\ARM\RdClientCx.winmd</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Input\Pointer\DirectModeControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="Microsoft.VCLibs.120, Version=14.0">

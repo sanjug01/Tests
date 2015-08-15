@@ -9,24 +9,10 @@
         bool IsActive { get; set; }
 
         /// <summary>
-        /// Report a unique application event.
+        /// Report collection of public properties of an arbitrary object. Numerical and boolean properties are reported as double metric values.
+        /// All other properties are reported as strings. The object class is used as the name of the telemetry event.
         /// </summary>
-        /// <param name="eventName">Name of the event that can be queried from the telemetry back-end.</param>
-        void Event(string eventName);
-
-        /// <summary>
-        /// Start a stopwatch that will track the duration of a process in the app.
-        /// </summary>
-        /// <returns>The stopwatch object that can be stopped to report the duration to the telemetry back-end.</returns>
-        ITelemetryStopwatch StartStopwatch();
-
-        /// <summary>
-        /// Report value of a metric.
-        /// </summary>
-        /// <param name="metricName">Name of the metric</param>
-        /// <param name="metricValue">Value of the metric</param>
-        void Metric(string metricName, double metricValue);
-
-        ITelemetryEvent MakeEvent(string eventName);
+        /// <param name="eventData">Object that represents a telemetry event.</param>
+        void ReportEvent(object eventData);
     }
 }

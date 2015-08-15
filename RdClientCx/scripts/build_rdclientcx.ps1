@@ -13,7 +13,7 @@ Function BcxPlatform($platform)
 	$p.StartInfo = $pinfo
 	$p.Start()
 	$p.StandardInput.WriteLine("cd /D $SDXROOT")
-	$p.StandardInput.WriteLine(".\tools\razzle.cmd $platform no_razacl no_oacr no_certcheck no_bl_ok")
+	$p.StandardInput.WriteLine(".\tools\razzle.cmd $platform no_certcheck no_oacr no_opt")
 	$p.StandardInput.WriteLine("cd .\termsrv\rdp\winrt\RdClientCxUAP\")
 	if($Clean)
 	{

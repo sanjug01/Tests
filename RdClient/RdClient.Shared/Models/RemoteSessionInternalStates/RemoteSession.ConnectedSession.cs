@@ -35,7 +35,7 @@
 
                 if(!this.Session._hasConnected)
                 {
-                    this.SessionDuration.StartStopwatch(SessionDurationStopwatchName);
+                    this.SessionDuration.Start();
                     this.Session._hasConnected = true;
                 }
             }

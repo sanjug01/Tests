@@ -6,6 +6,8 @@ using System;
 using System.ComponentModel;
 using Windows.UI.Xaml;
 using RdClient.Shared.Helpers;
+using Windows.UI.Xaml.Media;
+using Windows.Foundation;
 
 namespace RdClient.Shared.Test.Mock
 {
@@ -30,9 +32,9 @@ namespace RdClient.Shared.Test.Mock
             Invoke(new object[] { sender, e });
         }
 
-        public void ChangeMouseCursorShape(Shared.Input.Pointer.MouseCursorShape shape)
+        public void ChangeMouseCursorShape(ImageSource shape, Point hotspot)
         {
-            Invoke(new object[] { shape });
+            Invoke(new object[] { shape, hotspot });
         }
 
         public void MoveMouseCursor(Windows.Foundation.Point point)

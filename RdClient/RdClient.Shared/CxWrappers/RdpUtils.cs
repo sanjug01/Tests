@@ -13,13 +13,14 @@ namespace RdClient.Shared.CxWrappers.Utils
             properties.SetStringProperty("Full Address", desktop.HostName);
             properties.SetBoolProperty("Administrative Session", desktop.IsAdminSession);
             properties.SetIntProperty("AudioMode", (int) desktop.AudioMode);
+            properties.SetBoolProperty("High Resolution Mouse", true);
         }
 
         public static void ApplyScreenSize(IRdpProperties properties, IWindowSize windowSize)
         {
             Size size = windowSize.Size;
-            properties.SetIntProperty("PhysicalDesktopWidth", (int) size.Width);
-            properties.SetIntProperty("PhysicalDesktopHeight", (int) size.Height);
+            properties.SetIntProperty("PhysicalDesktopWidth", (int)size.Width);
+            properties.SetIntProperty("PhysicalDesktopHeight", (int)size.Height);
         }
 
         public static void ApplyScaleFactor(IRdpProperties properties, IScaleFactor scaleFactor)

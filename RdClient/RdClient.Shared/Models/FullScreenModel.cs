@@ -1,10 +1,9 @@
-﻿using RdClient.Shared.Helpers;
-using System;
-using Windows.UI.ViewManagement;
-
-
-namespace RdClient.Shared.Models
+﻿namespace RdClient.Shared.Models
 {
+    using RdClient.Shared.Helpers;
+    using System;
+    using Windows.UI.ViewManagement;
+
     enum FullScreenChanging
     {
         Entering,
@@ -94,6 +93,7 @@ namespace RdClient.Shared.Models
                 _enteringFullScreen(this, EventArgs.Empty);
             _changing = FullScreenChanging.Entering;
             _fullScreen.EnterFullScreen();
+            FullScreenDebouncer();
         }
 
         public void ExitFullScreen()
@@ -102,6 +102,7 @@ namespace RdClient.Shared.Models
                 _exitingFullScreen(this, EventArgs.Empty);
             _changing = FullScreenChanging.Exiting;
             _fullScreen.ExitFullScreen();
+            FullScreenDebouncer();
         }
 
         private void EmitFullScreenChange()
@@ -152,7 +153,6 @@ namespace RdClient.Shared.Models
                     break;
             }
         }
-
 
         private void FullScreenDebouncer()
         {

@@ -95,11 +95,12 @@
                 //
                 if(this.TelemetryClient.IsActive)
                 {
-                    ITelemetryEvent te = this.TelemetryClient.MakeEvent("LaunchConfiguration");
-                    te.AddMetric("localDesktopCount", appDataModel.LocalWorkspace.Connections.Models.Count);
-                    te.AddMetric("credentialsCount", appDataModel.Credentials.Models.Count);
-                    te.AddMetric("gatewaysCount", appDataModel.Gateways.Models.Count);
-                    te.Report();
+                    this.TelemetryClient.ReportEvent(new Shared.Telemetry.Events.LaunchConfiguration()
+                    {
+                        localDesktopCount = appDataModel.LocalWorkspace.Connections.Models.Count,
+                        credentialsCount = appDataModel.Credentials.Models.Count,
+                        gatewaysCount = appDataModel.Gateways.Models.Count
+                    });
                 }
             }
             else

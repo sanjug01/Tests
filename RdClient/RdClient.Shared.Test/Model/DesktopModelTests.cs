@@ -215,6 +215,7 @@
                 connection.Expect("SetStringProperty", new List<object>() { "Full Address", "narf" }, 0);
                 connection.Expect("SetBoolProperty", new List<object>() { "Administrative Session", default(bool) }, 0);
                 connection.Expect("SetIntProperty", new List<object>() { "AudioMode", (int)default(AudioMode) }, 0);
+                connection.Expect("SetBoolProperty", new List<object>() { "High Resolution Mouse", true }, 0);
                 connection.Expect("SetLeftHandedMouseMode", new List<object>() { default(bool) }, 0);
 
                 Assert.AreSame(connection, model.CreateConnection(connectionFactory, renderingPanel));

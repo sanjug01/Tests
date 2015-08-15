@@ -85,6 +85,13 @@ namespace RdClient.Shared.ViewModels
             }
         }
 
+        protected override void OnDismissed()
+        {
+            this.Error = null;
+
+            base.OnDismissed();
+        }
+
         protected override void OnNavigatingBack(IBackCommandArgs backArgs)
         {
             this.CancelCommand.Execute(null);

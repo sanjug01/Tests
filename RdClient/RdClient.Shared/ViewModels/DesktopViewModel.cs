@@ -11,6 +11,7 @@
 
     public class DesktopViewModel : Helpers.MutableObject, IDesktopViewModel
     {
+        private readonly Telemetry.ITelemetryClient _telemetryClient;
         private readonly RelayCommand _editCommand;
         private readonly RelayCommand _connectCommand;
         private readonly RelayCommand _deleteCommand;
@@ -24,20 +25,23 @@
 
         public static IDesktopViewModel Create(IModelContainer<RemoteConnectionModel> desktopContainer,
             ApplicationDataModel dataModel,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            Telemetry.ITelemetryClient telemetryClient)
         {
-            return new DesktopViewModel(desktopContainer, dataModel, navigationService);
+            return new DesktopViewModel(desktopContainer, dataModel, navigationService, telemetryClient);
         }
 
         private DesktopViewModel(IModelContainer<RemoteConnectionModel> desktopContainer,
             ApplicationDataModel dataModel,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            Telemetry.ITelemetryClient telemetryClient)
         {
             Contract.Assert(null != desktopContainer);
             Contract.Assert(null != desktopContainer);
             Contract.Assert(null != navigationService);
             Contract.Assert(!Guid.Empty.Equals(desktopContainer.Id));
 
+            _telemetryClient = telemetryClient;
             _editCommand = new RelayCommand(EditCommandExecute);
             _connectCommand = new RelayCommand(ConnectCommandExecute);
             _deleteCommand = new RelayCommand(DeleteCommandExecute);
@@ -193,12 +197,15 @@
                 Credentials = credentials
             };
 
-            _navigationService.NavigateToView("SessionView", connectionInformation);            
+            _navigationService.NavigateToView("SessionView", connectionInformation);
         }
 
         private void DeleteCommandExecute(object o)
         {            
-            _dataModel.LocalWorkspace.Connections.RemoveModel(this.DesktopId);            
+            _dataModel.LocalWorkspace.Connections.RemoveModel(this.DesktopId);
+
+            _telemetryClient.CastAndCall<Telemetry.ITelemetryClient>(tc =>
+                tc.ReportEvent(new Telemetry.Events.RemovedDesktop(_dataModel.LocalWorkspace.Connections.Models.Count)));
         }
     }
 }

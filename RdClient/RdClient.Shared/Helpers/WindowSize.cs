@@ -7,7 +7,19 @@ namespace RdClient.Shared.Helpers
 {
     public class WindowSizeChangedEventArgs
     {
-        public Size Size { get; set; }
+        private readonly Size _size;
+        public Size Size
+        {
+            get
+            {
+                return _size;
+            }
+        }
+
+        public WindowSizeChangedEventArgs(Size size)
+        {
+            _size = size;
+        }
     }
 
     public enum WindowActivation
@@ -20,7 +32,13 @@ namespace RdClient.Shared.Helpers
     {
         private readonly WindowActivation _windowActivation;
 
-        public WindowActivation WindowActivation { get; }
+        public WindowActivation WindowActivation
+        {
+            get
+            {
+                return _windowActivation;
+            }
+        }
 
         public WindowActivatedEventArgs(WindowActivation windowActivation)
         {
@@ -35,7 +53,7 @@ namespace RdClient.Shared.Helpers
 
         public WindowSize()
         {
-            Window.Current.CoreWindow.SizeChanged += (s, o) => { EmitSizeChanged(new WindowSizeChangedEventArgs() { Size = o.Size }); };
+            Window.Current.CoreWindow.SizeChanged += (s, o) => EmitSizeChanged(new WindowSizeChangedEventArgs(o.Size));
             Window.Current.CoreWindow.Activated += (s, o) =>
             {
                 if(o.WindowActivationState == Windows.UI.Core.CoreWindowActivationState.Deactivated)

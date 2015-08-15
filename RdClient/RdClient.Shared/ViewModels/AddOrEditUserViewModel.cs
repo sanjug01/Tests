@@ -116,6 +116,14 @@
             this.Password = _creds.Model.Password;
         }
 
+        protected override void OnDismissed()
+        {
+            this.User = null;
+            this.Password = null;
+
+            base.OnDismissed();
+        }
+
         private bool OkCommandIsEnabled()
         {
             return this.User.State.Status != ValidationResultStatus.Empty;

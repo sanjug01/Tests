@@ -14,8 +14,10 @@
 
     public class ConnectionCenterViewModel : DeferringViewModelBase,
         IConnectionCenterViewModel,
-        ISessionFactorySite
+        ISessionFactorySite,
+        ITelemetryClientSite
     {
+        private Telemetry.ITelemetryClient _telemetryClient;
         //
         // Sorted collection of desktop models; sorting order is defined by the Order property of this object.
         //
@@ -265,6 +267,11 @@
             _sessionFactory = sessionFactory;
         }
 
+        void ITelemetryClientSite.SetTelemetryClient(Telemetry.ITelemetryClient telemetryClient)
+        {
+            _telemetryClient = telemetryClient;
+        }
+
         protected override void OnPresenting(object activationParameter)
         {
             Contract.Assert(null != _sessionFactory);
@@ -336,6 +343,11 @@
             {
                 dvm.Dismissed();
             }
+
+            this.DesktopViewModels = null;
+            this.WorkspaceViewModels = null;
+
+            base.OnDismissed();
         }
 
         private IDesktopViewModel CreateDesktopViewModel(IModelContainer<RemoteConnectionModel> container)
@@ -343,7 +355,7 @@
             Contract.Assert(container.Model is DesktopModel, "Data model for a desktop tile is not DesktopModel");
             Contract.Assert(null != _sessionFactory);
 
-            IDesktopViewModel dvm = DesktopViewModel.Create(container, this.ApplicationDataModel, this.NavigationService);
+            IDesktopViewModel dvm = DesktopViewModel.Create(container, this.ApplicationDataModel, this.NavigationService, _telemetryClient);
 
             dvm.SelectionEnabled = this.DesktopsSelectable;
             dvm.PropertyChanged += DesktopSelection_PropertyChanged;

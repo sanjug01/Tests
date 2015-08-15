@@ -29,11 +29,6 @@
             <vm:RemoteSessionViewModel.KeyboardCapture>
                 <input:CoreWindowKeyboardCapture/>
             </vm:RemoteSessionViewModel.KeyboardCapture>
-            <vm:RemoteSessionViewModel.RightSideBarViewModel>
-                <vm:RightSideBarViewModel
-                    FullScreenModel="{StaticResource FullScreenModel}"
-                    DeviceCapabilities="{StaticResource DeviceCapabilities}"/>
-            </vm:RemoteSessionViewModel.RightSideBarViewModel>
             <vm:RemoteSessionViewModel.PointerPosition>
                 <pointer:PointerPosition />
             </vm:RemoteSessionViewModel.PointerPosition>
@@ -101,20 +96,10 @@
                 <c:PanKnob x:Name="PanKnob"
                            PanKnobSite="{Binding PanKnobSite}"/>
 
-                <!-- Transparent overlay that dismisses the side bars -->
-                <c:PointerPressDetector
-                    Visibility="{Binding RightSideBarViewModel.Visibility}"
-                    PointerPressDetected="{Binding RightSideBarViewModel.ToggleVisiblity}" />
-
                 <!-- Connection Bar -->
                 <c:ConnectionBar 
                     ItemsSource ="{Binding ConnectionBarItems}" 
                     Visibility="{Binding IsConnectionBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
-                <!-- Right side bar -->
-                <c:RightSideBarControl
-                    DataContext="{Binding RightSideBarViewModel}"
-                    BarVisibility="{Binding Visibility}" />
 
                 <!--
                 Belly-band container of in-session dialogs.
