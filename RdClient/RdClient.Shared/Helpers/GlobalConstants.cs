@@ -28,5 +28,9 @@ namespace RdClient.Shared.Helpers
         public const string HelpDocumentUrl = @"http://go.microsoft.com/fwlink/?LinkID=616713&clcid=0x409";
         public const string EulaUri = "ms-appx:///Strings/EULA.rtf";
         public const string ThirdPartyUri = "ms-appx:///Strings/ThirdPartyNotices.rtf";
+
+        // const that defines the width limit 
+        // that triggers switch between the narrow/phone and the default layout
+        public const double NarrowLayoutWidthLimit = 416; 
     }
 }

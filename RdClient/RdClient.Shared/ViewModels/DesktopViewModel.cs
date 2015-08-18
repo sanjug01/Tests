@@ -135,6 +135,7 @@
             get { return _deleteCommand; }
         }
 
+
         void IRemoteConnectionViewModel.Presenting(ISessionFactory sessionFactory)
         {
             Contract.Assert(null != sessionFactory);
