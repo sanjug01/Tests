@@ -1,7 +1,10 @@
 ﻿namespace RdClient.Views
 {
     using RdClient.Shared.Navigation;
+    using RdClient.Shared.Helpers;
+    using RdClient.Shared.ViewModels;
     using System.Diagnostics.Contracts;
+    using Windows.Foundation;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
@@ -11,11 +14,19 @@
         {
             this.InitializeComponent();
             this.VisualStates.CurrentStateChanging += this.OnVisualStateChanging;
+            this.SizeChanged += OnSizeChanged;
+        }
+        
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.UpdateTileSizes(e.NewSize);
+
         }
 
         IViewModel IPresentableView.ViewModel { get { return this.DataContext as IViewModel; } }
         void IPresentableView.Activating(object activationParameter) { }
         void IPresentableView.Presenting(INavigationService navigationService, object activationParameter) { }
+
         void IPresentableView.Dismissing() { }
 
         void IStackedViewPresenter.PushView(IPresentableView view, bool animated)
@@ -32,6 +43,13 @@
         private void OnVisualStateChanging(object sender, VisualStateChangedEventArgs e)
         {
             VisualStateManager.GoToState(this.AccessoryViewPresenter, e.NewState.Name, true);
+            VisualStateManager.GoToState(this.DesktopsList, e.NewState.Name, true);
+        }
+
+        private void UpdateTileSizes(Size newWindowsSize)
+        {
+            Size newTileSize = TileSizeHelper.GetTileSize(newWindowsSize);
+            (this.DataContext as IConnectionCenterViewModel).DesktopTileSize = newTileSize;
         }
     }
 }

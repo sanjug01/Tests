@@ -11,6 +11,7 @@
     using System.ComponentModel;
     using System.Diagnostics.Contracts;
     using System.Windows.Input;
+    using Windows.Foundation;
 
     public class ConnectionCenterViewModel : DeferringViewModelBase,
         IConnectionCenterViewModel,
@@ -40,6 +41,8 @@
         private bool _hasDesktops;
         private bool _hasApps;
         private bool _showSectionLabels;
+
+        private Size _desktopTileSize;
 
         private readonly IViewVisibility _accessoryViewVisibility;
         private RelayCommand _cancelAccessoryView;
@@ -259,6 +262,15 @@
                 {
                     vm.SelectionEnabled = value;
                 }                
+            }
+        }
+
+        public Size DesktopTileSize
+        {
+            get { return _desktopTileSize; }
+            set
+            {
+                SetProperty(ref _desktopTileSize, value);
             }
         }
 

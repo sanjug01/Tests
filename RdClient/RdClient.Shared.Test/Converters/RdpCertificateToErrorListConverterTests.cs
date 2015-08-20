@@ -55,39 +55,37 @@ namespace RdClient.Shared.Test.Converters
         [TestMethod]
         public void ConvertBackThrows()
         {
-            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 _converter.ConvertBack(new List<string>(), null, null, null);
-            }));
+            });
         }
 
         [TestMethod]
-        public void ConvertNullThrows()
+        public void ConvertNullReturnsEmptyErrorList()
         {
-            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
-            {
-                _converter.Convert(null, null, null, null);
-            }));
+            var errorList = _converter.Convert(null, null, null, null) as IList<string>;
+            Assert.IsNotNull(errorList);
+            Assert.AreEqual(0, errorList.Count);
         }
 
         [TestMethod]
-        public void ConvertCertificateWithNullErrorPropertyThrows()
+        public void ConvertCertificateWithNullErrorPropertyReturnsEmptyErrorList()
         {
-            Assert.IsTrue(ExceptionExpecter.ExpectException<ArgumentException>(() =>
-            {
-                _cert.Error = null;
-                _converter.Convert(_cert, null, null, null);
-            }));
+            _cert.Error = null;
+            var errorList = _converter.Convert(_cert, null, null, null) as IList<string>;
+            Assert.IsNotNull(errorList);
+            Assert.AreEqual(0, errorList.Count);
         }
 
         [TestMethod]
         public void ConvertThrowsIfLocalizedStringPropertyIsNull()
         {
-            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 _converter.TypeToLocalizedStringConverter = null;
                 _converter.Convert(_cert, null, null, null);
-            }));
+            });
         }
     }
 }

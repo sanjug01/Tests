@@ -6,6 +6,7 @@
     using Windows.Foundation;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
+    using Windows.UI.Xaml.Media;
 
     public sealed partial class DesktopsListControl : UserControl, IItemsView
     {
@@ -16,8 +17,9 @@
         public DesktopsListControl()
         {
             this.InitializeComponent();
+            this.VisualStates.CurrentStateChanging += this.OnVisualStateChanging;
         }
-
+        
         public IViewItemsSource ViewItemsSource
         {
             get { return (IViewItemsSource)GetValue(ViewItemsSourceProperty); }
@@ -60,5 +62,23 @@
             e.OldValue.CastAndCall<IViewItemsSource>(src => src.SetItemsView(null));
             e.NewValue.CastAndCall<IViewItemsSource>(src => src.SetItemsView(this));
         }
+
+        private void OnVisualStateChanging(object sender, VisualStateChangedEventArgs e)
+        {
+            foreach (var item in this.DesktopItemsControl.Items)
+            {
+                var contentPresenter = this.DesktopItemsControl.ContainerFromItem(item);
+
+                int childrenCount = VisualTreeHelper.GetChildrenCount(contentPresenter);
+                for (int i = 0; i < childrenCount; i++)
+                {
+                    var childElement = VisualTreeHelper.GetChild(contentPresenter, i);
+                    childElement.CastAndCall<Control>(
+                        c => VisualStateManager.GoToState(c, e.NewState.Name, true));
+                }
+
+            }
+        }
+
     }
 }

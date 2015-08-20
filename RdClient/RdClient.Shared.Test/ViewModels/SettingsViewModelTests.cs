@@ -227,10 +227,13 @@
         [TestMethod]
         public void AddGatewayNavigatesToAddGatewayView()
         {
+            IPresentationCompletion completion = null;
             _navService.Expect("PushAccessoryView", p =>
             {
                 Assert.AreEqual("AddOrEditGatewayView", p[0] as string);
                 Assert.IsTrue(p[1] is AddGatewayViewModelArgs);
+                completion = p[2] as IPresentationCompletion;
+                Assert.IsNotNull(completion);
                 return null;
             });
 
@@ -238,7 +241,8 @@
 
             Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);
             Guid newGatewayId = _dataModel.Gateways.AddNewModel(_testData.NewValidGatewayWithCredential(newCredId));
-            
+            completion.Completed(null, null);
+
             AssertGatewayOptionsCorrect();
             Assert.IsNull(_vm.SelectedGateway);
             AssertUserOptionsCorrect();
@@ -261,6 +265,7 @@
         [TestMethod]
         public void EditGatewayCommandShowsAddOrEditGatewayViewWithCorrectParameters()
         {
+            IPresentationCompletion completion = null;
             var gateway = _vm.Gateways.First(g => g.GatewayComboBoxType == GatewayComboBoxType.Gateway);
             _vm.SelectedGateway = gateway;
             _navService.Expect("PushAccessoryView", p =>
@@ -268,6 +273,8 @@
                 Assert.AreEqual("AddOrEditGatewayView", p[0] as string);
                 var args = p[1] as EditGatewayViewModelArgs;
                 Assert.AreEqual(gateway.Gateway, args.Gateway);
+                completion = p[2] as IPresentationCompletion;
+                Assert.IsNotNull(completion);
                 return null;
             });
             _vm.EditGateway.Execute(null);
@@ -275,6 +282,7 @@
             Guid newCredId = _dataModel.Credentials.AddNewModel(_testData.NewValidCredential().Model);//EditGatewayView may add a user as well as a gateway
             gateway.Gateway.Model.CredentialsId = newCredId;
             gateway.Gateway.Model.HostName = _testData.NewRandomString();
+            completion.Completed(null, null);
 
             AssertUserOptionsCorrect();
             AssertGatewayOptionsCorrect(false);

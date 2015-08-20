@@ -9,7 +9,8 @@
     xmlns:design="using:RdClient.DesignTime"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d"
-    d:DesignHeight="164" Width="296">
+    d:DesignWidth="296"
+    d:DesignHeight="164" >
     
     <d:UserControl.DataContext>
         <design:FakeDesktopViewModel />
@@ -38,35 +39,70 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <StackPanel> 
+    <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStates">
+                <VisualState x:Name="DefaultLayout">
+                    <Storyboard>
+                        <!-- DesktopName text: Style="{ThemeResource BodyTextBlockStyle}" -->
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DesktopName" 
+                                                       Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource BodyTextBlockStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>                        
+                    </Storyboard>
+                </VisualState>
+
+                <VisualState x:Name="NarrowLayout">
+                    <Storyboard>
+                        <!-- DesktopName text: Style="{ThemeResource BodyTextBlockStyle}" -->
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DesktopName" 
+                                                       Storyboard.TargetProperty="Style">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource CaptionTextBlockStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+       
         <Button Style="{StaticResource FlatButtonStyle}"
                 x:Name="ThumbnailButton"
                 Command="{Binding ConnectCommand}"
                 IsRightTapEnabled="True"
                 RightTapped="ThumbnailButton_RightTapped">
-            <Grid>
-                <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" Height="164" Width="296">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="42" />
-                </Grid.RowDefinitions>
 
-                    <Image Source="ms-appx:///Assets/desktop_placeholder.png"
-                       Visibility="{Binding Desktop.EncodedThumbnail, Converter={StaticResource NullToVisibleConverter}}"
-                       Stretch="None"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center" />
+            <!-- The TileGrid has the TileSize size and fills up the whole button-->
+            <Grid x:Name="TileGrid" Width="296" Height="164">
+                
+                <Grid Background="{ThemeResource ConnectionCenterDesktopPlaceholderIconColor}" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="42" />
+                    </Grid.RowDefinitions>
+
+                   <Grid x:Uid="DesktopThumbnailView_DefaultIcon">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2" />                            
+                            <RowDefinition Height="0.2*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="0.2*" />                            
+                        </Grid.RowDefinitions>
+                  
+                        <Path Grid.Row="2"                              
+                              Style="{StaticResource DesktopTileDefaultIconStyle}"
+                              Data="{StaticResource DesktopTileDefaultIconData}" />
+                    </Grid>
+
+                    <Image Grid.RowSpan="2"
+                           Source="{Binding Desktop.EncodedThumbnail, Converter={StaticResource BytesToBitmapConverter}}"
+                           Visibility="{Binding Desktop.EncodedThumbnail, Converter={StaticResource NotNullToVisibleConverter}}"
+                           Stretch="UniformToFill"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
             
-                <Image Grid.RowSpan="2"
-                       Source="{Binding Desktop.EncodedThumbnail, Converter={StaticResource BytesToBitmapConverter}}"
-                       Visibility="{Binding Desktop.EncodedThumbnail, Converter={StaticResource NotNullToVisibleConverter}}"
-                       Stretch="UniformToFill"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center" />
-            
-                <Grid Grid.Row="1" 
+                    <Grid Grid.Row="1" 
 					Background="{ThemeResource ConnectionCenterHostnameBackgroundColor}">
 					<TextBlock 
+                        x:Name="DesktopName"
 						Text="{Binding Desktop.DisplayName}" 
                         Style="{ThemeResource BodyTextBlockStyle}" 
 						Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"
@@ -75,26 +111,20 @@
 						TextLineBounds="Tight"
 						TextWrapping="NoWrap"
 						TextTrimming="None"
-						Margin="10,0,0,0">						
+						Margin="10,0,0,4">						
 					</TextBlock>
                 </Grid>
-				<CheckBox Grid.Row="1" 
-					HorizontalAlignment="Right" 
-					VerticalAlignment="Center" 
-					Margin="10,0,10,0" 
-					IsChecked="{Binding Path=IsSelected, Mode=TwoWay}"				 
-					Visibility="{Binding SelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">					
-				</CheckBox>
-            </Grid>
-                
-                <!--
-                "New desktop" indicator; the grid provides a container in which some additional indication may be placed.
-                -->
-                <Grid Visibility="{Binding Desktop.IsNew, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Border BorderBrush="{ThemeResource SystemControlHighlightAccentBrush}"
-                            BorderThickness="{ThemeResource ButtonBorderThemeThickness}"/>
+                    <!--
+				    <CheckBox Grid.Row="1" 
+					    HorizontalAlignment="Right" 
+					    VerticalAlignment="Center" 
+					    Margin="10,0,10,0" 
+					    IsChecked="{Binding Path=IsSelected, Mode=TwoWay}"				 
+					    Visibility="{Binding SelectionEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">					
+				    </CheckBox>
+                    -->
                 </Grid>
-
+                               
                 <!-- Invisible button for moving the attached flyout around -->
                 <Button x:Name="FlyoutButton"
                         IsTabStop="False"
@@ -110,5 +140,13 @@
 
             </Grid>
         </Button>
-    </StackPanel>
+        
+        <!--
+        "New desktop" indicator; the grid provides a container in which some additional indication may be placed.
+        -->
+        <Border Visibility="{Binding Desktop.IsNew, Converter={StaticResource BooleanToVisibilityConverter}}"            
+                Margin="{ThemeResource ButtonBorderThemeThickness}"
+                BorderBrush="{ThemeResource SystemControlHighlightAccentBrush}"
+                BorderThickness="{ThemeResource ButtonBorderThemeThickness}"/>            
+    </Grid>
 </UserControl>
