@@ -25,8 +25,8 @@ namespace RdClient.Shared.CxWrappers.Utils
 
         public static void ApplyScaleFactor(IRdpProperties properties, IScaleFactor scaleFactor)
         {
-            properties.SetIntProperty("DesktopScaleFactor", scaleFactor.DesktopScaleFactor);
-            properties.SetIntProperty("DeviceScaleFactor", scaleFactor.DeviceScaleFactor);
+            //properties.SetIntProperty("DesktopScaleFactor", scaleFactor.DesktopScaleFactor);
+            //properties.SetIntProperty("DeviceScaleFactor", scaleFactor.DeviceScaleFactor);
         }
     }
 }

@@ -115,7 +115,7 @@
             }
         }
 
-        IDeferredExecution IRemoteSessionViewSite.DeferredExecution
+        IDeferredExecution IRemoteSessionViewSite.Dispatcher
         {
             get { return this.Dispatcher; }
         }

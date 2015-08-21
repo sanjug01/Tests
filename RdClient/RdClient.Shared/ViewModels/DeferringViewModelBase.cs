@@ -19,6 +19,7 @@
             get { return _dispatcher; }
         }
 
+
         protected DeferringViewModelBase()
         {
             _monitor = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);

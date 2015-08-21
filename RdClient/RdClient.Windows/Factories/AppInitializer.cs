@@ -70,6 +70,11 @@
             RadcClient radcClient = new RadcClient(new RadcEventSource(), new TaskExecutor());
             radcClient.StartGetCachedFeeds();
 
+            //
+            //Setup the clipboard manager
+            //
+            ClipboardManager.Intialize(deferredExecution);
+
             _navigationService = this.CreateNavigationService(this.TelemetryClient);
             _navigationService.Presenter = this.ViewPresenter;
             //
