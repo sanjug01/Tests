@@ -13,38 +13,32 @@ namespace RdClient.Shared.Test.Helpers
 
         public abstract ITimerFactory GetFactory();
 
-        [TestInitialize]
         public void TestSetup()
         {
             _timerFactory = GetFactory();
             _timer = _timerFactory.CreateTimer();
         }
 
-        [TestCleanup]
         public void TestCleanup()
         {
             _timer.Stop();
         }
 
-        [TestMethod]
         public void TestCallStopOnNotRunningTimerDoesntThrow()
         {
             _timer.Stop();
         }
 
-        [TestMethod]
         public void TestCallStartOnRunningTimerThrows()
         {
-            Assert.IsTrue(ExceptionExpecter.ExpectException<InvalidOperationException>(() =>
+            TimeSpan longTimespan = new TimeSpan(1, 0, 0, 0);
+            _timer.Start(() => Assert.Fail("Callback Shouldn't be called"), longTimespan, false);
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
-
-                TimeSpan longTimespan = new TimeSpan(1, 0, 0, 0);
                 _timer.Start(() => Assert.Fail("Callback Shouldn't be called"), longTimespan, false);
-                _timer.Start(() => Assert.Fail("Callback Shouldn't be called"), longTimespan, false);
-            }));
+            });
         }
 
-        [TestMethod]
         public void TestStartRecurringTimerCallsCallbackMultipleTimes()
         {
             int timerCallbacks = 0;
@@ -54,8 +48,7 @@ namespace RdClient.Shared.Test.Helpers
             _timer.Stop();
             Assert.IsTrue(timerCallbacks > 1);                        
         }
-
-        [TestMethod]
+        
         public void TestStartNonRecurringTimerCallsCallbackSingleTime()
         {
             int timerCallbacks = 0;

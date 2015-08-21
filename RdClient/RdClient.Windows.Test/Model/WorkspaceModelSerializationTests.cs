@@ -1,6 +1,4 @@
-﻿using Windows.Storage;
-
-namespace RdClient.Windows.Test.Model
+﻿namespace RdClient.Windows.Test.Model
 {
     using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
     using RdClient.Shared.Data;
@@ -9,6 +7,7 @@ namespace RdClient.Windows.Test.Model
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading.Tasks;
+    using Windows.Storage;
 
     [TestClass]
     public sealed class WorkspaceModelSerializationTests
