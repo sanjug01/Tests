@@ -104,15 +104,7 @@ namespace RdClient.Shared.Test
 
         private void OnCodeContractFailed(object sender, ContractFailedEventArgs e)
         {
-            switch (e.FailureKind)
-            {
-                case ContractFailureKind.Assert:
-                    e.SetHandled();
-                    //
-                    // Throw an exception with information about the assertion.
-                    //
-                    throw new ContractAssertionException(e);
-            }
+            throw new ContractAssertionException(e);
         }
     }
 }
