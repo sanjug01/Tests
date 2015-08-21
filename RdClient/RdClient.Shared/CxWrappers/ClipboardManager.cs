@@ -35,31 +35,10 @@ namespace RdClient.Shared.CxWrappers
         }
         int IClipboardManager.GetClipboardFormats(out String[] formatsList, out int count)
         {
-            AutoResetEvent are = new AutoResetEvent(false);
-            bool hasText = false;
-            count = 0;
-            formatsList = null;
-           _deferredExecution.Defer(
-             () =>
-             {
-                 DataPackageView dataPackageView = Clipboard.GetContent();
-                 if (dataPackageView.Contains(StandardDataFormats.Text))
-                 {
-                     hasText = true;
-                 }
-
-                 are.Set();
-             });
-            
-            are.WaitOne();
-            if (hasText)
-            {
-                count = 1;
-                formatsList = new String[1];
-                formatsList[0] = "Text";
-            }
-            
-            return XRESULT_SUCCESS;
+            count = 1;
+            formatsList = new String[1];
+            formatsList[0] = "Text";
+            return XRESULT_SUCCESS;           
         }
 
         private void OnLocalClipboardChanged(Object sender, Object e)
@@ -90,15 +69,21 @@ namespace RdClient.Shared.CxWrappers
 
         int IClipboardManager.OnRemoteClipboardUpdated(String clipData)
         {
-            Debug.WriteLine(clipData);
-
+            int xRes;
             _deferredExecution.Defer(
                 () =>
                 {
-                    DataPackage dataPackage = new DataPackage();
-                    dataPackage.SetText(clipData);
-                    Clipboard.SetContent(dataPackage);
-                });
+
+                    try {
+                        DataPackage dataPackage = new DataPackage();
+                        dataPackage.SetText(clipData);
+                        Clipboard.SetContent(dataPackage);
+                    }
+                    catch (Exception ex) { 
+                        xRes = XRESULT_FAIL;
+                        RdTrace.IfFailXResultThrow(xRes, "Error updating clipboard with Text : " + ex.Message);
+                    }
+            });
             return XRESULT_SUCCESS;
          }
 
