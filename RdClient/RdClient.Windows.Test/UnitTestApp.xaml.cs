@@ -1,5 +1,7 @@
-﻿using System;
+﻿using RdClient.Shared.Helpers;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -28,6 +30,7 @@ namespace RdClient.Windows.Test
         /// </summary>
         public App()
         {
+            Contract.ContractFailed += this.OnCodeContractFailed;
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
@@ -66,7 +69,7 @@ namespace RdClient.Windows.Test
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
-            
+
             Microsoft.VisualStudio.TestPlatform.TestExecutor.UnitTestClient.CreateDefaultUI();
 
             // Ensure the current window is active
@@ -97,6 +100,11 @@ namespace RdClient.Windows.Test
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        private void OnCodeContractFailed(object sender, ContractFailedEventArgs e)
+        {
+            throw new ContractAssertionException(e);
         }
     }
 }
