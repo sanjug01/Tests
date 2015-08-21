@@ -50,16 +50,6 @@ namespace RdClient.Shared.CxWrappers
             _rdpConnectionCx.OnRemoteAppWindowIconUpdated += OnRemoteAppWindowIconUpdatedHandler;
         }
 
-        // TODO
-        // TODO
-        // TODO
-        // TODO this has to go away from the destructor.
-        // also, there is a race condition which makes disconnect events to be called multiple times
-        ~RdpConnection()
-        {
-            this.Cleanup();
-        }
-
         public void SetCredentials(CredentialsModel credentials, bool fUsingSavedCreds)
         {
             _instrument.Instrument("SetCredentials");
@@ -128,12 +118,6 @@ namespace RdClient.Shared.CxWrappers
                 _rdpConnectionCx.OnRemoteAppWindowDeleted -= OnRemoteAppWindowDeletedHandler;
                 _rdpConnectionCx.OnRemoteAppWindowTitleUpdated -= OnRemoteAppWindowTitleUpdatedHandler;
                 _rdpConnectionCx.OnRemoteAppWindowIconUpdated -= OnRemoteAppWindowIconUpdatedHandler;
-
-                //TODO: Need to terminate properly so that all xplat objects get cleaned up, 
-                //this currently effects clipboard and possibly other things too
-
-               // this.TerminateInstance();
-                _rdpConnectionCx = null;
             }
         }
 
@@ -168,8 +152,11 @@ namespace RdClient.Shared.CxWrappers
         public void TerminateInstance()
         {
             _instrument.Instrument("TerminateInstance");
-
-            _rdpConnectionCx.TerminateInstance();
+            if (null != _rdpConnectionCx)
+            {                
+                _rdpConnectionCx.TerminateInstance();
+                _rdpConnectionCx = null;
+            }
         }
 
         public void HandleAsyncDisconnectResult(RdpDisconnectReason disconnectReason, bool reconnectToServer)

@@ -514,6 +514,18 @@
             _deferredExecution.Defer(() => EmitClosed());
         }
 
+        private void CleanupConnection()
+        {
+            _connection.Cleanup();
+            /*
+             * RdClientCx.RdpConnection.TerminateInstance() must be run on the UI thread
+             * - If it runs on the thread we receive the disconnect on then it hangs the app
+             * - If it runs on a worker thread then it throws an exception
+             * See bug 3504511
+             */
+            _deferredExecution.Defer(() => _connection.TerminateInstance());
+        }
+
         private void EmitBadCertificate(BadCertificateEventArgs e)
         {
             Contract.Assert(null != e);
