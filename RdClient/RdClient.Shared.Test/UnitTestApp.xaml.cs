@@ -1,5 +1,7 @@
-﻿using System;
+﻿using RdClient.Shared.Helpers;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -28,6 +30,7 @@ namespace RdClient.Shared.Test
         /// </summary>
         public App()
         {
+            Contract.ContractFailed += this.OnCodeContractFailed;
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
@@ -97,6 +100,19 @@ namespace RdClient.Shared.Test
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        private void OnCodeContractFailed(object sender, ContractFailedEventArgs e)
+        {
+            switch (e.FailureKind)
+            {
+                case ContractFailureKind.Assert:
+                    e.SetHandled();
+                    //
+                    // Throw an exception with information about the assertion.
+                    //
+                    throw new ContractAssertionException(e);
+            }
         }
     }
 }
