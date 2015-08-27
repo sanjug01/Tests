@@ -41,7 +41,6 @@
         </fac:AppInitializer>
 
         <cv:BooleanToVisibilityConverter x:Key="boolToVisibility"/>
-        <cv:SegoeGlyphToSymbolIconConverter x:Key="segoeToSymbolIcon"/>
         <cv:ResourceIdToLocalizedStringConverter x:Key="ResourceIdToLocalizedStringConverter">
             <cv:ResourceIdToLocalizedStringConverter.LocalizedString>
                 <sh:LocalizedString/>
