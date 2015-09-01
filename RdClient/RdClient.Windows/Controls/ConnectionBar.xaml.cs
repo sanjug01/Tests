@@ -24,13 +24,26 @@ namespace RdClient.Controls
 
         protected override void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
         {
-            ((ButtonBase)e.OriginalSource).ReleasePointerCaptures();
             this.CapturePointer(_pointer);
+            base.OnManipulationStarted(e);
+        }
+
+        protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs e)
+        {
+            this.ReleasePointerCapture(_pointer);
+            base.OnManipulationCompleted(e);
         }
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
             this.MoveConnectionBar(_container.ActualWidth, e.Delta.Translation.X);
+            base.OnManipulationDelta(e);
+        }
+
+        protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
+        {
+            e.TranslationBehavior.DesiredDeceleration = _deceleration;
+            base.OnManipulationInertiaStarting(e);
         }
 
         private void MoveConnectionBar(double containerWidth, double dx)
@@ -53,10 +66,6 @@ namespace RdClient.Controls
                 position += dx;
             }
             this.ConnectionBarTransform.X = position;
-        }
-        protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
-        {
-            e.TranslationBehavior.DesiredDeceleration = _deceleration;
         }
 
         private static void OnItemsSourceChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)

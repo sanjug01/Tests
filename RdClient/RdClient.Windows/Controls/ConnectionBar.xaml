@@ -47,32 +47,29 @@
                                     Command="{Binding Command}"
                                     CommandParameter="{Binding CommandParameter}"
                                     Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"
-                                    ManipulationMode="All"/>
+                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}" />
                         </DataTemplate>
 
                         <DataTemplate x:Key="SymbolBarToggleButtonModel">
                             <ToggleButton
-                                    Style="{StaticResource RemoteSessionSymbolBarButton}"
+                                    Style="{ThemeResource RemoteSessionSymbolBarButton}"
                                     Margin="4,0"
                                     Command="{Binding Command}"
                                     CommandParameter="{Binding CommandParameter}"
                                     IsChecked="{Binding IsChecked}"
                                     IsThreeState="False"
                                     Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"
-                                    ManipulationMode="All"/>
+                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}" />
                         </DataTemplate>
 
                         <DataTemplate x:Key="SymbolBarSliderButtonModel">
                             <Button 
-                                    Style="{StaticResource RemoteSessionSymbolBarButton}"
+                                    Style="{ThemeResource RemoteSessionSymbolBarButton}"
                                     Margin="4,0"
                                     Command="{Binding Command}"
                                     CommandParameter="{Binding CommandParameter}"
                                     Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"
-                                    ManipulationMode="All">
+                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}" >
                                 <Button.Flyout>
                                     <Flyout>
                                         <Slider Orientation="Vertical" Height="100" Value="{Binding Value, Mode=TwoWay}"/>

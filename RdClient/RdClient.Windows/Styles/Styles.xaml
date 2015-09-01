@@ -15,7 +15,16 @@
             <SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="{ThemeResource SystemAltMediumColor}" />
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
-
+            
+            <SolidColorBrush x:Key="ConnectionBarButtonBackgroundThemeBrush" Color="{ThemeResource SystemChromeMediumColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonForegroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonDisabledBackgroundThemeBrush" Color="{ThemeResource SystemChromeMediumColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonDisabledForegroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonPointerOverBackgroundThemeBrush" Color="{ThemeResource SystemChromeMediumColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonPointerOverForegroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonPressedBackgroundThemeBrush" Color="{ThemeResource SystemChromeMediumColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonPressedForegroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
+            
             <SolidColorBrush x:Key="PointerOverBackgroundBrush" Color="{ThemeResource SystemControlForegroundBaseHighBrush}" />
             <SolidColorBrush x:Key="PointerOverForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
             <SolidColorBrush x:Key="PressedBackgroundBrush" Color="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
@@ -44,6 +53,15 @@
 			<SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="{ThemeResource SystemAltMediumColor}" />
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemBaseHighColor}"/>
+
+            <SolidColorBrush x:Key="ConnectionBarButtonBackgroundThemeBrush" Color="{ThemeResource SystemChromeMediumColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonForegroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonDisabledBackgroundThemeBrush" Color="{ThemeResource SystemChromeMediumColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonDisabledForegroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonPointerOverBackgroundThemeBrush" Color="{ThemeResource SystemChromeMediumColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonPointerOverForegroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonPressedBackgroundThemeBrush" Color="{ThemeResource SystemChromeMediumColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonPressedForegroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
 
             <SolidColorBrush x:Key="PointerOverBackgroundBrush" Color="{ThemeResource SystemControlForegroundBaseHighBrush}" />
             <SolidColorBrush x:Key="PointerOverForegroundBrush" Color="{ThemeResource SystemBaseHighColor}" />
@@ -74,6 +92,15 @@
             <SolidColorBrush x:Key="ConnectionCenterHostnameBackgroundColor" Color="{ThemeResource SystemColorButtonFaceColor}" />
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightNormalForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}"/>
             <SolidColorBrush x:Key="ConnectionCenterBarButtonLightPressedForegroundBrush" Color="{ThemeResource SystemColorButtonTextColor}"/>
+
+            <SolidColorBrush x:Key="ConnectionBarButtonBackgroundThemeBrush" Color="{ThemeResource SystemChromeMediumColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonForegroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonDisabledBackgroundThemeBrush" Color="{ThemeResource SystemChromeMediumColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonDisabledForegroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonPointerOverBackgroundThemeBrush" Color="{ThemeResource SystemChromeMediumColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonPointerOverForegroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonPressedBackgroundThemeBrush" Color="{ThemeResource SystemChromeMediumColor}" />
+            <SolidColorBrush x:Key="ConnectionBarButtonPressedForegroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
 
             <SolidColorBrush x:Key="PointerOverBackgroundBrush" Color="{ThemeResource SystemColorButtonFaceColor}" />
             <SolidColorBrush x:Key="PointerOverForegroundBrush" Color="{ThemeResource SystemColorHighlightColor}" />
@@ -145,11 +172,116 @@
         <Setter Property="Height" Value="40" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontFamily" Value="{StaticResource IconFont}" />
-        <Setter Property="Background" Value="{ThemeResource ConnectionCenterBarBackgroundBrush}" />
-        <Setter Property="Foreground" Value="{ThemeResource ConnectionCenterBarButtonLightNormalForegroundBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Background" Value="{ThemeResource ConnectionBarButtonBackgroundThemeBrush}" />
+        <Setter Property="Foreground" Value="{ThemeResource ConnectionBarButtonForegroundThemeBrush}" />
+        <Setter Property="Opacity" Value="0.6" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="Padding" Value="0" />
+        <Setter Property="Padding" Value="0" />        
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                                   Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ConnectionBarButtonPointerOverBackgroundThemeBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                                   Storyboard.TargetProperty="Opacity">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0.4" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                   Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ConnectionBarButtonPointerOverForegroundThemeBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                                   Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ConnectionBarButtonPressedBackgroundThemeBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                                   Storyboard.TargetProperty="Opacity">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0.2" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                   Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ConnectionBarButtonPressedForegroundThemeBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                                   Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ConnectionBarButtonDisabledBackgroundThemeBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter"
+                                                                   Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ConnectionBarButtonDisabledForegroundThemeBrush}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <!--<Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="FocusVisualWhite"
+                                                     Storyboard.TargetProperty="Opacity"
+                                                     To="1"
+                                                     Duration="0" />
+                                        <DoubleAnimation Storyboard.TargetName="FocusVisualBlack"
+                                                     Storyboard.TargetProperty="Opacity"
+                                                     To="1"
+                                                     Duration="0" />
+                                    </Storyboard>-->
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                                <VisualState x:Name="PointerFocused" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Margin="0">
+                            <ContentPresenter x:Name="ContentPresenter"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTransitions="{TemplateBinding ContentTransitions}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                          AutomationProperties.AccessibilityView="Raw"/>
+                        </Border>
+                        <Rectangle x:Name="FocusVisualWhite"
+                               IsHitTestVisible="False"
+                               Stroke="{ThemeResource FocusVisualWhiteStrokeThemeBrush}"
+                               StrokeEndLineCap="Square"
+                               StrokeDashArray="1,1"
+                               Opacity="0"
+                               StrokeDashOffset="1.5" />
+                        <Rectangle x:Name="FocusVisualBlack"
+                               IsHitTestVisible="False"
+                               Stroke="{ThemeResource FocusVisualBlackStrokeThemeBrush}"
+                               StrokeEndLineCap="Square"
+                               StrokeDashArray="1,1"
+                               Opacity="0"
+                               StrokeDashOffset="0.5" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
     </Style>
 
     <Style x:Key="ConnectionCenterBarNarrowButtonStyle" TargetType="Button" BasedOn="{StaticResource ConnectionCenterBarButtonStyle}">
