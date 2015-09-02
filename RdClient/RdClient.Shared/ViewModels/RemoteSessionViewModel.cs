@@ -293,6 +293,10 @@
 
             this.ScrollBarModel.SetScrollbarVisibility(Visibility.Collapsed);
             _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
+            //
+            // Stop capturing the keyboard so key presses in the menus won't get sent to the session.
+            //
+            _keyboardCapture.Stop();
 
             this.NavigationService.PushModalView("InSessionMenusView", model, new ModalPresentationCompletion((sender, e) =>
             {
@@ -305,6 +309,11 @@
                     _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Collapsed);
                 else if (this.PointerCapture.ConsumptionMode.ConsumptionMode == ConsumptionModeType.Pointer)
                     _activeSessionControl.RenderingPanel.ChangeMouseVisibility(Visibility.Visible);
+                //
+                // If the session is still connected, restore keyboard capturing.
+                //
+                if (SessionState.Connected == _sessionState)
+                    _keyboardCapture.Start();
             }));
         }
 
