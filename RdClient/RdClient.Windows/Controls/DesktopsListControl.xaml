@@ -16,21 +16,8 @@
     </d:UserControl.DataContext>
 
     <Grid Background="{ThemeResource ConnectionCenterScrollViewBackgroundBrush}">
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="VisualStates">
-                <VisualState x:Name="DefaultLayout">
-                    <Storyboard>
-                    </Storyboard>
-                </VisualState>
-
-                <VisualState x:Name="NarrowLayout">
-                    <Storyboard>
-                    </Storyboard>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
         <ScrollViewer x:Name="Scroller" Grid.Row="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
-            <Grid x:Name="DesktopsGrid">
+            <Grid>
                 <Grid.RowDefinitions>
 					<RowDefinition Height="{StaticResource ConnectionCenterMargin}" />
                     <RowDefinition Height="*" />
@@ -46,17 +33,12 @@
 					ItemsSource="{Binding DesktopViewModels}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapGrid Orientation="Horizontal"
-                                      ItemHeight="{Binding DesktopTileSize.Height}"
-                                      ItemWidth="{Binding DesktopTileSize.Width}"/>
+                            <WrapGrid Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <views:DesktopThumbnailView 
-                                x:Name="DesktopThumbnail" 
-                                Margin="0,0,4,4" 
-                                />
+                            <views:DesktopThumbnailView x:Name="DesktopThumbnail" Margin="0,0,4,4" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

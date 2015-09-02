@@ -10,13 +10,6 @@ namespace RdClient.Views
         public DesktopThumbnailView()
         {
             this.InitializeComponent();
-            this.SizeChanged += OnSizeChanged;
-        }
-
-        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            this.TileGrid.Width = e.NewSize.Width;
-            this.TileGrid.Height = e.NewSize.Height;
         }
 
         private void ThumbnailButton_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
@@ -31,6 +24,5 @@ namespace RdClient.Views
             
             e.Handled = true;
         }
-
     }
 }

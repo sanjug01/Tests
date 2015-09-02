@@ -46,8 +46,8 @@
         private SharedVisualState GetVisualState(Size size)
         {
             SharedVisualState state = SharedVisualState.DefaultLayout;
-            
-            if (size.Width <= RdClient.Shared.Helpers.GlobalConstants.NarrowLayoutWidthLimit)
+
+            if (size.Width <= 416.0)
                 state = SharedVisualState.NarrowLayout;
 
             return state;

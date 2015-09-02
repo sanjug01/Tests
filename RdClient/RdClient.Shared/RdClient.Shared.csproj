@@ -472,7 +472,6 @@
     <Compile Include="ViewModels\RemoteResourceViewModel.cs" />
     <Compile Include="ViewModels\GatewayComboBoxElement.cs" />
     <Compile Include="ViewModels\SelectNewResourceTypeViewModel.cs" />
-    <Compile Include="Helpers\TileSizeHelper.cs" />
     <Compile Include="ViewModels\SessionSizeViewModel.cs" />
     <Compile Include="Models\ButtonModels\SymbolBarButtonModel.cs" />
     <Compile Include="ViewModels\UserComboBoxElement.cs" />

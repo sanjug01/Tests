@@ -6,7 +6,6 @@
     using RdClient.Shared.ViewModels;
     using System.Collections.ObjectModel;
     using System.Windows.Input;
-    using Windows.Foundation;
 
     public sealed class FakeConnectionCenterViewModel : DisposableObject, IConnectionCenterViewModel
     {
@@ -93,14 +92,6 @@
             set { }
         }
 
-        // default size for most screens: Height="164" Width="296"
-        Size _size = new Size(296, 164);
-        public Size DesktopTileSize
-        {
-            get { return _size; }
-            set { }
-        }
-
         public IViewVisibility AccessoryViewVisibility
         {
             get { return _accessoryViewVisibility; }
@@ -110,6 +101,5 @@
         {
             get { return _cancelAccessoryView; }
         }
-
     }
 }

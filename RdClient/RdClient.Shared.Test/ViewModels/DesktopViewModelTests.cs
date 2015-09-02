@@ -265,6 +265,5 @@ namespace RdClient.Shared.Test.ViewModels
             _vm.SelectionEnabled = false;
             Assert.IsFalse(_vm.IsSelected);
         }
-
     }
 }
