@@ -1,49 +1,54 @@
-﻿using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml;
-using System.Diagnostics.Contracts;
+﻿using RdClient.Shared.Models;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
+using System.Diagnostics.Contracts;
+using Windows.UI;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
 
 namespace RdClient.Controls
 {
     public sealed partial class ConnectionBar : UserControl
     {
-
         private const double _deceleration = 0.05;
-        private Pointer _pointer;
         private FrameworkElement _container;
+        private ReadOnlyObservableCollection<object> _itemsSource;
 
-        private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
+        private static void SetButtonsEnabled(ReadOnlyObservableCollection<object> itemSource, bool state)
         {
-            _pointer = e.Pointer;
+            if (itemSource != null)
+            {
+                foreach (object o in itemSource)
+                {
+                    if (o is SymbolBarButtonModel)
+                    {
+                        ((SymbolBarButtonModel)o).IsEnabled = state;
+                    }
+                }
+            }
         }
 
         protected override void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
         {
-            this.CapturePointer(_pointer);
-            base.OnManipulationStarted(e);
+            this.Grid.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+            SetButtonsEnabled(_itemsSource, false);
         }
 
         protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs e)
         {
-            this.ReleasePointerCapture(_pointer);
-            base.OnManipulationCompleted(e);
+            SetButtonsEnabled(_itemsSource, true);
+            this.Grid.Background = null;
         }
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)
         {
             this.MoveConnectionBar(_container.ActualWidth, e.Delta.Translation.X);
-            base.OnManipulationDelta(e);
         }
 
         protected override void OnManipulationInertiaStarting(ManipulationInertiaStartingRoutedEventArgs e)
         {
             e.TranslationBehavior.DesiredDeceleration = _deceleration;
-            base.OnManipulationInertiaStarting(e);
         }
 
         private void MoveConnectionBar(double containerWidth, double dx)
@@ -77,6 +82,7 @@ namespace RdClient.Controls
         }
         private void OnItemsSourceChanged(ReadOnlyObservableCollection<object> oldSource, ReadOnlyObservableCollection<object> newSource)
         {
+            _itemsSource = newSource;
             this.ItemsControl.ItemsSource = newSource;
         }
         private void ContainerSizeChanged(object sender, SizeChangedEventArgs e)
@@ -114,7 +120,6 @@ namespace RdClient.Controls
         public ConnectionBar()
         {
             this.InitializeComponent();
-            this.AddHandler(PointerPressedEvent, new PointerEventHandler(this.OnPointerPressed), true);
         }
 
     }
