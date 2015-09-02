@@ -1,17 +1,16 @@
 ﻿using RdClient.Shared.Models;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
+using Windows.UI.Xaml.Media;
 
 namespace RdClient.Controls
 {
     public sealed partial class ConnectionBar : UserControl
     {
-        private Pointer _pointer;
         private const double _deceleration = 0.05;
         private FrameworkElement _container;
         private ReadOnlyObservableCollection<object> _itemsSource;
@@ -30,25 +29,16 @@ namespace RdClient.Controls
             }
         }
 
-        protected override void OnPointerPressed(PointerRoutedEventArgs e)
-        {
-            _pointer = e.Pointer;
-            this.CapturePointer(_pointer);
-        }
-
-        protected override void OnPointerReleased(PointerRoutedEventArgs e)
-        {
-        }
-
         protected override void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
-        {            
+        {
+            this.Grid.Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
             SetButtonsEnabled(_itemsSource, false);
         }
 
         protected override void OnManipulationCompleted(ManipulationCompletedRoutedEventArgs e)
         {
-            this.ReleasePointerCaptures();
             SetButtonsEnabled(_itemsSource, true);
+            this.Grid.Background = null;
         }
 
         protected override void OnManipulationDelta(ManipulationDeltaRoutedEventArgs e)

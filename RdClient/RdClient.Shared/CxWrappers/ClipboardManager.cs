@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.UI.Xaml;
-using Windows.ApplicationModel.DataTransfer;
-using Windows.UI.Core;
-using RdClient.Shared.Helpers;
+﻿using RdClient.Shared.Helpers;
 using RdClientCx;
+using System;
 using System.Threading;
-using RdClient.Shared.Navigation.Extensions;
+using Windows.ApplicationModel.DataTransfer;
 
 namespace RdClient.Shared.CxWrappers
 {
