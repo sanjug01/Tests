@@ -8,16 +8,23 @@
     public class SymbolBarButtonModel : BarButtonModel
     {
         private SegoeGlyph _glyph;
-
-        public SymbolBarButtonModel()
-        {
-            _glyph = SegoeGlyph.Home;
-        }
-
         public SegoeGlyph Glyph
         {
             get { return _glyph; }
             set { SetProperty(ref _glyph, value); }
+        }
+
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set { SetProperty(ref _isEnabled, value); }
+        }
+
+        public SymbolBarButtonModel()
+        {
+            _glyph = SegoeGlyph.Home;
+            _isEnabled = true;
         }
     }
 }

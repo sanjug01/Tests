@@ -24,15 +24,14 @@
         <cv:SessionStateToOpacityConverter x:Key="SessionStateToOpacityConverter" />
     </UserControl.Resources>
 
-    <Grid>
+    <Grid x:Name="Grid">
         <ItemsControl
                 x:Name="ItemsControl"
                 HorizontalAlignment="Center" VerticalAlignment="Top">
- 
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal"/>
+                    <StackPanel Orientation="Horizontal" Background="Transparent"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
@@ -47,7 +46,9 @@
                                     Command="{Binding Command}"
                                     CommandParameter="{Binding CommandParameter}"
                                     Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}" />
+                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"
+                                    IsEnabled="{Binding IsEnabled}"
+                                    ManipulationMode="All"/>
                         </DataTemplate>
 
                         <DataTemplate x:Key="SymbolBarToggleButtonModel">
@@ -59,7 +60,9 @@
                                     IsChecked="{Binding IsChecked}"
                                     IsThreeState="False"
                                     Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}" />
+                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"
+                                    IsEnabled="{Binding IsEnabled}"
+                                    ManipulationMode="All"/>
                         </DataTemplate>
 
                         <DataTemplate x:Key="SymbolBarSliderButtonModel">
@@ -69,7 +72,9 @@
                                     Command="{Binding Command}"
                                     CommandParameter="{Binding CommandParameter}"
                                     Visibility="{Binding CanExecute, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}" >
+                                    Content="{Binding Glyph, Converter={StaticResource enumToSymbolString}}"
+                                    IsEnabled="{Binding IsEnabled}"
+                                    ManipulationMode="All">
                                 <Button.Flyout>
                                     <Flyout>
                                         <Slider Orientation="Vertical" Height="100" Value="{Binding Value, Mode=TwoWay}"/>
