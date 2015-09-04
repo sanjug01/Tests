@@ -6,6 +6,7 @@ namespace RdClient.Views
     using RdClient.Shared.Models;
     using RdClient.Shared.Navigation;
     using RdClient.Shared.ViewModels;
+    using System;
     using Windows.UI.Core;
     using Windows.UI.ViewManagement;
     using Windows.UI.Xaml;
@@ -106,7 +107,7 @@ namespace RdClient.Views
 
         private void OnInputPaneShowing(InputPane sender, InputPaneVisibilityEventArgs e)
         {
-            this.SessionPanel.Height -= e.OccludedRect.Height;
+            this.SessionPanel.Height = Math.Min(this.SessionPanel.Height - e.OccludedRect.Height, 0);
         }
 
         private void OnInputPaneHiding(InputPane sender, InputPaneVisibilityEventArgs e)
