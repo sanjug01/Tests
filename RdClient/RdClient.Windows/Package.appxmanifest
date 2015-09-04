@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="Microsoft.MicrosoftRemoteDesktopPreview" Version="10.0.808.0" Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US" />
+  <Identity Name="Microsoft.MicrosoftRemoteDesktopPreview" Version="10.0.812.0" Publisher="CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US" />
   <mp:PhoneIdentity PhoneProductId="2d129dd4-8a88-4e6f-a1b9-d55effc0921d" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Microsoft Remote Desktop Preview</DisplayName>
@@ -19,8 +19,8 @@
       <uap:VisualElements DisplayName="Remote Desktop Preview" Square150x150Logo="Assets\AppNameMedTile.png" Square44x44Logo="Assets\SmallLogo.png" Description="Microsoft Remote Desktop Preview" BackgroundColor="#D14827">
         <uap:DefaultTile ShortName="Remote Desktop Preview" Wide310x150Logo="Assets\AppNameWideTile.png" Square310x310Logo="Assets\AppNameLargeTile.png" Square71x71Logo="Assets\AppNameSmallTile.png">
           <uap:ShowNameOnTiles>
-            <uap:ShowOn Tile="wide310x150Logo" />
             <uap:ShowOn Tile="square150x150Logo" />
+            <uap:ShowOn Tile="wide310x150Logo" />
             <uap:ShowOn Tile="square310x310Logo" />
           </uap:ShowNameOnTiles>
         </uap:DefaultTile>
