@@ -101,7 +101,14 @@
 
         private void OnViewportChanged(object sender, EventArgs e)
         {
-            _isZoomedIn = _viewport.ZoomFactor > 1.0;
+            if(_viewport != null)
+            {
+                _isZoomedIn = _viewport.ZoomFactor > 1.0;
+            }
+            else
+            {
+                _isZoomedIn = false;
+            }
         }
     }
 }
