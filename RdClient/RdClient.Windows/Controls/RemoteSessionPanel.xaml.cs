@@ -1,7 +1,5 @@
 ﻿namespace RdClient.Controls
 {
-    using RdClient.Helpers;
-    using RdClient.Shared.CxWrappers;
     using RdClient.Shared.Helpers;
     using RdClient.Shared.Input.Pointer;
     using RdClient.Shared.Input.Recognizers;
@@ -11,17 +9,12 @@
     using RdClient.Shared.ViewModels;
     using System;
     using System.ComponentModel;
-    using System.Diagnostics;
     using System.Diagnostics.Contracts;
     using System.Runtime.CompilerServices;
-    using System.Threading;
-    using System.Threading.Tasks;
     using Windows.Foundation;
-    using Windows.UI.Core;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
-    using Windows.UI.Xaml.Media;
 
 
 
