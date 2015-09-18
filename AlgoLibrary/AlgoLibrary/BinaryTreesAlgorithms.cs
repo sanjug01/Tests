@@ -78,10 +78,6 @@ namespace AlgoLibrary
     {
 
         public BinaryTreesAlgorithms() { }
-        public int BaseMethod()
-        {
-            return 1;
-        }
 
         public long[] DepthFirst(BinTreeNode tree)
         {

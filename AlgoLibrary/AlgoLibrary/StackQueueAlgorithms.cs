@@ -63,9 +63,7 @@ namespace AlgoLibrary
     public class StackQueueAlgorithms
     {
         public StackQueueAlgorithms() { }
-        public int BaseMethod()
-        {
-            return 1;
-        }
+
+        // TODO
     }
 }

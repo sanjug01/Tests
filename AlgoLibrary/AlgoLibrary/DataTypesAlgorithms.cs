@@ -8,9 +8,7 @@ namespace AlgoLibrary
     public class DataTypesAlgorithms
     {
         public DataTypesAlgorithms() { }
-        public int BaseMethod()
-        {
-            return 1;
-        }
+
+        // TODO
     }
 }

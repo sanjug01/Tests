@@ -9,10 +9,6 @@ namespace AlgoLibrary
     public class ArraysAlgorithms
     {
         public ArraysAlgorithms() { }
-        public int BaseMethod()
-        {
-            return 1;
-        }
 
         public int[] ProductExceptSelf(int[] nums)
         {

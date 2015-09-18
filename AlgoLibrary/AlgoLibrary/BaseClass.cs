@@ -26,11 +26,6 @@ namespace AlgoLibrary
 
     public class BaseClass
     {
-        public int BaseMethod()
-        {
-            return 1;
-        }
-
         public static Byte LeastBitOnly(Byte b)
         {
             return (Byte)(b & ~(b - 1));

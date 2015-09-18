@@ -10,35 +10,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgoUnitTests", "UnitTestPr
 		{85E3F8AB-8434-4470-8232-DAADCDCC573F} = {85E3F8AB-8434-4470-8232-DAADCDCC573F}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AlgoCLibrary", "AlgoCLibrary", "{5E87C0C8-FA84-490B-A937-A7D4EDC50018}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlgoCLibrary.Shared", "AlgoCLibrary\AlgoCLibrary.Shared\AlgoCLibrary.Shared.vcxitems", "{8929EC1F-2E6A-4529-A757-F2CDF3917C67}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlgoCLibrary.Windows", "AlgoCLibrary\AlgoCLibrary.Windows\AlgoCLibrary.Windows.vcxproj", "{D3C89B56-40B5-4CF5-9745-278E15E02B2F}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlgoCLibrary.WindowsPhone", "AlgoCLibrary\AlgoCLibrary.WindowsPhone\AlgoCLibrary.WindowsPhone.vcxproj", "{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AlgoCStaticLibrary", "AlgoCStaticLibrary", "{B24D19CE-4C05-42D9-A6C9-56CFEA1575AC}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlgoCStaticLibrary.Shared", "AlgoCStaticLibrary\AlgoCStaticLibrary.Shared\AlgoCStaticLibrary.Shared.vcxitems", "{45EE3EDD-84D5-4F4D-BE31-951BB570B98B}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlgoCStaticLibrary.Windows", "AlgoCStaticLibrary\AlgoCStaticLibrary.Windows\AlgoCStaticLibrary.Windows.vcxproj", "{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlgoCStaticLibrary.WindowsPhone", "AlgoCStaticLibrary\AlgoCStaticLibrary.WindowsPhone\AlgoCStaticLibrary.WindowsPhone.vcxproj", "{82C1FD7A-B503-4EB9-8465-BE8B23782326}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlgoWin32", "AlgoWin32\AlgoWin32.vcxproj", "{85E3F8AB-8434-4470-8232-DAADCDCC573F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlgoCTest", "AlgoCTest\AlgoCTest.vcxproj", "{105D618A-AEEB-4848-8B11-08FDEA2A7D69}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		AlgoCStaticLibrary\AlgoCStaticLibrary.Shared\AlgoCStaticLibrary.Shared.vcxitems*{82c1fd7a-b503-4eb9-8465-be8b23782326}*SharedItemsImports = 4
-		AlgoCLibrary\AlgoCLibrary.Shared\AlgoCLibrary.Shared.vcxitems*{d3c89b56-40b5-4cf5-9745-278e15e02b2f}*SharedItemsImports = 4
-		AlgoCStaticLibrary\AlgoCStaticLibrary.Shared\AlgoCStaticLibrary.Shared.vcxitems*{21a8bac5-617d-4adb-a030-b2a65b36c4b0}*SharedItemsImports = 4
-		AlgoCStaticLibrary\AlgoCStaticLibrary.Shared\AlgoCStaticLibrary.Shared.vcxitems*{45ee3edd-84d5-4f4d-be31-951bb570b98b}*SharedItemsImports = 9
-		AlgoCLibrary\AlgoCLibrary.Shared\AlgoCLibrary.Shared.vcxitems*{8929ec1f-2e6a-4529-a757-f2cdf3917c67}*SharedItemsImports = 9
-		AlgoCLibrary\AlgoCLibrary.Shared\AlgoCLibrary.Shared.vcxitems*{94f97c5b-0aa9-4dc7-b211-f3a4c6fbe799}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
@@ -82,58 +58,6 @@ Global
 		{D28A06DB-1025-4258-BE85-A0E5F6912D29}.Release|x64.Build.0 = Release|Any CPU
 		{D28A06DB-1025-4258-BE85-A0E5F6912D29}.Release|x86.ActiveCfg = Release|Any CPU
 		{D28A06DB-1025-4258-BE85-A0E5F6912D29}.Release|x86.Build.0 = Release|Any CPU
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Debug|ARM.ActiveCfg = Debug|ARM
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Debug|ARM.Build.0 = Debug|ARM
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Debug|x64.ActiveCfg = Debug|x64
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Debug|x64.Build.0 = Debug|x64
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Debug|x86.ActiveCfg = Debug|Win32
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Debug|x86.Build.0 = Debug|Win32
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Release|Any CPU.ActiveCfg = Release|Win32
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Release|ARM.ActiveCfg = Release|ARM
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Release|ARM.Build.0 = Release|ARM
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Release|x64.ActiveCfg = Release|x64
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Release|x64.Build.0 = Release|x64
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Release|x86.ActiveCfg = Release|Win32
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F}.Release|x86.Build.0 = Release|Win32
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}.Debug|ARM.ActiveCfg = Debug|ARM
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}.Debug|ARM.Build.0 = Debug|ARM
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}.Debug|x64.ActiveCfg = Debug|Win32
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}.Debug|x86.ActiveCfg = Debug|Win32
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}.Debug|x86.Build.0 = Debug|Win32
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}.Release|Any CPU.ActiveCfg = Release|Win32
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}.Release|ARM.ActiveCfg = Release|ARM
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}.Release|ARM.Build.0 = Release|ARM
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}.Release|x64.ActiveCfg = Release|Win32
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}.Release|x86.ActiveCfg = Release|Win32
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799}.Release|x86.Build.0 = Release|Win32
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Debug|ARM.ActiveCfg = Debug|ARM
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Debug|ARM.Build.0 = Debug|ARM
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Debug|x64.ActiveCfg = Debug|x64
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Debug|x64.Build.0 = Debug|x64
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Debug|x86.ActiveCfg = Debug|Win32
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Debug|x86.Build.0 = Debug|Win32
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Release|Any CPU.ActiveCfg = Release|Win32
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Release|ARM.ActiveCfg = Release|ARM
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Release|ARM.Build.0 = Release|ARM
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Release|x64.ActiveCfg = Release|x64
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Release|x64.Build.0 = Release|x64
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Release|x86.ActiveCfg = Release|Win32
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0}.Release|x86.Build.0 = Release|Win32
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326}.Debug|ARM.ActiveCfg = Debug|ARM
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326}.Debug|ARM.Build.0 = Debug|ARM
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326}.Debug|x64.ActiveCfg = Debug|Win32
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326}.Debug|x86.ActiveCfg = Debug|Win32
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326}.Debug|x86.Build.0 = Debug|Win32
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326}.Release|Any CPU.ActiveCfg = Release|Win32
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326}.Release|ARM.ActiveCfg = Release|ARM
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326}.Release|ARM.Build.0 = Release|ARM
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326}.Release|x64.ActiveCfg = Release|Win32
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326}.Release|x86.ActiveCfg = Release|Win32
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326}.Release|x86.Build.0 = Release|Win32
 		{85E3F8AB-8434-4470-8232-DAADCDCC573F}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{85E3F8AB-8434-4470-8232-DAADCDCC573F}.Debug|ARM.ActiveCfg = Debug|Win32
 		{85E3F8AB-8434-4470-8232-DAADCDCC573F}.Debug|x64.ActiveCfg = Debug|Win32
@@ -157,55 +81,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{8929EC1F-2E6A-4529-A757-F2CDF3917C67} = {5E87C0C8-FA84-490B-A937-A7D4EDC50018}
-		{D3C89B56-40B5-4CF5-9745-278E15E02B2F} = {5E87C0C8-FA84-490B-A937-A7D4EDC50018}
-		{94F97C5B-0AA9-4DC7-B211-F3A4C6FBE799} = {5E87C0C8-FA84-490B-A937-A7D4EDC50018}
-		{45EE3EDD-84D5-4F4D-BE31-951BB570B98B} = {B24D19CE-4C05-42D9-A6C9-56CFEA1575AC}
-		{21A8BAC5-617D-4ADB-A030-B2A65B36C4B0} = {B24D19CE-4C05-42D9-A6C9-56CFEA1575AC}
-		{82C1FD7A-B503-4EB9-8465-BE8B23782326} = {B24D19CE-4C05-42D9-A6C9-56CFEA1575AC}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://rfx.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = AlgoLibrary\\AlgoLibrary.csproj
-		SccProjectName1 = AlgoLibrary
-		SccLocalPath1 = AlgoLibrary
-		SccProjectUniqueName2 = UnitTestProject1\\AlgoUnitTests.csproj
-		SccProjectName2 = UnitTestProject1
-		SccLocalPath2 = UnitTestProject1
-		SccProjectUniqueName3 = AlgoCLibrary\\AlgoCLibrary.Shared\\AlgoCLibrary.Shared.vcxitems
-		SccProjectTopLevelParentUniqueName3 = AlgoLibrary.sln
-		SccProjectName3 = AlgoCLibrary/AlgoCLibrary.Shared
-		SccLocalPath3 = AlgoCLibrary\\AlgoCLibrary.Shared
-		SccProjectUniqueName4 = AlgoCLibrary\\AlgoCLibrary.Windows\\AlgoCLibrary.Windows.vcxproj
-		SccProjectTopLevelParentUniqueName4 = AlgoLibrary.sln
-		SccProjectName4 = AlgoCLibrary/AlgoCLibrary.Windows
-		SccLocalPath4 = AlgoCLibrary\\AlgoCLibrary.Windows
-		SccProjectUniqueName5 = AlgoCLibrary\\AlgoCLibrary.WindowsPhone\\AlgoCLibrary.WindowsPhone.vcxproj
-		SccProjectTopLevelParentUniqueName5 = AlgoLibrary.sln
-		SccProjectName5 = AlgoCLibrary/AlgoCLibrary.WindowsPhone
-		SccLocalPath5 = AlgoCLibrary\\AlgoCLibrary.WindowsPhone
-		SccProjectUniqueName6 = AlgoCStaticLibrary\\AlgoCStaticLibrary.Shared\\AlgoCStaticLibrary.Shared.vcxitems
-		SccProjectTopLevelParentUniqueName6 = AlgoLibrary.sln
-		SccProjectName6 = AlgoCStaticLibrary/AlgoCStaticLibrary.Shared
-		SccLocalPath6 = AlgoCStaticLibrary\\AlgoCStaticLibrary.Shared
-		SccProjectUniqueName7 = AlgoCStaticLibrary\\AlgoCStaticLibrary.Windows\\AlgoCStaticLibrary.Windows.vcxproj
-		SccProjectTopLevelParentUniqueName7 = AlgoLibrary.sln
-		SccProjectName7 = AlgoCStaticLibrary/AlgoCStaticLibrary.Windows
-		SccLocalPath7 = AlgoCStaticLibrary\\AlgoCStaticLibrary.Windows
-		SccProjectUniqueName8 = AlgoCStaticLibrary\\AlgoCStaticLibrary.WindowsPhone\\AlgoCStaticLibrary.WindowsPhone.vcxproj
-		SccProjectTopLevelParentUniqueName8 = AlgoLibrary.sln
-		SccProjectName8 = AlgoCStaticLibrary/AlgoCStaticLibrary.WindowsPhone
-		SccLocalPath8 = AlgoCStaticLibrary\\AlgoCStaticLibrary.WindowsPhone
-		SccProjectUniqueName9 = AlgoWin32\\AlgoWin32.vcxproj
-		SccProjectName9 = AlgoWin32
-		SccLocalPath9 = AlgoWin32
-		SccProjectUniqueName10 = AlgoCTest\\AlgoCTest.vcxproj
-		SccProjectName10 = AlgoCTest
-		SccLocalPath10 = AlgoCTest
 	EndGlobalSection
 EndGlobal

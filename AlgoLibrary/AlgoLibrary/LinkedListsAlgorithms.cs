@@ -8,9 +8,7 @@ namespace AlgoLibrary
     public class LinkedListAlgorithms
     {
         public LinkedListAlgorithms() { }
-        public int BaseMethod()
-        {
-            return 1;
-        }
+
+        // TODO
     }
 }

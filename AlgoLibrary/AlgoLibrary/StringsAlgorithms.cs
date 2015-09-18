@@ -8,10 +8,6 @@ namespace AlgoLibrary
     public class StringsAlgorithms
     {
         public StringsAlgorithms() { }
-        public int BaseMethod()
-        {
-            return 1;
-        }
 
         public int MyAtoi(string str)
         {
