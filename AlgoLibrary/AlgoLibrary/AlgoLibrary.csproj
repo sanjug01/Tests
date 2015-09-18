@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BE1FAC57-A4B5-4771-BE09-E892B2F344B2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AlgoLibrary</RootNamespace>
+    <AssemblyName>AlgoLibrary</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <Folder Include="Algorithms\" />
+    <Folder Include="DataStructures\" />
+    <Folder Include="Threading\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GraphAlgorithmsExt.cs" />
+    <Compile Include="GraphAlgorithms.cs" />
+    <Compile Include="LineAlgorithms.cs" />
+    <Compile Include="Patterns\Behavioral\ChainHandlerBase.cs" />
+    <Compile Include="Patterns\Behavioral\IAbstractExpression.cs" />
+    <Compile Include="Patterns\Behavioral\IColleague.cs" />
+    <Compile Include="Patterns\Behavioral\ICommand.cs" />
+    <Compile Include="Patterns\Behavioral\ICommandReceiver.cs" />
+    <Compile Include="Patterns\Behavioral\IContext.cs" />
+    <Compile Include="Patterns\Behavioral\IMediator.cs" />
+    <Compile Include="Patterns\Behavioral\IMementoNarrow.cs" />
+    <Compile Include="Patterns\Behavioral\IMementoWide.cs" />
+    <Compile Include="Patterns\Behavioral\MyColleague.cs" />
+    <Compile Include="Patterns\Behavioral\MyCommand.cs" />
+    <Compile Include="Patterns\Behavioral\MyExpression.cs" />
+    <Compile Include="Patterns\Behavioral\MyHandler.cs" />
+    <Compile Include="Patterns\Behavioral\MyMediator.cs" />
+    <Compile Include="Patterns\Behavioral\MyMemento.cs" />
+    <Compile Include="Patterns\Behavioral\MyMementoOriginator.cs" />
+    <Compile Include="Patterns\Creational\AbstractProduct2.cs" />
+    <Compile Include="Patterns\Creational\AbstractProduct1.cs" />
+    <Compile Include="Patterns\Structural\FacadeBase.cs" />
+    <Compile Include="Patterns\Creational\ISubject.cs" />
+    <Compile Include="Patterns\Creational\MyBuilder.cs" />
+    <Compile Include="Patterns\Creational\MyCreatorFactory.cs" />
+    <Compile Include="Patterns\Creational\MyFactoryA.cs" />
+    <Compile Include="Patterns\Creational\MyAbstractFactory.cs" />
+    <Compile Include="Patterns\Creational\MyProduct1.cs" />
+    <Compile Include="Patterns\Creational\MyPrototype.cs" />
+    <Compile Include="Patterns\Structural\MyProxy.cs" />
+    <Compile Include="Patterns\Structural\MySubject.cs" />
+    <Compile Include="Patterns\Structural\IAdaptee.cs" />
+    <Compile Include="Patterns\Structural\IBridgeAbstraction.cs" />
+    <Compile Include="Patterns\Structural\IBridgeImplementor.cs" />
+    <Compile Include="Patterns\Structural\IComponent.cs" />
+    <Compile Include="Patterns\Structural\IComposite.cs" />
+    <Compile Include="Patterns\Structural\ITarget.cs" />
+    <Compile Include="Patterns\Structural\MyAdaptee.cs" />
+    <Compile Include="Patterns\Structural\MyBridgeImplementor.cs" />
+    <Compile Include="Patterns\Structural\MyClassAdapter.cs" />
+    <Compile Include="Patterns\Structural\MyComponent.cs" />
+    <Compile Include="Patterns\Structural\MyComposite.cs" />
+    <Compile Include="Patterns\Structural\MyDecorator.cs" />
+    <Compile Include="Patterns\Structural\MyObjectAdapter.cs" />
+    <Compile Include="Patterns\Structural\MyRefinedAbstraction.cs" />
+    <Compile Include="SortingAlgorithms.cs" />
+    <Compile Include="DataTypesAlgorithms.cs" />
+    <Compile Include="ArraysAlgorithms.cs" />
+    <Compile Include="Heap.cs" />
+    <Compile Include="LinkedListsAlgorithms.cs" />
+    <Compile Include="StackQueueAlgorithms.cs" />
+    <Compile Include="BinaryTreesAlgorithms.cs" />
+    <Compile Include="HashmapAlgorithms.cs" />
+    <Compile Include="StringsAlgorithms.cs" />
+    <Compile Include="BaseClass.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
