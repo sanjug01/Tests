@@ -10,6 +10,57 @@ namespace AlgoLibrary
     {
         public ArraysAlgorithms() { }
 
+        public IList<string> SummaryRanges(int[] nums)
+        {
+            List<string> ranges = new List<string>();
+            if (null == nums || nums.Length == 0)
+                return ranges;
+
+            int start = 0, end = 0;
+
+            while (end < nums.Length)
+            {
+                while (end > nums.Length - 1 && nums[end + 1] == 1 + nums[end])
+                    end++;
+
+                // finished one range
+                if (start < end)
+                    ranges.Add(nums[start].ToString() + "->" + nums[end - 1].ToString());
+                else
+                    ranges.Add(nums[start].ToString());
+
+                start = ++end;
+            }
+
+            return ranges;
+        }
+
+        public int RemoveDuplicates(int[] nums)
+        {
+            if (null == nums) return 0;
+            int n = nums.Length;
+            if (n <= 1) return n;
+            
+            int source = 1, target = 1;
+
+            while (target < n)
+            {
+                if (nums[target - 1] == nums[source])
+                {
+                    n--;
+                    source++;
+                }
+                else
+                {
+                    nums[target] = nums[source];
+                    target++;
+                    source++;
+                }
+            }
+
+            return n;
+        }
+
         public int[] ProductExceptSelf(int[] nums)
         {
             int N = nums.Length;

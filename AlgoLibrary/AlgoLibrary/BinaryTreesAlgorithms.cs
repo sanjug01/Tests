@@ -415,4 +415,217 @@ namespace AlgoLibrary
         }
     }
 
+
+
+}
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public int val;
+ *     public TreeNode left;
+ *     public TreeNode right;
+ *     public TreeNode(int x) { val = x; }
+ * }
+ */
+public class TreeNode
+{
+     public int val;
+     public TreeNode left;
+     public TreeNode right;
+     public TreeNode(int x) { val = x; }
+}
+
+public class Solution
+{
+
+    private int KthWithSize(TreeNode root, int k, out int size)
+    {
+        size = 0;
+        if (null == root)
+            return -1;
+
+        int leftSize = 0;
+        int leftVal = KthWithSize(root.left, k, out leftSize);
+
+        if (k <= leftSize)
+        {
+            size = k;
+            return leftVal;
+        }
+        else if (k - 1 == leftSize)
+        {
+            size = k;
+            return root.val;
+        }
+        else
+        {
+            // search right
+            int rightSize;
+            int val = KthWithSize(root.right, k - 1 - leftSize, out rightSize);
+            size = 1 + leftSize + rightSize;
+            return val;
+        }
+    }
+
+    public int KthSmallest(TreeNode root, int k)
+    {
+        int size = 0;
+        return KthWithSize(root, k, out size);
+    }
+
+
+    private void BinaryTreePartialPath(TreeNode node, string partialPath, IList<string> solution)
+    {
+        if (null == node)
+        {
+            return;
+        }
+
+        string newPartialPath = partialPath + "->" + node.val;
+
+        if (null == node.left && null == node.right)
+        {
+            solution.Add(newPartialPath);
+        }
+        else
+        {
+            BinaryTreePartialPath(node.left, newPartialPath, solution);
+            BinaryTreePartialPath(node.right, newPartialPath, solution);
+        }
+
+    }
+
+    // easy -
+    public IList<string> BinaryTreePaths(TreeNode root)
+    {
+        List<string> solution = new List<string>();
+        if (null == root) return solution;
+
+        if (null == root.left && null == root.right)
+        {
+            solution.Add(root.val.ToString());
+        }
+
+        BinaryTreePartialPath(root, root.val.ToString(), solution);
+        return solution;
+    }
+
+    private void PartialPathSum(TreeNode node, int sum, List<int> path, int partialSum, IList<IList<int>> solution)
+    {
+        if (null == node) return;
+
+        path.Add(node.val);
+        int crtPos = path.Count;
+
+        partialSum += node.val;
+
+        if (null == node.left && null == node.right && partialSum == sum)
+        {
+            solution.Add(path.ToArray());
+        }
+        else
+        {
+            if (null != node.left)
+                PartialPathSum(node.left, sum, path, partialSum, solution);
+
+            if (null != node.right)
+                PartialPathSum(node.right, sum, path, partialSum, solution);
+        }
+
+        path.RemoveAt(crtPos - 1);
+        return;
+
+    }
+
+    public IList<IList<int>> PathSum(TreeNode root, int sum)
+    {
+        List<IList<int>> solution = new List<IList<int>>();
+
+        if (null == root) return solution;
+
+        int partialSum = 0;
+        List<int> partialPath = new List<int>();
+
+        PartialPathSum(root, sum, partialPath, partialSum, solution);
+
+        return solution;
+    }
+
+
+    private bool HasPathPartialSum(TreeNode node, int sum, int partialSum)
+    {
+        if (null == node)
+            return false;
+
+        partialSum += node.val;
+        if (null == node.left && null == node.right)
+        {
+            // leaf
+            return partialSum == sum;
+        }
+        else
+        {
+            return HasPathPartialSum(node.left, sum, partialSum)
+                || HasPathPartialSum(node.right, sum, partialSum);
+        }
+
+    }
+    // easy
+    public bool HasPathSum(TreeNode root, int sum)
+    {
+        return HasPathPartialSum(root, sum, 0);
+    }
+
+
+    
+    private void PartialSum(TreeNode node, int partialSum)
+    {
+        if (node == null) return; // left or right of a non-leaf
+
+        partialSum = partialSum * 10 + node.val;
+        if (null == node.left && null == node.right)
+        {
+            _total += partialSum;
+        }
+        else
+        {
+            PartialSum(node.left, partialSum);
+            PartialSum(node.right, partialSum);
+        }
+    }
+
+    int _total = 0;
+    public int SumNumbers(TreeNode root)
+    {
+        _total = 0;
+
+        return _total;
+    }
+
+    int _maxSum = int.MinValue;
+    public int MaxPathFromNode(TreeNode node)
+    {
+        if (null == node) return 0;
+
+        int left = MaxPathFromNode(node.left);
+        int right = MaxPathFromNode(node.right);
+
+        int localMax = node.val; // max that go through node
+        if (left > 0) localMax += left;
+        if (right > 0) localMax += right;
+
+        if (_maxSum < localMax) _maxSum = localMax; 
+
+        return node.val + Math.Max(left,right);
+    }
+    // hard - math sum on any path, no necesary to pass via root
+    public int MaxPathSum(TreeNode root)
+    {
+        _maxSum = int.MinValue;
+        int localMax = MaxPathFromNode(root);
+        return _maxSum;
+    }
+
 }

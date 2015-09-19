@@ -54,6 +54,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="StackQueueUnitTest.cs" />
     <Compile Include="GraphUnitTest.cs" />
     <Compile Include="SortingUnitTest.cs" />
     <Compile Include="BinaryTreesUnitTest.cs" />
