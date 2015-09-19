@@ -69,7 +69,7 @@ namespace AlgoLibrary
 
 
             /*** populate first, to avoid duplications **/
-            for (int i = 1; i <= Math.Sqrt(n); i++)
+            for (int i = 1; i <= n; i++)
             {
                 if (!dict.ContainsKey(i))
                 {
@@ -84,7 +84,13 @@ namespace AlgoLibrary
             return NumSquaresFromDict(n, dict);
             */
         }
-    
+
+
+        public int NumSquaresNotRecursive(int n)
+        {
+            //TODO: there is a more optimum solution I found later
+            return 0;
+        }
 
     public int[] StringDecompositions(string sentence, string[] words)
         {
@@ -343,7 +349,7 @@ namespace AlgoLibrary
 
             if (1 == n) return true;
 
-            while (n >= 1)
+            while (n > 1)
             {
                 if (notHappy.Contains(n))
                     return false;

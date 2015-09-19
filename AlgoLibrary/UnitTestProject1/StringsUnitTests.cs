@@ -24,12 +24,14 @@ namespace AlGoUnitTests
         [TestMethod]
         public void Test_MyAtoi()
         {
+            // TOFIX
             StringsAlgorithms algo = new StringsAlgorithms();
-
 
             Assert.AreEqual(2, algo.MyAtoi("2"));
             Assert.AreEqual(-12, algo.MyAtoi("-12a"));
-            Assert.AreEqual(2147483648, algo.MyAtoi("2147483648"));
+
+            // does handle overflow - cap
+            Assert.AreEqual(int.MaxValue, algo.MyAtoi("2147483648"));
 
             Assert.IsTrue(true);
         }
