@@ -628,4 +628,34 @@ public class Solution
         return _maxSum;
     }
 
+
+    public int LeftHeight(TreeNode root)
+    {
+        if (null == root) return 0;
+        return 1 + LeftHeight(root.left);
+    }
+
+    public int RightHeight(TreeNode root)
+    {
+        if (null == root) return 0;
+        else return 1 + RightHeight(root.right);
+    }
+
+    // medium - count complete three nodes
+    public int CountCompleteNodes(TreeNode root)
+    {
+        if (null == root) return 0;
+
+        int leftH = LeftHeight(root.left);
+        int rightH = RightHeight(root.right);
+
+        if (leftH == rightH)
+        {
+            // perfect complete, no need to check middle, bitwise power 2 for performance
+            return (1 << (1 + leftH)) - 1;
+        }
+
+        return 1 + CountCompleteNodes(root.left) + CountCompleteNodes(root.right);
+    }
+
 }

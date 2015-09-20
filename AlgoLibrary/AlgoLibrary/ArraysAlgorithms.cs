@@ -10,6 +10,102 @@ namespace AlgoLibrary
     {
         public ArraysAlgorithms() { }
 
+        // this is actually a graph problem - to find cycles
+        public bool CanFinish(int numCourses, int[,] prerequisites)
+        {
+            bool[,] path = new bool[numCourses,numCourses];
+            int E = prerequisites.GetLength(0);
+
+            for(int i= 0;i<E; i++)
+            {
+                path[prerequisites[i, 0], prerequisites[i, 1]] = true; ;
+            }
+
+            for(int len = 0; len < numCourses-1; len++)
+            {
+                // increase each path
+                for (int i = 0; i < E; i++)
+                {
+                    int start = prerequisites[i, 0], stop = prerequisites[i, 1];
+                    for(int k = 0; k<numCourses; k++)
+                    {
+                        if (path[k, start])
+                            path[k, stop] = true;
+                    }
+
+                    if (path[stop, stop]) return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        private bool MatrixDoubleBinSearch(int[,] m, int value, int start, int end, int M, int N)
+        {
+            // number of lines is not really necessary
+            if (start > end) return false;
+
+            int mid = (start + end) / 2;
+            int col = mid % N;
+            int lin = mid / N;
+
+            if (value == m[lin,col]) return true;
+
+            if (value < m[lin, col])
+                return MatrixDoubleBinSearch(m, value, start, mid - 1, M, N);
+            else
+                return MatrixDoubleBinSearch(m, value, mid+1, end, M, N);
+
+        }
+
+        public bool SearchDoubleSortedMatrix(int[,] m, int value)
+        {
+            bool found = false;
+            int M = m.GetLength(0);
+            int N = m.GetLength(1);
+
+            int L = m.GetLength(0) * m.GetLength(1);
+
+            found = MatrixDoubleBinSearch(m, value, 0, L-1, M, N);
+            return found;
+        }
+
+        private bool MatrixBinSearch(int[,] m, int startLin, int endLin, int startCol, int endCol, int value)
+        {
+            if (startLin > endLin || startCol > endCol)
+                return false;
+
+            int midLin = (startLin + endLin) / 2;
+            int midCol = (startCol + endCol) / 2;
+
+            if (value == m[midLin, midCol])
+                return true;
+
+            if(value< m[midLin, midCol])
+            {
+                // search top left, top right and down left
+                return MatrixBinSearch(m, midLin, endLin, startCol, midCol - 1, value)
+                    || MatrixBinSearch(m, startLin, midLin - 1, startCol, endCol, value);
+            }
+            else
+            {
+                return MatrixBinSearch(m, startLin, midLin, midCol + 1, endCol, value)
+                    || MatrixBinSearch(m, midLin + 1, endLin, startCol, endCol, value);
+            }
+        }
+
+        public bool SearchSortedMatrix(int[,] m, int value)
+        {
+            bool found = false;
+            int M = m.GetLength(0);
+            int N = m.GetLength(1);
+
+            found = MatrixBinSearch(m, 0, M, 0, N, value);
+            return found;
+        }
+
+
         public IList<string> SummaryRanges(int[] nums)
         {
             List<string> ranges = new List<string>();
@@ -309,7 +405,7 @@ namespace AlgoLibrary
             min = -1;
             max = -1;
 
-            return FindRangeInSubarray(A, value, 0, A.Length, out min, out max);
+            return FindRangeInSubarray(A, value, 0, A.Length-1, out min, out max);
         }
 
         public static IEnumerator<int> RunLength(int[] _values)
