@@ -6,6 +6,101 @@ using System.Text;
 namespace AlgoLibrary
 {
 
+    class TrieNode
+    {
+
+        public bool isWord;
+        public Dictionary<char, TrieNode> children;
+        public string prefix;
+
+        // Initialize your data structure here.
+        public TrieNode()
+        {
+            prefix = "";
+            isWord = false;
+            children = new Dictionary<char, TrieNode>();
+        }
+
+        public bool AddWord(string word, int idx)
+        {
+            if (idx >= word.Length) return false;
+            char crtCh = word[idx];
+            TrieNode child;
+            if (!children.ContainsKey(crtCh))
+            {
+                child = new TrieNode();
+                child.prefix = this.prefix + crtCh;
+                children[crtCh] = child;
+            }
+            else
+            {
+                child = children[crtCh];
+            }
+
+            child.isWord = (idx == word.Length - 1);
+            child.AddWord(word, idx + 1);
+
+            return true;
+        }
+
+        public bool FindWord(string word, int idx)
+        {
+            if (idx >= word.Length) return isWord;
+            char crtCh = word[idx];
+            if (!children.ContainsKey(crtCh))
+                return false;
+
+            return children[crtCh].FindWord(word, idx + 1);
+        }
+
+        public bool FindPrefix(string word, int idx)
+        {
+            if (idx >= word.Length) return true; // 
+            char crtCh = word[idx];
+            if (!children.ContainsKey(crtCh))
+                return false;
+
+            return children[crtCh].FindPrefix(word, idx + 1);
+        }
+    }
+
+
+    // TODO: untested
+    public class Trie
+    {
+        private TrieNode root;
+
+        public Trie()
+        {
+            root = new TrieNode();
+        }
+
+        // Inserts a word into the trie.
+        public void Insert(String word)
+        {
+            root.AddWord(word, 0);
+
+        }
+
+        // Returns if the word is in the trie.
+        public bool Search(string word)
+        {
+            return root.FindWord(word, 0);
+        }
+
+        // Returns if there is any word in the trie
+        // that starts with the given prefix.
+        public bool StartsWith(string word)
+        {
+            return root.FindPrefix(word,0);
+        }
+    }
+
+    // Your Trie object will be instantiated and called as such:
+    // Trie trie = new Trie();
+    // trie.Insert("somestring");
+    // trie.Search("key");
+
     public class BinTreeNode
     {
         public long Info { get; set; }
@@ -656,6 +751,82 @@ public class Solution
         }
 
         return 1 + CountCompleteNodes(root.left) + CountCompleteNodes(root.right);
+    }
+
+    // easy - for BST
+    public TreeNode LowestCommonAncestorInBST(TreeNode root, TreeNode p, TreeNode q)
+    {
+        // check null  - lets assume never
+
+        if (p == q) return p;
+        int min, max;
+        if (p.val < q.val)
+        {
+            min = p.val; max = q.val;
+        }
+        else
+        {
+            min = q.val; max = p.val;
+        }
+
+        if (root.val < min)
+            return LowestCommonAncestorInBST(root.right, p, q);
+        else if (root.val > max)
+            return LowestCommonAncestorInBST(root.left, p, q);
+        else
+            return root;
+    }
+    
+    private void FindOneNode(TreeNode node, TreeNode p, ref bool found)
+    {
+        if(node == p)
+        {
+            found = true;
+        }
+        else
+        {
+            FindOneNode(node.left, p, ref found);
+            if (!found) 
+                FindOneNode(node.right, p, ref found);
+        }
+    }
+
+    private TreeNode FindTwoNodes(TreeNode node, TreeNode p, TreeNode q, ref bool foundP, ref bool foundQ)
+    {
+        if (null == node) return null;
+        if(node == p)
+        {
+            foundP = true;
+            if (foundQ) return null;
+            FindOneNode(node, q, ref foundQ);
+            if (foundQ) return p;
+            else return null;
+        }
+        if (node == q)
+        {
+            foundQ = true;
+            if (foundP) return null;
+            FindOneNode(node, p, ref foundP);
+            if (foundP) return q;
+            else return null;
+        }
+
+        TreeNode foundNode = FindTwoNodes(node.left, p, q, ref foundP, ref foundQ);
+        if (foundP && foundQ)
+            return foundNode;
+        else if (!foundP && !foundQ)
+            return FindTwoNodes(node.right, p, q, ref foundP, ref foundQ);
+
+        return node; // only one found left and the other should be right
+    }
+
+    // arbitrary tree, no parent - medium hard
+    public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
+    {
+        bool foundP = false;
+        bool foundQ = false;
+
+        return FindTwoNodes(root, p, q, ref foundP, ref foundQ);
     }
 
 }

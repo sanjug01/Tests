@@ -10,6 +10,40 @@ namespace AlgoLibrary
     {
         public ArraysAlgorithms() { }
 
+        int QuickSelect(int[] a, int idx)
+        {
+            // returns the idex of a[idx] in the sorted aray
+            if (idx > a.Length) return idx;
+
+            int pivot = a[idx];
+            a[idx] = a[a.Length - 1];
+            a[a.Length - 1] = pivot;
+
+            int start = 0, end = a.Length - 2;
+            
+            while(start < end)
+            {
+                while (a[start] <= pivot) start++;
+                while (a[end] > pivot) end--;
+
+                if(start < end)
+                {
+                    int tmp = a[start];
+                    a[start] = a[end];
+                    a[end] = tmp;
+                    start++;
+                    end++; 
+                }
+            }
+
+            // place pivot
+            a[a.Length - 1] = a[start];
+            a[start] = pivot;
+            return start;
+
+            return idx;
+        }
+
         // this is actually a graph problem - to find cycles
         public bool CanFinish(int numCourses, int[,] prerequisites)
         {

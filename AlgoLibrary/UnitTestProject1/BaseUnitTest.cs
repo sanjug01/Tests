@@ -174,6 +174,15 @@ namespace AlGoUnitTests
             }
         }
 
+
+        [TestMethod]
+        public void Test_RangeBitAnd()
+        {
+            Assert.AreEqual(4, BaseClass.RangeBitwiseAnd(5, 7));
+
+            Assert.IsTrue(true);
+        }
+
         [TestMethod]
         public void Test_BitCounts()
         {
