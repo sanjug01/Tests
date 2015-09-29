@@ -115,7 +115,9 @@ namespace AlGoUnitTests
             LinkedList<string> linkedList = new LinkedList<string>();
             linkedList.AddFirst("zero");
             linkedList.AddLast("ten");
-
+            string first = linkedList.First.Value;
+            string second = linkedList.Last.Value;            
+            
             List<string> myList = new List<string>();
             myList.AddRange(stringArray);
 
@@ -172,15 +174,6 @@ namespace AlGoUnitTests
                 hashSet.Remove(s);
                 sortedSet.Remove(s);
             }
-        }
-
-
-        [TestMethod]
-        public void Test_RangeBitAnd()
-        {
-            Assert.AreEqual(4, BaseClass.RangeBitwiseAnd(5, 7));
-
-            Assert.IsTrue(true);
         }
 
         [TestMethod]

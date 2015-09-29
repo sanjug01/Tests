@@ -10,41 +10,21 @@ namespace AlgoLibrary
         public HashmapsAlgorithms() { }
 
 
-        public int[] SingleNumber(int[] nums)
+        private int NumSquaresFromDict(int n, Dictionary<int,int> map)
         {
-            HashSet<int> once = new HashSet<int>();
-
-            foreach(var v in nums)
-            {
-                if(once.Contains(v))
-                {
-                    once.Remove(v);
-                }
-                else
-                {
-                    once.Add(v);
-                }                
-            }
-
-            return once.ToArray();
-            
-        }
-
-        private int NumSquaresFromDict(int n, Dictionary<int, int> map)
-        {
-            if (map.ContainsKey(n))
+            if(map.ContainsKey(n))
             {
                 return map[n];
             }
 
-            // if(n == (int)Math.Sqrt(n) * (int)Math.Sqrt(n))
-            // {
-            //    map[n] = 1;
-            //    return 1;
-            // }
+            if(n == ((int)Math.Sqrt(n)) * ((int)Math.Sqrt(n)))
+            {
+                map[n] = 1;
+                return 1;
+            }
 
             int minLen = n;
-            for (int i = 1; i <= n / 2; i++)
+            for(int i=1; i<= n/2; i++)
             {
                 int left = NumSquaresFromDict(i, map);
                 int right = NumSquaresFromDict(n - i, map);
@@ -53,13 +33,11 @@ namespace AlgoLibrary
                     minLen = left + right;
             }
 
-            map[n] = minLen;
             return minLen;
         }
-
         public int NumSquares(int n)
         {
-
+            
             if (n <= 0) return 0;
             if (n == 1) return 1;
 
@@ -67,32 +45,18 @@ namespace AlgoLibrary
             for (int i = 1; i * i <= n; i++)
                 dict[i * i] = 1;
 
-
-            /*** populate first, to avoid duplications **/
-            for (int i = 1; i <= n; i++)
+            // should populate dictionary starting from the small numbers to avoid duplicated calls
+            for(int i = 2; i<= n; n++)
             {
-                if (!dict.ContainsKey(i))
-                {
-                    NumSquaresFromDict(i, dict);
-                }
+                if (!dict.ContainsKey(i)) 
+                    dict[i] = NumSquaresFromDict(i, dict);
+
             }
 
             return dict[n];
-            /*****/
-
-            /* let recursion add more 
-            return NumSquaresFromDict(n, dict);
-            */
         }
 
-
-        public int NumSquaresNotRecursive(int n)
-        {
-            //TODO: there is a more optimum solution I found later
-            return 0;
-        }
-
-    public int[] StringDecompositions(string sentence, string[] words)
+        public int[] StringDecompositions(string sentence, string[] words)
         {
             Queue<int> results = new Queue<int>();
             Dictionary<string, int> wordDictionary = new Dictionary<string, int>();
@@ -349,7 +313,7 @@ namespace AlgoLibrary
 
             if (1 == n) return true;
 
-            while (n > 1)
+            while (n >= 1)
             {
                 if (notHappy.Contains(n))
                     return false;

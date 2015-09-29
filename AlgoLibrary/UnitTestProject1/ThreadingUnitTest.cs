@@ -107,5 +107,31 @@ namespace AlGoUnitTests
             Assert.IsTrue(true);
         }
 
+        [TestMethod]
+        // this has an loooong loop, should not be a test
+        public void Test_ProduceConsumer()
+        {
+            MyResource resource = new MyResource(10);
+
+            MyConsumerProducer worker = new MyConsumerProducer(resource);
+
+            Thread consumerThread = new Thread(() => { worker.Consume(); });
+            Thread producerThread = new Thread(() => { worker.Produce(); });
+            consumerThread.Name = "consumeTh";
+            producerThread.Name = "produceTh";
+
+            consumerThread.Start();
+            producerThread.Start();
+
+            // allow worker to loop
+            Thread.Sleep(10000);
+            worker.StopLoop = true ;
+
+            producerThread.Join();
+            producerThread.Join();
+
+            Assert.IsTrue(true);
+        }
+
     }
 }

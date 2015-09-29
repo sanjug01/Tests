@@ -16,7 +16,9 @@ namespace AlGoUnitTests
             for (int i = 0; i < 20; i++)
                 sb.Append(i);
 
+
             String result = sb.ToString();
+
             Assert.AreEqual(sb.Length, result.Length);
             Assert.IsTrue(true);
         }
@@ -24,14 +26,12 @@ namespace AlGoUnitTests
         [TestMethod]
         public void Test_MyAtoi()
         {
-            // TOFIX
             StringsAlgorithms algo = new StringsAlgorithms();
+
 
             Assert.AreEqual(2, algo.MyAtoi("2"));
             Assert.AreEqual(-12, algo.MyAtoi("-12a"));
-
-            // does handle overflow - cap
-            Assert.AreEqual(int.MaxValue, algo.MyAtoi("2147483648"));
+            Assert.AreEqual(2147483648, algo.MyAtoi("2147483648"));
 
             Assert.IsTrue(true);
         }

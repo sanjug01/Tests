@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace AlgoLibrary
+namespace MyInterview
 {
-    public class DataTypesAlgorithms
+    public class MainClass
     {
-        public DataTypesAlgorithms() { }
-        public int BaseMethod()
+        public int SomeMethod()
         {
             return 1;
         }

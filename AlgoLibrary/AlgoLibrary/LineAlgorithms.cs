@@ -83,7 +83,9 @@ namespace AlgoLibrary
     public class LineAlgorithms
     {
         public LineAlgorithms() { }
-
-        // TODO
+        public int BaseMethod()
+        {
+            return 1;
+        }
     }
 }

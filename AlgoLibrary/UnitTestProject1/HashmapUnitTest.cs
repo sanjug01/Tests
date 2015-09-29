@@ -23,9 +23,6 @@ namespace AlGoUnitTests
         {
             Assert.AreEqual(2, _algo.NumSquares(101));
 
-            // theorem indicates max 4
-            Assert.IsTrue(_algo.NumSquares(2051) <= 4); 
-
             Assert.IsTrue(true);
         }
 

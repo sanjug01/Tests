@@ -89,6 +89,13 @@
     <Compile Include="Patterns\Structural\MyDecorator.cs" />
     <Compile Include="Patterns\Structural\MyObjectAdapter.cs" />
     <Compile Include="Patterns\Structural\MyRefinedAbstraction.cs" />
+    <Compile Include="ReservationSystem\TestReservationSystem.cs" />
+    <Compile Include="ReservationSystem\TimeSlot.cs" />
+    <Compile Include="ReservationSystem\PartyGroup.cs" />
+    <Compile Include="ReservationSystem\ReservationDate.cs" />
+    <Compile Include="ReservationSystem\ReservationSystem.cs" />
+    <Compile Include="ReservationSystem\TableReservation.cs" />
+    <Compile Include="ReservationSystem\Table.cs" />
     <Compile Include="SortingAlgorithms.cs" />
     <Compile Include="DataTypesAlgorithms.cs" />
     <Compile Include="ArraysAlgorithms.cs" />

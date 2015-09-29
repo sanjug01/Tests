@@ -62,7 +62,9 @@
     <Compile Include="BaseUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PatternsUnitTests.cs" />
+    <Compile Include="Threading\DiningPhilosophers.cs" />
     <Compile Include="Threading\MyScheduler.cs" />
+    <Compile Include="Threading\MyConsumerProducer.cs" />
     <Compile Include="Threading\MyWorker.cs" />
     <Compile Include="ThreadingUnitTest.cs" />
     <Compile Include="Threading\OddEvenWorker.cs" />
