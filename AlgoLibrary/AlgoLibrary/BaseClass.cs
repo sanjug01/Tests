@@ -26,6 +26,11 @@ namespace AlgoLibrary
 
     public class BaseClass
     {
+        public int BaseMethod()
+        {
+            return 1;
+        }
+
         public static Byte LeastBitOnly(Byte b)
         {
             return (Byte)(b & ~(b - 1));
@@ -60,20 +65,6 @@ namespace AlgoLibrary
             return i;
         }
 
-        public static int RangeBitwiseAnd(int m, int n)
-        {
-            // it is the common bit prefix
-            int result = 0;
-            int bit = 1 << (8 * sizeof(int)-1);
-            for (int i = 0; i < 8 * sizeof(int); i++, bit = bit >> 1)
-            {
-                if ((m & bit) != (n & bit))
-                    break;
-                result += (m & bit);
-            }
-
-            return result;
-        }
 
         // inefficient
         public static uint BitCount2(UInt16 c)

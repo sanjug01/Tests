@@ -180,6 +180,10 @@ namespace AlgoLibrary
     public class GraphAlgorithms
     {
         public GraphAlgorithms() { }
+        public int BaseMethod()
+        {
+            return 1;
+        }
 
 
         /*****

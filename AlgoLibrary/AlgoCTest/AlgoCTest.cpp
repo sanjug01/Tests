@@ -10,7 +10,7 @@ else \
 cout << endl << "Test " << TestName << " failed!" << endl; \
 
 
-// declare unit tests here
+// declare tests here
 int TestMethod1();
 int TestSpiralOrder();
 int TestDeleteReplaceString();
@@ -20,7 +20,6 @@ int TestPointers();
 int TestRangeOfValue();
 
 
-// this is a single program to run all or selected unit tests written in C++
 int _tmain(int argc, _TCHAR* argv[])
 {
 	if (argc > 1)
